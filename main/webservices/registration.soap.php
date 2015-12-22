@@ -1141,7 +1141,7 @@ function WSCreateUserPasswordCrypted($params)
     $loginName = $params['loginname'];
     $official_code = isset($params['official_code']) ? $params['official_code'] : '';
     $language = '';
-    $phone = $params['phone'];
+    $phone = isset($params['phone']) ? $params['phone'] : '';
     $picture_uri = '';
     $auth_source = PLATFORM_AUTH_SOURCE;
     $expiration_date = '';
@@ -2680,22 +2680,25 @@ function WSCreateCourse($params)
 
     foreach ($courses_params as $course_param) {
         $title = $course_param['title'];
-        $category_code = $course_param['category_code'];
+        $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
         $wanted_code = $course_param['wanted_code'];
-        $tutor_name = $course_param['tutor_name'];
+        $tutor_name = isset($course_param['tutor_name']) ? $course_param['tutor_name'] : '';
         $course_language = 'english'; // TODO: A hard-coded value.
         $original_course_id_name = $course_param['original_course_id_name'];
         $original_course_id_value = $course_param['original_course_id_value'];
         $orig_course_id_value[] = $course_param['original_course_id_value'];
         $visibility = null;
 
-        if ($course_param['visibility'] &&
-            $course_param['visibility'] >= 0 &&
-            $course_param['visibility'] <= 3
-        ) {
-            $visibility = $course_param['visibility'];
+        if (isset($course_param['visibility'])) {
+            if ($course_param['visibility'] &&
+                $course_param['visibility'] >= 0 &&
+                $course_param['visibility'] <= 3
+            ) {
+                $visibility = $course_param['visibility'];
+            }
         }
-        $extra_list = $course_param['extra'];
+        $extra_list = isset($course_param['extra']) ? $course_param['extra'] : '';
+
 
         // Check whether exits $x_course_code into user_field_values table.
         $courseInfo = CourseManager::getCourseInfoFromOriginalId(
@@ -2747,12 +2750,21 @@ function WSCreateCourse($params)
             $values['course_language'] = api_get_setting('platformLanguage');
         }
 
-        $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
+        if (isset($_user['firstName'])) {
+            $values['tutor_name'] = api_get_person_name(
+                $_user['firstName'],
+                $_user['lastName'],
+                null,
+                null,
+                $values['course_language']
+            );
+        }
 
         $params = array();
         $params['title'] = $title;
         $params['wanted_code'] = $wanted_code;
         $params['category_code'] = $category_code;
+        $params['course_category']    = $category_code;
         $params['tutor_name'] = $tutor_name;
         $params['course_language'] = $course_language;
         $params['user_id'] = api_get_user_id();
@@ -6716,6 +6728,82 @@ function WSDeleteUserFromGroup($params)
         $params['group_id']
     );
 }
+
+
+$server->wsdl->addComplexType(
+    'unSubscribeUserFromCourseSimple',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+        'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+        'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+
+
+/**
+ * @param array $params
+ * @return array|null|soap_fault
+ */
+function WSUnSubscribeUserFromCourseSimple($params)
+{
+    global $debug;
+    error_log('WSUnSubscribeUserFromCourseSimple');
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    $original_user_id_value = $params['original_user_id_value'];
+    $original_user_id_name = $params['original_user_id_name'];
+    $original_course_id_value = $params['original_course_id_value'];
+    $original_course_id_name = $params['original_course_id_name'];
+
+    $result = array();
+    $result['original_user_id_value'] = $original_user_id_value;
+    $result['result'] = 0;
+
+    $user_id = UserManager::get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    );
+
+    if ($user_id) {
+        if ($debug) {
+            error_log(
+                "User $original_user_id_value, $original_user_id_name found"
+            );
+        }
+        $courseCode = CourseManager::get_course_id_from_original_id(
+            $original_course_id_value,
+            $original_course_id_name
+        );
+
+        if (empty($courseCode)) {
+            // Course was not found
+            if ($debug) {
+                error_log("course not found");
+            }
+        } else {
+            if ($debug) {
+                error_log("Course $courseCode found");
+            }
+            CourseManager::unsubscribe_user($user_id, $courseCode, 0);
+            $result['result'] = 1;
+        }
+    } else {
+        if ($debug) {
+            error_log("User not found");
+        }
+    }
+}
+
+
 
 /* Delete user from group Web Service end */
 

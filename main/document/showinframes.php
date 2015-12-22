@@ -104,7 +104,7 @@ if (!api_is_allowed_to_edit() && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$jplayer_supported_files = array('mp4', 'ogv','flv');
+$jplayer_supported_files = array('mp4', 'ogv', 'flv', 'm4v');
 $jplayer_supported = false;
 
 if (in_array(strtolower($pathinfo['extension']), $jplayer_supported_files)) {
@@ -250,33 +250,40 @@ if ($isChatFolder) {
 }
 
 $execute_iframe = true;
-
 if ($jplayer_supported) {
     $extension = api_strtolower($pathinfo['extension']);
+    if ($extension == 'mp4')  {
+        $extension = 'm4v';
+    }
     $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
     $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skin/blue.monday/css/jplayer.blue.monday.css" type="text/css">';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jplayer/jquery.jplayer.min.js"></script>';
 
-    $jquery = ' $("#jquery_jplayer_1").jPlayer({
-                    ready: function() {
-                        $(this).jPlayer("setMedia", {
-                            '.$extension.' : "'.$document_data['direct_url'].'"
-                        });
-                    },
-                    errorAlerts: false,
-                    warningAlerts: false,
-                     swfPath: "'.$js_path.'jquery-jplayer/jplayer/",
-                    //supplied: "m4a, oga, mp3, ogg, wav",
-                    supplied: "'.$extension.'",
-                    //wmode: "window",
-                    solution: "flash, html",  // Do not change this setting
-                    cssSelectorAncestor: "#jp_container_1",
-                });';
+    $jquery = '
+        $("#jquery_jplayer_1").jPlayer({
+            ready: function() {
+                $(this).jPlayer("setMedia", {
+                    '.$extension.' : "'.$document_data['direct_url'].'"
+                });
+            },
+            cssSelectorAncestor: "#jp_container_1",
+            swfPath: "'.$js_path.'jquery-jplayer/jplayer/",
+            supplied: "'.$extension.'",
+            useStateClassSkin: true,
+            autoBlur: false,
+            keyEnabled: false,
+            remainingDuration: true,
+            toggleDuration: true,
+            solution: "html, flash",
+            errorAlerts: false,
+            warningAlerts: false
+        });
+    ';
 
     $htmlHeadXtra[] = '<script>
         $(document).ready( function() {
             //Experimental changes to preview mp3, ogg files
-            '.$jquery.'
+        '.$jquery.'
         });
     </script>';
     $execute_iframe = false;
@@ -356,9 +363,13 @@ if ($show_web_odf) {
 echo '</div>';
 
 if ($jplayer_supported) {
-    echo '<br /><div class="span12" style="margin:0 auto; width:100%; text-align:center;">';
+    echo '<br />';
+    echo '<div class="col-md-3 col-md-offset-3">';
     echo DocumentManager::generate_video_preview($document_data);
     echo '</div>';
+
+    // media_element blocks jplayer disable it
+    Display::$global_template->assign('show_media_element', 0);
 }
 
 if ($is_freemind_available) {
@@ -442,7 +453,7 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
-            echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+        echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }
 Display::display_footer();

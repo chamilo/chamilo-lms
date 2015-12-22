@@ -41,9 +41,8 @@ class scorm extends learnpath
         if ($this->debug > 0) {
             error_log('New LP - scorm::scorm('.$course_code.','.$resource_id.','.$user_id.') - In scorm constructor', 0);
         }
-        if (!empty($course_code) && !empty($resource_id) && !empty($user_id)) {
-            parent::__construct($course_code, $resource_id, $user_id);
-        }
+
+        parent::__construct($course_code, $resource_id, $user_id);
     }
 
     /**

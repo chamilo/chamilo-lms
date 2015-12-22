@@ -1104,7 +1104,7 @@ class learnpath
      */
     public function delete_children_items($id)
     {
-        $course_id = api_get_course_int_id();
+        $course_id = $this->course_info['real_id'];
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::delete_children_items(' . $id . ')', 0);
         }
@@ -4534,7 +4534,7 @@ class learnpath
         $this->name = $name;
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $course_id = api_get_course_int_id();
+        $course_id = $this->course_info['real_id'];
         $sql = "UPDATE $lp_table SET
                 name = '" . Database::escape_string($this->name). "'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
@@ -5983,18 +5983,39 @@ class learnpath
             $tmp_filename = $filename . '_' . ++ $i;
 
         $filename = $tmp_filename . '.'.$extension;
-        $content = stripslashes($content);
+        if ($extension == 'html') {
+            $content = stripslashes($content);
+            $content = str_replace(
+                api_get_path(WEB_COURSE_PATH),
+                api_get_path(REL_PATH).'courses/',
+                $content
+            );
 
-        $content = str_replace(api_get_path(WEB_COURSE_PATH), api_get_path(REL_PATH).'courses/', $content);
+            // Change the path of mp3 to absolute.
 
-        // Change the path of mp3 to absolute.
-
-        // The first regexp deals with :// urls.
-        $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $courseInfo['path'] . '/document/', $content);
-        // The second regexp deals with audio/ urls.
-        $content = preg_replace("|(flashvars=\"file=)([^/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $courseInfo['path'] . '/document/$2/', $content);
-        // For flv player: To prevent edition problem with firefox, we have to use a strange tip (don't blame me please).
-        $content = str_replace('</body>', '<style type="text/css">body{}</style></body>', $content);
+            // The first regexp deals with :// urls.
+            $content = preg_replace(
+                "|(flashvars=\"file=)([^:/]+)/|",
+                "$1".api_get_path(
+                    REL_COURSE_PATH
+                ).$courseInfo['path'].'/document/',
+                $content
+            );
+            // The second regexp deals with audio/ urls.
+            $content = preg_replace(
+                "|(flashvars=\"file=)([^/]+)/|",
+                "$1".api_get_path(
+                    REL_COURSE_PATH
+                ).$courseInfo['path'].'/document/$2/',
+                $content
+            );
+            // For flv player: To prevent edition problem with firefox, we have to use a strange tip (don't blame me please).
+            $content = str_replace(
+                '</body>',
+                '<style type="text/css">body{}</style></body>',
+                $content
+            );
+        }
 
         if (!file_exists($filepath . $filename)) {
             if ($fp = @ fopen($filepath . $filename, 'w')) {

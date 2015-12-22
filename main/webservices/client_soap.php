@@ -69,7 +69,7 @@ $params = array(
     // third party user id
     'original_user_id_value'    => $random_user_id,
     'secret_key'                => $secret_key,
-    //Extra fields
+    // Extra fields
     'extra' => array(
         array('field_name' => 'ruc', 'field_value' => '123'),
         array('field_name' => 'DNI', 'field_value' => '4200000')

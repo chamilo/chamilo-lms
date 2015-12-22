@@ -3201,13 +3201,14 @@ class DocumentManager
      */
     public static function generate_video_preview($document_data = array())
     {
+        //<button class="jp-video-play-icon" role="button" tabindex="0">play</button>
         $html = '
         <div id="jp_container_1" class="jp-video" role="application" aria-label="media player">
             <div class="jp-type-single">
                 <div id="jquery_jplayer_1" class="jp-jplayer"></div>
                 <div class="jp-gui">
                     <div class="jp-video-play">
-                        <button class="jp-video-play-icon" role="button" tabindex="0">play</button>
+
                     </div>
                     <div class="jp-interface">
                         <div class="jp-progress">

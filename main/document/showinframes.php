@@ -361,7 +361,7 @@ if ($show_web_odf) {
 echo '</div>';
 
 if ($jplayer_supported) {
-    echo '<br /><div class="span12" style="margin:0 auto 0 auto; width:640px; text-align:center;">';
+    echo '<br /><div align="center">';
     echo DocumentManager::generate_video_preview($document_data);
     echo '</div>';
     // media_element blocks jplayer disable it

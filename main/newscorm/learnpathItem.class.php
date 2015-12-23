@@ -4437,7 +4437,11 @@ class learnpathItem
                     'ip.visibility != ? AND ' => 2,
                     'ip.tool = ? AND ' => TOOL_FORUM_THREAD,
                     'ft.c_id = ? AND ' => intval($lpCourseId),
-                    'ft.lp_item_id = ?' => intval($this->db_id)
+                    '(ft.lp_item_id = ? OR (ft.thread_title = ? AND ft.lp_item_id = ?))' => [
+                        intval($this->db_id),
+                        "{$this->title} - {$this->db_id}",
+                        intval($this->db_id)
+                    ]
                 ]
             ],
             'first'

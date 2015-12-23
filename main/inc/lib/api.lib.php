@@ -1507,7 +1507,7 @@ function _api_format_user($user, $add_password = false)
  * @param bool $checkIfUserOnline
  * @param bool $showPassword
  * @param bool $loadExtraData
- *
+ * @param bool $loadOnlyVisibleExtraData Get the user extra fields that are visible
  * @return array $user_info user_id, lastname, firstname, username, email, etc
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @author Julio Montoya
@@ -1517,7 +1517,8 @@ function api_get_user_info(
     $user_id = 0,
     $checkIfUserOnline = false,
     $showPassword = false,
-    $loadExtraData = false
+    $loadExtraData = false,
+    $loadOnlyVisibleExtraData = false
 ) {
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
@@ -1557,7 +1558,8 @@ function api_get_user_info(
             $fieldValue = new ExtraFieldValue('user');
 
             $result_array['extra'] = $fieldValue->getAllValuesForAnItem(
-                $user_id
+                $user_id,
+                $loadOnlyVisibleExtraData
             );
         }
         $user = _api_format_user($result_array, $showPassword);

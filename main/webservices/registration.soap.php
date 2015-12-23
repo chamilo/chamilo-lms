@@ -99,9 +99,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-            'field_name'  => array('name' => 'field_name', 'type' => 'xsd:string'),
-            'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
-        )
+        'field_name'  => array('name' => 'field_name', 'type' => 'xsd:string'),
+        'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
+    )
 );
 
 $server->wsdl->addComplexType(
@@ -2229,6 +2229,7 @@ $server->wsdl->addComplexType(
         'wanted_code' => array('name' => 'wanted_code', 'type' => 'xsd:string'),
         'tutor_name' => array('name' => 'tutor_name', 'type' => 'xsd:string'),
         'course_language' => array('name' => 'course_language', 'type' => 'xsd:string'),
+        'disk_quota' => array('name' => 'disk_quota', 'type' => 'xsd:string'), // disk_quota in MB
         'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
         'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
         'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
@@ -2311,6 +2312,10 @@ function WSCreateCourse($params)
         $category_code = $course_param['category_code'];
         $wanted_code = $course_param['wanted_code'];
         $tutor_name = isset($course_param['tutor_name']) ? $course_param['tutor_name'] : '';
+        $diskQuota = isset($course_param['disk_quota']) ? $course_param['disk_quota'] : '100';
+        // Convert to MB
+        $diskQuota = $diskQuota * 1024 * 1024;
+
         $course_language = 'english'; // TODO: A hard-coded value.
         $original_course_id_name = $course_param['original_course_id_name'];
         $original_course_id_value = $course_param['original_course_id_value'];
@@ -2381,14 +2386,15 @@ function WSCreateCourse($params)
             );
         }
         $params = array();
-        $params['title']            = $title;
-        $params['wanted_code']      = $wanted_code;
-        $params['category_code']    = $category_code;
-        $params['course_category']    = $category_code;
-        $params['tutor_name']       = $tutor_name;
-        $params['course_language']  = $course_language;
-        $params['user_id']          = api_get_user_id();
-        $params['visibility']       = $visibility;
+        $params['title'] = $title;
+        $params['wanted_code'] = $wanted_code;
+        $params['category_code'] = $category_code;
+        $params['course_category'] = $category_code;
+        $params['tutor_name'] = $tutor_name;
+        $params['course_language'] = $course_language;
+        $params['user_id'] = api_get_user_id();
+        $params['visibility'] = $visibility;
+        $params['disk_quota'] = $diskQuota;
 
         $course_info = CourseManager::create_course($params);
 

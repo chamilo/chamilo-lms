@@ -1257,7 +1257,10 @@ class IndexManager
                                         ICON_SIZE_BIG
                                     ) . ' ';
 
-                                if (api_is_drh()) {
+                                $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
+                                $sessionTitleLink = $sessionTitleLink === false ? 1 : $sessionTitleLink;
+
+                                if (api_is_drh() || !$sessionTitleLink) {
                                     $session_link = $session_box['title'];
                                     $params['link'] = null;
                                 } else {

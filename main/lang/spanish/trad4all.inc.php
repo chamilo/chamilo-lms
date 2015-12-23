@@ -7628,4 +7628,8 @@ $CropYourPicture = "Recorta tu foto";
 $DownloadBadge = "Descargar la insignia";
 $NoXMLFileFoundInTheZip = "No se encontró ningún archivo XML en el zip. Se requiere uno para este tipo de importación.";
 $BakedBadgeProblem = "Ha ocurrido un problema al insertar la información de la insignia dentro de la imagen de la insignia, pero puede usar esta página como prueba de su logro.";
+$ConfirmAssociateForumToLPItem = "Esta acción asociará un hilo de conversación de foro a este paso de la lección. ¿Desea proceder?";
+$ConfirmDissociateForumToLPItem = "Esta acción disociará el hilo de conversación de este paso de la lección. ¿Desea proceder?";
+$DissociateForumToLPItem = "Disociar el hilo de la conversión de este paso de lección";
+$AssociateForumToLPItem = "Asociar un hilo de conversación de foro a este paso de la lección";
 ?>

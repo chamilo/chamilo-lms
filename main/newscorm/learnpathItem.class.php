@@ -4437,7 +4437,11 @@ class learnpathItem
                     'ip.visibility != ? AND ' => 2,
                     'ip.tool = ? AND ' => TOOL_FORUM_THREAD,
                     'ft.c_id = ? AND ' => intval($lpCourseId),
-                    'ft.lp_item_id = ?' => intval($this->db_id)
+                    '(ft.lp_item_id = ? OR (ft.thread_title = ? AND ft.lp_item_id = ?))' => [
+                        intval($this->db_id),
+                        "{$this->title} - {$this->db_id}",
+                        intval($this->db_id)
+                    ]
                 ]
             ],
             'first'
@@ -4490,7 +4494,11 @@ class learnpathItem
                     'ip.tool = ? AND ' => TOOL_FORUM_THREAD,
                     'ft.session_id = ? AND ' => $lpSessionId,
                     'ft.c_id = ? AND ' => intval($lpCourseId),
-                    'ft.lp_item_id = ?' => intval($this->db_id)
+                    '(ft.lp_item_id = ? OR (ft.thread_title = ? AND ft.lp_item_id = ?))' => [
+                        intval($this->db_id),
+                        "{$this->title} - {$this->db_id}",
+                        intval($this->db_id)
+                    ]
                 ]
             ],
             'first'
@@ -4512,27 +4520,68 @@ class learnpathItem
     {
         require_once api_get_path(SYS_CODE_PATH) . '/forum/forumfunction.inc.php';
 
-        $forumInfo = get_forum_information($currentForumId);
+        $em = Database::getManager();
+        $threadRepo = $em->getRepository('ChamiloCourseBundle:CForumThread');
+        $forumThread = $threadRepo->findOneBy([
+            'threadTitle' => "{$this->title} - {$this->db_id}",
+            'forumId' => intval($currentForumId)
+        ]);
 
-        $threadId = store_thread(
-            $forumInfo,
-            [
-                'forum_id' => intval($currentForumId),
-                'thread_id' => 0,
-                'gradebook' => 0,
-                'post_title' => $this->name,
-                'post_text' => $this->description,
-                'category_id' => 1,
-                'numeric_calification' => 0,
-                'calification_notebook_title' => 0,
-                'weight_calification' => 0.00,
-                'thread_peer_qualify' => 0,
-                'lp_item_id' => $this->db_id
-            ],
-            [],
-            false
+        if (!$forumThread) {
+            $forumInfo = get_forum_information($currentForumId);
+
+            store_thread(
+                $forumInfo,
+                [
+                    'forum_id' => intval($currentForumId),
+                    'thread_id' => 0,
+                    'gradebook' => 0,
+                    'post_title' => "{$this->name} - {$this->db_id}",
+                    'post_text' => $this->description,
+                    'category_id' => 1,
+                    'numeric_calification' => 0,
+                    'calification_notebook_title' => 0,
+                    'weight_calification' => 0.00,
+                    'thread_peer_qualify' => 0,
+                    'lp_item_id' => $this->db_id
+                ],
+                [],
+                false
+            );
+
+            return;
+        }
+
+        $forumThread->setLpItemId($this->db_id);
+
+        $em->persist($forumThread);
+        $em->flush();
+    }
+
+    /**
+     * Allow dissociate a forum to this LP item
+     * @param int $threadIid The thread id
+     * @return boolean
+     */
+    public function dissociateForumThread($threadIid)
+    {
+        $threadIid = intval($threadIid);
+        $em = Database::getManager();
+
+        $forumThread = $em->find('ChamiloCourseBundle:CForumThread', $threadIid);
+
+        if (!$forumThread) {
+            return false;
+        }
+
+        $forumThread->setThreadTitle(
+            "{$this->get_title()} - {$this->db_id}"
         );
+        $forumThread->setLpItemId(0);
 
-        return $threadId;
+        $em->persist($forumThread);
+        $em->flush();
+
+        return true;
     }
 }

@@ -156,12 +156,9 @@ class Agenda
                     'text' => $content,
                     'date' => $start,
                     'enddate' => $end,
-                    'all_day' => $allDay
+                    'all_day' => $allDay,
+                    'color' => $color
                 );
-
-                if ($this->allowEventColoring) {
-                    $attributes['color'] = $color;
-                }
 
                 $id = Database::insert(
                     $this->tbl_personal_agenda,
@@ -1498,7 +1495,7 @@ class Agenda
                 (
                     agenda.session_id = $session_id AND
                     ip.session_id = $session_id
-                ) ";                
+                ) ";
             }
 
             $sql = "SELECT DISTINCT
@@ -1545,7 +1542,7 @@ class Agenda
                 (
                     agenda.session_id = $session_id AND
                     ip.session_id = $session_id
-                ) ";                
+                ) ";
             }
 
             $sql = "SELECT DISTINCT

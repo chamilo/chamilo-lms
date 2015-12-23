@@ -987,8 +987,8 @@ $server->wsdl->addComplexType(
 );
 
 $server->register(
-	'WSSubscribeTeacherToSessionCourse',
-	array('SubscribeTeacherToSessionCourse' => 'tns:SubscribeTeacherToSessionCourse'),
+    'WSSubscribeTeacherToSessionCourse',
+    array('SubscribeTeacherToSessionCourse' => 'tns:SubscribeTeacherToSessionCourse'),
     array('return' => 'xsd:string'),
     'urn:WSRegistration',
     'urn:WSRegistration#WSSubscribeTeacherToSessionCourse',
@@ -1013,8 +1013,8 @@ $server->wsdl->addComplexType(
 );
 
 $server->register(
-	'WSUnsubscribeTeacherFromSessionCourse',
-	array('UnsubscribeTeacherFromSessionCourse' => 'tns:UnsubscribeTeacherFromSessionCourse'),
+    'WSUnsubscribeTeacherFromSessionCourse',
+    array('UnsubscribeTeacherFromSessionCourse' => 'tns:UnsubscribeTeacherFromSessionCourse'),
     array('return' => 'xsd:string'),
     'urn:WSRegistration',
     'urn:WSRegistration#WSUnsubscribeTeacherFromSessionCourse',
@@ -1023,54 +1023,54 @@ $server->register(
     'This webservice unsubscribe a teacher from a session course'
 );
 
-    /**
-     * Subscribe teacher to a session course
-     *
-     * @param array $params - WSFunction parameters (include VerifyKey)
-     * @return bool|null|soap_fault A simple boolean (true if teacher successful subscribed, false otherwise)
-     */
-    function WSSubscribeTeacherToSessionCourse($params)
-    {
-        global $debug;
+/**
+ * Subscribe teacher to a session course
+ *
+ * @param array $params - WSFunction parameters (include VerifyKey)
+ * @return bool|null|soap_fault A simple boolean (true if teacher successful subscribed, false otherwise)
+ */
+function WSSubscribeTeacherToSessionCourse($params)
+{
+    global $debug;
 
-        if ($debug) error_log('WSSubscribeTeacherToSessionCourse');
-        if ($debug) error_log('Params '. print_r($params, 1));
+    if ($debug) error_log('WSSubscribeTeacherToSessionCourse');
+    if ($debug) error_log('Params '. print_r($params, 1));
 
-        if (!WSHelperVerifyKey($params)) {
-            return return_error(WS_ERROR_SECRET_KEY);
-        }
-
-        $userId = $params['userId']; // Chamilo user Id
-        $sessionId = $params['sessionId']; // Current Session course ID
-        $courseId = $params['courseId']; // Course Real Id
-
-        return (SessionManager::set_coach_to_course_session($userId, $sessionId, $courseId));
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    /**
-     * Subscribe teacher to a session course
-     *
-     *  @param array $params - WSFunction parameters (include VerifyKey)
-     *  @return bool|null|soap_fault A simple boolean (true if teacher successful unsubscribed, false otherwise)
-     */
-    function WSUnsubscribeTeacherFromSessionCourse($params)
-    {
-        global $debug;
+    $userId = $params['userId']; // Chamilo user Id
+    $sessionId = $params['sessionId']; // Current Session course ID
+    $courseId = $params['courseId']; // Course Real Id
 
-        if ($debug) error_log('WSSubscribeTeacherToSessionCourse');
-        if ($debug) error_log('Params '. print_r($params, 1));
+    return (SessionManager::set_coach_to_course_session($userId, $sessionId, $courseId));
+}
 
-        if (!WSHelperVerifyKey($params)) {
-            return return_error(WS_ERROR_SECRET_KEY);
-        }
+/**
+ * Subscribe teacher to a session course
+ *
+ *  @param array $params - WSFunction parameters (include VerifyKey)
+ *  @return bool|null|soap_fault A simple boolean (true if teacher successful unsubscribed, false otherwise)
+ */
+function WSUnsubscribeTeacherFromSessionCourse($params)
+{
+    global $debug;
 
-        $userId = $params['userId']; // Chamilo user Id
-        $sessionId = $params['sessionId']; // Current Session course ID
-        $courseId = $params['courseId']; // Course Real Id
+    if ($debug) error_log('WSSubscribeTeacherToSessionCourse');
+    if ($debug) error_log('Params '. print_r($params, 1));
 
-        return (SessionManager::removeUsersFromCourseSession($userId, $sessionId, $courseId));
-
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
     }
+
+    $userId = $params['userId']; // Chamilo user Id
+    $sessionId = $params['sessionId']; // Current Session course ID
+    $courseId = $params['courseId']; // Course Real Id
+
+    return (SessionManager::removeUsersFromCourseSession($userId, $sessionId, $courseId));
+
+}
 
 
 /* Register WSCreateUserPasswordCrypted function */
@@ -2602,6 +2602,7 @@ $server->wsdl->addComplexType(
         'wanted_code' => array('name' => 'wanted_code', 'type' => 'xsd:string'),
         'tutor_name' => array('name' => 'tutor_name', 'type' => 'xsd:string'),
         'course_language' => array('name' => 'course_language', 'type' => 'xsd:string'),
+        'disk_quota' => array('name' => 'disk_quota', 'type' => 'xsd:string'), // disk_quota in MB
         'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
         'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
         'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
@@ -2683,6 +2684,10 @@ function WSCreateCourse($params)
         $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
         $wanted_code = $course_param['wanted_code'];
         $tutor_name = isset($course_param['tutor_name']) ? $course_param['tutor_name'] : '';
+        $diskQuota = isset($course_param['disk_quota']) ? $course_param['disk_quota'] : '100';
+        // Convert to MB
+        $diskQuota = $diskQuota * 1024 * 1024;
+
         $course_language = 'english'; // TODO: A hard-coded value.
         $original_course_id_name = $course_param['original_course_id_name'];
         $original_course_id_value = $course_param['original_course_id_value'];
@@ -2769,6 +2774,7 @@ function WSCreateCourse($params)
         $params['course_language'] = $course_language;
         $params['user_id'] = api_get_user_id();
         $params['visibility'] = $visibility;
+        $params['disk_quota'] = $diskQuota;
 
         $course_info = CourseManager::create_course($params);
 
@@ -4310,6 +4316,19 @@ $server->wsdl->addComplexType(
 
 
 $server->wsdl->addComplexType(
+    'subscribeUserToCourse_return',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_value'    => array('name' => 'original_user_id_value',    'type' => 'xsd:string'),
+        'original_course_id_value'  => array('name' => 'original_course_id_value',  'type' => 'xsd:string'),
+        'result'                    => array('name' => 'result',                    'type' => 'xsd:int')
+    )
+);
+
+$server->wsdl->addComplexType(
     'subscribeUserToCourse_return_global',
     'complexType',
     'array',
@@ -4349,7 +4368,7 @@ function WSSubscribeUserToCourse($params) {
             $status = $usercourse['status'];
         }
 
-        $resultValue = 1;
+        $resultValue = 0;
 
         // Get user id
         $user_id = UserManager::get_user_id_from_original_id(
@@ -4373,8 +4392,12 @@ function WSSubscribeUserToCourse($params) {
                 $resultValue = 0;
             } else {
                 if ($debug) error_log('WSSubscribeUserToCourse courseCode: '.$courseCode);
-                if (!CourseManager::add_user_to_course($user_id, $courseCode, $status)) {
-                    $resultValue = 0;
+                $result = CourseManager::add_user_to_course($user_id, $courseCode, $status, false);
+                if ($result) {
+                    $resultValue = 1;
+                    if ($debug) error_log('WSSubscribeUserToCourse subscribed');
+                } else {
+                    if ($debug) error_log('WSSubscribeUserToCourse NOT subscribed: ');
                 }
             }
         }
@@ -4751,6 +4774,91 @@ function WSUnsubscribeUserFromCourse($params)
     }
 
     return $output;
+}
+
+/* Register WSSuscribeUsersToSession function */
+$server->wsdl->addComplexType(
+    'unSubscribeUserFromCourseSimple',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+        'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+        'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+
+// Register the method to expose
+$server->register('WSUnSubscribeUserFromCourseSimple',                         // method name
+    array('unSubscribeUserFromCourseSimple' => 'tns:unSubscribeUserFromCourseSimple'), // input parameters
+    array('return' => 'tns:result_createUsersPassEncrypt'),           // output parameters
+    'urn:WSRegistration',                                                // namespace
+    'urn:WSRegistration#WSUnSubscribeUserFromCourseSimple',                    // soapaction
+    'rpc',                                                               // style
+    'encoded',                                                           // use
+    'This service unsubscribe a user from a course'                     // documentation
+);
+/**
+ * @param array $params
+ * @return array|null|soap_fault
+ */
+function WSUnSubscribeUserFromCourseSimple($params)
+{
+    global $debug;
+    error_log('WSUnSubscribeUserFromCourseSimple');
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    $original_user_id_value = $params['original_user_id_value'];
+    $original_user_id_name = $params['original_user_id_name'];
+    $original_course_id_value = $params['original_course_id_value'];
+    $original_course_id_name = $params['original_course_id_name'];
+
+    $result = array();
+    $result['original_user_id_value'] = $original_user_id_value;
+    $result['result'] = 0;
+
+    $user_id = UserManager::get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    );
+
+    if ($user_id) {
+        if ($debug) {
+            error_log("User $original_user_id_value, $original_user_id_name found");
+            error_log("Course $original_course_id_value, $original_course_id_name found");
+        }
+
+        $courseCode = CourseManager::get_course_id_from_original_id(
+            $original_course_id_value,
+            $original_course_id_name
+        );
+
+        if (empty($courseCode)) {
+            // Course was not found
+            if ($debug) {
+                error_log("course not found");
+            }
+        } else {
+            if ($debug) {
+                error_log("Course $courseCode found");
+            }
+            CourseManager::unsubscribe_user($user_id, $courseCode, 0);
+            $result['result'] = 1;
+        }
+    } else {
+        if ($debug) {
+            error_log("User not found");
+        }
+    }
+
+    return $result;
 }
 
 /* Register WSSuscribeUsersToSession function */
@@ -6728,81 +6836,6 @@ function WSDeleteUserFromGroup($params)
         $params['group_id']
     );
 }
-
-
-$server->wsdl->addComplexType(
-    'unSubscribeUserFromCourseSimple',
-    'complexType',
-    'struct',
-    'all',
-    '',
-    array(
-        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
-        'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-        'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
-        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
-    )
-);
-
-
-
-/**
- * @param array $params
- * @return array|null|soap_fault
- */
-function WSUnSubscribeUserFromCourseSimple($params)
-{
-    global $debug;
-    error_log('WSUnSubscribeUserFromCourseSimple');
-    if (!WSHelperVerifyKey($params)) {
-        return return_error(WS_ERROR_SECRET_KEY);
-    }
-
-    $original_user_id_value = $params['original_user_id_value'];
-    $original_user_id_name = $params['original_user_id_name'];
-    $original_course_id_value = $params['original_course_id_value'];
-    $original_course_id_name = $params['original_course_id_name'];
-
-    $result = array();
-    $result['original_user_id_value'] = $original_user_id_value;
-    $result['result'] = 0;
-
-    $user_id = UserManager::get_user_id_from_original_id(
-        $original_user_id_value,
-        $original_user_id_name
-    );
-
-    if ($user_id) {
-        if ($debug) {
-            error_log(
-                "User $original_user_id_value, $original_user_id_name found"
-            );
-        }
-        $courseCode = CourseManager::get_course_id_from_original_id(
-            $original_course_id_value,
-            $original_course_id_name
-        );
-
-        if (empty($courseCode)) {
-            // Course was not found
-            if ($debug) {
-                error_log("course not found");
-            }
-        } else {
-            if ($debug) {
-                error_log("Course $courseCode found");
-            }
-            CourseManager::unsubscribe_user($user_id, $courseCode, 0);
-            $result['result'] = 1;
-        }
-    } else {
-        if ($debug) {
-            error_log("User not found");
-        }
-    }
-}
-
 
 
 /* Delete user from group Web Service end */

@@ -125,6 +125,24 @@ function confirmation(name) {
         return false;
     }
 }
+
+$(document).ready(function() {
+    $('.lp-btn-associate-forum').on('click', function (e) {
+        var associate = confirm('<?php echo get_lang('ConfirmAssociateForumToLPItem') ?>');
+
+        if (!associate) {
+            e.preventDefault();
+        }
+    });
+
+    $('.lp-btn-dissociate-forum').on('click', function (e) {
+        var dissociate = confirm('<?php echo get_lang('ConfirmDissociateForumToLPItem') ?>');
+
+        if (!dissociate) {
+            e.preventDefault();
+        }
+    });
+});
 </script>
 <?php
 

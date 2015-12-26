@@ -4531,7 +4531,7 @@ class learnpath
         if (empty($name)) {
             return false;
         }
-        $this->name = $name;
+        $this->name = Database::escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $course_id = $this->course_info['real_id'];

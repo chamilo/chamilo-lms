@@ -14,7 +14,6 @@ $language_file[] = 'exercice';
 // setting the help
 $help_content = 'exercise_upload';
 
-// including the global Dokeos file
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'pear/excelreader/reader.php';
@@ -42,10 +41,12 @@ $(document).ready( function(){
 // Action handling
 lp_upload_quiz_action_handling();
 
-$interbreadcrumb[]= array ("url"=>"exercice.php", "name"=> get_lang('Exercices'));
+$interbreadcrumb[] = array(
+    "url" => "exercice.php?".api_get_cidreq(),
+    "name" => get_lang('Exercices'),
+);
 
 // Display the header
-
 Display :: display_header(get_lang('ImportExcelQuiz'), 'Exercises');
 
 if (isset($_GET['message'])) {
@@ -186,6 +187,8 @@ function lp_upload_quiz_action_handling() {
     $noNegativeScoreIndex = array();
     $questionTypeList = array();
     $questionTypeIndex = array();
+    $categoryList = array();
+    $categoryIndex = array();
 
     // Reading all the first column items sequentially to create breakpoints
     for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
@@ -208,6 +211,8 @@ function lp_upload_quiz_action_handling() {
             $noNegativeScoreIndex[] = $i;
         } elseif ($data->sheets[0]['cells'][$i][1] == 'QuestionType') {
             $questionTypeIndex[] = $i;
+        } elseif ($data->sheets[0]['cells'][$i][1] == 'Category') {
+            $categoryIndex[] = $i;
         }
     }
 
@@ -274,9 +279,13 @@ function lp_upload_quiz_action_handling() {
             //a complete line where 1st column is 'EnrichQuestion'
             $question_description[$m] = $column_data;
             $m++;
+        } elseif (in_array($i, $categoryIndex)) {
+            //a complete line where 1st column is 'Category'
+            $categoryList[$n] = $column_data;
+            $n++;
         } elseif (in_array($i, $noNegativeScoreIndex)) {
             //a complete line where 1st column is 'NoNegativeScore'
-            $noNegativeScoreList[$z-1] = $column_data;
+            $noNegativeScoreList[$z - 1] = $column_data;
         }
     }
 
@@ -343,6 +352,16 @@ function lp_upload_quiz_action_handling() {
                 $question_title = $question[$i][2];
                 $description = isset($question_description[$i][2]) ? $question_description[$i][2] : '';
 
+                $categoryId = null;
+                if (isset($categoryList[$i]) && isset($categoryList[$i][2]) && !empty($categoryList[$i][2])) {
+                    $categoryName = $categoryList[$i][2];
+                    $categoryId = Testcategory::get_category_id_for_title($categoryName, $courseId);
+                    if (empty($categoryId)) {
+                        $category = new Testcategory(null, $categoryName, '');
+                        $categoryId = $category->addCategoryInBDD();
+                    }
+                }
+
                 $question_description_text = "<p></p>";
                 if (!empty($description)) {
                     // Question description.
@@ -395,6 +414,14 @@ function lp_upload_quiz_action_handling() {
                         0, // max score
                         $answer->type
                     );
+
+                    if (!empty($categoryId)) {
+                        Testcategory::add_category_for_question_id(
+                            $categoryId,
+                            $question_id,
+                            $courseId
+                        );
+                    }
                 }
 
                 switch ($detectQuestionType) {
@@ -506,7 +533,7 @@ function lp_upload_quiz_action_handling() {
                         $size = array();
 
                         $globalScore = 0;
-                        foreach($answerList as $data) {
+                        foreach ($answerList as $data) {
                             $score = isset($data[3]) ? $data[3] : 0;
                             $globalScore += $score;
                             $scoreList[] = $score;

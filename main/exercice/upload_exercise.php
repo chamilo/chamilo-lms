@@ -348,9 +348,9 @@ function lp_upload_quiz_action_handling() {
                 $categoryId = null;
                 if (isset($categoryList[$i]) && isset($categoryList[$i][2]) && !empty($categoryList[$i][2])) {
                     $categoryName = $categoryList[$i][2];
-                    $categoryId = Testcategory::get_category_id_for_title($categoryName, $courseId);
+                    $categoryId = TestCategory::get_category_id_for_title($categoryName, $courseId);
                     if (empty($categoryId)) {
-                        $category = new Testcategory(null, $categoryName, '');
+                        $category = new TestCategory(null, $categoryName, '');
                         $categoryId = $category->addCategoryInBDD();
                     }
                 }
@@ -409,7 +409,7 @@ function lp_upload_quiz_action_handling() {
                     );
 
                     if (!empty($categoryId)) {
-                        Testcategory::add_category_for_question_id(
+                        TestCategory::add_category_for_question_id(
                             $categoryId,
                             $question_id,
                             $courseId

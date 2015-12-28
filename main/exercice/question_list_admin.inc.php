@@ -158,7 +158,15 @@ if (!$inATest) {
         //$questionList = $objExercise->selectQuestionList(true);
 
         $objExercise->setCategoriesGrouping(false);
-        $questionList = $objExercise->getQuestionListWithMediasUncompressed();
+
+        // Show exercises as in category settings
+        //$questionList = $objExercise->getQuestionListWithMediasUncompressed();
+
+        // Show all questions no matter the category settings.
+        $tempCategoryOrder = $objExercise->specialCategoryOrders;
+        $objExercise->specialCategoryOrders = false;
+        $questionList = $objExercise->selectQuestionList(true);
+        $objExercise->specialCategoryOrders = $tempCategoryOrder;
 
         // Style for columns
         $styleQuestion = "width:50%; float:left;";

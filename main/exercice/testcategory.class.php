@@ -391,7 +391,9 @@ class Testcategory
 		$tabQuestionList = $quiz->selectQuestionList();
 		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
 		for ($i=1; $i <= count($tabQuestionList); $i++) {
-			if (Testcategory::getCategoryForQuestion($tabQuestionList[$i]) == $in_categoryid) {
+			if (isset($tabQuestionList[$i]) &&
+                Testcategory::getCategoryForQuestion($tabQuestionList[$i]) == $in_categoryid
+            ) {
 				$nbCatResult++;
 			}
 		}
@@ -409,16 +411,21 @@ class Testcategory
 		$nbquestionresult = 0;
 		$tabcatid = Testcategory::getListOfCategoriesIDForTest($in_testid);
 		for ($i=0; $i < count($tabcatid); $i++) {
-			if ($tabcatid[$i] > 0) {	// 0 = no category for this questio
-				$nbQuestionInThisCat = Testcategory::getNumberOfQuestionsInCategoryForTest($in_testid, $tabcatid[$i]);
+            // 0 = no category for this question
+			if (isset($tabcatid[$i]) && $tabcatid[$i] > 0) {
+
+                $nbQuestionInThisCat = Testcategory::getNumberOfQuestionsInCategoryForTest(
+                    $in_testid,
+                    $tabcatid[$i]
+                );
 				if ($nbQuestionInThisCat > $in_nbrandom) {
 					$nbquestionresult += $in_nbrandom;
-				}
-				else {
+				} else {
 					$nbquestionresult += $nbQuestionInThisCat;
 				}
 			}
 		}
+
 		return $nbquestionresult;
 	}
 
@@ -445,8 +452,9 @@ class Testcategory
      * $categories[1][30] = 10, array with category id = 1 and question_id = 10
      * A question has "n" categories
      * @param int exercise
-     * @param array check question list
-     * @param string order by
+     * @param array $check_in_question_list
+     * @param array $categoriesAddedInExercise
+     *
      * @return array
      */
     static function getQuestionsByCat(
@@ -483,12 +491,16 @@ class Testcategory
                 }
             }
 
-            if (!isset($categories[$data['category_id']]) OR !is_array($categories[$data['category_id']])) {
+            if (!isset($categories[$data['category_id']]) ||
+                !is_array($categories[$data['category_id']])
+            ) {
                 $categories[$data['category_id']] = array();
             }
 
             $categories[$data['category_id']][] = $data['question_id'];
         }
+
+
 
         if (!empty($categoriesAddedInExercise)) {
             $newCategoryList = array();
@@ -498,7 +510,29 @@ class Testcategory
                     $newCategoryList[$categoryId] = $categories[$categoryId];
                 }
             }
+
+            $checkQuestionsWithNoCategory = false;
+            foreach ($categoriesAddedInExercise as $category) {
+                if (empty($category['category_id'])) {
+                    // Check
+                    $checkQuestionsWithNoCategory = true;
+                    break;
+                }
+            }
+
+            // Select questions that don't have any category related
+            if ($checkQuestionsWithNoCategory) {
+                $originalQuestionList = $check_in_question_list;
+                foreach ($originalQuestionList as $questionId) {
+                    $categoriesFlatten = array_flatten($categories);
+                    if (!in_array($questionId, $categoriesFlatten)) {
+                        $newCategoryList[0][] = $questionId;
+                    }
+                }
+            }
+
             $categories = $newCategoryList;
+
         }
 
         return $categories;
@@ -622,8 +656,12 @@ class Testcategory
 		// foreach question
 		$tabcatid = Testcategory::getListOfCategoriesIDForTest($in_testid);
 		for ($i=0; $i < count($tabcatid); $i++) {
-			if ($tabcatid[$i] > 0) {	// 0 = no category for this question
-				$nbQuestionInThisCat = Testcategory::getNumberOfQuestionsInCategoryForTest($in_testid, $tabcatid[$i]);
+			if (isset($tabcatid[$i]) && $tabcatid[$i] > 0) {
+                // 0 = no category for this question
+                $nbQuestionInThisCat = Testcategory::getNumberOfQuestionsInCategoryForTest(
+                    $in_testid,
+                    $tabcatid[$i]
+                );
 				if ($nbQuestionInThisCat > $res_num_max) {
 					$res_num_max = $nbQuestionInThisCat;
 				}
@@ -705,7 +743,9 @@ class Testcategory
 	 * @param Exercise $exercise
 	 * @param int $course_id
 	 * @param string $order
-	 * @return array
+	 * @param bool $shuffle
+	 * @param bool $excludeCategoryWithNoQuestions
+	 * @return array|bool
 	 */
 	public function getCategoryExerciseTree(
 		$exercise,
@@ -726,8 +766,8 @@ class Testcategory
 		$table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$sql = "SELECT * FROM $table qc
-              INNER JOIN $categoryTable c
-                ON (qc.c_id = c.c_id AND c.id = qc.category_id )
+              	LEFT JOIN $categoryTable c
+                ON (qc.c_id = c.c_id AND c.id = qc.category_id)
                 WHERE qc.c_id = $course_id AND exercise_id = {$exercise->id} ";
 
 		if (!empty($order)) {
@@ -743,6 +783,9 @@ class Testcategory
 					if ($row['count_questions'] == 0) {
 						continue;
 					}
+				}
+				if (empty($row['title']) && empty($row['category_id'])) {
+					$row['title'] = get_lang('NoCategory');
 				}
                 $categories[$row['category_id']] = $row;
 			}
@@ -832,6 +875,16 @@ class Testcategory
 			$return .= '<th height="24">' . get_lang('Categories') . '</th>';
 			$return .= '<th width="70" height="24">' . get_lang('Number') . '</th></tr>';
 
+			$emptyCategory = array(
+				'id' => '0',
+				'name' => get_lang('NoCategory'),
+				'description' => '',
+				'iid' => '0',
+				'title' => get_lang('NoCategory')
+			);
+
+			$categories[] = $emptyCategory;
+
 			foreach ($categories as $category) {
 				$cat_id = $category['iid'];
 				$return .= '<tr>';
@@ -845,6 +898,7 @@ class Testcategory
 				$return .= '</td>';
 				$return .= '</tr>';
 			}
+
 			$return .= '</table>';
 			$return .= get_lang('ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected');
 			return $return;

@@ -836,11 +836,11 @@ class Exercise
     /**
      * Select N values from the questions per category array
      *
+     * @param array $categoriesAddedInExercise
      * @param array $question_list
      * @param array $questions_by_category per category
-     * @param array how many questions per category
+     * @param bool $flatResult
      * @param bool $randomizeQuestions
-     * @param bool flat result
      *
      * @return array
      */
@@ -884,6 +884,7 @@ class Exercise
                         $numberOfQuestions = 0;
                     }
                 }
+
                 if ($addAll) {
                     $numberOfQuestions = 999;
                 }
@@ -894,6 +895,7 @@ class Exercise
                         $numberOfQuestions,
                         $randomizeQuestions
                     );
+
                     if (!empty($elements)) {
                         $temp_question_list[$category_id] = $elements;
                         $categoryQuestionList = $elements;
@@ -951,6 +953,7 @@ class Exercise
                     $question_list,
                     $categoriesAddedInExercise
                 );
+
 
                 $question_list = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
@@ -1139,7 +1142,6 @@ class Exercise
 
             $result['category_with_questions_list'] = $newCategoryList;
         }
-
         return $result;
     }
 
@@ -1163,7 +1165,7 @@ class Exercise
                 $sql = "SELECT DISTINCT e.question_order
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
                         ON (e.question_id = q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
-                    WHERE e.exercice_id	= ".intval($this->id)."";
+                    WHERE e.exercice_id	= ".intval($this->id);
                 $result = Database::query($sql);
 
                 $count_question_orders = Database::num_rows($result);

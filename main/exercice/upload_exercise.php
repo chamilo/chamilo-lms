@@ -12,7 +12,6 @@ use \ChamiloSession as Session;
 // setting the help
 $help_content = 'exercise_upload';
 
-// including the global Dokeos file
 require_once '../inc/global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH) . 'pear/excelreader/reader.php';
@@ -35,9 +34,13 @@ $(document).ready( function(){
 // Action handling
 lp_upload_quiz_action_handling();
 
-$interbreadcrumb[]= array ("url"=>"exercise.php", "name"=> get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => "exercise.php?".api_get_cidreq(),
+    "name" => get_lang('Exercises'),
+);
 
-Display::display_header(get_lang('ImportExcelQuiz'), 'Exercises');
+// Display the header
+Display :: display_header(get_lang('ImportExcelQuiz'), 'Exercises');
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], array('ExerciseEdited'))) {
@@ -53,7 +56,8 @@ echo '</div>';
 // the main content
 lp_upload_quiz_main();
 
-function lp_upload_quiz_actions() {
+function lp_upload_quiz_actions()
+{
     $return = '<a href="exercise.php?'.api_get_cidReq().'">'.
         Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     return $return;
@@ -83,7 +87,33 @@ function lp_upload_quiz_main() {
 
     $link = '<a href="../exercice/quiz_template.xls">'.
         Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate')).get_lang('DownloadExcelTemplate').'</a>';
-    $form->addElement('label', '', $link);
+    $form->addElement('advanced_settings', $link);
+
+    $table = new HTML_Table(array('class' => 'table'));
+
+    $tableList = array(
+        UNIQUE_ANSWER => get_lang('UniqueSelect'),
+        MULTIPLE_ANSWER => get_lang('MultipleSelect'),
+        FILL_IN_BLANKS => get_lang('FillBlanks'),
+        MATCHING => get_lang('Matching'),
+        FREE_ANSWER => get_lang('FreeAnswer'),
+        GLOBAL_MULTIPLE_ANSWER => get_lang('GlobalMultipleAnswer')
+    );
+
+    $table->setHeaderContents(0, 0, get_lang('QuestionType'));
+    $table->setHeaderContents(0, 1, '#');
+
+    $row = 1;
+    foreach ($tableList as $key => $label ) {
+        $table->setCellContents($row, 0, $label);
+        $table->setCellContents($row, 1, $key);
+        $row++;
+    }
+    $table = $table->toHtml();
+
+    $form->addElement('label', get_lang('QuestionType'), $table);
+
+
     $form->addElement('checkbox', 'user_custom_score', null, get_lang('UseCustomScoreForAllQuestions'), array('id'=> 'user_custom_score'));
     $form->addElement('html', '<div id="options" style="display:none">');
     $form->addElement('text', 'correct_score', get_lang('CorrectScore'));
@@ -150,6 +180,8 @@ function lp_upload_quiz_action_handling() {
     $noNegativeScoreIndex = array();
     $questionTypeList = array();
     $questionTypeIndex = array();
+    $categoryList = array();
+    $categoryIndex = array();
 
     // Reading all the first column items sequentially to create breakpoints
     for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
@@ -172,6 +204,8 @@ function lp_upload_quiz_action_handling() {
             $noNegativeScoreIndex[] = $i;
         } elseif ($data->sheets[0]['cells'][$i][1] == 'QuestionType') {
             $questionTypeIndex[] = $i;
+        } elseif ($data->sheets[0]['cells'][$i][1] == 'Category') {
+            $categoryIndex[] = $i;
         }
     }
 
@@ -238,9 +272,13 @@ function lp_upload_quiz_action_handling() {
             //a complete line where 1st column is 'EnrichQuestion'
             $question_description[$m] = $column_data;
             $m++;
+        } elseif (in_array($i, $categoryIndex)) {
+            //a complete line where 1st column is 'Category'
+            $categoryList[$n] = $column_data;
+            $n++;
         } elseif (in_array($i, $noNegativeScoreIndex)) {
             //a complete line where 1st column is 'NoNegativeScore'
-            $noNegativeScoreList[$z-1] = $column_data;
+            $noNegativeScoreList[$z - 1] = $column_data;
         }
     }
 
@@ -277,7 +315,7 @@ function lp_upload_quiz_action_handling() {
 
         // Quiz object
         $exercise = new Exercise();
-        //
+
         $quiz_id = $exercise->createExercise(
             $quiz_title,
             $expired_time,
@@ -306,6 +344,16 @@ function lp_upload_quiz_action_handling() {
                 // Question name
                 $question_title = $question[$i][2];
                 $description = isset($question_description[$i][2]) ? $question_description[$i][2] : '';
+
+                $categoryId = null;
+                if (isset($categoryList[$i]) && isset($categoryList[$i][2]) && !empty($categoryList[$i][2])) {
+                    $categoryName = $categoryList[$i][2];
+                    $categoryId = Testcategory::get_category_id_for_title($categoryName, $courseId);
+                    if (empty($categoryId)) {
+                        $category = new Testcategory(null, $categoryName, '');
+                        $categoryId = $category->addCategoryInBDD();
+                    }
+                }
 
                 $question_description_text = "<p></p>";
                 if (!empty($description)) {
@@ -359,6 +407,14 @@ function lp_upload_quiz_action_handling() {
                         0, // max score
                         $answer->type
                     );
+
+                    if (!empty($categoryId)) {
+                        Testcategory::add_category_for_question_id(
+                            $categoryId,
+                            $question_id,
+                            $courseId
+                        );
+                    }
                 }
 
                 switch ($detectQuestionType) {
@@ -368,7 +424,6 @@ function lp_upload_quiz_action_handling() {
                         $total = 0;
                         if (is_array($answerList) && !empty($question_id)) {
                             $id = 1;
-                            $globalScore = null;
                             $objAnswer = new Answer($question_id, $courseId);
                             $globalScore = $score_list[$i][3];
 
@@ -471,7 +526,7 @@ function lp_upload_quiz_action_handling() {
                         $size = array();
 
                         $globalScore = 0;
-                        foreach($answerList as $data) {
+                        foreach ($answerList as $data) {
                             $score = isset($data[3]) ? $data[3] : 0;
                             $globalScore += $score;
                             $scoreList[] = $score;
@@ -482,7 +537,7 @@ function lp_upload_quiz_action_handling() {
                         $sizeToString = implode(',', $size);
 
                         //<p>Texte long avec les [mots] à [remplir] mis entre [crochets]</p>::10,10,10:200.36363999999998,200,200:0@'
-                        $answerValue  = $description.'::'.$scoreToString.':'.$sizeToString.':0@';
+                        $answerValue = $description.'::'.$scoreToString.':'.$sizeToString.':0@';
                         $objAnswer = new Answer($question_id, $courseId);
                         $objAnswer->createAnswer(
                             $answerValue,
@@ -500,7 +555,9 @@ function lp_upload_quiz_action_handling() {
                         break;
                     case MATCHING:
                         $globalScore = $score_list[$i][3];
+
                         $position = 1;
+
                         $objAnswer = new Answer($question_id, $courseId);
                         foreach ($answerList as $data) {
                             $option = isset($data[3]) ? $data[3] : '';
@@ -565,7 +622,7 @@ function lp_upload_quiz_action_handling() {
             header('location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.Security::remove_XSS($_GET['lp_id']));
             exit;
         } else {
-            //  header('location: exercise.php?' . api_get_cidreq());
+            //  header('location: exercice.php?' . api_get_cidreq());
             echo '<script>window.location.href = "'.api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidReq().'&exerciseId='.$quiz_id.'&session_id='.api_get_session_id().'"</script>';
         }
     }

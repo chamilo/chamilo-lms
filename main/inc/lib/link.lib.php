@@ -934,8 +934,8 @@ function showlinksofcategory($catid)
     if (empty($session_id)) {
         $visibleCondition = " ( (id_session = 0 OR id_session IS NULL) AND (itemproperties.visibility = '0' OR itemproperties.visibility = '1') )  ";
     } else {
-        $visibleCondition = " ( (id_session = 0 OR id_session is NULL) AND itemproperties.visibility = '1') OR ";
-        $visibleCondition .= " ( id_session = $session_id  AND (itemproperties.visibility = '0' OR itemproperties.visibility = '1'))  ";
+        $visibleCondition = " (( (id_session = 0 OR id_session is NULL) AND itemproperties.visibility = '1') OR ";
+        $visibleCondition .= " ( id_session = $session_id  AND (itemproperties.visibility = '0' OR itemproperties.visibility = '1') ))  ";
     }
 
     $sql = "SELECT DISTINCT

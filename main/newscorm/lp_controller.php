@@ -1340,6 +1340,44 @@ switch ($action) {
     case 'report':
         require 'lp_report.php';
         break;
+    case 'dissociate_forum':
+        if (!isset($_GET['id'])) {
+            break;
+        }
+
+        $selectedItem = null;
+
+        foreach ($_SESSION['oLP']->items as $item) {
+            if ($item->db_id != $_GET['id']) {
+                continue;
+            }
+
+            $selectedItem = $item;
+        }
+
+        if (!empty($selectedItem)) {
+            $forumThread = $selectedItem->getForumThread(
+                $_SESSION['oLP']->course_int_id,
+                $_SESSION['oLP']->lp_session_id
+            );
+
+            if (!empty($forumThread)) {
+                $dissoaciated = $selectedItem->dissociateForumThread($forumThread['iid']);
+
+                if ($dissoaciated) {
+                    Display::addFlash(
+                        Display::return_message(get_lang('ForumDissociate'), 'success')
+                    );
+                }
+            }
+        }
+
+        header('Location:' . api_get_path(WEB_PATH) . api_get_self() . '?' . http_build_query([
+            'action' => 'add_item',
+            'type' => 'step',
+            'lp_id' => $_SESSION['oLP']->lp_id
+        ]));
+        break;
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);
         require 'lp_list.php';

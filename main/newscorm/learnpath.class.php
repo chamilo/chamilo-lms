@@ -5641,10 +5641,15 @@ class learnpath
                                 $this->lp_session_id
                             )
                             ) {
+                                $forumIconUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                                        'action' => 'dissociate_forum',
+                                        'id' => $arrLP[$i]['id'],
+                                        'lp_id' => $this->lp_id
+                                    ]);
                                 $forumIcon = Display::url(
-                                    Display::return_icon('forum.png', get_lang('CreateForum'), [], ICON_SIZE_TINY),
-                                    '#',
-                                    ['class' => 'btn btn-default disabled']
+                                    Display::return_icon('forum.png', get_lang('DissociateForumToLPItem'), [], ICON_SIZE_TINY),
+                                    $forumIconUrl,
+                                    ['class' => 'btn btn-default lp-btn-dissociate-forum']
                                 );
                             } else {
                                 $forumIconUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
@@ -5653,9 +5658,9 @@ class learnpath
                                         'lp_id' => $this->lp_id
                                     ]);
                                 $forumIcon = Display::url(
-                                    Display::return_icon('forum.png', get_lang('CreateForum'), [], ICON_SIZE_TINY),
+                                    Display::return_icon('forum.png', get_lang('AssociateForumToLPItem'), [], ICON_SIZE_TINY),
                                     $forumIconUrl,
-                                    ['class' => "btn btn-default"]
+                                    ['class' => "btn btn-default lp-btn-associate-forum"]
                                 );
                             }
                         }

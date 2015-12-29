@@ -7603,4 +7603,8 @@ $CropYourPicture = "Crop your picture";
 $DownloadBadge = "Download badge";
 $NoXMLFileFoundInTheZip = "No XML file found in the zip archive. This is a requirement for this type of import.";
 $BakedBadgeProblem = "There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof.";
+$ConfirmAssociateForumToLPItem = "This action will associate a forum thread to this learning path item. Do you want to proceed?";
+$ConfirmDissociateForumToLPItem = "This action will dissociate the forum thread of this learning path item. Do you want to proceed?";
+$DissociateForumToLPItem = "Dissociate the forum of this learning path item";
+$AssociateForumToLPItem = "Associate a forum to this learning path item";
 ?>

@@ -469,6 +469,8 @@ function lp_upload_quiz_action_handling() {
                                             ) {
                                                 $score = $score_list[$i][3] * -1;
                                             }
+                                        } else {
+                                            $score = $score_list[$i][3] * -1;
                                         }
                                         $score /= $numberRightAnswers;
                                         break;

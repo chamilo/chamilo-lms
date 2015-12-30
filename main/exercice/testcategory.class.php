@@ -500,8 +500,6 @@ class Testcategory
             $categories[$data['category_id']][] = $data['question_id'];
         }
 
-
-
         if (!empty($categoriesAddedInExercise)) {
             $newCategoryList = array();
             foreach ($categoriesAddedInExercise as $category) {
@@ -538,9 +536,13 @@ class Testcategory
         return $categories;
     }
 
-	/**
-	 * return a tab of $in_number random elements of $in_tab
-	 */
+    /**
+     * return a tab of $in_number random elements of $in_tab
+     *
+     * @param $in_tab
+     * @param $in_number
+     * @return array
+     */
 	public static function getNElementsFromArray($in_tab, $in_number)
 	{
 		$tabres = $in_tab;

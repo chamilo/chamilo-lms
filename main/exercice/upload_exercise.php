@@ -188,7 +188,6 @@ function lp_upload_quiz_action_handling() {
     $questionTypeList = array();
     $questionTypeIndex = array();
     $categoryList = array();
-    $categoryIndex = array();
 
     // Reading all the first column items sequentially to create breakpoints
     for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
@@ -211,10 +210,9 @@ function lp_upload_quiz_action_handling() {
             $noNegativeScoreIndex[] = $i;
         } elseif ($data->sheets[0]['cells'][$i][1] == 'QuestionType') {
             $questionTypeIndex[] = $i;
-        } elseif ($data->sheets[0]['cells'][$i][1] == 'Category') {
-            $categoryIndex[] = $i;
         }
     }
+
 
     // Variables
     $quiz = array();
@@ -256,6 +254,10 @@ function lp_upload_quiz_action_handling() {
                 if (isset($myData[1]) && $myData[1] == 'QuestionType') {
                     $questionTypeList[$k] = $myData[3];
                 }
+
+                if (isset($myData[1]) && $myData[1] == 'Category') {
+                    $categoryList[$k] = $myData[2];
+                }
             }
 
             if (!isset($questionTypeList[$k])) {
@@ -279,10 +281,6 @@ function lp_upload_quiz_action_handling() {
             //a complete line where 1st column is 'EnrichQuestion'
             $question_description[$m] = $column_data;
             $m++;
-        } elseif (in_array($i, $categoryIndex)) {
-            //a complete line where 1st column is 'Category'
-            $categoryList[$n] = $column_data;
-            $n++;
         } elseif (in_array($i, $noNegativeScoreIndex)) {
             //a complete line where 1st column is 'NoNegativeScore'
             $noNegativeScoreList[$z - 1] = $column_data;
@@ -353,8 +351,8 @@ function lp_upload_quiz_action_handling() {
                 $description = isset($question_description[$i][2]) ? $question_description[$i][2] : '';
 
                 $categoryId = null;
-                if (isset($categoryList[$i]) && isset($categoryList[$i][2]) && !empty($categoryList[$i][2])) {
-                    $categoryName = $categoryList[$i][2];
+                if (isset($categoryList[$i]) && !empty($categoryList[$i])) {
+                    $categoryName = $categoryList[$i];
                     $categoryId = Testcategory::get_category_id_for_title($categoryName, $courseId);
                     if (empty($categoryId)) {
                         $category = new Testcategory(null, $categoryName, '');

@@ -439,7 +439,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
         $this->addSql("ALTER TABLE c_course_setting MODIFY COLUMN value varchar(255) default ''");
 
-        $this->addSql("UPDATE course_field SET field_type = 1 WHERE field_variable = 'special_course'");
+        $this->addSql("UPDATE course_field SET field_type = 13 WHERE field_variable = 'special_course'");
         $this->addSql("UPDATE user SET registration_date = NULL WHERE registration_date = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE user SET expiration_date = NULL WHERE expiration_date = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE track_e_default SET default_date = NULL WHERE default_date = '0000-00-00 00:00:00'");

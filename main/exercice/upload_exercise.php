@@ -123,7 +123,7 @@ function lp_upload_quiz_main() {
     $form->addRule('user_upload_quiz', get_lang('ThisFieldIsRequired'), 'required');
 
     $form->add_progress_bar();
-    $form->addButtonUpload(get_lang('Send'), 'submit_upload_quiz');
+    $form->addButtonUpload(get_lang('Upload'), 'submit_upload_quiz');
 
     // Display the upload field
     $form->display();

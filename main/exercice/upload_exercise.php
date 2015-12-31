@@ -87,7 +87,7 @@ function lp_upload_quiz_main() {
 
     $link = '<a href="../exercice/quiz_template.xls">'.
         Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate')).get_lang('DownloadExcelTemplate').'</a>';
-    $form->addElement('advanced_settings', $link);
+    $form->addElement('label', '', $link);
 
     $table = new HTML_Table(array('class' => 'table'));
 

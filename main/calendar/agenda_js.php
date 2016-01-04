@@ -14,7 +14,7 @@ $use_anonymous = true;
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin', 'platform')) ? $_REQUEST['type'] : 'personal';
 $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
-if ($type == 'personal') {
+if ($type == 'personal' || $type == 'admin') {
     $cidReset = true; // fixes #5162
 }
 require_once '../inc/global.inc.php';

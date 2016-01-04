@@ -753,7 +753,7 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, v
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'user_chat_status','User chat status',0,0);
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'google_calendar_url','Google Calendar URL',0,0);
 
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) VALUES (2, 1, 'special_course', 'Special course', 1 , 1, '');
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) VALUES (2, 13, 'special_course', 'Special course', 1 , 1, '');
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (2, 10, 'tags', 'Tags', 1, 1);
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (2, 19, 'video_url', 'VideoUrl', 1, 1);
 

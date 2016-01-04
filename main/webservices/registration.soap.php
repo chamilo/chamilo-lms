@@ -3082,6 +3082,7 @@ $server->wsdl->addComplexType(
         'subscribe' => array('name' => 'subscribe', 'type' => 'xsd:string'),
         'unsubscribe' => array('name' => 'unsubscribe', 'type' => 'xsd:string'),
         'visual_code' => array('name' => 'visual_code', 'type' => 'xsd:string'),
+        'disk_quota' => array('name' => 'disk_quota', 'type' => 'xsd:string'), // disk_quota in MB
         'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
         'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
         'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
@@ -3162,21 +3163,24 @@ function WSEditCourse($params){
 
     foreach ($courses_params as $course_param) {
 
-        $tutor_id = $course_param['tutor_id'];
+        $tutor_id = isset($course_param['tutor_id']) ? $course_param['tutor_id'] : '';
         $title = $course_param['title'];
-        $category_code = $course_param['category_code'];
-        $department_name = $course_param['department_name'];
-        $department_url = $course_param['department_url'];
+        $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
+        $department_name = isset($course_param['department_name']) ? $course_param['department_name'] : '';
+        $department_url = isset($course_param['department_url']) ? $course_param['department_url'] : '';
         $course_language = $course_param['course_language'];
         $visibility = $course_param['visibility'];
         $subscribe = $course_param['subscribe'];
         $unsubscribe = $course_param['unsubscribe'];
         $visual_code = $course_param['visual_code'];
+        $diskQuota = isset($course_param['disk_quota']) ? $course_param['disk_quota'] : '100';
+        // Convert to MB
+        $diskQuota = $diskQuota * 1024 * 1024;
 
         $original_course_id_name = $course_param['original_course_id_name'];
         $original_course_id_value = $course_param['original_course_id_value'];
         $orig_course_id_value[] = $original_course_id_value;
-        $extra_list = $course_param['extra'];
+        $extra_list = isset($course_param['extra']) ? $course_param['extra'] : null;
 
         $courseInfo = CourseManager::getCourseInfoFromOriginalId(
             $original_course_id_value,
@@ -3204,8 +3208,6 @@ function WSEditCourse($params){
         if (empty($visual_code)) {
             $visual_code = CourseManager::generate_course_code(substr($title, 0, $maxlength));
         }
-
-        $disk_quota = '50000'; // TODO: A hard-coded value.
         $tutor_name = $tutor_name[0];
         $sql = "UPDATE $course_table SET
                     course_language='".Database::escape_string($course_language)."',
@@ -3215,9 +3217,9 @@ function WSEditCourse($params){
                     visual_code='".Database::escape_string($visual_code)."',
                     department_name='".Database::escape_string($department_name)."',
                     department_url='".Database::escape_string($department_url)."',
-                    disk_quota='".Database::escape_string($disk_quota)."',
                     visibility = '".Database::escape_string($visibility)."',
                     subscribe = '".Database::escape_string($subscribe)."',
+                    disk_quota='".Database::escape_string($diskQuota)."',
                     unsubscribe='".Database::escape_string($unsubscribe)."'
                 WHERE id ='".Database::escape_string($courseId)."'";
         $res = Database::query($sql);

@@ -28,6 +28,8 @@ if ($form->validate()) {
 	$htaccess = @file_get_contents($archive_path.'.htaccess');
 	$result = rmdirr($archive_path, true, true);
 
+	\Chamilo\CoreBundle\Composer\ScriptHandler::dumpCssFiles();
+
 	if (!empty($htaccess)) {
 		@file_put_contents($archive_path.'/.htaccess', $htaccess);
 	}
@@ -38,6 +40,7 @@ if ($form->validate()) {
 		$message = 'ArchiveDirCleanupFailed';
 		$type = 'error';
 	}
+
 	header('Location: '.api_get_self().'?msg='.$message.'&type='.$type);
 	exit;
 }

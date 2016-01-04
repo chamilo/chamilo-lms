@@ -2670,6 +2670,7 @@ $server->wsdl->addComplexType(
         'subscribe' => array('name' => 'subscribe', 'type' => 'xsd:string'),
         'unsubscribe' => array('name' => 'unsubscribe', 'type' => 'xsd:string'),
         'visual_code' => array('name' => 'visual_code', 'type' => 'xsd:string'),
+        'disk_quota' => array('name' => 'disk_quota', 'type' => 'xsd:string'), // disk_quota in MB
         'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
         'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
         'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
@@ -2763,6 +2764,9 @@ function WSEditCourse($params){
         $subscribe = $course_param['subscribe'];
         $unsubscribe = $course_param['unsubscribe'];
         $visual_code = $course_param['visual_code'];
+        $diskQuota = isset($course_param['disk_quota']) ? $course_param['disk_quota'] : '100';
+        // Convert to MB
+        $diskQuota = $diskQuota * 1024 * 1024;
 
         $original_course_id_name = $course_param['original_course_id_name'];
         $original_course_id_value = $course_param['original_course_id_value'];
@@ -2770,7 +2774,8 @@ function WSEditCourse($params){
         $extra_list = $course_param['extra'];
 
         // Get course code from id from remote system.
-        $sql = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+        $sql = "SELECT course_code    FROM $table_field cf,$t_cfv cfv
+                WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
 
@@ -2782,7 +2787,8 @@ function WSEditCourse($params){
         }
 
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT concat(lastname,'',firstname) as tutor_name FROM $table_user WHERE status='1' AND user_id = '$tutor_id' ORDER BY lastname,firstname";
+        $sql = "SELECT concat(lastname,'',firstname) as tutor_name FROM $table_user
+                WHERE status='1' AND user_id = '$tutor_id' ORDER BY lastname,firstname";
         $res = Database::query($sql);
         $tutor_name = Database::fetch_row($res);
 
@@ -2795,18 +2801,20 @@ function WSEditCourse($params){
 
         $disk_quota = '50000'; // TODO: A hard-coded value.
         $tutor_name = $tutor_name[0];
-        $sql = "UPDATE $course_table SET course_language='".Database::escape_string($course_language)."',
-                                    title='".Database::escape_string($title)."',
-                                    category_code='".Database::escape_string($category_code)."',
-                                    tutor_name='".Database::escape_string($tutor_name)."',
-                                    visual_code='".Database::escape_string($visual_code)."',
-                                    department_name='".Database::escape_string($department_name)."',
-                                    department_url='".Database::escape_string($department_url)."',
-                                    disk_quota='".Database::escape_string($disk_quota)."',
-                                    visibility = '".Database::escape_string($visibility)."',
-                                    subscribe = '".Database::escape_string($subscribe)."',
-                                    unsubscribe='".Database::escape_string($unsubscribe)."'
-                                WHERE code='".Database::escape_string($course_code)."'";
+        $sql = "UPDATE $course_table SET
+                    course_language='".Database::escape_string($course_language)."',
+                    title='".Database::escape_string($title)."',
+                    category_code='".Database::escape_string($category_code)."',
+                    tutor_name='".Database::escape_string($tutor_name)."',
+                    visual_code='".Database::escape_string($visual_code)."',
+                    department_name='".Database::escape_string($department_name)."',
+                    department_url='".Database::escape_string($department_url)."',
+                    disk_quota='".Database::escape_string($disk_quota)."',
+                    visibility = '".Database::escape_string($visibility)."',
+                    subscribe = '".Database::escape_string($subscribe)."',
+                    unsubscribe='".Database::escape_string($unsubscribe)."',
+                    disk_quota='".Database::escape_string($diskQuota)."'
+                WHERE code='".Database::escape_string($course_code)."'";
         $res = Database::query($sql);
 
         if (is_array($extra_list) && count($extra_list) > 0) {

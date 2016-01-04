@@ -52,6 +52,7 @@ class Notification extends Model
     const NOTIFICATION_TYPE_INVITATION = 2;
     const NOTIFICATION_TYPE_GROUP = 3;
     const NOTIFICATION_TYPE_WALL_MESSAGE = 4;
+    const NOTIFICATION_TYPE_DIRECT_MESSAGE = 5;
 
     /**
      *
@@ -158,6 +159,9 @@ class Notification extends Model
                     $newTitle .= sprintf(get_lang('YouHaveANewMessageFromX'), $senderName);
                 }
                 break;
+            case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
+                $newTitle = $title;
+                break;
             case self::NOTIFICATION_TYPE_INVITATION:
                 if (!empty($senderInfo)) {
                     $senderName = api_get_person_name(
@@ -214,6 +218,7 @@ class Notification extends Model
         $avoid_my_self = false;
 
         switch ($this->type) {
+            case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
             case self::NOTIFICATION_TYPE_MESSAGE:
                 $setting_to_check = 'mail_notify_message';
                 $defaultStatus = self::NOTIFY_MESSAGE_AT_ONCE;
@@ -312,6 +317,13 @@ class Notification extends Model
         $new_message_text = $link_to_new_message = '';
 
         switch ($this->type) {
+            case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
+                $new_message_text = $content;
+                $link_to_new_message = Display::url(
+                    get_lang('SeeMessage'),
+                    api_get_path(WEB_CODE_PATH) . 'messages/inbox.php'
+                );
+                break;
             case self::NOTIFICATION_TYPE_MESSAGE:
                 if (!empty($sender_info)) {
                     $senderName = api_get_person_name(

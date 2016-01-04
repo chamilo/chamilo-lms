@@ -212,6 +212,8 @@ class MessageManager
      * @param int 	   $edit_message_id id for updating the message (optional)
      * @param int     $topic_id (optional) the default value is the current user_id
      * @param int     $sender_id
+     * @param bool $directMessage
+     *
      * @return bool
      */
     public static function send_message(
@@ -224,7 +226,8 @@ class MessageManager
         $parent_id = 0,
         $edit_message_id = 0,
         $topic_id = 0,
-        $sender_id = null
+        $sender_id = null,
+        $directMessage = false
     ) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
@@ -340,8 +343,12 @@ class MessageManager
             $sender_info = api_get_user_info($user_sender_id);
 
             if (empty($group_id)) {
+                $type = Notification::NOTIFICATION_TYPE_MESSAGE;
+                if ($directMessage) {
+                    $type = Notification::NOTIFICATION_TYPE_DIRECT_MESSAGE;
+                }
                 $notification->save_notification(
-                    Notification::NOTIFICATION_TYPE_MESSAGE,
+                    $type,
                     array($receiver_user_id),
                     $subject,
                     $content,
@@ -382,7 +389,9 @@ class MessageManager
         $receiver_user_id,
         $subject,
         $message,
-        $sender_id = null
+        $sender_id = null,
+        $sendCopyToDrhUsers = false,
+        $directMessage = false
     ) {
         return MessageManager::send_message(
             $receiver_user_id,
@@ -394,7 +403,8 @@ class MessageManager
             null,
             null,
             null,
-            $sender_id
+            $sender_id,
+            $directMessage
         );
     }
 

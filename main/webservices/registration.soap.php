@@ -3163,11 +3163,11 @@ function WSEditCourse($params){
 
     foreach ($courses_params as $course_param) {
 
-        $tutor_id = $course_param['tutor_id'];
+        $tutor_id = isset($course_param['tutor_id']) ? $course_param['tutor_id'] : '';
         $title = $course_param['title'];
-        $category_code = $course_param['category_code'];
-        $department_name = $course_param['department_name'];
-        $department_url = $course_param['department_url'];
+        $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
+        $department_name = isset($course_param['department_name']) ? $course_param['department_name'] : '';
+        $department_url = isset($course_param['department_url']) ? $course_param['department_url'] : '';
         $course_language = $course_param['course_language'];
         $visibility = $course_param['visibility'];
         $subscribe = $course_param['subscribe'];
@@ -3180,7 +3180,7 @@ function WSEditCourse($params){
         $original_course_id_name = $course_param['original_course_id_name'];
         $original_course_id_value = $course_param['original_course_id_value'];
         $orig_course_id_value[] = $original_course_id_value;
-        $extra_list = $course_param['extra'];
+        $extra_list = isset($course_param['extra']) ? $course_param['extra'] : null;
 
         $courseInfo = CourseManager::getCourseInfoFromOriginalId(
             $original_course_id_value,

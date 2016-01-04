@@ -2799,7 +2799,6 @@ function WSEditCourse($params){
             $visual_code = generate_course_code(substr($title, 0, $maxlength));
         }
 
-        $disk_quota = '50000'; // TODO: A hard-coded value.
         $tutor_name = $tutor_name[0];
         $sql = "UPDATE $course_table SET
                     course_language='".Database::escape_string($course_language)."',
@@ -2809,7 +2808,6 @@ function WSEditCourse($params){
                     visual_code='".Database::escape_string($visual_code)."',
                     department_name='".Database::escape_string($department_name)."',
                     department_url='".Database::escape_string($department_url)."',
-                    disk_quota='".Database::escape_string($disk_quota)."',
                     visibility = '".Database::escape_string($visibility)."',
                     subscribe = '".Database::escape_string($subscribe)."',
                     unsubscribe='".Database::escape_string($unsubscribe)."',

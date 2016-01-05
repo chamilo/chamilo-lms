@@ -124,7 +124,7 @@ function import_pdfs($file, $subDir = '/')
                 $move = rename($baseDir.$uploadPath.$file, api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.'/'.$file);
                 api_item_property_update($course, TOOL_DOCUMENT, $docId, 'DocumentAdded', api_get_user_id());
                 // Redo visibility
-                api_set_default_visibility(TOOL_DOCUMENT, $docId);
+                api_set_default_visibility($docId, TOOL_DOCUMENT);
                 $errors[] = array('Line' => 0, 'Code' => $course['code'], 'Title' => $course['title']);
                 // Now add a link to the file from the Course description tool
                 $link = '<p>Sílabo de la asignatura <a href="'.api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$course['code'].'&id_session=0&gidReq=0&action=download&id='.$docId.'" target="_blank"><img src="'.api_get_path(WEB_IMG_PATH).'icons/32/pdf.png"></a></p>';

@@ -185,6 +185,8 @@ class MessageManager
      * @param int 	   $edit_message_id id for updating the message (optional)
      * @param int     $topic_id (optional) the default value is the current user_id
      * @param int     $sender_id
+     * @param bool $directMessage
+     *
      * @return bool
      */
     public static function send_message(

@@ -73,8 +73,8 @@ VALUES
 ('account_valid_duration',NULL, 'textfield','Platform','3660', 'AccountValidDurationTitle','AccountValidDurationComment', NULL, NULL, 0),
 ('use_session_mode', NULL, 'radio','Session','true', 'UseSessionModeTitle','UseSessionModeComment', NULL, NULL, 0),
 ('allow_email_editor', NULL, 'radio', 'Tools', 'false', 'AllowEmailEditorTitle', 'AllowEmailEditorComment', NULL, NULL, 0),
-('registered', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL, 0),
-('donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL,0 ),
+('registered', NULL, 'textfield', NULL, 'false', 'registered', NULL, NULL, NULL, 0),
+('donotlistcampus', NULL, 'textfield', NULL, 'false', 'donotlistcampus', NULL, NULL, NULL,0 ),
 ('show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL, 1),
 ('profile','phone','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'phone', 0),
 ('service_visio', 'active', 'radio',NULL,'false', 'VisioEnable','', NULL, NULL, 0),
@@ -740,25 +740,23 @@ INSERT INTO course_module VALUES
 (29,'attendance','attendance/index.php','attendance.gif',2,1,'basic'),
 (30,'course_progress','course_progress/index.php','course_progress.gif',2,1,'basic');
 
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'legal_accept','Legal',0,0);
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'already_logged_in','Already logged in',0,0);
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'update_type','Update script type',0,0);
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 10, 'tags','tags',0,0);
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'rssfeeds','RSS',0,0);
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'dashboard', 'Dashboard', 0, 0);
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 11, 'timezone', 'Timezone', 0, 0);
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) values (1, 4, 'mail_notify_invitation',   'MailNotifyInvitation',1,1,'1');
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) values (1, 4, 'mail_notify_message',      'MailNotifyMessage',1,1,'1');
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) values (1, 4, 'mail_notify_group_message','MailNotifyGroupMessage',1,1,'1');
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'user_chat_status','User chat status',0,0);
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'google_calendar_url','Google Calendar URL',0,0);
-
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) VALUES (2, 13, 'special_course', 'Special course', 1 , 1, '');
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (2, 10, 'tags', 'Tags', 1, 1);
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (2, 19, 'video_url', 'VideoUrl', 1, 1);
-
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (3, 16, 'image', 'Image', 1, 1);
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'captcha_blocked_until_date', 'Account locked until', 0, 0);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'legal_accept','Legal',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'already_logged_in','Already logged in',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'update_type','Update script type',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 10, 'tags','tags',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'rssfeeds','RSS',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'dashboard', 'Dashboard', 0, 0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 11, 'timezone', 'Timezone', 0, 0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value, created_at) values (1, 4, 'mail_notify_invitation',   'MailNotifyInvitation',1,1,'1', NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value, created_at) values (1, 4, 'mail_notify_message',      'MailNotifyMessage',1,1,'1', NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value, created_at) values (1, 4, 'mail_notify_group_message','MailNotifyGroupMessage',1,1,'1', NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'user_chat_status','User chat status',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'google_calendar_url','Google Calendar URL',0,0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value, created_at) VALUES (2, 13, 'special_course', 'Special course', 1 , 1, '', NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (2, 10, 'tags', 'Tags', 1, 1, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (2, 19, 'video_url', 'VideoUrl', 1, 1, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (3, 16, 'image', 'Image', 1, 1, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'captcha_blocked_until_date', 'Account locked until', 0, 0, NOW());
 
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '1', 'AtOnce',1);
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '8', 'Daily',2);
@@ -772,10 +770,7 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, option_or
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (10, '8', 'Daily',2);
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (10, '0', 'No',3);
 
-INSERT INTO access_url(url, description, active, created_by) VALUES ('http://localhost/',' ',1,1);
-
--- Adding admin to the first portal
--- INSERT INTO access_url_rel_user VALUES(1, 1);
+INSERT INTO access_url(url, description, active, created_by, tms) VALUES ('http://localhost/',' ',1,1, NOW());
 
 -- Adding the platform templates
 INSERT INTO system_template (title, comment, image, content) VALUES
@@ -1550,7 +1545,7 @@ VALUES
 (5,'SocialEnemy'),
 (6,'SocialDeleted');
 
-INSERT INTO skill (name) VALUES ('Root');
+INSERT INTO skill (name, icon, description, short_code, access_url_id, updated_at) VALUES ('Root', '', '', 'root', 1, now());
 
 INSERT INTO skill_rel_skill VALUES(1, 1, 0, 0, 0);
 
@@ -1561,26 +1556,24 @@ INSERT INTO course_type (id, name) VALUES (2, 'Entry exam');
 INSERT INTO sequence_rule (description)
 VALUES ('If user completes 70% of an entity or group of items, he will be able to access another entity or group of items');
 
-INSERT INTO sequence_condition (description, mat_op, param, act_true, act_false) VALUES
-('<= 100%','<=', 100.0, 2, null),
-('>= 70%','>=', 70.0, 0, null);
+INSERT INTO sequence_condition (description, mat_op, param, act_true, act_false) VALUES ('<= 100%','<=', 100.0, 2, 0), ('>= 70%','>=', 70.0, 0, '');
 
 INSERT INTO sequence_rule_condition VALUES
 (1,1,1),
 (2,1,2);
 
-INSERT INTO sequence_method (description,formula, assign, met_type) VALUES
-('Add completed item','v#2 + $complete_items;', 2, 'add'),
-('Update progress by division', 'v#2 / v#3 * 100;', 1, 'div'),
-('Update items count', '$total_items;', 3,'update'),
-('Enable success', '1;', 4, 'success'),
-('Store success date', '(empty(v#5))? api_get_utc_datetime() : v#5;', 5, 'success'),
-('Enable availability', '1;', 6, 'pre'),
-('Store availability start date', '(empty(v#7))? api_get_utc_datetime() : v#7;', 7, 'pre'),
-('Store availability end date', '(empty($available_end_date))? api_get_utc_datetime($available_end_date) : "0000-00-00 00:00:00";', 8, 'pre'),
-('Increase the items count', 'v#3 + $total_items;', 3,'add'),
-('Update completed items', '$complete_items;', 2,'update'),
-('Update progress', '$complete_items / $total_items * 100;', 1, 'update');
+INSERT INTO sequence_method (description,formula, assign, met_type, act_false) VALUES
+('Add completed item','v#2 + $complete_items;', 2, 'add', ''),
+('Update progress by division', 'v#2 / v#3 * 100;', 1, 'div', ''),
+('Update items count', '$total_items;', 3,'update', ''),
+('Enable success', '1;', 4, 'success', ''),
+('Store success date', '(empty(v#5))? api_get_utc_datetime() : v#5;', 5, 'success', ''),
+('Enable availability', '1;', 6, 'pre', ''),
+('Store availability start date', '(empty(v#7))? api_get_utc_datetime() : v#7;', 7, 'pre', ''),
+('Store availability end date', '(empty($available_end_date))? api_get_utc_datetime($available_end_date) : "0000-00-00 00:00:00";', 8, 'pre', ''),
+('Increase the items count', 'v#3 + $total_items;', 3,'add', ''),
+('Update completed items', '$complete_items;', 2,'update', ''),
+('Update progress', '$complete_items / $total_items * 100;', 1, 'update', '');
 
 INSERT INTO sequence_rule_method VALUES
 (1,1,1,1),
@@ -1666,8 +1659,7 @@ UPDATE user SET username_canonical = username;
 
 -- Version 1.10.0.40
 
-INSERT INTO settings_current
-(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
 VALUES
 ('allow_lp_return_link', NULL, 'radio', 'Course', 'true', 'AllowLearningPathReturnLinkTitle', 'AllowLearningPathReturnLinkComment', NULL, NULL, 1),
 ('hide_scorm_export_link', NULL, 'radio', 'Course', 'false', 'HideScormExportLinkTitle', 'HideScormExportLinkComment', NULL, NULL, 1),
@@ -1714,7 +1706,8 @@ VALUES
 ('course_catalog_published', NULL, 'radio', 'Course', 'false', 'CourseCatalogIsPublicTitle', 'CourseCatalogIsPublicComment', NULL, NULL, 0),
 ('user_reset_password', NULL, 'radio', 'Security', 'false', 'ResetPasswordTokenTitle', 'ResetPasswordTokenComment', NULL, NULL, 0),
 ('user_reset_password_token_limit', NULL, 'textfield', 'Security', '3600', 'ResetPasswordTokenLimitTitle', 'ResetPasswordTokenLimitComment', NULL, NULL, 0),
-('my_courses_view_by_session', NULL, 'radio', 'Session', 'false', 'ViewMyCoursesListBySessionTitle', 'ViewMyCoursesListBySessionComment', NULL, NULL, 0);
+('my_courses_view_by_session', NULL, 'radio', 'Session', 'false', 'ViewMyCoursesListBySessionTitle', 'ViewMyCoursesListBySessionComment', NULL, NULL, 0),
+('show_full_skill_name_on_skill_wheel', NULL, 'radio', 'Platform', 'false', 'ShowFullSkillNameOnSkillWheelTitle', 'ShowFullSkillNameOnSkillWheelComment', NULL, NULL, 1);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -1802,17 +1795,7 @@ VALUES
 ('user_reset_password', 'true', 'Yes'),
 ('user_reset_password', 'false', 'No'),
 ('my_courses_view_by_session', 'true', 'Yes'),
-('my_courses_view_by_session', 'false', 'No');
-
--- Version 1.10.0.51
-
-INSERT INTO settings_current
-(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
-VALUES
-('show_full_skill_name_on_skill_wheel', NULL, 'radio', 'Platform', 'false', 'ShowFullSkillNameOnSkillWheelTitle', 'ShowFullSkillNameOnSkillWheelComment', NULL, NULL, 1);
-
-INSERT INTO settings_options (variable, value, display_text)
-VALUES
+('my_courses_view_by_session', 'false', 'No'),
 ('show_full_skill_name_on_skill_wheel', 'true', 'Yes'),
 ('show_full_skill_name_on_skill_wheel', 'false', 'No');
 

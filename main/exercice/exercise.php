@@ -611,9 +611,19 @@ if (!empty($exercise_list)) {
                 );
 
                 if (!empty($sessionId)) {
-                    if ($visibility == 0) {
-                        continue;
+                    $setting = api_get_configuration_value('show_hidden_exercise_added_to_lp');
+                    if ($setting) {
+                        if ($exercise_obj->exercise_was_added_in_lp == false) {
+                            if ($visibility == 0) {
+                                continue;
+                            }
+                        }
+                    } else {
+                        if ($visibility == 0) {
+                            continue;
+                        }
                     }
+
                     $visibility = api_get_item_visibility(
                         $courseInfo,
                         TOOL_QUIZ,

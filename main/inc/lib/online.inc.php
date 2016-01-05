@@ -42,8 +42,8 @@ function LoginCheck($uid)
             $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
                       VALUES ($uid,$uid,'$login_date','$user_ip', '".$_course['real_id']."' , '$session_id' , '$access_url_id' )";
         } else {
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, session_id, access_url_id)
-                      VALUES ($uid,$uid,'$login_date','$user_ip', '$session_id', '$access_url_id')";
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
+                      VALUES ($uid,$uid,'$login_date','$user_ip', 0, '$session_id', '$access_url_id')";
         }
         Database::query($query);
     }

@@ -6682,11 +6682,12 @@ function api_is_global_chat_enabled(){
 
 /**
  * @todo Fix tool_visible_by_default_at_creation labels
- * @todo Add sessionId parameter to avoid using context
  */
-function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseInfo = array())
+function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseInfo = array(), $sessionId = null)
 {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
+    $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
+
     $courseId = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
 
@@ -6749,15 +6750,18 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseIn
 
         switch ($original_tool_id) {
             case TOOL_QUIZ:
-                $objExerciseTmp = new Exercise($courseId);
-                $objExerciseTmp->read($item_id);
-                if ($visibility == 'visible') {
-                    $objExerciseTmp->enable();
-                    $objExerciseTmp->save();
-                } else {
-                    $objExerciseTmp->disable();
-                    $objExerciseTmp->save();
+                if (empty($sessionId)) {
+                    $objExerciseTmp = new Exercise($courseId);
+                    $objExerciseTmp->read($item_id);
+                    if ($visibility == 'visible') {
+                        $objExerciseTmp->enable();
+                        $objExerciseTmp->save();
+                    } else {
+                        $objExerciseTmp->disable();
+                        $objExerciseTmp->save();
+                    }
                 }
+
                 break;
         }
     }

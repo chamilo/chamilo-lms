@@ -298,7 +298,7 @@ class UserManager
         if (!empty($currentUserId)) {
             $creator_id = $currentUserId;
         } else {
-            $creator_id = '';
+            $creator_id = 0;
         }
 
         // First check wether the login already exists

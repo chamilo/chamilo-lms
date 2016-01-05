@@ -103,6 +103,7 @@ class Exercise
     public $notifyUserByEmail = 0;
     public $sessionId = 0;
     public $specialCategoryOrders = false;
+    public $quizRelCategoryTable = false;
     // CREATE TABLE c_quiz_rel_category (iid BIGINT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, category_id INT NOT NULL, exercise_id INT NOT NULL, count_questions INT NOT NULL, PRIMARY KEY(iid));
     // ALTER TABLE c_quiz ADD COLUMN question_selection_type INT;
     /**
@@ -1770,7 +1771,7 @@ class Exercise
             // insert into the item_property table
             api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());
             // This function save the quiz again, carefull about start_time and end_time if you remove this line (see above)
-            api_set_default_visibility($this->id, TOOL_QUIZ, null, true);
+            api_set_default_visibility($this->id, TOOL_QUIZ, null, $this->course);
 
             if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
                 $this->search_engine_save();

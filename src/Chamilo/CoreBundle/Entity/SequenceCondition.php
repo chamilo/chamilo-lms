@@ -32,7 +32,7 @@ class SequenceCondition
     /**
      * @var string
      *
-     * @ORM\Column(name="mat_op", type="integer")
+     * @ORM\Column(name="mat_op", type="string")
      */
     private $mathOperation;
 
@@ -53,7 +53,7 @@ class SequenceCondition
     /**
      * @var string
      *
-     * @ORM\Column(name="act_false", type="integer")
+     * @ORM\Column(name="act_false", type="string")
      */
     private $actFalse;
 

@@ -46,14 +46,14 @@ class SequenceMethod
     /**
      * @var string
      *
-     * @ORM\Column(name="met_type", type="integer")
+     * @ORM\Column(name="met_type", type="string")
      */
     private $metType;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="act_false", type="integer")
+     * @ORM\Column(name="act_false", type="string")
      */
     private $actFalse;
 

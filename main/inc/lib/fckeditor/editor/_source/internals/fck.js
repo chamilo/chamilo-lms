@@ -381,10 +381,10 @@ var FCK =
 		var oRegex ;
 		if ( sTags.length > 0 )
 		{
-			oRegex = new RegExp( '<(' + sTags + ')(?!\w|:)', 'gi' ) ;            
+			oRegex = new RegExp( '<(' + sTags + ')(?!\w|:)', 'gi' ) ;
 			html = html.replace( oRegex, '<FCK:$1' ) ;
 
-			oRegex = new RegExp( '<\/(' + sTags + ')>', 'gi' ) ;            
+			oRegex = new RegExp( '<\/(' + sTags + ')>', 'gi' ) ;
 			html = html.replace( oRegex, '<\/FCK:$1>' ) ;
 		}
 
@@ -398,7 +398,7 @@ var FCK =
 		sTags = 'META' ;
 		if ( FCKBrowserInfo.IsIE )
 			sTags += '|HR' ;
-        
+
         //Fixes bug when editing meta tags see BT#4370
 		//oRegex = new RegExp( '<((' + sTags + ')(?=\\s|>|/)[\\s\\S]*?)/?>', 'gi' ) ;
         oRegex = new RegExp( '<((' + sTags + ')(?=\s|>)[\s\S]*?)/?>', 'gi' ) ;

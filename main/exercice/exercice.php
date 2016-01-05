@@ -248,7 +248,13 @@ if ($is_allowedToEdit) {
                         if (empty($sessionId)) {
                             $objExerciseTmp->enable();
                             $objExerciseTmp->save();
+                        } else {
+                            if (!empty($objExerciseTmp->sessionId)) {
+                                $objExerciseTmp->enable();
+                                $objExerciseTmp->save();
+                            }
                         }
+
                         api_item_property_update(
                             $courseInfo,
                             TOOL_QUIZ,
@@ -264,7 +270,14 @@ if ($is_allowedToEdit) {
                         if (empty($sessionId)) {
                             $objExerciseTmp->disable();
                             $objExerciseTmp->save();
+                        } else {
+                            // Only change active if it belongs to a session
+                            if (!empty($objExerciseTmp->sessionId)) {
+                                $objExerciseTmp->disable();
+                                $objExerciseTmp->save();
+                            }
                         }
+
                         api_item_property_update(
                             $courseInfo,
                             TOOL_QUIZ,

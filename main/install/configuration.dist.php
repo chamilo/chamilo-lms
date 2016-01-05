@@ -334,3 +334,4 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['session_hide_tab_list'] = array();
 //$_configuration['learnpath_fix_xerte_template'] = false;
 //$_configuration['learnpath_proxy_url'] = '';
+//$_configuration['show_hidden_exercise_added_to_lp'] = false;

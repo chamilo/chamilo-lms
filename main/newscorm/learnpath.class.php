@@ -5942,15 +5942,18 @@ class learnpath
         $postDir = isset($_POST['dir']) ? $_POST['dir'] : '';
         $dir = isset ($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
         // Please, do not modify this dirname formatting.
-        if (strstr($dir, '..'))
+        if (strstr($dir, '..')) {
             $dir = '/';
-        if ($dir[0] == '.')
+        }
+        if (!empty($dir[0]) && $dir[0] == '.') {
             $dir = substr($dir, 1);
-        if ($dir[0] != '/')
+        }
+        if (!empty($dir[0]) && $dir[0] != '/') {
             $dir = '/' . $dir;
-        if ($dir[strlen($dir) - 1] != '/')
+        }
+        if ($dir[strlen($dir) - 1] != '/') {
             $dir .= '/';
-
+        }
         $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document' . $dir;
 
         if (empty($_POST['dir']) && empty($_GET['dir'])) {

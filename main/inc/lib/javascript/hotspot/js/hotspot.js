@@ -1,5 +1,7 @@
 window.HotspotQuestion = (function () {
     return function (settings) {
+
+
         var HotspotModel = function (attributes) {
             this.attributes = attributes;
             this.id = 0;
@@ -53,6 +55,9 @@ window.HotspotQuestion = (function () {
                 this.set('height', y - startY);
             }
         };
+
+
+
         SquareModel.decode = function (hotspotInfo) {
             var coords = hotspotInfo.coord.split('|'),
                 position = coords[0].split(';'),
@@ -268,6 +273,7 @@ window.HotspotQuestion = (function () {
                 self.render();
             });
         };
+
         HotspotSVG.prototype.render = function () {
             var newEl = null;
 
@@ -321,6 +327,7 @@ window.HotspotQuestion = (function () {
                 self.render();
             });
         };
+
         AnswerSVG.prototype.render = function () {
             this.circleEl.setAttribute('cx', this.model.get('x'));
             this.circleEl.setAttribute('cy', this.model.get('y'));
@@ -349,6 +356,7 @@ window.HotspotQuestion = (function () {
 
             $('.input-group').removeClass('active');
         };
+
         HotspotSelect.prototype.render = function () {
             var self = this,
                 $el = $(this.el);
@@ -1119,13 +1127,13 @@ window.HotspotQuestion = (function () {
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript_admin.as.php', {
+                xhrQuestion = $.getJSON(config.relpath+'main/exercice/hotspot_actionscript_admin.as.php', {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
 
             case 'user':
-                xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript.as.php', {
+                xhrQuestion = $.getJSON(config.relpath+'main/exercice/hotspot_actionscript.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1134,7 +1142,7 @@ window.HotspotQuestion = (function () {
             case 'solution':
                 //no break
             case 'preview':
-                xhrQuestion = $.getJSON('/main/exercice/hotspot_answers.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'main/exercice/hotspot_answers.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1732,13 +1740,13 @@ window.DelineationQuestion = (function () {
 
             switch (config.for) {
                 case 'admin':
-                    xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript_admin.as.php', {
+                    xhrQuestion = $.getJSON(config.relpath+'main/exercice/hotspot_actionscript_admin.as.php', {
                         modifyAnswers: parseInt(config.questionId)
                     });
                     break;
 
                 case 'user':
-                    xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript.as.php', {
+                    xhrQuestion = $.getJSON(config.relpath+'main/exercice/hotspot_actionscript.as.php', {
                         modifyAnswers: parseInt(config.questionId)
                     });
                     break;
@@ -1746,7 +1754,7 @@ window.DelineationQuestion = (function () {
                 case 'solution':
                     //no break
                 case 'preview':
-                    xhrQuestion = $.getJSON('/main/exercice/hotspot_answers.as.php', {
+                    xhrQuestion = $.getJSON(config.relpath+'main/exercice/hotspot_answers.as.php', {
                         modifyAnswers: parseInt(config.questionId),
                         exe_id: parseInt(config.exerciseId)
                     });

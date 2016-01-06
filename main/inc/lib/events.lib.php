@@ -107,14 +107,15 @@ class Event
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
         $user_id = api_get_user_id();
+        $ip = api_get_real_ip();
 
         if ($user_id) {
             $user_id = "'".$user_id."'";
         } else {
             $user_id = "0"; // no one
         }
-        $sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (access_user_id, c_id, access_date, access_session_id) VALUES
-                (".$user_id.", '".$courseId."', '".$now."','".$id_session."')";
+        $sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (user_ip, access_user_id, c_id, access_date, access_session_id) VALUES
+                ('".$ip."', ".$user_id.", '".$courseId."', '".$now."','".$id_session."')";
 
         Database::query($sql);
 

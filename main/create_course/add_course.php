@@ -245,7 +245,7 @@ if ($form->validate()) {
     $course_values = $form->exportValues();
 
     $wanted_code = $course_values['wanted_code'];
-    $category_code = $course_values['category_code'];
+    $category_code = isset($course_values['category_code']) ? $course_values['category_code'] : '';
     $title = $course_values['title'];
     $course_language = $course_values['course_language'];
     $exemplary_content = !empty($course_values['exemplary_content']);

@@ -6461,7 +6461,7 @@ function api_get_css($file, $media = 'screen') {
  */
 function api_get_jquery_js()
 {
-    return api_get_asset('jquery/dist/jquery.min.js');
+    return api_get_asset('jquery/jquery.min.js');
 }
 
 /**
@@ -6470,7 +6470,7 @@ function api_get_jquery_js()
  */
 function api_get_jquery_web_path()
 {
-    return api_get_path(WEB_PATH).'web/assets/jquery/dist/jquery.min.js';
+    return api_get_path(WEB_PATH).'web/assets/jquery/jquery.min.js';
 }
 
 /**

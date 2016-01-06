@@ -1746,9 +1746,10 @@ class Event
         $courseId = intval($courseId);
         $user_id = intval($user_id);
         $session_id = intval($session_id);
+        $ip = api_get_real_ip();
 
-        $sql = "INSERT INTO $course_tracking_table(c_id, user_id, login_course_date, logout_course_date, counter, session_id)
-                VALUES('".$courseId."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
+        $sql = "INSERT INTO $course_tracking_table(c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
+                VALUES('".$courseId."', '".$ip."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
         Database::query($sql);
 
         // Course catalog stats modifications see #4191

@@ -776,6 +776,7 @@ class CourseManager
             'user_id' => $user_id,
             'status' => $status,
             'sort' => $max_sort + 1,
+            'relation_type' => 0,
             'user_course_cat' => $userCourseCategoryId
         ];
         $insertId = Database::insert($course_user_table, $params);
@@ -2517,8 +2518,7 @@ class CourseManager
         if ($adminGetsAllCourses && UserManager::is_admin($user_id)) {
             // get the whole courses list
             $sql = "SELECT DISTINCT(course.code), course.id as real_id
-                FROM $tbl_course course";
-
+                    FROM $tbl_course course";
         } else {
 
             $with_special_courses = $without_special_courses = '';
@@ -2530,14 +2530,17 @@ class CourseManager
 
             if (!empty($with_special_courses)) {
                 $sql = "SELECT DISTINCT(course.code), course.id as real_id
-                    FROM    " . $tbl_course_user . " course_rel_user
-                    LEFT JOIN " . $tbl_course . " course
-                    ON course.id = course_rel_user.c_id
-                    LEFT JOIN " . $tbl_user_course_category . " user_course_category
-                    ON course_rel_user.user_course_cat = user_course_category.id
-                    WHERE  $with_special_courses
-                    GROUP BY course.code
-                    ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
+                        FROM $tbl_course_user  course_rel_user
+                        LEFT JOIN $tbl_course  course
+                        ON course.id = course_rel_user.c_id
+                        LEFT JOIN $tbl_user_course_category user_course_category
+                        ON course_rel_user.user_course_cat = user_course_category.id
+                        WHERE  $with_special_courses
+                        GROUP BY course.code
+                        ORDER BY user_course_category.sort, course.title, course_rel_user.sort ASC
+
+                    ";
+                //
                 $rs_special_course = Database::query($sql);
                 if (Database::num_rows($rs_special_course) > 0) {
                     while ($result_row = Database::fetch_array($rs_special_course)) {

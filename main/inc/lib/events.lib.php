@@ -107,14 +107,15 @@ class Event
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
         $user_id = api_get_user_id();
+        $ip = api_get_real_ip();
 
         if ($user_id) {
             $user_id = "'".$user_id."'";
         } else {
             $user_id = "0"; // no one
         }
-        $sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (access_user_id, c_id, access_date, access_session_id) VALUES
-                (".$user_id.", '".$courseId."', '".$now."','".$id_session."')";
+        $sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (user_ip, access_user_id, c_id, access_date, access_session_id) VALUES
+                ('".$ip."', ".$user_id.", '".$courseId."', '".$now."','".$id_session."')";
 
         Database::query($sql);
 
@@ -1745,9 +1746,10 @@ class Event
         $courseId = intval($courseId);
         $user_id = intval($user_id);
         $session_id = intval($session_id);
+        $ip = api_get_real_ip();
 
-        $sql = "INSERT INTO $course_tracking_table(c_id, user_id, login_course_date, logout_course_date, counter, session_id)
-                VALUES('".$courseId."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
+        $sql = "INSERT INTO $course_tracking_table(c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
+                VALUES('".$courseId."', '".$ip."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
         Database::query($sql);
 
         // Course catalog stats modifications see #4191

@@ -37,8 +37,9 @@ class OpenofficePresentation extends OpenofficeDocument
         $previous = 0;
         $i = 0;
 
-        if (!is_dir($this->base_work_dir.$this->created_dir))
+        if (!is_dir($this->base_work_dir.$this->created_dir)) {
             return false;
+        }
 
         foreach ($files as $file) {
             /* '||' is used as separator between fields:

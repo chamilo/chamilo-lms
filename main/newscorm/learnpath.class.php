@@ -492,6 +492,11 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::add_item(' . $parent . ',' . $previous . ',' . $type . ',' . $id . ',' . $title . ')', 0);
         }
+        if (empty($course_id)) {
+            // Sometimes Oogie doesn't catch the course info but sets $this->cc
+            $this->course_info = api_get_course_info($this->cc);
+            $course_id = $this->course_info['real_id'];
+        }
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $_course = $this->course_info;
         $parent = intval($parent);

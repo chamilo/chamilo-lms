@@ -3956,12 +3956,14 @@ class Exercise
                 // We made an extra table for the answers
 
                 if ($show_result) {
+                    $relPath = api_get_path(REL_PATH);
                     //	if ($origin != 'learnpath') {
                     echo '</table></td></tr>';
                     echo "
                         <tr>
                             <td colspan=\"2\">
                                 <p><em>" . get_lang('HotSpot') . "</em></p>
+
                                 <div id=\"hotspot-solution-$questionId\"></div>
 
                                 <script>
@@ -3970,9 +3972,11 @@ class Exercise
                                             questionId: $questionId,
                                             exerciseId: $exeId,
                                             selector: '#hotspot-solution-$questionId',
-                                            for: 'solution'
+                                            for: 'solution',
+                                            relPath: '$relPath'
                                         });
                                     });
+
                                 </script>
                             </td>
                         </tr>

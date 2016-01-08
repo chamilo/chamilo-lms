@@ -1118,6 +1118,7 @@ HTML;
             $questionDescription = $objQuestionTmp->selectDescription();
 
             if ($freeze) {
+                $relPath = api_get_path(REL_PATH);
                 echo "
                     <script>
                         $(document).on('ready', function () {
@@ -1125,7 +1126,8 @@ HTML;
                                 questionId: $questionId,
                                 exerciseId: $exerciseId,
                                 selector: '#hotspot-preview-$questionId',
-                                for: 'preview'
+                                for: 'preview',
+                                relPath: '$relPath'
                             });
                         });
                     </script>
@@ -1191,7 +1193,7 @@ HOTSPOT;
             }
 
             $canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
-
+            $relPath = api_get_path(REL_PATH);
             $s .= "
                             <div class=\"col-sm-8 col-md-9\">
                                 <div class=\"hotspot-image\"></div>
@@ -1201,7 +1203,8 @@ HOTSPOT;
                                             questionId: $questionId,
                                             exerciseId: $exe_id,
                                             selector: '#question_div_' + $questionId + ' .hotspot-image',
-                                            for: 'user'
+                                            for: 'user',
+                                            relPath: '$relPath'
                                         });
                                     });
                                 </script>

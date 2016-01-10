@@ -309,10 +309,13 @@ class UserManager
         $currentDate = api_get_utc_datetime();
         $now = new DateTime($currentDate);
 
-        if (empty($expirationDate)) {
+        if (empty($expirationDate) || $expirationDate == '0000-00-00 00:00:00') {
             // Default expiration date
             // if there is a default duration of a valid account then
             // we have to change the expiration_date accordingly
+            // Accept 0000-00-00 00:00:00 as a null value to avoid issues with
+            // third party code using this method with the previous (pre-1.10)
+            // value of 0000...
             if (api_get_setting('account_valid_duration') != '') {
                 $expirationDate = new DateTime($currentDate);
                 $days = intval(api_get_setting('account_valid_duration'));

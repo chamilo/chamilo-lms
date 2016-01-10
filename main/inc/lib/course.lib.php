@@ -3394,7 +3394,7 @@ class CourseManager
                     $params['right_actions'] = '';
                     if (api_is_platform_admin()) {
                         if ($load_dirs) {
-                            $params['right_actions'] .= '<a id="document_preview_' . $course['real_id'] . '_0" class="document_preview" href="javascript:void(0);">' .
+                            $params['right_actions'] .= '<a id="document_preview_' . $course['id'] . '_0" class="document_preview" href="javascript:void(0);">' .
                                 Display::return_icon(
                                     'folder.png',
                                     get_lang('Documents'),
@@ -3409,7 +3409,7 @@ class CourseManager
                                     ICON_SIZE_SMALL
                                 ).'</a>';
                             $params['right_actions'] .= Display::div('', array(
-                                    'id' => 'document_result_' . $course['real_id'] . '_0',
+                                    'id' => 'document_result_' . $course['id'] . '_0',
                                     'class' => 'document_preview_container'
                                 ));
                         } else {
@@ -3423,7 +3423,7 @@ class CourseManager
                     } else {
                         if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                             if ($load_dirs) {
-                                $params['right_actions'] .= '<a id="document_preview_' . $course['real_id'] . '_0" class="document_preview" href="javascript:void(0);">' .
+                                $params['right_actions'] .= '<a id="document_preview_' . $course['id'] . '_0" class="document_preview" href="javascript:void(0);">' .
                                     Display::return_icon(
                                         'folder.png',
                                         get_lang('Documents'),
@@ -3431,7 +3431,7 @@ class CourseManager
                                         ICON_SIZE_SMALL
                                     ).'</a>';
                                 $params['right_actions'] .= Display::div('', array(
-                                        'id' => 'document_result_' . $course['real_id'] . '_0',
+                                        'id' => 'document_result_' . $course['id'] . '_0',
                                         'class' => 'document_preview_container'
                                     ));
                             }

@@ -5361,7 +5361,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
         $sql .= " AND category='$cat' ";
     }
     if ($ordering == 'group') {
-        $sql .= " GROUP BY variable ORDER BY id ASC";
+        $sql .= " ORDER BY id ASC";
     } else {
         $sql .= " ORDER BY 1,2 ASC";
     }

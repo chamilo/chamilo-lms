@@ -1447,7 +1447,7 @@ class SessionManager
 
                 Database::update($tbl_session, $values, array(
                     'id = ?' => $id
-                ), true);
+                ));
 
                 if (!empty($extraFields)) {
                     $extraFields['item_id'] = $id;

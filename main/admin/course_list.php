@@ -95,13 +95,14 @@ function get_course_data($from, $number_of_items, $column, $direction)
                     visibility AS col8,
                     directory as col9,
                     visual_code
-    		FROM $course_table";
+    		FROM $course_table course";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (id = url_rel_course.c_id)";
+        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course
+                 ON (course.id = url_rel_course.c_id)";
     }
 
     if (isset ($_GET['keyword'])) {

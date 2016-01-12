@@ -129,7 +129,7 @@ if($ajax_search) {
 	}
 
 	$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$sql="SELECT code, title
+	$sql="SELECT id, code, title
 	  	  	FROM $tbl_course u
 			ORDER BY title, code";
 	$result = Database::query($sql);
@@ -210,7 +210,7 @@ $url_list = UrlManager::get_url_data();
 								<?php
 								foreach($no_course_list as $no_course) {
 									?>
-									<option value="<?php echo $no_course['code']; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
+									<option value="<?php echo $no_course['id']; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
 								<?php
 								}
 								unset($no_course_list);
@@ -247,8 +247,9 @@ $url_list = UrlManager::get_url_data();
 					<select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
 						<?php
 						foreach($course_list as $course) {
+							$courseInfo = api_get_course_info_by_id($course['id']);
 							?>
-							<option value="<?php echo $course['course_code']; ?>"><?php echo $course['title'].' ('.$course['course_code'].')'; ?></option>
+							<option value="<?php echo $course['id']; ?>"><?php echo $course['title'].' ('.$courseInfo['code'].')'; ?></option>
 						<?php
 						}
 						unset($course_list);

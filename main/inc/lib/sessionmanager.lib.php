@@ -1475,6 +1475,7 @@ class SessionManager
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $tbl_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $userId = api_get_user_id();
 
@@ -1498,7 +1499,9 @@ class SessionManager
         Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id IN($id_checked)");
+        Database::query("DELETE FROM $tbl_item_properties WHERE session_id IN ($id_checked)");
         Database::query("DELETE FROM $tbl_url_session WHERE session_id IN($id_checked)");
+
         Database::query("DELETE FROM $tbl_session WHERE id IN ($id_checked)");
 
         $extraFieldValue = new ExtraFieldValue('session');

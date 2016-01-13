@@ -329,7 +329,7 @@ class Database
             try {
                 $result = $connection->executeQuery($query);
             } catch (Exception $e) {
-                // error_log($e->getMessage());
+                 error_log($e->getMessage());
                 api_not_allowed(false, get_lang('GeneralError'));
                 exit;
             }

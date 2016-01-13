@@ -59,6 +59,7 @@ class NotebookManager
 
         $now = api_get_utc_datetime();
         $params = [
+            'notebook_id' => 0,
             'c_id' => $course_id,
             'user_id' => api_get_user_id(),
             'course' => api_get_course_id(),

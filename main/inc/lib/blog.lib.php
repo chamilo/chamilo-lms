@@ -125,6 +125,7 @@ class Blog
         if ($info_count == 0) {
 			// Create the blog
             $params = [
+				'blog_id' => 0,
                 'c_id' => $course_id,
                 'blog_name' => $title,
                 'blog_subtitle' =>  $subtitle,
@@ -152,6 +153,7 @@ class Blog
 			// Make first post. :)
 
             $params = [
+				'post_id' => 0,
                 'c_id' => $course_id,
                 'title' => get_lang("Welcome"),
                 'full_text' => get_lang('FirstPostText'),
@@ -2536,16 +2538,16 @@ class Blog
 				$visibility_info=($info_log[2]==0) ? 'Visible' : 'Invisible';
 			 	$my_image = '<a href="' .api_get_self(). '?action=edit&blog_id=' . $info_log[3] . '">';
                                 $my_image.= Display::return_icon('edit.png', get_lang('EditBlog'));
-				
+
 				$my_image.= "</a>\n";
 				$my_image.= '<a href="' .api_get_self(). '?action=delete&blog_id=' . $info_log[3] . '" ';
 				$my_image.= 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >';
                                 $my_image.= Display::return_icon('delete.png', get_lang('DeleteBlog'));
-				
+
 				$my_image.= "</a>\n";
 				$my_image.= '<a href="' .api_get_self(). '?action=visibility&blog_id=' . $info_log[3] . '">';
                                 $my_image.= Display::return_icon($visibility_icon . '.gif', get_lang($visibility_info));
-				
+
 				$my_image.= "</a>\n";
 
 				$list_body_blog[]=$my_image;

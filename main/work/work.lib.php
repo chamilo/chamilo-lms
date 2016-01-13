@@ -1593,7 +1593,7 @@ function getWorkListTeacher(
             }
             // Remove Delete Work Button from action List
             // Because removeXSS "removes" the onClick JS Event to do the action (See model.ajax.php - Line 1639)
-            // But still can use the another jqgrid button to remove works (trash icon) 
+            // But still can use the another jqgrid button to remove works (trash icon)
             //
             // $deleteUrl = api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action=delete_dir&'.api_get_cidreq();
             // $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \'' . $deleteUrl . '\' ) " >' .
@@ -3783,14 +3783,16 @@ function addDir($formValues, $user_id, $courseInfo, $group_id, $session_id)
             'filetype' => 'folder',
             'post_group_id' => $group_id,
             'sent_date' => $today,
-            'qualification' => $formValues['qualification'] != '' ? $formValues['qualification'] : '',
-            'parent_id' => '',
-            'qualificator_id' => '',
-            'weight' => $formValues['weight'],
+            'qualification' => $formValues['qualification'] != '' ? $formValues['qualification'] : 0,
+            'parent_id' => 0,
+            'qualificator_id' => 0,
+            'weight' => !empty($formValues['weight']) ? $formValues['weight'] : 0,
             'session_id' => $session_id,
             'allow_text_assignment' => $formValues['allow_text_assignment'],
             'contains_file' => 0,
             'user_id' => $user_id,
+            'has_properties' => 0,
+            'document_id' => 0
         ];
         $id = Database::insert($work_table, $params);
 

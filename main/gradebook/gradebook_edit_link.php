@@ -15,9 +15,10 @@ $course_id              = GradebookUtils::get_course_id_by_link_id($_GET['editli
 $tbl_forum_thread 		= Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_work 				= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 $tbl_attendance 		= Database :: get_course_table(TABLE_ATTENDANCE);
-$linkarray 				= LinkFactory :: load($_GET['editlink']);
-$link = $linkarray[0];
 
+$linkarray 				= LinkFactory :: load($_GET['editlink']);
+/** @var AbstractLink $link */
+$link = $linkarray[0];
 if ($link->is_locked() && !api_is_platform_admin()) {
     api_not_allowed();
 }
@@ -51,7 +52,7 @@ if ($form->validate()) {
     if (!empty($values['select_gradebook'])) {
         $link->set_category_id($values['select_gradebook']);
     }
-    $link->set_visible(empty ($values['visible']) ? 0 : 1);
+    $link->set_visible(empty($values['visible']) ? 0 : 1);
     $link->save();
 
     //Update weight for attendance

@@ -95,15 +95,15 @@ class ForumThreadLink extends AbstractLink
 		}
 
 		$sql = 'SELECT tl.thread_id, tl.thread_title, tl.thread_title_qualify
-				FROM '.$tbl_grade_links.' tl ,'.$tbl_item_property.' ip
+				FROM '.$tbl_grade_links.' tl INNER JOIN '.$tbl_item_property.' ip
+				ON (tl.thread_id = ip.ref AND tl.c_id = ip.c_id )
 				WHERE
 				    tl.c_id = '.$this->course_id.' AND
                     ip.c_id = '.$this->course_id.' AND
-                    tl.thread_id = ip.ref AND
                     ip.tool = "forum_thread" AND
                     ip.visibility<>2 AND
                     '.$session_condition.'
-                GROUP BY ip.ref ';
+                ';
 
 		$result = Database::query($sql);
 
@@ -357,7 +357,10 @@ class ForumThreadLink extends AbstractLink
 		$ref_id = $this->get_ref_id();
 		if (!empty($ref_id)) {
 			//Cleans forum
-			$sql = 'UPDATE '.$this->get_forum_thread_table().' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify=""
+			$sql = 'UPDATE '.$this->get_forum_thread_table().' SET
+			        thread_qualify_max = 0,
+			        thread_weight = 0,
+			        thread_title_qualify = ""
                     WHERE c_id = '.$this->course_id.' AND thread_id= '.$ref_id;
 			Database::query($sql);
 		}

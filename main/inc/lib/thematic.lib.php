@@ -751,7 +751,8 @@ class Thematic
                 'attendance_id' => $attendance_id,
                 'content' => $content,
                 'start_date' => api_get_utc_datetime($start_date),
-                'duration' => $duration
+                'duration' => $duration,
+                'done_advance' => 0
             ];
             $last_id = Database::insert($tbl_thematic_advance, $params);
 
@@ -1155,7 +1156,7 @@ class Thematic
                             $sessionId
                         );
 
-                        if ($item_info['id_session'] == $sessionId) {
+                        if ($item_info['session_id'] == $sessionId) {
 
                             $a_thematic_advance_ids[] = $thematic_advance['id'];
 

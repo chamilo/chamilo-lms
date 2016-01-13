@@ -301,7 +301,10 @@ class Attendance
 			'description' => $this->description,
 			'attendance_qualify_title' => $title_gradebook,
 			'attendance_weight' => $weight_calification,
-			'session_id' => $session_id
+			'session_id' => $session_id,
+			'active' => 1,
+			'attendance_qualify_max' => 0,
+			'locked' => 0
 		];
 		$last_id = Database::insert($tbl_attendance, $params);
 

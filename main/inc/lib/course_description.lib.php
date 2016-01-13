@@ -207,8 +207,8 @@ class CourseDescription
             'description_type' => $this->description_type,
             'title' => $this->title,
             'content' => $this->content,
-            'progress' => $this->progress,
-            'session_id' => $this->session_id,
+            'progress' => intval($this->progress),
+            'session_id' => $this->session_id
         ];
 
         $last_id  = Database::insert($table, $params);
@@ -278,7 +278,7 @@ class CourseDescription
         $params = [
             'title' => $this->title,
             'content' => $this->content,
-            'progress' => $this->progress,
+            'progress' => intval($this->progress),
         ];
 
         Database::update(

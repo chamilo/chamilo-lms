@@ -406,6 +406,7 @@ function store_addcategory()
         // step 3b, we add the category if it does not exist yet.
         if (Database::num_rows($result) == 0) {
             $params = [
+                'cat_id' => 0,
                 'c_id' => $course_id,
                 'cat_name' => $_POST['category_name'],
                 'received' => $received,

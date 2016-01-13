@@ -128,7 +128,7 @@ class GroupManager
         if (!empty($session_condition)) {
             $sql .= $session_condition;
         }
-        $sql .= " GROUP BY g.id ORDER BY UPPER(g.name)";
+        $sql .= "ORDER BY UPPER(g.name)";
 
         $groupList = Database::query($sql);
 

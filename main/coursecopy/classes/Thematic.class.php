@@ -7,7 +7,7 @@ require_once 'Resource.class.php';
  * @package chamilo.backup
  */
 
-class Thematic extends Resource
+class Thematic extends Coursecopy\Resource
 {
     public $params = array();
     public $thematic_advance_list = array();

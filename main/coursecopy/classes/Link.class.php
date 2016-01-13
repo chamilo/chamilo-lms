@@ -9,7 +9,7 @@ require_once 'Resource.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class Link extends Resource
+class Link extends Coursecopy\Resource
 {
 	/**
 	 * The title

@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class ForumCategory extends Resource
+class ForumCategory extends Coursecopy\Resource
 {
     /**
      * Create a new ForumCategory

@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Olivier Brouckaert <oli.brouckaert@dokeos.com>
  * @package chamilo.backup
  */
-class ScormDocument extends Resource
+class ScormDocument extends Coursecopy\Resource
 {
     public $path;
     public $title;

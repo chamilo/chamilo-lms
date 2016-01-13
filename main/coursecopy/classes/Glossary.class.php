@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Isaac flores
  * @package chamilo.backup
  */
-class Glossary extends Resource
+class Glossary extends Coursecopy\Resource
 {
 	public $glossary_id;
 	public $name;

@@ -6,7 +6,7 @@
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class CourseCopyLearnpath extends Resource
+class CourseCopyLearnpath extends Coursecopy\Resource
 {
 	/**
 	 * Type of learnpath (can be dokeos (1), scorm (2), aicc (3))

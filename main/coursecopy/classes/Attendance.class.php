@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @package chamilo.backup
  */
 
-class Attendance extends Resource
+class Attendance extends Coursecopy\Resource
 {
     public $params = array();
     public $attendance_calendar = array();

@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @package chamilo.backup
  */
-class Work extends Resource
+class Work extends Coursecopy\Resource
 {
     public $params = array();
 

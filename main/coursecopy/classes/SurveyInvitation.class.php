@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @package chamilo.backup
  */
-class SurveyInvitation extends Resource
+class SurveyInvitation extends Coursecopy\Resource
 {
 	/**
 	 * Survey code

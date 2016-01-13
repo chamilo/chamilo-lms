@@ -9,7 +9,7 @@ require_once 'Resource.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class Quiz extends Resource
+class Quiz extends Coursecopy\Resource
 {
     /**
      * Create a new Quiz

@@ -1496,6 +1496,13 @@ class SessionManager
             }
         }
 
+        // Delete documents inside a session
+        $courses = SessionManager::getCoursesInSession($id_checked);
+        foreach ($courses as $courseId) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+            DocumentManager::deleteDocumentsFromSession($courseInfo, $id_checked);
+        }
+
         Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id IN($id_checked)");

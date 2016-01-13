@@ -198,6 +198,7 @@ if ($intro_dispForm) {
 }
 
 $thematic_description_html = '';
+$thematicItemTwo = '';
 
 if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
     // Only show this if we're on the course homepage and we're not currently editing

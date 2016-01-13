@@ -1840,6 +1840,7 @@ class UserGroup extends Model
                 INNER JOIN $table_group_rel_user gu
                 ON gu.usergroup_id = g.id
                 $where_relation_condition
+                GROUP BY g.id
                 ORDER BY created_at DESC
                 LIMIT $num ";
 

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+namespace Coursecopy;
 
 define('RESOURCE_DOCUMENT', 'document');
 define('RESOURCE_GLOSSARY', 'glossary');

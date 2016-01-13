@@ -11,7 +11,7 @@ define('FOLDER','folder');
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class Document extends Resource
+class Document extends Coursecopy\Resource
 {
     public $path;
     public $comment;

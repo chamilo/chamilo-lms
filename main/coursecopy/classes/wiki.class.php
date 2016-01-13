@@ -7,7 +7,7 @@
  * @package chamilo.backup
  * @author Matthias Crauwels <matthias.crauwels@UGent.be>, Ghent University
  */
-class Wiki extends Resource
+class Wiki extends Coursecopy\Resource
 {
 	var $id;
 	var $page_id;

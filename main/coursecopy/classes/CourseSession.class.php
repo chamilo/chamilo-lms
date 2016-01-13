@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Jhon Hinojosa <jhon.hinojosa@beeznest.com>
  * @package chamilo.backup
  */
-class CourseSession extends Resource
+class CourseSession extends Coursecopy\Resource
 {
     // The title session
 	public $title;

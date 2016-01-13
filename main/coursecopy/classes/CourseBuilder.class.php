@@ -1147,7 +1147,7 @@ class CourseBuilder
 
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
-            $cd = new CourseDescription(
+            $cd = new \Coursecopy\CourseDescription(
                 $obj->id,
                 $obj->title,
                 $obj->content,

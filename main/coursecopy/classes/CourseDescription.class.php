@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+namespace Coursecopy;
 require_once 'Resource.class.php';
 
 /**

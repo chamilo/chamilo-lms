@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class Announcement extends Resource
+class Announcement extends Coursecopy\Resource
 {
 	/**
 	 * The title of the announcement

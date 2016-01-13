@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class ForumPost extends Resource
+class ForumPost extends Coursecopy\Resource
 {
 
     /**

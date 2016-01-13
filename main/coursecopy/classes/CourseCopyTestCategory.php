@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Hubert Borderiou <hubert.borderiou@grenet.fr>
  * @package chamilo.backup
  */
-class CourseCopyTestcategory extends Resource
+class CourseCopyTestcategory extends Coursecopy\Resource
 {
     /**
      * The title

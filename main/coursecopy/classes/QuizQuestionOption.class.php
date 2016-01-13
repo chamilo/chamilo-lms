@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class QuizQuestionOption extends Resource
+class QuizQuestionOption extends Coursecopy\Resource
 {
     public $obj; //question_option
 

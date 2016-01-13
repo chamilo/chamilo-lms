@@ -4666,7 +4666,7 @@ class DocumentManager
         $fileFullPath = "{$filePath}/{$fileName}.html";
         $fileSize = 0;
         $fileType = 'file';
-        $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH) . 'gradebook/certificate_template/template.html');
+        $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
 
         $search = array('{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{COURSE_DIR}');
         $replace = array($css.$js, $img_dir, $codePath, $default_course_dir);

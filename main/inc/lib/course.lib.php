@@ -4368,6 +4368,8 @@ class CourseManager
             'session_id' => $session_id,
             'url_id' => $url_id,
             'creation_date' => $now,
+            'total_score' => 0,
+            'users' => 0
         );
 
         $result = Database::select(

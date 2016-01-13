@@ -1226,7 +1226,6 @@ function add_document(
     $table_document = Database::get_course_table(TABLE_DOCUMENT);
 
     $params = [
-        'id' => '',
         'c_id' => $c_id,
         'path' => $path,
         'filetype' => $filetype,

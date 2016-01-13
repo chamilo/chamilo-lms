@@ -174,21 +174,17 @@ class Event
         $pos2 = isset($_SERVER['HTTP_REFERER']) ? strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower(api_get_path(WEB_PATH)."index")) : false;
         // end "what's new" notification
         if ($pos !== false || $pos2 !== false) {
-            $sql = "INSERT INTO ".$TABLETRACK_ACCESS."
-                        (access_user_id,
-                         c_id,
-                         access_tool,
-                         access_date,
-                         access_session_id
-                         )
-                    VALUES
-                        (".$user_id.",".// Don't add ' ' around value, it's already done.
-                        "'".$courseId."' ,
-                        '".$tool."',
-                        '".$reallyNow."',
-                        '".$id_session."')";
-            Database::query($sql);
+            $params = [
+                'access_user_id' => $user_id,
+                'c_id' => $courseId,
+                'access_tool' => $tool,
+                'access_date' => $reallyNow,
+                'access_session_id' => $id_session,
+                'user_ip' => api_get_real_ip()
+            ];
+            Database::insert($TABLETRACK_ACCESS, $params);
         }
+
         // "what's new" notification
         $sql = "UPDATE $TABLETRACK_LASTACCESS
                 SET access_date = '$reallyNow'

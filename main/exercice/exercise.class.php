@@ -790,13 +790,13 @@ class Exercise
         if ($id) {
             // we prepare date in the database using the api_get_utc_datetime() function
             if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
-                $start_time = Database::escape_string($this->start_time);
+                $start_time = $this->start_time;
             } else {
                 $start_time = '0000-00-00 00:00:00';
             }
 
             if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
-                $end_time 	= Database::escape_string($this->end_time);
+                $end_time = $this->end_time;
             } else {
                 $end_time = '0000-00-00 00:00:00';
             }

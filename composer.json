@@ -65,6 +65,7 @@
         "fxp/composer-asset-plugin": "~1.0",
         "bower-asset/bootstrap": "3.3.*",
         "bower-asset/fontawesome": "4.4.*",
+        "bower-asset/jquery": "2.0.0",
         "bower-asset/jquery-ui": "1.11.*",
         "bower-asset/bootstrap-daterangepicker": "1.3.*",
         "bower-asset/ckeditor": "4.*",

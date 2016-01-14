@@ -1185,10 +1185,17 @@ function generate_settings_form($settings, $settings_by_access_list)
     $default_values = array();
     $url_info = api_get_access_url($url_id);
     $i = 0;
+    $addedSettings = [];
     foreach ($settings as $row) {
         if (in_array($row['variable'], array_keys($settings_to_avoid))) {
             continue;
         }
+
+        if (in_array($row['variable'], $addedSettings)) {
+            continue;
+        }
+
+        $addedSettings[] = $row['variable'];
 
         if (!empty($_configuration['multiple_access_urls'])) {
             if (api_is_global_platform_admin()) {

@@ -19,6 +19,8 @@ $libpath = api_get_path(LIBRARY_PATH);
 
 // Create the client instance
 $url = api_get_path(WEB_CODE_PATH)."webservices/registration.soap.php?wsdl";
+$url = api_get_path(WEB_CODE_PATH)."webservices/access_url.php?wsdl";
+
 global $_configuration;
 // see the main/inc/configuration.php file to get this value
 $security_key = $_configuration['security_key'];
@@ -39,9 +41,11 @@ $client->debug_flag = true;
 // This should be the IP address of the client
 $ip_address = $_SERVER['SERVER_ADDR'];
 $ip_address = "192.168.1.54";
+$ip_address = "127.0.0.1";
 
 //Secret key
-$secret_key = sha1($ip_address.$security_key);// Hash of the combination of IP Address + Chamilo security key
+//$secret_key = sha1($ip_address.$security_key);// Hash of the combination of IP Address + Chamilo security key
+$secret_key = sha1($security_key);
 
 //Creating a random user_id, this values need to be provided from your system
 $random_user_id = rand(0, 1000);
@@ -255,6 +259,51 @@ if ($err) {
     // Display the error
     echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 }
+
+
+//1. Create user webservice
+$result = $client->call(
+    'WSGetPortals',
+    array('getPortals' => [    'secret_key'                => $secret_key])
+);
+
+$result = $client->call(
+    'WSAddUserToPortal',
+    array('addUserToPortal' => ['user_id' => 1, 'portal_id'=> 1, 'secret_key'                => $secret_key])
+);
+
+$result = $client->call(
+    'WSGetPortalListFromUser',
+    array('getPortalListFromUser' => ['user_id' => 1, 'secret_key'                => $secret_key])
+);
+
+
+$result = $client->call(
+    'WSGetPortalListFromCourse',
+    array('getPortalListFromCourse' => ['course_id' => 20, 'secret_key'                => $secret_key])
+);
+
+$result = $client->call(
+    'WSAddCourseToPortal',
+    array('addCourseToPortal' => ['course_id' => 20, 'portal_id' => 1, 'secret_key'                => $secret_key])
+);
+
+
+$result = $client->call(
+    'WSRemoveUserFromPortal',
+    array('removeUserFromPortal' => ['course_id' => 20, 'portal_id'=> 1, 'secret_key'                => $secret_key])
+);
+
+
+var_dump($user_id);exit;
+
+
+
+
+
+
+
+
 
 if ($client->fault) {
     echo '<h2>Fault</h2><pre>';

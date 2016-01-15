@@ -6,11 +6,6 @@
  */
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'nusoap/nusoap.php';
-require_once $libpath.'fileManage.lib.php';
-require_once $libpath.'fileUpload.lib.php';
-require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
-require_once $libpath.'add_course.lib.inc.php';
 
 $debug = true;
 

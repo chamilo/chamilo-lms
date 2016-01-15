@@ -403,8 +403,15 @@ switch ($action) {
                         if (isset($_POST['path']) && $_GET['edit'] != 'true') {
                             $document_id = $_POST['path'];
                         } else {
-                            $document_id = $_SESSION['oLP']->create_document($_course);
+                            if ($_POST['content_lp']) {
+                                $document_id = $_SESSION['oLP']->create_document(
+                                    $_course,
+                                    $_POST['content_lp'],
+                                    $_POST['title']
+                                );
+                            }
                         }
+
                         $new_item_id = $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,

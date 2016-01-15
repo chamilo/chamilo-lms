@@ -5977,7 +5977,7 @@ class learnpath
         if (!empty($dir[0]) && $dir[0] != '/') {
             $dir = '/' . $dir;
         }
-        if ($dir[strlen($dir) - 1] != '/') {
+        if (isset($dir[strlen($dir) - 1]) && $dir[strlen($dir) - 1] != '/') {
             $dir .= '/';
         }
         $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document' . $dir;

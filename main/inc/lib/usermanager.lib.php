@@ -4731,28 +4731,28 @@ EOF;
     }
 
     /**
-     * @param int $user_id
+     * @param int $userId
      */
-    static function add_user_as_admin($user_id)
+    static function add_user_as_admin($userId)
     {
         $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
-        $user_id = intval($user_id);
+        $userId = intval($userId);
 
-        if (!self::is_admin($user_id)) {
-            $sql = "INSERT INTO $table_admin SET user_id = $user_id";
+        if (!self::is_admin($userId)) {
+            $sql = "INSERT INTO $table_admin SET user_id = $userId";
             Database::query($sql);
         }
     }
 
     /**
-     * @param int $user_id
+     * @param int $userId
      */
-    public static function remove_user_admin($user_id)
+    public static function remove_user_admin($userId)
     {
         $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
-        $user_id = intval($user_id);
-        if (self::is_admin($user_id)) {
-            $sql = "DELETE FROM $table_admin WHERE user_id = user_id";
+        $userId = intval($userId);
+        if (self::is_admin($userId)) {
+            $sql = "DELETE FROM $table_admin WHERE user_id = $userId";
             Database::query($sql);
         }
     }

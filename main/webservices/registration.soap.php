@@ -1286,10 +1286,11 @@ function WSCreateUserPasswordCrypted($params)
             active              = '".Database::escape_string($active)."'";
     if ($debug) error_log($sql);
 
-    $result = Database::query($sql);
+    Database::query($sql);
+    $return = Database::insert_id();
 
-    if ($result) {
-        $return = Database::insert_id();
+    if ($return) {
+
         $sql = "UPDATE $table_user SET user_id = id WHERE id = $return";
         Database::query($sql);
 
@@ -1331,6 +1332,7 @@ function WSCreateUserPasswordCrypted($params)
             }
         }
     } else {
+        if ($debug) error_log('Error while inserting a user');
         return 0;
     }
 

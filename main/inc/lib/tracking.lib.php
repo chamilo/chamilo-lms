@@ -1173,7 +1173,7 @@ class Tracking
                 null,
                 null,
                 null
-            );  
+            );
             foreach ($platformCourses as $course) {
                 $courses[$course['code']] = $course['code'];
             }
@@ -6205,7 +6205,7 @@ class TrackingCourseLog
         $url_table = null;
         $url_condition = null;
     	if (api_is_multiple_url_enabled()) {
-    		$url_table = ", ".$tbl_url_rel_user."as url_users";
+    		$url_table = ", ".$tbl_url_rel_user." as url_users";
     		$url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
     	}
 

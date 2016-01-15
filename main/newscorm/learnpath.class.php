@@ -382,8 +382,8 @@ class learnpath
                             }
 
                             // Add that row to the lp_item_view table so that we have something to show in the stats page.
-                            $sql = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
-                                    VALUES ($course_id, ".$item_id.",".$this->lp_view_id.", 1, 'not attempted')";
+                            $sql = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status, start_time, total_time, score)
+                                    VALUES ($course_id, ".$item_id.",".$this->lp_view_id.", 1, 'not attempted', '".time()."', 0, 0)";
 
                             if ($this->debug > 2) {
                                 error_log(
@@ -600,7 +600,9 @@ class learnpath
             "next_item_id" => $next,
             "display_order" => $display_order +1,
             "prerequisite" => $prerequisites,
-            "max_time_allowed" => $max_time_allowed
+            "max_time_allowed" => $max_time_allowed,
+            'min_score' => 0,
+            'launch_data' => ''
         );
 
         if ($prerequisites != 0) {

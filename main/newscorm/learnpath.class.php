@@ -216,9 +216,15 @@ class learnpath
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
             }
             $this->attempt = 1;
-            $sql = "INSERT INTO $lp_table (c_id, lp_id, user_id, view_count, session_id)
-                    VALUES ($course_id, $lp_id, $user_id, 1, $session_id)";
-            Database::query($sql);
+            $params = [
+                'c_id' => $course_id,
+                'lp_id' => $lp_id,
+                'user_id' => $user_id,
+                'view_count' => 1,
+                'session_id' => $session_id,
+                'last_item' => 0
+            ];
+            Database::insert($lp_table, $params);
             $this->lp_view_id = Database::insert_id();
 
             if ($this->debug > 2) {
@@ -821,9 +827,22 @@ class learnpath
                     'js_lib' => '',
                     'session_id' => $session_id,
                     'created_on' => api_get_utc_datetime(),
+                    'modified_on'  => api_get_utc_datetime(),
                     'publicated_on' => $publicated_on,
                     'expired_on' => $expired_on,
-                    'category_id' => $categoryId
+                    'category_id' => $categoryId,
+                    'force_commit' => 0,
+                    'content_license' => '',
+                    'debug' => 0,
+                    'theme' => '',
+                    'preview_image' => '',
+                    'author' => '',
+                    'prerequisite' => 0,
+                    'hide_toc_frame' => 0,
+                    'seriousgame_mode' => 0,
+                    'autolaunch' => 0,
+                    'max_attempts' => 0,
+                    'subscribe_users' => 0
                 ];
 
                 $id = Database::insert($tbl_lp, $params);

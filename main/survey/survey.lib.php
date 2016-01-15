@@ -668,7 +668,7 @@ class SurveyManager
                 $sql = "UPDATE $table_survey SET survey_id = $new_survey_id
                         WHERE iid = $new_survey_id";
                 Database::query($sql);
-                
+
                 // Insert into item_property
                 api_item_property_update(
                     api_get_course_info(),
@@ -681,7 +681,7 @@ class SurveyManager
         } else {
             $new_survey_id = intval($new_survey_id);
         }
-        
+
         $sql = "SELECT * FROM $table_survey_question_group
                 WHERE c_id = $course_id AND  survey_id='".$survey_id."'";
         $res = Database::query($sql);
@@ -723,14 +723,14 @@ class SurveyManager
             $insertId = Database::insert($table_survey_question, $params);
             $sql = "UPDATE $table_survey_question SET question_id = iid WHERE iid = $insertId";
             Database::query($sql);
-            
+
             $question_id[$row['question_id']] = $insertId;
         }
 
         // Get questions options
         $sql = "SELECT * FROM $table_survey_options
                 WHERE c_id = $course_id AND survey_id='".$survey_id."'";
-        
+
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res ,'ASSOC')) {
             $params = array(

@@ -1298,8 +1298,8 @@ function WSCreateUserPasswordCrypted($params)
         UrlManager::add_user_to_url($return, $url_id);
         if ($debug) error_log("Adding user_id = $return to URL id $url_id ");
 
-        // Save new fieldlabel into user_field table.
-        $field_id = UserManager::create_extra_field(
+        // Create extra field for the original_user_id_name
+        UserManager::create_extra_field(
             $original_user_id_name,
             1,
             $original_user_id_name,
@@ -1312,12 +1312,13 @@ function WSCreateUserPasswordCrypted($params)
             $original_user_id_value
         );
 
+        // Create extra fields
         if (is_array($extra_list) && count($extra_list) > 0) {
             foreach ($extra_list as $extra) {
                 $extra_field_name   = $extra['field_name'];
                 $extra_field_value  = $extra['field_value'];
                 // save new fieldlabel into user_field table
-                $field_id = UserManager::create_extra_field(
+                UserManager::create_extra_field(
                     $extra_field_name,
                     1,
                     $extra_field_name,

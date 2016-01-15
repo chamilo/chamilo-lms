@@ -114,9 +114,9 @@ function get_settings($category = null)
 
                 // One more validation if is changeable.
                 if ($row['access_url_changeable'] == 1) {
-                    $settings_by_access_list[$row['variable']] [$row['subkey']] [$row['category']] = $row;
+                    $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
                 } else {
-                    $settings_by_access_list[$row['variable']] [$row['subkey']] [$row['category']] = array();
+                    $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = array();
                 }
             }
         }

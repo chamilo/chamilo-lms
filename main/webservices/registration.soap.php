@@ -1271,6 +1271,7 @@ function WSCreateUserPasswordCrypted($params)
             lastname            = '".Database::escape_string(trim($lastName))."',
             firstname           = '".Database::escape_string(trim($firstName))."',
             username            = '".Database::escape_string(trim($loginName))."',
+            username_canonical  = '".Database::escape_string(api_strtolower(trim($loginName)))."',
             status              = '".Database::escape_string($status)."',
             password            = '".Database::escape_string($password)."',
             email               = '".Database::escape_string($email)."',

@@ -707,7 +707,7 @@ class ExtraField extends Model
 
         if (!empty($extra)) {
             foreach ($extra as $field_details) {
-                
+
                 // Getting default value id if is set
                 $defaultValueId = null;
                 if (isset($field_details['options']) && !empty($field_details['options'])) {
@@ -736,7 +736,7 @@ class ExtraField extends Model
                         continue;
                     }
                 }
-                
+
                 switch ($field_details['field_type']) {
                     case ExtraField::FIELD_TYPE_TEXT:
                         $form->addElement(
@@ -1086,6 +1086,7 @@ class ExtraField extends Model
                                                 text: value
                                             }));
                                         });
+                                        $("#second_extra_'.$field_details['variable'].'").selectpicker("refresh");
                                     },
                                 });
                             } else {
@@ -1158,13 +1159,13 @@ class ExtraField extends Model
                     case ExtraField::FIELD_TYPE_TAG:
                         $variable = $field_details['variable'];
                         $field_id = $field_details['id'];
-                        
+
                         //Added for correctly translate the extra_field
                         $get_lang_variables = false;
                         if (in_array($variable, ['tags'])) {
                             $get_lang_variables = true;
                         }
-                        
+
                         if ($get_lang_variables) {
                             $field_details['display_text'] = get_lang($field_details['display_text']);
                         }
@@ -1464,7 +1465,7 @@ EOF;
                         if (in_array($field_details['variable'], ['video_url'])) {
                             $get_lang_variables = true;
                         }
-                        
+
                         if ($get_lang_variables) {
                             $field_details['display_text'] = get_lang($field_details['display_text']);
                         }

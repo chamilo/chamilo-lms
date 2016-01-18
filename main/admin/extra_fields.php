@@ -126,6 +126,7 @@ switch ($action) {
         if ($form->validate()) {
             //if ($check) {
             $values = $form->exportValues();
+            unset($values['id']);
             $res = $obj->save($values);
             if ($res) {
                 Display::display_confirmation_message(get_lang('ItemAdded'));

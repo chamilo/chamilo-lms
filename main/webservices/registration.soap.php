@@ -3320,15 +3320,11 @@ $server->register('WSCourseDescription',                    // method name
 // Define the method WSCourseDescription
 function WSCourseDescription($params)
 {
-    global $_course;
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-
     $array_course_desc_id = array();
-    $array_course__desc_default_title = array();
     $array_course_desc_title = array();
     $array_course_desc_content = array();
 
@@ -3759,13 +3755,13 @@ $server->register('WSCreateSession',                // method name
 // define the method WSCreateSession
 function WSCreateSession($params)
 {
-    global $_user;
+    global $debug;
+    $sessionAdminId = 1;
 
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
     $sessions_params = $params['sessions'];
@@ -3788,7 +3784,7 @@ function WSCreateSession($params)
         $original_session_id_name = $session_param['original_session_id_name'];
         $original_session_id_value = $session_param['original_session_id_value'];
         $orig_session_id_value[] = $session_param['original_session_id_value'];
-        $extra_list = $session_param['extra'];
+        $extra_list = isset($session_param['extra']) ? $session_param['extra'] : '';
 
         $sessionId = SessionManager::getSessionIdFromOriginalId(
             $original_session_id_value,
@@ -3796,11 +3792,14 @@ function WSCreateSession($params)
         );
 
         if (empty($sessionId)) {
+            if ($debug) {
+                error_log("session '$name' exists");
+            }
             $results[] = 0;
             continue;
         }
 
-        if (empty($nolimit)){
+        if (empty($nolimit)) {
             $date_start = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start) . ' 00:00:00';
             $date_end = "$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end) . ' 23:59:59';
         } else {
@@ -3809,20 +3808,35 @@ function WSCreateSession($params)
         }
 
         if (empty($name)) {
+            if ($debug) {
+                error_log("session has no name");
+            }
             $results[] = 0;
             continue;
         } elseif (empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start))) {
+            if ($debug) {
+                error_log("There's an error with the start date: $month_start - $day_start - $year_start");
+            }
             $results[] = 0;
             continue;
-        } elseif (empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
+        } elseif (empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,  $day_end, $year_end))) {
             $results[] = 0;
+            if ($debug) {
+                error_log("There's an error with the end date: $month_end - $day_end - $year_end");
+            }
             continue;
         } elseif (empty($nolimit) && $date_start >= $date_end) {
             $results[] = 0;
+            if ($debug) {
+                error_log("There's an error with the start and end date");
+            }
             continue;
         } else {
             $rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".addslashes($name)."'");
             if (Database::num_rows($rs)) {
+                if ($debug) {
+                    error_log("Session with name '$name' already exists");
+                }
                 $results[] = 0;
                 continue;
             } else {
@@ -3849,43 +3863,52 @@ function WSCreateSession($params)
                     null,
                     0,
                     array(),
-                    $_user['user_id']
+                    $sessionAdminId
                 );
 
-                // Save new fieldlabel into course_field table.
-                $field_id = SessionManager::create_session_extra_field(
-                    $original_session_id_name,
-                    1,
-                    $original_session_id_name
-                );
+                if ($id_session) {
 
-                // Save the external system's id into user_field_value table.
-                $res = SessionManager::update_session_extra_field_value(
-                    $id_session,
-                    $original_session_id_name,
-                    $original_session_id_value
-                );
+                    if ($debug) {
+                        error_log("Session created '$id_session' ");
+                    }
+                    // Save new fieldlabel into course_field table.
+                    SessionManager::create_session_extra_field(
+                        $original_session_id_name,
+                        1,
+                        $original_session_id_name
+                    );
 
-                if (is_array($extra_list) && count($extra_list) > 0) {
-                    foreach ($extra_list as $extra) {
-                        $extra_field_name = $extra['field_name'];
-                        $extra_field_value = $extra['field_value'];
-                        // Save new fieldlabel into course_field table.
-                        $field_id = SessionManager::create_session_extra_field(
-                            $extra_field_name,
-                            1,
-                            $extra_field_name
-                        );
-                        // Save the external system's id into course_field_value table.
-                        $res = SessionManager::update_session_extra_field_value(
-                            $id_session,
-                            $extra_field_name,
-                            $extra_field_value
-                        );
+                    // Save the external system's id into user_field_value table.
+                    SessionManager::update_session_extra_field_value(
+                        $id_session,
+                        $original_session_id_name,
+                        $original_session_id_value
+                    );
+
+                    if (is_array($extra_list) && count($extra_list) > 0) {
+                        foreach ($extra_list as $extra) {
+                            $extra_field_name = $extra['field_name'];
+                            $extra_field_value = $extra['field_value'];
+                            // Save new fieldlabel into course_field table.
+                            SessionManager::create_session_extra_field(
+                                $extra_field_name,
+                                1,
+                                $extra_field_name
+                            );
+                            // Save the external system's id into course_field_value table.
+                            SessionManager::update_session_extra_field_value(
+                                $id_session,
+                                $extra_field_name,
+                                $extra_field_value
+                            );
+                        }
+                    }
+                    $results[] = $id_session;
+                } else {
+                    if ($debug) {
+                        error_log("There was an error when trying to save session with name $name");
                     }
                 }
-                $results[] = $id_session;
-                continue;
             }
         }
     } // end principal foreach
@@ -6035,9 +6058,9 @@ function WSUpdateUserApiKey($params) {
             $info = api_get_user_info_from_username($params['chamilo_username']);
             $user_id = $info['user_id'];
             // Save new fieldlabel into user_field table.
-            $field_id = UserManager::create_extra_field($params['original_user_id_name'], 1, $params['original_user_id_name'], '');
+            UserManager::create_extra_field($params['original_user_id_name'], 1, $params['original_user_id_name'], '');
             // Save the external system's id into user_field_value table.
-            $res = UserManager::update_extra_field_value($user_id, $params['original_user_id_name'], $params['original_user_id_value']);
+            UserManager::update_extra_field_value($user_id, $params['original_user_id_name'], $params['original_user_id_value']);
         }
         else {
             return 0;
@@ -6185,7 +6208,7 @@ $server->register('WSUserSubscribedInCourse',                            // meth
  * @param array $params Array of parameters (course and user_id)
  * @return bool|null|soap_fault A simple boolean (true if user is subscribed, false otherwise)
  */
-function WSUserSubscribedInCourse ($params)
+function WSUserSubscribedInCourse($params)
 {
     global $debug;
 

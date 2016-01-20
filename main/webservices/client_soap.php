@@ -19,7 +19,7 @@ $libpath = api_get_path(LIBRARY_PATH);
 
 // Create the client instance
 $url = api_get_path(WEB_CODE_PATH)."webservices/registration.soap.php?wsdl";
-$url = api_get_path(WEB_CODE_PATH)."webservices/access_url.php?wsdl";
+//$url = api_get_path(WEB_CODE_PATH)."webservices/access_url.php?wsdl";
 
 global $_configuration;
 // see the main/inc/configuration.php file to get this value
@@ -36,16 +36,17 @@ if (!empty($soap_error)) {
     $error_message = 'Nusoap object creation failed: ' . $soap_error;
     throw new Exception($error_message);
 }
-
+$client->setDebugLevel(10000);
 $client->debug_flag = true;
+
 // This should be the IP address of the client
 $ip_address = $_SERVER['SERVER_ADDR'];
 $ip_address = "192.168.1.54";
 $ip_address = "127.0.0.1";
 
 //Secret key
-//$secret_key = sha1($ip_address.$security_key);// Hash of the combination of IP Address + Chamilo security key
-$secret_key = sha1($security_key);
+$secret_key = sha1($ip_address.$security_key);// Hash of the combination of IP Address + Chamilo security key
+//$secret_key = sha1($security_key);
 
 //Creating a random user_id, this values need to be provided from your system
 $random_user_id = rand(0, 1000);
@@ -54,6 +55,7 @@ $generate_user_name = 'jbrion'.$random_user_id;
 //Creating a password (the username)
 $generate_password = sha1($generate_user_name);
 $user_field = 'uid';
+$sessionField = 'external_session_id';
 
 $params = array(
     'firstname'                 => 'Jon',
@@ -85,6 +87,72 @@ $user_id = $client->call(
     'WSCreateUserPasswordCrypted',
     array('createUserPasswordCrypted' => $params)
 );
+
+// Check for an error
+$err = $client->getError();
+
+if ($err) {
+    // Display the error
+    echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
+}
+
+
+$sessionValueRandom = uniqid();
+
+$params = [
+    'sessions' => [
+        [
+            'name' => 'session from ws: '.$sessionValueRandom,
+            'year_start' => '2015',
+            'month_start' => '10',
+            'day_start' => '1',
+            'year_end' => '',
+            'month_end' => '',
+            'day_end' => '',
+            'nb_days_access_before' =>  0,
+            'nb_days_access_after' => 0,
+            'nolimit' => 1,
+            'user_id' => 1,
+            'original_session_id_name' => $sessionField,
+            'original_session_id_value' => $sessionValueRandom,
+            'extra' => ''
+        ]
+    ],
+    'secret_key' => $secret_key,
+];
+
+$user_id = $client->call(
+    'WSCreateSession',
+    array('createSession' => $params)
+);
+
+
+$data = [
+    'secret_key' => $secret_key,
+    'userssessions' => [
+        [
+            'original_user_id_name' => $user_field,
+            'original_session_id_value' => $sessionValueRandom,
+            'original_session_id_name' => $sessionField,
+            'original_user_id_values' => [
+                [
+                    'original_user_id_value' => $random_user_id
+                ]
+            ]
+        ],
+    ],
+];
+
+$result = $client->call(
+    'WSSuscribeUsersToSession',
+    array('subscribeUsersToSession' => $data)
+);
+$err = $client->getError();
+var_dump($result);
+var_dump($err);
+
+
+
 
 if (!empty($user_id) && is_numeric($user_id)) {
 

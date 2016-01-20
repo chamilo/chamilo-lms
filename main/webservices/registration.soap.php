@@ -10,7 +10,7 @@ use Chamilo\UserBundle\Entity\User;
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 
-$debug = false;
+$debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);
 define('WS_ERROR_NOT_FOUND_RESULT', 2);
@@ -133,7 +133,8 @@ $server->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     array(),
-    array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:extras[]')),'tns:extras'
+    array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:extras[]')),
+    'tns:extras'
 );
 
 $server->wsdl->addComplexType(
@@ -165,7 +166,8 @@ $server->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     array(),
-    array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:usersParams[]')),'tns:usersParams'
+    array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:usersParams[]')),
+    'tns:usersParams'
 );
 
 $server->wsdl->addComplexType(
@@ -3700,7 +3702,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:createSessionParam[]')),
-    'tns:createSessionParam'
+    'tns:createSessionParamList'
 );
 
 // Register the data structures used by the service
@@ -3763,6 +3765,7 @@ function WSCreateSession($params)
     }
 
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+    error_log(print_r($params, 1));
 
     $sessions_params = $params['sessions'];
     $results = array();
@@ -3791,9 +3794,9 @@ function WSCreateSession($params)
             $original_session_id_name
         );
 
-        if (empty($sessionId)) {
+        if (!empty($sessionId)) {
             if ($debug) {
-                error_log("session '$name' exists");
+                error_log("session with external session id '$original_session_id_value' with '$name' exists");
             }
             $results[] = 0;
             continue;
@@ -3840,21 +3843,29 @@ function WSCreateSession($params)
                 $results[] = 0;
                 continue;
             } else {
-                $startDate = new DateTime($date_start);
-                $endDate = new DateTime($date_end);
-                $diffStart = new DateInterval($nb_days_access_before);
-                $diffEnd = new DateInterval($nb_days_access_after);
-                $coachStartDate = $startDate->sub($diffStart);
-                $coachEndDate = $endDate->add($diffEnd);
+                $coachStartDate = '';
+                if ($date_start) {
 
+                    $startDate = new DateTime($date_start);
+                    $diffStart = new DateInterval($nb_days_access_before);
+                    $coachStartDate = $startDate->sub($diffStart);
+                    $coachStartDate = $coachStartDate->format('Y-m-d H:i:s');
+                }
+                $coachEndDate = '';
+                if ($date_end) {
+                    $endDate = new DateTime($date_end);
+                    $diffEnd = new DateInterval($nb_days_access_after);
+                    $coachEndDate = $endDate->add($diffEnd);
+                    $coachEndDate = $coachEndDate->format('Y-m-d H:i:s');
+                }
                 $id_session = SessionManager::create_session(
                     $name,
                     $date_start,
                     $date_end,
                     $date_start,
                     $date_end,
-                    $coachStartDate->format('Y-m-d H:i:s'),
-                    $coachEndDate->format('Y-m-d H:i:s'),
+                    $coachStartDate,
+                    $coachEndDate,
                     $id_coach,
                     0,
                     0,
@@ -4135,32 +4146,6 @@ function WSEditSession($params)
 }
 
 
-/* Register WSSubscribeUserToCourse function */
-// Register the data structures used by the service
-$server->wsdl->addComplexType(
-    'originalUsersList',
-    'complexType',
-    'array',
-    '',
-    'SOAP-ENC:Array',
-    array(),
-    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:deleteSessionParams[]')),
-    'tns:originalUsersList'
-);
-
-$server->wsdl->addComplexType(
-    'subscribeUserToCourseParams',
-    'complexType',
-    'struct',
-    'all',
-    '',
-    array(
-        'original_user_id_values'   => array('name' => 'original_user_id_values',   'type' => 'tns:originalUsersList'),
-        'original_user_id_name'     => array('name' => 'original_user_id_name',     'type' => 'xsd:string'),
-        'original_course_id_value'  => array('name' => 'original_course_id_value',  'type' => 'xsd:string'),
-        'original_course_id_name'   => array('name' => 'original_course_id_value',  'type' => 'xsd:string')
-    )
-);
 
 /* Register WSDeleteSession function */
 $server->wsdl->addComplexType(
@@ -4890,6 +4875,73 @@ function WSUnSubscribeUserFromCourseSimple($params)
     return $result;
 }
 
+
+
+
+
+$server->wsdl->addComplexType(
+    'subscribeUserToCourseParams',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_values'   => array('name' => 'original_user_id_values',   'type' => 'tns:originalUsersList'),
+        'original_user_id_name'     => array('name' => 'original_user_id_name',     'type' => 'xsd:string'),
+        'original_course_id_value'  => array('name' => 'original_course_id_value',  'type' => 'xsd:string'),
+        'original_course_id_name'   => array('name' => 'original_course_id_value',  'type' => 'xsd:string')
+    )
+);
+
+
+// Prepare output params, in this case will return an array.
+$server->wsdl->addComplexType(
+    'result_subscribeUsersToSession',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'xsd:string'),
+        'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
+        'result' => array('name' => 'result', 'type' => 'xsd:string')
+    )
+);
+
+$server->wsdl->addComplexType(
+    'results_subscribeUsersToSession',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subscribeUsersToSession[]')),
+    'tns:result_subscribeUsersToSession'
+);
+
+$server->wsdl->addComplexType(
+    'originalUserItem',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string')
+    )
+);
+
+// Register the data structures used by the service
+$server->wsdl->addComplexType(
+    'originalUsersList',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:originalUserItem[]')),
+    'tns:originalUserItem'
+);
+
 /* Register WSSuscribeUsersToSession function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
@@ -4929,30 +4981,6 @@ $server->wsdl->addComplexType(
     )
 );
 
-// Prepare output params, in this case will return an array.
-$server->wsdl->addComplexType(
-    'result_subscribeUsersToSession',
-    'complexType',
-    'struct',
-    'all',
-    '',
-    array(
-        'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'xsd:string'),
-        'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
-        'result' => array('name' => 'result', 'type' => 'xsd:string')
-    )
-);
-
-$server->wsdl->addComplexType(
-    'results_subscribeUsersToSession',
-    'complexType',
-    'array',
-    '',
-    'SOAP-ENC:Array',
-    array(),
-    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subscribeUsersToSession[]')),
-    'tns:result_subscribeUsersToSession'
-);
 
 // Register the method to expose
 $server->register('WSSuscribeUsersToSession',                          // method name
@@ -4968,10 +4996,10 @@ $server->register('WSSuscribeUsersToSession',                          // method
 // define the method WSSuscribeUsersToSession
 function WSSuscribeUsersToSession($params)
 {
+    global $debug;
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -4979,11 +5007,14 @@ function WSSuscribeUsersToSession($params)
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
     $userssessions_params = $params['userssessions'];
+
+    if ($debug) {
+        error_log(print_r($params, 1));
+    }
     $results = array();
     $orig_user_id_value = array();
     $orig_session_id_value = array();
     foreach ($userssessions_params as $usersession_params) {
-
         $original_session_id_value = $usersession_params['original_session_id_value'];
         $original_session_id_name = $usersession_params['original_session_id_name'];
         $original_user_id_name = $usersession_params['original_user_id_name'];
@@ -5003,9 +5034,14 @@ function WSSuscribeUsersToSession($params)
         $usersList = array();
         foreach ($original_user_id_values as $key => $row_original_user_list) {
             $user_id = UserManager::get_user_id_from_original_id(
-                $original_user_id_values[$key],
-                $original_user_id_name[$key]
+                $row_original_user_list['original_user_id_value'],
+                $original_user_id_name
             );
+
+
+            if ($debug) {
+                error_log(" User to subscribe: $user_id");
+            }
             if ($user_id == 0) {
                 continue; // user_id doesn't exist.
             } else {

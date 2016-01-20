@@ -1813,6 +1813,8 @@ class SessionManager
             return false;
         }
 
+        $courses = SessionManager::getCoursesInSession($sessionId);
+
         $courseCode = Database::escape_string($courseInfo['code']);
 
         $statusCondition = null;
@@ -1831,6 +1833,10 @@ class SessionManager
                         $statusCondition
                     ";
             Database::query($sql);
+
+            if (count($courses) == 1) {
+                SessionManager::unsubscribe_user_from_session($sessionId, $userId);
+            }
         }
 
         if ($updateTotal) {

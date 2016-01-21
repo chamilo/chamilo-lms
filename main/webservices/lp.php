@@ -174,6 +174,7 @@ function WSImportLP($params)
     $fileData = base64_decode($params['file_data']);
 
     $uniqueFile = uniqid();
+    $userId = 1; // admin
     $filePath = api_get_path(SYS_ARCHIVE_PATH) . $uniqueFile;
     file_put_contents($filePath, $fileData);
 
@@ -198,12 +199,15 @@ function WSImportLP($params)
         $oScorm->import_manifest(
             $courseInfo['code'],
             $maxScore,
-            $sessionId
+            $sessionId,
+            $userId
         );
         $oScorm->set_name($lpName);
         $oScorm->set_proximity($proximity, $courseId);
         $oScorm->set_maker($maker, $courseId);
         //$oScorm->set_jslib('scorm_api.php');
+
+        if ($debug) error_log('scorm was added');
         return 1;
     } else {
         if ($debug) error_log('manifest data empty');

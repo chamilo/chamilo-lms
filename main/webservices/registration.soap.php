@@ -1007,10 +1007,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'userId'       => array('name' => 'course',     'type' => 'xsd:string'), // Chamilo user Id
-        'sessionId'      => array('name' => 'user_id',    'type' => 'xsd:string'), // Current Session course ID
-        'courseId'      =>array('name' => 'courseId',      'type' => 'xsd:string'), // Course Real Id
-        'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
+        'userId' => array('name' => 'course',     'type' => 'xsd:string'), // Chamilo user Id
+        'sessionId' => array('name' => 'user_id',    'type' => 'xsd:string'), // Current Session course ID
+        'courseId' =>array('name' => 'courseId',      'type' => 'xsd:string'), // Course Real Id
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
 );
 
@@ -1031,7 +1031,7 @@ $server->register(
  * @param array $params - WSFunction parameters (include VerifyKey)
  * @return bool|null|soap_fault A simple boolean (true if teacher successful subscribed, false otherwise)
  */
-function WSSubscribeTeacherToSessionCourse($params)
+    function WSSubscribeTeacherToSessionCourse($params)
 {
     global $debug;
 

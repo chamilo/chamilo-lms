@@ -965,12 +965,13 @@ class ImportCsv
             foreach ($data as $row) {
                 $row = $this->cleanCourseRow($row);
 
-                $courseCode = CourseManager::get_course_id_from_original_id(
+                $courseId = CourseManager::get_course_id_from_original_id(
                     $row['extra_' . $this->extraFieldIdNameList['course']],
                     $this->extraFieldIdNameList['course']
                 );
 
-                $courseInfo = api_get_course_info($courseCode);
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $courseCode = $courseInfo['code'];
 
                 if (empty($courseInfo)) {
                     // Create

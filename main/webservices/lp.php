@@ -391,18 +391,20 @@ function WSDeleteLp($params)
     $sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
     $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;
 
-    $courseCode = CourseManager::get_course_id_from_original_id(
+    $courseId = CourseManager::get_course_id_from_original_id(
         $courseIdValue,
         $courseIdName
     );
 
-    $courseInfo = api_get_course_info($courseCode);
-    $courseId = $courseInfo['real_id'];
+    $courseInfo = api_get_course_info_by_id($courseId);
+
 
     if (empty($courseInfo)) {
         if ($debug) error_log("Course not found: $courseIdName : $courseIdValue");
         return 'Course not found';
     }
+
+    $courseCode = $courseInfo['code'];
 
     $sessionId = 0;
 
@@ -421,7 +423,7 @@ function WSDeleteLp($params)
     }
     */
 
-    $lp = new learnpath($courseInfo['code'], $lpId, null);
+    $lp = new learnpath($courseCode, $lpId, null);
     if ($lp) {
         if ($debug) error_log("LP deleted $lpId");
 
@@ -572,13 +574,14 @@ function WSCreateLp($params)
     /*$sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
     $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;*/
 
-    $courseCode = CourseManager::get_course_id_from_original_id(
+    $courseId = CourseManager::get_course_id_from_original_id(
         $courseIdValue,
         $courseIdName
     );
 
-    $courseInfo = api_get_course_info($courseCode);
+    $courseInfo = api_get_course_info_by_id($courseId);
     $courseId = $courseInfo['real_id'];
+    $courseCode = $courseInfo['code'];
 
     if (empty($courseInfo)) {
         if ($debug) {

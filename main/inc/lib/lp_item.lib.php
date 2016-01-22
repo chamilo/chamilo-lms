@@ -11,28 +11,28 @@
  */
 class LpItem
 {
-    public $c_id=0;
-    public $id=0;
-    public $lp_id=0;
-    public $item_type="";
-    public $ref="";
-    public $title="";
-    public $description="";
-    public $path="";
-    public $min_score=0;
-    public $max_score=0;
-    public $mastery_score=0;
-    public $parent_item_id=0;
-    public $previous_item_id=0;
-    public $next_item_id=0;
-    public $display_order=0;
-    public $prerequisite="";
-    public $parameters="";
-    public $launch_data="";
-    public $max_time_allowed="";
-    public $terms="";
-    public $search_did=0;
-    public $audio="";
+    public $c_id = 0;
+    public $id = 0;
+    public $lp_id = 0;
+    public $item_type = "";
+    public $ref = "";
+    public $title = "";
+    public $description = "";
+    public $path = "";
+    public $min_score = 0;
+    public $max_score = 0;
+    public $mastery_score = 0;
+    public $parent_item_id = 0;
+    public $previous_item_id = 0;
+    public $next_item_id = 0;
+    public $display_order = 0;
+    public $prerequisite = "";
+    public $parameters = "";
+    public $launch_data = "";
+    public $max_time_allowed = "";
+    public $terms = "";
+    public $search_did = 0;
+    public $audio = "";
 
     public function __construct($in_c_id=0, $in_id=0)
     {

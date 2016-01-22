@@ -197,6 +197,7 @@ class SystemAnnouncementManager
 			$content .= '</table>';
 			$content .= '</div>';
 		}
+
 		return $content;
 	}
 

@@ -12,7 +12,7 @@ class GlossaryManager
     /**
      * Get all glossary terms
      * @author Isaac Flores <isaac.flores@dokeos.com>
-     * @return Array Contain glossary terms
+     * @return array Contain glossary terms
      */
     public static function get_glossary_terms()
     {
@@ -37,7 +37,7 @@ class GlossaryManager
      * Get glossary term by glossary id
      * @author Isaac Flores <florespaz@bidsoftperu.com>
      * @param int $glossary_id
-     * @return String The glossary description
+     * @return string The glossary description
      */
     public static function get_glossary_term_by_glossary_id ($glossary_id)
     {
@@ -58,8 +58,8 @@ class GlossaryManager
     /**
      * Get glossary term by glossary id
      * @author Isaac Flores <florespaz_isaac@hotmail.com>
-     * @param String The glossary term name
-     * @return String The glossary description
+     * @param string The glossary term name
+     * @return string The glossary description
      */
     public static function get_glossary_term_by_glossary_name ($glossary_name)
     {

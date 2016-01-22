@@ -86,6 +86,7 @@ class Statistics
         }
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->number;
     }
 
@@ -238,7 +239,9 @@ class Statistics
                     user.username         as col5,
                     user.user_id         as col6,
                     default_date         as col7
-                    FROM $track_e_default as track_default, $table_user as user, $access_url_rel_user_table as url
+                    FROM $track_e_default as track_default,
+                    $table_user as user,
+                    $access_url_rel_user_table as url
                     WHERE
                         track_default.default_user_id = user.user_id AND
                         url.user_id = user.user_id AND

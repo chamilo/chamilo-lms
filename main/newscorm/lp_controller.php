@@ -1331,7 +1331,7 @@ switch ($action) {
                     }
 
                     if (!empty($forumId)) {
-                        $selectedItem->createForumTthread($forumId);
+                        $selectedItem->createForumThread($forumId);
                     }
                 }
             }

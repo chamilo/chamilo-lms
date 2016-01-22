@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /*
  * Coaches reporting
  * @package chamilo.reporting
  */
-/**
- * Code
- */
+
 ob_start();
 $cidReset = true;
 
@@ -114,7 +113,9 @@ if (Database::num_rows($result_coachs) > 0) {
 		$id_coach = $coachs["id_coach"];
 
 		if (isset($_GET["id_student"])) {
-			$sql_infos_coach = "SELECT lastname, firstname FROM $tbl_user WHERE user_id='$id_coach'";
+			$sql_infos_coach = "SELECT lastname, firstname
+            FROM $tbl_user
+            WHERE user_id='$id_coach'";
 			$result_coachs_infos = Database::query($sql_infos_coach);
 			$lastname = Database::result($result_coachs_infos, 0, "lastname");
 			$firstname = Database::result($result_coachs_infos, 0, "firstname");
@@ -123,7 +124,9 @@ if (Database::num_rows($result_coachs) > 0) {
 			$firstname = $coachs["firstname"];
 		}
 
-		$sql_connection_time = "SELECT login_date, logout_date FROM $tbl_track_login WHERE login_user_id ='$id_coach' AND logout_date <> 'null'";
+		$sql_connection_time = "SELECT login_date, logout_date
+        FROM $tbl_track_login
+        WHERE login_user_id ='$id_coach' AND logout_date <> 'null'";
 		$result_connection_time = Database::query($sql_connection_time);
 
 		$nb_seconds = 0;
@@ -173,7 +176,7 @@ if (Database::num_rows($result_coachs) > 0) {
 			        <td>'.$firstname.'</td><td>'.$lastname.'</td><td>'.$s_connection_time.'</td>
 			        <td>
 			            <a href="course.php?type=coach&user_id='.$id_coach.'">
-                                    '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                        '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
 			            </a>
                     </td>
 			        <td>

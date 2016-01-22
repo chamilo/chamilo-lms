@@ -55,7 +55,8 @@ if (!empty($my_courses)) {
 		}
 
 		$t_lp 	= Database :: get_course_table(TABLE_LP_MAIN);
-		$sql_lp = "SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = $course_id AND lp.session_id = 0";
+		$sql_lp = "SELECT lp.name, lp.id FROM $t_lp lp
+				   WHERE c_id = $course_id AND lp.session_id = 0";
 		$rs_lp 	= Database::query($sql_lp);
 		$t_lpi 	= Database :: get_course_table(TABLE_LP_ITEM);
 		$t_news = Database :: get_course_table(TABLE_ANNOUNCEMENT);

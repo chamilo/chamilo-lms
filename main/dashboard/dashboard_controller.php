@@ -2,9 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Controller script. Prepares the common background variables to give to the scripts corresponding to
+ * Controller script. Prepares the common background
+ * variables to give to the scripts corresponding to
  * the requested action
- * This file contains class used like controller, it should be included inside a dispatcher file (e.g: index.php)
+ * This file contains class used like controller,
+ * it should be included inside a dispatcher file (e.g: index.php)
  * @author Christian Fasanando <christian1827@gmail.com>
  *
  * @package chamilo.dashboard

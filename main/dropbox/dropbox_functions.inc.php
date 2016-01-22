@@ -222,7 +222,10 @@ function store_move($id, $target, $part)
     $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
 
-    if ((isset($id) AND $id != '') AND (isset($target) AND $target != '') AND (isset($part) AND $part != '')) {
+    if ((isset($id) AND $id != '') AND
+        (isset($target) AND $target != '') AND
+        (isset($part) AND $part != '')
+    ) {
 
         if ($part == 'received') {
             $sql = "UPDATE ".$dropbox_cnf["tbl_post"]."
@@ -250,7 +253,8 @@ function store_move($id, $target, $part)
 }
 
 /**
-* This functions displays all teh possible actions that can be performed on multiple files. This is the dropdown list that
+* This functions displays all teh possible actions that can be
+ * performed on multiple files. This is the dropdown list that
 * appears below the sortable table of the sent / or received files.
 *
 * @return html value for the dropdown list
@@ -660,8 +664,9 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     /*
     * Show groups
     */
-    if (($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
-        && dropbox_cnf('allowGroup') || dropbox_cnf('allowStudentToStudent')) {
+    if (($dropbox_person->isCourseTutor || $dropbox_person->isCourseAdmin)
+        && dropbox_cnf('allowGroup') || dropbox_cnf('allowStudentToStudent')
+    ) {
         $complete_group_list_for_dropbox = GroupManager::get_group_list(null, dropbox_cnf('courseId'));
 
         if (count($complete_group_list_for_dropbox) > 0) {
@@ -842,7 +847,6 @@ function removeMoreIfMailing($file_id)
     }
 }
 
-
 /**
 * Function that finds a given config setting
 *
@@ -956,7 +960,11 @@ function store_add_dropbox()
     // separate functions: store_new_dropbox, store_new_mailing, store_just_upload
 
     if ($dropbox_overwrite) {
-        $dropbox_person = new Dropbox_Person($_user['user_id'], api_is_course_admin(), api_is_course_tutor());
+        $dropbox_person = new Dropbox_Person(
+            $_user['user_id'],
+            api_is_course_admin(),
+            api_is_course_tutor()
+        );
 
         foreach ($dropbox_person->sentWork as $w) {
             if ($w->title == $dropbox_filename) {
@@ -1320,7 +1328,8 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function get_total_number_feedback($file_id = '') {
+function get_total_number_feedback($file_id = '')
+{
     $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
     $sql = "SELECT COUNT(feedback_id) AS total, file_id
@@ -1340,7 +1349,8 @@ function get_total_number_feedback($file_id = '') {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function check_number_feedback($key, $array) {
+function check_number_feedback($key, $array)
+{
     if (is_array($array)) {
         if (array_key_exists($key, $array)) {
             return $array[$key];

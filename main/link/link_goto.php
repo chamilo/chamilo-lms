@@ -15,9 +15,6 @@
 * @author Thomas Depraetere, Hugues Peeters, Christophe Gesch� - original versions
 * @package chamilo.link
 */
-
-/*	INIT SECTION */
-
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 

@@ -5668,10 +5668,10 @@ class learnpath
                             )
                             ) {
                                 $forumIconUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
-                                        'action' => 'dissociate_forum',
-                                        'id' => $arrLP[$i]['id'],
-                                        'lp_id' => $this->lp_id
-                                    ]);
+                                    'action' => 'dissociate_forum',
+                                    'id' => $arrLP[$i]['id'],
+                                    'lp_id' => $this->lp_id
+                                ]);
                                 $forumIcon = Display::url(
                                     Display::return_icon('forum.png', get_lang('DissociateForumToLPItem'), [], ICON_SIZE_TINY),
                                     $forumIconUrl,
@@ -5679,10 +5679,10 @@ class learnpath
                                 );
                             } else {
                                 $forumIconUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
-                                        'action' => 'create_forum',
-                                        'id' => $arrLP[$i]['id'],
-                                        'lp_id' => $this->lp_id
-                                    ]);
+                                    'action' => 'create_forum',
+                                    'id' => $arrLP[$i]['id'],
+                                    'lp_id' => $this->lp_id
+                                ]);
                                 $forumIcon = Display::url(
                                     Display::return_icon('forum.png', get_lang('AssociateForumToLPItem'), [], ICON_SIZE_TINY),
                                     $forumIconUrl,

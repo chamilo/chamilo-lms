@@ -140,12 +140,11 @@ function WSImportLP($params)
 
     $lpName = $params['lp_name'];
 
-    $courseId = CourseManager::get_course_id_from_original_id(
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
         $courseIdValue,
         $courseIdName
     );
-
-    $courseInfo = api_get_course_info_by_id($courseId);
+    $courseId = $courseInfo['real_id'];
 
     if (empty($courseInfo)) {
         if ($debug) error_log('Course not found');
@@ -297,17 +296,17 @@ function WSGetLpList($params)
     $sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
     $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;
 
-    $courseId = CourseManager::get_course_id_from_original_id(
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
         $courseIdValue,
         $courseIdName
     );
-
-    $courseInfo = api_get_course_info_by_id($courseId);
 
     if (empty($courseInfo)) {
         if ($debug) error_log("Course not found: $courseIdName : $courseIdValue");
         return 'Course not found';
     }
+
+    $courseId = $courseInfo['real_id'];
 
     $sessionId = 0;
     if (!empty($sessionIdName) && !empty($sessionIdValue)) {
@@ -393,18 +392,16 @@ function WSDeleteLp($params)
     $sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
     $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;
 
-    $courseId = CourseManager::get_course_id_from_original_id(
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
         $courseIdValue,
         $courseIdName
     );
-
-    $courseInfo = api_get_course_info_by_id($courseId);
 
     if (empty($courseInfo)) {
         if ($debug) error_log("Course not found: $courseIdName : $courseIdValue");
         return 'Course not found';
     }
-
+    $courseId = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
 
     $sessionId = 0;
@@ -575,20 +572,19 @@ function WSCreateLp($params)
     /*$sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
     $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;*/
 
-    $courseId = CourseManager::get_course_id_from_original_id(
+     $courseInfo = CourseManager::getCourseInfoFromOriginalId(
         $courseIdValue,
         $courseIdName
     );
-
-    $courseInfo = api_get_course_info_by_id($courseId);
-    $courseId = $courseInfo['real_id'];
-    $courseCode = $courseInfo['code'];
 
     if (empty($courseInfo)) {
         if ($debug) {
             error_log('Course not found');
         }
     }
+
+    $courseId = $courseInfo['real_id'];
+    $courseCode = $courseInfo['code'];
 
     /*$sessionId = 0;
     if (!empty($sessionIdName) && !empty($sessionIdValue)) {

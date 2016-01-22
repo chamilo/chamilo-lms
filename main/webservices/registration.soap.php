@@ -3895,16 +3895,15 @@ function WSCreateSession($params)
             } else {
                 $coachStartDate = '';
                 if ($date_start) {
-
                     $startDate = new DateTime($date_start);
-                    $diffStart = new DateInterval($nb_days_access_before);
+                    $diffStart = new DateInterval("P".$nb_days_access_before."D");
                     $coachStartDate = $startDate->sub($diffStart);
                     $coachStartDate = $coachStartDate->format('Y-m-d H:i:s');
                 }
                 $coachEndDate = '';
                 if ($date_end) {
                     $endDate = new DateTime($date_end);
-                    $diffEnd = new DateInterval($nb_days_access_after);
+                    $diffEnd = new DateInterval("P".$nb_days_access_after."D");
                     $coachEndDate = $endDate->add($diffEnd);
                     $coachEndDate = $coachEndDate->format('Y-m-d H:i:s');
                 }
@@ -4136,13 +4135,20 @@ function WSEditSession($params)
             $results[] = 0; //StartDateShouldBeBeforeEndDate
             continue;
         } else {
-            $startDate = new DateTime($date_start);
-            $endDate = new DateTime($date_end);
-            $diffStart = new DateInterval($nb_days_access_before);
-            $diffEnd = new DateInterval($nb_days_access_after);
-            $coachStartDate = $startDate->sub($diffStart);
-            $coachEndDate = $endDate->add($diffEnd);
-
+            $coachStartDate = '';
+            if ($date_start) {
+                $startDate = new DateTime($date_start);
+                $diffStart = new DateInterval("P".$nb_days_access_before."D");
+                $coachStartDate = $startDate->sub($diffStart);
+                $coachStartDate = $coachStartDate->format('Y-m-d H:i:s');
+            }
+            $coachEndDate = '';
+            if ($date_end) {
+                $endDate = new DateTime($date_end);
+                $diffEnd = new DateInterval("P".$nb_days_access_after."D");
+                $coachEndDate = $endDate->add($diffEnd);
+                $coachEndDate = $coachEndDate->format('Y-m-d H:i:s');
+            }
             $sessionInfo = api_get_session_info($id);
 
             SessionManager::edit_session(
@@ -4152,8 +4158,8 @@ function WSEditSession($params)
                 $date_end,
                 $date_start,
                 $date_end,
-                $coachStartDate->format('Y-m-d H:i:s'),
-                $coachEndDate->format('Y-m-d H:i:s'),
+                $coachStartDate,
+                $coachEndDate,
                 $id_coach,
                 $sessionInfo['session_category_id'],
                 $sessionInfo['visibility'],
@@ -4169,7 +4175,7 @@ function WSEditSession($params)
                     $extra_field_name = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
                     // Save the external system's id into session_field_value table.
-                    $res = SessionManager::update_session_extra_field_value(
+                    SessionManager::update_session_extra_field_value(
                         $id,
                         $extra_field_name,
                         $extra_field_value

@@ -158,7 +158,7 @@ if (!empty($coursesInSession)) {
         $platformTeacherName = 'platform_teachers_by_session';
         $coachName = 'coaches_by_session';
 
-        $sessionUrl = api_get_path(WEB_CODE_PATH) . 'admin/resume_session.php?id_session=' . $sessionId;
+        $sessionUrl = api_get_path(WEB_CODE_PATH) . 'session/resume_session.php?id_session=' . $sessionId;
         $form->addElement(
             'advmultiselect',
             $groupName,

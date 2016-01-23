@@ -296,9 +296,7 @@ function WSGetPortalListFromUser($params)
     return $result;
 }
 
-
-// Course
-
+// Course ws
 $server->wsdl->addComplexType(
     'getPortalListFromCourse',
     'complexType',
@@ -307,7 +305,8 @@ $server->wsdl->addComplexType(
     '',
     array(
         'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string'),
-        'course_id' => array('name' => 'course_id', 'type' => 'xsd:string'),
+        'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+        'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')
     )
 );
 
@@ -329,7 +328,12 @@ function WSGetPortalListFromCourse($params)
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $courseId = $params['course_id'];
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+        $params['original_course_id_value'],
+        $params['original_course_id_name']
+    );
+
+    $courseId = $courseInfo['real_id'];
 
     $result = UrlManager::get_access_url_from_course($courseId);
 
@@ -351,7 +355,8 @@ $server->wsdl->addComplexType(
     array(
         'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string'),
         'portal_id' => array('name' => 'portal_id', 'type' => 'xsd:string'),
-        'course_id' => array('name' => 'course_id', 'type' => 'xsd:string')
+        'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+        'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')
     )
 );
 
@@ -373,7 +378,12 @@ function WSAddCourseToPortal($params)
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $courseId = $params['course_id'];
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+        $params['original_course_id_value'],
+        $params['original_course_id_name']
+    );
+
+    $courseId = $courseInfo['real_id'];
     $portalId = $params['portal_id'];
 
     UrlManager::add_course_to_url($courseId, $portalId);
@@ -401,7 +411,12 @@ function WSRemoveCourseFromPortal($params)
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $courseId = $params['course_id'];
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+        $params['original_course_id_value'],
+        $params['original_course_id_name']
+    );
+
+    $courseId = $courseInfo['real_id'];
     $portalId = $params['portal_id'];
 
     UrlManager::delete_url_rel_course($courseId, $portalId);

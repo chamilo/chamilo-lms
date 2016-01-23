@@ -8,7 +8,6 @@
  */
 class UserApiKeyManager
 {
-
     /**
      * The name of the default service.
      * 

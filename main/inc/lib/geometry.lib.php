@@ -5,7 +5,7 @@
  * @package chamilo.include.geometry
  */
 
-DEFINE('DEBUG', false);
+define('DEBUG', false);
 /**
  * poly_init -    build the array which will store the image of the polygone
  * @param max[x]    X resolution

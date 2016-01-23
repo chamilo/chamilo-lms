@@ -109,7 +109,9 @@ if (isset($_GET['f']) && $_GET['f'] == 'social') {
 
 $social_parameter = '';
 
-if (isset($_GET['f']) && $_GET['f'] == 'social' || api_get_setting('allow_social_tool') == 'true') {
+if ((isset($_GET['f']) && $_GET['f'] == 'social') ||
+    api_get_setting('allow_social_tool') == 'true'
+) {
     $social_parameter = '?f=social';
 } else {
     $actions = null;

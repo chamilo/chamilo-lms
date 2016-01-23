@@ -33,8 +33,10 @@ $tpl->assign('allowDrhSkillsManagement', api_get_setting('allow_hr_skills_manage
 if ($isStudent) {
     $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
             FROM $skillTable s
-            INNER JOIN $skillRelUserTable sru ON s.id = sru.skill_id
-            INNER JOIN $courseTable c ON sru.course_id = c.id
+            INNER JOIN $skillRelUserTable sru
+            ON s.id = sru.skill_id
+            INNER JOIN $courseTable c
+            ON sru.course_id = c.id
             WHERE sru.user_id = $userId";
 
     $result = Database::query($sql);
@@ -76,8 +78,10 @@ if ($isStudent) {
     if ($selectedStudent > 0) {
         $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
                 FROM $skillTable s
-                INNER JOIN $skillRelUserTable sru ON s.id = sru.skill_id
-                INNER JOIN $courseTable c ON sru.course_id = c.id
+                INNER JOIN $skillRelUserTable sru
+                ON s.id = sru.skill_id
+                INNER JOIN $courseTable c
+                ON sru.course_id = c.id
                 WHERE sru.user_id = $selectedStudent
                 ";
 

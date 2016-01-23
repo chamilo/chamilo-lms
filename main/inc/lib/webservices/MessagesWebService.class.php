@@ -8,7 +8,6 @@
  */
 class MessagesWebService extends WebService
 {
-
     const SERVICE_NAME = 'MsgREST';
 
     /**
@@ -125,5 +124,4 @@ class MessagesWebService extends WebService
 
         return $messages;
     }
-
 }

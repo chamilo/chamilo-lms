@@ -235,7 +235,6 @@ if (dropbox_cnf('allowOverwrite')) {
 
 		function checkfile(str)
 		{
-
 			ind = str.lastIndexOf('/'); //unix separator
 			if (ind == -1) ind = str.lastIndexOf('\\\');	//windows separator
 			filename = str.substring(ind+1, str.length);

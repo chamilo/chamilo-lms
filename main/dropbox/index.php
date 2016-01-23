@@ -75,7 +75,8 @@ if ($action == 'addreceivedcategory' || $action == 'addsentcategory') {
 	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
-	display_addcategory_form($_POST['category_name'], '', $_GET['action']);
+	$categoryName = isset($_POST['category_name']) ? $_POST['category_name'] : '';
+	display_addcategory_form($categoryName, '', $_GET['action']);
 }
 
 // Editing a category: displaying the form

@@ -273,13 +273,19 @@ class scorm extends learnpath
      *
      * @return bool	Returns -1 on error
      */
-    public function import_manifest($courseCode, $userMaxScore = 1, $sessionId = 0)
+    public function import_manifest($courseCode, $userMaxScore = 1, $sessionId = 0, $userId = 0)
     {
         if ($this->debug > 0) {
             error_log('New LP - Entered import_manifest('.$courseCode.')', 0);
         }
         $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
+
+        if (empty($userId)) {
+            $userId = api_get_user_id();
+        } else {
+            $userId = intval($userId);
+        }
 
         // Get table names.
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -322,7 +328,7 @@ class scorm extends learnpath
                     TOOL_LEARNPATH,
                     $this->lp_id,
                     'LearnpathAdded',
-                    api_get_user_id()
+                    $userId
                 );
 
                 api_item_property_update(
@@ -330,7 +336,7 @@ class scorm extends learnpath
                     TOOL_LEARNPATH,
                     $this->lp_id,
                     'visible',
-                    api_get_user_id()
+                    $userId
                 );
             }
 

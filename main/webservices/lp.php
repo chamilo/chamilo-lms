@@ -140,12 +140,10 @@ function WSImportLP($params)
 
     $lpName = $params['lp_name'];
 
-    $courseCode = CourseManager::get_course_id_from_original_id(
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
         $courseIdValue,
         $courseIdName
     );
-
-    $courseInfo = api_get_course_info($courseCode);
     $courseId = $courseInfo['real_id'];
 
     if (empty($courseInfo)) {
@@ -171,10 +169,11 @@ function WSImportLP($params)
     $maker = 'Scorm';
     $maxScore = ''; //$_REQUEST['use_max_score']
 
-    $oScorm = new scorm($courseCode);
+    $oScorm = new scorm($courseInfo['code']);
     $fileData = base64_decode($params['file_data']);
 
     $uniqueFile = uniqid();
+    $userId = 1; // admin
     $filePath = api_get_path(SYS_ARCHIVE_PATH) . $uniqueFile;
     file_put_contents($filePath, $fileData);
 
@@ -199,12 +198,15 @@ function WSImportLP($params)
         $oScorm->import_manifest(
             $courseInfo['code'],
             $maxScore,
-            $sessionId
+            $sessionId,
+            $userId
         );
         $oScorm->set_name($lpName);
         $oScorm->set_proximity($proximity, $courseId);
         $oScorm->set_maker($maker, $courseId);
         //$oScorm->set_jslib('scorm_api.php');
+
+        if ($debug) error_log('scorm was added');
         return 1;
     } else {
         if ($debug) error_log('manifest data empty');
@@ -294,18 +296,17 @@ function WSGetLpList($params)
     $sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
     $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;
 
-    $courseCode = CourseManager::get_course_id_from_original_id(
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
         $courseIdValue,
         $courseIdName
     );
-
-    $courseInfo = api_get_course_info($courseCode);
-    //$courseId = $courseInfo['real_id'];
 
     if (empty($courseInfo)) {
         if ($debug) error_log("Course not found: $courseIdName : $courseIdValue");
         return 'Course not found';
     }
+
+    $courseId = $courseInfo['real_id'];
 
     $sessionId = 0;
     if (!empty($sessionIdName) && !empty($sessionIdValue)) {
@@ -391,18 +392,17 @@ function WSDeleteLp($params)
     $sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
     $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;
 
-    $courseCode = CourseManager::get_course_id_from_original_id(
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
         $courseIdValue,
         $courseIdName
     );
-
-    $courseInfo = api_get_course_info($courseCode);
-    $courseId = $courseInfo['real_id'];
 
     if (empty($courseInfo)) {
         if ($debug) error_log("Course not found: $courseIdName : $courseIdValue");
         return 'Course not found';
     }
+    $courseId = $courseInfo['real_id'];
+    $courseCode = $courseInfo['code'];
 
     $sessionId = 0;
 
@@ -421,7 +421,7 @@ function WSDeleteLp($params)
     }
     */
 
-    $lp = new learnpath($courseInfo['code'], $lpId, null);
+    $lp = new learnpath($courseCode, $lpId, null);
     if ($lp) {
         if ($debug) error_log("LP deleted $lpId");
 
@@ -572,19 +572,19 @@ function WSCreateLp($params)
     /*$sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
     $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;*/
 
-    $courseCode = CourseManager::get_course_id_from_original_id(
+     $courseInfo = CourseManager::getCourseInfoFromOriginalId(
         $courseIdValue,
         $courseIdName
     );
-
-    $courseInfo = api_get_course_info($courseCode);
-    $courseId = $courseInfo['real_id'];
 
     if (empty($courseInfo)) {
         if ($debug) {
             error_log('Course not found');
         }
     }
+
+    $courseId = $courseInfo['real_id'];
+    $courseCode = $courseInfo['code'];
 
     /*$sessionId = 0;
     if (!empty($sessionIdName) && !empty($sessionIdValue)) {

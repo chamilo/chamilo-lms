@@ -695,7 +695,7 @@ switch ($action) {
                     $is_success = true;
                 }
 
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
             } else {
@@ -722,7 +722,7 @@ switch ($action) {
                     $_POST['description']
                 );
                 $is_success = true;
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
             }
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
@@ -1331,13 +1331,13 @@ switch ($action) {
                     }
 
                     if (!empty($forumId)) {
-                        $selectedItem->createForumTthread($forumId);
+                        $selectedItem->createForumThread($forumId);
                     }
                 }
             }
         }
 
-        header('Location:' . api_get_path(WEB_PATH) . api_get_self() . '?' . http_build_query([
+        header('Location:' . api_get_self() . '?' . http_build_query([
             'action' => 'add_item',
             'type' => 'step',
             'lp_id' => $_SESSION['oLP']->lp_id
@@ -1379,7 +1379,7 @@ switch ($action) {
             }
         }
 
-        header('Location:' . api_get_path(WEB_PATH) . api_get_self() . '?' . http_build_query([
+        header('Location:' . api_get_self() . '?' . http_build_query([
             'action' => 'add_item',
             'type' => 'step',
             'lp_id' => $_SESSION['oLP']->lp_id

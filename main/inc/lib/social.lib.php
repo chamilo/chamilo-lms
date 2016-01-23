@@ -291,7 +291,9 @@ class SocialManager extends UserManager
         $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT user_receiver_id, send_date,title,content
                 FROM '.$tbl_message.'
-                WHERE user_sender_id = '.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
+                WHERE
+                    user_sender_id = '.intval($user_id).' AND
+                    msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list_friend_invitation[$row['user_receiver_id']] = $row;
@@ -724,10 +726,7 @@ class SocialManager extends UserManager
             $show,
             array('shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends')
         )) {
-
-            
             $links = '<ul class="nav nav-pills nav-stacked">';
-            
             $active = $show == 'home' ? 'active' : null;
             $links .= '
                 <li class="home-icon ' . $active . '">
@@ -813,9 +812,7 @@ class SocialManager extends UserManager
         }
 
         if ($show == 'shared_profile') {
-            
             $links =  '<ul class="nav nav-pills nav-stacked">';
-
             // My own profile
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
                 $links .= '
@@ -897,7 +894,9 @@ class SocialManager extends UserManager
             }
 
             // Check if I already sent an invitation message
-            $invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
+            $invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(
+                api_get_user_id()
+            );
 
             if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) > 0) {
                 $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
@@ -909,13 +908,13 @@ class SocialManager extends UserManager
 
             $links .= '</ul>';
             $html .= Display::panelCollapse(
-                    get_lang('SocialNetwork'),
-                    $links,
-                    'social-network-menu',
-                    null,
-                    'sn-sidebar',
-                    'sn-sidebar-collapse'
-                    );
+                get_lang('SocialNetwork'),
+                $links,
+                'social-network-menu',
+                null,
+                'sn-sidebar',
+                'sn-sidebar-collapse'
+            );
 
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
                 $personal_course_list = UserManager::get_personal_session_course_list($user_id);
@@ -1207,6 +1206,7 @@ class SocialManager extends UserManager
             case SOCIAL_RIGHT_PLUGIN:
                 break;
         }
+
         return $content;
     }
     /**
@@ -1325,12 +1325,24 @@ class SocialManager extends UserManager
         $start = Database::escape_string($start);
         $limit = intval($limit);
 
-        $sql = "SELECT id, user_sender_id,user_receiver_id, send_date, content, parent_id,
-          (SELECT ma.path FROM $tblMessageAttachment ma WHERE  ma.message_id = tm.id ) as path,
-          (SELECT ma.filename FROM $tblMessageAttachment ma WHERE  ma.message_id = tm.id ) as filename
-            FROM $tblMessage tm
-            WHERE user_receiver_id = $userId
-                AND send_date > '$start' ";
+        $sql = "
+        SELECT
+          id,
+          user_sender_id,
+          user_receiver_id,
+          send_date,
+          content,
+          parent_id,
+          (SELECT ma.path FROM $tblMessageAttachment ma
+           WHERE  ma.message_id = tm.id ) as path,
+          (SELECT ma.filename FROM $tblMessageAttachment ma
+          WHERE  ma.message_id = tm.id ) as filename
+        FROM $tblMessage tm
+        WHERE
+            user_receiver_id = $userId AND
+            send_date > '$start'
+        ";
+
         $sql .= (empty($messageStatus) || is_null($messageStatus)) ? '' : " AND msg_status = '$messageStatus' ";
         $sql .= (empty($parentId) || is_null($parentId)) ? '' : " AND parent_id = '$parentId' ";
         $sql .= " ORDER BY send_date DESC LIMIT $offset, $limit ";
@@ -1563,6 +1575,7 @@ class SocialManager extends UserManager
         $html .= empty($graph->description) ? '' : '<p class="description">'.$graph->description.'</p>';
         $html .= '<a href="'.$link.'">'.$link.'</a>';
         $html .= '</div>';
+
         return $html;
     }
 
@@ -1746,7 +1759,7 @@ class SocialManager extends UserManager
                         $statusIcon = Display::span('', array('class' => 'offline_user_in_text'));
                     }
 
-                    $friendHtml.= '<li class="">';
+                    $friendHtml.= '<li>';
                     $friendHtml.= '<div>';
 
                     // the height = 92 must be the same in the image_friend_network span style in default.css

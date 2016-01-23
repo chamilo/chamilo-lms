@@ -8,7 +8,6 @@
  */
 abstract class WebService
 {
-
     protected $apiKey;
 
     /**

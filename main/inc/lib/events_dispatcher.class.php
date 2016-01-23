@@ -1,5 +1,4 @@
 <?php
-include_once api_get_path(CONFIGURATION_PATH).'events.conf.php';
 
 /**
  *  Class EventsDispatcher

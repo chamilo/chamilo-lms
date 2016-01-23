@@ -1345,7 +1345,11 @@ class UserGroup extends Model
         $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
 
         // Setting the form elements
-        $form->addButtonCreate($header);
+        if ($type == 'add') {
+            $form->addButtonCreate($header);
+        } else {
+            $form->addButtonUpdate($header);
+        }
     }
 
     /**

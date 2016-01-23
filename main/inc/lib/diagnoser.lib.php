@@ -13,20 +13,21 @@
  */
 class Diagnoser
 {
-    /**
-     * The status's
-     */
-    const STATUS_OK 			= 1;
-    const STATUS_WARNING 		= 2;
-    const STATUS_ERROR 			= 3;
-    const STATUS_INFORMATION 	= 4;
+    const STATUS_OK = 1;
+    const STATUS_WARNING = 2;
+    const STATUS_ERROR 	= 3;
+    const STATUS_INFORMATION = 4;
 
-    function __construct() {
+    /**
+     * Contructor
+     */
+    public function __construct()
+    {
     }
 
-    function show_html() {
-
-        $sections = array('chamilo', 'php', 'mysql', 'webserver');
+    public function show_html()
+    {
+        $sections = array('chamilo', 'php', 'database', 'webserver');
 
         if (!in_array(trim($_GET['section']), $sections)) {
             $current_section = 'chamilo';
@@ -37,7 +38,6 @@ class Diagnoser
         $html = '<div class="tabbable"><ul class="nav nav-tabs">';
 
         foreach ($sections as $section) {
-
             if ($current_section == $section) {
                 $html .= '<li class="active">';
             } else {
@@ -68,7 +68,7 @@ class Diagnoser
      * Functions to get the data for the chamilo diagnostics
      * @return array of data
      */
-    function get_chamilo_data()
+    public function get_chamilo_data()
     {
         $array = array();
         $writable_folders = array(
@@ -107,7 +107,8 @@ class Diagnoser
      * Functions to get the data for the php diagnostics
      * @return array of data
      */
-    function get_php_data() {
+    public function get_php_data()
+    {
         $array = array();
 
         // General Functions
@@ -270,18 +271,48 @@ class Diagnoser
      * Functions to get the data for the mysql diagnostics
      * @return array of data
      */
-    function get_mysql_data() {
+    public function get_database_data()
+    {
         $array = array();
+        $em = Database::getManager();
+        $connection = $em->getConnection();
+        $host = $connection->getHost();
+        $db = $connection->getDatabase();
+        $port = $connection->getPort();
+        $driver = $connection->getDriver()->getName();
 
-        // A note: Maybe it would be better if all "MySQL"-like variable names and words on the page to be replaced with "Database"-like ones.
+        $array[] = $this->build_setting(
+            self :: STATUS_INFORMATION,
+            '[Database]',
+            'driver',
+            '',
+            $driver, null, null, get_lang('Driver')
+        );
 
-        //$array[] = $this->build_setting(self :: STATUS_INFORMATION, '[MySQL]', 'host', 'http://www.php.net/manual/en/function.mysql-get-host-info.php', Database::get_host_info(), null, null, get_lang('MysqlHostInfo'));
-        /*
-        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[MySQL]', 'mysql_get_server_info()', 'http://www.php.net/manual/en/function.mysql-get-server-info.php', Database::get_server_info(), null, null, get_lang('MysqlServerInfo'));
+        $array[] = $this->build_setting(
+            self :: STATUS_INFORMATION,
+            '[Database]',
+            'host',
+            '',
+            $host, null, null, get_lang('MysqlHostInfo')
+        );
 
-        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[MySQL]', 'mysql_get_proto_info()', 'http://www.php.net/manual/en/function.mysql-get-proto-info.php', Database::get_proto_info(), null, null, get_lang('MysqlProtoInfo'));
+        $array[] = $this->build_setting(
+            self :: STATUS_INFORMATION,
+            '[Database]',
+            'port',
+            '',
+            $port, null, null, get_lang('Port')
+        );
 
-        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[MySQL]', 'mysql_get_client_info()', 'http://www.php.net/manual/en/function.mysql-get-client-info.php', Database::get_client_info(), null, null, get_lang('MysqlClientInfo'));*/
+
+        $array[] = $this->build_setting(
+            self :: STATUS_INFORMATION,
+            '[Database]',
+            'Database name',
+            '',
+            $db, null, null, get_lang('Name')
+        );
 
         return $array;
     }
@@ -290,7 +321,8 @@ class Diagnoser
      * Functions to get the data for the webserver diagnostics
      * @return array of data
      */
-    function get_webserver_data() {
+    public function get_webserver_data()
+    {
         $array = array();
 
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_NAME"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_NAME"], null, null, get_lang('ServerNameInfo'));
@@ -320,8 +352,7 @@ class Diagnoser
     /**
      * Additional functions needed for fast integration
      */
-
-    function build_setting($status, $section, $title, $url, $current_value, $expected_value, $formatter, $comment, $img_path = null) {
+    public function build_setting($status, $section, $title, $url, $current_value, $expected_value, $formatter, $comment, $img_path = null) {
         switch ($status) {
             case self :: STATUS_OK :
                 $img = 'bullet_green.png';
@@ -363,11 +394,13 @@ class Diagnoser
      * @param $url
      * @return string the url
      */
-    function get_link($title, $url) {
+    public function get_link($title, $url)
+    {
         return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
     }
 
-    function format_yes_no_optional($value) {
+    public function format_yes_no_optional($value)
+    {
     	$return = '';
     	switch($value) {
      		case 0:
@@ -384,11 +417,13 @@ class Diagnoser
 
     }
 
-    function format_yes_no($value) {
+    function format_yes_no($value)
+    {
         return $value ? get_lang('Yes') : get_lang('No');
     }
 
-    function format_on_off($value) {
+    function format_on_off($value)
+    {
         $value = intval($value);
         if ($value > 1) {
             // Greater than 1 values are shown "as-is", they may be interpreted as "On" later.

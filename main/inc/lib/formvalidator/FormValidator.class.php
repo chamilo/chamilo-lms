@@ -714,6 +714,36 @@ EOT;
     }
 
     /**
+     * @param $name
+     * @param $label
+     * @param $collection
+     * @param array $attributes
+     * @param bool $addNoneOption
+     * @param string $textCallable set a function getStringValue() by default __toString()
+     *
+     * @return HTML_QuickForm_element
+     */
+    public function addSelectFromCollection($name, $label, $collection, $attributes = array(), $addNoneOption = false, $textCallable = '')
+    {
+        $options = [];
+
+        if ($addNoneOption) {
+            $options[0] = get_lang('None');
+        }
+
+        if (!empty($collection)) {
+            foreach ($collection as $item) {
+                $text = $item;
+                if (!empty($textCallable)) {
+                    $text = $item->$textCallable();
+                }
+                $options[$item->getId()] = $text;
+            }
+        }
+        return $this->addElement('select', $name, $label, $options, $attributes);
+    }
+
+    /**
      * @param string $label
      * @param string $text
      *

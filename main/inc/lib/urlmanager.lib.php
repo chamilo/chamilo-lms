@@ -49,13 +49,12 @@ class UrlManager
     {
         $url_id = intval($url_id);
         $table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-        $tms = time();
         $sql = "UPDATE $table
                 SET url 	= '".Database::escape_string($url)."',
                 description = '".Database::escape_string($description)."',
                 active 		= '".intval($active)."',
                 created_by 	= '".api_get_user_id()."',
-                tms 		= FROM_UNIXTIME(".$tms.")
+                tms 		= '".api_get_utc_datetime()."'
                 WHERE id = '$url_id'";
 
         $result = Database::query($sql);
@@ -164,6 +163,7 @@ class UrlManager
                 WHERE id = ".intval($url_id);
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
+
         return $row;
     }
 
@@ -178,7 +178,7 @@ class UrlManager
     {
         $where = '';
         $table_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $tbl_user           = Database :: get_main_table(TABLE_MAIN_USER);
+        $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
         if (!empty($access_url_id)) {
             $where = "WHERE $table_url_rel_user.access_url_id = ".intval($access_url_id);
         }
@@ -335,6 +335,7 @@ class UrlManager
 
         $result = Database::query($sql);
         $courses = Database::store_result($result, 'ASSOC');
+
         return $courses;
     }
 
@@ -584,6 +585,7 @@ class UrlManager
                      course_category_id = ".intval($categoryCourseId);
         $result = Database::query($sql);
         $num = Database::num_rows($result);
+
         return $num;
     }
 
@@ -643,10 +645,10 @@ class UrlManager
                     $count = UrlManager::relation_url_session_exist($session_id, $url_id);
 
                     if ($count == 0) {
-                        $sql    = "INSERT INTO $table_url_rel_session
-		               			SET session_id = ".intval(
-                                $session_id
-                            ).", access_url_id = ".intval($url_id);
+                        $sql = "INSERT INTO $table_url_rel_session
+		               			SET
+		               			session_id = ".intval($session_id).",
+		               			access_url_id = ".intval($url_id);
                         $result = Database::query($sql);
                         if ($result) {
                             $result_array[$url_id][$session_id] = 1;
@@ -1045,8 +1047,6 @@ class UrlManager
         return $url_list;
     }
 
-
-
     /**
      * @param int $courseId
      * @return array
@@ -1063,7 +1063,6 @@ class UrlManager
         $url_list = Database::store_result($result,'ASSOC');
         return $url_list;
     }
-
 
     /**
      * @param $session_id
@@ -1131,5 +1130,4 @@ class UrlManager
         $response->addAssign('ajax_list_courses', 'innerHTML', api_utf8_encode($return));
         return $response;
     }
-
 }

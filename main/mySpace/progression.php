@@ -5,9 +5,7 @@
  * @package chamilo.reporting
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
-/**
- * Init
- */
+
 // TODO: This file seems to be unfinished and unused.
 require_once '../inc/global.inc.php';
 
@@ -66,9 +64,5 @@ if (Database::num_rows($result_course) > 0) {
 } else {
 	echo get_lang('NoCourse');
 }
-
-/*
-		FOOTER
-*/
 
 Display :: display_footer();

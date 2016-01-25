@@ -1197,7 +1197,7 @@ class ImportCsv
                 }
 
                 $this->logger->addError(
-                    "User '$chamiloUserName' with status $type was added to session: #$chamiloSessionId - Course: " . $courseInfo['code']
+                    "User '$chamiloUserName' was added as $type to session: #$chamiloSessionId - Course: " . $courseInfo['code']
                 );
             }
         }

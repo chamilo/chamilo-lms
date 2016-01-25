@@ -16,7 +16,7 @@ class Version20150610143426 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $this->addSql('ALTER TABLE c_tool ADD description LONGTEXT DEFAULT NULL, ADD custom_icon VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_tool ADD description LONGTEXT, ADD custom_icon VARCHAR(255) DEFAULT NULL');
     }
 
     /**

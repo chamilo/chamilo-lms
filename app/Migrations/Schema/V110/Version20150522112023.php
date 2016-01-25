@@ -20,7 +20,7 @@ class Version20150522112023 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_group_info SET category_id = 0 WHERE category_id = 2');
 
         $this->addSql('ALTER TABLE usergroup ADD group_type INT NOT NULL, ADD created_at DATETIME NOT NULL, ADD updated_at DATETIME NOT NULL');
-        $this->addSql('ALTER TABLE usergroup ADD picture VARCHAR(255) DEFAULT NULL, ADD url VARCHAR(255) DEFAULT NULL, ADD visibility VARCHAR(255) NOT NULL, ADD allow_members_leave_group INT NOT NULL, CHANGE description description LONGTEXT DEFAULT NULL');
+        $this->addSql('ALTER TABLE usergroup ADD picture VARCHAR(255) DEFAULT NULL, ADD url VARCHAR(255) DEFAULT NULL, ADD visibility VARCHAR(255) NOT NULL, ADD allow_members_leave_group INT NOT NULL, CHANGE description description LONGTEXT');
         $this->addSql('CREATE TABLE usergroup_rel_usergroup (id INT AUTO_INCREMENT NOT NULL, group_id INT NOT NULL, subgroup_id INT NOT NULL, relation_type INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('ALTER TABLE usergroup_rel_user ADD relation_type INT');
 

@@ -352,7 +352,7 @@ class Notification extends Model
 
         switch ($this->type) {
             case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
-                $newMessageText = $content;
+                $newMessageText = '';
                 $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
                     api_get_path(WEB_CODE_PATH) . 'messages/inbox.php'

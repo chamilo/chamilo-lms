@@ -47,6 +47,9 @@ class Version110 extends AbstractMigrationChamilo
 
         $this->addSql("ALTER TABLE session MODIFY COLUMN date_start date default NULL, MODIFY COLUMN date_end date default NULL");
         $this->addSql("ALTER TABLE skill_rel_user MODIFY COLUMN acquired_skill_at datetime default NULL");
+        $this->addSql("ALTER TABLE track_e_access MODIFY COLUMN access_date datetime DEFAULT NULL");
+        $this->addSql("ALTER TABLE track_e_lastaccess MODIFY COLUMN access_date datetime DEFAULT NULL");
+
 
         $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id");
         $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id");

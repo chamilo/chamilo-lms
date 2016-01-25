@@ -252,7 +252,7 @@ class MessageManager
         $inbox_last_id = null;
 
         //Just in case we replace the and \n and \n\r while saving in the DB
-        $content = str_replace(array("\n", "\n\r"), '<br />', $content);
+        //$content = str_replace(array("\n", "\n\r"), '<br />', $content);
 
         $now = api_get_utc_datetime();
         if (!empty($receiver_user_id) || !empty($group_id)) {

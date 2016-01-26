@@ -6057,7 +6057,7 @@ class SessionManager
      * @param array $extraFields A list of fields to be scanned and returned
      * @return mixed
      */
-    public static function getShortSessionListAndExtraByCategory($categoryId, $target, $extraFields = null)
+    public static function getShortSessionListAndExtraByCategory($categoryId, $target, $extraFields = null, $publicationDate = null)
     {
         // Init variables
         $categoryId = (int) $categoryId;
@@ -6075,6 +6075,16 @@ class SessionManager
                 $fieldsArray[] = Database::escape_string($field);
             }
             $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
+            if (isset ($publicationDate)) {
+                $publicationDateString = $publicationDate->format('Y-m-d H:i:s');
+                $wherePublication = " AND id NOT IN (
+                    SELECT sfv.item_id FROM $joinTable
+                    WHERE
+                        sf.extra_field_type = $extraFieldType AND
+                        ((sf.variable = 'publication_start_date' AND sfv.value > '$publicationDateString' and sfv.value != '') OR
+                        (sf.variable = 'publication_end_date' AND sfv.value < '$publicationDateString' and sfv.value != ''))
+                )";
+            }
             // Get the session list from session category and target
             $sessionList = Database::select(
                 'id, name, access_start_date, access_end_date',
@@ -6088,7 +6098,7 @@ class SessionManager
                                 sfv.item_id = session.id AND
                                 sf.variable = 'target' AND
                                 sfv.value = ?
-                        )" => array($categoryId, $target),
+                        ) $wherePublication" => array($categoryId, $target),
                     ),
                 )
             );

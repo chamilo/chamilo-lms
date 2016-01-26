@@ -651,12 +651,6 @@ class Database
             $path.'src/Chamilo/CourseBundle/Entity'
         );
 
-        /*$doctrineCache = api_get_path(SYS_ARCHIVE_PATH).'doctrine/';
-
-        if (!is_dir($doctrineCache)) {
-            mkdir($doctrineCache, api_get_permissions_for_new_directories(), true);
-        }*/
-
         return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
             $paths,
             $isDevMode,

@@ -33,11 +33,11 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         if (empty($this->manager)) {
             $dbParams = array(
                 'driver' => 'pdo_mysql',
-                'host' => $this->getConfigurationValue('db_host'),
-                'user' => $this->getConfigurationValue('db_user'),
-                'password' => $this->getConfigurationValue('db_password'),
-                'dbname' => $this->getConfigurationValue('main_database'),
-                'port' => $this->getConfigurationValue('db_port')
+                'host' => $this->connection->getHost(),
+                'user' => $this->connection->getUsername(),
+                'password' => $this->connection->getPassword(),
+                'dbname' => $this->connection->getDatabase(),
+                'port' => $this->connection->getPort()
             );
             $database = new \Database();
             $database->connect(

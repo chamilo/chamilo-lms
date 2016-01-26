@@ -27,7 +27,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
         // LDAP, CAS, Shibboleth, Facebook
 
         // Setting $_configuration['hide_home_top_when_connected'] = true;
-        $value = api_get_configuration_value('hide_home_top_when_connected');
+        $value = $this->getConfigurationValue('hide_home_top_when_connected');
 
         $this->addSettingCurrent(
             'hide_home_top_when_connected',
@@ -50,7 +50,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
 
         // Hide the global announcements for non-connected users
         //$_configuration['hide_global_announcements_when_not_connected'] = true;
-        $value = api_get_configuration_value('hide_global_announcements_when_not_connected');
+        $value = $this->getConfigurationValue('hide_global_announcements_when_not_connected');
         $this->addSettingCurrent(
             'hide_global_announcements_when_not_connected',
             '',
@@ -72,7 +72,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
 
         // Use this course as template for all new courses (define course real ID as value)
         //$_configuration['course_creation_use_template'] = 14;
-        $value = api_get_configuration_value('course_creation_use_template');
+        $value = $this->getConfigurationValue('course_creation_use_template');
         $this->addSettingCurrent(
             'course_creation_use_template',
             '',
@@ -94,7 +94,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
 
         // Add password strength checker
         //$_configuration['allow_strength_pass_checker'] = true;
-        $value = api_get_configuration_value('allow_strength_pass_checker');
+        $value = $this->getConfigurationValue('allow_strength_pass_checker');
         $this->addSettingCurrent(
             'allow_strength_pass_checker',
             '',
@@ -116,7 +116,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
 
         // Enable captcha
         // $_configuration['allow_captcha'] = true;
-        $value = api_get_configuration_value('allow_captcha');
+        $value = $this->getConfigurationValue('allow_captcha');
         $this->addSettingCurrent(
             'allow_captcha',
             '',
@@ -135,7 +135,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
         // Prevent account from logging in for a certain amount of time
         // if captcha is wrong for the specified number of times
         //$_configuration['captcha_number_mistakes_to_block_account'] = 5;
-        $value = api_get_configuration_value('captcha_number_mistakes_to_block_account');
+        $value = $this->getConfigurationValue('captcha_number_mistakes_to_block_account');
         $this->addSettingCurrent(
             'captcha_number_mistakes_to_block_account',
             '',
@@ -152,7 +152,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
         );
         // Prevent account from logging in for the specified number of minutes
         //$_configuration['captcha_time_to_block'] = 5;//minutes
-        $value = api_get_configuration_value('captcha_time_to_block');
+        $value = $this->getConfigurationValue('captcha_time_to_block');
         $this->addSettingCurrent(
             'captcha_time_to_block',
             '',
@@ -170,7 +170,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
 
         // Allow DRH role to access all content and users from the sessions he follows
         //$_configuration['drh_can_access_all_session_content'] = true;
-        $value = api_get_configuration_value('drh_can_access_all_session_content');
+        $value = $this->getConfigurationValue('drh_can_access_all_session_content');
         $this->addSettingCurrent(
             'drh_can_access_all_session_content',
             '',
@@ -189,7 +189,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
 
         // Display group's forum in general forum tool
         //$_configuration['display_groups_forum_in_general_tool'] = true;
-        $value = api_get_configuration_value('display_groups_forum_in_general_tool');
+        $value = $this->getConfigurationValue('display_groups_forum_in_general_tool');
         $this->addSettingCurrent(
             'display_groups_forum_in_general_tool',
             '',
@@ -208,7 +208,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
 
         // Allow course tutors in sessions to add existing students to their session
         //$_configuration['allow_tutors_to_assign_students_to_session'] = 'false';
-        $value = api_get_configuration_value('allow_tutors_to_assign_students_to_session');
+        $value = $this->getConfigurationValue('allow_tutors_to_assign_students_to_session');
         $this->addSettingCurrent(
             'allow_tutors_to_assign_students_to_session',
             '',

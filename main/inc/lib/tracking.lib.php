@@ -5668,7 +5668,7 @@ class TrackingCourseLog
     	        WHERE
                     track_resource.c_id = $course_id AND
                     track_resource.insert_user_id = user.user_id AND
-                    session_id = $session_id ";
+                    session_id " .(empty($session_id) ? ' IS NULL ' : " = $session_id ");
 
     	if (isset($_GET['keyword'])) {
     		$keyword = Database::escape_string(trim($_GET['keyword']));
@@ -5726,7 +5726,7 @@ class TrackingCourseLog
                 WHERE
                   track_resource.c_id = $course_id AND
                   track_resource.insert_user_id = user.user_id AND
-                  session_id = $session_id ";
+                  session_id " .(empty($session_id) ? ' IS NULL ' : " = $session_id ");
 
     	if (isset($_GET['keyword'])) {
     		$keyword = Database::escape_string(trim($_GET['keyword']));

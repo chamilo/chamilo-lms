@@ -60,7 +60,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
         // LDAP, CAS, Shibboleth, Facebook
 
         // Allow select the return link in the LP view
-        $value = api_get_configuration_value('allow_lp_return_link');
+        $value = $this->getConfigurationValue('allow_lp_return_link');
         $this->addSettingCurrent(
             'allow_lp_return_link',
             '',
@@ -78,7 +78,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
         );
 
         // If true the export link is blocked.
-        $value = api_get_configuration_value('hide_scorm_export_link');
+        $value = $this->getConfigurationValue('hide_scorm_export_link');
         $this->addSettingCurrent(
             'hide_scorm_export_link',
             '',
@@ -97,7 +97,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // If true the copy link is blocked.
         //$_configuration['hide_scorm_copy_link'] = false;
-        $value = api_get_configuration_value('hide_scorm_copy_link');
+        $value = $this->getConfigurationValue('hide_scorm_copy_link');
         $this->addSettingCurrent(
             'hide_scorm_copy_link',
             '',
@@ -116,7 +116,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // If true the pdf export link is blocked.
         //$_configuration['hide_scorm_pdf_link'] = false;
-        $value = api_get_configuration_value('hide_scorm_pdf_link');
+        $value = $this->getConfigurationValue('hide_scorm_pdf_link');
         $this->addSettingCurrent(
             'hide_scorm_pdf_link',
             '',
@@ -135,7 +135,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Default session days before coach access
         //$_configuration['session_days_before_coach_access'] = 0;
-        $value = api_get_configuration_value('session_days_before_coach_access');
+        $value = $this->getConfigurationValue('session_days_before_coach_access');
         $this->addSettingCurrent(
             'session_days_before_coach_access',
             '',
@@ -154,7 +154,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Default session days after coach access
         //$_configuration['session_days_after_coach_access'] = 0;
-        $value = api_get_configuration_value('session_days_after_coach_access');
+        $value = $this->getConfigurationValue('session_days_after_coach_access');
         $this->addSettingCurrent(
             'session_days_after_coach_access',
             '',
@@ -172,7 +172,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // PDF Logo header in app/Resources/public/css/themes/xxx/images/pdf_logo_header.png
         //$_configuration['pdf_logo_header'] = false;
-        $value = api_get_configuration_value('pdf_logo_header');
+        $value = $this->getConfigurationValue('pdf_logo_header');
         $this->addSettingCurrent(
             'pdf_logo_header',
             '',
@@ -191,7 +191,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Order inscription user list by official_code
         //$_configuration['order_user_list_by_official_code'] = false;
-        $value = api_get_configuration_value('order_user_list_by_official_code');
+        $value = $this->getConfigurationValue('order_user_list_by_official_code');
         $this->addSettingCurrent(
             'order_user_list_by_official_code',
             '',
@@ -210,7 +210,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Default course setting "email_alert_manager_on_new_quiz"
         //$_configuration['email_alert_manager_on_new_quiz'] = 1;
-        $value = api_get_configuration_value('email_alert_manager_on_new_quiz');
+        $value = $this->getConfigurationValue('email_alert_manager_on_new_quiz');
         $this->addSettingCurrent(
             'email_alert_manager_on_new_quiz',
             '',
@@ -229,7 +229,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Show official code in exercise report list.
         //$_configuration['show_official_code_exercise_result_list'] = false;
-        $value = api_get_configuration_value('show_official_code_exercise_result_list');
+        $value = $this->getConfigurationValue('show_official_code_exercise_result_list');
         $this->addSettingCurrent(
             'show_official_code_exercise_result_list',
             '',
@@ -249,7 +249,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Hide private courses from course catalog
         //$_configuration['course_catalog_hide_private'] = false;
-        $value = api_get_configuration_value('course_catalog_hide_private');
+        $value = $this->getConfigurationValue('course_catalog_hide_private');
         $this->addSettingCurrent(
             'course_catalog_hide_private',
             '',
@@ -269,7 +269,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
         // Display sessions catalog
         // 0 = show only courses; 1 = show only sessions; 2 = show courses and sessions
         //$_configuration['catalog_show_courses_sessions'] = 0;
-        $value = api_get_configuration_value('catalog_show_courses_sessions');
+        $value = $this->getConfigurationValue('catalog_show_courses_sessions');
         $this->addSettingCurrent(
             'catalog_show_courses_sessions',
             '',
@@ -288,7 +288,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Auto detect language custom pages.
         // $_configuration['auto_detect_language_custom_pages'] = true;
-        $value = api_get_configuration_value('auto_detect_language_custom_pages');
+        $value = $this->getConfigurationValue('auto_detect_language_custom_pages');
         $this->addSettingCurrent(
             'auto_detect_language_custom_pages',
             '',
@@ -307,7 +307,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Show reduce LP report
         //$_configuration['lp_show_reduced_report'] = false;
-        $value = api_get_configuration_value('lp_show_reduced_report');
+        $value = $this->getConfigurationValue('lp_show_reduced_report');
         $this->addSettingCurrent(
             'lp_show_reduced_report',
             '',
@@ -326,7 +326,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         //Allow session-to-session copy
         //$_configuration['allow_session_course_copy_for_teachers'] = true;
-        $value = api_get_configuration_value('allow_session_course_copy_for_teachers');
+        $value = $this->getConfigurationValue('allow_session_course_copy_for_teachers');
         $this->addSettingCurrent(
             'allow_session_course_copy_for_teachers',
             '',
@@ -345,7 +345,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Hide the logout button
         //$_configuration['hide_logout_button'] = true;
-        $value = api_get_configuration_value('hide_logout_button');
+        $value = $this->getConfigurationValue('hide_logout_button');
         $this->addSettingCurrent(
             'hide_logout_button',
             '',
@@ -364,7 +364,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Prevent redirecting admin to admin page
         //$_configuration['redirect_admin_to_courses_list'] = true;
-        $value = api_get_configuration_value('redirect_admin_to_courses_list');
+        $value = $this->getConfigurationValue('redirect_admin_to_courses_list');
         $this->addSettingCurrent(
             'redirect_admin_to_courses_list',
             '',
@@ -383,7 +383,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Shows the custom course icon instead of the classic green board icon
         //$_configuration['course_images_in_courses_list'] = false;
-        $value = api_get_configuration_value('course_images_in_courses_list');
+        $value = $this->getConfigurationValue('course_images_in_courses_list');
         $this->addSettingCurrent(
             'course_images_in_courses_list',
             '',
@@ -402,7 +402,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Which student publication will be taken when connected to the gradebook: first|last
         //$_configuration['student_publication_to_take_in_gradebook'] = 'first';
-        $value = api_get_configuration_value('student_publication_to_take_in_gradebook');
+        $value = $this->getConfigurationValue('student_publication_to_take_in_gradebook');
         $this->addSettingCurrent(
             'student_publication_to_take_in_gradebook',
             '',
@@ -421,7 +421,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Show a filter by official code
         //$_configuration['certificate_filter_by_official_code'] = false;
-        $value = api_get_configuration_value('certificate_filter_by_official_code');
+        $value = $this->getConfigurationValue('certificate_filter_by_official_code');
         $this->addSettingCurrent(
             'certificate_filter_by_official_code',
             '',
@@ -441,7 +441,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
         // Max quantity of fkceditor allowed in the exercise result page otherwise
         // Textareas are used.
         //$_configuration['exercise_max_ckeditors_in_page'] = 0;
-        $value = api_get_configuration_value('exercise_max_ckeditors_in_page');
+        $value = $this->getConfigurationValue('exercise_max_ckeditors_in_page');
         $this->addSettingCurrent(
             'exercise_max_ckeditors_in_page',
             '',
@@ -460,7 +460,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Default upload option
         //$_configuration['document_if_file_exists_option'] = 'rename'; // overwrite
-        $value = api_get_configuration_value('document_if_file_exists_option');
+        $value = $this->getConfigurationValue('document_if_file_exists_option');
         $this->addSettingCurrent(
             'document_if_file_exists_option',
             '',
@@ -478,7 +478,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
         );
         // Enable add_gradebook_certificates.php cron task
         //$_configuration['add_gradebook_certificates_cron_task_enabled'] = true;
-        $value = api_get_configuration_value('add_gradebook_certificates_cron_task_enabled');
+        $value = $this->getConfigurationValue('add_gradebook_certificates_cron_task_enabled');
         $this->addSettingCurrent(
             'add_gradebook_certificates_cron_task_enabled',
             '',
@@ -497,7 +497,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Which OpenBadges backpack send the badges
         //$_configuration['openbadges_backpack'] = 'https://backpack.openbadges.org/';
-        $value = api_get_configuration_value('openbadges_backpack');
+        $value = $this->getConfigurationValue('openbadges_backpack');
         $this->addSettingCurrent(
             'openbadges_backpack',
             '',
@@ -516,7 +516,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Shows a warning message explaining that the site uses cookies
         //$_configuration['cookie_warning'] = false;
-        $value = api_get_configuration_value('cookie_warning');
+        $value = $this->getConfigurationValue('cookie_warning');
         $this->addSettingCurrent(
             'cookie_warning',
             '',
@@ -535,7 +535,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // If there are any tool available and the user is not registered hide the group
         //$_configuration['hide_course_group_if_no_tools_available'] = false;
-        $value = api_get_configuration_value('hide_course_group_if_no_tools_available');
+        $value = $this->getConfigurationValue('hide_course_group_if_no_tools_available');
         $this->addSettingCurrent(
             'hide_course_group_if_no_tools_available',
             '',
@@ -554,7 +554,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Allow student to enroll into a session without an approval needing
         //$_configuration['catalog_allow_session_auto_subscription'] = false;
-        $value = api_get_configuration_value('catalog_allow_session_auto_subscription');
+        $value = $this->getConfigurationValue('catalog_allow_session_auto_subscription');
         $this->addSettingCurrent(
             'catalog_allow_session_auto_subscription',
             '',
@@ -573,7 +573,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Decode UTF-8 from Web Services (option passed to SOAP)
         //$_configuration['registration.soap.php.decode_utf8'] = false;
-        $value = api_get_configuration_value('registration.soap.php.decode_utf8');
+        $value = $this->getConfigurationValue('registration.soap.php.decode_utf8');
         $this->addSettingCurrent(
             'registration.soap.php.decode_utf8',
             '',
@@ -592,7 +592,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Show delete option in attendance
         //$_configuration['allow_delete_attendance'] = false;
-        $value = api_get_configuration_value('allow_delete_attendance');
+        $value = $this->getConfigurationValue('allow_delete_attendance');
         $this->addSettingCurrent(
             'allow_delete_attendance',
             '',
@@ -611,7 +611,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Enable Gravatar profile image if no local image has been given
         //$_configuration['gravatar_enabled'] = true;
-        $value = api_get_configuration_value('gravatar_enabled');
+        $value = $this->getConfigurationValue('gravatar_enabled');
         $this->addSettingCurrent(
             'gravatar_enabled',
             '',
@@ -631,7 +631,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
         // If Gravatar is enabled, tells which type of picture we want (default is "mm").
         // Options: mm | identicon | monsterid | wavatar
         //$_configuration['gravatar_type'] = 'mm';
-        $value = api_get_configuration_value('gravatar_type');
+        $value = $this->getConfigurationValue('gravatar_type');
         $this->addSettingCurrent(
             'gravatar_type',
             '',
@@ -657,7 +657,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
         // User block -> Add user
         // Course Sessions block -> Training session list
         //$_configuration['limit_session_admin_role'] = false;
-        $value = api_get_configuration_value('limit_session_admin_role');
+        $value = $this->getConfigurationValue('limit_session_admin_role');
         $this->addSettingCurrent(
             'limit_session_admin_role',
             '',
@@ -676,7 +676,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Show session description
         //$_configuration['show_session_description'] = false;
-        $value = api_get_configuration_value('show_session_description');
+        $value = $this->getConfigurationValue('show_session_description');
         $this->addSettingCurrent(
             'show_session_description',
             '',
@@ -695,7 +695,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Hide only for students the link to export certificates to PDF
         //$_configuration['hide_certificate_export_link_students'] = false;
-        $value = api_get_configuration_value('hide_certificate_export_link_students');
+        $value = $this->getConfigurationValue('hide_certificate_export_link_students');
         $this->addSettingCurrent(
             'hide_certificate_export_link_students',
             '',
@@ -714,7 +714,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Hide for all user roles the link to export certificates to PDF
         //$_configuration['hide_certificate_export_link'] = false;
-        $value = api_get_configuration_value('hide_certificate_export_link');
+        $value = $this->getConfigurationValue('hide_certificate_export_link');
         $this->addSettingCurrent(
             'hide_certificate_export_link',
             '',
@@ -733,7 +733,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // Hide session course coach in dropbox sent to user list
         //$_configuration['dropbox_hide_course_coach'] = false;
-        $value = api_get_configuration_value('dropbox_hide_course_coach');
+        $value = $this->getConfigurationValue('dropbox_hide_course_coach');
         $this->addSettingCurrent(
             'dropbox_hide_course_coach',
             '',
@@ -750,7 +750,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
 
-        $value = api_get_configuration_value('dropbox_hide_general_coach');
+        $value = $this->getConfigurationValue('dropbox_hide_general_coach');
         $this->addSettingCurrent(
             'dropbox_hide_general_coach',
             '',
@@ -769,7 +769,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
 
         // If SSO is used, the redirection to the master server is forced.
         //$_configuration['force_sso_redirect'] = false;
-        $value = api_get_configuration_value('force_sso_redirect');
+        $value = $this->getConfigurationValue('force_sso_redirect');
         $this->addSettingCurrent(
             'sso_force_redirect',
             '',
@@ -790,7 +790,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
         // false = alphabetic order (default)
         // true = based in the session course list
         //$_configuration['session_course_ordering'] = false;
-        $value = api_get_configuration_value('session_course_ordering');
+        $value = $this->getConfigurationValue('session_course_ordering');
         $this->addSettingCurrent(
             'session_course_ordering',
             '',

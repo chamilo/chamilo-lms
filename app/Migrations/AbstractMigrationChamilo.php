@@ -122,4 +122,17 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         }
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * @param $variable
+     * @return mixed
+     */
+    public function getConfigurationValue($variable)
+    {
+        global $_configuration;
+        if (isset($_configuration[$variable])) {
+            return $_configuration[$variable];
+        }
+        return false;
+    }
 }

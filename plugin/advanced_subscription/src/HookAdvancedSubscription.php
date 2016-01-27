@@ -450,10 +450,12 @@ class HookAdvancedSubscription extends HookObserver implements
             'vacancies',
             'schedule',
         );
+        $datePub = new DateTime();
         $sessionList = SessionManager::getShortSessionListAndExtraByCategory(
             $sessionCategoryId,
             $params['target'],
-            $fields
+            $fields,
+            $datePub
         );
 
         return $sessionList;

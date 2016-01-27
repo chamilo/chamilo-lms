@@ -371,7 +371,7 @@ if ($action_forums != 'add') {
                 $html .= '<div class="row">';
                 $html .= '<div class="col-md-6">';
                 $html .= '<div class="col-md-3">';
-                $html .= '<div class="number-post">'.$forum_image .'<p>' . $my_number_posts . ' ' . get_lang('Posts') . '</p></div>';
+                $html .= '<div class="number-post">'.$forum_image .'<p>' . $my_number_threads . ' ' . get_lang('ForumThreads') . '</p></div>';
                 $html .= '</div>';
 
                 $html .= '<div class="col-md-9">';
@@ -430,8 +430,7 @@ if ($action_forums != 'add') {
 
                 $html .= '<div class="row">';
                 $html .= '<div class="col-md-2">';
-                $html .= Display::return_icon('post-forum.png', get_lang('Threads'), null, ICON_SIZE_SMALL);
-                $html .= ' ' . $my_number_threads . '<br>' . $newPost . '</div>';
+                $html .= $newPost . '</div>';
 
                 // the last post in the forum
                 if ($forum['last_poster_name'] != '') {

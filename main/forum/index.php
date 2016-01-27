@@ -490,7 +490,7 @@ if (is_array($forumCategories)) {
                         $html .= '<div class="row">';
                         $html .= '<div class="col-md-6">';
                         $html .= '<div class="col-md-3">';
-                        $html .= '<div class="number-post">'.$forum_image.'<p>'.$number_posts.' ' . get_lang('Posts') . '</p>'
+                        $html .= '<div class="number-post">'.$forum_image.'<p>'.$number_threads.' ' . get_lang('ForumThreads') . '</p>'
                             . '</div>';
                         $html .= '</div>';
 
@@ -556,13 +556,7 @@ if (is_array($forumCategories)) {
                         $html .= '<div class="col-md-6">';
                         $html .= '<div class="row">';
                         $html .= '<div class="col-md-2">';
-                        $html .= Display::return_icon(
-                            'post-forum.png',
-                            get_lang('Forum'),
-                            null,
-                            ICON_SIZE_SMALL
-                        );
-                        $html .= ' ' . $number_threads . '<br>'.$newPost.'</div>';
+                        $html .= $newPost.'</div>';
                         $html .= '<div class="col-md-6">';
 
                         // The last post in the forum.

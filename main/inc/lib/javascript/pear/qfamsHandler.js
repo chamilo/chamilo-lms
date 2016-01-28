@@ -526,10 +526,9 @@ $(function() {
         if (!checked) {
             $('#users-f option').prop('selected', true);
             QFAMS.moveSelection('users', this.form.elements['users-f[]'], this.form.elements['users-t[]'], this.form.elements['users[]'], 'add', 'none');
-        }
-
-        $('#' + selectDestinationId +' option').each(function() {
+        } else {
+            $('#users-t option').prop('selected', true);
             QFAMS.moveSelection('users', this.form.elements['users-f[]'], this.form.elements['users-t[]'], this.form.elements['users[]'], 'remove', 'none');
-        });
+        }
     });
 });

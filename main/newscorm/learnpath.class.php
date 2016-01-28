@@ -6008,7 +6008,7 @@ class learnpath
 
         $filename = $title;
 
-        $content = isset($content) ? $content : $_POST['content_lp'];
+        $content = !empty($content) ? $content : $_POST['content_lp'];
 
         $tmp_filename = $filename;
 

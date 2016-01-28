@@ -1016,7 +1016,7 @@ class ImportCsv
 
                     if ($addTeacherToSession) {
                         CourseManager::updateTeachers(
-                            $courseInfo['id'],
+                            $courseInfo['code'],
                             $row['teachers'],
                             false,
                             true,
@@ -1025,9 +1025,9 @@ class ImportCsv
                         );
                     } else {
                         CourseManager::updateTeachers(
-                            $courseInfo['id'],
+                            $courseInfo['code'],
                             $row['teachers'],
-                            false,
+                            true,
                             false,
                             false,
                             $teacherBackup
@@ -1130,7 +1130,6 @@ class ImportCsv
 
             }
         }
-
     }
 
     /**

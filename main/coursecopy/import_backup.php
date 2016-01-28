@@ -89,7 +89,7 @@ if (Security::check_token('post') && (
         }
     }
 
-    if (!$error && $course->has_resources()) {
+    if (!$error && is_object($course) && $course->has_resources()) {
         $cr = new CourseRestorer($course);
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();

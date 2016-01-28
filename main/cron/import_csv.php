@@ -780,6 +780,7 @@ class ImportCsv
                         $this->extraFieldIdNameList['calendar_event'] => $row['external_calendar_itemID']
                     );
                 }
+                $errorFound = false;
             }
 
             if (empty($eventsToCreate)) {

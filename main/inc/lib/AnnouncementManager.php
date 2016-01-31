@@ -1329,7 +1329,7 @@ class AnnouncementManager
             $file_name = $file ['name'];
 
             if (!filter_extension($new_file_name)) {
-                $return - 1;
+                $return = -1;
                 Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
             } else {
                 $new_file_name = uniqid('');

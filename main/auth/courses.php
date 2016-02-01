@@ -285,7 +285,9 @@ switch ($action) {
 
             SessionManager::suscribe_users_to_session(
                 $_GET['session_id'],
-                array($userId)
+                array($userId),
+                SESSION_VISIBLE_READ_ONLY,
+                false
             );
 
             $coursesList = SessionManager::get_course_list_by_session_id($_GET['session_id']);

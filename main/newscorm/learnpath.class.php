@@ -10464,13 +10464,13 @@ EOD;
                     $exerciseItem->db_id
                 );
 
-                $exerciseResult = 0;
+                $exerciseResultInfo = end($exerciseResultInfo);
 
-                foreach ($exerciseResultInfo as $result) {
-                    $exerciseResult += $result['exe_result'];
+                if (!$exerciseResultInfo) {
+                    continue;
                 }
 
-                $totalExercisesResult += $exerciseResult;
+                $totalExercisesResult += $exerciseResultInfo['exe_result'];
             }
         }
 
@@ -10484,8 +10484,10 @@ EOD;
                 $finalEvaluationItem->db_id
             );
 
-            foreach ($evaluationResultInfo as $result) {
-                $totalEvaluationResult += $result['exe_result'];
+            $evaluationResultInfo = end($evaluationResultInfo);
+
+            if ($evaluationResultInfo) {
+                $totalEvaluationResult += $evaluationResultInfo['exe_result'];
             }
         }
 

@@ -10346,15 +10346,15 @@ EOD;
                     $exerciseItem->db_id
                 );
 
-                $exerciseResult = 0;
+                $exerciseResultInfo = end($exerciseResultInfo);
 
-                foreach ($exerciseResultInfo as $result) {
-                    $exerciseResult += $result['exe_result'] * 100 / $result['exe_weighting'];
+                if (!$exerciseResultInfo) {
+                    continue;
                 }
 
-                $exerciseAverage = $exerciseResult / (count($exerciseResultInfo) > 0 ? count($exerciseResultInfo) : 1);
+                $exerciseResult = $exerciseResultInfo['exe_result'] * 100 / $exerciseResultInfo['exe_weighting'];
 
-                $totalResult += $exerciseAverage;
+                $totalResult += $exerciseResult;
             }
 
             $totalExerciseAverage = $totalResult / (count($exercisesItems) > 0 ? count($exercisesItems) : 1);
@@ -10381,18 +10381,14 @@ EOD;
                 $finalEvaluationItem->db_id
             );
 
-            $evaluationResult = 0;
+            $evaluationResultInfo = end($evaluationResultInfo);
 
-            foreach ($evaluationResultInfo as $result) {
-                $evaluationResult += $result['exe_result'] * 100 / $result['exe_weighting'];
-            }
+            if ($evaluationResultInfo) {
+                $evaluationResult = $evaluationResultInfo['exe_result'] * 100 / $evaluationResultInfo['exe_weighting'];
 
-            $averageDivisor = count($evaluationResultInfo) > 0 ? count($evaluationResultInfo) : 1;
-
-            $evaluationAverage = $evaluationResult / $averageDivisor;
-
-            if ($evaluationAverage >= 80) {
-                $stars++;
+                if ($evaluationResult >= 80) {
+                    $stars++;
+                }
             }
         }
 

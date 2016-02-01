@@ -746,7 +746,7 @@ class UrlManager
     * */
     public static function delete_url_rel_user($user_id, $url_id)
     {
-        $table_url_rel_user= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $table_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $result = true;
         if (!empty($user_id) && !empty($url_id)) {
             $sql= "DELETE FROM $table_url_rel_user

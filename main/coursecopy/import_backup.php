@@ -62,6 +62,10 @@ if (Security::check_token('post') && (
     $error = false;
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
         // Partial backup here we recover the documents posted
+        // This gets $_POST['course']. Beware that when using Suhosin,
+        // the post.max_value_length limit might get in the way of the
+        // restoration of a course with many items. A value of 1,000,000 bytes
+        // might be too short.
         $course = CourseSelectForm::get_posted_course();
 
     } else {
@@ -89,7 +93,7 @@ if (Security::check_token('post') && (
         }
     }
 
-    if (!$error && $course->has_resources()) {
+    if (!$error && is_object($course) && $course->has_resources()) {
         $cr = new CourseRestorer($course);
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();

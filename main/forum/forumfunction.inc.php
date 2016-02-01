@@ -1450,13 +1450,10 @@ function get_forums(
 ) {
     $course_info = api_get_course_info($course_code);
 
-    $table_users = Database :: get_main_table(TABLE_MAIN_USER);
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
-    // GETTING ALL THE FORUMS
 
     // Condition for the session
     if (empty($sessionId)) {
@@ -1464,7 +1461,7 @@ function get_forums(
     } else {
         $session_id = $sessionId;
     }
-    
+
     $sessionIdLink = ($session_id === 0) ? '' : 'AND threads.session_id = item_properties.session_id';
 
     $condition_session = api_get_session_condition(
@@ -1505,7 +1502,7 @@ function get_forums(
                 INNER JOIN ".$table_item_property." item_properties
                 ON (
                     threads.thread_id=item_properties.ref AND
-                    threads.c_id = item_properties.c_id 
+                    threads.c_id = item_properties.c_id
                     $sessionIdLink
                 )
                 WHERE
@@ -1515,20 +1512,6 @@ function get_forums(
                     item_properties.c_id = $course_id
                 GROUP BY threads.forum_id";
 
-        // Select the number of posts of the forum (post that are visible and that are in a thread that is visible).
-        $sql3 = "SELECT count(*) AS number_of_posts, posts.forum_id
-                FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
-                WHERE
-                    posts.visible=1 AND
-                    posts.thread_id=threads.thread_id AND
-                    threads.thread_id=item_properties.ref AND
-                    threads.session_id = item_properties.session_id AND
-                    item_properties.visibility=1 AND
-                    item_properties.tool='".TOOL_FORUM_THREAD."' AND
-                    threads.c_id = $course_id AND
-                    posts.c_id = $course_id AND
-                    item_properties.c_id = $course_id
-                GROUP BY threads.forum_id";
 
         // Course Admin
         if (api_is_allowed_to_edit()) {
@@ -1554,25 +1537,12 @@ function get_forums(
                     INNER JOIN ".$table_item_property." item_properties
                     ON (
                         threads.thread_id=item_properties.ref AND
-                        threads.c_id = item_properties.c_id 
+                        threads.c_id = item_properties.c_id
                         $sessionIdLink
                     )
                     WHERE
                         item_properties.visibility<>2 AND
                         item_properties.tool='".TOOL_FORUM_THREAD."' AND
-                        threads.c_id = $course_id AND
-                        item_properties.c_id = $course_id
-                    GROUP BY threads.forum_id";
-            // Select the number of posts of the forum.
-            $sql3 = "SELECT count(*) AS number_of_posts, posts.forum_id
-                    FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
-                    WHERE
-                        posts.thread_id=threads.thread_id AND
-                        threads.thread_id=item_properties.ref AND
-                        threads.session_id = item_properties.session_id AND
-                        item_properties.visibility=1 AND
-                        item_properties.tool='".TOOL_FORUM_THREAD."' AND
-                        posts.c_id = $course_id AND
                         threads.c_id = $course_id AND
                         item_properties.c_id = $course_id
                     GROUP BY threads.forum_id";
@@ -1605,31 +1575,6 @@ function get_forums(
                     forum_id = ".intval($id)." AND
                     c_id = $course_id
                 GROUP BY forum_id";
-
-        // Select the number of posts of the forum.
-        $sql3 = "SELECT count(*) AS number_of_posts, forum_id
-                FROM $table_posts
-                WHERE
-                    forum_id = ".intval($id)." AND
-                    c_id = $course_id
-                GROUP BY forum_id";
-
-        // Select the last post and the poster (note: this is probably no longer needed).
-        $sql4 = "SELECT
-                    post.post_id,
-                    post.forum_id,
-                    post.poster_id,
-                    post.poster_name,
-                    post.post_date,
-                    users.lastname,
-                    users.firstname
-                FROM $table_posts post, $table_users users
-                WHERE
-                    forum_id = ".intval($id)." AND
-                    post.poster_id=users.user_id AND
-                    post.c_id = $course_id
-                GROUP BY post.forum_id
-                ORDER BY post.post_id ASC";
     }
 
     // Handling all the forum information.
@@ -1653,25 +1598,16 @@ function get_forums(
         }
     }
 
-    // Handling the postcount information.
-    $result3 = Database::query($sql3);
-    while ($row3 = Database::fetch_array($result3)) {
-        if ($id == '') {
-            // This is needed because sql3 takes also the deleted forums into account.
-            if (array_key_exists($row3['forum_id'], $forum_list)) {
-                $forum_list[$row3['forum_id']]['number_of_posts'] = $row3['number_of_posts'];
-            }
-        } else {
-            $forum_list['number_of_posts'] = $row3['number_of_posts'];
-        }
-    }
-
     /* Finding the last post information
     (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)*/
     if ($id == '') {
         if (is_array($forum_list)) {
             foreach ($forum_list as $key => $value) {
-                $last_post_info_of_forum = get_last_post_information($key, api_is_allowed_to_edit(), $course_id);
+                $last_post_info_of_forum = get_last_post_information(
+                    $key,
+                    api_is_allowed_to_edit(),
+                    $course_id
+                );
                 $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
                 $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
                 $forum_list[$key]['last_post_date'] = $last_post_info_of_forum['last_post_date'];
@@ -1683,7 +1619,11 @@ function get_forums(
             $forum_list = array();
         }
     } else {
-        $last_post_info_of_forum = get_last_post_information($id, api_is_allowed_to_edit(), $course_id);
+        $last_post_info_of_forum = get_last_post_information(
+            $id,
+            api_is_allowed_to_edit(),
+            $course_id
+        );
         $forum_list['last_post_id'] = $last_post_info_of_forum['last_post_id'];
         $forum_list['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
         $forum_list['last_post_date'] = $last_post_info_of_forum['last_post_date'];
@@ -2767,7 +2707,8 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
                 empty($values['weight_calification'])
             ) {
                 Display::display_error_message(
-                    get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>',
+                    get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.
+                    get_lang('Back').'</a>',
                     false
                 );
 
@@ -3111,10 +3052,11 @@ function store_reply($current_forum, $values)
                 'visible' => $visible,
             ]
         );
-        if ($new_post_id) {
 
+        if ($new_post_id) {
             $sql = "UPDATE $table_posts SET post_id = iid WHERE iid = $new_post_id";
             Database::query($sql);
+
             $values['new_post_id'] = $new_post_id;
             $message = get_lang('ReplyAdded');
 
@@ -3142,12 +3084,19 @@ function store_reply($current_forum, $values)
                 api_get_user_id()
             );
 
+            // Insert post
+            api_item_property_update(
+                $_course,
+                TOOL_FORUM_POST,
+                $new_post_id,
+                'NewPost',
+                api_get_user_id()
+            );
+
             if ($current_forum['approval_direct_post'] == '1' &&
                 !api_is_allowed_to_edit(null, true)
             ) {
-                $message .= '<br />'.get_lang(
-                        'MessageHasToBeApproved'
-                    ).'<br />';
+                $message .= '<br />'.get_lang('MessageHasToBeApproved').'<br />';
             }
 
             // Setting the notification correctly.
@@ -3157,7 +3106,6 @@ function store_reply($current_forum, $values)
             }
 
             send_notification_mails($values['thread_id'], $values);
-
             add_forum_attachment_file('', $new_post_id);
         }
 
@@ -3732,7 +3680,10 @@ function get_post_topics_of_forum($forum_id)
         $number_of_topics = 0; // Due to the nature of the group by this can result in an empty string.
     }
 
-    $return = array('number_of_topics' => $number_of_topics, 'number_of_posts' => $number_of_posts);
+    $return = array(
+        'number_of_topics' => $number_of_topics,
+        'number_of_posts' => $number_of_posts,
+    );
 
     return $return;
 }
@@ -4354,6 +4305,7 @@ function display_forum_search_results($search_term)
     $forum_list = get_forums();
 
     $result = Database::query($sql);
+    $search_results = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $display_result = false;
         /*

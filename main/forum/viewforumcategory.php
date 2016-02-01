@@ -68,6 +68,8 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
+$sessionId = api_get_session_id();
+
 $current_forum_category = get_forum_categories($_GET['forumcategory']);
 $interbreadcrumb[] = array(
     'url' => 'index.php?gradebook=' . $gradebook . '&search='
@@ -152,7 +154,6 @@ if ($action_forums != 'add') {
     $forum_category = get_forum_categories($_GET['forumcategory']);
 
     // Step 2: We find all the forums.
-    $forum_list = array();
     $forum_list = get_forums();
 
     /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
@@ -172,10 +173,8 @@ if ($action_forums != 'add') {
     $html = '';
     $html .= '<div class="category-forum">';
 
-    $my_session = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null;
-
     if (
-        (!isset($_SESSION['id_session']) || $_SESSION['id_session'] == 0) &&
+        (!isset($sessionId) || $sessionId == 0) &&
         !empty($forum_category['session_name'])
     ) {
         $session_displayed = ' ('.Security::remove_XSS($forum_category['session_name']).')';
@@ -194,7 +193,7 @@ if ($action_forums != 'add') {
         ICON_SIZE_MEDIUM
     );
 
-    if (api_is_allowed_to_edit(false, true) && !($forum_category['session_id'] == 0 && intval($my_session) != 0)) {
+    if (api_is_allowed_to_edit(false, true) && !($forum_category['session_id'] == 0 && $sessionId != 0)) {
 
         $iconsEdit = '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&forumcategory='
             . Security::remove_XSS($_GET['forumcategory']) . '&action=edit&content=forumcategory&id='
@@ -327,7 +326,6 @@ if ($action_forums != 'add') {
 
                 $my_whatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']] : null;
 
-
                 if ($forum['forum_of_group'] == '0') {
                     $forum_image = Display::return_icon(
                         'forum_group.png',
@@ -360,7 +358,7 @@ if ($action_forums != 'add') {
                     $forum_title_group_addition = '';
                 }
 
-                if ((!isset($_SESSION['id_session']) || $_SESSION['id_session'] == 0) && !empty($forum['session_name'])) {
+                if (!empty($sessionId) && !empty($forum['session_name'])) {
                     $session_displayed = ' ('.$forum['session_name'].')';
                 } else {
                     $session_displayed = '';
@@ -373,7 +371,7 @@ if ($action_forums != 'add') {
                 $html .= '<div class="row">';
                 $html .= '<div class="col-md-6">';
                 $html .= '<div class="col-md-3">';
-                $html .= '<div class="number-post">'.$forum_image .'<p>' . $my_number_posts . ' ' . get_lang('Posts') . '</p></div>';
+                $html .= '<div class="number-post">'.$forum_image .'<p>' . $my_number_threads . ' ' . get_lang('ForumThreads') . '</p></div>';
                 $html .= '</div>';
 
                 $html .= '<div class="col-md-9">';
@@ -416,7 +414,7 @@ if ($action_forums != 'add') {
 
                 // The number of topics and posts.
                 if ($forum['forum_of_group'] !== '0') {
-                    $newPost='';
+                    $newPost = '';
                     if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                         $newPost = ' ' . Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
                     } else {
@@ -432,8 +430,7 @@ if ($action_forums != 'add') {
 
                 $html .= '<div class="row">';
                 $html .= '<div class="col-md-2">';
-                $html .= Display::return_icon('post-forum.png', null, null, ICON_SIZE_SMALL);
-                $html .= ' ' . $my_number_threads . '<br>' . $newPost . '</div>';
+                $html .= $newPost . '</div>';
 
                 // the last post in the forum
                 if ($forum['last_poster_name'] != '') {
@@ -455,8 +452,7 @@ if ($action_forums != 'add') {
 
                 if (
                     api_is_allowed_to_edit(false, true) &&
-                    !($forum['session_id'] == 0 &&
-                    intval(isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null) != 0)
+                    !($forum['session_id'] == 0 && $sessionId != 0)
                 ) {
                     $html .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&forumcategory='
                         . Security::remove_XSS($_GET['forumcategory'])

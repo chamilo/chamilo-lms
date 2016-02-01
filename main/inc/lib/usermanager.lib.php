@@ -543,17 +543,13 @@ class UserManager
                     cu.user_id = '".$user_id."' AND
                     relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
                     c.id = cu.c_id";
+
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
             $sql = "DELETE FROM $table_group
                     WHERE c_id = {$course->id} AND user_id = $user_id";
             Database::query($sql);
         }
-
-        // Unsubscribe user from all classes
-        //Classes are not longer supported
-        /* $sql = "DELETE FROM $table_class_user WHERE user_id = '".$user_id."'";
-          Database::query($sql); */
 
         // Unsubscribe user from usergroup_rel_user
         $sql = "DELETE FROM $usergroup_rel_user WHERE user_id = '".$user_id."'";
@@ -569,25 +565,30 @@ class UserManager
 
         // If the user was added as a id_coach then set the current admin as coach see BT#
         $currentUserId = api_get_user_id();
-        $sql = "UPDATE $table_session SET id_coach = $currentUserId  WHERE id_coach = '".$user_id."'";
+        $sql = "UPDATE $table_session SET id_coach = $currentUserId
+                WHERE id_coach = '".$user_id."'";
         Database::query($sql);
 
-        $sql = "UPDATE $table_session SET id_coach = $currentUserId  WHERE session_admin_id = '".$user_id."'";
+        $sql = "UPDATE $table_session SET id_coach = $currentUserId
+                WHERE session_admin_id = '".$user_id."'";
         Database::query($sql);
 
         // Unsubscribe user from all sessions
-        $sql = "DELETE FROM $table_session_user WHERE user_id = '".$user_id."'";
+        $sql = "DELETE FROM $table_session_user
+                WHERE user_id = '".$user_id."'";
         Database::query($sql);
 
         // Delete user picture
         /* TODO: Logic about api_get_setting('split_users_upload_directory') == 'true'
         a user has 4 different sized photos to be deleted. */
         $user_info = api_get_user_info($user_id);
+
         if (strlen($user_info['picture_uri']) > 0) {
             $path = self::getUserPathById($user_id, 'system');
             $img_path = $path.$user_info['picture_uri'];
-            if (file_exists($img_path))
+            if (file_exists($img_path)) {
                 unlink($img_path);
+            }
         }
 
         // Delete the personal course categories
@@ -611,13 +612,8 @@ class UserManager
         $extraFieldValue = new ExtraFieldValue('user');
         $extraFieldValue->deleteValuesByItem($user_id);
 
-        if (api_get_multiple_access_url()) {
-            $url_id = api_get_current_access_url_id();
-            UrlManager::delete_url_rel_user($user_id, $url_id);
-        } else {
-            //we delete the user from the url_id =1
-            UrlManager::delete_url_rel_user($user_id, 1);
-        }
+        $url_id = api_get_current_access_url_id();
+        UrlManager::delete_url_rel_user($user_id, $url_id);
 
         if (api_get_setting('allow_social_tool') == 'true') {
             $userGroup = new UserGroup();
@@ -640,12 +636,27 @@ class UserManager
         $sql = "DELETE FROM $table_work WHERE user_id = $user_id AND c_id <> 0";
         Database::query($sql);
 
+        $sql = "UPDATE c_item_property SET to_user_id = NULL
+                WHERE to_user_id = '".$user_id."'";
+        Database::query($sql);
+
+        $sql = "UPDATE c_item_property SET insert_user_id = NULL
+                WHERE insert_user_id = '".$user_id."'";
+        Database::query($sql);
+
+        $sql = "UPDATE c_item_property SET lastedit_user_id = NULL
+                WHERE lastedit_user_id = '".$user_id."'";
+        Database::query($sql);
+
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);
 
+
+
         // Add event to system log
         $user_id_manager = api_get_user_id();
+
         Event::addEvent(
             LOG_USER_DELETE,
             LOG_USER_ID,
@@ -653,6 +664,7 @@ class UserManager
             api_get_utc_datetime(),
             $user_id_manager
         );
+
         Event::addEvent(
             LOG_USER_DELETE,
             LOG_USER_OBJECT,

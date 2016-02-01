@@ -49,6 +49,7 @@ require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $userid  = api_get_user_id();
+$sessionId = api_get_session_id();
 
 /* MAIN DISPLAY SECTION */
 
@@ -595,7 +596,9 @@ if (is_array($threads)) {
             $row_post_id = Database::fetch_array($result_post_id);
             $iconsEdit = '';
             if ($origin != 'learnpath') {
-                if (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])) {
+                if (api_is_allowed_to_edit(false, true) &&
+                    !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+                ) {
                     $iconsEdit .= '<a href="' . $forumUrl . 'editpost.php?' . api_get_cidreq()
                         . '&forum=' . Security::remove_XSS($my_forum) . '&thread='
                         . Security::remove_XSS($row['thread_id']) . '&post=' . $row_post_id['post_id']

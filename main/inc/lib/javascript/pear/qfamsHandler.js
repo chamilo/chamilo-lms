@@ -524,27 +524,11 @@ $(function() {
 
         var checked = !$('#'+ id).is(':checked');
         if (!checked) {
-            $('#' +selectId +' option').each(function() {
-                var val = $(this).val();
-                var text = $(this).text();
-                if (val.substr(0 , 4) == 'USER') {
-                    $('#'+selectId).find('[value="'+val+'"]').remove();
-                    $('#' +selectDestinationId).append(new Option(text, val));
-                }
-            });
+            $('#users-f option').prop('selected', true);
+            QFAMS.moveSelection('users', this.form.elements['users-f[]'], this.form.elements['users-t[]'], this.form.elements['users[]'], 'add', 'none');
+        } else {
+            $('#users-t option').prop('selected', true);
+            QFAMS.moveSelection('users', this.form.elements['users-f[]'], this.form.elements['users-t[]'], this.form.elements['users[]'], 'remove', 'none');
         }
-
-        $('#' + selectDestinationId +' option').each(function() {
-            var val = $(this).val();
-            var text = $(this).text();
-
-            if (val.substr(0 , 4) == 'USER') {
-                if (checked) {
-                    // Add
-                    $('#' +selectId ).append(new Option(text, val));
-                    $('#' + selectDestinationId).find('[value="'+val+'"]').remove();
-                }
-            }
-        });
     });
 });

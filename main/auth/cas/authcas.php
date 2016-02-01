@@ -88,7 +88,7 @@ function cas_is_authenticated()
 		        // if option is on we update user automatically from ldap server
 		        if (api_get_setting("update_user_info_cas_with_ldap") == "true") {
                     $ldapuser = extldap_authenticate($login, 'nopass', true);
-                    if ($ldap_user !== false) {
+                    if ($ldapuser !== false) {
                         $chamilo_user = extldap_get_chamilo_user($ldapuser);
                         $chamilo_user['user_id'] = $tab_user_info['user_id'];
                         $chamilo_user['status'] = $tab_user_info['status'];
@@ -114,7 +114,7 @@ function cas_is_authenticated()
 	                    // user has already been authenticated by CAS
 	                    // If user not found in LDAP, user not created
 	                    $ldapuser = extldap_authenticate($login, 'nopass', true);
-	                    if ($ldap_user !== false) {
+	                    if ($ldapuser !== false) {
 	                        $chamilo_user = extldap_get_chamilo_user($ldapuser);
                             $chamilo_user['username'] = $login;
                             $chamilo_user['auth_source'] = CAS_AUTH_SOURCE;

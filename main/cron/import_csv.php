@@ -79,10 +79,13 @@ class ImportCsv
      */
     public function run()
     {
-        /*
         global $_configuration;
-        $_configuration['access_url'] = 2;
-        */
+
+        $value = api_get_configuration_value('import_csv_custom_url_id');
+        if (!empty($value)) {
+            $_configuration['access_url'] = $value;
+        }
+
         $path = api_get_path(SYS_CODE_PATH).'cron/incoming/';
         if (!is_dir($path)) {
             echo "The folder! $path does not exits";

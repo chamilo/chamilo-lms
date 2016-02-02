@@ -3960,12 +3960,8 @@ class UserManager
         }
 
         if (!empty($lastConnectionDate)) {
-            if (isset($_configuration['save_user_last_login']) &&
-                $_configuration['save_user_last_login']
-            ) {
-                $lastConnectionDate = Database::escape_string($lastConnectionDate);
-                $userConditions .=  " AND u.last_login <= '$lastConnectionDate' ";
-            }
+            $lastConnectionDate = Database::escape_string($lastConnectionDate);
+            $userConditions .=  " AND u.last_login <= '$lastConnectionDate' ";
         }
 
         $courseConditions = null;

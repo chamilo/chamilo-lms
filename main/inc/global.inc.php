@@ -544,15 +544,11 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         $sql = "UPDATE $tbl_track_login SET logout_date = '$now'
                 WHERE login_id='$i_id_last_connection'";
         Database::query($sql);
-        // Saves the last login in the user table see BT#7297
-        if (isset($_configuration['save_user_last_login']) &&
-            $_configuration['save_user_last_login']
-        ) {
-            $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "UPDATE $tableUser SET last_login = '$now'
-                    WHERE user_id = ".$_user["user_id"];
-            Database::query($sql);
-        }
+
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "UPDATE $tableUser SET last_login = '$now'
+                WHERE user_id = ".$_user["user_id"];
+        Database::query($sql);
     }
 }
 

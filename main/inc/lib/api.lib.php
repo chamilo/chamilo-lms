@@ -1445,29 +1445,9 @@ function _api_format_user($user, $add_password = false)
     $user_id = intval($user['user_id']);
     // Maintain the user_id index for backwards compatibility
     $result['user_id'] = $result['id'] = $user_id;
-    $saveUserLastLogin = api_get_configuration_value('save_user_last_login');
-
-    if ($saveUserLastLogin) {
-        $last_login = $user['last_login'];
-    } else {
-
-        if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
-            $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
-            // Convert the timestamp back into a datetime
-            // NOTE: this timestamp has ALREADY been converted to the local timezone in the get_last_connection_date function
-            $last_login = date('Y-m-d H:i:s', $timestamp);
-        } else {
-            if (isset($user['lastLogin'])) {
-                $last_login = $user['lastLogin'];
-            } else {
-                $last_login = $user['last_login'];
-            }
-        }
-    }
-
-    $result['last_login'] = $last_login;
+    $result['last_login'] = $user['last_login'];
     // Kept for historical reasons
-    $result['lastLogin'] = $last_login;
+    $result['lastLogin'] = $user['last_login'];
 
     // Getting user avatar.
 

@@ -109,6 +109,7 @@ $call_from_tool = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin'])
 $slide_id = isset($_GET['origin_opt']) ? Security::remove_XSS($_GET['origin_opt']) : null;
 $file_name = $doc;
 $group_document = false;
+$_course = api_get_course_info();
 $sessionId = api_get_session_id();
 $user_id = api_get_user_id();
 $doc_tree = explode('/', $file);
@@ -182,7 +183,10 @@ if (empty($document_data['parents'])) {
     }
 }
 
-if (!api_is_allowed_to_edit()) {
+if (!($is_allowed_to_edit ||
+    $_SESSION['group_member_with_upload_rights'] ||
+    DocumentManager::is_my_shared_folder($user_id, $dir, api_get_session_id()))
+) {
     api_not_allowed(true);
 }
 

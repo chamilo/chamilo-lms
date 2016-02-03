@@ -101,6 +101,7 @@ require_once $lib_path.'fileUpload.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 $course_info = api_get_course_info();
+$_course = api_get_course_info();
 $group_id = api_get_group_id();
 
 if (api_is_in_group()) {
@@ -204,7 +205,10 @@ if (empty($document_data['parents'])) {
     }
 }
 
-if (!api_is_allowed_to_edit()) {
+if (!($is_allowed_to_edit ||
+    $_SESSION['group_member_with_upload_rights'] ||
+    is_my_shared_folder(api_get_user_id(), $dir, $sessionId))
+) {
     api_not_allowed(true);
 }
 

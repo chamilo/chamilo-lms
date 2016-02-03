@@ -1357,7 +1357,8 @@ class ImportCsv
                         $courseArray = bracketsToArray($course);
                         $courseCode = $courseArray[0];
                         if (CourseManager::course_exists($courseCode)) {
-                            $courseList[] = $courseCode;
+                            $courseInfo = api_get_course_info($courseCode);
+                            $courseList[] = $courseInfo['real_id'];
                         }
                     }
 

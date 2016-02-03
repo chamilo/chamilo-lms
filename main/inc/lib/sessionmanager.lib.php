@@ -2111,7 +2111,7 @@ class SessionManager
                 FROM $tbl_session_rel_user
                 WHERE
                     session_id = $sessionId AND
-                    relation_type<>" . SESSION_RELATION_TYPE_RRHH . "";
+                    relation_type<>" . SESSION_RELATION_TYPE_RRHH;
         $result = Database::query($sql);
         $user_list = Database::store_result($result);
 

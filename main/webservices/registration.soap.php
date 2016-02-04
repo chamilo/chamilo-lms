@@ -1091,10 +1091,13 @@ function WSSubscribeTeacherToSessionCourse($params)
     $result = 0;
 
     if (!empty($coaches)) {
+        if ($debug) error_log('Coaches:  '. print_r($coaches, 1));
         if (in_array($userId, $coaches)) {
             $result = 1;
         }
     }
+
+    if ($debug) error_log('Result:  '. $result);
 
     return $result;
 }
@@ -1134,21 +1137,22 @@ function WSUnsubscribeTeacherFromSessionCourse($params)
     $courseId = $params['course_id'];
     $sessionId = $params['session_id'];
 
-    $result = intval(SessionManager::removeUsersFromCourseSession($userId, $sessionId, $courseId));
-    if ($debug) error_log('Result: '. $result);
+    SessionManager::removeUsersFromCourseSession($userId, $sessionId, $courseId);
 
     $coaches = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
 
     $result = 0;
 
     if (!empty($coaches)) {
+        if ($debug) error_log('Coaches:  ' . print_r($coaches, 1));
         if (!in_array($userId, $coaches)) {
             $result = 1;
         }
+    } else {
+        $result = 1;
     }
 
-    return $result;
-
+    if ($debug) error_log('Final Result:  '. $result);
 
     return $result;
 }
@@ -5091,6 +5095,10 @@ function WSSuscribeUsersToSession($params)
     if ($debug) {
         error_log('WSSuscribeUsersToSession');
         error_log(print_r($params, 1));
+
+        if (empty($userssessions_params)) {
+            error_log('userssessions is empty');
+        }
     }
 
     $results = array();

@@ -1137,8 +1137,7 @@ function WSUnsubscribeTeacherFromSessionCourse($params)
     $courseId = $params['course_id'];
     $sessionId = $params['session_id'];
 
-    SessionManager::removeUsersFromCourseSession($userId, $sessionId, $courseId);
-
+    SessionManager::removeUsersFromCourseSession([$userId], $sessionId, $courseId);
     $coaches = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
 
     $result = 0;
@@ -1152,7 +1151,7 @@ function WSUnsubscribeTeacherFromSessionCourse($params)
         $result = 1;
     }
 
-    if ($debug) error_log('Final Result:  '. $result);
+    if ($debug) error_log('Final Result: '. $result);
 
     return $result;
 }

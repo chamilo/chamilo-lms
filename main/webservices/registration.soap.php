@@ -5142,7 +5142,7 @@ function WSSuscribeUsersToSession($params)
                     continue; // user_id is not active.
                 }
 
-                SessionManager::suscribe_users_to_session($sessionId, $user_id);
+                SessionManager::suscribe_users_to_session($sessionId, array($user_id), SESSION_VISIBLE_READ_ONLY, false);
                 $orig_user_id_value[] = $row_original_user_list['original_user_id_value'];
                 $orig_session_id_value[] = $original_session_id_value;
                 $results[] = 1;

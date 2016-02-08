@@ -3712,10 +3712,13 @@ class Tracking
                     AND session_course_user.session_id = '.intval($session_id).'
                     AND session_course_user.user_id = stats_login.user_id ';
         }
-        $sql = 'SELECT user_id, MAX(login_course_date) max_date
+
+        $sql = 'SELECT stats_login.user_id, MAX(login_course_date) max_date
                 FROM '.$tbl_track_login.' stats_login '.$inner.'
                 INNER JOIN '.$tableCourse.' c
                 ON (c.id = stats_login.c_id)
+                INNER JOIN '.$table_course_rel_user.' course_user
+                ON course_user.user_id = stats_login.user_id AND course_user.c_id = c.id
                 GROUP BY user_id
                 HAVING DATE_SUB( "' . $now . '", INTERVAL '.$since.' DAY) > max_date ';
 

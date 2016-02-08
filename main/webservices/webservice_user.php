@@ -418,7 +418,15 @@ class WSUser extends WS {
 		if($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
-			$result = $this->editUserHelper($user_id_field_name, $user_id_value, $firstname, $lastname, $status, $loginname, $password, $encrypt_method, $email, $language, $phone, $expiration_date, $extras);
+
+			$extras_associative = array();
+			if (!empty($extras)) {
+				foreach($extras as $extra) {
+					$extras_associative[$extra['field_name']] = $extra['field_value'];
+				}
+			}
+
+			$result = $this->editUserHelper($user_id_field_name, $user_id_value, $firstname, $lastname, $status, $loginname, $password, $encrypt_method, $email, $language, $phone, $expiration_date, $extras_associative);
 			if($result instanceof WSError) {
 				$this->handleError($result);
 			}

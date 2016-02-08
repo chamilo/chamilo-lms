@@ -280,8 +280,7 @@ ul#navigation .report a {
     margin-top: 5px;
 }
 .file_upload input{
-    position: relative;
-    border: none;
+    position: absolute;
 }
 #results .jqgrid_whitespace .date-time{
     font-size: 12px;

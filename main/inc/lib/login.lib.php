@@ -304,7 +304,6 @@ class Login
                     $_user['firstName'] = $uData['firstname'];
                     $_user['lastName'] = $uData['lastname'];
                     $_user['mail'] = $uData['email'];
-                    $_user['lastLogin'] = $uData['login_date'];
                     $_user['official_code'] = $uData['official_code'];
                     $_user['picture_uri'] = $uData['picture_uri'];
                     $_user['user_id'] = $uData['user_id'];

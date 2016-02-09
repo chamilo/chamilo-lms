@@ -1428,7 +1428,8 @@ function _api_format_user($user, $add_password = false)
         'creator_id',
         'registration_date',
         'hr_dept_id',
-        'expiration_date'
+        'expiration_date',
+        'last_login'
     );
 
     foreach ($attributes as $attribute) {
@@ -1445,12 +1446,8 @@ function _api_format_user($user, $add_password = false)
     $user_id = intval($user['user_id']);
     // Maintain the user_id index for backwards compatibility
     $result['user_id'] = $result['id'] = $user_id;
-    $result['last_login'] = $user['last_login'];
-    // Kept for historical reasons
-    $result['lastLogin'] = $user['last_login'];
 
     // Getting user avatar.
-
     $originalFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL, $result);
     $smallFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL, $result);
 

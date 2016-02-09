@@ -678,7 +678,7 @@ class Event
                 unset($event_value['avatar']);
                 unset($event_value['mail']);
                 unset($event_value['password']);
-                unset($event_value['lastLogin']);
+                unset($event_value['last_login']);
                 unset($event_value['picture_uri']);
                 $event_value = serialize($event_value);
             }

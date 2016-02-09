@@ -50,6 +50,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 null,
                 false
             );
+
             foreach ($user_list as & $user_id) {
                 $user_info = api_get_user_info($user_id);
                 $user_id   = $user_info['complete_name'];

@@ -326,7 +326,6 @@ function loginUser($userId)
         $_user['firstName'] = $userInfo['firstname'];
         $_user['lastName'] = $userInfo['lastname'];
         $_user['mail'] = $userInfo['email'];
-        //$_user['lastLogin'] = $user_data['login_date'];
         $_user['official_code'] = $userInfo['official_code'];
         $_user['picture_uri'] = $userInfo['picture_uri'];
         $_user['user_id'] = $userId;

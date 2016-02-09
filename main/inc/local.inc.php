@@ -811,11 +811,8 @@ if (isset($uidReset) && $uidReset) {
             // Extracting the user data
 
             $uData = Database::fetch_array($result);
-
-            $_user =  _api_format_user($uData, false);
-            $_user['lastLogin'] = api_strtotime($uData['login_date'], 'UTC');
-
-            $is_platformAdmin = (bool) (! is_null($uData['is_admin']));
+            $_user = _api_format_user($uData, false);
+            $is_platformAdmin = (bool) (!is_null($uData['is_admin']));
             $is_allowedCreateCourse = (bool) (($uData ['status'] == COURSEMANAGER) || (api_get_setting('drhCourseManagerRights') && $uData['status'] == DRH));
             ConditionalLogin::check_conditions($uData);
 

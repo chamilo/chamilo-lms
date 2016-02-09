@@ -13,10 +13,10 @@
 /**
  * Variables used from the main/install/index.php
  */
-$new_version = '1.10.2';
-$new_version_status = 'stable';
+$new_version = '1.10.4';
+$new_version_status = 'dev';
 $new_version_last_id = 0;
-$new_version_stable = true;
-$new_version_major = true;
+$new_version_stable = false;
+$new_version_major = false;
 $software_name = 'Chamilo';
 $software_url = 'http://www.chamilo.org/';

@@ -666,7 +666,7 @@ class Template
 
         $bowerJsFiles = [
             'modernizr/modernizr.js',
-            'jquery/jquery.min.js',
+            'jquery/dist/jquery.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
             'jquery-ui/jquery-ui.min.js',
             'moment/min/moment-with-locales.min.js',

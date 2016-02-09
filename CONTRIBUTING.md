@@ -74,6 +74,7 @@ Pick a password for the MySQL server and enter it twice, when prompted.
 root@docker$ cd /var/www
 root@docker$ rm -rf html
 root@docker$ git clone --single-branch -b 1.10.0-beta https://github.com/chamilo/chamilo-lms.git html
+root@docker$ cd html
 root@docker$ chmod -R 0777 app/ vendor/ main/lang/ main/default_course_document/images/ web/
 root@docker$ vim /etc/php5/apache2/php.ini
 ```

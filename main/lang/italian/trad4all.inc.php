@@ -7040,8 +7040,8 @@ Array structure is explained in file main/auth/external_login/ldap.conf.php<br /
 <h5>Modifica file main/inc/conf/configuration.php</h5>
 
 -&gt; Togli commento alle linee <br />
-&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/login.ldap.php&quot;;<br />
-&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&#36_configuration['code_append'].&quot;auth/external_login/newUser.ldap.php&quot;;<br />
+&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/login.ldap.php&quot;;<br />
+&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/newUser.ldap.php&quot;;<br />
 <br /><br />
 N.B. : utenti LDAP usano gli stessi campi degli altri utenti. <br />
 N.B. : l'attivazione LDAP aggiunge al menù External authentication <[LDAP] nelle pagine &quot;aggiungi o modifica&quot; utente.";

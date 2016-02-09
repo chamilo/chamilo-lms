@@ -12,7 +12,9 @@
 
 {% for lp_data in data %}
     <h3 class="page-header">
-        {{ lp_data.category.getName() }}
+        {% if (categories|length) > 1 %}
+            {{ lp_data.category.getName() }}
+        {% endif %}
 
         {% if lp_data.category.getId() > 0 and is_allowed_to_edit %}
             <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=add_lp_category&id=' ~ lp_data.category.getId() }}" title="{{ "Edit"|get_lang }}">

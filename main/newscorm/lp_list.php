@@ -819,9 +819,9 @@ $template = new Template($nameTools);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 $template->assign('is_invitee', api_is_invitee());
 $template->assign('actions', $actions);
+$template->assign('categories', $categories);
 $template->assign('message', $message);
 $template->assign('introduction_section', $introductionSection);
-
 $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 

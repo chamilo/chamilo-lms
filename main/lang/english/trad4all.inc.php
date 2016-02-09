@@ -7607,4 +7607,6 @@ $ConfirmAssociateForumToLPItem = "This action will associate a forum thread to t
 $ConfirmDissociateForumToLPItem = "This action will dissociate the forum thread of this learning path item. Do you want to proceed?";
 $DissociateForumToLPItem = "Dissociate the forum of this learning path item";
 $AssociateForumToLPItem = "Associate a forum to this learning path item";
+$ForumDissociated = "Forum dissociated";
+$ClickOrDropOneFileHere = "Click or drop one file here";
 ?>

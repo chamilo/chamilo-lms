@@ -7590,4 +7590,10 @@ $CropYourPicture = "Découpez votre photo";
 $DownloadBadge = "Télécharger ce badge";
 $NoXMLFileFoundInTheZip = "Aucun fichier XML trouvé dans le fichier zip. C'est malheureusement nécessaire pour ce type d'import.";
 $BakedBadgeProblem = "Un problème s'est produit lors de l'insertion de l'information d'assertion du badge dans l'image du badge, mais vous pouvez de toute façon utiliser cette page comme assertion valide.";
+$ConfirmAssociateForumToLPItem = "Cette action associera un fil de conversation de forum à cet élément du parcours. Continuer?";
+$ConfirmDissociateForumToLPItem = "Cette action dissociera le fil de conversation du forum de cet élément du parcours. Continuer?";
+$DissociateForumToLPItem = "Dissocier le fil de conversation de cette élément du parcours";
+$AssociateForumToLPItem = "Associer un fil de conversation du forum à cet élément du parcours";
+$ForumDissociated = "Forum dissocié";
+$ClickOrDropOneFileHere = "Déplacez un fichier ici ou cliquez";
 ?>

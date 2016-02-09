@@ -162,30 +162,31 @@ class DashboardManager
             // clean from extra user data
             $field_variable = 'dashboard';
             $extra_user_data = UserManager::get_extra_user_data_by_field_variable($field_variable);
-            foreach ($extra_user_data as $key => $user_data) {
-                $user_id = $key;
-                $user_block_data = self::get_user_block_data($user_id);
-                $user_block_id = array_keys($user_block_data);
+            if (!empty($extra_user_data) && count($extra_user_data) > 0) {
+                foreach ($extra_user_data as $key => $user_data) {
+                    $user_id = $key;
+                    $user_block_data = self::get_user_block_data($user_id);
+                    $user_block_id = array_keys($user_block_data);
 
-                // clean disabled block data
-                foreach ($user_block_id as $block_id) {
-                    if (in_array($block_id, $not_selected_blocks_id)) {
-                        unset($user_block_data[$block_id]);
+                    // clean disabled block data
+                    foreach ($user_block_id as $block_id) {
+                        if (in_array($block_id, $not_selected_blocks_id)) {
+                            unset($user_block_data[$block_id]);
+                        }
                     }
-                }
 
-                // get columns and blocks id for updating extra user data
-                $columns = array();
-                $user_blocks_id = array();
-                foreach ($user_block_data as $data) {
-                    $user_blocks_id[$data['block_id']] = true;
-                    $columns[$data['block_id']] = $data['column'];
-                }
+                    // get columns and blocks id for updating extra user data
+                    $columns = array();
+                    $user_blocks_id = array();
+                    foreach ($user_block_data as $data) {
+                        $user_blocks_id[$data['block_id']] = true;
+                        $columns[$data['block_id']] = $data['column'];
+                    }
 
-                // update extra user blocks data
-                self::store_user_blocks($user_id, $user_blocks_id, $columns);
+                    // update extra user blocks data
+                    self::store_user_blocks($user_id, $user_blocks_id, $columns);
+                }
             }
-
             // clean from block data
             if (!empty($not_selected_blocks_id)) {
                 $sql_check = "SELECT id FROM $tbl_block WHERE id IN(".implode(',',$not_selected_blocks_id).")";
@@ -197,48 +198,50 @@ class DashboardManager
             }
 
             // store selected plugins
-            foreach ($selected_plugins as $testplugin) {
-                $selected_path = Database::escape_string($testplugin);
+            if (!empty($selected_plugins) && count($selected_plugins) > 0) {
+                foreach ($selected_plugins as $testplugin) {
+                    $selected_path = Database::escape_string($testplugin);
 
-                // check if the path already stored inside block table for updating or adding it
-                $sql = "SELECT path FROM $tbl_block WHERE path = '$selected_path'";
-                $rs	 = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    // update
-                    $upd = "UPDATE $tbl_block SET active = 1 WHERE path = '$selected_path'";
-                    $result = Database::query($upd);
-                    $affected_rows = Database::affected_rows($result);
-                } else {
-                    // insert
-                    $plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
-                    $plugin_info = array();
-                    if (file_exists($plugin_info_file)) {
-                        $plugin_info = parse_info_file($plugin_info_file);
-                    }
+                    // check if the path already stored inside block table for updating or adding it
+                    $sql = "SELECT path FROM $tbl_block WHERE path = '$selected_path'";
+                    $rs = Database::query($sql);
+                    if (Database::num_rows($rs) > 0) {
+                        // update
+                        $upd = "UPDATE $tbl_block SET active = 1 WHERE path = '$selected_path'";
+                        $result = Database::query($upd);
+                        $affected_rows = Database::affected_rows($result);
+                    } else {
+                        // insert
+                        $plugin_info_file = $dashboard_pluginpath . $testplugin . "/$testplugin.info";
+                        $plugin_info = array();
+                        if (file_exists($plugin_info_file)) {
+                            $plugin_info = parse_info_file($plugin_info_file);
+                        }
 
-                    // change keys to lower case
-                    $plugin_info = array_change_key_case($plugin_info);
+                        // change keys to lower case
+                        $plugin_info = array_change_key_case($plugin_info);
 
-                    // setting variables
-                    $plugin_name = $testplugin;
-                    $plugin_description = '';
-                    $plugin_controller = '';
-                    $plugin_path = $testplugin;
+                        // setting variables
+                        $plugin_name = $testplugin;
+                        $plugin_description = '';
+                        $plugin_controller = '';
+                        $plugin_path = $testplugin;
 
-                    if (isset($plugin_info['name'])) {
-                        $plugin_name = Database::escape_string($plugin_info['name']);
-                    }
-                    if (isset($plugin_info['description'])) {
-                        $plugin_description = Database::escape_string($plugin_info['description']);
-                    }
-                    if (isset($plugin_info['controller'])) {
-                        $plugin_controller = Database::escape_string($plugin_info['controller']);
-                    }
+                        if (isset($plugin_info['name'])) {
+                            $plugin_name = Database::escape_string($plugin_info['name']);
+                        }
+                        if (isset($plugin_info['description'])) {
+                            $plugin_description = Database::escape_string($plugin_info['description']);
+                        }
+                        if (isset($plugin_info['controller'])) {
+                            $plugin_controller = Database::escape_string($plugin_info['controller']);
+                        }
 
-                    $ins = "INSERT INTO $tbl_block(name, description, path, controller)
+                        $ins = "INSERT INTO $tbl_block(name, description, path, controller)
                             VALUES ('$plugin_name', '$plugin_description', '$plugin_path', '$plugin_controller')";
-                    $result = Database::query($ins);
-                    $affected_rows = Database::affected_rows($result);
+                        $result = Database::query($ins);
+                        $affected_rows = Database::affected_rows($result);
+                    }
                 }
             }
         }

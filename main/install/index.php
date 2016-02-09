@@ -309,7 +309,7 @@ if ($encryptPassForm == '1') {
         @import "../../web/css/base.css";
         @import "../../web/css/themes/chamilo/default.css";
     </style>
-    <script type="text/javascript" src="../../web/assets/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../inc/lib/javascript/bootstrap-select/js/bootstrap-select.min.js"></script>
     <script type="text/javascript">

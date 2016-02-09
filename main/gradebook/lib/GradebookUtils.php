@@ -382,7 +382,7 @@ class GradebookUtils
      * @param    int     Resource type (use constants defined in linkfactory.class.php)
      * @param    int     Resource ID in the corresponding tool
      * @param    int     Session ID (optional -  0 if not defined)
-     * @return   int     false on error or link ID
+     * @return   int     false on error or array of resource
      */
     public static function is_resource_in_course_gradebook($course_code, $resource_type, $resource_id, $session_id = 0)
     {

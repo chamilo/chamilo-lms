@@ -4273,12 +4273,8 @@ class Tracking
             $all_exercise_start_time = array();
 
             foreach ($course_in_session as $my_session_id => $session_data) {
-
                 $course_list  = $session_data['course_list'];
-                $session_name = $session_data['name'];
-
                 $user_count = count(SessionManager::get_users_by_session($my_session_id));
-
                 $exercise_graph_name_list = array();
                 //$user_results = array();
                 $exercise_graph_list = array();
@@ -4292,6 +4288,7 @@ class Tracking
                         false,
                         1
                     );
+
                     foreach ($exercise_list as $exercise_data) {
                         $exercise_obj = new Exercise($course_data['id']);
                         $exercise_obj->read($exercise_data['id']);
@@ -4366,7 +4363,9 @@ class Tracking
                 );
             }
 
-            $html .= Display::page_subheader(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL).' '.get_lang('Sessions'));
+            $html .= Display::page_subheader(
+                Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL) . ' ' . get_lang('Sessions')
+            );
 
             $html .= '<table class="data_table" width="100%">';
             $html .= '<tr>
@@ -4459,7 +4458,6 @@ class Tracking
 
             if (isset($_GET['session_id'])) {
                 $session_id_from_get = intval($_GET['session_id']);
-
                 $session_data 	= $course_in_session[$session_id_from_get];
                 $course_list 	= $session_data['course_list'];
 
@@ -4520,7 +4518,6 @@ class Tracking
                         'my_average' => $my_average
                     );
 
-                    $weighting = 0;
                     $last_connection = Tracking:: get_last_connection_date_on_the_course(
                         $user_id,
                         $courseInfo,
@@ -4572,7 +4569,7 @@ class Tracking
                     } else {
                         $progress = '0%';
                     }
-                    //Progress
+                    // Progress
                     $html .= Display::tag('td', $progress, array('align'=>'center'));
                     if (is_numeric($percentage_score)) {
                         $percentage_score = $percentage_score.'%';
@@ -4735,7 +4732,7 @@ class Tracking
                             );
                             if (!empty($exercise_stat)) {
 
-                                //Always getting the BEST attempt
+                                // Always getting the BEST attempt
                                 $score          = $exercise_stat['exe_result'];
                                 $weighting      = $exercise_stat['exe_weighting'];
                                 $exe_id         = $exercise_stat['exe_id'];
@@ -4808,6 +4805,8 @@ class Tracking
                 $course_info['code'],
                 $session_id,
                 'publicated_on ASC',
+                true,
+                null,
                 true
             );
 

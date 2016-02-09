@@ -32,6 +32,7 @@ class LearnpathList
      * @param   string  $order_by
      * @param   string  $check_publication_dates
      * @param   int     $categoryId
+     * @param bool $ignoreCategoryFilter
      *
      * @return	void
      */
@@ -41,7 +42,8 @@ class LearnpathList
         $session_id = null,
         $order_by = null,
         $check_publication_dates = false,
-        $categoryId = null
+        $categoryId = null,
+        $ignoreCategoryFilter = false
     ) {
         $course_info = api_get_course_info($course_code);
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
@@ -83,11 +85,14 @@ class LearnpathList
             ";
         }
 
-        if (!empty($categoryId)) {
-            $categoryId = intval($categoryId);
-            $categoryFilter = " AND category_id = $categoryId";
-        } else {
-            $categoryFilter = " AND (category_id = 0 OR category_id IS NULL) ";
+        $categoryFilter = '';
+        if ($ignoreCategoryFilter == false) {
+            if (!empty($categoryId)) {
+                $categoryId = intval($categoryId);
+                $categoryFilter = " AND category_id = $categoryId";
+            } else {
+                $categoryFilter = " AND (category_id = 0 OR category_id IS NULL) ";
+            }
         }
 
         $sql = "SELECT * FROM $lp_table

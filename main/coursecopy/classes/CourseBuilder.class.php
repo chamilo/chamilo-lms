@@ -80,7 +80,7 @@ class CourseBuilder
         }
 
         $this->course = new Course();
-        $this->course->code = $_course['official_code'];
+        $this->course->code = $_course['code'];
         $this->course->type = $type;
         $this->course->path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
         $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];

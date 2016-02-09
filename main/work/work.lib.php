@@ -2089,7 +2089,7 @@ function get_work_user_list(
                         action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
                         >
                         <div class="button-load">
-                            '.get_lang('ClickOrDropFilesHere').'
+                            '.get_lang('ClickOrDropOneFileHere').'
                         </div>
                         <input type="file" name="file" multiple>
                         <button type="submit"></button>

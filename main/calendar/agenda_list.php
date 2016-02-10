@@ -33,6 +33,14 @@ if (!empty($currentCourseId) && $currentCourseId != -1) {
     $this_section = SECTION_COURSES;
 } else {
     // Agenda is out of the course tool (e.g personal agenda)
+    
+    // Little hack to sort the events by start date in personal agenda (Agenda events List view - See #8014)
+    usort($events, function($a, $b) {
+        $t1 = strtotime($a['start']);
+        $t2 = strtotime($b['start']);
+        return $t1 - $t2;
+    });
+    
     $url = false;
     if (!empty($events)) {
         foreach ($events as &$event) {

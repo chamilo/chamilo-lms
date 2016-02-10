@@ -100,14 +100,15 @@ if (!empty($_SESSION['msg'])) {
 	echo '<br />';
 }
 
-$txt_search_word = Security::remove_XSS($_REQUEST['txt_search_word']);
+
+$txt_search_word = (!empty($_REQUEST['txt_search_word']) ? Security::remove_XSS($_REQUEST['txt_search_word']) : '');
 $html ='<div style="float:left" class="actions">';
 $html.='<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="GET" action="sub_language.php">';
 $html.='&nbsp;'.get_lang('OriginalName').'&nbsp; :&nbsp;';
 
 $html.='<input name="id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['id']).'" />';
 $html.='<input name="sub_language_id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['sub_language_id']).'" />';
-$html.='<input name="txt_search_word" type="text" size="50"  id="txt_search_word" value="'.Security::remove_XSS($_REQUEST['txt_search_word']).'" />';
+$html.='<input name="txt_search_word" type="text" size="50"  id="txt_search_word" value="'.$txt_search_word.'" />';
 $html.="&nbsp;".'<button name="SubmitSearchLanguage" class="search" type="submit">'.get_lang('Search').'</button>';
 $html.='</form>';
 $html.='</div>';

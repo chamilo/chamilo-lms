@@ -23,6 +23,8 @@ if (isset($content['form']->_elementIndex['status'])) {
     $content['form']->removeElement('status');
     $content['form']->removeElement('status');
 }
+$rootWeb = api_get_path('WEB_PATH');
+
 // Deprecated since 2015-03-26
 /**
  * Code to change the way QuickForm render html
@@ -95,7 +97,7 @@ EOT;
     <script src="js/vendor/html5shiv.js"></script>
     <script src="js/vendor/respond.min.js"></script>
     <![endif]-->
-    <script type="text/javascript" src="/main/inc/lib/javascript/jquery.min.js"></script>
+    <script type="text/javascript" src="<?php echo $rootWeb ?>web/assets/jquery/jquery.min.js"></script>
 </head>
 <body>
 <img id="backgroundimage" src="/custompages/images/page-background.png"">

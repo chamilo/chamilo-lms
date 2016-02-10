@@ -52,8 +52,7 @@ $rootWeb = api_get_path('WEB_PATH');
 	<!--[if IE 6]>
 	<link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
 	<![endif]-->
-
-	<script type="text/javascript" src="<?php echo $rootWeb ?>main/inc/lib/javascript/jquery.min.js"></script>
+    <script type="text/javascript" src="<?php echo $rootWeb ?>web/assets/jquery/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			if (top.location != location) {

@@ -43,9 +43,10 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
                 'status' => 1,
                 'init' => $userInfo['email']
             );
+
             $extraFields = array(
-                'firstname' => $userInfo['firstname'],
-                'lastname' => $userInfo['lastname']
+                'first_name' => $userInfo['firstname'],
+                'last_name' => $userInfo['lastname']
             );
 
             $options = array(

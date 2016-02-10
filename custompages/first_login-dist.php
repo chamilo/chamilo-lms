@@ -59,6 +59,7 @@ if ($_GET['invalid'] == 1) {
 if ($_GET['invalid'] == 2) {
     $error_message = get_lang('PassTwo');
 }
+$www = api_get_path('WEB_PATH');
 /**
  * HTML output
  */
@@ -75,7 +76,7 @@ if ($_GET['invalid'] == 2) {
 	<link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
 	<![endif]-->
 
-	<script type="text/javascript" src="/main/inc/lib/javascript/jquery.min.js"></script>
+	<script type="text/javascript" src="<?php echo $www ?>web/assets/jquery/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			if (top.location != location)

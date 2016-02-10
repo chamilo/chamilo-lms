@@ -101,7 +101,10 @@ $wiki->blockConcurrentEditions(api_get_user_id(), $action);
 /* MAIN WIKI AREA */
 
 ob_start();
-$wiki->handleAction($action);
+$handleAction = $wiki->handleAction($action);
+if (!$handleAction && $action == 'export_to_pdf') {
+    $wiki->handleAction('showpage');
+}
 $content = ob_get_contents();
 ob_end_clean();
 

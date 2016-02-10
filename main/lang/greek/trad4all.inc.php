@@ -1291,7 +1291,6 @@ $NomPageAdmin = "Διαχείριση";
 $SysInfo = "Πληροφορίες για το σύστημα";
 $DiffTranslation = "Σύγκριση μεταφράσεων";
 $StatOf = "Στατιστικά του";
-$SpeeSubscribe = "Γρήγορη εγγραφή ως ελεγκτής μαθήματος";
 $LogIdentLogout = "Λίστα εισόδου (εκτεταμένη)";
 $ServerStatus = "Κατάσταση MySQL server :";
 $DataBase = "Βάση δεδομένων";

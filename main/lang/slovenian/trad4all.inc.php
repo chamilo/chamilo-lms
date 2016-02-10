@@ -1414,7 +1414,6 @@ $NomPageAdmin = "Administracija";
 $SysInfo = "Informacija o sistemu";
 $DiffTranslation = "Primerjaj prevode";
 $StatOf = "Statistika o";
-$SpeeSubscribe = "Hitri vpis kot preverjevalec tečajev";
 $LogIdentLogout = "Seznam dostopov";
 $ServerStatus = "Stanje strežnika MySQL :";
 $DataBase = "Podatkovna baza";

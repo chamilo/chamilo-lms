@@ -952,7 +952,6 @@ $NomPageAdmin = "Administrēšana";
 $SysInfo = "Informācija par sistēmu";
 $DiffTranslation = "Salīdzināt tulkojumus";
 $StatOf = "Statistika par";
-$SpeeSubscribe = "Ātrā piereģistrēšanās, kā Kursa Pārbaudītājs";
 $LogIdentLogout = "Pieteikšanos (loginu) saraksts";
 $ServerStatus = "MySQL servera status";
 $DataBase = "Datubāze";

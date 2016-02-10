@@ -761,7 +761,6 @@ $NomPageAdmin = "Administration";
 $SysInfo = "Info om systemet";
 $DiffTranslation = "Sammenlign oversættelser";
 $StatOf = "Statistik for";
-$SpeeSubscribe = "Hurtig registrering som kursusovervåger";
 $LogIdentLogout = "Login liste";
 $ServerStatus = "Status på mysql serveren :";
 $DataBase = "Database";

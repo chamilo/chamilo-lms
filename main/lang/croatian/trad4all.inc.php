@@ -821,7 +821,6 @@ $NomPageAdmin = "Administracija";
 $SysInfo = "Podaci o sustavu";
 $DiffTranslation = "Provjeri prijevod";
 $StatOf = "Statistika";
-$SpeeSubscribe = "Brza prijava za testiranje";
 $LogIdentLogout = "Dnevnik prijava i odjava sa sustava";
 $ServerStatus = "Status MySQL server baze podataka :";
 $DataBase = "Baza podataka";

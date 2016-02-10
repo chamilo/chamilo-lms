@@ -911,7 +911,6 @@ $NomPageAdmin = "Kamachina";
 $SysInfo = "Sistema nisqaq willan";
 $DiffTranslation = "Kikinchay t'ijrasqakunata";
 $StatOf = "Estadíticas de";
-$SpeeSubscribe = "Inscripción rápida como revisador de cursos";
 $LogIdentLogout = "Lista de logins";
 $ServerStatus = "Estado del servidor MySQL nisqa:";
 $DataBase = "Base de datos nisqa";

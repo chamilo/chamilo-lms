@@ -1438,7 +1438,6 @@ $NomPageAdmin = "Amministrazione";
 $SysInfo = "Informazioni sul Sistema";
 $DiffTranslation = "Confronta traduzioni";
 $StatOf = "Statistiche di";
-$SpeeSubscribe = "Iscrizione rapida come revisore dei corsi";
 $LogIdentLogout = "Elenco degli accessi";
 $ServerStatus = "Stato del server MySQL:";
 $DataBase = "Database";

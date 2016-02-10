@@ -676,7 +676,6 @@ $NomPageAdmin = "Administravimas";
 $SysInfo = "Infomacija apie sistemą";
 $DiffTranslation = "Palyginti vertimus";
 $StatOf = "Statistika";
-$SpeeSubscribe = "Greita kurso testuotojo registracija";
 $LogIdentLogout = "Prisijungimų sąrašas";
 $ServerStatus = "MySQL serverio būsena :";
 $DataBase = "Duomenų bazė";

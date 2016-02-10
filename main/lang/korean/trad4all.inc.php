@@ -520,7 +520,6 @@ $NomPageAdmin = "관리";
 $SysInfo = "시스템 정보";
 $DiffTranslation = "번역본과 비교";
 $StatOf = "통계정보";
-$SpeeSubscribe = "과정 체커로 빠른 등록";
 $LogIdentLogout = "로그인 리스트";
 $ServerStatus = "MySQL의 상태:";
 $DataBase = "데이터베이스";

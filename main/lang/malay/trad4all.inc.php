@@ -190,7 +190,6 @@ $NomPageAdmin = "Pentadbiran";
 $SysInfo = "Info tentang sistem";
 $DiffTranslation = "Perbandingan Terjemahan";
 $StatOf = "Statistik";
-$SpeeSubscribe = "Quick subscribe as Course Checker";
 $LogIdentLogout = "Senarai Login";
 $ServerStatus = "Status of MySQL server :";
 $DataBase = "Database";

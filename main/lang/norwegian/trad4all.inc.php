@@ -266,7 +266,6 @@ $NomPageAdmin = "Administrasjon";
 $SysInfo = "Informasjon om systemet";
 $DiffTranslation = "Sammenlign oversettelser";
 $StatOf = "Statistikk om";
-$SpeeSubscribe = "Hurtig registrering som kursobserverer";
 $LogIdentLogout = "Liste påloggede";
 $ServerStatus = "Status for MySQL-tjener";
 $DataBase = "Database";

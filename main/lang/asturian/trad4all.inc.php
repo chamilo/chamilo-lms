@@ -944,7 +944,6 @@ $NomPageAdmin = "Alministración";
 $SysInfo = "Información del sistema";
 $DiffTranslation = "Comparar traducciones";
 $StatOf = "Estadístiques de";
-$SpeeSubscribe = "Apuntase atayando a revisor de cursos";
 $LogIdentLogout = "Llistáu de conesiones y desconesiones";
 $ServerStatus = "Estáu del servidor MySQL:";
 $DataBase = "Base de datos";

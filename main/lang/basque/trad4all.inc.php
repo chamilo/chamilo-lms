@@ -993,7 +993,6 @@ $NomPageAdmin = "Administrazioa";
 $SysInfo = "Sistemaren gaineko informazioa";
 $DiffTranslation = "Alderatu itzulpenak";
 $StatOf = "Estatistikak";
-$SpeeSubscribe = "Inskripzio bizkorra ikastaro berrikusle izateko";
 $LogIdentLogout = "Konexio zerrenda";
 $ServerStatus = "MySQL zerbitzariaren egoera:";
 $DataBase = "Datu basea";

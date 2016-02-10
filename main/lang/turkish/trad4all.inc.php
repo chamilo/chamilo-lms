@@ -800,7 +800,6 @@ $NomPageAdmin = "Yönetim";
 $SysInfo = "Sistem Bilgileri";
 $DiffTranslation = "Çevirileri karşılaştır";
 $StatOf = "İstatistik konusu";
-$SpeeSubscribe = "Kolay kurs kontrolcüsü ol";
 $LogIdentLogout = "Erişim kayıtları";
 $ServerStatus = "MySQL sunucusunun durumu:";
 $DataBase = "Veritabanı";

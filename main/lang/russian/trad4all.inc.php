@@ -801,7 +801,6 @@ $NomPageAdmin = "Администрация";
 $SysInfo = "Информация о Системе";
 $DiffTranslation = "Сравнить переводы";
 $StatOf = "Статистика";
-$SpeeSubscribe = "Быстрая подписка в качестве ревизора курса";
 $LogIdentLogout = "Список регистрационных имен (логинов)";
 $ServerStatus = "Состояние сервера MySQL";
 $DataBase = "База данных";

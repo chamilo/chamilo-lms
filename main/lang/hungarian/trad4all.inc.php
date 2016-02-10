@@ -876,7 +876,6 @@ $NomPageAdmin = "Adminisztráció";
 $SysInfo = "Rendszerinformáció";
 $DiffTranslation = "Fordítások összehasonlítása";
 $StatOf = "Statisztikája ennek";
-$SpeeSubscribe = "Kurzusellenőrként való gyors feliratkozás";
 $LogIdentLogout = "Belépési lista";
 $ServerStatus = "MySQL szerver állapota :";
 $DataBase = "Adatbázis";

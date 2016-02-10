@@ -1451,7 +1451,6 @@ $NomPageAdmin = "Administrácia";
 $SysInfo = "Informácie o Systéme";
 $DiffTranslation = "Porovnaj preklady";
 $StatOf = "Štatistika";
-$SpeeSubscribe = "Rýchle zapísanie ako tester kurzu";
 $LogIdentLogout = "Zoznam prihlásených";
 $ServerStatus = "Stav MySQL serveru:";
 $DataBase = "Databáza";

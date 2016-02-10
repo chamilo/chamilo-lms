@@ -622,7 +622,6 @@ $NomPageAdmin = "Mastrumado";
 $SysInfo = "Sistema informo";
 $DiffTranslation = "Komparo inter la tradukoj";
 $StatOf = "Statistikoj de";
-$SpeeSubscribe = "Portempa aliĝo por testi kurson";
 $LogIdentLogout = "Logo de salutoj kaj adiaŭoj";
 $ServerStatus = "Statuso de MySQLa Servilo";
 $DataBase = "Datumbazo";

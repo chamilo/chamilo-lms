@@ -189,7 +189,6 @@ $NomPageAdmin = "Quản trị";
 $SysInfo = "Thông tin về hệ thống";
 $DiffTranslation = "So sánh các bản dịch ngôn ngữ";
 $StatOf = "Thống kê về";
-$SpeeSubscribe = "Đăng ký nhanh quyền kiểm tra giáo trình";
 $LogIdentLogout = "Danh mục đăng nhập";
 $ServerStatus = "Trạng thái MySQL server :";
 $DataBase = "Database";

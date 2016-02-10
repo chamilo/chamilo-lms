@@ -970,7 +970,6 @@ $NomPageAdmin = "Beheer";
 $SysInfo = "Systeeminfo";
 $DiffTranslation = "Vergelijking tussen de vertalingen";
 $StatOf = "Statistieken van";
-$SpeeSubscribe = "Snelle registratie om een cursus te testen";
 $LogIdentLogout = "Log-in- en log-outlijst";
 $ServerStatus = "MySQL-serverstatus:";
 $DataBase = "Databank";

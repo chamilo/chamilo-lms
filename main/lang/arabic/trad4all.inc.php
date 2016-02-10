@@ -808,7 +808,6 @@ $NomPageAdmin = " ادارة";
 $SysInfo = " معلومات حول النظام";
 $DiffTranslation = " مقارنة الترجمات";
 $StatOf = " احصائيات لـ";
-$SpeeSubscribe = " التسجيل السريع كمراقب للمقرر";
 $LogIdentLogout = " قائمة التسجيل";
 $ServerStatus = " : MySQL حالة الخادم";
 $DataBase = " ركيزة البيانات";

@@ -616,7 +616,6 @@ $NomPageAdmin = "Administrasi";
 $SysInfo = "Info tentang System";
 $DiffTranslation = "Bandingkan terjemahan";
 $StatOf = "Statistik dari";
-$SpeeSubscribe = "Mendaftar cepat sebagai Course Checker";
 $LogIdentLogout = "Daftar Login";
 $ServerStatus = "Status server MySQL :";
 $DataBase = "Database";

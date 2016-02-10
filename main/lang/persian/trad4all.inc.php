@@ -961,7 +961,6 @@ $NomPageAdmin = "اداره";
 $SysInfo = "اطلاعات\nمربوط به سیستم";
 $DiffTranslation = "مقایسه ترجمه ها";
 $StatOf = "آمار";
-$SpeeSubscribe = "ثبتنام سریع یهعنوان بررسیکننده درس";
 $LogIdentLogout = "لیست نام های کاربری";
 $ServerStatus = "MySQL وضعیت\nسرور";
 $DataBase = "پایگاه داده ها";

@@ -675,7 +675,6 @@ $NomPageAdmin = "Раководство";
 $SysInfo = "Информации за Системот";
 $DiffTranslation = "Спореди преводи";
 $StatOf = "Статистика";
-$SpeeSubscribe = "Брзо запишување како Проверувач на курсеви";
 $LogIdentLogout = "Список на кориснички имиња";
 $ServerStatus = "Статус на MySQL серверот:";
 $DataBase = "База на податоци";

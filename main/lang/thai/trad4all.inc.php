@@ -597,7 +597,6 @@ $NomPageAdmin = "การบริหารจัดการระบบ";
 $SysInfo = "แสดงรายละเอียดสถานะของระบบ";
 $DiffTranslation = "เปรียบเทียบการแปล";
 $StatOf = "ʶԵԢͧ";
-$SpeeSubscribe = "ลงทะเบียนด่วนเป็นผู้ตรวจสอบวิชา";
 $LogIdentLogout = "แสดงรายการเข้าสู่ระบบ";
 $ServerStatus = "ʶҹТͧ MySQL server";
 $DataBase = "ฐานข้อมูล";

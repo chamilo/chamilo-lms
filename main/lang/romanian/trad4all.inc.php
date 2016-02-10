@@ -1345,7 +1345,6 @@ $NomPageAdmin = "Administrare";
 $SysInfo = "Informatii despre sistem";
 $DiffTranslation = "Comparati traducerile";
 $StatOf = "Statistica pentru";
-$SpeeSubscribe = "Inregistrare rapida pentru verificator de curs";
 $LogIdentLogout = "Lista de logare";
 $ServerStatus = "Status pentru MySQLserver :";
 $DataBase = "Baza de date";

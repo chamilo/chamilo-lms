@@ -820,7 +820,6 @@ $NomPageAdmin = "Administracija";
 $SysInfo = "Informacije o sistemu";
 $DiffTranslation = "Uporedi prevode";
 $StatOf = "Statistike";
-$SpeeSubscribe = "Brza prijava za proveravanje kursa";
 $LogIdentLogout = "Lista korisničkih imena";
 $ServerStatus = "Status MySQL servera:";
 $DataBase = "Baza podataka";

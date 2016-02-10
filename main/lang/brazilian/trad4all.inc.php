@@ -1420,7 +1420,6 @@ $NomPageAdmin = "Administração";
 $SysInfo = "Informações sobre o Chamilo";
 $DiffTranslation = "Comparar traduções";
 $StatOf = "Estatísticas do";
-$SpeeSubscribe = "Inscrição rápida como revisor de cursos";
 $LogIdentLogout = "Lista de logins";
 $ServerStatus = "Status do servidor MySQL :";
 $DataBase = "Base de dados";

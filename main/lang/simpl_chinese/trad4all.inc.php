@@ -731,7 +731,6 @@ $NomPageAdmin = "系统管理";
 $SysInfo = "系统信息";
 $DiffTranslation = "比较翻译";
 $StatOf = "统计信息";
-$SpeeSubscribe = "快速选课";
 $LogIdentLogout = "登录日志";
 $ServerStatus = "MySQL服务器状态";
 $DataBase = "数据库";

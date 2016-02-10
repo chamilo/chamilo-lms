@@ -488,7 +488,6 @@ $NomPageAdmin = "Адміністрування";
 $SysInfo = "Інформація про платформу";
 $DiffTranslation = "Порівняти переклади";
 $StatOf = "Статистика";
-$SpeeSubscribe = "Швидке зарахування в якості ревізора курсу";
 $LogIdentLogout = "Список логінів та логаутів";
 $ServerStatus = "Статус серверу MySQL:";
 $DataBase = "База даних";

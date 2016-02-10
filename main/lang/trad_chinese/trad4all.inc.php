@@ -774,7 +774,6 @@ $NomPageAdmin = "系統管理";
 $SysInfo = "系統訊息";
 $DiffTranslation = "比較翻譯";
 $StatOf = "統計訊息";
-$SpeeSubscribe = "快速選課";
 $LogIdentLogout = "登錄日誌";
 $ServerStatus = "MySQL伺服器狀態";
 $DataBase = "數據庫";

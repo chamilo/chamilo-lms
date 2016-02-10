@@ -8,6 +8,8 @@
  * HTML output
  */
 require_once('language.php');
+$rootWeb = api_get_path('WEB_PATH');
+
 ?>
 <html>
 <head>
@@ -23,7 +25,7 @@ require_once('language.php');
     <script src="js/vendor/html5shiv.js"></script>
     <script src="js/vendor/respond.min.js"></script>
     <![endif]-->
-    <script type="text/javascript" src="<?php echo api_get_path('WEB_PATH') ?>/main/inc/lib/javascript/jquery.min.js"></script>
+    <script type="text/javascript" src="<?php echo $rootWeb ?>web/assets/jquery/jquery.min.js"></script>
 </head>
 <body>
 <img src="/custompages/images/page-background.png" class="backgroundimage" />

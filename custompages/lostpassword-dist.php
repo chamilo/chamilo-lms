@@ -7,7 +7,7 @@
 
 require_once('../../main/inc/global.inc.php');
 require_once('language.php');
-
+$rootWeb = api_get_path('WEB_PATH');
 ?>
 <html>
 <head>
@@ -19,7 +19,8 @@ require_once('language.php');
 	<!--[if IE 6]>
 	<link rel="stylesheet" type="text/css" href="../../custompages/style-ie6.css" />
 	<![endif]-->
-	<script type="text/javascript" src="../../main/inc/lib/javascript/jquery.min.js"></script>
+	<script type="text/javascript" src="<?php echo $rootWeb ?>web/assets/jquery/jquery.min.js"></script>
+
 	<script type="text/javascript">
 		$(document).ready(function() {
 			// Handler pour la touche retour

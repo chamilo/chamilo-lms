@@ -453,6 +453,10 @@ if (!empty($valid_languages)) {
         }
     }
 
+    // If language is set via browser ignore the priority
+    if (isset($_GET['language'])) {
+        $language_interface = $user_language;
+    }
 }
 
 // Sometimes the variable $language_interface is changed
@@ -487,6 +491,7 @@ if (!empty($parent_path)) {
     include $langpath.'english/trad4all.inc.php';
     // prepare string for current language
     $langfile = $langpath.$language_interface.'/trad4all.inc.php';
+
     if (file_exists($langfile)) {
         include $langfile;
     }

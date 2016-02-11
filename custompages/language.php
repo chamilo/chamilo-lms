@@ -35,8 +35,17 @@ function custompages_get_lang($variable) {
 	return get_lang($variable, null, $_SESSION['user_language_choice']);
 }
 
-$available_langs = array('en', 'fr', 'es');
-$chamilo_langs = array(null => 'english', 'en' => 'english', 'fr' => 'french', 'nl' => 'dutch', 'de' => 'german', 'es' => 'spanish');
+$available_langs = array('en', 'fr', 'es', 'gl', 'eu');
+$chamilo_langs = array(
+    null => 'english',
+    'en' => 'english',
+    'fr' => 'french',
+    'nl' => 'dutch',
+    'de' => 'german',
+    'es' => 'spanish',
+    'gl' => 'galician',
+    'eu' => 'basque'
+);
 $lang_match = $chamilo_langs[get_preferred_language($available_langs)];
 // recover previous value ...
 if (isset($_SESSION['user_language_choice']))

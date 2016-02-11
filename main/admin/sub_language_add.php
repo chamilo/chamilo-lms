@@ -226,7 +226,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
                                     $msg .= Display::return_message(get_lang('LanguageDirectoryNotWriteableContactAdmin'),'error');
                                 } else {
                                     // Here we build the confirmation message and we send the user to the sub language terms definition page, using a little hack - see #3712
-                                    $_SESSION['msg'] = Display::return_message(get_lang('TheNewSubLanguageHasBeenAdded').$str_info.$link,'confirm',false);
+                                    $_SESSION['msg'] = Display::return_message(get_lang('TheNewSubLanguageHasBeenAdded').$str_info.'confirm',false);
                                     unset($interbreadcrumb);
                                     $_GET['sub_language_id'] = $_REQUEST['sub_language_id'] = $sl_id;
                                     require 'sub_language.php';

@@ -26,16 +26,15 @@ class AnnouncementEmail
     }
 
     /**
-     * @param int $course
+     * @param int $courseId
      * @param int $announcement
      */
-    public function __construct($course, $announcement)
+    public function __construct($courseId, $announcement)
     {
-        if (empty($course)) {
-            $course = api_get_course_int_id();
-            $course = api_get_course_info_by_id($course);
-        } else if (is_numeric($course)) {
-            $course = api_get_course_info_by_id($course);
+        if (!empty($courseId)) {
+            $course = api_get_course_info_by_id($courseId);
+        } else {
+            $course = api_get_course_info();
         }
         $this->course = $course;
         $this->session_id = api_get_session_id();
@@ -118,15 +117,17 @@ class AnnouncementEmail
         $tool = TOOL_ANNOUNCEMENT;
 
         $id = $this->announcement('id');
-        $course_id = $this->course('id');
+        $course_id = $this->course('real_id');
+        $sessionCondition = api_get_session_condition($this->session_id);
 
         $sql = "SELECT to_group_id, to_user_id
                 FROM $tbl_item_property
                 WHERE
                     c_id = $course_id AND
                     tool = '$tool' AND
-                    ref = $id AND
-                    session_id = {$this->session_id} ";
+                    ref = $id
+                    $sessionCondition";
+
         $rs = Database::query($sql);
 
         while ($row = Database::fetch_array($rs, 'ASSOC')) {

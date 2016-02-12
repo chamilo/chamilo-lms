@@ -57,12 +57,12 @@ $actions = array(
     'search_session'
 );
 
-$action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
+$action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_courses';
 if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
     $action = Security::remove_XSS($_GET['action']);
 }
 
-$categoryCode = isset($_GET['category_code']) ? $_GET['category_code'] : '';
+$categoryCode = isset($_GET['category_code']) ? $_GET['category_code'] : 'ALL';
 
 $nameTools = getCourseCatalogNameTools($action);
 if (empty($nameTools)) {

@@ -763,6 +763,7 @@ If you have issues with files taking a long time to download, make sure you reco
     <li>If you have issues, you can always save your code somewhere else and ask Git to put you exactly at the most recent 1.9.x stage ("git pull"/"git reset --hard origin/1.9.x")</li>
     <li>Once you're sure you have a "clean" local Chamilo repository, create a 1.10.x branch with "git checkout -b 1.10.x"</li>
     <li>In the new branch, download all code from the 1.10.x branch upstream: "git pull origin 1.10.x"</li>
+    <li>If you never used composer or used it only a few times in the past, you might need to update it (rm -rf ~/.composer/vendor; composer global require "fxp/composer-asset-plugin:1.0.3"; composer clear-cache) before trying the following command</li>
     <li>Update composer: "composer update" (you might need to give a Github token here)</li>
     <li>Change permissions on folders app, web, main/lang and main/default_course_document/images</li>
     <li>Go to your portal install page (main/install/) and follow the upgrade procedure</li>

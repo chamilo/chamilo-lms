@@ -3719,6 +3719,7 @@ class Tracking
                 ON (c.id = stats_login.c_id)
                 INNER JOIN '.$table_course_rel_user.' course_user
                 ON course_user.user_id = stats_login.user_id AND course_user.c_id = c.id
+                WHERE c.id = '.$courseId.'
                 GROUP BY user_id
                 HAVING DATE_SUB( "' . $now . '", INTERVAL '.$since.' DAY) > max_date ';
 
@@ -3732,7 +3733,7 @@ class Tracking
                     ON (c.id = stats_login.c_id)
                     '.$inner.'
                     WHERE
-                        course_user.c_id = \''.$courseId.'\' AND
+                        course_user.c_id = '.$courseId.' AND
                         stats_login.login_course_date IS NULL
                     GROUP BY course_user.user_id';
         }

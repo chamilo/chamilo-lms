@@ -30,9 +30,10 @@ $visibility = api_get_item_visibility(
     api_get_course_info(),
     TOOL_LEARNPATH,
     $lp_id,
-    $action,
+    api_get_session_id(),
     api_get_user_id(),
-    api_get_session_id()
+    null,
+    api_get_group_id()
 );
 if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0 ) {
      api_not_allowed();
@@ -91,6 +92,7 @@ foreach ($list as $toc) {
 }
 
 //Setting the template
+$tool_name = get_lang('ViewModeImpress');
 $tpl = new Template($tool_name, false, false, true);
 $tpl->assign('html', $html);
 $content = $tpl->fetch('default/learnpath/impress.tpl');

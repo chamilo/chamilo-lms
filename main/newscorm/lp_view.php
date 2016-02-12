@@ -31,7 +31,7 @@ $show_learnpath = true;
 
 api_protect_course_script();
 
-$lp_id = intval($_GET['lp_id']);
+$lp_id = !empty($_GET['lp_id'])?intval($_GET['lp_id']):0;
 $sessionId = api_get_session_id();
 
 // Check if the learning path is visible for student - (LP requisites)
@@ -93,6 +93,9 @@ $(document).ready(function() {
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
+if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame() == 1) {
+    $htmlHeadXtra[] = '';
+}
 
 //Impress js
 if ($_SESSION['oLP']->mode == 'impress') {
@@ -123,7 +126,7 @@ $htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" langua
 $htmlHeadXtra[] = '<script>
 var sv_user = \'' . api_get_user_id() . '\';
 var sv_course = chamilo_courseCode;
-var sv_sco = \'' . intval($_REQUEST['lp_id']) . '\';
+var sv_sco = \'' . $lp_id . '\';
 </script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
 $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 

@@ -1,4 +1,4 @@
-<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }}">
+<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' }}">
     {% if is_allowed_to_edit %}
         <div id="learning_path_breadcrumb_zone" class="hidden-xs">
             {{ breadcrumb }}
@@ -102,8 +102,13 @@
                 <div class="lp-view-zone-container">
                     <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
                         <a href="#" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
-                            <span class="fa fa-expand" aria-hidden="true"></span>
-                            <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+                            {% if lp_mode == 'embedframe' %}
+                                <span class="fa fa-compress" aria-hidden="true"></span>
+                                <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+                            {% else %}
+                                <span class="fa fa-expand" aria-hidden="true"></span>
+                                <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+                            {% endif %}
                         </a>
                         <a id="home-course" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
                             <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
@@ -156,6 +161,18 @@
         };
 
         $(document).on('ready', function () {
+            
+            {% if lp_mode == 'embedframe' %}
+                //$('#learning_path_main').addClass('lp-view-collapsed');
+                $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
+                e.preventDefault();
+
+                $('#learning_path_main').toggleClass('lp-view-collapsed');
+
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+            });
+            {% else %}
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
                 e.preventDefault();
 
@@ -164,6 +181,8 @@
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
             });
+            
+            {% endif %}
 
             $('.lp-view-tabs').on('click', '.disabled', function (e) {
                 e.preventDefault();

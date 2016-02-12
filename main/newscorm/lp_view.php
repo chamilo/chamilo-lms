@@ -93,9 +93,6 @@ $(document).ready(function() {
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
-if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame() == 1) {
-    $htmlHeadXtra[] = 'hello';
-}
 
 //Impress js
 if ($_SESSION['oLP']->mode == 'impress') {

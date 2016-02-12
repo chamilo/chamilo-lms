@@ -5076,13 +5076,13 @@ class learnpath
             $default_view_mode = $row['default_view_mod'];
             $view_mode = $default_view_mode;
             switch ($default_view_mode) {
-                case 'fullscreen':
+                case 'fullscreen': // default with popup
                     $view_mode = 'embedded';
                     break;
-                case 'embedded':
+                case 'embedded': // default view with left menu
                     $view_mode = 'embedframe';
                     break;
-                case 'embedframe':
+                case 'embedframe': //folded menu
                     $view_mode = 'impress';
                     break;
                 case 'impress':

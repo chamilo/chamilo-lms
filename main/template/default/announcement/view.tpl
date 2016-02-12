@@ -2,10 +2,10 @@
 
 {% if not announcement is empty %}
     <article id="announcement-{{ announcement.id }}}">
-        <header class="page-header">
+        <div class="page-header">
             <h3>{{ announcement.title }}</h3>
             {{ announcement.content }}
-        </header>
+        </div>
     </article>
 {% else %}
     <div class="alert alert-danger" role="alert">

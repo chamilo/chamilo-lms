@@ -1447,6 +1447,7 @@ $NomPageAdmin = "Administration";
 $SysInfo = "Info about the System";
 $DiffTranslation = "Compare translations";
 $StatOf = "Reporting for";
+$PDFDownloadNotAllowedForStudents = "PDF download is not allowed for students";
 $LogIdentLogout = "Login list";
 $ServerStatus = "Status of MySQL server :";
 $DataBase = "Database";

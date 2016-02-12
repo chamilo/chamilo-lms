@@ -1440,6 +1440,7 @@ $NomPageAdmin = "Administration";
 $SysInfo = "Info Système";
 $DiffTranslation = "Comparaison des traductions";
 $StatOf = "Statistiques de";
+$PDFDownloadNotAllowedForStudents = "Les apprenants ne peuvent pas télécharger un PDF";
 $LogIdentLogout = "Liste des logins";
 $ServerStatus = "Statut du serveur MySQL";
 $DataBase = "Base de données";

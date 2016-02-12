@@ -2016,7 +2016,7 @@ class Wiki
             if (api_get_setting('students_export2pdf') !== 'true') {
                 self::setMessage(
                     Display::display_error_message(
-                        get_lang('StudentsDownloadPDFDoesntAllowed'),
+                        get_lang('PDFDownloadNotAllowedForStudents'),
                         false,
                         true
                     )

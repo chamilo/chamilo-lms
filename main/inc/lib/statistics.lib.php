@@ -530,6 +530,43 @@ class Statistics
             Statistics::printStats(get_lang('Logins'), $totalLogin, false);
         }
     }
+    
+    /**
+     * get the number of recent logins
+     * @param bool    $distinct   Whether to only give distinct users stats, or *all* logins
+     * @return array
+     */
+    public static function getRecentLoginStats($distinct = false)
+    {
+        $totalLogin = array();
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $current_url_id = api_get_current_access_url_id();
+        if (api_is_multiple_url_enabled()) {
+            $table_url = ", $access_url_rel_user_table";
+            $where_url = " AND login_user_id=user_id AND access_url_id='".$current_url_id."'";
+        } else {
+            $table_url = '';
+            $where_url='';
+        }
+        $now = api_get_utc_datetime();
+        $field = 'login_user_id';
+        if ($distinct) {
+            $field = 'DISTINCT(login_user_id)';
+        }
+        $sql[get_lang('ThisDay')]    = "SELECT count($field) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
+        $sql[get_lang('Last7days')]  = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
+        $sql[get_lang('Last31days')] = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
+        $sql[get_lang('Total')]      = "SELECT count($field) AS number  FROM $table $table_url WHERE 1=1 $where_url";
+        foreach ($sql as $index => $query) {
+            $res = Database::query($query);
+            $obj = Database::fetch_object($res);
+            $totalLogin[$index] = $obj->number;
+        }
+        
+        return $totalLogin;
+    }
+    
     /**
      * Show some stats about the accesses to the different course tools
      */

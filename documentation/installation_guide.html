@@ -66,6 +66,7 @@
   <li><a href="#14._Improving_files_download">Improving files download time</a></li>
   <li><a href="#15._Videoconference">Videoconference</a></li>
   <li><a href="#16._Rewrite">Rewrite configurations</a></li>
+  <li><a href="#17._Git_Upgrade">Upgrading from Git</a></li>
 </ol>
 
 <br />
@@ -751,6 +752,21 @@ If you have issues with files taking a long time to download, make sure you reco
         domain-specific configuration file.
     </p>
 <hr style="width: 100%; height: 2px;" />
+    <hr style="width: 100%; height: 2px;" />
+    <h2><a name="17._Git_Upgrade"></a>Upgrading from Git</h2>
+    <p>If you have sufficient experience with Git and have installed your initial Chamilo portal
+        from the Git version, you might want to upgrade from 1.9.x to 1.10.x using Git directly.<br />
+    Here are a few tips that might help you:<br />
+    <ul>
+    <li>Get into your Chamilo Git repository</li>
+    <li>Make sure you have no additional elements that were not commited (git status/git stash)</li>
+    <li>If you have issues, you can always save your code somewhere else and ask Git to put you exactly at the most recent 1.9.x stage ("git pull"/"git reset --hard origin/1.9.x")</li>
+    <li>Once you're sure you have a "clean" local Chamilo repository, create a 1.10.x branch with "git checkout -b 1.10.x"</li>
+    <li>In the new branch, download all code from the 1.10.x branch upstream: "git pull origin 1.10.x"</li>
+    <li>Update composer: "composer update" (you might need to give a Github token here)</li>
+    <li>Change permissions on folders app, web, main/lang and main/default_course_document/images</li>
+    <li>Go to your portal install page (main/install/) and follow the upgrade procedure</li>
+</ul></p>
 <p>
   <br />
   <br />

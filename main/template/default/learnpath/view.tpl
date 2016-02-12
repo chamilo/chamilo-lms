@@ -1,4 +1,4 @@
-<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }}">
+<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' }}">
     {% if is_allowed_to_edit %}
         <div id="learning_path_breadcrumb_zone" class="hidden-xs">
             {{ breadcrumb }}
@@ -163,7 +163,7 @@
         $(document).on('ready', function () {
             
             {% if lp_mode == 'embedframe' %}
-                $('#learning_path_main').addClass('lp-view-collapsed');
+                //$('#learning_path_main').addClass('lp-view-collapsed');
                 $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
                 e.preventDefault();
 

@@ -2013,7 +2013,14 @@ class Wiki
     public function export_to_pdf($id, $course_code)
     {
         if (!api_is_platform_admin()) {
-            if (api_get_setting('students_export2pdf') == 'true') {
+            if (api_get_setting('students_export2pdf') !== 'true') {
+                self::setMessage(
+                    Display::display_error_message(
+                        get_lang('PDFDownloadNotAllowedForStudents'),
+                        false,
+                        true
+                    )
+                );
                 return false;
             }
         }
@@ -5362,7 +5369,7 @@ class Wiki
             case 'export_to_pdf':
                 if (isset($_GET['wiki_id'])) {
                     self::export_to_pdf($_GET['wiki_id'], api_get_course_id());
-                    exit;
+                    break;
                 }
                 break;
             case 'export2doc':

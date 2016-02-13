@@ -31,7 +31,7 @@ $show_learnpath = true;
 
 api_protect_course_script();
 
-$lp_id = !empty($_GET['lp_id'])?intval($_GET['lp_id']):0;
+$lp_id = !empty($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
 $sessionId = api_get_session_id();
 
 // Check if the learning path is visible for student - (LP requisites)

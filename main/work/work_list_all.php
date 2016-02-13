@@ -184,7 +184,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
 }
 
 
-echo Display::toolbarAction('toolbar-worklist', array( 0 => $actionsLeft));
+echo Display::toolbarAction('toolbar-worklist', array( 0 => $actionsLeft), 1);
 
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);

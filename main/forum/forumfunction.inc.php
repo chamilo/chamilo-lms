@@ -3925,7 +3925,7 @@ function send_mail($user_info = array(), $thread_information = array())
     $email_body .= get_lang('ThreadCanBeFoundHere')." : <br /><a href=\"".$thread_link."\">".$thread_link."</a>\n";
 
     if ($user_info['user_id'] <> $user_id) {
-        MessageManager::send_message($user_info['user_id'], $subject, $email_body, null, null, null, null, null, null, $user_id);
+        MessageManager::send_message($user_info['user_id'], $subject, $email_body, [], [], null, null, null, null, $user_id);
     }
 }
 

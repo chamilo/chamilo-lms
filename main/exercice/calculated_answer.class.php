@@ -143,7 +143,7 @@ class CalculatedAnswer extends Question
             get_lang('NotationList'),
             api_get_path(WEB_PATH).'main/exercice/evalmathnotation.php',
             array(
-                'class' => 'btn ajax',
+                'class' => 'btn btn-info ajax',
                 'data-title' => get_lang('NotationList'),
                 '_target' => '_blank'
             )

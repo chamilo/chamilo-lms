@@ -7943,8 +7943,11 @@ function api_mail_html(
 
     $mailView = new Template(null, false, false, false, false, false, false);
     $mailView->assign('content', $message);
-    $link = $additionalParameters['link'];
-    $mailView->assign('link', $link);
+
+    if (isset($additionalParameters['link'])) {
+        $mailView->assign('link', $additionalParameters['link']);
+    }
+
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 

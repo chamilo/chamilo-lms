@@ -369,7 +369,7 @@ function get_number_of_group_users()
     $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 
     // Query
-    $sql = "SELECT count(id) AS number_of_users
+    $sql = "SELECT count(iid) AS number_of_users
             FROM ".$table_group_user."
             WHERE c_id = $course_id AND group_id='".Database::escape_string($current_group['id'])."'";
     $result = Database::query($sql);

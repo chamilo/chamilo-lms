@@ -7609,4 +7609,5 @@ $DissociateForumToLPItem = "Dissociate the forum of this learning path item";
 $AssociateForumToLPItem = "Associate a forum to this learning path item";
 $ForumDissociated = "Forum dissociated";
 $ClickOrDropOneFileHere = "Click or drop one file here";
+$ModuloPercentage = "Modulo:\t\t\t%";
 ?>

@@ -171,7 +171,7 @@ foreach ($users as $user) {
             break;
     }
 
-    $userPicture = UserManager::getUserPicture($user['user_id']);
+    $userPicture = UserManager::getUserPicture($user['id']);
     $user['image'] = '<img src="' . $userPicture . '"  width="50px" height="50px"  />';
     $new_member_list[] = $user;
 }

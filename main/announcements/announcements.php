@@ -318,6 +318,14 @@ switch ($action) {
 
         $form->addElement('text', 'title', get_lang('EmailTitle'));
         $form->addElement('hidden', 'id');
+        $htmlTags = "<b>".get_lang('Tags')."</b></br></br>";
+        $tags = AnnouncementManager::get_tags();
+        
+        foreach ($tags as $tag) {
+            $htmlTags .= "<b>".$tag."</b></br>";
+        }
+        
+        $form->addHtml("<div class='form-group'><div class='col-sm-2'></div><div class='col-sm-8'><div class='alert alert-info'>".$htmlTags."</div></div></div>");
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),

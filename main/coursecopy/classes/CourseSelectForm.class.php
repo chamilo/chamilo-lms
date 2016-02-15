@@ -224,7 +224,7 @@ class CourseSelectForm
 						foreach ($resources as $id => $resource) {
                             if ($resource) {
 								// Event obj in 1.9.x in 1.10.x the class is CalendarEvent
-                                Resource::setClassType($resource);
+                                Coursecopy\Resource::setClassType($resource);
                                 echo '<label class="checkbox">';
                                 echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
                                 $resource->show();

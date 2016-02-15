@@ -181,7 +181,7 @@ $members = $usergroup->get_users_by_group(
 
 if (is_array($members) && count($members)>0) {
     foreach ($members as &$member) {
-        $image = UserManager::getUserPicture($member['user_id']);
+        $image = UserManager::getUserPicture($member['id']);
         $member['image'] = '<img src="'.$image.'"  width="50px" height="50px"  />';
     }
     $social_right_content .= '<h3>'.get_lang('UsersAlreadyInvited').'</h3>';

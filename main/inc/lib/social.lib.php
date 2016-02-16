@@ -1219,7 +1219,7 @@ class SocialManager extends UserManager
      * @return boolean
      * @author Yannick Warnier
      */
-    public static function sendWallMessage($userId, $friendId, $messageContent, $messageId = 0 ,$messageStatus)
+    public static function sendWallMessage($userId, $friendId, $messageContent, $messageId = 0, $messageStatus = '')
     {
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $userId = intval($userId);
@@ -1445,7 +1445,7 @@ class SocialManager extends UserManager
             $start = '0000-00-00';
         }
         $isOwnWall = (api_get_user_id() == $userId  && $userId == $friendId);
-        $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL_POST , null, $start, $limit, $offset);
+        $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL_POST, null, $start, $limit, $offset);
         $users = array();
         $data = array();
         foreach ($messages as $key => $message) {

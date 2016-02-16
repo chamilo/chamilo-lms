@@ -188,4 +188,47 @@ class FeatureContext extends MinkContext
             new Given('the "language" field should contain "' . $argument . '"')
         );
     }
+
+    /**
+     * @Given /^I am logged as "([^"]*)"$/
+     */
+    public function iAmLoggedAs($username)
+    {
+        return [
+            new Given('I am on "/index.php?logout=logout"'),
+            new Given('I am on homepage'),
+            new Given('I fill in "login" with "' . $username . '"'),
+            new Given('I fill in "password" with "' . $username . '"'),
+            new Given('I press "submitAuth"')
+        ];
+    }
+
+    /**
+     * @Given /^I have a friend$/
+     */
+    public function iHaveAFriend()
+    {
+        $adminId = 1;
+        $friendId = 11;
+        $friendUsername = 'fbaggins';
+
+        $sendInvitationURL = '/main/inc/ajax/message.ajax.php?' . http_build_query([
+            'a' => 'send_invitation',
+            'user_id' => $friendId,
+            'content' => 'Add me'
+        ]);
+        $acceptInvitationURL = '/main/inc/ajax/social.ajax.php?' . http_build_query([
+            'a' => 'add_friend',
+            'friend_id' => $adminId,
+            'is_my_friend' => 'friend'
+        ]);
+
+        return array(
+            new Given('I am a platform administrator'),
+            new Given('I am on "' . $sendInvitationURL . '"'),
+            new Given('I am logged as "' . $friendUsername . '"'),
+            new Given('I am on "' . $acceptInvitationURL . '"'),
+            new Given('I am a platform administrator')
+        );
+    }
 }

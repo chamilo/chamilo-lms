@@ -647,17 +647,18 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
             }
             $userId = $current_user['user_id'];
             $userInfo = api_get_user_info($userId);
+            if ($userInfo['status'] != 20) {
+                $groupNameListToString = '';
+                if (!empty($groups)) {
+                    $groupNameList = array_column($groups, 'name');
+                    $groupNameListToString = ' - ['.implode(', ', $groupNameList).']';
+                }
+                $groups = $userGroup->getUserGroupListByUser($userId);
 
-            $groupNameListToString = '';
-            if (!empty($groups)) {
-                $groupNameList = array_column($groups, 'name');
-                $groupNameListToString = ' - ['.implode(', ', $groupNameList).']';
+                $full_name = $userInfo['complete_name'].$groupNameListToString;
+                $current_user_id = $current_user['user_id'];
+                $options['user_' . $current_user_id] = $full_name;
             }
-            $groups = $userGroup->getUserGroupListByUser($userId);
-
-            $full_name = $userInfo['complete_name'].$groupNameListToString;
-            $current_user_id = $current_user['user_id'];
-            $options['user_' . $current_user_id] = $full_name;
         }
     }
 
@@ -1045,7 +1046,7 @@ function store_add_dropbox()
     new Dropbox_SentWork(
         $_user['user_id'],
         $dropbox_title,
-        $_POST['description'],
+        isset($_POST['description']) ? $_POST['description'] : '',
         strip_tags($_POST['authors']),
         $dropbox_filename,
         $dropbox_filesize,

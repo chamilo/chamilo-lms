@@ -17,6 +17,10 @@ define('WS_ERROR_NOT_FOUND_RESULT', 2);
 define('WS_ERROR_INVALID_INPUT', 3);
 define('WS_ERROR_SETTING', 4);
 
+/**
+ * @param string $code
+ * @return null|soap_fault
+ */
 function returnError($code)
 {
     $fault = null;
@@ -87,7 +91,7 @@ function WSHelperVerifyKey($params)
     }
 
     $result = api_is_valid_secret_key($secret_key, $security_key);
-    //error_log($secret_key.'-'.$security_key);
+
     if ($debug)
         error_log('WSHelperVerifyKey result: '.intval($result));
     return $result;
@@ -2420,35 +2424,41 @@ $server->register('WSEditUserPasswordCrypted',                         // method
 // Define the method WSEditUserPasswordCrypted
 function WSEditUserPasswordCrypted($params)
 {
-    global $_configuration;
+    global $_configuration, $debug;
 
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
+    }
+
+    if ($debug) {
+        error_log('WSEditUserPasswordCrypted');
     }
 
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
     $original_user_id_value = $params['original_user_id_value'];
     $original_user_id_name = $params['original_user_id_name'];
-    $firstname = $params['firstname'];
-    $lastname = $params['lastname'];
-    $username = $params['username'];
+
+    $firstname = isset($params['firstname']) ? $params['firstname'] : '';
+    $lastname = isset($params['lastname']) ? $params['lastname'] : '';
+    $username = isset($params['username']) ? $params['username'] : '';
     $password = null;
     $auth_source = null;
-    $email = $params['email'];
-    $status = $params['status'];
+    $email = isset($params['email']) ? $params['email'] : '';
+    $status = isset($params['status']) ? $params['status'] : '';
     $official_code = '';
-    $phone = $params['phone'];
+    $phone = isset($params['phone']) ? $params['phone'] : '';
     $picture_uri = '';
-    $expiration_date = $params['expiration_date'];
+    $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : '';
     $active = 1;
     $creator_id = null;
     $hr_dept_id = 0;
     $extra = null;
-    $extra_list = $params['extra'];
+    $extra_list = isset($params['extra']) ? $params['extra'] : '';
+    $params['password'] = isset($params['password']) ? $params['password'] : '';
+    $params['encrypt_method'] = isset($params['encrypt_method']) ? $params['encrypt_method'] : '';
 
     if (!empty($params['password']) && !empty($params['encrypt_method'])) {
-
         $password = $params['password'];
         $encrypt_method = $params['encrypt_method'];
         if ($_configuration['password_encryption'] === $encrypt_method ) {
@@ -2465,9 +2475,11 @@ function WSEditUserPasswordCrypted($params)
         }
     } elseif (!empty($params['password']) && empty($params['encrypt_method'])) {
         $msg = "If password is not empty the encrypt_method param is required ";
+
         return $msg;
     } elseif (empty($params['password']) && !empty($params['encrypt_method'])) {
         $msg = "If encrypt_method is not empty the password param is required ";
+
         return $msg;
     }
 
@@ -2475,6 +2487,10 @@ function WSEditUserPasswordCrypted($params)
         $original_user_id_value,
         $original_user_id_name
     );
+
+    if ($debug) {
+        error_log("user: $user_id");
+    }
 
     if ($user_id == 0) {
         return 0;
@@ -2506,10 +2522,12 @@ function WSEditUserPasswordCrypted($params)
         $sql .= " firstname='".Database::escape_string($firstname)."', ";
     }
     $sql .= " username='".Database::escape_string($username)."',";
-    if (!is_null($password)) {
+
+    if (!empty($password)) {
         $sql .= " password='".Database::escape_string($password)."',";
     }
-    if (!is_null($auth_source)) {
+
+    if (!empty($auth_source)) {
         $sql .= " auth_source='".Database::escape_string($auth_source)."',";
     }
 
@@ -2540,15 +2558,20 @@ function WSEditUserPasswordCrypted($params)
     if (!is_null($creator_id)) {
         $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
     }
+
     $sql .= " WHERE user_id='$user_id'";
     $return = @Database::query($sql);
+
+    if ($debug) {
+        error_log("SQL: $sql");
+    }
 
     if (is_array($extra_list) && count($extra_list) > 0) {
         foreach ($extra_list as $extra) {
             $extra_field_name = $extra['field_name'];
             $extra_field_value = $extra['field_value'];
             // save the external system's id into user_field_value table'
-            $res = UserManager::update_extra_field_value(
+            UserManager::update_extra_field_value(
                 $user_id,
                 $extra_field_name,
                 $extra_field_value

@@ -81,12 +81,19 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     exit;
 
 } else if (isset($_GET['messageId'])) {
-    $messageId = Security::remove_XSS($_GET['messageId']);
-    $status = SocialManager::deleteMessage($messageId);
-    Display::addFlash(Display::return_message(get_lang('MessageDeleted')));
-    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/profile.php');
-    exit;
+    $messageId = intval($_GET['messageId']);
+    $messageInfo = MessageManager::get_message_by_id($messageId);
+    if (!empty($messageInfo)) {
+        // I can only delete messages of my own wall
+        if ($messageInfo['user_receiver_id'] == $user_id) {
+            $status = SocialManager::deleteMessage($messageId);
 
+            Display::addFlash(Display::return_message(get_lang('MessageDeleted')));
+            header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/profile.php');
+            exit;
+        }
+    }
+    api_not_allowed(true);
 } else if (isset($_GET['u'])) { //I'm your friend? I can see your profile?
     $user_id = intval($_GET['u']);
     if (api_is_anonymous($user_id, true)) {

@@ -21,49 +21,6 @@ $interbreadcrumb[] = array ('url' =>'#','name' => get_lang('Invitations'));
 
 $userGroup = new UserGroup();
 
-$htmlHeadXtra[] = '
-<script>
-function denied_friend(element_input) {
-    name_button=$(element_input).attr("id");
-    name_div_id="id_"+name_button.substring(13);
-    user_id=name_div_id.split("_");
-    friend_user_id=user_id[1];
-    $.ajax({
-        contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
-            $("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />");
-        },
-        type: "POST",
-        url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=deny_friend",
-        data: "denied_friend_id="+friend_user_id,
-        success: function(datos) {
-            $("div#"+name_div_id).hide("slow");
-            $("#id_response").html(datos);
-        }
-   });
-}
-function register_friend(element_input) {
-    if(confirm("'.get_lang('AddToFriends').'")) {
-		name_button=$(element_input).attr("id");
-		name_div_id="id_"+name_button.substring(13);
-		user_id=name_div_id.split("_");
-		user_friend_id=user_id[1];
-        $.ajax({
-           contentType: "application/x-www-form-urlencoded",
-           beforeSend: function(objeto) {
-               $("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-               type: "POST",
-               url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
-               data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
-               success: function(data) {
-                   $("div#"+name_div_id).hide("slow");
-                   $("#id_response").html(data);
-               }
-		});
-    }
-}
-
-</script>';
 $show_message = null;
 $content = null;
 
@@ -114,12 +71,29 @@ if ($number_loop != 0) {
                                     </h4>';
         $invitationHtml .= '<div class="content-invitation">'.$content.'</div>';
         $invitationHtml .= '<div class="date-invitation">'.get_lang('DateSend').' : '.$date.'</div>';
-        $invitationHtml .= '<div class="btn-group" role="group">
-                            <button class="btn btn-success" type="submit" id="btn_accepted_'.$sender_user_id.'" onclick="javascript:register_friend(this)">
-                            <em class="fa fa-check"></em> '.get_lang('AcceptInvitation').'</button>
-                            <button class="btn btn-danger" type="submit" id="btn_deniedst_'.$sender_user_id.' " onclick="javascript:denied_friend(this)" >
-                            <em class="fa fa-times"></em> '.get_lang('DenyInvitation').'</button>
-                            ';
+
+        $invitationHtml .= '<div class="btn-group" role="group">';
+        $invitationHtml .= Display::toolbarButton(
+            get_lang('AcceptInvitation'),
+            api_get_path(WEB_AJAX_PATH) . 'social.ajax.php?' . http_build_query([
+                'a' => 'add_friend',
+                'friend_id' => $sender_user_id,
+                'is_my_friend' => 'friend'
+            ]),
+            'check',
+            'success',
+            ['id' => 'btn-accept-' . $sender_user_id]
+        );
+        $invitationHtml .= Display::toolbarButton(
+            get_lang('DenyInvitation'),
+            api_get_path(WEB_AJAX_PATH) . 'social.ajax.php?' . http_build_query([
+                'a' => 'deny_friend',
+                'denied_friend_id' => $sender_user_id,
+            ]),
+            'times',
+            'danger',
+            ['id' => 'btn-deny-' . $sender_user_id]
+        );
         $invitationHtml .= '</div>';
         $invitationHtml .= '</div>';
         $invitationHtml .= '</div></div>';

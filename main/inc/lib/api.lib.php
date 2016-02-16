@@ -6775,7 +6775,7 @@ function api_get_real_ip(){
     $ip = trim($_SERVER['REMOTE_ADDR']);
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         if (preg_match('/,/', $_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            list($ip1, $ip2) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            @list($ip1, $ip2) = @explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         } else {
             $ip1 = $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
@@ -7943,8 +7943,11 @@ function api_mail_html(
 
     $mailView = new Template(null, false, false, false, false, false, false);
     $mailView->assign('content', $message);
-    $link = $additionalParameters['link'];
-    $mailView->assign('link', $link);
+
+    if (isset($additionalParameters['link'])) {
+        $mailView->assign('link', $additionalParameters['link']);
+    }
+
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 

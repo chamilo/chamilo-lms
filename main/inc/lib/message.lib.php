@@ -196,8 +196,8 @@ class MessageManager
         $receiver_user_id,
         $subject,
         $content,
-        $file_attachments = array(),
-        $file_comments = array(),
+        array $file_attachments = [],
+        array $file_comments = [],
         $group_id = 0,
         $parent_id = 0,
         $edit_message_id = 0,
@@ -293,7 +293,7 @@ class MessageManager
                     if ($file_attach['error'] == 0) {
                         self::save_message_attachment_file(
                             $file_attach,
-                            $file_comments[$i],
+                            isset($file_comments[$i]) ? $file_comments[$i] : null,
                             $inbox_last_id,
                             null,
                             $receiver_user_id,
@@ -365,7 +365,7 @@ class MessageManager
 
                 $new_user_list = array();
                 foreach ($user_list as $user_data) {
-                    $new_user_list[] = $user_data['user_id'];
+                    $new_user_list[] = $user_data['id'];
                 }
                 $group_info = array(
                     'group_info' => $group_info,
@@ -408,8 +408,8 @@ class MessageManager
             $receiver_user_id,
             $subject,
             $message,
-            null,
-            null,
+            [],
+            [],
             null,
             null,
             null,

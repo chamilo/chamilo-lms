@@ -557,7 +557,6 @@ class Statistics
         $sql[get_lang('ThisDay')]    = "SELECT count($field) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
         $sql[get_lang('Last7days')]  = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
         $sql[get_lang('Last31days')] = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
-        $sql[get_lang('Total')]      = "SELECT count($field) AS number  FROM $table $table_url WHERE 1=1 $where_url";
         foreach ($sql as $index => $query) {
             $res = Database::query($query);
             $obj = Database::fetch_object($res);

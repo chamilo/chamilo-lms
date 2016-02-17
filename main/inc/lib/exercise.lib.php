@@ -2907,7 +2907,7 @@ HOTSPOT;
                 $listStudentsId[] = $listStudentInfo['user_id'];
             }
 
-            $listFillTheBlankResult = getFillTheBlankTabResult(
+            $listFillTheBlankResult = FillBlanks::getFillTheBlankTabResult(
                 $exercise_id,
                 $question_id,
                 $listStudentsId,
@@ -2915,7 +2915,7 @@ HOTSPOT;
                 '3000-01-01'
             );
 
-            return getNbResultFillBlankAll($listFillTheBlankResult);
+            return FillBlanks::getNbResultFillBlankAll($listFillTheBlankResult);
         }
 
         if (empty($session_id)) {

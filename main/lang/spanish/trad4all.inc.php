@@ -7635,4 +7635,5 @@ $AssociateForumToLPItem = "Asociar un hilo de conversación de foro a este paso 
 $ForumDissociated = "Foro disociado";
 $ClickOrDropOneFileHere = "Suelte un archivo aquí o haga clic";
 $ModuloPercentage = "Módulo:\t\t\t%";
+$LastXDays = "Últimos %s días";
 ?>

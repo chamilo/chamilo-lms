@@ -122,7 +122,7 @@ switch ($report) {
         break;
     case 'recentlogins':
         echo '<h2>'. sprintf(get_lang('LastXDays'), '15') . '</h2>';
-        echo '<canvas class="col-md-12" id="canvas" height="100px" ></canvas>';
+        echo '<canvas class="col-md-12" id="canvas" height="100px" style="margin-bottom: 20px"></canvas>';
         Statistics::printRecentLoginStats();
         Statistics::printRecentLoginStats(true);
         break;

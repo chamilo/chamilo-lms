@@ -1166,7 +1166,8 @@ if (!empty($error)) {
             [],
             'description',
             'exercise-collapse',
-            false
+            false,
+            true
         );
     }
 }

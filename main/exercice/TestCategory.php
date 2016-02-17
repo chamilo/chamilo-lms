@@ -443,26 +443,32 @@ class TestCategory
     */
     public static function getQuestionsByCat($exerciseId)
     {
-		$TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $exerciseId = intval($exerciseId);
-		$sql = "SELECT qrc.question_id, qrc.category_id
-		        FROM $TBL_QUESTION_REL_CATEGORY qrc, $TBL_EXERCISE_QUESTION eq
-                WHERE
-                    exercice_id=$exerciseId AND
-                    eq.question_id=qrc.question_id AND
-                    eq.c_id=".api_get_course_int_id()." AND
-                    eq.c_id=qrc.c_id
-                ORDER BY category_id, question_id";
-		$res = Database::query($sql);
+        $em = Database::getManager();
+        $qb = $em->createQueryBuilder();
+        $res = $qb
+            ->select('qrc.questionId', 'qrc.categoryId')
+            ->from('ChamiloCourseBundle:CQuizQuestionRelCategory', 'qrc')
+            ->innerJoin(
+                'ChamiloCourseBundle:CQuizRelQuestion',
+                'eq',
+                Doctrine\ORM\Query\Expr\Join::WITH,
+                'qrc.questionId = eq.questionId AND qrc.cId = eq.cId'
+            )
+            ->where(
+                $qb->expr()->eq('eq.exerciceId', $exerciseId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('eq.cId', api_get_course_int_id())
+            )
+            ->getQuery()
+            ->getResult();
         $list = array();
-		while ($data = Database::fetch_array($res)) {
-			if (!isset($tabres[$data['category_id']])) {
-                $list[$data['category_id']] = array();
-			}
-            $list[$data['category_id']][] = $data['question_id'];
-		}
-
+        foreach ($res as $data) {
+            if (!isset($list[$data['categoryId']])) {
+                $list[$data['categoryId']] = array();
+            }
+            $list[$data['categoryId']][] = $data['questionId'];
+        }
 		return $list;
 	}
 

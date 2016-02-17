@@ -1,0 +1,79 @@
+h1. Introduction
+
+This library is an implementation of the PENS specification (see http://pens.lmstesting.com/pages/whatispens.htm) in PHP. It provides a PENSServer class and, in the future, will provide a PENSClient class.
+
+h1. Requirements
+
+You need at least PHP 5.2 with the curl extension installed to use this library.
+
+h1. State
+
+Currently, some features are missing (such as the possibility to send alerts or the possibility to send receipts to a mailto url), and the library is not considered as stable.
+
+h1. How do I create a server ?
+
+Assuming the URL of your server is http://www.myserver.com, create a file called pens.php at the root so that it is accessible through http://www.myserver.com/pens.php.
+
+In this file, write the following code:
+
+pre.. // Assuming the library is accessible through pens/pens.php
+
+require_once("pens/pens.php");
+
+// Create a concrete class that extends PENSPackageHandler and 
+// write your implementation of the processPackage method in it
+class MyPackageHandler extends PENSPackageHandler {
+	// See the documentation of the processPackage method for more information
+	public function processPackage($request, $path_to_package) {
+		// Write your implementation of the package handling here
+	}
+}
+
+// Create an instance of your handler and configure it
+// See the file pens_package_handler.php for more information
+$handler = new MyPackageHandler();
+$handler->setSupportedPackageTypes(array("scorm-pif"));
+$handler->setSupportedPackageFormats(array("zip"));
+
+// Initialize the server
+$server = PENSServer::singleton();
+$server->setPackageHandler($handler);
+
+// The server should only receive collect commands, so call the receiveCollect method
+$server->receiveCollect();
+
+h1. How do I create a client ?
+
+The role of the PENSClient is simply to receive receipts and alerts from the server and process them. Here is how to create a client.
+
+pre.. require_once("pens/pens.php");
+
+// Create a request handler if you need one. This allows you to do some processing on the requests (store them in a DB, send them to an email address etc...)
+// You do not need to create a request handler if you do not want to process the requests
+class MyRequestHandler extends PENSRequestHandler {
+	public function processRequest($request, $response) {
+		// Do the processing of the alert or the receipt here
+	}
+}
+
+// Instantiate the handler
+$handler = new MyRequestHandler();
+
+// Create the client and set the request handler
+$client = PENSClient::singleton();
+$client->setRequestHandler($handler);
+
+// Parse and process the request
+$client->receiveRequest();
+
+h1. Licence
+
+The php-pens library is published under the GNU GPL 3 licence (see COPYING)
+
+h1. Credits
+
+The author of the library is Guillaume Viguier-Just <guillaume@viguierjust.com> and this library has been realized mainly for use in the Chamilo project (http://www.chamilo.org).
+
+This library was realized as part of my work in Beeznest Latino (http://www.beeznest.com), for the Chamilo project.
+
+Also note the use of a library called rfc2396regexes written by Rudy Desjardins and distributed as GPL v2

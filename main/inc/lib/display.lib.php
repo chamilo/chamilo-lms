@@ -2259,16 +2259,27 @@ class Display
         $arrow = false
     ) {
         if (!empty($idAccordion)) {
-            $html = null;
-            $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">' . PHP_EOL;
-            $html .= '<div class="panel panel-default" id="'.$id.'">' . PHP_EOL;
-            $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">' . PHP_EOL;
-            $html .= '<a class="' . ($arrow===true?'arrow':'') . ' '.($open===true?'':'collapsed').'" role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollapse.'" aria-expanded="true" aria-controls="'.$idCollapse.'">'.$title.'</a>' . PHP_EOL;
-            $html .= '</h4></div>' . PHP_EOL;
-            $html .= '<div id="'.$idCollapse.'" class="panel-collapse collapse '.($open===true?'in':'').'" role="tabpanel">' . PHP_EOL;
-            $html .= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
-            $html .= '</div></div></div>' . PHP_EOL;
+            $headerClass = '';
+            $headerClass .= $arrow ? 'arrow ' : '';
+            $headerClass .= $open ? '' : 'collapsed';
+            $contentClass = 'panel-collapse collapse ';
+            $contentClass .= $open ? 'in' : '';
+            $ariaExpanded = $open ? 'true' : 'false';
 
+            $html = <<<HTML
+                <div class="panel-group" id="$idAccordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default" id="$id">
+                        <div class="panel-heading" role="tab">
+                            <h4 class="panel-title">
+                                <a class="$headerClass" role="button" data-toggle="collapse" data-parent="#$idAccordion" href="#$idCollapse" aria-expanded="$ariaExpanded" aria-controls="$idCollapse">$title</a>
+                            </h4>
+                        </div>
+                        <div id="$idCollapse" class="$contentClass" role="tabpanel">
+                            <div class="panel-body">$content</div>
+                        </div>
+                    </div>
+                </div>
+HTML;
         } else {
             if (!empty($id)) {
                 $params['id'] = $id;

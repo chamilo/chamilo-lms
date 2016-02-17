@@ -14,18 +14,20 @@ switch ($action) {
             echo '';
             break;
         }
-        if (isset($_POST['is_my_friend'])) {
+        if (isset($_GET['is_my_friend'])) {
             $relation_type = USER_RELATION_TYPE_FRIEND; //My friend
         } else {
             $relation_type = USER_RELATION_TYPE_UNKNOW; //Unknown contact
         }
 
-        if (isset($_POST['friend_id'])) {
-            $my_current_friend  = $_POST['friend_id'];
+        if (isset($_GET['friend_id'])) {
+            $my_current_friend  = $_GET['friend_id'];
             UserManager::relate_users($current_user_id, $my_current_friend, $relation_type);
             UserManager::relate_users($my_current_friend, $current_user_id, $relation_type);
             SocialManager::invitation_accepted($my_current_friend, $current_user_id);
             Display::display_normal_message(api_xml_http_response_encode(get_lang('AddedContactToList')));
+
+            header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
         }
         break;
     case 'deny_friend':

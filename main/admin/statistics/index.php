@@ -12,6 +12,25 @@ api_protect_admin_script();
 
 $interbreadcrumb[] = array('url' => '../index.php', 'name' => get_lang('PlatformAdmin'));
 
+$report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
+
+if ($report) {
+    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+    $htmlHeadXtra[] = ''
+    . '<script type="text/javascript">'
+        . '$(document).ready(function() {'
+            . '$.ajax({'
+                . 'url: "'. api_get_path(WEB_CODE_PATH) .'inc/ajax/statistics.ajax.php?a=recentlogins",'
+                . 'type: "POST",'
+                . 'success: function(data) {'
+                    . 'Chart.defaults.global.responsive = true;'
+                    . 'var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);'
+                . '}'
+            . '});'
+        . '});' 
+    . '</script>'; 
+}
+        
 $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
@@ -61,7 +80,7 @@ echo '</tr></table>';
 
 $course_categories = Statistics::getCourseCategories();
 echo '<br/><br/>';//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
-$report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
+
 switch ($report) {
     case 'courses':
         // total amount of courses
@@ -102,6 +121,8 @@ switch ($report) {
         Statistics::printStats(get_lang('Students'), $students);
         break;
     case 'recentlogins':
+        echo '<h2>'. sprintf(get_lang('LastXDays'), '15') . '</h2>';
+        echo '<canvas class="col-md-12" id="canvas" height="100px" style="margin-bottom: 20px"></canvas>';
         Statistics::printRecentLoginStats();
         Statistics::printRecentLoginStats(true);
         break;

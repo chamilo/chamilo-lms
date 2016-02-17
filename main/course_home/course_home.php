@@ -68,7 +68,8 @@ $(document).ready(function() {
 		tool_id = $(this).attr("id");
 		tool_info = tool_id.split("_");
 		my_tool_id = tool_info[1];
-
+        $("#id_normal_message").attr("class", "normal-message alert alert-success");
+        
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {

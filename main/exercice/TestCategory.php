@@ -457,7 +457,7 @@ class TestCategory
 		$res = Database::query($sql);
         $list = array();
 		while ($data = Database::fetch_array($res)) {
-			if (!isset($tabres[$data['category_id']])) {
+			if (!isset($list[$data['category_id']])) {
                 $list[$data['category_id']] = array();
 			}
             $list[$data['category_id']][] = $data['question_id'];

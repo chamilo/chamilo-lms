@@ -538,7 +538,7 @@ class Statistics
      */
     public static function getRecentLoginStats($distinct = false)
     {
-        $totalLogin = array();
+        $totalLogin = [];
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
@@ -554,13 +554,11 @@ class Statistics
         if ($distinct) {
             $field = 'DISTINCT(login_user_id)';
         }
-        $sql[get_lang('ThisDay')]    = "SELECT count($field) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
-        $sql[get_lang('Last7days')]  = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
-        $sql[get_lang('Last31days')] = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
-        foreach ($sql as $index => $query) {
-            $res = Database::query($query);
-            $obj = Database::fetch_object($res);
-            $totalLogin[$index] = $obj->number;
+        $sql = "SELECT count($field) AS number, date(login_date) as login_date FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 15 DAY) >= '$now' $where_url GROUP BY date(login_date)";
+        
+        $res = Database::query($sql);
+        while($row = Database::fetch_array($res,'ASSOC')){
+            $totalLogin[$row['login_date']] = $row['number'];
         }
         
         return $totalLogin;

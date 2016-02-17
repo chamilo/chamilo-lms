@@ -2245,7 +2245,7 @@ class Display
      * @param null $idAccordion
      * @param null $idCollapse
      * @param bool|true $open
-     * @param bool|false $arrow
+     * @param bool|false $fullClickable
      * @return null|string
      */
     public static function panelCollapse(
@@ -2256,11 +2256,11 @@ class Display
         $idAccordion = null,
         $idCollapse = null,
         $open = true,
-        $arrow = false
+        $fullClickable = false
     ) {
         if (!empty($idAccordion)) {
             $headerClass = '';
-            $headerClass .= $arrow ? 'arrow ' : '';
+            $headerClass .= $fullClickable ? 'center-block ' : '';
             $headerClass .= $open ? '' : 'collapsed';
             $contentClass = 'panel-collapse collapse ';
             $contentClass .= $open ? 'in' : '';

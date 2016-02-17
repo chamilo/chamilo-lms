@@ -7596,4 +7596,6 @@ $DissociateForumToLPItem = "Dissocier le fil de conversation de cette élément 
 $AssociateForumToLPItem = "Associer un fil de conversation du forum à cet élément du parcours";
 $ForumDissociated = "Forum dissocié";
 $ClickOrDropOneFileHere = "Déplacez un fichier ici ou cliquez";
+$ModuloPercentage = "Modulo:\t\t\t%";
+$LastXDays = "Derniers %s jours";
 ?>

@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 /**
 *
 * nusoap_parser class parses SOAP XML messages into native PHP values
@@ -12,8 +9,8 @@
 * @version  $Id: class.soap_parser.php,v 1.42 2010/04/26 20:15:08 snichol Exp $
 * @access   public
 */
-class nusoap_parser extends nusoap_base {
-
+class nusoap_parser extends nusoap_base
+{
 	var $xml = '';
 	var $xml_encoding = '';
 	var $method = '';
@@ -65,7 +62,7 @@ class nusoap_parser extends nusoap_base {
 		$this->decode_utf8 = $decode_utf8;
 
 		// Check whether content has been read.
-		if(!empty($xml)){
+		if(!empty($this->xml)){
 			// Check XML encoding
 			$pos_xml = strpos($xml, '<?xml');
 			if ($pos_xml !== FALSE) {
@@ -102,8 +99,11 @@ class nusoap_parser extends nusoap_base {
 			xml_set_element_handler($this->parser, 'start_element','end_element');
 			xml_set_character_data_handler($this->parser,'character_data');
 
+			xml_parse($this->parser, $this->xml);
+
 			// Parse the XML file.
-			if(!xml_parse($this->parser,$xml,true)){
+			//if (!xml_parse($this->parser,$xml,true)){
+			if (false) {
 			    // Display an error message.
 			    $err = sprintf('XML error parsing SOAP payload on line %d: %s',
 			    xml_get_current_line_number($this->parser),
@@ -152,6 +152,7 @@ class nusoap_parser extends nusoap_base {
 	* @access   private
 	*/
 	function start_element($parser, $name, $attrs) {
+
 		// position in a total number of elements, starting from 0
 		// update class level pos
 		$pos = $this->position++;
@@ -412,9 +413,10 @@ class nusoap_parser extends nusoap_base {
 	* @param    string $data element content
 	* @access   private
 	*/
-	function character_data($parser, $data){
+	function character_data($parser, $data)
+    {
 		$pos = $this->depth_array[$this->depth];
-		if ($this->xml_encoding=='UTF-8'){
+		if ($this->xml_encoding == 'UTF-8'){
 			// TODO: add an option to disable this for folks who want
 			// raw UTF-8 that, e.g., might not map to iso-8859-1
 			// TODO: this can also be handled with xml_parser_set_option($this->parser, XML_OPTION_TARGET_ENCODING, "ISO-8859-1");
@@ -610,7 +612,7 @@ class nusoap_parser extends nusoap_base {
 			}
 			$ret = is_array($params) ? $params : array();
 			$this->debug('in buildVal, return:');
-			$this->appendDebug($this->varDump($ret));
+			//$this->appendDebug($this->varDump($ret));
 			return $ret;
 		} else {
         	$this->debug('in buildVal, no children, building scalar');

@@ -7,6 +7,15 @@
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 
+ini_set('memory_limit', -1);
+/*
+ini_set('upload_max_filesize', '4000M');
+ini_set('post_max_size', '4000M');
+ini_set('max_execution_time', '80000');
+ini_set('max_input_time', '80000');
+*/
+
+
 $debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);
@@ -36,7 +45,7 @@ function WSHelperVerifyKey($params)
     // if we are behind a reverse proxy, assume it will send the
     // HTTP_X_FORWARDED_FOR header and use this IP instead
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        list($ip1, $ip2) = split(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        list($ip1, $ip2) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
     if ($debug)

@@ -1468,9 +1468,13 @@ abstract class Question
             $tabCat = TestCategory::getCategoriesIdAndName();
             $form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
 
-            if (in_array($this->type, array(UNIQUE_ANSWER, MULTIPLE_ANSWER))) {
-                $buttonValue = $this->type == UNIQUE_ANSWER ? 'ConvertToMultipleAnswer' : 'ConvertToUniqueAnswer';
-                $form->addElement('button', 'convertAnswer', get_lang($buttonValue));
+            switch ($this->type) {
+                case UNIQUE_ANSWER:
+                    $form->addButton('convertAnswer', get_lang('ConvertToMultipleAnswer'), 'dot-circle-o', 'info');
+                    break;
+                case MULTIPLE_ANSWER:
+                    $form->addButton('convertAnswer', get_lang('ConvertToUniqueAnswer'), 'check-square-o', 'info');
+                    break;
             }
 
             //Medias

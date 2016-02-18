@@ -19,6 +19,9 @@ if ($work['active'] != 1) {
     api_not_allowed(true);
 }
 
+$work['title'] = isset($work['title']) ? Security::remove_XSS($work['title']) : '';
+$work['description'] = isset($work['description']) ? Security::remove_XSS($work['description']) : '';
+
 $interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPublications'));
 
 $my_folder_data = get_work_data_by_id($work['parent_id']);

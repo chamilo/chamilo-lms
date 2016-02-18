@@ -776,9 +776,11 @@ class GradebookUtils
                 $row = Database::fetch_array($res);
                 $category_id = $row['id'];
             }
+            
+            return $category_id;
         }
 
-        return $category_id;
+        return false;
     }
 
     /**

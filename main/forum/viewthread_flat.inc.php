@@ -15,6 +15,13 @@ if ((isset($_GET['action']) &&
     delete_attachment(0, $_GET['id_attach']);
 }
 
+
+// Are we in a lp ?
+$origin = '';
+if (isset($_GET['origin'])) {
+    $origin = Security::remove_XSS($_GET['origin']);
+}
+
 $sessionId = api_get_session_id();
 $_user = api_get_user_info();
 $userId = api_get_user_id();
@@ -311,7 +318,7 @@ if (isset($current_thread['thread_id'])) {
                         (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
                     ) {
                         $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&origin='
-                            . Security::remove_XSS($_GET['origin']) . '&action=delete_attach&id_attach='
+                            . Security::remove_XSS($origin) . '&action=delete_attach&id_attach='
                             . $attachment['iid'] . '&forum=' . $clean_forum_id . '&thread=' . $clean_thread_id
                             . '" onclick="javascript:if(!confirm(\''
                             . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))

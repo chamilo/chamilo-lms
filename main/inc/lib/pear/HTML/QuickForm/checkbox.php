@@ -136,7 +136,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         } else {
             $label =
                 '<div class="checkbox">
-                <label '.$this->getAttribute('label-class').' ">' .
+                <label '.$this->getAttribute('label-class').'>' .
                     HTML_QuickForm_input::toHtml().$this->_text.
                 '</label>
                 </div>

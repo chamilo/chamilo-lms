@@ -32,10 +32,14 @@ api_protect_course_script(true);
 
 $nameTools = get_lang('ToolForum');
 
+// Unset the formElements in session before the includes function works
+unset($_SESSION['formelements']);
+
 /* Including necessary files */
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
+// Are we in a lp ?
 $origin = '';
 if (isset($_GET['origin'])) {
     $origin = Security::remove_XSS($_GET['origin']);
@@ -110,12 +114,6 @@ $htmlHeadXtra[] = <<<JS
     });
     </script>
 JS;
-
-// Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin = Security::remove_XSS($_GET['origin']);
-}
 
 if ($origin == 'learnpath') {
     Display::display_reduced_header();
@@ -215,41 +213,6 @@ $values = show_edit_post_form(
 
 if (!empty($values) and isset($_POST['SubmitPost'])) {
     store_edit_post($values);
-
-    $option_chek = isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : null; // values 1 or 0
-    if (1 == $option_chek) {
-        $id = $values['thread_id'];
-        $title_gradebook = Security::remove_XSS(stripslashes($values['calification_notebook_title']));
-        $value_calification = $values['numeric_calification'];
-        $weight_calification = $values['weight_calification'];
-        $description = '';
-        $session_id = api_get_session_id();
-
-        $link_info = GradebookUtils::is_resource_in_course_gradebook(
-            api_get_course_id(),
-            5,
-            $id,
-            $session_id
-        );
-        $link_id = $link_info['id'];
-
-        if (!$link_info) {
-            GradebookUtils::add_resource_to_course_gradebook(
-                $values['category_id'],
-                api_get_course_id(),
-                5,
-                $id,
-                $title_gradebook,
-                $weight_calification,
-                $value_calification,
-                $description,
-                1,
-                api_get_session_id()
-            );
-        } else {
-            Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
-        }
-    }
 }
 
 // Footer

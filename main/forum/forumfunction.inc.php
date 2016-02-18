@@ -1833,6 +1833,37 @@ function get_threads($forum_id, $course_code = null)
 }
 
 /**
+ * Get a thread by Id and course id
+ *
+ * @param int $threadId the thread Id
+ * @param int $cId the course id
+ * @return array containing all the information about the thread
+ */
+function getThreadInfo($threadId, $cId)
+{
+    $em = Database::getManager();
+    $forumThread = $em->getRepository('ChamiloCourseBundle:CForumThread')->findOneBy(['threadId' => $threadId, 'cId' => $cId]);
+    
+    $thread = [];
+    
+    if ($forumThread) {
+        $thread['threadId'] = $forumThread->getThreadId();
+        $thread['threadTitle'] = $forumThread->getThreadTitle();
+        $thread['forumId'] = $forumThread->getForumId();
+        $thread['sessionId'] = $forumThread->getSessionId();
+        $thread['threadSticky'] = $forumThread->getThreadSticky();
+        $thread['locked'] = $forumThread->getLocked();
+        $thread['threadTitleQualify'] = $forumThread->getThreadTitleQualify();
+        $thread['threadQualifyMax'] = $forumThread->getThreadQualifyMax();
+        $thread['threadCloseDate'] = $forumThread->getThreadCloseDate();
+        $thread['threadWeight'] = $forumThread->getThreadWeight();
+        $thread['threadPeerQualify'] = $forumThread->isThreadPeerQualify();
+    }
+
+    return $thread;
+}
+
+/**
  * Retrieve all posts of a given thread
  * @param int $threadId The thread ID
  * @param string $orderDirection Optional. The direction for sort the posts
@@ -2196,7 +2227,7 @@ function get_forum_information($forum_id, $courseId = 0)
             ";
 
     $result = Database::query($sql);
-    $row = Database::fetch_array($result);
+    $row = Database::fetch_array($result, 'ASSOC');
     $row['approval_direct_post'] = 0;
     // We can't anymore change this option, so it should always be activated.
 
@@ -2254,6 +2285,75 @@ function count_number_of_forums_in_category($cat_id)
     $row = Database::fetch_array($result);
 
     return $row['number_of_forums'];
+}
+
+/**
+ * This function update a thread
+ *
+ * @param array $values - The form Values
+ * @return void HTML
+ *
+ */
+function updateThread($values)
+{
+    $threadTable = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $courseId = api_get_course_int_id();
+        
+    $params = [
+            'thread_title' => $values['thread_title'],
+            'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : null,
+            'thread_title_qualify' => $values['calification_notebook_title'],
+            'thread_qualify_max' => $values['numeric_calification'],
+            'thread_weight' => $values['weight_calification'],
+            'thread_peer_qualify' => $values['thread_peer_qualify'],
+        ];
+        $where = ['c_id = ? AND thread_id = ?' => [$courseId, $values['thread_id']]];
+        Database::update($threadTable, $params, $where);
+        
+        if (api_is_course_admin() == true) {
+            $option_chek = isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : false; // values 1 or 0
+            if ($option_chek) {
+                $id = $values['thread_id'];
+                $titleGradebook = Security::remove_XSS(stripslashes($values['calification_notebook_title']));
+                $valueCalification = isset($values['numeric_calification']) ? intval($values['numeric_calification']) : 0;
+                $weightCalification = isset($values['weight_calification']) ? floatval($values['weight_calification']) : 0;
+                $description = '';
+                $sessionId = api_get_session_id();
+                $courseId = api_get_course_id();
+
+                $linkInfo = GradebookUtils::is_resource_in_course_gradebook(
+                    $courseId,
+                    LINK_FORUM_THREAD,
+                    $id,
+                    $sessionId
+                );
+                $linkId = $linkInfo['id'];
+
+                if (!$linkInfo) {
+                    GradebookUtils::add_resource_to_course_gradebook(
+                        $values['category_id'],
+                        $courseId,
+                        LINK_FORUM_THREAD,
+                        $id,
+                        $titleGradebook,
+                        $weightCalification,
+                        $valueCalification,
+                        $description,
+                        1,
+                        $sessionId
+                    );
+                } else {
+                    $em = Database::getManager();
+                    $gradebookLink = $em->getRepository('ChamiloCoreBundle:GradebookLink')->find($linkId);
+                    $gradebookLink->setWeight($weightCalification);
+                    $em->persist($gradebookLink);
+                    $em->flush();
+                }
+            }
+        }
+        
+        $message = get_lang('EditPostStored').'<br />';
+        Display :: display_confirmation_message($message, false);
 }
 
 /**
@@ -2493,6 +2593,140 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         if ($showMessage) {
             Display::display_error_message(get_lang('UplNoFileUploaded'));
         }
+    }
+}
+
+/**
+ * This function displays the form that is used to UPDATE a Thread.
+ * @param array $currentForum
+ * @param array $forumSetting
+ * @param array $formValues
+ * @return void HMTL
+ * @author José Loguercio <jose.loguercio@beeznest.com>
+ * @version february 2016, chamilo 1.10.4
+ */
+function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
+{
+    $userInfo = api_get_user_info();
+    
+    $myThread = isset($_GET['thread']) ? intval($_GET['thread']) : '';
+    $myForum = isset($_GET['forum']) ? intval($_GET['forum']) : '';
+    $myGradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : '';
+    $form = new FormValidator(
+        'thread',
+        'post',
+        api_get_self() . '?' . http_build_query([
+            'forum' => $myForum,
+            'gradebook' => $myGradebook,
+            'thread' => $myThread,
+        ]) . '&' . api_get_cidreq()
+    );
+    
+    $form->addElement('header', get_lang('EditThread'));
+    $form->setConstants(array('forum' => '5'));
+    $form->addElement('hidden', 'forum_id', $myForum);
+    $form->addElement('hidden', 'thread_id', $myThread);
+    $form->addElement('hidden', 'gradebook', $myGradebook);
+    $form->addElement('text', 'thread_title', get_lang('Title'));
+    $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
+    $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+    if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && ($myThread)) {
+        // Thread qualify
+        if (Gradebook::is_active()) {
+            //Loading gradebook select
+            GradebookUtils::load_gradebook_select_in_tool($form);
+            $form->addElement(
+                'checkbox',
+                'thread_qualify_gradebook',
+                '',
+                get_lang('QualifyThreadGradebook'),
+                [
+                    'id' => 'thread_qualify_gradebook'
+                ]
+            );
+        } else {
+            $form->addElement('hidden', 'thread_qualify_gradebook', false);
+        }
+        
+        $form->addElement('html', '<div id="options_field" style="display:none">');
+        $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'));
+        $form->applyFilter('numeric_calification', 'html_filter');
+        $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
+        $form->applyFilter('calification_notebook_title', 'html_filter');
+        $form->addElement(
+            'text',
+            'weight_calification',
+            get_lang('QualifyWeight'),
+            array('value' => '0.00', 'onfocus' => "javascript: this.select();")
+        );
+        $form->applyFilter('weight_calification', 'html_filter');
+        $group = array();
+        $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('Yes'), 1);
+        $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('No'), 0);
+        $form->addGroup(
+            $group,
+            '',
+            [
+                get_lang('ForumThreadPeerScoring'),
+                get_lang('ForumThreadPeerScoringComment'),
+            ],
+            ' '
+        );
+        $form->addElement('html', '</div>');
+    }
+    if ($forumSetting['allow_post_notification'] && isset($userInfo['user_id'])) {
+        $form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$userInfo['mail'].')');
+    }
+    if ($forumSetting['allow_sticky'] && api_is_allowed_to_edit(null, true)) {
+        $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
+    }
+    
+    $form->addElement('html', '</div>');
+    
+    if (!empty($formValues)) {
+        $defaults['thread_qualify_gradebook'] = ($formValues['threadQualifyMax'] > 0 && empty($_POST)) ? 1 : 0 ;
+        $defaults['thread_title'] = prepare4display($formValues['threadTitle']);
+        $defaults['thread_sticky'] = strval(intval($formValues['threadSticky']));
+        $defaults['thread_peer_qualify'] = intval($formValues['threadPeerQualify']);
+        $defaults['numeric_calification'] = $formValues['threadQualifyMax'];
+        $defaults['calification_notebook_title'] = $formValues['threadTitleQualify'];
+        $defaults['weight_calification'] = $formValues['threadWeight'];
+    } else {
+        $defaults['thread_qualify_gradebook'] = 0;
+        $defaults['numeric_calification'] = 0;
+        $defaults['calification_notebook_title'] = '';
+        $defaults['weight_calification'] = 0;
+        $defaults['thread_peer_qualify'] = 0;
+    }
+    $form->setDefaults(isset($defaults) ? $defaults : null);
+    
+    $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
+    
+    if ($form->validate()) {
+        $check = Security::check_token('post');
+        if ($check) {
+            $values = $form->exportValues();
+            if (isset($values['thread_qualify_gradebook']) &&
+                $values['thread_qualify_gradebook'] == '1' &&
+                empty($values['weight_calification'])
+            ) {
+                Display::display_error_message(
+                    get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.
+                    get_lang('Back').'</a>',
+                    false
+                );
+                return false;
+            }
+            Security::clear_token();
+            return $values;
+        }
+    } else {
+        $token = Security::get_token();
+        $form->addElement('hidden', 'sec_token');
+        $form->setConstants(array('sec_token' => $token));
+        
+        
+        $form->display();
     }
 }
 
@@ -3073,7 +3307,7 @@ function store_reply($current_forum, $values)
             }
 
             // Update the thread.
-            update_thread($values['thread_id'], $new_post_id, $post_date);
+            updateThreadInfo($values['thread_id'], $new_post_id, $post_date);
 
             // Update the forum.
             api_item_property_update(
@@ -3405,39 +3639,7 @@ function store_edit_post($values)
             $values['id_attach']
         );
     }
-
-    if (api_is_course_admin() == true) {
-        $ccode = api_get_course_id();
-        $sid = api_get_session_id();
-
-
-        $link_info = GradebookUtils::is_resource_in_course_gradebook($ccode, 5, $values['thread_id'], $sid);
-        $link_id = $link_info['id'];
-
-        $thread_qualify_gradebook = isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : null;
-
-        if ($thread_qualify_gradebook != 1) {
-            if ($link_info !== false) {
-                GradebookUtils::remove_resource_from_course_gradebook($link_id);
-            }
-        } else {
-            if ($link_info === false && !$_GET['thread']) {
-                $weigthqualify = $values['weight_calification'];
-                GradebookUtils::add_resource_to_course_gradebook(
-                    $values['category_id'],
-                    $ccode,
-                    5,
-                    $values['thread_id'],
-                    Database::escape_string(stripslashes($values['calification_notebook_title'])),
-                    $weigthqualify,
-                    $values['numeric_calification'],
-                    null,
-                    0,
-                    $sid
-                );
-            }
-        }
-    }
+    
     // Storing the attachments if any.
     //update_added_resources('forum_post', $values['post_id']);
 
@@ -3519,7 +3721,7 @@ function increase_thread_view($thread_id)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function update_thread($thread_id, $last_post_id, $post_date)
+function updateThreadInfo($thread_id, $last_post_id, $post_date)
 {
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();

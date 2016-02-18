@@ -231,4 +231,34 @@ class FeatureContext extends MinkContext
             new Given('I am a platform administrator')
         );
     }
+
+    /**
+     * @Given /^I have a public password-protected course named "([^"]*)" with password "([^"]*)"$/
+     */
+    public function iHaveAPublicPasswordProtectedCourse($code, $password)
+    {
+        return [
+            new Given('I am on "/main/admin/course_add.php"'),
+            new Given('I fill in "title" with "Password Protected"'),
+            new Given('I fill in "visual_code" with "' . $code . '"'),
+            new Given('I fill in "visibility" with "3"'),
+            new Given('I press "submit"'),
+            new Given('I am on "/main/course_info/infocours.php?cidReq=' . $code . '"'),
+            new Given('I should see "Course registration password"'),
+            new Given('I fill in "course_registration_password" with "' . $password . '"'),
+            new Given('I press "submit_save"'),
+            new Given('the "course_registration_password" field should contain "' . $password . '"')
+        ];
+    }
+
+    /**
+     * @Given /^I am not logged$/
+     */
+    public function iAmNotLogged()
+    {
+        return [
+            new Given('I am on "/index.php?logout=logout"'),
+            new Given('I am on homepage')
+        ];
+    }
 }

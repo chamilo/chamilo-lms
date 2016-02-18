@@ -631,20 +631,20 @@ class GroupPortalManager
      * */
     public static function get_user_group_role($user_id, $group_id)
     {
-        $table_group_rel_user = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
-        $return_value = 0;
-        if (!empty($user_id) && !empty($group_id)) {
-            $sql = "SELECT relation_type FROM $table_group_rel_user
-                    WHERE
-                        group_id = ".intval($group_id)." AND
-                        user_id = ".intval($user_id)." ";
-            $result = Database::query($sql);
-            if (Database::num_rows($result) > 0) {
-                $row = Database::fetch_array($result, 'ASSOC');
-                $return_value = $row['relation_type'];
-            }
+        $em = Database::getManager();
+
+        $result = $em
+            ->getRepository('ChamiloCoreBundle:UsergroupRelUser')
+            ->findOneBy([
+                'usergroup' => intval($group_id),
+                'user' => intval($user_id)
+            ]);
+
+        if (!$result) {
+            return 0;
         }
-        return $return_value;
+
+        return $result->getRelationType();
     }
 
     /**
@@ -657,35 +657,49 @@ class GroupPortalManager
     public static function add_user_to_group($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
     {
         $result = false;
-        $table_url_rel_group = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
-        if (!empty($user_id) && !empty($group_id)) {
-            $role = self::get_user_group_role($user_id, $group_id);
-            if ($role == 0) {
-                $sql = "INSERT INTO $table_url_rel_group
-           				SET
-           				    user_id = ".intval($user_id).",
-           				    group_id = ".intval($group_id).",
-           				    relation_type = ".intval($relation_type);
-                $result = Database::query($sql);
-                Event::addEvent(
-                    LOG_GROUP_PORTAL_USER_SUBSCRIBED,
-                    LOG_GROUP_PORTAL_REL_USER_ARRAY,
-                    array(
-                        'user_id' => $user_id,
-                        'group_id' => $group_id,
-                        'relation_type' => $relation_type,
-                    )
-                );
 
-            } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-                // If somebody already invited me I can be added
-                self::update_user_role(
-                    $user_id,
-                    $group_id,
-                    GROUP_USER_PERMISSION_READER
-                );
-            }
+        if (empty($user_id) || empty($group_id)) {
+            return false;
         }
+
+        $em = Database::getManager();
+
+        $user = $em->find('ChamiloCoreBundle:User', $user_id);
+        $usergroup = $em->find('ChamiloCoreBundle:Usergroup', $group_id);
+        $role = self::get_user_group_role($user_id, $group_id);
+
+        if ($role == 0) {
+            $usergroupRelUser = new \Chamilo\CoreBundle\Entity\UsergroupRelUser();
+            $usergroupRelUser
+                ->setUser($user)
+                ->setUsergroup($usergroup)
+                ->setRelationType($relation_type);
+
+            $em->persist($usergroupRelUser);
+            $em->flush();
+
+            Event::addEvent(
+                LOG_GROUP_PORTAL_USER_SUBSCRIBED,
+                LOG_GROUP_PORTAL_REL_USER_ARRAY,
+                array(
+                    'user_id' => $user_id,
+                    'group_id' => $group_id,
+                    'relation_type' => $relation_type,
+                )
+            );
+
+            return true;
+        } else if ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
+            // If somebody already invited me I can be added
+            self::update_user_role(
+                $user_id,
+                $group_id,
+                GROUP_USER_PERMISSION_READER
+            );
+
+            return true;
+        }
+
         return $result;
     }
 
@@ -753,10 +767,21 @@ class GroupPortalManager
      * */
     public static function delete_user_rel_group($user_id, $group_id)
     {
-        $table = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
-        $sql = "DELETE FROM $table
-                WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id);
-        $result = Database::query($sql);
+        $em = Database::getManager();
+
+        $result = $em
+            ->getRepository('ChamiloCoreBundle:UsergroupRelUser')
+            ->findOneBy([
+                'usergroup' => intval($group_id),
+                'user' => intval($user_id)
+            ]);
+
+        if (!$result) {
+            return false;
+        }
+
+        $em->remove($result);
+        $em->flush();
 
         Event::addEvent(
             LOG_GROUP_PORTAL_USER_UNSUBSCRIBED,
@@ -764,7 +789,7 @@ class GroupPortalManager
             array('user_id' => $user_id, 'group_id' => $group_id)
         );
 
-        return $result;
+        return true;
     }
 
     /**
@@ -778,20 +803,29 @@ class GroupPortalManager
      **/
     public static function update_user_role($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
     {
-        $table_group_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
         if (empty($user_id) || empty($group_id) || empty($relation_type)) {
             return false;
         }
+
+        $em = Database::getManager();
         $group_id = intval($group_id);
         $user_id = intval($user_id);
 
-        $sql = "UPDATE $table_group_rel_user
-   				SET relation_type = ".intval($relation_type)."
-   				WHERE
-                    user_id = $user_id AND
-                    group_id = $group_id
-            ";
-        Database::query($sql);
+        $usergroupUser = $em
+            ->getRepository('ChamiloCoreBundle:UsergroupRelUser')
+            ->findOneBy([
+                'user' => $user_id,
+                'usergroup' => $group_id
+            ]);
+
+        if (!$usergroupUser) {
+            return false;
+        }
+
+        $usergroupUser->setRelationType($relation_type);
+
+        $em->merge($usergroupUser);
+        $em->flush();
 
         Event::addEvent(
             LOG_GROUP_PORTAL_USER_UPDATE_ROLE,

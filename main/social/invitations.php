@@ -19,9 +19,67 @@ $this_section = SECTION_SOCIAL;
 $interbreadcrumb[] = array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
 $interbreadcrumb[] = array ('url' =>'#','name' => get_lang('Invitations'));
 
+if (is_array($_GET) && count($_GET) > 0) {
+    foreach ($_GET as $key => $value) {
+        switch ($key) {
+            case 'accept':
+                $useRole = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);
+
+                if (in_array(
+                    $useRole,
+                    array(
+                        GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,
+                        GROUP_USER_PERMISSION_PENDING_INVITATION
+                    )
+                )) {
+                    GroupPortalManager::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
+
+                    Display::addFlash(
+                        Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'success')
+                    );
+
+                    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
+                    exit;
+                }
+
+                if (in_array(
+                    $useRole,
+                    array(
+                        GROUP_USER_PERMISSION_READER,
+                        GROUP_USER_PERMISSION_ADMIN,
+                        GROUP_USER_PERMISSION_MODERATOR
+                    )
+                )) {
+                    Display::addFlash(
+                        Display::return_message(get_lang('UserIsAlreadySubscribedToThisGroup'), 'warning')
+                    );
+
+                    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
+                    exit;
+                }
+
+                Display::addFlash(
+                    Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'warning')
+                );
+
+                header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
+                exit;
+                break;
+            case 'deny':
+                GroupPortalManager::delete_user_rel_group(api_get_user_id(), $value);
+
+                Display::addFlash(
+                    Display::return_message(get_lang('GroupInvitationWasDeny'))
+                );
+
+                header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
+                exit;
+        }
+    }
+}
+
 $userGroup = new UserGroup();
 
-$show_message = null;
 $content = null;
 
 // Block Menu Social
@@ -148,8 +206,20 @@ if (count($pending_invitations) > 0) {
         $waitingInvitation .= '<h4 class="tittle-profile">'.$invitation['name'].'</h4>';
         $waitingInvitation .= '<div class="description-group">'.$invitation['description'].'</div>';
         $waitingInvitation .= '<div class="btn-group" role="group">';
-        $waitingInvitation .= '<a class="btn btn-success" href="invitations.php?accept='.$invitation['id'].'"><em class="fa fa-check"></em> '.get_lang('AcceptInvitation').'</a>';
-        $waitingInvitation .= '<a class="btn btn-danger" href="invitations.php?deny='.$invitation['id'].'"><em class="fa fa-times"></em> '.get_lang('DenyInvitation').'</a>';
+        $waitingInvitation .= Display::toolbarButton(
+            get_lang('AcceptInvitation'),
+            api_get_path(WEB_CODE_PATH) . 'social/invitations.php?' . http_build_query(['accept' => $invitation['id']]),
+            'check',
+            'success',
+            ['id' => 'accept-invitation-' . $invitation['id']]
+        );
+        $waitingInvitation .= Display::toolbarButton(
+            get_lang('DenyInvitation'),
+            api_get_path(WEB_CODE_PATH) . 'social/invitations.php?' . http_build_query(['deny' => $invitation['id']]),
+            'times',
+            'danger',
+            ['id' => 'deny-invitation-' . $invitation['id']]
+        );
         $waitingInvitation .='</div>';
         $waitingInvitation .= '</div></div>';
     }
@@ -160,7 +230,6 @@ $tpl = new Template(null);
 SocialManager::setSocialUserBlock($tpl, $user_id, 'invitations');
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_invitations_block',$socialInvitationsBlock);
-$tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $social_layout = $tpl->get_template('social/invitations.tpl');
 $tpl->display($social_layout);

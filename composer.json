@@ -6,7 +6,10 @@
     "license": "GPL-3.0",
     "support": {
         "forum": "http://www.chamilo.org/forum",
-        "irc": "irc://irc.freenode.org/chamilo"
+        "irc": "irc://irc.freenode.org/chamilo",
+        "source": "https://github.com/chamilo/chamilo-lms",
+        "docs": "https://github.com/chamilo/docs",
+        "issues": "https://support.chamilo.org/projects/chamilo-18"
     },
     "autoload": {
         "psr-4": {

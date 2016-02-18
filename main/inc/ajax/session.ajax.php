@@ -113,6 +113,18 @@ switch ($action) {
             echo json_encode($json);
         }
         break;
+    case 'session_info':
+        $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
+        $sessionInfo = api_get_session_info($sessionId);
+
+        $extraFieldValues = new ExtraFieldValue('session');
+        $values = $extraFieldValues->getAllValuesByItem($sessionId);
+        $sessionInfo['extra_fields'] = $values;
+
+        if (!empty($sessionInfo)) {
+            echo json_encode($sessionInfo);
+        }
+        break;
     case 'get_description':
         if (isset($_GET['session'])) {
             $sessionInfo = api_get_session_info($_GET['session']);

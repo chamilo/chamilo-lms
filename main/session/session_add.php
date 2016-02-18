@@ -139,17 +139,34 @@ $form = new FormValidator('add_session', 'post', $urlAction);
 $form->addElement('header', $tool_name);
 $result = SessionManager::setForm($form);
 
-$htmlHeadXtra[] ='
+$url = api_get_path(WEB_AJAX_PATH).'session.ajax.php';
+$htmlHeadXtra[] ="
 <script>
 $(function() {
-    '.$result['js'].'
-});
-</script>';
+    ".$result['js']."
+    $('#system_template').on('change', function() {
+        var sessionId = $(this).find('option:selected').val();
+
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: '".$url."',
+            data: 'a=session_info&session_id=' + sessionId,
+            success: function(data) {
+                $('#duration').val(data.duration);
+                $.each(data.extra_fields, function( i, item ) {
+                    $('input[name=extra_'+item.variable+']').val(item.value)
+                });
+            }
+        });
+    })
+})
+</script>";
 
 $form->addButtonNext(get_lang('NextStep'));
 
 if (!$formSent) {
-    $formDefaults['access_start_date'] =  $formDefaults['display_start_date'] = api_get_local_time();
+    $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
     $formDefaults['coach_username'] = api_get_user_id();
 } else {
     $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES, $charset);

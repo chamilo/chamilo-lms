@@ -438,8 +438,9 @@ class SessionManager
                     s.id
                 "
             ;
-
-            $isMakingOrder = strpos($options['order'], 'category_name') === 0;
+            if (isset($options['order'])) {
+                $isMakingOrder = strpos($options['order'], 'category_name') === 0;
+            }
         }
 
         $isFilteringSessionCategory = strpos($where, 'category_name') !== false;
@@ -6742,6 +6743,23 @@ class SessionManager
 
         $form->addButtonAdvancedSettings('advanced_params');
         $form->addElement('html','<div id="advanced_params_options" style="display:none">');
+
+        if (empty($sessionId)) {
+            $sessions = SessionManager::get_sessions_admin();
+
+            $sessionList = [];
+            $sessionList[] = '';
+            foreach ($sessions as $session) {
+                $sessionList[$session['id']] = $session['name'];
+            }
+
+            $form->addSelect(
+                'session_template',
+                get_lang('SessionTemplate'),
+                $sessionList,
+                ['id' => 'system_template']
+            );
+        }
 
         $form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
             'id' => 'session_category'

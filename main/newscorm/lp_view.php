@@ -420,10 +420,16 @@ if ($is_allowed_to_edit) {
 }
 
 $buttonHomeText = get_lang('CourseHomepageLink');
-// Return to lp list
-if (api_get_course_setting('lp_return_link') == 1) {
-    $buttonHomeUrl .= '&redirectTo=lp_list';
-    $buttonHomeText = get_lang('LearningPathList');
+$returnLink = api_get_course_setting('lp_return_link');
+switch ($returnLink) {
+    case 1: // lp list
+        $buttonHomeUrl .= '&redirectTo=lp_list';
+        $buttonHomeText = get_lang('LearningPathList');
+        break;
+    case 2: // user portal
+        $buttonHomeUrl .= '&redirectTo=my_courses';
+        $buttonHomeText = get_lang('MyCourses');
+        break;
 }
 
 $lpPreviewImagePath = api_get_path(WEB_CODE_PATH).'img/icons/64/unknown.png';

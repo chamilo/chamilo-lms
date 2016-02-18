@@ -387,6 +387,13 @@ if ($allowLPReturnLink === 'true') {
             null,
             get_lang('RedirectToCourseHome'),
             0
+        ),
+        $form->createElement(
+            'radio',
+            'lp_return_link',
+            null,
+            get_lang('RedirectToMyCourses'),
+            2
         )
     );
     $form->addGroup($group, '', array(get_lang("LpReturnLink")), '');

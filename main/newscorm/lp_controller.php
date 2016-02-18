@@ -1221,8 +1221,14 @@ switch ($action) {
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();
             $url = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php?id_session='.api_get_session_id();
-            if (isset($_GET['redirectTo']) && $_GET['redirectTo'] == 'lp_list') {
-                $url = 'lp_controller.php?'.api_get_cidreq();
+            $redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : '';
+            switch ($redirectTo) {
+                case 'lp_list':
+                    $url = 'lp_controller.php?'.api_get_cidreq();
+                    break;
+                case 'my_courses':
+                    $url = api_get_path(WEB_PATH).'user_portal.php';
+                    break;
             }
             header('location: '.$url);
             exit;

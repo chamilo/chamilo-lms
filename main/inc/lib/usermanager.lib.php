@@ -3027,6 +3027,7 @@ class UserManager
         }
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
         $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
+
         $res = Database::query($sql);
         return Database::num_rows($res) === 1;
     }

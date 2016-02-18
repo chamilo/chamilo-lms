@@ -80,7 +80,7 @@ class ExtraFieldValue extends Model
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
 
-            if ($found === FALSE) {
+            if ($found === false) {
                 continue;
             }
 

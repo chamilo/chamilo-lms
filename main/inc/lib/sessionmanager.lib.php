@@ -410,7 +410,7 @@ class SessionManager
             $where .=" AND s.id_coach = $user_id ";
         }
 
-        $extra_field = new ExtraField('session');
+        $extra_field = new \ExtraField('session');
         $conditions = $extra_field->parseConditions($options);
         $inject_joins = $conditions['inject_joins'];
         $where .= $conditions['where'];
@@ -425,17 +425,19 @@ class SessionManager
         if ($get_count == true) {
             $select = " SELECT count(*) as total_rows";
         } else {
-            $select =
-                "SELECT DISTINCT ".
-                " s.name, ".
-                " s.display_start_date, ".
-                " s.display_end_date, ".
-                " access_start_date, ".
-                " access_end_date, ".
-                " s.visibility, ".
-                " s.session_category_id, ".
-                " $inject_extra_fields ".
-                " s.id ";
+            $select ="
+                SELECT DISTINCT
+                    s.name,
+                    s.display_start_date,
+                    s.display_end_date,
+                    access_start_date,
+                    access_end_date,
+                    s.visibility,
+                    s.session_category_id,
+                    $inject_extra_fields
+                    s.id
+                "
+            ;
 
             $isMakingOrder = strpos($options['order'], 'category_name') === 0;
         }
@@ -470,6 +472,7 @@ class SessionManager
 
         $query .= $order;
         $query .= $limit;
+//echo $query;
         $result = Database::query($query);
 
         $categories = self::get_all_session_category();

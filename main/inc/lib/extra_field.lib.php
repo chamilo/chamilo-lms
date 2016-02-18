@@ -71,15 +71,28 @@ class ExtraField extends Model
     public $pageUrl;
     public $extraFieldType = 0;
 
+    public $table_field_options;
+    public $table_field_values;
+    public $table_field_tag;
+    public $table_field_rel_tag;
+
+    public $handler_id;
+    public $primaryKey;
+
     /**
      * @param string $type
      */
     public function __construct($type)
     {
         $this->type = $type;
+
         $this->table = Database::get_main_table(TABLE_EXTRA_FIELD);
         $this->table_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         $this->table_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $this->table_field_tag = Database::get_main_table(TABLE_MAIN_TAG);
+        $this->table_field_rel_tag = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
+
+        $this->handler_id = 'item_id';
 
         switch ($this->type) {
             case 'calendar_event':
@@ -87,12 +100,15 @@ class ExtraField extends Model
                 break;
             case 'course':
                 $this->extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
+                $this->primaryKey = 'id';
                 break;
             case 'user':
                 $this->extraFieldType = EntityExtraField::USER_FIELD_TYPE;
                 break;
             case 'session':
                 $this->extraFieldType = EntityExtraField::SESSION_FIELD_TYPE;
+                $this->handlerEntityId = 'sessionId';
+                $this->primaryKey = 'id';
                 break;
             case 'question':
                 $this->extraFieldType = EntityExtraField::QUESTION_FIELD_TYPE;
@@ -364,9 +380,11 @@ class ExtraField extends Model
      * @param FormValidator $form
      * @param int $itemId
      * @param array $exclude variables of extra field to exclude
+     * @param bool $filter
+     *
      * @return array|bool
      */
-    public function addElements($form, $itemId = 0, $exclude = [])
+    public function addElements($form, $itemId = 0, $exclude = [], $filter = false)
     {
         if (empty($form)) {
             return false;
@@ -383,7 +401,11 @@ class ExtraField extends Model
             }
         }
 
-        $extraFields = $this->get_all(null, 'option_order');
+        $conditions = [];
+        if ($filter) {
+            $conditions = ['filter = ?' => 1];
+        }
+        $extraFields = $this->get_all($conditions, 'option_order');
         $extra = $this->set_extra_fields_in_form(
             $form,
             $extraData,
@@ -1980,6 +2002,7 @@ EOF;
                 }
             }
         }
+
         $options_by_double = array();
         foreach ($double_fields as $double) {
             $my_options = $extraFieldOption->get_field_options_by_field(
@@ -2005,8 +2028,7 @@ EOF;
                 foreach ($extra_fields as $extra_info) {
                     $extra_field_info = $extra_info['extra_field_info'];
                     $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
-                                       ON (s.".$this->primaryKey." = fv$counter.".$this->handler_id.") ";
-
+                                       ON (s." . $this->primaryKey . " = fv$counter." . $this->handler_id . ") ";
                     // Add options
                     if (isset($extra_field_info['field_type']) && in_array(
                             $extra_field_info['field_type'],
@@ -2019,11 +2041,31 @@ EOF;
                     ) {
                         $options['where'] = str_replace(
                             $extra_info['field'],
-                            'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fvo'.$counter.'.option_value',
+                            'fv' . $counter . '.field_id = ' . $extra_info['id'] . ' AND fvo' . $counter . '.option_value',
                             $options['where']
                         );
-                        $inject_joins .= " INNER JOIN $this->table_field_options fvo$counter ".
-                            " ON (fv$counter.field_id = fvo$counter.field_id AND fv$counter.value = fvo$counter.option_value) ";
+                        $inject_joins .= "
+                             INNER JOIN $this->table_field_options fvo$counter
+                             ON (
+                                fv$counter.field_id = fvo$counter.field_id AND
+                                fv$counter.value = fvo$counter.option_value
+                             )
+                            ";
+                    } else if (isset($extra_field_info['field_type']) &&
+                        $extra_field_info['field_type'] == ExtraField::FIELD_TYPE_TAG
+                    ) {
+                        $options['where'] = str_replace(
+                            $extra_info['field'],
+                            'tag' . $counter . '.tag ',
+                            $options['where']
+                        );
+
+                        $inject_joins .= "
+                            INNER JOIN $this->table_field_rel_tag tag_rel$counter
+                            ON (tag_rel$counter.field_id = ".$extra_info['id']." AND tag_rel$counter.item_id = s." . $this->primaryKey.")
+                            INNER JOIN $this->table_field_tag tag$counter
+                            ON (tag$counter.id =  tag_rel$counter.tag_id)
+                        ";
                     } else {
                         //text, textarea, etc
                         $options['where'] = str_replace(
@@ -2053,11 +2095,11 @@ EOF;
         }
 
         return array(
-            'order'               => $order,
-            'limit'               => $limit,
-            'where'               => $where,
-            'inject_where'        => $inject_where,
-            'inject_joins'        => $inject_joins,
+            'order' => $order,
+            'limit' => $limit,
+            'where' => $where,
+            'inject_where' => $inject_where,
+            'inject_joins' => $inject_joins,
             'field_value_to_join' => $field_value_to_join,
             'inject_extra_fields' => $inject_extra_fields,
         );
@@ -2112,7 +2154,6 @@ EOF;
         $condition_array = array();
 
         foreach ($filters->rules as $rule) {
-
             if (strpos($rule->field, $stringToSearch) === false) {
                 //normal fields
                 $field = $rule->field;
@@ -2126,10 +2167,9 @@ EOF;
                 if (strpos($rule->field, '_second') === false) {
                     //No _second
                     $original_field = str_replace($stringToSearch, '', $rule->field);
-                    $field_option = $this->get_handler_field_info_by_variable($original_field);
+                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
 
                     if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
-
                         if (isset($double_select[$rule->field])) {
                             $data = explode('#', $rule->data);
                             $rule->data = $data[1].'::'.$double_select[$rule->field];

@@ -108,14 +108,19 @@ $search = isset($_REQUEST['_search']) ? $_REQUEST['_search'] : false;
 $forceSearch = isset($_REQUEST['_force_search']) ? $_REQUEST['_force_search'] : false;
 $extra_fields = array();
 
-if (($search || $forceSearch) && ($search !== 'false')) {
+if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) && ($search !== 'false')) {
     $whereCondition = ' 1 = 1 ';
     $whereConditionInForm = getWhereClause($searchField, $searchOperator, $searchString);
 
     if (!empty($whereConditionInForm)) {
         $whereCondition .= ' AND '.$whereConditionInForm;
     }
+
     $filters = isset($_REQUEST['filters']) && !is_array($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+
+    if (isset($_REQUEST['filters2'])) {
+        $filters = json_decode($_REQUEST['filters2']);
+    }
 
     if (!empty($filters)) {
         if (in_array($action, ['get_questions', 'get_sessions'])) {
@@ -145,11 +150,11 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                 $whereCondition .= $extraCondition;
 
                 // Question field
-
                 $resultQuestion = $extraField->getExtraFieldRules($filters, 'question_');
                 $questionFields = $resultQuestion['extra_fields'];
                 $condition_array = $resultQuestion['condition_array'];
 
+                $extraQuestionCondition = '';
                 if (!empty($condition_array)) {
                     $extraQuestionCondition = ' AND ( ';
                     $extraQuestionCondition .= implode($filters->groupOp, $condition_array);

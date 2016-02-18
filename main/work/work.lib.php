@@ -3651,7 +3651,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
     $sessionId = intval($sessionId);
     $userId = intval($userId);
 
-    $title  = $values['title'];
+    $title = $values['title'];
     $description = $values['description'];
     $contains_file = isset($values['contains_file']) && !empty($values['contains_file']) ? intval($values['contains_file']): 0;
 
@@ -3680,24 +3680,23 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
     if ($saveWork) {
         $active = '1';
         $params = [
-            'c_id'         => $courseId,
-            'url'          => $url,
-            'filetype'     => 'file',
-            'title'        => $title,
-            'description'  => $description,
+            'c_id' => $courseId,
+            'url' => $url,
+            'filetype' => 'file',
+            'title' => $title,
+            'description' => $description,
             'contains_file' => $contains_file,
-            'active'       => $active,
-            'accepted'     => '1',
+            'active' => $active,
+            'accepted' => '1',
             'post_group_id' => $groupId,
-            'sent_date'    =>  api_get_utc_datetime(),
-            'parent_id'    =>  $workInfo['id'],
-            'session_id'   => $sessionId,
-            'user_id'      => $userId
+            'sent_date' => api_get_utc_datetime(),
+            'parent_id' => $workInfo['id'],
+            'session_id' => $sessionId,
+            'user_id' => $userId,
         ];
         $workId = Database::insert($work_table, $params);
 
         if ($workId) {
-
             $sql = "UPDATE $work_table SET id = iid WHERE iid = $workId ";
             Database::query($sql);
 

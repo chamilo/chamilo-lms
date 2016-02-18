@@ -63,11 +63,23 @@ if (!empty($workInfo) && !empty($workInfo['qualification'])) {
 $homework = get_work_assignment_by_id($workInfo['id']);
 $validationStatus = getWorkDateValidationStatus($homework);
 
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id, 'name' =>  $workInfo['title']);
-$interbreadcrumb[] = array('url' => '#', 'name'  => get_lang('UploadADocument'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+    'name' => get_lang('StudentPublications'),
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id,
+    'name' => $workInfo['title'],
+);
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UploadADocument'));
 
-$form = new FormValidator('form', 'POST', api_get_self()."?".api_get_cidreq()."&id=".$work_id, '', array('enctype' => "multipart/form-data"));
+$form = new FormValidator(
+    'form',
+    'POST',
+    api_get_self()."?".api_get_cidreq()."&id=".$work_id,
+    '',
+    array('enctype' => "multipart/form-data")
+);
 setWorkUploadForm($form, $workInfo['allow_text_assignment']);
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'sec_token', $token);

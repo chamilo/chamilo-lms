@@ -3,6 +3,7 @@
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
     Behat\Behat\Context\BehatContext,
+    Behat\Behat\Context\Step,
     Behat\Behat\Context\Step\Given,
     Behat\Behat\Exception\PendingException,
     Behat\Behat\Event\SuiteEvent;
@@ -204,13 +205,13 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^I have a friend$/
+     * @Given /^I have a friend named "([^"]*)" with id "([^"]*)"$/
      */
-    public function iHaveAFriend()
+    public function iHaveAFriend($friendUsername, $friendId)
     {
         $adminId = 1;
-        $friendId = 11;
-        $friendUsername = 'fbaggins';
+        $friendId = $friendId;
+        $friendUsername = $friendUsername;
 
         $sendInvitationURL = '/main/inc/ajax/message.ajax.php?' . http_build_query([
             'a' => 'send_invitation',
@@ -259,6 +260,18 @@ class FeatureContext extends MinkContext
         return [
             new Given('I am on "/index.php?logout=logout"'),
             new Given('I am on homepage')
+        ];
+    }
+
+    /**
+     * @When /^I invite to a friend with id "([^"]*)" to a social group with id "([^"]*)"$/
+     */
+    public function iInviteAFrienToASocialGroup($friendId, $groupId)
+    {
+        return [
+            new Step\Given('I am on "/main/social/group_invitation.php?id=' . $groupId . '"'),
+            new Step\When('I fill in "invitation[]" with "' . $friendId . '"'),
+            new Step\When('I press "submit"')
         ];
     }
 }

@@ -14,8 +14,21 @@ Feature: Social Group
 
     Scenario: Invite a friend to group
         Given I am a platform administrator
-        And I have a friend
-        And I am on "/main/social/group_invitation.php?id=1"
-        When I fill in "invitation[]" with "11"
-        And I press "submit"
+        And I have a friend named "fbaggins" with id "11"
+        When I invite to a friend with id "11" to a social group with id "1"
         Then I should see "Invitation sent"
+
+    Scenario: Accept an invitation to social group
+        Given I am logged as "fbaggins"
+        And I am on "/main/social/invitations.php"
+        When I follow "accept-invitation-1"
+        Then I should see "User is subscribed to this group"
+
+    Scenario: Deny an invitation to social group
+        Given I am a platform administrator
+        And I have a friend named "sgamgee" with id "13"
+        And I invite to a friend with id "13" to a social group with id "1"
+        When I am logged as "sgamgee"
+        And I am on "/main/social/invitations.php"
+        And I follow "deny-invitation-1"
+        Then I should see "Group invitation was denied"

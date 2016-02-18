@@ -17,7 +17,11 @@ if ($work['active'] != 1) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPublications'));
+
+$work['title'] = isset($work['title']) ? Security::remove_XSS($work['title']) : '';
+$work['description'] = isset($work['description']) ? Security::remove_XSS($work['description']) : '';
+
+$interbreadcrumb[] = array ('url' => 'work.php?'.api_get_self(), 'name' => get_lang('StudentPublications'));
 
 $my_folder_data = get_work_data_by_id($work['parent_id']);
 $courseInfo = api_get_course_info();
@@ -37,9 +41,9 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
     )
 ) {
     if ((api_is_allowed_to_edit() || api_is_coach()) || api_is_drh()) {
-        $url_dir = 'work_list_all.php?id='.$my_folder_data['id'];
+        $url_dir = 'work_list_all.php?id='.$my_folder_data['id'].'&'.api_get_cidreq();
     } else {
-        $url_dir = 'work_list.php?id='.$my_folder_data['id'];
+        $url_dir = 'work_list.php?id='.$my_folder_data['id'].'&'.api_get_cidreq();
     }
 
     $userInfo = api_get_user_info($work['user_id']);
@@ -99,6 +103,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $commentForm = getWorkCommentForm($work);
 
         $tpl = new Template();
+
         $tpl->assign('work', $work);
         $tpl->assign('comments', $comments);
 

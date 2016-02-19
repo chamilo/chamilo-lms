@@ -37,7 +37,7 @@ before_script:
   # Continue...
   - phpenv config-add tests/travis-php-config.ini
   # enable php-fpm
-  - sudo service php-fpm stop
+  - sudo /etc/init.d/php-fpm stop
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
   - sudo a2enmod rewrite actions fastcgi alias
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini

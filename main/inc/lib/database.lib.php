@@ -640,9 +640,8 @@ class Database
      */
     public static function getDoctrineConfig($path)
     {
-        $isDevMode = true;
-        $isSimpleMode = false;
-        $proxyDir = null;
+        $isDevMode = false;
+        $isSimpleMode = false; // related to annotations @Entity
         $cache = null;
         $path = !empty($path) ? $path : api_get_path(SYS_PATH);
 
@@ -651,6 +650,8 @@ class Database
             $path.'src/Chamilo/UserBundle/Entity',
             $path.'src/Chamilo/CourseBundle/Entity'
         );
+
+        $proxyDir = $path.'/app/cache/';
 
         return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
             $paths,

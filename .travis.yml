@@ -29,7 +29,7 @@ before_script:
   #- composer install -n
   #- composer -v update
   # ...OR use the proxy repository to download the necessary dependencies
-  - git clone https://github.com/ywarnier/chamilo-vendors.git
+  - git clone -b 1.10.x --depth=1 https://github.com/ywarnier/chamilo-vendors.git
   - sudo mv chamilo-vendors/vendor .
   - sudo mv chamilo-vendors/web .
   - sudo mv chamilo-vendors/composer.lock .

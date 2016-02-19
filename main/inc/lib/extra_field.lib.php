@@ -2083,7 +2083,11 @@ EOF;
             $val = '%'.$val;
         }
         if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
-            $val = '%'.$val.'%';
+            if (is_array($val)) {
+                $val = '%'.implode(';', $val).'%';
+            } else {
+                $val = '%'.$val.'%';
+            }
         }
         $val = \Database::escape_string($val);
 
@@ -2114,15 +2118,13 @@ EOF;
 
         foreach ($filters->rules as $rule) {
             if (strpos($rule->field, $stringToSearch) === false) {
-                //normal fields
+                // normal fields
                 $field = $rule->field;
-
-                if (isset($rule->data) && $rule->data != -1) {
+                if (isset($rule->data) && is_string($rule->data) && $rule->data != -1) {
                     $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
                 }
             } else {
                 // Extra fields
-
                 if (strpos($rule->field, '_second') === false) {
                     //No _second
                     $original_field = str_replace($stringToSearch, '', $rule->field);
@@ -2134,8 +2136,10 @@ EOF;
                             $rule->data = $data[1].'::'.$double_select[$rule->field];
                         } else {
                             // only was sent 1 select
-                            $data = explode('#', $rule->data);
-                            $rule->data = $data[1];
+                            if (is_string($rule->data)) {
+                                $data = explode('#', $rule->data);
+                                $rule->data = $data[1];
+                            }
                         }
 
                         if (!isset($rule->data)) {

@@ -46,10 +46,13 @@ if (!empty($userInfo)) {
         }
     }
 }
+if ($userToLoad) {
+    $formSearch->setDefaults(['user_id' => $userToLoad]);
+}
 
 $formSearch->addButtonSearch(get_lang('Search'), 'save');
 
-$form = new FormValidator('search', 'post', api_get_self().'&user_id='.$userToLoad);
+$form = new FormValidator('search', 'post', api_get_self().'?user_id='.$userToLoad);
 $form->addHeader(get_lang('Diagnosis'));
 $form->addHidden('user_id', $userToLoad);
 
@@ -67,7 +70,7 @@ $extraField = new ExtraField('session');
 $extraFieldValue = new ExtraFieldValue('session');
 $extra = $extraField->addElements($form, '', [], true);
 
-$form->addButtonSearch(get_lang('Save'), 'save');
+$form->addButtonSearch(get_lang('Search'), 'save');
 
 $result = SessionManager::getGridColumns('simple');
 $columns = $result['columns'];

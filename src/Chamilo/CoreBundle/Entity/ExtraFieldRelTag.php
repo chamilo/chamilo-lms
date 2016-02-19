@@ -23,6 +23,15 @@ class ExtraFieldRelTag
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue()
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="field_id", type="integer", nullable=false)
      */
     private $fieldId;
@@ -41,14 +50,6 @@ class ExtraFieldRelTag
      */
     private $itemId;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
 
     /**
      * Set fieldId

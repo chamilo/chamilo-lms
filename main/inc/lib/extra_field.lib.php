@@ -538,11 +538,11 @@ class ExtraField extends Model
 
     /**
      * Converts a string like this:
-     * France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
+     * France:Paris;Bretagne;Marseille;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
      * into
      * array(
  *      'France' =>
-     *      array('Paris', 'Bregtane', 'Marseilles'),
+     *      array('Paris', 'Bregtane', 'Marseille'),
      *  'Belgique' =>
      *      array('Namur', 'Liège')
      * ), etc
@@ -800,7 +800,7 @@ class ExtraField extends Model
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
                                 $options[$option_details['option_value']] = $option_details['display_text'];
-                                $group[]                                  = $form->createElement(
+                                $group[] = $form->createElement(
                                     'radio',
                                     'extra_'.$field_details['variable'],
                                     $option_details['option_value'],
@@ -828,7 +828,7 @@ class ExtraField extends Model
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
                                 $options[$option_details['option_value']] = $option_details['display_text'];
-                                $group[]                                  = $form->createElement(
+                                $group[] = $form->createElement(
                                     'checkbox',
                                     'extra_'.$field_details['variable'],
                                     $option_details['option_value'],
@@ -838,9 +838,7 @@ class ExtraField extends Model
                             }
                         } else {
                             $fieldVariable = "extra_{$field_details['variable']}";
-
                             $checkboxAttributes = array();
-
                             if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
                                 $checkboxAttributes['checked'] = true;
                             }
@@ -881,9 +879,7 @@ class ExtraField extends Model
 
                         // Get extra field workflow
                         $userInfo = api_get_user_info();
-
                         $addOptions = array();
-
                         $optionsExists = false;
                         global $app;
                         // Check if exist $app['orm.em'] object
@@ -1117,17 +1113,16 @@ class ExtraField extends Model
                         });';
 
                         $first_id  = null;
-                        $second_id = null;
-
                         if (!empty($extraData)) {
-                            $first_id  = $extraData['extra_'.$field_details['variable']]['extra_'.$field_details['variable']];
-                            $second_id = $extraData['extra_'.$field_details['variable']]['extra_'.$field_details['variable'].'_second'];
+                            if (isset($extraData['extra_'.$field_details['variable']])) {
+                                $first_id = $extraData['extra_'.$field_details['variable']]['extra_'.$field_details['variable']];
+                            }
                         }
 
                         $options = ExtraField::extra_field_double_select_convert_array_to_ordered_array(
                             $field_details['options']
                         );
-                        $values  = array('' => get_lang('Select'));
+                        $values = array('' => get_lang('Select'));
 
                         $second_values = array();
                         if (!empty($options)) {
@@ -1201,41 +1196,6 @@ class ExtraField extends Model
                         $tagsSelect->setMultiple(true);
 
                         if ($this->type == 'user') {
-
-                           /* //the magic should be here
-                            $user_tags = UserManager::get_user_tags($user_id, $field_details[0]);
-
-                            $tag_list = '';
-                            if (is_array($user_tags) && count($user_tags) > 0) {
-                                foreach ($user_tags as $tag) {
-                                    $tag_list .= '<option value="'.$tag['tag'].'" class="selected">'.$tag['tag'].'</option>';
-                                }
-                            }
-
-                            $multi_select = '<select id="extra_'.$field_details[1].'" name="extra_'.$field_details[1].'">
-                                    '.$tag_list.'
-                                    </select>';
-
-                            $form->addElement('label', $field_details[3], $multi_select);
-                            $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
-                            $complete_text = get_lang('StartToType');
-                            //if cache is set to true the jquery will be called 1 time
-                            $jquery_ready_content = <<<EOF
-                    $("#extra_$field_details[1]").fcbkcomplete({
-                        json_url: "$url?a=search_tags&field_id=$field_details[0]",
-                        cache: false,
-                        filter_case: true,
-                        filter_hide: true,
-                        complete_text:"$complete_text",
-                        firstselected: true,
-                        //onremove: "testme",
-                        //onselect: "testme",
-                        filter_selected: true,
-                        newel: true
-                    });
-EOF;
-                            break;*/
-
                             // The magic should be here
                             $user_tags = UserManager::get_user_tags($itemId, $field_details['id']);
 
@@ -1265,7 +1225,6 @@ EOF;
                                 if (empty($tag)) {
                                     continue;
                                 }
-
                                 $tagsSelect->addOption(
                                     $tag->getTag(),
                                     $tag->getTag(),

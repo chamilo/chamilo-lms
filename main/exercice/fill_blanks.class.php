@@ -756,8 +756,7 @@ class FillBlanks extends Question
 
        $tblTrackEAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
        $tblTrackEExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-       $tblCQuizAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
-       $courseCode = api_get_course_id();
+       $courseId = api_get_course_int_id();
 
        require_once api_get_path(SYS_PATH).'main/exercice/fill_blanks.class.php';
 
@@ -771,10 +770,10 @@ class FillBlanks extends Question
 
            LEFT JOIN '.$tblTrackEExercise.' tee
            ON tee.exe_id = tea.exe_id
-           AND tea.c_id = "'.$courseCode.'"
+           AND tea.c_id = '.$courseId.'
            AND exe_exo_id = '.$testId.'
 
-           WHERE course_code = "'.$courseCode.'"
+           WHERE tee.c_id = '.$courseId.'
            AND question_id = '.$questionId.'
            AND tea.user_id IN ('.implode(',', $studentsIdList).')
            AND tea.tms >= "'.$startDate.'"
@@ -795,7 +794,7 @@ class FillBlanks extends Question
                if ($tabAnswer['studentanswer'][$bracketNumber] != '') {
                    // student has answered this bracket, cool
                    switch (FillBlanks::getFillTheBlankAnswerType($tabAnswer['tabwords'][$bracketNumber])) {
-                       case FILL_THE_BLANK_MENU :
+                       case self::FILL_THE_BLANK_MENU :
                            // get the indice of the choosen answer in the menu
                            // we know that the right answer is the first entry of the menu, ie 0
                            // (remember, menu entries are shuffled when taking the test)

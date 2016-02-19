@@ -146,26 +146,19 @@ if (!empty($question_list)) {
 
                         $answer_item = api_substr($answer_item, 1);
                         $answer_item = api_substr($answer_item, 0, api_strlen($answer_item) -1);
+                        
+                        $data[$id]['answer'] 	= $answer_item;
 
                         $data[$id]['correct'] 	= '-';
 
-                        $count = ExerciseLib::get_number_students_answer_count(
-                            $real_answer_id,
-                            $question_id,
-                            $exercise_id,
-                            $courseCode,
-                            $sessionId,
-                            FILL_IN_BLANKS,
-                            $answer_info_db,
-                            $answer_item
-                        );
-
+                        $count = ExerciseLib::getNumberStudentsFillBlanksAnwserCount($question_id, $exercise_id);
+                        $count = $count[$counter];
+                        
                         $percentange = 0;
                         if (!empty($count_students)) {
                             $percentange = $count/$count_students*100;
                         }
                         $data[$id]['attempts'] = Display::bar_progress($percentange, false, $count .' / '.$count_students);
-
                         $id++;
                         $counter++;
                     }

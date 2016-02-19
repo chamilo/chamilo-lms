@@ -9,10 +9,11 @@ require_once 'main/inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (!api_is_drh()) {
-    api_not_allowed(true);
-}
-
+//if (!api_is_platform_admin()) {
+    if (!api_is_drh()) {
+        api_not_allowed(true);
+    }
+//}
 $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 

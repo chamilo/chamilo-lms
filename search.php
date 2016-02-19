@@ -28,19 +28,21 @@ $extraFieldValue = new ExtraFieldValue('session');
 $extra = $extraField->addElements($form, '', [], true);
 
 $form->addButtonSave(get_lang('Save'), 'save');
-$form->addButtonSearch(get_lang('Search'), 'search');
+//$form->addButtonSearch(get_lang('Search'), 'search');
 
 $result = SessionManager::getGridColumns('simple');
 $columns = $result['columns'];
 $column_model = $result['column_model'];
 
-
 $defaults = [];
-
+$tagsData = [];
 if (!empty($items)) {
     /** @var ExtraFieldSavedSearch $item */
     foreach ($items as $item) {
         $variable = 'extra_'.$item->getField()->getVariable();
+        if ($item->getField()->getFieldType() == Extrafield::FIELD_TYPE_TAG) {
+            $tagsData[$variable] = $item->getValue();
+        }
         $defaults[$variable] = $item->getValue();
     }
 }
@@ -150,14 +152,25 @@ if ($form->validate()) {
     }
 }
 
-$htmlHeadXtra[] ='
-<script>
+$jsTag = '';
+if (!empty($tagsData)) {
+    foreach ($tagsData as $extraField => $tags) {
+        foreach ($tags as $tag) {
+            $jsTag .= "$('#$extraField')[0].addItem('$tag', '$tag');";
+        }
+    }
+}
 
+$htmlHeadXtra[] ='<script>
 $(function() {
     '.$extra['jquery_ready_content'].'
+
+    $(document).ready( function() {
+        '.$jsTag.'
+
+    });
 });
 </script>';
-
 
 if (!empty($filterToSend)) {
     $filterToSend = json_encode($filterToSend);
@@ -165,10 +178,6 @@ if (!empty($filterToSend)) {
 } else {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&_force_search=true&rows=20&page=1&sidx=&sord=asc';
 }
-
-
-
-
 
 // Autowidth
 $extra_params['autowidth'] = 'true';
@@ -194,16 +203,16 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$griJs = Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+/*$griJs = Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
 $grid = '<div id="session-table" class="table-responsive">';
 $grid .= Display::grid_html('sessions');
-$grid .= '</div>';
+$grid .= '</div>';*/
 
 $tpl = new Template(get_lang('Diagnosis'));
 $tpl->assign('form', $view);
-$tpl->assign('grid', $grid);
-$tpl->assign('grid_js', $griJs);
+//$tpl->assign('grid', $grid);
+//$tpl->assign('grid_js', $griJs);
 $content = $tpl->fetch('default/user_portal/search_extra_field.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

@@ -1049,7 +1049,7 @@ class ExtraField extends Model
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
                             $options,
-                            array('multiple' => 'multiple')
+                            array('multiple' => 'multiple', 'id' => 'extra_'.$field_details['variable'])
                         );
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {

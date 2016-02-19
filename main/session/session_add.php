@@ -220,9 +220,15 @@ $(function() {
                             $('[name=\''+radio+'\']').val([item.value]);
                             break;
                         case '4': // simple select
-                        case '5': // multiple select
                             $('#'+fieldName+'').val(item.value);
                             $('#'+fieldName+'').selectpicker('render');
+                            break;
+                        case '5': // multiple select
+                            if (item.value) {
+                                var values = item.value.split(';');
+                                $('#'+fieldName+'').val(values);
+                                $('#'+fieldName+'').selectpicker('render');
+                            }
                             break;
                         case '8': // double
                             var first = 'first_'+fieldName;

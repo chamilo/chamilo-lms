@@ -4304,7 +4304,9 @@ class Tracking
                 $html .= Display::page_subheader(
                     Display::return_icon('course.png', get_lang('MyCourses'), array(), ICON_SIZE_SMALL).' '.get_lang('MyCourses')
                 );
-                $html .= '<table class="data_table" width="100%">';
+                $html .= '<div class="table-responsive">';
+                $html .= '<table class="table table-striped table-hover">';
+                $html .= '<thead>';
                 $html .= '<tr>
                           '.Display::tag('th', get_lang('Course'), array('width'=>'300px')).'
                           '.Display::tag('th', get_lang('TimeSpentInTheCourse'), array('class'=>'head')).'
@@ -4313,6 +4315,7 @@ class Tracking
                           '.Display::tag('th', get_lang('LastConnexion'), array('class'=>'head')).'
                           '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
                         </tr>';
+                $html .= '</thead><tbody>';
 
                 foreach ($courses as $course_code => $course_title) {
                     $courseInfo = api_get_course_info($course_code);
@@ -4379,7 +4382,8 @@ class Tracking
                     $html .= '</a>';
                     $html .= '</td></tr>';
                 }
-                $html .= '</table>';
+                $html .= '</tbody></table>';
+                $html .= '</div>';
             }
         }
 

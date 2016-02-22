@@ -2092,7 +2092,13 @@ EOF;
         }
         if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
             if (is_array($val)) {
-                $val = '%'.implode(';', $val).'%';
+                $result = '"%'.implode(';', $val).'%"';
+                foreach ($val as $item) {
+                    $result .= ' OR '.$col.' LIKE "%'.$item.'%"';
+                }
+                $val = $result;
+
+                return " $col {$this->ops[$oper]} $val ";
             } else {
                 $val = '%'.$val.'%';
             }

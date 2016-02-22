@@ -120,13 +120,21 @@ class ImportCsv
                         $method = 'importSessionsExtIdStatic';
                     }
 
+                    if ($method == 'importCourseinsertStatic') {
+                        $method = 'importSubscribeUserToCourse';
+                    }
+
                     if ($method == 'importUnsubsessionsextidStatic') {
                         $method = 'importUnsubsessionsExtidStatic';
                     }
 
                     if (method_exists($this, $method)) {
-                        if (($method == 'importUnsubscribeStatic' ||
-                            $method == 'importSubscribeStatic') ||
+                        if (
+                            (
+                                $method == 'importUnsubscribeStatic' ||
+                                $method == 'importSubscribeStatic' ||
+                                $method == 'importSubscribeUserToCourse'
+                            ) ||
                             empty($isStatic)
                         ) {
                             $fileToProcess[$parts[1]][] = array(
@@ -164,7 +172,8 @@ class ImportCsv
                 'courses',
                 'sessions',
                 'subscribe-static',
-                'unsubscribe-static'
+                'unsubscribe-static',
+                'courseinsert-static'
             );
 
             foreach ($sections as $section) {
@@ -194,7 +203,7 @@ class ImportCsv
                 'sessions-static',
                 'sessionsextid-static',
                 'unsubsessionsextid-static',
-                'calendar-static',
+                'calendar-static'
             );
 
             foreach ($sections as $section) {
@@ -1536,6 +1545,42 @@ class ImportCsv
                 $this->logger->addError(
                     "User '$chamiloUserName' with status $type was added to session: #$chamiloSessionId - Course: " . $courseInfo['code']
                 );
+            }
+        }
+    }
+
+    /**
+     * @param $file
+     * @param bool $moveFile
+     */
+    private function importSubscribeUserToCourse($file, $moveFile = false)
+    {
+        $data = Import::csv_reader($file);
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data) . " records found.");
+            foreach ($data as $row) {
+
+                $chamiloUserName = $row['UserName'];
+                $chamiloCourseCode = $row['CourseCode'];
+                $status = $row['Status'];
+
+                $courseInfo = api_get_course_info($chamiloCourseCode);
+
+                if (empty($courseInfo)) {
+                    $this->logger->addError('Course does not exists: '.$courseInfo);
+                    continue;
+                }
+
+                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
+
+                if (empty($userId)) {
+                    $this->logger->addError('User does not exists: '.$chamiloUserName);
+                    continue;
+                }
+
+                CourseManager::subscribe_user($userId, $courseInfo['code'], $status);
+                $this->logger->addInfo("User $userId added to course $chamiloCourseCode as $status");
             }
         }
     }

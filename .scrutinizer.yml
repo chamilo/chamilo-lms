@@ -11,7 +11,6 @@ build:
     dependencies:
         before:
             - composer global require "fxp/composer-asset-plugin:1.0.3"
-            - composer install -n
             - composer -v update
 filter:
     excluded_paths:
@@ -21,6 +20,7 @@ filter:
         - app/cache/*
         - app/logs/*
         - web/*
+        - vendor/*
 checks:
     php:
         code_rating: true

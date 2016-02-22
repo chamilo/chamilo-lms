@@ -920,7 +920,7 @@ function getLinkCategories($courseId, $sessionId)
  */
 function showlinksofcategory($catid)
 {
-    global $is_allowed, $charset, $urlview, $up, $down, $_user, $token;
+    global $urlview, $up, $down, $_user, $token;
 
     $tbl_link = Database :: get_course_table(TABLE_LINK);
     $TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -943,7 +943,8 @@ function showlinksofcategory($catid)
               url,
               title,
               target,
-              description
+              description,
+              id_session as session_id
             FROM $tbl_link link
             INNER JOIN $TABLE_ITEM_PROPERTY itemproperties
             ON (link.id = itemproperties.ref AND link.c_id = itemproperties.c_id)
@@ -1140,8 +1141,6 @@ function showlinksofcategory($catid)
                         array(),
                         ICON_SIZE_SMALL
                     );
-
-
 
                     if ($visibility == '1') {
                         echo '<a href="link.php?'.api_get_cidreq().

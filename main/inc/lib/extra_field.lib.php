@@ -384,7 +384,7 @@ class ExtraField extends Model
      *
      * @return array|bool
      */
-    public function addElements($form, $itemId = 0, $exclude = [], $filter = false)
+    public function addElements($form, $itemId = 0, $exclude = [], $filter = false, $useTagAsSelect = false)
     {
         if (empty($form)) {
             return false;
@@ -696,6 +696,14 @@ class ExtraField extends Model
      */
     public function delete($id)
     {
+        $em = Database::getManager();
+        $items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy(['field' => $id]);
+        if ($items) {
+            foreach ($items as $item) {
+                $em->remove($item);
+            }
+            $em->flush();
+        }
         $field_option = new ExtraFieldOption($this->type);
         $field_option->delete_all_options_by_field_id($id);
 

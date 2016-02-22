@@ -25,7 +25,7 @@ $items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($
 
 $extraField = new ExtraField('session');
 $extraFieldValue = new ExtraFieldValue('session');
-$extra = $extraField->addElements($form, '', [], true);
+$extra = $extraField->addElements($form, '', [], true, true);
 
 $form->addButtonSave(get_lang('Save'), 'save');
 //$form->addButtonSearch(get_lang('Search'), 'search');

@@ -77,10 +77,14 @@ $columns = $result['columns'];
 $column_model = $result['column_model'];
 $defaults = [];
 
+$tagsData = [];
 if (!empty($items)) {
     /** @var ExtraFieldSavedSearch $item */
     foreach ($items as $item) {
         $variable = 'extra_'.$item->getField()->getVariable();
+        if ($item->getField()->getFieldType() == Extrafield::FIELD_TYPE_TAG) {
+            $tagsData[$variable] = $item->getValue();
+        }
         $defaults[$variable] = $item->getValue();
     }
 }
@@ -103,7 +107,6 @@ if ($form->validate()) {
             $filters[$key] = $value;
         }
     }
-
     $filterToSend = [];
     if (!empty($filters)) {
         $filterToSend = ['groupOp' => 'AND'];
@@ -124,11 +127,24 @@ if ($form->validate()) {
     }
 }
 
+$jsTag = '';
+if (!empty($tagsData)) {
+    foreach ($tagsData as $extraField => $tags) {
+        foreach ($tags as $tag) {
+            $jsTag .= "$('#$extraField')[0].addItem('$tag', '$tag');";
+        }
+    }
+}
+
+
 $htmlHeadXtra[] ='
 <script>
 
 $(function() {
     '.$extra['jquery_ready_content'].'
+
+        '.$jsTag.'
+
 });
 </script>';
 

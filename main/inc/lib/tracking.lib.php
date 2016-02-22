@@ -4740,6 +4740,7 @@ class Tracking
             $session_id = intval($session_id);
             $course = Database::escape_string($course_code);
             $course_info = CourseManager::get_course_information($course);
+            $em = Database::getManager();
 
             $html .= Display::page_subheader($course_info['title']);
             $html .= '<table class="data_table" width="100%">';
@@ -4986,6 +4987,63 @@ class Tracking
                       </tr>';
             }
             $html .='</table>';
+
+            if (api_get_setting('allow_skills_tool') === 'true') {
+                $skillsRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelUser')->findBy([
+                    'userId' => $user_id,
+                    'courseId' => $course_info['id'],
+                    'sessionId' => $session_id
+                ]);
+
+                $html .= '
+                    <div class="table-responsive">
+                        <table class="table" id="skillList">
+                            <thead>
+                                <tr>
+                                    <th>' . get_lang('Badges') . '</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                ';
+
+                if (count($skillsRelUser)) {
+                    $html .= '
+                                        <div class="scrollbar-inner badges-sidebar">
+                                            <ul class="list-unstyled list-badges">
+                    ';
+
+                    foreach ($skillsRelUser as $userSkill) {
+                        $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill->getSkillId());
+
+                        $html .= '
+                                                    <li class="thumbnail">
+                                                        <a href="' . api_get_path(WEB_PATH) . 'badge/' . $skill->getId() . '/user/' . $user_id . '" target="_blank">
+                                                            <img class="img-responsive" title="' . $skill->getName() . '" src="' . $skill->getWebIconPath() . '" width="64" height="64">
+                                                            <div class="caption">
+                                                                <p class="text-center">' . $skill->getName() . '</p>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                        ';
+                    }
+
+                    
+                    $html .= '
+                                            </ul>
+                                        </div>
+                    ';
+                }
+
+                $html .= '
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                ';
+            }
         }
 
         return $html;

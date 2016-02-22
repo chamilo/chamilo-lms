@@ -412,7 +412,8 @@ class ExtraField extends Model
             false,
             $extraFields,
             $itemId,
-            $exclude
+            $exclude,
+            $useTagAsSelect
         );
 
         return $extra;
@@ -729,7 +730,8 @@ class ExtraField extends Model
         $admin_permissions = false,
         $extra = array(),
         $itemId = null,
-        $exclude = []
+        $exclude = [],
+        $useTagAsSelect = false
     ) {
         $type = $this->type;
 
@@ -1199,7 +1201,11 @@ class ExtraField extends Model
                             "extra_{$field_details['variable']}",
                             $field_details['display_text']
                         );
-                        $tagsSelect->setAttribute('class', null);
+
+                        if ($useTagAsSelect == false) {
+                            $tagsSelect->setAttribute('class', null);
+                        }
+
                         $tagsSelect->setAttribute('id', "extra_{$field_details['variable']}");
                         $tagsSelect->setMultiple(true);
 
@@ -1226,7 +1232,6 @@ class ExtraField extends Model
                                     'fieldId' => $field_id,
                                     'itemId' => $itemId
                                 ]);
-
                             foreach ($fieldTags as $fieldTag) {
                                 $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
@@ -1240,9 +1245,42 @@ class ExtraField extends Model
                                 );
                             }
 
+                            if ($useTagAsSelect) {
+
+                                $fieldTags = $em
+                                    ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                                    ->findBy([
+                                        'fieldId' => $field_id
+                                    ]);
+                                $tagsAdded = [];
+                                foreach ($fieldTags as $fieldTag) {
+                                    $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+
+                                    if (empty($tag)) {
+                                        continue;
+                                    }
+
+                                    $tagText = $tag->getTag();
+
+                                    if (in_array($tagText, $tagsAdded)) {
+                                        continue;
+                                    }
+
+                                    $tagsSelect->addOption(
+                                        $tag->getTag(),
+                                        $tag->getTag(),
+                                        []
+                                    );
+
+                                    $tagsAdded[] = $tagText;
+                                }
+
+                            }
+
                             $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                         }
 
+                        if ($useTagAsSelect == false) {
                         $complete_text = get_lang('StartToType');
 
                         //if cache is set to true the jquery will be called 1 time
@@ -1259,6 +1297,7 @@ class ExtraField extends Model
                         newel: true
                     });
 EOF;
+                        }
                         break;
                     case ExtraField::FIELD_TYPE_TIMEZONE:
                         $form->addElement(

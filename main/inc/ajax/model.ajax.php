@@ -56,6 +56,8 @@ if (!in_array(
     api_protect_teacher_script(true);
 }
 
+$toRemove = ['extra_access_start_date', 'extra_access_end_date'];
+
 // Search features
 
 //@todo move this in the display_class or somewhere else
@@ -133,10 +135,30 @@ if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) 
                     break;
             }
 
+            $accessStartDate = '';
+            $accessEndDate = '';
+
             if (!empty($type)) {
                 // Extra field.
                 $extraField = new ExtraField($type);
+
+                foreach ($filters->rules as $key => $data)  {
+                    if ($data->field == 'extra_access_start_date') {
+                        $accessStartDate = $data->data;
+                    }
+
+                    if ($data->field == 'extra_access_end_date') {
+                        $accessEndDate = $data->data;
+                    }
+
+                    if (in_array($data->field, $toRemove)) {
+                        unset($filters->rules[$key]);
+                    }
+                }
+
                 $result = $extraField->getExtraFieldRules($filters, 'extra_');
+
+
                 $extra_fields = $result['extra_fields'];
                 $condition_array = $result['condition_array'];
 
@@ -457,7 +479,9 @@ switch ($action) {
         if ($list_type == 'simple') {
             $count = SessionManager::get_sessions_admin(
                 array('where' => $whereCondition, 'extra' => $extra_fields),
-                true
+                true,
+                $accessStartDate,
+                $accessEndDate
             );
         } else {
             $count = SessionManager::get_count_admin_complete(
@@ -983,7 +1007,9 @@ switch ($action) {
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ),
-                false
+                false,
+                $accessStartDate,
+                $accessEndDate
             );
         } else {
             $result = SessionManager::get_sessions_admin_complete(

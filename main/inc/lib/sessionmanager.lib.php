@@ -388,7 +388,7 @@ class SessionManager
      * @return mixed Integer for number of rows, or array of results
      * @assert (array(),true) !== false
      */
-    public static function get_sessions_admin($options = array(), $get_count = false)
+    public static function get_sessions_admin($options = array(), $get_count = false, $accessStartDate = '', $accessEndDate = '')
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -458,6 +458,12 @@ class SessionManager
         }
 
         $query = "$select FROM $tbl_session s $inject_joins $where $inject_where";
+
+        if (!empty($accessStartDate) && !empty($accessEndDate)) {
+            $accessStartDate = api_get_utc_datetime($accessStartDate);
+            $accessEndDate = api_get_utc_datetime($accessEndDate);
+            $query .= " AND '$accessStartDate' > access_start_date AND '$accessEndDate' < access_end_date ";
+        }
 
         if (api_is_multiple_url_enabled()) {
             $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);

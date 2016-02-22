@@ -500,7 +500,10 @@ class SessionManager
 
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
-                $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
+                $session['name'] = Display::url(
+                    $session['name'],
+                    api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id']
+                );
 
                 if (isset($session['session_active']) && $session['session_active'] == 1) {
                     $session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), ICON_SIZE_SMALL);

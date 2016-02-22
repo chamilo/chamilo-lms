@@ -4750,7 +4750,6 @@ class Tracking
             $session_id = intval($session_id);
             $course = Database::escape_string($course_code);
             $course_info = CourseManager::get_course_information($course);
-            $em = Database::getManager();
 
             $html .= Display::page_subheader($course_info['title']);
             $html .= '<div class="table-responsive">';
@@ -5004,64 +5003,7 @@ class Tracking
             }
             $html .='</tbody></table></div>';
 
-            if (api_get_setting('allow_skills_tool') === 'true') {
-                $skillsRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelUser')->findBy([
-                    'userId' => $user_id,
-                    'courseId' => $course_info['id'],
-                    'sessionId' => $session_id
-                ]);
-
-                $html .= '
-                    <div class="table-responsive">
-                        <table class="table" id="skillList">
-                            <thead>
-                                <tr>
-                                    <th>' . get_lang('Badges') . '</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                ';
-
-                if (count($skillsRelUser)) {
-                    $html .= '
-                                        <div class="scrollbar-inner badges-sidebar">
-                                            <ul class="list-unstyled list-badges">
-                    ';
-
-                    foreach ($skillsRelUser as $userSkill) {
-                        $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill->getSkillId());
-
-                        $html .= '
-                                                    <li class="thumbnail">
-                                                        <a href="' . api_get_path(WEB_PATH) . 'badge/' . $skill->getId() . '/user/' . $user_id . '" target="_blank">
-                                                            <img class="img-responsive" title="' . $skill->getName() . '" src="' . $skill->getWebIconPath() . '" width="64" height="64">
-                                                            <div class="caption">
-                                                                <p class="text-center">' . $skill->getName() . '</p>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                        ';
-                    }
-
-                    
-                    $html .= '
-                                            </ul>
-                                        </div>
-                    ';
-                } else {
-                    $html .= get_lang('WithoutAchievedSkills');
-                }
-
-                $html .= '
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                ';
-            }
+            $html .= self::displayUserSkills($user_id, $course_info['id'], $session_id);
         }
 
         return $html;
@@ -5884,6 +5826,91 @@ class Tracking
                 'user' => $user
             ])
             ->getOneOrNullResult();
+    }
+
+    /**
+     * Get the HTML code for show a block with the achieved user skill on course/session
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     * @return string
+     */
+    public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0)
+    {
+        $userId = intval($userId);
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        if (api_get_setting('allow_skills_tool') !== 'true') {
+            return '';
+        }
+
+        $filter = ['userId' => $userId];
+
+        if (!empty($courseId)) {
+            $filter['courseId'] = $courseId;
+        }
+
+        if (!empty($sessionId)) {
+            $filter['sessionId'] = $sessionId;
+        }
+
+        $em = Database::getManager();
+
+        $skillsRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelUser')->findBy($filter);
+
+        $html = '
+            <div class="table-responsive">
+                <table class="table" id="skillList">
+                    <thead>
+                        <tr>
+                            <th>' . get_lang('AchievedSkills') . '</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+        ';
+
+        if (count($skillsRelUser)) {
+            $html .= '
+                                <div class="scrollbar-inner badges-sidebar">
+                                    <ul class="list-unstyled list-badges">
+            ';
+
+            foreach ($skillsRelUser as $userSkill) {
+                $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill->getSkillId());
+
+                $html .= '
+                                            <li class="thumbnail">
+                                                <a href="' . api_get_path(WEB_PATH) . 'badge/' . $skill->getId() . '/user/' . $userId . '" target="_blank">
+                                                    <img class="img-responsive" title="' . $skill->getName() . '" src="' . $skill->getWebIconPath() . '" width="64" height="64">
+                                                    <div class="caption">
+                                                        <p class="text-center">' . $skill->getName() . '</p>
+                                                    </div>
+                                                </a>
+                                            </li>
+                ';
+            }
+
+
+            $html .= '
+                                    </ul>
+                                </div>
+            ';
+        } else {
+            $html .= get_lang('WithoutAchievedSkills');
+        }
+
+        $html .= '
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        ';
+
+        return $html;
     }
 }
 

@@ -1369,7 +1369,9 @@ class Agenda
                         $where_condition AND
                         ip.visibility   = '1' AND
                         agenda.c_id     = $course_id AND
-                        ip.c_id         = $course_id
+                        ip.c_id         = $course_id AND
+                        agenda.session_id = $session_id AND
+                        ip.id_session = $session_id
                     ";
         } else {
             $visibilityCondition = " ip.visibility='1' AND";

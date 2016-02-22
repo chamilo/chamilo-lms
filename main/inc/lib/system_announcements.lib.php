@@ -729,7 +729,7 @@ class SystemAnnouncementManager
 
         $sql = "SELECT * FROM " . $table . "
 				WHERE
-				    (lang = '$user_selected_language' OR lang IS NULL) AND
+				    (lang = '$user_selected_language' OR lang = '') AND
 				    ('$now' >= date_start AND '$now' <= date_end) ";
 
         switch ($visible) {

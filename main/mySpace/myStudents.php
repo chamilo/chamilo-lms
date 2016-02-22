@@ -1160,6 +1160,8 @@ if (!empty($student_id)) {
         </table>
 
     <?php
+        echo Tracking::displayUserSkills($user_info['user_id'], $info_course['id'], $sessionId);
+
     } //end details
 }
 

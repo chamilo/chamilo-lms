@@ -169,7 +169,7 @@ $extra_params['postData'] = array(
 );
 
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-     return \'<a href="'.api_get_self().'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+options.rowId+\'">'.Display::return_icon('add.png', get_lang('Subscribe'),'',ICON_SIZE_SMALL).'</a>'.
+     return \'<a href="'.api_get_self().'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+options.rowId+\'">'.Display::return_icon('add.png', addslashes(get_lang('Subscribe')),'',ICON_SIZE_SMALL).'</a>'.
     '\';
 }';
 

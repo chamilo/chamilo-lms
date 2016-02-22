@@ -109,6 +109,8 @@ $searchString = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : f
 $search = isset($_REQUEST['_search']) ? $_REQUEST['_search'] : false;
 $forceSearch = isset($_REQUEST['_force_search']) ? $_REQUEST['_force_search'] : false;
 $extra_fields = array();
+$accessStartDate = '';
+$accessEndDate = '';
 
 if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) && ($search !== 'false')) {
     $whereCondition = ' 1 = 1 ';
@@ -134,9 +136,6 @@ if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) 
                     $type = 'session';
                     break;
             }
-
-            $accessStartDate = '';
-            $accessEndDate = '';
 
             if (!empty($type)) {
                 // Extra field.
@@ -1692,7 +1691,7 @@ if (in_array($action, $allowed_actions)) {
         }
     }
 
-    header('Content-Type: application/json;charset=utf-8');
+    //header('Content-Type: application/json;charset=utf-8');
     echo json_encode($response);
 }
 exit;

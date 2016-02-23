@@ -1096,6 +1096,15 @@ class Template
         $tpl = $this->get_template('layout/show_footer.tpl');
         $this->display($tpl);
     }
+    
+    /**
+     * Show footer js template.
+     */
+    public function show_footer_js_template()
+    {
+        $tpl = $this->get_template('layout/footer.js.tpl');
+        $this->display($tpl);
+    }
 
     /**
      * Sets the plugin content in a template variable

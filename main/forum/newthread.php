@@ -162,7 +162,7 @@ JS;
 if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
-    Display :: display_header(null);
+    Display::display_header();
 }
 handle_forum_and_forumcategories();
 
@@ -188,6 +188,8 @@ if (!empty($values) && isset($values['SubmitPost'])) {
     store_thread($current_forum, $values);
 }
 
-if (isset($origin) && $origin != 'learnpath') {
-    Display :: display_footer();
+if ($origin == 'learnpath') {
+    Display::display_reduced_footer();
+} else {
+    Display::display_footer();
 }

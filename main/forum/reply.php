@@ -164,10 +164,10 @@ $htmlHeadXtra[] = <<<JS
 JS;
 
 if ($origin == 'learnpath') {
-    Display :: display_reduced_header('');
+    Display::display_reduced_header();
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give an empty string.
-    Display :: display_header('');
+    Display::display_header();
 }
 /* Action links */
 
@@ -217,6 +217,8 @@ if (!empty($values) && isset($_POST['SubmitPost'])) {
     </script>';
 }
 
-if (isset($origin) && $origin != 'learnpath') {
-    Display :: display_footer();
+if ($origin == 'learnpath') {
+    Display::display_reduced_footer();
+} else {
+    Display::display_footer();
 }

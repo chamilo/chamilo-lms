@@ -542,7 +542,7 @@ if (!empty($student_id)) {
                 <td align="right"><?php echo get_lang('LatestLoginInPlatform') ?></td>
                 <td align="left"><?php echo $last_connection_date ?></td>
             </tr>
-            <?php if (isset($_GET['details']) && $_GET['details'] == 'true') {?>
+            <?php if (isset($_GET['details']) && $_GET['details'] == 'true') { ?>
                 <tr>
                     <td align="right"><?php echo get_lang('TimeSpentInTheCourse') ?></td>
                     <td align="left"><?php echo  $time_spent_on_the_course ?></td>

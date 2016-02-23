@@ -57,6 +57,8 @@ $nameTools = get_lang('StudentDetails');
 
 $get_course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : '';
 
+$em = Database::getManager();
+
 if (isset($_GET['details'])) {
     if ($origin == 'user_course') {
         $course_info = CourseManager :: get_course_information($get_course_code);
@@ -744,17 +746,26 @@ if (!empty($student_id)) {
                 get_lang('LastConnexion')
             );
 
+            $query = $em
+                ->createQuery('
+                    SELECT lp FROM ChamiloCourseBundle:CLp lp
+                    WHERE lp.sessionId = :session AND lp.cId = :course
+                    ORDER BY lp.displayOrder ASC
+                ');
+
             if (empty($sessionId)) {
-                $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp
-                        WHERE session_id = 0 AND c_id = {$info_course['real_id']}
-                        ORDER BY lp.display_order";
+                $query->setParameters([
+                    'session' => 0,
+                    'course' => $info_course['real_id']
+                ]);
             } else {
-                $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp
-                        WHERE c_id = {$info_course['real_id']}
-                        ORDER BY lp.display_order";
+                $query->setParameters([
+                    'session' => $sessionId,
+                    'course' => $info_course['real_id']
+                ]);
             }
-            $rs_lp = Database::query($sql_lp);
-            if (Database :: num_rows($rs_lp) > 0) {
+            $rs_lp = $query->getResult();
+            if (count($rs_lp) > 0) {
                 ?>
                 <!-- LPs-->
                 <table class="data_table">
@@ -785,10 +796,9 @@ if (!empty($student_id)) {
                 <?php
 
                 $i = 0;
-                while ($learnpath = Database :: fetch_array($rs_lp)) {
-
-                    $lp_id = intval($learnpath['id']);
-                    $lp_name = $learnpath['name'];
+                foreach ($rs_lp as $learnpath) {
+                    $lp_id = intval($learnpath->getId());
+                    $lp_name = $learnpath->getName();
                     $any_result = false;
 
                     // Get progress in lp
@@ -903,7 +913,7 @@ if (!empty($student_id)) {
                         }
                         $link = Display::url(
                             '<img src="../img/icons/22/2rightarrow.png" border="0" />',
-                            'lp_tracking.php?cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).$from.'&origin='.$origin.'&lp_id='.$learnpath['id'].'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
+                            'lp_tracking.php?cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).$from.'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
                         );
                         echo Display::tag('td', $link);
                     }
@@ -911,7 +921,7 @@ if (!empty($student_id)) {
                     if (api_is_allowed_to_edit()) {
                         echo '<td>';
                         if ($any_result === true) {
-                            echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath['id'].'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
+                            echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
                             echo Display::return_icon('clean.png',get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
                             echo '</a>';
                         }

@@ -495,7 +495,7 @@ if (is_array($threads)) {
                 );
             }
 
-            $html .= '<div class="thumbnail">' . display_user_image($row['user_id'], $name) . '</div>';
+            $html .= '<div class="thumbnail">' . display_user_image($row['user_id'], $name, $origin) . '</div>';
             $html .= '</div>';
             $html .= '<div class="col-md-10">';
             $html .= Display::tag(

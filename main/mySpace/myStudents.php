@@ -315,7 +315,7 @@ $token = Security::get_token();
 if (!empty($student_id)) {
     // Actions bar
     echo '<div class="actions">';
-    echo '<a href="javascript: window.history.go(-1);" ">'.
+    echo '<a href="javascript: window.history.go(-1);">'.
             Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
@@ -469,19 +469,18 @@ if (!empty($student_id)) {
 
     echo Display::page_subheader($table_title);
 
-    echo '<table width="100%" border="0">';
-    echo '<tr>';
-
     $userPicture = UserManager::getUserPicture($user_info['user_id']);
-    echo '<img src="' . $userPicture . '" />';
-
-    echo '</td>';
     ?>
-    <td width="40%" valign="top">
-        <table width="100%" class="data_table">
-            <tr>
-                <th><?php echo get_lang('Information'); ?></th>
-            </tr>
+    <img src="<?php echo $userPicture ?>">
+    <div class="row">
+        <div class="col-sm-6">
+            <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th><?php echo get_lang('Information'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
             <tr>
                 <td><?php echo get_lang('Name') . ' : '.$user_info['complete_name']; ?></td>
             </tr>
@@ -534,14 +533,17 @@ if (!empty($student_id)) {
             <?php
             }
             ?>
+            </tbody>
         </table>
-    </td>
-
-    <td class="borderLeft" width="35%" valign="top">
-        <table width="100%" class="data_table">
+        </div>
+        <div class="col-sm-6">
+        <table class="table table-striped table-hover">
+            <thead>
             <tr>
-                <th colspan="2"><?php echo get_lang('Tracking'); ?></th>
+                <th colspan="2" class="text-center"><?php echo get_lang('Tracking'); ?></th>
             </tr>
+            </thead>
+            <tbody>
             <tr><td align="right"><?php echo get_lang('FirstLoginInPlatform') ?></td>
                 <td align="left"><?php echo $first_connection_date ?></td>
             </tr>
@@ -577,10 +579,10 @@ if (!empty($student_id)) {
                     echo '</tr>';
                 }
             } ?>
+            </tbody>
         </table>
-    </td>
-    </tr>
-    </table>
+        </div>
+    </div>
     <?php
 
     $table_title = '';
@@ -638,7 +640,9 @@ if (!empty($student_id)) {
 
             // Courses
             echo '<h3>'.$title.'</h3>';
-            echo '<table class="data_table courses-tracking">';
+            echo '<div class="table-respondive">';
+            echo '<table class="table table-striped table-hover courses-tracking">';
+            echo '<thead>';
             echo '<tr>
 				<th>'.get_lang('Course').'</th>
 				<th>'.get_lang('Time').'</th>
@@ -648,6 +652,8 @@ if (!empty($student_id)) {
 				<th>'.get_lang('Evaluations').'</th>
 				<th>'.get_lang('Details').'</th>
 			</tr>';
+            echo '</thead>';
+            echo '<tbody>';
 
             if (!empty($courses)) {
                 foreach ($courses as $courseId) {
@@ -727,7 +733,9 @@ if (!empty($student_id)) {
             } else {
                 echo "<tr><td colspan='5'>".get_lang('NoCourse')."</td></tr>";
             }
+            echo '</tbody>';
             echo '</table>';
+            echo '</div>';
         }
     } else {
         if ($user_info['status'] != INVITEE) {
@@ -768,7 +776,9 @@ if (!empty($student_id)) {
             if (count($rs_lp) > 0) {
                 ?>
                 <!-- LPs-->
-                <table class="data_table">
+                <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                <thead>
                 <tr>
                     <th><?php echo get_lang('Learnpaths');?></th>
                     <th><?php
@@ -793,6 +803,8 @@ if (!empty($student_id)) {
                     }
                     ?>
                 </tr>
+                </thead>
+                <tbody>
                 <?php
 
                 $i = 0;
@@ -935,11 +947,15 @@ if (!empty($student_id)) {
                 //echo '<tr><td colspan="6">'.get_lang('NoLearnpath').'</td></tr>';
             }
             ?>
+            </tbody>
             </table>
+            </div>
         <?php } ?>
         <!-- line about exercises -->
         <?php if ($user_info['status'] != INVITEE) { ?>
-        <table class="data_table">
+        <div class="table-responsive">
+        <table class="table table-striped table-hover">
+        <thead>
         <tr>
             <th><?php echo get_lang('Exercises'); ?></th>
             <th><?php echo get_lang('LearningPath');?></th>
@@ -948,6 +964,8 @@ if (!empty($student_id)) {
             <th><?php echo get_lang('LatestAttempt'); ?></th>
             <th><?php echo get_lang('AllAttempts'); ?></th>
         </tr>
+        </thead>
+        <tbody>
         <?php
 
         $csv_content[] = array();
@@ -1052,7 +1070,11 @@ if (!empty($student_id)) {
         } else {
             echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
         }
-        echo '</table>';
+        ?>
+        </tbody>
+        </table>
+        </div>
+        <?php
         }
 
         //@when using sessions we do not show the survey list
@@ -1098,8 +1120,16 @@ if (!empty($student_id)) {
         }
 
         // line about other tools
-        echo '<table class="data_table">';
-
+        ?>
+        <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th colspan="2"><?php echo get_lang('OtherTools'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+        <?php
         $csv_content[] = array ();
         $nb_assignments 		= Tracking::count_student_assignments($student_id, $course_code, $sessionId);
         $messages 				= Tracking::count_student_messages($student_id, $course_code, $sessionId);
@@ -1137,9 +1167,6 @@ if (!empty($student_id)) {
             $chat_last_connection
         );
         ?>
-        <tr>
-            <th colspan="2"><?php echo get_lang('OtherTools'); ?></th>
-        </tr>
         <tr><!-- assignments -->
             <td width="40%"><?php echo get_lang('Student_publication') ?></td>
             <td><?php echo $nb_assignments ?></td>
@@ -1164,11 +1191,9 @@ if (!empty($student_id)) {
             <td><?php echo get_lang('ChatLastConnection') ?></td>
             <td><?php echo $chat_last_connection; ?></td>
         </tr>
+        </tbody>
         </table>
-        </td>
-        </tr>
-        </table>
-
+        </div>
     <?php
     } //end details
 }

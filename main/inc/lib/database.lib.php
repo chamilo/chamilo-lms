@@ -131,6 +131,7 @@ class Database
     public function connect($params = array(), $sysPath = '', $entityRootPath = '')
     {
         $config = self::getDoctrineConfig($entityRootPath);
+        $config->setAutoGenerateProxyClasses(true);
 
         $config->setEntityNamespaces(
             array(
@@ -651,7 +652,7 @@ class Database
             $path.'src/Chamilo/CourseBundle/Entity'
         );
 
-        $proxyDir = $path.'/app/cache/';
+        $proxyDir = $path.'app/cache/';
 
         return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
             $paths,

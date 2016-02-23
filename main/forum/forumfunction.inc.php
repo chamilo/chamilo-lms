@@ -3681,7 +3681,7 @@ function display_user_link($user_id, $name, $origin = '', $in_title = '')
  * This function displays the user image from the profile, with a link to the user's details.
  * @param   int     User's database ID
  * @param   string  User's name
- * @param   string  the origin where the forum is call (example : learnpath)
+ * @param   string  the origin where the forum is called (example : learnpath)
  * @return  string  An HTML with the anchor and the image of the user
  * @author Julio Montoya <gugli100@gmail.com>
  */

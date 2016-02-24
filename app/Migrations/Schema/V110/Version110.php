@@ -49,11 +49,12 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE skill_rel_user MODIFY COLUMN acquired_skill_at datetime default NULL");
         $this->addSql("ALTER TABLE track_e_access MODIFY COLUMN access_date datetime DEFAULT NULL");
         $this->addSql("ALTER TABLE track_e_lastaccess MODIFY COLUMN access_date datetime DEFAULT NULL");
-
-
         $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id");
         $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id");
         $this->addSql("ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id)");
+
+        // Delete info of session_rel_user if session does not exists;
+        $this->addSql("DELETE FROM session_rel_user WHERE id_session NOT IN (SELECT id FROM session)");
 
         $session = $schema->getTable('session');
         $session->getColumn('id')->setType(Type::getType(Type::INTEGER))->setUnsigned(false);

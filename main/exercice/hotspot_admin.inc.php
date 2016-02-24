@@ -1038,14 +1038,14 @@ if ($modifyAnswers) {
                     questionId: <?php echo $modifyAnswers ?>,
                     selector: '#hotspot-container',
                     for: 'admin',
-                    relpath: '<?php echo $relPath ?>'
+                    relPath: '<?php echo $relPath ?>'
                 });
             <?php } else { ?>
                 new HotspotQuestion({
                     questionId: <?php echo $modifyAnswers ?>,
                     selector: '#hotspot-container',
                     for: 'admin',
-                    relpath: '<?php echo $relPath ?>'
+                    relPath: '<?php echo $relPath ?>'
                 });
             <?php } ?>
         });

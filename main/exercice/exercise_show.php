@@ -369,8 +369,8 @@ foreach ($questionList as $questionId) {
         $totalScore    += $question_result['score'];
 
         if ($show_results) {
-			echo '</table></td></tr>';
-
+            $relPath = api_get_path(REL_PATH);
+            echo '</table></td></tr>';
             echo "
                     <tr>
                         <td colspan=\"2\">
@@ -381,7 +381,8 @@ foreach ($questionList as $questionId) {
                                         questionId: $questionId,
                                         exerciseId: $id,
                                         selector: '#hotspot-solution',
-                                        for: 'solution'
+                                        for: 'solution',
+                                        relPath: '$relPath'
                                     });
                                 });
                             </script>
@@ -511,6 +512,7 @@ foreach ($questionList as $questionId) {
             $resfree = Database::query($queryfree);
             $questionScore= Database::result($resfree,0,"marks");
             $totalScore+=$questionScore;
+            $relPath = api_get_path(REL_PATH);
             echo '</table></td></tr>';
 
             echo "
@@ -523,7 +525,8 @@ foreach ($questionList as $questionId) {
                                         questionId: $questionId,
                                         exerciseId: $id,
                                         selector: '#hotspot-solution',
-                                        for: 'solution'
+                                        for: 'solution',
+                                        relPath: '$relPath'
                                     });
                                 });
                             </script>

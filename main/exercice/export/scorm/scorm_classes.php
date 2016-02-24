@@ -637,6 +637,7 @@ class ScormAnswerHotspot extends Answer
 		$canClick = true;
 		//$tes = isset($_GET['modifyAnswers']) ? '0' : '1';
 		//echo $tes;
+		$relPath = api_get_path(REL_PATH);
         $html .= <<<HTML
             <tr>
                 <td>
@@ -646,7 +647,8 @@ class ScormAnswerHotspot extends Answer
                             new HotspotQuestion({
                                 questionId: {$this->questionJSId},
                                 selector: '#hotspot-{$this->questionJSId}',
-                                for: 'user'
+                                for: 'user',
+                                relPath: '$relPath'
                             });
                         });
                     </script>

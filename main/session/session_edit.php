@@ -24,6 +24,15 @@ SessionManager::protectSession($id);
 
 $sessionInfo = SessionManager::fetch($id);
 
+// Sets to local time to show it correctly when you edit a session
+
+$sessionInfo['display_start_date'] = api_get_local_time($sessionInfo['display_start_date']);
+$sessionInfo['display_end_date'] = api_get_local_time($sessionInfo['display_end_date']);
+$sessionInfo['access_start_date'] = api_get_local_time($sessionInfo['access_start_date']);
+$sessionInfo['access_end_date'] = api_get_local_time($sessionInfo['access_end_date']);
+$sessionInfo['coach_access_start_date'] = api_get_local_time($sessionInfo['coach_access_start_date']);
+$sessionInfo['coach_access_end_date'] = api_get_local_time($sessionInfo['coach_access_end_date']);
+
 $id_coach = $sessionInfo['id_coach'];
 $tool_name = get_lang('EditSession');
 
@@ -116,12 +125,12 @@ if ($form->validate()) {
     $params = $form->getSubmitValues();
 
     $name = $params['name'];
-    $startDate = api_get_utc_datetime($params['access_start_date']);
-    $endDate = api_get_utc_datetime($params['access_end_date']);
-    $displayStartDate = api_get_utc_datetime($params['display_start_date']);
-    $displayEndDate = api_get_utc_datetime($params['display_end_date']);
-    $coachStartDate = api_get_utc_datetime($params['coach_access_start_date']);
-    $coachEndDate = api_get_utc_datetime($params['coach_access_end_date']);
+    $startDate = $params['access_start_date'];
+    $endDate = $params['access_end_date'];
+    $displayStartDate = $params['display_start_date'];
+    $displayEndDate = $params['display_end_date'];
+    $coachStartDate = $params['coach_access_start_date'];
+    $coachEndDate = $params['coach_access_end_date'];
     $coach_username = intval($params['coach_username']);
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];

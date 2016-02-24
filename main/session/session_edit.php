@@ -116,12 +116,12 @@ if ($form->validate()) {
     $params = $form->getSubmitValues();
 
     $name = $params['name'];
-    $startDate = $params['access_start_date'];
-    $endDate = $params['access_end_date'];
-    $displayStartDate = $params['display_start_date'];
-    $displayEndDate = $params['display_end_date'];
-    $coachStartDate = $params['coach_access_start_date'];
-    $coachEndDate = $params['coach_access_end_date'];
+    $startDate = api_get_utc_datetime($params['access_start_date']);
+    $endDate = api_get_utc_datetime($params['access_end_date']);
+    $displayStartDate = api_get_utc_datetime($params['display_start_date']);
+    $displayEndDate = api_get_utc_datetime($params['display_end_date']);
+    $coachStartDate = api_get_utc_datetime($params['coach_access_start_date']);
+    $coachEndDate = api_get_utc_datetime($params['coach_access_end_date']);
     $coach_username = intval($params['coach_username']);
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];

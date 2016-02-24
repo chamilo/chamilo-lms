@@ -24,7 +24,7 @@ SessionManager::protectSession($id);
 
 $sessionInfo = SessionManager::fetch($id);
 
-// Sets to local time
+// Sets to local time to show it correctly when you edit a session
 
 $sessionInfo['display_start_date'] = api_get_local_time($sessionInfo['display_start_date']);
 $sessionInfo['display_end_date'] = api_get_local_time($sessionInfo['display_end_date']);

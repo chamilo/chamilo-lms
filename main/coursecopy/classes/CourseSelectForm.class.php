@@ -19,6 +19,7 @@ class CourseSelectForm
 	static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
     {
         global $charset;
+        $resource_titles[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
         $resource_titles[RESOURCE_EVENT] = get_lang('Events');
         $resource_titles[RESOURCE_ANNOUNCEMENT] = get_lang('Announcements');
         $resource_titles[RESOURCE_DOCUMENT] = get_lang('Documents');
@@ -176,7 +177,7 @@ class CourseSelectForm
             if (count($resources) > 0) {
 				switch ($type) {
 					//Resources to avoid
-					case RESOURCE_FORUMCATEGORY :
+					case RESOURCE_FORUMCATEGORY:
                         foreach ($resources as $id => $resource) {
                             $forum_categories[$id] = $resource;
                         }
@@ -194,8 +195,8 @@ class CourseSelectForm
                         }
                         $element_count++;
                         break;
-                    case RESOURCE_LINKCATEGORY :
-					case RESOURCE_FORUMPOST :
+                    case RESOURCE_LINKCATEGORY:
+					case RESOURCE_FORUMPOST:
 					case RESOURCE_QUIZQUESTION:
 					case RESOURCE_SURVEYQUESTION:
 					case RESOURCE_SURVEYINVITATION:

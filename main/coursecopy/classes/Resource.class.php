@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 namespace Coursecopy;
 
 define('RESOURCE_DOCUMENT', 'document');
@@ -27,6 +28,7 @@ define('RESOURCE_THEMATIC', 'thematic');
 define('RESOURCE_ATTENDANCE', 'attendance');
 define('RESOURCE_WORK', 'work');
 define('RESOURCE_SESSION_COURSE', 'session_course');
+define('RESOURCE_GRADEBOOK', 'gradebook');
 
 /**
  * Class Resource
@@ -35,7 +37,7 @@ define('RESOURCE_SESSION_COURSE', 'session_course');
  * Documents,...) should be derived.
  * @author Bart Mollet <bart.mollet@hogent.be>s
  * @package  chamilo.backup
- * @todo Use the gloabaly defined constants voor tools and remove the RESOURCE_*
+ * @todo Use the globally defined constants voor tools and remove the RESOURCE_*
  * constants
  */
 class Resource
@@ -70,7 +72,7 @@ class Resource
     /**
      * Create a new Resource
      * @param int $id The id of this resource in the source course.
-     * @param constant $type The type of this resource.
+     * @param integer $type The type of this resource.
      */
     public function __construct($id, $type)
     {
@@ -84,7 +86,7 @@ class Resource
     /**
      * Add linked resource
      */
-    function add_linked_resource($type, $id)
+    public function add_linked_resource($type, $id)
     {
         $this->linked_resources[$type][] = $id;
     }
@@ -92,7 +94,7 @@ class Resource
     /**
      * Get linked resources
      */
-    function get_linked_resources()
+    public function get_linked_resources()
     {
         return $this->linked_resources;
     }
@@ -100,7 +102,7 @@ class Resource
     /**
      * Checks if this resource links to a given resource
      */
-    function links_to(& $resource)
+    public function links_to(& $resource)
     {
         self::setClassType($resource);
         $type = $resource->get_type();
@@ -119,7 +121,7 @@ class Resource
      * Returns the id of this resource.
      * @return int The id of this resource in the source course.
      */
-    function get_id()
+    public function get_id()
     {
         return $this->source_id;
     }
@@ -128,7 +130,7 @@ class Resource
      * Resturns the type of this resource
      * @return constant The type.
      */
-    function get_type()
+    public function get_type()
     {
         return $this->type;
     }
@@ -145,7 +147,7 @@ class Resource
      * @todo once the RESOURCE_* constants are replaced by the globally
      * defined TOOL_* constants, this function will be replaced by get_type()
      */
-    function get_tool($for_item_property_table = true)
+    public function get_tool($for_item_property_table = true)
     {
         switch ($this->get_type()) {
             case RESOURCE_DOCUMENT:
@@ -208,7 +210,7 @@ class Resource
      * Set the destination id
      * @param int $id The id of this resource in the destination course.
      */
-    function set_new_id($id)
+    public function set_new_id($id)
     {
         $this->destination_id = $id;
     }
@@ -217,7 +219,7 @@ class Resource
      * Check if this resource is allready restored in the destination course.
      * @return bool true if allready restored (i.e. destination_id is set).
      */
-    function is_restored()
+    public function is_restored()
     {
         return $this->destination_id > -1;
     }
@@ -225,7 +227,7 @@ class Resource
     /**
      * Show this resource
      */
-    function show()
+    public function show()
     {
         //echo 'RESOURCE: '.$this->get_id().' '.$type[$this->get_type()].' ';
     }

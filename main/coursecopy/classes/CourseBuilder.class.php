@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once 'Resource.class.php';
+require_once 'GradeBookBackup.php';
 require_once 'Course.class.php';
 require_once 'Event.class.php';
 require_once 'Link.class.php';
@@ -59,7 +60,8 @@ class CourseBuilder
         'tool_intro',
         'thematic',
         'wiki',
-        'works'
+        'works',
+        'gradebook'
     );
 
     /* With this array you can filter wich elements of the tools are going
@@ -1580,5 +1582,23 @@ class CourseBuilder
             $obj = new Work($row);
             $this->course->add_resource($obj);
         }
+    }
+
+    /**
+     * @param int $session_id
+     * @param int $courseId
+     * @param bool $with_base_content
+     */
+    public function build_gradebook(
+        $session_id = 0,
+        $courseId = 0,
+        $with_base_content = false
+    ) {
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $courseCode = $courseInfo['code'];
+        $cats = Category:: load(null, null, $courseCode, null, null, $session_id);
+
+        $obj = new GradeBookBackup($cats);
+        $this->course->add_resource($obj);
     }
 }

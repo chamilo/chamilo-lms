@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once 'Resource.class.php';
+require_once 'GradeBookBackup.php';
 require_once 'Course.class.php';
 require_once 'Event.class.php';
 require_once 'Link.class.php';
@@ -68,6 +69,7 @@ class CourseRestorer
         'thematic',
         'wiki',
         'works',
+        'gradebook',
     );
 
     /** Setting per tool */
@@ -442,7 +444,7 @@ class CourseRestorer
                                             'title' => self::DBUTF8($document->title),
                                             'filetype' => self::DBUTF8($document->file_type),
                                             'size' => self::DBUTF8($document->size),
-                                            'session_id' => $my_session_id
+                                            'session_id' => $my_session_id,
                                         ];
 
     									$document_id = Database::insert($table, $params);
@@ -475,7 +477,7 @@ class CourseRestorer
                                             'title' => self::DBUTF8($document->title),
                                             'filetype' => self::DBUTF8($document->file_type),
                                             'size' => self::DBUTF8($document->size),
-                                            'session_id' => $my_session_id
+                                            'session_id' => $my_session_id,
                                         ];
 
                                         Database::update(
@@ -532,7 +534,7 @@ class CourseRestorer
                                         [
                                             'c_id = ? AND id = ?' => [
                                                 $this->destination_course_id,
-                                                $document_id
+                                                $document_id,
                                             ],
                                         ]
                                     );
@@ -652,7 +654,7 @@ class CourseRestorer
                                             'title' => self::DBUTF8(basename($path_title)),
                                             'filetype' => self::DBUTF8($document->file_type),
                                             'size' => self::DBUTF8($document->size),
-                                            'session_id' => $my_session_id
+                                            'session_id' => $my_session_id,
                                         ];
 
 										$document_id = Database::insert($table, $params);
@@ -708,7 +710,7 @@ class CourseRestorer
                                             'title' => self::DBUTF8($document->title),
                                             'filetype' => self::DBUTF8($document->file_type),
                                             'size' => self::DBUTF8($document->size),
-                                            'session_id' => $my_session_id
+                                            'session_id' => $my_session_id,
                                         ];
 
                                         $document_id = Database::insert($table, $params);
@@ -762,7 +764,7 @@ class CourseRestorer
                                         'title' => self::DBUTF8($document->title),
                                         'filetype' => self::DBUTF8($document->file_type),
                                         'size' => self::DBUTF8($document->size),
-                                        'session_id' => $my_session_id
+                                        'session_id' => $my_session_id,
                                     ];
 
                                     $document_id = Database::insert($table, $params);
@@ -826,7 +828,7 @@ class CourseRestorer
                                 'title' => self::DBUTF8($document->title),
                                 'filetype' => self::DBUTF8($document->file_type),
                                 'size' => self::DBUTF8($document->size),
-                                'session_id' => $my_session_id
+                                'session_id' => $my_session_id,
                             ];
 
                             $document_id = Database::insert($table, $params);
@@ -1310,7 +1312,7 @@ class CourseRestorer
                     'c_id' => $this->destination_course_id,
                     'id' => self::DBUTF8($tool_intro->id),
                     'intro_text' => self::DBUTF8($tool_intro->intro_text),
-                    'session_id' => $sessionId
+                    'session_id' => $sessionId,
                 ];
 
                 $id = Database::insert($tool_intro_table, $params);
@@ -1354,7 +1356,7 @@ class CourseRestorer
                     'all_day' => $event->all_day,
                     'start_date' => $event->start_date,
                     'end_date' => $event->end_date,
-                    'session_id' => $sessionId
+                    'session_id' => $sessionId,
                 ];
 				$new_event_id = Database::insert($table, $params);
 
@@ -1398,7 +1400,7 @@ class CourseRestorer
                                 'comment' => self::DBUTF8($attachment_event->comment),
                                 'size' => $attachment_event->size,
                                 'filename' => $attachment_event->filename,
-                                'agenda_id' => $new_event_id
+                                'agenda_id' => $new_event_id,
                             ];
                             $id = Database::insert($table_attachment, $params);
                             if ($id) {
@@ -1424,7 +1426,7 @@ class CourseRestorer
                                 'comment' => self::DBUTF8($event->attachment_comment),
                                 'size' => $event->size,
                                 'filename' => $event->filename,
-                                'agenda_id' => $new_event_id
+                                'agenda_id' => $new_event_id,
                             ];
                             $id = Database::insert($table_attachment, $params);
 
@@ -1508,7 +1510,7 @@ class CourseRestorer
                     'end_date' => $announcement->date,
                     'display_order' => $announcement->display_order,
                     'email_sent' => $announcement->email_sent,
-                    'session_id' => $sessionId
+                    'session_id' => $sessionId,
                 ];
 
 				$new_announcement_id = Database::insert($table, $params);
@@ -1556,7 +1558,7 @@ class CourseRestorer
                                 'comment' => self::DBUTF8($attachment_event->comment),
                                 'size' => $attachment_event->size,
                                 'filename' => $attachment_event->filename,
-                                'announcement_id' => $new_announcement_id
+                                'announcement_id' => $new_announcement_id,
                             ];
 
                             $attachmentId = Database::insert($table_attachment, $params);
@@ -1592,7 +1594,7 @@ class CourseRestorer
                                 'comment' => self::DBUTF8($announcement->attachment_comment),
                                 'size' => $announcement->attachment_size,
                                 'filename' => $announcement->attachment_filename,
-                                'announcement_id' => $new_announcement_id
+                                'announcement_id' => $new_announcement_id,
                             ];
 
                             $attachmentId = Database::insert($table_attachment, $params);
@@ -1769,7 +1771,7 @@ class CourseRestorer
                 'type' => self::DBUTF8($question->quiz_type),
                 'picture' => self::DBUTF8($question->picture),
                 'level' => self::DBUTF8($question->level),
-                'extra' => self::DBUTF8($question->extra)
+                'extra' => self::DBUTF8($question->extra),
             ];
 
 			$new_id = Database::insert($table_que, $params);
@@ -1822,7 +1824,7 @@ class CourseRestorer
                         'ponderation' => $answer['ponderation'],
                         'position' => $answer['position'],
                         'hotspot_coordinates' => $answer['hotspot_coordinates'],
-                        'hotspot_type' => $answer['hotspot_type']
+                        'hotspot_type' => $answer['hotspot_type'],
                     ];
                     $answerId = Database::insert($table_ans, $params);
 
@@ -1863,7 +1865,7 @@ class CourseRestorer
                         'ponderation' => $answer['ponderation'],
                         'position' => $answer['position'],
                         'hotspot_coordinates' => $answer['hotspot_coordinates'],
-                        'hotspot_type' => $answer['hotspot_type']
+                        'hotspot_type' => $answer['hotspot_type'],
                     ];
 
                     $answerId = Database::insert($table_ans, $params);
@@ -1911,9 +1913,9 @@ class CourseRestorer
                                 'WHERE' => array(
                                     'question_id = ? AND c_id = ? ' => array(
                                         $new_id,
-                                        $this->destination_course_id
-                                    )
-                                )
+                                        $this->destination_course_id,
+                                    ),
+                                ),
                             )
                         );
 
@@ -1927,8 +1929,8 @@ class CourseRestorer
                                     'iid = ? AND c_id = ? AND question_id = ? ' => array(
                                         $answer_item['iid'],
                                         $this->destination_course_id,
-                                        $new_id
-                                    )
+                                        $new_id,
+                                    ),
                                 ),
                                 false
                             );
@@ -2122,7 +2124,7 @@ class CourseRestorer
                     'answered' => '0',
                     'invite_mail' => self::DBUTF8($survey->invite_mail),
                     'reminder_mail' => self::DBUTF8($survey->reminder_mail),
-                    'session_id' => $sessionId
+                    'session_id' => $sessionId,
                 ];
 
 				//An existing survey exists with the same code and the same language
@@ -2427,7 +2429,7 @@ class CourseRestorer
                             'visibility' => '0',
                             'admin' => '0',
                             'address' => 'squaregrey.gif',
-                            'session_id' => $session_id
+                            'session_id' => $session_id,
                         ];
                         $insertId = Database::insert($table_tool, $params);
                         if ($insertId) {
@@ -2504,7 +2506,7 @@ class CourseRestorer
                         'prerequisite' => self::DBUTF8($item['prerequisite']),
                         'parameters' => self::DBUTF8($item['parameters']),
                         'audio' => self::DBUTF8($item['audio']),
-                        'launch_data' => self::DBUTF8($item['launch_data'])
+                        'launch_data' => self::DBUTF8($item['launch_data']),
                     ];
 
 					$new_item_id = Database::insert($table_item, $params);
@@ -2875,7 +2877,7 @@ class CourseRestorer
                         'max_version' => 0,
                         'startdate_assig' => '',
                         'enddate_assig' => '',
-                        'delayedsubmit' => 0
+                        'delayedsubmit' => 0,
                     ];
 
                     Database::insert($table_wiki_conf, $params);
@@ -3134,6 +3136,40 @@ class CourseRestorer
                             }
                         }
                         break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Restore Works
+     * @param int $sessionId
+     */
+    public function restore_gradebook($sessionId = 0)
+    {
+        if ($this->course->has_resources(RESOURCE_GRADEBOOK)) {
+            $resources = $this->course->resources;
+            /**
+             * @var GradeBookBackup $obj
+             */
+            foreach ($resources[RESOURCE_GRADEBOOK] as $id => $obj) {
+                if (!empty($obj->categories)) {
+                    $categoryIdList = [];
+                    /** @var Category $cat */
+                    foreach ($obj->categories as $cat) {
+                        $cat->set_course_code($this->destination_course_info['code']);
+                        $cat->set_session_id($sessionId);
+
+                        $parentId = $cat->get_parent_id();
+                        if (!empty($parentId)) {
+                            if (isset($categoryIdList[$parentId])) {
+                                $cat->set_parent_id($categoryIdList[$parentId]);
+                            }
+                        }
+                        $oldId = $cat->get_id();
+                        $categoryId = $cat->add();
+                        $categoryIdList[$oldId] = $categoryId;
+                    }
                 }
             }
         }

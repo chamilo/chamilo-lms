@@ -56,6 +56,9 @@ class Version110 extends AbstractMigrationChamilo
         // Delete info of session_rel_user if session does not exists;
         $this->addSql("DELETE FROM session_rel_user WHERE id_session NOT IN (SELECT id FROM session)");
 
+        // Delete info of usergroup_rel_user if usergroup does not exists;
+        $this->addSql("DELETE FROM usergroup_rel_user WHERE usergroup_id NOT IN (SELECT id FROM usergroup)");
+
         $session = $schema->getTable('session');
         $session->getColumn('id')->setType(Type::getType(Type::INTEGER))->setUnsigned(false);
         if (!$session->hasColumn('description')) {

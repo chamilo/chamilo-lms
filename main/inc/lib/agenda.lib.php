@@ -1215,7 +1215,7 @@ class Agenda
             case 'admin':
             case 'platform':
                 $sql = "SELECT * FROM ".$this->tbl_global_agenda."
-                        WHERE id = ".$id;
+                        WHERE id = $id";
                 $result = Database::query($sql);
                 if (Database::num_rows($result)) {
                     $event = Database::fetch_array($result, 'ASSOC');
@@ -1314,12 +1314,15 @@ class Agenda
         $sql = "SELECT DISTINCT to_user_id, to_group_id
                 FROM $tbl_property ip
                 INNER JOIN $tlb_course_agenda agenda
-                ON (ip.ref = agenda.id AND ip.c_id = agenda.c_id)
+                ON (
+                  ip.ref = agenda.id AND
+                  ip.c_id = agenda.c_id AND
+                  ip.tool = '".TOOL_CALENDAR_EVENT."'
+                )
                 WHERE
-                    ip.tool = '".TOOL_CALENDAR_EVENT."' AND
                     ref = $eventId AND
                     ip.visibility = '1' AND
-                    ip.c_id         = $courseId AND
+                    ip.c_id = $courseId AND
                     $sessionCondition
                 ";
 
@@ -1407,7 +1410,6 @@ class Agenda
         if (empty($courseInfo)) {
             return array();
         }
-
         $course_id = $courseInfo['real_id'];
 
         if (empty($course_id)) {
@@ -1415,7 +1417,6 @@ class Agenda
         }
 
         $session_id = intval($session_id);
-
         $user_id = intval($user_id);
         $groupList = GroupManager::get_group_list(null, $courseInfo['code']);
 
@@ -1425,8 +1426,6 @@ class Agenda
                 $group_name_list[$group['id']] = $group['name'];
             }
         }
-
-        $group_memberships = [];
 
         if (!empty($groupId)) {
             if (!api_is_allowed_to_edit()) {
@@ -1483,12 +1482,10 @@ class Agenda
                 $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
             }
 
-            $sessionCondition = '';
             if (empty($session_id)) {
                 $sessionCondition =  "
                 (
-                    agenda.session_id = 0 AND
-                    ip.session_id IS NULL
+                    agenda.session_id = 0 AND (ip.session_id IS NULL OR ip.session_id = 0)
                 ) ";
             } else {
                 $sessionCondition =  "
@@ -1507,9 +1504,8 @@ class Agenda
                         to_user_id
                     FROM $tlb_course_agenda agenda
                     INNER JOIN $tbl_property ip
-                    ON (agenda.id = ip.ref AND agenda.c_id = ip.c_id)
+                    ON (agenda.id = ip.ref AND agenda.c_id = ip.c_id AND ip.tool = '".TOOL_CALENDAR_EVENT."')
                     WHERE
-                        ip.tool = '".TOOL_CALENDAR_EVENT."' AND
                         $where_condition AND
                         ip.visibility = '1' AND
                         agenda.c_id = $course_id AND
@@ -1518,7 +1514,6 @@ class Agenda
                     ";
         } else {
             $visibilityCondition = " ip.visibility='1' AND ";
-            $sessionCondition = '';
 
             if (api_is_allowed_to_edit()) {
                 if ($user_id == 0) {
@@ -1535,7 +1530,7 @@ class Agenda
                 $sessionCondition =  "
                 (
                     agenda.session_id = 0 AND
-                    ip.session_id IS NULL
+                    (ip.session_id IS NULL OR ip.session_id = 0)
                 ) ";
             } else {
                 $sessionCondition =  "
@@ -1554,9 +1549,8 @@ class Agenda
                         to_user_id
                     FROM $tlb_course_agenda agenda
                     INNER JOIN $tbl_property ip
-                    ON (agenda.id = ip.ref AND agenda.c_id = ip.c_id)
+                    ON (agenda.id = ip.ref AND agenda.c_id = ip.c_id AND ip.tool='".TOOL_CALENDAR_EVENT."' )
                     WHERE
-                        ip.tool='".TOOL_CALENDAR_EVENT."' AND
                         $where_condition
                         $visibilityCondition
                         agenda.c_id = $course_id AND
@@ -1589,6 +1583,16 @@ class Agenda
         if (Database::num_rows($result)) {
             $eventsAdded = array_column($this->events, 'unique_id');
             while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $event = array();
+                $event['id'] = 'course_'.$row['id'];
+                $event['unique_id']  = $row['iid'];
+                // To avoid doubles
+                if (in_array($event['unique_id'], $eventsAdded)) {
+                    continue;
+                }
+
+                $eventsAdded[] = $event['unique_id'];
+
                 $eventId = $row['ref'];
                 $items = $this->getUsersAndGroupSubscribedToEvent(
                     $eventId,
@@ -1597,16 +1601,6 @@ class Agenda
                 );
                 $group_to_array = $items['groups'];
                 $user_to_array = $items['users'];
-                $event = array();
-                $event['id'] = 'course_'.$row['id'];
-                $event['unique_id']  = $row['iid'];
-
-                // To avoid doubles
-                if (in_array($event['unique_id'], $eventsAdded)) {
-                    continue;
-                }
-
-                $eventsAdded[] = $event['unique_id'];
                 $attachment = $this->getAttachment($row['id'], $courseInfo);
 
                 if (!empty($attachment)) {
@@ -1685,7 +1679,7 @@ class Agenda
                     $event['type'] = 'group';
                 }
 
-                //Event sent to a user?
+                // Event sent to a user?
                 if (isset($row['to_user_id'])) {
                     $sent_to = array();
                     if (!empty($user_to_array)) {

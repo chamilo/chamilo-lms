@@ -1142,7 +1142,7 @@ window.HotspotQuestion = (function () {
             case 'solution':
                 //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relpath + 'main/exercice/hotspot_answers.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'main/exercice/hotspot_answers.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });

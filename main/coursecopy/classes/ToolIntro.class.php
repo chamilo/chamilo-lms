@@ -10,12 +10,12 @@ require_once 'Resource.class.php';
  */
 class ToolIntro extends Coursecopy\Resource
 {
-	var $id;
+	public $id;
 
 	/**
 	 * intro text
 	 */
-	var $intro_text;
+	public $intro_text;
 
 	/**
 	 * Create a new text introduction

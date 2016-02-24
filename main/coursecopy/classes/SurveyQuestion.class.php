@@ -13,36 +13,38 @@ class SurveyQuestion extends Coursecopy\Resource
 	/**
 	 * Survey ID
 	 */
-	var $survey_id;
+	public $survey_id;
 	/**
 	 * Question and question comment
 	 */
-	var $survey_question;
-	var $survey_question_comment;
+	public $survey_question;
+	public $survey_question_comment;
 	/**
 	 * Question type
 	 */
-	var $survey_question_type;
+	public $survey_question_type;
 	/**
 	 * Display ?
 	 */
-	var $display;
+	public $display;
 	/**
 	 * Sorting order
 	 */
-	var $sort;
+	public $sort;
 	/**
 	 * Shared question ID
 	 */
-	var $shared_question_id;
+	public $shared_question_id;
 	/**
 	 * Maximum value for the vote
 	 */
-	var $max_value;
+	public $max_value;
+
 	/**
 	 * Question's options
 	 */
-	var $options;
+	public $options;
+
 	/**
 	 * Create a new SurveyQuestion
 	 * @param int	 $id

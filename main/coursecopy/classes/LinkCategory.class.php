@@ -13,15 +13,16 @@ class LinkCategory extends Coursecopy\Resource
 	/**
 	 * The title
 	 */
-	var $title;
+	public $title;
 	/**
 	 * The description
 	 */
-	var $description;
+	public $description;
 	/**
 	 * The display order
 	 */
-	var $display_order;
+	public $display_order;
+
 	/**
 	 * Create a new LinkCategory
 	 * @param int $id
@@ -35,6 +36,7 @@ class LinkCategory extends Coursecopy\Resource
 		$this->description = $description;
 		$this->display_order = $display_order;
 	}
+
 	/**
 	 * Show this LinkCategory
 	 */

@@ -13,92 +13,92 @@ class Forum extends Coursecopy\Resource
     /**
      * The title
      */
-    var $title;
+    public $title;
 
     /**
      * The description
      */
-    var $description;
+    public $description;
 
     /**
      * Category-id
      */
-    var $category_id;
+    public $category_id;
 
     /**
      * Last post
      */
-    var $last_post;
+    public $last_post;
 
     /**
      * Number of threads
      */
-    var $topics;
+    public $topics;
 
     /**
      * Number of posts
      */
-    var $posts;
+    public $posts;
 
     /**
      * Allow anonimous
      */
-    var $allow_anonymous;
+    public $allow_anonymous;
 
     /**
      * Allow edit
      */
-    var $allow_edit;
+    public $allow_edit;
 
     /**
      * Approval direct post
      */
-    var $approval_direct_post;
+    public $approval_direct_post;
 
     /**
      * Allow attachments
      */
-    var $allow_attachements;
+    public $allow_attachements;
 
     /**
      * Allow new threads
      */
-    var $allow_new_topics;
+    public $allow_new_topics;
 
     /**
      * Default view
      */
-    var $default_view;
+    public $default_view;
 
     /**
      * Group forum
      */
-    var $of_group;
+    public $of_group;
 
     /**
      * Public/private group forum
      */
-    var $group_public_private;
+    public $group_public_private;
 
     /**
      * Order
      */
-    var $order;
+    public $order;
 
     /**
      * Locked or not
      */
-    var $locked;
+    public $locked;
 
     /**
      * Session id
      */
-    var $session_id;
+    public $session_id;
 
     /**
      * Image
      */
-    var $image;
+    public $image;
 
     /**
      * Create a new Forum

@@ -10,7 +10,6 @@ require_once 'Resource.class.php';
  */
 class ForumPost extends Coursecopy\Resource
 {
-
     /**
      * Create a new ForumPost
      */

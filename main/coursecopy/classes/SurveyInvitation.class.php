@@ -13,23 +13,24 @@ class SurveyInvitation extends Coursecopy\Resource
 	/**
 	 * Survey code
 	 */
-	var $code;
+	public $code;
 	/**
 	 * User info
 	 */
-	var $user;
+	public $user;
 	/**
 	 * Invitation code
 	 */
-	var $invitation_code;
+	public $invitation_code;
 	/**
 	 * Invitation date
 	 */
-	var $invitation_date;
+	public $invitation_date;
 	/**
 	 * Reminder date
 	 */
-	var $reminder_date;
+	public $reminder_date;
+
 	/**
 	 * Create a new SurveyInvitation
 	 * @param	int	 $id

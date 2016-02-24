@@ -9,17 +9,30 @@
  */
 class Wiki extends Coursecopy\Resource
 {
-	var $id;
-	var $page_id;
-	var $reflink;
-	var $title;
-	var $content;
-	var $user_id;
-	var $group_id;
-	var $timestamp;
-	var $progress;
-	var $version;
+	public $id;
+	public $page_id;
+	public $reflink;
+	public $title;
+	public $content;
+	public $user_id;
+	public $group_id;
+	public $timestamp;
+	public $progress;
+	public $version;
 
+	/**
+	 * Wiki constructor.
+	 * @param int $id
+	 * @param int $page_id
+	 * @param $reflink
+	 * @param $title
+	 * @param $content
+	 * @param $user_id
+	 * @param $group_id
+	 * @param $timestamp
+	 * @param $progress
+	 * @param $version
+	 */
 	public function __construct(
 		$id,
 		$page_id,
@@ -45,7 +58,7 @@ class Wiki extends Coursecopy\Resource
         $this->version = $version;
 	}
 
-	function show()
+	public function show()
 	{
 		parent::show();
 		echo $this->reflink.' ('. (empty($this->group_id) ? get_lang('Everyone') : get_lang('Group') . ' ' .  $this->group_id) .') ' . '<i>(' . $this->dtime . ')</i>';

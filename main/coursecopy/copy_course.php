@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.backup
  */
@@ -43,11 +44,8 @@ echo Display::page_header(get_lang('CopyCourse'));
 
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
 if (Security::check_token('post') && (
-        (
-            isset($_POST['action']) &&
-            $_POST['action'] == 'course_select_form') || (
-                isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy'
-        )
+        (isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
+        (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')
     )
 ) {
     // Clear token

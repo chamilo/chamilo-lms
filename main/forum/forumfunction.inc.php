@@ -3680,16 +3680,18 @@ function display_user_link($user_id, $name, $origin = '', $in_title = '')
 /**
  * This function displays the user image from the profile, with a link to the user's details.
  * @param   int     User's database ID
- * @param   str     User's name
+ * @param   string  User's name
+ * @param   string  the origin where the forum is called (example : learnpath)
  * @return  string  An HTML with the anchor and the image of the user
  * @author Julio Montoya <gugli100@gmail.com>
  */
 function display_user_image($user_id, $name, $origin = '')
 {
     $userInfo = api_get_user_info($user_id);
-    $link = '<a href="'.$userInfo['profile_url'].'" '.(!empty($origin) ? 'target="_self"' : '').'>';
+    
+    $link = '<a href="'.(!empty($origin) ? '#' : $userInfo['profile_url']).'" '.(!empty($origin) ? 'target="_self"' : '').'>';
+    
     if ($user_id != 0) {
-
         return $link.'<img src="'.$userInfo['avatar'].'"  alt="'.$name.'"  title="'.$name.'" /></a>';
     } else {
         return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'" /></a>';

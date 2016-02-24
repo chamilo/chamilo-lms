@@ -164,26 +164,26 @@ class SessionManager
                 );
 
                 if (!empty($startDate)) {
-                    $values['access_start_date'] = $startDate;
+                    $values['access_start_date'] = api_get_utc_datetime($startDate);
                 }
 
                 if (!empty($endDate)) {
-                    $values['access_end_date'] = $endDate;
+                    $values['access_end_date'] = api_get_utc_datetime($endDate);
                 }
 
                 if (!empty($displayStartDate)) {
-                    $values['display_start_date'] = $displayStartDate;
+                    $values['display_start_date'] = api_get_utc_datetime($displayStartDate);
                 }
 
                 if (!empty($displayEndDate)) {
-                    $values['display_end_date'] = $displayEndDate;
+                    $values['display_end_date'] = api_get_utc_datetime($displayEndDate);
                 }
 
                 if (!empty($coachStartDate)) {
-                    $values['coach_access_start_date'] = $coachStartDate;
+                    $values['coach_access_start_date'] = api_get_utc_datetime($coachStartDate);
                 }
                 if (!empty($coachEndDate)) {
-                    $values['coach_access_end_date'] = $coachEndDate;
+                    $values['coach_access_end_date'] = api_get_utc_datetime($coachEndDate);
                 }
 
                 if (!empty($sessionCategoryId)) {
@@ -1419,26 +1419,26 @@ class SessionManager
                 }
 
                 if (!empty($startDate)) {
-                    $values['access_start_date'] = $startDate;
+                    $values['access_start_date'] = api_get_utc_datetime($startDate);
                 }
 
                 if (!empty($endDate)) {
-                    $values['access_end_date'] = $endDate;
+                    $values['access_end_date'] = api_get_utc_datetime($endDate);
                 }
 
                 if (!empty($displayStartDate)) {
-                    $values['display_start_date'] = $displayStartDate;
+                    $values['display_start_date'] = api_get_utc_datetime($displayStartDate);
                 }
 
                 if (!empty($displayEndDate)) {
-                    $values['display_end_date'] = $displayEndDate;
+                    $values['display_end_date'] = api_get_utc_datetime($displayEndDate);
                 }
 
                 if (!empty($coachStartDate)) {
-                    $values['coach_access_start_date'] = $coachStartDate;
+                    $values['coach_access_start_date'] = api_get_utc_datetime($coachStartDate);
                 }
                 if (!empty($coachEndDate)) {
-                    $values['coach_access_end_date'] = $coachEndDate;
+                    $values['coach_access_end_date'] = api_get_utc_datetime($coachEndDate);
                 }
 
                 if (!empty($sessionCategoryId)) {

@@ -38,17 +38,18 @@ class ch_yesno extends survey_question
     {
         if (is_array($questionData['options'])) {
             if ($questionData['display'] == 'vertical') {
-                $class = '';
+                $class = 'radio';
             } else {
-                $class = 'inline';
+                $class = 'radio-inline';
             }
 
             $name = 'question' . $questionData['question_id'];
+
             $form->addRadio(
-                $name ,
+                $name,
                 null,
                 $questionData['options'],
-                array('label-class' => $class)
+                ['radio-class' => $class, 'label-class' => $class]
             );
 
             if (!empty($answers)) {

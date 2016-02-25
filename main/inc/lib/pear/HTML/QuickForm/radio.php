@@ -40,7 +40,9 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @since     1.1
      * @access    private
      */
-    var $_text = '';
+    public $_text = '';
+    public $labelClass;
+    public $radioClass;
 
     /**
      * Class constructor
@@ -61,6 +63,17 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         $value = null,
         $attributes = null
     ) {
+        $this->labelClass = isset($attributes['label-class']) ? $attributes['label-class'] : '';
+        $this->radioClass = isset($attributes['radio-class']) ? $attributes['radio-class'] : 'radio';
+
+        if (isset($attributes['label-class'])) {
+            unset($attributes['label-class']);
+        }
+
+        if (isset($attributes['radio-class'])) {
+            unset($attributes['radio-class']);
+        }
+
         parent::__construct($elementName, $elementLabel, $attributes);
         if (isset($value)) {
             $this->setValue($value);
@@ -114,7 +127,9 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         } elseif ($this->_flagFrozen) {
             $label = $this->_text;
         } else {
-            $label = '<div class="radio"><label '.$this->getAttribute('label-class').'">' .
+            $labelClass = $this->labelClass;
+            $radioClass = $this->radioClass;
+            $label = '<div class="'.$radioClass.'"><label class="'.$labelClass.'">' .
                 HTML_QuickForm_input::toHtml().$this->_text .
                 '</label></div>';
 

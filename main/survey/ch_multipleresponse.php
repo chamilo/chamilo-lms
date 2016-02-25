@@ -40,9 +40,9 @@ class ch_multipleresponse extends survey_question
     public function render(FormValidator $form, $questionData = array(), $answers = array())
     {
         if ($questionData['display'] == 'vertical') {
-            $class = '';
+            $class = 'checkbox';
         } else {
-            $class = 'inline';
+            $class = 'checkbox-inline';
         }
 
         $name = 'question'.$questionData['question_id'];
@@ -51,7 +51,7 @@ class ch_multipleresponse extends survey_question
             $name,
             null,
             $questionData['options'],
-            array('label-class' => $class)
+            array('checkbox-class' => $class, 'label-class' => $class)
         );
 
         $defaults = [];

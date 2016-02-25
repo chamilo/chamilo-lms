@@ -639,16 +639,16 @@ class Attendance
 				'',
 				'lastname'
 			);
-
-			if (!empty($groupId)) {
-				$students = GroupManager::getStudents($groupId);
-				if (!empty($students)) {
-					foreach ($students as $student) {
-						$studentInGroup[$student['user_id']] = true;
-					}
-				}
-			}
 		}
+
+        if (!empty($groupId)) {
+            $students = GroupManager::getStudents($groupId);
+            if (!empty($students)) {
+                foreach ($students as $student) {
+                    $studentInGroup[$student['user_id']] = true;
+                }
+            }
+        }
 
 		// get registered users inside current course
 		$a_users = array();

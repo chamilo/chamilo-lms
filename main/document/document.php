@@ -38,7 +38,6 @@ $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
 api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
-
 DocumentManager::removeGeneratedAudioTempFile();
 
 if (
@@ -375,6 +374,10 @@ switch ($action) {
                     'cidReq='.$cidReq.'&amp;id_session='.$id_session.'&amp;'.
                     'gidReq='.$gidReq.'&amp;parent_id='.$parent_id
             );
+
+            if (api_get_setting('allow_my_files') === 'false') {
+                $file_link = '';
+            }
 
             if (file_exists($copyfile)) {
                 $message = get_lang('CopyAlreadyDone').'</p><p>';

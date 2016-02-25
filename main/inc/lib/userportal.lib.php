@@ -857,7 +857,13 @@ class IndexManager
             }
 
             if (isset($_configuration['allow_my_files_link_in_homepage']) && $_configuration['allow_my_files_link_in_homepage']) {
-                $profile_content .= '<li class="myfiles-social"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.get_lang('MyFiles').'</a></li>';
+                $myFiles = '<li class="myfiles-social"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.get_lang('MyFiles').'</a></li>';
+
+                if (api_get_setting('allow_my_files') === 'false') {
+                    $myFiles = '';
+                }
+
+                $profile_content .= $myFiles;
             }
         }
 

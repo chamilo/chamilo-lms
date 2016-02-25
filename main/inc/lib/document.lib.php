@@ -5244,8 +5244,13 @@ class DocumentManager
                 $copy_myfiles_link = ($filetype == 'file') ? api_get_self() . '?' . api_get_cidreq() . '&action=copytomyfiles&id=' . $document_data['id'] : api_get_self() . '?' . api_get_cidreq();
 
                 if ($filetype == 'file') {
+
                     $copy_to_myfiles = '<a href="' . $copy_myfiles_link . '" style="float:right"' . $prevent_multiple_click . '>' .
                         Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(), ICON_SIZE_SMALL) . '&nbsp;&nbsp;</a>';
+
+                    if (api_get_setting('allow_my_files') === 'false') {
+                        $copy_to_myfiles = '';
+                    }
                 }
 
                 if ($filetype == 'file') {

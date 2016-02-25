@@ -252,7 +252,7 @@ CKEDITOR.dialog.add( 'video', function ( editor )
 								id : 'height',
 								label : editor.lang.common.height,
 								'default' : 300,
-								validate : CKEDITOR.dialog.validate.notEmpty(lang.heightRequired ),
+								//validate : CKEDITOR.dialog.validate.notEmpty(lang.heightRequired ),
 								commit : commitValue,
 								setup : loadValue
 							},

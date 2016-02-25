@@ -900,9 +900,13 @@ window.HotspotQuestion = (function () {
                     isMoving = true;
 
                     if (e.target.tagName === 'circle') {
-                        answerIndex = $(e.target).index('circle');
+                        //Hack to move correctly the hot spots if there are more than one HS question in same page
+                        answerIndex = $(e.target).next().html();
+                        answerIndex = parseInt(answerIndex) - 1;
                     } else if (e.target.tagName === 'text') {
-                        answerIndex = $(e.target).index('text');
+                        //Hack to move correctly the hot spots if there are more than one HS question in same page
+                        answerIndex = $(e.target).html();
+                        answerIndex = parseInt(answerIndex) - 1;
                     }
 
                     hotspot = self.hotspotsCollection.get(answerIndex);

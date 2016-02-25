@@ -13,12 +13,12 @@ class CourseCopyTestcategory extends Coursecopy\Resource
     /**
      * The title
      */
-    var $title;
+    public $title;
 
     /**
      * The description
      */
-    var $description;
+    public $description;
 
     /**
      * Create a new TestCategory

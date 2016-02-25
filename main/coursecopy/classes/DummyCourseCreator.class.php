@@ -23,15 +23,16 @@ class DummyCourseCreator
 	/**
 	 * The dummy course
 	 */
-	var $course;
+	public $course;
 	/**
 	 *
 	 */
-	var $default_property = array();
+	public $default_property = array();
+
 	/**
 	 * Create the dummy course
 	 */
-	function create_dummy_course($course_code)
+	public function create_dummy_course($course_code)
 	{
 		$this->default_property['insert_user_id'] = '1';
 		$this->default_property['insert_date'] = date('Y-m-d H:i:s');

@@ -45,7 +45,6 @@ class CalendarEvent extends Coursecopy\Resource
      */
     public $attachment_comment;
 
-
     /**
      * Create a new Event
      * @param int $id

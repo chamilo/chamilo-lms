@@ -150,7 +150,7 @@ class ImsAssessmentItem
  */
 class ImsSection
 {
-    var $exercise;
+    public $exercise;
 
     /**
      * Constructor.

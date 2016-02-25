@@ -13,12 +13,8 @@ class QuizQuestionOption extends Coursecopy\Resource
     public $obj; //question_option
 
     /**
-     * Create a new QuizQuestion
-     * @param string $question
-     * @param string $description
-     * @param int $ponderation
-     * @param int $type
-     * @param int $position
+     * QuizQuestionOption constructor.
+     * @param mixed $obj
      */
     public function __construct($obj)
     {

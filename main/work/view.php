@@ -21,7 +21,7 @@ if ($work['active'] != 1) {
 $work['title'] = isset($work['title']) ? Security::remove_XSS($work['title']) : '';
 $work['description'] = isset($work['description']) ? Security::remove_XSS($work['description']) : '';
 
-$interbreadcrumb[] = array ('url' => 'work.php?'.api_get_self(), 'name' => get_lang('StudentPublications'));
+$interbreadcrumb[] = array ('url' => 'work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
 
 $my_folder_data = get_work_data_by_id($work['parent_id']);
 $courseInfo = api_get_course_info();

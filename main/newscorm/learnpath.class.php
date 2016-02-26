@@ -8642,8 +8642,8 @@ class learnpath
         $return = '<ul class="lp_resource">';
 
         $return .= '<li class="lp_resource_element">';
-        $return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php?'.api_get_cidreq().'&lp_id=' . $this->lp_id . '">' .
+        $return .= Display::return_icon('new_test_small.gif');
+        $return .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'exercice/exercise_admin.php?'.api_get_cidreq().'&lp_id=' . $this->lp_id . '">' .
             get_lang('NewExercise') . '</a>';
         $return .= '</li>';
 
@@ -8666,8 +8666,8 @@ class learnpath
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
-            $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
-            $return .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
+            $return .= Display::return_icon('quizz_small.gif');
+            $return .= ' <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
                 Security :: remove_XSS(cut($row_quiz['title'], 80)).
                 '</a>';
             $return .= '</li>';
@@ -8731,7 +8731,7 @@ class learnpath
         <ul class="lp_resource">
             <li class="lp_resource_element">
                 <img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px"/>
-                <a href="'.api_get_path(REL_CODE_PATH).'link/link.php?'.$courseIdReq.
+                <a href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.
             '&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('LinkAdd').'">'.get_lang('LinkAdd').'</a>
             </li>';
         foreach ($categorizedLinks as $categoryId => $links) {
@@ -8770,16 +8770,40 @@ class learnpath
 
     /**
      * Creates a list with all the student publications in it
-     * @return unknown
+     * @return string
      */
     public function get_student_publications()
     {
-        $return = '<div class="lp_resource" >';
-        $return .= '<div class="lp_resource_element">';
-        $return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=add_item&type=' . TOOL_STUDENTPUBLICATION . '&lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
-        $return .= '</div>';
-        $return .= '</div>';
+        $return = '<ul class="lp_resource" >';
+        $return .= '<li class="lp_resource_element">';
+        $return .= Display::return_icon('works_new.gif');
+        $return .= ' <a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=add_item&type=' . TOOL_STUDENTPUBLICATION . '&lp_id=' . $this->lp_id . '">' .
+            get_lang('AddAssignmentPage') . '</a>';
+        $return .= '</li>';
+        $sessionId = api_get_session_id();
+
+        if (empty($sessionId)) {
+            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+            $works = getWorkListTeacher(0, 100, null, null, null);
+            if (!empty($works)) {
+                foreach ($works as $work) {
+                    $return .= '<li class="lp_resource_element" data_id="'.$work['iid'].'" data_type="work" title="'.Security :: remove_XSS(cut(strip_tags($work['title']), 80)).'">';
+                    $return .= '<a class="moved" href="#">';
+                    $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+                    $return .= '</a> ';
+
+                    $return .= Display::return_icon('works.gif');
+                    $return .= ' <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_STUDENTPUBLICATION . '&file=' . $work['iid'] . '&lp_id=' . $this->lp_id . '">' .
+                        Security :: remove_XSS(cut(strip_tags($work['title']), 80)).
+                        '</a>';
+
+                    $return .= '</li>';
+                }
+            }
+        }
+
+        $return .= '</ul>';
+
         return $return;
     }
 
@@ -8798,21 +8822,21 @@ class learnpath
 
         //First add link
         $return .= '<li class="lp_resource_element">';
-        $return .= '<img alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'forum/index.php?' . api_get_cidreq() . '&action=add&content=forum&origin=learnpath&lp_id=' . $this->lp_id . '" title="' . get_lang('CreateANewForum') . '">' . get_lang('CreateANewForum') . '</a>';
+        $return .= Display::return_icon('forum_new_small.gif');
+        $return .= ' <a href="' . api_get_path(WEB_CODE_PATH) . 'forum/index.php?' . api_get_cidreq() . '&action=add&content=forum&origin=learnpath&lp_id=' . $this->lp_id . '" title="' . get_lang('CreateANewForum') . '">' . get_lang('CreateANewForum') . '</a>';
         $return .= '</li>';
 
         $return .= '<script>
-                    function toggle_forum(forum_id){
-                        if(document.getElementById("forum_"+forum_id+"_content").style.display == "none"){
-                            document.getElementById("forum_"+forum_id+"_content").style.display = "block";
-                            document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'remove.gif";
-                        } else {
-                            document.getElementById("forum_"+forum_id+"_content").style.display = "none";
-                            document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'add.gif";
-                        }
-                    }
-                </script>';
+            function toggle_forum(forum_id){
+                if(document.getElementById("forum_"+forum_id+"_content").style.display == "none"){
+                    document.getElementById("forum_"+forum_id+"_content").style.display = "block";
+                    document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'remove.gif";
+                } else {
+                    document.getElementById("forum_"+forum_id+"_content").style.display = "none";
+                    document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'add.gif";
+                }
+            }
+        </script>';
 
         foreach ($a_forums as $forum) {
             if (!empty($forum['forum_id'])) {

@@ -597,7 +597,7 @@ class learnpath
             "max_score" => $max_score,
             "parent_item_id" => $parent,
             "previous_item_id" => $previous,
-            "next_item_id" => $next,
+            "next_item_id" => itnval($next),
             "display_order" => $display_order +1,
             "prerequisite" => $prerequisites,
             "max_time_allowed" => $max_time_allowed,

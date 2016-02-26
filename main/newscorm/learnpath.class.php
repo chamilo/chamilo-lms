@@ -589,20 +589,20 @@ class learnpath
         $params = array(
             "c_id" => $course_id,
             "lp_id" => $this->get_id(),
-            "item_type" =>$typeCleaned ,
+            "item_type" => $typeCleaned,
             "ref" => '',
-            "title" =>$title ,
+            "title" => $title,
             "description" => $description,
             "path" => $id,
             "max_score" => $max_score,
             "parent_item_id" => $parent,
             "previous_item_id" => $previous,
-            "next_item_id" => itnval($next),
-            "display_order" => $display_order +1,
+            "next_item_id" => intval($next),
+            "display_order" => $display_order + 1,
             "prerequisite" => $prerequisites,
             "max_time_allowed" => $max_time_allowed,
             'min_score' => 0,
-            'launch_data' => ''
+            'launch_data' => '',
         );
 
         if ($prerequisites != 0) {

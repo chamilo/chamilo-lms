@@ -3169,7 +3169,7 @@ $ModifyQuestion = "Modificar pregunta";
 $Example = "Ejemplo";
 $CheckAll = "comprobar";
 $NbAnnoucement = "Avisos";
-$OtherCourses = "Otros cursos";
+$DisplayCertificate = "Visualizar certificado";
 $Doc = "documento";
 $PlataformAdmin = "Administración de la plataforma";
 $Groups = "Grupos";
@@ -7636,4 +7636,5 @@ $ForumDissociated = "Foro disociado";
 $ClickOrDropOneFileHere = "Suelte un archivo aquí o haga clic";
 $ModuloPercentage = "Módulo:\t\t\t%";
 $LastXDays = "Últimos %s días";
+$ExportBadges = "Exportar insignias";
 ?>

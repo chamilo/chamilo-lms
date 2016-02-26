@@ -327,7 +327,7 @@ if (count($a_students) > 0) {
     $form = new FormValidator(
         'reminder_form',
         'get',
-        api_get_path(REL_CODE_PATH).'announcements/announcements.php?' . api_get_cidreq(),
+        api_get_path(WEB_CODE_PATH).'announcements/announcements.php?' . api_get_cidreq(),
         null,
         ['style' => 'margin-bottom: 10px'],
         FormValidator::LAYOUT_INLINE

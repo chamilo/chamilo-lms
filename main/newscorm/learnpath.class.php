@@ -3409,27 +3409,29 @@ class learnpath
             // @todo Use constants instead of int values.
             switch ($lp_type) {
                 case 1 :
-                    if ($lp_item_type == 'dokeos_chapter') {
-                        $file = 'lp_content.php?type=dir';
-                    } else {
-                        require_once 'resourcelinker.inc.php';
-                        $file = rl_get_resource_link_for_learnpath(
-                            $course_id,
-                            $this->get_id(),
-                            $item_id,
-                            $this->get_view_id()
-                        );
 
-                        if ($this->debug > 0) {
-                            error_log('rl_get_resource_link_for_learnpath - file: ' . $file, 0);
-                        }
+                    require_once 'resourcelinker.inc.php';
+                    $file = rl_get_resource_link_for_learnpath(
+                        $course_id,
+                        $this->get_id(),
+                        $item_id,
+                        $this->get_view_id()
+                    );
 
-                        if ($lp_item_type == 'link') {
+                    if ($this->debug > 0) {
+                        error_log('rl_get_resource_link_for_learnpath - file: ' . $file, 0);
+                    }
+
+                    switch ($lp_item_type) {
+                        case 'dokeos_chapter':
+                            $file = 'lp_content.php?type=dir';
+                            break;
+                        case 'link':
                             if (Link::is_youtube_link($file)) {
-                                $src  = Link::get_youtube_video_id($file);
+                                $src = Link::get_youtube_video_id($file);
                                 $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=youtube&source='.$src;
                             } elseif (Link::isVimeoLink($file)) {
-                                $src  = Link::getVimeoLinkId($file);
+                                $src = Link::getVimeoLinkId($file);
                                 $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=vimeo&source='.$src;
                             } else {
                                 // If the current site is HTTPS and the link is
@@ -3441,11 +3443,14 @@ class learnpath
                                     $linkProtocol = substr($file, 0, 5);
                                     if ($linkProtocol === 'http:') {
                                         //this is the special intervention case
-                                        $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=nonhttps&source=' .  urlencode($file);
+                                        $file = api_get_path(
+                                                WEB_CODE_PATH
+                                            ).'newscorm/embed.php?type=nonhttps&source='.urlencode($file);
                                     }
                                 }
                             }
-                        } else {
+                            break;
+                        case 'quiz':
                             // Check how much attempts of a exercise exits in lp
                             $lp_item_id = $this->get_current_item_id();
                             $lp_view_id = $this->get_view_id();
@@ -3481,26 +3486,27 @@ class learnpath
                                 $sql = "SELECT count(*) FROM $lp_item_view_table
                                         WHERE
                                             c_id = $course_id AND
-                                            lp_item_id='" . $lp_item_id . "' AND
-                                            lp_view_id ='" . $lp_view_id . "' AND
+                                            lp_item_id='".$lp_item_id."' AND
+                                            lp_view_id ='".$lp_view_id."' AND
                                             status='completed'";
                                 $result = Database::query($sql);
-                                $row_count = Database :: fetch_row($result);
-                                $count_item_view = (int) $row_count[0];
+                                $row_count = Database:: fetch_row($result);
+                                $count_item_view = (int)$row_count[0];
                                 $not_multiple_attempt = 0;
                                 if ($prevent_reinit === 1 && $count_item_view > 0) {
                                     $not_multiple_attempt = 1;
                                 }
-                                $file .= '&not_multiple_attempt=' . $not_multiple_attempt;
+                                $file .= '&not_multiple_attempt='.$not_multiple_attempt;
                             }
-
-                            $tmp_array = explode('/', $file);
-                            $document_name = $tmp_array[count($tmp_array) - 1];
-                            if (strpos($document_name, '_DELETED_')) {
-                                $file = 'blank.php?error=document_deleted';
-                            }
+                            break;
                         }
+
+                    $tmp_array = explode('/', $file);
+                    $document_name = $tmp_array[count($tmp_array) - 1];
+                    if (strpos($document_name, '_DELETED_')) {
+                        $file = 'blank.php?error=document_deleted';
                     }
+
                     break;
                 case 2 :
                     if ($this->debug > 2) {
@@ -5603,14 +5609,13 @@ class learnpath
 
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
 
-            $icon = '';
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
-                $icon = '<img src="../img/lp_' . $icon_name . '.png" />';
+                $icon = Display::return_icon('lp_' . $icon_name . '.png');
             } else {
                 if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-                    $icon = '<img src="../img/lp_' . $icon_name . '.gif"  />';
+                    $icon = Display::return_icon('lp_' . $icon_name . '.gif');
                 } else {
-                    $icon = '<img src="../img/folder_document.gif" />';
+                    $icon = Display::return_icon('folder_document.gif');
                 }
             }
 
@@ -8787,7 +8792,7 @@ class learnpath
             $works = getWorkListTeacher(0, 100, null, null, null);
             if (!empty($works)) {
                 foreach ($works as $work) {
-                    $return .= '<li class="lp_resource_element" data_id="'.$work['iid'].'" data_type="work" title="'.Security :: remove_XSS(cut(strip_tags($work['title']), 80)).'">';
+                    $return .= '<li class="lp_resource_element" data_id="'.$work['iid'].'" data_type="'.TOOL_STUDENTPUBLICATION.'" title="'.Security :: remove_XSS(cut(strip_tags($work['title']), 80)).'">';
                     $return .= '<a class="moved" href="#">';
                     $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                     $return .= '</a> ';

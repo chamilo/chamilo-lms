@@ -139,7 +139,7 @@ if (!api_is_invitee()) {
         'sortname' => 'firstname'
     );
 
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$workId.'&type='.$type;
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();
     ?>
         <script>
             $(function() {

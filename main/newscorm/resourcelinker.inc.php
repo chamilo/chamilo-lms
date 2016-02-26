@@ -1626,7 +1626,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
     if (Database::num_rows($res_item) < 1) {
         return -1;
     }
-    $row_item = Database::fetch_array($res_item);
+    $row_item = Database::fetch_array($res_item, 'ASSOC');
 
     $type = strtolower($row_item['item_type']);
     $id = (strcmp($row_item['path'], '') == 0) ? '0' : $row_item['path'];
@@ -1730,8 +1730,8 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
         case TOOL_USER:
             $link .= $main_dir_path.'user/user.php?origin='.$origin;
             break;
-        case 'student_publication' :
-            $link .= $main_dir_path.'work/work.php?origin=learnpath';
+        case TOOL_STUDENTPUBLICATION:
+            $link .= $main_dir_path.'work/work_list.php?'.api_get_cidreq().'&id='.$row_item['path'].'&origin=learnpath';
             break;
     } //end switch
     return $link;

@@ -63,7 +63,17 @@ class Template
     ) {
         // Page title
         $this->title = $title;
+
         $this->show_learnpath = $show_learnpath;
+
+        if (empty($this->show_learnpath)) {
+            $origin = api_get_origin();
+            if ($origin == 'learnpath') {
+                $this->show_learnpath = true;
+                $show_footer = false;
+                $show_header = false;
+            }
+        }
         $this->hide_global_chat = $hide_global_chat;
         $this->load_plugins = $load_plugins;
 

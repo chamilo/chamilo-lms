@@ -27,6 +27,10 @@
                 <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|get_lang }}">
             </a>
 
+            <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=add_users_to_category&id=' ~ lp_data.category.getId() }}" title="{{ "AddUser"|get_lang }}">
+                <img src="{{ "user.png"|icon }}" alt="{{ "AddUser"|get_lang }}">
+            </a>
+
             {% if loop.index0 == 1 %}
                 <a href="#">
                     <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|get_lang }}">

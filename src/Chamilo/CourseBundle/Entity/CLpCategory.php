@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -19,7 +21,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class CLpCategory
 {
-  /**
+    /**
      * @var integer
      *
      * @ORM\Column(name="iid", type="integer")
@@ -46,6 +48,19 @@ class CLpCategory
      * @ORM\Column(name="position", type="integer")
      */
     private $position;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser", mappedBy="category", cascade={"persist", "remove"}, orphanRemoval=true)
+     **/
+    private $users;
+
+    /**
+     * CLpCategory constructor.
+     */
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     /**
      * Set cId
@@ -84,7 +99,7 @@ class CLpCategory
     }
 
     /**
-     * Get blogId
+     * Get id
      *
      * @return integer
      */
@@ -94,11 +109,8 @@ class CLpCategory
     }
 
     /**
-     * Set category name
-     *
-     * @param string $blogName
-     *
-     * @return CLpCategory
+     * @param $name
+     * @return $this
      */
     public function setName($name)
     {
@@ -118,7 +130,8 @@ class CLpCategory
     }
 
     /**
-     * @param int $position
+     * @param $position
+     * @return $this
      */
     public function setPosition($position)
     {
@@ -133,5 +146,87 @@ class CLpCategory
     public function getPosition()
     {
         return $this->position;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param $users
+     */
+    public function setUsers($users)
+    {
+        $this->users = new ArrayCollection();
+
+        foreach ($users as $user) {
+            $this->addUser($user);
+        }
+    }
+
+    /**
+     * @param CLpCategoryUser $categoryUser
+     */
+    public function addUser(CLpCategoryUser $categoryUser)
+    {
+        $categoryUser->setCategory($this);
+
+        if (!$this->hasUser($categoryUser)) {
+            $this->users->add($categoryUser);
+        }
+    }
+
+    /**
+     * @param CLpCategoryUser $categoryUser
+     * @return bool
+     */
+    public function hasUser(CLpCategoryUser $categoryUser)
+    {
+        if ($this->getUsers()->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq("user", $categoryUser->getUser())
+            )->andWhere(
+                Criteria::expr()->eq("category", $categoryUser->getCategory())
+            );
+
+            $relation = $this->getUsers()->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function hasUserAdded($user)
+    {
+        if ($this->getUsers()->count()) {
+            $categoryUser = new CLpCategoryUser();
+            $categoryUser->setCategory($this);
+            $categoryUser->setUser($user);
+
+            return $this->hasUser($categoryUser);
+
+        }
+
+        return false;
+    }
+
+    /**
+     * @param CLpCategoryUser $user
+     * @return $this
+     */
+    public function removeUsers(CLpCategoryUser $user)
+    {
+        $this->users->removeElement($user);
+
+        return $this;
     }
 }

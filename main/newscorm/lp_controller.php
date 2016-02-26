@@ -443,10 +443,18 @@ switch ($action) {
             }
         }
         break;
+    case 'add_users_to_category':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+
+        require 'lp_subscribe_users_to_category.php';
+        break;
     case 'add_audio':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+
         if ($debug > 0) error_log('New LP - add audio action triggered', 0);
 
         if (!$lp_found) {

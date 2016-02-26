@@ -10,6 +10,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 
 $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
@@ -57,7 +58,7 @@ $introductionSection = Display::return_introduction_section(
     array(
         'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
         'CreateDocumentDir' => '../../courses/'.api_get_course_path().'/document/',
-        'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
+        'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/',
     )
 );
 
@@ -113,13 +114,13 @@ $token = Security::get_token();
 /* DISPLAY SCORM LIST */
 
 $categoriesTempList = learnpath::getCategories(api_get_course_int_id());
-$categoryTest = new \Chamilo\CourseBundle\Entity\CLpCategory();
+$categoryTest = new CLpCategory();
 $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
 $categoryTest->setPosition(0);
 
 $categories = array(
-    $categoryTest
+    $categoryTest,
 );
 
 if (!empty($categoriesTempList)) {
@@ -132,11 +133,22 @@ $userInfo = api_get_user_info();
 $lpIsShown = false;
 
 $test_mode = api_get_setting('server_type');
+$user = UserManager::getRepository()->find($userId);
 
 $data = [];
-
+/** @var CLpCategory $item */
 foreach ($categories as $item) {
     $categoryId = $item->getId();
+
+    if (!$is_allowed_to_edit) {
+        $users = $item->getUsers();
+
+        if (!empty($users) && $users->count() > 0) {
+            if (!$item->hasUserAdded($user)) {
+                continue;
+            }
+        }
+    }
 
     $list = new LearnpathList(
         api_get_user_id(),
@@ -351,7 +363,7 @@ foreach ($categories as $item) {
                                 'action' => 'add_item',
                                 'type' => 'step',
                                 'lp_id' => $id,
-                                'isStudentView' => 'false'
+                                'isStudentView' => 'false',
                             ])
                         );
                     } else {
@@ -396,7 +408,7 @@ foreach ($categories as $item) {
                     . api_get_cidreq() . '&'
                     . http_build_query([
                         'action' => 'report',
-                        'lp_id' => $id
+                        'lp_id' => $id,
                     ]);
 
                 $trackingAction = Display::url(
@@ -720,6 +732,7 @@ foreach ($categories as $item) {
                         );
                     }
                 }
+
                 if ($is_allowed_to_edit) {
                     $start_time = $start_time;
                     $end_time = $end_time;
@@ -736,7 +749,7 @@ foreach ($categories as $item) {
                             'default',
                             [
                                 'class' => 'btn-xs',
-                                'title' => get_lang('EnableGamificationMode')
+                                'title' => get_lang('EnableGamificationMode'),
                             ]
                         );
                     } else {
@@ -747,7 +760,7 @@ foreach ($categories as $item) {
                             'warning',
                             [
                                 'class' => 'btn-xs active',
-                                'title' => get_lang('DisableGamificationMode')
+                                'title' => get_lang('DisableGamificationMode'),
                             ]
                         );
                     }
@@ -799,7 +812,7 @@ foreach ($categories as $item) {
                 'action_delete' => $dsp_delete,
                 'action_order' => $dsp_order,
                 'action_serious_game' => $actionSeriousGame,
-                'action_subscribe_users' => $subscribeUsers
+                'action_subscribe_users' => $subscribeUsers,
             ];
 
             $lpIsShown = true;
@@ -811,7 +824,7 @@ foreach ($categories as $item) {
 
     $data[] = [
         'category' => $item,
-        'lp_list' => $listData
+        'lp_list' => $listData,
     ];
 }
 

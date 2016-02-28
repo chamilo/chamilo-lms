@@ -3169,7 +3169,7 @@ $ModifyQuestion = "Save the question";
 $Example = "Example";
 $CheckAll = "Check all";
 $NbAnnoucement = "Announcement";
-$OtherCourses = "Other courses";
+$DisplayCertificate = "Display certificate";
 $Doc = "Document";
 $PlataformAdmin = "Portal Admin";
 $Groups = "Groups";
@@ -7611,4 +7611,5 @@ $ForumDissociated = "Forum dissociated";
 $ClickOrDropOneFileHere = "Click or drop one file here";
 $ModuloPercentage = "Modulo:\t\t\t%";
 $LastXDays = "Last % days";
+$ExportBadges = "Export badges";
 ?>

@@ -53,24 +53,20 @@ git config --global push.default current
 From the Chamilo folder (in which you should be now if you followed the previous steps), launch:
 
 ```
-composer global require "fxp/composer-asset-plugin:1.0.3"
 composer update
 ```
 
-If you ever face issues with scrollbars not appearing or JavaScript generating 
-errors, you might need to ensure that your web/assets folder is completely
-re-generated.
+If you face issues related to missing JS libraries, you might need to ensure
+that your web/assets folder is completely re-generated.
 Use this set of commands to do that:
 ```
-composer global require "fxp/composer-asset-plugin:1.0.3"
 rm composer.lock
-rm -rf web/assets
+rm -rf web/ vendor/
 composer clear-cache
 composer update
 ```
-This will take longer, but should definitely generate the 
-web/assets/jquery/dist/jquery.min.js file (jQuery 2.2 or superior), which was 
-not present in Chamilo versions previous to 1.10.4.
+This will take several minutes in the best case scenario, but should definitely
+generate the missing files.
 
 ### Change permissions
 
@@ -109,6 +105,15 @@ git checkout origin 1.10.x
 Then load the Chamilo URL in your browser, adding "main/install/index.php" and 
 follow the upgrade instructions. Select the "Upgrade from 1.9.x" button to 
 proceed.
+
+If you have previously updated database rows manually, you might face issue with
+FOREIGN KEYS during the upgrade process. Please make sure your database is
+consistent before upgrading. This usually means making sure that you have to delete
+rows from tables referring to rows which have been deleted from the user or access_url tables.
+Typically:
+<pre>
+    DELETE FROM access_url_rel_course WHERE access_url_id NOT IN (SELECT id FROM access_url);
+</pre>
 
 # For developers and testers only
 

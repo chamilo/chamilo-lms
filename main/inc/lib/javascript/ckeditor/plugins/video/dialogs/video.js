@@ -194,48 +194,6 @@ CKEDITOR.dialog.add( 'video', function ( editor )
 				[
 					{
 						type : 'hbox',
-						widths: [ '', '100px'],
-						children : [
-							{
-								type : 'text',
-								id : 'poster',
-								label : lang.poster,
-								commit : commitValue,
-								setup : loadValue,
-								onChange : function()
-								{
-									var dialog = this.getDialog(),
-										newUrl = this.getValue();
-
-									//Update preview image
-									if ( newUrl.length > 0 )	//Prevent from load before onShow
-									{
-										dialog = this.getDialog();
-										var preview = dialog.previewImage;
-
-										preview.on( 'load', onImgLoadEvent, dialog );
-										preview.on( 'error', onImgLoadErrorEvent, dialog );
-										preview.on( 'abort', onImgLoadErrorEvent, dialog );
-										preview.setAttribute( 'src', newUrl );
-									}
-								}
-							},
-							{
-								type : 'button',
-								id : 'browse',
-								hidden : 'true',
-								style : 'display:inline-block;margin-top:10px;',
-								filebrowser :
-								{
-									action : 'Browse',
-									target: 'info:poster',
-									url: editor.config.filebrowserImageBrowseUrl || editor.config.filebrowserBrowseUrl
-								},
-								label : editor.lang.common.browseServer
-							}]
-					},
-					{
-						type : 'hbox',
 						widths: [ '33%', '33%', '33%'],
 						children : [
 							{
@@ -340,6 +298,48 @@ CKEDITOR.dialog.add( 'video', function ( editor )
 								],
 								commit : commitSrc,
 								setup : loadSrc
+							}]
+					},
+					{
+						type : 'hbox',
+						widths: [ '', '100px'],
+						children : [
+							{
+								type : 'text',
+								id : 'poster',
+								label : lang.poster,
+								commit : commitValue,
+								setup : loadValue,
+								onChange : function()
+								{
+									var dialog = this.getDialog(),
+										newUrl = this.getValue();
+
+									//Update preview image
+									if ( newUrl.length > 0 )	//Prevent from load before onShow
+									{
+										dialog = this.getDialog();
+										var preview = dialog.previewImage;
+
+										preview.on( 'load', onImgLoadEvent, dialog );
+										preview.on( 'error', onImgLoadErrorEvent, dialog );
+										preview.on( 'abort', onImgLoadErrorEvent, dialog );
+										preview.setAttribute( 'src', newUrl );
+									}
+								}
+							},
+							{
+								type : 'button',
+								id : 'browse',
+								hidden : 'true',
+								style : 'display:inline-block;margin-top:10px;',
+								filebrowser :
+								{
+									action : 'Browse',
+									target: 'info:poster',
+									url: editor.config.filebrowserImageBrowseUrl || editor.config.filebrowserBrowseUrl
+								},
+								label : editor.lang.common.browseServer
 							}]
 					}
 				]

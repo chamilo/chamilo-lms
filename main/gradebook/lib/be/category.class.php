@@ -1966,13 +1966,10 @@ class Category implements GradebookItem
 
             if (!$category->getGenerateCertificates() && $userHasSkills) {
                 return [
-                    'badge_link' => Display::url(
-                        get_lang('DownloadBadges'),
+                    'badge_link' => Display::toolbarButton(
+                        get_lang('ExportBadges'),
                         api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
-                        array(
-                            'target' => '_blank',
-                            'class' => 'btn btn-default'
-                        )
+                        'external-link'
                     )
                 ];
             }
@@ -2004,14 +2001,7 @@ class Category implements GradebookItem
             if (!empty($fileWasGenerated)) {
                 $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
 
-                $certificates = Display::url(
-                    Display::returnFontAwesomeIcon('download').' '.get_lang('DownloadCertificate'),
-                    $url,
-                    array(
-                        'target' => '_blank',
-                        'class' => 'btn btn-sm btn-primary'
-                    )
-                );
+                $certificates = Display::toolbarButton(get_lang('DisplayCertificate'), $url, 'eye', 'primary');
 
                 $exportToPDF = Display::url(
                     Display::return_icon(
@@ -2036,13 +2026,10 @@ class Category implements GradebookItem
                 );
 
                 if ($skillToolEnabled && $userHasSkills) {
-                    $html['badge_link'] = Display::url(
-                        get_lang('DownloadBadges'),
+                    $html['badge_link'] = Display::toolbarButton(
+                        get_lang('ExportBadges'),
                         api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
-                        array(
-                            'target' => '_blank',
-                            'class' => 'btn btn-default'
-                        )
+                        'external-link'
                     );
                 }
             }

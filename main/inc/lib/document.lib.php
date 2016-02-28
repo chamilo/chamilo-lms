@@ -5016,10 +5016,10 @@ class DocumentManager
      * @param string	The current folder (path inside of the "document" directory, including the prefix "/")
      * @param string	Group directory, if empty, prevents documents to be uploaded (because group documents cannot be uploaded in root)
      * @param	boolean	Whether to change the renderer (this will add a template <span> to the QuickForm object displaying the form)
-     * @todo this funcionality is really bad : jmontoya
+
      * @return string html form
      */
-    public static function build_directory_selector($folders, $document_id, $group_dir = '', $change_renderer = false)
+    public static function build_directory_selector($folders, $document_id, $group_dir = '', $change_renderer = false, & $form = null, $selectName = 'id')
     {
         $doc_table = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
@@ -5041,9 +5041,18 @@ class DocumentManager
             }
         }
 
-        $form = new FormValidator('selector', 'GET', api_get_self() . '?' . api_get_cidreq());
+        $attributes = [];
+        if (empty($form)) {
+            $form = new FormValidator('selector', 'GET', api_get_self().'?'.api_get_cidreq());
+            $attributes = array('onchange' => 'javascript: document.selector.submit();');
+        }
         $form->addElement('hidden', 'cidReq', api_get_course_id());
-        $parent_select = $form->addSelect('id', get_lang('CurrentDirectory'), '', array('onchange' => 'javascript: document.selector.submit();'));
+        $parent_select = $form->addSelect(
+            $selectName,
+            get_lang('CurrentDirectory'),
+            '',
+            $attributes
+        );
 
         if ($change_renderer) {
             $renderer = $form->defaultRenderer();
@@ -5090,6 +5099,7 @@ class DocumentManager
                 }
             }
         }
+
         $html = $form->toHtml();
 
         return $html;
@@ -5765,6 +5775,8 @@ class DocumentManager
      * @param $curdirpath
      * @param $move_file
      * @param string $group_dir
+     * @param $form
+     *
      * @return string
      */
     public static function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '')

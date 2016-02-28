@@ -5924,11 +5924,14 @@ class learnpath
         }
 
         $folder = self::generate_learning_path_folder($course);
+        // Limits title size
+        $title = api_substr(api_replace_dangerous_char($lp_name), 0 , 80);
+        $dir = $dir.$title;
+
         // Creating LP folder
+        $documentId = null;
+
         if ($folder) {
-            //Limits title size
-            $title = api_substr(api_replace_dangerous_char($lp_name), 0 , 80);
-            $dir   = $dir.$title;
             $filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';
             if (!is_dir($filepath.'/'.$dir)) {
                 $folderData = create_unexisting_directory(
@@ -5944,6 +5947,8 @@ class learnpath
                 if (!empty($folderData)) {
                     $folder = true;
                 }
+
+                $documentId = $folderData['id'];
             } else {
                 $folder = true;
             }
@@ -5952,11 +5957,19 @@ class learnpath
                 $filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document'.$dir;
             }
         }
+
+        if (empty($documentId)) {
+            $dir = api_remove_trailing_slash($dir);
+            $documentId = DocumentManager::get_document_id($course, $dir, 0);
+        }
+
         $array = array(
             'dir' => $dir,
             'filepath' => $filepath,
-            'folder' => $folder
+            'folder' => $folder,
+            'id' => $documentId
         );
+
         return $array;
     }
 
@@ -5966,10 +5979,11 @@ class learnpath
      * @param string $content
      * @param string $title
      * @param string $extension
+     * @param int $parentId
      *
      * @return string
      */
-    public function create_document($courseInfo, $content = '', $title = '', $extension = 'html')
+    public function create_document($courseInfo, $content = '', $title = '', $extension = 'html', $parentId = 0)
     {
         if (!empty($courseInfo)) {
             $course_id = $courseInfo['real_id'];
@@ -5977,34 +5991,39 @@ class learnpath
             $course_id = api_get_course_int_id();
         }
 
-        global $charset;
-        $postDir = isset($_POST['dir']) ? $_POST['dir'] : '';
-        $dir = isset ($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
-        // Please, do not modify this dirname formatting.
-        if (strstr($dir, '..')) {
-            $dir = '/';
-        }
-        if (!empty($dir[0]) && $dir[0] == '.') {
-            $dir = substr($dir, 1);
-        }
-        if (!empty($dir[0]) && $dir[0] != '/') {
-            $dir = '/' . $dir;
-        }
-        if (isset($dir[strlen($dir) - 1]) && $dir[strlen($dir) - 1] != '/') {
-            $dir .= '/';
-        }
-        $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document' . $dir;
+        //$dir = '/';
+        // Generates folder
+        $result = $this->generate_lp_folder($courseInfo);
+        $dir = $result['dir'];
 
-        if (empty($_POST['dir']) && empty($_GET['dir'])) {
-            //Generates folder
-            $result = $this->generate_lp_folder($courseInfo);
-            $dir = $result['dir'];
-            $filepath = $result['filepath'];
+        if (empty($parentId)) {
+            $postDir = isset($_POST['dir']) ? $_POST['dir'] : '';
+            $dir = isset ($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
+            // Please, do not modify this dirname formatting.
+            if (strstr($dir, '..')) {
+                $dir = '/';
+            }
+            if (!empty($dir[0]) && $dir[0] == '.') {
+                $dir = substr($dir, 1);
+            }
+            if (!empty($dir[0]) && $dir[0] != '/') {
+                $dir = '/'.$dir;
+            }
+            if (isset($dir[strlen($dir) - 1]) && $dir[strlen($dir) - 1] != '/') {
+                $dir .= '/';
+            }
+        } else {
+            $parentInfo = DocumentManager::get_document_data_by_id($parentId, $courseInfo['code']);
+            if (!empty($parentInfo)) {
+                $dir = $parentInfo['path'].'/';
+            }
         }
+
+        $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document'.$dir;
 
         if (!is_dir($filepath)) {
-            $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document/';
             $dir = '/';
+            $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document'.$dir;
         }
 
         // stripslashes() before calling api_replace_dangerous_char() because $_POST['title']
@@ -6018,16 +6037,14 @@ class learnpath
         }
 
         $title = disable_dangerous_file($title);
-
         $filename = $title;
-
         $content = !empty($content) ? $content : $_POST['content_lp'];
-
         $tmp_filename = $filename;
 
         $i = 0;
-        while (file_exists($filepath . $tmp_filename . '.'.$extension))
+        while (file_exists($filepath . $tmp_filename . '.'.$extension)){
             $tmp_filename = $filename . '_' . ++ $i;
+        }
 
         $filename = $tmp_filename . '.'.$extension;
         if ($extension == 'html') {
@@ -6103,7 +6120,7 @@ class learnpath
                         if ($new_comment)
                             $ct .= ", comment='" . Database::escape_string($new_comment). "'";
                         if ($new_title)
-                            $ct .= ", title='" . Database::escape_string(htmlspecialchars($new_title, ENT_QUOTES, $charset))."' ";
+                            $ct .= ", title='" . Database::escape_string($new_title)."' ";
 
                         $sql = "UPDATE " . $tbl_doc ." SET " . substr($ct, 1)."
                                WHERE c_id = ".$course_id." AND id = " . $document_id;
@@ -7556,7 +7573,27 @@ class learnpath
         }
         $defaults['description'] = $item_description;
         $form->addElement('html', $return);
+
         if ($action != 'move') {
+            $data = $this->generate_lp_folder($_course);
+            $folders = DocumentManager::get_all_document_folders(
+                $_course,
+                0,
+                true
+            );
+            DocumentManager::build_directory_selector(
+                $folders,
+                '',
+                array(),
+                true,
+                $form,
+                'directory_parent_id'
+            );
+
+            if (isset($data['id'])) {
+                $defaults['directory_parent_id'] = $data['id'];
+            }
+
             $form->addElement('text', 'title', get_lang('Title'), array('id' => 'idTitle', 'class' => 'col-md-4'));
             $form->applyFilter('title', 'html_filter');
         }
@@ -7647,7 +7684,6 @@ class learnpath
             }
 
             $arrHide = array();
-
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter') {
                     if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id'])
@@ -7757,7 +7793,7 @@ class learnpath
         $form->addElement('hidden', 'post_time', time());
         $form->setDefaults($defaults);
 
-        return $form->return_form();
+        return $form->returnForm();
     }
 
     /**

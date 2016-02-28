@@ -390,6 +390,14 @@ switch ($action) {
                 } else {
 
                     $_SESSION['post_time'] = $_POST['post_time'];
+                    $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
+
+                    if (empty($directoryParentId)) {
+                        $result = $_SESSION['oLP']->generate_lp_folder($courseInfo);
+                        var_dump($result);exit;
+                    }
+
+
 
                     $parent = isset($_POST['parent']) ? $_POST['parent'] : '';
                     $previous = isset($_POST['previous']) ? $_POST['previous'] : '';
@@ -407,7 +415,9 @@ switch ($action) {
                                 $document_id = $_SESSION['oLP']->create_document(
                                     $_course,
                                     $_POST['content_lp'],
-                                    $_POST['title']
+                                    $_POST['title'],
+                                    'html',
+                                    $directoryParentId
                                 );
                             }
                         }

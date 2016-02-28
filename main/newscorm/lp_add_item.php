@@ -64,9 +64,9 @@ $(document).on("ready", function() {
 
 /* Constants and variables */
 
-$isStudentView  = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
-$learnpath_id   = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : null;
-$submit			= isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
+$isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
+$learnpath_id = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : null;
+$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -98,11 +98,17 @@ $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpa
 
 switch ($type) {
     case 'chapter':
-        $interbreadcrumb[]= array('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id(), 'name' => get_lang('NewStep'));
+        $interbreadcrumb[] = array(
+            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id(),
+            'name' => get_lang('NewStep'),
+        );
         $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewChapter'));
         break;
     case 'document':
-        $interbreadcrumb[]= array('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id(), 'name' => get_lang('NewStep'));
+        $interbreadcrumb[] = array(
+            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id(),
+            'name' => get_lang('NewStep'),
+        );
         break;
     default:
         $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewStep'));
@@ -195,11 +201,8 @@ $(document).ready(function() {
 /* DISPLAY SECTION */
 
 echo $learnPath->build_action_menu();
-
 echo '<div class="row" style="overflow:hidden">';
-
 echo '<div id="lp_sidebar" class="col-md-4">';
-
 echo $learnPath->return_new_tree(null, true);
 
 $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;

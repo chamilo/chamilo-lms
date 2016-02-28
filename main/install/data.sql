@@ -309,7 +309,8 @@ VALUES
 ('cron_remind_course_finished_activate', NULL, 'radio', 'Crons', 'false', 'CronRemindCourseFinishedActivateTitle', 'CronRemindCourseFinishedActivateComment', NULL, NULL, 1),
 ('cron_remind_course_expiration_frequency', NULL, 'textfield', 'Crons', '2', 'CronRemindCourseExpirationFrequencyTitle', 'CronRemindCourseExpirationFrequencyComment', NULL, NULL, 1),
 ('cron_remind_course_expiration_activate', NULL, 'radio', 'Crons', 'false', 'CronRemindCourseExpirationActivateTitle', 'CronRemindCourseExpirationActivateComment', NULL, NULL, 1),
-('allow_coach_feedback_exercises',NULL,'radio','Session','true','AllowCoachFeedbackExercisesTitle','AllowCoachFeedbackExercisesComment',NULL,NULL, 0);
+('allow_coach_feedback_exercises',NULL,'radio','Session','true','AllowCoachFeedbackExercisesTitle','AllowCoachFeedbackExercisesComment',NULL,NULL, 0),
+('allow_my_files',NULL,'radio','Platform','true','AllowMyFilesTitle','AllowMyFilesComment','',NULL, 1);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -631,7 +632,9 @@ VALUES
 ('cron_remind_course_expiration_activate', 'false', 'No'),
 ('cron_remind_course_expiration_activate', 'true', 'Yes'),
 ('allow_coach_feedback_exercises','true','Yes'),
-('allow_coach_feedback_exercises','false','No');
+('allow_coach_feedback_exercises','false','No'),
+('allow_my_files','true','Yes'),
+('allow_my_files','false','No');
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),

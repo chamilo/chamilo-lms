@@ -8670,7 +8670,7 @@ class learnpath
         $condition_session = api_get_session_condition($session_id);
 
         $sql_quiz = "SELECT * FROM $tbl_quiz
-                     WHERE c_id = $course_id AND active<>'-1' $condition_session
+                     WHERE c_id = $course_id AND active = 1 $condition_session
                      ORDER BY title ASC";
 
         $sql_hot  = "SELECT * FROM $tbl_doc

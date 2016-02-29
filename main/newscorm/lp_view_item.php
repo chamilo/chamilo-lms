@@ -28,8 +28,8 @@ if (isset($_GET['lp_item_id'])) {
         $src = $oLP->get_link('http', $lp_item_id);
     }
 
-    $url_info 		= parse_url($src);
-    $real_url_info	= parse_url(api_get_path(WEB_PATH));
+    $url_info = parse_url($src);
+    $real_url_info = parse_url(api_get_path(WEB_PATH));
 
     // The host must be the same.
     if ($url_info['host'] == $real_url_info['host']) {
@@ -76,7 +76,7 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 $course_id = api_get_course_int_id();
 $sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
 $result=Database::query($sql_query);
-$therow=Database::fetch_array($result);
+$therow = Database::fetch_array($result);
 
 /* SHOWING THE ADMIN TOOLS	*/
 
@@ -91,9 +91,18 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => $therow['name']);
-$interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id", 'name' => get_lang('NewStep'));
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list?'.api_get_cidreq(),
+    'name' => get_lang('LearningPaths'),
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
+    'name' => $therow['name'],
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
+    'name' => get_lang('NewStep'),
+);
 
 // Theme calls
 $show_learn_path = true;
@@ -138,7 +147,7 @@ if (is_object($_SESSION['oLP'])) {
             echo $_SESSION['oLP']->return_new_tree();
             echo '</div>';
             echo '<div class="col-md-9">';
-                echo $_SESSION['oLP']->display_item($id);
+            echo $_SESSION['oLP']->display_item($id);
             echo '</div>';
             echo '</div>';
             Display::display_footer();

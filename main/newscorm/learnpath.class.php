@@ -5587,18 +5587,14 @@ class learnpath
 
             $title_cut = cut($arrLP[$i]['title'], 25);
 
-            //Link for the documents
-            if ($arrLP[$i]['item_type'] == 'document') {
-                $url = api_get_self() . '?'.api_get_cidreq().'&action=view_item&mode=preview_document&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id;
-                $title_cut = Display::url(
-                    $title_cut,
-                    $url,
-                    array(
-                        'class' => 'ajax',
-                        'data-title' => $title_cut
-                    )
-                );
-            }
+            $url = api_get_self() . '?'.api_get_cidreq().'&action=view_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id;
+            $title_cut = Display::url(
+                $title_cut,
+                $url,
+                array(
+                    'data-title' => $title_cut
+                )
+            );
 
             if (($i % 2) == 0) {
                 $oddClass = 'row_odd';
@@ -5621,19 +5617,9 @@ class learnpath
 
             // The audio column.
             $return_audio  .= '<td align="left" style="padding-left:10px;">';
-
             $audio = '';
-
             if (!$update_audio || $update_audio <> 'true') {
                 if (!empty($arrLP[$i]['audio'])) {
-                    /*$audio .= '<span id="container'.$i.'"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</span>';
-                    $audio .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-                    $audio .= '<script type="text/javascript">
-                                    var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
-                                    s1.addParam("allowscriptaccess","always");
-                                    s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $arrLP[$i]['audio'] . '");
-                                    s1.write("container' . $i . '");
-                                </script>';*/
                 } else {
                     $audio .= '';
                 }
@@ -5647,6 +5633,7 @@ class learnpath
                     }
                 }
             }
+
             $return_audio .= Display::span($icon.' '.$title).Display::tag('td', $audio, array('style'=>''));
             $return_audio .= '</td>';
             $move_icon = '';
@@ -5656,6 +5643,7 @@ class learnpath
             $audio_icon = '';
             $prerequisities_icon = '';
             $forumIcon = '';
+            $previewIcon = '';
 
             if ($is_allowed_to_edit) {
                 if (!$update_audio || $update_audio <> 'true') {
@@ -5671,9 +5659,7 @@ class learnpath
                         $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
 
-                        if (
-                        !in_array($arrLP[$i]['item_type'], ['forum', 'thread'])
-                        ) {
+                        if (!in_array($arrLP[$i]['item_type'], ['forum', 'thread'])) {
                             if (
                             $this->items[$arrLP[$i]['id']]->getForumThread(
                                 $this->course_int_id,
@@ -5716,10 +5702,38 @@ class learnpath
 
                 $url = api_get_self() . '?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
 
+                if ($arrLP[$i]['item_type'] == 'document') {
+                    $urlPreviewLink = api_get_self().'?'.api_get_cidreq().'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
+                    $previewIcon = Display::url(
+                        Display::return_icon('preview_view.png', get_lang('Preview'), array(), ICON_SIZE_TINY),
+                        $urlPreviewLink,
+                        array(
+                            'class' => 'btn btn-default ajax',
+                            'data-title' => $arrLP[$i]['title']
+                        )
+                    );
+                } else {
+                    $previewIcon = Display::url(
+                        Display::return_icon('preview_view.png', get_lang('Preview'), array(), ICON_SIZE_TINY),
+                        $url.'&action=view_item', ['class' => 'btn btn-default']
+                    );
+                }
+
                 if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module', 'dir'))) {
-                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq', ['class' => 'btn btn-default']);
-                    $move_item_icon = Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY), $url.'&action=move_item', ['class' => 'btn btn-default']);
-                    $audio_icon = Display::url(Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY), $url.'&action=add_audio', ['class' => 'btn btn-default']);
+                    $prerequisities_icon = Display::url(
+                        Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY),
+                        $url.'&action=edit_item_prereq', ['class' => 'btn btn-default']
+                    );
+                    $move_item_icon = Display::url(
+                        Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY),
+                        $url.'&action=move_item',
+                        ['class' => 'btn btn-default']
+                    );
+                    $audio_icon = Display::url(
+                        Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY),
+                        $url.'&action=add_audio',
+                        ['class' => 'btn btn-default']
+                    );
                 }
             }
             if ($update_audio != 'true') {
@@ -5727,14 +5741,14 @@ class learnpath
                     Display::span($title_cut) .
                     Display::tag(
                         'div',
-                        "<div class=\"btn-group btn-group-xs\">$audio $edit_icon $forumIcon $prerequisities_icon $move_item_icon $audio_icon $delete_icon</div>",
+                        "<div class=\"btn-group btn-group-xs\">$previewIcon $audio $edit_icon $forumIcon $prerequisities_icon $move_item_icon $audio_icon $delete_icon</div>",
                         array('class'=>'btn-toolbar button_actions')
                     );
             } else {
                 $row = Display::span($title.$icon).Display::span($audio, array('class'=>'button_actions'));
             }
-            $parent_id = $arrLP[$i]['parent_item_id'];
 
+            $parent_id = $arrLP[$i]['parent_item_id'];
             $default_data[$arrLP[$i]['id']] = $row;
             $default_content[$arrLP[$i]['id']] = $arrLP[$i];
 
@@ -5798,8 +5812,14 @@ class learnpath
         }
         $list .= '</ul>';
 
-        //$return .= Display::panel($list, $this->name);
-        $return .= Display::panelCollapse($this->name, $list, 'scorm-list', null, 'scorm-list-accordion', 'scorm-list-collapse');
+        $return .= Display::panelCollapse(
+            $this->name,
+            $list,
+            'scorm-list',
+            null,
+            'scorm-list-accordion',
+            'scorm-list-collapse'
+        );
 
         if ($update_audio == 'true') {
             $return = $return_audio;
@@ -5832,14 +5852,22 @@ class learnpath
                 if (isset($_REQUEST['id']) && $key == $_REQUEST['id']) {
                     $active = 'active';
                 }
-                $return  .= Display::tag('li', Display::div($item['data'], array('class'=>"item_data $active")).$sub_list, array('id'=>$key, 'class'=>'record li_container'));
+                $return  .= Display::tag(
+                    'li',
+                    Display::div($item['data'], array('class'=>"item_data $active")).$sub_list,
+                    array('id'=>$key, 'class'=>'record li_container')
+                );
             } else {
-                //sections
+                // Sections
                 if (isset($item['children'])) {
                     $data = self::print_recursive($item['children'], $default_data, $default_content);
                 }
                 $sub_list = Display::tag('ul', $sub_list.$data, array('id'=>'UL_'.$key, 'class'=>'record li_container'));
-                $return .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record li_container'));
+                $return .= Display::tag(
+                    'li',
+                    Display::div($item['data'], array('class'=>'item_data')).$sub_list,
+                    array('id'=>$key, 'class'=>'record li_container')
+                );
             }
         }
 
@@ -6230,6 +6258,11 @@ class learnpath
                             $exercise = new Exercise();
                             $exercise->read($row['path']);
                             $return .= $exercise->description.'<br />';
+                            $return .= Display::url(
+                                get_lang('GoToExercise'),
+                                api_get_path(WEB_CODE_PATH).'exercice/overview.php?'.api_get_cidreq().'&exerciseId='.$exercise->id,
+                                ['class' => 'btn btn-primary']
+                            );
                         }
                         break;
                     case TOOL_DOCUMENT:
@@ -8706,11 +8739,18 @@ class learnpath
             $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$row_quiz['title'].'" >';
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
-            $return .= '</a> ';
+
             $return .= Display::return_icon('quizz_small.gif');
+            $return .= ' '.Security :: remove_XSS(cut($row_quiz['title'], 80));
+            $return .= '</a> ';
+
             $return .= ' <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
-                Security :: remove_XSS(cut($row_quiz['title'], 80)).
+                Display::return_icon('add.png').
                 '</a>';
+            $return .= ' <a href="' . api_get_path(WEB_CODE_PATH) . 'exercice/overview.php?'.api_get_cidreq().'&exerciseId=' . $row_quiz['id'].'">' .
+                Display::return_icon('preview_view.png').
+                '</a>';
+
             $return .= '</li>';
         }
 

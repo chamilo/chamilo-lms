@@ -393,11 +393,8 @@ switch ($action) {
                     $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
 
                     if (empty($directoryParentId)) {
-                        $result = $_SESSION['oLP']->generate_lp_folder($courseInfo);
-                        var_dump($result);exit;
+                        $_SESSION['oLP']->generate_lp_folder($courseInfo);
                     }
-
-
 
                     $parent = isset($_POST['parent']) ? $_POST['parent'] : '';
                     $previous = isset($_POST['previous']) ? $_POST['previous'] : '';

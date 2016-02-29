@@ -4994,7 +4994,8 @@ class CourseManager
             'email_alert_to_teacher_on_new_user_in_course',
             'enable_lp_auto_launch',
             'pdf_export_watermark_text',
-            'show_system_folders'
+            'show_system_folders',
+            'exercise_invisible_in_session'
         );
 
         $allowLPReturnLink = api_get_setting('allow_lp_return_link');

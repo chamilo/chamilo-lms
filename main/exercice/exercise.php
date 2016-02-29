@@ -512,6 +512,52 @@ while ($row = Database :: fetch_array($result, 'ASSOC')) {
     $exercise_list[$row['iid']] = $row;
 }
 
+if (!empty($exercise_list) &&
+    api_get_setting('exercise_invisible_in_session') === 'true'
+) {
+    if (!empty($sessionId)) {
+        $changeDefaultVisibility = true;
+        if (api_get_setting('configure_exercise_visibility_in_course') === 'true') {
+            if (api_get_course_setting('exercise_invisible_in_session') == 1) {
+                $changeDefaultVisibility = true;
+            } else {
+                $changeDefaultVisibility = false;
+            }
+        }
+
+        if ($changeDefaultVisibility) {
+            // Check exercise
+            foreach ($exercise_list as $exercise) {
+                if ($exercise['session_id'] == 0) {
+                    $visibilityInfo = api_get_item_property_info(
+                        $courseInfo,
+                        TOOL_QUIZ,
+                        $exercise['iid'],
+                        $sessionId
+                    );
+
+                    if (empty($visibilityInfo)) {
+                        // Create a record for this
+                        api_item_property_update(
+                            $courseInfo,
+                            TOOL_QUIZ,
+                            $exercise['iid'],
+                            'invisible',
+                            api_get_user_id(),
+                            0,
+                            null,
+                            '',
+                            '',
+                            $sessionId
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 if (isset($list_ordered) && !empty($list_ordered)) {
     $new_question_list = array();
     foreach ($list_ordered as $exercise_id) {

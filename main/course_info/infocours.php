@@ -392,6 +392,33 @@ if ($allowLPReturnLink === 'true') {
     $form->addGroup($group, '', array(get_lang("LpReturnLink")), '');
 }
 
+$exerciseInvisible = api_get_setting('exercise_invisible_in_session');
+$configureExerciseVisibility = api_get_setting('configure_exercise_visibility_in_course');
+
+if ($exerciseInvisible === 'true' &&
+    $configureExerciseVisibility === 'true'
+) {
+    $group = array(
+        $form->createElement(
+            'radio',
+            'exercise_invisible_in_session',
+            get_lang('ExerciseInvisibleInSession'),
+            get_lang('Yes'),
+            1
+        ),
+        $form->createElement(
+            'radio',
+            'exercise_invisible_in_session',
+            null,
+            get_lang('No'),
+            0
+        )
+    );
+    $form->addGroup($group, '', array(get_lang("ExerciseInvisibleInSession")), '');
+}
+
+
+
 if (is_settings_editable()) {
     $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 } else {

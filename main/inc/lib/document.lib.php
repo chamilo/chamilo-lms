@@ -328,13 +328,14 @@ class DocumentManager
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
         $filename = str_replace(',', '', $filename);
-        global $_configuration;
+
+        $sendFileHeaders = api_get_configuration_value('enable_x_sendfile_headers');
 
         if ($forced) {
             // Force the browser to save the file instead of opening it
 
-            if (isset($_configuration['enable_x_sendfile_headers']) &&
-                !empty($_configuration['enable_x_sendfile_headers'])) {
+            if (isset($sendFileHeaders) &&
+                !empty($sendFileHeaders)) {
                 header("X-Sendfile: $filename");
             }
 
@@ -361,6 +362,7 @@ class DocumentManager
             //no forced download, just let the browser decide what to do according to the mimetype
 
             $content_type = self::file_get_mime_type($filename);
+            $lpFixedEncoding = api_get_configuration_value('lp_fixed_encoding');
 
             header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
@@ -369,7 +371,7 @@ class DocumentManager
             //header('Pragma: no-cache');
             switch ($content_type) {
                 case 'text/html':
-                    if (isset($_configuration['lp_fixed_encoding']) && $_configuration['lp_fixed_encoding'] === 'true') {
+                    if (isset($lpFixedEncoding) && $lpFixedEncoding === 'true') {
                         $content_type .= '; charset=UTF-8';
                     } else {
                         $encoding = @api_detect_encoding_html(file_get_contents($full_file_name));
@@ -379,7 +381,7 @@ class DocumentManager
                     }
                     break;
                 case 'text/plain':
-                    if (isset($_configuration['lp_fixed_encoding']) && $_configuration['lp_fixed_encoding'] === 'true') {
+                    if (isset($lpFixedEncoding) && $lpFixedEncoding === 'true') {
                         $content_type .= '; charset=UTF-8';
                     } else {
                         $encoding = @api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
@@ -1586,7 +1588,7 @@ class DocumentManager
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row['visibility'] == 1) {
-                $is_visible = $_SESSION['is_allowed_in_course'] || api_is_platform_admin();
+                $is_visible = api_is_allowed_in_course() || api_is_platform_admin();
             }
         }
 
@@ -2797,7 +2799,8 @@ class DocumentManager
         $unzip = 0,
         $if_exists = null,
         $index_document = false,
-        $show_output = false
+        $show_output = false,
+        $fileKey = 'file'
     ) {
         $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
@@ -2805,14 +2808,14 @@ class DocumentManager
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $base_work_dir = $sys_course_path . $course_dir;
 
-        if (isset($files['file'])) {
-            $upload_ok = process_uploaded_file($files['file'], $show_output);
+        if (isset($files[$fileKey])) {
+            $upload_ok = process_uploaded_file($files[$fileKey], $show_output);
 
             if ($upload_ok) {
                 // File got on the server without problems, now process it
                 $new_path = handle_uploaded_document(
                     $course_info,
-                    $files['file'],
+                    $files[$fileKey],
                     $base_work_dir,
                     $path,
                     api_get_user_id(),
@@ -2898,11 +2901,13 @@ class DocumentManager
                             false,
                             $sessionId
                         );
+
                         return $documentData;
                     }
                 }
             }
         }
+
         return false;
     }
 
@@ -3106,8 +3111,8 @@ class DocumentManager
      * on the base of a maximum directory size allowed
      *
      * @author Bert Vanderkimpen
-     * @param  int file_size size of the file in byte
-     * @param  int max_dir_space maximum size
+     * @param  int $file_size size of the file in byte
+     * @param  int $max_dir_space maximum size
      * @return boolean true if there is enough space, false otherwise
      *
      * @see enough_space() uses  documents_total_space() function
@@ -3123,31 +3128,33 @@ class DocumentManager
     }
 
     /**
-     * @param array parameters: count, url, extension
+     * @param array $params count, url, extension
      * @return string
      */
     static function generate_jplayer_jquery($params = array())
     {
         $js_path = api_get_path(WEB_LIBRARY_PATH) . 'javascript/';
 
-        $js = ' $("#jquery_jplayer_' . $params['count'] . '").jPlayer({
-                    ready: function() {
-                        $(this).jPlayer("setMedia", {
-                            ' . $params['extension'] . ' : "' . $params['url'] . '"
-                        });
-                    },
-                    play: function() { // To avoid both jPlayers playing together.
-                        $(this).jPlayer("pauseOthers");
-                    },
-                    //errorAlerts: true,
-                    //warningAlerts: true,
-                    swfPath: "' . $js_path . 'jquery-jplayer/jplayer/",
-                    //supplied: "m4a, oga, mp3, ogg, wav",
-                    supplied: "' . $params['extension'] . '",
-                    wmode: "window",
-                    solution: "flash, html",  // Do not change this setting
-                    cssSelectorAncestor: "#jp_container_' . $params['count'] . '",
-                });  	 ' . "\n\n";
+        $js = '
+            $("#jquery_jplayer_' . $params['count'] . '").jPlayer({
+                ready: function() {
+                    $(this).jPlayer("setMedia", {
+                        ' . $params['extension'] . ' : "' . $params['url'] . '"
+                    });
+                },
+                play: function() { // To avoid both jPlayers playing together.
+                    $(this).jPlayer("pauseOthers");
+                },
+                //errorAlerts: true,
+                //warningAlerts: true,
+                swfPath: "' . $js_path . 'jquery-jplayer/jplayer/",
+                //supplied: "m4a, oga, mp3, ogg, wav",
+                supplied: "' . $params['extension'] . '",
+                wmode: "window",
+                solution: "flash, html",  // Do not change this setting
+                cssSelectorAncestor: "#jp_container_' . $params['count'] . '",
+            });  	 ' . "\n\n";
+
         return $js;
     }
 
@@ -5315,8 +5322,8 @@ class DocumentManager
                             'style' => 'float: left;'
                         ]
                     )
-                        . $force_download_html . $send_to . $copy_to_myfiles
-                        . $open_in_new_window_link . $pdf_icon;
+                    . $force_download_html . $send_to . $copy_to_myfiles
+                    . $open_in_new_window_link . $pdf_icon;
                 } else {
                     // For PDF Download the file.
                     $pdfPreview = null;

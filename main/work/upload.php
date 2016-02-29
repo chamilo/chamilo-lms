@@ -32,7 +32,11 @@ protectWork($course_info, $work_id);
 
 $workInfo = get_work_data_by_id($work_id);
 
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_id, $session_id);
+$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
+    $user_id,
+    $course_id,
+    $session_id
+);
 $is_course_member = $is_course_member || api_is_platform_admin();
 
 if ($is_course_member == false || api_is_invitee()) {
@@ -80,7 +84,9 @@ $form = new FormValidator(
     '',
     array('enctype' => "multipart/form-data")
 );
+
 setWorkUploadForm($form, $workInfo['allow_text_assignment']);
+
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'sec_token', $token);
 
@@ -92,7 +98,7 @@ if ($form->validate()) {
     if ($student_can_edit_in_session && $check) {
         $values = $form->getSubmitValues();
         // Process work
-        $error_message = processWorkForm(
+        processWorkForm(
             $workInfo,
             $values,
             $course_info,
@@ -104,9 +110,6 @@ if ($form->validate()) {
         if ($is_allowed_to_edit) {
             $script = 'work_list_all.php';
         }
-        if (!empty($error_message)) {
-            Session::write('error_message', $error_message);
-        }
         header('Location: '.api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id);
         exit;
     } else {
@@ -115,8 +118,139 @@ if ($form->validate()) {
     }
 }
 
+$url = api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_file&id='.$work_id;
+
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
 $htmlHeadXtra[] = to_javascript_work();
+$htmlHeadXtra[] = "
+<script>
+$(function () {
+    'use strict';
+    var url = '".$url."';
+    var uploadButton = $('<button/>')
+        .addClass('btn btn-primary')
+        .prop('disabled', true)
+        .text('".get_lang('Loading')."')
+        .on('click', function () {
+            var \$this = $(this),
+            data = \$this.data();
+
+            \$this
+                .off('click')
+                .text('".get_lang('Cancel')."')
+                .on('click', function () {
+                    \$this.remove();
+                    data.abort();
+                });
+            data.submit().always(function () {
+                \$this.remove();
+            });
+        });
+
+    $('#file_upload').fileupload({
+        url: url,
+        dataType: 'json',
+        autoUpload: false,
+        // Enable image resizing, except for Android and Opera,
+        // which actually support image resizing, but fail to
+        // send Blob objects via XHR requests:
+        disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+        previewMaxWidth: 100,
+        previewMaxHeight: 100,
+        previewCrop: true
+     }).on('fileuploadadd', function (e, data) {
+        data.context = $('<div/>').appendTo('#files');
+
+        $.each(data.files, function (index, file) {
+            var node = $('<p/>').append($('<span/>').text(file.name));
+            if (!index) {
+                node
+                    .append('<br>')
+                    .append(uploadButton.clone(true).data(data));
+            }
+            node.appendTo(data.context);
+        });
+    }).on('fileuploadprocessalways', function (e, data) {
+        var index = data.index,
+            file = data.files[index],
+            node = $(data.context.children()[index]);
+        if (file.preview) {
+            node
+                .prepend('<br>')
+                .prepend(file.preview);
+        }
+        if (file.error) {
+            node
+                .append('<br>')
+                .append($('<span class=\"text-danger\"/>').text(file.error));
+        }
+        if (index + 1 === data.files.length) {
+            data.context.find('button')
+                .text('Upload')
+                .prop('disabled', !!data.files.error);
+        }
+    }).on('fileuploadprogressall', function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .progress-bar').css(
+            'width',
+            progress + '%'
+        );
+    }).on('fileuploaddone', function (e, data) {
+
+        $.each(data.result.files, function (index, file) {
+            if (file.url) {
+                var link = $('<a>')
+                    .attr('target', '_blank')
+                    .prop('href', file.url);
+
+                $(data.context.children()[index]).wrap(link);
+            } else if (file.error) {
+                var error = $('<span class=\"text-danger\"/>').text(file.error);
+                $(data.context.children()[index])
+                    .append('<br>')
+                    .append(error);
+            }
+        });
+    }).on('fileuploadfail', function (e, data) {
+        $.each(data.files, function (index) {
+            var error = $('<span class=\"text-danger\"/>').text('File upload failed.');
+            $(data.context.children()[index])
+                .append('<br>')
+                .append(error);
+        });
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+});
+
+</script>";
+
 Display :: display_header(null);
+
+$headers = array(
+    get_lang('Upload'),
+    get_lang('Upload').' ('.get_lang('Simple').')',
+);
+
+$multiple_form = '<div class="description-upload">'.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'</div>';
+$multiple_form .=  '
+<span class="btn btn-success fileinput-button">
+    <i class="glyphicon glyphicon-plus"></i>
+    <span>'.get_lang('AddFiles').'</span>
+    <!-- The file input field used as target for the file upload widget -->
+    <input id="file_upload" type="file" name="files[]" multiple>
+</span>
+
+<br />
+<br />
+<!-- The global progress bar -->
+<div id="progress" class="progress">
+    <div class="progress-bar progress-bar-success"></div>
+</div>
+<div id="files" class="files"></div>
+';
+
+$tabs = Display::tabs($headers, array($multiple_form, $form->returnForm()), 'tabs');
 
 if (!empty($work_id)) {
     echo $validationStatus['message'];
@@ -124,10 +258,10 @@ if (!empty($work_id)) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
             echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
         } else {
-            $form->display();
+            echo $tabs;
         }
     } elseif ($student_can_edit_in_session && $validationStatus['has_ended'] == false) {
-        $form->display();
+        echo $tabs;
     } else {
         Display::display_error_message(get_lang('ActionNotAllowed'));
     }

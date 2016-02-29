@@ -42,7 +42,6 @@ require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
 
 // Variables
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $_course = api_get_course_info();
 $groupId = api_get_group_id();

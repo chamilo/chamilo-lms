@@ -240,6 +240,7 @@ function get_work_data_by_id($id, $courseId = null, $sessionId = null)
         $work['download_url'] = api_get_path(WEB_CODE_PATH).'work/download.php?id='.$work['id'].'&'.api_get_cidreq();
         $work['view_url'] = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
         $work['show_url'] = api_get_path(WEB_CODE_PATH).'work/show_file.php?id='.$work['id'].'&'.api_get_cidreq();
+        $work['show_content'] = '';
         if ($work['contains_file']) {
             $fileInfo = pathinfo($work['title']);
             if (is_array($fileInfo) &&
@@ -279,7 +280,7 @@ function get_work_count_by_student($user_id, $work_id)
     $result = Database::query($sql);
     $return = 0;
     if (Database::num_rows($result)) {
-        $return = Database::fetch_row($result,'ASSOC');
+        $return = Database::fetch_row($result, 'ASSOC');
         $return = intval($return[0]);
     }
 
@@ -535,7 +536,6 @@ function getUniqueStudentAttempts(
 function showStudentWorkGrid()
 {
     $courseInfo = api_get_course_info();
-
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_student&'.api_get_cidreq();
 
     $columns = array(
@@ -1078,96 +1078,94 @@ function count_dir($path_dir, $recurse)
  */
 function to_javascript_work()
 {
-    $origin = isset($_REQUEST['origin']) && !empty($_REQUEST['origin']) ? api_get_tools_lists($_REQUEST['origin']) : '';
-
     $js = '<script>
-            function updateDocumentTitle(value) {
-                var temp = value.indexOf("/");
-                //linux path
-                if(temp!=-1){
-                    var temp=value.split("/");
+        function updateDocumentTitle(value) {
+            var temp = value.indexOf("/");
+            //linux path
+            if(temp!=-1){
+                var temp=value.split("/");
+            } else {
+                var temp=value.split("\\\");
+            }
+            document.getElementById("file_upload").value=temp[temp.length-1];
+            $("#contains_file_id").attr("value", 1);
+        }
+
+        function checkDate(month, day, year) {
+          var monthLength =
+            new Array(31,28,31,30,31,30,31,31,30,31,30,31);
+
+          if (!day || !month || !year)
+            return false;
+
+          // check for bisestile year
+          if (year/4 == parseInt(year/4))
+            monthLength[1] = 29;
+
+          if (month < 1 || month > 12)
+            return false;
+
+          if (day > monthLength[month-1])
+            return false;
+
+          return true;
+        }
+
+        function mktime() {
+
+            var no, ma = 0, mb = 0, i = 0, d = new Date(), argv = arguments, argc = argv.length;
+            d.setHours(0,0,0); d.setDate(1); d.setMonth(1); d.setYear(1972);
+
+            var dateManip = {
+                0: function(tt){ return d.setHours(tt); },
+                1: function(tt){ return d.setMinutes(tt); },
+                2: function(tt){ set = d.setSeconds(tt); mb = d.getDate() - 1; return set; },
+                3: function(tt){ set = d.setMonth(parseInt(tt)-1); ma = d.getFullYear() - 1972; return set; },
+                4: function(tt){ return d.setDate(tt+mb); },
+                5: function(tt){ return d.setYear(tt+ma); }
+            };
+
+            for( i = 0; i < argc; i++ ){
+                no = parseInt(argv[i]*1);
+                if (isNaN(no)) {
+                    return false;
                 } else {
-                    var temp=value.split("\\\");
-                }
-                document.getElementById("file_upload").value=temp[temp.length-1];
-                $("#contains_file_id").attr("value", 1);
-            }
-
-            function checkDate(month, day, year) {
-              var monthLength =
-                new Array(31,28,31,30,31,30,31,31,30,31,30,31);
-
-              if (!day || !month || !year)
-                return false;
-
-              // check for bisestile year
-              if (year/4 == parseInt(year/4))
-                monthLength[1] = 29;
-
-              if (month < 1 || month > 12)
-                return false;
-
-              if (day > monthLength[month-1])
-                return false;
-
-              return true;
-            }
-
-            function mktime() {
-
-                var no, ma = 0, mb = 0, i = 0, d = new Date(), argv = arguments, argc = argv.length;
-                d.setHours(0,0,0); d.setDate(1); d.setMonth(1); d.setYear(1972);
-
-                var dateManip = {
-                    0: function(tt){ return d.setHours(tt); },
-                    1: function(tt){ return d.setMinutes(tt); },
-                    2: function(tt){ set = d.setSeconds(tt); mb = d.getDate() - 1; return set; },
-                    3: function(tt){ set = d.setMonth(parseInt(tt)-1); ma = d.getFullYear() - 1972; return set; },
-                    4: function(tt){ return d.setDate(tt+mb); },
-                    5: function(tt){ return d.setYear(tt+ma); }
-                };
-
-                for( i = 0; i < argc; i++ ){
-                    no = parseInt(argv[i]*1);
-                    if (isNaN(no)) {
+                    // arg is number, lets manipulate date object
+                    if(!dateManip[i](no)){
+                        // failed
                         return false;
-                    } else {
-                        // arg is number, lets manipulate date object
-                        if(!dateManip[i](no)){
-                            // failed
-                            return false;
-                        }
                     }
                 }
-                return Math.floor(d.getTime()/1000);
+            }
+            return Math.floor(d.getTime()/1000);
+        }
+
+        function setFocus() {
+            $("#work_title").focus();
+        }
+
+        $(document).ready(function() {
+            setFocus();
+
+            var checked = $("#expiry_date").attr("checked");
+            if (checked) {
+                $("#option2").show();
+                $("#option3").show();
+                $("#end_date").attr("checked", true);
+            } else {
+                $("#option2").hide();
+                $("#option3").hide();
+                $("#end_date").attr("checked", false);
             }
 
-            function setFocus() {
-                $("#work_title").focus();
-            }
-
-            $(document).ready(function() {
-                setFocus();
-
-                var checked = $("#expiry_date").attr("checked");
-                if (checked) {
-                    $("#option2").show();
-                    $("#option3").show();
-                    $("#end_date").attr("checked", true);
-                } else {
-                    $("#option2").hide();
-                    $("#option3").hide();
-                    $("#end_date").attr("checked", false);
-                }
-
-                $("#expiry_date").click(function() {
-                    $("#option2").toggle();
-                });
-
-                $("#end_date").click(function() {
-                    $("#option3").toggle();
-                });
+            $("#expiry_date").click(function() {
+                $("#option2").toggle();
             });
+
+            $("#end_date").click(function() {
+                $("#option3").toggle();
+            });
+        });
     </script>';
 
     return $js;
@@ -2099,7 +2097,7 @@ function get_work_user_list(
                     $correction .= "
                         <script>
                         $(document).ready(function() {
-                            $('#file_upload_".$item_id."').fileUploadUI({
+                            $('#file_upload_".$item_id."').fileupload({
                                 uploadTable: $('.files'),
                                 downloadTable: $('.files'),
                                 buildUploadRow: function (files, index) {
@@ -3313,8 +3311,8 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         if (!empty($workParent)) {
             $uploadDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work'.$workParent['url'];
             $newFileName = 'comment_'.$commentId.'_'.php2phps(
-                api_replace_dangerous_char($fileData['name'])
-            );
+                    api_replace_dangerous_char($fileData['name'])
+                );
             $newFilePath = $uploadDir.'/'.$newFileName;
             $result = move_uploaded_file($fileData['tmp_name'], $newFilePath);
             if ($result) {
@@ -3453,25 +3451,30 @@ function setWorkUploadForm($form, $uploadFormType = 0)
  * @param array $_course
  * @param bool $isCorrection
  * @param array $workInfo
+ * @param array $file
  *
  * @return array
  */
-function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo = [])
+function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo = [], $file = [])
 {
-    if (empty($_FILES['file']['size'])) {
+    if (isset($_FILES['file']) && !empty($_FILES['file'])) {
+        $file = $_FILES['file'];
+    }
+
+    if (empty($file['size'])) {
         return array('error' => Display :: return_message(get_lang('UplUploadFailedSizeIsZero'), 'error'));
     }
     $updir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/work/'; //directory path to upload
 
     // Try to add an extension to the file if it has'nt one
-    $filename = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
+    $filename = add_ext_on_mime(stripslashes($file['name']), $file['type']);
 
     // Replace dangerous characters
     $filename = api_replace_dangerous_char($filename);
 
     // Transform any .php file in .phps fo security
     $filename = php2phps($filename);
-    $filesize = filesize($_FILES['file']['tmp_name']);
+    $filesize = filesize($file['tmp_name']);
 
     if (empty($filesize)) {
         return array(
@@ -3515,7 +3518,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     // If we come from the group tools the groupid will be saved in $work_table
     if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
         $result = move_uploaded_file(
-            $_FILES['file']['tmp_name'],
+            $file['tmp_name'],
             $updir.$curdirpath.'/'.$new_file_name
         );
     } else {
@@ -3535,6 +3538,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     return array(
         'url' => $url,
         'filename' => $filename,
+        'filesize' => $filesize,
         'error' => null
     );
 }
@@ -3640,9 +3644,11 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
  * @param int $sessionId
  * @param int $groupId
  * @param int $userId
+ * @param array $file
+ *
  * @return null|string
  */
-function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, $userId)
+function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, $userId, $file = [])
 {
     $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -3659,9 +3665,10 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
     $message = null;
     $filename = null;
     $url = null;
+    $filesize = null;
 
     if ($values['contains_file']) {
-        $result = uploadWork($workInfo, $courseInfo);
+        $result = uploadWork($workInfo, $courseInfo, false, [], $file);
         if (isset($result['error'])) {
             $message = $result['error'];
             $saveWork = false;
@@ -3670,12 +3677,16 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
         if (empty($title)) {
             $title = isset($result['title']) && !empty($result['title']) ? $result['title'] : get_lang('Untitled');
         }
+
+        $filesize = isset($result['filesize']) ? $result['filesize'] : null;
         $url = $result['url'];
     }
 
     if (empty($title)) {
         $title = get_lang('Untitled');
     }
+
+    $workData = [];
 
     if ($saveWork) {
         $active = '1';
@@ -3693,6 +3704,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
             'parent_id' => $workInfo['id'],
             'session_id' => $sessionId,
             'user_id' => $userId,
+            //'filesize' => $filesize
         ];
         $workId = Database::insert($work_table, $params);
 
@@ -3725,15 +3737,14 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
             );
             sendAlertToUsers($workId, $courseInfo, $sessionId);
             Event::event_upload($workId);
-            $message = Display::return_message(get_lang('DocAdd'));
+            $workData = get_work_data_by_id($workId);
+            Display::addFlash(Display::return_message(get_lang('DocAdd')));
         }
     } else {
-        if (empty($message)) {
-            $message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
-        }
+        Display::addFlash(Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error'));
     }
 
-    return $message;
+    return $workData;
 }
 
 /**
@@ -4875,9 +4886,9 @@ function exportAllStudentWorkFromPublication(
                         $content .= '<h4>'.get_lang('Feedback').': </h4>';
                         foreach ($comments as $comment) {
                             $feedback .= get_lang('User').': '.api_get_person_name(
-                                $comment['firstname'],
-                                $comment['lastname']
-                            ).'<br />';
+                                    $comment['firstname'],
+                                    $comment['lastname']
+                                ).'<br />';
                             $feedback .= $comment['comment'].'<br />';
                         }
                     }

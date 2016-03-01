@@ -1971,10 +1971,10 @@ class learnpath
                     </a>
                     <a class="icon-toolbar" id="view-embedded" href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode">
                         <span class="fa fa-columns"></span><span class="sr-only">' . get_lang('ScormExitFullScreen') . '</span>
-                    </a> 
+                    </a>
                   </span>';
 
-        } else { 
+        } else {
             $navbar = '
                 <span id="'.$idBar.'" class="buttons text-right">
                     <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link">
@@ -5581,14 +5581,14 @@ class learnpath
 
             $title_cut = cut($arrLP[$i]['title'], 25);
 
-            //Link for the documents
+            // Link for the documents
             if ($arrLP[$i]['item_type'] == 'document') {
                 $url = api_get_self() . '?'.api_get_cidreq().'&action=view_item&mode=preview_document&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id;
                 $title_cut = Display::url(
                     $title_cut,
                     $url,
                     array(
-                        'class' => 'ajax',
+                        'class' => 'ajax moved',
                         'data-title' => $title_cut
                     )
                 );
@@ -5603,7 +5603,6 @@ class learnpath
 
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
 
-            $icon = '';
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
                 $icon = '<img src="../img/lp_' . $icon_name . '.png" />';
             } else {

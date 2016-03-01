@@ -329,7 +329,7 @@ function get_dropbox_categories($filter = '')
 
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
-        if (($filter == 'sent' AND $row['sent'] == 1) OR ($filter == 'received' AND $row['received'] == 1) OR $filter == '') {
+        if (($filter == 'sent' && $row['sent'] == 1) || ($filter == 'received' && $row['received'] == 1) || $filter == '') {
             $return_array[$row['cat_id']] = $row;
         }
     }
@@ -507,7 +507,7 @@ function display_addcategory_form($category_name = '', $id = '', $action)
     $form = new FormValidator('add_new_category', 'post', api_get_self().'?view='.Security::remove_XSS($_GET['view']));
     $form->addElement('header', $title);
 
-    if (isset($id) AND $id != '') {
+    if (isset($id) && $id != '') {
         $form->addElement('hidden', 'edit_id', intval($id));
     }
     $form->addElement('hidden', 'action', Security::remove_XSS($action));
@@ -560,7 +560,7 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     $form->addElement('file', 'file', get_lang('UploadFile'), array('onChange' => 'javascript: checkfile(this.value);'));
 
     if (dropbox_cnf('allowOverwrite')) {
-        $form->addElement('checkbox', 'cb_overwrite',  null, get_lang('OverwriteFile'), array('id' => 'cb_overwrite'));
+        $form->addElement('checkbox', 'cb_overwrite', null, get_lang('OverwriteFile'), array('id' => 'cb_overwrite'));
     }
 
     // List of all users in this course and all virtual courses combined with it
@@ -715,7 +715,10 @@ function getUserNameFromId($id)
     $result = Database::query($sql);
     $res = Database::fetch_array($result);
 
-    if (!$res) return false;
+    if (!$res) {
+        return false;
+    }
+
     return stripslashes($res['name']);
 }
 
@@ -871,7 +874,7 @@ function store_add_dropbox()
     // Validating the form data
 
     // there are no recipients selected
-    if (!isset($_POST['recipients']) || count( $_POST['recipients']) <= 0) {
+    if (!isset($_POST['recipients']) || count($_POST['recipients']) <= 0) {
         return get_lang('YouMustSelectAtLeastOneDestinee');
     } else {
         // Check if all the recipients are valid
@@ -988,7 +991,7 @@ function store_add_dropbox()
     $new_work_recipients = array();
     foreach ($_POST['recipients'] as $rec) {
         if (strpos($rec, 'user_') === 0) {
-            $new_work_recipients[] = substr($rec, strlen('user_') );
+            $new_work_recipients[] = substr($rec, strlen('user_'));
         } elseif (strpos($rec, 'group_') === 0) {
             $userList = GroupManager::get_subscribed_users(substr($rec, strlen('group_')));
             foreach ($userList as $usr) {

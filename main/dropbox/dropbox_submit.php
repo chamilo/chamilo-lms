@@ -227,7 +227,7 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent'])
         } else {
             die(get_lang('GeneralError').' (code 409)');
         }
-    } elseif (isset( $_GET['deleteSent'])) {
+    } elseif (isset($_GET['deleteSent'])) {
         if ($_GET['deleteSent'] == 'all') {
             $dropbox_person->deleteAllSentWork( );
         } elseif (is_numeric($_GET['deleteSent'])) {

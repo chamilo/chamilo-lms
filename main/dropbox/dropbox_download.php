@@ -57,7 +57,7 @@ if (isset($_GET['cat_id']) &&
     while ($row = Database::fetch_array($result)) {
         $files_to_download[] = $row['id'];
     }
-    if (!is_array($files_to_download) OR empty($files_to_download)) {
+    if (!is_array($files_to_download) || empty($files_to_download)) {
         header('location: index.php?view='.Security::remove_XSS($_GET['sent_received']).'&error=ErrorNoFilesInFolder');
         exit;
     }

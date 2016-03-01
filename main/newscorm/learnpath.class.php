@@ -1971,10 +1971,10 @@ class learnpath
                     </a>
                     <a class="icon-toolbar" id="view-embedded" href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode">
                         <span class="fa fa-columns"></span><span class="sr-only">' . get_lang('ScormExitFullScreen') . '</span>
-                    </a> 
+                    </a>
                   </span>';
 
-        } else { 
+        } else {
             $navbar = '
                 <span id="'.$idBar.'" class="buttons text-right">
                     <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link">
@@ -5592,6 +5592,7 @@ class learnpath
                 $title_cut,
                 $url,
                 array(
+                    'class' => 'moved',
                     'data-title' => $title_cut
                 )
             );
@@ -8744,11 +8745,11 @@ class learnpath
             $return .= ' '.Security :: remove_XSS(cut($row_quiz['title'], 80));
             $return .= '</a> ';
 
-            $return .= ' <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
-                Display::return_icon('add.png').
-                '</a>';
+            /*$return .= ' <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
+                Display::return_icon('add.png', get_lang('Add')).
+                '</a>';*/
             $return .= ' <a href="' . api_get_path(WEB_CODE_PATH) . 'exercice/overview.php?'.api_get_cidreq().'&exerciseId=' . $row_quiz['id'].'">' .
-                Display::return_icon('preview_view.png').
+                Display::return_icon('preview_view.png', get_lang('Preview')).
                 '</a>';
 
             $return .= '</li>';
@@ -8815,21 +8816,27 @@ class learnpath
                 <a href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.
             '&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('LinkAdd').'">'.get_lang('LinkAdd').'</a>
             </li>';
+
         foreach ($categorizedLinks as $categoryId => $links) {
             $linkNodes = null;
             foreach ($links as $key => $title) {
+
+                $link = Display::url(
+                    Display::return_icon('preview_view.png', get_lang('Preview')),
+                    api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$key,
+                    ['target' => '_blank']
+                );
+
                 if (api_get_item_visibility($course, TOOL_LINK, $key, $session_id) != 2)  {
                     $linkNodes .=
-                        '<li class="lp_resource_element" data_id="'.$key.
-                        '" data_type="'.TOOL_LINK.'" title="'.$title.'" >
+                        '<li class="lp_resource_element" data_id="'.$key.'" data_type="'.TOOL_LINK.'" title="'.$title.'" >
                         <a class="moved" href="#">'.
-                        $moveEverywhereIcon.
+                            $moveEverywhereIcon.
                         '</a>
                         <img alt="" src="../img/lp_link.gif" style="margin-right:5px;width:16px"/>
-                        <a href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
-                        TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
-                        Security::remove_XSS($title).
-                        '</a>
+                        <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
+                        Security::remove_XSS($title).' '.$link.'
+                        </a>
                     </li>';
                 }
             }
@@ -8868,15 +8875,22 @@ class learnpath
             $works = getWorkListTeacher(0, 100, null, null, null);
             if (!empty($works)) {
                 foreach ($works as $work) {
+
+                    $link = Display::url(
+                        Display::return_icon('preview_view.png', get_lang('Preview')),
+                        api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$work['iid'],
+                        ['target' => '_blank']
+                    );
+
                     $return .= '<li class="lp_resource_element" data_id="'.$work['iid'].'" data_type="'.TOOL_STUDENTPUBLICATION.'" title="'.Security :: remove_XSS(cut(strip_tags($work['title']), 80)).'">';
                     $return .= '<a class="moved" href="#">';
                     $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                     $return .= '</a> ';
 
                     $return .= Display::return_icon('works.gif');
-                    $return .= ' <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_STUDENTPUBLICATION . '&file=' . $work['iid'] . '&lp_id=' . $this->lp_id . '">' .
-                        Security :: remove_XSS(cut(strip_tags($work['title']), 80)).
-                        '</a>';
+                    $return .= ' <a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_STUDENTPUBLICATION . '&file=' . $work['iid'] . '&lp_id=' . $this->lp_id . '">' .
+                        Security :: remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link.'
+                    </a>';
 
                     $return .= '</li>';
                 }
@@ -8921,6 +8935,14 @@ class learnpath
 
         foreach ($a_forums as $forum) {
             if (!empty($forum['forum_id'])) {
+
+                $link = Display::url(
+                    Display::return_icon('preview_view.png', get_lang('Preview')),
+                    api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forum['forum_id'],
+                    ['target' => '_blank']
+                );
+
+
                 $return .= '<li class="lp_resource_element" data_id="'.$forum['forum_id'].'" data_type="'.TOOL_FORUM.'" title="'.$forum['forum_title'].'" >';
                 $return .= '<a class="moved" href="#">';
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
@@ -8929,8 +8951,8 @@ class learnpath
                 $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle">
                                 <img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
                             </a>
-                            <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_FORUM . '&forum_id=' . $forum['forum_id'] . '&lp_id=' . $this->lp_id . '" style="vertical-align:middle">' .
-                    Security :: remove_XSS($forum['forum_title']) . '</a>';
+                            <a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_FORUM . '&forum_id=' . $forum['forum_id'] . '&lp_id=' . $this->lp_id . '" style="vertical-align:middle">' .
+                    Security :: remove_XSS($forum['forum_title']) .' '.$link. '</a>';
 
                 $return .= '</li>';
 
@@ -8938,13 +8960,20 @@ class learnpath
                 $a_threads = get_threads($forum['forum_id']);
                 if (is_array($a_threads)) {
                     foreach ($a_threads as $thread) {
+
+                        $link = Display::url(
+                            Display::return_icon('preview_view.png', get_lang('Preview')),
+                            api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum['forum_id'].'&thread='.$thread['thread_id'],
+                            ['target' => '_blank']
+                        );
+
                         $return .= '<li class="lp_resource_element" data_id="'.$thread['thread_id'].'" data_type="'.TOOL_THREAD.'" title="'.$thread['thread_title'].'" >';
                         $return .= '&nbsp;<a class="moved" href="#">';
                         $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                         $return .= ' </a>';
                         $return .= Display::return_icon('forumthread.png', get_lang('Thread'), array(), ICON_SIZE_TINY);
-                        $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type=' . TOOL_THREAD . '&thread_id=' . $thread['thread_id'] . '&lp_id=' . $this->lp_id . '">' .
-                            Security :: remove_XSS($thread['thread_title']) . '</a>';
+                        $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type=' . TOOL_THREAD . '&thread_id=' . $thread['thread_id'] . '&lp_id=' . $this->lp_id . '">' .
+                            Security :: remove_XSS($thread['thread_title']) . ' '.$link.'</a>';
                         $return .= '</li>';
                     }
                 }

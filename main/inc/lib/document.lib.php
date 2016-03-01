@@ -3615,7 +3615,15 @@ class DocumentManager
 
         $link = Display::url(
             '<img alt="" src="' . $img . '" title="" />&nbsp;' . $my_file_title, $url,
-            array('target' => $target)
+            array('target' => $target, 'class' => 'moved')
+        );
+
+        $directUrl = $web_code_path . 'document/document.php?cidReq=' . $course_info['code'] . '&id_session=' . $session_id . '&id=' . $documentId;
+
+        $link .= Display::url(
+            Display::return_icon('preview_view.png', get_lang('Preview')),
+            $directUrl,
+            ['target' => '_blank']
         );
 
         $visibilityClass = null;

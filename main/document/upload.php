@@ -204,7 +204,6 @@ $(function () {
 
 </script>";
 
-
 // This needs cleaning!
 if (!empty($groupId)) {
     // If the group id is set, check if the user has the right to be here

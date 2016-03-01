@@ -63,10 +63,7 @@ if ($action == 'add') {
 if (isset($_POST['submitWork'])) {
 	$check = Security::check_token();
 	if ($check) {
-        $message = store_add_dropbox();
-        if (!empty($message)) {
-            Display :: display_confirmation_message($message);
-        }
+        store_add_dropbox();
 	}
 }
 

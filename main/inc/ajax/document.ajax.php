@@ -62,27 +62,24 @@ switch ($action) {
                 );
 
                 $json = array();
-                $json['name'] = Display::url(
-                    api_htmlentities($result['title']),
-                    api_htmlentities($result['url']),
-                    array('target'=>'_blank')
-                );
-
-                $json['url'] = $result['url'];
-
-                $json['size'] = format_file_size($file['size']);
-                $json['type'] = api_htmlentities($file['type']);
-
                 if (!empty($result) && is_array($result)) {
+                    $json['name'] = Display::url(
+                        api_htmlentities($result['title']),
+                        api_htmlentities($result['url']),
+                        array('target'=>'_blank')
+                    );
+
+                    $json['url'] = $result['url'];
+                    $json['size'] = format_file_size($file['size']);
+                    $json['type'] = api_htmlentities($file['type']);
+
                     $json['result'] = Display::return_icon(
                         'accept.png',
                         get_lang('Uploaded')
                     );
                 } else {
-                    $json['result'] = Display::return_icon(
-                        'exclamation.png',
-                        get_lang('Error')
-                    );
+                    $json['url'] = '';
+                    $json['error'] = get_lang('Error');
                 }
                 $resultList[] = $json;
             }

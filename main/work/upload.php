@@ -120,8 +120,7 @@ $url = api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
 $htmlHeadXtra[] = to_javascript_work();
-$htmlHeadXtra[] = "
-<script>
+$htmlHeadXtra[] = "<script>
 $(function () {
     'use strict';
     var url = '".$url."';

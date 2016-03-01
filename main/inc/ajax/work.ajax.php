@@ -44,27 +44,23 @@ switch ($action) {
                 $result = processWorkForm($workInfo, $values, $courseInfo, $sessionId, 0, $userId, $file);
 
                 $json = array();
-                $json['name'] = Display::url(
-                    api_htmlentities($result['title']),
-                    api_htmlentities($result['view_url']),
-                    array('target' => '_blank')
-                );
-
-                $json['url'] = $result['view_url'];
-                //$json['size'] = format_file_size($result['filesize']);
-                $json['size'] = '';
-                $json['type'] = api_htmlentities($result['filetype']);
-
                 if (!empty($result) && is_array($result) && empty($result['error'])) {
+                    $json['name'] = Display::url(
+                        api_htmlentities($result['title']),
+                        api_htmlentities($result['view_url']),
+                        array('target' => '_blank')
+                    );
+
+                    $json['url'] = $result['view_url'];
+                    $json['size'] = '';
+                    $json['type'] = api_htmlentities($result['filetype']);
                     $json['result'] = Display::return_icon(
                         'accept.png',
                         get_lang('Uploaded')
                     );
                 } else {
-                    $json['result'] = Display::return_icon(
-                        'exclamation.png',
-                        get_lang('Error')
-                    );
+                    $json['url'] = '';
+                    $json['error'] = get_lang('Error');
                 }
                 $resultList[] = $json;
             }

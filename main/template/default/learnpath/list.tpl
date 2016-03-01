@@ -12,13 +12,19 @@
 
 {% for lp_data in data %}
     <h3 class="page-header">
-        {% if (categories|length) > 1 %}
-            {% if lp_data.lp_list and lp_data.category.getId() != 0 %}
+        {% if is_allowed_to_edit %}
+            {% if (categories|length) > 1 %}
                 {{ lp_data.category.getName() }}
-            {% elseif lp_data.lp_list and lp_data.category.getId() == 0 %}
-                {{ lp_data.category.getName() }}
-            {% elseif not lp_data.lp_list and lp_data.category.getId() != 0 %}
-                {{ lp_data.category.getName() }}
+            {% endif %}
+        {% else %}
+            {% if (categories|length) > 1 %}
+                {% if lp_data.lp_list is not empty and lp_data.category.getId() != 0 %}
+                    {{ lp_data.category.getName() }}
+                {% elseif lp_data.lp_list is not empty and lp_data.category.getId() == 0 %}
+                    {{ lp_data.category.getName() }}
+                {% elseif lp_data.lp_list is not empty and lp_data.category.getId() != 0 %}
+                    {{ lp_data.category.getName() }}
+                {% endif %}
             {% endif %}
         {% endif %}
 

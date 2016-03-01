@@ -57,7 +57,7 @@ $htmlHeadXtra[] = '<script>
     var disabledLang = "'.$disabledLang.'"
 
     if (msgLang == 1) {
-        $("#js_alerts").html("<div class=\"alert alert-warning\">' . get_lang('ThereAreUsersUsingThisLanguagesDisableItManually') . ' </br> " + disabledLang + "</div");
+        $("#id_content_message").html("<div class=\"alert alert-warning\">' . get_lang('ThereAreUsersUsingThisLanguagesDisableItManually') . ' </br> " + disabledLang + "</div");
     }
     
     $("#disable_all_except_default").click(function () {
@@ -65,7 +65,7 @@ $htmlHeadXtra[] = '<script>
             $.ajax({
                 contentType: "application/x-www-form-urlencoded",
                 beforeSend: function(objeto) {
-                    $("#id_content_message").html("<div class=\"normal-message\"><img src=\"' . api_get_path(WEB_PATH) . 'main/img/loading1.gif\" /> ' . get_lang('Loading') . '</div>");
+                    $("#id_content_message").html("<div class=\"alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  ' . get_lang('Loading') . '</div>");
                 },
                 type: "GET",
                 url: "../admin/languages.php",
@@ -107,7 +107,7 @@ $htmlHeadXtra[] = '<script>
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-				$("#id_content_message").html("<div class=\"normal-message\"><img src=\"' . api_get_path(WEB_PATH) . 'main/img/loading1.gif\" /></div>");
+				$("#id_content_message").html("<div class=\"alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  ' . get_lang('Loading') . '</div>");
 			},
 			type: "POST",
 			url: "../admin/languages.php",
@@ -126,19 +126,20 @@ $htmlHeadXtra[] = '<script>
                     }
 
                     if (datos=="set_visible") {
-                        $("#id_content_message").html("<div class=\"confirmation-message\">' . get_lang('LanguageIsNowVisible', '') . '</div>");
+                        $("#id_content_message").html("<div class=\"alert alert-success\">' . get_lang('LanguageIsNowVisible', '') . '</div>");
                     }
 
                     if (datos=="set_hidden") {
-                        $("#id_content_message").html("<div class=\"confirmation-message\">' . get_lang('LanguageIsNowHidden', '') . '</div>");
+                        $("#id_content_message").html("<div class=\"alert alert-success\">' . get_lang('LanguageIsNowHidden', '') . '</div>");
                     }
                 }
 
                 var action = datos.split(":")[0];
                 if (action && action == "confirm") {
                     var id = datos.split(":")[1];
-                    var sure = "<div class=\"warning-message\">'.get_lang('ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage').'</div><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn btn-default\">' . get_lang('MakeUnavailable') . '</a>";
+                    var sure = "<div class=\"alert alert-warning\">'.get_lang('ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage').'</br></br><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn btn-default\"><em class=\"fa fa-eye\"></em> ' . get_lang('MakeUnavailable') . '</a></div>";
                     $("#id_content_message").html(sure);
+                    $("html, body").animate({ scrollTop: 0 }, 200);
 				}
 		} });
 	});
@@ -181,7 +182,7 @@ if ($action == 'disable_all_except_default') {
             SubLanguageManager::make_unavailable_language($language['id']);
         } else {
             if (intval(SubLanguageManager::get_platform_language_id()) !== intval($language['id'])) {
-                $failedDisabledLanguages .= ' -' .$language['english_name'] . '</br>';
+                $failedDisabledLanguages .= ' - ' .$language['english_name'] . '</br>';
                 $checkFailed = true;
             }
         }
@@ -251,7 +252,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'make_unavailable_confirmed') {
 // displaying the explanation for this tool
 Display::display_normal_message(get_lang('PlatformLanguagesExplanation'));
 
-echo '<a id="disable_all_except_default" href="javascript:void(0)" class="btn btn-primary"><em class="fa fa-eye"></em> ' . get_lang('LanguagesDisableAllExceptDefault') . '</a>';
+echo '<a id="disable_all_except_default" href="javascript:void(0)" class="btn btn-primary"><em class="fa fa-eye"></em> ' . get_lang('LanguagesDisableAllExceptDefault') . '</a></br></br>';
 
 // selecting all the languages
 $sql_select = "SELECT * FROM $tbl_admin_languages";

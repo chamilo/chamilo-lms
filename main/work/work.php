@@ -53,48 +53,63 @@ if ($action == 'upload_form') {
 }
 
 /*	Header */
-if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-    $_SESSION['gradebook'] = Security::remove_XSS($_GET['gradebook']);
-    $gradebook =	$_SESSION['gradebook'];
-} elseif (empty($_GET['gradebook'])) {
-    unset($_SESSION['gradebook']);
-    $gradebook = '';
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array ('url' => '../gradebook/' . $_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
+if (api_is_in_gradebook()) {
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
+        'name' => get_lang('ToolGradebook'),
+    );
 }
 
 if (!empty($group_id)) {
     api_protect_course_group(GroupManager::GROUP_TOOL_WORK);
-
     $group_properties = GroupManager::get_group_properties($group_id);
 
-    $interbreadcrumb[] = array('url' => '../group/group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => '../group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
-    $interbreadcrumb[] = array('url' =>'work.php?'.api_get_cidreq(),'name' => get_lang('StudentPublications'));
-    $url_dir = 'work.php?&id=' . $work_id.'&'.api_get_cidreq();
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+        'name' => get_lang('Groups'),
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+        'name' => get_lang('StudentPublications'),
+    );
+    $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?&id=' . $work_id.'&'.api_get_cidreq();
     if (!empty($my_folder_data)) {
         $interbreadcrumb[] = array('url' => $url_dir, 'name' =>  $my_folder_data['title']);
     }
 
     if ($action == 'upload_form') {
-        $interbreadcrumb[] = array('url' => 'work.php?'.api_get_cidreq(),'name' => get_lang('UploadADocument'));
+        $interbreadcrumb[] = array(
+            'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+            'name' => get_lang('UploadADocument'),
+        );
     }
 
     if ($action == 'create_dir') {
-        $interbreadcrumb[] = array('url' => 'work.php?'.api_get_cidreq(),'name' => get_lang('CreateAssignment'));
+        $interbreadcrumb[] = array(
+            'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+            'name' => get_lang('CreateAssignment'),
+        );
     }
 } else {
     if ($origin != 'learnpath') {
         if (isset($_GET['id']) && !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir') {
-            $interbreadcrumb[] = array('url' => 'work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
+            $interbreadcrumb[] = array(
+                'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+                'name' => get_lang('StudentPublications'),
+            );
         } else {
             $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('StudentPublications'));
         }
 
         if (!empty($my_folder_data)) {
-            $interbreadcrumb[] = array('url' => 'work.php?id=' . $work_id.'&'.api_get_cidreq(), 'name' =>  $my_folder_data['title']);
+            $interbreadcrumb[] = array(
+                'url' => api_get_path(WEB_CODE_PATH).'work/work.php?id='.$work_id.'&'.api_get_cidreq(),
+                'name' => $my_folder_data['title'],
+            );
         }
 
         if ($action == 'upload_form') {
@@ -322,7 +337,7 @@ switch ($action) {
         }
         if (api_is_allowed_to_edit() || api_is_coach()) {
             // Work list
-            
+
             $content .= '<div class="row">';
             $content .= '<div class="col-md-12">';
             $content .= '<div class="table-responsive">';

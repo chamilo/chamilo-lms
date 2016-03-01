@@ -38,8 +38,14 @@ $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 $homework = get_work_assignment_by_id($workInfo['id']);
 $validationStatus = getWorkDateValidationStatus($homework);
 
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId, 'name' =>  $workInfo['title']);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+    'name' => get_lang('StudentPublications'),
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId,
+    'name' => $workInfo['title'],
+);
 $interbreadcrumb[] = array('url' => '#', 'name'  => get_lang('UploadCorrections'));
 
 $form = new FormValidator(
@@ -62,13 +68,11 @@ $succeed = false;
 if ($form->validate()) {
 
     $values = $form->getSubmitValues();
-
     $upload = process_uploaded_file($_FILES['file'], false);
 
     if ($upload) {
 
         $zip = new PclZip($_FILES['file']['tmp_name']);
-
         // Check the zip content (real size and file extension)
         $zipFileList = (array)$zip->listContent();
 
@@ -126,6 +130,9 @@ if ($form->validate()) {
 
         $finder = new Finder();
         $finder->files()->in($destinationDir);
+
+        $table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+
         /** @var SplFileInfo $file */
         foreach ($finder as $file) {
             $fileName = $file->getBasename();
@@ -143,12 +150,8 @@ if ($form->validate()) {
                         if (!empty($workStudent['url'])) {
                             $correctionFilePath = $coursePath.$workStudent['url'].'_correction';
                             $correctionTitle = $fileName;
-                        } else {
-                            //$correctionFilePath = $workDir.api_get_unique_id().'_correction';
                         }
                     }
-
-                    $table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
 
                     if (!empty($correctionFilePath)) {
 

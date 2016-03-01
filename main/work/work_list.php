@@ -34,24 +34,35 @@ $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
 
 if (!empty($group_id)) {
     $group_properties  = GroupManager :: get_group_properties($group_id);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+        'name' => get_lang('Groups'),
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+    );
 }
 
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId, 'name' =>  $my_folder_data['title']);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+    'name' => get_lang('StudentPublications'),
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId,
+    'name' => $my_folder_data['title'],
+);
 
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 Display :: display_header(null);
 
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'">'.
-    Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
 
-if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee() ) {
+$actionsRight = '';
+if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee()) {
     $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin;
-    //$actionsRight .= Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).' ' . get_lang('UploadADocument') . '</a>';
-    
     $actionsRight = Display::toolbarButton(get_lang('UploadMyAssignment'), $url, 'upload', 'success');
 }
 echo Display::toolbarAction('toolbar-work', array(0 => $actionsLeft . $actionsRight));
@@ -70,7 +81,7 @@ if (!empty($my_folder_data['description'])) {
     $contentWork = Security::remove_XSS($my_folder_data['description']);
     $html = '';
     $html .= Display::panel($contentWork, get_lang('Description'));
-    echo $html;    
+    echo $html;
 }
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
@@ -108,7 +119,7 @@ if (!api_is_invitee()) {
         $column_model = array(
             array('name'=>'type', 'index'=>'file', 'width'=>'5',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
             array('name'=>'title', 'index'=>'title', 'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
-            array('name'=>'qualification',	'index'=>'qualification', 'width'=>'10',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'qualification', 'index'=>'qualification', 'width'=>'10', 'align'=>'left', 'search' => 'true'),
             array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
             array('name'=>'qualificator_id', 'index'=>'qualificator_id', 'width'=>'20', 'align'=>'left', 'search' => 'true'),
             array('name'=>'actions', 'index'=>'actions', 'width'=>'20', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
@@ -149,10 +160,10 @@ if (!api_is_invitee()) {
             });
         </script>
     <?php
-    
+
     $html = '';
     $tableWork = Display::grid_html('results');
-    $html = Display::panel($tableWork); 
+    $html = Display::panel($tableWork);
     echo $html;
 }
 

@@ -48,11 +48,11 @@ if (!empty($group_id)) {
     }
 
     $interbreadcrumb[] = array(
-        'url' => '../group/group.php',
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')
     );
     $interbreadcrumb[] = array(
-        'url' => '../group/group_space.php?gidReq='.$group_id,
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$group_properties['name']
     );
 } else {

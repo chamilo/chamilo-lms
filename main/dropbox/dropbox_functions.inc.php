@@ -222,9 +222,9 @@ function store_move($id, $target, $part)
     $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
 
-    if ((isset($id) AND $id != '') AND
-        (isset($target) AND $target != '') AND
-        (isset($part) AND $part != '')
+    if ((isset($id) && $id != '') &&
+        (isset($target) && $target != '') &&
+        (isset($part) && $part != '')
     ) {
 
         if ($part == 'received') {
@@ -329,7 +329,7 @@ function get_dropbox_categories($filter = '')
 
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
-        if (($filter == 'sent' AND $row['sent'] == 1) OR ($filter == 'received' AND $row['received'] == 1) OR $filter == '') {
+        if (($filter == 'sent' && $row['sent'] == 1) || ($filter == 'received' && $row['received'] == 1) || $filter == '') {
             $return_array[$row['cat_id']] = $row;
         }
     }
@@ -469,7 +469,7 @@ function display_addcategory_form($category_name = '', $id = '', $action)
     $course_id = api_get_course_int_id();
     $title = get_lang('AddNewCategory');
 
-    if (isset($id) AND $id != '') {
+    if (isset($id) && $id != '') {
         // retrieve the category we are editing
         $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
                 WHERE c_id = $course_id AND cat_id = ".intval($id)."";
@@ -507,7 +507,7 @@ function display_addcategory_form($category_name = '', $id = '', $action)
     $form = new FormValidator('add_new_category', 'post', api_get_self().'?view='.Security::remove_XSS($_GET['view']));
     $form->addElement('header', $title);
 
-    if (isset($id) AND $id != '') {
+    if (isset($id) && $id != '') {
         $form->addElement('hidden', 'edit_id', intval($id));
     }
     $form->addElement('hidden', 'action', Security::remove_XSS($action));
@@ -560,7 +560,7 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     $form->addElement('file', 'file', get_lang('UploadFile'), array('onChange' => 'javascript: checkfile(this.value);'));
 
     if (dropbox_cnf('allowOverwrite')) {
-        $form->addElement('checkbox', 'cb_overwrite',  null, get_lang('OverwriteFile'), array('id' => 'cb_overwrite'));
+        $form->addElement('checkbox', 'cb_overwrite', null, get_lang('OverwriteFile'), array('id' => 'cb_overwrite'));
     }
 
     // List of all users in this course and all virtual courses combined with it
@@ -693,7 +693,53 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
         )
     );
     $form->addButtonUpload(get_lang('Upload'), 'submitWork');
-    $form->display();
+
+
+    $headers = array(
+        get_lang('Upload'),
+        get_lang('Upload').' ('.get_lang('Simple').')',
+    );
+
+    $multipleForm = new FormValidator(
+        'sent_multiple',
+        'post',
+        '#',
+        null,
+        array('enctype' => 'multipart/form-data', 'id' => 'fileupload')
+    );
+
+    $multipleForm->addSelect(
+        'recipients',
+        get_lang('SendTo'),
+        $options,
+        array(
+            'multiple' => 'multiple',
+            'size' => '10',
+            'id' => 'recipient_form'
+        )
+    );
+
+    $multipleForm->addHtml('
+        <div id="multiple_form" style="display:none">
+        <div class="description-upload">'.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'</div>
+            <span class="btn btn-success fileinput-button">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>'.get_lang('AddFiles').'</span>
+                <!-- The file input field used as target for the file upload widget -->
+                <input id="input_fileupload" type="file" name="files[]" multiple>
+            </span>
+
+            <br />
+            <br />
+            <!-- The global progress bar -->
+            <div id="progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+            </div>
+            <div id="files" class="files"></div>
+        </div>
+    ');
+
+    echo Display::tabs($headers, array($multipleForm->returnForm(), $form->returnForm()), 'tabs');
 }
 
 /**
@@ -715,7 +761,10 @@ function getUserNameFromId($id)
     $result = Database::query($sql);
     $res = Database::fetch_array($result);
 
-    if (!$res) return false;
+    if (!$res) {
+        return false;
+    }
+
     return stripslashes($res['name']);
 }
 
@@ -860,18 +909,24 @@ function dropbox_cnf($variable)
 }
 
 /**
+ * @param array $file
+ *
  * @return array|null|string
  */
-function store_add_dropbox()
+function store_add_dropbox($file = [])
 {
     $_course = api_get_course_info();
     $_user = api_get_user_info();
     $dropbox_cnf = getDropboxConf();
 
+    if (empty($file)) {
+        $file = isset($_FILES['file']) ? $_FILES['file'] : null;
+    }
+
     // Validating the form data
 
     // there are no recipients selected
-    if (!isset($_POST['recipients']) || count( $_POST['recipients']) <= 0) {
+    if (!isset($_POST['recipients']) || count($_POST['recipients']) <= 0) {
         return get_lang('YouMustSelectAtLeastOneDestinee');
     } else {
         // Check if all the recipients are valid
@@ -883,28 +938,34 @@ function store_add_dropbox()
             } elseif ($rec == 'upload') {
                 $thisIsJustUpload = true;
             } elseif (strpos($rec, 'user_') === 0 && !isCourseMember(substr($rec, strlen('user_')))) {
-                return get_lang('InvalideUserDetected');
+                Display::addFlash(Display::return_message(get_lang('InvalideUserDetected'), 'warning'));
+                return false;
             } elseif (strpos($rec, 'group_') !== 0 && strpos($rec, 'user_') !== 0) {
-                return get_lang('InvalideGroupDetected');
+                Display::addFlash(Display::return_message(get_lang('InvalideGroupDetected'), 'warning'));
+                return false;
             }
         }
     }
 
     // we are doing a mailing but an additional recipient is selected
     if ($thisIsAMailing && (count($_POST['recipients']) != 1)) {
-        return get_lang('MailingSelectNoOther');
+        Display::addFlash(Display::return_message(get_lang('MailingSelectNoOther'), 'warning'));
+
+        return false;
     }
 
     // we are doing a just upload but an additional recipient is selected.
     // note: why can't this be valid? It is like sending a document to
     // yourself AND to a different person (I do this quite often with my e-mails)
     if ($thisIsJustUpload && (count($_POST['recipients']) != 1)) {
-        return get_lang('MailingJustUploadSelectNoOther');
+
+        Display::addFlash(Display::return_message(get_lang('MailingJustUploadSelectNoOther'), 'warning'));
+        return false;
     }
 
-    if (empty($_FILES['file']['name'])) {
-        $error = true;
-        return get_lang('NoFileSpecified');
+    if (empty($file['name'])) {
+        Display::addFlash(Display::return_message(get_lang('NoFileSpecified'), 'warning'));
+        return false;
     }
 
     // are we overwriting a previous file or sending a new one
@@ -916,23 +977,26 @@ function store_add_dropbox()
 
     // doing the upload
 
-    $dropbox_filename = $_FILES['file']['name'];
-    $dropbox_filesize = $_FILES['file']['size'];
-    $dropbox_filetype = $_FILES['file']['type'];
-    $dropbox_filetmpname = $_FILES['file']['tmp_name'];
+    $dropbox_filename = $file['name'];
+    $dropbox_filesize = $file['size'];
+    $dropbox_filetype = $file['type'];
+    $dropbox_filetmpname = $file['tmp_name'];
 
     // check if the filesize does not exceed the allowed size.
     if ($dropbox_filesize <= 0 || $dropbox_filesize > $dropbox_cnf['maxFilesize']) {
-        return get_lang('DropboxFileTooBig');
-        // TODO: The "too big" message does not fit in the case of uploading zero-sized file.
+        Display::addFlash(Display::return_message(get_lang('DropboxFileTooBig'), 'warning'));
+
+        return false;
     }
 
     // check if the file is actually uploaded
     if (!is_uploaded_file($dropbox_filetmpname)) { // check user fraud : no clean error msg.
-        return get_lang('TheFileIsNotUploaded');
+        Display::addFlash(Display::return_message(get_lang('TheFileIsNotUploaded'), 'warning'));
+
+        return false;
     }
 
-    $upload_ok = process_uploaded_file($_FILES['file'], true);
+    $upload_ok = process_uploaded_file($file, true);
 
     if (!$upload_ok) {
         return null;
@@ -947,7 +1011,8 @@ function store_add_dropbox()
 
     //filter extension
     if (!filter_extension($dropbox_filename)) {
-        return get_lang('UplUnableToSaveFileFilteredExtension');
+        Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'warning'));
+        return false;
     }
 
     // set title
@@ -970,10 +1035,13 @@ function store_add_dropbox()
         foreach ($dropbox_person->sentWork as $w) {
             if ($w->title == $dropbox_filename) {
                 if (($w->recipients[0]['id'] > dropbox_cnf('mailingIdBase')) xor $thisIsAMailing) {
-                    return get_lang('MailingNonMailingError');
+                    Display::addFlash(Display::return_message(get_lang('MailingNonMailingError'), 'warning'));
+                    return false;
                 }
                 if (($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload) {
-                    return get_lang('MailingJustUploadSelectNoOther');
+
+                    Display::addFlash(Display::return_message(get_lang('MailingJustUploadSelectNoOther'), 'warning'));
+                    return false;
                 }
                 $dropbox_filename = $w->filename;
                 $found = true; // note: do we still need this?
@@ -988,7 +1056,7 @@ function store_add_dropbox()
     $new_work_recipients = array();
     foreach ($_POST['recipients'] as $rec) {
         if (strpos($rec, 'user_') === 0) {
-            $new_work_recipients[] = substr($rec, strlen('user_') );
+            $new_work_recipients[] = substr($rec, strlen('user_'));
         } elseif (strpos($rec, 'group_') === 0) {
             $userList = GroupManager::get_subscribed_users(substr($rec, strlen('group_')));
             foreach ($userList as $usr) {
@@ -1043,7 +1111,7 @@ function store_add_dropbox()
         }
     }
 
-    new Dropbox_SentWork(
+    $result = new Dropbox_SentWork(
         $_user['user_id'],
         $dropbox_title,
         isset($_POST['description']) ? $_POST['description'] : '',
@@ -1054,11 +1122,13 @@ function store_add_dropbox()
     );
 
     Security::clear_token();
-    return get_lang('FileUploadSucces');
+    Display::addFlash(Display::return_message(get_lang('FileUploadSucces')));
+
+    return $result;
 }
 
 /**
-* this function transforms the array containing all the feedback into something visually attractive.
+* Transforms the array containing all the feedback into something visually attractive.
 *
 * @param an array containing all the feedback about the given message.
 *

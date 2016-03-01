@@ -11,6 +11,64 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $isAllowedToEdit = api_is_allowed_to_edit();
 
 switch ($action) {
+    case 'upload_file':
+        api_protect_course_script(true);
+        $workId = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
+
+        $workInfo = get_work_data_by_id($workId);
+        $courseInfo = api_get_course_info();
+        $sessionId = api_get_session_id();
+        $userId = api_get_user_id();
+
+        if (!empty($_FILES)) {
+            $files = $_FILES['files'];
+            $fileList = [];
+            foreach ($files as $name => $array) {
+                $counter = 0;
+                foreach ($array as $data) {
+                    $fileList[$counter][$name] = $data;
+                    $counter++;
+                }
+            }
+
+            $resultList = [];
+            foreach ($fileList as $file) {
+                $globalFile = [];
+                $globalFile['files'] = $file;
+
+                $values = [
+                    'contains_file' => 1,
+                    'title' => $file['name'],
+                    'description' => ''
+                ];
+                $result = processWorkForm($workInfo, $values, $courseInfo, $sessionId, 0, $userId, $file);
+
+                $json = array();
+                if (!empty($result) && is_array($result) && empty($result['error'])) {
+                    $json['name'] = Display::url(
+                        api_htmlentities($result['title']),
+                        api_htmlentities($result['view_url']),
+                        array('target' => '_blank')
+                    );
+
+                    $json['url'] = $result['view_url'];
+                    $json['size'] = '';
+                    $json['type'] = api_htmlentities($result['filetype']);
+                    $json['result'] = Display::return_icon(
+                        'accept.png',
+                        get_lang('Uploaded')
+                    );
+                } else {
+                    $json['url'] = '';
+                    $json['error'] = get_lang('Error');
+                }
+                $resultList[] = $json;
+            }
+
+            echo json_encode(['files' => $resultList]);
+        }
+
+        break;
     case 'delete_work':
         if ($isAllowedToEdit) {
             if (empty($_REQUEST['id'])) {

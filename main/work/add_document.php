@@ -31,8 +31,14 @@ if (!api_is_allowed_to_edit()) {
 
 $courseInfo = api_get_course_info();
 
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId, 'name' => $my_folder_data['title']);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+    'name' => get_lang('StudentPublications'),
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
+    'name' => $my_folder_data['title'],
+);
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddDocument'));
 
 $error_message = null;

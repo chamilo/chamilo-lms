@@ -689,8 +689,8 @@ class Dropbox_Person
 	/**
 	 * Updates feedback for received work of this person with id=$id
 	 *
-	 * @param unknown_type $id
-	 * @param unknown_type $text
+	 * @param string $id
+	 * @param string $text
 	 */
 	function updateFeedback($id, $text)
     {

@@ -48,8 +48,7 @@ function setFocus() {
 }
 </script>';
 // The next javascript script is to manage ajax upload file
-$htmlHeadXtra[] = "
-<script>
+$htmlHeadXtra[] = "<script>
 $(function () {
     setFocus();
     $('#file_upload').fileUploadUI({
@@ -998,8 +997,8 @@ function return_visible_invisible_icon($content, $id, $current_visibility_status
                 $html .= $key . '=' . $value . '&';
             }
         }
-       $html.='action=invisible&content='.$content.'&id='.$id.'">'.
-           Display::return_icon('visible.png', get_lang('MakeInvisible'), array(), ICON_SIZE_SMALL).'</a>';
+        $html.='action=invisible&content='.$content.'&id='.$id.'">'.
+            Display::return_icon('visible.png', get_lang('MakeInvisible'), array(), ICON_SIZE_SMALL).'</a>';
     }
     if ($current_visibility_status == '0') {
         $html .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&';
@@ -1008,8 +1007,8 @@ function return_visible_invisible_icon($content, $id, $current_visibility_status
                 $html .= $key . '=' . $value . '&';
             }
         }
-       $html .= 'action=visible&content=' . $content . '&id=' . $id . '">' .
-           Display::return_icon('invisible.png', get_lang('MakeVisible'), array(), ICON_SIZE_SMALL) . '</a>';
+        $html .= 'action=visible&content=' . $content . '&id=' . $id . '">' .
+            Display::return_icon('invisible.png', get_lang('MakeVisible'), array(), ICON_SIZE_SMALL) . '</a>';
     }
     return $html;
 }
@@ -1843,9 +1842,9 @@ function getThreadInfo($threadId, $cId)
 {
     $em = Database::getManager();
     $forumThread = $em->getRepository('ChamiloCourseBundle:CForumThread')->findOneBy(['threadId' => $threadId, 'cId' => $cId]);
-    
+
     $thread = [];
-    
+
     if ($forumThread) {
         $thread['threadId'] = $forumThread->getThreadId();
         $thread['threadTitle'] = $forumThread->getThreadTitle();
@@ -2298,62 +2297,62 @@ function updateThread($values)
 {
     $threadTable = Database :: get_course_table(TABLE_FORUM_THREAD);
     $courseId = api_get_course_int_id();
-        
-    $params = [
-            'thread_title' => $values['thread_title'],
-            'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : null,
-            'thread_title_qualify' => $values['calification_notebook_title'],
-            'thread_qualify_max' => $values['numeric_calification'],
-            'thread_weight' => $values['weight_calification'],
-            'thread_peer_qualify' => $values['thread_peer_qualify'],
-        ];
-        $where = ['c_id = ? AND thread_id = ?' => [$courseId, $values['thread_id']]];
-        Database::update($threadTable, $params, $where);
-        
-        if (api_is_course_admin() == true) {
-            $option_chek = isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : false; // values 1 or 0
-            if ($option_chek) {
-                $id = $values['thread_id'];
-                $titleGradebook = Security::remove_XSS(stripslashes($values['calification_notebook_title']));
-                $valueCalification = isset($values['numeric_calification']) ? intval($values['numeric_calification']) : 0;
-                $weightCalification = isset($values['weight_calification']) ? floatval($values['weight_calification']) : 0;
-                $description = '';
-                $sessionId = api_get_session_id();
-                $courseId = api_get_course_id();
 
-                $linkInfo = GradebookUtils::is_resource_in_course_gradebook(
+    $params = [
+        'thread_title' => $values['thread_title'],
+        'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : null,
+        'thread_title_qualify' => $values['calification_notebook_title'],
+        'thread_qualify_max' => $values['numeric_calification'],
+        'thread_weight' => $values['weight_calification'],
+        'thread_peer_qualify' => $values['thread_peer_qualify'],
+    ];
+    $where = ['c_id = ? AND thread_id = ?' => [$courseId, $values['thread_id']]];
+    Database::update($threadTable, $params, $where);
+
+    if (api_is_course_admin() == true) {
+        $option_chek = isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : false; // values 1 or 0
+        if ($option_chek) {
+            $id = $values['thread_id'];
+            $titleGradebook = Security::remove_XSS(stripslashes($values['calification_notebook_title']));
+            $valueCalification = isset($values['numeric_calification']) ? intval($values['numeric_calification']) : 0;
+            $weightCalification = isset($values['weight_calification']) ? floatval($values['weight_calification']) : 0;
+            $description = '';
+            $sessionId = api_get_session_id();
+            $courseId = api_get_course_id();
+
+            $linkInfo = GradebookUtils::is_resource_in_course_gradebook(
+                $courseId,
+                LINK_FORUM_THREAD,
+                $id,
+                $sessionId
+            );
+            $linkId = $linkInfo['id'];
+
+            if (!$linkInfo) {
+                GradebookUtils::add_resource_to_course_gradebook(
+                    $values['category_id'],
                     $courseId,
                     LINK_FORUM_THREAD,
                     $id,
+                    $titleGradebook,
+                    $weightCalification,
+                    $valueCalification,
+                    $description,
+                    1,
                     $sessionId
                 );
-                $linkId = $linkInfo['id'];
-
-                if (!$linkInfo) {
-                    GradebookUtils::add_resource_to_course_gradebook(
-                        $values['category_id'],
-                        $courseId,
-                        LINK_FORUM_THREAD,
-                        $id,
-                        $titleGradebook,
-                        $weightCalification,
-                        $valueCalification,
-                        $description,
-                        1,
-                        $sessionId
-                    );
-                } else {
-                    $em = Database::getManager();
-                    $gradebookLink = $em->getRepository('ChamiloCoreBundle:GradebookLink')->find($linkId);
-                    $gradebookLink->setWeight($weightCalification);
-                    $em->persist($gradebookLink);
-                    $em->flush();
-                }
+            } else {
+                $em = Database::getManager();
+                $gradebookLink = $em->getRepository('ChamiloCoreBundle:GradebookLink')->find($linkId);
+                $gradebookLink->setWeight($weightCalification);
+                $em->persist($gradebookLink);
+                $em->flush();
             }
         }
-        
-        $message = get_lang('EditPostStored').'<br />';
-        Display :: display_confirmation_message($message, false);
+    }
+
+    $message = get_lang('EditPostStored').'<br />';
+    Display :: display_confirmation_message($message, false);
 }
 
 /**
@@ -2608,7 +2607,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
 function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
 {
     $userInfo = api_get_user_info();
-    
+
     $myThread = isset($_GET['thread']) ? intval($_GET['thread']) : '';
     $myForum = isset($_GET['forum']) ? intval($_GET['forum']) : '';
     $myGradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : '';
@@ -2621,7 +2620,7 @@ function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
             'thread' => $myThread,
         ]) . '&' . api_get_cidreq()
     );
-    
+
     $form->addElement('header', get_lang('EditThread'));
     $form->setConstants(array('forum' => '5'));
     $form->addElement('hidden', 'forum_id', $myForum);
@@ -2647,7 +2646,7 @@ function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
         } else {
             $form->addElement('hidden', 'thread_qualify_gradebook', false);
         }
-        
+
         $form->addElement('html', '<div id="options_field" style="display:none">');
         $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'));
         $form->applyFilter('numeric_calification', 'html_filter');
@@ -2680,9 +2679,9 @@ function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
     if ($forumSetting['allow_sticky'] && api_is_allowed_to_edit(null, true)) {
         $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
     }
-    
+
     $form->addElement('html', '</div>');
-    
+
     if (!empty($formValues)) {
         $defaults['thread_qualify_gradebook'] = ($formValues['threadQualifyMax'] > 0 && empty($_POST)) ? 1 : 0 ;
         $defaults['thread_title'] = prepare4display($formValues['threadTitle']);
@@ -2699,9 +2698,9 @@ function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
         $defaults['thread_peer_qualify'] = 0;
     }
     $form->setDefaults(isset($defaults) ? $defaults : null);
-    
+
     $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
-    
+
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
@@ -2724,8 +2723,8 @@ function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-        
-        
+
+
         $form->display();
     }
 }
@@ -3639,7 +3638,7 @@ function store_edit_post($values)
             $values['id_attach']
         );
     }
-    
+
     // Storing the attachments if any.
     //update_added_resources('forum_post', $values['post_id']);
 
@@ -3688,9 +3687,9 @@ function display_user_link($user_id, $name, $origin = '', $in_title = '')
 function display_user_image($user_id, $name, $origin = '')
 {
     $userInfo = api_get_user_info($user_id);
-    
+
     $link = '<a href="'.(!empty($origin) ? '#' : $userInfo['profile_url']).'" '.(!empty($origin) ? 'target="_self"' : '').'>';
-    
+
     if ($user_id != 0) {
         return $link.'<img src="'.$userInfo['avatar'].'"  alt="'.$name.'"  title="'.$name.'" /></a>';
     } else {

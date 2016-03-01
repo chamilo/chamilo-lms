@@ -79,6 +79,20 @@ $(document).ready(function() {
         $cropButton.addClass("hidden");
         return false;
     });
+
+    $(\'#id_generate_api_key\').on(\'click\', function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            contentType: "application/x-www-form-urlencoded",
+            type: "POST",
+            url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=generate_api_key",
+            data: "num_key_id="+"",
+            success: function(datos) {
+                $("#div_api_key").html(datos);
+            }
+        });
+    });
 });
 
 function confirmation(name) {
@@ -93,19 +107,6 @@ function show_image(image,width,height) {
     height = parseInt(height) + 20;
     window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 
-}
-function generate_open_id_form() {
-    $.ajax({
-        contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
-        /*$("#div_api_key").html("Loading...");*/ },
-        type: "POST",
-        url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=generate_api_key",
-        data: "num_key_id="+"",
-        success: function(datos) {
-         $("#div_api_key").html(datos);
-        }
-    });
 }
 
 function hide_icon_edit(element_html)  {
@@ -404,15 +405,15 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
         array('size' => 40, 'id' => 'id_api_key_generate')
     );
     $form->addElement('html', '</div>');
-    $form->addElement(
-        'button',
+    $form->addButton(
         'generate_api_key',
         get_lang('GenerateApiKey'),
-        array(
-            'id' => 'id_generate_api_key',
-            'onclick' => 'generate_open_id_form(); return false;',
-        )
-    ); //generate_open_id_form()
+        'cogs',
+        'default',
+        'default',
+        null,
+        ['id' => 'id_generate_api_key']
+    );
 }
 //    SUBMIT
 if (is_profile_editable()) {

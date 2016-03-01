@@ -77,8 +77,8 @@ if (!empty($my_folder_data)) {
         if (!empty($homework['expires_on']) &&
             !empty($homework['expires_on'])
         ) {
-            $time_expires 	= api_strtotime($homework['expires_on'], 'UTC');
-            $difference 	= $time_expires - $time_now;
+            $time_expires = api_strtotime($homework['expires_on'], 'UTC');
+            $difference = $time_expires - $time_now;
             if ($difference < 0) {
                 $has_expired = true;
             }
@@ -89,8 +89,8 @@ if (!empty($my_folder_data)) {
         }
 
         if (!empty($homework['ends_on'])) {
-            $time_ends 		= api_strtotime($homework['ends_on'], 'UTC');
-            $difference2 	= $time_ends - $time_now;
+            $time_ends = api_strtotime($homework['ends_on'], 'UTC');
+            $difference2 = $time_ends - $time_now;
             if ($difference2 < 0) {
                 $has_ended = true;
             }
@@ -159,7 +159,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
             $form->addLabel(
                 get_lang('Download'),
                 '<a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
-                    Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_MEDIUM).'
+                    Display::return_icon('save.png', get_lang('Save'), array(), ICON_SIZE_MEDIUM).'
                 </a>'
             );
         }
@@ -335,7 +335,7 @@ if (!empty($work_id)) {
             $content .= Display::return_message(get_lang('ActionNotAllowed'), 'error');
         }
     } elseif ($student_can_edit_in_session && $has_ended == false) {
-        $content .= $form->return_form();
+        $content .= $form->returnForm();
     } else {
         $content .= Display::return_message(get_lang('ActionNotAllowed'), 'error');
     }

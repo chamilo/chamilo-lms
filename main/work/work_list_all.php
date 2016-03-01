@@ -179,10 +179,9 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
     $actionsLeft .= Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
     
-    $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;    
+    $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
     $actionsLeft .= Display::toolbarButton(get_lang('UploadCorrections'), $url, 'upload', 'success');
 }
-
 
 echo Display::toolbarAction('toolbar-worklist', array( 0 => $actionsLeft), 1);
 
@@ -200,7 +199,7 @@ if (!empty($my_folder_data['description'])) {
     $contentWork = Security::remove_XSS($my_folder_data['description']);
     $html = '';
     $html .= Display::panel($contentWork, get_lang('Description'));
-    echo $html;  
+    echo $html;
 }
 
 $check_qualification = intval($my_folder_data['qualification']);

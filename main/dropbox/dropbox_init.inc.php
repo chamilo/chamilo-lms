@@ -113,15 +113,10 @@ Version 1.4 (Yannick Warnier)
  * @package chamilo.dropbox
  */
 
-/**
- * Code
- */
-/*	INIT SECTION */
-
 use ChamiloSession as Session;
 
 // including the basic Chamilo initialisation file
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $is_allowed_in_course = api_is_allowed_in_course();
 $is_courseTutor = api_is_course_tutor();
 $is_courseAdmin = api_is_course_admin();
@@ -134,7 +129,6 @@ Session::write('dropbox_conf', $dropbox_cnf);
 
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';
-
 
 // protecting the script
 api_protect_course_script();
@@ -182,39 +176,39 @@ if ($action == 'add') {
 }
 
 /*	Create javascript and htmlHeaders */
-$javascript = "<script type=\"text/javascript\">
-	function confirmsend ()
-	{
-		if (confirm(\"".get_lang('MailingConfirmSend', '')."\")){
-			return true;
-		} else {
-			return false;
-		}
-		return true;
-	}
+$javascript = "<script>
+function confirmsend()
+{
+    if (confirm(\"".get_lang('MailingConfirmSend', '')."\")){
+        return true;
+    } else {
+        return false;
+    }
+    return true;
+}
 
-	function confirmation (name)
-	{
-		if (confirm(\"".get_lang('ConfirmDelete', '')." : \"+ name )){
-			return true;
-		} else {
-			return false;
-		}
-		return true;
-	}
+function confirmation (name)
+{
+    if (confirm(\"".get_lang('ConfirmDelete', '')." : \"+ name )){
+        return true;
+    } else {
+        return false;
+    }
+    return true;
+}
 
-	function checkForm (frm)
-	{
-		if (frm.elements['recipients[]'].selectedIndex < 0){
-			alert(\"".get_lang('NoUserSelected', '')."\");
-			return false;
-		} else if (frm.file.value == '') {
-			alert(\"".get_lang('NoFileSpecified', '')."\");
-			return false;
-		} else {
-			return true;
-		}
-	}
+function checkForm (frm)
+{
+    if (frm.elements['recipients[]'].selectedIndex < 0){
+        alert(\"".get_lang('NoUserSelected', '')."\");
+        return false;
+    } else if (frm.file.value == '') {
+        alert(\"".get_lang('NoFileSpecified', '')."\");
+        return false;
+    } else {
+        return true;
+    }
+}
 ";
 
 if (dropbox_cnf('allowOverwrite')) {
@@ -278,8 +272,7 @@ if (dropbox_cnf('allowOverwrite')) {
 $javascript .= "
 	</script>";
 $htmlHeadXtra[] = $javascript;
-$htmlHeadXtra[] =
-"<script type=\"text/javascript\">
+$htmlHeadXtra[] ="<script>
 function confirmation (name)
 {
 	if (confirm(\" ". get_lang("AreYouSureToDeleteJS") ." \"+ name + \" ?\"))
@@ -289,25 +282,148 @@ function confirmation (name)
 }
 </script>";
 
-Session::write('javascript',$javascript);
+Session::write('javascript', $javascript);
 
 $htmlHeadXtra[] = '<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="expires" content="-1">';
+
 
 $checked_files = false;
 if (!$view || $view == 'received') {
 	$part = 'received';
 } elseif ($view = 'sent') {
 	$part = 'sent';
+    $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
+    $url = api_get_path(WEB_AJAX_PATH).'dropbox.ajax.php?'.api_get_cidreq().'&a=upload_file&id=';
+
+    $htmlHeadXtra[] = "<script>
+$(function () {
+    'use strict';
+    var url = '".$url."';
+    var uploadButton = $('<button/>')
+        .addClass('btn btn-primary')
+        .prop('disabled', true)
+        .text('".get_lang('Loading')."')
+        .on('click', function () {
+            var \$this = $(this),
+            data = \$this.data();
+
+            \$this
+                .off('click')
+                .text('".get_lang('Cancel')."')
+                .on('click', function () {
+                    \$this.remove();
+                    data.abort();
+                });
+            data.submit().always(function () {
+
+                \$this.remove();
+            });
+    });
+
+    $('#recipient_form').on('change', function() {
+        $('#multiple_form').show();
+    });
+
+    $('#fileupload').bind('fileuploaddone', function (e, data) {
+      console.log('fileuploaddone');
+        event.preventDefault();
+        return false;
+    });
+
+    $('#fileupload').submit(function() {
+    return false;
+    });
+
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',
+        autoUpload: false,
+        // Enable image resizing, except for Android and Opera,
+        // which actually support image resizing, but fail to
+        // send Blob objects via XHR requests:
+        disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+        previewMaxWidth: 100,
+        previewMaxHeight: 100,
+        previewCrop: true,
+        complete: function (e, data) {
+        }
+    }).on('fileuploadadd', function (e, data) {
+        data.context = $('<div/>').appendTo('#files');
+
+        $.each(data.files, function (index, file) {
+            var node = $('<p/>').append($('<span/>').text(file.name));
+            if (!index) {
+                node
+                    .append('<br>')
+                    .append(uploadButton.clone(true).data(data));
+            }
+            node.appendTo(data.context);
+        });
+    }).on('fileuploadprocessalways', function (e, data) {
+        var index = data.index,
+            file = data.files[index],
+            node = $(data.context.children()[index]);
+        if (file.preview) {
+            node
+                .prepend('<br>')
+                .prepend(file.preview);
+        }
+        if (file.error) {
+            node
+                .append('<br>')
+                .append($('<span class=\"text-danger\"/>').text(file.error));
+        }
+        if (index + 1 === data.files.length) {
+            data.context.find('button')
+                .text('Upload')
+                .prop('disabled', !!data.files.error);
+        }
+    }).on('fileuploadprogressall', function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .progress-bar').css(
+            'width',
+            progress + '%'
+        );
+    }).on('fileuploaddone', function (e, data) {
+        $.each(data.result.files, function (index, file) {
+            if (file.url) {
+                var link = $('<a>')
+                    //.attr('target', '_blank')
+                    .prop('href', file.url);
+
+                $(data.context.children()[index]).wrap(link);
+            } else if (file.error) {
+                var error = $('<span class=\"text-danger\"/>').text(file.error);
+                $(data.context.children()[index])
+                    .append('<br>')
+                    .append(error);
+            }
+        });
+    }).on('fileuploadfail', function (e, data) {
+        $.each(data.files, function (index) {
+            var error = $('<span class=\"text-danger\"/>').text('File upload failed.');
+            $(data.context.children()[index])
+                .append('<br>')
+                .append(error);
+        });
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+});
+
+</script>";
+
 } else {
 	header('location: index.php?view='.$view.'&error=Error');
+	exit;
 }
 
 if (($postAction == 'download_received' || $postAction == 'download_sent') and !$_POST['store_feedback']) {
     $checked_file_ids = $_POST['id'];
     if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {
-        header ('location: index.php?view='.$view.'&error=CheckAtLeastOneFile');
+        header('location: index.php?view='.$view.'&error=CheckAtLeastOneFile');
     } else {
         handle_multiple_actions();
     }
@@ -331,25 +447,40 @@ if ((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(nu
 /*	BREADCRUMBS */
 
 if ($view == 'received') {
-	$interbreadcrumb[] = array('url' => '../dropbox/index.php', 'name' => get_lang('Dropbox', ''));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
+        'name' => get_lang('Dropbox', ''),
+    );
 	$nameTools = get_lang('ReceivedFiles');
 
 	if ($action == 'addreceivedcategory') {
-		$interbreadcrumb[] = array('url' => '../dropbox/index.php?view=received', 'name' => get_lang('ReceivedFiles'));
+        $interbreadcrumb[] = array(
+            'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=received&'.api_get_cidreq(),
+            'name' => get_lang('ReceivedFiles'),
+        );
 		$nameTools = get_lang('AddNewCategory');
 	}
 }
 
 if ($view == 'sent' || empty($view)) {
-	$interbreadcrumb[] = array('url' => '../dropbox/index.php', 'name' => get_lang('Dropbox', ''));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
+		'name' => get_lang('Dropbox')
+    );
 	$nameTools = get_lang('SentFiles');
 
 	if ($action == 'addsentcategory') {
-		$interbreadcrumb[] = array('url' => '../dropbox/index.php?view=sent', 'name' => get_lang('SentFiles'));
+		$interbreadcrumb[] = array(
+			'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
+			'name' => get_lang('SentFiles'),
+		);
 		$nameTools = get_lang('AddNewCategory');
 	}
 	if ($action == 'add') {
-		$interbreadcrumb[] = array ('url' => '../dropbox/index.php?view=sent', 'name' => get_lang('SentFiles'));
+		$interbreadcrumb[] = array(
+			'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
+			'name' => get_lang('SentFiles'),
+		);
 		$nameTools = get_lang('UploadNewFile');
 	}
 }

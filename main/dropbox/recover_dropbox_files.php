@@ -40,14 +40,14 @@ if (Database::num_rows($result)) {
         $sql = "SELECT * FROM $person_tbl
                 WHERE c_id = $course_id AND user_id = $user_id AND file_id = {$file['id']}";
         $result_person = Database::query($sql);
-        if (Database::num_rows($result_person) == 0 ) {
+        if (Database::num_rows($result_person) == 0) {
             $rows[] = array(
-                    $file['filename'],
-                    api_convert_and_format_date($file['upload_date']),
-                    Display::url(
-                        get_lang('Recover'), api_get_self().'?recover_id='.$file['id'],
-                        array('class' => 'btn btn-default')
-                    )
+                $file['filename'],
+                api_convert_and_format_date($file['upload_date']),
+                Display::url(
+                    get_lang('Recover'), api_get_self().'?recover_id='.$file['id'],
+                    array('class' => 'btn btn-default')
+                )
             );
         }
     }

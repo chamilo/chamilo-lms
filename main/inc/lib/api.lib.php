@@ -6518,9 +6518,19 @@ function api_get_jquery_libraries_js($libraries) {
 
     //Document multiple upload funcionality
     if (in_array('jquery-upload', $libraries)) {
-        $js .= api_get_js('jquery-upload/jquery.fileupload.js');
-        $js .= api_get_js('jquery-upload/jquery.fileupload-ui.js');
-        $js .= api_get_css($js_path.'jquery-upload/jquery.fileupload-ui.css');
+
+        $js .= api_get_asset('blueimp-load-image/js/load-image.all.min.js');
+        $js .= api_get_asset('blueimp-canvas-to-blob/js/canvas-to-blob.min.js');
+        $js .= api_get_asset('jquery-file-upload/js/jquery.iframe-transport.js');
+        $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload.js');
+        $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-process.js');
+        $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-image.js');
+        $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-audio.js');
+        $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-video.js');
+        $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-validate.js');
+
+        $js .= api_get_css(api_get_path(WEB_PATH).'web/assets/jquery-file-upload/css/jquery.fileupload.css');
+        $js .= api_get_css(api_get_path(WEB_PATH).'web/assets/jquery-file-upload/css/jquery.fileupload-ui.css');
     }
 
     // jquery datepicker

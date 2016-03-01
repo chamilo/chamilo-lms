@@ -48,8 +48,36 @@ if (isset($_POST['sent_http_request'])) {
     exit;
 }
 
+$msgLang = isset($_SESSION['disabled_languages']) ? 1 : 0;
+$disabledLang = isset($_SESSION['disabled_languages']) ? $_SESSION['disabled_languages'] : null;
+
 $htmlHeadXtra[] = '<script>
  $(document).ready(function() {
+    var msgLang = '.$msgLang.';
+    var disabledLang = "'.$disabledLang.'"
+
+    if (msgLang == 1) {
+        $("#js_alerts").html("<div class=\"alert alert-warning\">' . get_lang('ThereAreUsersUsingThisLanguagesDisableItManually') . ' </br> " + disabledLang + "</div");
+    }
+    
+    $("#disable_all_except_default").click(function () {
+        if(confirm("'. get_lang('ConfirmYourChoice') .'")) {
+            $.ajax({
+                contentType: "application/x-www-form-urlencoded",
+                beforeSend: function(objeto) {
+                    $("#id_content_message").html("<div class=\"normal-message\"><img src=\"' . api_get_path(WEB_PATH) . 'main/img/loading1.gif\" /> ' . get_lang('Loading') . '</div>");
+                },
+                type: "GET",
+                url: "../admin/languages.php",
+                data: "action=disable_all_except_default",
+                success: function(datos) {
+                    window.location.href = "' . api_get_self() . '";
+                }
+            });
+        }
+        
+        return false;  
+    });
 
  	//$(window).load(function () {
       $(".make_visible_and_invisible").attr("href","javascript:void(0)");
@@ -117,6 +145,10 @@ $htmlHeadXtra[] = '<script>
 
  });
 </script>';
+
+// unset the msg session variable
+unset($_SESSION['disabled_languages']);
+
 // setting the table that is needed for the styles management (there is a check if it exists later in this code)
 $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $tbl_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -138,6 +170,27 @@ if ($action == 'setplatformlanguage') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
         SubLanguageManager::set_platform_language($_GET['id']);
     }
+}
+
+if ($action == 'disable_all_except_default') {
+    $allLanguages = SubLanguageManager::getAllLanguages();
+    $failedDisabledLanguages = '';
+    $checkFailed = false;
+    foreach ($allLanguages as $language) {
+        if (SubLanguageManager::check_if_language_is_used($language['id']) == false) {
+            SubLanguageManager::make_unavailable_language($language['id']);
+        } else {
+            if (intval(SubLanguageManager::get_platform_language_id()) !== intval($language['id'])) {
+                $failedDisabledLanguages .= ' -' .$language['english_name'] . '</br>';
+                $checkFailed = true;
+            }
+        }
+    }
+    
+    if ($checkFailed) {
+        $_SESSION['disabled_languages'] = $failedDisabledLanguages;
+    }
+    
 }
 
 if (isset($_POST['Submit']) && $_POST['Submit']) {
@@ -197,6 +250,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'make_unavailable_confirmed') {
 
 // displaying the explanation for this tool
 Display::display_normal_message(get_lang('PlatformLanguagesExplanation'));
+
+echo '<a id="disable_all_except_default" href="javascript:void(0)" class="btn btn-primary"><em class="fa fa-eye"></em> ' . get_lang('LanguagesDisableAllExceptDefault') . '</a>';
 
 // selecting all the languages
 $sql_select = "SELECT * FROM $tbl_admin_languages";

@@ -232,9 +232,3 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['session_hide_tab_list'] = array();
 // Show invisible exercise in LP list
 //$_configuration['show_invisible_exercise_in_lp_list'] = false;
-//Allow send a push notification when an email are sent
-//$_configuration['messaging_allow_send_push_notification'] = 'true';
-//Project number in the Google Developer Console
-//$_configuration['messaging_gdc_project_number'] = '';
-//Api Key in the Google Developer Console
-//$_configuration['messaging_gdc_api_key'] = '';

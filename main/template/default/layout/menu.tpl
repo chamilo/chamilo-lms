@@ -12,7 +12,9 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
-                {{ menu }}
+                {% for item in menu %}
+                    <li class="{{ item.current }}"><a href="{{ item.url }}">{{ item.title }}</a></li>
+                {% endfor %}
             </ul>
            {% if _u.logged == 1 %}
            <ul class="nav navbar-nav navbar-right">

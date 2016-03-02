@@ -394,16 +394,19 @@ function return_navigation_array()
 function menuArray()
 {
     $mainNavigation = return_navigation_array();
-    unset($mainNavigation['navigation']);
+    unset($mainNavigation['possible_tabs']);
     unset($mainNavigation['menu_navigation']);
     //$navigation = $navigation['navigation'];
     // Get active language
     $lang = api_get_setting('platformLanguage');
     if (!empty($_SESSION['user_language_choice'])) {
         $lang = $_SESSION['user_language_choice'];
+        
     } elseif (!empty($_SESSION['_user']['language'])) {
         $lang = $_SESSION['_user']['language'];
     }
+    
+    
     // Preparing home folder for multiple urls
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
@@ -415,6 +418,7 @@ function menuArray()
             $cleanUrl = str_replace('/', '-', $cleanUrl);
             $cleanUrl .= '/';
             $homepath  = api_get_path(SYS_APP_PATH).'home/'.$cleanUrl; //homep for Home Path
+            var_dump($homepath);
             //we create the new dir for the new sites
             if (!is_dir($homepath)) {
                 mkdir($homepath, api_get_permissions_for_new_directories());
@@ -460,7 +464,7 @@ function menuArray()
     if (!empty($open) OR !empty($openMenuTabsLoggedIn)) {
         if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') === false) {
             if (api_is_anonymous()) {
-                $mainNavigation['possible_tabs'][SECTION_CAMPUS]  = null;
+                $mainNavigation['navigation'][SECTION_CAMPUS]  = null;
             }
         } else {
             if (api_get_user_id() && !api_is_anonymous()) {
@@ -469,7 +473,7 @@ function menuArray()
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
                     if ($match) {
-                        $mainNavigation['possible_tabs'][$matches[3]] = array(
+                        $mainNavigation['navigation'][$matches[3]] = array(
                             'url' => $matches[1],
                             'target' => $matches[2],
                             'title' => $matches[3],
@@ -485,7 +489,7 @@ function menuArray()
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
                     if ($match) {
-                        $mainNavigation['possible_tabs'][$matches[3]] = array(
+                        $mainNavigation['navigation'][$matches[3]] = array(
                             'url' => $matches[1],
                             'target' => $matches[2],
                             'title' => $matches[3],
@@ -497,10 +501,10 @@ function menuArray()
         }
     }
     
-    if (count($mainNavigation['possible_tabs']) > 0) {
+    if (count($mainNavigation['navigation']) > 0) {
         //$pre_lis = '';
         $activeSection = '';
-        foreach ($mainNavigation['possible_tabs'] as $section => $navigation_info) {
+        foreach ($mainNavigation['navigation'] as $section => $navigation_info) {
             
             $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
             
@@ -525,16 +529,16 @@ function menuArray()
             } else {
                 $current = '';
             }
-            $mainNavigation['possible_tabs'][$section]['current'] = '';
+            $mainNavigation['navigation'][$section]['current'] = '';
         }
         if (!empty($activeSection)) {
-            $mainNavigation['possible_tabs'][$activeSection]['current'] = 'active';
+            $mainNavigation['navigation'][$activeSection]['current'] = 'active';
         }
         
     }
-    unset($mainNavigation['possible_tabs']['myprofile']);
+    unset($mainNavigation['navigation']['myprofile']);
     
-    return $mainNavigation['possible_tabs'];
+    return $mainNavigation['navigation'];
 }
 
 

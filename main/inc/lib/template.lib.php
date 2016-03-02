@@ -934,7 +934,6 @@ class Template
         
         //Menu
         $menu =  menuArray();
-        
         $this->assign('menu', $menu);
 
         // Setting notifications

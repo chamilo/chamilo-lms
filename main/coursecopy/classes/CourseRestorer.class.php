@@ -334,8 +334,10 @@ class CourseRestorer
                             continue;
                         }
 
-                        //$title = basename($sysFolderPath);
                         $title = $document->title;
+                        if (empty($title)) {
+                            $title = basename($sysFolderPath);
+                        }
 
                         // File doesn't exist in file system.
                         if (!is_dir($sysFolderPath)) {
@@ -392,8 +394,10 @@ class CourseRestorer
                                 //continue;
                                 $visibility = $document->item_properties[0]['visibility'];
                                 $new = '/'.substr(dirname($document->path), 9);
-                                //$title = str_replace('/', '', $new);
                                 $title = $document->title;
+                                if (empty($title)) {
+                                    $title = str_replace('/', '', $new);
+                                }
 
                                 // This code fixes the possibility for a file without a directory entry to be
                                 $document_id = add_document(
@@ -425,7 +429,7 @@ class CourseRestorer
 
 					if (file_exists($path.$document->path)) {
 						switch ($this->file_option) {
-							case FILE_OVERWRITE :
+							case FILE_OVERWRITE:
                                 $origin_path = $this->course->backup_path.'/'.$document->path;
 
 								if (file_exists($origin_path)) {

@@ -131,7 +131,6 @@ class ImportCsv
                     if (method_exists($this, $method)) {
                         if (
                             (
-                                $method == 'importUnsubscribeStatic' ||
                                 $method == 'importSubscribeStatic' ||
                                 $method == 'importSubscribeUserToCourse'
                             ) ||
@@ -172,7 +171,6 @@ class ImportCsv
                 'courses',
                 'sessions',
                 'subscribe-static',
-                'unsubscribe-static',
                 'courseinsert-static'
             );
 
@@ -201,9 +199,10 @@ class ImportCsv
                 'teachers-static',
                 'courses-static',
                 'sessions-static',
+                'calendar-static',
                 'sessionsextid-static',
+                'unsubscribe-static',
                 'unsubsessionsextid-static',
-                'calendar-static'
             );
 
             foreach ($sections as $section) {

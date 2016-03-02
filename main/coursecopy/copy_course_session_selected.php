@@ -30,7 +30,7 @@ if (!api_is_coach()) {
 }
 
 $courseId = api_get_course_int_id();
-$courseInfo = api_get_course_info($courseId);
+$courseInfo = api_get_course_info_by_id($courseId);
 $courseCode = $courseInfo['code'];
 $sessionId = api_get_session_id();
 

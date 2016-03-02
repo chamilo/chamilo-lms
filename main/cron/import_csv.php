@@ -1567,7 +1567,7 @@ class ImportCsv
                 $courseInfo = api_get_course_info($chamiloCourseCode);
 
                 if (empty($courseInfo)) {
-                    $this->logger->addError('Course does not exists: '.$courseInfo);
+                    $this->logger->addError('Course does not exists: '.$chamiloCourseCode);
                     continue;
                 }
 

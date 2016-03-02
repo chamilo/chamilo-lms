@@ -2405,8 +2405,18 @@ function fixIds(EntityManager $em)
             foreach ($dataList as $data) {
                 if (isset($oldGroups[$data['group_id']])) {
                     $data['group_id'] = $oldGroups[$data['group_id']];
+
+                    $userId = $data['user_id'];
+
+                    $sql = "SELECT id FROM user WHERE user_id = $userId";
+                    $userResult = $connection->executeQuery($sql);
+                    $userInfo = $userResult->fetch();
+                    if (empty($userInfo)) {
+                        continue;
+                    }
+
                     $sql = "INSERT INTO usergroup_rel_user (usergroup_id, user_id, relation_type)
-                            VALUES ('{$data['group_id']}', '{$data['user_id']}', '{$data['relation_type']}')";
+                            VALUES ('{$data['group_id']}', '{$userId}', '{$data['relation_type']}')";
                     $connection->executeQuery($sql);
                 }
             }

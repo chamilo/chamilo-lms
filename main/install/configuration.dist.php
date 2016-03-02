@@ -230,3 +230,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['document_manage_deleted_files'] = false;
 // Hide tabs in the main/session/index.php page
 //$_configuration['session_hide_tab_list'] = array();
+// Show invisible exercise in LP list
+//$_configuration['show_invisible_exercise_in_lp_list'] = false;

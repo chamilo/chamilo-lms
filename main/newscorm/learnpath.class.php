@@ -8627,8 +8627,15 @@ class learnpath
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
+        $setting = api_get_configuration_value('show_invisible_exercise_in_lp_list');
+
+        $activeCondition = " active <> -1 ";
+        if ($setting) {
+            $activeCondition = " active = 1 ";
+        }
+
         $sql_quiz = "SELECT * FROM $tbl_quiz
-                     WHERE c_id = $course_id AND active = 1 $condition_session
+                     WHERE c_id = $course_id AND $activeCondition $condition_session
                      ORDER BY title ASC";
 
         $sql_hot  = "SELECT * FROM $tbl_doc

@@ -93,20 +93,136 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => $learnPath->get_name());
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
+
+$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
+
+$htmlHeadXtra[] = "
+<script>
+$(function () {
+    'use strict';
+
+    $('#form_upload').submit(function() {
+        return false;
+    });
+
+    var url = '".$url."';
+    var uploadButton = $('<button/>')
+        .addClass('btn btn-primary')
+        .prop('disabled', true)
+        .text('".get_lang('Loading')."')
+        .on('click', function () {
+            var \$this = $(this),
+            data = \$this.data();
+
+            \$this
+                .off('click')
+                .text('".get_lang('Cancel')."')
+                .on('click', function () {
+                    \$this.remove();
+                    data.abort();
+                });
+            data.submit().always(function () {
+                \$this.remove();
+            });
+        });
+
+    $('#file_upload').fileupload({
+        url: url,
+        dataType: 'json',
+        autoUpload: false,
+        // Enable image resizing, except for Android and Opera,
+        // which actually support image resizing, but fail to
+        // send Blob objects via XHR requests:
+        disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+        previewMaxWidth: 100,
+        previewMaxHeight: 100,
+        previewCrop: true
+     }).on('fileuploadadd', function (e, data) {
+        data.context = $('<div/>').appendTo('#files');
+
+        $.each(data.files, function (index, file) {
+            var node = $('<p/>').append($('<span/>').text(file.name));
+            if (!index) {
+                node
+                    .append('<br>')
+                    .append(uploadButton.clone(true).data(data));
+            }
+            node.appendTo(data.context);
+        });
+    }).on('fileuploadprocessalways', function (e, data) {
+        var index = data.index,
+            file = data.files[index],
+            node = $(data.context.children()[index]);
+        if (file.preview) {
+            node
+                .prepend('<br>')
+                .prepend(file.preview);
+        }
+        if (file.error) {
+            node
+                .append('<br>')
+                .append($('<span class=\"text-danger\"/>').text(file.error));
+        }
+        if (index + 1 === data.files.length) {
+            data.context.find('button')
+                .text('Upload')
+                .prop('disabled', !!data.files.error);
+        }
+    }).on('fileuploadprogressall', function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .progress-bar').css(
+            'width',
+            progress + '%'
+        );
+    }).on('fileuploaddone', function (e, data) {
+
+        $.each(data.result.files, function (index, file) {
+            if (file.url) {
+                var link = $('<a>')
+                    .attr('target', '_blank')
+                    .prop('href', file.url);
+
+                $(data.context.children()[index]).wrap(link);
+            } else if (file.error) {
+                var error = $('<span class=\"text-danger\"/>').text(file.error);
+                $(data.context.children()[index])
+                    .append('<br>')
+                    .append(error);
+            }
+        });
+    }).on('fileuploadfail', function (e, data) {
+        $.each(data.files, function (index) {
+            var error = $('<span class=\"text-danger\"/>').text('File upload failed.');
+            $(data.context.children()[index])
+                .append('<br>')
+                .append(error);
+        });
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+});
+</script>";
+
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list?'.api_get_cidreq(),
+    'name' => get_lang('LearningPaths'),
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
+    'name' => $learnPath->get_name(),
+);
 
 switch ($type) {
     case 'chapter':
         $interbreadcrumb[] = array(
-            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id(),
+            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
         );
         $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewChapter'));
         break;
     case 'document':
         $interbreadcrumb[] = array(
-            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id(),
+            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
         );
         break;
@@ -115,7 +231,7 @@ switch ($type) {
         break;
 }
 
-if ($action == 'add_item' && $type == 'document' ) {
+if ($action == 'add_item' && $type == 'document') {
     $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewDocumentCreated'));
 }
 
@@ -164,10 +280,9 @@ jQuery(document).ready(function(){
 
 $(document).ready(function() {
     $("#doc_form").removeClass( "col-md-8" ).addClass( "col-md-7" );
-    
     $("#hide_bar_template").click(function() {
         $("#lp_sidebar").toggleClass("hide");
-        
+
         if ($('#doc_form').is('.col-md-7')) {
             $('#doc_form').removeClass('col-md-7');
             $('#doc_form').addClass('col-md-11');
@@ -175,7 +290,7 @@ $(document).ready(function() {
             $('#doc_form').removeClass('col-md-11');
             $('#doc_form').addClass('col-md-7');
         }
-       
+
         $("#hide_bar_template").toggleClass("hide_bar_template_not_hide");
     });
 

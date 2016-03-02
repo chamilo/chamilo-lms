@@ -8672,7 +8672,7 @@ class learnpath
         $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
 
-        $document_tree = DocumentManager::get_document_preview(
+        $documentTree = DocumentManager::get_document_preview(
             $course_info,
             $this->lp_id,
             null,
@@ -8684,7 +8684,69 @@ class learnpath
             true
         );
 
-        return $document_tree;
+        $headers = array(
+            get_lang('Files'),
+            get_lang('NewDocument'),
+            get_lang('Upload'),
+        );
+
+        $multipleForm = '';
+
+        $form = new FormValidator('form_upload', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING'], '', array('enctype'=> "multipart/form-data"));
+
+        $folders = DocumentManager::get_all_document_folders(
+            api_get_course_info(),
+            0,
+            true
+        );
+
+        DocumentManager::build_directory_selector(
+            $folders,
+            '',
+            array(),
+            true,
+            $form,
+            'directory_parent_id'
+        );
+
+        $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
+        $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
+        $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
+        $form->setDefaults(['if_exists' => 'rename']);
+
+
+        // Check box options
+        $form->addElement(
+            'checkbox',
+            'unzip',
+            get_lang('Options'),
+            get_lang('Uncompress')
+        );
+
+        $form->addHtml('
+            <span class="btn btn-success fileinput-button">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>'.get_lang('AddFiles').'</span>
+                <!-- The file input field used as target for the file upload widget -->
+                <input id="file_upload" type="file" name="files[]" multiple>
+            </span>
+
+            <br />
+            <br />
+            <!-- The global progress bar -->
+            <div id="progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+            </div>
+            <div id="files" class="files"></div>
+            '
+        );
+
+
+        $new = $this->display_document_form('add', 0);
+
+        $tabs = Display::tabs($headers, array($documentTree, $new, $form->returnForm()), 'subtab');
+
+        return $tabs;
     }
 
     /**

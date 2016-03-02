@@ -2789,6 +2789,8 @@ class DocumentManager
      * @param string $if_exists overwrite, rename or warn (default)
      * @param bool $index_document index document (search xapian module)
      * @param bool $show_output print html messages
+     * @param string $fileKey
+     *
      * @return array|bool
      */
     public static function upload_document(
@@ -2828,6 +2830,21 @@ class DocumentManager
                     null,
                     $sessionId
                 );
+
+                // Showing message when sending zip files
+                if ($new_path === true && $unzip == 1) {
+                    if ($show_output) {
+                        Display::display_confirmation_message(
+                            get_lang('UplUploadSucceeded').'<br />',
+                            false
+                        );
+                    }
+
+                    return [
+                        'title' => $path,
+                        'url' => $path,
+                    ];
+                }
 
                 if ($new_path) {
                     $documentId = DocumentManager::get_document_id(
@@ -2875,13 +2892,6 @@ class DocumentManager
                         );
                     }
 
-                    // Showing message when sending zip files
-                    if ($new_path === true && $unzip == 1 && $show_output) {
-                        Display::display_confirmation_message(
-                            get_lang('UplUploadSucceeded') . '<br />',
-                            false
-                        );
-                    }
 
                     if ($index_document) {
                         self::index_document(
@@ -3403,13 +3413,13 @@ class DocumentManager
         $return = '';
         if ($lp_id) {
             if ($folderId === false) {
-                $return .= '<div class="lp_resource_element">';
+                /*$return .= '<div class="lp_resource_element">';
                 $return .= Display::return_icon('new_doc.gif', '', array(), ICON_SIZE_SMALL);
                 $return .= Display::url(
                     get_lang('NewDocument'),
                     api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id
                 );
-                $return .= '</div>';
+                $return .= '</div>';*/
             }
         } else {
             $return .= Display::div(
@@ -5034,8 +5044,14 @@ class DocumentManager
 
      * @return string html form
      */
-    public static function build_directory_selector($folders, $document_id, $group_dir = '', $change_renderer = false, & $form = null, $selectName = 'id')
-    {
+    public static function build_directory_selector(
+        $folders,
+        $document_id,
+        $group_dir = '',
+        $change_renderer = false,
+        & $form = null,
+        $selectName = 'id'
+    ) {
         $doc_table = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
         $folder_titles = array();

@@ -5399,7 +5399,7 @@ div#chat-remote-video video {
     width: 420px;
 }
 .tab-wrapper .tab-content{
-    padding: 25px;
+    padding: 25px 0px 25px 0px;
 }
 .description-upload{
     margin-bottom: 10px;

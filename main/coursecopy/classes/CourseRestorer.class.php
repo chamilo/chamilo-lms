@@ -319,7 +319,6 @@ class CourseRestorer
 
 		    	if ($document->file_type == FOLDER) {
 		    		$visibility = $document->item_properties[0]['visibility'];
-
 		    		$new = substr($document->path, 8);
 
                     $folderList = explode('/', $new);
@@ -335,7 +334,9 @@ class CourseRestorer
                             continue;
                         }
 
-                        $title = basename($sysFolderPath);
+                        //$title = basename($sysFolderPath);
+                        $title = $document->title;
+
                         // File doesn't exist in file system.
                         if (!is_dir($sysFolderPath)) {
                             // Creating directory
@@ -390,8 +391,9 @@ class CourseRestorer
                             if (Database::num_rows($res) == 0) {
                                 //continue;
                                 $visibility = $document->item_properties[0]['visibility'];
-                                $new        = '/'.substr(dirname($document->path), 9);
-                                $title      = str_replace('/', '', $new);
+                                $new = '/'.substr(dirname($document->path), 9);
+                                //$title = str_replace('/', '', $new);
+                                $title = $document->title;
 
                                 // This code fixes the possibility for a file without a directory entry to be
                                 $document_id = add_document(

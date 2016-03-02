@@ -1806,13 +1806,13 @@ VALUES
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
 VALUES
-('messaging_allow_send_push_notification', NULL, 'radio', 'WebServices', 'false', 'MessagingAllowSendPushNotificationText', 'MessagingAllowSendPushNotificationComment', NULL, NULL, 0),
+('messaging_allow_send_push_notification', NULL, 'radio', 'WebServices', 'false', 'MessagingAllowSendPushNotificationTitle', 'MessagingAllowSendPushNotificationComment', NULL, NULL, 0),
 ('messaging_gdc_project_number', NULL, 'textfield', 'WebServices', '', 'MessagingGDCProjectNumberTitle', 'MessagingGDCProjectNumberComment', NULL, NULL, 0),
 ('messaging_gdc_api_key', NULL, 'textfield', 'WebServices', '', 'MessagingGDCApiKeyTitle', 'MessagingGDCApiKeyComment', NULL, NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
 ('messaging_allow_send_push_notification', 'true', 'Yes'),
-('messaging_allow_send_push_notification', 'false', 'No'),
+('messaging_allow_send_push_notification', 'false', 'No');
 
 UPDATE settings_current SET selected_value = '1.10.0.52' WHERE variable = 'chamilo_database_version';

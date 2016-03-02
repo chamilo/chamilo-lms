@@ -314,17 +314,20 @@ class Notification extends Model
                 }
 
                 // Saving the notification to be sent some day.
+                $content = cut($content, $this->max_content_length);
                 $params = array(
                     'sent_at' => $sendDate,
                     'dest_user_id' => $user_id,
                     'dest_mail' => $userInfo['email'],
                     'title' => $title,
-                    'content' => cut($content, $this->max_content_length),
+                    'content' => $content,
                     'send_freq' => $userSetting
                 );
 
                 $this->save($params);
             }
+
+            MessagesWebService::sendPushNotification($user_list, $title, $content);
         }
     }
 

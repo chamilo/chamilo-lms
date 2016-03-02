@@ -1835,7 +1835,6 @@ $UserInfo = "brugerinformation";
 $ModifyQuestion = "Rediger spørgsmålet";
 $CheckAll = "Afkryds alle";
 $NbAnnoucement = "Meddelelser";
-$OtherCourses = "andre kurser";
 $Doc = "Læringssti";
 $PlataformAdmin = "Platformadmin";
 $Groups = "Grupper";

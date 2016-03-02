@@ -1807,7 +1807,6 @@ $UserInfo = "podatci o korisniku";
 $ModifyQuestion = "Izmijeni pitanje";
 $CheckAll = "Označi sve";
 $NbAnnoucement = "Obavijest";
-$OtherCourses = "drugi kolegiji";
 $Doc = "dokument";
 $PlataformAdmin = "Nadzornik platforme";
 $Groups = "Skupine";

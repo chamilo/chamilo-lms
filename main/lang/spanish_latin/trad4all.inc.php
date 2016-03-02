@@ -1544,7 +1544,6 @@ $UserInfo = "información de usuario";
 $ModifyQuestion = "Modificar una pregunta";
 $CheckAll = "Marcar todo";
 $NbAnnoucement = "Avisos";
-$OtherCourses = "otros cursos";
 $Doc = "documento";
 $PlataformAdmin = "Administración de la plataforma";
 $Groups = "Grupos";

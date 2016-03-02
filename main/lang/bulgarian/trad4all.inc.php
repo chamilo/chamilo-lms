@@ -2609,7 +2609,6 @@ $UserInfo = "потребителска информация";
 $ModifyQuestion = "Промяна на въпроса";
 $CheckAll = "Провери всички";
 $NbAnnoucement = "Обяви";
-$OtherCourses = "други курсове";
 $Doc = "Документи";
 $PlataformAdmin = "Администратор";
 $Groups = "Групи";

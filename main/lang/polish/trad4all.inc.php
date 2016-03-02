@@ -2709,7 +2709,6 @@ $ModifyQuestion = "Zapisz pytanie";
 $Example = "Przykład";
 $CheckAll = "Zaznacz wszystkie";
 $NbAnnoucement = "Ogłoszenie";
-$OtherCourses = "inne kursy";
 $Doc = "Kurs";
 $PlataformAdmin = "Platforma administratora";
 $Groups = "Grupy";

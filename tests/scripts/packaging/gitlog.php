@@ -20,14 +20,20 @@ require 'php-git/src/Git.php';
 $repository = __DIR__.'/../..';
 $number = 500; //the number of commits to check (including minor)
 $formatHTML = true;
+$showDate = false;
+if (!empty($argv[1]) && $argv[1] == '-t') {
+    $showDate = true;
+}
 
 $git = new \SebastianBergmann\Git\Git($repository);
-echo $git->getCurrentBranch().PHP_EOL;
+echo "Log from branch: ".$git->getCurrentBranch().PHP_EOL;
 
 $logs = $git->getRevisions('DESC', $number);
 $i = 0;
 foreach ($logs as $log) {
-    //echo $log['date']->format('Y-m-d H:i:s').' '.substr($log['sha1'],0,8).PHP_EOL;
+    if ($showDate) {
+      echo $log['date']->format('Y-m-d H:i:s').' '.substr($log['sha1'],0,8).PHP_EOL;
+    }
     if (strncasecmp($log['message'], 'Minor', 5) === 0) {
         //Skip minor messages
         continue;

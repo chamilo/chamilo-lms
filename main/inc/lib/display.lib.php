@@ -133,7 +133,7 @@ class Display
     {
         echo self::$global_template->show_footer_template();
     }
-    
+
     /**
      * Display the page footer
      */
@@ -979,42 +979,47 @@ class Display
                         $( "#tabs" ).tabs();
                     });
                 </script>
-     * @param   array   list of the tab titles
-     * @param   array   content that will be showed
-     * @param   string  the id of the container of the tab in the example "tabs"
-     * @param   array   attributes for the ul
+     * @param   array   $headers list of the tab titles
+     * @param   array   $items
+     * @param   string  $id id of the container of the tab in the example "tabs"
+     * @param   array   $attributes for the ul
+     * @param array $ul_attributes
      *
+     * @return string
      */
-    public static function tabs($header_list, $content_list, $id = 'tabs', $attributes = array(), $ul_attributes = array())
+    public static function tabs($headers, $items, $id = 'tabs', $attributes = array(), $ul_attributes = array())
     {
-        if (empty($header_list) || count($header_list) == 0 ) {
+        if (empty($headers) || count($headers) == 0 ) {
             return '';
         }
 
         $lis = '';
         $i = 1;
-        foreach ($header_list as $item) {
+        foreach ($headers as $item) {
             $active = '';
             if ($i == 1) {
                 $active = ' active';
             }
-            $item = self::tag('a', $item, array('href'=>'#'.$id.'-'.$i, 'role'=> 'tab'));
-            $ul_attributes['data-toggle'] = 'tab';
+            $item = self::tag('a', $item, array('href'=>'#'.$id.'-'.$i, 'role'=> 'tab', 'data-toggle' => 'tab'));
             $ul_attributes['role'] = 'presentation';
             $ul_attributes['class'] = $active;
             $lis .= self::tag('li', $item, $ul_attributes);
             $i++;
         }
-        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs', 'role'=> 'tablist']);
+        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs', 'role'=> 'tablist', 'id' => 'ul_'.$id]);
 
         $i = 1;
         $divs = '';
-        foreach ($content_list as $content) {
+        foreach ($items as $content) {
             $active = '';
             if ($i == 1) {
                 $active = ' active';
             }
-            $divs .= self::tag('div', $content, array('id'=> $id.'-'.$i, 'class' => 'tab-pane '.$active, 'role' => 'tabpanel'));
+            $divs .= self::tag(
+                'div',
+                $content,
+                array('id' => $id.'-'.$i, 'class' => 'tab-pane '.$active, 'role' => 'tabpanel')
+            );
             $i++;
         }
 

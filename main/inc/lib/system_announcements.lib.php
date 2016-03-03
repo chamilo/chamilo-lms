@@ -568,7 +568,6 @@ class SystemAnnouncementManager
         }
 
         $announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
-        $announcement = new \Chamilo\CoreBundle\Entity\SysAnnouncement();
 
         if (!$announcement) {
             return false;

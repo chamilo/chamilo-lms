@@ -8690,9 +8690,13 @@ class learnpath
             get_lang('Upload'),
         );
 
-        $multipleForm = '';
-
-        $form = new FormValidator('form_upload', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING'], '', array('enctype'=> "multipart/form-data"));
+        $form = new FormValidator(
+            'form_upload',
+            'POST',
+            api_get_self().'?'.$_SERVER['QUERY_STRING'],
+            '',
+            array('enctype' => "multipart/form-data")
+        );
 
         $folders = DocumentManager::get_all_document_folders(
             api_get_course_info(),
@@ -8714,7 +8718,6 @@ class learnpath
         $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
         $form->setDefaults(['if_exists' => 'rename']);
 
-
         // Check box options
         $form->addElement(
             'checkbox',
@@ -8723,25 +8726,8 @@ class learnpath
             get_lang('Uncompress')
         );
 
-        $form->addHtml('
-            <span class="btn btn-success fileinput-button">
-                <i class="glyphicon glyphicon-plus"></i>
-                <span>'.get_lang('AddFiles').'</span>
-                <!-- The file input field used as target for the file upload widget -->
-                <input id="file_upload" type="file" name="files[]" multiple>
-            </span>
-
-            <br />
-            <br />
-            <!-- The global progress bar -->
-            <div id="progress" class="progress">
-                <div class="progress-bar progress-bar-success"></div>
-            </div>
-            <div id="files" class="files"></div>
-            '
-        );
-
-
+        $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
+        $form->addMultipleUpload($url);
         $new = $this->display_document_form('add', 0);
 
         $tabs = Display::tabs($headers, array($documentTree, $new, $form->returnForm()), 'subtab');

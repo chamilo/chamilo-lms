@@ -167,6 +167,10 @@ function confirmation(name) {
 
 jQuery(document).ready(function(){
     jQuery('.scrollbar-inner').scrollbar();
+
+    $('#subtab ').on('click', 'a:first', function() {
+        window.location.reload();
+    });
 });
 
 $(document).ready(function() {

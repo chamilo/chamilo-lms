@@ -9,6 +9,10 @@
 class MessagesWebService extends WebService
 {
     const SERVICE_NAME = 'MsgREST';
+    /**
+     * @var string EXTRA_FIELD_GCM_REGISTRATION Variable name of the user extra field.
+     * Necessary for register the registration token from the Google Cloud Messaging
+     */
     const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
 
     /**
@@ -144,9 +148,9 @@ class MessagesWebService extends WebService
     }
 
     /**
-     * Register the GCM Registration ID for a user
+     * Register the Registration ID (token) obtained from Google Cloud Messaging for a user
      * @param Chamilo\UserBundle\Entity\User $user The user
-     * @param string $registrationId The token registration id from GCM
+     * @param string $registrationId The token registration id from Google Cloud Messaging
      * @return int The id after insert or the number of affected rows after update. Otherwhise return false
      */
     public static function setGcmRegistrationId(Chamilo\UserBundle\Entity\User $user, $registrationId)

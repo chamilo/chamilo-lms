@@ -3149,7 +3149,6 @@ $ModifyQuestion = "Modifica il quesito";
 $Example = "Esempio";
 $CheckAll = "Seleziona tutto";
 $NbAnnoucement = "Avviso";
-$OtherCourses = "altri corsi";
 $Doc = "Moduli didattici";
 $PlataformAdmin = "Amministratore Campus";
 $Groups = "Gruppi";

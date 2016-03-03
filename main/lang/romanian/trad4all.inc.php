@@ -3025,7 +3025,6 @@ $ModifyQuestion = "Modifica intrebarea";
 $Example = "Exemplu";
 $CheckAll = "Bifeaza toate";
 $NbAnnoucement = "Anunt";
-$OtherCourses = "alte cursuri";
 $Doc = "document";
 $PlataformAdmin = "Administratorul platformei";
 $Groups = "Grupuri";

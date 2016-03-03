@@ -2808,7 +2808,6 @@ $ModifyQuestion = "Fragen ändern";
 $Example = "Beispiel";
 $CheckAll = "Alle prüfen";
 $NbAnnoucement = "Ankündigung";
-$OtherCourses = "andere Kurse";
 $Doc = "Dokument";
 $PlataformAdmin = "Administrator";
 $Groups = "Gruppen";

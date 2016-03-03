@@ -2027,7 +2027,6 @@ $UserInfo = "معلومات المستخدم";
 $ModifyQuestion = "تعديل السؤال";
 $CheckAll = "اختر الجميع";
 $NbAnnoucement = "إعلان";
-$OtherCourses = " مقررات أخرى";
 $Doc = "مسار التعلم";
 $PlataformAdmin = "مدير المنصة";
 $Groups = "مجموعات";

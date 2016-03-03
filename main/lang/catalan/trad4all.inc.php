@@ -2961,7 +2961,6 @@ $ModifyQuestion = "Modificar la pregunta";
 $Example = "Exemple";
 $CheckAll = "Verificar tot";
 $NbAnnoucement = "Anunci";
-$OtherCourses = "Altres cursos";
 $Doc = "Document";
 $PlataformAdmin = "Administrador de l'entorn";
 $Groups = "Grups";

@@ -2513,7 +2513,6 @@ $UserInfo = "Informācija par lietotāju";
 $ModifyQuestion = "Saglabāt jautājumu";
 $CheckAll = "Atzīmēt visus";
 $NbAnnoucement = "Paziņojums";
-$OtherCourses = "citi kursi";
 $Doc = "Kurss";
 $PlataformAdmin = "Platformas administrators";
 $Groups = "Grupas";

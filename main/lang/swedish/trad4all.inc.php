@@ -1958,7 +1958,6 @@ $ModifyQuestion = "Ändra fråga";
 $Example = "Exempel";
 $CheckAll = "Markera allt";
 $NbAnnoucement = "Tillkännagivande";
-$OtherCourses = "andra kurser";
 $Doc = "dokument";
 $PlataformAdmin = "Plattformsadministratör";
 $Groups = "Grupper";

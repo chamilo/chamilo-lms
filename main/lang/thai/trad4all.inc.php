@@ -1283,7 +1283,6 @@ $UserInfo = "ข้อมูลของผู้ใช้";
 $ModifyQuestion = "ปรับ/แก้ไขคำถาม";
 $CheckAll = "เลือกทั้งหมด";
 $NbAnnoucement = "ประกาศ";
-$OtherCourses = "รายวิชาอื่น";
 $Doc = "เอกสาร";
 $PlataformAdmin = "การบริหารระบบ";
 $Groups = "กลุ่ม";

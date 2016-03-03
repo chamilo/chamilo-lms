@@ -2657,7 +2657,6 @@ $ModifyQuestion = "Wijzig vraag";
 $Example = "Voorbeeld";
 $CheckAll = "Controleer alles";
 $NbAnnoucement = "Mededeling";
-$OtherCourses = "Andere cursussen";
 $Doc = "document";
 $PlataformAdmin = "Platformbeheerder";
 $Groups = "Groepen";

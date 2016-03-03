@@ -1945,7 +1945,6 @@ $UserInfo = "информация пользователя";
 $ModifyQuestion = "Изменить вопрос";
 $CheckAll = "Проверить все";
 $NbAnnoucement = "Объявление";
-$OtherCourses = "другие курсы";
 $Doc = "Учебный план";
 $PlataformAdmin = "Администратор платформы";
 $Groups = "Группы";

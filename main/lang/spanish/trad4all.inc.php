@@ -7637,4 +7637,6 @@ $ClickOrDropOneFileHere = "Suelte un archivo aquí o haga clic";
 $ModuloPercentage = "Módulo:\t\t\t%";
 $LastXDays = "Últimos %s días";
 $ExportBadges = "Exportar insignias";
+$LanguagesDisableAllExceptDefault = "Desactivar todos los idiomas excepto el por defecto de la plataforma";
+$ThereAreUsersUsingThisLanguagesDisableItManually = "Hay usuarios que usan actualmente el idioma siguiente. Por favor, desactivar manualmente.";
 ?>

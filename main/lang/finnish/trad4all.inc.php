@@ -1342,7 +1342,6 @@ $UserInfo = "tietoja käyttäjästä";
 $ModifyQuestion = "Muokkaa kysymystä";
 $CheckAll = "Valitse kaikki";
 $NbAnnoucement = "Ilmoitus";
-$OtherCourses = "Kurssit";
 $Doc = "tiedosto";
 $PlataformAdmin = "Alustan ylläpitäjä";
 $Groups = "Ryhmät";

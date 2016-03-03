@@ -1868,7 +1868,6 @@ $UserInfo = "kullanıcı bilgisi";
 $ModifyQuestion = "Soruyu düzenle";
 $CheckAll = "Hepsini seç";
 $NbAnnoucement = "Duyuru";
-$OtherCourses = "diğer dersler";
 $Doc = "belge";
 $PlataformAdmin = "Platform Yöneticisi";
 $Groups = "Gruplar";

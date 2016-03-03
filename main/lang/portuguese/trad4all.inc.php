@@ -2843,7 +2843,6 @@ $UserInfo = "informação do utilizador";
 $ModifyQuestion = "Guardar a pergunta";
 $CheckAll = "Verificar todos";
 $NbAnnoucement = "Anúncio";
-$OtherCourses = "outros cursos";
 $Doc = "Curso";
 $PlataformAdmin = "Administração do Portal";
 $Groups = "Grupos";

@@ -56,6 +56,7 @@
     <h3>Security fixes</h3>
     <ul>
         <li>There were no specific security flaws detected during the development of 1.10.4 but standard development procedures and criterias were followed during the development to ensure a very high security level.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4ec97d924f0ed9344579e0af84cdc2a44f582712">4ec97d92</a>) Fix missing escape_string in LP title update</li>
     </ul>
     <h3>Possibly breaking changes</h3>
     <ul>
@@ -64,22 +65,229 @@
     <h3>Notable new Features</h3>
     <h4>For end-users, teachers and Chamilo admins</h4>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/08b7cd5708f7ae783703b70bee29d3bb14ddf72e">08b7cd57</a> - <a href="https://support.chamilo.org/issues/8085">#8085</a>) Add announcements tags list again</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/da8bce63019338ab1261a6b1be75adbf2f99d340">da8bce63</a> - <a href="https://support.chamilo.org/issues/8086">#8086</a>) Add modulo operation for calculated answers</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d2a2878cfbd3db3f0bf569ad5490aafd02d57a61">d2a2878c</a>) Updated Excel template to integrate no negative score management when importing questions. Fill blank or form type of question, matching type of question and category management</li>
     </ul>
     <h4>For developers and sysadmins</h4>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/aebd287c3cf6f86e896a758bd48e604deac476e5">aebd287c</a> - <a href="https://support.chamilo.org/issues/8105">#8105</a>) Boost agenda query efficiency</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b22023e8fda76176ca0cdceb82794bcd6f8cf9e0">b22023e8</a> - <a href="https://support.chamilo.org/issues/288">#288</a>) Add PENS plugin (beta)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7532197623c9e1cd8170c52bab772a43451925f5">75321976</a> - <a href="https://support.chamilo.org/issues/8081">#8081</a>) Added Last 15 days recents login chart</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3bb91f1219233f45451b73e7b57e4f282584763b">3bb91f12</a> - <a href="https://support.chamilo.org/issues/8081">#8081</a>) Added Chart to RecentLogin Statistics Page</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a87abb12e113e7606fddc04f809d81a2c3a309cd">a87abb12</a> - <a href="https://support.chamilo.org/issues/8081">#8081</a>) Add charts to statistics page</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6db2ef0ee7e0b77885ab369d4e79e9d3c3d4c625">6db2ef0e</a> - <a href="https://support.chamilo.org/issues/8059">#8059</a>) Add deletion of related resources when deleting a user (issues were caused by the inclusion of new foreign keys)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e77104ae15496ad1619f678b8e62af8b0eb6a808">e77104ae</a>) Fix default values in migration from previous versions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f283e196cbb036c768bd75b12fc27793990ecacc">f283e196</a>) Fix default values in migration from previous versions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d7a97678ef81479cd0864711aad3ce0f12468311">d7a97678</a>) TEXT Don't have default values in migration from previous versions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/af936717039713a0023142e5de1353243cfcee2e">af936717</a> - <a href="https://task.beeznest.com/issues/10749">BT#10749</a>) Add option to force the download instead of the preview of a file through a URL parameter &dl=1 to download.php</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4e271d321c5216050286fa9b5424d08c074fbcb8">4e271d32</a>) Add migration correction</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f4d3eb00ee8d058a8c5d7dc9d9b4753b0a26384e">f4d3eb00</a>) Remove use of undefined configuration param code_append in default configuration file</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/8bc797b7dbe13b529bd1ec7503912ef51d6d60af">8bc797b7</a>) Add setting show_hidden_exercise_added_to_lp</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/fc699728718be6da357d5027909fdb8034ce478a">fc699728</a> - <a href="https://support.chamilo.org/issues/8025">#8025</a>) Support HTTPS with Gravatar</li>
     </ul>
 
     <h3>Improvements (minor features) and debug</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cea07e84d24984de48350e4de8f0b9351d06a8a0">cea07e84</a> - <a href="https://task.beeznest.com/issues/8986">BT#8986</a>) Fix error course info</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1265dfc3c19b835b8c1befbfa145f9fac2a2052c">1265dfc3</a> - <a href="https://task.beeznest.com/issues/10730">BT#10730</a>) Fix upgrade issue with usergroup_rel_user table</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e7fa1a208a0319d6ee7fa96c06a12ea907092f60">e7fa1a20</a>) Add condition if value is empty in course restorer</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cd5a4a442041a35d9d3a07eaf1c37440e8fda350">cd5a4a44</a> - <a href="https://task.beeznest.com/issues/10901">BT#10901</a>) Fix course restorer</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3f192a52f323da799e5367842faa63b036840ffd">3f192a52</a> - <a href="https://task.beeznest.com/issues/10902">BT#10902</a>) Add show_invisible_exercise_in_lp_list setting</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b5dedb9de9ba8620119a53163cdf4c112e2192d6">b5dedb9d</a>) Added new style to messaging system in Languages</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/dd9554a5157348457d523c04a8609c5a0be7aeae">dd9554a5</a> - <a href="https://support.chamilo.org/issues/8111">#8111</a>) Added Button to disable all languages that are not the default</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/68dcc8e05f89390f0393a999240ff796d220cc7d">68dcc8e0</a>) Add CSS class moved to learning path items</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/669e3633978371ba6251aae7076179f8aa95c061">669e3633</a> - <a href="https://task.beeznest.com/issues/10882">BT#10882</a>) Fix category title in learning paths</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2fb41be35e5e95e7ea3349a5eb892a33020c1c28">2fb41be3</a> - <a href="https://task.beeznest.com/issues/10896">BT#10896</a>) Add dropbox drag n drop</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a9322ed1b1048d82a4d89d77a54eb9d23df75d35">a9322ed1</a>) Format code + add api_get_cidreq + use api_get_path() in dropbox</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/603ad72d3a14fcb2de0c6f03bebdcddce0a5485b">603ad72d</a>) Fix urls + format code in work tool</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/fff4a7a2da44bc18a50a730db4cd528c50cb590e">fff4a7a2</a>) Fix edit profile form generating api key</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/000263132270c0ac7ad1f6f7ba444118f4e1cb27">00026313</a> - <a href="https://task.beeznest.com/issues/10893">BT#10893</a>) Add work drag and drop form </li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3d311507cdf3a92afa5e0b40b4112252403c6df7">3d311507</a> - <a href="https://task.beeznest.com/issues/10893">BT#10893</a>) Add new jquery upload to documents and forum</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/48d96605417a00ed3ee5767a58a3e82174f7d4a7">48d96605</a> - <a href="https://task.beeznest.com/issues/10902">BT#10902</a>) Only show visible exercises</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/751682e3447967806520403c04d900e59acab0d8">751682e3</a>) Display the video poster field on bottom of ckeditor dialog</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/56eed0a0831fa39e28c657343f4eec0492b6e5ec">56eed0a0</a> - <a href="https://task.beeznest.com/issues/10843">BT#10843</a>) Fix button to display certificate and export badges</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/8f9d20cb387de072fa8cb290d7ee93c6e6a25c64">8f9d20cb</a> - <a href="https://task.beeznest.com/issues/10843">BT#10843</a>) Fix image urls when exporting certificates to pdf</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ab96a56212f6cb92d4ddcb002ecfa1152a18a99c">ab96a562</a> - <a href="https://support.chamilo.org/issues/8108">#8108</a>) Fix Button "Deny invitation" does not work.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/873535d292a6a80be428cd51da581a32c7bb9983">873535d2</a>) Allow set empty height for videos embed with ckeditor</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9dabe8230b6431e955f958a921fe3bcab08ac9e0">9dabe823</a> - <a href="https://support.chamilo.org/issues/8098">#8098</a>) Fix Hotspot question, student cannot move points if several Hotspot questions on one page</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f17c32e3b1a561eca4953c8838663d8849216aba">f17c32e3</a>) Fix permissions issue for admins looking at documents in courses where they are not teachers</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2b2c541ef022665748a3a4d34640bef33b1bd51b">2b2c541e</a> - <a href="https://task.beeznest.com/issues/10880">BT#10880</a>) Fix group filter to attendances</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0097b65680214901304a177cabdf5bd691de2d68">0097b656</a> - <a href="https://task.beeznest.com/issues/10880">BT#10880</a>) fix SQL ambiguous id issue in attendances</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/53e453bfa4fc224f3938f38c6974ef55be120c58">53e453bf</a>) Fix survey UI</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/05d217dba5207979757961fda173e7ef9ca82a9f">05d217db</a>) Fix breadcrumb URL in work tool</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f0c4e728ba1d22eae96e67d92106b3535b8612fa">f0c4e728</a>) Fix hotspot creation issue when relpath not empty …</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9694d70b0c0ad8659c0c19955d3e2ae9c8c3f60c">9694d70b</a> - <a href="https://support.chamilo.org/issues/8103">#8103</a>) Fix - Advanced settings do not work in forums inside a learning path</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ca3d375966e00bfedbbdb7dafcdbddecd600a6b8">ca3d3759</a>) Add gradebook category backup</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a377c0fd29eb7d5a9407219aea3968b783d8ab7a">a377c0fd</a>) Fix usergroup_rel_user during migration.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ba346708c321eee779f01a0e748a81e91eab73f1">ba346708</a>) Fix session_rel_user table if session does not exists.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b4b5adf90e3776dc2779f9fd1233b70573bb57e4">b4b5adf9</a> - <a href="https://support.chamilo.org/issues/8099">#8099</a>) Added correct UTC Dates DB Save In Sessions Add & Edit</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6b4a268e96491847bfb800f0575c93363a5abb9a">6b4a268e</a> - <a href="https://support.chamilo.org/issues/8099">#8099</a>) Fix correct UTC Dates DB Save In Sessions Edit</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cc27d59653ebb41c0ce8a7dad8ba7239b0f3ed79">cc27d596</a>) Minor - fix param comment</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9518a9b5226a2ab1eb96c52439bfc383cf457dae">9518a9b5</a> - <a href="https://support.chamilo.org/issues/8104">#8104</a>) Fix Click the user img in thread list it redirect to the full page of chamilo when the forum is in LP</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/977f9da1181763095b6ba2657fd967900fab00ae">977f9da1</a> - <a href="https://task.beeznest.com/issues/10856">BT#10856</a>) Use Bootstrap's responsive style on tables</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1c2430048946a70a7daaef1268e2766e857d8828">1c243004</a> - <a href="https://task.beeznest.com/issues/10856">BT#10856</a>) Fix filter by session on LP in learner details on curse page</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e684d1da69a3db397e88b993df315662108d4716">e684d1da</a> - <a href="https://task.beeznest.com/issues/10861">BT#10861</a>) Fix query in course tracking</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/35a2b32b6a1e9b370d7fa319c1bac790eac4d334">35a2b32b</a> - <a href="https://task.beeznest.com/issues/10861">BT#10861</a>) Fix mysql error in tracking lib</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/10e81d65a96fe2d8459ced34be805f8e95a6cbb9">10e81d65</a>) setAutoGenerateProxyClasses(true)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/57bcaecdef3a11f78595ace6287806efbaad2851">57bcaecd</a>) Fix issue where users can't see announcements in "All" Langs</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/09507abdef3ad1cbc65db11e098b45be54e5ef20">09507abd</a> - <a href="https://support.chamilo.org/issues/8099">#8099</a>) Fix correct UTC dates DB saves for sessions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/596c6b65d658ec216650ebcba6e756c8660b24cb">596c6b65</a> - <a href="https://support.chamilo.org/issues/8093">#8093</a>) Setting cache dir and dev = false (Doctrine will try to use a cache strategy)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7004bc146d1ee20f8e58dd318236990f43a2390c">7004bc14</a> - <a href="https://support.chamilo.org/issues/8077">#8077</a>) Fix all Stats report for fill-in-the-blanks questions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/aec6d4f4b2bed35310ebb0514b09e817ff1c8886">aec6d4f4</a> - <a href="https://support.chamilo.org/issues/8095">#8095</a>) Add Behat test for accept/deny invitations to social group</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a8c216dfaaee12ae2a264aa6fe767b9a352cd7b9">a8c216df</a> - <a href="https://support.chamilo.org/issues/8095">#8095</a>) Fix accept/deny invitations to social groups</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c3b9a10e7c9ad04e1cc3437848a99867cb5067ad">c3b9a10e</a> - <a href="https://support.chamilo.org/issues/8094">#8094</a>) Add security::removeXSS to work titles</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9c5f41896e09705419c5ad73175081b7a8bc3f8c">9c5f4189</a>) Fix function name get_handler_field_info_by_variable()</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2954d4db70121e980d7145be44bdffba93181c35">2954d4db</a> - <a href="https://support.chamilo.org/issues/8077">#8077</a>) Fix getFillTheBlankTabResult() and getNbResultFillBlankAll() is not defined</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a04331b31e4e2a7db80820762017eed7c783f7c0">a04331b3</a> - <a href="https://support.chamilo.org/issues/8076">#8076</a>) Fix Forum Threads can't be edit</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b385710a3a885f35c64f745c3290daff1f56a977">b385710a</a> - <a href="https://support.chamilo.org/issues/8092">#8092</a>) Add Behat test for check access to public course with password</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/33fd94230659516c2168fde59e33551cc403057b">33fd9423</a> - <a href="https://support.chamilo.org/issues/8092">#8092</a>) Fix Access to public course with password</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c68c83ef2b36722acc9631651c71ddb479a64487">c68c83ef</a> - <a href="https://support.chamilo.org/issues/8092">#8092</a>) Fix checkbox issue preventing the right selection in quickform</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/553e0a96f845f9ec100e1612af753da9c5803dfa">553e0a96</a> - <a href="https://support.chamilo.org/issues/8092">#8092</a>) Fix course settings form issues</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d86b7886e248814f4a78c3e74e39a52ace52d955">d86b7886</a> - <a href="https://support.chamilo.org/issues/8078">#8078</a>) Show the collapsible panel header like a clickable block</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/70b667c9e8be81523fbf632f9717fd0d22c238ee">70b667c9</a> - <a href="https://support.chamilo.org/issues/8079">#8079</a>) Use DQL to get questions by category</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c165f721c12309896d3670a2d54dbc1e1630d6b1">c165f721</a> - <a href="https://support.chamilo.org/issues/8079">#8079</a>) Fix get questions by category</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/488bf0aeb630d5936e6f84bc581d4d699c505e5b">488bf0ae</a> - <a href="https://support.chamilo.org/issues/8079">#8079</a>) Fix style of button to convert multiple/unique answer</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9b2d4e5e57d93ecba56a8cd94398feeb2a7f8e9a">9b2d4e5e</a> - <a href="https://support.chamilo.org/issues/8078">#8078</a>) Display question description collapsed</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3f2f10af36c42e68af43158e498048268db0bcbe">3f2f10af</a> - <a href="https://task.beeznest.com/issues/10567">BT#10567</a>) Fix error when uploading large files</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6e7badc42c0fc3a51720b2ea86da415711fc0537">6e7badc4</a>) Fix unnecessary escape slash in buycourse plugin French strings</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3f0997afc203b62b07b591f72757234cb01f0fc2">3f0997af</a> - <a href="https://support.chamilo.org/issues/8081">#8081</a>) Add margin below chart</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/aabd8a29efbc8cc7864ac3b7ede4173c0fd591e0">aabd8a29</a> - <a href="https://support.chamilo.org/issues/8089">#8089</a>) Add Behat tests for social group</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2e18ad61e981c42da1b35c2aece7d3f9f1d0a238">2e18ad61</a>) Fix Accept/Deny friend invitations to allow for non-AJAX change (accessibility)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f87902851787df1d7e15cbabce27fc6876bf2e78">f8790285</a> - <a href="https://support.chamilo.org/issues/8091">#8091</a>) Prevent the addition of invitee user type to course group</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1991f11de763105f392e42cf94a0ce032d971040">1991f11d</a> - <a href="https://support.chamilo.org/issues/8087">#8087</a>) Fix prevent sending to users in api_is_excluded_user_type() in dropbox</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e45079df7a1bf31bbcdd9b1d22d8c23cf76fd1db">e45079df</a> - <a href="https://support.chamilo.org/issues/8090">#8090</a>) Fix issue whereby people can delete others messages on the social</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/891d518eecb27fb952cc2df5b185117ab6a2f203">891d518e</a>) Silence minor error about double IP for reverse proxies</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6ca9a4f9bdb76b144bf59f402e186d5c08ea19ad">6ca9a4f9</a>) Fix send invitation to social group</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e8efd31347b344dcea5a67c91218bc324e910eb1">e8efd313</a>) Fix urls for social group member list</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3752cc9d7922f17d12bafbaf2948063a94e45d9a">3752cc9d</a>) Fix social group member list</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/506c4928e5e9c93a638b07747f74033b5949ff3b">506c4928</a> - <a href="https://support.chamilo.org/issues/8089">#8089</a>) Fix creating message on social group</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/896f3fb1f54469731daae95e84f355384e6b4d57">896f3fb1</a> - <a href="https://support.chamilo.org/issues/8089">#8089</a>) Set the correct value for params arrays in MessageManager::send_message</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ac3ddd9da0d2941f912806840c2fe71ec01cc5e1">ac3ddd9d</a> - <a href="https://support.chamilo.org/issues/8063">#8063</a>) Fix path to SimpleWebRTC</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cf438eb4c597723003f028df297d82940e1935d5">cf438eb4</a> - <a href="https://support.chamilo.org/issues/10836">#10836</a>) Fix pagination in course Groups</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cb46dfa3cf3e96c0f62f083e06d13a64b5de961d">cb46dfa3</a>) Fix send mail without additional parameters</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/287baedc0620062311b04178195c62ab1f3f7cc6">287baedc</a>) Fix class resource not found (bis)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0aa1ab3ce4cd61b2030d2b732cf142aac9076b88">0aa1ab3c</a>) Fix class resource not found</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0ec03e6bd6b51c53c0f34a5f7c387c323bb6ee69">0ec03e6b</a> - <a href="https://support.chamilo.org/issues/8083">#8083</a>) Fix gradebook link eval log</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f3af58e7aa8ab79a5516edd5172007eb83d7af45">f3af58e7</a>) Visual Fix when you switch visibility in course home icons</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9f9f79943a3d9ed755341f11ba40818c25537e44">9f9f7994</a>) Add $returnObj in function</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5a9081c9c39fbb8b0e1f34e5925a9951c20969da">5a9081c9</a>) Change JS variable names for Hotspot library configuration</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b176f632529d22653b4bdfec3fcadbc74d137587">b176f632</a> - <a href="https://task.beeznest.com/issues/10818">BT#10818</a>) Fix more learning path mode embedframe expand</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9708e67f9de02f7a64bef4be2aae390153482eec">9708e67f</a> - <a href="https://task.beeznest.com/issues/10818">BT#10818</a>) Fix learning path mode embedframe expand</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/55b592ae64e191d67ef9a1a55a7235fc76eb624d">55b592ae</a> - <a href="https://task.beeznest.com/issues/10818">BT#10818</a>) Fix learning path fullscreen button navigation</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1b7ca40263e0f87ca768f6e2b31f3f4aca379a80">1b7ca402</a> - <a href="https://support.chamilo.org/issues/8041">#8041</a>) Show all courses with pagination in courses catalog</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d33b564327b26ca179c44528f49d7eedbf78eb77">d33b5643</a> - <a href="https://support.chamilo.org/issues/8043">#8043</a>) Fix custom header image shows in global announcements</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d54af9a16ac8bee3b971df6677c075311c701ae0">d54af9a1</a> - <a href="https://support.chamilo.org/issues/8080">#8080</a>) Fix Visualization Error in Impress LP</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/eab4375b35de7981fcddd7b7f0b897bf7edc5e44">eab4375b</a>) Remove a strange "hello" message in lp_view.php</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2897dfdefe2d163f24186b2e28941916ec36f299">2897dfde</a> - <a href="https://support.chamilo.org/issues/8026">#8026</a>) Fix "without Category" category shows when there is no learning path at all</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/96a29c1314e2961be67ec9d33097023918a66a48">96a29c13</a>) Documentation: improve git upgrade section of installation guide</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d226b53008c01342a14664c2bd652fdc1981016a">d226b530</a>) Documentation: add section about upgrading with Git to the English installation guide</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b2b01c8a8593a32c7ee2b782f13e218be522d4d1">b2b01c8a</a> - <a href="https://task.beeznest.com/issues/10816">BT#10816</a>) Fix query in course tracking (inactive students)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/bb68399161a52995230a1adfdd811e3741493b7e">bb683991</a> - <a href="https://task.beeznest.com/issues/10816">BT#10816</a>) Fix erroneous announcement sending to all users</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1fc0137abfc2a0adb1164db35cd50e945c01d211">1fc0137a</a>) Add galician and basque + add forced change language when using get param</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/66e8840fb41e566be0d59bd2de569400138f5b36">66e8840f</a> - <a href="https://support.chamilo.org/issues/8050">#8050</a>) Fix can not import any report on any extension in Gradebook</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3b4445b1b54187ace717cf3ceda3b7605c898c4f">3b4445b1</a> - <a href="https://support.chamilo.org/issues/8014">#8014</a>) Fix agenda events sort by start date</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/881ed0eb1a5b06b30a951366929621a067a7bd8c">881ed0eb</a> - <a href="https://support.chamilo.org/issues/8006">#8006</a>) Fix issues when student try to download a wiki page as pdf</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ff905d2e677b3b6d2d01f9facb0fff911d3d5ee2">ff905d2e</a> - <a href="https://support.chamilo.org/issues/8061">#8061</a>) Fix Forum Student evaluation doesn't give the list of posts anymore</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d4773332a8923f10c882e1cab0ce1ad30b789f11">d4773332</a> - <a href="https://task.beeznest.com/issues/10675">BT#10675</a>) Add filter $ignoreCategoryFilter</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/197a7eedbc4a5d9f29a06c20e8049e884445813e">197a7eed</a>) If there are more than 1 category show category title in learning paths</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/72d8aae5190bef81a90b74f18b6a62fe6b27c6a3">72d8aae5</a>) Remove lastLogin use last_login instead.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6e09ed4ebcb1fb8cef93a2fb9cfeacc8d19e5243">6e09ed4e</a> - <a href="https://support.chamilo.org/issues/8053">#8053</a>) Fix Bug - You can not edit attendance list.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/939d7c52945450a210225fe8e34652b0c81dfe44">939d7c52</a>) Fix Drag & Drop for Teacher Corrections in Works</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/432b56477e9bf3c53ab47c26d6b718ac14b193a8">432b5647</a> - <a href="https://support.chamilo.org/issues/8049">#8049</a>) Fix Drag & drop multiUpload Click Event in Chrome Browser</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5aa7996ad366dab2c577ccc5f7329c2bd90a8267">5aa7996a</a>) Fixed bug on edit user webservice: extra fields were not updated because $extras array were not transformed to associative array before sending it to editUserHelper.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ec5fd4a69dfaa809e8e9414a72f37721a9c2f9fa">ec5fd4a6</a>) Fixed bug on create user webservice: extra fields method didn't return result so just the first one extra field was processed.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/78a82f9637470308f194cd699aab3b9c02d61aa9">78a82f96</a>) Added initialization of $op_Params to avoid warning on xml returned in webservice to disable a user.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3acf899995c01a98b3efd27dae68701528405bc7">3acf8999</a> - <a href="https://task.beeznest.com/issues/10809">BT#10809</a>) Fix reminder notification</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/97ed9c82cfd5b393e0d30ffdb4947758571dc2a8">97ed9c82</a> - <a href="https://task.beeznest.com/issues/10701">BT#10701</a>) Fix course code that generating error in learning path copy</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/83210008b184e2e41a6db70e5da2119c28cc0af0">83210008</a>) Fix removeUsersFromCourseSession</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/30936fc233115462638f6d062d4dc6eb58039f6e">30936fc2</a>) Fix suscribe_users_to_session</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/40e70a62ef614c1179a74b49980d461390080eb5">40e70a62</a> - <a href="https://task.beeznest.com/issues/10725">BT#10725</a>) Fix webservices around course creation not using course ID but course code</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/bbbeaf5be3dba499e806b49923589d059074ce84">bbbeaf5b</a> - <a href="https://task.beeznest.com/issues/10769">BT#10769</a>) Fix edit doc/dir inside group</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/70ccc9638891a46443fad4e1d4cc5af7557cc66e">70ccc963</a> - <a href="https://task.beeznest.com/issues/10776">BT#10776</a>) Calculate gamification stars based on the last exercise attempt</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/8472056181045a2fd732a81413d763f1a6efcbf9">84720561</a> - <a href="https://task.beeznest.com/issues/10775">BT#10775</a>) Fix bug when using auto-subscription session</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a961d25a2b4f6a4370b48c143e6fb0eaf2eb4262">a961d25a</a> - <a href="https://task.beeznest.com/issues/10776">BT#10776</a>) Calculate gamification points based on the last exercise attempt</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7e07d38ffdc7474ebab8a7e9b1d372cd73695d01">7e07d38f</a>) fix function return value in announcements</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5cf49b50ade7177b9c8a39aab441ce14b1452d9f">5cf49b50</a>) fix: variable $ldap_user has not been initialized</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9f292516b2cd1da84d69ae6aba48baaa7513bdd5">9f292516</a> - <a href="https://task.beeznest.com/issues/10760">BT#10760</a>) Add comment about Suhosin limits blocking courses import</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f37e2596ca5195fe6f7b18eeb0be67d175bbbd1b">f37e2596</a> - <a href="https://task.beeznest.com/issues/10760">BT#10760</a>) Avoid fatal error if, for some reason, the course object could not be properly instantiated in partial course import</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c4f81fecd5f5fa4815a5ee4e57a73f6b1496dc93">c4f81fec</a> - <a href="https://support.chamilo.org/issues/10763">#10763</a>) Fix Multiselect ADV in selection of destinations for announcements</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3da7cdd0adb34d69c829ff17dd7c1cad5f2aec84">3da7cdd0</a> - <a href="https://task.beeznest.com/issues/10757">BT#10757</a>) Remove wrong post count number in forum</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3c8ecead9d0074e838416dee83468994ba275fd9">3c8ecead</a>) Use api_get_session_id() in several places in forum</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/530d559c8b660e3ead519348d86e81769275b3cf">530d559c</a> - <a href="https://task.beeznest.com/issues/10751">BT#10751</a>) Add verification of the session publication date if date indicated</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cc9f9596dcecdbeea5d95c82b075ee3f08a3c46f">cc9f9596</a>) Replace api_get_configuration_value() function</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/bb4584413f5ec958ad4af08ffbd06100b8133462">bb458441</a> - <a href="https://support.chamilo.org/issues/8068">#8068</a>) Fix issue in course resources tracking SQL query asking for session_id = 0 where table has been changed to use NULL value</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cbf3866a31d03d59a4dbc6a150181e0e8460ff40">cbf3866a</a>) Change use of api_get_settings(), use new function getConfigurationValue()</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/72830d4ffcfb4626dc94472b423d80cb14c03145">72830d4f</a> - <a href="https://task.beeznest.com/issues/10725">BT#10725</a>) Fix webservices</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2bea5cbdb302ffd7be8aa04709f84c28e91648f8">2bea5cbd</a>) Fix double content in social messaging</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2b9f826f505be30370b20810c35b02862f37aa25">2b9f826f</a>) Change \n\r", "\n", "\r" to <br ></li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4ff3d68e7ab0d4c02525393ddf67ede915618cca">4ff3d68e</a>) Fix default visibility of sessions in creation through web services</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/53b21e8bf0c34422de63d4c473a77f964a0f3fb6">53b21e8b</a>) Fix link to session in course edition form</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5476d3d12f8dfe0aa81c08424ce3ba46674f301b">5476d3d1</a>) Fix session creation issue with dates</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ae61b4e2523f5ca78513a1ef844a9d78843019b0">ae61b4e2</a>) Fix Vimeo url issues with HTTPS in HTMLPurifier</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6a6b8aa8bf5584087bacee7f9012c3ac42452cb8">6a6b8aa8</a>) Fix function name createForumTthread</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9cdea4e876538eaa030af96a9fc18fd53d2272b9">9cdea4e8</a>) Fix wrong redirection + add api_get_cidreq() in learning paths</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c42c9be41a4fe96590c567ac863b6115b6b5759e">c42c9be4</a>) Fix database info page in admin screen</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/81bffa3cd947647f422dcbf243c6fa4543bc010c">81bffa3c</a>) Fix learning paths links for teacher</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e38c3e543c512fe15641d1dfa23076fe0cded6c6">e38c3e54</a> - <a href="https://task.beeznest.com/issues/10725">#10725</a>) Use external values user, course session values</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c6479435d627a9b29de3a9a3f4d7e96f11afab14">c6479435</a>) Replace userid value in learning paths SCORM import</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/240fb5e6a4609335a28a3df715514ccb8eabd142">240fb5e6</a>) Fix function calls in web services related to learning paths</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/62330ab3956ea735fe80c5f27985a591c237574f">62330ab3</a>) Add missing get_course_id_from_original_id() function</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7b0919aa8b8cd0c1443e9b51f07614551cae630e">7b0919aa</a>) Fix WSSuscribeUsersToSession()</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/10ad09a88b06ff0ec31760b01731ae15f2b09e1f">10ad09a8</a>) Use original_course_id_name instead of course_id in web services</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b28b490df46bf47aeb6d64bfbb8570f8e871f341">b28b490d</a>) Add addSelectFromCollection() to FormValidator</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/de7908ab184b1ae6d141ccc3bf57c8c52cc091e5">de7908ab</a>) Update example image for double-select profile field</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/162e4ec997ed93f77c9ff5ad77e03acd66dd6e02">162e4ec9</a>) Fix double select update select</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e1c443e1ea1de96882345989966f4258132636b6">e1c443e1</a>) Fix issue creating documents in learning paths</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6a69ca69ec996fb82a5918eb813f318373590c40">6a69ca69</a> - <a href="https://task.beeznest.com/issues/10724">BT#10724</a>) Fixed issue losing all admins in portal when removing admin rights of one user</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/de4fe039a4a544cd0fb382004a36b1720de59b97">de4fe039</a> - <a href="https://support.chamilo.org/issues/8051">#8051</a>) Fix double settings</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9d81f35b99f67413be065d8434416bf745aca3f6">9d81f35b</a>) Add get_access_url_from_course() function</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/551700e5d23eff9d66d8a178659dfb5639655ab4">551700e5</a>) Add SOAP calls examples in SOAP client test file</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2c7e75fa46fea31dd0c16fe6d7a468fe624e5c3f">2c7e75fa</a>) Added Web Service to get current portal list, add/get/remove user to portal  add/get/remove course to portal</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c953b098c47d3efba7fa3fdeaaa1960dee899b6e">c953b098</a> - <a href="https://support.chamilo.org/issues/8045">#8045</a>) Fix Conflict between 2 CourseDescription classes</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a0a274cb8278ac552f4bff46971332e744db5117">a0a274cb</a>) Fix mysql errors in Gradebook</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d9c71064ccb7027f80c6121b2e81b965238c090e">d9c71064</a> - <a href="https://support.chamilo.org/issues/8042">#8042</a>) Fix mysql errors in Gradebook</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f9281cce95571bf063b822e63e2849c808a3714f">f9281cce</a>) Fix DB issues with MySQL  >= 5.7.10</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1c3b18802c2862c4f1a769e570ea358e6bd16d8b">1c3b1880</a> - <a href="https://task.beeznest.com/issues/10676">BT#10676</a>) Fix query in users list</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e4f335541d1e4a2bf814000bcf6e06852817abc6">e4f33554</a> - <a href="https://support.chamilo.org/issues/8044">#8044</a>) Add method to delete documents inside a session</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/8f0e33bfc4393b65cfde59ed070982042e1cde5a">8f0e33bf</a> - <a href="https://task.beeznest.com/issues/10706">BT#10706</a>) Move user deletion *after* other tables records deletions to avoid foreign key issues. c_item_property still an issue (if any record is there) and under discussion</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d923a4f96131646932a8392ce6fcc2d6642a2187">d923a4f9</a> - <a href="https://task.beeznest.com/issues/10700">BT#10700</a>) Add deletion from c_item_property when deleting a session</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/699afe5bafa797a4c0845c58aacd190bb8ee5740">699afe5b</a> - <a href="https://task.beeznest.com/issues/10692">BT#10692</a>) Fix courses list in multi-url view</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/bc903102fc67f79f7410c5199f3b61deb0bdf3c2">bc903102</a>) Add condition whereby a user creation date of '0000-00-00 00:00:00' is considered null</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c1ddde57d488f24613dcc5a9205d65f42db9a9a0">c1ddde57</a>) Fix use of course info 'real_id' index when 'id' is needed</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0755fb60f4ca41436b35b25b20e608e77f784ec7">0755fb60</a> - <a href="https://support.chamilo.org/issues/8029">#8029</a>) Remove non deterministic "group by" in platform settings</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/06a87595066f2be340da82e3506d8e8e17ed8bdc">06a87595</a> - <a href="https://task.beeznest.com/issues/10596">BT#10596</a>) Fix issue with course info not available in Oogie documents conversion</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d9b4c01a8341f888cd04eb88109fadc5789730fd">d9b4c01a</a>) Avoid notice message for reverse proxies with only 1 IP.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4a7b1ecac3a9161376e3cbf69cf4a71b8c815b34">4a7b1eca</a>) Adding missing value user_ip</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9309b7e083b4179086e573831c0b833d58a9bf7a">9309b7e0</a>) Fix course creation SQL error due to wrong default values.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/797043fb48767b8125362f6abcacc8b167667584">797043fb</a>) Fix missing c_id</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5c21e79d8b1170bc06ab4db8ea191df53e5e9d9b">5c21e79d</a>) Fix sql errors during installation</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ede6cf8744f691b606664b880d5cf8e2c169640d">ede6cf87</a>) Set updated_at by default in model class if is present in columns.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6b15778515dba8bde92f8fe6e288f501fbe4129c">6b157785</a> - <a href="https://support.chamilo.org/issues/8018">#8018</a>) Fix saving new learning path item</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/8baa4bb96c5ea960cb6e40c407941ae0552fa7c4">8baa4bb9</a>) Fix error creating hotspot question when relpath != "/"</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7ebd0a11612b25f323d4fdb0f286cfb39236f572">7ebd0a11</a> - <a href="https://task.beeznest.com/issues/10567">BT#10567</a>) Add disk_quota to course creation WS</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/768829ad38f6a7e512e575181f9107b2b23f7822">768829ad</a>) Add dumpCssFiles when cleaning cache to ensure CSS refresh</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/57102fff85379f8af6389b2599c7ceacaea3362d">57102fff</a> - <a href="https://support.chamilo.org/issues/8022">#8022</a>) Fix extra field "special_course" (was not updating anymore)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d4cd676cc6eaab1f1c44d5cc628172ae981b0ab4">d4cd676c</a> - <a href="https://task.beeznest.com/issues/10052">BT#10052</a>) Fix questions categories when uploading a test in XLS format</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/44221a533e20fcdb54c767b9d151b3395dd42ecf">44221a53</a> - <a href="https://task.beeznest.com/issues/8659">BT#8659</a>) Import questions with negative score by default</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/8a29439ab3ccd86a81cf40c25c9fe83ed97f9ff7">8a29439a</a> - <a href="https://support.chamilo.org/issues/8020">#8020</a>) Fix agenda creation</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c25fbb77fa8ec9a831293484934128c484a57f71">c25fbb77</a> - <a href="https://task.beeznest.com/issues/10631">BT#10631</a>) Avoid show the invisible user extra fields on My Profile page</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c4f585fc5d2a82da1961a1f298b60059e1e721f9">c4f585fc</a> - <a href="https://task.beeznest.com/issues/10629">BT#10629</a>) Fix creation of forum threads for LP items</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/83de577b2616966a15fafe5b3b279427c29a17d7">83de577b</a> - <a href="https://task.beeznest.com/issues/10629">BT#10629</a>) Allow the dissociation of forum threads from LP items</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c22e4cd72ec1cdf8d75e63675c10f329f0bdf7e4">c22e4cd7</a> - <a href="https://task.beeznest.com/issues/10629">BT#10629</a>) Confirm before associating/dissociating forum threads to LP items</li>
     </ul>
     <h3>Stylesheets and theming</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b78ea7950dc65fc73db266adcaf0312a166a12a4">b78ea795</a>) Add big calendar icon</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/54911dd27822acdfaa2b8942eef21bbd9a82b9b5">54911dd2</a>) Add calendar icon for users list</li>
     </ul>
     <h3>Web services</h3>
     <ul>
     </ul>
     <h3>Removals</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1afc60670b98e7e7e3ae31dcb60446ad56a2fb10">1afc6067</a>) Remove config save_user_last_login see #7042</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d8531027238ce3de22c2a84df8b093ff95c75ec4">d8531027</a>) Remove files that are not needed.</li>
     </ul>
     <h3>Known issues</h3>
     <ul>

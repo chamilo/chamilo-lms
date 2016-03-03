@@ -1599,7 +1599,6 @@ $UserInfo = "uzulaj informoj";
 $ModifyQuestion = "Ŝanĝi la demandon";
 $CheckAll = "Kontroli ĉion";
 $NbAnnoucement = "Komuniko";
-$OtherCourses = "Aliaj kursoj";
 $Doc = "dokumento";
 $PlataformAdmin = "Platformmastrumanto";
 $Groups = "Grupoj";

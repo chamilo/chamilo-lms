@@ -513,11 +513,12 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int $userId
-     *
-     * @return array
+     * Get the group list for a user
+     * @param int $userId The user ID
+     * @param int $filterByType Optional. The type of group
+     * @return type
      */
-    public function getUserGroupListByUser($userId)
+    public function getUserGroupListByUser($userId, $filterByType = null)
     {
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
@@ -534,6 +535,10 @@ class UserGroup extends Model
                 ON (u.usergroup_id = g.id)
                 ";
             $where =  array('where' => array('user_id = ?' => $userId));
+        }
+
+        if ($filterByType !== null) {
+            $where['where'][' AND g.group_type = ?'] = intval($filterByType);
         }
 
         $results = Database::select(

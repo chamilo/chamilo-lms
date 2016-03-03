@@ -38,27 +38,25 @@ if (!empty($action)) {
                 // 3. if anonymous posts are not allowed
                 // The only exception is the course manager
                 // They are several pieces for clarity.
-                if (!api_is_allowed_to_edit(null, true) AND
+                if (!api_is_allowed_to_edit(null, true) &&
                     (
-                        ($current_forum_category && $current_forum_category['visibility'] == 0) OR
+                        ($current_forum_category && $current_forum_category['visibility'] == 0) ||
                         $current_forum['visibility'] == 0
                     )
                 ) {
                     $json['errorMessage'] = '1. the forum category, forum or thread is invisible (visibility==0)';
                     break;
                 }
-                if (!api_is_allowed_to_edit(null, true) AND
+                if (!api_is_allowed_to_edit(null, true) &&
                     (
-                        ($current_forum_category && $current_forum_category['locked'] <> 0) OR
-                        $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0
+                        ($current_forum_category && $current_forum_category['locked'] <> 0) ||
+                        $current_forum['locked'] <> 0 || $current_thread['locked'] <> 0
                     )
                 ) {
                     $json['errorMessage'] = '2. the forum category, forum or thread is locked (locked <>0)';
                     break;
                 }
-                if (api_is_anonymous() AND
-                    $current_forum['allow_anonymous'] == 0
-                ) {
+                if (api_is_anonymous() && $current_forum['allow_anonymous'] == 0) {
                     $json['errorMessage'] = '3. if anonymous posts are not allowed';
                     break;
                 }

@@ -299,7 +299,6 @@ $UserInfo = "Informacions de l'usancier";
 $ModifyQuestion = "Modificar la demanda";
 $CheckAll = "Tot verificar";
 $NbAnnoucement = "Anóncia";
-$OtherCourses = "Autrei cors";
 $Doc = "Document";
 $Groups = "Grops";
 $GroupManagement = "Administracion dau grop";

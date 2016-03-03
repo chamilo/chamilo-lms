@@ -3160,7 +3160,7 @@ $ModifyQuestion = "Modifier la question";
 $Example = "Exemple";
 $CheckAll = "Sélectionner tout";
 $NbAnnoucement = "Annonces";
-$OtherCourses = "Autres cours";
+$DisplayCertificate = "Voir certificat";
 $Doc = "Parcours";
 $PlataformAdmin = "Administrateur de la plateforme";
 $Groups = "Groupes";
@@ -6215,7 +6215,7 @@ $Pediaphon = "Utiliser les services audio de Pediaphon";
 $HelpPediaphon = "Supporte des textes de plusieurs milliers de caractères et vous permet de choisir entre plusieurs types de voix masculines et féminines (dépendant de la langue). Les fichiers audio seront générés et automatiquement sauvegardés dans le répertoire Chamilo dans lequel vous vous trouvez.";
 $FirstSelectALanguage = "Sélectionnez d'abord une langue";
 $MoveUserStats = "Déplacer les résultats utilisateurs dans/vers une session";
-$CompareUserResultsBetweenCoursesAndCoursesInASession = "Cet outil avancé vous permet d'améliorer le suivi des résultats utilisateurs lorsque vous changez d'une méthodologie de purs cours ver une méthodologie de sessions (ou cycles de cours). Dans la plupart des cas, vous n'aurez pas besoin de cet outil.<br />
+$CompareUserResultsBetweenCoursesAndCoursesInASession = "Cet outil avancé vous permet d'améliorer le suivi des résultats utilisateurs lorsque vous changez d'une méthodologie de purs cours vers une méthodologie de sessions (ou cycles de cours). Dans la plupart des cas, vous n'aurez pas besoin de cet outil.<br />
 Sur cet écran, vous pouvez comparer les résultats des utilisateurs entre un contexte de cours isolé et un contexte de session.<br />
 Une fois que vous vous êtes décidé sur le meilleur contexte au sein duquel devrait exister le suivi des utilisateurs (score des exercices et suivi des parcours), vous pourrez déplacer ce suivi d'un cours vers une session.";
 $PDFExportWatermarkEnableTitle = "Activer les filigranes dans les exports PDF";
@@ -7598,4 +7598,7 @@ $ForumDissociated = "Forum dissocié";
 $ClickOrDropOneFileHere = "Déplacez un fichier ici ou cliquez";
 $ModuloPercentage = "Modulo:\t\t\t%";
 $LastXDays = "Derniers %s jours";
+$ExportBadges = "Exporter badges";
+$LanguagesDisableAllExceptDefault = "Désactiver toutes les langues execpté celle par défaut de la plateforme";
+$ThereAreUsersUsingThisLanguagesDisableItManually = "Des utilisateurs utilisent encore la langue suivante. Veuillez la désactiver manuellement.";
 ?>

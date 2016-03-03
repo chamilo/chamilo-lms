@@ -1428,7 +1428,6 @@ $UserInfo = "informasi user";
 $ModifyQuestion = "Ubah pertanyaan";
 $CheckAll = "Conteng semua";
 $NbAnnoucement = "Pengumuman";
-$OtherCourses = "mata kuliah lain";
 $Doc = "dokumen";
 $PlataformAdmin = "Admin Platform";
 $Groups = "Group";

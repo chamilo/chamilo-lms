@@ -1715,7 +1715,6 @@ $UserInfo = "vartotojo informacija";
 $ModifyQuestion = "Redaguoti klausimą";
 $CheckAll = "Tikrinti viską";
 $NbAnnoucement = "Skelbimas";
-$OtherCourses = "kiti kursai";
 $Doc = "Teorinė medžiaga";
 $PlataformAdmin = "Sistemos administratorius";
 $Groups = "Grupės";

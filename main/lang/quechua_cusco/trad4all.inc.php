@@ -2414,7 +2414,6 @@ $UserInfo = "haykuqmasimanta willay";
 $ModifyQuestion = "T'ijrapay taputa";
 $CheckAll = "cheqaqchay";
 $NbAnnoucement = "Willaykuna";
-$OtherCourses = "hoq yachachinakuna";
 $Doc = "qelqa khipu";
 $PlataformAdmin = "Hanp'araq kamachina";
 $Groups = "Huñusqakuna";

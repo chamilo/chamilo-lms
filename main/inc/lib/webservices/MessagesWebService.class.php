@@ -170,11 +170,11 @@ class MessagesWebService extends WebService
      */
     public static function sendPushNotification(array $userIds, $title, $content)
     {
-        if (api_get_setting('messaging_allow_send_push_notification') !== 'true') {
+        if (api_get_configuration_value('messaging_allow_send_push_notification') !== 'true') {
             return false;
         }
 
-        $gdcApiKey = api_get_setting('messaging_gdc_api_key');
+        $gdcApiKey = api_get_configuration_value('messaging_gdc_api_key');
 
         if ($gdcApiKey === false) {
             return false;

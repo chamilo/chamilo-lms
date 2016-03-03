@@ -2066,7 +2066,6 @@ $UserInfo = "Felhasználói információ";
 $ModifyQuestion = "Kérdés módosítása";
 $CheckAll = "Összes ellenőrzése";
 $NbAnnoucement = "Bejelentés";
-$OtherCourses = "más kurzusok";
 $Doc = "dokumentum";
 $PlataformAdmin = "Platform Adminisztrátor";
 $Groups = "Csoportok";

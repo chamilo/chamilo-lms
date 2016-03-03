@@ -1412,7 +1412,6 @@ $UserInfo = "інформація користувача";
 $ModifyQuestion = "Змінити питання";
 $CheckAll = "Позначити всі";
 $NbAnnoucement = "Оголошення";
-$OtherCourses = "інші курси";
 $Doc = "Документ";
 $PlataformAdmin = "Адміністратор платформи";
 $Groups = "Групи";

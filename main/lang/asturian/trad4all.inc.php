@@ -2624,7 +2624,6 @@ $UserInfo = "información del usuariu";
 $ModifyQuestion = "Modificar la entruga";
 $CheckAll = "comprobar";
 $NbAnnoucement = "Anuncies";
-$OtherCourses = "otros cursos";
 $Doc = "documentu";
 $PlataformAdmin = "Alministración de la plataforma";
 $Groups = "Grupos";

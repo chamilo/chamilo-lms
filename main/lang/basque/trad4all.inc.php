@@ -2716,7 +2716,6 @@ $ModifyQuestion = "Aldatu galdera";
 $Example = "Adibidea";
 $CheckAll = "Markatu dena";
 $NbAnnoucement = "Abisua";
-$OtherCourses = "beste ikastaro batzuk";
 $Doc = "dokumentua";
 $PlataformAdmin = "Plataformaren kudeaketa";
 $Groups = "Taldeak";

@@ -1879,7 +1879,6 @@ $UserInfo = "用户信息";
 $ModifyQuestion = "修改题目";
 $CheckAll = "全部选定";
 $NbAnnoucement = "通知";
-$OtherCourses = "其它课程";
 $Doc = "文档";
 $PlataformAdmin = "平台管理";
 $Groups = "小组";

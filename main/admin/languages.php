@@ -57,7 +57,7 @@ $htmlHeadXtra[] = '<script>
     var disabledLang = "'.$disabledLang.'"
 
     if (msgLang == 1) {
-        $("#id_content_message").html("<div class=\"alert alert-warning\">' . get_lang('ThereAreUsersUsingThisLanguagesDisableItManually') . ' </br> " + disabledLang + "</div");
+        $("#id_content_message").html("<div class=\"warning-message alert alert-warning\">' . get_lang('ThereAreUsersUsingThisLanguagesDisableItManually') . ' </br> " + disabledLang + "</div");
     }
     
     $("#disable_all_except_default").click(function () {
@@ -65,7 +65,7 @@ $htmlHeadXtra[] = '<script>
             $.ajax({
                 contentType: "application/x-www-form-urlencoded",
                 beforeSend: function(objeto) {
-                    $("#id_content_message").html("<div class=\"alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  ' . get_lang('Loading') . '</div>");
+                    $("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  ' . get_lang('Loading') . '</div>");
                 },
                 type: "GET",
                 url: "../admin/languages.php",
@@ -107,7 +107,7 @@ $htmlHeadXtra[] = '<script>
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-				$("#id_content_message").html("<div class=\"alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  ' . get_lang('Loading') . '</div>");
+				$("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  ' . get_lang('Loading') . '</div>");
 			},
 			type: "POST",
 			url: "../admin/languages.php",
@@ -126,18 +126,18 @@ $htmlHeadXtra[] = '<script>
                     }
 
                     if (datos=="set_visible") {
-                        $("#id_content_message").html("<div class=\"alert alert-success\">' . get_lang('LanguageIsNowVisible', '') . '</div>");
+                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">' . get_lang('LanguageIsNowVisible', '') . '</div>");
                     }
 
                     if (datos=="set_hidden") {
-                        $("#id_content_message").html("<div class=\"alert alert-success\">' . get_lang('LanguageIsNowHidden', '') . '</div>");
+                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">' . get_lang('LanguageIsNowHidden', '') . '</div>");
                     }
                 }
 
                 var action = datos.split(":")[0];
                 if (action && action == "confirm") {
                     var id = datos.split(":")[1];
-                    var sure = "<div class=\"alert alert-warning\">'.get_lang('ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage').'</br></br><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn btn-default\"><em class=\"fa fa-eye\"></em> ' . get_lang('MakeUnavailable') . '</a></div>";
+                    var sure = "<div class=\"warning-message alert alert-warning\">'.get_lang('ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage').'</br></br><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn btn-default\"><em class=\"fa fa-eye\"></em> ' . get_lang('MakeUnavailable') . '</a></div>";
                     $("#id_content_message").html(sure);
                     $("html, body").animate({ scrollTop: 0 }, 200);
 				}

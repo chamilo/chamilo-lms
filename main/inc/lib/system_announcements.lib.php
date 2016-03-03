@@ -504,6 +504,8 @@ class SystemAnnouncementManager
         $send_mail = 0,
         $sendEmailTest = false
     ) {
+        $em = Database::getManager();
+
 		$a_dateS = explode(' ',$date_start);
 		$a_arraySD = explode('-',$a_dateS[0]);
 		$a_arraySH = explode(':',$a_dateS[1]);
@@ -514,8 +516,7 @@ class SystemAnnouncementManager
 		$a_arrayEH = explode(':',$a_dateE[1]);
 		$date_end_to_compare = array_merge($a_arrayED,$a_arrayEH);
 
-		$langsql = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
-		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $lang = is_null($lang) ? '' : $lang;
 
 		if (!checkdate($date_start_to_compare[1], $date_start_to_compare[2], $date_start_to_compare[0])) {
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
@@ -539,16 +540,11 @@ class SystemAnnouncementManager
 	    $start    = api_get_utc_datetime($date_start);
         $end      = api_get_utc_datetime($date_end);
 
-		$title = Database::escape_string($title);
-		$content = Database::escape_string($content);
-
 		//Fixing urls that are sent by email
 		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
 		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
 
-		$id = intval($id);
-		$sql = "UPDATE ".$db_table." SET lang=$langsql,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
-		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' , access_url_id = '".api_get_current_access_url_id()."'  WHERE id = ".$id;
+        $id = intval($id);
 
         if ($sendEmailTest) {
             SystemAnnouncementManager::send_system_announcement_by_email(
@@ -570,11 +566,31 @@ class SystemAnnouncementManager
                 );
             }
         }
-		$res = Database::query($sql);
-		if ($res === false) {
 
-			return false;
-		}
+        $announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
+        $announcement = new \Chamilo\CoreBundle\Entity\SysAnnouncement();
+
+        if (!$announcement) {
+            return false;
+        }
+
+        $dateStart = new DateTime($start, new DateTimeZone('UTC'));
+        $dateEnd = new DateTime($end, new DateTimeZone('UTC'));
+
+        $announcement
+            ->setLang($lang)
+            ->setTitle($title)
+            ->setContent($content)
+            ->setDateStart($dateStart)
+            ->setDateEnd($dateEnd)
+            ->setVisibleTeacher($visible_teacher)
+            ->setVisibleStudent($visible_student)
+            ->setVisibleGuest($visible_guest)
+            ->setAccessUrlId(api_get_current_access_url_id());
+
+        $em->merge($announcement);
+        $em->flush();
+
 		return true;
 	}
 

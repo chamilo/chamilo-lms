@@ -84,7 +84,9 @@ if (Request::is_post() && $is_error) {
                                         'href="https://',
                                         'href="http://',
                                         'url="www.',
-                                        'pdfs/download.php?'
+                                        'pdfs/download.php?',
+                                        "iframe src='https://",
+                                        "iframe src='http://"
                                     );
 
                                     $replace = array(
@@ -92,7 +94,9 @@ if (Request::is_post() && $is_error) {
                                         'target = "_blank" href="'.$proxyPath.'?type=link&src=https://',
                                         'target = "_blank" href="'.$proxyPath.'?type=link&src=http://',
                                         'url="http://www.',
-                                        'pdfs/download.php&'
+                                        'pdfs/download.php&',
+                                        "iframe src='".$proxyPath."&#63;type=link&amp;src=https://",
+                                        "iframe src='".$proxyPath."&#63;type=link&amp;src=http://",
                                     );
                                     $templateContent = str_replace($find, $replace, $templateContent);
                                     file_put_contents($templatePath, $templateContent);

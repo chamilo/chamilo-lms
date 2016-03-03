@@ -231,11 +231,15 @@ if ($action_todo) {
                 );
 
                 if ($announcement_id !== false) {
-                    SystemAnnouncementManager::announcement_for_groups(
-                        $announcement_id,
-                        array($values['group'])
-                    );
-                    Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
+                    if (isset($values['group'])) {
+                        SystemAnnouncementManager::announcement_for_groups(
+                            $announcement_id,
+                            array($values['group'])
+                        );
+                        Display:: display_confirmation_message(
+                            get_lang('AnnouncementAdded')
+                        );
+                    }
                 } else {
                     $show_announcement_list = false;
                     $form->display();
@@ -258,11 +262,15 @@ if ($action_todo) {
                     $sendMailTest
                 )
                 ) {
-                    SystemAnnouncementManager::announcement_for_groups(
-                        $values['id'],
-                        array($values['group'])
-                    );
-                    Display :: display_confirmation_message(get_lang('AnnouncementUpdated'));
+                    if (isset($values['group'])) {
+                        SystemAnnouncementManager::announcement_for_groups(
+                            $values['id'],
+                            array($values['group'])
+                        );
+                        Display:: display_confirmation_message(
+                            get_lang('AnnouncementUpdated')
+                        );
+                    }
                 } else {
                     $show_announcement_list = false;
                     $form->display();

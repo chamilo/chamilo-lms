@@ -176,9 +176,9 @@ if ($action_todo) {
             get_lang('AnnouncementForGroup'),
             $group_list
         );
-
-        $values['group'] = isset($values['group']) ? $values['group'] : '0';
     }
+
+    $values['group'] = isset($values['group']) ? $values['group'] : '0';
 
     $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));
 
@@ -233,7 +233,7 @@ if ($action_todo) {
                 if ($announcement_id !== false) {
                     SystemAnnouncementManager::announcement_for_groups(
                         $announcement_id,
-                        isset($values['group']) ? [$values['group']] : []
+                        array($values['group'])
                     );
                     Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
                 } else {
@@ -260,7 +260,7 @@ if ($action_todo) {
                 ) {
                     SystemAnnouncementManager::announcement_for_groups(
                         $values['id'],
-                        isset($values['group']) ? [$values['group']] : []
+                        array($values['group'])
                     );
                     Display :: display_confirmation_message(get_lang('AnnouncementUpdated'));
                 } else {

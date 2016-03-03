@@ -75,7 +75,8 @@ class IndexManager
     {
         //// Display System announcements
         $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
-        if ($hideAnnouncements == 'true' && empty($userId)) {
+        $currentUserId = api_get_user_id();
+        if ($hideAnnouncements == 'true' && empty($currentUserId)) {
             return null;
         }
         $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : null;

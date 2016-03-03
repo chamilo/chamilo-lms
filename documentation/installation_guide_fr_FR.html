@@ -745,6 +745,10 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
 Nginx ne supporte pas les règles .htaccess, donc vous n'avez pas d'autre option que d'appliquer les règles suivantes (notez que la configuration PHP peut changer).
 Ce sont uniquement les redirections à placer dans un bloc server{}, comme les autres valeurs peuvent changer d'une installation à l'autre.
 <pre>
+  # Add your own "server {" header here with listen, server_name, access_log, error_log, index, root and error_page params
+
+  charset utf-8;
+
   location @rewrite{
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
@@ -757,8 +761,11 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
   location / {
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/main/admin/$ /main/admin/index.php last;
     try_files $uri @rewrite;
+  }
+
+  location /main {
+    rewrite ^/main/admin/$ /main/admin/index.php last;
   }
 
   location ~ \.php$ {
@@ -769,7 +776,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
-    rewrite ^/badge/(\d{1,})/user/(\d{1,})$ main/badge/issued.php?skill=$1&user=$2 last;
+    rewrite "^/badge/(\d{1,})/user/(\d{1,})$" main/badge/issued.php?skill=$1&user=$2 last;
 
     fastcgi_pass unix:/var/run/php5-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;

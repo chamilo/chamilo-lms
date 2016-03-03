@@ -234,7 +234,7 @@ function handle_stylesheets()
     $form->addElement('text', 'name_stylesheet', get_lang('NameStylesheet'), array('size' => '40', 'maxlength' => '40'));
     $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
-    $allowed_file_types = array('css', 'zip', 'jpeg', 'jpg', 'png', 'gif', 'ico','psd');
+    $allowed_file_types = array('css', 'zip', 'jpeg', 'jpg', 'png', 'gif', 'ico', 'psd', 'xcf', 'svg', 'webp', 'woff', 'woff2');
 
     $form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
     $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');

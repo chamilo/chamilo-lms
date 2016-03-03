@@ -163,7 +163,9 @@ if (!empty($coursesInSession)) {
             'advmultiselect',
             $groupName,
             Display::url(
-                $session['name'], $sessionUrl, array('target' => '_blank')
+                $session['name'],
+                $sessionUrl,
+                array('target' => '_blank')
             ) . ' - ' . get_lang('Coaches'),
             $allTeachers
         );
@@ -184,7 +186,6 @@ $categorySelect = $form->addElement(
 
 if (!empty($courseInfo['categoryCode'])) {
     $data = getCategory($courseInfo['categoryCode']);
-
     $categorySelect->addOption($data['name'], $data['code']);
 }
 
@@ -221,37 +222,9 @@ $form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
-$specialCourseField = new ExtraField('course');
-$specialCourseFieldInfo = $specialCourseField->get_handler_field_info_by_field_variable('special_course');
-
-if (!empty($specialCourseFieldInfo)) {
-    $specialCourseValue = new ExtraFieldValue('course');
-    $specialCourseValueInfo = $specialCourseValue->get_values_by_handler_and_field_variable(
-        $course_code,
-        'special_course'
-    );
-
-    $specialCourseAttributes = array();
-
-    if (!empty($specialCourseValueInfo) && $specialCourseValueInfo['value'] == 1) {
-        $specialCourseAttributes['checked'] = '';
-    }
-
-    $form->addElement(
-        'checkbox',
-        'extra_special_course',
-        array(
-            null,
-            get_lang('AllUsersAreAutomaticallyRegistered')
-        ),
-        get_lang('SpecialCourse'),
-        $specialCourseAttributes
-    );
-}
-
-//Extra fields
+// Extra fields
 $extra_field = new ExtraField('course');
-$extra = $extra_field->addElements($form, $courseId, ['special_course']);
+$extra = $extra_field->addElements($form, $courseId);
 
 $htmlHeadXtra[] = '
 <script>
@@ -315,10 +288,9 @@ if ($form->validate()) {
         $warn = substr($warn, 0, -1);
     }
 
-    $teachers = $course['course_teachers'];
-
+    $teachers = isset($course['course_teachers']) ? $course['course_teachers'] : '';
     $title = $course['title'];
-    $category_code = $course['category_code'];
+    $category_code = isset($course['category_code']) ? $course['category_code'] : '';
     $department_name = $course['department_name'];
     $department_url = $course['department_url'];
     $course_language = $course['course_language'];

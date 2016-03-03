@@ -95,19 +95,25 @@ class ExtraFieldValue extends Model
         }
 
         $type = $this->getExtraField()->getExtraFieldType();
+
+        $extraField = new ExtraField($this->type);
+        $extraFields = $extraField->get_all(null, 'option_order');
+
         // Parse params.
-        foreach ($params as $key => $value) {
-            if (
-                substr($key, 0, 6) != 'extra_' &&
-                substr($key, 0, 7) != '_extra_'
-            ) {
+        //foreach ($params as $key => $value) {
+        foreach ($extraFields as $fieldDetails) {
+            if ($fieldDetails['visible'] != 1) {
                 continue;
             }
 
-            // An extra field.
-            $field_variable = substr($key, 6);
+            $field_variable = $fieldDetails['variable'];
+            if (isset($params['extra_'.$field_variable])) {
+                $value = $params['extra_'.$field_variable];
+            } else {
+                $value = '';
+            }
             $extraFieldInfo = $this->getExtraField()->get_handler_field_info_by_field_variable($field_variable);
-            
+
             if (!$extraFieldInfo) {
                 continue;
             }
@@ -267,6 +273,24 @@ class ExtraFieldValue extends Model
 
                         self::save($new_params);
                     }
+                    break;
+                case ExtraField::FIELD_TYPE_CHECKBOX:
+                    $fieldToSave = 0;
+                    if (is_array($value)) {
+                        if (isset($value['extra_'.$field_variable])) {
+                            $fieldToSave = 1;
+                        }
+                    }
+
+                    $newParams = array(
+                        'item_id' => $params['item_id'],
+                        'field_id' => $extraFieldInfo['id'],
+                        'value' => $fieldToSave,
+                        'comment' => $comment
+                    );
+
+                    self::save($newParams);
+
                     break;
                 default:
                     $newParams = array(

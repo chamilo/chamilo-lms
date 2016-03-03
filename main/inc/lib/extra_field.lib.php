@@ -810,7 +810,7 @@ class ExtraField extends Model
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
                                 $options[$option_details['option_value']] = $option_details['display_text'];
-                                $group[]                                  = $form->createElement(
+                                $group[] = $form->createElement(
                                     'checkbox',
                                     'extra_'.$field_details['variable'],
                                     $option_details['option_value'],
@@ -824,7 +824,9 @@ class ExtraField extends Model
                             $checkboxAttributes = array();
 
                             if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
-                                $checkboxAttributes['checked'] = true;
+                                if (!empty($extraData[$fieldVariable])) {
+                                    $checkboxAttributes['checked'] = 1;
+                                }
                             }
 
                             // We assume that is a switch on/off with 1 and 0 as values
@@ -837,6 +839,7 @@ class ExtraField extends Model
                                 $checkboxAttributes
                             );
                         }
+
                         $form->addGroup(
                             $group,
                             'extra_'.$field_details['variable'],

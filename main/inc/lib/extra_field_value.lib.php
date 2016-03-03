@@ -80,7 +80,7 @@ class ExtraFieldValue extends Model
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
 
-            if ($found === FALSE) {
+            if ($found === false) {
                 continue;
             }
 
@@ -107,7 +107,7 @@ class ExtraFieldValue extends Model
             // An extra field.
             $field_variable = substr($key, 6);
             $extraFieldInfo = $this->getExtraField()->get_handler_field_info_by_field_variable($field_variable);
-
+            
             if (!$extraFieldInfo) {
                 continue;
             }
@@ -176,7 +176,7 @@ class ExtraFieldValue extends Model
                             ]);
 
                         $tag->setCount(count($tagUses) + 1);
-                        $em->persist($tag);    
+                        $em->persist($tag);
                     }
 
                     $em->flush();

@@ -181,7 +181,7 @@ if ($form->validate()) {
 }
 
 // Display the form.
-$content = $form->return_form();
+$content = $form->returnForm();
 
 $tpl = new Template($tool_name);
 $tpl->assign('content', $content);

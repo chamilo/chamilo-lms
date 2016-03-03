@@ -48,33 +48,7 @@ function setFocus() {
 }
 </script>';
 // The next javascript script is to manage ajax upload file
-$htmlHeadXtra[] = "<script>
-$(function () {
-    setFocus();
-    $('#file_upload').fileUploadUI({
-        uploadTable:   $('.files'),
-        downloadTable: $('.files'),
-        buildUploadRow: function (files, index) {
-            $('.files').closest('.control-group').show();
-            return $('<tr><td>' + files[index].name + '<\/td>' +
-                    '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
-                    '<td class=\"file_upload_cancel\">' +
-                    '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' + '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
-                    '<\/td><\/tr>');
-        },
-        buildDownloadRow: function (file) {
-            if (!file.error) {
-                return $('<tr id=' + file.id + ' ><td>' + file.name + '<\/td><td>' + file.size + '<\/td><td>&nbsp;' + file.result +
-                    ' <\/td><td> <input style=\"width:90%;\" type=\"text\" value=\"' + file.comment + '\" name=\"file_comments[]\"> <\/td><td>' +
-                    file.delete + '<\/td>' +
-                    '<input type=\"hidden\" value=\"' + file.id +'\" name=\"file_ids[]\">' + '<\/tr>');
-            } else {
-                alert('" . get_lang('UploadError') . "');
-            }
-        }
-    });
-});
-</script>";
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
 
 // Recover Thread ID, will be used to generate delete attachment URL to do ajax
 $threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : 0;
@@ -82,30 +56,30 @@ $forumId = isset($_REQUEST['forum']) ? intval($_REQUEST['forum']) : 0;
 
 // The next javascript script is to delete file by ajax
 $htmlHeadXtra[] = '<script>
-    $(function () {
-        $(document).on("click", ".deleteLink", function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var l = $(this);
-            var id = l.closest("tr").attr("id");
-            var filename = l.closest("tr").find(".attachFilename").html();
-            if (confirm("' . get_lang('AreYouSureToDeleteJS') . '", filename)) {
-                $.ajax({
-                    type: "POST",
-                    url: "'.api_get_path(WEB_AJAX_PATH) . 'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId .'&forum='.$forumId .'",
-                    dataType: "json",
-                    success: function(data) {
-                        if (data.error == false) {
-                            l.closest("tr").remove();
-                            if ($(".files td").length < 1) {
-                                $(".files").closest(".control-group").hide();
-                            }
+$(function () {
+    $(document).on("click", ".deleteLink", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var l = $(this);
+        var id = l.closest("tr").attr("id");
+        var filename = l.closest("tr").find(".attachFilename").html();
+        if (confirm("' . get_lang('AreYouSureToDeleteJS') . '", filename)) {
+            $.ajax({
+                type: "POST",
+                url: "'.api_get_path(WEB_AJAX_PATH) . 'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId .'&forum='.$forumId .'",
+                dataType: "json",
+                success: function(data) {
+                    if (data.error == false) {
+                        l.closest("tr").remove();
+                        if ($(".files td").length < 1) {
+                            $(".files").closest(".control-group").hide();
                         }
                     }
-                })
-            }
-        });
+                }
+            })
+        }
     });
+});
 </script>';
 
 /**
@@ -5577,7 +5551,9 @@ function editAttachedFile($array, $id, $courseId = null) {
  * @param int $forumId Forum ID from where the post are
  * @param int $threadId Thread ID where forum post are
  * @param int $postId Post ID to identify Post
+ * @deprecated this function seems to never been used
  * @return string The Forum Attachment Ajax Form
+ *
  */
 function getAttachmentAjaxForm($forumId, $threadId, $postId)
 {
@@ -5591,18 +5567,11 @@ function getAttachmentAjaxForm($forumId, $threadId, $postId)
     }
 
     $url = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&forum=' . $forumId . '&thread=' . $threadId . '&postId=' . $postId . '&a=upload_file';
-    // Form
-    $formFileUpload = '<div class="form-ajax">
-        <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
-            <input type="file" name="user_upload" multiple>
-            <button type="submit">Upload</button>
-            <div class="button-load">
-                '.get_lang('UploadFiles').'
-            </div>
-        </form></div>
-        ';
 
-    return $formFileUpload;
+    $multipleForm = new FormValidator('post');
+    $multipleForm->addMultipleUpload($url);
+
+    return $multipleForm->returnForm();
 }
 
 /**

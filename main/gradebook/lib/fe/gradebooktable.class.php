@@ -809,7 +809,7 @@ class GradebookTable extends SortableTable
             $ySize = 400;
             $pChart = new pImage($xSize, $ySize, $dataSet);
             /* Turn of Antialiasing */
-            $pChart->Antialias = FALSE;
+            $pChart->Antialias = false;
 
             /* Add a border to the picture */
             $pChart->drawRectangle(0,0,$xSize-10,$ySize-10,array("R"=>0,"G"=>0,"B"=>0));

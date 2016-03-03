@@ -107,7 +107,7 @@ switch ($action) {
         $_SESSION['notebook_view'] = 'creation_date';
 
         $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
-        $form = $career->return_form($url, 'add');
+        $form = $career->returnForm($url, 'add');
 
         // The validation or display
         if ($form->validate()) {
@@ -132,7 +132,7 @@ switch ($action) {
     case 'edit':
         // Action handling: Editing
         $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
-        $form = $career->return_form($url, 'edit');
+        $form = $career->returnForm($url, 'edit');
 
         // The validation or display
         if ($form->validate()) {

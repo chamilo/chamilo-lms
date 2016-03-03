@@ -454,7 +454,7 @@ EOT;
      * @param array $attributes Additional attributes
      * @return HTML_QuickForm_button
      */
-    public function addButtonNext($label, $name = 'submit',$attributes = array())
+    public function addButtonNext($label, $name = 'submit', $attributes = array())
     {
         return $this->addButton($name, $label, 'arrow-right', 'primary', null, null, $attributes);
     }
@@ -723,8 +723,14 @@ EOT;
      *
      * @return HTML_QuickForm_element
      */
-    public function addSelectFromCollection($name, $label, $collection, $attributes = array(), $addNoneOption = false, $textCallable = '')
-    {
+    public function addSelectFromCollection(
+        $name,
+        $label,
+        $collection,
+        $attributes = array(),
+        $addNoneOption = false,
+        $textCallable = ''
+    ) {
         $options = [];
 
         if ($addNoneOption) {
@@ -1102,7 +1108,7 @@ EOT;
      * A trim-filter is attached to the field.
      * @param string $name The element name
      * @param string $label The label for the form-element
-     * @param bool $required	Optional. Is the form-element required (default=true)
+     * @param bool $required Optional. Is the form-element required (default=true)
      * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addTextLettersOnly(
@@ -1110,8 +1116,7 @@ EOT;
         $label,
         $required = false,
         $attributes = []
-    )
-    {
+    ) {
         $attributes = array_merge(
             $attributes,
             [
@@ -1149,7 +1154,7 @@ EOT;
      * A trim-filter is attached to the field.
      * @param string $name The element name
      * @param string $label The label for the form-element
-     * @param bool $required	Optional. Is the form-element required (default=true)
+     * @param bool $required Optional. Is the form-element required (default=true)
      * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addTextAlphanumeric(
@@ -1157,8 +1162,7 @@ EOT;
         $label,
         $required = false,
         $attributes = []
-    )
-    {
+    ) {
         $attributes = array_merge(
             $attributes,
             [
@@ -1196,7 +1200,7 @@ EOT;
      * A trim-filter is attached to the field.
      * @param string $name The element name
      * @param string $label The label for the form-element
-     * @param bool $required	Optional. Is the form-element required (default=true)
+     * @param bool $required Optional. Is the form-element required (default=true)
      * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addTextLettersAndSpaces(
@@ -1204,8 +1208,7 @@ EOT;
         $label,
         $required = false,
         $attributes = []
-    )
-    {
+    ) {
         $attributes = array_merge(
             $attributes,
             [
@@ -1243,7 +1246,7 @@ EOT;
      * A trim-filter is attached to the field.
      * @param string $name The element name
      * @param string $label The label for the form-element
-     * @param bool $required	Optional. Is the form-element required (default=true)
+     * @param bool $required Optional. Is the form-element required (default=true)
      * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addTextAlphanumericAndSpaces(
@@ -1251,8 +1254,7 @@ EOT;
         $label,
         $required = false,
         $attributes = []
-    )
-    {
+    ) {
         $attributes = array_merge(
             $attributes,
             [
@@ -1285,6 +1287,161 @@ EOT;
         );
     }
 
+    /**
+     * @param string $url
+     */
+    public function addMultipleUpload($url)
+    {
+        $inputName = 'input_file_upload';
+        $this->addMultipleUploadJavascript($url, $inputName);
+
+        $this->addHtml('
+            <div class="description-upload">'.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'</div>
+            <span class="btn btn-success fileinput-button">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>'.get_lang('AddFiles').'</span>
+                <!-- The file input field used as target for the file upload widget -->
+                <input id="'.$inputName.'" type="file" name="files[]" multiple>
+            </span>
+            <br />
+            <br />
+            <div id="dropzone">
+                <div class="button-load">
+                '.get_lang('UploadFiles').'
+                </div>
+            </div>
+
+            <br />
+            <!-- The global progress bar -->
+            <div id="progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+            </div>
+            <div id="files" class="files"></div>
+        ');
+    }
+
+    /**
+     *
+     * @param string $url page that will handle the upload
+     * @param string $inputName
+     */
+    private function addMultipleUploadJavascript($url, $inputName)
+    {
+        $this->addHtml("
+        <script>
+        $(function () {
+            'use strict';
+
+            $('#".$this->getAttribute('id')."').submit(function(){
+                return false;
+            });
+
+            $('#dropzone').on('click', function() {
+                $('#".$inputName."').click();
+            });
+
+            var url = '".$url."';
+            var uploadButton = $('<button/>')
+                .addClass('btn btn-primary')
+                .prop('disabled', true)
+                .text('".get_lang('Loading')."')
+                .on('click', function () {
+                    var \$this = $(this),
+                    data = \$this.data();
+
+                    \$this
+                        .off('click')
+                        .text('".get_lang('Cancel')."')
+                        .on('click', function () {
+                            \$this.remove();
+                            data.abort();
+                        });
+                    data.submit().always(function () {
+                        \$this.remove();
+                    });
+                });
+
+            $('#".$inputName."').fileupload({
+                url: url,
+                dataType: 'json',
+                autoUpload: false,
+                // Enable image resizing, except for Android and Opera,
+                // which actually support image resizing, but fail to
+                // send Blob objects via XHR requests:
+                disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+                previewMaxWidth: 100,
+                previewMaxHeight: 100,
+                previewCrop: true,
+                dropzone: $('#dropzone')
+             }).on('fileuploadadd', function (e, data) {
+                data.context = $('<div/>').appendTo('#files');
+
+                $.each(data.files, function (index, file) {
+                    var node = $('<p/>').append($('<span/>').text(file.name));
+                    if (!index) {
+                        node
+                            .append('<br>')
+                            .append(uploadButton.clone(true).data(data));
+                    }
+                    node.appendTo(data.context);
+                });
+            }).on('fileuploadprocessalways', function (e, data) {
+                var index = data.index,
+                    file = data.files[index],
+                    node = $(data.context.children()[index]);
+                if (file.preview) {
+                    node
+                        .prepend('<br>')
+                        .prepend(file.preview);
+                }
+                if (file.error) {
+                    node
+                        .append('<br>')
+                        .append($('<span class=\"text-danger\"/>').text(file.error));
+                }
+                if (index + 1 === data.files.length) {
+                    data.context.find('button')
+                        .text('Upload')
+                        .prop('disabled', !!data.files.error);
+                }
+            }).on('fileuploadprogressall', function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .progress-bar').css(
+                    'width',
+                    progress + '%'
+                );
+            }).on('fileuploaddone', function (e, data) {
+
+                $.each(data.result.files, function (index, file) {
+                    if (file.url) {
+                        var link = $('<a>')
+                            .attr('target', '_blank')
+                            .prop('href', file.url);
+
+                        $(data.context.children()[index]).wrap(link);
+                    } else if (file.error) {
+                        var error = $('<span class=\"text-danger\"/>').text(file.error);
+                        $(data.context.children()[index])
+                            .append('<br>')
+                            .append(error);
+                    }
+                });
+            }).on('fileuploadfail', function (e, data) {
+                $.each(data.files, function (index) {
+                    var error = $('<span class=\"text-danger\"/>').text('".get_lang('Failed')."');
+                    $(data.context.children()[index])
+                        .append('<br>')
+                        .append(error);
+                });
+            }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+            $('.fileinput-button').hide();
+
+        });
+        </script>"
+        );
+    }
 }
 
 /**
@@ -1328,5 +1485,6 @@ function html_filter_student_fullpage($html)
 function mobile_phone_number_filter($mobilePhoneNumber)
 {
     $mobilePhoneNumber = str_replace(array('+', '(', ')'), '', $mobilePhoneNumber);
-    return ltrim($mobilePhoneNumber,'0');
+
+    return ltrim($mobilePhoneNumber, '0');
 }

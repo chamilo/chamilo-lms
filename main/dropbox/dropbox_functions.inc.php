@@ -719,25 +719,10 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
         )
     );
 
-    $multipleForm->addHtml('
-        <div id="multiple_form" style="display:none">
-        <div class="description-upload">'.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'</div>
-            <span class="btn btn-success fileinput-button">
-                <i class="glyphicon glyphicon-plus"></i>
-                <span>'.get_lang('AddFiles').'</span>
-                <!-- The file input field used as target for the file upload widget -->
-                <input id="input_fileupload" type="file" name="files[]" multiple>
-            </span>
-
-            <br />
-            <br />
-            <!-- The global progress bar -->
-            <div id="progress" class="progress">
-                <div class="progress-bar progress-bar-success"></div>
-            </div>
-            <div id="files" class="files"></div>
-        </div>
-    ');
+    $url = api_get_path(WEB_AJAX_PATH).'dropbox.ajax.php?'.api_get_cidreq().'&a=upload_file&id=';
+    $multipleForm->addHtml('<div id="multiple_form" style="display:none">');
+    $multipleForm->addMultipleUpload($url);
+    $multipleForm->addHtml('</div>');
 
     echo Display::tabs($headers, array($multipleForm->returnForm(), $form->returnForm()), 'tabs');
 }

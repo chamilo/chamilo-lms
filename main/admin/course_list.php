@@ -340,7 +340,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $defaults['keyword_subscribe'] = '%';
     $defaults['keyword_unsubscribe'] = '%';
     $form->setDefaults($defaults);
-    $content .= $form->return_form();
+    $content .= $form->returnForm();
 } else {
     $interbreadcrumb[] = array ('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
     $tool_name = get_lang('CourseList');
@@ -386,7 +386,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
         $sessionInfo = SessionManager::fetch($sessionId);
         $sessionSelect->addOption($sessionInfo['name'], $sessionInfo['id'], ['selected' => 'selected']);
     }
-    
+
     $courseListUrl = api_get_self();
     $actions .= '<div class="row">';
     $actions .= '<div class="col-md-2">';
@@ -396,10 +396,10 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     }
     $actions .= '</div>';
     $actions .= '<div class="col-md-4">';
-    $actions .= $form->return_form();
+    $actions .= $form->returnForm();
     $actions .= '</div>';
     $actions .= '<div class="col-md-4">';
-    $actions .= $sessionFilter->return_form();
+    $actions .= $sessionFilter->returnForm();
     $actions .= '</div>';
     $actions .= '<div class="col-md-2">';
     $actions .= '<div class="pull-right">';

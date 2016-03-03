@@ -62,6 +62,37 @@ a.thumbnail:hover{
   margin-left: 20px;
   text-align: left;
 }
+.gallery .img-gallery{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 5px;
+}
+.gallery .photo{
+    display: block;
+    padding-bottom: 100%;
+    overflow: hidden;
+    
+}
+.gallery .frame{
+    background-color: #eeeeee;
+    display: block;
+    width: 100%;
+}
+.gallery .canvas-one{
+    margin-bottom: 30px;
+}
+.gallery .canvas-two{
+    margin-right: 30px;
+    flex-shrink: 1;
+    -webkit-flex-shrink: 1;
+    -ms-flex-negative:1 ;
+    display: block;
+    position: relative;
+    width: 100%;
+}
 /*------------------------*/
 .cursor-pointer {
     cursor: pointer;

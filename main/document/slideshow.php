@@ -169,13 +169,13 @@ if ($slide_id == 'all') {
 
 	// Config for make thumbnails
     $allowed_thumbnail_types = array('jpg', 'jpeg', 'gif', 'png');
-	$max_thumbnail_width     = 100;
-	$max_thumbnail_height    = 100;
+	$max_thumbnail_width     = 200;
+	$max_thumbnail_height    = 200;
 	$png_compression	     = 0;//0(none)-9
 	$jpg_quality  	         = 75;//from 0 to 100 (default is 75). More quality less compression
 
 	$directory_thumbnails = $sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
-
+        
 	//Other parameters only for show tumbnails
 	$row_items 			     = 4;//only in slideshow.php
 	$number_image 			 = 7;//num icons cols to show
@@ -291,7 +291,7 @@ if ($slide_id == 'all') {
 
 					$one_image_thumbnail_file='.thumbs/.'.$one_image_file;//get path thumbnail
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_thumbnail_file : $path.$one_image_thumbnail_file;
-					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';
+					$image_tag[] = '<img class="img-gallery" src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';
 				} else {
 					//if images aren't support by gd (not gif, jpg, jpeg, png)
 					if ($imagetype=="bmp") {
@@ -326,23 +326,30 @@ if ($slide_id == 'all') {
 	$count_image = count($image_tag);
 	$number_iteration = ceil($count_image/$number_image);
 	$p = 0;
-    echo '<ul class="thumbnails">';
+    $html = '';
+    $html .= '<div class="gallery">';
 	for ($k = 0; $k < $number_iteration; $k++) {
 		for ($i = 0; $i < $number_image; $i++) {
 			if (isset($image_tag[$p])) {
-				echo '<li class="col-md-4">
-                      <div class="thumbnail">';
-				echo '<a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.'">'.$image_tag[$p].'</a>';
-				echo '</div>';
-                echo '</li>';
+                            $html .= '<div class="col-md-3">';
+                            $html .= '<div class="canvas-one">';
+                            $html .= '<a class="canvas-two" href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.'">';
+                            $html .= '<div class="frame">';
+                            $html .= '<div class="photo">';
+                            $html .=  $image_tag[$p];
+                            $html .= '</div>';
+                            $html .= '</div>';
+                            $html .= '</a>';
+                            $html .= '</div>';
+                            $html .= '</div>';
 			}
 			$p++;
 		}
 	}
-    echo '</ul>';
+    $html .= '</div>';
 
 }//end slide==all
-
+echo $html;
 /*	ONE AT A TIME VIEW */
 $course_id = api_get_course_int_id();
 

@@ -74,7 +74,7 @@ $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tool_name = get_lang('ConfigureHomePage');
 $_languages = api_get_languages();
-
+$selfUrl =  api_get_self();
 $interbreadcrumb[] = array(
 	'url' => 'index.php',
 	'name' => get_lang('PlatformAdmin')
@@ -464,7 +464,7 @@ if (!empty($action)) {
 						}
 					}
 
-					$class_add_in_tab = 'class="show_menu"';
+					
 					if (!$add_in_tab) {
 						$class_add_in_tab = 'class="hide_menu"';
 					}
@@ -472,7 +472,7 @@ if (!empty($action)) {
 					// If the requested action is to create a link, make some room
 					// for the new link in the home_menu array at the requested place
 					// and insert the new link there
-                    $icon = '<em class="fa fa-external-link"></em>';
+                    
 					if ($action == 'insert_link' || $action == 'insert_tabs') {
 						for ($i = sizeof($home_menu); $i; $i--) {
 							if ($i > $insert_where) {
@@ -481,10 +481,10 @@ if (!empty($action)) {
 								break;
 							}
 						}
-						$home_menu[$insert_where + 1] = '<li '.$class_add_in_tab.'><a href="'.$link_url.'" target="'.($target_blank ? '_blank' : '_self').'">'.$icon.' '.$link_name.'</a></li>';
+						$home_menu[$insert_where + 1] = '<li><a href="'.$link_url.'" target="'.($target_blank ? '_blank' : '_self').'">'. $link_name .'</a></li>';
 					} else {
 						// If the request is about a link edition, change the link
-						$home_menu[$link_index]='<li '.$class_add_in_tab.'><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$icon.' '.$link_name.'</a></li>';
+						$home_menu[$link_index]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'. $link_name .'</a></li>';
 					}
 					// Re-build the file from the home_menu array
 					$home_menu = implode("\n", $home_menu);
@@ -546,7 +546,7 @@ if (!empty($action)) {
 		} //end of switch($action)
 
 		if (empty($errorMsg)) {
-			header('Location: '.api_get_self().'?language='.$languageGet);
+			header('Location: '.$selfUrl.'?language='.$languageGet);
 			exit();
 		}
 	} else {
@@ -588,7 +588,7 @@ if (!empty($action)) {
 						fclose($fpo);
 					}
 				}
-				header('Location: '.api_get_self());
+				header('Location: '.$selfUrl);
 				exit();
 				break;
 			case 'edit_top':
@@ -792,7 +792,7 @@ switch ($action) {
 	case 'edit_notice':
 		// Display for edit_notice case
 		?>
-		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" class="form-horizontal">
+		<form action="<?php echo $selfUrl; ?>?action=<?php echo $action; ?>" method="post" class="form-horizontal">
 			<legend><?php echo $tool_name; ?></legend>
 			<input type="hidden" name="formSent" value="1"/>
 			<?php
@@ -847,7 +847,7 @@ switch ($action) {
 			Display::display_normal_message($errorMsg);
 		}
 		$default = array();
-		$form = new FormValidator('configure_homepage_'.$action, 'post', api_get_self().'?action='.$action, '', array('style' => 'margin: 0px;'));
+		$form = new FormValidator('configure_homepage_'.$action, 'post', $selfUrl.'?action='.$action, '', array('style' => 'margin: 0px;'));
 		$renderer =& $form->defaultRenderer();
 
 		$form->addElement('header', '', $tool_name);
@@ -942,7 +942,7 @@ switch ($action) {
 		$form = new FormValidator(
 			'configure_homepage_'.$action,
 			'post',
-			api_get_self().'?action='.$action,
+			$selfUrl.'?action='.$action,
 			'',
 			array('style' => 'margin: 0px;')
 		);
@@ -1037,7 +1037,7 @@ switch ($action) {
                             <h4 class="panel-title">
                                 <a role="button" data-toggle="collapse" data-parent="#notice-block" href="#notice-list" aria-expanded="true" aria-controls="notice-list">
                                     <?php echo get_lang('Notice'); ?>
-                                    <a class="pull-right" href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>
+                                    <a class="pull-right" href="<?php echo $selfUrl; ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>
                                 </a>
                             </h4>
                         </div>
@@ -1073,8 +1073,7 @@ switch ($action) {
                     </div>
                     <div id="links-list" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                         <div class="panel-body">
-                            <a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?>
-                                <?php echo get_lang('InsertLink'); ?>
+                            <a href="<?php echo $selfUrl; ?>?action=insert_link"><?php echo Display::return_icon('add.png', get_lang('InsertLink')).'&nbsp;'. get_lang('InsertLink'); ?>
                             </a>
                             <ul class="menulist">
                                 <?php
@@ -1096,9 +1095,9 @@ switch ($action) {
                                     foreach ($home_menu as $enreg) {
                                         $enreg = trim($enreg);
                                         if (!empty($enreg)) {
-                                            $edit_link = '<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-                                            $delete_link = '<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-                                            echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', '<br />'.$edit_link.' '.$delete_link.'</li>'), $enreg);
+                                            $edit_link = '<a href="'.$selfUrl.'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.png', get_lang('Edit')).'</a>';
+                                            $delete_link = '<a href="'.$selfUrl.'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+                                            echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', $edit_link.' '.$delete_link.'</li>'), $enreg);
                                             $i++;
                                         }
                                     }
@@ -1112,9 +1111,8 @@ switch ($action) {
         </div>
         <div class="col-md-9">
             <div class="actions">
-		<a href="<?php echo api_get_self(); ?>?action=edit_top&language=<?php echo $languageGet; ?>">
-                    <?php echo Display::return_icon('edit.png', get_lang('EditHomePage'),null,ICON_SIZE_SMALL); ?>
-                    <?php echo get_lang('EditHomePage'); ?>
+		<a href="<?php echo $selfUrl; ?>?action=edit_top&language=<?php echo $languageGet; ?>">
+                    <?php echo Display::return_icon('edit.png', get_lang('EditHomePage'),null,ICON_SIZE_SMALL).'&nbsp;'. get_lang('EditHomePage'); ?>
 		</a>
             </div>
             <section id="homepage-home">
@@ -1140,14 +1138,14 @@ switch ($action) {
 
                 if ($access_url_id == 1) {
                     echo '<div class="actions">';
-                    echo '<a href="course_category.php">'.Display::return_icon('edit.png', get_lang('Edit')).get_lang('EditCategories').'</a>';
+                    echo '<a href="course_category.php">'.Display::return_icon('edit.png', get_lang('Edit')).'&nbsp;'.get_lang('EditCategories').'</a>';
                     echo '</div>';
                 }
                 echo '<ul class="list-group">';
                 if ($access_url_id == 1) {
                     if (sizeof($Categories)) {
                         foreach ($Categories as $enreg) {
-                            echo '<li class="list-group-item">'.Display::return_icon('folder_document.gif', $enreg['name']).'&nbsp;'.$enreg['name'].'</li>';
+                            echo '<li class="list-group-item">'.Display::return_icon('folder.png', $enreg['name']).'&nbsp;'.$enreg['name'].'</li>';
                         }
                         unset($Categories);
                     } else {
@@ -1195,10 +1193,10 @@ switch ($action) {
                     foreach ($home_menu as $enreg) {
                     $enreg = trim($enreg);
 			if (!empty($enreg)) {
-                            $edit_link   = ' <a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
-                            $delete_link = ' <a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
+                            $edit_link   = ' <a href="'.$selfUrl.'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.png', get_lang('Edit')).'</span></a>';
+                            $delete_link = ' <a href="'.$selfUrl.'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.png', get_lang('Delete')).'</span></a>';
                             $tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'),
-                                array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'),
+                                array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', $edit_link.$delete_link.'</li>'),
 				$enreg);
                             $tab_string = str_replace(array('<li>', '</li>','class="hide_menu"', 'hide_menu'), '', $tab_string);
 				$link_list .= Display::tag('li', $tab_string, array('class' => 'list-group-item'));
@@ -1207,8 +1205,8 @@ switch ($action) {
 		}
             ?>
             <div class="actions">
-		<a href="<?php echo api_get_self(); ?>?action=insert_tabs">
-                    <?php Display::display_icon('addd.gif', get_lang('InsertLink')); echo get_lang('InsertLink'); ?>
+		<a href="<?php echo $selfUrl; ?>?action=insert_tabs">
+                    <?php echo Display::return_icon('add.png', get_lang('InsertLink')) .'&nbsp;'. get_lang('InsertLink'); ?>
                 </a>
             </div>
             <?php

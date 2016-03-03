@@ -15,18 +15,22 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'nothing';
 $username = isset($_POST['username']) ? Security::remove_XSS($_POST['username']) : null;
 $apiKey = isset($_POST['api_key']) ? Security::remove_XSS($_POST['api_key']) : null;
 
+$em = Database::getManager();
+
 switch ($action) {
     case 'loginNewMessages':
         $password = isset($_POST['password']) ? Security::remove_XSS($_POST['password']) : null;
 
         if (MessagesWebService::isValidUser($username, $password)) {
-            $webService = new MessagesWebService();
+            MessagesWebService::init();
 
+            $webService = new MessagesWebService();
             $apiKey = $webService->getApiKey($username);
 
             $json = array(
                 'status' => true,
-                'apiKey' => $apiKey
+                'apiKey' => $apiKey,
+                'gcmSenderId' => api_get_configuration_value('messaging_gdc_project_number'),
             );
         } else {
             $json = array(
@@ -71,6 +75,18 @@ switch ($action) {
                 'status' => false
             );
         }
+        break;
+    case 'setGcmRegistrationId':
+        if (!MessagesWebService::isValidApiKey($username, $apiKey)) {
+            $json = ['status' => false];
+            break;
+        }
+
+        $user = $em->getRepository('ChamiloUserBundle:User')->findOneBy(['username' => $username]);
+
+        MessagesWebService::setGcmRegistrationId($user, $_POST['registration_id']);
+
+        $json = ['status' => true];
         break;
     default:
 }

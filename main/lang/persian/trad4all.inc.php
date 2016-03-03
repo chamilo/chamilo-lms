@@ -2018,7 +2018,6 @@ $ModifyQuestion = "ذخیره کردن سوال";
 $Example = "نمونه";
 $CheckAll = "انتخاب همه";
 $NbAnnoucement = "اطلاعیه ها";
-$OtherCourses = "دیگر دروس";
 $Doc = "آموزش";
 $PlataformAdmin = "پرتال مدیر";
 $Groups = "گروه ها";

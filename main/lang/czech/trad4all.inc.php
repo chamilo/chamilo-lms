@@ -1623,7 +1623,6 @@ $PlatformAdmin = "Administrace platformy";
 $UserInfo = "informace o uživateli";
 $CheckAll = "Označ vše";
 $NbAnnoucement = "Oznámení";
-$OtherCourses = "ostatní kurzy";
 $Doc = "dokument";
 $PlataformAdmin = "Administrátor platformy";
 $Groups = "Skupiny";

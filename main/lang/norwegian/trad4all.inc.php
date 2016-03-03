@@ -658,7 +658,6 @@ $NameOfLang['vietnamese'] = "vietnamesisk";
 $UserInfo = "Brukerinformasjon";
 $CheckAll = "Velg alle";
 $NbAnnoucement = "Annonsering";
-$OtherCourses = "Andre kurs";
 $Doc = "dokument";
 $PlataformAdmin = "Plattformadministrasjon";
 $Groups = "Grupper";

@@ -3133,7 +3133,6 @@ $ModifyQuestion = "Modificar a pregunta";
 $Example = "Exemplo";
 $CheckAll = "comprobar";
 $NbAnnoucement = "Avisos";
-$OtherCourses = "outros cursos";
 $Doc = "documento";
 $PlataformAdmin = "Administración da plataforma";
 $Groups = "Grupos";

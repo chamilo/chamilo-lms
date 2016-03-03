@@ -1803,7 +1803,6 @@ $UserInfo = "用戶訊息";
 $ModifyQuestion = "修改題目";
 $CheckAll = "全部選定";
 $NbAnnoucement = "通知";
-$OtherCourses = "其它課程";
 $Doc = "學習路徑";
 $PlataformAdmin = "平台管理員";
 $Groups = "組別";

@@ -1148,7 +1148,6 @@ $NameOfLang['vietnamese'] = "vietnamese";
 $UserInfo = "유저 정보";
 $ModifyQuestion = "문제 수정";
 $NbAnnoucement = "공지사항";
-$OtherCourses = "다른 과정들";
 $Doc = "문서";
 $PlataformAdmin = "플랫폼 관리자";
 $Groups = "그룹";

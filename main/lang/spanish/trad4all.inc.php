@@ -7637,4 +7637,12 @@ $ClickOrDropOneFileHere = "Suelte un archivo aquí o haga clic";
 $ModuloPercentage = "Módulo:\t\t\t%";
 $LastXDays = "Últimos %s días";
 $ExportBadges = "Exportar insignias";
+$LanguagesDisableAllExceptDefault = "Desactivar todos los idiomas excepto el por defecto de la plataforma";
+$ThereAreUsersUsingThisLanguagesDisableItManually = "Hay usuarios que usan actualmente el idioma siguiente. Por favor, desactivar manualmente.";
+$MessagingAllowSendPushNotificationTitle = "Permitir enviar notificaciones Push a la aplicación móvil de Chamilo Messaging";
+$MessagingAllowSendPushNotificationComment = "Enviar notificaciones Push a través de Google Cloud Messaging";
+$MessagingGDCProjectNumberTitle = "Número de proyecto de Google Developer Console";
+$MessagingGDCProjectNumberComment = "Necesita registrar un proyecto en <a href=\"https://console.developers.google.com/\">Google Developer Console</a>";
+$MessagingGDCApiKeyTitle = "API key de Google Developer Console para Google Cloud Messaging";
+$MessagingGDCApiKeyComment = "Necesita habilitar la API de Google Cloud Messaging y crear una credencial para Android";
 ?>

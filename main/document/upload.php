@@ -80,8 +80,6 @@ if (empty($document_data)) {
 }
 $group_properties = array();
 
-$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath='.$path;
-
 $htmlHeadXtra[] = '<script>
 
 function check_unzip() {
@@ -101,108 +99,6 @@ function setFocus(){
 }
 </script>';
 
-$htmlHeadXtra[] = "
-<script>
-$(function () {
-    'use strict';
-    var url = '".$url."';
-    var uploadButton = $('<button/>')
-        .addClass('btn btn-primary')
-        .prop('disabled', true)
-        .text('".get_lang('Loading')."')
-        .on('click', function () {
-            var \$this = $(this),
-            data = \$this.data();
-
-            \$this
-                .off('click')
-                .text('".get_lang('Cancel')."')
-                .on('click', function () {
-                    \$this.remove();
-                    data.abort();
-                });
-            data.submit().always(function () {
-                \$this.remove();
-            });
-        });
-
-    $('#file_upload').fileupload({
-        url: url,
-        dataType: 'json',
-        autoUpload: false,
-        // Enable image resizing, except for Android and Opera,
-        // which actually support image resizing, but fail to
-        // send Blob objects via XHR requests:
-        disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
-        previewMaxWidth: 100,
-        previewMaxHeight: 100,
-        previewCrop: true
-     }).on('fileuploadadd', function (e, data) {
-        data.context = $('<div/>').appendTo('#files');
-
-        $.each(data.files, function (index, file) {
-            var node = $('<p/>').append($('<span/>').text(file.name));
-            if (!index) {
-                node
-                    .append('<br>')
-                    .append(uploadButton.clone(true).data(data));
-            }
-            node.appendTo(data.context);
-        });
-    }).on('fileuploadprocessalways', function (e, data) {
-        var index = data.index,
-            file = data.files[index],
-            node = $(data.context.children()[index]);
-        if (file.preview) {
-            node
-                .prepend('<br>')
-                .prepend(file.preview);
-        }
-        if (file.error) {
-            node
-                .append('<br>')
-                .append($('<span class=\"text-danger\"/>').text(file.error));
-        }
-        if (index + 1 === data.files.length) {
-            data.context.find('button')
-                .text('Upload')
-                .prop('disabled', !!data.files.error);
-        }
-    }).on('fileuploadprogressall', function (e, data) {
-        var progress = parseInt(data.loaded / data.total * 100, 10);
-        $('#progress .progress-bar').css(
-            'width',
-            progress + '%'
-        );
-    }).on('fileuploaddone', function (e, data) {
-
-        $.each(data.result.files, function (index, file) {
-            if (file.url) {
-                var link = $('<a>')
-                    .attr('target', '_blank')
-                    .prop('href', file.url);
-
-                $(data.context.children()[index]).wrap(link);
-            } else if (file.error) {
-                var error = $('<span class=\"text-danger\"/>').text(file.error);
-                $(data.context.children()[index])
-                    .append('<br>')
-                    .append(error);
-            }
-        });
-    }).on('fileuploadfail', function (e, data) {
-        $.each(data.files, function (index) {
-            var error = $('<span class=\"text-danger\"/>').text('File upload failed.');
-            $(data.context.children()[index])
-                .append('<br>')
-                .append(error);
-        });
-    }).prop('disabled', !$.support.fileInput)
-        .parent().addClass($.support.fileInput ? undefined : 'disabled');
-
-});
-
-</script>";
 
 // This needs cleaning!
 if (!empty($groupId)) {
@@ -213,7 +109,7 @@ if (!empty($groupId)) {
     // Only courseadmin or group members allowed
     if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupId)) {
         $interbreadcrumb[] = array(
-            'url' => '../group/group_space.php?'.api_get_cidreq(),
+            'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
             'name' => get_lang('GroupSpace'),
         );
     } else {
@@ -284,7 +180,6 @@ $this_section = SECTION_COURSES;
 Display::display_header($nameTools, 'Doc');
 
 /*    Here we do all the work */
-
 $unzip = isset($_POST['unzip']) ? $_POST['unzip'] : null;
 $index = isset($_POST['index_document']) ? $_POST['index_document'] : null;
 // User has submitted a file
@@ -399,33 +294,16 @@ $form->setDefaults($defaults);
 
 $simple_form = $form->returnForm();
 
-$multiple_form = '<div class="description-upload">'.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'</div>';
-$multiple_form .=  '
-<span class="btn btn-success fileinput-button">
-    <i class="glyphicon glyphicon-plus"></i>
-    <span>'.get_lang('AddFiles').'</span>
-    <!-- The file input field used as target for the file upload widget -->
-    <input id="file_upload" type="file" name="files[]" multiple>
-</span>
+$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath='.$path;
 
-<br />
-<br />
-<!-- The global progress bar -->
-<div id="progress" class="progress">
-    <div class="progress-bar progress-bar-success"></div>
-</div>
-<div id="files" class="files"></div>
-';
+$multipleForm = new FormValidator('post');
+$multipleForm->addMultipleUpload($url);
 
-$nav_info = api_get_navigator();
-if ($nav_info ['name'] == 'Internet Explorer') {
-    echo $simple_form;
-} else {
     $headers = array(
         get_lang('Upload'),
         get_lang('Upload').' ('.get_lang('Simple').')',
     );
-    echo Display::tabs($headers, array($multiple_form, $simple_form), 'tabs');
-}
+
+echo Display::tabs($headers, array($multipleForm->returnForm(), $form->returnForm()), 'tabs');
 
 Display::display_footer();

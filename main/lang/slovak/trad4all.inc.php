@@ -3193,7 +3193,6 @@ $ModifyQuestion = "Zmeniť otázku";
 $Example = "Príklad";
 $CheckAll = "Zaškrtnúť všetko";
 $NbAnnoucement = "Oznam";
-$OtherCourses = "ostatné kurzy";
 $Doc = "Dokument";
 $PlataformAdmin = "Administrátor platformy";
 $Groups = "Skupiny";

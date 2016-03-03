@@ -3121,7 +3121,6 @@ $ModifyQuestion = "Shrani vprašanje";
 $Example = "Primer";
 $CheckAll = "Izberi vse";
 $NbAnnoucement = "Obvestilo";
-$OtherCourses = "ostali tečaji";
 $Doc = "Tečaj";
 $PlataformAdmin = "Admin portala";
 $Groups = "Skupine";

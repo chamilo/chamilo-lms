@@ -1645,7 +1645,6 @@ $UserInfo = "informacija o korisniku";
 $ModifyQuestion = "Izmena putanja";
 $CheckAll = "Proveri sve";
 $NbAnnoucement = "Obaveštenje";
-$OtherCourses = "drugi kursevi";
 $Doc = "dokument";
 $PlataformAdmin = "Administratorska platforma";
 $Groups = "Grupe";

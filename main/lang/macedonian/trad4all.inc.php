@@ -1684,7 +1684,6 @@ $UserInfo = "информација за корисникот";
 $ModifyQuestion = "Измени го прашањето";
 $CheckAll = "Маркирај се'";
 $NbAnnoucement = "Соопштение";
-$OtherCourses = "други курсеви";
 $Doc = "Патека_на_учењето";
 $PlataformAdmin = "Управувач со Платформата";
 $Groups = "Групи";

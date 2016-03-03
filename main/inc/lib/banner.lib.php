@@ -413,12 +413,13 @@ function menuArray()
         if ($access_url_id != -1) {
             // If not a dead URL
             $urlInfo = api_get_access_url($access_url_id);
+           
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
             $cleanUrl = api_replace_dangerous_char($url);
             $cleanUrl = str_replace('/', '-', $cleanUrl);
             $cleanUrl .= '/';
             $homepath  = api_get_path(SYS_APP_PATH).'home/'.$cleanUrl; //homep for Home Path
-            var_dump($homepath);
+            
             //we create the new dir for the new sites
             if (!is_dir($homepath)) {
                 mkdir($homepath, api_get_permissions_for_new_directories());

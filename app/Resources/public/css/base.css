@@ -1866,13 +1866,20 @@ div.admin_section h4 {
   box-shadow: 0px 1px 1px rgba(0,0,0,0.05);
   margin-bottom: 35px;
 }
-
+.question_row_score{
+    margin-bottom: 20px;
+    display: block;
+}
 .question_item {
     height:50px;
     padding:5px;
     margin:10px 0px 10px 0px;
 }
-
+.question-return{
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
 .option_item {
     width:150px;
     padding:3px;

@@ -136,8 +136,8 @@ $userGroup = new UserGroup();
 if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');
     foreach ($complete_user_list as $index => $user) {
-        //prevent invitee users add to groups - see #8091
-        if ($user['status'] != 20) {
+        //prevent invitee users add to groups or tutors - see #8091
+        if ($user['status'] != INVITEE) {
             $officialCode = !empty($user['official_code']) ? ' - '.$user['official_code'] : null;
 
             $groups = $userGroup->getUserGroupListByUser($user['user_id']);

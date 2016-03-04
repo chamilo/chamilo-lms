@@ -1649,7 +1649,13 @@ div.admin_section h4 {
 
 
 /* Groups boxes */
-
+.toolbar-groups{
+    margin-bottom: 30px;
+}
+.form-group  label span{
+    display: block;
+    font-size: 12px;
+}
 .group_invitation_grid_container { width:100%;}
 .group_invitation_grid_item {
     border:1px dotted #CCCCCC;

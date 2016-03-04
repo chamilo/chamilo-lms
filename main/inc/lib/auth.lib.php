@@ -605,7 +605,13 @@ class Auth
         $user_id = api_get_user_id();
         $all_course_information = CourseManager::get_course_information($course_code);
 
-        if ($all_course_information['registration_code'] == '' || $_POST['course_registration_code'] == $all_course_information['registration_code']) {
+        if (
+            $all_course_information['registration_code'] == '' ||
+            (
+                isset($_POST['course_registration_code']) &&
+                $_POST['course_registration_code'] == $all_course_information['registration_code']
+            )
+        ) {
             if (api_is_platform_admin()) {
                 $status_user_in_new_course = COURSEMANAGER;
             } else {
@@ -636,7 +642,7 @@ class Auth
             $form->addElement('hidden', 'sec_token', $_SESSION['sec_token']);
             $form->addElement('hidden', 'subscribe_user_with_password', $all_course_information['code']);
             $form->addElement('text', 'course_registration_code');
-            $form->addButton(get_lang('SubmitRegistrationCode'));
+            $form->addButton('submit', get_lang('SubmitRegistrationCode'));
             $content = $form->returnForm();
 
             return array('message' => $message, 'content' => $content);

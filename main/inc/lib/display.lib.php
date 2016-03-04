@@ -133,7 +133,7 @@ class Display
     {
         echo self::$global_template->show_footer_template();
     }
-    
+
     /**
      * Display the page footer
      */
@@ -712,7 +712,8 @@ class Display
         $additional_attributes = array(),
         $size = ICON_SIZE_SMALL,
         $show_text = true,
-        $return_only_path = false
+        $return_only_path = false,
+        $loadThemeIcon = true
     ) {
         $code_path = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
@@ -720,7 +721,6 @@ class Display
         $alternateWebCssPath = api_get_path(WEB_CSS_PATH);
 
         $image = trim($image);
-        $theme = 'themes/' . api_get_visual_theme() . '/icons/';
         $size_extra = '';
 
         if (isset($size)) {
@@ -730,15 +730,20 @@ class Display
             $size = ICON_SIZE_SMALL;
         }
 
-        //Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX
-        if (is_file($alternateCssPath.$theme.$size_extra.$image)) {
-            $icon = $alternateWebCssPath.$theme.$size_extra.$image;
-        } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {
-            //Checking the main/img/icons/XXX/ folder
-            $icon = $w_code_path.'img/icons/'.$size_extra.$image;
-        } else {
-            //Checking the img/ folder
-            $icon = $w_code_path . 'img/' . $image;
+        // Checking the img/ folder
+        $icon = $w_code_path.'img/'.$image;
+
+        $theme = 'themes/chamilo/icons/';
+
+        if ($loadThemeIcon) {
+            $theme = 'themes/' . api_get_visual_theme() . '/icons/';
+            // Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX
+            if (is_file($alternateCssPath.$theme.$size_extra.$image)) {
+                $icon = $alternateWebCssPath.$theme.$size_extra.$image;
+            } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {
+                //Checking the main/img/icons/XXX/ folder
+                $icon = $w_code_path.'img/icons/'.$size_extra.$image;
+            }
         }
 
         // Special code to enable SVG - refs #7359 - Needs more work

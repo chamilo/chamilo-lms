@@ -62,6 +62,37 @@ a.thumbnail:hover{
   margin-left: 20px;
   text-align: left;
 }
+.gallery .img-gallery{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 5px;
+}
+.gallery .photo{
+    display: block;
+    padding-bottom: 100%;
+    overflow: hidden;
+    
+}
+.gallery .frame{
+    background-color: #eeeeee;
+    display: block;
+    width: 100%;
+}
+.gallery .canvas-one{
+    margin-bottom: 30px;
+}
+.gallery .canvas-two{
+    margin-right: 30px;
+    flex-shrink: 1;
+    -webkit-flex-shrink: 1;
+    -ms-flex-negative:1 ;
+    display: block;
+    position: relative;
+    width: 100%;
+}
 /*------------------------*/
 .cursor-pointer {
     cursor: pointer;
@@ -1864,13 +1895,20 @@ div.admin_section h4 {
   box-shadow: 0px 1px 1px rgba(0,0,0,0.05);
   margin-bottom: 35px;
 }
-
+.question_row_score{
+    margin-bottom: 20px;
+    display: block;
+}
 .question_item {
     height:50px;
     padding:5px;
     margin:10px 0px 10px 0px;
 }
-
+.question-return{
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
 .option_item {
     width:150px;
     padding:3px;

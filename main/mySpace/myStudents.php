@@ -470,6 +470,9 @@ if (!empty($student_id)) {
     echo Display::page_subheader($table_title);
 
     $userPicture = UserManager::getUserPicture($user_info['user_id']);
+
+    $userGroupManager = new UserGroup();
+    $userGroups = $userGroupManager->getUserGroupListByUser($user_info['user_id'], UserGroup::NORMAL_CLASS);
     ?>
     <img src="<?php echo $userPicture ?>">
     <div class="row">
@@ -581,6 +584,22 @@ if (!empty($student_id)) {
             } ?>
             </tbody>
         </table>
+        <?php if (!empty($userGroups)) { ?>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th><?php echo get_lang('Classes') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($userGroups as $class) { ?>
+                    <tr>
+                        <td><?php echo $class['name'] ?></td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } ?>
         </div>
     </div>
     <?php

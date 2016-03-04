@@ -1288,6 +1288,7 @@ $CourseResources = "Course resources";
 $ExternalLink = "External link";
 $DropboxAdd = "Add the dropbox page to this chapter.";
 $AddAssignmentPage = "課題ツールをコースに追加";
+$IntroductionText = "このコースへようこそ";
 $CourseDescription = "コースの説明";
 $LinkTarget = "リンク先";
 $AgendaAdd = "イベントを追加";

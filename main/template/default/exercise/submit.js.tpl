@@ -9,7 +9,7 @@ var DraggableAnswer = {
         }
 
         item.fadeOut(function () {
-            var $list = $('<div class="gallery ui-helper-reset"/>').appendTo(insertHere);
+            var $list = $('<ul>').addClass('gallery ui-helper-reset').appendTo(insertHere);
 
             item.find('a.btn').remove();
 
@@ -24,22 +24,7 @@ var DraggableAnswer = {
                 })
                 .attr("selected", true);
 
-            var recycleButton = $('<a>')
-                    .attr('href', '#')
-                    .addClass('btn btn-default btn-xs')
-                    .append(
-                        "{{ "Undo" | get_lang }} ",
-                        $('<i>').addClass('fa fa-undo')
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-
-                        var liParent = $(this).parent();
-
-                        DraggableAnswer.recycleItem(liParent);
-                    });
-
-            item.append(recycleButton).appendTo($list).fadeIn();
+            item.appendTo($list).fadeIn();
         });
     },
     recycleItem: function (item) {

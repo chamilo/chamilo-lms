@@ -507,6 +507,15 @@ ul#navigation .report a {
 #exercise-description.panel-default{
     border: 1px solid #DDD;
 }
+#exercise-description .panel-heading a span{
+    margin-left: 25px;
+}
+#exercise-description .panel-heading a{
+    background: url("../../main/img/icons/22/arrow-up-collapse.png") no-repeat left center;
+}
+#exercise-description .panel-heading a.collapsed{
+    background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat left center;
+}
 /*****************************************************
  *              AGENDA                               *
  *****************************************************/

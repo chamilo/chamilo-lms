@@ -2717,7 +2717,7 @@ class GroupManager
         $url = api_get_path(WEB_CODE_PATH).'group/%s?'.api_get_cidreq();
 
         echo '
-            <ul class="nav nav-tabs">
+            <ul class="toolbar-groups nav nav-tabs">
                 <li class="'.$activeSettings.'">
                     <a href="'.sprintf($url, 'settings.php').'">
                     '.Display::return_icon('settings.png').' '.get_lang('Settings').'

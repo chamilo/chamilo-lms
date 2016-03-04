@@ -170,10 +170,10 @@ if ($slide_id == 'all') {
 
 	// Config for make thumbnails
     $allowed_thumbnail_types = array('jpg', 'jpeg', 'gif', 'png');
-	$max_thumbnail_width     = 200;
-	$max_thumbnail_height    = 200;
+	$max_thumbnail_width     = 250;
+	$max_thumbnail_height    = 250;
 	$png_compression	     = 0;//0(none)-9
-	$jpg_quality  	         = 75;//from 0 to 100 (default is 75). More quality less compression
+	$jpg_quality  	         = 100;//from 0 to 100 (default is 75). More quality less compression
 
 	$directory_thumbnails = $sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
         
@@ -228,8 +228,7 @@ if ($slide_id == 'all') {
                             $max_thumbnail_width,
                             $max_thumbnail_height
                         );
-
-						if ($max_thumbnail_width>$original_image_size['width'] && $max_thumbnail_height>$original_image_size['height']){
+						if($max_thumbnail_width>$original_image_size['width'] && $max_thumbnail_height>$original_image_size['height']){
 							$new_thumbnail_size['width']=$original_image_size['width'];
 							$new_thumbnail_size['height']=$original_image_size['height'];
 						}
@@ -327,11 +326,12 @@ if ($slide_id == 'all') {
 	$count_image = count($image_tag);
 	$number_iteration = ceil($count_image/$number_image);
 	$p = 0;
+    $html = '';
     $html .= '<div class="gallery">';
 	for ($k = 0; $k < $number_iteration; $k++) {
 		for ($i = 0; $i < $number_image; $i++) {
 			if (isset($image_tag[$p])) {
-                            $html .= '<div class="col-md-3">';
+                            $html .= '<div class="col-xs-6 col-sm-3 col-md-2">';
                             $html .= '<div class="canvas-one">';
                             $html .= '<a class="canvas-two" href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.'">';
                             $html .= '<div class="frame">';

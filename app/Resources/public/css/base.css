@@ -507,6 +507,15 @@ ul#navigation .report a {
 #exercise-description.panel-default{
     border: 1px solid #DDD;
 }
+#exercise-description .panel-heading a span{
+    margin-left: 25px;
+}
+#exercise-description .panel-heading a{
+    background: url("../../main/img/icons/22/arrow-up-collapse.png") no-repeat left center;
+}
+#exercise-description .panel-heading a.collapsed{
+    background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat left center;
+}
 /*****************************************************
  *              AGENDA                               *
  *****************************************************/
@@ -5817,9 +5826,16 @@ a.sessionView {
     padding-right: 15px;
     visibility: visible;
   }
+  .items-course{
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+  }
 }
 /* Landscape phones and down */
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  
   #learning_path_breadcrumb_zone {
   }
   #learning_path_main{
@@ -5894,6 +5910,7 @@ a.sessionView {
   #show_graph{
    text-align: center;
   }
+  
 }
 @media (min-width : 480px) and (max-width: 767px) {
   #touch-button{
@@ -5901,6 +5918,9 @@ a.sessionView {
   }
   .sidebar-scorm{
     width: 100%;
+  }
+  .items-course{
+    padding: 15px;
   }
   #control-bottom.well{
     padding: 10px;
@@ -5934,6 +5954,13 @@ a.sessionView {
     }
     footer #footer_right{
         text-align: center;
+    }
+    .items-course{
+        padding: 5px;
+        min-height: 300px;
+    }
+    .col-xs-6{
+        width: 100%;
     }
 }
 

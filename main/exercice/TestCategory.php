@@ -759,9 +759,9 @@ class TestCategory
             $content .= $category['description'];
             $content .= '</div>';
 
-            $links = '<a href="' . api_get_self() . '?action=editcategory&category_id=' . $category['id'] . '">' .
+            $links = '<a href="' . api_get_self() . '?action=editcategory&category_id=' . $category['id'] . '&'.api_get_cidreq().'">' .
                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . '</a>';
-            $links .= ' <a href="' . api_get_self() . '?action=deletecategory&category_id=' . $category['id'] . '" ';
+            $links .= ' <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=deletecategory&category_id=' . $category['id'] . '" ';
             $links .= 'onclick="return confirmDelete(\'' . self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure') . '[' . $rowname) . '] ?\', \'id_cat' . $category['id'] . '\');">';
             $links .= Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
             $html .= Display::panel($content, $category['title'].$links);

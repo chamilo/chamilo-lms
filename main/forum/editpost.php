@@ -216,7 +216,7 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
 }
 
 // Footer
-if ($origin == 'learnpath') {
+if (isset($origin) && $origin == 'learnpath') {
     Display::display_reduced_footer();
 } else {
     Display::display_footer();

@@ -128,27 +128,31 @@ if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');
 
     foreach ($complete_user_list as $index => $user) {
-        $officialCode = !empty($user['official_code']) ? ' - '.$user['official_code'] : null;
-        $groups = $userGroup->getUserGroupListByUser($user['user_id']);
-        $groupNameListToString = '';
-        if (!empty($groups)) {
-            $groupNameList = array_column($groups, 'name');
-            $groupNameListToString = ' - ['.implode(', ', $groupNameList).']';
-        }
+        //prevent invitee users add to groups or tutors - see #8091
+        if ($user['status'] != INVITEE) {
+            $officialCode = !empty($user['official_code']) ? ' - '.$user['official_code'] : null;
+            
+            $groups = $userGroup->getUserGroupListByUser($user['user_id']);
+            $groupNameListToString = '';
+            if (!empty($groups)) {
+                $groupNameList = array_column($groups, 'name');
+                $groupNameListToString = ' - ['.implode(', ', $groupNameList).']';
+            }
 
-        $name = api_get_person_name(
-                $user['firstname'],
-                $user['lastname']
-            ).' ('.$user['username'].')'.$officialCode;
-
-        if ($orderUserListByOfficialCode === 'true') {
-            $officialCode = !empty($user['official_code']) ? $user['official_code']." - " : '? - ';
-            $name = $officialCode." ".api_get_person_name(
+            $name = api_get_person_name(
                     $user['firstname'],
                     $user['lastname']
-                ).' ('.$user['username'].')';
+                ).' ('.$user['username'].')'.$officialCode;
+
+            if ($orderUserListByOfficialCode === 'true') {
+                $officialCode = !empty($user['official_code']) ? $user['official_code']." - " : '? - ';
+                $name = $officialCode." ".api_get_person_name(
+                        $user['firstname'],
+                        $user['lastname']
+                    ).' ('.$user['username'].')';
+            }
+            $possible_users[$user['user_id']] = $name.$groupNameListToString;
         }
-        $possible_users[$user['user_id']] = $name.$groupNameListToString;
     }
 }
 

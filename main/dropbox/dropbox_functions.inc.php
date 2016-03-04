@@ -647,7 +647,7 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
             }
             $userId = $current_user['user_id'];
             $userInfo = api_get_user_info($userId);
-            if ($userInfo['status'] != 20) {
+            if ($userInfo['status'] != INVITEE) {
                 $groupNameListToString = '';
                 if (!empty($groups)) {
                     $groupNameList = array_column($groups, 'name');

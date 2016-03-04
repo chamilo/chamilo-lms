@@ -1041,6 +1041,10 @@ function getCourseCategoryUrl(
     $action = isset($action) ? Security::remove_XSS($action) : $requestAction;
     $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : null;
 
+    if ($action === 'subscribe_user_with_password') {
+        $action = 'subscribe';
+    }
+
     $categoryCodeRequest = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : null;
     $categoryCode = isset($categoryCode) ? Security::remove_XSS($categoryCode) : $categoryCodeRequest;
 

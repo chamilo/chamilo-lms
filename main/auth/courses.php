@@ -173,11 +173,10 @@ if (isset($_POST['unsubscribe'])) {
 switch ($action) {
     case 'subscribe_user_with_password':
         $courses_controller->subscribe_user(
-            $_POST['subscribe_user_with_password'],
-            $_POST['search_term'],
-            $_POST['category_code']
+            isset($_POST['subscribe_user_with_password']) ? $_POST['subscribe_user_with_password'] : '',
+            isset($_POST['search_term']) ? $_POST['search_term'] : '',
+            isset($_POST['category_code']) ? $_POST['category_code'] : ''
         );
-        exit;
         break;
     case 'createcoursecategory':
         $courses_controller->categories_list($action);

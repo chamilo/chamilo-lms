@@ -183,10 +183,17 @@ class CForumForum
 
     /**
      * @var integer
-     * 
+     *
      * @ORM\Column(name="lp_id", type="integer", options={"unsigned":true})
      */
     private $lpId;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="moderated", type="boolean", nullable=true)
+     */
+    private $moderated;
 
     /**
      * Set forumTitle
@@ -715,4 +722,22 @@ class CForumForum
         return $this->lpId;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isModerated()
+    {
+        return $this->moderated;
+    }
+
+    /**
+     * @param $moderated
+     * @return $this
+     */
+    public function setModerated($moderated)
+    {
+        $this->moderated = $moderated;
+
+        return $this;
+    }
 }

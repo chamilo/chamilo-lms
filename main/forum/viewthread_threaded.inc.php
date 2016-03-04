@@ -24,7 +24,7 @@
 $forumUrl = api_get_path(WEB_CODE_PATH) . 'forum/';
 $_user = api_get_user_info();
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
-$rows = getPosts($_GET['thread'], $sortDirection, true);
+$rows = getPosts($current_forum, $_GET['thread'], $sortDirection, true);
 $sessionId = api_get_session_id();
 $currentThread = get_thread_information($_GET['thread']);
 $post_id = isset($_GET['post']) ? (int) $_GET['post'] : 0;
@@ -263,7 +263,7 @@ if (
 
 
 // Verified the post minor
-$my_post = getPosts($_GET['thread']);
+$my_post = getPosts($current_forum, $_GET['thread']);
 $id_posts = array();
 
 if (!empty($my_post) && is_array($my_post)) {
@@ -279,7 +279,7 @@ if (!empty($my_post) && is_array($my_post)) {
 if (
     GroupManager::is_tutor_of_group(api_get_user_id(), $groupId) ||
     api_is_allowed_to_edit(false, true) &&
-    !(api_is_course_coach() &&$current_forum['session_id'] != $sessionId)
+    !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
 ) {
     if ($locked == false) {
         echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() .
@@ -295,7 +295,6 @@ if (
                 ICON_SIZE_SMALL
             )."</a>";
     }
-
     echo return_visible_invisible_icon(
         'post',
         $rows[$display_post_id]['post_id'],

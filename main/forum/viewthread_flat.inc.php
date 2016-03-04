@@ -15,7 +15,6 @@ if ((isset($_GET['action']) &&
     delete_attachment(0, $_GET['id_attach']);
 }
 
-
 // Are we in a lp ?
 $origin = '';
 if (isset($_GET['origin'])) {
@@ -31,7 +30,7 @@ $groupId = api_get_group_id();
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin != 'learnpath' ? 'ASC' : 'DESC');
 
 if (isset($current_thread['thread_id'])) {
-    $rows = getPosts($current_thread['thread_id'], $sortDirection);
+    $rows = getPosts($current_forum, $current_thread['thread_id'], $sortDirection);
     $increment = 0;
     $clean_forum_id = intval($_GET['forum']);
     $clean_thread_id = intval($_GET['thread']);
@@ -130,7 +129,6 @@ if (isset($current_thread['thread_id'])) {
                 );
             } else {
                 $name = Display::tag('strong', "#" . $postCount--, ['class' => 'text-info']) . " | $name";
-
                 $html .= Display::tag(
                     'p',
                     $name,
@@ -201,11 +199,15 @@ if (isset($current_thread['thread_id'])) {
                     api_is_allowed_to_edit(false, true) &&
                     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 ) {
+                    $statusIcon = getPostStatus($current_forum, $row);
                     $iconEdit .= return_visible_invisible_icon(
-                        'post', $row['post_id'], $row['visible'], array(
-                        'forum' => $clean_forum_id,
-                        'thread' => $clean_thread_id,
-                        'origin' => $origin,
+                        'post',
+                        $row['post_id'],
+                        $row['visible'],
+                        array(
+                            'forum' => $clean_forum_id,
+                            'thread' => $clean_thread_id,
+                            'origin' => $origin,
                         )
                     );
                     $iconEdit .= "";
@@ -219,14 +221,8 @@ if (isset($current_thread['thread_id'])) {
                 }
             }
 
-            $user_status = api_get_status_of_user_in_course(
-                $row['user_id'], api_get_course_int_id()
-            );
-
-            $current_qualify_thread = showQualify(
-                '1', $row['poster_id'], $_GET['thread']
-            );
-
+            $user_status = api_get_status_of_user_in_course($row['user_id'], api_get_course_int_id());
+            $current_qualify_thread = showQualify('1', $row['poster_id'], $_GET['thread']);
             if (
                 (
                     $current_thread['thread_peer_qualify'] == 1 ||
@@ -254,8 +250,10 @@ if (isset($current_thread['thread_id'])) {
                 }
             }
             if ($iconEdit != '') {
-                $html .= '<div class="tools-icons">' . $iconEdit . '</div>';
+                $html .= '<div class="tools-icons">' . $iconEdit . $statusIcon.'</div>';
             }
+
+
 
             $html .= $closedPost;
             $html .= '</div>';
@@ -263,18 +261,22 @@ if (isset($current_thread['thread_id'])) {
             $html .= '<div class="col-md-10">';
 
             $titlePost = Display::tag(
-                'h3', $row['post_title'],
+                'h3',
+                $row['post_title'],
                 array('class' => 'forum_post_title')
             );
+
             $html .= Display::tag(
-                'div', $titlePost,
+                'div',
+                $titlePost,
                 array('class' => 'post-header')
             );
 
             // see comments inside forumfunction.inc.php to lower filtering and allow more visual changes
 
             $html .= Display::tag(
-                'div', $row['post_text'],
+                'div',
+                $row['post_text'],
                 array('class' => 'post-body')
             );
             $html .= '</div>';
@@ -307,10 +309,8 @@ if (isset($current_thread['thread_id'])) {
             $attachment_list = getAllAttachment($row['post_id']);
             if (!empty($attachment_list) && is_array($attachment_list)) {
                 foreach ($attachment_list as $attachment) {
-
                     $realname = $attachment['path'];
                     $user_filename = $attachment['filename'];
-
                     $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
                     $html .= '<a href="download.php?file=' . $realname . '"> ' . $user_filename . ' </a>';
 

@@ -61,20 +61,19 @@ $sessionId = api_get_session_id();
 if ($origin == 'group') {
     $group_properties = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = array(
-        'url' => '../group/group.php',
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')
     );
     $interbreadcrumb[] = array(
-        'url' => '../group/group_space.php?' . api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?' . api_get_cidreq(),
         'name' => get_lang('GroupSpace') . ' ' . $group_properties['name']
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewforum.php?forum=' . intval($_GET['forum']) . '&' . api_get_cidreq()
-            . "&origin=$origin&search=" . Security::remove_XSS(urlencode($my_search)),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum=' . intval($_GET['forum']) . '&' . api_get_cidreq(). "&search=" . Security::remove_XSS(urlencode($my_search)),
         'name' => Security::remove_XSS($current_forum['forum_title'])
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewthread.php?forum=' . intval($_GET['forum']) . '&' . api_get_cidreq(). '&thread=' . intval($_GET['thread']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum=' . intval($_GET['forum']) . '&' . api_get_cidreq(). '&thread=' . intval($_GET['thread']),
         'name' => Security::remove_XSS($current_thread['thread_title'])
     );
 
@@ -85,22 +84,15 @@ if ($origin == 'group') {
         Display::display_reduced_header();
     } else {
         $interbreadcrumb[] = array(
-            'url' => 'index.php?'
-                . (isset($gradebook) ? "gradebook=$gradebook&" : '')
-                . 'search=' . Security::remove_XSS(urlencode($my_search)),
+            'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&search=' . Security::remove_XSS(urlencode($my_search)),
             'name' => $nameTools
         );
         $interbreadcrumb[] = array(
-            'url' => 'viewforumcategory.php?forumcategory='
-                . $current_forum_category['cat_id']
-                . "&origin=$origin&search="
-                . Security::remove_XSS(urlencode($my_search)),
+            'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='. $current_forum_category['cat_id']. "&search=". Security::remove_XSS(urlencode($my_search)),
             'name' => Security::remove_XSS($current_forum_category['cat_title'])
         );
         $interbreadcrumb[] = array(
-            'url' => 'viewforum.php?forum=' . intval($_GET['forum'])
-                . "&origin=$origin&search="
-                . Security::remove_XSS(urlencode($my_search)),
+            'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum=' . intval($_GET['forum']). "&search=". Security::remove_XSS(urlencode($my_search)),
             'name' => Security::remove_XSS($current_forum['forum_title'])
         );
         $interbreadcrumb[] = array(
@@ -138,9 +130,7 @@ if (
 ) {
     $message = delete_post($_GET['id']);
 }
-if (
-    ($my_action == 'invisible' ||
-    $my_action == 'visible') &&
+if (($my_action == 'invisible' || $my_action == 'visible') &&
     isset($_GET['id']) &&
     (api_is_allowed_to_edit(false, true) ||
     GroupManager::is_tutor_of_group(api_get_user_id(), $groupId))
@@ -186,7 +176,7 @@ if ($my_message != 'PostDeletedSpecial') {
         api_is_allowed_to_edit(false, true)
     ) {
         // The link should only appear when the user is logged in or when anonymous posts are allowed.
-        if ($_user['user_id'] OR ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
+        if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
             // reply link
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="' . $forumUrl . 'reply.php?' . api_get_cidreq() . '&forum='
@@ -204,7 +194,7 @@ if ($my_message != 'PostDeletedSpecial') {
                 ($current_forum['allow_new_threads'] == 1 && isset($_user['user_id'])) ||
                 ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)
             ) {
-                if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
+                if ($current_forum['locked'] <> 1 && $current_forum['locked'] <> 1) {
                     echo '&nbsp;&nbsp;';
                 } else {
                     echo get_lang('ForumLocked');
@@ -231,7 +221,7 @@ if ($my_message != 'PostDeletedSpecial') {
 
     /* Display Forum Category and the Forum information */
 
-    if (!isset($_SESSION['view']))	{
+    if (!isset($_SESSION['view'])) {
         $viewMode = $current_forum['default_view'];
     } else {
         $viewMode = $_SESSION['view'];
@@ -246,18 +236,7 @@ if ($my_message != 'PostDeletedSpecial') {
         $viewMode = 'flat';
     }
 
-    if (isset($_GET['msg']) && isset($_GET['type'])) {
-        switch($_GET['type']) {
-            case 'error':
-                Display::display_error_message($_GET['msg']);
-                break;
-            case 'confirmation':
-                Display::display_confirmation_message($_GET['msg']);
-                break;
-        }
-    }
-
-    if ($current_thread['thread_peer_qualify'] == 1 ) {
+    if ($current_thread['thread_peer_qualify'] == 1) {
         echo Display::return_message(get_lang('ForumThreadPeerScoringStudentComment'), 'info');
     }
 

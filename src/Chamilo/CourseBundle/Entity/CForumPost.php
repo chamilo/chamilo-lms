@@ -116,6 +116,13 @@ class CForumPost
     private $visible;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer", nullable=true)
+     */
+    private $status;
+
+    /**
      * Set postTitle
      *
      * @param string $postTitle
@@ -390,4 +397,24 @@ class CForumPost
     {
         return $this->cId;
     }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     * @return CForumPost
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
 }

@@ -24,6 +24,7 @@
 
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
+use Chamilo\CourseBundle\Entity\CForumPost;
 
 define('FORUM_NEW_POST', 0);
 
@@ -231,10 +232,7 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
 function show_add_forum_form($inputvalues = array(), $lp_id)
 {
     $_course = api_get_course_info();
-
-    $gradebook = Security::remove_XSS($_GET['gradebook']);
-    // Initialize the object.
-    $form = new FormValidator('forumcategory', 'post', 'index.php?gradebook='.$gradebook.'&'.api_get_cidreq());
+    $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq());
 
     // The header for the form
     if (!empty($inputvalues)) {
@@ -242,7 +240,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     } else {
         $form_title = get_lang('AddForum');
     }
-    $session_header = isset($_SESSION['session_name']) ? ' ('.$_SESSION['session_name'].') ' : '';
+    $session_header = api_get_session_name();
     $form->addElement('header', $form_title.$session_header);
 
     // We have a hidden field if we are editing.
@@ -251,6 +249,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $form->addElement('hidden', 'forum_id', $my_forum_id);
     }
     $lp_id = intval($lp_id);
+
     // hidden field if from learning path
     $form->addElement('hidden', 'lp_id', $lp_id);
 
@@ -284,6 +283,11 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
 
     $form->addButtonAdvancedSettings('advanced_params');
     $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+
+    $group = array();
+    $group[] = $form->createElement('radio', 'moderated', null, get_lang('Yes'), 1);
+    $group[] = $form->createElement('radio', 'moderated', null, get_lang('No'), 0);
+    $form->addGroup($group, 'moderated', get_lang('ModeratedForum'), ' ');
 
     $group = array();
     $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('Yes'), 1);
@@ -361,6 +365,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
 
     // Settings the defaults
     if (empty($inputvalues) || !is_array($inputvalues)) {
+        $defaults['moderated']['moderated'] = 0;
         $defaults['allow_anonymous_group']['allow_anonymous'] = 0;
         $defaults['students_can_edit_group']['students_can_edit'] = 0;
         $defaults['approval_direct_group']['approval_direct'] = 0;
@@ -375,6 +380,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $defaults['forum_id'] = isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
         $defaults['forum_title'] = prepare4display(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : null);
         $defaults['forum_comment'] = prepare4display(isset($inputvalues['forum_comment']) ? $inputvalues['forum_comment'] : null);
+        $defaults['moderated']['moderated'] = isset($inputvalues['moderated']) ? $inputvalues['moderated'] : 0;
         $defaults['forum_category'] = isset($inputvalues['forum_category']) ? $inputvalues['forum_category'] : null;
         $defaults['allow_anonymous_group']['allow_anonymous'] = isset($inputvalues['allow_anonymous']) ? $inputvalues['allow_anonymous'] : null;
         $defaults['students_can_edit_group']['students_can_edit'] = isset($inputvalues['allow_edit']) ? $inputvalues['allow_edit'] : null;
@@ -685,6 +691,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
+            'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
@@ -725,6 +732,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
+            'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
@@ -1838,6 +1846,7 @@ function getThreadInfo($threadId, $cId)
 
 /**
  * Retrieve all posts of a given thread
+ * @param array $forumInfo
  * @param int $threadId The thread ID
  * @param string $orderDirection Optional. The direction for sort the posts
  * @param boolean $recursive Optional. If the list is recursive
@@ -1847,7 +1856,7 @@ function getThreadInfo($threadId, $cId)
  *
  * @return array containing all the information about the posts of a given thread
  */
-function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postId = 0, $depth = -1)
+function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = false, $postId = 0, $depth = -1)
 {
     $list = [];
 
@@ -1866,6 +1875,12 @@ function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postI
         ->andWhere($visibleCriteria)
     ;
 
+    if (!api_is_allowed_to_edit()) {
+        if ($forumInfo['moderated']) {
+            $criteria->where(Criteria::expr()->eq('status', 1));
+        }
+    }
+
     if ($recursive) {
         $criteria->andWhere(Criteria::expr()->eq('postParentId', $postId));
     }
@@ -1875,10 +1890,11 @@ function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postI
         ->addCriteria($criteria)
         ->addOrderBy('p.postId', $orderDirection);
 
+
     $posts = $qb->getQuery()->getResult();
 
     $depth++;
-    /** @var \Chamilo\CourseBundle\Entity\CForumPost $post */
+    /** @var CForumPost $post */
     foreach ($posts as $post) {
         $user = $em->find('ChamiloUserBundle:User', $post->getPosterId());
 
@@ -1895,6 +1911,7 @@ function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postI
             'post_notification' => $post->getPostNotification(),
             'post_parent_id' => $post->getPostParentId(),
             'visible' => $post->getVisible(),
+            'status' => $post->getStatus(),
             'indent_cnt' => $depth,
             'user_id' => $user->getUserId(),
             'username' => $user->getUsername(),
@@ -1910,6 +1927,7 @@ function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postI
         $list = array_merge(
             $list,
             getPosts(
+                $forumInfo,
                 $threadId,
                 $orderDirection,
                 $recursive,
@@ -1938,13 +1956,13 @@ function get_post_information($post_id)
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT * FROM ".$table_posts." posts, ".$table_users." users
+    $sql = "SELECT posts.*, email FROM ".$table_posts." posts, ".$table_users." users
             WHERE
                 c_id = $course_id AND
                 posts.poster_id=users.user_id AND
-                posts.post_id = ".intval($post_id)."";
+                posts.post_id = ".intval($post_id);
     $result = Database::query($sql);
-    $row = Database::fetch_array($result);
+    $row = Database::fetch_array($result, 'ASSOC');
 
     return $row;
 }
@@ -2603,6 +2621,7 @@ function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
     $form->addElement('text', 'thread_title', get_lang('Title'));
     $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
     $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+
     if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && ($myThread)) {
         // Thread qualify
         if (Gradebook::is_active()) {
@@ -2913,10 +2932,12 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
                 $values['thread_qualify_gradebook'] == '1' &&
                 empty($values['weight_calification'])
             ) {
-                Display::display_error_message(
-                    get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.
-                    get_lang('Back').'</a>',
+                Display::addFlash(
+                    Display::return_message(
+                    get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>',
+                    'error',
                     false
+                    )
                 );
 
                 return false;
@@ -2937,7 +2958,8 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $attachmentAjaxTable = getAttachmentsAjaxTable(0, $current_forum['forum_id']);
         $ajaxHtml = $attachmentAjaxTable;
         $form->addElement('html', $ajaxHtml);
-        $form->display();
+
+        return $form;
     }
 }
 
@@ -3239,7 +3261,6 @@ function store_reply($current_forum, $values)
     }
 
     $upload_ok = 1;
-
     $return = array();
 
     if ($upload_ok) {
@@ -3306,6 +3327,12 @@ function store_reply($current_forum, $values)
                 $message .= '<br />'.get_lang('MessageHasToBeApproved').'<br />';
             }
 
+            if ($current_forum['moderated'] &&
+                !api_is_allowed_to_edit(null, true)
+            ) {
+                $message .= '<br />'.get_lang('MessageHasToBeApproved').'<br />';
+            }
+
             // Setting the notification correctly.
             $my_post_notification = isset($values['post_notification']) ? $values['post_notification'] : null;
             if ($my_post_notification == 1) {
@@ -3321,12 +3348,12 @@ function store_reply($current_forum, $values)
         Session::erase('breadcrumbs');
         Session::erase('addedresource');
         Session::erase('addedresourceid');
-        $return['msg'] = $message;
-        $return['type'] = 'confirmation';
 
+        Display::addFlash(Display::return_message($message, 'confirmation', false));
     } else {
-        $return['msg'] = get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst');
-        $return['type'] = 'error';
+        Display::addFlash(
+            Display::return_message(get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst'), 'error')
+        );
     }
 
     return $return;
@@ -3463,9 +3490,20 @@ function show_edit_post_form(
         $form->addElement('html', '</div>');
     }
 
+    if ($current_forum['moderated']) {
+        $group = array();
+        $group[] = $form->createElement('radio', 'status', null, get_lang('Validated'), 1);
+        $group[] = $form->createElement('radio', 'status', null, get_lang('WaitingModeration'), 2);
+        $group[] = $form->createElement('radio', 'status', null, get_lang('Rejected'), 3);
+        $form->addGroup($group, 'status', get_lang('Status'), ' ');
+    }
+
+    $defaults['status']['status'] = isset($current_post['status']) && !empty($current_post['status']) ? $current_post['status'] : 2;
+
     if ($forum_setting['allow_post_notification']) {
         $form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$current_post['email'].')');
     }
+
     if ($forum_setting['allow_sticky'] &&
         api_is_allowed_to_edit(null, true) &&
         $current_post['post_parent_id'] == 0
@@ -3501,6 +3539,7 @@ function show_edit_post_form(
     // Setting the default values for the form elements.
     $defaults['post_title'] = $current_post['post_title'];
     $defaults['post_text'] = $current_post['post_text'];
+
     if ($current_post['post_notification'] == 1) {
         $defaults['post_notification'] = true;
     }
@@ -3548,7 +3587,7 @@ function show_edit_post_form(
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function store_edit_post($values)
+function store_edit_post($forumInfo, $values)
 {
     $threadTable = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
@@ -3559,7 +3598,7 @@ function store_edit_post($values)
     // First we check if the change affects the thread and if so we commit
     // the changes (sticky and post_title=thread_title are relevant).
 
-    $posts = getPosts($values['thread_id']);
+    $posts = getPosts($forumInfo, $values['thread_id']);
     $first_post = null;
     if (!empty($posts) && count($posts) > 0 && isset($posts[0])) {
         $first_post = $posts[0];
@@ -3579,8 +3618,14 @@ function store_edit_post($values)
         Database::update($threadTable, $params, $where);
     }
 
+    $status = '';
+    if ($forumInfo['moderated']) {
+        $status = $values['status']['status'];
+    }
+
     // Update the post_title and the post_text.
     $params = [
+        'status' => $status,
         'post_title' => $values['post_title'],
         'post_text' => $values['post_text'],
         'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : '',
@@ -5856,4 +5901,26 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
     }
 
     return $resultData;
+}
+
+function getPostStatus($current_forum, $row)
+{
+    $statusIcon = '';
+    if ($current_forum['moderated']) {
+        $statusIcon = '<br /><br />';
+        $row['status'] = empty($row['status']) ? 2 : $row['status'];
+        switch ($row['status']) {
+            case 1:
+                $statusIcon .= Display::label(get_lang('Validated'), 'success');
+                break;
+            case 2:
+                $statusIcon .= Display::label(get_lang('WaitingModeration'), 'warning');
+                break;
+            case 3:
+                $statusIcon .= Display::label(get_lang('Rejected'), 'danger');
+                break;
+        }
+    }
+
+    return $statusIcon;
 }

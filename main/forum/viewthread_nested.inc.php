@@ -25,7 +25,7 @@ if (isset($_GET['action']) &&
 // Decide whether we show the latest post first
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin != 'learnpath' ? 'ASC' : 'DESC');
 
-$rows = getPosts($_GET['thread'], $sortDirection, true);
+$rows = getPosts($current_forum, $_GET['thread'], $sortDirection, true);
 $count = 0;
 $clean_forum_id = intval($_GET['forum']);
 $clean_thread_id = intval($_GET['thread']);
@@ -191,8 +191,10 @@ foreach ($rows as $post) {
         }
     }
 
+    $statusIcon = getPostStatus($current_forum, $post);
+
     if ($iconEdit != '') {
-        $html .= '<div class="tools-icons">' . $iconEdit . '</div>';
+        $html .= '<div class="tools-icons">' . $iconEdit . ' '.$statusIcon.'</div>';
     }
 
     if (($current_forum_category && $current_forum_category['locked'] == 0) &&

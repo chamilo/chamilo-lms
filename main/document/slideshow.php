@@ -165,6 +165,7 @@ if (isset($_SESSION["image_resizing"]) &&  $_SESSION["image_resizing"] == "resiz
 
 // This is for viewing all the images in the slideshow as thumbnails.
 $image_tag = array ();
+$html = '';
 if ($slide_id == 'all') {
 
 	// Config for make thumbnails
@@ -179,8 +180,8 @@ if ($slide_id == 'all') {
 	//Other parameters only for show tumbnails
 	$row_items 			     = 4;//only in slideshow.php
 	$number_image 			 = 7;//num icons cols to show
-	$thumbnail_width_frame=$max_thumbnail_width;//optional $max_thumbnail_width+x
-	$thumbnail_height_frame=$max_thumbnail_height;
+	$thumbnail_width_frame = $max_thumbnail_width;//optional $max_thumbnail_width+x
+	$thumbnail_height_frame = $max_thumbnail_height;
 
 	// Create the template_thumbnails folder (if no exist)
 
@@ -228,7 +229,7 @@ if ($slide_id == 'all') {
                             $max_thumbnail_height
                         );
 
-						if($max_thumbnail_width>$original_image_size['width'] && $max_thumbnail_height>$original_image_size['height']){
+						if ($max_thumbnail_width>$original_image_size['width'] && $max_thumbnail_height>$original_image_size['height']){
 							$new_thumbnail_size['width']=$original_image_size['width'];
 							$new_thumbnail_size['height']=$original_image_size['height'];
 						}
@@ -326,7 +327,6 @@ if ($slide_id == 'all') {
 	$count_image = count($image_tag);
 	$number_iteration = ceil($count_image/$number_image);
 	$p = 0;
-    $html = '';
     $html .= '<div class="gallery">';
 	for ($k = 0; $k < $number_iteration; $k++) {
 		for ($i = 0; $i < $number_image; $i++) {
@@ -472,16 +472,18 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 			$aux = explode('.', htmlspecialchars($image_files_only[$slide]));
 			$ext = $aux[count($aux) - 1];
 
-            if ($_SESSION['image_resizing'] == 'resizing') {
+            if (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] == 'resizing') {
                 $resize_info = get_lang('Resizing').'<br />';
-                $resize_widht = $_SESSION["image_resizing_width"].' x ';
+                $resize_width = $_SESSION["image_resizing_width"].' x ';
                 $resize_height = $_SESSION['image_resizing_height'];
-            } elseif($_SESSION['image_resizing'] != 'noresizing'){
+            } elseif (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] != 'noresizing'){
                 $resize_info = get_lang('Resizing').'<br />';
-                $resize_widht = get_lang('Auto').' x ';
+                $resize_width = get_lang('Auto').' x ';
                 $resize_height = get_lang('Auto');
             } else {
                 $resize_info = get_lang('NoResizing').'<br />';
+				$resize_width = '';
+				$resize_height = '';
             }
 
             echo '<tr>';
@@ -498,7 +500,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 			echo '<tr>';
 			echo '<td align="center">';
 			echo $resize_info;
-			echo $resize_widht;
+			echo $resize_width;
 			echo $resize_height;
 			echo '</td>';
 			echo '</tr>';

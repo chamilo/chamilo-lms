@@ -91,7 +91,7 @@ a.thumbnail:hover{
     -ms-flex-negative:1 ;
     display: block;
     position: relative;
-    width: 100%;
+    
 }
 /*------------------------*/
 .cursor-pointer {
@@ -5994,6 +5994,9 @@ a.sessionView {
         min-height: 300px;
     }
     .col-xs-6{
+        width: 100%;
+    }
+    .gallery .canvas-two{
         width: 100%;
     }
 }

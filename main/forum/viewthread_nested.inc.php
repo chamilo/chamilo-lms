@@ -82,6 +82,10 @@ foreach ($rows as $post) {
             array('class' => 'title-username')
         );
     } else {
+        if (api_get_course_setting('allow_user_image_forum')) {
+            $html .= '<div class="thumbnail">' . display_user_image($post['user_id'], $name, $origin) . '</div>';
+        }
+        
         $html .= Display::tag(
             'p',
             $name,

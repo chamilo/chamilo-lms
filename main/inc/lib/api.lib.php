@@ -8,6 +8,8 @@
  * @package chamilo.library
  */
 
+use ChamiloSession as Session;
+
 /**
  * Constants declaration
  */
@@ -17,8 +19,6 @@ define('REQUIRED_PHP_VERSION', '5.4');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
-
-use ChamiloSession as Session;
 
 // USER STATUS CONSTANTS
 /** global status of a user: student */
@@ -1629,7 +1629,7 @@ function api_get_course_int_id($code = null)
             return false;
         }
     }
-    return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
+    return Session::read('_real_cid', 0);
 }
 
 /**
@@ -1856,17 +1856,14 @@ function api_format_course_array($course_data)
     $_course['language'] = $course_data['course_language'];
     $_course['extLink']['url'] = $course_data['department_url'];
     $_course['extLink']['name'] = $course_data['department_name'];
-
     $_course['categoryCode'] = $course_data['faCode'];
     $_course['categoryName'] = $course_data['faName'];
-
     $_course['visibility'] = $course_data['visibility'];
     $_course['subscribe_allowed'] = $course_data['subscribe'];
     $_course['subscribe'] = $course_data['subscribe'];
     $_course['unsubscribe'] = $course_data['unsubscribe'];
-
     $_course['course_language'] = $course_data['course_language'];
-    $_course['activate_legal'] = isset($course_data['activate_legal']) ? $course_data['activate_legal'] : false;;
+    $_course['activate_legal'] = isset($course_data['activate_legal']) ? $course_data['activate_legal'] : false;
     $_course['legal'] = $course_data['legal'];
     $_course['show_score'] = $course_data['show_score']; //used in the work tool
     $_course['department_name'] = $course_data['department_name'];
@@ -1884,14 +1881,14 @@ function api_format_course_array($course_data)
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
     } else {
-        $url_image = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true);
+        $url_image = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true, false);
     }
     $_course['course_image'] = $url_image;
 
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic.png';
     } else {
-        $url_image = Display::return_icon('session_default.png',null,null,null,null,true);
+        $url_image = Display::return_icon('session_default.png', null, null, null, null, true, false);
     }
     $_course['course_image_large'] = $url_image;
 
@@ -4370,11 +4367,13 @@ function api_get_language_info($language_id) {
  * The returned name depends on the platform, course or user -wide settings.
  * @return string   The visual theme's name, it is the name of a folder inside .../chamilo/main/css/
  */
-function api_get_visual_theme() {
+function api_get_visual_theme()
+{
     static $visual_theme;
     if (!isset($visual_theme)) {
 
         $platform_theme = api_get_setting('stylesheets');
+
         // Platform's theme.
         $visual_theme = $platform_theme;
 
@@ -4391,14 +4390,15 @@ function api_get_visual_theme() {
         }
 
         $course_id = api_get_course_id();
+
         if (!empty($course_id) && $course_id != -1) {
             if (api_get_setting('allow_course_theme') == 'true') {
                 $course_theme = api_get_course_setting('course_theme');
 
                 if (!empty($course_theme) && $course_theme != -1) {
                     if (!empty($course_theme)) {
-                        $visual_theme = $course_theme;
                         // Course's theme.
+                        $visual_theme = $course_theme;
                     }
                 }
 
@@ -4408,8 +4408,8 @@ function api_get_visual_theme() {
                     // These variables come from the file lp_controller.php.
                     if (!$lp_theme_config) {
                         if (!empty($lp_theme_css)) {
-                            $visual_theme = $lp_theme_css;
                             // LP's theme.
+                            $visual_theme = $lp_theme_css;
                         }
                     }
                 }
@@ -4463,7 +4463,6 @@ function api_get_themes() {
     return array($list_dir, $list_name);
 }
 
-
 /**
  * Find the largest sort value in a given user_course_category
  * This function is used when we are moving a course to a different category
@@ -4475,7 +4474,6 @@ function api_get_themes() {
 function api_max_sort_value($user_course_category, $user_id)
 {
     $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
     $sql = "SELECT max(sort) as max_sort FROM $tbl_course_user
             WHERE
                 user_id='".intval($user_id)."' AND

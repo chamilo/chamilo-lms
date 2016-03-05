@@ -1095,19 +1095,21 @@ if (!empty($error)) {
         	$remind_highlight = ' remind_highlight ';
         }
 
-        // Showing the question
+        // Showing the exercise description
         if (!empty($objExercise->description)){
-            //echo Display::panel($objExercise->description, get_lang('ExerciseDescriptionLabel'));
-            echo Display::panelCollapse('<span>'.
-                get_lang('ExerciseDescriptionLabel').'</span>',
-                $objExercise->description,
-                'exercise-description',
-                [],
-                'description',
-                'exercise-collapse',
-                false,
-                true
-            );
+            if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i==1)) {
+                //echo Display::panel($objExercise->description, get_lang('ExerciseDescriptionLabel'));
+                echo Display::panelCollapse('<span>' .
+                    get_lang('ExerciseDescriptionLabel') . '</span>',
+                    $objExercise->description,
+                    'exercise-description',
+                    [],
+                    'description',
+                    'exercise-collapse',
+                    false,
+                    true
+                );
+            }
         }
 
         echo '<div id="question_div_'.$questionId.'" class="main-question '.$remind_highlight.'" >';

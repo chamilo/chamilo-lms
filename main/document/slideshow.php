@@ -172,8 +172,8 @@ if ($slide_id == 'all') {
     $allowed_thumbnail_types = array('jpg', 'jpeg', 'gif', 'png');
 	$max_thumbnail_width     = 250;
 	$max_thumbnail_height    = 250;
-	$png_compression	     = 0;//0(none)-9
-	$jpg_quality  	         = 75;//from 0 to 100 (default is 75). More quality less compression
+	$png_compression	     = 0; // 0(none)-9
+	$jpg_quality  	         = 75; // from 0 to 100 (default is 75). More quality less compression
 
 	$directory_thumbnails = $sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
         
@@ -202,7 +202,7 @@ if ($slide_id == 'all') {
                 //or check $imagetype = image_type_to_extension(exif_imagetype($image), false);
 				$imagetype = strtolower($imagetype[count($imagetype)-1]);
 
-				if(in_array($imagetype,$allowed_thumbnail_types)) {
+				if (in_array($imagetype,$allowed_thumbnail_types)) {
 					if (!file_exists($image_thumbnail)){
                         //run each once we view thumbnails is too heavy, then need move into  !file_exists($image_thumbnail, and only run when haven't the thumbnail
 						$original_image_size = api_getimagesize($image);
@@ -228,7 +228,7 @@ if ($slide_id == 'all') {
                             $max_thumbnail_width,
                             $max_thumbnail_height
                         );
-						if($max_thumbnail_width>$original_image_size['width'] && $max_thumbnail_height>$original_image_size['height']){
+						if ($max_thumbnail_width>$original_image_size['width'] && $max_thumbnail_height>$original_image_size['height']){
 							$new_thumbnail_size['width']=$original_image_size['width'];
 							$new_thumbnail_size['height']=$original_image_size['height'];
 						}
@@ -236,7 +236,7 @@ if ($slide_id == 'all') {
 						$crop = imagecreatetruecolor($new_thumbnail_size['width'], $new_thumbnail_size['height']);
 
 						// preserve transparency
-						if($imagetype == "png"){
+						if ($imagetype == "png"){
 							imagesavealpha($crop, true);
 							$color = imagecolorallocatealpha($crop,0x00,0x00,0x00,127);
 							imagefill($crop, 0, 0, $color);

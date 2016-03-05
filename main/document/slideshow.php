@@ -173,7 +173,7 @@ if ($slide_id == 'all') {
 	$max_thumbnail_width     = 250;
 	$max_thumbnail_height    = 250;
 	$png_compression	     = 0;//0(none)-9
-	$jpg_quality  	         = 100;//from 0 to 100 (default is 75). More quality less compression
+	$jpg_quality  	         = 75;//from 0 to 100 (default is 75). More quality less compression
 
 	$directory_thumbnails = $sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
         

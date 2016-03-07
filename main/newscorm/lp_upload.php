@@ -69,6 +69,7 @@ if (Request::is_post() && $is_error) {
                 $oScorm->parse_manifest($manifest);
                 $fixTemplate = api_get_configuration_value('learnpath_fix_xerte_template');
                 $proxyPath = api_get_configuration_value('learnpath_proxy_url');
+                // Check also setting lp_replace_http_to_https
                 if ($fixTemplate && !empty($proxyPath)) {
                     // Check organisations:
                     if (isset($oScorm->manifest['organizations'])) {
@@ -84,8 +85,10 @@ if (Request::is_post() && $is_error) {
                                         'href="http://',
                                         'url="www.',
                                         'pdfs/download.php?',
+
                                         "iframe src='https://",
                                         "iframe src='http://",
+
                                         'href=&quot;http://',
                                         'href=&quot;https://',
 
@@ -97,8 +100,10 @@ if (Request::is_post() && $is_error) {
                                         'target = "_blank" href="'.$proxyPath.'?type=link&src=http://',
                                         'url="http://www.',
                                         'pdfs/download.php&',
+
                                         "iframe src='".$proxyPath."&#63;type=link&amp;src=https://",
                                         "iframe src='".$proxyPath."&#63;type=link&amp;src=http://",
+
                                         'href=&quot;'.$proxyPath.'&#63;type=link&amp;src=http://',
                                         'href=&quot;'.$proxyPath.'&#63;type=link&amp;src=https://',
                                     );
@@ -127,10 +132,12 @@ if (Request::is_post() && $is_error) {
                                 if (file_exists($framePath) && is_file($framePath)) {
                                     $content = file_get_contents($framePath);
                                     $find = array(
-                                        '$iFrameHolder.html(iFrameTag);'
+                                        '$iFrameHolder.html(iFrameTag);',
+                                        '$iFrameHolder.html(pageSrc);'
                                     );
                                     $replace = array(
-                                        'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png"></a>\'; $iFrameHolder.html(iFrameTag); '
+                                        'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png"></a>\'; $iFrameHolder.html(iFrameTag); ',
+                                        'var html = $.parseHTML(pageSrc); var data = "";  if (html[0]) {  data = html[0].getAttribute("src");  data = \'<br /><a target ="_blank" href="\'+ data + \'"> Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png">\'; } $iFrameHolder.html(pageSrc+ data);'
                                     );
                                     $content = str_replace($find, $replace, $content);
                                     file_put_contents($framePath, $content);

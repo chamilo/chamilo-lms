@@ -378,11 +378,11 @@ $(document).ready(function() {
 						'{{ "Delete"|get_lang }}': function() {
 
                             if (calEvent.parent_event_id || calEvent.has_children != '') {
-                                var newDiv = $(document.createElement('div'));
-
+                                var newDiv = $('<div>');
                                 newDiv.dialog({
                                     modal: true,
-                                    title: "{{ 'DeleteThisItem' | get_lang }}"
+                                    title: "{{ 'DeleteThisItem' | get_lang }}",
+                                    buttons: []
                                 });
 
                                 var buttons = newDiv.dialog("option", "buttons");
@@ -400,7 +400,7 @@ $(document).ready(function() {
                                                     calendar.fullCalendar("refetchEvents");
                                                     calendar.fullCalendar("rerenderEvents");
                                                     $("#dialog-form").dialog("close");
-                                                    newDiv.dialog( "close" );
+                                                    newDiv.dialog( "destroy" );
                                                 }
                                             });
                                         }
@@ -421,7 +421,7 @@ $(document).ready(function() {
                                                 calendar.fullCalendar("refetchEvents");
                                                 calendar.fullCalendar("rerenderEvents");
                                                 $("#dialog-form").dialog( "close" );
-                                                newDiv.dialog( "close" );
+                                                newDiv.dialog( "destroy" );
                                             }
                                         });
                                     }

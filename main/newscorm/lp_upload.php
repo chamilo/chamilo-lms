@@ -78,7 +78,6 @@ if (Request::is_post() && $is_error) {
                                 $templatePath = str_replace('imsmanifest.xml', 'template.xml', $manifest);
                                 if (file_exists($templatePath) && is_file($templatePath)) {
                                     $templateContent = file_get_contents($templatePath);
-
                                     $find = array(
                                         'href="www.',
                                         'href="https://',
@@ -86,7 +85,10 @@ if (Request::is_post() && $is_error) {
                                         'url="www.',
                                         'pdfs/download.php?',
                                         "iframe src='https://",
-                                        "iframe src='http://"
+                                        "iframe src='http://",
+                                        'href=&quot;http://',
+                                        'href=&quot;https://',
+
                                     );
 
                                     $replace = array(
@@ -97,6 +99,8 @@ if (Request::is_post() && $is_error) {
                                         'pdfs/download.php&',
                                         "iframe src='".$proxyPath."&#63;type=link&amp;src=https://",
                                         "iframe src='".$proxyPath."&#63;type=link&amp;src=http://",
+                                        'href=&quot;'.$proxyPath.'&#63;type=link&amp;src=http://',
+                                        'href=&quot;'.$proxyPath.'&#63;type=link&amp;src=https://',
                                     );
                                     $templateContent = str_replace($find, $replace, $templateContent);
                                     file_put_contents($templatePath, $templateContent);

@@ -245,7 +245,6 @@ $(document).ready(function() {
 			}
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
-            console.log(calEvent, jsEvent, view);
             var start_date = calEvent.start.format("YY-MM-DD");
 
             if (calEvent.allDay == 1) {

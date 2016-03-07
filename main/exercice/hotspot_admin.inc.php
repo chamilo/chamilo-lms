@@ -158,7 +158,7 @@ if ($submitAnswers || $buttonBack) {
 
         $questionWeighting = $nbrGoodAnswers = 0;
         $select_question = $_POST['select_question'];
-        $try = $_POST['try'];
+        $try = isset($_POST['try']) ? $_POST['try'] : [];
         $url = $_POST['url'];
         $destination = array();
 
@@ -195,7 +195,7 @@ if ($submitAnswers || $buttonBack) {
 
             $threadhold_total = $threadhold1_str . ';' . $threadhold2_str . ';' . $threadhold3_str;
 
-            if ($try[$i] == 'on') {
+            if (isset($try[$i]) && $try[$i] == 'on') {
                 $try_str = 1;
             } else {
                 $try_str = 0;
@@ -248,7 +248,7 @@ if ($submitAnswers || $buttonBack) {
         //now the noerror section
         $selectQuestionNoError = $_POST['select_question_noerror'];
         $lp_noerror = $_POST['lp_noerror'];
-        $try_noerror = $_POST['try_noerror'];
+        $try_noerror = isset($_POST['try_noerror']) ? $_POST['try_noerror'] : null;
         $url_noerror = $_POST['url_noerror'];
         $comment_noerror = $_POST['comment_noerror'];
         $threadhold_total = '0;0;0';
@@ -344,16 +344,16 @@ if ($modifyAnswers) {
     }
 
     if ($answerType == HOT_SPOT_DELINEATION) {
-        $try = $_POST['try'];
+        $try = isset($_POST['try']) ? $_POST['try'] : [];
         for ($i = 1; $i <= $nbrAnswers; $i++) {
-            if ($try[$i] == 'on') {
+            if (isset($try[$i]) && $try[$i] == 'on') {
                 $try[$i] = 1;
             } else {
                 $try[$i] = 0;
             }
         }
 
-        if ($_POST['try_noerror'] == 'on') {
+        if (isset($_POST['try_noerror']) && $_POST['try_noerror'] == 'on') {
             $try_noerror = 1;
         } else {
             $try_noerror = 0;
@@ -392,6 +392,10 @@ if ($modifyAnswers) {
             if ($answerType == HOT_SPOT_DELINEATION) {
                 $destination[$i] = $objAnswer->selectDestination($i);
 
+                if (empty($destination[$i])) {
+                    $destination[$i] = ';;;@@@@@@@@';
+                }
+
                 $destination_items = explode('@@', $destination[$i]);
                 $threadhold_total = $destination_items[0];
                 $threadhold_items = explode(';', $threadhold_total);
@@ -412,6 +416,11 @@ if ($modifyAnswers) {
         $reponse_noerror = 'noerror';
         $comment_noerror = $objAnswer->selectComment($nbrAnswers + 1);
         $destination_noerror_list = $objAnswer->selectDestination($nbrAnswers + 1);
+
+        if (empty($destination_noerror_list)) {
+            $destination_noerror_list = '@@@@@@@@';
+        }
+
         $destination_items = explode('@@', $destination_noerror_list);
 
         $try_noerror = $destination_items[1];
@@ -432,7 +441,7 @@ if ($modifyAnswers) {
     $_SESSION['tmp_answers']['hotspot_type'] = $hotspot_type;
 
     if ($answerType == HOT_SPOT_DELINEATION) {
-        $_SESSION['tmp_answers']['destination'] = $destination;
+        $_SESSION['tmp_answers']['destination'] = isset($destination) ? $destination : null;
     }
 
     $lessAnswers = isset($_POST['lessAnswers']) ? true : false;
@@ -649,16 +658,15 @@ if ($modifyAnswers) {
                                     $selected = '';
                                     $question = Question::read($questionid);
                                     $val = 'Q' . $key . ' :' . substrwords($question->selectTitle(), ICON_SIZE_SMALL);
-                                    $select_lp_id[$id] = $details['lp_name'];
 
-                                    if ($questionid == $select_question[$i]) {
+                                    if (isset($select_question[$i]) && $questionid == $select_question[$i]) {
                                         $selected = 'selected="selected"';
                                     }
 
                                     $option_feed.='<option value="' . $questionid . '" ' . $selected . ' >' . $val . '</option>';
                                 }
 
-                                if ($select_question[$i] == -1) {
+                                if (isset($select_question[$i]) && $select_question[$i] == -1) {
                                     $option_feed .= '<option value="-1" selected="selected" >' . get_lang('ExitTest') . '</option>';
                                 } else {
                                     $option_feed .= '<option value="-1">' . get_lang('ExitTest') . '</option>';
@@ -667,6 +675,8 @@ if ($modifyAnswers) {
                                 //-------- IF it is a delineation
 
                                 if ($_SESSION['tmp_answers']['hotspot_type'][$i] == 'delineation') {
+                                    $option1 = $option2 = $option3 = '';
+
                                     for ($k = 1; $k <= 100; $k++) {
                                         $selected1 = $selected2 = $selected3 = '';
                                         if ($k == $threadhold1[$i])
@@ -825,10 +835,10 @@ if ($modifyAnswers) {
                                             <span class="fa fa-square fa-2x" aria-hidden="true" style="color: <?php echo $hotspot_colors[$i]; ?>"></span>
                                         </td>
                                         <td>
-                                            <input class="form-control" type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo Security::remove_XSS($reponse[$i]); ?>" />
+                                            <input class="form-control" type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo isset($reponse[$i]) ? Security::remove_XSS($reponse[$i]) : ''; ?>" />
                                         </td>
                                         <td colspan="2"  align="left">
-                                            <textarea class="form-control" wrap="virtual" rows="3" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo Security::remove_XSS($comment[$i]); ?></textarea>
+                                            <textarea class="form-control" wrap="virtual" rows="3" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo isset($comment[$i]) ? Security::remove_XSS($comment[$i]) : ''; ?></textarea>
                                             <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="oar" />
                                             <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php
                                             echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]);
@@ -839,7 +849,7 @@ if ($modifyAnswers) {
                                                 <div class="checkbox">
                                                     <p>
                                                         <label>
-                                                            <input type="checkbox" class="checkbox" name="<?php echo 'try[' . $i; ?>]" <?php if ($try[$i] == 1) echo'checked'; ?> />
+                                                            <input type="checkbox" class="checkbox" name="<?php echo 'try[' . $i; ?>]" <?php if (isset($try[$i]) && $try[$i] == 1) echo'checked'; ?> />
                                                             <?php echo get_lang('TryAgain'); ?>
                                                         </label>
                                                     </p>
@@ -852,7 +862,7 @@ if ($modifyAnswers) {
                                                 </p>
                                                 <p>
                                                     <?php echo get_lang('Other'); ?>
-                                                    <input class="form-control" name="url[<?php echo $i; ?>]" value="<?php echo $url[$i]; ?>">
+                                                    <input class="form-control" name="url[<?php echo $i; ?>]" value="<?php echo isset($url[$i]) ? $url[$i] : ''; ?>">
                                                 </p>
                                                 <p>
                                                     <?php echo get_lang('SelectQuestion'); ?>

@@ -245,6 +245,7 @@ $(document).ready(function() {
 			}
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
+            console.log(calEvent, jsEvent, view);
             var start_date = calEvent.start.format("YY-MM-DD");
 
             if (calEvent.allDay == 1) {
@@ -382,14 +383,15 @@ $(document).ready(function() {
 
                                 newDiv.dialog({
                                     modal: true,
-                                    title: "{{ 'Confirmation' | get_lang }}"
+                                    title: "{{ 'DeleteThisItem' | get_lang }}"
                                 });
 
                                 var buttons = newDiv.dialog("option", "buttons");
 
                                 if (calEvent.has_children == '0') {
-                                    $.extend(buttons, {
-                                        '{{ "DeleteThisItem" | get_lang }}' : function() {
+                                    buttons.push({
+                                        text: '{{ "DeleteThisItem" | get_lang }}',
+                                        click: function() {
                                             $.ajax({
                                                 url: delete_url,
                                                 success:function() {
@@ -408,9 +410,9 @@ $(document).ready(function() {
                                 }
 
                                 var buttons = newDiv.dialog("option", "buttons");
-
-                                $.extend(buttons, {
-                                    '{{ "DeleteAllItems" | get_lang }}' : function() {
+                                buttons.push({
+                                    text: '{{ "DeleteAllItems" | get_lang }}',
+                                    click: function() {
                                         $.ajax({
                                             url: delete_url+'&delete_all_events=1',
                                             success:function() {

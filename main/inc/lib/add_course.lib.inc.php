@@ -1031,8 +1031,8 @@ class AddCourse
             $exercise->exercise = get_lang('ExerciceEx');
             $html = '<table width="100%" border="0" cellpadding="0" cellspacing="0">
                         <tr>
-                        <td width="110" valign="top" align="left">
-                            <img src="' . api_get_path(WEB_CODE_PATH) . 'default_course_document/images/mr_dokeos/thinking.jpg">
+                        <td width="220" valign="top" align="left">
+                            <img src="' . api_get_path(WEB_CODE_PATH) . 'default_course_document/images/mr_chamilo/doubts.png">
                         </td>
                         <td valign="top" align="left">' . get_lang('Antique') . '</td></tr>
                     </table>';

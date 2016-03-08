@@ -49,6 +49,7 @@ if (
 }
 $_user = api_get_user_info();
 $courseInfo = api_get_course_info();
+$courseId = $courseInfo['real_id'];
 $course_dir = $courseInfo['directory'] . '/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path . $course_dir;
@@ -115,6 +116,8 @@ if (api_get_session_id() != 0) {
     $group_member_with_upload_rights = $group_member_with_upload_rights && api_is_allowed_to_session_edit(false, true);
 }
 
+$groupMemberWithEditRights = $is_allowed_to_edit || GroupManager::is_tutor_of_group($userId, $groupId, $courseId);
+
 // Setting group variables.
 if (!empty($groupId)) {
     // Get group info
@@ -149,9 +152,13 @@ if (!empty($groupId)) {
             'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
             'name' => get_lang('GroupSpace').' '.$group_properties['name']
         );
-        //allowed to upload?
-        if ($is_allowed_to_edit || GroupManager::is_subscribed($userId, $groupId)) {
-            // Only courseadmin or group members can upload
+
+        // Allowed to upload?
+        if ($is_allowed_to_edit ||
+            GroupManager::is_subscribed($userId, $groupId) ||
+            GroupManager::is_tutor_of_group($userId, $groupId, $courseId)
+        ) {
+            // Only course admin or group members can upload
             $group_member_with_upload_rights = true;
         }
     }
@@ -187,7 +194,8 @@ switch ($action) {
                             $_GET['deleteid'],
                             $courseInfo,
                             $sessionId,
-                            api_get_user_id())
+                            api_get_user_id()
+                        )
                         ) {
                             api_not_allowed();
                         }
@@ -198,7 +206,8 @@ switch ($action) {
                         api_get_user_id(),
                         '',
                         $_GET['deleteid'],
-                        true)
+                        true
+                    )
                     ) {
                         api_not_allowed();
                     }
@@ -212,7 +221,6 @@ switch ($action) {
                 );
 
                 // Check whether the document is in the database.
-
                 if (!empty($documentInfo)) {
                     $deleteDocument = DocumentManager::delete_document(
                         $courseInfo,
@@ -979,7 +987,9 @@ if ($is_allowed_to_edit ||
             );
 
             // filter if is my shared folder. TODO: move this code to build_move_to_selector function
-            if (DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) && !$is_allowed_to_edit) {
+            if (DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) &&
+                !$is_allowed_to_edit
+            ) {
                 //only main user shared folder
                 $main_user_shared_folder_main = '/shared_folder/sf_user_'.api_get_user_id();
                 $main_user_shared_folder_sub = '/shared_folder\/sf_user_'.api_get_user_id().'\//'; //all subfolders
@@ -1011,7 +1021,6 @@ if ($is_allowed_to_edit ||
     }
 
     if (!empty($moveTo) && isset($_POST['move_file'])) {
-
         if (!$is_allowed_to_edit) {
             if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $_POST['move_file'])) {
                 api_not_allowed(true);
@@ -1780,7 +1789,8 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
 
             // Admins get an edit column
-            if ($is_allowed_to_edit || $group_member_with_upload_rights ||
+            if ($is_allowed_to_edit ||
+                $groupMemberWithEditRights ||
                 DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
             ) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
@@ -1803,6 +1813,8 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                     );
                 }
                 $row[] = $edit_icons;
+            } else {
+                $row[] = '';
             }
             $row[] = $last_edit_date;
             $row[] = $size;

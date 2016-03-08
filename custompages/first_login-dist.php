@@ -48,7 +48,7 @@ if (isset($_POST['password'])) {
 		''
 	);
 
-    if ($updated) {
+    if ($updated !== false) {
         UserManager::update_extra_field_value($u['user_id'], 'already_logged_in', 'true');
         ConditionalLogin::login();
     }

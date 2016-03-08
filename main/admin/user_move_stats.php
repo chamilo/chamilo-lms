@@ -200,9 +200,10 @@ if (isset($_REQUEST['load_ajax'])) {
                     foreach ($list as $id => $data) {
                         if ($update_database) {
                             $sql = "UPDATE $TBL_TRACK_E_COURSE_ACCESS SET session_id = $new_session_id WHERE course_access_id = $id";
-                            if ($debug) echo $sql;
+                            if ($debug) {
+                                echo $sql;
+                            }
                             $res = Database::query($sql);
-                            if ($debug) var_dump($res);
                             $result_message[$TBL_TRACK_E_COURSE_ACCESS]++;
                         }
                     }

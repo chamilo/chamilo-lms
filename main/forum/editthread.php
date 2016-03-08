@@ -10,7 +10,6 @@
 
 use ChamiloSession as Session;
 
-// Including the global initialization file.
 require_once '../inc/global.inc.php';
 
 // The section (tabs).
@@ -19,7 +18,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $cidreq = api_get_cidreq();
-
 $nameTools = get_lang('ToolForum');
 
 /* Including necessary files */
@@ -53,14 +51,9 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
-if (!empty($_GET['gidReq'])) {
-    $toolgroup = intval($_GET['gidReq']);
-    Session::write('toolgroup',$toolgroup);
-}
-
 $threadId = isset($_GET['thread']) ? intval($_GET['thread']) : 0;
 $courseInfo = isset($_GET['cidReq']) ? api_get_course_info($_GET['cidReq']) : 0;
-$cId = isset($courseInfo['real_id']) ? intval($courseInfo['real_id']) : 0; 
+$cId = isset($courseInfo['real_id']) ? intval($courseInfo['real_id']) : 0;
 
 /* Is the user allowed here? */
 
@@ -113,12 +106,12 @@ if (!empty($groupId)) {
     $groupProperties = GroupManager :: get_group_properties($groupId);
     $interbreadcrumb[] = array('url' => '../group/group.php?'.$cidreq, 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url' => '../group/group_space.php?'.$cidreq, 'name' => get_lang('GroupSpace').' '.$groupProperties['name']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?'.$cidreq.'&forum='.Security::remove_XSS($_GET['forum']), 'name' => $currentForum['forum_title']);
-    $interbreadcrumb[] = array('url' => 'newthread.php?'.$cidreq.'&forum='.Security::remove_XSS($_GET['forum']),'name' => get_lang('EditThread'));
+    $interbreadcrumb[] = array('url' => 'viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $currentForum['forum_title']);
+    $interbreadcrumb[] = array('url' => 'newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']),'name' => get_lang('EditThread'));
 } else {
     $interbreadcrumb[] = array('url' => 'index.php?'.$cidreq, 'name' => $nameTools);
     $interbreadcrumb[] = array('url' => 'viewforumcategory.php?'.$cidreq.'&forumcategory='.$currentForumCategory['cat_id'], 'name' => $currentForumCategory['cat_title']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?'.$cidreq.'&forum='.Security::remove_XSS($_GET['forum']), 'name' => $currentForum['forum_title']);
+    $interbreadcrumb[] = array('url' => 'viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $currentForum['forum_title']);
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditThread'));
 }
 
@@ -129,13 +122,13 @@ $tableLink = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $htmlHeadXtra[] = <<<JS
     <script>
     $(document).on('ready', function() {
-        
+
         if ($('#thread_qualify_gradebook').is(':checked') == true) {
             document.getElementById('options_field').style.display = 'block';
         } else {
             document.getElementById('options_field').style.display = 'none';
         }
-        
+
         $('#thread_qualify_gradebook').click(function() {
             if ($('#thread_qualify_gradebook').is(':checked') == true) {
                 document.getElementById('options_field').style.display = 'block';
@@ -175,7 +168,7 @@ $values = showUpdateThreadForm(
 );
 
 if (!empty($values) && isset($values['SubmitPost'])) {
-    
+
     // update thread in table forum_thread.
     updateThread($values);
 }

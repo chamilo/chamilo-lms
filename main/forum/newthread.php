@@ -65,11 +65,6 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
-if (!empty($_GET['gidReq'])) {
-    $toolgroup = intval($_GET['gidReq']);
-    Session::write('toolgroup',$toolgroup);
-}
-
 /* Is the user allowed here? */
 
 // The user is not allowed here if:
@@ -121,12 +116,12 @@ if (!empty($groupId)) {
     $groupProperties = GroupManager :: get_group_properties($groupId);
     $interbreadcrumb[] = array('url' => '../group/group.php?'.$cidreq, 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url' => '../group/group_space.php?'.$cidreq, 'name' => get_lang('GroupSpace').' '.$groupProperties['name']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?'.$cidreq.'&forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
-    $interbreadcrumb[] = array('url' => 'newthread.php?'.$cidreq.'&forum='.Security::remove_XSS($_GET['forum']),'name' => get_lang('NewTopic'));
+    $interbreadcrumb[] = array('url' => 'viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $current_forum['forum_title']);
+    $interbreadcrumb[] = array('url' => 'newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']),'name' => get_lang('NewTopic'));
 } else {
     $interbreadcrumb[] = array('url' => 'index.php?'.$cidreq, 'name' => $nameTools);
     $interbreadcrumb[] = array('url' => 'viewforumcategory.php?'.$cidreq.'&forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?'.$cidreq.'&forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
+    $interbreadcrumb[] = array('url' => 'viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $current_forum['forum_title']);
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewTopic'));
 }
 
@@ -169,7 +164,7 @@ handle_forum_and_forumcategories();
 // Action links
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
-echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&'.$cidreq.'">'.
+echo '<a href="viewforum.php?forum='.intval($_GET['forum']).'&'.$cidreq.'">'.
     Display::return_icon('back.png',get_lang('BackToForum'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 

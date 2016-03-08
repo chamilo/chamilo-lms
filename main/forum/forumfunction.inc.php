@@ -3355,7 +3355,7 @@ function show_edit_post_form(
     $form = new FormValidator(
         'edit_post',
         'post',
-        api_get_self().'?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post'])
+        api_get_self().'?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&post='.intval($_GET['post'])
     );
     $form->addElement('header', get_lang('EditPost'));
     // Setting the form elements.
@@ -3617,8 +3617,8 @@ function store_edit_post($values)
     //update_added_resources('forum_post', $values['post_id']);
 
     $message = get_lang('EditPostStored').'<br />';
-    $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&">'.get_lang('Forum').'</a><br />';
-    $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&gradebook='.$gradebook.'&thread='.$values['thread_id'].'&post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
+    $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&">'.get_lang('Forum').'</a><br />';
+    $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&gradebook='.$gradebook.'&thread='.$values['thread_id'].'&post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
 
     Session::erase('formelements');
     Session::erase('origin');

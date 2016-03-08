@@ -68,7 +68,7 @@ if ($origin == 'learnpath') {
         'name' => prepare4display($current_forum_category['cat_title']),
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&search='.Security::remove_XSS(urlencode($_GET['search'])),
+        'url' => 'viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&origin='.$origin.'&search='.Security::remove_XSS(urlencode($_GET['search'])),
         'name' => prepare4display($current_forum['forum_title']),
     );
 
@@ -121,7 +121,7 @@ if ($message != 'PostDeletedSpecial') {
     /* Action Links */
 
     echo '<div style="float:right;">';
-    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&origin='.$origin.'&gradebook='.$gradebook.'&search='.Security::remove_XSS(urlencode($_GET['search']));
+    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&origin='.$origin.'&gradebook='.$gradebook.'&search='.Security::remove_XSS(urlencode($_GET['search']));
     echo $my_url.'&view=flat&origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
     echo $my_url.'&view=threaded&origin='.$origin.'">'.get_lang('ThreadedView').'</a> | ';
     echo $my_url.'&view=nested&origin='.$origin.'">'.get_lang('NestedView').'</a>';
@@ -136,7 +136,7 @@ if ($message != 'PostDeletedSpecial') {
         // The link should only appear when the user is logged in or when anonymous posts are allowed.
         if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
             // reply link
-            echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
+            echo '<a href="reply.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
 
             // new thread link
             if (api_is_allowed_to_edit(false, true) ||

@@ -84,12 +84,12 @@ if ($origin == 'learnpath') {
             "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')'
         );
         $interbreadcrumb[] = array(
-            "url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&origin=".$origin."&search=".Security::remove_XSS(urlencode($_GET['search'])),
+            "url" => "viewforum.php?forum=".intval($_GET['forum'])."&origin=".$origin."&search=".Security::remove_XSS(urlencode($_GET['search'])),
             "name" => prepare4display($currentForum['forum_title'])
         );
         if ($message <> 'PostDeletedSpecial') {
             $interbreadcrumb[]= array(
-                "url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&gradebook=".$gradebook."&thread=".Security::remove_XSS($_GET['thread']),
+                "url" => "viewthread.php?forum=".intval($_GET['forum'])."&gradebook=".$gradebook."&thread=".intval($_GET['thread']),
                 "name" => prepare4display($currentThread['thread_title'])
             );
         }
@@ -120,14 +120,14 @@ if ($origin == 'learnpath') {
 
         if ($message <> 'PostDeletedSpecial') {
             if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
-                $info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+                $info_thread=get_thread_information($_GET['thread']);
                 $interbreadcrumb[] = array(
-                    "url" => "viewthread.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&thread=".Security::remove_XSS($_GET['thread']),
+                    "url" => "viewthread.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&thread=".intval($_GET['thread']),
                     "name" => prepare4display($currentThread['thread_title'])
                 );
             } else {
                 $interbreadcrumb[] = array(
-                    "url" => "viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&thread=".Security::remove_XSS($_GET['thread']),
+                    "url" => "viewthread.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&thread=".intval($_GET['thread']),
                     "name" => prepare4display($currentThread['thread_title'])
                 );
             }

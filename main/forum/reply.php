@@ -92,7 +92,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 if ($origin == 'group') {
-    $_clean['toolgroup'] = (int)$_SESSION['toolgroup'];
+    $_clean['toolgroup'] = api_get_group_id();
     $group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
     $interbreadcrumb[] = array(
         'url' => '../group/group.php?'.api_get_cidreq(),

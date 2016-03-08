@@ -172,7 +172,7 @@ if ($my_message != 'PostDeletedSpecial') {
     echo '<span style="float:right;">'.search_link().'</span>';
     if ($origin != 'learnpath') {
         echo '<a href="' . $forumUrl . 'viewforum.php?forum='
-            . Security::remove_XSS($_GET['forum']) . '&' . api_get_cidreq() . '">'
+            . intval($_GET['forum']) . '&' . api_get_cidreq() . '">'
             . Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM) . '</a>';
     }
     // The reply to thread link should only appear when the forum_category is
@@ -190,8 +190,8 @@ if ($my_message != 'PostDeletedSpecial') {
             // reply link
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="' . $forumUrl . 'reply.php?' . api_get_cidreq() . '&forum='
-                    . Security::remove_XSS($_GET['forum']) . '&thread='
-                    . Security::remove_XSS($_GET['thread']) . '&action=replythread">'
+                    . intval($_GET['forum']) . '&thread='
+                    . intval($_GET['thread']) . '&action=replythread">'
                     . Display::return_icon('reply_thread.png', get_lang('ReplyToThread'), '', ICON_SIZE_MEDIUM)
                     . '</a>';
             }
@@ -216,7 +216,7 @@ if ($my_message != 'PostDeletedSpecial') {
     // The different views of the thread.
     if ($origin != 'learnpath') {
         $my_url = '<a href="' . $forumUrl . 'viewthread.php?' . api_get_cidreq() . '&' . api_get_cidreq()
-            . '&forum=' . Security::remove_XSS($_GET['forum']) . '&thread=' . Security::remove_XSS($_GET['thread'])
+            . '&forum=' . intval($_GET['forum']) . '&thread=' . intval($_GET['thread'])
             . '&search=' . Security::remove_XSS(urlencode($my_search));
         echo $my_url . '&view=flat">'
             . Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)

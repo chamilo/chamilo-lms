@@ -65,7 +65,7 @@ if ($origin == 'group') {
     $group_properties  = GroupManager :: get_group_properties($groupId);
     $interbreadcrumb[] = array('url' => '../group/group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url' => '../group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace').' ('.$group_properties['name'].')');
-    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq(), 'name' => prepare4display($current_forum['forum_title']));
+    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&forum='.intval($_GET['forum']).'&'.api_get_cidreq(), 'name' => prepare4display($current_forum['forum_title']));
     $interbreadcrumb[] = array('url' => 'forumsearch.php?'.api_get_cidreq(),'name' => get_lang('ForumSearch'));
 } else {
     $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => $nameTools);

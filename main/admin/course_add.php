@@ -173,7 +173,7 @@ if ($form->validate()) {
     $course['wanted_code'] = $course['visual_code'];
     $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
     // Fixing category code
-    $course['course_category'] = $course['category_code'];
+    $course['course_category'] = isset($course['category_code']) ? $course['category_code'] :  '';
     $course_info = CourseManager::create_course($course);
 
     header('Location: course_list.php'.($course_info===false?'?action=show_msg&warn='.api_get_last_failure():''));

@@ -295,7 +295,12 @@ $simple_form = $form->returnForm();
 
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath='.$path;
 
-$multipleForm = new FormValidator('post');
+$multipleForm = new FormValidator(
+    'drag_drop',
+    'post',
+    '#',
+    array('enctype' => 'multipart/form-data')
+);
 $multipleForm->addMultipleUpload($url);
 
 $headers = array(

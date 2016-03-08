@@ -346,6 +346,8 @@ $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsn
 
 $course_id = api_get_course_int_id();
 
+$isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id(), $course_id);
+
 $counter = 0;
 if (is_array($threads)) {
     foreach ($threads as $row) {
@@ -393,33 +395,6 @@ if (is_array($threads)) {
                 $post_date = api_convert_and_format_date($last_post_info['post_date']);
                 $last_post = $post_date.' '.get_lang('By').' '.display_user_link($last_post_info['poster_id'], $poster_info['complete_name'], '', $poster_info['username']);
             }
-            /*
-            if ($row['last_poster_user_id'] == '0') {
-                $name = $row['poster_name'];
-                $last_poster_username = "";
-            } else {
-                $name = api_get_person_name($row['last_poster_firstname'], $row['last_poster_lastname']);
-                $tab_last_poster_info = api_get_user_info($row['last_poster_user_id']);
-                $last_poster_username = sprintf(get_lang('LoginX'), $tab_last_poster_info['username']);
-            }
-            // If the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread.
-            if (($row['visible'] == '1' OR api_is_allowed_to_edit(false, true)) && $origin != 'learnpath') {
-                $last_post = $post_date.' '.get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name, '', $last_poster_username);
-            } elseif ($origin != 'learnpath') {
-                $last_post_sql = "SELECT post.*, user.firstname, user.lastname, user.username FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' AND post.c_id=".api_get_course_int_id()." ORDER BY post_id DESC";
-                $last_post_result = Database::query($last_post_sql);
-                $last_post_row = Database::fetch_array($last_post_result);
-                $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-                $last_post_info_username = sprintf(get_lang('LoginX'), $last_post_row['username']);
-                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name, '', $last_post_info_username);
-            } else {
-                $last_post_sql = "SELECT post.*, user.firstname, user.lastname, user.username FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' AND post.c_id=".api_get_course_int_id()." ORDER BY post_id DESC";
-                $last_post_result = Database::query($last_post_sql);
-                $last_post_row = Database::fetch_array($last_post_result);
-                $last_post_info_username = sprintf(get_lang('LoginX'), $last_post_row['username']);
-                $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.Display::tag('span', $name, array("title"=>api_htmlentities($last_post_info_username, ENT_QUOTES)));
-            }*/
 
             echo '<td>'.$last_post.'</td>';
             echo '<td class="td_actions">';
@@ -441,7 +416,10 @@ if (is_array($threads)) {
             $row_post_id = Database::fetch_array($result_post_id);
 
             if ($origin != 'learnpath') {
-                if (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])) {
+                $editShowed = false;
+                if (api_is_allowed_to_edit(false, true) &&
+                    !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])
+                ) {
                     echo '<a href="'.$forumUrl.'editpost.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;thread='.Security::remove_XSS($row['thread_id']).'&amp;post='.$row_post_id['post_id'].'&id_attach='.$id_attach.'">'.
                         Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
 
@@ -454,8 +432,15 @@ if (is_array($threads)) {
 
                     display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array('forum' => $my_forum, 'origin' => $origin, 'gidReq' => $groupId));
                     display_lock_unlock_icon('thread', $row['thread_id'], $row['locked'], array('forum' => $my_forum, 'origin' => $origin, 'gidReq' => api_get_group_id()));
+
                     echo '<a href="viewforum.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=move&thread='.$row['thread_id'].$origin_string.'">'.
                         Display::return_icon('move.png', get_lang('MoveThread'), array(), ICON_SIZE_SMALL).'</a>';
+                    $editShowed = true;
+                }
+
+                if ($isTutor && $editShowed == false) {
+                    echo '<a href="'.$forumUrl.'editpost.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;thread='.Security::remove_XSS($row['thread_id']).'&amp;post='.$row_post_id['post_id'].'&id_attach='.$id_attach.'">'.
+                        Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
                 }
             }
             $iconnotify = 'send_mail.gif';

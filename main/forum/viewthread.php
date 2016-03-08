@@ -24,6 +24,9 @@ require_once 'forumfunction.inc.php';
 
 $nameTools = get_lang('Forum');
 $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
+$userId = api_get_user_id();
+$groupId = api_get_group_id();
+$courseId = api_get_course_int_id();
 
 // Are we in a lp ?
 $origin = '';
@@ -157,6 +160,18 @@ if ($my_message != 'PostDeletedSpecial') {
                 } else {
                     echo get_lang('ForumLocked');
                 }
+            }
+        }
+    } else {
+        if (!empty($group_id)) {
+            $reply = api_is_allowed_to_edit() ||
+                (
+                    GroupManager::is_tutor_of_group($userId, $groupId, $courseId) ||
+                    GroupManager::is_subscribed($userId, $groupId, $courseId)
+                );
+            if ($reply) {
+                echo '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread">'.
+                    Display::return_icon('reply_thread.png', get_lang('ReplyToThread'), '', ICON_SIZE_MEDIUM).'</a>';
             }
         }
     }

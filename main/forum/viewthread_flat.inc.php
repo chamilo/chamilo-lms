@@ -5,6 +5,7 @@
  * @copyright Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
  * @package chamilo.forum
  */
+
 //delete attachment file
 if ((isset($_GET['action']) && $_GET['action']=='delete_attach') && isset($_GET['id_attach'])) {
     delete_attachment(0,$_GET['id_attach']);
@@ -94,7 +95,9 @@ if (isset($current_thread['thread_id'])) {
                 }
             }
 
-            if (($current_forum_category && $current_forum_category['locked']==0) AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
+            if (($current_forum_category && $current_forum_category['locked']==0) AND
+                $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)
+            ) {
                 if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
                     if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
                         echo '<a href="reply.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$row['post_id'].'&amp;action=replymessage&amp;origin='.$origin.'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>";
@@ -110,6 +113,19 @@ if (isset($current_thread['thread_id'])) {
                 }
                 if ($current_thread['locked']==1) {
                     echo get_lang('ThreadLocked').'<br />';
+                }
+
+                if (!empty($group_id)) {
+                    $reply = api_is_allowed_to_edit() ||
+                        (
+                            GroupManager::is_tutor_of_group($userId, $groupId, $courseId) ||
+                            GroupManager::is_subscribed($userId, $groupId, $courseId)
+                        );
+
+                    if ($reply) {
+                        echo '<a href="reply.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$row['post_id'].'&amp;action=replymessage&amp;origin='.$origin.'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>";
+                        echo '<a href="reply.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$row['post_id'].'&amp;action=quote&amp;origin='.$origin.'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>";
+                    }
                 }
             }
             echo "</td>";
@@ -152,7 +168,8 @@ if (isset($current_thread['thread_id'])) {
                     echo '<a href="download.php?file='.$realname.'"> '.$user_filename.' </a>';
 
                     if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
-                        echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment['id'].'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a><br />';
+                        echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment['id'].'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.
+                            Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a><br />';
                     }
                     echo '<span class="forum_attach_comment" >'.$attachment['comment'].'</span>';
                     echo '</td></tr>';

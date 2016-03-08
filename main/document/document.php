@@ -58,6 +58,7 @@ if(
     unlink($_SESSION['temp_realpath_image']);
 }
 $courseInfo = api_get_course_info();
+$courseId = $courseInfo['real_id'];
 $course_dir = $courseInfo['directory'] . '/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path . $course_dir;
@@ -131,6 +132,7 @@ if (!empty($groupId)) {
     $group_properties = GroupManager::get_group_properties($groupId);
     // Let's assume the user cannot upload files for the group
     $group_member_with_upload_rights = false;
+    $groupMemberWithEditRights = $is_allowed_to_edit || GroupManager::is_tutor_of_group($userId, $groupId, $courseId);
 
     if ($group_properties['doc_state'] == 2) {
         // Documents are private
@@ -160,7 +162,10 @@ if (!empty($groupId)) {
             'name' => get_lang('GroupSpace').' '.$group_properties['name']
         );
         //allowed to upload?
-        if ($is_allowed_to_edit || GroupManager::is_subscribed($userId, $groupId)) {
+        if ($is_allowed_to_edit ||
+            GroupManager::is_subscribed($userId, $groupId) ||
+            GroupManager::is_tutor_of_group($userId, $groupId, $courseId)
+        ) {
             // Only courseadmin or group members can upload
             $group_member_with_upload_rights = true;
         }
@@ -835,7 +840,7 @@ if ($is_certificate_mode) {
     $interbreadcrumb[] = array('url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
 } else {
     if ((isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath']) || isset($_GET['createdir'])) {
-        $interbreadcrumb[] = array('url' => 'document.php', 'name' => get_lang('Documents'));
+        $interbreadcrumb[] = array('url' => 'document.php?'.api_get_cidreq(), 'name' => get_lang('Documents'));
     } else {
         $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Documents'));
     }
@@ -1653,7 +1658,6 @@ if ($is_allowed_to_edit ||
 $table_footer = '';
 $total_size = 0;
 $sortable_data = array();
-
 if (isset($documentAndFolders) && is_array($documentAndFolders)) {
     if ($groupId == 0 ||
         GroupManager::user_has_access(
@@ -1679,6 +1683,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                 api_get_user_id(),
                 false
             );
+
 
             $invisibility_span_open = ($is_visible == 0) ? '<span class="muted">' : '';
             $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
@@ -1749,10 +1754,10 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                 ' <div class="muted"><small>'.$last_edit_date."</small></div>";
 
             $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
-
             // Admins get an edit column
-            if ($is_allowed_to_edit || $group_member_with_upload_rights ||
-                is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+            if ($is_allowed_to_edit || $groupMemberWithEditRights ||
+                is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
+                $document_data['insert_user_id'] == api_get_user_id()
             ) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
                 // If readonly, check if it the owner of the file or if the user is an admin
@@ -1774,6 +1779,8 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                     );
                 }
                 $row[] = $edit_icons;
+            } else {
+                $row[] = '';
             }
             $row[] = $last_edit_date;
             $row[] = $size;

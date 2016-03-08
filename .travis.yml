@@ -1,7 +1,7 @@
 language: php
 
 php:
-  #- 5.4
+  #- 5.4 // Removed because of Chash dependencies on PHP 5.5
   - 5.5
   - 5.6
 

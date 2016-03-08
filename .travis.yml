@@ -24,16 +24,17 @@ before_script:
   - php5 -v
   - php5 -m
   - composer self-update
-  - composer global require "fxp/composer-asset-plugin:1.0.3"
+  # Previously, fxp/composer-asset-plugin was required but was causing a lot of trouble updating. Now it's disabled.
+  #- composer global require "fxp/composer-asset-plugin:1.0.3"
   # You can either use the composer install method and face the Github limit
   #- composer install -n
-  #- composer -v update
+  - composer -v update
   # ...OR use the proxy repository to download the necessary dependencies
-  - git clone -b 1.10.x --depth=1 https://github.com/ywarnier/chamilo-vendors.git
-  - sudo mv chamilo-vendors/vendor .
-  - sudo mv chamilo-vendors/web .
-  - sudo mv chamilo-vendors/composer.lock .
-  - sudo rm -rf chamilo-vendors
+  #- git clone -b 1.10.x --depth=1 https://github.com/ywarnier/chamilo-vendors.git
+  #- sudo mv chamilo-vendors/vendor .
+  #- sudo mv chamilo-vendors/web .
+  #- sudo mv chamilo-vendors/composer.lock .
+  #- sudo rm -rf chamilo-vendors
   # Continue...
   - phpenv config-add tests/travis-php-config.ini
   # enable php-fpm

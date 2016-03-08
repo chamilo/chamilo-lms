@@ -122,6 +122,21 @@ foreach ($rows as $post) {
         if ($current_thread['locked']==1) {
             echo get_lang('ThreadLocked').'<br />';
         }
+
+        if (!empty($group_id)) {
+            $reply = api_is_allowed_to_edit() ||
+                (
+                    GroupManager::is_tutor_of_group($userId, $groupId, $courseId) ||
+                    GroupManager::is_subscribed($userId, $groupId, $courseId)
+                );
+
+            if ($reply) {
+                echo '<a href="reply.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$post['post_id'].'&amp;action=replymessage&amp;origin='.$origin.'">'.
+                    Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>";
+                echo '<a href="reply.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$post['post_id'].'&amp;action=quote&amp;origin='.$origin.'">'.
+                    Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>";
+            }
+        }
     }
     echo "</td>";
     // note: this can be removed here because it will be displayed in the tree

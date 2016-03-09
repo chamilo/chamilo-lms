@@ -69,7 +69,7 @@ $(document).ready(function() {
 		tool_info = tool_id.split("_");
 		my_tool_id = tool_info[1];
         $("#id_normal_message").attr("class", "normal-message alert alert-success");
-        
+
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
@@ -294,8 +294,8 @@ if (api_get_setting('homepage_view') == 'activity' ||
 	require 'vertical_activity.php';
 }
 
-
 $content = '<div id="course_tools">'.$content.'</div>';
+
 $tpl = new Template(null);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);

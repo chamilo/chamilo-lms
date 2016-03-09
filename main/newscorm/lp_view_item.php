@@ -12,7 +12,6 @@
  */
 
 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
-
 require_once '../inc/global.inc.php';
 
 api_protect_course_script();
@@ -28,8 +27,8 @@ if (isset($_GET['lp_item_id'])) {
         $src = $oLP->get_link('http', $lp_item_id);
     }
 
-    $url_info 		= parse_url($src);
-    $real_url_info	= parse_url(api_get_path(WEB_PATH));
+    $url_info = parse_url($src);
+    $real_url_info = parse_url(api_get_path(WEB_PATH));
 
     // The host must be the same.
     if ($url_info['host'] == $real_url_info['host']) {
@@ -44,8 +43,6 @@ if (isset($_GET['lp_item_id'])) {
 
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'fullpage';
 
-/* INIT SECTION */
-
 $_SESSION['whereami'] = 'lp/build';
 if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
     $_SESSION['oLP'] -> current = intval($_GET['id']);
@@ -59,14 +56,14 @@ $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
-$isStudentView  = (empty($_REQUEST['isStudentView']) ? 0 : (int) $_REQUEST['isStudentView']);
-$learnpath_id   = (int) $_REQUEST['lp_id'];
+$isStudentView = (empty($_REQUEST['isStudentView']) ? 0 : (int)$_REQUEST['isStudentView']);
+$learnpath_id = (int)$_REQUEST['lp_id'];
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
      $htmlHeadXtra[] = "<script> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
-if ((!$is_allowed_to_edit) || ($isStudentView)) {
+if ((!$is_allowed_to_edit) || $isStudentView) {
     error_log('New LP - User not authorized in lp_view_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
@@ -75,25 +72,30 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 
 $course_id = api_get_course_int_id();
 $sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
-$result=Database::query($sql_query);
-$therow=Database::fetch_array($result);
+$result = Database::query($sql_query);
+$therow = Database::fetch_array($result);
 
 /* SHOWING THE ADMIN TOOLS	*/
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array (
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
         'name' => get_lang('ToolGradebook')
     );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => $therow['name']);
-$interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id", 'name' => get_lang('NewStep'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?action=list&'.api_get_cidreq(),
+    'name' => get_lang('LearningPaths')
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
+    'name' => $therow['name']
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
+    'name' => get_lang('NewStep')
+);
 
 // Theme calls
 $show_learn_path = true;

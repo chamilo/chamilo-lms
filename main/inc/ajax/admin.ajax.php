@@ -114,8 +114,8 @@ function version_check()
  */
 function check_system_version()
 {
-    global $_configuration;
-    $system_version = trim($_configuration['system_version']); // the chamilo version of your installation
+    // the chamilo version of your installation
+    $system_version = trim(api_get_configuration_value('system_version'));
 
     if (ini_get('allow_url_fopen') == 1) {
         // The number of courses

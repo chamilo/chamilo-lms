@@ -151,8 +151,8 @@ function poly_compile($poly, $max, $test = false) {
 
         // doubling the first point if needed (see above)
         if (($pente1<0 && $pente>0) || ($pente1>0 && $pente<0)) {
-        	if (is_array($bords[$poly[$i]['y']]))
-            	array_push($bords[$poly[$i]['y']],  round($poly[$i]['x']));
+        	if (is_array($bords[$poly[$i - 1]['y']]))
+            	array_push($bords[$poly[$i - 1]['y']],  round($poly[$i - 1]['x']));
             //if (DEBUG) echo '('.$poly[$i-1]['x'].';'.$poly[$i-1]['y'].')   ';
         }
         //  doubling the last point if neededd
@@ -188,7 +188,11 @@ function poly_compile($poly, $max, $test = false) {
        		sort($bords[$i]);
         }
 
-        for ($j = 0; $j<sizeof($bords[$i]);$j+=2) // bords
+        for ($j = 0; $j<sizeof($bords[$i]);$j+=2) { // bords
+            if (!isset($bords[$i][$j + 1])) {
+                continue;
+            }
+
             for ($k = round($bords[$i][$j]); $k<=$bords[$i][$j+1];$k++) {
                 $res[$k][$i] = true; //filling the array with trues
                 if ($test == 1)  {
@@ -203,6 +207,7 @@ function poly_compile($poly, $max, $test = false) {
                 	echo $k.'  '.$i; echo '<br />';
                 }
             }
+        }
     }
 
     return $res;

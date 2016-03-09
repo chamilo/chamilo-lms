@@ -7601,4 +7601,6 @@ $LastXDays = "Derniers %s jours";
 $ExportBadges = "Exporter badges";
 $LanguagesDisableAllExceptDefault = "Désactiver toutes les langues execpté celle par défaut de la plateforme";
 $ThereAreUsersUsingThisLanguagesDisableItManually = "Des utilisateurs utilisent encore la langue suivante. Veuillez la désactiver manuellement.";
+$MessagingAllowSendPushNotificationTitle = "Permettre l'envoi de notifications Push à l'application mobile Chamilo Messaging";
+$Overwrite = "Écraser";
 ?>

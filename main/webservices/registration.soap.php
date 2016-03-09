@@ -5799,6 +5799,20 @@ function WSUnsuscribeCoursesFromSession($params)
 /** WSListCourses **/
 
 $server->wsdl->addComplexType(
+    'listCourseInput',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
+        'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+        'from' => array('name' => 'from', 'type' => 'xsd:int'),
+        'to' => array('name' => 'to', 'type' => 'xsd:int')
+    )
+);
+
+$server->wsdl->addComplexType(
     'course',
     'complexType',
     'struct',
@@ -5830,7 +5844,7 @@ $server->wsdl->addComplexType(
 
 // Register the method to expose
 $server->register('WSListCourses',                                                  // method name
-    array('secret_key' => 'xsd:string', 'original_course_id_name' => 'xsd:string'), // input parameters
+    array('listCourseInput' => 'tns:listCourseInput'), // input parameters
     array('return' => 'tns:courses'),                                               // output parameters
     'urn:WSRegistration',                                                           // namespace
     'urn:WSRegistration#WSListCourses',                                             // soapaction
@@ -5851,7 +5865,15 @@ function WSListCourses($params)
     $courses_result = array();
     $category_names = array();
 
-    $courses = CourseManager::get_courses_list();
+    $from = isset($params['from']) ? $params['from'] : null;
+    $to = isset($params['to']) ? $params['to'] : null;
+
+    error_log(print_r($params,1));
+    error_log($from);
+    error_log($to);
+
+    $courses = CourseManager::get_courses_list($from, $to);
+
     foreach ($courses as $course) {
         $course_tmp = array();
         $course_tmp['id'] = $course['id'];
@@ -5859,16 +5881,19 @@ function WSListCourses($params)
         $course_tmp['title'] = $course['title'];
         $course_tmp['language'] = $course['course_language'];
         $course_tmp['visibility'] = $course['visibility'];
+        $course_tmp['category_name'] = '';
 
         // Determining category name
         if (!empty($course['category_code']) &&
-            $category_names[$course['category_code']]
+            isset($category_names[$course['category_code']])
         ) {
             $course_tmp['category_name'] = $category_names[$course['category_code']];
         } else {
             $category = CourseManager::get_course_category($course['category_code']);
-            $category_names[$course['category_code']] = $category['name'];
-            $course_tmp['category_name'] = $category['name'];
+            if ($category) {
+                $category_names[$course['category_code']] = $category['name'];
+                $course_tmp['category_name'] = $category['name'];
+            }
         }
 
         // Determining number of students registered in course
@@ -5890,7 +5915,6 @@ function WSListCourses($params)
     }
 
     return $courses_result;
-
 }
 
 

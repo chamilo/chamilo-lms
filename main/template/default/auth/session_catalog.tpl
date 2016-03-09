@@ -78,7 +78,7 @@
         <div class="col-md-12">
             <div class="row">
                 {% for session in sessions %}
-                    <div class="col-md-3 session-col">
+                    <div class="col-xs-6 col-sm-6 col-md-3 session-col">
                         <div class="item" id="session-{{ session.id }}">
                             <img src="{{ session.image ? _p.web_upload ~ session.image : _p.web_img ~ 'session_default.png' }}">
 

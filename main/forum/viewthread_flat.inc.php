@@ -120,7 +120,7 @@ if (isset($current_thread['thread_id'])) {
 
             if ($origin != 'learnpath') {
                 if (api_get_course_setting('allow_user_image_forum')) {
-                    $html .= '<div class="thumbnail">' . display_user_image($row['user_id'], $name) . '</div>';
+                    $html .= '<div class="thumbnail">' . display_user_image($row['user_id'], $name, $origin) . '</div>';
                 }
                 $html .= Display::tag(
                     'h4',
@@ -128,6 +128,9 @@ if (isset($current_thread['thread_id'])) {
                     array('class' => 'title-username')
                 );
             } else {
+                if (api_get_course_setting('allow_user_image_forum')) {
+                    $html .= '<div class="thumbnail">' . display_user_image($row['user_id'], $name, $origin) . '</div>';
+                }
                 $name = Display::tag('strong', "#" . $postCount--, ['class' => 'text-info']) . " | $name";
                 $html .= Display::tag(
                     'p',

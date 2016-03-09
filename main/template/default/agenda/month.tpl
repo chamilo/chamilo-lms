@@ -245,6 +245,10 @@ $(document).ready(function() {
 			}
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
+            if (!calEvent.end) {
+                calEvent.end = calEvent.start;
+            }
+
             var start_date = calEvent.start.format("YY-MM-DD");
 
             if (calEvent.allDay == 1) {

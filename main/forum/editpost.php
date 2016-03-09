@@ -200,7 +200,7 @@ if ($origin != 'learnpath') {
         echo '<a href="index.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
     }
-    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin='.$origin.'">'.
+    echo '<a href="viewforum.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq().'&origin='.$origin.'">'.
         Display::return_icon('forum.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 }
@@ -234,7 +234,7 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
 }
 
 // Footer
-if ($origin == 'learnpath') {
+if (isset($origin) && $origin == 'learnpath') {
     Display::display_reduced_footer();
 } else {
     Display::display_footer();

@@ -44,8 +44,6 @@ if (isset($_GET['lp_item_id'])) {
 
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'fullpage';
 
-/* INIT SECTION */
-
 $_SESSION['whereami'] = 'lp/build';
 if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
     $_SESSION['oLP'] -> current = intval($_GET['id']);
@@ -66,7 +64,7 @@ $learnpath_id   = (int) $_REQUEST['lp_id'];
 if ($action == 'add' && $type == 'learnpathitem') {
      $htmlHeadXtra[] = "<script> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
-if ((!$is_allowed_to_edit) || ($isStudentView)) {
+if ((!$is_allowed_to_edit) || $isStudentView) {
     error_log('New LP - User not authorized in lp_view_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
@@ -80,28 +78,24 @@ $therow = Database::fetch_array($result);
 
 /* SHOWING THE ADMIN TOOLS	*/
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array (
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
         'name' => get_lang('ToolGradebook')
     );
 }
 
 $interbreadcrumb[] = array(
-    'url' => 'lp_controller.php?action=list?'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'url' => api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?action=list&'.api_get_cidreq(),
+    'name' => get_lang('LearningPaths')
 );
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => $therow['name'],
+    'name' => $therow['name']
 );
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => get_lang('NewStep'),
+    'name' => get_lang('NewStep')
 );
 
 // Theme calls

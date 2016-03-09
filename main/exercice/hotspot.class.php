@@ -34,7 +34,7 @@ class HotSpot extends Question
 		parent::createForm($form, $fck_config);
 
 		if (!isset($_GET['editQuestion'])) {
-			$form->addElement('file','imageUpload',array('<img src="../img/icons/22/hotspots.png" />', get_lang('UploadJpgPicture')) );
+			$form->addElement('file','imageUpload',array('<img src="'.Display::return_icon('hotspot.png', null, null, ICON_SIZE_BIG, false, true).'" />', get_lang('UploadJpgPicture')) );
 
 			// setting the save button here and not in the question class.php
 			// Saving a question

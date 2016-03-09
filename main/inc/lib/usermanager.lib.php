@@ -800,7 +800,7 @@ class UserManager
      * @param int The user ID of the person who registered this user (optional, defaults to null)
      * @param int The department of HR in which the user is registered (optional, defaults to 0)
      * @param array A series of additional fields to add to this user as extra fields (optional, defaults to null)
-     * @return boolean true if the user information was updated
+     * @return boolean|integer False on error, or the user ID if the user information was updated
      * @assert (false, false, false, false, false, false, false, false, false, false, false, false, false) === false
      */
     public static function update_user(

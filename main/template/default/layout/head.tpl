@@ -2,9 +2,13 @@
 <link href="https://chamilo.org/chamilo-lms/" rel="help" />
 <link href="https://chamilo.org/the-association/" rel="author" />
 <link href="https://chamilo.org/the-association/" rel="copyright" />
+<!-- Force latest IE rendering engine or ChromeFrame if installed -->
+<!--[if IE]>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<![endif]-->
+
 {{ prefetch }}
 {{ favico }}
-{{ browser_specific_head }}
 <link rel="apple-touch-icon" href="{{ _p.web }}apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="Generator" content="{{ _s.software_name }} {{ _s.system_version|slice(0,1) }}" />

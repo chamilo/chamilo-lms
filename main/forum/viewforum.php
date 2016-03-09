@@ -48,12 +48,15 @@ if (isset($_GET['origin'])) {
 require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
-$userid  = api_get_user_id();
+$userId = api_get_user_id();
 $sessionId = api_get_session_id();
+$groupId = api_get_group_id();
+$courseId = api_get_course_int_id();
+
+$isTutor = GroupManager::is_tutor_of_group($userId, $groupId, $courseId);
 
 /* MAIN DISPLAY SECTION */
 
-$groupId = api_get_group_id();
 $my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
 // Note: This has to be validated that it is an existing forum.
 $current_forum = get_forum_information($my_forum);
@@ -69,23 +72,23 @@ if (!empty($groupId)) {
     //Group info & group category info
     $group_properties = GroupManager::get_group_properties($groupId);
     //User has access in the group?
-    $user_has_access_in_group = GroupManager::user_has_access($userid, $groupId, GroupManager::GROUP_TOOL_FORUM);
+    $user_has_access_in_group = GroupManager::user_has_access($userId, $groupId, GroupManager::GROUP_TOOL_FORUM);
     $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupId);
 
-    //Course
+    // Course
     if (
-        !api_is_allowed_to_edit(false, true) AND  //is a student
-        (($current_forum_category && $current_forum_category['visibility'] == 0) OR
-        $current_forum['visibility'] == 0 OR !$user_has_access_in_group)
+        !api_is_allowed_to_edit(false, true) &&  //is a student
+        (($current_forum_category && $current_forum_category['visibility'] == 0) ||
+        $current_forum['visibility'] == 0 || !$user_has_access_in_group)
     ) {
         api_not_allowed(true);
     }
 } else {
     //Course
     if (
-        !api_is_allowed_to_edit(false, true) AND  //is a student
+        !api_is_allowed_to_edit(false, true) &&  //is a student
         (
-            ($current_forum_category && $current_forum_category['visibility'] == 0) OR
+            ($current_forum_category && $current_forum_category['visibility'] == 0) ||
             $current_forum['visibility'] == 0
         ) //forum category or forum visibility is false
     ) {
@@ -110,16 +113,11 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
-if (!empty($_GET['gidReq'])) {
-    $toolgroup = Database::escape_string($_GET['gidReq']);
-    Session::write('toolgroup',$toolgroup);
-}
-
 $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
 if ($origin == 'group') {
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH) . 'group/group.php',
+        'url' => api_get_path(WEB_CODE_PATH) . 'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')
     );
     $interbreadcrumb[] = array(
@@ -156,9 +154,9 @@ if ($origin == 'learnpath') {
 /* Actions */
 // Change visibility of a forum or a forum category.
 if (
-    ($my_action == 'invisible' OR $my_action == 'visible') AND
-    isset($_GET['content']) AND
-    isset($_GET['id']) AND
+    ($my_action == 'invisible' || $my_action == 'visible') &&
+    isset($_GET['content']) &&
+    isset($_GET['id']) &&
     api_is_allowed_to_edit(false, true) &&
     api_is_allowed_to_session_edit(false, true)
 ) {
@@ -166,8 +164,8 @@ if (
 }
 // Locking and unlocking.
 if (
-    ($my_action == 'lock' OR $my_action == 'unlock') AND
-    isset($_GET['content']) AND isset($_GET['id']) AND
+    ($my_action == 'lock' || $my_action == 'unlock') &&
+    isset($_GET['content']) && isset($_GET['id']) &&
     api_is_allowed_to_edit(false, true) &&
     api_is_allowed_to_session_edit(false, true)
 ) {
@@ -175,9 +173,9 @@ if (
 }
 // Deleting.
 if (
-    $my_action == 'delete' AND
-    isset($_GET['content']) AND
-    isset($_GET['id']) AND
+    $my_action == 'delete' &&
+    isset($_GET['content']) &&
+    isset($_GET['id']) &&
     api_is_allowed_to_edit(false, true) &&
     api_is_allowed_to_session_edit(false, true)
 ) {
@@ -200,7 +198,7 @@ if (
 }
 // Moving.
 if ($my_action == 'move' && isset($_GET['thread']) &&
-    api_is_allowed_to_edit(false, true ) &&
+    api_is_allowed_to_edit(false, true) &&
     api_is_allowed_to_session_edit(false, true)
 ) {
     $message = move_thread_form();
@@ -281,7 +279,7 @@ if (
             $table_list .= '<th>' . get_lang('Qualify') . '</th>';
         }
         $table_list .= '</tr>';
-        $max_qualify = showQualify('2', $userid, $_GET['id']);
+        $max_qualify = showQualify('2', $userId, $_GET['id']);
         $counter_stdlist = 0;
 
         if (Database::num_rows($student_list) > 0) {
@@ -363,9 +361,9 @@ if ($origin != 'learnpath') {
 // 2. the course member is here and new threads are allowed
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
 if (
-    api_is_allowed_to_edit(false, true) OR
-    ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR
-    ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)
+    api_is_allowed_to_edit(false, true) ||
+    ($current_forum['allow_new_threads'] == 1 && isset($_user['user_id'])) ||
+    ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)
 ) {
     if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
         if (!api_is_anonymous() && !api_is_invitee()) {
@@ -437,9 +435,8 @@ if (is_array($threads)) {
     foreach ($threads as $row) {
         // Thread who have no replies yet and the only post is invisible should not be displayed to students.
         if (api_is_allowed_to_edit(false, true) ||
-            !($row['thread_replies'] == '0' AND $row['visibility'] == '0')
+            !($row['thread_replies'] == '0' && $row['visibility'] == '0')
         ) {
-
             $my_whatsnew_post_info = null;
 
             if (isset($whatsnew_post_info[$my_forum][$row['thread_id']])) {
@@ -477,8 +474,7 @@ if (is_array($threads)) {
             if ($origin != 'learnpath') {
                 $authorName = display_user_link(
                     $row['user_id'],
-                    api_get_person_name($row['firstname'],
-                    $row['lastname']),
+                    api_get_person_name($row['firstname'], $row['lastname']),
                     '',
                     $poster_username
                 );
@@ -547,39 +543,9 @@ if (is_array($threads)) {
                 . Display::return_icon('post-item.png', null, null, ICON_SIZE_TINY)
                 . ' ' . $last_post;
             $html .= '</div>';
-
-            /*
-            if ($row['last_poster_user_id'] == '0') {
-                $name = $row['poster_name'];
-                $last_poster_username = "";
-            } else {
-                $name = api_get_person_name($row['last_poster_firstname'], $row['last_poster_lastname']);
-                $tab_last_poster_info = api_get_user_info($row['last_poster_user_id']);
-                $last_poster_username = sprintf(get_lang('LoginX'), $tab_last_poster_info['username']);
-            }
-            // If the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread.
-            if (($row['visible'] == '1' OR api_is_allowed_to_edit(false, true)) && $origin != 'learnpath') {
-                $last_post = $post_date.' '.get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name, '', $last_poster_username);
-            } elseif ($origin != 'learnpath') {
-                $last_post_sql = "SELECT post.*, user.firstname, user.lastname, user.username FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' AND post.c_id=".api_get_course_int_id()." ORDER BY post_id DESC";
-                $last_post_result = Database::query($last_post_sql);
-                $last_post_row = Database::fetch_array($last_post_result);
-                $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-                $last_post_info_username = sprintf(get_lang('LoginX'), $last_post_row['username']);
-                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name, '', $last_post_info_username);
-            } else {
-                $last_post_sql = "SELECT post.*, user.firstname, user.lastname, user.username FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' AND post.c_id=".api_get_course_int_id()." ORDER BY post_id DESC";
-                $last_post_result = Database::query($last_post_sql);
-                $last_post_row = Database::fetch_array($last_post_result);
-                $last_post_info_username = sprintf(get_lang('LoginX'), $last_post_row['username']);
-                $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-                $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.Display::tag('span', $name, array("title"=>api_htmlentities($last_post_info_username, ENT_QUOTES)));
-            }*/
-
-
             $html .= '<div class="col-md-3">';
             $cidreq = api_get_cidreq();
-            
+
             // Get attachment id.
             if (isset($row['post_id'])) {
                 $attachment_list = get_attachment($row['post_id']);
@@ -591,11 +557,10 @@ if (is_array($threads)) {
                     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 ) {
                     $iconsEdit .= '<a href="' . $forumUrl . 'editthread.php?' . $cidreq
-                        . '&forum=' . Security::remove_XSS($my_forum) . '&thread='
-                        . Security::remove_XSS($row['thread_id'])
+                        . '&forum=' . intval($my_forum) . '&thread='
+                        . intval($row['thread_id'])
                         . '&id_attach=' . $id_attach . '">'
                         . Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . '</a>';
-
                     if (api_resource_is_locked_by_gradebook($row['thread_id'], LINK_FORUM_THREAD)) {
                         $iconsEdit .= Display::return_icon(
                             'delete_na.png',
@@ -605,7 +570,7 @@ if (is_array($threads)) {
                         );
                     } else {
                         $iconsEdit.= '<a href="' . api_get_self() . '?' . $cidreq . '&forum='
-                            . Security::remove_XSS($my_forum) . '&action=delete&content=thread&id='
+                            . intval($my_forum) . '&action=delete&content=thread&id='
                             . $row['thread_id'] . $origin_string
                             . "\" onclick=\"javascript:if(!confirm('"
                             . addslashes(api_htmlentities(get_lang('DeleteCompleteThread'), ENT_QUOTES))
@@ -634,7 +599,7 @@ if (is_array($threads)) {
                         )
                     );
                     $iconsEdit .= '<a href="viewforum.php?' . $cidreq . '&forum='
-                        . Security::remove_XSS($my_forum)
+                        . intval($my_forum)
                         . '&action=move&thread=' . $row['thread_id'] . $origin_string . '">'
                         . Display::return_icon('move.png', get_lang('MoveThread'), array(), ICON_SIZE_SMALL)
                         . '</a>';
@@ -658,7 +623,7 @@ if (is_array($threads)) {
                     . '">' . Display::return_icon($iconnotify, get_lang('NotifyMe')) . '</a>';
             }
 
-            if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath') {
+            if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
                 $iconsEdit .= '<a href="' . api_get_self() . '?' . $cidreq . '&forum='
                     . Security::remove_XSS($my_forum)
                     . "&origin=$origin&action=liststd&content=thread&id={$row['thread_id']}"
@@ -682,8 +647,6 @@ if (is_array($threads)) {
 
 echo '</div>';
 echo isset($table_list) ? $table_list : '';
-
-/* FOOTER */
 
 if ($origin != 'learnpath') {
     Display::display_footer();

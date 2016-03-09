@@ -74,31 +74,19 @@ if (api_is_allowed_to_edit(null, true)) {
             case 'set_tutor':
                 $userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
                 $isTutor = isset($_GET['is_tutor']) ? intval($_GET['is_tutor']) : 0;
+                $userInfo = api_get_user_info($userId);
+                
                 if (!empty($userId)) {
-                    if ($sessionId) {
-                        /*$res = SessionManager::set_coach_to_course_session(
-                            $userId,
-                            $sessionId,
-                            $courseCode,
-                            true
-                        );*/
-                    } else {
-                        /*if (!empty($_POST['promoteCourseAdmin']) && $_POST['promoteCourseAdmin']){
-                            $userProperties['status'] = 1;
-                        } else{
-                            $userProperties['status'] = 5;
+                    if (!$sessionId) {
+                        if ($userInfo['status'] != INVITEE) {
+                            CourseManager::updateUserCourseTutor(
+                                $userId,
+                                $courseId,
+                                $isTutor
+                            );
+                        } else {
+                            Display::addFlash(Display::return_message(get_lang('InviteesCantBeTutors'), 'error'));
                         }
-                        if (!empty($_POST['promoteTutor']) && $_POST['promoteTutor']){
-                            $userProperties['tutor'] = 1;
-                        } else{
-                            $userProperties['tutor'] = 0;
-                        }*/
-
-                        CourseManager::updateUserCourseTutor(
-                            $userId,
-                            $courseId,
-                            $isTutor
-                        );
                     }
                 }
                 break;
@@ -774,6 +762,8 @@ function modify_filter($user_id, $row, $data)
     global $is_allowed_to_track, $charset;
 
     $user_id = $data[0];
+    $userInfo = api_get_user_info($user_id);
+    $isInvitee = $userInfo['status'] == INVITEE ? true : false;
     $course_info = $_course = api_get_course_info();
     $current_user_id = api_get_user_id();
     $sessionId = api_get_session_id();
@@ -805,7 +795,11 @@ function modify_filter($user_id, $row, $data)
                 $text = get_lang('SetTutor');
             }
 
-            $disabled = '';
+            if ($isInvitee) {
+                $disabled = 'disabled';
+            } else {
+                $disabled = '';
+            }
 
             if ($data['user_status_in_course'] == STUDENT) {
 

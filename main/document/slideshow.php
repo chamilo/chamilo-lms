@@ -165,12 +165,13 @@ if (isset($_SESSION["image_resizing"]) &&  $_SESSION["image_resizing"] == "resiz
 
 // This is for viewing all the images in the slideshow as thumbnails.
 $image_tag = array ();
+$html = '';
 if ($slide_id == 'all') {
 
 	// Config for make thumbnails
     $allowed_thumbnail_types = array('jpg', 'jpeg', 'gif', 'png');
-	$max_thumbnail_width     = 200;
-	$max_thumbnail_height    = 200;
+	$max_thumbnail_width     = 250;
+	$max_thumbnail_height    = 250;
 	$png_compression	     = 0;//0(none)-9
 	$jpg_quality  	         = 75;//from 0 to 100 (default is 75). More quality less compression
 
@@ -331,7 +332,7 @@ if ($slide_id == 'all') {
 	for ($k = 0; $k < $number_iteration; $k++) {
 		for ($i = 0; $i < $number_image; $i++) {
 			if (isset($image_tag[$p])) {
-                            $html .= '<div class="col-md-3">';
+                            $html .= '<div class="col-xs-6 col-sm-3 col-md-2">';
                             $html .= '<div class="canvas-one">';
                             $html .= '<a class="canvas-two" href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.'">';
                             $html .= '<div class="frame">';
@@ -472,16 +473,18 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 			$aux = explode('.', htmlspecialchars($image_files_only[$slide]));
 			$ext = $aux[count($aux) - 1];
 
-            if ($_SESSION['image_resizing'] == 'resizing') {
+            if (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] == 'resizing') {
                 $resize_info = get_lang('Resizing').'<br />';
-                $resize_widht = $_SESSION["image_resizing_width"].' x ';
+                $resize_width = $_SESSION["image_resizing_width"].' x ';
                 $resize_height = $_SESSION['image_resizing_height'];
-            } elseif($_SESSION['image_resizing'] != 'noresizing'){
+            } elseif (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] != 'noresizing'){
                 $resize_info = get_lang('Resizing').'<br />';
-                $resize_widht = get_lang('Auto').' x ';
+                $resize_width = get_lang('Auto').' x ';
                 $resize_height = get_lang('Auto');
             } else {
                 $resize_info = get_lang('NoResizing').'<br />';
+				$resize_width = '';
+				$resize_height = '';
             }
 
             echo '<tr>';
@@ -498,7 +501,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 			echo '<tr>';
 			echo '<td align="center">';
 			echo $resize_info;
-			echo $resize_widht;
+			echo $resize_width;
 			echo $resize_height;
 			echo '</td>';
 			echo '</tr>';

@@ -5248,13 +5248,9 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
  */
 function api_get_access_url($id, $returnDefault = true)
 {
-    global $_configuration;
     $id = intval($id);
     // Calling the Database:: library dont work this is handmade.
-    //$table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-    $table = 'access_url';
-    $database = $_configuration['main_database'];
-    $table_access_url = "" . $database . "." . $table . "";
+    $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $sql = "SELECT url, description, active, created_by, tms
             FROM $table_access_url WHERE id = '$id' ";
     $res = Database::query($sql);
@@ -5277,6 +5273,7 @@ function api_get_access_url($id, $returnDefault = true)
             }
         }
     }
+
     return $result;
 }
 

@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - 5.4
+  #- 5.4 // Removed because of Chash dependencies on PHP 5.5
   - 5.5
   - 5.6
 
@@ -24,20 +24,21 @@ before_script:
   - php5 -v
   - php5 -m
   - composer self-update
-  - composer global require "fxp/composer-asset-plugin:1.0.3"
+  # Previously, fxp/composer-asset-plugin was required but was causing a lot of trouble updating. Now it's disabled.
+  #- composer global require "fxp/composer-asset-plugin:1.0.3"
   # You can either use the composer install method and face the Github limit
   #- composer install -n
-  #- composer -v update
+  - composer -v update
   # ...OR use the proxy repository to download the necessary dependencies
-  - git clone -b 1.10.x --depth=1 https://github.com/ywarnier/chamilo-vendors.git
-  - sudo mv chamilo-vendors/vendor .
-  - sudo mv chamilo-vendors/web .
-  - sudo mv chamilo-vendors/composer.lock .
-  - sudo rm -rf chamilo-vendors
+  #- git clone -b 1.10.x --depth=1 https://github.com/ywarnier/chamilo-vendors.git
+  #- sudo mv chamilo-vendors/vendor .
+  #- sudo mv chamilo-vendors/web .
+  #- sudo mv chamilo-vendors/composer.lock .
+  #- sudo rm -rf chamilo-vendors
   # Continue...
   - phpenv config-add tests/travis-php-config.ini
   # enable php-fpm
-  - sudo /etc/init.d/php-fpm stop
+  - sudo /etc/init.d/php5-fpm stop
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
   - sudo a2enmod rewrite actions fastcgi alias
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
@@ -46,7 +47,7 @@ before_script:
   - sudo cp -f tests/travis-apache /etc/apache2/sites-available/default
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
   - sudo service apache2 restart
-  - sudo service php-fpm restart
+  - sudo service php5-fpm restart
   - php5 -v
   # install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash

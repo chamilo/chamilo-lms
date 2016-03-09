@@ -26,7 +26,9 @@ $threadhold1 = null;
 $threadhold2 = null;
 $threadhold3 = null;
 
-if (empty ($exerciseResult)) {
+$exerciseResult = [];
+
+if (isset($_SESSION['exerciseResult'])) {
     $exerciseResult = $_SESSION['exerciseResult'];
 }
 
@@ -40,18 +42,18 @@ if (empty($origin)) {
 // if origin is learnpath
 $learnpath_id = 0;
 
-if (empty($learnpath_id)) {
-	$learnpath_id = Security::remove_XSS($_REQUEST['learnpath_id']);
+if (isset($_REQUEST['learnpath_id'])) {
+	$learnpath_id = intval($_REQUEST['learnpath_id']);
 }
 
 $learnpath_item_id = 0;
 
-if (empty($learnpath_item_id)) {
-	$learnpath_item_id = Security::remove_XSS($_REQUEST['learnpath_item_id']);
+if (isset($_REQUEST['learnpath_item_id'])) {
+	$learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
 }
 
 $_SESSION['hotspot_coord']=array();
-$newquestionList= $_SESSION['newquestionList'];
+$newquestionList= isset($_SESSION['newquestionList']) ? $_SESSION['newquestionList'] : [];
 $questionList 	= $_SESSION['questionList'];
 
 $exerciseId		= intval($_GET['exerciseId']);
@@ -65,15 +67,19 @@ Session::erase('exerciseResultExtra'.$exerciseId);
 Session::erase('questionListExtra'.$exerciseId);
 
 //round-up the coordinates
-$coords = explode('/', $_GET['hotspot']);
 $user_array = '';
-if (is_array($coords) && count($coords) > 0) {
-	foreach ($coords as $coord) {
-        if (!empty($coord)) {
-            list($x, $y) = explode(';', $coord);
-            $user_array .= round($x).';'.round($y).'/';
+
+if (isset($_GET['hotspot'])) {
+    $coords = explode('/', $_GET['hotspot']);
+
+    if (is_array($coords) && count($coords) > 0) {
+        foreach ($coords as $coord) {
+            if (!empty($coord)) {
+                list($x, $y) = explode(';', $coord);
+                $user_array .= round($x).';'.round($y).'/';
+            }
         }
-	}
+    }
 }
 
 $choice_value = '';

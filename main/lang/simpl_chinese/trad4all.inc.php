@@ -1764,7 +1764,7 @@ $AddNewQuestionType = "添加新的问题类型";
 $Numbered = "数字化的";
 $iso639_2_code = "zh";
 $iso639_1_code = "zho";
-$charset = "字符编码";
+$charset = "utf-8";
 $text_dir = "ltr";
 $left_font_family = "verdana, helvetica, arial, geneva, sans-serif";
 $right_font_family = "helvetica, arial, geneva, sans-serif";
@@ -3583,4 +3583,5 @@ $EditBlocks = "编辑资料块";
 $EndDateMustBeMoreThanStartDate = "结束日期需迟于开始日期";
 $ToolSearch = "搜索";
 $NewImage = "新图片";
+$Administration = "行政";
 ?>

@@ -1667,7 +1667,7 @@ VALUES
 ('allow_lp_return_link', NULL, 'radio', 'Course', 'true', 'AllowLearningPathReturnLinkTitle', 'AllowLearningPathReturnLinkComment', NULL, NULL, 1),
 ('hide_scorm_export_link', NULL, 'radio', 'Course', 'false', 'HideScormExportLinkTitle', 'HideScormExportLinkComment', NULL, NULL, 1),
 ('hide_scorm_copy_link', NULL, 'radio', 'Course', 'false', 'HideScormCopyLinkTitle', 'HideScormCopyLinkComment', NULL, NULL, 1),
-('hide_scorm_pdf_link', NULL, 'radio', 'Course', 'false', 'HideScormPdfLinkTitle', 'HideScormPdfLinkComment', NULL, NULL, 1),
+('hide_scorm_pdf_link', NULL, 'radio', 'Course', 'true', 'HideScormPdfLinkTitle', 'HideScormPdfLinkComment', NULL, NULL, 1),
 ('session_days_before_coach_access', NULL, 'textfield', 'Session', '0', 'SessionDaysBeforeCoachAccessTitle', 'SessionDaysBeforeCoachAccessComment', NULL, NULL, 1),
 ('session_days_after_coach_access', NULL, 'textfield', 'Session', '0', 'SessionDaysAfterCoachAccessTitle', 'SessionDaysAfterCoachAccessComment', NULL, NULL, 1),
 ('pdf_logo_header', NULL, 'radio', 'Course', 'false', 'PdfLogoHeaderTitle', 'PdfLogoHeaderComment', NULL, NULL, 1),

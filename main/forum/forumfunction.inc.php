@@ -2647,9 +2647,7 @@ function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
         );
         $form->addElement('html', '</div>');
     }
-    if ($forumSetting['allow_post_notification'] && isset($userInfo['user_id'])) {
-        $form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$userInfo['mail'].')');
-    }
+
     if ($forumSetting['allow_sticky'] && api_is_allowed_to_edit(null, true)) {
         $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
     }
@@ -2826,10 +2824,6 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         );
 
         $form->addElement('html', '</div>');
-    }
-
-    if ($forum_setting['allow_post_notification'] && isset($_user['user_id'])) {
-        $form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$_user['mail'].')');
     }
 
     if ($forum_setting['allow_sticky'] && api_is_allowed_to_edit(null, true) && $action == 'newthread') {
@@ -3463,9 +3457,6 @@ function show_edit_post_form(
         $form->addElement('html', '</div>');
     }
 
-    if ($forum_setting['allow_post_notification']) {
-        $form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$current_post['email'].')');
-    }
     if ($forum_setting['allow_sticky'] &&
         api_is_allowed_to_edit(null, true) &&
         $current_post['post_parent_id'] == 0

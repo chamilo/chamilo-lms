@@ -6262,8 +6262,9 @@ class DocumentManager
         $documentTable = Database::get_course_table(TABLE_DOCUMENT);
 
         $conditionSession = api_get_session_condition($sessionId, true, false, 'd.session_id');
+        $courseId = $courseInfo['real_id'];
 
-        //get invisible folders
+        // get invisible folders
         $sql = "SELECT DISTINCT d.id, path
                 FROM $itemPropertyTable i
                 INNER JOIN $documentTable d
@@ -6272,8 +6273,8 @@ class DocumentManager
                     d.id = i.ref AND
                     i.tool = '" . TOOL_DOCUMENT . "'
                     $conditionSession AND
-                    i.c_id = {$courseInfo['real_id']} AND
-                    d.c_id = {$courseInfo['real_id']} ";
+                    i.c_id = $courseId AND
+                    d.c_id = $courseId ";
 
         $result = Database::query($sql);
         $documents = Database::store_result($result, 'ASSOC');
@@ -6294,5 +6295,12 @@ class DocumentManager
             }
         }
 
+        $sql = "DELETE FROM $documentTable
+                WHERE c_id = $courseId AND session_id = $sessionId";
+        Database::query($sql);
+
+        $sql = "DELETE FROM $itemPropertyTable
+                WHERE c_id = $courseId AND session_id = $sessionId AND tool = '".TOOL_DOCUMENT."'";
+        Database::query($sql);
     }
 }

@@ -686,6 +686,10 @@ If you have issues with files taking a long time to download, make sure you reco
     Nginx doesn't support .htaccess rules, so you have no other option than to apply the following rules (note that your PHP backend configuration may vary).
     These are only the redirection rules to be placed inside a server{} block, as other settings might differ from one installation to another.
     <pre>
+  # Add your own "server {" header here with listen, server_name, access_log, error_log, index, root and error_page params
+
+  charset utf-8;
+
   location @rewrite{
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
@@ -698,8 +702,11 @@ If you have issues with files taking a long time to download, make sure you reco
   location / {
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/main/admin/$ /main/admin/index.php last;
     try_files $uri @rewrite;
+  }
+
+  location /main {
+    rewrite ^/main/admin/$ /main/admin/index.php last;
   }
 
   location ~ \.php$ {

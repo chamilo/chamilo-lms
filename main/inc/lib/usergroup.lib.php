@@ -963,7 +963,7 @@ class UserGroup extends Model
                     $this->add_user_to_group(
                         api_get_user_id(),
                         $id,
-                        $params['relation_type']
+                        $params['group_type']
                     );
                 }
                 $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;

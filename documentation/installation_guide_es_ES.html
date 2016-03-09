@@ -679,6 +679,10 @@ por ejemplo. El efecto debería ser inmediato.
     Nginx: La configuración para nuestro sitio de ejemplo my.chamilo10.net (en el cual los archivos se han almacenado
     en /var/www/my.chamilo10.net/www) sería la siguiente, tomando como supuesto el uso de php5-fpm a través de sockets:
 <pre>
+  # Add your own "server {" header here with listen, server_name, access_log, error_log, index, root and error_page params
+
+  charset utf-8;
+
   location @rewrite{
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
@@ -691,8 +695,11 @@ por ejemplo. El efecto debería ser inmediato.
   location / {
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/main/admin/$ /main/admin/index.php last;
     try_files $uri @rewrite;
+  }
+
+  location /main {
+    rewrite ^/main/admin/$ /main/admin/index.php last;
   }
 
   location ~ \.php$ {

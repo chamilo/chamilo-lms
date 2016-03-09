@@ -108,7 +108,7 @@ class ExerciseLib
                 if ($answerType == DRAGGABLE) {
                     $s .= '<div class="col-md-12 ui-widget ui-helper-clearfix">
                         <div class="clearfix">
-                        <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix">';
+                        <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix list-inline">';
                 } else {
                     $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
                            <table class="data_table">';
@@ -830,7 +830,7 @@ class ExerciseLib
                             $parsed_answer,
                             [
                                 'id' => "window_$windowId",
-                                'class' => "window{$questionId}_question_draggable exercise-draggable-answer-option"
+                                'class' => "window{$questionId}_question_draggable exercise-draggable-answer-option btn btn-info"
                             ]
                         );
                         $selectedValue = 0;
@@ -1056,10 +1056,10 @@ HTML;
 
                     if ($answerCorrect) {
                         $s .= Display::div(
-                            $counterAnswer,
+                            '&nbsp;',
                             [
                                 'id' => "drop_$windowId",
-                                'class' => 'droppable col-md-2'
+                                'class' => 'col-md-2 droppable'
                             ]
                         );
 

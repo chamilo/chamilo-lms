@@ -62,6 +62,37 @@ a.thumbnail:hover{
   margin-left: 20px;
   text-align: left;
 }
+.gallery .img-gallery{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 5px;
+}
+.gallery .photo{
+    display: block;
+    padding-bottom: 100%;
+    overflow: hidden;
+    
+}
+.gallery .frame{
+    background-color: #eeeeee;
+    display: block;
+    width: 100%;
+}
+.gallery .canvas-one{
+    margin-bottom: 30px;
+}
+.gallery .canvas-two{
+    margin-right: 30px;
+    flex-shrink: 1;
+    -webkit-flex-shrink: 1;
+    -ms-flex-negative:1 ;
+    display: block;
+    position: relative;
+    width: 100%;
+}
 /*------------------------*/
 .cursor-pointer {
     cursor: pointer;
@@ -475,6 +506,15 @@ ul#navigation .report a {
 }
 #exercise-description.panel-default{
     border: 1px solid #DDD;
+}
+#exercise-description .panel-heading a span{
+    margin-left: 25px;
+}
+#exercise-description .panel-heading a{
+    background: url("../../main/img/icons/22/arrow-up-collapse.png") no-repeat left center;
+}
+#exercise-description .panel-heading a.collapsed{
+    background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat left center;
 }
 /*****************************************************
  *              AGENDA                               *
@@ -1866,13 +1906,20 @@ div.admin_section h4 {
   box-shadow: 0px 1px 1px rgba(0,0,0,0.05);
   margin-bottom: 35px;
 }
-
+.question_row_score{
+    margin-bottom: 20px;
+    display: block;
+}
 .question_item {
     height:50px;
     padding:5px;
     margin:10px 0px 10px 0px;
 }
-
+.question-return{
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
 .option_item {
     width:150px;
     padding:3px;
@@ -4413,52 +4460,21 @@ ul.holder li.bit-box{
 }
 
 /***    Draggable answer    ***/
-.question_options ul.exercise-draggable-answer{
-  float: left;
-  margin-bottom: 20px;
-  min-height: 2em;
-  min-width: 100%;
+ul.exercise-draggable-answer {
+  min-height: 3.5em;
 }
-ul.exercise-draggable-answer li {
+ul.exercise-draggable-answer li.touch-items {
   cursor: move;
-  float: left;
   margin: 0 20px 20px 0;
-  padding: 5px 20px;
   text-align: center;
-}
-ul.exercise-draggable-answer .touch-items{
-  background: #ffffff;
-  background-image: -webkit-linear-gradient(top, #ffffff, #cfcfcf);
-  background-image: -moz-linear-gradient(top, #ffffff, #cfcfcf);
-  background-image: -ms-linear-gradient(top, #ffffff, #cfcfcf);
-  background-image: -o-linear-gradient(top, #ffffff, #cfcfcf);
-  background-image: linear-gradient(to bottom, #ffffff, #cfcfcf);
-  -webkit-border-radius: 4;
-  -moz-border-radius: 4;
-  border-radius: 4px;
-  font-family: Arial;
-  color: #2e2e2e;
-  font-size: 13px;
-  padding: 10px 20px 10px 20px;
-  border: solid #b0b0b0 1px;
-  text-decoration: none;
   z-index: 100;
-}
-ul.exercise-draggable-answer .touch-items:hover{
-  background: #ffffff;
-  background-image: -webkit-linear-gradient(top, #ffffff, #b8d3e3);
-  background-image: -moz-linear-gradient(top, #ffffff, #b8d3e3);
-  background-image: -ms-linear-gradient(top, #ffffff, #b8d3e3);
-  background-image: -o-linear-gradient(top, #ffffff, #b8d3e3);
-  background-image: linear-gradient(to bottom, #ffffff, #b8d3e3);
-  text-decoration: none;
 }
 .question_options .ui-widget{
   padding: 10px 20px;
 }
 .question_options .droppable {
   margin: 0 20px 20px 0;
-  padding: 10px;
+  padding: 0 10px 10px;
   text-align: center;
   background-color: #ECF0F1;
   border: dotted #dddddd 4px;
@@ -4479,11 +4495,6 @@ ul.exercise-draggable-answer .touch-items:hover{
 }
 .question_options .droppable .gallery .exercise-draggable-answer-option {
   margin-bottom: 15px;
-  background-color: #286090;
-  color: #ffffff;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 4px;
 }
 
 /***    Matching Draggable answer ***/
@@ -5815,9 +5826,16 @@ a.sessionView {
     padding-right: 15px;
     visibility: visible;
   }
+  .items-course{
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+  }
 }
 /* Landscape phones and down */
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  
   #learning_path_breadcrumb_zone {
   }
   #learning_path_main{
@@ -5892,6 +5910,7 @@ a.sessionView {
   #show_graph{
    text-align: center;
   }
+  
 }
 @media (min-width : 480px) and (max-width: 767px) {
   #touch-button{
@@ -5899,6 +5918,9 @@ a.sessionView {
   }
   .sidebar-scorm{
     width: 100%;
+  }
+  .items-course{
+    padding: 15px;
   }
   #control-bottom.well{
     padding: 10px;
@@ -5932,6 +5954,13 @@ a.sessionView {
     }
     footer #footer_right{
         text-align: center;
+    }
+    .items-course{
+        padding: 5px;
+        min-height: 300px;
+    }
+    .col-xs-6{
+        width: 100%;
     }
 }
 

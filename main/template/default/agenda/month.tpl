@@ -378,18 +378,19 @@ $(document).ready(function() {
 						'{{ "Delete"|get_lang }}': function() {
 
                             if (calEvent.parent_event_id || calEvent.has_children != '') {
-                                var newDiv = $(document.createElement('div'));
-
+                                var newDiv = $('<div>');
                                 newDiv.dialog({
                                     modal: true,
-                                    title: "{{ 'Confirmation' | get_lang }}"
+                                    title: "{{ 'DeleteThisItem' | get_lang }}",
+                                    buttons: []
                                 });
 
                                 var buttons = newDiv.dialog("option", "buttons");
 
                                 if (calEvent.has_children == '0') {
-                                    $.extend(buttons, {
-                                        '{{ "DeleteThisItem" | get_lang }}' : function() {
+                                    buttons.push({
+                                        text: '{{ "DeleteThisItem" | get_lang }}',
+                                        click: function() {
                                             $.ajax({
                                                 url: delete_url,
                                                 success:function() {
@@ -399,7 +400,7 @@ $(document).ready(function() {
                                                     calendar.fullCalendar("refetchEvents");
                                                     calendar.fullCalendar("rerenderEvents");
                                                     $("#dialog-form").dialog("close");
-                                                    newDiv.dialog( "close" );
+                                                    newDiv.dialog( "destroy" );
                                                 }
                                             });
                                         }
@@ -408,9 +409,9 @@ $(document).ready(function() {
                                 }
 
                                 var buttons = newDiv.dialog("option", "buttons");
-
-                                $.extend(buttons, {
-                                    '{{ "DeleteAllItems" | get_lang }}' : function() {
+                                buttons.push({
+                                    text: '{{ "DeleteAllItems" | get_lang }}',
+                                    click: function() {
                                         $.ajax({
                                             url: delete_url+'&delete_all_events=1',
                                             success:function() {
@@ -420,7 +421,7 @@ $(document).ready(function() {
                                                 calendar.fullCalendar("refetchEvents");
                                                 calendar.fullCalendar("rerenderEvents");
                                                 $("#dialog-form").dialog( "close" );
-                                                newDiv.dialog( "close" );
+                                                newDiv.dialog( "destroy" );
                                             }
                                         });
                                     }

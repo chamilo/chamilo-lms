@@ -21,6 +21,7 @@ filter:
         - app/logs/*
         - web/*
         - vendor/*
+        - main/admin/db.php
 checks:
     php:
         code_rating: true

@@ -217,7 +217,7 @@ if ($showCourses && $action != 'display_sessions') {
             $icon_title = null;
             $html = null;
             // display the course bloc
-            $html .= '<div class="col-md-3"><div class="items-course">';
+            $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items-course">';
 
             // display thumbnail
             $html .= return_thumbnail($course, $icon_title);

@@ -1096,6 +1096,19 @@ if (!empty($error)) {
         }
 
         // Showing the question
+        if (!empty($objExercise->description)){
+            //echo Display::panel($objExercise->description, get_lang('ExerciseDescriptionLabel'));
+            echo Display::panelCollapse('<span>'.
+                get_lang('ExerciseDescriptionLabel').'</span>',
+                $objExercise->description,
+                'exercise-description',
+                [],
+                'description',
+                'exercise-collapse',
+                false,
+                true
+            );
+        }
 
         echo '<div id="question_div_'.$questionId.'" class="main-question '.$remind_highlight.'" >';
 
@@ -1158,18 +1171,6 @@ if (!empty($error)) {
     }
     echo '</form>';
 
-    if (!empty($objExercise->description)){
-        echo Display::panelCollapse(
-            get_lang('ExerciseDescriptionLabel'),
-            $objExercise->description,
-            'exercise-description',
-            [],
-            'description',
-            'exercise-collapse',
-            false,
-            true
-        );
-    }
 }
 
 if ($origin != 'learnpath') {

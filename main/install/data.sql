@@ -1681,7 +1681,7 @@ VALUES
 ('allow_session_course_copy_for_teachers', NULL, 'radio', 'Session', 'false', 'AllowSessionCourseCopyForTeachersTitle', 'AllowSessionCourseCopyForTeachersComment', NULL, NULL, 1),
 ('hide_logout_button', NULL, 'radio', 'Platform', 'false', 'HideLogoutButtonTitle', 'HideLogoutButtonComment', NULL, NULL, 1),
 ('redirect_admin_to_courses_list', NULL, 'radio', 'Platform', 'false', 'RedirectAdminToCoursesListTitle', 'RedirectAdminToCoursesListComment', NULL, NULL, 1),
-('course_images_in_courses_list', NULL, 'radio', 'Course', 'false', 'CourseImagesInCoursesListTitle', 'CourseImagesInCoursesListComment', NULL, NULL, 1),
+('course_images_in_courses_list', NULL, 'radio', 'Course', 'true', 'CourseImagesInCoursesListTitle', 'CourseImagesInCoursesListComment', NULL, NULL, 1),
 ('student_publication_to_take_in_gradebook', NULL, 'radio', 'Gradebook', 'first', 'StudentPublicationSelectionForGradebookTitle', 'StudentPublicationSelectionForGradebookComment', NULL, NULL, 1),
 ('certificate_filter_by_official_code', NULL, 'radio', 'Gradebook', 'false', 'FilterCertificateByOfficialCodeTitle', 'FilterCertificateByOfficialCodeComment', NULL, NULL, 1),
 ('exercise_max_ckeditors_in_page', NULL, 'textfield', 'Tools', '0', 'MaxCKeditorsOnExerciseResultsPageTitle', 'MaxCKeditorsOnExerciseResultsPageComment', NULL, NULL, 1),

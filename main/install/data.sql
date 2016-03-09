@@ -1692,7 +1692,7 @@ VALUES
 ('hide_course_group_if_no_tools_available', NULL, 'radio', 'Tools', 'false', 'HideCourseGroupIfNoToolAvailableTitle', 'HideCourseGroupIfNoToolAvailableComment', NULL, NULL, 1),
 ('catalog_allow_session_auto_subscription', NULL, 'radio', 'Session', 'false', 'CatalogueAllowSessionAutoSubscriptionTitle', 'CatalogueAllowSessionAutoSubscriptionTitle', NULL, NULL, 1),
 ('registration.soap.php.decode_utf8', NULL, 'radio', 'Platform', 'false', 'SoapRegistrationDecodeUtf8Title', 'SoapRegistrationDecodeUtf8Comment', NULL, NULL, 1),
-('allow_delete_attendance', NULL, 'radio', 'Tools', 'false', 'AttendanceDeletionEnableTitle', 'AttendanceDeletionEnableComment', NULL, NULL, 1),
+('allow_delete_attendance', NULL, 'radio', 'Tools', 'true', 'AttendanceDeletionEnableTitle', 'AttendanceDeletionEnableComment', NULL, NULL, 1),
 ('gravatar_enabled', NULL, 'radio', 'Platform', 'false', 'GravatarPicturesTitle', 'GravatarPicturesComment', NULL, NULL, 1),
 ('gravatar_type', NULL, 'radio', 'Platform', 'mm', 'GravatarPicturesTypeTitle', 'GravatarPicturesTypeComment', NULL, NULL, 1),
 ('limit_session_admin_role', NULL, 'radio', 'Session', 'false', 'SessionAdminPermissionsLimitTitle', 'SessionAdminPermissionsLimitComment', NULL, NULL, 1),

@@ -25,31 +25,31 @@ class DisplayGradebook
                 if ($evalobj->get_course_code() == null) {
 
                 } elseif (!$evalobj->has_results()) {
-                    $header .= '<a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '">
+                    $header .= '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '">
     				' . Display::return_icon('evaluation_rate.png', get_lang('AddResult'), '', ICON_SIZE_MEDIUM) . '</a>';
                 }
 
                 if (api_is_platform_admin() || $evalobj->is_locked() == false) {
-                    $header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import=">' .
+                    $header .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&selecteval=' . $evalobj->get_id() . '&import=">' .
                         Display::return_icon('import_evaluation.png', get_lang('ImportResult'), '', ICON_SIZE_MEDIUM) . '</a>';
                 }
 
                 if ($evalobj->has_results()) {
-                    $header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&export=">' .
+                    $header .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&selecteval=' . $evalobj->get_id() . '&export=">' .
                         Display::return_icon('export_evaluation.png', get_lang('ExportResult'), '', ICON_SIZE_MEDIUM) . '</a>';
 
                     if (api_is_platform_admin() || $evalobj->is_locked() == false) {
-                        $header .= '<a href="gradebook_edit_result.php?selecteval=' . $evalobj->get_id() . '">' .
+                        $header .= '<a href="gradebook_edit_result.php?'.api_get_cidreq().'&selecteval=' . $evalobj->get_id() . '">' .
                             Display::return_icon('edit.png', get_lang('EditResult'), '', ICON_SIZE_MEDIUM) . '</a>';
-                        $header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&deleteall=" onclick="return confirmationall();">' .
+                        $header .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&selecteval=' . $evalobj->get_id() . '&deleteall=" onclick="return confirmationall();">' .
                             Display::return_icon('delete.png', get_lang('DeleteResult'), '', ICON_SIZE_MEDIUM) . '</a>';
                     }
                 }
 
-                $header .= '<a href="' . api_get_self() . '?print=&selecteval=' . $evalobj->get_id() . '" target="_blank">' .
+                $header .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&print=&selecteval=' . $evalobj->get_id() . '" target="_blank">' .
                     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM) . '</a>';
             } else {
-                $header .= '<a href="gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '"> ' .
+                $header .= '<a href="gradebook_view_result.php?'.api_get_cidreq().'&selecteval=' . Security::remove_XSS($_GET['selecteval']) . '"> ' .
                     Display::return_icon(('back.png'), get_lang('FolderView'), '', ICON_SIZE_MEDIUM) . '</a>';
             }
             $header .= '</div>';
@@ -539,7 +539,7 @@ class DisplayGradebook
         }
 
         // for course admin & platform admin add item buttons are added to the header
-       
+
         $actionsLeft = '';
         $my_category = $catobj->shows_all_information_an_category($catobj->get_id());
         $user_id = api_get_user_id();
@@ -613,7 +613,7 @@ class DisplayGradebook
                         $actionsRight .= '<a href="gradebook_scoring_system.php?' . $my_api_cidreq . '&selectcat=' . $catobj->get_id() . '">' .
                             Display::return_icon('ranking.png', get_lang('ScoreEdit'), '', ICON_SIZE_MEDIUM) . '</a>';
                     }
-                    
+
                 }
             }
         } elseif (isset($_GET['search'])) {

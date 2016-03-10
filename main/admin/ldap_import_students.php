@@ -202,7 +202,7 @@ elseif(!empty($annee) && empty($course))
 {
 	Display::display_header($tool_name);
 	echo '<div style="align:center">';
-	echo Display::return_icon('course.gif', get_lang('SelectCourseToImportUsersTo')).' '.get_lang('SelectCourseToImportUsersTo').'<br />';
+	echo Display::return_icon('course.png', get_lang('SelectCourseToImportUsersTo')).' '.get_lang('SelectCourseToImportUsersTo').'<br />';
 	echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
 	echo '<select name="course">';
 	$courses = CourseManager::get_courses_list();

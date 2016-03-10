@@ -144,9 +144,9 @@ if ($region_value == 'en') {
 }
 $tpl->assign('region_value', $region_value);
 
-$export_icon = api_get_path(WEB_IMG_PATH).'img/export.png';
-$export_icon_low = api_get_path(WEB_IMG_PATH).'img/export_low_fade.png';
-$export_icon_high = api_get_path(WEB_IMG_PATH).'img/export_high_fade.png';
+$export_icon = Display::return_icon('export.png', null, null, null, null, true, false);
+$export_icon_low = Display::return_icon('export_low_fade.png', null, null, null, null, true, false);
+$export_icon_high = Display::return_icon('export_high_fade.png', null, null, null, null, true, false);
 
 $tpl->assign(
     'export_ical_confidential_icon',

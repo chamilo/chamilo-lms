@@ -65,7 +65,7 @@ function add_image_form() {
 	document.getElementById("filepath_"+counter_image).innerHTML = "\n\
         <input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />\n\
         <a href=\"javascript:remove_image_form("+id_elem1+")\">\n\
-            <img src=\"' . api_get_path(WEB_IMG_PATH) . 'delete.gif\">\n\
+            <img src=\"' . Display::returnIconPath('delete.gif').'\">\n\
         </a>\n\
     ";
 

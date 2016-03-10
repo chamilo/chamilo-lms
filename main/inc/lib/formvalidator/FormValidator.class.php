@@ -851,7 +851,7 @@ EOT;
             $label = get_lang('PleaseStandBy');
         }
         $this->with_progress_bar = true;
-        $this->updateAttributes("onsubmit=\"javascript: myUpload.start('dynamic_div','" . api_get_path(WEB_IMG_PATH) . "progress_bar.gif','" . $label . "','" . $this->getAttribute('id') . "')\"");
+        $this->updateAttributes("onsubmit=\"javascript: myUpload.start('dynamic_div','".Display::returnIconPath('progress_bar.gif')."','" . $label . "','" . $this->getAttribute('id') . "')\"");
         $this->addElement('html', '<script language="javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/upload.js" type="text/javascript"></script>');
         $this->addElement('html', '<script type="text/javascript">var myUpload = new upload(' . (abs(intval($delay)) * 1000) . ');</script>');
     }
@@ -882,12 +882,13 @@ EOT;
 
         // Add div-element where the progress bar is to be displayed
         $this->addElement('html', '
-                		<div id="dynamic_div_container" style="display:none">
-                			<div id="dynamic_div_label">' . get_lang('UploadFile') . '</div>
-                			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url(' . api_get_path(WEB_IMG_PATH) . 'real_upload_frame.gif);">
-                				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url(' . api_get_path(WEB_IMG_PATH) . 'real_upload_step.gif);background-repeat:repeat-x;background-position:center;"></div>
-                			</div>
-                		</div>');
+            <div id="dynamic_div_container" style="display:none">
+                <div id="dynamic_div_label">' . get_lang('UploadFile') . '</div>
+                <div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url(' . Display::returnIconPath('real_upload_frame.gif').');">
+                    <div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url(' . api_get_path(WEB_IMG_PATH) . 'real_upload_step.gif);background-repeat:repeat-x;background-position:center;"></div>
+                </div>
+            </div>'
+        );
 
         if ($wait_after_upload) {
             $this->addElement('html', '
@@ -896,7 +897,7 @@ EOT;
 					' . get_lang('SlideshowConversion') . '
 				</div>
 				<div id="dynamic_div_waiter_frame">
-					<img src="' . api_get_path(WEB_IMG_PATH) . 'real_upload_frame.gif" />
+					'.Display::return_icon('real_upload_frame.gif').'
 				</div>
 			</div>
 		');

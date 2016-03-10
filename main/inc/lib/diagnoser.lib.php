@@ -352,7 +352,16 @@ class Diagnoser
     /**
      * Additional functions needed for fast integration
      */
-    public function build_setting($status, $section, $title, $url, $current_value, $expected_value, $formatter, $comment, $img_path = null) {
+    public function build_setting(
+        $status,
+        $section,
+        $title,
+        $url,
+        $current_value,
+        $expected_value,
+        $formatter,
+        $comment
+    ) {
         switch ($status) {
             case self :: STATUS_OK :
                 $img = 'bullet_green.png';
@@ -368,11 +377,7 @@ class Diagnoser
                 break;
         }
 
-        if (! $img_path) {
-            $img_path = api_get_path(WEB_IMG_PATH);
-        }
         $image = Display::return_icon($img, $status);
-        //$image = '<img src="' . $img_path . $img . '" alt="' . $status . '" />';
         $url = $this->get_link($title, $url);
 
         $formatted_current_value = $current_value;

@@ -697,6 +697,17 @@ class Display
     }
 
     /**
+     * Gets the path of an icon
+     * 
+     * @param string $icon
+     * @return string
+     */
+    public static function returnIconPath($icon)
+    {
+        return Display::return_icon($icon, null, null, null, null, true, false);
+    }
+
+    /**
      * This public function returns the htmlcode for an icon
      *
      * @param string   The filename of the file (in the main/img/ folder

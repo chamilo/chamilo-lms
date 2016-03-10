@@ -73,21 +73,21 @@ function active_user(element_div) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-				$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'loading1.gif'.'"); }, //candy eye stuff
+				$(ident).attr("src","'.Display::returnIconPath('loading1.gif').'"); }, //candy eye stuff
 			type: "GET",
 			url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
 			data: "user_id="+user_id[1]+"&status="+status,
 			success: function(data) {
 				if (data == 1) {
-					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'icons/16/accept.png'.'");
+					$(ident).attr("src", "'.Display::returnIconPath('accept.png').'");
 					$(ident).attr("title","'.get_lang('Lock').'");
 				}
                 if (data == 0) {
-					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'icons/16/error.png'.'");
+					$(ident).attr("src","'.Display::returnIconPath('error.png').'");
 					$(ident).attr("title","'.get_lang('Unlock').'");
 				}
                 if (data == -1) {
-                    $(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'icons/16/warning.png'.'");
+                    $(ident).attr("src", "'.Display::returnIconPath('warning.png').'");
 					$(ident).attr("title","'.get_lang('ActionNotAllowed').'");
                 }
 			}

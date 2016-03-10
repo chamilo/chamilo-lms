@@ -8727,18 +8727,18 @@ class learnpath
             function toggle_tool(tool, id){
                 if(document.getElementById(tool+"_"+id+"_content").style.display == "none"){
                     document.getElementById(tool+"_"+id+"_content").style.display = "block";
-                    document.getElementById(tool+"_"+id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'remove.gif";
+                    document.getElementById(tool+"_"+id+"_opener").src = "' . Display::returnIconPath('remove.gif').'";
                 } else {
                     document.getElementById(tool+"_"+id+"_content").style.display = "none";
-                    document.getElementById(tool+"_"+id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'add.gif";
+                    document.getElementById(tool+"_"+id+"_opener").src = "'.Display::returnIconPath('add.gif').'";
                 }
             }
         </script>
         <ul class="lp_resource">
             <li class="lp_resource_element">
-                <img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px"/>
-                <a href="'.api_get_path(REL_CODE_PATH).'link/link.php?'.$courseIdReq.
-            '&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('LinkAdd').'">'.get_lang('LinkAdd').'</a>
+                <img alt="" src="'.Display::returnIconPath('linksnew.gif').' style="margin-right:5px;width:16px"/>
+                <a href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('LinkAdd').'">'.
+            get_lang('LinkAdd').'</a>
             </li>';
         foreach ($categorizedLinks as $categoryId => $links) {
             $linkNodes = null;
@@ -8762,7 +8762,7 @@ class learnpath
                 '<li>
                 <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')"
                 style="vertical-align:middle">
-                    <img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
+                    <img src="'.Display::returnIconPath('add.gif').'" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
                     align="absbottom" />
                 </a>
                 <span style="vertical-align:middle">'.Security::remove_XSS($categories[$categoryId]).'</span>
@@ -8812,10 +8812,10 @@ class learnpath
                     function toggle_forum(forum_id){
                         if(document.getElementById("forum_"+forum_id+"_content").style.display == "none"){
                             document.getElementById("forum_"+forum_id+"_content").style.display = "block";
-                            document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'remove.gif";
+                            document.getElementById("forum_"+forum_id+"_opener").src = "' . Display::returnIconPath('remove.gif').'";
                         } else {
                             document.getElementById("forum_"+forum_id+"_content").style.display = "none";
-                            document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'add.gif";
+                            document.getElementById("forum_"+forum_id+"_opener").src = "' . Display::returnIconPath('add.gif').'";
                         }
                     }
                 </script>';
@@ -8828,7 +8828,7 @@ class learnpath
                 $return .= ' </a>';
                 $return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
                 $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle">
-                                <img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
+                                <img src="' . Display::returnIconPath('add.gif').'" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
                             </a>
                             <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_FORUM . '&forum_id=' . $forum['forum_id'] . '&lp_id=' . $this->lp_id . '" style="vertical-align:middle">' .
                     Security :: remove_XSS($forum['forum_title']) . '</a>';

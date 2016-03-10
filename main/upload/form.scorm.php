@@ -59,7 +59,7 @@ $form = new FormValidator(
     )
 );
 $form->addElement('header', $nameTools);
-$form->addLabel(null, Display::img(api_get_path(WEB_IMG_PATH).'scorm_logo.jpg'));
+$form->addLabel(null, Display::return_icon('scorm_logo.jpg', null, ['style' => 'width:230px;height:100px']));
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('hidden', 'tool', $my_tool);
 $form->addElement('file', 'user_file', get_lang('FileToUpload'));

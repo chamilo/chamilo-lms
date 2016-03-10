@@ -299,7 +299,7 @@ if (!empty($userList)) {
         );
 
         $courseUserLink = Display::url(
-            Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')),
+            Display::return_icon('course.png', get_lang('BlockCoursesForThisUser')),
             api_get_path(WEB_CODE_PATH).'session/session_course_user.php?id_user='.$user['user_id'].'&id_session='.$sessionId
         );
 

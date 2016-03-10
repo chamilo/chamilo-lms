@@ -68,7 +68,9 @@ elseif(!empty($annee) && empty($id_session))
 {
 	Display::display_header($tool_name);
 	echo '<div style="align:center">';
-	echo Display::return_icon('course.gif', get_lang('SelectSessionToImportUsersTo')).' '.get_lang('SelectSessionToImportUsersTo').'<br />';
+	echo Display::return_icon(
+			'course.png',
+			get_lang('SelectSessionToImportUsersTo')).' '.get_lang('SelectSessionToImportUsersTo').'<br />';
 	echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
 	echo '<select name="id_session">';
 

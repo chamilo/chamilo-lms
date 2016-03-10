@@ -7,9 +7,8 @@
  * section here: http://en.wikipedia.org/wiki/Personal_knowledge_management
  */
 
-
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 /**
  * Validate the imported data.
@@ -19,7 +18,6 @@ require '../inc/global.inc.php';
 function validate_data($skills)
 {
     $errors = array();
-    $skills = array();
     // 1. Check if mandatory fields are set.
     $mandatory_fields = array('id', 'parent_id', 'name');
     foreach ($skills as $index => $skill) {
@@ -87,6 +85,7 @@ function parse_csv_data($file)
 	foreach ($skills as $index => $skill) {
 		$skills[$index] = $skill;
 	}
+
 	return $skills;
 }
 
@@ -195,7 +194,7 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
 		$error_kind_file = true;
 	}
 
-	// List skill id whith error.
+	// List skill id with error.
 	$skills_to_insert = $skill_id_error = array();
 	if (is_array($errors)) {
 		foreach ($errors as $my_errors) {
@@ -234,19 +233,9 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
 		$warning_message .= '</ul>';
 	}
 
-	// if the warning message is too long then we display the warning message trough a session
-	if (!empty($warning_message) && api_strlen($warning_message) > 150) {
-		$_SESSION['session_message_import_skills'] = $warning_message;
-		$warning_message = 'session_message';
-	}
-
     if ($error_kind_file) {
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
-	} else {
-		//header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skills_import.php?action=show_message&warn='.urlencode($warning_message).'&message='.urlencode($see_message_import).'&sec_token='.$tok);
-		//exit;
 	}
-
 }
 Display :: display_header($tool_name);
 

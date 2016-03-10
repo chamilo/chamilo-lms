@@ -405,6 +405,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
         $see_message_import = get_lang('FileImported');
     }
 
+    $warning_message = '';
     if (count($errors) != 0) {
         $warning_message = '<ul>';
         foreach ($errors as $index => $error_user) {
@@ -422,25 +423,21 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
     }
 
     // if the warning message is too long then we display the warning message trough a session
+    Display::addFlash(Display::return_message($warning_message, 'warning', false));
 
-    $_SESSION['session_message_import_users'] = $warning_message;
-    $warning_message = 'session_message';
+    Display::addFlash(Display::return_message($see_message_import, 'confirmation', false));
 
     if ($error_kind_file) {
-        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
+        Display::addFlash(Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error', false));
     } else {
-        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&warn='.urlencode($warning_message).'&message='.urlencode($see_message_import).'&sec_token='.$tok);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?sec_token='.$tok);
         exit;
     }
 }
 
 Display :: display_header($tool_name);
 
-if (!empty($error_message)) {
-    Display::display_error_message($error_message);
-}
-
-$form = new FormValidator('user_import','post','user_import.php');
+$form = new FormValidator('user_import', 'post', api_get_self());
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));

@@ -315,19 +315,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
         $check = Security::check_token('get');
         if ($check) {
             switch ($_GET['action']) {
-                case 'show_message' :
-                    if (!empty($_GET['warn'])) {
-                        // to prevent too long messages
-                        if ($_GET['warn'] == 'session_message') {
-                            $_GET['warn'] = $_SESSION['session_message_import_users'];
-                        }
-                        Display::display_warning_message(urldecode($_GET['warn']), false);
-                    }
-                    if (!empty($_GET['message'])) {
-                        Display :: display_confirmation_message(stripslashes($_GET['message']));
-                    }
-                    break;
-                case 'delete_group' :
+                case 'delete_group':
                     if (api_is_platform_admin()) {
                         if (GroupPortalManager :: delete($_GET['group_id'])) {
                             Display :: display_confirmation_message(get_lang('GroupDeleted'));
@@ -336,11 +324,11 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                         }
                     }
                     break;
-                case 'lock' :
+                case 'lock':
                     $message = lock_unlock_user('lock', $_GET['user_id']);
                     Display :: display_normal_message($message);
                     break;
-                case 'unlock';
+                case 'unlock':
                     $message = lock_unlock_user('unlock', $_GET['user_id']);
                     Display :: display_normal_message($message);
                     break;

@@ -523,6 +523,10 @@ class Display
      */
     public static function return_message($message, $type = 'normal', $filter = true)
     {
+        if (empty($message)) {
+            return '';
+        }
+
         if ($filter) {
         	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
         }

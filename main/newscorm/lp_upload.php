@@ -137,7 +137,7 @@ if (Request::is_post() && $is_error) {
                                     );
                                     $replace = array(
                                         'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png"></a>\'; $iFrameHolder.html(iFrameTag); ',
-                                        'var html = $.parseHTML(pageSrc); var data = "";  if (html[0]) {  data = html[0].getAttribute("src");  data = \'<br /><a target ="_blank" href="\'+ data + \'"> Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png">\'; } $iFrameHolder.html(pageSrc+ data);'
+                                        'var html = $.parseHTML(pageSrc); var data = "";  if (html[0]) {  data = html[0].getAttribute("src");  data = \'<br /><a target ="_blank" href="\'+ data + \'"> Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png">\'; } $iFrameHolder.html(data+ pageSrc);'
                                     );
                                     $content = str_replace($find, $replace, $content);
                                     file_put_contents($framePath, $content);

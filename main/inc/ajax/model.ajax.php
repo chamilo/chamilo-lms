@@ -46,7 +46,8 @@ if (!in_array(
         'get_user_course_report_resumed',
         'get_user_course_report',
         'get_sessions_tracking',
-        'get_sessions'
+        'get_sessions',
+        'get_course_announcements'
     )
 ) && !isset($_REQUEST['from_course_session'])) {
     api_protect_admin_script(true);
@@ -328,6 +329,9 @@ switch ($action) {
     case 'get_user_skill_ranking':
         $skill = new Skill();
         $count = $skill->get_user_list_skill_ranking_count();
+        break;
+    case 'get_course_announcements':
+        $count = AnnouncementManager::getAnnouncements(null, null, true);
         break;
     case 'get_work_teacher':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -755,6 +759,17 @@ switch ($action) {
             }
         }
         break;
+    case 'get_course_announcements':
+        $columns = array(
+            'title',
+            'username',
+            'insert_date',
+            'actions'
+        );
+
+        $result = AnnouncementManager::getAnnouncements(null, null, false, $start, $limit, $sidx, $sord);
+
+        break;
     case 'get_work_teacher':
         $columns = array(
             'type',
@@ -1084,11 +1099,15 @@ switch ($action) {
         }
         $columns[] = 'total';
 
-        $result = SessionManager::get_session_lp_progress($sessionId, $courseId, $date_from, $date_to,
+        $result = SessionManager::get_session_lp_progress(
+            $sessionId,
+            $courseId,
+            $date_from,
+            $date_to,
             array(
                 'where' => $whereCondition,
                 'order' => "$sidx $sord",
-                'limit'=> "$start , $limit"
+                'limit' => "$start , $limit",
             )
         );
         break;
@@ -1116,16 +1135,20 @@ switch ($action) {
 
         $questions = SurveyManager::get_questions($surveyId, $courseId);
 
-        foreach ($questions as $question_id => $question)
-        {
+        foreach ($questions as $question_id => $question) {
             $columns[] = $question_id;
         }
 
-        $result = SessionManager::get_survey_overview($sessionId, $courseId, $surveyId, $date_from, $date_to,
+        $result = SessionManager::get_survey_overview(
+            $sessionId,
+            $courseId,
+            $surveyId,
+            $date_from,
+            $date_to,
             array(
                 'where' => $whereCondition,
                 'order' => "$sidx $sord",
-                'limit'=> "$start , $limit"
+                'limit' => "$start , $limit",
             )
         );
         break;
@@ -1144,25 +1167,25 @@ switch ($action) {
             'wikis',
             'surveys',
             //exercises
-            'lessons_total' ,
-            'lessons_done' ,
-            'lessons_left' ,
+            'lessons_total',
+            'lessons_done',
+            'lessons_left',
             'lessons_progress',
             //exercises
-            'exercises_total' ,
-            'exercises_done' ,
-            'exercises_left' ,
-            'exercises_progress' ,
+            'exercises_total',
+            'exercises_done',
+            'exercises_left',
+            'exercises_progress',
             //forums
-            'forums_total' ,
-            'forums_done' ,
-            'forums_left' ,
-            'forums_progress' ,
+            'forums_total',
+            'forums_done',
+            'forums_left',
+            'forums_progress',
             //assignments
-            'assignments_total' ,
-            'assignments_done' ,
-            'assignments_left' ,
-            'assignments_progress' ,
+            'assignments_total',
+            'assignments_done',
+            'assignments_left',
+            'assignments_progress',
             //Wiki
             'wiki_total',
             'wiki_revisions',
@@ -1170,11 +1193,11 @@ switch ($action) {
             'wiki_unread',
             'wiki_progress',
             //surveys
-            'surveys_total' ,
-            'surveys_done' ,
-            'surveys_left' ,
-            'surveys_progress' ,
-            );
+            'surveys_total',
+            'surveys_done',
+            'surveys_left',
+            'surveys_progress',
+        );
         $sessionId = 0;
         if (!empty($_GET['course_id']) && !empty($_GET['session_id'])) {
             $sessionId = intval($_GET['session_id']);
@@ -1354,7 +1377,7 @@ switch ($action) {
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
-        $result     = Database::select('*', "$obj->table ", array('order' =>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $result = Database::select('*', "$obj->table ", array('order' => "$sidx $sord", 'LIMIT' => "$start , $limit"));
         $new_result = array();
         foreach ($result as $item) {
             $new_result[] = $item;
@@ -1439,7 +1462,7 @@ switch ($action) {
 
         $quizIds = array();
         if (!empty($exercises)) {
-            foreach($exercises as $exercise) {
+            foreach ($exercises as $exercise) {
                 $quizIds[] = $exercise['id'];
             }
         }
@@ -1449,7 +1472,7 @@ switch ($action) {
 
         $usersId = array_keys($listUserSess);
 
-        $users = UserManager::get_user_list_by_ids($usersId, null, "lastname, firstname",  "$start , $limit");
+        $users = UserManager::get_user_list_by_ids($usersId, null, "lastname, firstname", "$start , $limit");
         $exeResults = $objExercise->getExerciseAndResult($_GET['course_id'], $_GET['session_id'], $quizIds);
 
         $arrGrade = array();
@@ -1539,9 +1562,7 @@ switch ($action) {
                 }
 
                 $role = $obj->getUserRoleToString(api_get_user_id(), $group['id']);
-
                 $group['status'] = $role;
-
                 $group['actions'] = Display::url($icon, $url);
                 $new_result[] = $group;
             }
@@ -1589,7 +1610,8 @@ $allowed_actions = array(
     'get_user_course_report',
     'get_user_course_report_resumed',
     'get_exercise_grade',
-    'get_group_reporting'
+    'get_group_reporting',
+    'get_course_announcements'
 );
 
 //5. Creating an obj to return a json

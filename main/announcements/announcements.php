@@ -37,10 +37,10 @@ $display_form = false;
 $display_title_list = true;
 
 // Maximum title messages to display
-$maximum 	= '12';
+$maximum = '12';
 
 // Length of the titles
-$length 	= '36';
+$length = '36';
 
 // Database Table Definitions
 $tbl_courses = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -69,16 +69,15 @@ $content = null;
 switch ($action) {
     case 'move':
         /* Move announcement up/down */
-        if (isset($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
-            if (!empty($_GET['down'])) {
-                $thisAnnouncementId = intval($_GET['down']);
-                $sortDirection = "DESC";
-            }
 
-            if (!empty($_GET['up'])) {
-                $thisAnnouncementId = intval($_GET['up']);
-                $sortDirection = "ASC";
-            }
+        if (!empty($_GET['down'])) {
+            $thisAnnouncementId = intval($_GET['down']);
+            $sortDirection = "DESC";
+        }
+
+        if (!empty($_GET['up'])) {
+            $thisAnnouncementId = intval($_GET['up']);
+            $sortDirection = "ASC";
         }
 
         if (!empty($sortDirection)) {
@@ -130,7 +129,101 @@ switch ($action) {
         $content = AnnouncementManager::display_announcement($announcement_id);
         break;
     case 'list':
-        $content = AnnouncementManager::getAnnouncements($stok, $announcement_number);
+
+        $htmlHeadXtra[] = api_get_jqgrid_js();
+
+        // jqgrid will use this URL to do the selects
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_course_announcements&'.api_get_cidreq();
+        $deleteUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?a=delete_item&'.api_get_cidreq();
+        $columns = array(get_lang('Title'), get_lang('By'), get_lang('LastUpdateDate'), get_lang('Actions'));
+
+        // Column config
+        $columnModel = array(
+            array(
+                'name' => 'title',
+                'index' => 'title',
+                'width' => '300',
+                'align' => 'left',
+                'sortable' => 'false',
+            ),
+            array(
+                'name' => 'username',
+                'index' => 'username',
+                'width' => '100',
+                'align' => 'left',
+                'sortable' => 'false',
+            ),
+            array(
+                'name' => 'insert_date',
+                'index' => 'insert_date',
+                'width' => '200',
+                'align' => 'left',
+                'sortable' => 'false',
+            ),
+            array(
+                'name' => 'actions',
+                'index' => 'actions',
+                'width' => '150',
+                'align' => 'left',
+                //'formatter' => 'action_formatter',
+                'sortable' => 'false',
+            ),
+        );
+
+        // Autowidth
+        $extra_params['autowidth'] = 'true';
+        // height auto
+        $extra_params['height'] = 'auto';
+
+        $editOptions = '';
+
+        if (api_is_allowed_to_edit()) {
+            $extra_params['multiselect'] = true;
+            $editOptions = '
+            $("#announcements").jqGrid(
+                "navGrid",
+                "#announcements_pager",
+                { edit: false, add: false, del: true },
+                { height:280, reloadAfterSubmit:false }, // edit options
+                { height:280, reloadAfterSubmit:false }, // add options
+                { reloadAfterSubmit:false, url: "'.$deleteUrl.'" }, // del options
+                { width:500 } // search options
+            );
+            ';
+        }
+
+        $content = '<script>
+        $(function() {'.
+        Display::grid_js('announcements', $url, $columns, $columnModel, $extra_params, array(), '', true).$editOptions.'
+        });
+        </script>';
+
+        $count = AnnouncementManager::getAnnouncements($stok, $announcement_number, true);
+
+        if (empty($count)) {
+            $html = '';
+            if ((api_is_allowed_to_edit(false, true) ||
+                    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) &&
+                (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
+            ) {
+                $html .= '<div id="no-data-view">';
+                $html .= '<h3>' . get_lang('Announcements') . '</h3>';
+                $html .= Display::return_icon('valves.png', '', array(), 64);
+                $html .= '<div class="controls">';
+                $html .= Display::url(
+                    get_lang('AddAnnouncement'),
+                    api_get_self() . "?" . api_get_cidreq() . "&action=add",
+                    array('class' => 'btn btn-primary')
+                );
+                $html .= '</div>';
+                $html .= '</div>';
+            } else {
+                $html = Display::return_message(get_lang('NoAnnouncements'), 'warning');
+            }
+            $content = $html;
+        } else {
+            $content .= Display::grid_html('announcements');
+        }
         break;
     case 'delete':
         /* Delete announcement */
@@ -140,11 +233,10 @@ switch ($action) {
         }
 
         if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
-            // tooledit : visibility = 2 : only visible for platform administrator
-            if ($ctok == $_GET['sec_token']) {
-                AnnouncementManager::delete_announcement($_course, $id);
-                Display::addFlash(Display::return_message(get_lang('AnnouncementDeleted')));
-            }
+
+            AnnouncementManager::delete_announcement($_course, $id);
+            Display::addFlash(Display::return_message(get_lang('AnnouncementDeleted')));
+
         }
         header('Location: '.$homeUrl);
         exit;
@@ -159,17 +251,17 @@ switch ($action) {
         break;
     case 'delete_attachment':
         $id = $_GET['id_attach'];
-        if ($ctok == $_GET['sec_token']) {
-            if (api_is_allowed_to_edit()) {
-                AnnouncementManager::delete_announcement_attachment_file($id);
-            }
+
+        if (api_is_allowed_to_edit()) {
+            AnnouncementManager::delete_announcement_attachment_file($id);
         }
+
         header('Location: '.$homeUrl);
         exit;
         break;
     case 'showhide':
         if (!isset($_GET['isStudentView']) || $_GET['isStudentView'] != 'false') {
-            if (isset($_GET['id']) AND $_GET['id']) {
+            if (isset($_GET['id']) && $_GET['id']) {
                 if (api_get_session_id() != 0 &&
                     api_is_allowed_to_session_edit(false, true) == false) {
                     api_not_allowed();
@@ -178,15 +270,15 @@ switch ($action) {
                 if (!api_is_course_coach() ||
                     api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])
                 ) {
-                    if ($ctok == $_GET['sec_token']) {
-                        AnnouncementManager::change_visibility_announcement(
-                            $_course,
-                            $_GET['id']
-                        );
-                        Display::addFlash(Display::return_message(get_lang('VisibilityChanged')));
-                        header('Location: '.$homeUrl);
-                        exit;
-                    }
+
+                    AnnouncementManager::change_visibility_announcement(
+                        $_course,
+                        $_GET['id']
+                    );
+                    Display::addFlash(Display::return_message(get_lang('VisibilityChanged')));
+                    header('Location: '.$homeUrl);
+                    exit;
+
                 }
             }
         }
@@ -320,11 +412,11 @@ switch ($action) {
         $form->addElement('hidden', 'id');
         $htmlTags = "<b>".get_lang('Tags')."</b></br></br>";
         $tags = AnnouncementManager::get_tags();
-        
+
         foreach ($tags as $tag) {
             $htmlTags .= "<b>".$tag."</b></br>";
         }
-        
+
         $form->addHtml("<div class='form-group'><div class='col-sm-2'></div><div class='col-sm-8'><div class='alert alert-info'>".$htmlTags."</div></div></div>");
         $form->addHtmlEditor(
             'content',
@@ -443,13 +535,19 @@ if (!empty($_GET['remind_inactive'])) {
 
 if (!empty($group_id)) {
     $group_properties  = GroupManager :: get_group_properties($group_id);
-    $interbreadcrumb[] = array("url" => "../group/group.php?".api_get_cidreq(), "name" => get_lang('Groups'));
-    $interbreadcrumb[] = array("url"=>"../group/group_space.php?".api_get_cidreq(), "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        "name" => get_lang('Groups'),
+    );
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
+    );
 }
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
     //we are not in the learning path
-    Display::display_header($nameTools,get_lang('Announcements'));
+    Display::display_header($nameTools, get_lang('Announcements'));
 }
 
 // Tool introduction
@@ -459,24 +557,24 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 
 // Actions
 $show_actions = false;
-if ((api_is_allowed_to_edit(false,true) ||
+if ((api_is_allowed_to_edit(false, true) ||
     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) &&
     (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 ) {
     echo '<div class="actions">';
     if (in_array($action, array('add', 'modify','view'))) {
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
-            Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
     } else {
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$origin."'>".
-            Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'',ICON_SIZE_MEDIUM)."</a>";
+            Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), '', ICON_SIZE_MEDIUM)."</a>";
     }
     $show_actions = true;
 } else {
     if (in_array($action, array('view'))) {
         echo '<div class="actions">';
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
-            Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
         echo '</div>';
     }
 }
@@ -494,8 +592,6 @@ if (api_is_allowed_to_edit() && $announcement_number > 1) {
 
 if ($show_actions)
     echo '</div>';
-
-Display::showFlash();
 
 echo $content;
 

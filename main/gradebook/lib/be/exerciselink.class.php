@@ -207,7 +207,7 @@ class ExerciseLink extends AbstractLink
 			            orig_lp_item_id = 0 AND
 			            status <> 'incomplete' AND
 			            session_id = $session_id AND
-                                    c_id = $courseId 
+                                    c_id = $courseId
                                 ";
 		    } else {
 		        $lpId = null;
@@ -223,7 +223,7 @@ class ExerciseLink extends AbstractLink
 		                    orig_lp_id = $lpId AND
 		                    status <> 'incomplete' AND
 		                    session_id = $session_id AND
-                                    c_id = $courseId 
+                                    c_id = $courseId
                                 ";
 		    }
 
@@ -286,9 +286,9 @@ class ExerciseLink extends AbstractLink
                         break;
                     case 'average':
                         $count = count($this->getStudentList());
-                        /*if (empty($count)) {
-                            return null;
-                        }*/
+                        if (empty($count)) {
+                            return array(0, $weight);
+                        }
                         return array($sumResult/$count , $weight);
                         break;
                     case 'ranking':

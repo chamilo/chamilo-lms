@@ -955,22 +955,22 @@ class Tracking
                                             if ($origin != 'tracking') {
                                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                     $output .= '<td>
-                                                            <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
+                                                            <img src="' . Display::returnIconPath('quiz_na.gif').'" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
                                                             </td>';
                                                 } else {
                                                     $output .= '<td>
                                                             <a href="../exercice/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
-                                                            <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
+                                                            <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
                                                             </a></td>';
                                                 }
                                             } else {
                                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                     $output .= '<td>
-                                                                <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
+                                                                <img src="' . Display::returnIconPath('quiz_na.gif').'" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
                                                 } else {
                                                     $output .= '<td>
                                                                     <a href="../exercice/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
-                                                                    <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
+                                                                    <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
                                                 }
                                             }
                                         }
@@ -1578,8 +1578,9 @@ class Tracking
     				if ($convert_date) {
                         $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                         $icon = api_is_allowed_to_edit() ?
-                            '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
-                             <img src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /> </a>'
+                            '<a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
+                              '.Display::return_icon('messagebox_warning.gif').'
+                             </a>'
                             : null;
     					return $icon. Display::label($last_login_date, 'warning');
     				} else {

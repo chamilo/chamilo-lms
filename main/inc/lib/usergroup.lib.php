@@ -1371,7 +1371,7 @@ class UserGroup extends Model
         $picture = array();
         $picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
-            $picture['file'] = api_get_path(WEB_IMG_PATH).$picture_file;
+            $picture['file'] = Display::returnIconPath($picture_file);
             return $picture;
         }
 
@@ -1409,7 +1409,7 @@ class UserGroup extends Model
             if (file_exists($file) && !is_dir($file)) {
                 $picture['file'] = $image_array['dir'].$picture_file;
             } else {
-                $picture['file'] = api_get_path(WEB_IMG_PATH).'unknown_group.png';
+                $picture['file'] = Display::returnIconPath('unknown_group.png');
             }
         }
         return $picture;

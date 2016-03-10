@@ -406,14 +406,12 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['
     }
 
     // if the warning message is too long then we display the warning message trough a session
-
-    $_SESSION['session_message_import_users'] = $warning_message;
-    $warning_message = 'session_message';
+    Display::addFlash(Display::return_message($warning_message, 'warning', false));
 
     if ($error_kind_file) {
-        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
+        Display::addFlash(Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error', false));
     } else {
-        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&warn='.urlencode($warning_message).'&message='.urlencode($see_message_import).'&sec_token='.$tok);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?sec_token='.$tok);
         exit;
     }
 
@@ -424,8 +422,8 @@ if (!empty($error_message)) {
     Display::display_error_message($error_message);
 }
 
-$form = new FormValidator('user_update_import','post','user_update_import.php');
-$form->addElement('header', '', $tool_name);
+$form = new FormValidator('user_update_import', 'post', api_get_self());
+$form->addElement('header', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 
@@ -457,14 +455,14 @@ if ($count_fields > 0) {
 }
 
 ?>
-    <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 
-        <blockquote>
-            <pre>
-                <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
-                xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;0/1;xxx;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />
-            </pre>
-        </blockquote>
-    <p><?php
+    <blockquote>
+        <pre>
+            <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
+            xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;0/1;xxx;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />
+        </pre>
+    </blockquote>
+<p><?php
 
 Display :: display_footer();

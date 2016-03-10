@@ -1063,7 +1063,8 @@ if (!empty($student_id)) {
                     $id_last_attempt = Database :: result($result_last_attempt, 0, 0);
                     if ($count_attempts > 0)
                         echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
-                        <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
+                        '.Display::return_icon('quiz.gif').'
+                     </a>';
                 }
                 echo '</td>';
 

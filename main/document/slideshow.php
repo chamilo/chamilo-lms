@@ -72,11 +72,12 @@ if ($slide_id != 'all') {
 		// Back forward buttons
 		if ($slide == 0) {
 			$imgp = 'action_prev_na.png';
-			$first = '<img src="'.api_get_path(WEB_IMG_PATH).'action_first_na.png">';
+			$first = Display::return_icon('action_first_na.png');
 		} else {
 			$imgp = 'action_prev.png';
 			$first = '<a href="slideshow.php?slide_id=0&curdirpath='.$pathurl.'">
-			          <img src="'.api_get_path(WEB_IMG_PATH).'action_first.png" title="'.get_lang('FirstSlide').'" alt="'.get_lang('FirstSlide').'"></a>';
+			          '.Display::return_icon('action_first.png', get_lang('FirstSlide')).'
+			          </a>';
 		}
 
 		// First slide
@@ -176,7 +177,7 @@ if ($slide_id == 'all') {
 	$jpg_quality  	         = 75;//from 0 to 100 (default is 75). More quality less compression
 
 	$directory_thumbnails = $sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
-        
+
 	//Other parameters only for show tumbnails
 	$row_items 			     = 4;//only in slideshow.php
 	$number_image 			 = 7;//num icons cols to show

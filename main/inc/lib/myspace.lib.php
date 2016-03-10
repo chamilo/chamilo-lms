@@ -463,7 +463,9 @@ class MySpace
             $table_row[] = $nb_students;
             $table_row[] = $nb_courses;
             $table_row[] = $nb_sessions;
-            $table_row[] = '<a href="session.php?id_coach='.$coaches['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'icons/22/2rightarrow.png" border="0" /></a>';
+            $table_row[] = '<a href="session.php?id_coach='.$coaches['user_id'].'">
+                '.Display::return_icon('2rightarrow.png').'
+            </a>';
             $all_datas[] = $table_row;
 
             if ($is_western_name_order) {
@@ -2167,7 +2169,8 @@ class MySpace
 
             //set the "from" value to know if I access the Reporting by the chamilo tab or the course link
             $table_row[] = '<center><a href="../../tracking/courseLog.php?cidReq=' .$course_code.'&from=myspace&id_session='.$session_id.'">
-                             <img src="'.api_get_path(WEB_IMG_PATH).'icons/22/2rightarrow.png" border="0" /></a>
+                             '.Display::return_icon('2rightarrow.png').'
+                             </a>
                             </center>';
             $csv_content[] = array(
                 api_html_entity_decode($row_course[1], ENT_QUOTES, $charset),
@@ -2894,9 +2897,9 @@ class MySpace
         }
 
         //TODO add course name
-        $sql = "SELECT 
+        $sql = "SELECT
                 a.login_course_date as col0,
-                u.username as col1, 
+                u.username as col1,
                 " . (
                     $is_western_name_order ? "
                         u.firstname AS col2,
@@ -2906,8 +2909,8 @@ class MySpace
                         u.firstname AS col3,
                 " ) . "
                 a.logout_course_date,
-                c.title, 
-                c.code, 
+                c.title,
+                c.code,
                 u.user_id
             FROM $track_e_course_access a
             INNER JOIN $user u ON a.user_id = u.user_id
@@ -2922,7 +2925,7 @@ class MySpace
         $sql .= " LIMIT $from,$numberItems";
         $result = Database::query($sql);
 
-        //$clicks = Tracking::get_total_clicks_by_session();  
+        //$clicks = Tracking::get_total_clicks_by_session();
         $data = array();
 
         while ($user = Database::fetch_assoc($result)) {

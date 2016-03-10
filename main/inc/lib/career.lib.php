@@ -96,7 +96,7 @@ class Career extends Model
      * @todo the form should be auto generated
      * @param   string  $url
      * @param   string  $action add, edit
-     * @return  obj     form validator obj
+     * @return  FormValidator
      */
     public function return_form($url, $action)
     {
@@ -130,9 +130,9 @@ class Career extends Model
             $form->freeze('created_at');
         }
         if ($action == 'edit') {
-            $form->addButtonSave(get_lang('Modify'),'submit');
+            $form->addButtonSave(get_lang('Modify'), 'submit');
         } else {
-            $form->addButtonCreate(get_lang('Add'),'submit');
+            $form->addButtonCreate(get_lang('Add'), 'submit');
         }
 
         // Setting the defaults

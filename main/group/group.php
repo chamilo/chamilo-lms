@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *	Main page for the group module.
  *	This script displays the general group settings,
@@ -262,4 +264,5 @@ if (api_get_setting('allow_group_categories') == 'true') {
 if (!isset($_GET['origin']) || $_GET['origin'] != 'learnpath') {
     Display::display_footer();
 }
-$_SESSION['_gid'] = 0;
+
+Session::write('_gid', 0);

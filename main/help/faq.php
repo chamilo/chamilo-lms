@@ -13,7 +13,7 @@ $help_name = isset($_GET['open']) ? Security::remove_XSS($_GET['open']) : null;
 Display :: display_header(get_lang('Faq'));
 
 if (api_is_platform_admin()) {
-    echo '&nbsp;<a href="faq.php?edit=true"><img src="'.api_get_path(WEB_IMG_PATH).'edit.png" /></a>';
+    echo '&nbsp;<a href="faq.php?edit=true">'.Display::return_icon('edit.png').'</a>';
 }
 
 echo Display::page_header(get_lang('Faq'));
@@ -21,7 +21,13 @@ echo Display::page_header(get_lang('Faq'));
 $faq_file = 'faq.html';
 if (!empty($_GET['edit']) && $_GET['edit'] == 'true' && api_is_platform_admin()) {
     $form = new FormValidator('set_faq', 'post', 'faq.php?edit=true');
-    $form->addHtmlEditor('faq_content', null, false, false, array('ToolbarSet' => 'FAQ', 'Width' => '100%', 'Height' => '300'));
+    $form->addHtmlEditor(
+        'faq_content',
+        null,
+        false,
+        false,
+        array('ToolbarSet' => 'FAQ', 'Width' => '100%', 'Height' => '300')
+    );
     $form->addButtonSave(get_lang('Ok'), 'faq_submit');
     $faq_content = @(string)file_get_contents(api_get_path(SYS_APP_PATH).'home/faq.html');
     $faq_content = api_to_system_encoding($faq_content, api_detect_encoding(strip_tags($faq_content)));

@@ -298,7 +298,8 @@ function return_thumbnail($course, $icon_title)
     if (file_exists($course_path.'/course-pic.png')) {
         $course_medium_image = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png'; // redimensioned image 85x85
     } else {
-        $course_medium_image = api_get_path(WEB_IMG_PATH).'session_default.png'; // without picture
+        // without picture
+        $course_medium_image = Display::return_icon('session_default.png', null, null, null, null, true, false);
     }
 
     // course image

@@ -561,11 +561,11 @@ class Agenda
      * @param string $title
      * @param string $content
      * @param array $usersToSend
-     * @param int $editRepeatType
      * @param array $attachmentArray
      * @param string $attachmentComment
      * @param string $comment
      * @param string $color
+     * @param bool $addAnnouncement
      *
      * @return bool
      */
@@ -580,7 +580,8 @@ class Agenda
         $attachmentArray = array(),
         $attachmentComment = null,
         $comment = null,
-        $color = ''
+        $color = '',
+        $addAnnouncement = false
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -794,9 +795,9 @@ class Agenda
                     }
 
                     // Add announcement.
-                    /*if (isset($addAsAnnouncement) && !empty($addAsAnnouncement)) {
-                        $this->store_agenda_item_as_announcement($id);
-                    }*/
+                    if (isset($addAnnouncement) && !empty($addAnnouncement)) {
+                        $this->store_agenda_item_as_announcement($id, $usersToSend);
+                    }
 
                     // Add attachment.
                     if (isset($attachmentArray) && !empty($attachmentArray)) {
@@ -1960,6 +1961,15 @@ class Agenda
             }
 
             $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
+
+            if (!empty($id)) {
+                $form->addElement(
+                    'checkbox',
+                    'add_announcement',
+                    null,
+                    get_lang('AddAnnouncement').'&nbsp('.get_lang('SendMail').')'
+                );
+            }
         }
 
         if (empty($id)) {

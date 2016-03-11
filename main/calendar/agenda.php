@@ -171,6 +171,7 @@ if (api_is_allowed_to_edit(false, true) OR
                 $values = $form->getSubmitValues();
 
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
+                $sendEmail = isset($values['add_announcement']) ? true : false;
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 
@@ -215,7 +216,9 @@ if (api_is_allowed_to_edit(false, true) OR
                     $values['users_to_send'],
                     $attachment,
                     $attachmentComment,
-                    $comment
+                    $comment,
+                    '',
+                    $sendEmail
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {

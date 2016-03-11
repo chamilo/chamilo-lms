@@ -580,6 +580,7 @@ if ($allowToEdit && (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath'))
     } else {
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$origin."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'',ICON_SIZE_MEDIUM)."</a>";
     }
+
     $show_actions = true;
 } else {
     if (in_array($_GET['action'], array('view'))) {
@@ -601,8 +602,35 @@ if (api_is_allowed_to_edit() && $announcement_number > 1) {
     }	// if announcementNumber > 1
 }
 
-if ($show_actions)
+$keyword = '';
+$userIdToSearch = 0;
+
+if ($show_actions) {
+
+    $searchForm = new FormValidator('search', 'get', api_get_self().'?'.api_get_cidreq(), '', array('class' => 'form-search'), false);
+    //$form = new FormValidator('search_simple', 'get', '', '', array('class' => 'form-search'), false);
+    $searchForm->addElement('text', 'keyword', get_lang('Title'));
+    $users = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
+    $userList = array('' => '');
+    if (!empty($users)) {
+        foreach ($users as $user) {
+            $userList[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+        }
+    }
+    $users = [];
+    $searchForm->addElement('select', 'user_id', get_lang('Users'), $userList);
+    $searchForm->addElement('button', 'submit', get_lang('Search'));
+
+    echo $searchForm->display();
+
+    $filterData = array();
+    if ($searchForm->validate()) {
+        $filterData = $searchForm->getSubmitValues();
+        $keyword = $filterData['keyword'];
+        $userIdToSearch = $filterData['user_id'];
+    }
     echo '</div>';
+}
 
 //	ANNOUNCEMENTS LIST
 
@@ -799,16 +827,19 @@ if ($display_form) {
  */
 $course_id = api_get_course_int_id();
 
-//if ($display_announcement_list && !$surveyid) {
-
 if ($display_announcement_list) {
-    // by default we use the id of the current user.
-    // The course administrator can see the announcement of other
-    // users by using the user / group filter
-    //$user_id=$_user['user_id'];
-    if (isset($_SESSION['user'])) {
-        //$user_id=$_SESSION['user'];
+
+    $searchCondition = '';
+
+    if (!empty($keyword)) {
+        $keyword = Database::escape_string($keyword);
+        $searchCondition .= " AND (title LIKE '%$keyword%')";
     }
+    if (!empty($userIdToSearch)) {
+        $userIdToSearch = intval($userIdToSearch);
+        $searchCondition .= " AND (ip.insert_user_id = $userIdToSearch)";
+    }
+
     $user_id = api_get_user_id();
 
     if (isset($_SESSION['group'])) {
@@ -830,7 +861,7 @@ if ($display_announcement_list) {
 							ip.tool			= 'announcement' AND
 							(ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 							$condition_session
-
+                    $searchCondition
 					ORDER BY display_order DESC";
 
             } else {
@@ -843,6 +874,7 @@ if ($display_announcement_list) {
 							(ip.to_user_id		= $user_id OR ip.to_group_id='0') AND
 							ip.visibility='1'
 					$condition_session
+					$searchCondition
 					ORDER BY display_order DESC";
 
             }
@@ -858,6 +890,7 @@ if ($display_announcement_list) {
 						AND ip.visibility<>'2'
 						AND (ip.to_group_id=$group_id OR ip.to_group_id='0')
 						$condition_session
+						$searchCondition
 				GROUP BY ip.ref
 				ORDER BY display_order DESC";
         } else {
@@ -875,6 +908,7 @@ if ($display_announcement_list) {
 							AND ip.tool='announcement'
 							AND ip.visibility='1'
 							$condition_session
+							$searchCondition
 					GROUP BY ip.ref
 					ORDER BY display_order DESC";
             } else {
@@ -888,6 +922,7 @@ if ($display_announcement_list) {
 							AND ip.tool='announcement'
 							AND (ip.visibility='0' or ip.visibility='1')
 							$condition_session
+							$searchCondition
 					GROUP BY ip.ref
 					ORDER BY display_order DESC";
             }
@@ -920,6 +955,7 @@ if ($display_announcement_list) {
 	        				AND ip.tool='announcement'
 	        				$cond_user_id
 	        				$condition_session
+	        				$searchCondition
 	        				AND ip.visibility='1'
     				ORDER BY display_order DESC";
         } else {
@@ -939,6 +975,7 @@ if ($display_announcement_list) {
     						ip.tool='announcement'
     						$cond_user_id
     						$condition_session
+    						$searchCondition
     						AND ip.visibility='1'
     						AND announcement.session_id IN(0,".api_get_session_id().")
 						ORDER BY display_order DESC";
@@ -958,6 +995,7 @@ if ($display_announcement_list) {
 						AND ip.tool='announcement'
 						$cond_user_id
 						$condition_session
+						$searchCondition
 						AND ip.visibility='1'
 						AND announcement.session_id IN(0,".api_get_session_id().")";
             }

@@ -698,7 +698,7 @@ class Display
 
     /**
      * Gets the path of an icon
-     * 
+     *
      * @param string $icon
      * @return string
      */
@@ -2203,7 +2203,7 @@ class Display
                 if ( $col == 2 && $i == 1 ) {
                     if ($right === true) {
                         $html .= '<div class="pull-right">';
-                        $html .= (isset($content[$i])?$content[$i]:'');
+                        $html .= (isset($content[$i]) ? $content[$i] : '');
                         $html .= '</div>';
                     } else {
                         $html .= $content[$i];

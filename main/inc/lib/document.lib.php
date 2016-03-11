@@ -3470,7 +3470,6 @@ class DocumentManager
         );
 
         $return .= $write_result;
-        $img_path = api_get_path(WEB_IMG_PATH);
         if ($lp_id == false) {
             $url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
             $return .= "<script>
@@ -3516,12 +3515,12 @@ class DocumentManager
 
                 if (image.hasClass('open')) {
                     image.removeClass('open');
-                    image.attr('src', '" . $img_path . "nolines_plus.gif');
+                    image.attr('src', '" . Display::returnIconPath('nolines_plus.gif')."');
                     $('#'+id).show();
                     $('#'+tempId).hide();
                 } else {
                     image.addClass('open');
-                    image.attr('src', '" . $img_path . "nolines_minus.gif');
+                    image.attr('src', '" . Display::returnIconPath('nolines_minus.gif') . "');
                     $('#'+id).hide();
                     $('#'+tempId).show();
 
@@ -3568,7 +3567,6 @@ class DocumentManager
         $target,
         $overwrite_url
     ) {
-        $img_path = api_get_path(WEB_IMG_PATH);
         $img_sys_path = api_get_path(SYS_CODE_PATH) . 'img/';
         $web_code_path = api_get_path(WEB_CODE_PATH);
 
@@ -3595,7 +3593,7 @@ class DocumentManager
 
         // Show the "image name" not the filename of the image.
         if ($lp_id) {
-            //LP URL
+            // LP URL
             $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $documentId . '&amp;lp_id=' . $lp_id;
             if (!empty($overwrite_url)) {
                 $url = $overwrite_url . '&cidReq=' . $course_info['code'] . '&id_session=' . $session_id . '&document_id=' . $documentId.'';
@@ -3608,9 +3606,9 @@ class DocumentManager
             }
         }
 
-        $img = $img_path . $icon;
+        $img = Display::returnIconPath($icon);
         if (!file_exists($img_sys_path . $icon)) {
-            $img = $img_path . 'icons/16/default_small.gif';
+            $img = Display::returnIconPath('default_small.gif');
         }
 
         $link = Display::url(
@@ -3653,8 +3651,6 @@ class DocumentManager
     {
         $title = isset($resource['title']) ? $resource['title'] : null;
         $path = isset($resource['path']) ? $resource['path'] : null;
-
-        $img_path = api_get_path(WEB_IMG_PATH);
 
         if (empty($path)) {
             $num = 0;
@@ -3707,13 +3703,12 @@ class DocumentManager
 
         $return .= '<li class="doc_folder '.$folder_class_hidden.'" id="doc_id_' . $resource['id'] . '"  style="margin-left:' . ($num * 18) . 'px; ">';
 
-        $image = $img_path.'nolines_plus.gif';
+        $image = Display::returnIconPath('nolines_plus.gif');
         if (empty($path)) {
-            $image = $img_path.'nolines_minus.gif';
+            $image = Display::returnIconPath('nolines_minus.gif');
         }
         $return .= '<img style="cursor: pointer;" src="'.$image.'" align="absmiddle" id="img_'.$resource['id'] . '" '.$onclick.'>';
-
-        $return .= '<img alt="" src="' . $img_path . 'lp_folder.gif" title="" align="absmiddle" />&nbsp;';
+        $return .= Display::returnIconPath('lp_folder.gif').'&nbsp;';
         $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';
         $return .= '</li>';
 

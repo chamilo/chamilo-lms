@@ -87,7 +87,8 @@ if ($slide_id != 'all') {
 		if ($slide > 0) {
 			echo '<a href="slideshow.php?slide_id='.$previous_slide.'&curdirpath='.$pathurl.'">';
 		}
-		echo '<img src="'.api_get_path(WEB_IMG_PATH).$imgp.'" title="'.get_lang('Previous').'" alt="'.get_lang('Previous').'">';
+
+        echo Display::return_icon($imgp, get_lang('Previous'));
 		if ($slide > 0) {
 			echo '</a>';
 		}
@@ -101,12 +102,14 @@ if ($slide_id != 'all') {
 		}
 		if ($slide == $total_slides - 1) {
 			$imgn = 'action_next_na.png';
-			$last = '<img src="'.api_get_path(WEB_IMG_PATH).'action_last_na.png" title="'.get_lang('LastSlide').'" alt="'.get_lang('LastSlide').'">';
+            $last = Display::return_icon('action_last_na.png', get_lang('LastSlide'));
 		} else {
 			$imgn = 'action_next.png';
-			$last = '<a href="slideshow.php?slide_id='.($total_slides-1).'&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'action_last.png" title="'.get_lang('LastSlide').'" alt="'.get_lang('LastSlide').'"></a>';
+			$last = '<a href="slideshow.php?slide_id='.($total_slides-1).'&curdirpath='.$pathurl.'">
+			        '.Display::return_icon('action_last.png', get_lang('LastSlide')).'
+                </a>';
 		}
-		echo '<img src="'.api_get_path(WEB_IMG_PATH).$imgn.'" title="'.get_lang('Next').'" alt="'.get_lang('Next').'">';
+        echo Display::return_icon($imgn, get_lang('Next'));
 		if ($slide > 0) {
 			echo '</a>';
 		}
@@ -130,12 +133,9 @@ if ($slide_id != 'all') {
 }
 // Slideshow options
 echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'&'.api_get_cidreq().'">'.
-    Display::return_icon('settings.png',get_lang('SetSlideshowOptions'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('settings.png', get_lang('SetSlideshowOptions'),'',ICON_SIZE_MEDIUM).'</a>';
 
-?>
-</div>
-
-<?php
+echo '</div>';
 echo '<br />';
 
 /*	TREATING THE POST DATA FROM SLIDESHOW OPTIONS */

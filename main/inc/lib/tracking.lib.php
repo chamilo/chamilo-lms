@@ -6384,15 +6384,16 @@ class TrackingCourseLog
                 $user['survey'] = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0) .' / '.$total_surveys;
             }
 
-    		$user['link'] = '<center><a href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'icons/22/2rightarrow.png" border="0" /></a></center>';
+    		$user['link'] = '<center>
+                             <a href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'">
+    		                 '.Display::return_icon('2rightarrow.png').'
+    		                 </a>
+                         </center>';
 
     		// store columns in array $users
-
     		$is_western_name_order = api_is_western_name_order();
             $user_row = array();
-
             $user_row[]= $user['official_code']; //0
-
             if ($is_western_name_order) {
                 $user_row[]= $user['firstname'];
                 $user_row[]= $user['lastname'];

@@ -1825,7 +1825,7 @@ class api_failure {
      * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
      * @param  string $failure_type - the type of failure
      * @global array  $api_failureList
-     * @return bolean false to stay consistent with the main script
+     * @return boolean false to stay consistent with the main script
      */
     static function set_failure($failure_type) {
         global $api_failureList;
@@ -3720,7 +3720,7 @@ function api_get_track_item_property_history($tool, $ref)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  * @param int $session_id
  */
-function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
+function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $groupId = 0)
 {
     $course_info = api_get_course_info_by_id($course_id);
 
@@ -3742,6 +3742,11 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
                 tool = '$tool' AND
                 ref = $ref AND
                 id_session = $session_id ";
+
+    if (!empty($groupId)) {
+        $groupId = intval($groupId);
+        $sql .= " AND to_group_id = $groupId ";
+    }
 
     $rs  = Database::query($sql);
     $row = array();

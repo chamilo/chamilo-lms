@@ -1732,8 +1732,8 @@ function get_threads($forum_id, $course_code = null)
     // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
     // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
     // This is why it is added to the end of the field selection
-    $groupCondition = api_get_group_id() != 0 ? " AND item_properties.to_group_id = '$groupId' AND item_properties.c_id = '$course_id'" : "";
-    $sql = "SELECT
+    $groupCondition = api_get_group_id() != 0 ? " AND item_properties.to_group_id = '$groupId' " : "";
+    $sql = "SELECT DISTINCT
                 thread.*,
                 item_properties.*,
                 users.firstname,
@@ -1743,10 +1743,10 @@ function get_threads($forum_id, $course_code = null)
             FROM $table_threads thread
             INNER JOIN $table_item_property item_properties
             ON
-                thread.thread_id=item_properties.ref AND
+                thread.thread_id = item_properties.ref AND
                 item_properties.c_id = $course_id AND
                 thread.c_id = $course_id AND
-                item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
+                item_properties.tool='".TABLE_FORUM_THREAD."' $groupCondition
             LEFT JOIN $table_users users
                 ON thread.thread_poster_id=users.user_id
             WHERE
@@ -1759,8 +1759,7 @@ function get_threads($forum_id, $course_code = null)
         // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
         // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
         //This is why it is added to the end of the field selection
-        $groupCondition = api_get_group_id() != 0 ? " AND item_properties.to_group_id = '$groupId' AND item_properties.c_id = '$course_id'" : "";
-        $sql = "SELECT
+        $sql = "SELECT DISTINCT
                     thread.*,
                     item_properties.*,
                     users.firstname,
@@ -1783,10 +1782,14 @@ function get_threads($forum_id, $course_code = null)
     }
     $result = Database::query($sql);
     $thread_list = array();
+    $alreadyAdded = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
+        if (in_array($row['thread_id'], $alreadyAdded)) {
+            continue;
+        }
         $thread_list[] = $row;
+        $alreadyAdded[] = $row['thread_id'];
     }
-
     return $thread_list;
 }
 
@@ -3510,7 +3513,7 @@ function move_thread_form()
     // Initialize the object.
     $form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($_GET['thread']).'&action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq());
     // The header for the form
-    $form->addElement('header', '', get_lang('MoveThread'));
+    $form->addElement('header', get_lang('MoveThread'));
     // Invisible form: the thread_id
     $form->addElement('hidden', 'thread_id', intval($_GET['thread']));
     // the fora
@@ -3711,20 +3714,55 @@ function store_move_post($values)
  */
 function store_move_thread($values)
 {
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_threads = Database:: get_course_table(TABLE_FORUM_THREAD);
+    $table_posts = Database:: get_course_table(TABLE_FORUM_POST);
 
-    $course_id = api_get_course_int_id();
+    $courseId = api_get_course_int_id();
+    $sessionId = api_get_session_id();
+
+    $forumId = intval($_POST['forum']);
+    $threadId = intval($_POST['thread_id']);
+    $forumInfo = get_forums($forumId);
 
     // Change the thread table: Setting the forum_id to the new forum.
-    $sql = "UPDATE $table_threads SET forum_id='".Database::escape_string($_POST['forum'])."'
-            WHERE c_id = $course_id AND thread_id='".Database::escape_string($_POST['thread_id'])."'";
+    $sql = "UPDATE $table_threads SET forum_id = $forumId
+            WHERE c_id = $courseId AND thread_id = $threadId";
     Database::query($sql);
 
     // Changing all the posts of the thread: setting the forum_id to the new forum.
-    $sql = "UPDATE $table_posts SET forum_id='".Database::escape_string($_POST['forum'])."'
-            WHERE c_id = $course_id AND thread_id='".Database::escape_string($_POST['thread_id'])."'";
+    $sql = "UPDATE $table_posts SET forum_id = $forumId
+            WHERE c_id = $courseId AND thread_id= $threadId";
     Database::query($sql);
+    // Fix group id, if forum is moved to a different group
+    if (!empty($forumInfo['to_group_id'])) {
+        $groupId = $forumInfo['to_group_id'];
+        $item = api_get_item_property_info($courseId, TABLE_FORUM_THREAD, $threadId, $sessionId, $groupId);
+        $table = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        if (!empty($item)) {
+            if ($item['to_group_id'] != $groupId) {
+                $sql = "UPDATE $table
+                    SET to_group_id = $groupId
+                    WHERE
+                      tool = '".TABLE_FORUM_THREAD."' AND
+                      c_id = $courseId AND
+                      ref = ".$item['ref']." AND
+                      id_session = $sessionId AND
+
+                ";
+                Database::query($sql);
+            }
+        } else {
+            $sql = "UPDATE $table
+                    SET to_group_id = $groupId
+                    WHERE
+                      tool = '".TABLE_FORUM_THREAD."' AND
+                      c_id = $courseId AND
+                      ref = ".$threadId." AND
+                      id_session = $sessionId
+            ";
+            Database::query($sql);
+        }
+    }
 
     return get_lang('ThreadMoved');
 }

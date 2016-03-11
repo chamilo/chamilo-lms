@@ -7,8 +7,8 @@
  * @author Julio Montoya <gugli100@gmail.com>, MORE code cleaning 2011
  *
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
- *			 Announcements tool and also add the resource linker here. The database also needed refactoring
- *			 as there was no title field (the title was merged into the content field)
+ *             Announcements tool and also add the resource linker here. The database also needed refactoring
+ *             as there was no title field (the title was merged into the content field)
  * @package chamilo.announcements
  * multiple functions
  */
@@ -24,7 +24,7 @@ require_once '../inc/global.inc.php';
 $ctok = Security::get_existing_token();
 $stok = Security::get_token();
 
-$current_course_tool  = TOOL_ANNOUNCEMENT;
+$current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('ToolAnnouncement');
 
@@ -64,7 +64,8 @@ $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'list
 $announcement_number = AnnouncementManager::getNumberAnnouncements();
 
 $homeUrl = api_get_self().'?action=list&'.api_get_cidreq();
-$content = null;
+$content = '';
+$searchFormToString = '';
 
 switch ($action) {
     case 'move':
@@ -82,7 +83,7 @@ switch ($action) {
 
         if (!empty($sortDirection)) {
             if (!in_array(trim(strtoupper($sortDirection)), array('ASC', 'DESC'))) {
-                $sortDirection='ASC';
+                $sortDirection = 'ASC';
             }
 
             $announcementInfo = AnnouncementManager::get_by_id($course_id, $thisAnnouncementId);
@@ -129,11 +130,43 @@ switch ($action) {
         $content = AnnouncementManager::display_announcement($announcement_id);
         break;
     case 'list':
-
         $htmlHeadXtra[] = api_get_jqgrid_js();
 
+        $searchForm = new FormValidator(
+            'search_simple',
+            'post',
+            api_get_self().'?'.api_get_cidreq(),
+            '',
+            array(),
+            FormValidator::LAYOUT_INLINE
+        );
+
+        $searchForm->addElement('text', 'keyword', get_lang('Title'));
+        $users = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
+        $userList = array('' => '');
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                $userList[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+            }
+        }
+        $users = [];
+        $searchForm->addElement('select', 'user_id', get_lang('Users'), $userList);
+        $searchForm->addButtonSearch(get_lang('Search'));
+
+        $filterData = array();
+        $keyword = '';
+        $userIdToSearch = 0;
+
+        if ($searchForm->validate()) {
+            $filterData = $searchForm->getSubmitValues();
+            $keyword = $filterData['keyword'];
+            $userIdToSearch = $filterData['user_id'];
+        }
+
+        $searchFormToString = $searchForm->returnForm();
+
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_course_announcements&'.api_get_cidreq();
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_course_announcements&'.api_get_cidreq().'&title_to_search='.$keyword.'&user_id_to_search='.$userIdToSearch;
         $deleteUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?a=delete_item&'.api_get_cidreq();
         $columns = array(get_lang('Title'), get_lang('By'), get_lang('LastUpdateDate'), get_lang('Actions'));
 
@@ -194,7 +227,16 @@ switch ($action) {
 
         $content = '<script>
         $(function() {'.
-        Display::grid_js('announcements', $url, $columns, $columnModel, $extra_params, array(), '', true).$editOptions.'
+            Display::grid_js(
+                'announcements',
+                $url,
+                $columns,
+                $columnModel,
+                $extra_params,
+                array(),
+                '',
+                true
+            ).$editOptions.'
         });
         </script>';
 
@@ -207,12 +249,12 @@ switch ($action) {
                 (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
             ) {
                 $html .= '<div id="no-data-view">';
-                $html .= '<h3>' . get_lang('Announcements') . '</h3>';
+                $html .= '<h3>'.get_lang('Announcements').'</h3>';
                 $html .= Display::return_icon('valves.png', '', array(), 64);
                 $html .= '<div class="controls">';
                 $html .= Display::url(
                     get_lang('AddAnnouncement'),
-                    api_get_self() . "?" . api_get_cidreq() . "&action=add",
+                    api_get_self()."?".api_get_cidreq()."&action=add",
                     array('class' => 'btn btn-primary')
                 );
                 $html .= '</div>';
@@ -228,15 +270,13 @@ switch ($action) {
     case 'delete':
         /* Delete announcement */
         $id = intval($_GET['id']);
-        if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false, true) == false) {
+        if (api_get_session_id() != 0 && api_is_allowed_to_session_edit(false, true) == false) {
             api_not_allowed();
         }
 
         if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
-
             AnnouncementManager::delete_announcement($_course, $id);
             Display::addFlash(Display::return_message(get_lang('AnnouncementDeleted')));
-
         }
         header('Location: '.$homeUrl);
         exit;
@@ -263,7 +303,8 @@ switch ($action) {
         if (!isset($_GET['isStudentView']) || $_GET['isStudentView'] != 'false') {
             if (isset($_GET['id']) && $_GET['id']) {
                 if (api_get_session_id() != 0 &&
-                    api_is_allowed_to_session_edit(false, true) == false) {
+                    api_is_allowed_to_session_edit(false, true) == false
+                ) {
                     api_not_allowed();
                 }
 
@@ -293,7 +334,7 @@ switch ($action) {
 
         // DISPLAY ADD ANNOUNCEMENT COMMAND
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-        $url = api_get_self().'?action='.$action.'&id=' . $id . '&' . api_get_cidreq();
+        $url = api_get_self().'?action='.$action.'&id='.$id.'&'.api_get_cidreq();
 
         $form = new FormValidator(
             'f1',
@@ -334,7 +375,7 @@ switch ($action) {
                 );
                 // setting the variables for the form elements: the users who need to receive the message
                 foreach ($to as &$user) {
-                    $user = 'USER:' . $user;
+                    $user = 'USER:'.$user;
                 }
                 // setting the variables for the form elements: the message has to be sent by email
                 $email_ann = '1';
@@ -399,7 +440,7 @@ switch ($action) {
                 'title' => $announcementInfo['title'],
                 'content' => $announcementInfo['content'],
                 'id' => $announcementInfo['id'],
-                'users' => $to
+                'users' => $to,
             );
         } else {
             $defaults = array();
@@ -417,7 +458,9 @@ switch ($action) {
             $htmlTags .= "<b>".$tag."</b></br>";
         }
 
-        $form->addHtml("<div class='form-group'><div class='col-sm-2'></div><div class='col-sm-8'><div class='alert alert-info'>".$htmlTags."</div></div></div>");
+        $form->addHtml(
+            "<div class='form-group'><div class='col-sm-2'></div><div class='col-sm-8'><div class='alert alert-info'>".$htmlTags."</div></div></div>"
+        );
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),
@@ -435,7 +478,6 @@ switch ($action) {
         }
 
         $form->addCheckBox('send_to_hrm_users', null, get_lang('SendAnnouncementCopyToDRH'));
-
         $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
         $form->setDefaults($defaults);
 
@@ -497,7 +539,7 @@ switch ($action) {
                         $insert_id = AnnouncementManager::add_group_announcement(
                             $data['title'],
                             $data['content'],
-                            array('GROUP:' . $group_id),
+                            array('GROUP:'.$group_id),
                             $data['users'],
                             $file,
                             $file_comment,
@@ -524,7 +566,6 @@ switch ($action) {
                 } // end condition token
             }
         }
-
         $content = $form->returnForm();
         break;
 }
@@ -534,7 +575,7 @@ if (!empty($_GET['remind_inactive'])) {
 }
 
 if (!empty($group_id)) {
-    $group_properties  = GroupManager :: get_group_properties($group_id);
+    $group_properties = GroupManager:: get_group_properties($group_id);
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
@@ -557,41 +598,43 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 
 // Actions
 $show_actions = false;
+$actionsLeft = '';
 if ((api_is_allowed_to_edit(false, true) ||
     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) &&
     (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 ) {
-    echo '<div class="actions">';
-    if (in_array($action, array('add', 'modify','view'))) {
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
+    if (in_array($action, array('add', 'modify', 'view'))) {
+        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
     } else {
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$origin."'>".
+        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$origin."'>".
             Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), '', ICON_SIZE_MEDIUM)."</a>";
     }
     $show_actions = true;
 } else {
     if (in_array($action, array('view'))) {
-        echo '<div class="actions">';
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
+        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
-        echo '</div>';
     }
 }
 
 if (api_is_allowed_to_edit() && $announcement_number > 1) {
-    if (api_get_group_id() == 0 ) {
-        if (!$show_actions)
-            echo '<div class="actions">';
+    if (api_get_group_id() == 0) {
         if (!isset($_GET['action'])) {
-            echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".
-                Display::return_icon('delete_announce.png',get_lang('AnnouncementDeleteAll'),'',ICON_SIZE_MEDIUM)."</a>";
+            $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".
+                Display::return_icon(
+                    'delete_announce.png',
+                    get_lang('AnnouncementDeleteAll'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                )."</a>";
         }
     }
 }
 
-if ($show_actions)
-    echo '</div>';
+if ($show_actions) {
+    echo Display::toolbarAction('toolbar', array($actionsLeft, $searchFormToString), 2, false);
+}
 
 echo $content;
 

@@ -767,7 +767,20 @@ switch ($action) {
             'actions'
         );
 
-        $result = AnnouncementManager::getAnnouncements(null, null, false, $start, $limit, $sidx, $sord);
+        $titleToSearch = isset($_REQUEST['title_to_search']) ? $_REQUEST['title_to_search'] : '';
+        $userIdToSearch = isset($_REQUEST['user_id_to_search']) ? $_REQUEST['user_id_to_search'] : 0;
+
+        $result = AnnouncementManager::getAnnouncements(
+            null,
+            null,
+            false,
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $titleToSearch,
+            $userIdToSearch
+        );
 
         break;
     case 'get_work_teacher':

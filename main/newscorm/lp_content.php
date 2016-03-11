@@ -53,11 +53,12 @@ if ($dokeos_chapter) {
             if ($prereq_check === true) {
                 $src = $_SESSION['oLP']->get_link('http', $lp_item_id);
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
-            } else {
-                $src = 'blank.php?error=prerequisites';
+                $src = $_SESSION['oLP']->fixBlockedLinks($src);
+
+                break;
             }
 
-            $src = $_SESSION['oLP']->fixBlockedLinks($src);
+            $src = 'blank.php?error=prerequisites';
             break;
         case 2:
             $_SESSION['oLP']->stop_previous_item();

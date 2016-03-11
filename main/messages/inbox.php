@@ -135,12 +135,20 @@ if (api_get_setting('allow_social_tool') == 'true') {
 
 //Right content
 $social_right_content = null;
-
+$keyword = '';
 if (api_get_setting('allow_social_tool') == 'true') {
     $social_right_content .= '<div class="span9">';
     $social_right_content .= '<div class="actions">';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';
+
+    $form = MessageManager::getSearchForm();
+    if ($form->validate()) {
+        $values = $form->getSubmitValues();
+        $keyword = $values['keyword'];
+    }
+    $social_right_content .= $form->return_form();
+
     $social_right_content .= '</div>';
     $social_right_content .= '</div>';
     $social_right_content .= '<div class="span9">';
@@ -148,7 +156,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 //MAIN CONTENT
 
 if (!isset($_GET['del_msg'])) {
-    $social_right_content .= MessageManager::inbox_display();
+    $social_right_content .= MessageManager::inbox_display($keyword);
 } else {
     $num_msg = intval($_POST['total']);
     for ($i = 0; $i < $num_msg; $i++) {

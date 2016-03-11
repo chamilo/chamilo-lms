@@ -108,6 +108,7 @@ if (isset($_REQUEST['action'])) {
 }
 
 $social_right_content = '';
+$keyword = '';
 
 if (api_get_setting('allow_social_tool') == 'true') {
     $social_avatar_block = SocialManager::show_social_avatar_block('messages');
@@ -115,6 +116,14 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $social_right_content .= '<div class="span9">';
         $social_right_content .= '<div class="actions">';
         $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
+
+    $form = MessageManager::getSearchForm();
+    if ($form->validate()) {
+        $values = $form->getSubmitValues();
+        $keyword = $values['keyword'];
+    }
+    $social_right_content .= $form->return_form();
+
         $social_right_content .= '</div>';
     $social_right_content .= '</div>';
     $social_right_content .= '<div class="span9">';
@@ -132,16 +141,16 @@ if ($action == 'delete') {
         MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
     }
     $delete_list_id=array();
-    $social_right_content .= MessageManager::outbox_display();
+    $social_right_content .= MessageManager::outbox_display($keyword);
 
 } elseif($action =='deleteone') {
     $delete_list_id=array();
     $id = Security::remove_XSS($_GET['id']);
     MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
     $delete_list_id=array();
-    $social_right_content .= MessageManager::outbox_display();
+    $social_right_content .= MessageManager::outbox_display($keyword);
 } else {
-    $social_right_content .= MessageManager::outbox_display();
+    $social_right_content .= MessageManager::outbox_display($keyword);
 }
 
 if (api_get_setting('allow_social_tool') == 'true') {

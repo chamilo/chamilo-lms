@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 require_once api_get_path(LIBRARY_PATH).'online.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
@@ -131,8 +133,19 @@ class MessageManager
             $condition_msg_status = ' msg_status IN('.MESSAGE_STATUS_NEW.','.MESSAGE_STATUS_UNREAD.') ';
         }
 
+        $keyword = Session::read('message_search_keyword');
+        $keywordCondition = '';
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND (title like '%$keyword%' OR content LIKE '%$keyword%') ";
+        }
+
         $sql = "SELECT COUNT(*) as number_messages FROM $table_message
-                WHERE $condition_msg_status AND user_receiver_id=".api_get_user_id();
+                WHERE
+                    $condition_msg_status AND
+                    user_receiver_id=".api_get_user_id()."
+                    $keywordCondition
+                ";
         $sql_result = Database::query($sql);
         $result = Database::fetch_array($sql_result);
         return $result['number_messages'];
@@ -160,9 +173,19 @@ class MessageManager
         }
         $table_message = Database::get_main_table(TABLE_MESSAGE);
 
+        $keyword = Session::read('message_search_keyword');
+        $keywordCondition = '';
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND (title like '%$keyword%' OR content LIKE '%$keyword%') ";
+        }
+
         $sql = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, msg_status as col4
                 FROM $table_message
-                WHERE user_receiver_id=".api_get_user_id()." AND msg_status IN (0,1)
+                WHERE
+                    user_receiver_id=".api_get_user_id()." AND
+                    msg_status IN (0,1)
+                    $keywordCondition
                 ORDER BY col$column $direction
                 LIMIT $from,$number_of_items";
 
@@ -803,6 +826,14 @@ class MessageManager
             if (!in_array($direction, array('ASC', 'DESC')))
                 $direction = 'ASC';
         }
+
+        $keyword = Session::read('message_sent_search_keyword');
+        $keywordCondition = '';
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND (title like '%$keyword%' OR content LIKE '%$keyword%') ";
+        }
+
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $request = api_is_xml_http_request();
         $sql = "SELECT
@@ -811,6 +842,7 @@ class MessageManager
                 WHERE
                     user_sender_id=".api_get_user_id()." AND
                     msg_status=".MESSAGE_STATUS_OUTBOX."
+                    $keywordCondition
                 ORDER BY col$column $direction
                 LIMIT $from, $number_of_items";
         $sql_result = Database::query($sql);
@@ -861,8 +893,20 @@ class MessageManager
     public static function get_number_of_messages_sent()
     {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
+
+        $keyword = Session::read('message_sent_search_keyword');
+        $keywordCondition = '';
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND (title like '%$keyword%' OR content LIKE '%$keyword%') ";
+        }
+
         $sql = "SELECT COUNT(*) as number_messages FROM $table_message
-                WHERE msg_status=".MESSAGE_STATUS_OUTBOX." AND user_sender_id=".api_get_user_id();
+                WHERE
+                  msg_status=".MESSAGE_STATUS_OUTBOX." AND
+                  user_sender_id=".api_get_user_id()."
+                  $keywordCondition
+                ";
         $sql_result = Database::query($sql);
         $result = Database::fetch_array($sql_result);
         return $result['number_messages'];
@@ -1445,19 +1489,22 @@ class MessageManager
         return $div;
     }
 
-    //@todo this functions should be in the message class
-
-    public static function inbox_display()
+    /**
+     * @param string $keyword
+     * @return string
+     */
+    public static function inbox_display($keyword = '')
     {
         $success = get_lang('SelectedMessagesDeleted');
         $success_read = get_lang('SelectedMessagesRead');
         $success_unread = get_lang('SelectedMessagesUnRead');
         $html = '';
 
+        Session::write('message_search_keyword', $keyword);
+
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
-                 case 'mark_as_unread' :
-                    $number_of_selected_messages = count($_POST['id']);
+                 case 'mark_as_unread':
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $message_id) {
                             MessageManager::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_UNREAD);
@@ -1465,8 +1512,7 @@ class MessageManager
                     }
                     $html .= Display::return_message(api_xml_http_response_encode($success_unread), 'normal', false);
                     break;
-                case 'mark_as_read' :
-                    $number_of_selected_messages = count($_POST['id']);
+                case 'mark_as_read':
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $message_id) {
                             MessageManager::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_NEW);
@@ -1474,14 +1520,13 @@ class MessageManager
                     }
                     $html .= Display::return_message(api_xml_http_response_encode($success_read), 'normal', false);
                     break;
-                case 'delete' :
-                    $number_of_selected_messages = count($_POST['id']);
+                case 'delete':
                     foreach ($_POST['id'] as $index => $message_id) {
                         MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
                     }
                     $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
                     break;
-                case 'deleteone' :
+                case 'deleteone':
                     MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
                     $html .= Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
                     break;
@@ -1489,7 +1534,14 @@ class MessageManager
         }
 
         // display sortable table with messages of the current user
-        $table = new SortableTable('message_inbox', array('MessageManager', 'get_number_of_messages'), array('MessageManager', 'get_message_data'), 3, 20, 'DESC');
+        $table = new SortableTable(
+            'message_inbox',
+            array('MessageManager', 'get_number_of_messages'),
+            array('MessageManager', 'get_message_data'),
+            3,
+            20,
+            'DESC'
+        );
         $table->set_header(0, '', false, array('style' => 'width:15px;'));
         $table->set_header(1, get_lang('Messages'), false);
         $table->set_header(2, get_lang('Date'), true, array('style' => 'width:180px;'));
@@ -1498,21 +1550,34 @@ class MessageManager
         if (isset($_REQUEST['f']) && $_REQUEST['f'] == 'social') {
             $parameters['f'] = 'social';
             $table->set_additional_parameters($parameters);
+
         }
-        $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages'),'mark_as_unread' => get_lang('MailMarkSelectedAsUnread'),'mark_as_read' => get_lang('MailMarkSelectedAsRead')));
+        $table->set_form_actions(
+            array(
+                'delete' => get_lang('DeleteSelectedMessages'),
+                'mark_as_unread' => get_lang('MailMarkSelectedAsUnread'),
+                'mark_as_read' => get_lang('MailMarkSelectedAsRead'),
+            )
+        );
         $html .= $table->return_table();
+
+        Session::erase('message_search_keyword');
+
         return $html;
     }
 
     /**
-     * @return string
+     * @param string $keyword
+     * @return null|string
      */
-    static function outbox_display()
+    public static function outbox_display($keyword = '')
     {
         $social_link = false;
         if (isset($_REQUEST['f']) && $_REQUEST['f'] == 'social') {
             $social_link = 'f=social';
         }
+        Session::write('message_sent_search_keyword', $keyword);
+
         $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
 
         $html = null;
@@ -1536,7 +1601,14 @@ class MessageManager
         }
 
         // display sortable table with messages of the current user
-        $table = new SortableTable('message_outbox', array('MessageManager', 'get_number_of_messages_sent'), array('MessageManager', 'get_message_data_sent'), 3, 20, 'DESC');
+        $table = new SortableTable(
+            'message_outbox',
+            array('MessageManager', 'get_number_of_messages_sent'),
+            array('MessageManager', 'get_message_data_sent'),
+            3,
+            20,
+            'DESC'
+        );
 
         $parameters['f'] = isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
         $table->set_additional_parameters($parameters);
@@ -1548,6 +1620,9 @@ class MessageManager
 
         $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages')));
         $html .= $table->return_table();
+
+        Session::erase('message_sent_search_keyword');
+
         return $html;
     }
 
@@ -1657,6 +1732,21 @@ class MessageManager
         }
 
         return false;
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return FormValidator
+     */
+    public static function getSearchForm($url)
+    {
+        $form = new FormValidator('search', 'post', $url, null, array('class' => 'form-search'));
+
+        $form->addElement('text', 'keyword');
+        $form->addElement('style_submit_button', 'submit', get_lang('Search'));
+
+        return $form;
     }
 
 }

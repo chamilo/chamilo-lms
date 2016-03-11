@@ -171,7 +171,7 @@ class FormValidator extends HTML_QuickForm
         if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {
             $element_template = ' {label}  {element} ';
             $renderer->setElementTemplate($element_template);
-        } elseif (isset($attributes['class']) && $attributes['class'] == 'form-search') {
+        } elseif (isset($attributes['class']) && ($attributes['class'] == 'form-search' || $attributes['class'] == 'form-search pull-right')) {
             $element_template = ' {label}  {element} ';
             $renderer->setElementTemplate($element_template);
         } else {

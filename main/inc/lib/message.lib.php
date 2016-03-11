@@ -1741,7 +1741,7 @@ class MessageManager
      */
     public static function getSearchForm($url)
     {
-        $form = new FormValidator('search', 'post', $url, null, array('class' => 'form-search'));
+        $form = new FormValidator('search', 'post', $url, null, array('class' => 'form-search pull-right'));
 
         $form->addElement('text', 'keyword');
         $form->addElement('style_submit_button', 'submit', get_lang('Search'));

@@ -3708,7 +3708,7 @@ class DocumentManager
             $image = Display::returnIconPath('nolines_minus.gif');
         }
         $return .= '<img style="cursor: pointer;" src="'.$image.'" align="absmiddle" id="img_'.$resource['id'] . '" '.$onclick.'>';
-        $return .= Display::returnIconPath('lp_folder.gif').'&nbsp;';
+        $return .= Display::return_icon('lp_folder.gif').'&nbsp;';
         $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';
         $return .= '</li>';
 

@@ -107,14 +107,12 @@ if (api_is_allowed_to_edit(null, true) ||
     if (!$is_locked_attendance || api_is_platform_admin()) {
 
         $actionsLeft = '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">'.
-            Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
-            Display::return_icon('pdf.png',get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a>';
-        //if (count($users_in_course) > 0) {
-        $actionsRight = $form->returnForm();
-        //}
+            Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
-        $toolbar = Display::toolbarAction('toolbar-attendance', array(0 => $actionsLeft, 1 => $actionsRight), 2 , false);
+        $actionsRight = $form->returnForm();
+        $toolbar = Display::toolbarAction('toolbar-attendance', array($actionsLeft, $actionsRight), 2, false);
         echo $toolbar;
     }
 
@@ -207,7 +205,6 @@ if (api_is_allowed_to_edit(null, true) ||
         </script>
 
         <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_filter ?>&attendance_id=<?php echo $attendance_id?>" >
-
             <div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;margin-top:20px;">
                 <div class="divTableWithFloatingHeader attendance-users-table" style="width:45%;float:left;margin:0px;padding:0px;">
                     <table class="tableWithFloatingHeader data_table" width="100%">
@@ -264,15 +261,19 @@ if (api_is_allowed_to_edit(null, true) ||
                 echo '<table class="tableWithFloatingHeader data_table" width="100%">';
                 echo '<thead>';
                 $result = null;
-                if (count($attendant_calendar) > 0 ) {
+                if (count($attendant_calendar) > 0) {
                     foreach ($attendant_calendar as $calendar) {
                         $date = $calendar['date'];
                         $time = $calendar['time'];
                         $datetime = '<div class="grey">'. $date . ' - ' . $time . '</div>';
 
-                        $img_lock = Display::return_icon('lock-closed.png',get_lang('DateUnLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));
+                        $img_lock = Display::return_icon(
+                            'lock-closed.png',
+                            get_lang('DateUnLock'),
+                            array('class' => 'img_lock', 'id' => 'datetime_column_'.$calendar['id'])
+                        );
 
-                        if (!empty($calendar['done_attendance'])){
+                        if (!empty($calendar['done_attendance'])) {
                             $datetime = '<div class="blue">' . $date . ' - ' . $time . '</div>';
                         }
                         $disabled_check = 'disabled = "true"';
@@ -319,7 +320,7 @@ if (api_is_allowed_to_edit(null, true) ||
                     }
                     echo '<tr class="'.$class.'">';
 
-                    if (count($attendant_calendar) > 0 ) {
+                    if (count($attendant_calendar) > 0) {
                         foreach ($attendant_calendar as $calendar) {
                             $checked = 'checked';
                             $presence = -1;
@@ -343,10 +344,11 @@ if (api_is_allowed_to_edit(null, true) ||
                             $style_td = '';
 
                             if ($next_attendance_calendar_id == $calendar['id']) {
-                                if ($i%2==0)
+                                if ($i % 2 == 0) {
                                     $style_td = 'background-color:#eee;';
-                                else
+                                } else {
                                     $style_td = 'background-color:#dcdcdc;';
+                                }
                                 $disabled = '';
                             }
 
@@ -363,10 +365,10 @@ if (api_is_allowed_to_edit(null, true) ||
                             } else {
                                 switch ($presence) {
                                     case 1:
-                                        echo Display::return_icon('accept.png',get_lang('Attended'));
+                                        echo Display::return_icon('accept.png', get_lang('Attended'));
                                         break;
                                     case 0:
-                                        echo Display::return_icon('exclamation.png',get_lang('NotAttended'));
+                                        echo Display::return_icon('exclamation.png', get_lang('NotAttended'));
                                         break;
                                     case -1:
                                         //echo Display::return_icon('warning.png',get_lang('NotAttended'));
@@ -397,18 +399,21 @@ if (api_is_allowed_to_edit(null, true) ||
 
                 <div class="row">
                     <div class="col-md-12">
-                <?php if (!$is_locked_attendance || api_is_platform_admin()) {
-                    if (api_is_allowed_to_edit(null, true)) {
-                        ?>
-                        <button type="submit" class="btn btn-primary"><?php echo get_lang('Save') ?></button>
-                    <?php }
-                }
-                ?>  </div>
+                    <?php if (!$is_locked_attendance || api_is_platform_admin()) {
+                        if (api_is_allowed_to_edit(null, true)) { ?>
+                            <button type="submit" class="btn btn-primary"><?php echo get_lang('Save') ?></button>
+                        <?php }
+                    } ?>
+                    </div>
                 </div>
         </form>
     <?php
     } else {
-        echo Display::display_warning_message('<a href="'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'">'.get_lang('ThereAreNoRegisteredLearnersInsidetheCourse').'</a>', false);
+        echo Display::display_warning_message(
+            '<a href="'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'">'.
+            get_lang('ThereAreNoRegisteredLearnersInsidetheCourse').'</a>',
+            false
+        );
     }
 } else {
     echo Display::page_header(get_lang('AttendanceSheetReport'));

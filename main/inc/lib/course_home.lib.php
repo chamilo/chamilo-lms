@@ -119,7 +119,9 @@ class CourseHome
                 }
             }
 
-            if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
+            if (api_get_session_id() != 0 &&
+                in_array($tool['name'], array('course_maintenance', 'course_setting'))
+            ) {
                 continue;
             }
 
@@ -143,10 +145,13 @@ class CourseHome
             }
 
             // Setting the actual image url
-            $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img'];
+            $tool['img'] = Display::returnIconPath($tool['img']);
 
             // VISIBLE
-            if (($tool['visibility'] || ((api_is_coach() || api_is_course_tutor()) && $tool['name'] == TOOL_TRACKING)) || $cat == 'courseAdmin' || $cat == 'platformAdmin') {
+            if (($tool['visibility'] ||
+                ((api_is_coach() || api_is_course_tutor()) && $tool['name'] == TOOL_TRACKING)) ||
+                $cat == 'courseAdmin' || $cat == 'platformAdmin'
+            ) {
                 if (strpos($tool['name'], 'visio_') !== false) {
                     $cell_content .= '<a  href="javascript: void(0);" onclick="javascript: window.open(\''.$tool['link'].$link_annex.'\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$tool['target'].'"><img src="'.$tool['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>';
                 } elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {

@@ -60,7 +60,7 @@ if (api_is_allowed_to_edit(null, true)) {
         if ($tool['img'] != 'external.gif') {
             $tool['link'] = api_get_path(WEB_CODE_PATH).$tool['link'];
         }
-        $tool['image'] = api_get_path(WEB_IMG_PATH).$tool['image'];
+        $tool['image'] = Display::returnIconPath($tool['image']);
 
         echo "<br /><br /><br />\n";
         echo "<table class=\"message\" width=\"70%\" align=\"center\">\n",

@@ -70,7 +70,7 @@ switch ($action) {
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
         $deleteAllEventsFromSerie = isset($_REQUEST['delete_all_events']) ? true : false;
-        $agenda->delete_event($id, $deleteAllEventsFromSerie);
+        $agenda->deleteEvent($id, $deleteAllEventsFromSerie);
         break;
     case 'resize_event':
         if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
@@ -80,7 +80,7 @@ switch ($action) {
         $minute_delta = $_REQUEST['minute_delta'];
         $id = explode('_', $_REQUEST['id']);
         $id = $id[1];
-        $agenda->resize_event($id, $day_delta, $minute_delta);
+        $agenda->resizeEvent($id, $day_delta, $minute_delta);
         break;
     case 'move_event':
         if (!api_is_allowed_to_edit(null, true) && $type == 'course') {

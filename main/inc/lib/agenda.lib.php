@@ -289,7 +289,7 @@ class Agenda
 
                     // Add announcement.
                     if ($addAsAnnouncement) {
-                        $this->store_agenda_item_as_announcement($id, $usersToSend);
+                        $this->storeAgendaEventAsAnnouncement($id, $usersToSend);
                     }
 
                     // Add attachment.
@@ -507,7 +507,7 @@ class Agenda
      * @param array $sentTo
      * @return int
      */
-    public function store_agenda_item_as_announcement($item_id, $sentTo = array())
+    public function storeAgendaEventAsAnnouncement($item_id, $sentTo = array())
     {
         $table_agenda = Database::get_course_table(TABLE_AGENDA);
         $course_id = api_get_course_int_id();
@@ -554,11 +554,11 @@ class Agenda
      * @param string $title
      * @param string $content
      * @param array $usersToSend
-     * @param int $editRepeatType
      * @param array $attachmentArray
      * @param string $attachmentComment
      * @param string $comment
      * @param string $color
+     * @param bool $addAnnouncement
      *
      * @return bool
      */
@@ -573,7 +573,8 @@ class Agenda
         $attachmentArray = array(),
         $attachmentComment = '',
         $comment = '',
-        $color = ''
+        $color = '',
+        $addAnnouncement = false
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -774,9 +775,9 @@ class Agenda
                     }
 
                     // Add announcement.
-                    /*if (isset($addAsAnnouncement) && !empty($addAsAnnouncement)) {
-                        $this->store_agenda_item_as_announcement($id);
-                    }*/
+                    if (isset($addAnnouncement) && !empty($addAnnouncement)) {
+                        $this->storeAgendaEventAsAnnouncement($id, $usersToSend);
+                    }
 
                     // Add attachment.
                     if (isset($attachmentArray) && !empty($attachmentArray)) {
@@ -813,7 +814,7 @@ class Agenda
      * @param int $id
      * @param bool $deleteAllItemsFromSerie
      */
-    public function delete_event($id, $deleteAllItemsFromSerie = false)
+    public function deleteEvent($id, $deleteAllItemsFromSerie = false)
     {
         switch ($this->type) {
             case 'personal':
@@ -838,22 +839,21 @@ class Agenda
                             $events = $this->getAllRepeatEvents($eventInfo['parent_event_id']);
                             if (!empty($events)) {
                                 foreach ($events as $event) {
-                                    $this->delete_event($event['id']);
+                                    $this->deleteEvent($event['id']);
                                 }
                             }
                             // Removing parent.
-                            $this->delete_event($eventInfo['parent_event_id']);
+                            $this->deleteEvent($eventInfo['parent_event_id']);
                         } else {
                             // This is the father looking for the children.
                             $events = $this->getAllRepeatEvents($id);
                             if (!empty($events)) {
                                 foreach ($events as $event) {
-                                    $this->delete_event($event['id']);
+                                    $this->deleteEvent($event['id']);
                                 }
                             }
                         }
                     }
-
 
                     // Removing from events.
                     Database::delete(
@@ -936,7 +936,6 @@ class Agenda
                         $this->eventOtherSessionColor
                     );
                 } else {
-
                     $this->getCourseEvents(
                         $start,
                         $end,
@@ -1078,7 +1077,7 @@ class Agenda
      * @param int $minute_delta
      * @return int
      */
-    public function resize_event($id, $day_delta, $minute_delta)
+    public function resizeEvent($id, $day_delta, $minute_delta)
     {
         // we convert the hour delta into minutes and add the minute delta
         $delta = ($day_delta * 60 * 24) + $minute_delta;

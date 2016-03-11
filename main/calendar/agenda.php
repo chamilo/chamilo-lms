@@ -92,7 +92,7 @@ if (api_is_allowed_to_edit(false, true) ||
     (api_get_course_setting('allow_user_edit_agenda') &&
     !api_is_anonymous() &&
     api_is_allowed_to_session_edit(false, true)) ||
-    GroupManager::user_has_access(api_get_user_id(), $group_id,  GroupManager::GROUP_TOOL_CALENDAR) &&
+    GroupManager::user_has_access(api_get_user_id(), $group_id, GroupManager::GROUP_TOOL_CALENDAR) &&
     GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
 ) {
     switch ($action) {
@@ -169,7 +169,7 @@ if (api_is_allowed_to_edit(false, true) ||
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
-
+                $sendEmail = isset($values['add_announcement']) ? true : false;
                 $sendAttachment = isset($_FILES['user_upload']) ? true : false;
                 $attachment = $sendAttachment ? $_FILES['user_upload'] : null;
                 $attachmentComment = isset($values['file_comment']) ? $values['file_comment'] : null;
@@ -178,7 +178,7 @@ if (api_is_allowed_to_edit(false, true) ||
                 // This is a sub event. Delete the current and create another BT#7803
 
                 if (!empty($event['parent_event_id'])) {
-                    $agenda->delete_event($eventId);
+                    $agenda->deleteEvent($eventId);
 
                     $eventId = $agenda->addEvent(
                         $startDate,
@@ -211,7 +211,9 @@ if (api_is_allowed_to_edit(false, true) ||
                     $values['users_to_send'],
                     $attachment,
                     $attachmentComment,
-                    $comment
+                    $comment,
+                    '',
+                    $sendEmail
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -245,7 +247,7 @@ if (api_is_allowed_to_edit(false, true) ||
         case 'importical':
             $actionName = get_lang('Import');
             $form = $agenda->getImportCalendarForm();
-            $content = $form->return_form();
+            $content = $form->returnForm();
 
             if ($form->validate()) {
                 $ical_name = $_FILES['ical_import']['name'];
@@ -274,7 +276,7 @@ if (api_is_allowed_to_edit(false, true) ||
         case "delete":
             if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $eventId) )) {
                 // a coach can only delete an element belonging to his session
-                $content = $agenda->delete_event($eventId);
+                $content = $agenda->deleteEvent($eventId);
             }
             break;
     }
@@ -283,11 +285,11 @@ if (api_is_allowed_to_edit(false, true) ||
 if (!empty($group_id)) {
     $group_properties = GroupManager :: get_group_properties($group_id);
     $interbreadcrumb[] = array(
-        "url" => api_get_path(WEB_CODE_PATH)."group/group.php",
+        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups')
     );
     $interbreadcrumb[] = array(
-        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?gidReq=".$group_id,
+        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace').' '.$group_properties['name']
     );
 }

@@ -607,7 +607,14 @@ $userIdToSearch = 0;
 
 if ($show_actions) {
 
-    $searchForm = new FormValidator('search', 'get', api_get_self().'?'.api_get_cidreq(), '', array('class' => 'form-search'), false);
+    $searchForm = new FormValidator(
+        'search',
+        'post',
+        api_get_self().'?'.api_get_cidreq(),
+        '',
+        array('class' => 'form-search'),
+        false
+    );
     //$form = new FormValidator('search_simple', 'get', '', '', array('class' => 'form-search'), false);
     $searchForm->addElement('text', 'keyword', get_lang('Title'));
     $users = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());

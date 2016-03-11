@@ -95,19 +95,19 @@ if ($origin == 'group') {
     $_clean['toolgroup'] = api_get_group_id();
     $group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
     $interbreadcrumb[] = array(
-        'url' => '../group/group.php?'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
     );
     $interbreadcrumb[] = array(
-        'url' => '../group/group_space.php?'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$group_properties['name'],
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewforum.php?origin='.$origin.'&forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
         'name' => $current_forum['forum_title'],
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&'.api_get_cidreq(),
         'name' => $current_thread['thread_title'],
     );
     $interbreadcrumb[] = array(
@@ -120,22 +120,21 @@ if ($origin == 'group') {
         'name' => $nameTools,
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
         'name' => $current_forum_category['cat_title'],
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewforum.php?origin='.$origin.'&forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
         'name' => $current_forum['forum_title'],
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&'.api_get_cidreq(),
         'name' => $current_thread['thread_title'],
     );
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Reply'));
 }
 
 /* Resource Linker */
-
 if (isset($_POST['add_resources']) && $_POST['add_resources'] == get_lang('Resources')) {
     $_SESSION['formelements'] = $_POST;
     $_SESSION['origin'] = $_SERVER['REQUEST_URI'];
@@ -145,7 +144,6 @@ if (isset($_POST['add_resources']) && $_POST['add_resources'] == get_lang('Resou
 }
 
 /* Header */
-
 $htmlHeadXtra[] = <<<JS
     <script>
     $(document).on('ready', function() {

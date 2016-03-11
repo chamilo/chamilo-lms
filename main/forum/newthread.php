@@ -114,19 +114,18 @@ if (api_is_invitee()) {
 $groupId = api_get_group_id();
 if (!empty($groupId)) {
     $groupProperties = GroupManager :: get_group_properties($groupId);
-    $interbreadcrumb[] = array('url' => '../group/group.php?'.$cidreq, 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => '../group/group_space.php?'.$cidreq, 'name' => get_lang('GroupSpace').' '.$groupProperties['name']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $current_forum['forum_title']);
-    $interbreadcrumb[] = array('url' => 'newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']),'name' => get_lang('NewTopic'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq, 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq, 'name' => get_lang('GroupSpace').' '.$groupProperties['name']);
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $current_forum['forum_title']);
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']),'name' => get_lang('NewTopic'));
 } else {
-    $interbreadcrumb[] = array('url' => 'index.php?'.$cidreq, 'name' => $nameTools);
-    $interbreadcrumb[] = array('url' => 'viewforumcategory.php?'.$cidreq.'&forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $current_forum['forum_title']);
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools);
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $current_forum['forum_title']);
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewTopic'));
 }
 
 /* Resource Linker */
-
 if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Resources')) {
     $_SESSION['formelements']	= $_POST;
     $_SESSION['origin']			= $_SERVER['REQUEST_URI'];
@@ -134,8 +133,6 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
     header('Location: ../resourcelinker/resourcelinker.php');
     exit;
 }
-
-/* Header */
 
 $htmlHeadXtra[] = <<<JS
     <script>
@@ -165,7 +162,7 @@ handle_forum_and_forumcategories();
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
 echo '<a href="viewforum.php?forum='.intval($_GET['forum']).'&'.$cidreq.'">'.
-    Display::return_icon('back.png',get_lang('BackToForum'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // Set forum attachment data into $_SESSION
@@ -183,7 +180,7 @@ if (!empty($values) && isset($values['SubmitPost'])) {
     store_thread($current_forum, $values);
 }
 
-if ($origin == 'learnpath') {
+if (isset($origin) && $origin == 'learnpath') {
     Display::display_reduced_footer();
 } else {
     Display::display_footer();

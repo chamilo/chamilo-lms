@@ -80,7 +80,7 @@ if (!is_dir($filepath)) {
 //groups //TODO:clean
 if (!empty($group_id)) {
 	$req_gid = '&amp;gidReq='.$group_id;
-	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace'));
+	$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace'));
 	$group_document = true;
 	$noPHP_SELF = true;
 }

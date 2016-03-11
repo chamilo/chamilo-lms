@@ -4100,13 +4100,15 @@ function api_get_track_item_property_history($tool, $ref)
 
 /**
  * Gets item property data from tool of a course id
- * @param int       course id
- * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
- * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ * @param int $course_id
+ * @param string $tool   tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param int $ref id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  * @param int $session_id
+ * @param int $groupId
+ *
  * @return array Array with all fields from c_item_property, empty array if not found or false if course could not be found
  */
-function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
+function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $groupId = 0)
 {
     $courseInfo = api_get_course_info_by_id($course_id);
 
@@ -4134,6 +4136,11 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
                 ref = $ref AND
                 $sessionCondition ";
 
+    if (!empty($groupId)) {
+        $groupId = intval($groupId);
+        $sql .= " AND to_group_id = $groupId ";
+    }
+
     $rs  = Database::query($sql);
     $row = array();
     if (Database::num_rows($rs) > 0) {
@@ -4151,7 +4158,8 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
  * @return string
  */
 
-function api_get_languages_combo($name = 'language') {
+function api_get_languages_combo($name = 'language')
+{
     $ret = '';
     $platformLanguage = api_get_setting('platformLanguage');
 

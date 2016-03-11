@@ -122,10 +122,8 @@ if (api_is_allowed_to_edit(false, true) ||
     $forums_of_groups = get_forums_of_group($current_group['id']);
 
     if (is_array($forums_of_groups)) {
-        if ($current_group['forum_state'] != GroupManager::TOOL_NOT_AVAILABLE ) {
+        if ($current_group['forum_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
             foreach ($forums_of_groups as $key => $value) {
-
-                //*!empty($user_subscribe_to_current_group) && */
                 if ($value['forum_group_public_private'] == 'public' ||
                     ($value['forum_group_public_private'] == 'private') ||
                     !empty($user_is_tutor) ||
@@ -133,17 +131,23 @@ if (api_is_allowed_to_edit(false, true) ||
                 ) {
 
                     $actions_array[] = array(
-                        'url' => '../forum/viewforum.php?forum='.$value['forum_id'].'&'.api_get_cidreq().'&origin=group',
-                        'content' => Display::return_icon('forum.png', get_lang('Forum').': '.$value['forum_title'] , array(), 32)
+                        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$value['forum_id'].'&'.api_get_cidreq().'&origin=group',
+                        'content' => Display::return_icon(
+                            'forum.png',
+                            get_lang('Forum').': '.$value['forum_title'],
+                            array(),
+                            32
+                        ),
                     );
                 }
             }
         }
     }
+
     if ($current_group['doc_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
         // Link to the documents area of this group
         $actions_array[] = array(
-            'url' => '../document/document.php?'.api_get_cidreq(),
+            'url' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
             'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), array(), 32)
         );
     }
@@ -155,14 +159,14 @@ if (api_is_allowed_to_edit(false, true) ||
         }
         // Link to a group-specific part of agenda
         $actions_array[] = array(
-            'url' => '../calendar/agenda_js.php?'.api_get_cidreq().$groupFilter,
+            'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq().$groupFilter,
             'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), 32)
         );
     }
     if ($current_group['work_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
         // Link to the works area of this group
         $actions_array[] = array(
-            'url' => '../work/work.php?'.api_get_cidreq(),
+            'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'content' => Display::return_icon('work.png', get_lang('GroupWork'), array(), 32)
         );
 
@@ -170,7 +174,7 @@ if (api_is_allowed_to_edit(false, true) ||
     if ($current_group['announcements_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
         // Link to a group-specific part of announcements
         $actions_array[] = array(
-            'url' => '../announcements/announcements.php?'.api_get_cidreq(),
+            'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
             'content' => Display::return_icon('announce.png', get_lang('GroupAnnouncements'), array(), 32)
         );
     }
@@ -178,7 +182,7 @@ if (api_is_allowed_to_edit(false, true) ||
     if ($current_group['wiki_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
         // Link to the wiki area of this group
         $actions_array[] = array(
-            'url' => '../wiki/index.php?'.api_get_cidreq().'&action=show&title=index&session_id='.api_get_session_id().'&group_id='.$current_group['id'],
+            'url' => api_get_path(WEB_CODE_PATH).'wiki/index.php?'.api_get_cidreq().'&action=show&title=index&session_id='.api_get_session_id().'&group_id='.$current_group['id'],
             'content' => Display::return_icon('wiki.png', get_lang('GroupWiki'), array(), 32)
         );
     }
@@ -195,7 +199,7 @@ if (api_is_allowed_to_edit(false, true) ||
             );
         } else {
             $actions_array[] = array(
-                'url' => "../chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id'],
+                'url' => api_get_path(WEB_CODE_PATH)."chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id'],
                 'content' => Display::return_icon('chat.png', get_lang('Chat'), array(), 32)
             );
         }
@@ -212,11 +216,11 @@ if (api_is_allowed_to_edit(false, true) ||
     $forums_of_groups = get_forums_of_group($current_group['id']);
 
     if (is_array($forums_of_groups)) {
-        if ( $current_group['forum_state'] == GroupManager::TOOL_PUBLIC ) {
+        if ( $current_group['forum_state'] == GroupManager::TOOL_PUBLIC) {
             foreach ($forums_of_groups as $key => $value) {
-                if ($value['forum_group_public_private'] == 'public' ) {
+                if ($value['forum_group_public_private'] == 'public') {
                     $actions_array[] = array(
-                        'url' => '../forum/viewforum.php?cidReq='.api_get_course_id().'&forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'&origin=group',
+                        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?cidReq='.api_get_course_id().'&forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'&origin=group',
                         'content' => Display::return_icon('forum.png', get_lang('GroupForum'), array(), ICON_SIZE_MEDIUM)
                     );
                 }
@@ -227,7 +231,7 @@ if (api_is_allowed_to_edit(false, true) ||
     if ($current_group['doc_state'] == GroupManager::TOOL_PUBLIC) {
         // Link to the documents area of this group
         $actions_array[] = array(
-            'url' => '../document/document.php?'.api_get_cidreq(),
+            'url' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
             'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), array(), ICON_SIZE_MEDIUM)
         );
     }
@@ -235,7 +239,7 @@ if (api_is_allowed_to_edit(false, true) ||
     if ($current_group['calendar_state'] == GroupManager::TOOL_PUBLIC) {
         // Link to a group-specific part of agenda
         $actions_array[] = array(
-            'url' => '../calendar/agenda.php?'.api_get_cidreq(),
+            'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda.php?'.api_get_cidreq(),
             'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), ICON_SIZE_MEDIUM)
         );
 
@@ -244,7 +248,7 @@ if (api_is_allowed_to_edit(false, true) ||
     if ($current_group['work_state'] == GroupManager::TOOL_PUBLIC) {
         // Link to the works area of this group
         $actions_array[] = array(
-            'url' => '../work/work.php?'.api_get_cidreq(),
+            'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'content' => Display::return_icon('work.png', get_lang('GroupWork'), array(), ICON_SIZE_MEDIUM)
         );
     }
@@ -252,7 +256,7 @@ if (api_is_allowed_to_edit(false, true) ||
     if ($current_group['announcements_state'] == GroupManager::TOOL_PUBLIC) {
         // Link to a group-specific part of announcements
         $actions_array[] = array(
-            'url' => '../announcements/announcements.php?'.api_get_cidreq(),
+            'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
             'content' => Display::return_icon('announce.png', get_lang('GroupAnnouncements'), array(), ICON_SIZE_MEDIUM)
         );
     }
@@ -260,12 +264,12 @@ if (api_is_allowed_to_edit(false, true) ||
     if ($current_group['wiki_state'] == GroupManager::TOOL_PUBLIC) {
         // Link to the wiki area of this group
         $actions_array[] = array(
-            'url' => '../wiki/index.php?'.api_get_cidreq().'&action=show&title=index&session_id='.api_get_session_id().'&group_id='.$current_group['id'],
+            'url' => api_get_path(WEB_CODE_PATH).'wiki/index.php?'.api_get_cidreq().'&action=show&title=index&session_id='.api_get_session_id().'&group_id='.$current_group['id'],
             'content' => Display::return_icon('wiki.png', get_lang('GroupWiki'), array(), 32)
         );
     }
 
-    if ($current_group['chat_state'] == GroupManager::TOOL_PUBLIC ) {
+    if ($current_group['chat_state'] == GroupManager::TOOL_PUBLIC) {
         // Link to the chat area of this group
         if (api_get_course_setting('allow_open_chat_window')) {
             $actions_array[] = array(
@@ -274,7 +278,7 @@ if (api_is_allowed_to_edit(false, true) ||
             );
         } else {
             $actions_array[] = array(
-                'url' => "../chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id'],
+                'url' => api_get_path(WEB_CODE_PATH)."chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id'],
                 'content' => Display::return_icon('chat.png', get_lang('Chat'), array(), 32)
             );
         }
@@ -322,7 +326,12 @@ echo '<br />';
  */
 echo Display::page_subheader(get_lang('GroupMembers'));
 
-$table = new SortableTable('group_users', 'get_number_of_group_users', 'get_group_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1);
+$table = new SortableTable(
+    'group_users',
+    'get_number_of_group_users',
+    'get_group_user_data',
+    (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1
+);
 $my_cidreq = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $my_origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $my_gidreq = isset($_GET['gidReq']) ? Security::remove_XSS($_GET['gidReq']) : '';
@@ -366,14 +375,15 @@ function get_number_of_group_users()
     $course_id = api_get_course_int_id();
 
     // Database table definition
-    $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
+    $table = Database :: get_course_table(TABLE_GROUP_USER);
 
     // Query
     $sql = "SELECT count(iid) AS number_of_users
-            FROM ".$table_group_user."
-            WHERE c_id = $course_id AND group_id='".Database::escape_string($current_group['id'])."'";
+            FROM ".$table."
+            WHERE c_id = $course_id AND group_id='".intval($current_group['id'])."'";
     $result = Database::query($sql);
-    $return = Database::fetch_array($result,'ASSOC');
+    $return = Database::fetch_array($result, 'ASSOC');
+
     return $return['number_of_users'];
 }
 

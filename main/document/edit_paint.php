@@ -85,11 +85,13 @@ if (!is_dir($filepath)) {
 
 //groups //TODO:clean
 if (!empty($groupId)) {
-	$interbreadcrumb[] = array ('url' => '../group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace'));
+	$interbreadcrumb[] = array(
+		'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+		'name' => get_lang('GroupSpace'),
+	);
 	$group_document = true;
 	$noPHP_SELF = true;
 }
-
 
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 

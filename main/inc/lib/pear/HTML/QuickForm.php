@@ -1396,10 +1396,7 @@ class HTML_QuickForm extends HTML_Common
     static function isTypeRegistered($type)
     {
         return isset($GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][strtolower($type)]);
-    } // end func isTypeRegistered
-
-    // }}}
-    // {{{ getRegisteredTypes()
+    }
 
     /**
      * Returns an array of registered element types
@@ -1549,10 +1546,7 @@ class HTML_QuickForm extends HTML_Common
     function getRequiredNote()
     {
         return $this->_requiredNote;
-    } // end func getRequiredNote
-
-    // }}}
-    // {{{ validate()
+    }
 
     /**
      * Performs the server side validation
@@ -1646,10 +1640,7 @@ class HTML_QuickForm extends HTML_Common
         }
 
         return (0 == count($this->_errors));
-    } // end func validate
-
-    // }}}
-    // {{{ freeze()
+    }
 
     /**
      * Displays elements without HTML input tags
@@ -1683,10 +1674,7 @@ class HTML_QuickForm extends HTML_Common
             return PEAR::raiseError(null, QUICKFORM_NONEXIST_ELEMENT, null, E_USER_WARNING, "Nonexistant element(s): '" . implode("', '", array_keys($elementList)) . "' in HTML_QuickForm::freeze()", 'HTML_QuickForm_Error', true);
         }
         return true;
-    } // end func freeze
-
-    // }}}
-    // {{{ isFrozen()
+    }
 
     /**
      * Returns whether or not the whole form is frozen
@@ -1698,10 +1686,7 @@ class HTML_QuickForm extends HTML_Common
     function isFrozen()
     {
          return $this->_freezeAll;
-    } // end func isFrozen
-
-    // }}}
-    // {{{ process()
+    }
 
     /**
      * Performs the form data processing
@@ -1720,10 +1705,7 @@ class HTML_QuickForm extends HTML_Common
         }
         $values = ($mergeFiles === true) ? HTML_QuickForm::arrayMerge($this->_submitValues, $this->_submitFiles) : $this->_submitValues;
         return call_user_func($callback, $values);
-    } // end func process
-
-    // }}}
-    // {{{ accept()
+    }
 
    /**
     * Accepts a renderer
@@ -1743,10 +1725,7 @@ class HTML_QuickForm extends HTML_Common
             $element->accept($renderer, $required, $error);
         }
         $renderer->finishForm($this);
-    } // end func accept
-
-    // }}}
-    // {{{ defaultRenderer()
+    }
 
    /**
     * Returns a reference to default renderer object
@@ -1762,10 +1741,7 @@ class HTML_QuickForm extends HTML_Common
             $GLOBALS['_HTML_QuickForm_default_renderer'] = new HTML_QuickForm_Renderer_Default();
         }
         return $GLOBALS['_HTML_QuickForm_default_renderer'];
-    } // end func defaultRenderer
-
-    // }}}
-    // {{{ toHtml ()
+    }
 
     /**
      * Returns an HTML version of the form
@@ -1786,10 +1762,7 @@ class HTML_QuickForm extends HTML_Common
         $this->accept($renderer);
 
         return $renderer->toHtml();
-    } // end func toHtml
-
-    // }}}
-    // {{{ getValidationScript()
+    }
 
     /**
      * Returns the client side validation script
@@ -1882,10 +1855,7 @@ class HTML_QuickForm extends HTML_Common
                 "</script>";
         }
         return '';
-    } // end func getValidationScript
-
-    // }}}
-    // {{{ getSubmitValues()
+    }
 
     /**
      * Returns the values submitted by the form
@@ -1898,10 +1868,7 @@ class HTML_QuickForm extends HTML_Common
     function getSubmitValues($mergeFiles = false)
     {
         return $mergeFiles? HTML_QuickForm::arrayMerge($this->_submitValues, $this->_submitFiles): $this->_submitValues;
-    } // end func getSubmitValues
-
-    // }}}
-    // {{{ toArray()
+    }
 
     /**
      * Returns the form's contents in an array.
@@ -1922,10 +1889,7 @@ class HTML_QuickForm extends HTML_Common
         //
         $this->accept($renderer);
         return $renderer->toArray();
-     } // end func toArray
-
-    // }}}
-    // {{{ exportValue()
+     }
 
     /**
      * Returns a 'safe' element's value
@@ -1958,9 +1922,6 @@ class HTML_QuickForm extends HTML_Common
         }
         return $value;
     }
-
-    // }}}
-    // {{{ exportValues()
 
     /**
      * Returns 'safe' elements' values
@@ -2000,9 +1961,6 @@ class HTML_QuickForm extends HTML_Common
         return $values;
     }
 
-    // }}}
-    // {{{ isSubmitted()
-
    /**
     * Tells whether the form was already submitted
     *
@@ -2032,10 +1990,7 @@ class HTML_QuickForm extends HTML_Common
     function isError($value)
     {
         return (is_object($value) && is_a($value, 'html_quickform_error'));
-    } // end func isError
-
-    // }}}
-    // {{{ errorMessage()
+    }
 
     /**
      * Return a textual error message for an QuickForm error code
@@ -2073,7 +2028,7 @@ class HTML_QuickForm extends HTML_Common
 
         // return the textual error message corresponding to the code
         return isset($errorMessages[$value]) ? $errorMessages[$value] : $errorMessages[QUICKFORM_ERROR];
-    } // end func errorMessage
+    }
 
     /**
      * @param HTML_QuickForm_element $element
@@ -2097,18 +2052,14 @@ class HTML_QuickForm extends HTML_Common
  * @author      Bertrand Mansion <bmansion@mamasam.com>
  * @version     Release: 3.2.11
  */
-class HTML_QuickForm_Error extends PEAR_Error {
-
-    // {{{ properties
+class HTML_QuickForm_Error extends PEAR_Error
+{
 
     /**
     * Prefix for all error messages
     * @var string
     */
     var $error_message_prefix = 'QuickForm Error: ';
-
-    // }}}
-    // {{{ constructor
 
     /**
     * Creates a quickform error object, extending the PEAR_Error class

@@ -252,14 +252,18 @@ class GroupManager
                 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
                 $forum_categories = get_forum_categories();
+                if (empty($forum_categories)) {
+                    $categoryParam = array(
+                        'forum_category_title' => get_lang('GroupForums'),
+                    );
+                    store_forumcategory($categoryParam);
 
-                $values = array();
-                $values['forum_title'] = $name;
-                $values['group_id'] = $lastId;
+                    $forum_categories = get_forum_categories();
+                }
 
                 $counter = 0;
-                foreach ($forum_categories as $key=>$value) {
-                    if ($counter==0) {
+                foreach ($forum_categories as $key => $value) {
+                    if ($counter == 0) {
                         $forum_category_id = $key;
                     }
                     $counter++;
@@ -268,6 +272,10 @@ class GroupManager
                 if (empty($forum_category_id)) {
                     $forum_category_id = 0;
                 }
+
+                $values = array();
+                $values['forum_title'] = $name;
+                $values['group_id'] = $lastId;
                 $values['forum_category'] = $forum_category_id;
                 $values['allow_anonymous_group']['allow_anonymous'] = 0;
                 $values['students_can_edit_group']['students_can_edit'] = 0;

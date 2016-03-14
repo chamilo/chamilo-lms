@@ -118,15 +118,15 @@ $current_group_name = $current_group['name'];
 
 if (isset($group_id) && $group_id != '') {
     $interbreadcrumb[] = array(
-        'url' => '../group/group.php?'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
     );
     $interbreadcrumb[] = array(
-        'url' => '../group/group_space.php?'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$current_group_name,
     );
     $name_to_show = explode('/', $name_to_show);
-    unset ($name_to_show[1]);
+    unset($name_to_show[1]);
     $name_to_show = implode('/', $name_to_show);
 }
 

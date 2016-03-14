@@ -2118,7 +2118,7 @@ class Tracking
      * course.
      * @param int|array $studentId
      * @param string    $courseCode
-     * @param array     $lPIds Limit average to listed lp ids
+     * @param array     $lpIdList Limit average to listed lp ids
      * @param int       $sessionId     Session id (optional),
      * if parameter $session_id is null(default) it'll return results including
      * sessions, 0 = session is not filtered
@@ -2130,7 +2130,7 @@ class Tracking
     public static function get_avg_student_progress(
         $studentId,
         $courseCode = null,
-        $lPIds = array(),
+        $lpIdList = array(),
         $sessionId = null,
         $returnArray = false,
         $onlySeriousGame = false
@@ -2148,32 +2148,32 @@ class Tracking
         }
 
         $lPTable = Database::get_course_table(TABLE_LP_MAIN);
-        $lPViewTable = Database::get_course_table(TABLE_LP_VIEW);
-        $lPConditions = [];
-        $lPConditions['c_id = ? '] = $courseInfo['real_id'];
+        $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
+        $lpConditions = [];
+        $lpConditions['c_id = ? '] = $courseInfo['real_id'];
 
         if ($sessionId > 0) {
-            $lPConditions['AND (session_id = ? OR session_id = 0 OR session_id IS NULL)'] = $sessionId;
+            $lpConditions['AND (session_id = ? OR session_id = 0 OR session_id IS NULL)'] = $sessionId;
         } else {
-            $lPConditions['AND session_id = ?'] = $sessionId;
+            $lpConditions['AND session_id = ?'] = $sessionId;
         }
 
-        if (is_array($lPIds) && count($lPIds) > 0) {
+        if (is_array($lpIdList) && count($lpIdList) > 0) {
             $placeHolders = [];
-            for ($i = 0; $i < count($lPIds); $i++) {
+            for ($i = 0; $i < count($lpIdList); $i++) {
                 $placeHolders[] = '?';
             }
-            $lPConditions['AND id IN(' . implode(', ', $placeHolders) . ') '] = $lPIds;
+            $lpConditions['AND id IN(' . implode(', ', $placeHolders) . ') '] = $lpIdList;
         }
 
         if ($onlySeriousGame) {
-            $lPConditions['AND seriousgame_mode = ? '] = true;
+            $lpConditions['AND seriousgame_mode = ? '] = true;
         }
 
         $resultLP = Database::select(
             'id',
             $lPTable,
-            ['where' => $lPConditions]
+            ['where' => $lpConditions]
         );
         $filteredLP = array_keys($resultLP);
 
@@ -2186,16 +2186,27 @@ class Tracking
             " lp_view.lp_id IN(" . implode(', ', $filteredLP) . ") "
         ];
 
+        $groupBy = 'GROUP BY lp_id';
+
         if (is_array($studentId)) {
             $studentId = array_map('intval', $studentId);
             $conditions[] = " lp_view.user_id IN (" . implode(',', $studentId) . ")  ";
 
-            $groupBy = 'GROUP BY lp_id';
+
         } else {
             $studentId = intval($studentId);
             $conditions[] = " lp_view.user_id = '$studentId' ";
 
-            $groupBy = 'GROUP BY user_id';
+            if (empty($lpIdList)) {
+                $lpList = new LearnpathList($studentId, $courseCode, $sessionId);
+                $lpList = $lpList->get_flat_list();
+                if (!empty($lpList)) {
+                    /** @var  $lp */
+                    foreach ($lpList as $lpId => $lp) {
+                        $lpIdList[] = $lpId;
+                    }
+                }
+            }
         }
 
         if (!empty($sessionId)) {
@@ -2205,26 +2216,64 @@ class Tracking
         $conditionToString = implode('AND', $conditions);
         // Get last view for each student (in case of multi-attempt)
         // Also filter on LPs of this session
-        $sql = " SELECT
+        /*$sql = " SELECT
                     MAX(view_count),
                     AVG(progress) average,
                     SUM(progress) sum_progress,
                     count(progress) count_progress
-                FROM $lPViewTable lp_view
+                FROM $lpViewTable lp_view
                 WHERE
                   $conditionToString
-                $groupBy";
+                $groupBy";*/
+
+        $sql = "
+            SELECT
+                    lp_id,
+                    view_count,
+                    progress
+            FROM $lpViewTable lp_view
+            WHERE
+              $conditionToString
+            $groupBy
+            ORDER BY view_count DESC
+            ";
+
         $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
+
+        $progress = array();
+        $viewCount = array();
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            if (!isset($viewCount[$row['lp_id']])) {
+                $progress[$row['lp_id']] = $row['progress'];
+            }
+            $viewCount[$row['lp_id']] = $row['view_count'];
+        }
+
+        // Fill with lp ids
+        if (!empty($lpIdList)) {
+            foreach ($lpIdList as $lpId) {
+                if (!isset($progress[$lpId])) {
+                    $progress[$lpId] = 0;
+                }
+            }
+        }
+
+        if (!empty($progress)) {
+            $sum = array_sum($progress);
+            $average = $sum / count($progress);
+        } else {
+            $average = 0;
+            $sum = 0;
+        }
 
         if ($returnArray) {
             return [
-                $row['sum_progress'],
-                $row['count_progress']
+                $sum,
+                count($progress)
             ];
         }
 
-        return round($row['average'], 1);
+        return round($average, 1);
     }
 
     /**

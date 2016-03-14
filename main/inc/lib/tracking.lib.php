@@ -2186,11 +2186,13 @@ class Tracking
             " lp_view.lp_id IN(" . implode(', ', $filteredLP) . ") "
         ];
 
+        $groupBy = 'GROUP BY lp_id';
+
         if (is_array($studentId)) {
             $studentId = array_map('intval', $studentId);
             $conditions[] = " lp_view.user_id IN (" . implode(',', $studentId) . ")  ";
 
-            $groupBy = 'GROUP BY lp_id';
+
         } else {
             $studentId = intval($studentId);
             $conditions[] = " lp_view.user_id = '$studentId' ";
@@ -2205,8 +2207,6 @@ class Tracking
                     }
                 }
             }
-
-            $groupBy = 'GROUP BY user_id';
         }
 
         if (!empty($sessionId)) {

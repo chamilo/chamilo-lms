@@ -364,10 +364,7 @@ class HTML_QuickForm extends HTML_Common
     function apiVersion()
     {
         return 3.2;
-    } // end func apiVersion
-
-    // }}}
-    // {{{ registerElementType()
+    }
 
     /**
      * Registers a new element type
@@ -382,10 +379,7 @@ class HTML_QuickForm extends HTML_Common
     function registerElementType($typeName, $include, $className)
     {
         $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][strtolower($typeName)] = array($include, $className);
-    } // end func registerElementType
-
-    // }}}
-    // {{{ registerRule()
+    }
 
     /**
      * Registers a new validation rule
@@ -403,10 +397,7 @@ class HTML_QuickForm extends HTML_Common
         include_once('HTML/QuickForm/RuleRegistry.php');
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
         $registry->registerRule($ruleName, $type, $data1, $data2);
-    } // end func registerRule
-
-    // }}}
-    // {{{ elementExists()
+    }
 
     /**
      * Returns true if element is in the form
@@ -419,10 +410,7 @@ class HTML_QuickForm extends HTML_Common
     function elementExists($element=null)
     {
         return isset($this->_elementIndex[$element]);
-    } // end func elementExists
-
-    // }}}
-    // {{{ setDatasource()
+    }
 
     /**
      * Sets a datasource object for this form object
@@ -489,10 +477,7 @@ class HTML_QuickForm extends HTML_Common
                 $this->_elements[$key]->onQuickFormEvent('updateValue', null, $this);
             }
         }
-    } // end func setDefaults
-
-    // }}}
-    // {{{ setConstants()
+    }
 
     /**
      * Initializes constant form values.
@@ -1910,10 +1895,7 @@ class HTML_QuickForm extends HTML_Common
         //
         $this->accept($renderer);
         return $renderer->toArray();
-     } // end func toArray
-
-    // }}}
-    // {{{ exportValue()
+    }
 
     /**
      * Returns a 'safe' element's value
@@ -1946,9 +1928,6 @@ class HTML_QuickForm extends HTML_Common
         }
         return $value;
     }
-
-    // }}}
-    // {{{ exportValues()
 
     /**
      * Returns 'safe' elements' values
@@ -1988,10 +1967,7 @@ class HTML_QuickForm extends HTML_Common
         return $values;
     }
 
-    // }}}
-    // {{{ isSubmitted()
-
-   /**
+    /**
     * Tells whether the form was already submitted
     *
     * This is useful since the _submitFiles and _submitValues arrays
@@ -2004,10 +1980,6 @@ class HTML_QuickForm extends HTML_Common
     {
         return $this->_flagSubmitted;
     }
-
-
-    // }}}
-    // {{{ isError()
 
     /**
      * Tell whether a result from a QuickForm method is an error (an instance of HTML_QuickForm_Error)
@@ -2061,10 +2033,8 @@ class HTML_QuickForm extends HTML_Common
 
         // return the textual error message corresponding to the code
         return isset($errorMessages[$value]) ? $errorMessages[$value] : $errorMessages[QUICKFORM_ERROR];
-    } // end func errorMessage
-
-    // }}}
-} // end class HTML_QuickForm
+    }
+}
 
 /**
  * Class for errors thrown by HTML_QuickForm package
@@ -2075,10 +2045,8 @@ class HTML_QuickForm extends HTML_Common
  * @author      Bertrand Mansion <bmansion@mamasam.com>
  * @version     Release: 3.2.11
  */
-class HTML_QuickForm_Error extends PEAR_Error {
-
-    // {{{ properties
-
+class HTML_QuickForm_Error extends PEAR_Error
+{
     /**
     * Prefix for all error messages
     * @var string
@@ -2105,6 +2073,4 @@ class HTML_QuickForm_Error extends PEAR_Error {
             $this->PEAR_Error("Invalid error code: $code", QUICKFORM_ERROR, $mode, $level, $debuginfo);
         }
     }
-    // }}}
-} // end class HTML_QuickForm_Error
-?>
+}

@@ -465,8 +465,8 @@ EOT;
      * displayed. The progress bar will disappear once the page has been
      * reloaded.
      *
-     * @param int $delay (optional)				The number of seconds between the moment the user
-     * @param string $label (optional)			Custom label to be shown
+     * @param int $delay (optional)                The number of seconds between the moment the user
+     * @param string $label (optional)            Custom label to be shown
      * submits the form and the start of the progress bar.
      */
     public function add_progress_bar($delay = 2, $label = '')
@@ -548,8 +548,8 @@ EOT;
     /**
      * This function has been created for avoiding changes directly within QuickForm class.
      * When we use it, the element is threated as 'required' to be dealt during validation.
-     * @param array $element					The array of elements
-     * @param string $message					The message displayed
+     * @param array $element The array of elements
+     * @param string $message The message displayed
      */
     function add_multiple_required_rule($elements, $message)
     {

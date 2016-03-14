@@ -144,7 +144,7 @@ class Tracking
                 get_lang('ScormLessonTitle'),
                 get_lang('ScormStatus'),
                 get_lang('ScormScore'),
-                get_lang('ScormTime')
+                get_lang('ScormTime'),
             );
         }
 
@@ -1003,14 +1003,14 @@ class Tracking
                 '',
                 '',
                 '',
-                ''
+                '',
             );
             $csv_content[] = $temp;
             $temp = array(
                 get_lang('AccomplishedStepsTotal'),
                 '',
                 $final_score,
-                $total_time
+                $total_time,
             );
             $csv_content[] = $temp;
             ob_end_clean();
@@ -1202,7 +1202,7 @@ class Tracking
             'students' => $students,
             'courses' => $courses,
             'sessions' => $sessions,
-            'assignedCourses' => $assignedCourses
+            'assignedCourses' => $assignedCourses,
         );
     }
 
@@ -2056,7 +2056,7 @@ class Tracking
         if (!empty($lp_ids)) {
             if (count($lp_ids) > 0) {
                 $lp_ids = array_map('intval', $lp_ids);
-                $conditions[] = " lp_view.lp_id IN(".implode(',', $lp_ids).") ";
+                $conditions[] = " lp_view.lp_id IN (".implode(',', $lp_ids).") ";
             }
         }
 
@@ -2068,7 +2068,19 @@ class Tracking
             } else {
                 $student_id = intval($student_id);
                 $conditions[] = " lp_view.user_id = '$student_id' ";
+
+                if (empty($lp_ids)) {
+                    $lpList = new learnpathList($student_id, $course_code, $session_id);
+                    $lpList = $lpList->get_flat_list();
+                    if (!empty($lpList)) {
+                        /** @var  $lp */
+                        foreach ($lpList as $lpId => $lp) {
+                            $lp_ids[] = $lpId;
+                        }
+                    }
+                }
             }
+
             if (!empty($session_id)) {
                 $conditions[] = " session_id = $session_id ";
             }
@@ -2076,7 +2088,7 @@ class Tracking
 
             // Get last view for each student (in case of multi-attempt)
             // Also filter on LPs of this session
-            $sql = " SELECT
+            /*$sql = " SELECT
                         MAX(view_count),
                         AVG(progress) average,
                         SUM(progress) sum_progress,
@@ -2084,14 +2096,54 @@ class Tracking
                     FROM $tbl_course_lp_view lp_view
                     WHERE
                       $conditionToString
-                    GROUP BY lp_id";
+                    GROUP BY lp_id";*/
+
+            $sql = " SELECT
+                        lp_id,
+                        view_count,
+                        progress
+                    FROM $tbl_course_lp_view lp_view
+                    WHERE
+                      $conditionToString
+                    GROUP BY lp_id
+                    ORDER BY view_count DESC
+                    ";
+
             $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
+
+            $progress = array();
+            $viewCount = array();
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                if (!isset($viewCount[$row['lp_id']])) {
+                    $progress[$row['lp_id']] = $row['progress'];
+                }
+                $viewCount[$row['lp_id']] = $row['view_count'];
+            }
+
+            // Fill with lp ids
+            if (!empty($lp_ids)) {
+                foreach ($lp_ids as $lpId) {
+                    if (!isset($progress[$lpId])) {
+                        $progress[$lpId] = 0;
+                    }
+                }
+            }
+
+            if (!empty($progress)) {
+                $sum = array_sum($progress);
+                $average = $sum / count($progress);
+            } else {
+                $average = 0;
+                $sum = 0;
+            }
+
             if (!$return_array) {
-                $avg_progress = round($row['average'], 1);
+                $avg_progress = round($average, 1);
+
                 return $avg_progress;
             } else {
-                return array($row['sum_progress'], $row['count_progress']);
+
+                return array($sum, count($progress));
             }
         }
     }
@@ -5211,7 +5263,7 @@ class Tracking
                     'position' => $rowQuestion['position'],
                     'question' => $rowQuestion['question'],
                     'answer' => $rowQuestion['answer'],
-                    'correct' => $rowQuestion['correct']
+                    'correct' => $rowQuestion['correct'],
                 );
                 $question[$questionId]['question'] = $rowQuestion['question'];
             }
@@ -5613,7 +5665,7 @@ class TrackingCourseLog
     	return array(
             'table_name' => $table_name,
             'link_tool' => $link_tool,
-            'id_tool' => $id_tool
+            'id_tool' => $id_tool,
         );
     }
 
@@ -6723,7 +6775,7 @@ class TrackingUserLogCSV
 
         return array(
             'array' => $csvContent,
-            'html' => $courseToolInformationTotal
+            'html' => $courseToolInformationTotal,
         );
     }
 }

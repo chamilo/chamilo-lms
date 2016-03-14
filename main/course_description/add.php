@@ -24,7 +24,7 @@ echo '<a href="index.php?'.api_get_cidreq().'">'.
 	'</a>';
 ksort($categories);
 foreach ($categories as $id => $title) {
-	if ($i==ADD_BLOCK) {
+	if ($i == ADD_BLOCK) {
 		echo '<a href="index.php?'.api_get_cidreq().'&action=add">'.
 			Display::return_icon($default_description_icon[$id], $title, '',ICON_SIZE_MEDIUM).'</a>';
 		break;
@@ -38,7 +38,7 @@ echo '</div>';
 
 // error messages
 if (isset($error) && intval($error) == 1) {
-	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
+	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
 }
 
 // default header title form
@@ -48,9 +48,6 @@ if ($description_type >= ADD_BLOCK) {
 	$header = $default_description_titles[ADD_BLOCK];
 }
 
-if (!$error) {
-	$token = Security::get_token();
-}
 // display form
 $form = new FormValidator(
     'course_description',
@@ -61,7 +58,7 @@ $form->addElement('header', '', $header);
 $form->addElement('hidden', 'description_type', $description_type);
 $form->addElement('hidden', 'sec_token', $token);
 $form->addText('title', get_lang('Title'), true, array('size'=>'width: 350px;'));
-$form->applyFilter('title','html_filter');
+$form->applyFilter('title', 'html_filter');
 $form->addHtmlEditor(
     'contentDescription',
     get_lang('Content'),

@@ -1632,7 +1632,7 @@ INSERT INTO settings_current
 VALUES
 ('hide_home_top_when_connected', '', 'radio', 'Platform', 'false', 'HideHomeTopContentWhenLoggedInText', 'HideHomeTopContentWhenLoggedInComment', NULL, '', true),
 ('hide_global_announcements_when_not_connected','','radio','Platform','false', 'HideGlobalAnnouncementsWhenNotLoggedInText','HideGlobalAnnouncementsWhenNotLoggedInComment',NULL,'', true),
-('course_creation_use_template','','textfield','Course','','CourseCreationUsesTemplateText','CourseCreationUsesTemplateComment',NULL,'',true),
+('course_creation_use_template','','select_course','Course','','CourseCreationUsesTemplateText','CourseCreationUsesTemplateComment',NULL,'',true),
 ('allow_strength_pass_checker','','radio','Security','true','EnablePasswordStrengthCheckerText','EnablePasswordStrengthCheckerComment',NULL,'',true),
 ('allow_captcha','','radio','Security','false','EnableCaptchaText','EnableCaptchaComment',NULL,'',true),
 ('captcha_number_mistakes_to_block_account','','textfield','Security',5,'CaptchaNumberOfMistakesBeforeBlockingAccountText','CaptchaNumberOfMistakesBeforeBlockingAccountComment',NULL,'',true),

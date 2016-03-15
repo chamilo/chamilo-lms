@@ -1167,6 +1167,7 @@ function update_gradebook_score_display_custom_values($values) {
 function generate_settings_form($settings, $settings_by_access_list)
 {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
+    $em = Database::getManager();
     $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
@@ -1415,6 +1416,24 @@ function generate_settings_form($settings, $settings_by_access_list)
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
             case 'custom':
+                break;
+            case 'select_course':
+                $courseSelect = $form->addElement(
+                    'select_ajax',
+                    $row['variable'],
+                    [
+                        get_lang($row['title']),
+                        get_lang($row['comment']),
+                    ],
+                    null,
+                    ['url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course']
+                );
+
+                if (!empty($row['selected_value'])) {
+                    $course = $em->find('ChamiloCoreBundle:Course', $row['selected_value']);
+
+                    $courseSelect->addOption($course->getTitle(), $course->getCode(), ['selected' => 'selected']);
+                }
                 break;
         }
 

@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="128"
    height="128"
-   viewBox="0 0 102.4 102.4"
+   viewBox="0 0 128 128"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -35,16 +35,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
+     inkscape:window-width="1325"
+     inkscape:window-height="747"
      id="namedview63"
      showgrid="false"
      units="px"
-     inkscape:zoom="4.9270059"
-     inkscape:cx="18.748314"
-     inkscape:cy="62.796964"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:zoom="1.2317515"
+     inkscape:cx="85.883116"
+     inkscape:cy="19.584322"
+     inkscape:window-x="41"
+     inkscape:window-y="21"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <defs
@@ -153,7 +153,7 @@
   </defs>
   <g
      id="g4193"
-     transform="matrix(2.1061485,0,0,2.1061485,0.652436,-113.92204)">
+     transform="matrix(2.6135561,0,0,2.6135561,0.652436,-141.52501)">
     <path
        style="opacity:0.2"
        inkscape:connector-curvature="0"
@@ -173,17 +173,17 @@
        transform="translate(0,54.4)"
        style="fill:#febf59"
        id="polygon45"
-       points="23.989,44.285 23.989,11.065 4.334,11.065 4.334,37.07 4.349,37.07 23.92,44.311 " />
+       points="23.989,11.065 4.334,11.065 4.334,37.07 4.349,37.07 23.92,44.311 23.989,44.285 " />
     <polygon
        transform="translate(0,54.4)"
        style="fill:#ffffff"
        id="polygon47"
-       points="43.666,11.065 23.989,11.065 23.989,44.285 23.92,44.311 43.491,37.07 43.666,37.07 " />
+       points="23.989,11.065 23.989,44.285 23.92,44.311 43.491,37.07 43.666,37.07 43.666,11.065 " />
     <polygon
        transform="translate(0,54.4)"
        style="fill:#ffffff"
        id="polygon49"
-       points="23.92,3.82 4.334,11.065 23.92,18.311 43.506,11.065 " />
+       points="4.334,11.065 23.92,18.311 43.506,11.065 23.92,3.82 " />
     <path
        style="fill:#ffffff"
        inkscape:connector-curvature="0"

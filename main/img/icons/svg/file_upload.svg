@@ -12,7 +12,7 @@
    version="1.0"
    width="128"
    height="128"
-   viewBox="0 0 546.13333 546.13333"
+   viewBox="0 0 128 128"
    id="svg548"
    inkscape:version="0.91 r13725"
    sodipodi:docname="file_upload.svg">
@@ -25,15 +25,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
+     inkscape:window-width="1325"
+     inkscape:window-height="747"
      id="namedview33"
      showgrid="false"
-     inkscape:zoom="1.9327147"
-     inkscape:cx="-46.165653"
-     inkscape:cy="27.644558"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:zoom="1.3666357"
+     inkscape:cx="107.85434"
+     inkscape:cy="-12.45216"
+     inkscape:window-x="41"
+     inkscape:window-y="21"
      inkscape:window-maximized="1"
      inkscape:current-layer="g4175" />
   <svg:metadata
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </svg:metadata>
@@ -131,7 +131,7 @@
      transform="translate(0,290.13333)">
     <svg:g
        id="g4188"
-       transform="matrix(2.2417766,0,0,2.2417766,-13.880755,-304.01409)">
+       transform="matrix(0.48735366,0,0,0.48735366,2.1440667,-288.72099)">
       <svg:g
          id="back"
          style="font-size:12px;stroke:#000000">

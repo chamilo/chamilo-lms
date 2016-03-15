@@ -10,7 +10,7 @@
    version="1.0"
    space="preserve"
    height="128"
-   viewBox="0 0 273.06667 273.06667"
+   viewBox="0 0 128 128"
    width="128"
    id="svg2"
    inkscape:version="0.91 r13725"
@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -38,15 +38,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
+     inkscape:window-width="1325"
+     inkscape:window-height="747"
      id="namedview37"
      showgrid="false"
-     inkscape:zoom="2.4635029"
-     inkscape:cx="-7.0882414"
-     inkscape:cy="-28.013407"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:zoom="1.7419596"
+     inkscape:cx="141.45422"
+     inkscape:cy="26.348269"
+     inkscape:window-x="41"
+     inkscape:window-y="21"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <linearGradient
@@ -160,7 +160,7 @@
   </linearGradient>
   <g
      id="g4169"
-     transform="matrix(2.1568894,0,0,2.1568894,-1.507579,-314.40036)">
+     transform="matrix(0.95045356,0,0,0.95045356,1.9368177,-131.5372)">
     <path
        inkscape:connector-curvature="0"
        id="path9"

@@ -10,8 +10,9 @@
    height="128"
    version="1.1"
    width="128"
+   viewBox="0 0 128 128"
    id="svg2"
-   inkscape:version="0.91 r"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="order-course.svg">
   <metadata
      id="metadata18">
@@ -21,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -36,20 +37,20 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1051"
+     inkscape:window-width="1325"
+     inkscape:window-height="747"
      id="namedview14"
      showgrid="false"
-     inkscape:zoom="3.4766083"
-     inkscape:cx="77.684518"
-     inkscape:cy="38.730618"
-     inkscape:window-x="1366"
-     inkscape:window-y="0"
+     inkscape:zoom="1.7383042"
+     inkscape:cx="39.41118"
+     inkscape:cy="20.0049"
+     inkscape:window-x="41"
+     inkscape:window-y="21"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <g
      id="g8037"
-     transform="matrix(4.0666682,0,0,4.0666682,-809.10949,-2719.2589)">
+     transform="matrix(4.2666667,0,0,4.2666667,-852.52488,-2855.7922)">
     <rect
        style="opacity:0;fill:#d45500;fill-opacity:0.99215686;stroke:none"
        id="rect14621"

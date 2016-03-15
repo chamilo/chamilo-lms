@@ -116,6 +116,8 @@ class ImportCsv
                     $method = 'import'.$preMethod;
                     $isStatic = strpos($method, 'Static');
 
+
+
                     if ($method == 'importSessionsextidStatic') {
                         $method = 'importSessionsExtIdStatic';
                     }
@@ -126,6 +128,10 @@ class ImportCsv
 
                     if ($method == 'importUnsubsessionsextidStatic') {
                         $method = 'importUnsubsessionsExtidStatic';
+                    }
+
+                    if ($method == 'importSubsessionsextidStatic') {
+                        $method = 'importSubscribeUserToCourseSessionExtStatic';
                     }
 
                     if (method_exists($this, $method)) {
@@ -203,6 +209,7 @@ class ImportCsv
                 'sessionsextid-static',
                 'unsubscribe-static',
                 'unsubsessionsextid-static',
+                'subsessionsextid-static'
             );
 
             foreach ($sections as $section) {
@@ -1084,6 +1091,74 @@ class ImportCsv
 
         if ($moveFile) {
             $this->moveFile($file);
+        }
+    }
+
+    /**
+     * Parse filename: encora_subsessionsextid-static_31082016.csv
+     * @param string $file
+     */
+    private function importSubscribeUserToCourseSessionExtStatic($file)
+    {
+        $data = Import::csv_reader($file);
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data) . " records found.");
+            foreach ($data as $row) {
+                $chamiloUserName = $row['UserName'];
+                $chamiloCourseCode = $row['CourseCode'];
+                $externalSessionId = $row['ExtSessionID'];
+                $status = $row['Status'];
+
+                $chamiloSessionId = null;
+                if (!empty($externalSessionId)) {
+                    $chamiloSessionId = SessionManager::get_session_id_from_original_id(
+                        $externalSessionId,
+                        $this->extraFieldIdNameList['session']
+                    );
+                }
+
+                $sessionInfo = api_get_session_info($chamiloSessionId);
+
+                if (empty($sessionInfo)) {
+                    $this->logger->addError('Session does not exists: '.$chamiloSessionId);
+                    continue;
+                }
+
+                $courseInfo = api_get_course_info($chamiloCourseCode);
+                if (empty($courseInfo)) {
+                    $this->logger->addError('Course does not exists: '.$courseInfo);
+                    continue;
+                }
+
+                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
+
+                if (empty($userId)) {
+                    $this->logger->addError('User does not exists: '.$chamiloUserName);
+                    continue;
+                }
+
+                switch ($status) {
+                    case 'student':
+                        SessionManager::subscribe_users_to_session_course(
+                            array($userId),
+                            $chamiloSessionId,
+                            $courseInfo['code']
+                        );
+                        break;
+                    case 'teacher':
+                        SessionManager::set_coach_to_course_session(
+                            $userId,
+                            $chamiloSessionId,
+                            $courseInfo['code']
+                        );
+                        break;
+                }
+
+                $this->logger->addError(
+                    "User '$chamiloUserName' was added as '$status' to Session: #$chamiloSessionId - Course: " . $courseInfo['code']
+                );
+
+            }
         }
     }
 

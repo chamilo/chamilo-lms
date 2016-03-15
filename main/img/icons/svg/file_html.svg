@@ -16,7 +16,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="128"
    height="128"
-   viewBox="0 0 546.13333 546.13333"
+   viewBox="0 0 128 128"
    overflow="visible"
    enable-background="new 0 0 256 256"
    xml:space="preserve"
@@ -30,13 +30,13 @@
      id="base"
      showgrid="false"
      units="px"
-     inkscape:zoom="2.4635029"
-     inkscape:cx="-50.800736"
-     inkscape:cy="-4.3537028"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:zoom="1.2317515"
+     inkscape:cx="72.987527"
+     inkscape:cy="43.359316"
+     inkscape:window-width="1325"
+     inkscape:window-height="747"
+     inkscape:window-x="41"
+     inkscape:window-y="21"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg3932" /><metadata
      id="metadata3933"><ns:sfw><ns:slices /><ns:sliceSourceBounds
@@ -298,7 +298,7 @@ ACzJ+OKu/Q2l/wDLMn44q79DaX/yzJ+OKu/Q2l/8syfjirv0Npf/ACzJ+OKuGjaWD/vMn3Yqio4o
              rdf:about=""><dc:format>
 image/svg+xml</dc:format></rdf:Description><cc:Work
              rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-               rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata></x:xmpmeta><x:xmpmeta
+               rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata></x:xmpmeta><x:xmpmeta
        x:xmptk="XMP toolkit 3.0-29, framework 1.6"><rdf:RDF><rdf:Description
            rdf:about="" /><rdf:Description
            rdf:about="" /><rdf:Description
@@ -784,7 +784,7 @@ yfjirv0Npf8AyzJ+OKu/Q2l/8syfjirv0Npf/LMn44q79DaX/wAsyfjirv0Npf8AyzJ+OKu/Q2l/
            rdf:about=""><dc:format>
 image/svg+xml</dc:format></rdf:Description></rdf:RDF></x:xmpmeta><xpacket>end='w'    </xpacket></metadata><g
      id="Layer_1"
-     transform="matrix(2.1839509,0,0,2.1839509,0,-12.958095)"><path
+     transform="matrix(0.48413557,0,0,0.48413557,2.0092314,1.8437817)"><path
        enable-background="new    "
        d="m 44,15.5 c -9.374,0 -17,7.626 -17,17 l 0,200 c 0,9.374 7.626,17 17,17 l 176,0 c 9.375,0 17,-7.626 17,-17 l 0,-200 c 0,-9.374 -7.625,-17 -17,-17 l -176,0 z"
        id="path3935"
@@ -1079,7 +1079,7 @@ image/svg+xml</dc:format></rdf:Description></rdf:RDF></x:xmpmeta><xpacket>end='w
            style="stop-color:#003399"
            id="midPointStop4012" /></linearGradient><polygon
          enable-background="new    "
-         points="125.878,76.285 126.073,73.444 123.076,73.631 123.473,76.284 125.878,76.284 "
+         points="123.473,76.284 125.878,76.284 125.878,76.285 126.073,73.444 123.076,73.631 "
          id="polygon4013"
          style="fill:url(#XMLID_21_)" /><linearGradient
          id="XMLID_22_"

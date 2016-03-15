@@ -8,11 +8,12 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="48px"
+   height="128"
    id="svg11300"
-   width="48px"
+   width="128"
+   viewBox="0 0 128 128"
    version="1.1"
-   inkscape:version="0.91 r"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="url.svg">
   <metadata
      id="metadata3459">
@@ -22,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -35,15 +36,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1051"
+     inkscape:window-width="1325"
+     inkscape:window-height="747"
      id="namedview3457"
      showgrid="false"
-     inkscape:zoom="4.3489583"
-     inkscape:cx="24.346818"
-     inkscape:cy="9.7359282"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:zoom="1.0872396"
+     inkscape:cx="146.09244"
+     inkscape:cy="-0.65685374"
+     inkscape:window-x="41"
+     inkscape:window-y="21"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg11300" />
   <defs
@@ -172,7 +173,8 @@
      id="g4559"
      inkscape:export-filename="/var/www/chamilo/main/img/icons/22/url.png"
      inkscape:export-xdpi="41"
-     inkscape:export-ydpi="41">
+     inkscape:export-ydpi="41"
+     transform="scale(2.6479043,2.6479043)">
     <rect
        inkscape:export-ydpi="41.25"
        inkscape:export-xdpi="41.25"

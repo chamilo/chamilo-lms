@@ -17,7 +17,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="128"
    height="128"
-   viewBox="0 0 102.4 102.4"
+   viewBox="0 0 128 128"
    style="overflow:visible"
    xml:space="preserve"
    id="svg548"
@@ -29,13 +29,13 @@
      id="base"
      showgrid="false"
      units="px"
-     inkscape:zoom="2.4635029"
-     inkscape:cx="-27.497711"
-     inkscape:cy="32.146444"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:zoom="1.7419596"
+     inkscape:cx="56.55618"
+     inkscape:cy="6.9392626"
+     inkscape:window-width="1325"
+     inkscape:window-height="747"
+     inkscape:window-x="41"
+     inkscape:window-y="21"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg548" /><metadata
      id="metadata549"><xpacket>begin='﻿' id='W5M0MpCehiHzreSzNTczkc9d'    </xpacket><x:xmpmeta
@@ -272,9 +272,9 @@ image/svg+xml</dc:format><dc:title><rdf:Alt><rdf:li
                    xml:lang="x-default">
 home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
              rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-               rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata></x:xmpmeta><xpacket>end='w'    </xpacket></metadata><g
+               rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata></x:xmpmeta><xpacket>end='w'    </xpacket></metadata><g
      id="Layer_1"
-     transform="matrix(2.1162967,0,0,2.1162967,0.4088792,0.4088792)"><path
+     transform="matrix(2.6186046,0,0,2.6186046,0.4088792,0.4088792)"><path
        style="opacity:0.2"
        d="M 46.327,21.456 36.3,8.435 C 36.123,8.206 35.852,8.071 35.563,8.07 L 11.498,7.92 C 11.201,7.918 10.92,8.057 10.742,8.295 L 1.431,20.721 c -0.207,0.276 -0.246,0.645 -0.1,0.958 0.146,0.313 0.452,0.521 0.796,0.541 l 4.389,0.25 0,14.819 14.167,5.479 21.205,-5.334 0.131,-14.137 3.651,-0.336 c 0.341,-0.031 0.637,-0.246 0.773,-0.559 0.137,-0.313 0.092,-0.676 -0.116,-0.946 z M 17.674,19.377 12.143,19.052 c 1.158,-1.363 2.367,-2.785 2.916,-3.431 0.439,0.63 1.491,2.142 2.615,3.756 z"
        id="path551"
@@ -317,7 +317,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#C76200"
          id="midPointStop562" /></linearGradient><polygon
        style="fill:url(#XMLID_22_)"
-       points="41.292,20.059 5.767,17.971 5.767,36.539 19.933,42.019 41.138,36.685 "
+       points="5.767,17.971 5.767,36.539 19.933,42.019 41.138,36.685 41.292,20.059 "
        id="polygon563" /><radialGradient
        id="XMLID_23_"
        cx="15.041"
@@ -377,7 +377,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#FF9933"
          id="midPointStop579" /></linearGradient><polygon
        style="fill:url(#XMLID_24_)"
-       points="40.394,34.224 40.537,20.608 19.981,14.135 19.981,19.417 12.819,10.042 6.517,18.227 6.517,34.15 19.981,39.358 "
+       points="40.537,20.608 19.981,14.135 19.981,19.417 12.819,10.042 6.517,18.227 6.517,34.15 19.981,39.358 40.394,34.224 "
        id="polygon580" /><linearGradient
        id="XMLID_25_"
        gradientUnits="userSpaceOnUse"
@@ -410,7 +410,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#FF9999"
          id="midPointStop589" /></linearGradient><polygon
        style="fill:url(#XMLID_25_)"
-       points="44.834,21.277 34.807,8.257 10.742,8.108 1.432,20.533 7.949,20.906 14.383,13.337 21.414,23.436 "
+       points="34.807,8.257 10.742,8.108 1.432,20.533 7.949,20.906 14.383,13.337 21.414,23.436 44.834,21.277 "
        id="polygon590" /><linearGradient
        id="XMLID_26_"
        gradientUnits="userSpaceOnUse"
@@ -435,7 +435,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#FFCC66"
          id="midPointStop596" /></linearGradient><polygon
        style="fill:url(#XMLID_26_)"
-       points="19.981,41.233 19.981,14.135 40.537,20.608 40.394,36.099 "
+       points="19.981,14.135 40.537,20.608 40.394,36.099 19.981,41.233 "
        id="polygon597" /><linearGradient
        id="XMLID_27_"
        gradientUnits="userSpaceOnUse"
@@ -459,7 +459,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#FFA700"
          id="midPointStop603" /></linearGradient><polygon
        style="fill:url(#XMLID_27_)"
-       points="19.981,41.233 40.394,36.099 40.35,20.608 40.524,20.604 40.394,34.786 19.981,39.921 "
+       points="40.394,36.099 40.35,20.608 40.524,20.604 40.394,34.786 19.981,39.921 19.981,41.233 "
        id="polygon604" /><linearGradient
        id="XMLID_28_"
        gradientUnits="userSpaceOnUse"
@@ -483,7 +483,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#0066CC"
          id="midPointStop610" /></linearGradient><polygon
        style="fill:url(#XMLID_28_)"
-       points="23.827,34.525 28.477,33.532 28.448,29.018 28.448,29.017 28.441,27.921 28.433,26.508 28.433,26.508 28.428,25.682 27.337,25.838 23.776,26.352 23.81,31.771 23.81,31.771 23.811,31.847 23.827,34.501 23.827,34.501 "
+       points="28.477,33.532 28.448,29.018 28.448,29.017 28.441,27.921 28.433,26.508 28.433,26.508 28.428,25.682 27.337,25.838 23.776,26.352 23.81,31.771 23.81,31.771 23.811,31.847 23.827,34.501 23.827,34.501 23.827,34.525 "
        id="polygon611" /><linearGradient
        id="XMLID_29_"
        gradientUnits="userSpaceOnUse"
@@ -541,7 +541,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#FF0000"
          id="midPointStop627" /></linearGradient><polygon
        style="fill:url(#XMLID_30_)"
-       points="7.949,20.906 17.689,9.447 10.742,8.108 1.432,20.533 "
+       points="17.689,9.447 10.742,8.108 1.432,20.533 7.949,20.906 "
        id="polygon628" /><linearGradient
        id="XMLID_31_"
        gradientUnits="userSpaceOnUse"
@@ -565,7 +565,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#FF9999"
          id="midPointStop634" /></linearGradient><polygon
        style="fill:url(#XMLID_31_)"
-       points="34.807,8.257 10.742,8.108 1.432,20.533 7.949,20.906 20.67,23.883 44.411,21.527 44.834,21.277 "
+       points="10.742,8.108 1.432,20.533 7.949,20.906 20.67,23.883 44.411,21.527 44.834,21.277 34.807,8.257 "
        id="polygon635" /><linearGradient
        id="XMLID_32_"
        gradientUnits="userSpaceOnUse"
@@ -589,7 +589,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#600000"
          id="midPointStop641" /></linearGradient><polygon
        style="opacity:0.9;fill:url(#XMLID_32_)"
-       points="13.993,10.664 11.58,9.232 3.451,20.094 7.008,20.094 "
+       points="11.58,9.232 3.451,20.094 7.008,20.094 13.993,10.664 "
        id="polygon642" /><linearGradient
        id="XMLID_33_"
        gradientUnits="userSpaceOnUse"
@@ -613,7 +613,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#FF9933"
          id="midPointStop648" /></linearGradient><polygon
        style="fill:url(#XMLID_33_)"
-       points="19.981,19.417 19.981,41.233 6.517,36.025 6.517,18.227 12.819,10.042 "
+       points="19.981,41.233 6.517,36.025 6.517,18.227 12.819,10.042 19.981,19.417 "
        id="polygon649" /><linearGradient
        id="XMLID_34_"
        gradientUnits="userSpaceOnUse"
@@ -637,7 +637,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#FF9933"
          id="midPointStop655" /></linearGradient><polygon
        style="fill:url(#XMLID_34_)"
-       points="19.981,40.108 6.517,34.9 6.517,36.025 19.981,41.233 "
+       points="6.517,34.9 6.517,36.025 19.981,41.233 19.981,40.108 "
        id="polygon656" /><path
        style="opacity:0.6;fill:#ffffff"
        d="m 20.125,22.483 c 0,0 -0.179,13.859 1.056,18.449 l -1.199,0.302 0,-18.311 c 0.091,-0.283 0.143,-0.44 0.143,-0.44 z"
@@ -680,7 +680,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#CF0000"
          id="midPointStop668" /></linearGradient><polygon
        style="opacity:0.5;fill:url(#XMLID_35_)"
-       points="20.414,19.108 13.206,9.502 11.377,11.92 20.34,25.15 41.071,23.056 41.1,20.328 20.414,13.695 "
+       points="13.206,9.502 11.377,11.92 20.34,25.15 41.071,23.056 41.1,20.328 20.414,13.695 20.414,19.108 "
        id="polygon669" /><linearGradient
        id="XMLID_36_"
        gradientUnits="userSpaceOnUse"
@@ -704,7 +704,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#0066CC"
          id="midPointStop675" /></linearGradient><polygon
        style="fill:url(#XMLID_36_)"
-       points="33.679,30.525 33.648,32.734 38.156,31.907 38.073,25.925 38.057,24.712 36.987,24.851 33.75,25.271 33.679,30.525 "
+       points="33.648,32.734 38.156,31.907 38.073,25.925 38.057,24.712 36.987,24.851 33.75,25.271 33.679,30.525 33.679,30.525 "
        id="polygon676" /><linearGradient
        id="XMLID_37_"
        gradientUnits="userSpaceOnUse"
@@ -767,7 +767,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#FF9999"
          id="midPointStop693" /></linearGradient><polygon
        style="fill:url(#XMLID_38_)"
-       points="21.414,23.436 44.834,21.277 34.807,8.257 10.742,8.108 "
+       points="44.834,21.277 34.807,8.257 10.742,8.108 21.414,23.436 "
        id="polygon694" /><linearGradient
        id="XMLID_39_"
        gradientUnits="userSpaceOnUse"
@@ -791,7 +791,7 @@ home.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
          style="stop-color:#006A00"
          id="midPointStop700" /></linearGradient><polygon
        style="fill:url(#XMLID_39_)"
-       points="9.726,27.487 9.703,28.884 9.703,28.884 9.677,30.438 9.668,30.994 9.668,30.994 9.573,36.867 15.878,39.509 15.925,36.66 16.067,27.892 9.739,26.641 "
+       points="9.703,28.884 9.703,28.884 9.677,30.438 9.668,30.994 9.668,30.994 9.573,36.867 15.878,39.509 15.925,36.66 16.067,27.892 9.739,26.641 9.726,27.487 "
        id="polygon701" /><linearGradient
        id="XMLID_40_"
        gradientUnits="userSpaceOnUse"

@@ -362,6 +362,67 @@ function handle_stylesheets()
             }
         }
     }
+    
+    $logoForm = new FormValidator(
+        'logo_upload',
+        'post',
+        'settings.php?category=Stylesheets#tabs-2'
+    );
+    
+    $logoForm->addHtml(Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info'));
+    
+    $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
+    $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
+    $logoFileName = 'header-logo.png';
+    $newLogoFileName = 'header-logo-custom.png';
+    
+    if (is_file($dir.$newLogoFileName)) {
+        $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $newLogoFileName .'?'. time() . '">'); 
+    } else {
+        $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $logoFileName .'?'. time() . '">');
+    }
+    
+    $logoForm->addFile('new_logo', get_lang('UpdateLogo'));
+    $allowedFileTypes = ['png'];
+    
+    if (isset($_POST['logo_reset'])) {
+        if (is_file($dir.$newLogoFileName)) {
+            unlink($dir.$newLogoFileName);
+            Display::display_normal_message(get_lang('ResetToTheOriginalLogo'));
+            echo '<script>'
+                . '$("#header-logo").attr("src","'.$url.$logoFileName.'");'
+            . '</script>';
+        }
+    } elseif (isset($_POST['logo_upload'])) {
+        
+        $logoForm->addRule('new_logo', get_lang('InvalidExtension').' ('.implode(',', $allowedFileTypes).')', 'filetype', $allowedFileTypes);
+        $logoForm->addRule('new_logo', get_lang('ThisFieldIsRequired'), 'required');
+        
+        if ($logoForm->validate()) {
+            
+            $imageInfo = getimagesize($_FILES['new_logo']['tmp_name']);
+            $width = $imageInfo[0];
+            $height = $imageInfo[1];
+            if ($width <= 250 && $height <= 70 ) {
+                if (is_file($dir.$newLogoFileName)) {
+                    unlink($dir.$newLogoFileName);
+                }
+                
+                $status = move_uploaded_file($_FILES['new_logo']['tmp_name'], $dir.$newLogoFileName);
+
+                if ($status) {
+                    Display::display_normal_message(get_lang('NewLogoUpdated'));
+                    echo '<script>'
+                            . '$("#header-logo").attr("src","'.$url.$newLogoFileName.'");'
+                        . '</script>';
+                } else {
+                    Display::display_error_message('Error - '.get_lang('UplNoFileUploaded'));
+                }
+            } else {
+                Display::display_error_message('Error - '.get_lang('InvalidImageDimensions'));
+            }
+        }
+    }
 
     if ($is_style_changeable) {
         $group = [
@@ -384,6 +445,17 @@ function handle_stylesheets()
             );
         } else {
             $form_change->display();
+        }
+        
+        //Little hack to update the logo image in update form when submiting
+        if (isset($_POST['logo_reset'])) {
+            echo '<script>'
+                    . '$("#header-logo-custom").attr("src","'.$url.$logoFileName.'");'
+                . '</script>';
+        } elseif (isset($_POST['logo_upload'])) {
+            echo '<script>'
+                    . '$("#header-logo-custom").attr("src","'.$url.$newLogoFileName.'");'
+                . '</script>';
         }
     } else {
         $form_change->freeze();

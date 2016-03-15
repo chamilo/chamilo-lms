@@ -19,7 +19,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="128"
    height="128"
-   viewBox="0 0 546.13333 546.13333"
+   viewBox="0 0 128 128"
    overflow="visible"
    enable-background="new 0 0 256 256"
    xml:space="preserve"
@@ -27,7 +27,7 @@
    sodipodi:version="0.32"
    sodipodi:docname="survey.svg"
    version="1.1"
-   inkscape:version="0.91 r"
+   inkscape:version="0.91 r13725"
    style="overflow:visible"><defs
      id="defs891"><linearGradient
        inkscape:collect="always"
@@ -287,13 +287,13 @@
        gradientUnits="userSpaceOnUse" /></defs><sodipodi:namedview
      id="base"
      showgrid="false"
-     inkscape:zoom="1.3707534"
-     inkscape:cx="275.82818"
-     inkscape:cy="-25.815034"
-     inkscape:window-width="1920"
-     inkscape:window-height="1051"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:zoom="2.7415068"
+     inkscape:cx="119.46326"
+     inkscape:cy="61.27364"
+     inkscape:window-width="1325"
+     inkscape:window-height="747"
+     inkscape:window-x="41"
+     inkscape:window-y="21"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg797"
      units="px" /><metadata
@@ -573,7 +573,8 @@ image/svg+xml</dc:format><dc:title><rdf:Alt><rdf:li
 mime.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
              rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
                rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata></x:xmpmeta><xpacket>end='w'    </xpacket></metadata><g
-     id="g6406"><path
+     id="g6406"
+     transform="matrix(0.22725986,0,0,0.22725986,2.6593779,2.7046553)"><path
        inkscape:connector-curvature="0"
        style="fill:url(#XMLID_15_)"
        d="M 280.6633,223.21555 390.48743,94.743765 372.60048,87.760247 C 334.87286,73.015879 291.91591,65.225931 248.37284,65.225931 c -21.66969,0 -78.88465,13.389233 -78.88465,13.389233 C 101.09544,99.549091 48.63176,140.86824 28.562459,191.56941 l -6.08148,15.35958 213.217611,38.57978 8.2181,20.68867 14.20814,-16.62742 35.55358,6.43066 -13.01511,-32.78513 z"

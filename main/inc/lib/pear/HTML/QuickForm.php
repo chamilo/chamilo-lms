@@ -2034,6 +2034,18 @@ class HTML_QuickForm extends HTML_Common
         // return the textual error message corresponding to the code
         return isset($errorMessages[$value]) ? $errorMessages[$value] : $errorMessages[QUICKFORM_ERROR];
     }
+
+    /**
+     * @param HTML_QuickForm_element $element
+     */
+    public function setRequired(HTML_QuickForm_element $element)
+    {
+        $this->addRule(
+            $element->getName(),
+            get_lang('ThisFieldIsRequired'),
+            'required'
+        );
+    }
 }
 
 /**

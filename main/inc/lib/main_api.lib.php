@@ -7565,3 +7565,26 @@ function api_protect_limit_for_session_admin()
         api_not_allowed(true);
     }
 }
+
+/**
+ * @param string $tool Possible values:
+ * GroupManager::GROUP_TOOL_*
+ *
+ */
+function api_protect_course_group($tool, $showHeader = true)
+{
+    $userId = api_get_user_id();
+    $groupId = api_get_group_id();
+
+    if (!empty($groupId)) {
+        $allow = GroupManager::user_has_access(
+            $userId,
+            $groupId,
+            $tool
+        );
+
+        if (!$allow) {
+            api_not_allowed($showHeader);
+        }
+    }
+}

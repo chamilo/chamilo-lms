@@ -3539,7 +3539,9 @@ function move_thread_form()
     $htmlcontent .= '   </div>
                     </div>';
 
-    $form->addElement('html', $htmlcontent);
+
+
+$form->addElement('html', $htmlcontent);
 
     // The OK button
     $form->addElement('style_submit_button', 'SubmitForum', get_lang('MoveThread'), 'class="save"');

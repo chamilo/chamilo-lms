@@ -567,6 +567,11 @@ EOT;
         echo $this->return_form();
     }
 
+    public function returnForm()
+    {
+        return $this->return_form();
+    }
+
     /**
      * Returns the HTML code of the form.
      * If an element in the form didn't validate, an error message is showed
@@ -633,6 +638,27 @@ EOT;
             $return_value .= '<div id="dynamic_div" style="display:block; margin-left:40%; margin-top:10px; height:50px;"></div>';
         }
         return $return_value;
+    }
+
+    /**
+     * @param string $snippet
+     */
+    public function addHtml($snippet)
+    {
+        $this->addElement('html', $snippet);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $text
+     * @param array  $attributes
+     *
+     * @return HTML_QuickForm_checkbox
+     */
+    public function addCheckBox($name, $label, $text = '', $attributes = array())
+    {
+        return $this->addElement('checkbox', $name, $label, $text, $attributes);
     }
 }
 

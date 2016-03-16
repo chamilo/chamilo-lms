@@ -2129,4 +2129,106 @@ class Display
     {
         Session::erase('flash_messages');
     }
+
+    /**
+     * @param string $content
+     * @param string $title
+     * @param string $footer
+     * @param string $style primary|success|info|warning|danger
+     * @param string $extra
+     *
+     * @return string
+     */
+    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '')
+    {
+        $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
+        $footer = !empty($footer) ? '<div class="panel-footer ">'.$footer.'</div>' : '';
+        $styles = ['primary','success','info','warning','danger'];
+        $style = !in_array($style, $styles) ? 'default' : $style;
+
+        return '
+            <div class="panel panel-'.$style.'">
+                '.$title.'
+                '.self::contentPanel($content).'
+                '.$footer.'
+            </div>'
+            ;
+    }
+
+    /**
+     * @param string $content
+     * @return string
+     */
+    public static function contentPanel($content)
+    {
+        return '<div class="panel-body">
+                '.$content.'
+                </div>';
+    }
+
+    /**
+     * Get the button HTML with an Awesome Font icon
+     * @param string $text The button content
+     * @param string $url The url to button
+     * @param string $icon The Awesome Font class for icon
+     * @param string $type Optional. The button Bootstrap class. Default 'default' class
+     * @param array $attributes The additional attributes
+     * @return string The button HTML
+     */
+    public static function toolbarButton(
+        $text,
+        $url,
+        $icon = 'check',
+        $type = 'default',
+        array $attributes = [],
+        $includeText = true
+    ) {
+        $buttonClass = "btn btn-$type";
+        $icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
+        $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
+
+        if (!$includeText) {
+            $text = '<span class="sr-only">' . $text . '</span>';
+        }
+
+        return self::url("$icon $text", $url, $attributes);
+    }
+
+    /**
+     * @param int $id
+     * @param array $content
+     * @param int $col
+     * @param bool|true $right
+     * @return string
+     */
+    public static function toolbarAction($id, $content = array(), $col = 2, $right = true)
+    {
+        $columns = 12/$col;
+        $html = '';
+        $html .= '<div id="' . $id . '" class="actions">';
+        $html .= '<div class="row-fluid">';
+        if ($col > 4) {
+            $html = '<div class="alert alert-warning" role="alert">Action toolbar design does not work when exceeding four columns - check Display::toolbarAction()</div>';
+        } else {
+            for ( $i = 0; $i < $col; $i++ ) {
+                $html .= '<div class="span' . $columns . '">';
+                if ( $col == 2 && $i == 1 ) {
+                    if ($right === true) {
+                        $html .= '<div class="pull-right">';
+                        $html .= (isset($content[$i]) ? $content[$i] : '');
+                        $html .= '</div>';
+                    } else {
+                        $html .= $content[$i];
+                    }
+                } else {
+                    $html .= $content[$i];
+                }
+                $html .= '</div>';
+            }
+        }
+        $html .= '</div>';
+        $html .= '</div>';
+
+        return $html;
+    }
 }

@@ -48,7 +48,8 @@ if (!in_array(
         'get_usergroups_teacher',
         'get_user_course_report_resumed',
         'get_user_course_report',
-        'get_sessions_tracking'
+        'get_sessions_tracking',
+        'get_course_announcements'
     )
 ) && !isset($_REQUEST['from_course_session'])) {
     api_protect_admin_script(true);
@@ -143,6 +144,9 @@ if (!$sidx) {
 //@todo rework this
 
 switch ($action) {
+    case 'get_course_announcements':
+        $count = AnnouncementManager::getAnnouncements(null, null, true);
+        break;
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
         if (!(api_is_platform_admin(false, true))) {
@@ -562,6 +566,31 @@ switch ($action) {
                 $item['currently_learning'] = !empty($count_skill_by_course) ? array_sum($count_skill_by_course) : 0;
             }
         }
+        break;
+    case 'get_course_announcements':
+        $columns = array(
+            'title',
+            'username',
+            'insert_date',
+            'actions'
+        );
+
+        $titleToSearch = isset($_REQUEST['title_to_search']) ? $_REQUEST['title_to_search'] : '';
+        $userIdToSearch = isset($_REQUEST['user_id_to_search']) ? $_REQUEST['user_id_to_search'] : 0;
+
+        $result = AnnouncementManager::getAnnouncements(
+            null,
+            null,
+            false,
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $titleToSearch,
+            $userIdToSearch
+        );
+
+
         break;
     case 'get_work_teacher':
         $columns = array(
@@ -1328,7 +1357,8 @@ $allowed_actions = array(
     //'get_course_exercise_medias',
     'get_user_course_report',
     'get_user_course_report_resumed',
-    'get_exercise_grade'
+    'get_exercise_grade',
+    'get_course_announcements'
 );
 
 //5. Creating an obj to return a json

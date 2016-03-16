@@ -34,29 +34,47 @@ if (isset($_GET['description_type'])) {
 
 $id = null;
 if (isset($_GET['id'])) {
-	$id = intval($_GET['id']);
+    $id = intval($_GET['id']);
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
-	$action = 'listing';
+    $action = 'listing';
 }
 
 // interbreadcrumb
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('CourseProgram'));
-if ($description_type == 1) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('GeneralDescription'));
-if ($description_type == 2) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Objectives'));
-if ($description_type == 3) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Topics'));
-if ($description_type == 4) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Methodology'));
-if ($description_type == 5) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('CourseMaterial'));
-if ($description_type == 6) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('HumanAndTechnicalResources'));
-if ($description_type == 7) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Assessment'));
-if ($description_type == 8) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('ThematicAdvance'));
-if ($description_type >= 9) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Others'));
+$interbreadcrumb[] = array ("url" => "index.php?".api_get_cidreq(), "name" => get_lang('CourseProgram'));
+if ($description_type == 1) {
+    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('GeneralDescription'));
+}
+if ($description_type == 2) {
+    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Objectives'));
+}
+if ($description_type == 3) {
+    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Topics'));
+}
+if ($description_type == 4) {
+    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Methodology'));
+}
+if ($description_type == 5) {
+    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('CourseMaterial'));
+}
+if ($description_type == 6) {
+    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('HumanAndTechnicalResources'));
+}
+if ($description_type == 7) {
+    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Assessment'));
+}
+if ($description_type == 8) {
+    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('ThematicAdvance'));
+}
+if ($description_type >= 9) {
+    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Others'));
+}
 
 // course description controller object
 $course_description_controller = new CourseDescriptionController();
 
-// distpacher actions to controller
+// Actions to controller
 switch ($action) {
     case 'listing':
         $course_description_controller->listing();

@@ -3,7 +3,7 @@
 $reports_template['exercicesMultiCourses'] = array(
 	'description' => 'Result of each test per student',
 	'getSQL' => 'reports_template_exercicesMultiCourses_getSQL',
-	'wizard' => 
+	'wizard' =>
 '
 <span id="exercicesMultiCourses" class="step">
 	<span class="font_normal_07em_black">Result of each test per student</span><br />
@@ -26,7 +26,7 @@ $reports_template['exercicesMultiCourses'] = array(
 		<option value="average">group and take the average value</option>
 		<option value="min">group and take the minimum value</option>
 		<option value="max">group and take the maximum value</option>
-	</select></br>
+	</select><br />
 -->	<input type="hidden" class="link" value="format" />
 </span>
 ');
@@ -52,7 +52,7 @@ function reports_template_exercicesMultiCourses_getSQL() {
 	foreach ($columns as $key => $column)
 		$query .= ', '.$function.'(k'.$key.'.score) as `'.
 				$column['course'].' - '.
-				$column['test'].'` '; 
+				$column['test'].'` ';
 	$query .= ' from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
 	foreach ($columns as $key => $column) // fixme sessions
 		$query .= 'left outer join '.

@@ -451,11 +451,11 @@ switch ($action) {
 
         $form->addElement('text', 'title', get_lang('EmailTitle'));
         $form->addElement('hidden', 'id');
-        $htmlTags = "<b>".get_lang('Tags')."</b></br></br>";
+        $htmlTags = "<b>".get_lang('Tags')."</b><br /><br />";
         $tags = AnnouncementManager::get_tags();
 
         foreach ($tags as $tag) {
-            $htmlTags .= "<b>".$tag."</b></br>";
+            $htmlTags .= "<b>".$tag."</b><br />";
         }
 
         $form->addHtml(

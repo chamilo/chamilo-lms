@@ -713,7 +713,15 @@ if (!empty($student_id)) {
 
                         $scoretotal_display = '0/0 (0%)';
                         if (!empty($scoretotal)) {
-                            $scoretotal_display =  round($scoretotal[0],1).'/'.round($scoretotal[1],1).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)';
+                            $scoretotal_display = round(
+                                    $scoretotal[0],
+                                    1
+                                ).'/'.
+                                round(
+                                    $scoretotal[1],
+                                    1
+                                ).' ('.
+                                round(($scoretotal[0] / $scoretotal[1]) * 100, 2).' %)';
                         }
 
                         $progress = Tracking::get_avg_student_progress($user_info['user_id'], $course_code, null, $sessionId);
@@ -943,7 +951,7 @@ if (!empty($student_id)) {
                             $from ='&from=myspace';
                         }
                         $link = Display::url(
-                            '<img src="../img/icons/22/2rightarrow.png" border="0" />',
+                            Display::return_icon('2rightarrow.png'),
                             'lp_tracking.php?cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).$from.'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
                         );
                         echo Display::tag('td', $link);

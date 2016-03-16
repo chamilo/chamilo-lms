@@ -1940,14 +1940,11 @@ HOTSPOT;
                                     date('Y-m-d h:i:s'),
                                     false
                                 );
-                                $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip=' . $ip . '" target="_blank"><img src="' . api_get_path(
-                                        WEB_CODE_PATH
-                                    ) . 'img/icons/22/info.png" title="' . $ip . '" /></a>';
+                                $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip=' . $ip . '" target="_blank">
+                                '.Display::return_icon('info.png', $ip).'
+                                </a>';
 
-                                $delete_link = '<a href="exercise_report.php?' . api_get_cidreq(
-                                    ) . '&filter_by_user=' . intval(
-                                        $_GET['filter_by_user']
-                                    ) . '&filter=' . $filter . '&exerciseId=' . $exercise_id . '&delete=delete&did=' . $id . '"
+                                $delete_link = '<a href="exercise_report.php?' . api_get_cidreq() . '&filter_by_user=' . intval($_GET['filter_by_user']) . '&filter=' . $filter . '&exerciseId=' . $exercise_id . '&delete=delete&did=' . $id . '"
                                 onclick="javascript:if(!confirm(\'' . sprintf(
                                         get_lang('DeleteAttempt'),
                                         $results[$i]['username'],
@@ -2867,10 +2864,10 @@ HOTSPOT;
 
         return $return;
     }
-    
+
     /**
      * Get the correct answer count for a fill blanks question
-     * 
+     *
      * @param int $question_id
      * @param int $exercise_id
      * @return int
@@ -2911,7 +2908,7 @@ HOTSPOT;
                     $arrayCount[$index] += $count;
                 }
             }
-            
+
             return $arrayCount;
     }
 
@@ -3276,11 +3273,11 @@ HOTSPOT;
                 }
             }
             $tmp = api_strrpos($choice[$j], ' / ');
-            
+
             if ($tmp !== false) {
                 $choice[$j] = api_substr($choice[$j], 0, $tmp);
             }
-            
+
             $choice[$j] = trim($choice[$j]);
 
             //Needed to let characters ' and " to work as part of an answer

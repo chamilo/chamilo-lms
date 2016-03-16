@@ -142,16 +142,16 @@ class GradeModel extends Model
             $template_title =
             '&nbsp{element} <!-- BEGIN error --> <span class="form_error">{error}</span><!-- END error -->
              <a href="javascript:plusItem(' . ($counter+1) . ')">
-                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="../img/icons/22/add.png" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img>
+                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="'.Display::return_icon('add.png').'" alt="'.get_lang('Add').'" title="'.get_lang('Add').'">
             </a>
             <a href="javascript:minItem(' . ($counter) . ')">
-                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="min-' . $counter . '" src="../img/delete.png" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img>
+                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="min-' . $counter . '" src="'.Display::return_icon('delete.png').'" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'">
             </a>
             </div></p></div>';
 
             $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
-            $renderer->setElementTemplate($template_percentage ,  'components['.$i.'][percentage]');
-            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][acronym]');
+            $renderer->setElementTemplate($template_percentage, 'components['.$i.'][percentage]');
+            $renderer->setElementTemplate($template_acronym, 'components['.$i.'][acronym]');
 
             if ($i == 0) {
                 $form->addRule('components['.$i.'][percentage]', get_lang('ThisFieldIsRequired'), 'required');

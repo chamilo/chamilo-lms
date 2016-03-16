@@ -951,7 +951,7 @@ if (!empty($student_id)) {
                             $from ='&from=myspace';
                         }
                         $link = Display::url(
-                            '<img src="../img/icons/22/2rightarrow.png" border="0" />',
+                            Display::return_icon('2rightarrow.png'),
                             'lp_tracking.php?cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).$from.'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
                         );
                         echo Display::tag('td', $link);

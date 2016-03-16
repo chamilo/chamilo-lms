@@ -5604,12 +5604,12 @@ class learnpath
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
 
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
-                $icon = '<img src="../img/lp_' . $icon_name . '.png" />';
+                $icon = Display::return_icon('lp_'.$icon_name.'.png');
             } else {
                 if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-                    $icon = '<img src="../img/lp_' . $icon_name . '.gif"  />';
+                    $icon = Display::return_icon('lp_'.$icon_name.'.gif');
                 } else {
-                    $icon = '<img src="../img/folder_document.gif" />';
+                    $icon = Display::return_icon('folder_document.gif');
                 }
             }
 
@@ -5620,14 +5620,6 @@ class learnpath
 
             if (!$update_audio || $update_audio <> 'true') {
                 if (!empty($arrLP[$i]['audio'])) {
-                    /*$audio .= '<span id="container'.$i.'"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</span>';
-                    $audio .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-                    $audio .= '<script type="text/javascript">
-                                    var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
-                                    s1.addParam("allowscriptaccess","always");
-                                    s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $arrLP[$i]['audio'] . '");
-                                    s1.write("container' . $i . '");
-                                </script>';*/
                 } else {
                     $audio .= '';
                 }
@@ -8499,14 +8491,15 @@ class learnpath
             $icon_name = str_replace(' ', '', $item['item_type']);
 
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
-                $return .= '<img alt="" src="../img/lp_' . $icon_name . '.png" style="margin-right:5px;" title="" />';
+                $return .= Display::return_icon('lp_' . $icon_name . '.png');
             } else {
                 if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-                    $return .= '<img alt="" src="../img/lp_' . $icon_name . '.gif" style="margin-right:5px;" title="" />';
+                    $return .= Display::return_icon('lp_' . $icon_name . '.gif');
                 } else {
-                    $return .= Display::return_icon('folder_document.gif','',array('style'=>'margin-right:5px;'));
+                    $return .= Display::return_icon('folder_document.gif', '', array('style'=>'margin-right:5px;'));
                 }
             }
+
             $return .=  $item['title'] . '</label>';
             $return .= '</td>';
 
@@ -8660,7 +8653,7 @@ class learnpath
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
 
-            $return .= '<img src="../img/hotpotatoes_s.png" style="margin-right:5px;" title="" width="16px" />';
+            $return .= Display::return_icon('hotpotatoes_s.png');
             $return .= '<a href="' . api_get_self() . '?' . api_get_cidreq().'&action=add_item&type=' . TOOL_HOTPOTATOES . '&file=' . $row_hot['id'] . '&lp_id=' . $this->lp_id . '">'.
                 ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS($row_hot['title'])) . '</a>';
             $return .= '</li>';
@@ -8671,7 +8664,7 @@ class learnpath
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
-            $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
+            $return .= Display::return_icon('quizz_small.gif', '', array(), ICON_SIZE_TINY);
             $return .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
                 Security :: remove_XSS(cut($row_quiz['title'], 80)).
                 '</a>';
@@ -8679,6 +8672,7 @@ class learnpath
         }
 
         $return .= '</ul>';
+
         return $return;
     }
 
@@ -8733,23 +8727,25 @@ class learnpath
                 }
             }
         </script>
+
         <ul class="lp_resource">
             <li class="lp_resource_element">
-                <img alt="" src="'.Display::returnIconPath('linksnew.gif').' style="margin-right:5px;width:16px"/>
+                '.Display::return_icon('linksnew.gif').'
                 <a href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('LinkAdd').'">'.
-            get_lang('LinkAdd').'</a>
+                get_lang('LinkAdd').'
+                </a>
             </li>';
+
         foreach ($categorizedLinks as $categoryId => $links) {
             $linkNodes = null;
             foreach ($links as $key => $title) {
                 if (api_get_item_visibility($course, TOOL_LINK, $key, $session_id) != 2)  {
                     $linkNodes .=
-                        '<li class="lp_resource_element" data_id="'.$key.
-                        '" data_type="'.TOOL_LINK.'" title="'.$title.'" >
+                        '<li class="lp_resource_element" data_id="'.$key.'" data_type="'.TOOL_LINK.'" title="'.$title.'" >
                         <a class="moved" href="#">'.
                         $moveEverywhereIcon.
                         '</a>
-                        <img alt="" src="../img/lp_link.gif" style="margin-right:5px;width:16px"/>
+                        '.Display::return_icon('lp_link.png').'
                         <a href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
                         TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
                         Security::remove_XSS($title).
@@ -8759,8 +8755,7 @@ class learnpath
             }
             $linksHtmlCode .=
                 '<li>
-                <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')"
-                style="vertical-align:middle">
+                <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')" style="vertical-align:middle">
                     <img src="'.Display::returnIconPath('add.gif').'" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
                     align="absbottom" />
                 </a>
@@ -8781,7 +8776,7 @@ class learnpath
     {
         $return = '<div class="lp_resource" >';
         $return .= '<div class="lp_resource_element">';
-        $return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
+        $return .= Display::return_icon('works_small.gif', '', array(), ICON_SIZE_TINY);
         $return .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=add_item&type=' . TOOL_STUDENTPUBLICATION . '&lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
         $return .= '</div>';
         $return .= '</div>';
@@ -8798,13 +8793,12 @@ class learnpath
         require_once '../forum/forumconfig.inc.php';
 
         $a_forums = get_forums();
-
         $return = '<ul class="lp_resource">';
 
         //First add link
         $return .= '<li class="lp_resource_element">';
-        $return .= '<img alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'forum/index.php?' . api_get_cidreq() . '&action=add&content=forum&origin=learnpath&lp_id=' . $this->lp_id . '" title="' . get_lang('CreateANewForum') . '">' . get_lang('CreateANewForum') . '</a>';
+        $return .= Display::return_icon('forum_new_small.gif');
+        $return .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'forum/index.php?' . api_get_cidreq() . '&action=add&content=forum&origin=learnpath&lp_id=' . $this->lp_id . '" title="' . get_lang('CreateANewForum') . '">' . get_lang('CreateANewForum') . '</a>';
         $return .= '</li>';
 
         $return .= '<script>
@@ -8825,7 +8819,7 @@ class learnpath
                 $return .= '<a class="moved" href="#">';
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                 $return .= ' </a>';
-                $return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
+                $return .= Display::return_icon('lp_forum.png', '', array(), ICON_SIZE_TINY);
                 $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle">
                                 <img src="' . Display::returnIconPath('add.gif').'" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
                             </a>

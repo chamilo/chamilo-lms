@@ -426,7 +426,7 @@ if (api_get_course_setting('lp_return_link') == 1) {
     $buttonHomeText = get_lang('LearningPathList');
 }
 
-$lpPreviewImagePath = api_get_path(WEB_CODE_PATH).'img/icons/64/unknown.png';
+$lpPreviewImagePath = Display::returnIconPath('unknown.png', ICON_SIZE_BIG);
 if ($_SESSION['oLP']->get_preview_image()) {
     $lpPreviewImagePath = $_SESSION['oLP']->get_preview_image_path();
 }

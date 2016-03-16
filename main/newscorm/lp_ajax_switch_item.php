@@ -85,7 +85,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     if ($mylp->force_commit) {
         $mylp->save_current();
     }
-    //$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
+
     if (is_object($mylp->items[$new_item_id])) {
         $mylpi = $mylp->items[$new_item_id];
     } else {

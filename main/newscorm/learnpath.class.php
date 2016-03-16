@@ -266,7 +266,9 @@ class learnpath
                             error_log(
                                 'New LP - learnpath::__construct() - ' .
                                 'aicc object with id ' . $my_item_id .
-                                ' set in items[]', 0);
+                                ' set in items[]',
+                                0
+                            );
                         }
                     }
                     break;

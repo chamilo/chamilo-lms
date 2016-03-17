@@ -583,7 +583,12 @@ class Template
                 $css[] = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/learnpath.css';
             }
         }
-
+        
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
+            if (is_file(api_get_path(SYS_CSS_PATH).'themes/'.$this->theme.'/editor.css')) {
+                $css[] = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/editor.css';
+            }
+        
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/default.css');
 
 

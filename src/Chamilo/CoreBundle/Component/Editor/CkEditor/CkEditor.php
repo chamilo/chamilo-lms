@@ -86,6 +86,7 @@ class CkEditor extends Editor
            CKEDITOR.replace('".$this->getName()."',
                $javascript
            );
+           
            </script>";
 
         return $html;

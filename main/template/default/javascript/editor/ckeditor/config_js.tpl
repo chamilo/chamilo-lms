@@ -18,7 +18,17 @@ CKEDITOR.editorConfig = function (config) {
     config.templates_files  = [
         '{{ _p.web_main ~ 'inc/lib/elfinder/templates.php'}}'
     ];
-
+    //Style for default CKEditor Chamilo LMS
+    config.stylesSet = [
+        { name : 'Title border center' , element : 'h2', attributes : { 'class': 'ck-title-border-center'} },
+	{ name : 'Title border left' , element : 'h2'	, attributes : { 'class': 'ck-title-border-left'} },
+	{ name : 'Underline' , element : 'u' },
+	{ name : 'Strikethrough' , element : 'strike' },
+	{ name : 'Subscript' , element : 'sub' },
+	{ name : 'Superscript' , element : 'sup' }
+    ];
+    
+    
     {% if moreButtonsInMaximizedMode %}
         config.toolbar = 'minToolbar';
         config.smallToolbar = 'minToolbar';

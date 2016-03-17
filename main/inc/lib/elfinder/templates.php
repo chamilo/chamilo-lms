@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 $template = new Template();
 
 $editor = new CkEditor();
+
 $templates = $editor->simpleFormatTemplates();
 
 $template->assign('templates', $templates);

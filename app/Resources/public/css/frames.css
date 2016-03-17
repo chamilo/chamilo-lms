@@ -20,3 +20,27 @@ a{
 a:hover{
     text-decoration: underline;
 }
+.ck-title-border-center{
+    margin-bottom: 15px;
+	color: #404040;
+	position: relative;
+	display: inline-block;
+	text-transform: uppercase;
+	margin-bottom: 30px;
+	font-weight: bold;
+	font-size: 17px;
+	float: none;
+    width: auto;
+    background: none;
+}
+.ck-title-border-center::before {
+    position: absolute;
+    margin: auto;
+    z-index: 1;
+    content: "";
+    width: 75%;
+    height: 2px;
+    background: #FFB000 none repeat scroll 0% 0% !important;
+    bottom: -9px;
+    left: 12.5%;
+}

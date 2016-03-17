@@ -18,6 +18,8 @@ $skill = new Skill();
 $gradebook = new Gradebook();
 $skill_gradebook = new SkillRelGradebook();
 
+$userId = api_get_user_id();
+
 switch ($action) {
     case 'add':
         if (api_is_platform_admin() || api_is_drh()) {
@@ -135,14 +137,13 @@ switch ($action) {
         echo $html;
         break;
     case 'get_skills_tree_json':
-        $user_id    = isset($_REQUEST['load_user']) && $_REQUEST['load_user'] == 1 ? api_get_user_id() : 0;
-        $skill_id   = isset($_REQUEST['skill_id']) ? intval($_REQUEST['skill_id']) : 0;
-        $depth      = isset($_REQUEST['main_depth']) ? intval($_REQUEST['main_depth']) : 2;
-        $all = $skill->get_skills_tree_json($user_id, $skill_id, false, $depth);
+        $userId = isset($_REQUEST['load_user']) && $_REQUEST['load_user'] == 1 ? api_get_user_id() : 0;
+        $skill_id = isset($_REQUEST['skill_id']) ? intval($_REQUEST['skill_id']) : 0;
+        $depth = isset($_REQUEST['main_depth']) ? intval($_REQUEST['main_depth']) : 2;
+        $all = $skill->get_skills_tree_json($userId, $skill_id, false, $depth);
         echo $all;
         break;
     case 'get_user_skill':
-        $userId = api_get_user_id();
         $skillId = isset($_REQUEST['profile_id']) ? intval($_REQUEST['profile_id']) : 0;
         $skill = $skill->user_has_skill($userId, $skillId);
         if ($skill) {
@@ -152,12 +153,11 @@ switch ($action) {
         }
         break;
     case 'get_all_user_skills':
-        $userId = api_get_user_id();
-        $skills = $skill->get_user_skills($user_id, true);
+        $skills = $skill->get_user_skills($userId, true);
         echo json_encode($skills);
         break;
     case 'get_user_skills':
-        $skills = $skill->get_user_skills($user_id, true);
+        $skills = $skill->get_user_skills($userId, true);
         Display::display_no_header();
         Display::$global_template->assign('skills', $skills);
         echo Display::$global_template->fetch('default/skill/user_skills.tpl');

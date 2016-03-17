@@ -452,7 +452,7 @@ function handle_stylesheets()
             echo '<script>'
                     . '$("#header-logo-custom").attr("src","'.$url.$logoFileName.'");'
                 . '</script>';
-        } elseif (isset($_POST['logo_upload'])) {
+        } elseif (isset($_POST['logo_upload']) && is_file($dir.$newLogoFileName)) {
             echo '<script>'
                     . '$("#header-logo-custom").attr("src","'.$url.$newLogoFileName.'");'
                 . '</script>';

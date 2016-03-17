@@ -7551,4 +7551,5 @@ $MessagingGDCProjectNumberTitle = "Número do projeto de Google Developer Consol
 $MessagingGDCProjectNumberComment = "Você precisa registrar um projeto no Google Developer Console";
 $MessagingGDCApiKeyTitle = "Key API do Google Developer Console para o Google Cloud Mensagens";
 $MessagingGDCApiKeyComment = "Você precisa ativar a API do Google Cloud Mensagens e criar uma credencial para Android";
+$Overwrite = "Sobrescrever";
 ?>

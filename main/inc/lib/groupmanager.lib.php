@@ -84,7 +84,6 @@ class GroupManager
         $session_id = api_get_session_id();
 
         $course_id = $course_info['real_id'];
-        $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         $table_group = Database :: get_course_table(TABLE_GROUP);
 
         $sql = "SELECT g.id,
@@ -96,18 +95,9 @@ class GroupManager
                     g.self_registration_allowed,
                     g.self_unregistration_allowed,
                     g.session_id,
-                    g.status,
-                    ug.user_id is_member
+                    g.status
                 FROM $table_group g
-                LEFT JOIN $table_group_user ug
-                ON (
-                    ug.group_id = g.id AND
-                    ug.user_id = '".api_get_user_id()."' AND
-                    ug.c_id = $course_id AND
-                    g.c_id = $course_id
-                )";
-
-        $sql .= " WHERE 1=1 ";
+                WHERE 1 = 1 ";
 
         if (!is_null($categoryId)) {
             $sql .= " AND g.category_id = '".intval($categoryId)."' ";
@@ -2230,6 +2220,7 @@ class GroupManager
 
             // All the tutors of this group
             $tutorsids_of_group = self::get_subscribed_tutors($this_group['id'], true);
+            $isMember = self::is_subscribed($user_id, $this_group['id']);
 
             // Create a new table-row
             $row = array();
@@ -2250,7 +2241,7 @@ class GroupManager
                     Security::remove_XSS($this_group['name']).'</a> ';
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
                     $group_name .= Display::label(get_lang('OneMyGroups'), 'success');
-                } elseif ($this_group['is_member']) {
+                } elseif ($isMember) {
                     $group_name .= Display::label(get_lang('MyGroup'), 'success');
                 }
 

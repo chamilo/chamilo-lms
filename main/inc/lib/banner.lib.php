@@ -152,33 +152,44 @@ function return_logo($theme)
     $_course = api_get_course_info();
     $html = '';
     $logoBase = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/header-logo.';
+    $customLogoBase = api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme.'/images/header-logo-custom.';
 
-    $site_name = api_get_setting('siteName');
+    $siteName = api_get_setting('siteName');
     $attributes = array(
-        'title' => $site_name,
+        'title' => $siteName,
         'class' => 'img-responsive',
+        'id' => 'header-logo'
     );
     $testServer = api_get_setting('server_type');
     if ($testServer == 'test' && is_file($logoBase . 'svg')) {
         $logo = $logoBase . 'svg';
         $attributes['width'] = '245';
         $attributes['height'] = '68';
-        $image_url = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.svg';
+        $imageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.svg';
     } else {
         $logo = $logoBase . 'png';
-        $image_url = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.png';
+        $customLogo = $customLogoBase . 'png';
+        $imageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.png';
+        $customImageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo-custom.png';
     }
-
-    if (file_exists($logo)) {
-        $site_name = api_get_setting('Institution').' - '.$site_name;
+    if (file_exists($customLogo)) {
+        $siteName = api_get_setting('Institution').' - '.$siteName;
+        $customLogo = Display::img(
+            $customImageUrl,
+            $siteName,
+            $attributes
+        );
+        $html .= Display::url($customLogo, api_get_path(WEB_PATH).'index.php');
+    } elseif (file_exists($logo)) {
+        $siteName = api_get_setting('Institution').' - '.$siteName;
         $logo = Display::img(
-            $image_url,
-            $site_name,
+            $imageUrl,
+            $siteName,
             $attributes
         );
         $html .= Display::url($logo, api_get_path(WEB_PATH).'index.php');
     } else {
-        $html .= '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$site_name.'</a>';
+        $html .= '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$siteName.'</a>';
         $iurl = api_get_setting('InstitutionUrl');
         $iname = api_get_setting('Institution');
 

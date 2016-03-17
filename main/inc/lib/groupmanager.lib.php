@@ -88,7 +88,6 @@ class GroupManager
         $session_id = api_get_session_id();
 
         $course_id = $course_info['real_id'];
-        $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         $table_group = Database :: get_course_table(TABLE_GROUP);
 
         $sql = "SELECT g.id,
@@ -99,21 +98,12 @@ class GroupManager
                     g.secret_directory,
                     g.self_registration_allowed,
                     g.self_unregistration_allowed,
-                    g.session_id,
-                    ug.user_id is_member
+                    g.session_id
                 FROM $table_group g
-                LEFT JOIN $table_group_user ug
-                ON (
-                    ug.group_id = g.id AND
-                    ug.user_id = '".api_get_user_id()."' AND
-                    ug.c_id = $course_id AND
-                    g.c_id = $course_id
-                )";
-
-        $sql .= " WHERE 1=1 ";
+                WHERE 1=1 ";
 
         if ($category != null) {
-            $sql .= "  AND  g.category_id = '".intval($category)."' ";
+            $sql .= "  AND g.category_id = '".intval($category)."' ";
             $session_condition = api_get_session_condition($session_id);
             if (!empty($session_condition)) {
                 $sql .= $session_condition;
@@ -2180,6 +2170,7 @@ class GroupManager
 
             // All the tutors of this group
             $tutorsids_of_group = self::get_subscribed_tutors($this_group['id'], true);
+            $isMember = self::is_subscribed($user_id, $this_group['id']);
 
             // Create a new table-row
             $row = array();
@@ -2192,7 +2183,7 @@ class GroupManager
             // Group name
             if ((api_is_allowed_to_edit(false, true) ||
                     in_array($user_id, $tutorsids_of_group) ||
-                    $this_group['is_member'] ||
+                    $isMember ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_FORUM) ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_DOCUMENTS) ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_CALENDAR) ||
@@ -2205,7 +2196,7 @@ class GroupManager
                     Security::remove_XSS($this_group['name']).'</a> ';
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
                     $group_name .= Display::label(get_lang('OneMyGroups'), 'success');
-                } elseif ($this_group['is_member']) {
+                } elseif ($isMember) {
                     $group_name .= Display::label(get_lang('MyGroup'), 'success');
                 }
 

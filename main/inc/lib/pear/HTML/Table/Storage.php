@@ -769,18 +769,17 @@ class HTML_Table_Storage extends HTML_Common {
                     }
 
                     $typeContent = $tabs . $tab . $tab . $extraTab . "<$type" . $this->_getAttrString($attr) . '>';
-                    
-                    if ($contents || is_numeric($contents)) {
-                        $typeContent .= $contents;
-                    } elseif (empty($contents)) {
+
+                    if (empty($contents)) {
                         if (isset($this->_autoFill) && $this->_autoFill) {
                             $contents = $this->_autoFill;
                         }
+                    } else {
+                        $typeContent .= $contents;
                     }
-                    
                     $typeContent .= "</$type>" . $lnEnd;
 
-                    if (!empty($contents) || is_numeric($contents)) {
+                    if (!empty($contents)) {
                         $strHtml .= $typeContent;
                     }
 

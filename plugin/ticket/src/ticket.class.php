@@ -766,10 +766,10 @@ class TicketManager
 
                 if ($dif > 172800 && $row['priority_id'] == 'NRM' && $row['status_id'] != 'CLS') {
                     $actions .= '<a href="myticket.php?ticket_id=' . $row['ticket_id'] . '&amp;action=alert">
-                                 <img src="' . $webPath . 'main/img/exclamation.png" border="0" /></a>';
+                                 <img src="' . Display::returnIconPath('exclamation.png') . '" border="0" /></a>';
                 }
                 if ($row['priority_id'] == 'HGH') {
-                    $actions .= '<img src="' . $webCodePath . 'img/admin_star.png" border="0" />';
+                    $actions .= '<img src="' . Display::returnIconPath('admin_star.png') . '" border="0" />';
                 }
                 $ticket = array(
                     $row['col0'],
@@ -782,14 +782,12 @@ class TicketManager
             }
             if ($unread > 0) {
                 $ticket['0'] = $ticket['0'] . '&nbsp;&nbsp;(' . $unread . ')<a href="ticket_details.php?ticket_id=' . $row['ticket_id'] . '">
-                                <img src="' . $webPath . 'main/img/message_new.png" border="0" title="' . $unread . ' ' . get_lang('Messages') . '"/>
+                                <img src="' . Display::returnIconPath('message_new.png') . '" border="0" title="' . $unread . ' ' . get_lang('Messages') . '"/>
                                 </a>';
             }
             if ($isAdmin) {
                 $ticket['0'] .= '&nbsp;&nbsp;<a  href="javascript:void(0)" onclick="load_history_ticket(\'div_' . $row['ticket_id'] . '\',' . $row['ticket_id'] . ')">
-					<img onclick="load_course_list(\'div_' . $row['ticket_id'] . '\',' . $row['ticket_id'] . ')" onmouseover="clear_course_list (\'div_' . $row['ticket_id'] . '\')" src="' . $webPath . 'main/img/history.gif" title="' . get_lang(
-                                'Historial'
-                        ) . '" alt="' . get_lang('Historial') . '"/>
+					<img onclick="load_course_list(\'div_' . $row['ticket_id'] . '\',' . $row['ticket_id'] . ')" onmouseover="clear_course_list (\'div_' . $row['ticket_id'] . '\')" src="' . Display::returnIconPath('history.gif') . '" title="' . get_lang('Historial') . '" alt="' . get_lang('Historial') . '"/>
 					<div class="blackboard_hide" id="div_' . $row['ticket_id'] . '">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
             }

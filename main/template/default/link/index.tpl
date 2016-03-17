@@ -2,24 +2,24 @@
 {{javascript}}
 
 <script type="text/javascript">
-    
+
     {% if is_allowed_to_edit %}
         var sec_token = '{{sec_token}}';
     {% endif %}
-    
+
 $(function() {
 	$('.collapsible .head').click(function(e) {
         $(this).toggleClass('collapsed');
         $(this).next().toggle();
 		return true;
 	});
-    
+
     {% if is_allowed_to_edit %}
         $(".categories.sortable" ).sortable({
             axis: 'y',
             handle: '.handle',
             //placeholder: 'ui-state-highlight',
-            update: function(event, ui) { 
+            update: function(event, ui) {
                 var c_id = 0;
                 var ids = [];
                 var items;
@@ -27,8 +27,8 @@ $(function() {
                 items.each(function(index, li){
                     li = $(li);
                     var id;
-                    id = li.attr('data-id'); 
-                    c_id = li.attr('data-c_id'); 
+                    id = li.attr('data-id');
+                    c_id = li.attr('data-c_id');
                     ids.push(id);
                 });
 
@@ -40,7 +40,7 @@ $(function() {
         $(".links.sortable" ).sortable({
             axis: 'y',
             placeholder: 'ui-state-highlight',
-            update: function(event, ui) { 
+            update: function(event, ui) {
                 var c_id = 0;
                 var ids = [];
                 var items;
@@ -48,8 +48,8 @@ $(function() {
                 items.each(function(index, li){
                     li = $(li);
                     var id;
-                    id = li.attr('data-id'); 
-                    c_id = li.attr('data-c_id'); 
+                    id = li.attr('data-id');
+                    c_id = li.attr('data-c_id');
                     ids.push(id);
                 });
 
@@ -57,27 +57,27 @@ $(function() {
             }
         });
         $(".links.sortable" ).disableSelection();
-    
+
     {% endif %}
-    
+
 });
- 
+
  function expand_all(){
     $('.collapsible .head').removeClass('collapsed').next().show();
  }
- 
- function collapse_all(){     
+
+ function collapse_all(){
     $('.collapsible .head').addClass('collapsed').next().hide();
  }
- 
- function delete_category(name){   
+
+ function delete_category(name){
     if(!confirm("{{'ConfirmYourChoice'|get_lang}}")){
         return false;
-    } 
+    }
 
     var item = $('#'+name);
-    var id = item.attr('data-id'); 
-    var c_id = item.attr('data-c_id'); 
+    var id = item.attr('data-id');
+    var c_id = item.attr('data-c_id');
 
     var f = function(data){
         if(data.success){
@@ -87,12 +87,12 @@ $(function() {
     };
     LinkCategory.del(c_id, id, f);
  }
- 
+
  function delete_all(){
     if(!confirm("{{'ConfirmYourChoice'|get_lang}}")){
         return false;
-    } 
-    
+    }
+
     var f = function(data){
         if(data.success){
             var item = $('.data');
@@ -101,22 +101,22 @@ $(function() {
         message.update(data);
     };
     Link.delete_by_course({{c_id}}, {{session_id}}, f);
-    
+
  }
- 
- function delete_link(name, btn){   
+
+ function delete_link(name, btn){
     if(!confirm("{{'ConfirmYourChoice'|get_lang}}")){
         return false;
-    } 
+    }
 
     var item = $('#'+name);
-    var id = item.attr('data-id'); 
-    var c_id = item.attr('data-c_id'); 
+    var id = item.attr('data-id');
+    var c_id = item.attr('data-c_id');
 
     var f = function(data){
         if(data.success){
             item.remove();
-        }else{            
+        }else{
             $(btn).removeClass("loading");
         }
         message.update(data);
@@ -124,12 +124,12 @@ $(function() {
     $(btn).addClass("loading");
     Link.del(c_id, id, f);
  }
- 
+
 function switch_li_visibility(name, btn)
 {
     var li = $('#'+name);
-    var id = li.attr('data-id'); 
-    var c_id = li.attr('data-c_id'); 
+    var id = li.attr('data-id');
+    var c_id = li.attr('data-c_id');
 
     var is_visible = !li.hasClass('invisible')
 
@@ -161,9 +161,9 @@ function switch_li_visibility(name, btn)
 
 function validate_link(name, btn){
     var li = $('#'+name);
-    var id = li.attr('data-id'); 
-    var c_id = li.attr('data-c_id'); 
-    
+    var id = li.attr('data-id');
+    var c_id = li.attr('data-c_id');
+
     var f = function(data){
         if(data.success){
             li.addClass('valid');
@@ -229,10 +229,10 @@ function validate_link(name, btn){
 
             <li id="link_{{link.id}}" class="link {{link_class}}" data-id="{{link.id}}" data-c_id="{{link.c_id}}" data-type="link" >
                 <a class="icon" target="{{link.target}}" href="{{root}}&amp;action=go&amp;id={{link.id}}&amp;c_id={{link.c_id}}">
-                    <img alt="{{'Links'|get_lang}}" src="../../main/img/link.gif" />        
+                    {{ 'link.png' |icon(22)}}
                 </a>
                 <a class="title" target="{{link.target}}" href="{{root}}&amp;action=go&amp;id={{link.id}}&amp;c_id={{link.c_id}}">
-                    {%if link.title %}{{link.title}}{% else %}{{link.url}}{%endif%}                
+                    {%if link.title %}{{link.title}}{% else %}{{link.url}}{%endif%}
                 </a>
                 {% if link.session_id %}
                     {{session_image}}
@@ -240,19 +240,19 @@ function validate_link(name, btn){
                 <div class="status" style="display:inline-block;">&nbsp;</div>
                 {% if is_allowed_to_edit %}
                     <div style="float:right;">
-                        <a href="javascript:void(0)" onclick="validate_link('link_{{link.id}}', this);return false;" 
-                        title="{{'CheckURL'|get_lang}}" 
+                        <a href="javascript:void(0)" onclick="validate_link('link_{{link.id}}', this);return false;"
+                        title="{{'CheckURL'|get_lang}}"
                         class="btn validate_link">
-                            
-                        </a>   
-                        <a href="{{root}}&amp;action=edit_link&amp;id={{link.id}}&amp;c_id={{link.c_id}}" 
-                        title="{{'Edit'|get_lang}}" 
+
+                        </a>
+                        <a href="{{root}}&amp;action=edit_link&amp;id={{link.id}}&amp;c_id={{link.c_id}}"
+                        title="{{'Edit'|get_lang}}"
                         class="">
                             <em class="size-22 icon-edit"></em>
-                        </a>   
-                        <a href="javascript:void(0)" onclick="switch_li_visibility('link_{{link.id}}', this);return false;" 
+                        </a>
+                        <a href="javascript:void(0)" onclick="switch_li_visibility('link_{{link.id}}', this);return false;"
                         class="btn visibility {%if link.visibility == 1%}hide{%else%}show{%endif%}">
-                            
+
                         </a>
                         <a href="javascript:void(0)" onclick="delete_link('link_{{link.id}}', this);return false;" title="{{'Delete'|get_lang}}" class="">
                             <em class="size-22 icon-delete"></em>
@@ -267,17 +267,17 @@ function validate_link(name, btn){
     <ul id="link_categories" class="categories sortable" style="list-style: none; margin-left:0;">
     {% for category in categories %}
         <li id="category_{{category.id}}" class="link_category collapsible" data-id="{{category.id}}" data-c_id="{{category.c_id}}" data-type="category" >
-            <div class="head handle collapsed">    
+            <div class="head handle collapsed">
                 {% if is_allowed_to_edit %}
                     <div style="float:right;">
-                        <a href="{{root}}&amp;action=edit_category&amp;id={{category.id}}&amp;c_id={{category.c_id}}" 
-                        onclick="event.stopPropagation();" 
+                        <a href="{{root}}&amp;action=edit_category&amp;id={{category.id}}&amp;c_id={{category.c_id}}"
+                        onclick="event.stopPropagation();"
                         title="{{'Edit'|get_lang}}"
                         class="">
                             <em class="size-22 icon-edit"></em>
-                        </a>            
-                        <a href="javascript:void(0)" 
-                        onclick="delete_category('category_{{category.id}}');event.stopPropagation();return false;" 
+                        </a>
+                        <a href="javascript:void(0)"
+                        onclick="delete_category('category_{{category.id}}');event.stopPropagation();return false;"
                             title="{{'Delete'|get_lang}}"
                             class="">
                             <em class="size-22 icon-delete"></em>
@@ -289,7 +289,7 @@ function validate_link(name, btn){
                 </h3>
                 {{category.description}}
             </div>
-            <div class="body" style="display:none;"> 
+            <div class="body" style="display:none;">
                 <ul style="list-style: none; margin-left:0;" class="links sortable">
                     {% for link in category.links %}
                     {% set link_class %}
@@ -301,10 +301,10 @@ function validate_link(name, btn){
 
                         <li id="link_{{link.id}}" class="link {{link_class}}" data-id="{{link.id}}" data-c_id="{{link.c_id}}" data-type="link" >
                             <a class="icon" target="{{link.target}}" href="{{root}}&amp;action=go&amp;id={{link.id}}&amp;c_id={{link.c_id}}">
-                                <img alt="{{'Links'|get_lang}}" src="../../main/img/link.gif" />        
+                                {{ 'link.png' |icon(22) }}
                             </a>
                             <a class ="title" target="{{link.target}}" href="{{root}}&amp;action=go&amp;id={{link.id}}&amp;c_id={{link.c_id}}">
-                                {%if link.title %}{{link.title}}{% else %}{{link.url}}{%endif%}                
+                                {%if link.title %}{{link.title}}{% else %}{{link.url}}{%endif%}
                             </a>
                             {% if link.session_id %}
                                 {{session_image}}
@@ -312,20 +312,20 @@ function validate_link(name, btn){
                             <div class="status" style="display:inline-block;">&nbsp;</div>
                             {% if is_allowed_to_edit %}
                                 <div style="float:right;">
-                                    <a href="javascript:void(0)" onclick="validate_link('link_{{link.id}}', this);return false;" 
-                                    title="{{'CheckURL'|get_lang}}" 
-                                    class="btn validate_link"></a>   
-                                    <a href="{{root}}&amp;action=edit_link&amp;id={{link.id}}&amp;c_id={{link.c_id}}" 
-                                    onclick="" 
+                                    <a href="javascript:void(0)" onclick="validate_link('link_{{link.id}}', this);return false;"
+                                    title="{{'CheckURL'|get_lang}}"
+                                    class="btn validate_link"></a>
+                                    <a href="{{root}}&amp;action=edit_link&amp;id={{link.id}}&amp;c_id={{link.c_id}}"
+                                    onclick=""
                                     title="{{'Edit'|get_lang}}"
                                     class="">
                                         <em class="size-22 icon-edit"></em>
-                                    </a>   
-                                    <a href="javascript:void(0)" 
-                                    onclick="switch_li_visibility('link_{{link.id}}', this);return false;" 
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                    onclick="switch_li_visibility('link_{{link.id}}', this);return false;"
                                     class="btn visibility {%if link.visibility == 1%}hide{%else%}show{%endif%}"></a>
-                                    <a href="javascript:void(0)" 
-                                    onclick="delete_link('link_{{link.id}}', this);return false;" 
+                                    <a href="javascript:void(0)"
+                                    onclick="delete_link('link_{{link.id}}', this);return false;"
                                     title="{{'Delete'|get_lang}}"
                                     class="">
                                         <em class="size-22 icon-delete"></em>

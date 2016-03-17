@@ -304,13 +304,10 @@ EOT;
                     <input type="hidden" name="search_term" value="$search_term" />
 EOT;
         }
-
-        $web_path = api_get_path(WEB_PATH);
-        $subscribe_label = get_lang('Subscribe');
-        echo <<<EOT
-                    <input type="image" name="unsub" src="$web_path/main/img/enroll.gif" alt="$subscribe_label" />$subscribe_label
+        echo '<input type="image" name="unsub" src="'.Display::returnIconPath('enroll.gif').'" alt="'.get_lang('Subscribe').'" />
+                '.get_lang('Subscribe').'
                 </form>
-EOT;
+        ';
         return true;
     }
 

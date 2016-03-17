@@ -246,6 +246,7 @@ $TheTextYouEnteredDoesNotMatchThePicture = "The text you entered doesn't match t
 $RemoveOldRelationships = "Remove previous relationships";
 $ImportSessionDrhList = "Import list of HR directors into sessions";
 $FollowedStudents = "Followed students";
+$FollowedStudentBosses = "Followed student' superiors";
 $FollowedTeachers = "Followed teachers";
 $AllowOnlyFiles = "Allow only files";
 $AllowOnlyText = "Allow only text";

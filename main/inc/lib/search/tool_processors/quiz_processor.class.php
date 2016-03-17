@@ -106,34 +106,27 @@ class quiz_processor extends search_processor {
     /**
      * Get learning path information
      */
-    private function get_information($courseCode, $exercise_id) {
+    private function get_information($courseCode, $exercise_id)
+    {
         $course_information = api_get_course_info($courseCode);
         $course_id = $course_information['real_id'];
 
         if (!empty($course_information)) {
             $exercise_table = Database::get_course_table(TABLE_QUIZ_TEST);
-            $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
             $exercise_id = intval($exercise_id);
             $sql = "SELECT * FROM $exercise_table WHERE id = $exercise_id AND c_id = $course_id LIMIT 1";
             $dk_result = Database::query($sql);
 
-            //actually author isn't saved on exercise tool, but prepare for when it's ready
-            /*
-            $sql = "SELECT insert_user_id FROM $item_property_table
-                    WHERE ref = $doc_id AND tool = '" . TOOL_DOCUMENT . "' AND c_id = $course_id 
-                    LIMIT 1";
-            */
-
             $name = '';
             if ($row = Database::fetch_array($dk_result)) {
                 // Get the image path
-                $thumbnail = api_get_path(WEB_PATH) . 'main/img/quiz.gif';
+                $thumbnail = Display::returnIconPath('quiz.png');
                 $image = $thumbnail; //FIXME: use big images
                 $name = $row['title'];
                 // get author
                 $author = '';
                 $item_result = Database::query($sql);
-                if ($item_result !== FALSE && $row = Database::fetch_array($item_result)) {
+                if ($item_result !== false && $row = Database::fetch_array($item_result)) {
                     $user_data = api_get_user_info($row['insert_user_id']);
                     $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
                 }
@@ -143,5 +136,4 @@ class quiz_processor extends search_processor {
             return array();
         }
     }
-
 }

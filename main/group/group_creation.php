@@ -15,8 +15,11 @@ $current_course_tool  = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-/*	Create the groups */
+if (!api_is_allowed_to_edit(false, true)) {
+	api_not_allowed(true);
+}
 
+/*	Create the groups */
 if (isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'create_groups':
@@ -79,15 +82,8 @@ $nameTools = get_lang('GroupCreation');
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
 Display :: display_header($nameTools, 'Group');
 
-if (!api_is_allowed_to_edit(false, true)) {
-    api_not_allowed();
-}
-
-/*	MAIN TOOL CODE */
-
 /*	Show group-settings-form */
-
-elseif (isset($_POST['number_of_groups'])) {
+if (isset($_POST['number_of_groups'])) {
     if (!is_numeric($_POST['number_of_groups']) || intval($_POST['number_of_groups']) < 1) {
         Display :: display_error_message(get_lang('PleaseEnterValidNumber').'<br /><br /><a href="group_creation.php?'.api_get_cidreq().'">&laquo; '.get_lang('Back').'</a>', false);
     } else {

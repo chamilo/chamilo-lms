@@ -20,7 +20,7 @@ class DisplayGradebook
         if (api_is_allowed_to_edit(null, true)) {
             $header = '<div class="actions">';
             if ($page != 'statistics') {
-                $header .= '<a href="' . Security::remove_XSS($_SESSION['gradebook_dest']) . '?selectcat=' . $selectcat . '">' .
+                $header .= '<a href="' . Security::remove_XSS($_SESSION['gradebook_dest']) . '?selectcat=' . $selectcat . '&'.api_get_cidreq().'">' .
                     Display::return_icon(('back.png'), get_lang('FolderView'), '', ICON_SIZE_MEDIUM) . '</a>';
                 if ($evalobj->get_course_code() == null) {
 
@@ -92,7 +92,6 @@ class DisplayGradebook
         $evalinfo .= '<h2>' . $evalobj->get_name() . '</h2><hr>';
         $evalinfo .= $description;
         $evalinfo .= get_lang('Course') . ' :<b> ' . $course . '</b><br />';
-        //'<br>' . get_lang('Weight') . ' :<b> ' . $evalobj->get_weight() . '</b><br>' . get_lang('Visible') . ' :<b> ' . $visible . '</b>
         $evalinfo .= get_lang('QualificationNumeric') . ' :<b> ' . $evalobj->get_max() . '</b><br>' . $average;
 
         if (!api_is_allowed_to_edit()) {

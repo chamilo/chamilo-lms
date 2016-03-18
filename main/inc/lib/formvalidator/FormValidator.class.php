@@ -945,26 +945,17 @@ EOT;
      */
     public function returnForm()
     {
-        $error = false;
+        $returnValue = '';
+
         /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as $element) {
-            if (!is_null(parent::getElementError($element->getName()))) {
-                $error = true;
+            $elementError = parent::getElementError($element->getName());
+            if (!is_null($elementError)) {
+                $returnValue .= Display::return_message($elementError, 'warning').'<br />';
                 break;
             }
         }
 
-        $returnValue = '';
-        $js = null;
-
-        if ($error) {
-            $returnValue = Display::return_message(
-                get_lang('FormHasErrorsPleaseComplete'),
-                'warning'
-            );
-        }
-
-        $returnValue .= $js;
         $returnValue .= parent::toHtml();
         // Add div-element which is to hold the progress bar
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {

@@ -2357,7 +2357,6 @@ class UserManager
 
         $result = Database::query($sql);
         $categories = array();
-
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
 
@@ -2380,7 +2379,10 @@ class UserManager
                         if (api_is_allowed_to_create_course()) {
                             // Teachers can access the session depending in the access_coach date
                         } else {
-                            if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00') {
+                            if (isset($row['access_end_date']) &&
+                                ($row['access_end_date'] != '0000-00-00 00:00:00') &&
+                                !empty($row['access_end_date'])
+                            ) {
                                 if ($row['access_end_date'] <= $now) {
                                     continue;
                                 }
@@ -2410,6 +2412,7 @@ class UserManager
                     $ignore_visibility_for_admins
                 );
 
+
                 // Course Coach session visibility.
                 $blockedCourseCount = 0;
                 $closedVisibilityList = array(
@@ -2426,7 +2429,6 @@ class UserManager
                     );
 
                     $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
-
                     if ($courseIsVisible == false || $visibility == SESSION_INVISIBLE) {
                         $blockedCourseCount++;
                     }
@@ -3773,16 +3775,23 @@ class UserManager
         } else {
             $user_id = api_get_user_id();
             $sql = 'SELECT COUNT(*) as count FROM '.$tbl_my_friend.'
-                    WHERE user_id='.$user_id.' AND relation_type NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND friend_user_id='.$friend_id;
+                    WHERE
+                        user_id='.$user_id.' AND
+                        relation_type NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND
+                        friend_user_id='.$friend_id;
             $result = Database::query($sql);
             $row = Database :: fetch_array($result, 'ASSOC');
             if ($row['count'] == 1) {
                 //Delete user rel user
-                $sql_i = 'UPDATE '.$tbl_my_friend.' SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE user_id='.$user_id.' AND friend_user_id='.$friend_id;
-                $sql_j = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.' WHERE user_receiver_id='.$user_id.' AND user_sender_id='.$friend_id.' AND update_date="0000-00-00 00:00:00" ';
+                $sql_i = 'UPDATE '.$tbl_my_friend.' SET relation_type='.USER_RELATION_TYPE_DELETED.'
+                          WHERE user_id='.$user_id.' AND friend_user_id='.$friend_id;
+                $sql_j = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.'
+                          WHERE user_receiver_id='.$user_id.' AND user_sender_id='.$friend_id.' AND update_date="0000-00-00 00:00:00" ';
                 //Delete user
-                $sql_ij = 'UPDATE '.$tbl_my_friend.'  SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE user_id='.$friend_id.' AND friend_user_id='.$user_id;
-                $sql_ji = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.' WHERE user_receiver_id='.$friend_id.' AND user_sender_id='.$user_id.' AND update_date="0000-00-00 00:00:00" ';
+                $sql_ij = 'UPDATE '.$tbl_my_friend.'  SET relation_type='.USER_RELATION_TYPE_DELETED.'
+                           WHERE user_id='.$friend_id.' AND friend_user_id='.$user_id;
+                $sql_ji = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.'
+                           WHERE user_receiver_id='.$friend_id.' AND user_sender_id='.$user_id.' AND update_date="0000-00-00 00:00:00" ';
                 Database::query($sql_i);
                 Database::query($sql_j);
                 Database::query($sql_ij);

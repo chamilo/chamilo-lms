@@ -99,7 +99,7 @@ if (!$_in_course) {
         'name' => get_lang('Gradebook')
     );
 }
-$interbreadcrumb[]= array(	'url' =>'index.php','name' => get_lang('ToolGradebook'));
+$interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolGradebook'));
 Display :: display_header(get_lang('NewCategory'));
 
 $display_form = true;

@@ -1174,7 +1174,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 }
 .tableFloatingHeaderOriginal{
     font-size: 12px;
-    height: 60px;
+    height: 64px;
 }
 /**********************************************
  *  MESSAGE TOOL                           *
@@ -2524,16 +2524,20 @@ form .formw .freeze {
   text-align: left;
   width: 100%;
 }
-
 .data_table_no_border td {
     line-height: normal;
     padding: 6px;
     text-align: left;
     vertical-align: middle;
 }
-
 .data_table tr.row_odd {
     background-color: #F9F9F9;
+}
+.attendance-users-table .data_table tr.row_odd {
+    height: 64px;
+}
+.attendance-users-table .data_table tr.row_even {
+    height: 60px;
 }
 .data_table tr.row_odd:hover, .data_table tr.row_even:hover {
     background-color: #E5EDF9;
@@ -2541,11 +2545,15 @@ form .formw .freeze {
 .data_table tr.row_even {
     background-color: #fff;
 }
-
+.attendance-calendar-table .data_table tr.row_odd {
+    height: 64px;
+}
+.attendance-calendar-table .data_table tr.row_even {
+    height: 60px;
+}
 .data_table_no_border td .highlight{
     font-weight: bold;
 }
-
 .data_table_pagination {
   width:100%;
   margin-top: 5px;

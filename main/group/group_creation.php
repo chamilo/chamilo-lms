@@ -10,6 +10,11 @@ $current_course_tool  = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
+
+if (!api_is_allowed_to_edit(false, true)) {
+	api_not_allowed(true);
+}
+
 $currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
 
 /*	Create the groups */
@@ -72,10 +77,6 @@ if (isset($_POST['action'])) {
 $nameTools = get_lang('GroupCreation');
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
 Display :: display_header($nameTools, 'Group');
-
-if (!api_is_allowed_to_edit(false, true)) {
-    api_not_allowed();
-}
 
 if (isset($_POST['number_of_groups'])) {
     if (!is_numeric($_POST['number_of_groups']) || intval($_POST['number_of_groups']) < 1) {

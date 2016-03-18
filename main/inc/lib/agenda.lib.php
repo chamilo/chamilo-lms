@@ -3128,9 +3128,6 @@ class Agenda
         $startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
         $g_cc = (isset($_GET['courseCode'])?$_GET['courseCode']:'');
 
-        $prev_icon = Display::return_icon('action_prev.png',get_lang('Previous'));
-        $next_icon = Display::return_icon('action_next.png',get_lang('Next'));
-
         $next_month = ($month == 1 ? 12 : $month -1);
         $prev_month = ($month == 12 ? 1 : $month +1);
 
@@ -3138,30 +3135,31 @@ class Agenda
         $prev_year = ($month == 12 ? $year +1 : $year);
 
         if ($show_content)  {
-            $back_url = Display::url($prev_icon, api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($g_cc)."&action=view&view=month&month=".$next_month."&year=".$next_year);
-            $next_url = Display::url($next_icon, api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($g_cc)."&action=view&view=month&month=".$prev_month."&year=".$prev_year);
+            $back_url = Display::url(get_lang('Previous'), api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($g_cc)."&action=view&view=month&month=".$next_month."&year=".$next_year);
+            $next_url = Display::url(get_lang('Next'), api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($g_cc)."&action=view&view=month&month=".$prev_month."&year=".$prev_year);
         } else {
-            $back_url = Display::url($prev_icon, '', array('onclick'=>"load_calendar('".$user_id."','".$next_month."', '".$next_year."'); "));
-            $next_url = Display::url($next_icon, '', array('onclick'=>"load_calendar('".$user_id."','".$prev_month."', '".$prev_year."'); "));
+            $back_url = Display::url(get_lang('Previous'), '', array('onclick'=>"load_calendar('".$user_id."','".$next_month."', '".$next_year."'); ", 'class' => 'btn ui-button ui-widget ui-state-default'));
+            $next_url = Display::url(get_lang('Next'), '', array('onclick'=>"load_calendar('".$user_id."','".$prev_month."', '".$prev_year."'); ", 'class' => 'pull-right btn ui-button ui-widget ui-state-default'));
         }
-
-        echo '<table id="agenda_list"><tr>';
-        echo '<th width="10%">'.$back_url.'</th>';
-        echo '<th width="80%" colspan="5"><br /><h3>'.$monthName." ".$year.'</h3></th>';
-        echo '<th width="10%">'.$next_url.'</th>';
-
-        echo '</tr>';
-
-        echo '<tr>';
+        $html = '';
+        $html .= '<div class="actions">';
+        $html .= '<div class="row">';
+        $html .= '<div class="col-md-4">'.$back_url.'</div>';
+        $html .= '<div class="col-md-4"><p class="agenda-title text-center">'.$monthName." ".$year.'</p></div>';
+        $html .= '<div class="col-md-4">'.$next_url.'</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<table id="agenda_list2" class="table table-bordered">';
+        $html .= '<tr>';
         for ($ii = 1; $ii < 8; $ii ++) {
-            echo '<td class="weekdays">'.$DaysShort[$ii % 7].'</td>';
+            $html .= '<td class="weekdays">'.$DaysShort[$ii % 7].'</td>';
         }
-        echo '</tr>';
+        $html .= '</tr>';
 
         $curday = -1;
         $today = getdate();
         while ($curday <= $numberofdays[$month]) {
-            echo "<tr>";
+            $html .= "<tr>";
             for ($ii = 0; $ii < 7; $ii ++) {
                 if (($curday == -1) && ($ii == $startdayofweek)) {
                     $curday = 1;
@@ -3173,12 +3171,12 @@ class Agenda
                         $class = "class=\"days_today\" style=\"width:10%;\"";
                     }
 
-                    echo "<td ".$class.">".$dayheader;
+                    $html .= "<td ".$class.">".$dayheader;
 
                     if (!empty($agendaitems[$curday])) {
                         $items =  $agendaitems[$curday];
                         $items =  msort($items, 'start_date_tms');
-
+                        
                         foreach($items  as $value) {
                             $value['title'] = Security::remove_XSS($value['title']);
                             $start_time = api_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
@@ -3234,22 +3232,23 @@ class Agenda
                                 //Main div
                                 $result .= Display::div($content, array('id'=>'main_'.$link, 'class' => 'dialog', 'style' => 'display:none'));
                                 $result .= '</div>';
-                                echo $result;
+                                $html .= $result;
                                 //echo Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog'));
                             } else {
-                                echo $result .= $icon.'</div>';
+                                $html .= $result .= $icon.'</div>';
                             }
                         }
                     }
-                    echo "</td>";
+                    $html .= "</td>";
                     $curday ++;
                 } else {
-                    echo "<td></td>";
+                    $html .= "<td></td>";
                 }
             }
-            echo "</tr>";
+            $html .= "</tr>";
         }
-        echo "</table>";
+        $html .= "</table>";
+        echo $html;
     }
 
     /**

@@ -114,17 +114,17 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $social_avatar_block = SocialManager::show_social_avatar_block('messages');
     $social_menu_block = SocialManager::show_social_menu('messages');
     $social_right_content .= '<div class="span9">';
-        $social_right_content .= '<div class="actions">';
-        $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
+    $social_right_content .= '<div class="actions">';
+    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
 
-    $form = MessageManager::getSearchForm();
+    $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/outbox.php');
     if ($form->validate()) {
         $values = $form->getSubmitValues();
         $keyword = $values['keyword'];
     }
     $social_right_content .= $form->return_form();
 
-        $social_right_content .= '</div>';
+    $social_right_content .= '</div>';
     $social_right_content .= '</div>';
     $social_right_content .= '<div class="span9">';
 }

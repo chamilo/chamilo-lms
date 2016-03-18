@@ -1478,7 +1478,7 @@ div.admin_section h4 {
 .toolbar-groups{
     margin-bottom: 30px;
 }
-.form-group  label span{
+#group_edit .form-group label span{
     display: block;
     font-size: 12px;
 }

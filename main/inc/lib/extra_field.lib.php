@@ -384,7 +384,7 @@ class ExtraField extends Model
      *
      * @return array|bool
      */
-    public function addElements($form, $itemId = 0, $exclude = [], $filter = false, $useTagAsSelect = false)
+    public function addElements($form, $itemId = 0, $exclude = [], $filter = false, $useTagAsSelect = false, $showOnlyThisFields = array())
     {
         if (empty($form)) {
             return false;
@@ -413,7 +413,8 @@ class ExtraField extends Model
             $extraFields,
             $itemId,
             $exclude,
-            $useTagAsSelect
+            $useTagAsSelect,
+            $showOnlyThisFields
         );
 
         return $extra;
@@ -731,7 +732,8 @@ class ExtraField extends Model
         $extra = array(),
         $itemId = null,
         $exclude = [],
-        $useTagAsSelect = false
+        $useTagAsSelect = false,
+        $showOnlyThisFields = array()
     ) {
         $type = $this->type;
 
@@ -739,6 +741,12 @@ class ExtraField extends Model
 
         if (!empty($extra)) {
             foreach ($extra as $field_details) {
+                if (!empty($showOnlyThisFields)) {
+
+                    if (!in_array($field_details['variable'], $showOnlyThisFields)) {
+                        continue;
+                    }
+                }
 
                 // Getting default value id if is set
                 $defaultValueId = null;

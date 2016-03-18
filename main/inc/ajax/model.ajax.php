@@ -141,7 +141,7 @@ if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) 
                 // Extra field.
                 $extraField = new ExtraField($type);
 
-                foreach ($filters->rules as $key => $data)  {
+                foreach ($filters->rules as $key => $data) {
                     if ($data->field == 'extra_access_start_date') {
                         $accessStartDate = $data->data;
                     }
@@ -156,7 +156,6 @@ if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) 
                 }
 
                 $result = $extraField->getExtraFieldRules($filters, 'extra_');
-
 
                 $extra_fields = $result['extra_fields'];
                 $condition_array = $result['condition_array'];
@@ -475,12 +474,28 @@ switch ($action) {
         break;
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+
+
+        $loadExtraFields = isset($_REQUEST['load_extra_field']) ? $_REQUEST['load_extra_field'] : '';
+        if (!empty($loadExtraFields)) {
+            $loadExtraFields = explode(',', $loadExtraFields);
+            $extraFieldsToLoad = array();
+            foreach ($loadExtraFields as $fieldId) {
+                $extraField = new ExtraField('session');
+                $fieldData = $extraField->get($fieldId);
+                $extraFieldsToLoad[] = $fieldData;
+            }
+        }
+
         if ($list_type == 'simple') {
+
+
             $count = SessionManager::get_sessions_admin(
                 array('where' => $whereCondition, 'extra' => $extra_fields),
                 true,
                 $accessStartDate,
-                $accessEndDate
+                $accessEndDate,
+                $extraFieldsToLoad
             );
         } else {
             $count = SessionManager::get_count_admin_complete(
@@ -994,8 +1009,7 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-
-        $session_columns = SessionManager::getGridColumns($list_type);
+        $session_columns = SessionManager::getGridColumns($list_type, $extraFieldsToLoad);
         $columns = $session_columns['simple_column_name'];
 
         if ($list_type == 'simple') {
@@ -1008,7 +1022,8 @@ switch ($action) {
                 ),
                 false,
                 $accessStartDate,
-                $accessEndDate
+                $accessEndDate,
+                $extraFieldsToLoad
             );
         } else {
             $result = SessionManager::get_sessions_admin_complete(
@@ -1043,6 +1058,9 @@ switch ($action) {
             $whereCondition = str_replace(
                 'category_name',
                 'sc.name',
+
+
+
                 $whereCondition
             );
 

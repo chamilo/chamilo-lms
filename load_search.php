@@ -25,9 +25,15 @@ switch ($action) {
         $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
         SessionManager::suscribe_users_to_session($sessionId, [$userToLoad], SESSION_VISIBLE_READ_ONLY, false);
         Display::addFlash(Display::return_message(get_lang('UserAdded')));
-
-        /**header("Location: ".api_get_self().'?user_id='.$userToLoad);
-        break;*/
+        header("Location: ".api_get_self().'?user_id='.$userToLoad);
+        exit;
+        break;
+    case 'unsubscribe_user':
+        $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
+        SessionManager::unsubscribe_user_from_session($sessionId, $userToLoad);
+        Display::addFlash(Display::return_message(get_lang('Unsubscribed')));
+        header("Location: ".api_get_self().'?user_id='.$userToLoad);
+        break;
 }
 
 $em = Database::getManager();
@@ -72,7 +78,16 @@ $extra = $extraField->addElements($form, '', [], true);
 
 $form->addButtonSearch(get_lang('Search'), 'save');
 
-$result = SessionManager::getGridColumns('simple');
+$extraFieldsToFilter = $extraField->get_all(array('variable = ?' => 'temps-de-travail'));
+$extraFieldToSearch = array();
+if (!empty($extraFieldsToFilter)) {
+    foreach ($extraFieldsToFilter as $filter) {
+        $extraFieldToSearch[] = $filter['id'];
+    }
+}
+$extraFieldListToString = implode(',', $extraFieldToSearch);
+
+$result = SessionManager::getGridColumns('simple', $extraFieldsToFilter);
 $columns = $result['columns'];
 $column_model = $result['column_model'];
 $defaults = [];
@@ -151,9 +166,9 @@ $(function() {
 
 if (!empty($filterToSend)) {
     $filterToSend = json_encode($filterToSend);
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
 } else {
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&_force_search=true&rows=20&page=1&sidx=&sord=asc';
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc';
 }
 
 // Autowidth
@@ -168,9 +183,21 @@ $extra_params['postData'] = array(
     )
 );
 
+$sessionByUserList = SessionManager::get_sessions_by_user($userToLoad, true, true);
+
+$sessionUserList = array();
+if (!empty($sessionByUserList)) {
+    foreach ($sessionByUserList as $sessionByUser) {
+        $sessionUserList[] = $sessionByUser['session_id'];
+    }
+}
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-     return \'<a href="'.api_get_self().'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+options.rowId+\'">'.Display::return_icon('add.png', addslashes(get_lang('Subscribe')),'',ICON_SIZE_SMALL).'</a>'.
-    '\';
+    var sessionList = '.json_encode($sessionUserList).';
+    if ($.inArray(options.rowId, sessionList) == -1) {
+        return \'<a href="'.api_get_self().'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+options.rowId+\'">'.Display::return_icon('add.png', addslashes(get_lang('Subscribe')),'',ICON_SIZE_SMALL).'</a>'.'\';
+    } else {
+        return \'<a href="'.api_get_self().'?action=unsubscribe_user&user_id='.$userToLoad.'&session_id=\'+options.rowId+\'">'.Display::return_icon('delete.png', addslashes(get_lang('Delete')),'',ICON_SIZE_SMALL).'</a>'.'\';
+    }
 }';
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -190,7 +217,28 @@ if (empty($items)) {
 }
 $tpl->assign('form', $view);
 $tpl->assign('form_search', $formSearch->returnForm());
-$tpl->assign('grid', $grid);
+
+$table = new HTML_Table(array('class' => 'data_table'));
+$column = 0;
+$row = 0;
+
+$total = '0';
+$sumHours = '0';
+$numHours = '0';
+$headers = array(
+    "Total d'heures disponibles" => $total,
+    'Sommes des heures de sessions inscrites' => $sumHours,
+    "Nombre d'heures encore disponible" => $numHours
+);
+foreach ($headers as $header => $value) {
+    $table->setCellContents($row, 0, $header);
+    $table->updateCellAttributes($row, 0, 'width="250px"');
+    $table->setCellContents($row, 1, $value);
+    $row++;
+}
+
+
+$tpl->assign('grid', $grid.$table->toHtml());
 $tpl->assign('grid_js', $griJs);
 
 $content = $tpl->fetch('default/user_portal/search_extra_field.tpl');

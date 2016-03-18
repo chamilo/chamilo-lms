@@ -28,7 +28,6 @@ $extraFieldValue = new ExtraFieldValue('session');
 $extra = $extraField->addElements($form, '', [], true, true);
 
 $form->addButtonSave(get_lang('Save'), 'save');
-//$form->addButtonSearch(get_lang('Search'), 'search');
 
 $result = SessionManager::getGridColumns('simple');
 $columns = $result['columns'];
@@ -152,67 +151,25 @@ if ($form->validate()) {
     }
 }
 
-$jsTag = '';
-if (!empty($tagsData)) {
-    foreach ($tagsData as $extraField => $tags) {
-        foreach ($tags as $tag) {
-            $jsTag .= "$('#$extraField')[0].addItem('$tag', '$tag');";
-        }
-    }
+
+$extraField = new ExtraField('user');
+
+$userForm = new FormValidator('user_form', 'post', api_get_self());
+$userForm->addHeader(get_lang('User'));
+$extra = $extraField->addElements($userForm, api_get_user_id(), [], true, true, array('heures-disponibilites-par-semaines'));
+$userForm->addButtonSave(get_lang('Save'));
+$userFormToString = $userForm->returnForm();
+
+if ($userForm->validate()) {
+    $extraFieldValue = new ExtraFieldValue('user');
+    $user_data = $userForm->getSubmitValues();
+
+    $extraFieldValue->saveFieldValues($user_data);
 }
 
-$htmlHeadXtra[] ='<script>
-$(function() {
-    '.$extra['jquery_ready_content'].'
-
-    $(document).ready( function() {
-        '.$jsTag.'
-
-    });
-});
-</script>';
-
-if (!empty($filterToSend)) {
-    $filterToSend = json_encode($filterToSend);
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
-} else {
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&_force_search=true&rows=20&page=1&sidx=&sord=asc';
-}
-
-// Autowidth
-$extra_params['autowidth'] = 'true';
-
-// height auto
-$extra_params['height'] = 'auto';
-$extra_params['postData'] = array(
-    'filters' => array(
-        "groupOp" => "AND",
-        "rules" => $result['rules'],
-        /*array(
-            array( "field" => "display_start_date", "op" => "gt", "data" => ""),
-            array( "field" => "display_end_date", "op" => "gt", "data" => "")
-        ),*/
-        //'groups' => $groups
-    )
-);
-
-$action_links = 'function action_formatter(cellvalue, options, rowObject) {
-     return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-    '\';
-}';
-
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
-/*$griJs = Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
-
-$grid = '<div id="session-table" class="table-responsive">';
-$grid .= Display::grid_html('sessions');
-$grid .= '</div>';*/
 
 $tpl = new Template(get_lang('Diagnosis'));
-$tpl->assign('form', $view);
-//$tpl->assign('grid', $grid);
-//$tpl->assign('grid_js', $griJs);
+$tpl->assign('form', $view.$userFormToString);
 $content = $tpl->fetch('default/user_portal/search_extra_field.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

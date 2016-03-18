@@ -58,14 +58,21 @@ a:hover{
     font-weight: bold;
     color: #000;
 }
+.img-responsive{
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
 figure.image.alignleft{
     margin: 0 20px 20px 0;
 }
 figure.image.alignright{
     margin: 0 20px 0px 20px;
 }
-figure figcaption{
-    
+figure.image{
+    margin: 0 20px 0px 20px;
+}
+figure figcaption{   
     text-align: left;
     background-color: #f3f3f3;
     padding-top: 0px;
@@ -75,7 +82,27 @@ figure figcaption{
 }
 figure{
     border: 1px solid #ddd;
-    margin-bottom: 10px;
+    margin-bottom: 20px !important;
     padding: 5px;
     border-radius: 5px;
+}
+blockquote {
+  background: #f9f9f9;
+  border-left: 8px solid #ccc;
+  font: 14px/20px italic Times, serif;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+  display: inline-block;
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
 }

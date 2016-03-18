@@ -386,7 +386,6 @@ class AnnouncementManager
         if (empty($last_id)) {
             return false;
         } else {
-
             $sql = "UPDATE $tbl_announcement SET id = iid WHERE iid = $last_id";
             Database::query($sql);
 
@@ -399,7 +398,6 @@ class AnnouncementManager
             }
 
             // store in item_property (first the groups, then the users
-
             if (empty($sentTo) || !empty($sentTo) &&
                 isset($sentTo[0]) && $sentTo[0] == 'everyone'
             ) {
@@ -460,6 +458,8 @@ class AnnouncementManager
      * @param $to_users
      * @param array $file
      * @param string $file_comment
+     * @param bool $sendToUsersInSession
+     *
      * @return bool|int
      */
     public static function add_group_announcement(

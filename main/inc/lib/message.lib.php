@@ -244,7 +244,7 @@ class MessageManager
                 format_file_size(api_get_setting('message_max_upload_filesize'))
             );
 
-            Display::addFlash(Display::return_message($warning , 'warning'));
+            Display::addFlash(Display::return_message($warning, 'warning'));
 
             return false;
         }

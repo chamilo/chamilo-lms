@@ -7646,4 +7646,9 @@ $MessagingGDCProjectNumberComment = "Necesita registrar un proyecto en <a href=\
 $MessagingGDCApiKeyTitle = "API key de Google Developer Console para Google Cloud Messaging";
 $MessagingGDCApiKeyComment = "Necesita habilitar la API de Google Cloud Messaging y crear una credencial para Android";
 $Overwrite = "Sobreescribir";
+$TheLogoMustBeSizeXAndFormatY = "El logo debe ser de un tamaño de %s px y en el formato %s";
+$ResetToTheOriginalLogo = "Reseteado al logo original";
+$NewLogoUpdated = "Nuevo logo subido";
+$CurrentLogo = "Logo activo";
+$UpdateLogo = "Cambiar el logo";
 ?>

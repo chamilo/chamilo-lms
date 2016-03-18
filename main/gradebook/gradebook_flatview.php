@@ -6,6 +6,8 @@
  * @package chamilo.gradebook
  */
 require_once '../inc/global.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
+
 $current_course_tool  = TOOL_GRADEBOOK;
 
 api_protect_course_script(true);

@@ -2150,7 +2150,6 @@ class Agenda
             );
         }
 
-
         if ($id) {
             $form->addButtonUpdate(get_lang('ModifyEvent'));
         } else {

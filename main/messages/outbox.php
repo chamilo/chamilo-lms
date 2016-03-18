@@ -99,15 +99,21 @@ if (isset($_REQUEST['action'])) {
     $action = $_REQUEST['action'];
 }
 
+$keyword = '';
 $social_right_content = '';
 if (api_get_setting('allow_social_tool') == 'true') {
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
-
-    $social_right_content .= '<div class="actions">';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.
+    $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.
         Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
-    $social_right_content .= '</div>';
+
+    $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/outbox.php');
+    if ($form->validate()) {
+        $values = $form->getSubmitValues();
+        $keyword = $values['keyword'];
+    }
+    $actionsRight = $form->returnForm();
+    $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 }
 //MAIN CONTENT
 if ($action == 'delete') {
@@ -118,20 +124,19 @@ if ($action == 'delete') {
     if (isset($_POST['id'])) {
         $delete_list_id=$_POST['id'];
     }
-    for ($i=0;$i<count($delete_list_id);$i++) {
+    for ($i = 0; $i < count($delete_list_id); $i++) {
         MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
     }
     $delete_list_id=array();
-    $social_right_content .= MessageManager::outbox_display();
-
-} elseif($action =='deleteone') {
-    $delete_list_id=array();
+    $social_right_content .= MessageManager::outbox_display($keyword);
+} elseif ($action == 'deleteone') {
+    $delete_list_id = array();
     $id = Security::remove_XSS($_GET['id']);
-    MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
+    MessageManager::delete_message_by_user_sender(api_get_user_id(), $id);
     $delete_list_id=array();
-    $social_right_content .= MessageManager::outbox_display();
+    $social_right_content .= MessageManager::outbox_display($keyword);
 } else {
-    $social_right_content .= MessageManager::outbox_display();
+    $social_right_content .= MessageManager::outbox_display($keyword);
 }
 
 $tpl = new Template(get_lang('ComposeMessage'));
@@ -146,7 +151,6 @@ if (api_get_setting('allow_social_tool') == 'true') {
 } else {
     $content = $social_right_content;
     $tpl->assign('actions', $actions);
-    //$tpl->assign('message', $show_message);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 }

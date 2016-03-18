@@ -6,6 +6,7 @@
  * @package chamilo.gradebook
  */
 require_once '../inc/global.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
 
 api_block_anonymous_users();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -19,8 +20,8 @@ if (!$isDrhOfCourse) {
 
 $interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'],
-    'name' => get_lang('Gradebook'
-    ));
+    'name' => get_lang('Gradebook')
+);
 
 //load the evaluation & category
 $select_eval = intval($_GET['selecteval']);
@@ -35,10 +36,11 @@ if ($eval[0]->get_category_id() < 0) {
     // if category id is negative, then the evaluation's origin is a link
     $link = LinkFactory :: get_evaluation_link($eval[0]->get_id());
     $currentcat = Category :: load($link->get_category_id());
-} else
-    $currentcat = Category :: load($eval[0]->get_category_id());
-//load the result with the evaluation id
+} else {
+    $currentcat = Category:: load($eval[0]->get_category_id());
+}
 
+//load the result with the evaluation id
 if (isset($_GET['delete_mark'])) {
     $result = Result :: load($_GET['delete_mark']);
     if (!empty($result[0])) {
@@ -64,7 +66,6 @@ if (isset($_GET['editres'])) {
     );
 
     if ($edit_res_form->validate()) {
-
         $values = $edit_res_form->exportValues();
         $result = new Result();
         $resultlog = new Result();
@@ -334,11 +335,11 @@ if (isset($_GET['export'])) {
         }
 
         switch ($file_type) {
-            case 'xml' :
+            case 'xml':
                 Export :: arrayToXml($alldata, $filename, 'Result', 'XMLResults');
                 exit;
                 break;
-            case 'csv' :
+            case 'csv':
                 Export :: arrayToCsv($alldata, $filename);
                 exit;
                 break;
@@ -359,7 +360,7 @@ if (isset($_POST['action'])) {
         Display :: display_warning_message(get_lang('NoItemsSelected'), false);
     } else {
         switch ($_POST['action']) {
-            case 'delete' :
+            case 'delete':
                 $number_of_deleted_results = 0;
                 foreach ($_POST['id'] as $indexstr) {
                     $result = Result :: load($indexstr);

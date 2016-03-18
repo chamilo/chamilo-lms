@@ -370,12 +370,12 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
         . '&search='.Security::remove_XSS($_POST['keyword']));
     exit;
 }
-// DISPLAY HEADERS AND MESSAGES                           -
 
-if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
+// DISPLAY HEADERS AND MESSAGES                           -
+if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
     if (isset ($_GET['studentoverview'])) {
         $interbreadcrumb[]= array (
-            'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
+            'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat'].'&'.api_get_cidreq()),
             'name' => get_lang('ToolGradebook')
         );
         Display :: display_header(get_lang('FlatView'));
@@ -401,13 +401,13 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
     }
 }
 
-if (isset ($_GET['categorymoved'])) {
+if (isset($_GET['categorymoved'])) {
     Display :: display_confirmation_message(get_lang('CategoryMoved'),false);
 }
-if (isset ($_GET['evaluationmoved'])) {
+if (isset($_GET['evaluationmoved'])) {
     Display :: display_confirmation_message(get_lang('EvaluationMoved'),false);
 }
-if (isset ($_GET['linkmoved'])) {
+if (isset($_GET['linkmoved'])) {
     Display :: display_confirmation_message(get_lang('LinkMoved'),false);
 }
 if (isset ($_GET['addcat'])) {

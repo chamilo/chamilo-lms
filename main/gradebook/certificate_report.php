@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * List all certificates filtered by session/course and month/year
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
@@ -16,7 +17,7 @@ $this_section = SECTION_TRACKING;
 api_block_anonymous_users();
 
 $interbreadcrumb[] = array(
-    "url" => api_get_path(WEB_CODE_PATH) . "mySpace/index.php",
+    "url" => api_get_path(WEB_CODE_PATH) . "mySpace/index.php?".api_get_cidreq(),
     "name" => get_lang("MySpace")
 );
 
@@ -27,7 +28,6 @@ $selectedYear = isset($_POST['year']) && !empty($_POST['year']) ? trim($_POST['y
 $selectedStudent = isset($_POST['student']) && !empty($_POST['student']) ? intval($_POST['student']) : 0;
 
 $userId = api_get_user_id();
-
 $sessions = $courses = $months = $students = [0 => get_lang('Select')];
 
 if (api_is_student_boss()) {

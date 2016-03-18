@@ -155,6 +155,8 @@ class Template
 
         //Setting administrator variables
         $this->setAdministratorParams();
+        
+        $this->setCSSEditor();
 
         //header and footer are showed by default
         $this->set_footer($show_footer);
@@ -565,6 +567,14 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('css_static_file_to_string', $css_file_to_string);
         }
+    }
+    public function setCSSEditor() {
+        $cssEditor = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
+            if (is_file(api_get_path(SYS_CSS_PATH).'themes/'.$this->theme.'/editor.css')) {
+                $cssEditor = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/editor.css';
+            }
+            
+        $this->assign('cssEditor', $cssEditor);
     }
     /**
      * Prepare custom CSS to be added at the very end of the <head> section

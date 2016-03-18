@@ -63,13 +63,13 @@ a:hover{
     max-width: 100%;
     height: auto;
 }
-figure.image.alignleft{
+figure .image.alignleft{
     margin: 0 20px 20px 0;
 }
-figure.image.alignright{
+figure .image.alignright{
     margin: 0 20px 0px 20px;
 }
-figure.image{
+figure .image{
     margin: 0 20px 0px 20px;
 }
 figure figcaption{   

@@ -51,7 +51,7 @@ class Basic extends Toolbar
        'showblocks',
        'smiley',
        'sourcedialog',
-       /* 'stylesheetparser', css default*/
+       'stylesheetparser',
        'tableresize',
        'templates',
        'uicolor',

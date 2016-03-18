@@ -7,6 +7,7 @@
     Version: 1.0
 */
 @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,300italic,400italic);
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
 body{
     color: #666;
     font-family: 'Open Sans', sans-serif;
@@ -20,27 +21,61 @@ a{
 a:hover{
     text-decoration: underline;
 }
-.ck-title-border-center{
-    margin-bottom: 15px;
-	color: #404040;
-	position: relative;
-	display: inline-block;
-	text-transform: uppercase;
-	margin-bottom: 30px;
-	font-weight: bold;
-	font-size: 17px;
-	float: none;
-    width: auto;
-    background: none;
+.ck{
+    display: block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-feature-settings: normal;
+    font-language-override: normal;
+    font-kerning: auto;
+    font-synthesis: weight style;
+    font-variant: normal;
 }
-.ck-title-border-center::before {
-    position: absolute;
-    margin: auto;
-    z-index: 1;
-    content: "";
-    width: 75%;
-    height: 2px;
-    background: #FFB000 none repeat scroll 0% 0% !important;
-    bottom: -9px;
-    left: 12.5%;
+.ck-article{
+    text-transform: uppercase;
+    color: #E95839;
+    font-weight: bold;
+    background: url(../../main/img/document/border-title.png) repeat-x 0 80%;
+    padding-bottom: 2%;
+    margin-bottom: 10px;
+}
+.ck-article:before{
+    content: "\f15c";
+    margin-right: 5px;
+    font-family: FontAwesome;
+    font-weight: normal;
+}
+.ck-paragraph-box{
+    background-color: #F5EEE2;
+    padding: 2% 3%;
+    line-height: 20px;
+}
+.ck-title{
+    display: block;
+    font-weight: bold;
+    color: #000;
+}
+figure.image.alignleft{
+    margin: 0 20px 20px 0;
+}
+figure.image.alignright{
+    margin: 0 20px 0px 20px;
+}
+figure figcaption{
+    
+    text-align: left;
+    background-color: #f3f3f3;
+    padding-top: 0px;
+    margin: 0px;
+    border-radius: 0px;
+    padding-left: 5px;
+}
+figure{
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
 }

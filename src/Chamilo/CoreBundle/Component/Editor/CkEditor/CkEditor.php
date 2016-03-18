@@ -82,11 +82,11 @@ class CkEditor extends Editor
         $config = $toolbar->getConfig();
 
         $javascript = $this->toJavascript($config);
+        
         $html = "<script>
            CKEDITOR.replace('".$this->getName()."',
                $javascript
            );
-           
            </script>";
 
         return $html;

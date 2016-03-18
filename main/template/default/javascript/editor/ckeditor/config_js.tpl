@@ -20,11 +20,11 @@ CKEDITOR.editorConfig = function (config) {
     ];
     //Style for default CKEditor Chamilo LMS
     config.stylesSet = [
-        { name : 'Title border center' , element : 'h2', attributes : { 'class': 'ck-title-border-center'} },
-	{ name : 'Title border left' , element : 'h2'	, attributes : { 'class': 'ck-title-border-left'} },
-	{ name : 'Underline' , element : 'u' },
-	{ name : 'Strikethrough' , element : 'strike' },
-	{ name : 'Subscript' , element : 'sub' },
+        { name : 'Title border center', element : 'h1', attributes : { 'class': 'ck ck-title'} },
+	{ name : 'Section Article' , element : 'h3' , attributes : { 'class': 'ck ck-article'} },
+	{ name : 'Paragraph box' , element : 'p' , attributes: { 'class': 'ck-paragraph-box'} },
+	
+	
 	{ name : 'Superscript' , element : 'sup' }
     ];
     

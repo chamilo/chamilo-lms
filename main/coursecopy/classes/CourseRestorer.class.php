@@ -1536,10 +1536,9 @@ class CourseRestorer
                 );
 
                 $params = [];
-				if (!empty($session_id)) {
-					$session_id = intval($session_id);
-                    $params['session_id'] = $session_id;
-				}
+
+                $session_id = intval($session_id);
+                $params['session_id'] = $session_id;
                 $params['c_id'] = $this->destination_course_id;
                 $params['description_type'] = self::DBUTF8($descriptionType);
                 $params['title'] = self::DBUTF8($title);

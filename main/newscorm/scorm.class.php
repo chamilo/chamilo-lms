@@ -529,9 +529,9 @@ class scorm extends learnpath
             error_log('New LP - import_package() - zip file path = ' . $zip_file_path . ', zip file name = ' . $zip_file_name, 0);
         }
 
-        $course_rel_dir     = api_get_course_path($courseInfo['code']).'/scorm'; // scorm dir web path starting from /courses
+        $course_rel_dir = api_get_course_path($courseInfo['code']).'/scorm'; // scorm dir web path starting from /courses
         $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // Absolute system path for this course.
-        $current_dir        = api_replace_dangerous_char(trim($current_dir)); // Current dir we are in, inside scorm/
+        $current_dir = api_replace_dangerous_char(trim($current_dir)); // Current dir we are in, inside scorm/
 
         if ($this->debug > 1) {
             error_log( 'New LP - import_package() - current_dir = ' . $current_dir, 0);

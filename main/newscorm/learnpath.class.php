@@ -8575,14 +8575,15 @@ class learnpath
             $icon_name = str_replace(' ', '', $item['item_type']);
 
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
-                $return .= '<img alt="" src="../img/lp_' . $icon_name . '.png" style="margin-right:5px;" title="" />';
+                $return .= Display::return_icon('lp_' . $icon_name . '.png');
             } else {
                 if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-                    $return .= '<img alt="" src="../img/lp_' . $icon_name . '.gif" style="margin-right:5px;" title="" />';
+                    $return .= Display::return_icon('lp_' . $icon_name . '.gif');
                 } else {
                     $return .= Display::return_icon('folder_document.gif','',array('style'=>'margin-right:5px;'));
                 }
             }
+
             $return .=  $item['title'] . '</label>';
             $return .= '</td>';
 
@@ -8785,7 +8786,7 @@ class learnpath
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
 
-            $return .= '<img src="../img/hotpotatoes_s.png" style="margin-right:5px;" title="" width="16px" />';
+            $return .= Display::return_icon('hotpotatoes_s.png');
             $return .= '<a href="' . api_get_self() . '?' . api_get_cidreq().'&action=add_item&type=' . TOOL_HOTPOTATOES . '&file=' . $row_hot['id'] . '&lp_id=' . $this->lp_id . '">'.
                 ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS($row_hot['title'])) . '</a>';
             $return .= '</li>';
@@ -8795,16 +8796,10 @@ class learnpath
             $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$row_quiz['title'].'" >';
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
-
-            $return .= Display::return_icon('quizz_small.gif');
-            $return .= ' '.Security :: remove_XSS(cut($row_quiz['title'], 80));
             $return .= '</a> ';
-
-            /*$return .= ' <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
-                Display::return_icon('add.png', get_lang('Add')).
-                '</a>';*/
-            $return .= ' <a href="' . api_get_path(WEB_CODE_PATH) . 'exercice/overview.php?'.api_get_cidreq().'&exerciseId=' . $row_quiz['id'].'">' .
-                Display::return_icon('preview_view.png', get_lang('Preview')).
+            $return .= Display::return_icon('quizz_small.gif', '', array(), ICON_SIZE_TINY);
+            $return .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
+                Security :: remove_XSS(cut($row_quiz['title'], 80)).
                 '</a>';
 
             $return .= '</li>';
@@ -8858,18 +8853,20 @@ class learnpath
             function toggle_tool(tool, id){
                 if(document.getElementById(tool+"_"+id+"_content").style.display == "none"){
                     document.getElementById(tool+"_"+id+"_content").style.display = "block";
-                    document.getElementById(tool+"_"+id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'remove.gif";
+                    document.getElementById(tool+"_"+id+"_opener").src = "' . Display::returnIconPath('remove.gif').'";
                 } else {
                     document.getElementById(tool+"_"+id+"_content").style.display = "none";
-                    document.getElementById(tool+"_"+id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'add.gif";
+                    document.getElementById(tool+"_"+id+"_opener").src = "'.Display::returnIconPath('add.gif').'";
                 }
             }
         </script>
+
         <ul class="lp_resource">
             <li class="lp_resource_element">
-                <img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px"/>
-                <a href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.
-            '&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('LinkAdd').'">'.get_lang('LinkAdd').'</a>
+                '.Display::return_icon('linksnew.gif').'
+                <a href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('LinkAdd').'">'.
+                get_lang('LinkAdd').'
+                </a>
             </li>';
 
         foreach ($categorizedLinks as $categoryId => $links) {
@@ -8888,18 +8885,18 @@ class learnpath
                         <a class="moved" href="#">'.
                             $moveEverywhereIcon.
                         '</a>
-                        <img alt="" src="../img/lp_link.gif" style="margin-right:5px;width:16px"/>
-                        <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
-                        Security::remove_XSS($title).' '.$link.'
-                        </a>
+                        '.Display::return_icon('lp_link.png').'
+                        <a href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
+                        TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
+                        Security::remove_XSS($title).
+                        '</a>
                     </li>';
                 }
             }
             $linksHtmlCode .=
                 '<li>
-                <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')"
-                style="vertical-align:middle">
-                    <img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
+                <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')" style="vertical-align:middle">
+                    <img src="'.Display::returnIconPath('add.gif').'" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
                     align="absbottom" />
                 </a>
                 <span style="vertical-align:middle">'.Security::remove_XSS($categories[$categoryId]).'</span>
@@ -8980,10 +8977,10 @@ class learnpath
             function toggle_forum(forum_id){
                 if(document.getElementById("forum_"+forum_id+"_content").style.display == "none"){
                     document.getElementById("forum_"+forum_id+"_content").style.display = "block";
-                    document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'remove.gif";
+                            document.getElementById("forum_"+forum_id+"_opener").src = "' . Display::returnIconPath('remove.gif').'";
                 } else {
                     document.getElementById("forum_"+forum_id+"_content").style.display = "none";
-                    document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'add.gif";
+                            document.getElementById("forum_"+forum_id+"_opener").src = "' . Display::returnIconPath('add.gif').'";
                 }
             }
         </script>';
@@ -9002,12 +8999,12 @@ class learnpath
                 $return .= '<a class="moved" href="#">';
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                 $return .= ' </a>';
-                $return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
+                $return .= Display::return_icon('lp_forum.png', '', array(), ICON_SIZE_TINY);
                 $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle">
-                                <img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
+                                <img src="' . Display::returnIconPath('add.gif').'" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
                             </a>
-                            <a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_FORUM . '&forum_id=' . $forum['forum_id'] . '&lp_id=' . $this->lp_id . '" style="vertical-align:middle">' .
-                    Security :: remove_XSS($forum['forum_title']) .' '.$link. '</a>';
+                            <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_FORUM . '&forum_id=' . $forum['forum_id'] . '&lp_id=' . $this->lp_id . '" style="vertical-align:middle">' .
+                    Security :: remove_XSS($forum['forum_title']) . '</a>';
 
                 $return .= '</li>';
 

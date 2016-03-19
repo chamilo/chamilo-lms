@@ -386,7 +386,6 @@ class AnnouncementManager
         if (empty($last_id)) {
             return false;
         } else {
-
             $sql = "UPDATE $tbl_announcement SET id = iid WHERE iid = $last_id";
             Database::query($sql);
 
@@ -399,7 +398,6 @@ class AnnouncementManager
             }
 
             // store in item_property (first the groups, then the users
-
             if (empty($sentTo) || !empty($sentTo) &&
                 isset($sentTo[0]) && $sentTo[0] == 'everyone'
             ) {
@@ -460,6 +458,8 @@ class AnnouncementManager
      * @param $to_users
      * @param array $file
      * @param string $file_comment
+     * @param bool $sendToUsersInSession
+     *
      * @return bool|int
      */
     public static function add_group_announcement(
@@ -1524,9 +1524,9 @@ class AnnouncementManager
             }
         } else {
             // STUDENT
-            if (is_array($group_memberships) && count($group_memberships)>0) {
+            if (is_array($group_memberships) && count($group_memberships) > 0) {
                 if ($allowUserEditSetting && !api_is_anonymous()) {
-                    if (api_get_group_id() == 0) {
+                    if ($group_id == 0) {
                         // No group
                         $cond_user_id = " AND (
                             ip.lastedit_user_id = '".$user_id."' OR (
@@ -1540,13 +1540,13 @@ class AnnouncementManager
                         )";
                     }
                 } else {
-                    if (api_get_group_id() == 0) {
+                    if ($group_id == 0) {
                         $cond_user_id = " AND (
-                            ip.to_user_id=$user_id OR (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
+                            ip.to_user_id = $user_id AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
                         ) ";
                     } else {
                        $cond_user_id = " AND (
-                            ip.to_user_id=$user_id OR (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".api_get_group_id()."))
+                            ip.to_user_id = $user_id AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id."))
                         )";
                     }
                 }
@@ -1565,6 +1565,7 @@ class AnnouncementManager
                             AND ip.visibility='1'
                         ORDER BY display_order DESC";
             } else {
+
                 if ($user_id) {
                     if ($allowUserEditSetting && !api_is_anonymous()) {
                         $cond_user_id = " AND (
@@ -1586,7 +1587,7 @@ class AnnouncementManager
     						$condition_session
     						$searchCondition
     						AND ip.visibility='1'
-    						AND announcement.session_id IN(0, ".api_get_session_id().")
+    						AND announcement.session_id IN(0, ".$session_id.")
 						ORDER BY display_order DESC";
 
                 } else {

@@ -291,54 +291,9 @@ if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
 <?php
 }//end pediaphon
 
-//vozMe services
-	//disabled for a time
-/*
-echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktext2voice" onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;<img src="../img/file_sound.gif" title="'.get_lang('HelpvozMe').'" alt="'.get_lang('vozMe').'"/>&nbsp;'.get_lang('vozMe').'';
-echo '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
-echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
-
-echo '<form id="form3" name="form3" method="post" action="http://vozme.com/text2voice.php" target="mymp3" class="formw">';
-	echo '<br/>';
-	echo '<label>'.get_lang('Language').': ';
-	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-	$sql_select = "SELECT * FROM $tbl_admin_languages";
-	$result_select = Database::query($sql_select);
-	echo '<select name="lang" id="select">';
-	while ($row = Database::fetch_array($result_select)) {
-		if (in_array($row['isocode'], array('ca', 'en', 'es', 'hi', 'it', 'pt'))) {
-			if (api_get_setting('platformLanguage')==$row['english_name']){
-				echo '<option value="'.$row['isocode'].'" selected="selected">'.$row['original_name'].' ('.$row['english_name'].')</option>';
-			} else {
-				echo '<option value="'.$row['isocode'].'">'.$row['original_name'].' ('.$row['english_name'].')</option>';
-			}
-		}
-	}
-	echo '</select>';
-	echo '</label>';
-	echo '<label>&nbsp;&nbsp;'.get_lang('Voice').': ';
-	echo '<select name="gn" id="select1">';
-	echo '<option value="ml">'.get_lang('Male').'</option>';
-	echo '<option value="fm">'.get_lang('Female').'</option>';
-	echo '</select>';
-	echo '</label>';
-	echo '<br/><br/>';
-	echo '<div>'.get_lang('InsertText2Audio').'</div>';
-	echo '<br/>';
-	echo '<label>';
-	echo '<textarea name="text" id="textarea" cols="70" rows="10"></textarea>';
-	echo '</label>';
-	echo '<br/><br/>';
-	echo '<button class="save" type="submit" name="SendText2Audio">'.get_lang('BuildMP3').'</button>';
-	echo '<br/>';
-echo '</form>';
-echo '</div>';
-*/
 echo '</div>';
 
 Display :: display_footer();
-
-//Functions. TODO:all at one
 
 /**
  * This function save a post into a file mp3 from google services

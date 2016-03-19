@@ -60,7 +60,7 @@ function WSHelperVerifyKey($params)
     // if we are behind a reverse proxy, assume it will send the
     // HTTP_X_FORWARDED_FOR header and use this IP instead
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        list($ip1, $ip2) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        list($ip1) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
     if ($debug)
@@ -2579,7 +2579,11 @@ function WSEditUserPasswordCrypted($params)
         }
     }
 
-    return $return;
+    if ($return) {
+        return 1;
+    }
+
+    return 0;
 }
 
 /** WSDeleteUsers **/

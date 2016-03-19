@@ -16,7 +16,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="128"
    height="128"
-   viewBox="0 0 102.4 102.4"
+   viewBox="0 0 128 128"
    style="overflow:visible"
    xml:space="preserve"
    id="svg548"
@@ -27,13 +27,13 @@
      id="defs1113" /><sodipodi:namedview
      id="base"
      showgrid="false"
-     inkscape:zoom="2.1098556"
-     inkscape:cx="-68.635868"
-     inkscape:cy="-2.6249057"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:zoom="1.4918932"
+     inkscape:cx="88.615499"
+     inkscape:cy="16.243437"
+     inkscape:window-width="1325"
+     inkscape:window-height="747"
+     inkscape:window-x="41"
+     inkscape:window-y="21"
      inkscape:window-maximized="1"
      inkscape:current-layer="Layer_1"
      units="px" /><metadata
@@ -371,7 +371,7 @@ uuid:1f14adaf-76b0-4634-ae4d-a09f46b097a9</xapMM:DocumentID></rdf:Description><r
              rdf:about="uuid:451bae10-203e-4af9-9635-d6df11f2a519"><dc:format>
 image/svg+xml</dc:format></rdf:Description><cc:Work
              rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-               rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata></x:xmpmeta><xpacket>end='w'    </xpacket></metadata><g
+               rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata></x:xmpmeta><xpacket>end='w'    </xpacket></metadata><g
      id="Layer_2"
      transform="translate(0,54.4)"><rect
        id="_x3C_Slice_x3E_"
@@ -824,7 +824,7 @@ image/svg+xml</dc:format></rdf:Description><cc:Work
            style="stop-color:#FFFFFF"
            id="midPointStop694" /></linearGradient></g><g
        id="g1048"
-       transform="matrix(3.8266796,-1.1170363,1.1170363,3.8266796,-107.92883,-64.345898)"><path
+       transform="matrix(4.5887576,-1.3394923,1.3394923,4.5887576,-127.55393,-62.446953)"><path
          style="opacity:0.2"
          d="m 21.339,34.665 c 3.068,-5.448 3.624,-6.435 3.854,-6.622 -0.021,0.008 -0.053,0.019 -0.053,0.019 L 40.707,16.541 c 0.831,-0.612 2.249,0.52 3.217,1.831 0.96,1.296 1.629,2.986 0.833,3.629 l -15.633,11.522 -0.089,-0.002 -6.678,1.594 -1.319,0.127 0.301,-0.577 z"
          id="path1049"

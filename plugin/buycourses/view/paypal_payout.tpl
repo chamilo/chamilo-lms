@@ -27,7 +27,7 @@
             {% endfor %}
         </tbody>
     </table>
-        
+
     <div id="startPayout" class="modal fade" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -35,7 +35,7 @@
                     <h4 class="modal-title">{{ 'PaypalPayoutCommissions'|get_plugin_lang('BuyCoursesPlugin') }}</h4>
                 </div>
                 <div class="modal-body" id="content">
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button id="proceedPayout" type="button" class="btn btn-success fa fa-paypal"> {{ 'ProceedPayout' | get_plugin_lang('BuyCoursesPlugin') }}</button>
@@ -52,21 +52,21 @@
 
 <script>
     $(document).ready(function() {
-        
+
         $("#responseButton").hide();
-        
+
         $("#checkAll").click(function() {
             $(':checkbox').prop('checked', this.checked);
         });
-        
+
         $('#continuePayout').click(function() {
-            
+
             var val = [];
-            
+
             $(':checkbox:checked').not('#checkAll').each(function(i) {
                 val[i] = $(this).attr("id");
             });
-            
+
             $.ajax({
                 data: { payouts : val },
                 url: '{{ _p.web_plugin ~ 'buycourses/src/buycourses.ajax.php?' ~  { 'a': 'processPayout' } | url_encode() }}',
@@ -77,15 +77,15 @@
                 }
             });
         });
-        
+
         $('#proceedPayout').click(function() {
-            
+
             var val = [];
-            
+
             $(':checkbox:checked').not('#checkAll').each(function(i) {
                 val[i] = $(this).attr("id");
             });
-            
+
             $.ajax({
                 data: { payouts : val },
                 url: '{{ _p.web_plugin ~ 'buycourses/src/buycourses.ajax.php?' ~  { 'a': 'proceedPayout' } | url_encode() }}',
@@ -93,7 +93,7 @@
                 beforeSend: function() {
                     $("#proceedPayout").hide();
                     $("#cancelPayout").hide();
-                    $("#spinner").html('</br></br><div class="wobblebar-loader"></div><p> {{ 'ProcessingPayoutsDontCloseThisWindow' | get_plugin_lang('BuyCoursesPlugin') }} </p>');
+                    $("#spinner").html('<br /><br /><div class="wobblebar-loader"></div><p> {{ 'ProcessingPayoutsDontCloseThisWindow' | get_plugin_lang('BuyCoursesPlugin') }} </p>');
                 },
                 success: function(response) {
                     $("#content").html(response);
@@ -101,7 +101,7 @@
                 }
             });
         });
-        
+
         $(".cancelPayout").click(function() {
             var id = this.id;
             $.ajax({
@@ -113,7 +113,7 @@
                 }
             });
         });
-        
+
         $('#responseButton').click(function() {
             window.location.reload();
         });

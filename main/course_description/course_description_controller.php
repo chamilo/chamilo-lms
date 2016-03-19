@@ -76,11 +76,9 @@ class CourseDescriptionController
         $data = array();
         $data['id'] = $id;
         $affected_rows = null;
-        $message = array();
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
-                $check = Security::check_token();
-                if ($check) {
+                if (1) {
                     $title = $_POST['title'];
                     $content = $_POST['contentDescription'];
                     $description_type = $_POST['description_type'];
@@ -108,7 +106,6 @@ class CourseDescriptionController
                     } else {
                         $course_description->insert();
                     }
-                    Security::clear_token();
 
                     Display::addFlash(
                         Display::return_message(
@@ -193,9 +190,7 @@ class CourseDescriptionController
         $data = array();
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
-
-                $check = Security::check_token();
-                if ($check) {
+                if (1) {
                     $title = $_POST['title'];
                     $content = $_POST['contentDescription'];
                     $description_type = $_POST['description_type'];
@@ -205,7 +200,6 @@ class CourseDescriptionController
                         $course_description->set_content($content);
                         $course_description->insert(api_get_course_int_id());
                     }
-                    Security::clear_token();
 
                     Display::addFlash(
                         Display::return_message(

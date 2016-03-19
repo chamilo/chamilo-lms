@@ -700,11 +700,13 @@ class Display
      * Gets the path of an icon
      *
      * @param string $icon
+     * @param string $size
+     *
      * @return string
      */
-    public static function returnIconPath($icon)
+    public static function returnIconPath($icon, $size = ICON_SIZE_SMALL)
     {
-        return Display::return_icon($icon, null, null, null, null, true, false);
+        return Display::return_icon($icon, null, null, $size, null, true, false);
     }
 
     /**

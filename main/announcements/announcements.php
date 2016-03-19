@@ -51,6 +51,7 @@ $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $course_id = api_get_course_int_id();
 $_course = api_get_course_info_by_id($course_id);
 $group_id = api_get_group_id();
+$sessionId = api_get_session_id();
 
 api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 
@@ -142,7 +143,7 @@ switch ($action) {
         );
 
         $searchForm->addElement('text', 'keyword', get_lang('Title'));
-        $users = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
+        $users = CourseManager::get_user_list_from_course_code(api_get_course_id(), $sessionId);
         $userList = array('' => '');
         if (!empty($users)) {
             foreach ($users as $user) {
@@ -270,7 +271,7 @@ switch ($action) {
     case 'delete':
         /* Delete announcement */
         $id = intval($_GET['id']);
-        if (api_get_session_id() != 0 && api_is_allowed_to_session_edit(false, true) == false) {
+        if ($sessionId != 0 && api_is_allowed_to_session_edit(false, true) == false) {
             api_not_allowed();
         }
 
@@ -302,7 +303,7 @@ switch ($action) {
     case 'showhide':
         if (!isset($_GET['isStudentView']) || $_GET['isStudentView'] != 'false') {
             if (isset($_GET['id']) && $_GET['id']) {
-                if (api_get_session_id() != 0 &&
+                if ($sessionId != 0 &&
                     api_is_allowed_to_session_edit(false, true) == false
                 ) {
                     api_not_allowed();
@@ -326,7 +327,7 @@ switch ($action) {
         break;
     case 'add':
     case 'modify':
-        if (api_get_session_id() != 0 &&
+        if ($sessionId != 0 &&
             api_is_allowed_to_session_edit(false, true) == false
         ) {
             api_not_allowed(true);
@@ -371,7 +372,7 @@ switch ($action) {
                 $to = Tracking:: getInactiveStudentsInCourse(
                     api_get_course_int_id(),
                     $since,
-                    api_get_session_id()
+                    $sessionId
                 );
                 // setting the variables for the form elements: the users who need to receive the message
                 foreach ($to as &$user) {
@@ -451,11 +452,11 @@ switch ($action) {
 
         $form->addElement('text', 'title', get_lang('EmailTitle'));
         $form->addElement('hidden', 'id');
-        $htmlTags = "<b>".get_lang('Tags')."</b></br></br>";
+        $htmlTags = "<b>".get_lang('Tags')."</b><br /><br />";
         $tags = AnnouncementManager::get_tags();
 
         foreach ($tags as $tag) {
-            $htmlTags .= "<b>".$tag."</b></br>";
+            $htmlTags .= "<b>".$tag."</b><br />";
         }
 
         $form->addHtml(
@@ -473,7 +474,7 @@ switch ($action) {
         $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
         $form->addElement('hidden', 'sec_token', $stok);
 
-        if (api_get_session_id() == 0) {
+        if (empty($sessionId)) {
             $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
         }
 
@@ -533,6 +534,7 @@ switch ($action) {
                             $data['users'],
                             $file,
                             $file_comment,
+                            null,
                             $sendToUsersInSession
                         );
                     } else {

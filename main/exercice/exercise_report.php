@@ -95,7 +95,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
         $export->setOnlyBestAttempts($onlyBestAttempts);
 
         switch ($_GET['export_format']) {
-            case 'xls' :
+            case 'xls':
                 $export->exportCompleteReportXLS(
                     $documentPath,
                     null,
@@ -105,8 +105,8 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
                 );
                 exit;
                 break;
-            case 'csv' :
-            default :
+            case 'csv':
+            default:
                 $export->exportCompleteReportCSV(
                     $documentPath,
                     null,
@@ -130,6 +130,7 @@ if (isset($_REQUEST['comments']) &&
     //filtered by post-condition
     $id = intval($_GET['exeid']);
     $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
+
     if (empty($track_exercise_info)) {
         api_not_allowed();
     }
@@ -137,8 +138,8 @@ if (isset($_REQUEST['comments']) &&
     $student_id = $track_exercise_info['exe_user_id'];
     $session_id = $track_exercise_info['session_id'];
     $lp_id = $track_exercise_info['orig_lp_id'];
-    //$lp_item_id        = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
+    $exerciseId = $track_exercise_info['exe_exo_id'];
 
     $course_info = api_get_course_info();
 
@@ -216,6 +217,7 @@ if (isset($_REQUEST['comments']) &&
     $sql = "UPDATE $TBL_TRACK_EXERCISES
             SET exe_result = '".floatval($tot)."'
             WHERE exe_id = ".$id;
+
     Database::query($sql);
 
     if (isset($_POST['send_notification'])) {
@@ -226,9 +228,9 @@ if (isset($_REQUEST['comments']) &&
         $message .= '<h3>'.get_lang('CourseName').'</h3><p>'.Security::remove_XSS($course_info['name']).'';
         $message .= '<h3>'.get_lang('Exercise').'</h3><p>'.Security::remove_XSS($test);
 
-        //Only for exercises not in a LP
+        // Only for exercises not in a LP
         if ($lp_id == 0) {
-            $message .= '<p>'.get_lang('ClickLinkToViewComment').' <a href="#url#">#url#</a><br />';
+            $message .= '<p>'.get_lang('ClickLinkToViewComment').' <br /><a href="#url#">#url#</a><br />';
         }
 
         $message .= '<p>'.get_lang('Regards').'</p>';
@@ -246,23 +248,24 @@ if (isset($_REQUEST['comments']) &&
             Display::addFlash(
                 Display::return_message(get_lang('MessageSent'))
             );
-            header('Location: ' . api_get_path(WEB_PATH));
+            header('Location: ' . api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId);
             exit;
         }
     }
 
-    //Updating LP score here
-    if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))) {
+    // Updating LP score here
+    if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))
+    ) {
         $sql = "UPDATE $TBL_LP_ITEM_VIEW SET score = '".floatval($tot)."'
                 WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
         Database::query($sql);
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
-            header('location: exercise.php?course='.Security :: remove_XSS($_GET['course']));
+            header('location: '.api_get_path(WEB_CODE_PATH).'exercice/exercise.php?course='.Security :: remove_XSS($_GET['course']));
             exit;
         } else {
-            //Redirect to the reporting
-            header('location: ../mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.$course_id.'&session_id='.$session_id);
+            // Redirect to the reporting
+            header('Location: '.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.$course_id.'&session_id='.$session_id);
             exit;
         }
     }

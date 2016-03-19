@@ -1066,7 +1066,6 @@ class IndexManager
                 ) {
                     // Independent sessions
                     foreach ($session_category['sessions'] as $session) {
-
                         $session_id = $session['session_id'];
 
                         // Don't show empty sessions.

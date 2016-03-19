@@ -527,7 +527,7 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
         // Storing after edition.
         $params = [
             'cat_title' => $clean_cat_title,
-            'cat_comment' => $values['forum_category_comment'],
+            'cat_comment' => isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '',
         ];
         Database::update(
             $table_categories,
@@ -553,7 +553,7 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
         $params = [
             'c_id' => $course_id,
             'cat_title' => $clean_cat_title,
-            'cat_comment' => $values['forum_category_comment'],
+            'cat_comment' => isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '',
             'cat_order' => $new_max,
             'session_id' => $session_id,
         ];

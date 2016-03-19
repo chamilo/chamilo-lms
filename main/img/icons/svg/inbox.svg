@@ -11,6 +11,7 @@
    version="1.1"
    width="128"
    id="svg2"
+	viewBox="0 0 128 128"
    inkscape:version="0.91 r"
    sodipodi:docname="inbox.svg">
   <metadata
@@ -40,7 +41,7 @@
      inkscape:window-height="1051"
      id="namedview14"
      showgrid="false"
-     inkscape:zoom="3.4766083"
+     inkscape:zoom="1.4"
      inkscape:cx="77.684518"
      inkscape:cy="38.730618"
      inkscape:window-x="1366"

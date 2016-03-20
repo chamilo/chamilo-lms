@@ -10,7 +10,6 @@ build:
             my.chamilodev.net: '127.0.0.1'
     dependencies:
         before:
-            - composer global require "fxp/composer-asset-plugin:1.0.3"
             - composer -v update
 filter:
     excluded_paths:

@@ -1,8 +1,8 @@
-# Chamilo 1.10.x
+# Chamilo 1.11.x
 
-[![Build Status](https://travis-ci.org/chamilo/chamilo-lms.svg?branch=1.10.x)](https://travis-ci.org/chamilo/chamilo-lms)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/quality-score.png?b=1.10.x)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=1.10.x)
-[![Code Coverage](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/coverage.png?b=1.10.x)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=1.10.x)
+[![Build Status](https://travis-ci.org/chamilo/chamilo-lms.svg?branch=1.11.x)](https://travis-ci.org/chamilo/chamilo-lms)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/quality-score.png?b=1.11.x)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=1.11.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/coverage.png?b=1.11.x)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=1.11.x)
 [![Bountysource](https://www.bountysource.com/badge/team?team_id=12439&style=raised)](https://www.bountysource.com/teams/chamilo?utm_source=chamilo&utm_medium=shield&utm_campaign=raised)
 
 ## Installation
@@ -19,14 +19,14 @@ sudo apt-get install libapache2-mod-php mysql-server php5-gd php5-intl php5-curl
 
 ### Install Git
 
-The development version 1.10.x requires you to have Git installed. If you are working on a Debian-based system (Debian, Ubuntu, Mint, etc), just type
+The development version 1.11.x requires you to have Git installed. If you are working on a Debian-based system (Debian, Ubuntu, Mint, etc), just type
 ```
 sudo apt-get install git
 ```
 
 ### Install Composer
 
-To run the development version 1.10.x, you need Composer, a libraries dependency management system that will update all the libraries you need for Chamilo to the latest available version.
+To run the development version 1.11.x, you need Composer, a libraries dependency management system that will update all the libraries you need for Chamilo to the latest available version.
 
 Make sure you have Composer installed. If you do, you should be able to launch "composer" on the command line and have the inline help of composer show a few subcommands. If you don't, please follow the installation guide at https://getcomposer.org/download/
 
@@ -35,16 +35,16 @@ Make sure you have Composer installed. If you do, you should be able to launch "
 Clone the repository
 
 ```
-sudo mkdir chamilo-1.10
-sudo chown -R `whoami` chamilo-1.10
-git clone -b 1.10.x --single-branch https://github.com/chamilo/chamilo-lms.git chamilo-1.10
+sudo mkdir chamilo-1.11
+sudo chown -R `whoami` chamilo-1.11
+git clone -b 1.11.x --single-branch https://github.com/chamilo/chamilo-lms.git chamilo-1.11
 ```
 
-Checkout branch 1.10.x
+Checkout branch 1.11.x
 
 ```
-cd chamilo-1.10
-git checkout --track origin/1.10.x
+cd chamilo-1.11
+git checkout --track origin/1.11.x
 git config --global push.default current
 ```
 
@@ -82,28 +82,23 @@ to the installer. If not, add the "main/install/index.php" suffix manually in
 your browser address bar. The rest should be a matter of simple
  OK > Next > OK > Next...
 
-## Upgrade from 1.9.x
+## Upgrade from 1.10.x
 
-1.10.0 is a major version. It contains a series of new features, that
-also mean a series of new database changes in regards with versions 1.9.x. As 
+1.11.0 is a major version. It contains a series of new features, that
+also mean a series of new database changes in regards with versions 1.10.x. As 
 such, it is necessary to go through an upgrade procedure when upgrading from 
-1.9.x to 1.10.x.
+1.10.x to 1.11.x.
 
-When we published 1.10.0, we didn't catch a series of important upgrade errors.
-We released a warning a few days later asking people not to upgrade from 1.9.x
-to 1.10.0 for the time being. Version 1.10.2 fixed that, and you can now
-safely upgrade from any 1.9.x version to any 1.10.x version higher than 1.10.0.
-
-The upgrade procedure is relatively straightforward. If you have a 1.9.x 
+The upgrade procedure is relatively straightforward. If you have a 1.10.x 
 initially installed with Git, here are the steps you should follow 
 (considering you are already inside the Chamilo folder):
 ```
 git fetch --all
-git checkout origin 1.10.x
+git checkout origin 1.11.x
 ```
 
 Then load the Chamilo URL in your browser, adding "main/install/index.php" and 
-follow the upgrade instructions. Select the "Upgrade from 1.9.x" button to 
+follow the upgrade instructions. Select the "Upgrade from 1.10.x" button to 
 proceed.
 
 If you have previously updated database rows manually, you might face issue with
@@ -123,10 +118,10 @@ need to update their Chamilo portal as described here.
 
 ## Updating code
 
-To update your code with the latest developments in the 1.10.x branch, go to
+To update your code with the latest developments in the 1.11.x branch, go to
 your Chamilo folder and type:
 ```
-git pull origin 1.10.x
+git pull origin 1.11.x
 ```
 If you have made customizations to your code before the update, you will have
 two options:

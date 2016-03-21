@@ -6,10 +6,15 @@
  */
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-$current_course_tool  = TOOL_GROUP;
+$current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
+
+if (!api_is_allowed_to_edit(false, true)) {
+    api_not_allowed(true);
+}
+
 $currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
 
 /*	Create the groups */
@@ -70,12 +75,11 @@ if (isset($_POST['action'])) {
 }
 
 $nameTools = get_lang('GroupCreation');
-$interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+    'name' => get_lang('Groups'),
+);
 Display :: display_header($nameTools, 'Group');
-
-if (!api_is_allowed_to_edit(false, true)) {
-    api_not_allowed();
-}
 
 if (isset($_POST['number_of_groups'])) {
     if (!is_numeric($_POST['number_of_groups']) || intval($_POST['number_of_groups']) < 1) {
@@ -176,9 +180,20 @@ EOT;
 			$group_el = array();
 			$group_el[] = $form->createElement('text', 'group_'.$group_number.'_name');
 			if (api_get_setting('allow_group_categories') == 'true') {
-				$group_el[] = $form->createElement('select', 'group_'.$group_number.'_category', null, $cat_options, array('id' => 'category_'.$group_number));
+                $group_el[] = $form->createElement(
+                    'select',
+                    'group_'.$group_number.'_category',
+                    null,
+                    $cat_options,
+                    array('id' => 'category_'.$group_number)
+                );
 			}
-			$group_el[] = $form->createElement('text', 'group_'.$group_number.'_places', null, array('class' => 'span1', 'id' => 'places_'.$group_number));
+            $group_el[] = $form->createElement(
+                'text',
+                'group_'.$group_number.'_places',
+                null,
+                array('class' => 'span1', 'id' => 'places_'.$group_number)
+            );
 
 			if ($_POST['number_of_groups'] < 10000) {
 				if ($group_id < 10) {
@@ -208,11 +223,6 @@ EOT;
 
 	$create_groups_form = new FormValidator('create_groups', 'post', api_get_self().'?'.api_get_cidreq());
 	$create_groups_form->addElement('header', $nameTools);
-	/* $group_el = array ();
-	$group_el[] = $create_groups_form->createElement('text', 'number_of_groups', array(get_lang('Create'), '1'));
-	$group_el[] = $create_groups_form->addButtonCreate(get_lang('ProceedToCreateGroup'), 'submit', true);
-	$create_groups_form->addGroup($group_el, 'create_groups', get_lang('NumberOfGroupsToCreate'), ' ', false);
-	*/
     $create_groups_form->addText('number_of_groups',get_lang('NumberOfGroupsToCreate'),null,array('value'=>'1'));
     $create_groups_form->addButton('submit', get_lang('ProceedToCreateGroup'),'plus','primary');
 	$defaults = array();

@@ -164,7 +164,7 @@ switch ($action) {
             $userIdToSearch = $filterData['user_id'];
         }
 
-        $searchFormToString = $searchForm->returnForm();
+        //$searchFormToString = $searchForm->returnForm();
 
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_course_announcements&'.api_get_cidreq().'&title_to_search='.$keyword.'&user_id_to_search='.$userIdToSearch;

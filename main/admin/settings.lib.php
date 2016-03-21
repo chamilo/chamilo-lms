@@ -513,7 +513,10 @@ function upload_stylesheet($values, $picture)
                 'ico',
                 'psd',
                 'woff',
-                'woff2'
+                'woff2',
+                'xcf',
+                'svg',
+                'webp'
             );
 
             for ($i = 0; $i < $num_files; $i++) {

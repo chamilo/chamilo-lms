@@ -12,12 +12,14 @@ $userId = isset($_GET['user_id']) ? $_GET['user_id'] : null;
 SessionManager::protectSession($sessionId);
 
 $sessionInfo = api_get_session_info($sessionId);
+
 if (empty($sessionInfo)) {
     api_not_allowed(true);
 }
 
 if (!isset($sessionInfo['duration']) ||
-    isset($sessionInfo['duration']) && empty($sessionInfo['duration'])) {
+    (isset($sessionInfo['duration']) && empty($sessionInfo['duration']))
+) {
     api_not_allowed(true);
 }
 
@@ -25,9 +27,12 @@ if (empty($sessionId) || empty($userId)) {
     api_not_allowed(true);
 }
 
-//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
-$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$sessionId, "name" => get_lang('SessionOverview'));
+$interbreadcrumb[] = array(
+    'url' => "resume_session.php?id_session=".$sessionId,
+    "name" => get_lang('SessionOverview')
+);
 
 $form = new FormValidator('edit', 'post', api_get_self().'?session_id='.$sessionId.'&user_id='.$userId);
 $form->addHeader(get_lang('EditUserSessionDuration'));
@@ -39,6 +44,7 @@ $userAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
     $sessionId,
     $userId
 );
+
 if (count($userAccess) == 0) {
     // User never accessed the session. End date is still open
     $msg = sprintf(get_lang('UserNeverAccessedSessionDefaultDurationIsX'), $sessionInfo['duration']);
@@ -54,7 +60,7 @@ if (count($userAccess) == 0) {
     if ($days > 0) {
         $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateInZDays'), $firstAccessString, $duration, $days);
     } else {
-        $endDateInSeconds = $firstAccess + $duration*24*60*60;
+        $endDateInSeconds = $firstAccess + $duration * 24*60*60;
         $last = api_convert_and_format_date($endDateInSeconds, DATE_FORMAT_SHORT);
         $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateWasZ'), $firstAccessString, $duration, $last);
     }

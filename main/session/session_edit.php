@@ -25,13 +25,28 @@ SessionManager::protectSession($id);
 $sessionInfo = SessionManager::fetch($id);
 
 // Sets to local time to show it correctly when you edit a session
+if (!empty($sessionInfo['display_start_date'])) {
+    $sessionInfo['display_start_date'] = api_get_local_time($sessionInfo['display_start_date']);
+}
+if (!empty($sessionInfo['display_end_date'])) {
+    $sessionInfo['display_end_date'] = api_get_local_time($sessionInfo['display_end_date']);
+}
 
-$sessionInfo['display_start_date'] = api_get_local_time($sessionInfo['display_start_date']);
-$sessionInfo['display_end_date'] = api_get_local_time($sessionInfo['display_end_date']);
-$sessionInfo['access_start_date'] = api_get_local_time($sessionInfo['access_start_date']);
-$sessionInfo['access_end_date'] = api_get_local_time($sessionInfo['access_end_date']);
-$sessionInfo['coach_access_start_date'] = api_get_local_time($sessionInfo['coach_access_start_date']);
-$sessionInfo['coach_access_end_date'] = api_get_local_time($sessionInfo['coach_access_end_date']);
+if (!empty($sessionInfo['access_start_date'])) {
+    $sessionInfo['access_start_date'] = api_get_local_time($sessionInfo['access_start_date']);
+}
+
+if (!empty($sessionInfo['access_end_date'])) {
+    $sessionInfo['access_end_date'] = api_get_local_time($sessionInfo['access_end_date']);
+}
+
+if (!empty($sessionInfo['coach_access_start_date'])) {
+    $sessionInfo['coach_access_start_date'] = api_get_local_time($sessionInfo['coach_access_start_date']);
+}
+
+if (!empty($sessionInfo['coach_access_end_date'])) {
+    $sessionInfo['coach_access_end_date'] = api_get_local_time($sessionInfo['coach_access_end_date']);
+}
 
 $id_coach = $sessionInfo['id_coach'];
 $tool_name = get_lang('EditSession');

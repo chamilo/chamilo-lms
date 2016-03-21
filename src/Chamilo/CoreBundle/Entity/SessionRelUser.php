@@ -50,6 +50,13 @@ class SessionRelUser
     /**
      * @var integer
      *
+     * @ORM\Column(name="duration", type="integer", nullable=true)
+     */
+    private $duration;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="moved_to", type="integer", nullable=true, unique=false)
      */
     private $movedTo;
@@ -265,6 +272,25 @@ class SessionRelUser
     public function getRegisteredAt()
     {
         return $this->registeredAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @param int $duration
+     * @return SessionRelUser
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+
+        return $this;
     }
 
 }

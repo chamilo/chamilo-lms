@@ -312,7 +312,8 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $sessionRelUser->addColumn('moved_to', Type::INTEGER)->setNotnull(false);
         $sessionRelUser->addColumn('moved_status', Type::INTEGER)->setNotnull(false);
         $sessionRelUser->addColumn('moved_at', Type::DATETIME)->setNotnull(false);
-        $sessionRelUser->dropColumn('duration');
+        $sessionRelUser->addColumn('duration', Type::INTEGER)->setNotnull(false);
+
         $sessionRelUser->addIndex(['session_id']);
         $sessionRelUser->addIndex(['user_id']);
         $sessionRelUser->addIndex(['user_id', 'moved_to']);
@@ -327,9 +328,7 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $settingsCurrent->addUniqueIndex(['variable', 'value']);
 
         $schema->getTable('track_e_access')->addIndex(['c_id']);
-
         $schema->getTable('track_e_attempt')->addIndex(['c_id']);
-
         $schema->getTable('track_e_course_access')->addIndex(['c_id']);
 
         $trackEDefault = $schema->getTable('track_e_default');
@@ -337,19 +336,12 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $trackEDefault->addIndex(['session_id']);
 
         $schema->getTable('track_e_downloads')->addIndex(['c_id']);
-
         $schema->getTable('track_e_exercises')->addIndex(['c_id']);
-
         $schema->getTable('track_e_hotpotatoes')->addIndex(['c_id']);
-
         $schema->getTable('track_e_lastaccess')->addIndex(['c_id']);
-
         $schema->getTable('track_e_links')->addIndex(['c_id']);
-
         $schema->getTable('track_e_online')->addIndex(['c_id']);
-
         $schema->getTable('track_e_uploads')->addIndex(['c_id']);
-
         $schema->getTable('user')->addUniqueIndex(['username_canonical']);
 
         $usergroupRelUSer = $schema->getTable('usergroup_rel_user');

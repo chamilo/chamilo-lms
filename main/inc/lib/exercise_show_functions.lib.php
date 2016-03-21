@@ -153,14 +153,24 @@ class ExerciseShowFunctions
 
 	/**
 	 * Displays the answer to a hotspot question
-	 *
-	 * @param int $answerId
-	 * @param string $answer
-	 * @param string $studentChoice
-	 * @param string $answerComment
-	 */
-	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment, $in_results_disabled)
-	 {
+     * @param int $feedback_type
+     * @param int $answerId
+     * @param string $answer
+     * @param string $studentChoice
+     * @param string $answerComment
+     * @param string $in_results_disabled
+     * @param int $orderColor
+     */
+	public static function display_hotspot_answer(
+        $feedback_type,
+        $answerId,
+        $answer,
+        $studentChoice,
+        $answerComment,
+        $in_results_disabled,
+        $orderColor
+    )
+    {
         $hide_expected_answer = false;
         if ($feedback_type == 0 && $in_results_disabled == 2) {
             $hide_expected_answer = true;
@@ -185,7 +195,7 @@ class ExerciseShowFunctions
 		<table class="data_table">
 		<tr>
             <td class="text-center" width="5%">
-                <span class="fa fa-square fa-fw fa-2x" aria-hidden="true" style="color: <?php echo $hotspot_colors[$answerId]; ?>"></span>
+                <span class="fa fa-square fa-fw fa-2x" aria-hidden="true" style="color: <?php echo $hotspot_colors[$orderColor]; ?>"></span>
             </td>
 			<td class="text-left" width="25%">
                 <?php echo "$answerId - $answer"; ?>

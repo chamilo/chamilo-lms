@@ -46,11 +46,8 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $courseType->getColumn('id')->setUnsigned(false);
 
         $schema->getTable('c_announcement')->addIndex(['c_id']);
-
         $schema->getTable('c_announcement_attachment')->addIndex(['c_id']);
-
         $schema->getTable('c_attendance')->addIndex(['c_id']);
-
         $schema->getTable('c_attendance_calendar')->addIndex(['c_id']);
 
         $cAttendanceCalendarRelGroup = $schema->getTable('c_attendance_calendar_rel_group');
@@ -64,15 +61,10 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $cAttendanceSheet->addIndex(['user_id']);
 
         $schema->getTable('c_attendance_sheet_log')->addIndex(['c_id']);
-
         $schema->getTable('c_blog')->addIndex(['c_id']);
-
         $schema->getTable('c_blog_attachment')->addIndex(['c_id']);
-
         $schema->getTable('c_blog_comment')->addIndex(['c_id']);
-
         $schema->getTable('c_blog_post')->addIndex(['c_id']);
-
         $schema->getTable('c_blog_rating')->addIndex(['c_id']);
 
         $cBlogRelUser = $schema->getTable('c_blog_rel_user');
@@ -94,9 +86,7 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $cCalendarEvent->addIndex(['c_id']);
 
         $schema->getTable('c_calendar_event_attachment')->addIndex(['c_id']);
-
         $schema->getTable('c_calendar_event_repeat')->addIndex(['c_id']);
-
         $schema->getTable('c_calendar_event_repeat_not')->addIndex(['c_id']);
 
         $cChatConnected = $schema->getTable('c_chat_connected');
@@ -104,13 +94,9 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $cChatConnected->addIndex(['user_id']);
 
         $schema->getTable('c_course_setting')->addIndex(['c_id']);
-
         $schema->getTable('c_document')->addIndex(['c_id']);
-
         $schema->getTable('c_dropbox_category')->addIndex(['c_id']);
-
         $schema->getTable('c_dropbox_feedback')->addIndex(['c_id']);
-
         $schema->getTable('c_dropbox_file')->addIndex(['c_id']);
 
         $cDropboxPerson = $schema->getTable('c_dropbox_person');
@@ -122,9 +108,7 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $cDropboxPost->addIndex(['dest_user_id']);
 
         $schema->getTable('c_forum_attachment')->addIndex(['c_id']);
-
         $schema->getTable('c_forum_category')->addIndex(['c_id']);
-
         $schema->getTable('c_forum_forum')->addIndex(['c_id']);
 
         $cForumMailcue = $schema->getTable('c_forum_mailcue');
@@ -139,63 +123,35 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $cForumNotification->addIndex(['post_id']);
 
         $schema->getTable('c_forum_post')->addIndex(['c_id']);
-
         $schema->getTable('c_forum_thread')->addIndex(['c_id']);
-
         $schema->getTable('c_forum_thread_qualify')->addIndex(['c_id']);
-
         $schema->getTable('c_forum_thread_qualify_log')->addIndex(['c_id']);
-
         $schema->getTable('c_glossary')->addIndex(['c_id']);
-
         $schema->getTable('c_group_category')->addIndex(['c_id']);
-
         $schema->getTable('c_group_info')->addIndex(['c_id']);
-
         $schema->getTable('c_group_rel_tutor')->addIndex(['c_id']);
 
         $schema->getTable('c_group_rel_user')->addIndex(['c_id']);
-
         $schema->getTable('c_link')->addIndex(['c_id']);
-
         $schema->getTable('c_link_category')->addIndex(['c_id']);
-
         $schema->getTable('c_lp')->addIndex(['c_id']);
-
         $schema->getTable('c_lp_category')->addIndex(['c_id']);
-
         $schema->getTable('c_lp_item')->addIndex(['c_id']);
-
         $schema->getTable('c_lp_item_view')->addIndex(['c_id']);
-
         $schema->getTable('c_lp_iv_interaction')->addIndex(['c_id']);
-
         $schema->getTable('c_lp_iv_objective')->addIndex(['c_id']);
-
         $schema->getTable('c_lp_view')->addIndex(['c_id']);
-
         $schema->getTable('c_notebook')->addIndex(['c_id']);
-
         $schema->getTable('c_online_connected')->addIndex(['c_id']);
-
         $schema->getTable('c_online_link')->addIndex(['c_id']);
-
         $schema->getTable('c_permission_group')->addIndex(['c_id']);
-
         $schema->getTable('c_permission_task')->addIndex(['c_id']);
-
         $schema->getTable('c_permission_user')->addIndex(['c_id']);
-
         $schema->getTable('c_quiz')->addIndex(['c_id']);
-
         $schema->getTable('c_quiz_answer')->addIndex(['c_id']);
-
         $schema->getTable('c_quiz_question')->addIndex(['c_id']);
-
         $schema->getTable('c_quiz_question_category')->addIndex(['c_id']);
-
         $schema->getTable('c_quiz_question_option')->addIndex(['c_id']);
-
         $schema->getTable('c_quiz_question_rel_category')->addIndex(['c_id']);
 
         $cQuizRelQuestion = $schema->getTable('c_quiz_rel_question');
@@ -220,7 +176,6 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $cRoleUser->addIndex(['user_id']);
 
         $schema->getTable('c_student_publication')->addIndex(['c_id']);
-
         $schema->getTable('c_student_publication_assignment')->addIndex(['c_id']);
 
         $cStudentPublicationComment = $schema->getTable('c_student_publication_comment');
@@ -239,35 +194,20 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $cStudentPublicationComment->addIndex(['user_id']);
 
         $schema->getTable('c_survey')->addIndex(['c_id']);
-
         $schema->getTable('c_survey_answer')->addIndex(['c_id']);
-
         $schema->getTable('c_survey_group')->addIndex(['c_id']);
-
         $schema->getTable('c_survey_invitation')->addIndex(['c_id']);
-
         $schema->getTable('c_survey_question')->addIndex(['c_id']);
-
         $schema->getTable('c_survey_question_option')->addIndex(['c_id']);
-
         $schema->getTable('c_thematic')->addIndex(['c_id']);
-
         $schema->getTable('c_thematic_advance')->addIndex(['c_id']);
-
         $schema->getTable('c_thematic_plan')->addIndex(['c_id']);
-
         $schema->getTable('c_tool')->addIndex(['c_id']);
-
         $schema->getTable('c_tool_intro')->addIndex(['c_id']);
-
         $schema->getTable('c_userinfo_content')->addIndex(['c_id']);
-
         $schema->getTable('c_userinfo_def')->addIndex(['c_id']);
-
         $schema->getTable('c_wiki')->addIndex(['c_id']);
-
         $schema->getTable('c_wiki_conf')->addIndex(['c_id']);
-
         $schema->getTable('c_wiki_discuss')->addIndex(['c_id']);
 
         $cWikiMailcue = $schema->getTable('c_wiki_mailcue');

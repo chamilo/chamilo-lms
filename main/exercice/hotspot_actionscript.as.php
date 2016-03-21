@@ -8,6 +8,8 @@
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
+use ChamiloSession as Session;
+
 session_cache_limiter("none");
 
 require '../inc/global.inc.php';
@@ -127,6 +129,25 @@ if (!empty($attemptList)) {
 
 $data['nmbrTries'] = $nmbrTries;
 $data['done'] = 'done';
+
+if (Session::has('hotspot_ordered')) {
+    $tempHotspots = [];
+    $hotspotOrdered = Session::read('hotspot_ordered');
+
+    foreach ($hotspotOrdered as $hotspotOrder) {
+        foreach ($data['hotspots'] as $hotspot) {
+            if ($hotspot['id'] != $hotspotOrder) {
+                continue;
+            }
+
+            $tempHotspots[] = $hotspot;
+        }
+    }
+
+    $data['hotspots'] = $tempHotspots;
+
+    Session::erase('hotspot_ordered');
+}
 
 header('Content-Type: application/json');
 

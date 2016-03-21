@@ -245,6 +245,8 @@ class Answer
             $this->comment[$i] = $object->comment;
             $this->weighting[$i] = $object->ponderation;
             $this->position[$i] = $object->position;
+            $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
+            $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
             $this->autoId[$i] = $object->id_auto;
             $i++;
@@ -256,6 +258,8 @@ class Answer
             $this->comment[$i] = $doubt_data->comment;
             $this->weighting[$i] = $doubt_data->ponderation;
             $this->position[$i] = $doubt_data->position;
+            $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
+            $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $doubt_data->destination;
             $this->autoId[$i] = $doubt_data->id_auto;
             $i++;

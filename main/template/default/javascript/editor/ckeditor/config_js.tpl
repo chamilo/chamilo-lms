@@ -35,6 +35,23 @@ CKEDITOR.editorConfig = function (config) {
         }, {
             name : 'Superscript' ,
             element : 'sup'
+        },
+        {
+            name : 'Subscript' ,
+            element : 'sub'
+        },
+        {
+            name : 'Strikethrough' ,
+            element : 'del'
+        },
+        {
+            name : 'Underlined' ,
+            element : 'ins'
+        },
+        {
+            name : 'Stand Out' ,
+            element : 'span',
+            attributes: { 'class':'ck-stand-out'}
         }
     ];
     

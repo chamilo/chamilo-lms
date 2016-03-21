@@ -11,7 +11,6 @@
 body{
     color: #666;
     font-family: 'Open Sans', sans-serif;
-    padding: 20px;
     line-height: 30px;
 }
 a{
@@ -59,7 +58,7 @@ a:hover{
     color: #000;
 }
 .img-responsive{
-    width: 100%;
+    display: block;
     max-width: 100%;
     height: auto;
 }
@@ -105,4 +104,7 @@ blockquote:before {
 }
 blockquote p {
   display: inline;
+}
+.ck-stand-out{
+    background-color: yellow;
 }

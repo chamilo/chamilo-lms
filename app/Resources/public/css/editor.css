@@ -7,7 +7,8 @@
     Version: 1.0
 */
 @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,300italic,400italic);
-@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
+@import url(../assets/fontawesome/css/font-awesome.min.css);
+@import url(../assets/bootstrap/dist/css/bootstrap.min.css);
 body{
     color: #666;
     font-family: 'Open Sans', sans-serif;
@@ -57,11 +58,23 @@ a:hover{
     font-weight: bold;
     color: #000;
 }
-.img-responsive{
-    display: block;
-    max-width: 100%;
-    height: auto;
+.ck-title2{
+    padding-top: 0;
+    margin-top: 0;
+    font-weight: 500;
+    position: relative;
+    color: #000;
 }
+.ck-title2:after{
+    background-color:#E95839;
+    margin: 10px 0px 0px;
+    width: 50px;
+    height: 2px;
+    display: block;
+    content: "";
+    
+}
+
 figure .image.alignleft{
     margin: 0 20px 20px 0;
 }
@@ -107,4 +120,29 @@ blockquote p {
 }
 .ck-stand-out{
     background-color: yellow;
+}
+/* line horizontal separation */
+.ck-style1 {
+    height: 6px;
+    background: url(../../main/img/document/hr-1.png) repeat-x 0 0;
+    border: 0;
+}
+.ck-style2 {
+    height: 6px;
+    background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
+    border: 0;
+}
+.ck-style3 { 
+  border-top: 1px dashed #8c8b8b; 
+} 
+.ck-style3:after { 
+  content: '\002702'; 
+  display: inline-block; 
+  position: relative; 
+  top: -12px; 
+  left: 40px; 
+  padding: 0 3px; 
+  background: #FFF;
+  color: #8c8b8b; 
+  font-size: 18px; 
 }

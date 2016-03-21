@@ -21,10 +21,36 @@ CKEDITOR.editorConfig = function (config) {
     //Style for default CKEditor Chamilo LMS
     config.stylesSet = [
         { 
-            name : 'Title border center',
+            name : 'Title 1',
             element : 'h1',
             attributes : { 'class': 'ck ck-title' }
-        },{ 
+        },
+        { 
+            name : 'Title 2',
+            element : 'h2',
+            attributes : { 'class': 'ck ck-title2' }
+        },
+        { 
+            name : 'Alert Success',
+            element : 'p',
+            attributes : { 'class': 'alert alert-success' }
+        },
+        { 
+            name : 'Alert Info',
+            element : 'p',
+            attributes : { 'class': 'alert alert-info' }
+        },
+        { 
+            name : 'Alert Warning',
+            element : 'p',
+            attributes : { 'class': 'alert alert-warning' }
+        },
+        { 
+            name : 'Alert Danger',
+            element : 'p',
+            attributes : { 'class': 'alert alert-danger' }
+        },
+        { 
             name : 'Section Article' ,
             element : 'h3' ,
             attributes : { 'class': 'ck ck-article' }
@@ -52,6 +78,21 @@ CKEDITOR.editorConfig = function (config) {
             name : 'Stand Out' ,
             element : 'span',
             attributes: { 'class':'ck-stand-out'}
+        },
+        {
+            name : 'Separate Style 1' ,
+            element : 'hr',
+            attributes: { 'class':'ck-style1'}
+        },
+        {
+            name : 'Separate Style 2' ,
+            element : 'hr',
+            attributes: { 'class':'ck-style2'}
+        },
+        {
+            name : 'Separate Style 3' ,
+            element : 'hr',
+            attributes: { 'class':'ck-style3'}
         }
     ];
     

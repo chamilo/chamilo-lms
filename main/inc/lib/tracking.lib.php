@@ -1125,6 +1125,26 @@ class Tracking
                 $students[] = $studentData['user_id'];
             }
 
+            $studentBossesList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                'drh_all',
+                $userId,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                array(),
+                array(),
+                STUDENT_BOSS
+            );
+            $studentBosses = array();
+            foreach ($studentBossesList as $studentBossData) {
+                $studentBosses[] = $studentBossData['user_id'];
+            }
+
             $teacherList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
                 $userId,
@@ -1198,6 +1218,25 @@ class Tracking
             $students = array();
             foreach ($studentList as $studentData) {
                 $students[] = $studentData['user_id'];
+            }
+
+            $studentBossesList = UserManager::getUsersFollowedByUser(
+                $userId,
+                STUDENT_BOSS,
+                false,
+                false,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                COURSEMANAGER
+            );
+            $studentBosses = array();
+            foreach ($studentBossesList as $studentBossData) {
+                $studentBosses[] = $studentBossData['user_id'];
             }
 
             $teacherList = UserManager::getUsersFollowedByUser(
@@ -1275,6 +1314,7 @@ class Tracking
             'drh' => $humanResourcesList,
             'teachers' => $teachers,
             'students' => $students,
+            'studentBosses' => $studentBosses,
             'courses' => $courses,
             'sessions' => $sessions,
             'assignedCourses' => $assignedCourses

@@ -325,14 +325,14 @@ ul#navigation .report a {
     position: relative;
     width: 100%;
     height:600px;
-  }
-  .impress-title{
+}
+.impress-title{
     position: absolute;
     top:40%;
     left: 0%;
     text-align: center;
     width: 100%;
-  }
+}
 .impress-title h1{
     font-size: 35px;
 }
@@ -2386,6 +2386,9 @@ form .formw .freeze {
   width:100%;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+.table{
+    font-size: 12px;
 }
 .table-well{
   background:#ffffff;
@@ -4758,6 +4761,10 @@ div#chat-remote-video video {
 }
 #page-install .page-header{
   margin: 20px 0px 20px;
+}
+.page-header h2{
+    font-size: 22px;
+    margin-top: 25px;
 }
 #page-install .normal-message{
   padding: 20px;

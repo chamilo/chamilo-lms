@@ -738,14 +738,14 @@ class Display
         $alternateWebCssPath = api_get_path(WEB_CSS_PATH);
 
         $image = trim($image);
-        $size_extra = '';
 
         if (isset($size)) {
             $size = intval($size);
-            $size_extra = $size . '/';
         } else {
             $size = ICON_SIZE_SMALL;
         }
+
+        $size_extra = $size . '/';
 
         // Checking the img/ folder
         $icon = $w_code_path.'img/'.$image;
@@ -761,6 +761,11 @@ class Display
                 //Checking the main/img/icons/XXX/ folder
                 $icon = $w_code_path.'img/icons/'.$size_extra.$image;
             }
+        } else {
+            if (is_file($code_path.'img/icons/'.$size_extra.$image)) {
+                // Checking the main/img/icons/XXX/ folder
+                $icon = $w_code_path.'img/icons/'.$size_extra.$image;
+            }
         }
 
         // Special code to enable SVG - refs #7359 - Needs more work
@@ -768,7 +773,7 @@ class Display
         // it checks if there is an SVG version. If so, it uses it.
         // When moving this to production, the return_icon() calls should
         // ask for the SVG version directly
-        $testServer = api_get_setting('server_type');
+        /*$testServer = api_get_setting('server_type');
         if ($testServer == 'test' && $return_only_path == false) {
             $svgImage = substr($image, 0, -3) . 'svg';
             if (is_file($code_path . $theme . 'svg/' . $svgImage)) {
@@ -783,7 +788,7 @@ class Display
             if (empty($additional_attributes['width'])) {
                 $additional_attributes['width'] = $size;
             }
-        }
+        }*/
 
         $icon = api_get_cdn_path($icon);
 
@@ -793,7 +798,7 @@ class Display
         }
 
         $img = self::img($icon, $alt_text, $additional_attributes);
-        if (SHOW_TEXT_NEAR_ICONS == true and !empty($alt_text)) {
+        if (SHOW_TEXT_NEAR_ICONS == true && !empty($alt_text)) {
             if ($show_text) {
                 $img = "$img $alt_text";
             }

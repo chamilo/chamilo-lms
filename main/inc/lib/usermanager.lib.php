@@ -1507,6 +1507,7 @@ class UserManager
         }
 
         $gravatarEnabled = api_get_setting('gravatar_enabled');
+
         $anonymousPath = Display::returnIconPath('unknown.png', $pictureAnonymousSize);
 
         if ($pictureWebFile == 'unknown.jpg' || empty($pictureWebFile)) {

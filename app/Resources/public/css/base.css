@@ -93,6 +93,9 @@ a.thumbnail:hover{
     position: relative;
     
 }
+.page-course{
+    padding: 2% 3%;
+}
 /*------------------------*/
 .cursor-pointer {
     cursor: pointer;

@@ -108,7 +108,7 @@ class Documents extends Basic
             ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
-            [
+            [   'Styles',
                 'Format',
                 'Font',
                 'FontSize',

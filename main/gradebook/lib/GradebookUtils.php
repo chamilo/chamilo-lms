@@ -271,13 +271,6 @@ class GradebookUtils
                         '',
                         ICON_SIZE_SMALL
                     ) . '</a>';
-                //no move ability for root categories
-                if ($cat->is_movable()) {
-                    /* $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$cat->get_course_code().'">
-                      <img src="../img/icons/22/move.png" border="0" title="' . get_lang('Move') . '" alt="" /></a>'; */
-                } else {
-                    //$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
-                }
 
                 if ($cat->is_locked() && !api_is_platform_admin()) {
                     $modify_icons .= Display::return_icon('delete_na.png', get_lang('DeleteAll'), '', ICON_SIZE_SMALL);
@@ -357,8 +350,6 @@ class GradebookUtils
                 $modify_icons = '<a href="gradebook_edit_link.php?editlink=' . $link->get_id() . '&cidReq=' . $link->get_course_code() . '&id_session='.$link->get_session_id().'">' .
                     Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
             }
-
-            //$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movelink=' . $link->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
             $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&' . $visibility_command . '=&selectcat=' . $selectcat . '&id_session='.$link->get_session_id(). ' ">' .
                 Display::return_icon($visibility_icon . '.png', get_lang('Visible'), '', ICON_SIZE_SMALL) . '</a>';
             $modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink=' . $link->get_id() . '&selectcat=' . $selectcat . '&cidReq=' . $link->get_course_code() . '&id_session='.$link->get_session_id(). '">' .
@@ -712,7 +703,9 @@ class GradebookUtils
         //add print header
         if ($hide_print_button == false) {
             $print = '<style media="print" type="text/css">#print_div {visibility:hidden;}</style>';
-            $print .= '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="' . api_get_path(WEB_CODE_PATH) . 'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+            $print .= '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div">';
+            $print .= Display::return_icon('printmgr.gif', get_lang('Print'));
+            $print .= '</a>';
         }
 
         // Add header

@@ -674,7 +674,9 @@ if (!empty($exercise_list)) {
                     $class_tip = 'link_tooltip';
                 }
                 //$class_tip = 'exercise_link';
-                $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>';
+                $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">
+                             '.Display::returnIconPath('quiz.gif').'
+                 '.$title.' </a>';
 
                 $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
@@ -1025,7 +1027,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
 
         // prof only
         if ($is_allowedToEdit) {
-            $item = Display::tag('td', '<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?file='.$path.'&cid='.api_get_course_id().'&uid='.$userId.'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a> ');
+            $item = Display::tag('td', Display::return_icon('hotpotatoes_s.png', "HotPotatoes").'<a href="showinframes.php?file='.$path.'&cid='.api_get_course_id().'&uid='.$userId.'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a> ');
             $item .= Display::tag('td', '-');
 
             $actions = Display::url(

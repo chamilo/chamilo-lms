@@ -746,7 +746,7 @@ function active_filter($active, $urlParams, $row)
     /* you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is
         locked out and nobody can change it anymore.*/
     if ($row[0] <> $userId) {
-        $result = '<center><img src="../img/icons/16/'.$image.'.png" border="0" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
+        $result = '<center><img src="'.Display::returnIconPath($image.'.png', 16).'" border="0" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
     }
 
     return $result;
@@ -770,10 +770,9 @@ function modify_filter($user_id, $row, $data)
     $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
 
     $result = "";
-
     if ($is_allowed_to_track) {
-        $result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$_course['id'].'&origin=user_course&id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'"  >
-            <img border="0" alt="'.get_lang('Tracking').'" src="../img/icons/22/stats.png" />
+        $result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$_course['id'].'&origin=user_course&id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'">
+            '.Display::return_icon('stats.png', get_lang('Tracking')).'
         </a>';
     }
 

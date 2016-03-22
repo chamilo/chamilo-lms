@@ -398,37 +398,7 @@ function display_role_list($current_course_roles, $current_platform_roles)
     $course_id = api_get_course_int_id();
 
 	$coures_roles_table=Database::get_course_table(TABLE_ROLE);
-	$platform_roles_table=Database::get_main_table(TABLE_ROLE);
-/*
-	// platform roles
-	$sql="SELECT * FROM $platform_roles_table";
-	$result=Database::query($sql);
-	while ($row=Database::fetch_array($result))
-	{
-		if(in_array($row['role_id'], $current_platform_roles))
-		{
-			$checked='checked';
-			$image='checkbox_on2.gif';
-			$action='revoke';
-		}
-		else
-		{
-			$checked='';
-			$image='wrong.gif';
-			$action='grant';
-		}
-		if($setting_visualisation=='checkbox')
-		{
-			echo "<input type=\"checkbox\" name=\"role*platform*".$row['role_id']."\" $checked>";
-		}
-		if($setting_visualisation=='image')
-		{
-			echo "<a href=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."&amp;action=$action&amp;role=".$row['role_id']."&amp;scope=platform\"><img src=\"../img/".$image."\" border=\"0\"/></a>";
-		}
-		echo $row['role_name']."<br />\n";
-		echo $row['role_comment']."<br />\n";
-	}
-*/
+
 	// course roles
 	$sql="SELECT * FROM $coures_roles_table WHERE c_id = $course_id ";
 	$result=Database::query($sql);

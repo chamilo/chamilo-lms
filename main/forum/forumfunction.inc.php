@@ -3678,7 +3678,7 @@ function display_user_image($user_id, $name, $origin = '')
     if ($user_id != 0) {
         return $link.'<img src="'.$userInfo['avatar'].'"  alt="'.$name.'"  title="'.$name.'" /></a>';
     } else {
-        return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'" /></a>';
+        return $link.Display::return_icon('unknown.jpg', $name).'</a>';
     }
 }
 

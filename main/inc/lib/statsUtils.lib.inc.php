@@ -240,18 +240,18 @@ class StatsUtils
                 echo "</td>
                     <td width='60%' style='padding-top: 3px;' align='center'>"
                     // display hitbar
-                    . "<img src='../img/bar_1.gif' width='1' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
+                    . "<img src='".Display::returnIconPath('bar_1.gif')."' width='1' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
                 if ($pourcent != 0) {
-                    echo "<img src='../img/bar_1u.gif' width='$barwidth' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
+                    echo "<img src='".Display::returnIconPath('bar_1u.gif')."' width='$barwidth' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
                 }
                 // display 100% bar
                 if ($pourcent != 100 && $pourcent != 0) {
-                    echo "<img src='../img/bar_1m.gif' width='1' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
+                    echo "<img src='".Display::returnIconPath('bar_1m.gif')."' width='1' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
                 }
                 if ($pourcent != 100) {
-                    echo "<img src='../img/bar_1r.gif' width='" . ($maxSize - $barwidth) . "' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
+                    echo "<img src='".Display::returnIconPath('bar_1r.gif')."' width='" . ($maxSize - $barwidth) . "' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
                 }
-                echo "<img src='../img/bar_1.gif' width='1' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />
+                echo "<img src='".Display::returnIconPath('bar_1.gif')."' width='1' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />
                     </td>
                     <td align='center' width='10%'>
                         $cpt

@@ -34,7 +34,7 @@ var hide_bar = function() {
     $("#template_col").hide();
     $("#doc_form").removeClass("col-md-9");
     $("#doc_form").addClass("col-md-11");
-    $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
+    $("#hide_bar_template").css({"background-image" : \'url("'.Display::returnIconPath('hide.png').'")\'})
 }
 
 $(document).ready(function() {
@@ -139,9 +139,9 @@ $editorConfig = array(
 );
 
 if ($is_certificate_mode) {
-    $editorConfig['CreateDocumentDir']    = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
-    $editorConfig['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
-    $editorConfig['BaseHref']             = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
+	$editorConfig['CreateDocumentDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
+	$editorConfig['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
+	$editorConfig['BaseHref'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']||

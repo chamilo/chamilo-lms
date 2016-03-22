@@ -64,7 +64,7 @@ class ExerciseShowFunctions
      * @param int       Question ID
      * @return void
      */
-    static function display_calculated_answer($feedback_type, $answer, $id, $questionId)
+    public static function display_calculated_answer($feedback_type, $answer, $id, $questionId)
     {
         if (empty($id)) {
             echo '<tr><td>'. (Security::remove_XSS($answer)).'</td></tr>';
@@ -253,19 +253,25 @@ class ExerciseShowFunctions
         if ($feedback_type == 0 && $in_results_disabled == 2) {
             $hide_expected_answer = true;
         }
+        $icon = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio':'checkbox';
+		$icon .= $studentChoice?'_on':'_off';
+		$icon .= '.gif';
+
+		$iconAnswer = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox';
+		$iconAnswer .= $answerCorrect?'_on':'_off';
+		$iconAnswer .= '.gif';
+
 		?>
 		<tr>
 		<td width="5%">
-			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
-			border="0" alt="" />
+			<?php echo Display::return_icon($icon); ?>
 		</td>
 		<td width="5%">
-            <?php if (!$hide_expected_answer) { ?>
-			    <img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif" border="0" alt=" " />
-            <?php }
-            else {
+            <?php if (!$hide_expected_answer) {
+                echo Display::return_icon($iconAnswer);
+            } else {
                 echo "-";
-            }?>
+            } ?>
 		</td>
 		<td width="40%">
 			<?php

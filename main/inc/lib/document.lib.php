@@ -5744,8 +5744,9 @@ class DocumentManager
                         $certificate = get_lang('NoDefaultCertificate');
                     }
                     if (isset($_GET['selectcat'])) {
-                        $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;selectcat=' . Security::remove_XSS($_GET['selectcat']) . '&amp;set_certificate=' . $id . '&amp;' . $sort_params . '">
-                    <img src="../img/' . $visibility_icon_certificate . '.png" border="0" title="' . $certificate . '" alt="" /></a>';
+                        $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;selectcat=' . intval($_GET['selectcat']) . '&amp;set_certificate=' . $id . '&amp;' . $sort_params . '">';
+                        $modify_icons .= Display::return_icon($visibility_icon_certificate.'.png', $certificate);
+                        $modify_icons .= '</a>';
                         if ($is_preview) {
                             $modify_icons .= '&nbsp;<a target="_blank"  href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;set_preview=' . $id . '&amp;' . $sort_params . '" >' .
                                 Display::return_icon('preview_view.png', $preview, '', ICON_SIZE_SMALL) . '</a>';

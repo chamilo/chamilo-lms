@@ -1603,12 +1603,6 @@ function display_resources($showdeleteimg)
 
 			if ($showdeleteimg==1)
 			{
-				//if (strstr($_SERVER['REQUEST_URI'],"?id="))
-				//	{ echo " <a href='".api_get_self()."?id=".$output['id']."&amp;"; }
-				//else
-				//	{ echo " <a href='".api_get_self()."?"; }
-				//action=$action&id=$id&
-				//echo "action=$action&amp;id=$id&amp;originalresource=no&amp;resourceaction=removeresource&amp;key=".key($addedresource)."'><img src='../img/delete.gif' border='0' alt='resource ".get_lang('Delete')."' /></a><br />";
 				echo "<a href=".api_get_self()."?showresources=true&amp;source_forum=".$_GET['source_forum']."&amp;resourceaction=removeresource&amp;locationkey=".key($addedresource)."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no><img src='../img/delete.gif' border='0' alt='resource ".get_lang('Delete')."' /></a><br />";
 			}
 			echo '</td></tr>';

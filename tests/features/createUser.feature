@@ -26,6 +26,7 @@ Feature: Users management as admin
 
   Scenario: Search and delete a user
     Given I am a platform administrator
+    And Admin top bar is disabled
     And I am on "/main/admin/user_list.php"
     And I fill in "keyword" with "smarshall"
     And I press "submit"

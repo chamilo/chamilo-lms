@@ -111,7 +111,6 @@ $TheTextYouEnteredDoesNotMatchThePicture = "El text introduït no correspon a la
 $RemoveOldRelationships = "Elimina relacions prèvies";
 $ImportSessionDrhList = "Importa llista de directors de RRHH a les sessions";
 $FollowedStudents = "Estudiants seguits";
-$FollowedStudentBosses = "Superiors d'estudiant seguits";
 $FollowedTeachers = "Professors seguits";
 $AllowOnlyFiles = "Només arxius";
 $AllowOnlyText = "Només resposta en línia";

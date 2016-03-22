@@ -246,7 +246,6 @@ $TheTextYouEnteredDoesNotMatchThePicture = "The text you entered doesn't match t
 $RemoveOldRelationships = "Remove previous relationships";
 $ImportSessionDrhList = "Import list of HR directors into sessions";
 $FollowedStudents = "Followed students";
-$FollowedStudentBosses = "Followed student' superiors";
 $FollowedTeachers = "Followed teachers";
 $AllowOnlyFiles = "Allow only files";
 $AllowOnlyText = "Allow only text";
@@ -7622,4 +7621,9 @@ $MessagingGDCProjectNumberComment = "You need register a project on <a href=\"ht
 $MessagingGDCApiKeyTitle = "API Key of Google Developer Console for Google Cloud Messaging";
 $MessagingGDCApiKeyComment = "You need enable the Google Cloud Messaging API and create one credential for Android";
 $Overwrite = "Overwrite";
+$TheLogoMustBeSizeXAndFormatY = "The logo must be of %s px in size and in %s format";
+$ResetToTheOriginalLogo = "Original logo recovered";
+$NewLogoUpdated = "New logo uploaded";
+$CurrentLogo = "Current logo";
+$UpdateLogo = "Update logo";
 ?>

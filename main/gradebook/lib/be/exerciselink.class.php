@@ -286,9 +286,9 @@ class ExerciseLink extends AbstractLink
                         break;
                     case 'average':
                         $count = count($this->getStudentList());
-                        /*if (empty($count)) {
-                            return null;
-                        }*/
+                        if (empty($count)) {
+                            return array(0, $weight);
+                        }
                         return array($sumResult/$count , $weight);
                         break;
                     case 'ranking':

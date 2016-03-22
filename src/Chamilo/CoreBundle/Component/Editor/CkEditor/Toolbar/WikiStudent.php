@@ -97,7 +97,7 @@ class WikiStudent extends Basic
             ['Wikilink', 'Link', 'Unlink', 'Anchor'],
             ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath'],
             ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'leaflet'],
-            ['Format', 'Font', 'FontSize'],
+            ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             [
                 'Subscript',

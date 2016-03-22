@@ -155,6 +155,8 @@ class Template
 
         //Setting administrator variables
         $this->setAdministratorParams();
+        
+        $this->setCSSEditor();
 
         //header and footer are showed by default
         $this->set_footer($show_footer);
@@ -566,6 +568,14 @@ class Template
             $this->assign('css_static_file_to_string', $css_file_to_string);
         }
     }
+    public function setCSSEditor() {
+        $cssEditor = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
+            if (is_file(api_get_path(SYS_CSS_PATH).'themes/'.$this->theme.'/editor.css')) {
+                $cssEditor = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/editor.css';
+            }
+            
+        $this->assign('cssEditor', $cssEditor);
+    }
     /**
      * Prepare custom CSS to be added at the very end of the <head> section
      * @return void
@@ -575,6 +585,7 @@ class Template
     {
         global $disable_js_and_css_files;
         // Base CSS
+        
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
 
         if ($this->show_learnpath) {
@@ -583,16 +594,19 @@ class Template
                 $css[] = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/learnpath.css';
             }
         }
-
+        
+        if (is_file(api_get_path(SYS_CSS_PATH).'themes/'.$this->theme.'/editor.css')) {
+            $css[] = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/editor.css';
+        }else{
+            $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
+        }
+        
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/default.css');
-
-
-
+        
         $css_file_to_string = null;
         foreach ($css as $file) {
             $css_file_to_string .= api_get_css($file);
         }
-
         // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
         if (SHOW_TEXT_NEAR_ICONS == true) {
             //hack in order to fix the actions buttons

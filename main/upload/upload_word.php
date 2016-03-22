@@ -15,7 +15,7 @@ $form_style= '<style>
     width: 200px;
 }
 .convert_button{
-    background: url("../img/icons/22/learnpath.png") 0px 0px no-repeat;
+    background: url("'.Display::returnIconPath('learnpath.png').'") 0px 0px no-repeat;
     padding: 2px 0px 2px 22px;
 }
 #dynamic_div_container{float:left;margin-right:10px;}

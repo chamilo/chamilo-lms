@@ -3178,28 +3178,17 @@ class learnpath
         $i = 0;
 
         foreach ($toc_list as $item) {
-            // TODO: Complete this
-            $icon_name = array (
-                'not attempted' => '../img/notattempted.gif',
-                'incomplete'    => '../img/incomplete.png',
-                'failed'        => '../img/delete.png',
-                'completed'     => '../img/completed.png',
-                'passed'        => '../img/passed.png',
-                'succeeded'     => '../img/succeeded.png',
-                'browsed'       => '../img/completed.png',
-            );
 
             // Style Status
-
-            $class_name = array (
+            $class_name = [
                 'not attempted' => 'scorm_not_attempted',
-                'incomplete'    => 'scorm_not_attempted',
-                'failed'        => 'scorm_failed',
-                'completed'     => 'scorm_completed',
-                'passed'        => 'scorm_completed',
-                'succeeded'     => 'scorm_completed',
-                'browsed'       => 'scorm_completed',
-            );
+                'incomplete' => 'scorm_not_attempted',
+                'failed' => 'scorm_failed',
+                'completed' => 'scorm_completed',
+                'passed' => 'scorm_completed',
+                'succeeded' => 'scorm_completed',
+                'browsed' => 'scorm_completed',
+            ];
 
             $scorm_color_background = 'row_odd';
             $style_item = '';
@@ -5617,7 +5606,6 @@ class learnpath
 
             // The audio column.
             $return_audio  .= '<td align="left" style="padding-left:10px;">';
-
             $audio = '';
 
             if (!$update_audio || $update_audio <> 'true') {

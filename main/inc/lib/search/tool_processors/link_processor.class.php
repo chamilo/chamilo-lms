@@ -111,7 +111,7 @@ class link_processor extends search_processor {
             $url = api_get_path(WEB_PATH) . 'main/link/link.php?cidReq=%s';
             $url = sprintf($url, $course_id_alpha);
             // Get the image path
-            $thumbnail = api_get_path(WEB_CODE_PATH) . 'img/link.gif';
+            $thumbnail = Display::returnIconPath('link.png');
             $image = $thumbnail; //FIXME: use big images
             // get author
             $author = '';

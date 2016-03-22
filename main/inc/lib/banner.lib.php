@@ -153,7 +153,7 @@ function return_logo($theme)
     $html = '';
     $logoBase = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/header-logo.';
     $customLogoBase = api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme.'/images/header-logo-custom.';
-
+    $customLogo = '';
     $siteName = api_get_setting('siteName');
     $attributes = array(
         'title' => $siteName,

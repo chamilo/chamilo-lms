@@ -126,7 +126,7 @@ class SortableTable extends HTML_Table
             $table_id = $table_name.uniqid();
         }
         $this->table_id = $table_id;
-        parent::__construct(array('class' => 'table table-bordered', 'id' => $table_id));
+        parent::__construct(array('class' => 'data_table table', 'id' => $table_id));
         $this->table_name = $table_name;
         $this->additional_parameters = array();
         $this->param_prefix = $table_name.'_';
@@ -231,9 +231,9 @@ class SortableTable extends HTML_Table
      */
     public function display()
     {
-        echo '<div class="table-responsive">';
+        
         echo $this->return_table();
-        echo '</div>';
+        
     }
 
     /**
@@ -337,7 +337,8 @@ class SortableTable extends HTML_Table
                 $html .= '</form>';
             }
         }
-        return $html;
+        
+        return '<div class="table-responsive">' . $html . '</div>';
     }
 
     /**

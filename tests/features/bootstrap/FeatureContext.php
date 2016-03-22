@@ -305,4 +305,26 @@ class FeatureContext extends MinkContext
             new Step\When('I press "submit"')
         ];
     }
+
+    /**
+     * @Given /^I am on the social group members page with id "([^"]*)"$/
+     */
+    public function iAmOnSocialGroupMembersPageWithId($groupId)
+    {
+        return [
+            new Step\Given('I am on "/main/social/group_view.php?id=' . $groupId . '"')
+        ];
+    }
+
+    /**
+     * @When /^I try delete a friend with id "([^"]*)" from the social group with id "([^"]*)"$/
+     */
+    public function iTryDeleteAFriendFromSocialGroup($friendId, $groupId)
+    {
+        return [
+            new Step\When(
+                'I am on "/main/social/group_members.php?id=' . $groupId . '&u=' . $friendId . '&action=delete"'
+            )
+        ];
+    }
 }

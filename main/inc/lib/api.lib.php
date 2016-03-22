@@ -7877,7 +7877,11 @@ function api_mail_html(
         $mail->SMTPAuth = 1;
         $mail->Username = $platform_email['SMTP_USER'];
         $mail->Password = $platform_email['SMTP_PASS'];
+        if (isset($platform_email['SMTP_SECURE'])) {
+            $mail->SMTPSecure = $platform_email['SMTP_SECURE'];
+        }
     }
+    $mail->SMTPDebug = isset($platform_email['SMTP_DEBUG'])?$platform_email['SMTP_DEBUG']:0;
 
     // 5 = low, 1 = high
     $mail->Priority = 3;

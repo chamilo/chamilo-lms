@@ -130,20 +130,17 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                                 </div>
                                 <div class="user-info">
                                    <p>'.$user_info['complete_name'].'</p>
-                                   <div class="items-user-status">' . $status_icon . $user_icon . '</div>    
+                                   <div class="items-user-status">' . $status_icon . $user_icon . '</div>
                                    <div class="toolbar">
                                     '.$invitations.'
                                    </div>
                                 </div>
                             </div>
                       </div>';
-
-
         }
-        $results .= '</div></div>';
-        
-        
+        $results .= '</div>';
     }
+    $results .= '</div>';
 
     $visibility = array(true, true, true, true, true);
     $results .= Display::return_sortable_grid(
@@ -159,7 +156,14 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $totalUsers
     );
 
-    $block_search .= Display::panelCollapse(get_lang('Users'), $results, 'search-friends', null, 'friends-acorderon', 'friends-collapse');
+    $block_search .= Display::panelCollapse(
+        get_lang('Users'),
+        $results,
+        'search-friends',
+        null,
+        'friends-acorderon',
+        'friends-collapse'
+    );
     
     $grid_groups = array();
     $block_groups = '<div id="whoisonline">';
@@ -201,11 +205,10 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                         </div>
                     </div>
                 </div>';
-
         }
-        $block_groups .= '</div></div></div>';
-        
+        $block_groups .= '</div>';
     }
+    $block_groups .= '</div>';
 
     $visibility = array(true, true, true, true, true);
     $block_groups .= Display::return_sortable_grid(
@@ -220,8 +223,15 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         array(),
         $totalGroups
     );
-    
-    $block_search .= Display:: panelCollapse(get_lang('Groups'), $block_groups, 'search-groups', null, 'groups-acorderon', 'groups-collapse');
+
+    $block_search .= Display:: panelCollapse(
+        get_lang('Groups'),
+        $block_groups,
+        'search-groups',
+        null,
+        'groups-acorderon',
+        'groups-collapse'
+    );
 }
 
 $tpl = new Template($tool_name);
@@ -232,7 +242,6 @@ $tpl->assign('social_search', $block_search);
 $tpl->assign('search_form', $searchForm);
 
 $formModalTpl =  new Template();
-//$formModalTpl->assign('message_form', MessageManager::generate_message_form('send_message'));
 $formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 

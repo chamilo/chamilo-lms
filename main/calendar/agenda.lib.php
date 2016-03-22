@@ -122,8 +122,8 @@ class Agenda
      * @param array   $usersToSend array('everyone') or a list of user/group ids
      * @param bool    $addAsAnnouncement event as a *course* announcement
      * @param int $parentEventId
-     * @param array $attachmentArray $_FILES['']
-     * @param string $attachmentComment
+     * @param array $attachmentArray array of $_FILES['']
+     * @param array $attachmentCommentList
      * @param string $eventComment
      * @param string $color
      *
@@ -139,7 +139,7 @@ class Agenda
         $addAsAnnouncement = false,
         $parentEventId = null,
         $attachmentArray = array(),
-        $attachmentComment = null,
+        $attachmentCommentList = array(),
         $eventComment = null,
         $color = ''
     ) {
@@ -304,12 +304,16 @@ class Agenda
 
                     // Add attachment.
                     if (isset($attachmentArray) && !empty($attachmentArray)) {
-                        $this->addAttachment(
-                            $id,
-                            $attachmentArray,
-                            $attachmentComment,
-                            $this->course
-                        );
+                        $counter = 0;
+                        foreach ($attachmentArray as $attachmentItem) {
+                            $this->addAttachment(
+                                $id,
+                                $attachmentItem,
+                                $attachmentCommentList[$counter],
+                                $this->course
+                            );
+                            $counter++;
+                        }
                     }
                 }
                 break;
@@ -562,7 +566,7 @@ class Agenda
      * @param string $content
      * @param array $usersToSend
      * @param array $attachmentArray
-     * @param string $attachmentComment
+     * @param array $attachmentCommentList
      * @param string $comment
      * @param string $color
      * @param bool $addAnnouncement
@@ -578,7 +582,7 @@ class Agenda
         $content,
         $usersToSend = array(),
         $attachmentArray = array(),
-        $attachmentComment = null,
+        $attachmentCommentList = array(),
         $comment = null,
         $color = '',
         $addAnnouncement = false
@@ -801,12 +805,17 @@ class Agenda
 
                     // Add attachment.
                     if (isset($attachmentArray) && !empty($attachmentArray)) {
-                        $this->updateAttachment(
-                            $id,
-                            $attachmentArray,
-                            $attachmentComment,
-                            $this->course
-                        );
+                        $counter = 0;
+                        foreach ($attachmentArray as $attachmentItem) {
+                            $this->updateAttachment(
+                                $attachmentItem['id'],
+                                $id,
+                                $attachmentItem,
+                                $attachmentCommentList[$counter],
+                                $this->course
+                            );
+                            $counter++;
+                        }
                     }
                 }
                 break;
@@ -848,10 +857,11 @@ class Agenda
                 break;
             case 'course':
                 $course_id = api_get_course_int_id();
+
                 if (!empty($course_id) && api_is_allowed_to_edit(null, true)) {
                     // Delete
+                    $eventInfo = $this->get_event($id);
                     if ($deleteAllItemsFromSerie) {
-                        $eventInfo = $this->get_event($id);
                         /* This is one of the children.
                            Getting siblings and delete 'Em all + the father! */
                         if (isset($eventInfo['parent_event_id']) && !empty($eventInfo['parent_event_id'])) {
@@ -895,6 +905,12 @@ class Agenda
                         $this->table_repeat,
                         array('cal_id = ? AND c_id = ?' => array($id, $course_id))
                     );
+
+                    if (isset($eventInfo['attachment']) && !empty($eventInfo['attachment'])) {
+                        foreach ($eventInfo['attachment'] as $attachment) {
+                            self::deleteAttachmentFile($attachment['id'], $this->course);
+                        }
+                    }
                 }
                 break;
             case 'admin':
@@ -1152,7 +1168,7 @@ class Agenda
                             $event['parent_info'] = $this->get_event($event['parent_event_id']);
                         }
 
-                        $event['attachment'] = $this->getAttachment($id, $this->course);
+                        $event['attachment'] = $this->getAttachmentList($id, $this->course);
                     }
                 }
                 break;
@@ -1439,13 +1455,16 @@ class Agenda
                 }
 
                 $eventsAdded[] = $event['unique_id'];
-                $attachment = $this->getAttachment($row['id'], $courseInfo);
+                $attachmentList = $this->getAttachmentList($row['id'], $courseInfo);
 
-                if (!empty($attachment)) {
-                    $has_attachment = Display::return_icon('attachment.gif', get_lang('Attachment'));
-                    $user_filename = $attachment['filename'];
-                    $url = api_get_path(WEB_CODE_PATH).'calendar/download.php?file='.$attachment['path'].'&course_id='.$course_id.'&'.api_get_cidreq();
-                    $event['attachment'] = $has_attachment.Display::url($user_filename, $url);
+                if (!empty($attachmentList)) {
+                    foreach ($attachmentList as $attachment) {
+                        $has_attachment = Display::return_icon('attachment.gif', get_lang('Attachment'));
+                        $user_filename = $attachment['filename'];
+                        $url = api_get_path(WEB_CODE_PATH).'calendar/download.php?file='.$attachment['path'].'&course_id='.$course_id.'&'.api_get_cidreq();
+                        $event['attachment'] .= $has_attachment.Display::url($user_filename, $url).'<br />';
+                    }
+
                 } else {
                     $event['attachment'] = '';
                 }
@@ -1944,23 +1963,36 @@ class Agenda
                 $form->addElement('textarea', 'comment', get_lang('Comment'));
             }
 
-            $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
-            if ($showAttachmentForm) {
-                if (isset($params['attachment']) && !empty($params['attachment'])) {
-                    $attachment = $params['attachment'];
-                    $params['file_comment'] = $attachment['comment'];
-                    if (!empty($attachment['path'])) {
-                        $form->addElement(
-                            'checkbox',
-                            'delete_attachment',
-                            null,
-                            get_lang('DeleteAttachment').' '.$attachment['filename']
-                        );
-                    }
-                }
-            }
+            //$form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
 
-            $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
+            $form->addElement('advanced_settings', get_lang('FilesAttachment').'<span id="filepaths">
+                        <div id="filepath_1">
+                            <input type="file" name="attach_1"/><br />
+                            '.get_lang('Description').'&nbsp;&nbsp;<input type="text" name="legend[]" /><br /><br />
+                        </div>
+                    </span>');
+            $form->addElement('advanced_settings','<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
+
+            //if ($showAttachmentForm) {
+
+                if (isset($params['attachment']) && !empty($params['attachment'])) {
+                    $attachmentList = $params['attachment'];
+                    foreach ($attachmentList as $attachment) {
+                        $params['file_comment'] = $attachment['comment'];
+                        if (!empty($attachment['path'])) {
+                            $form->addElement(
+                                'checkbox',
+                                'delete_attachment['.$attachment['id'].']',
+                                null,
+                                get_lang('DeleteAttachment').': '.$attachment['filename']
+                            );
+                        }
+                    }
+
+                }
+           // }
+
+            //$form->addElement('textarea', 'file_comment', get_lang('FileComment'));
 
             if (!empty($id)) {
                 $form->addElement(
@@ -2079,17 +2111,49 @@ class Agenda
      * @param array $courseInfo
      * @return array with the post info
      */
-    public function getAttachment($eventId, $courseInfo)
+    public function getAttachmentList($eventId, $courseInfo)
     {
         $tableAttachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
         $courseId = intval($courseInfo['real_id']);
         $eventId = intval($eventId);
-        $row = array();
+
         $sql = "SELECT id, path, filename, comment
                 FROM $tableAttachment
                 WHERE
                     c_id = $courseId AND
                     agenda_id = $eventId";
+        $result = Database::query($sql);
+        $list = array();
+        if (Database::num_rows($result) != 0) {
+            $list = Database::store_result($result, 'ASSOC');
+        }
+
+        return $list;
+    }
+
+
+    /**
+     * Show a list with all the attachments according to the post's id
+     * @param int $attachmentId
+     * @param int $eventId
+     * @param array $courseInfo
+     * @return array with the post info
+     */
+    public function getAttachment($attachmentId, $eventId, $courseInfo)
+    {
+        $tableAttachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+        $courseId = intval($courseInfo['real_id']);
+        $eventId = intval($eventId);
+        $attachmentId = intval($attachmentId);
+
+        $row = array();
+        $sql = "SELECT id, path, filename, comment
+                FROM $tableAttachment
+                WHERE
+                    c_id = $courseId AND
+                    agenda_id = $eventId AND
+                    id = $attachmentId
+                ";
         $result = Database::query($sql);
         if (Database::num_rows($result) != 0) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -2162,16 +2226,17 @@ class Agenda
     }
 
     /**
+     * @param int $attachmentId
      * @param int $eventId
      * @param array $fileUserUpload
      * @param string $comment
      * @param array $courseInfo
      */
-    public function updateAttachment($eventId, $fileUserUpload, $comment, $courseInfo)
+    public function updateAttachment($attachmentId, $eventId, $fileUserUpload, $comment, $courseInfo)
     {
-        $attachment = $this->getAttachment($eventId, $courseInfo);
+        $attachment = $this->getAttachment($attachmentId, $eventId, $courseInfo);
         if (!empty($attachment)) {
-            $this->deleteAttachmentFile($attachment['id'], $courseInfo);
+            $this->deleteAttachmentFile($attachmentId, $courseInfo);
         }
         $this->addAttachment($eventId, $fileUserUpload, $comment, $courseInfo);
     }

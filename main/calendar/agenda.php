@@ -8,7 +8,7 @@
 use \ChamiloSession as Session;
 
 // name of the language file that needs to be included
-$language_file = array('agenda', 'group');
+$language_file = array('agenda', 'group', 'messages', 'userInfo', 'admin');
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -61,6 +61,33 @@ function plus_repeated_event() {
 </script>
 ";
 
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+var counter_image = 1;
+function add_image_form() {
+	// Multiple filepaths for image form
+	var filepaths = document.getElementById("filepaths");
+	if (document.getElementById("filepath_"+counter_image)) {
+		counter_image = counter_image + 1;
+	}  else {
+		counter_image = counter_image;
+	}
+	var elem1 = document.createElement("div");
+	elem1.setAttribute("id","filepath_"+counter_image);
+	filepaths.appendChild(elem1);
+	id_elem1 = "filepath_"+counter_image;
+	id_elem1 = "\'"+id_elem1+"\'";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\" />&nbsp; <br />'.get_lang('Description').'&nbsp;&nbsp;<input type=\"text\" name=\"legend[]\"  /><br /><br />";
+	if (filepaths.childNodes.length == 6) {
+		var link_attach = document.getElementById("link-more-attach");
+		if (link_attach) {
+			link_attach.innerHTML="";
+		}
+	}
+}
+</script>';
+
+
 // setting the name of the tool
 $nameTools = get_lang('Agenda');
 
@@ -110,10 +137,9 @@ if (api_is_allowed_to_edit(false, true) OR
                 $sendEmail = isset($values['add_announcement']) ? true : false;
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
 
-                $sendAttachment = isset($_FILES['user_upload']) ? true : false;
-                $attachment = $sendAttachment ? $_FILES['user_upload'] : null;
-                $attachmentComment = isset($values['file_comment']) ? $values['file_comment'] : null;
-
+                $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
+                $attachmentList = $sendAttachment ? $_FILES : null;
+                $attachmentCommentList = isset($values['legend']) ? $values['legend'] : null;
                 $comment = isset($values['comment']) ? $values['comment'] : null;
 
                 $startDate = $values['date_range_start'];
@@ -128,8 +154,8 @@ if (api_is_allowed_to_edit(false, true) OR
                     $values['users_to_send'],
                     $sendEmail,
                     null,
-                    $attachment,
-                    $attachmentComment,
+                    $attachmentList,
+                    $attachmentCommentList,
                     $comment
                 );
 
@@ -175,9 +201,10 @@ if (api_is_allowed_to_edit(false, true) OR
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 
-                $sendAttachment = isset($_FILES['user_upload']) ? true : false;
-                $attachment = $sendAttachment ? $_FILES['user_upload'] : null;
-                $attachmentComment = isset($values['file_comment']) ? $values['file_comment'] : null;
+                $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
+                $attachmentList = $sendAttachment ? $_FILES : null;
+                $attachmentCommentList = isset($values['legend']) ? $values['legend'] : null;
+
                 $comment = isset($values['comment']) ? $values['comment'] : null;
 
                 // This is a sub event. Delete the current and create another BT#7803
@@ -194,8 +221,8 @@ if (api_is_allowed_to_edit(false, true) OR
                         $values['users_to_send'],
                         false,
                         null,
-                        $attachment,
-                        $attachmentComment,
+                        $attachmentList,
+                        $attachmentCommentList,
                         $comment
                     );
 
@@ -214,8 +241,8 @@ if (api_is_allowed_to_edit(false, true) OR
                     $values['title'],
                     $values['content'],
                     $values['users_to_send'],
-                    $attachment,
-                    $attachmentComment,
+                    $attachmentList,
+                    $attachmentCommentList,
                     $comment,
                     '',
                     $sendEmail
@@ -232,13 +259,15 @@ if (api_is_allowed_to_edit(false, true) OR
                     );
                 }
 
-                $deleteAttachment = isset($values['delete_attachment']) ? true : false;
+                $deleteAttachmentList = isset($values['delete_attachment']) ? $values['delete_attachment'] : array();
 
-                if ($deleteAttachment && isset($event['attachment']) && !empty($event['attachment'])) {
-                    $agenda->deleteAttachmentFile(
-                        $event['attachment']['id'],
-                        $agenda->course
-                    );
+                if (!empty($deleteAttachmentList)) {
+                    foreach ($deleteAttachmentList as $deleteAttachmentId => $value) {
+                        $agenda->deleteAttachmentFile(
+                            $deleteAttachmentId,
+                            $agenda->course
+                        );
+                    }
                 }
 
                 $message = Display::return_message(get_lang('Updated'), 'confirmation');

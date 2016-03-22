@@ -32,3 +32,8 @@ Feature: Social Group
         And I am on "/main/social/invitations.php"
         And I follow "deny-invitation-1"
         Then I should see "Group invitation was denied"
+
+    Scenario: Delete user from group
+        Given I am a platform administrator
+        When I try delete a friend with id "11" from the social group with id "1"
+        Then I should see "The user has been deleted"

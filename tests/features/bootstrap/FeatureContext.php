@@ -274,4 +274,58 @@ class FeatureContext extends MinkContext
             new Step\When('I press "submit"')
         ];
     }
+
+    /**
+     * Sometimes the top admin toolbar has form buttons
+     * that conflicts with the main page forms so we need
+     * to disable it
+     * @Given /^Admin top bar is disabled$/
+     */
+    public function adminTopBarIsDisabled()
+    {
+        return [
+            new Step\Given('I am a platform administrator'),
+            new Step\Given('I am on "/main/admin/settings.php"'),
+            new Step\When('I fill in "search_field" with "show_admin_toolbar"'),
+            new Step\When('I press "submit_button"'),
+            new Step\When('I select "do_not_show" from "show_admin_toolbar"'),
+            new Step\When('I press "submit"')
+        ];
+    }
+    /**
+     * @Given /^Admin top bar is enabled$/
+     */
+    public function adminTopBarIsEnabled()
+    {
+        return [
+            new Step\Given('I am a platform administrator'),
+            new Step\Given('I am on "/main/admin/settings.php"'),
+            new Step\When('I fill in "search_field" with "show_admin_toolbar"'),
+            new Step\When('I press "submit_button"'),
+            new Step\When('I select "show_to_admin_and_teachers" from "show_admin_toolbar"'),
+            new Step\When('I press "submit"')
+        ];
+    }
+
+    /**
+     * @Given /^I am on the social group members page with id "([^"]*)"$/
+     */
+    public function iAmOnSocialGroupMembersPageWithId($groupId)
+    {
+        return [
+            new Step\Given('I am on "/main/social/group_view.php?id=' . $groupId . '"')
+        ];
+    }
+
+    /**
+     * @When /^I try delete a friend with id "([^"]*)" from the social group with id "([^"]*)"$/
+     */
+    public function iTryDeleteAFriendFromSocialGroup($friendId, $groupId)
+    {
+        return [
+            new Step\When(
+                'I am on "/main/social/group_members.php?id=' . $groupId . '&u=' . $friendId . '&action=delete"'
+            )
+        ];
+    }
 }

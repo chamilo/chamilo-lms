@@ -489,11 +489,11 @@ class UserManager
             return false;
         }
         $sql = "SELECT * FROM $table_course_user
-                WHERE status = '1' AND id = '".$user_id."'";
+                WHERE status = 1 AND user_id = ".$user_id;
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
             $sql = "SELECT id FROM $table_course_user
-                    WHERE status='1' AND c_id ='".Database::escape_string($course->c_id)."'";
+                    WHERE status=1 AND c_id = " . Database::escape_string($course->c_id);
             $res2 = Database::query($sql);
             if (Database::num_rows($res2) == 1) {
                 return false;

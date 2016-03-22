@@ -675,7 +675,7 @@ if (!empty($exercise_list)) {
                 }
                 //$class_tip = 'exercise_link';
                 $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">
-                             '.Display::returnIconPath('quiz.gif').'
+                             '.Display::return_icon('quiz.gif', $row['title']).'
                  '.$title.' </a>';
 
                 $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);

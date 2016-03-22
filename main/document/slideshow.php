@@ -440,7 +440,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 
 			 if (initial_height>height || initial_width>width) {
 				document.getElementById('image').style.visibility='hidden';
-				document.getElementById('td_image').style.background='url(../img/loadingAnimation.gif) center no-repeat';
+				document.getElementById('td_image').style.background='url(<?php echo Display::returnIconPath('loadingAnimation.gif'); ?>) center no-repeat';
 				document.getElementById('image').onload = resizeImage;
 			    window.onresize = resizeImage;
 			}

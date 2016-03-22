@@ -1479,28 +1479,28 @@ class UserManager
         $pictureWebFile = $imageWebPath['file'];
         $pictureWebDir = $imageWebPath['dir'];
 
-        $pictureAnonymous = 'icons/128/unknown.png';
+        $pictureAnonymousSize = '128';
         $gravatarSize = 22;
         $realSizeName = 'small_';
 
         switch ($size) {
             case USER_IMAGE_SIZE_SMALL:
-                $pictureAnonymous = 'icons/22/unknown.png';
+                $pictureAnonymousSize = '22';
                 $realSizeName = 'small_';
                 $gravatarSize = 22;
                 break;
             case USER_IMAGE_SIZE_MEDIUM:
-                $pictureAnonymous = 'icons/64/unknown.png';
+                $pictureAnonymousSize = '64';
                 $realSizeName = 'medium_';
                 $gravatarSize = 50;
                 break;
             case USER_IMAGE_SIZE_ORIGINAL:
-                $pictureAnonymous = 'icons/128/unknown.png';
+                $pictureAnonymousSize = '128';
                 $realSizeName = '';
                 $gravatarSize = 108;
                 break;
             case USER_IMAGE_SIZE_BIG:
-                $pictureAnonymous = 'icons/128/unknown.png';
+                $pictureAnonymousSize = '128';
                 $realSizeName = 'big_';
                 $gravatarSize = 200;
                 break;
@@ -1508,7 +1508,7 @@ class UserManager
 
         $gravatarEnabled = api_get_setting('gravatar_enabled');
 
-        $anonymousPath = api_get_path(WEB_CODE_PATH).'img/'.$pictureAnonymous;
+        $anonymousPath = Display::returnIconPath('unknown.png', $pictureAnonymousSize);
 
         if ($pictureWebFile == 'unknown.jpg' || empty($pictureWebFile)) {
 
@@ -1744,12 +1744,12 @@ class UserManager
 
         $production_path = self::get_user_picture_path_by_id($user_id, 'web');
         $production_dir = $production_path['dir'];
-        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.png';
-        $add_image = api_get_path(WEB_CODE_PATH).'img/archive.png';
+        $del_image = Display::returnIconPath('delete.png');
+        $add_image = Display::returnIconPath('archive.png');
         $del_text = get_lang('Delete');
         $production_list = '';
         if (count($productions) > 0) {
-            $production_list = '<div class="files-production"> <ul id="productions">';
+            $production_list = '<div class="files-production"><ul id="productions">';
             foreach ($productions as $file) {
                 $production_list .= '<li><img src="'.$add_image.'" /><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
                 if ($showdelete) {
@@ -1931,6 +1931,7 @@ class UserManager
         if (!$force && !empty($_POST['remove_'.$extra_field])) {
             return true; // postpone reading from the filesystem
         }
+
         $extra_files = self::get_user_extra_files($user_id, $extra_field);
         if (empty($extra_files)) {
             return false;
@@ -1938,7 +1939,8 @@ class UserManager
 
         $path_info = self::get_user_picture_path_by_id($user_id, 'web');
         $path = $path_info['dir'];
-        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.png';
+        $del_image = Display::returnIconPath('delete.png');
+
         $del_text = get_lang('Delete');
         $extra_file_list = '';
         if (count($extra_files) > 0) {

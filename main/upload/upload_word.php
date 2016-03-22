@@ -15,7 +15,7 @@ $form_style= '<style>
     width: 200px;
 }
 .convert_button{
-    background: url("../img/icons/22/learnpath.png") 0px 0px no-repeat;
+    background: url("'.Display::returnIconPath('learnpath.png').'") 0px 0px no-repeat;
     padding: 2px 0px 2px 22px;
 }
 #dynamic_div_container{float:left;margin-right:10px;}
@@ -81,7 +81,6 @@ $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "
 $nameTools = get_lang("WoogieConversionPowerPoint");
 Display :: display_header($nameTools);
 
-//echo '<img src="../img/mascot.png"><br />';
 echo '<span style="color: #5577af; font-size: 16px; font-family: Arial; margin-left: 10px;">'.get_lang("WelcomeWoogieSubtitle").'</span><br>';
 $message = get_lang("WelcomeWoogieConverter");
 echo '<br />';
@@ -149,14 +148,19 @@ $user_file_template =
 EOT;
 $renderer->setCustomElementTemplate($user_file_template);
 
-$form -> addElement ('file', 'user_file','<img src="../img/word_big.gif" align="absbottom" />');
-if (api_get_setting('search_enabled')=='true') {
-    $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-    $form -> addElement ('html','<br />');
-    $form -> addElement ('html', get_lang('SearchFeatureDocumentLanguage').': &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'. api_get_languages_combo());
-    $form -> addElement ('html','<div class="sub-form">');
+$form -> addElement ('file', 'user_file', Display::return_icon('word_big.gif'));
+if (api_get_setting('search_enabled') == 'true') {
+    $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));
+    $form->addElement('html', '<br />');
+    $form->addElement(
+        'html',
+        get_lang(
+            'SearchFeatureDocumentLanguage'
+        ).': &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.api_get_languages_combo()
+    );
+    $form->addElement('html', '<div class="sub-form">');
     foreach ($specific_fields as $specific_field) {
-        $form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
+        $form->addElement('text', $specific_field['code'], $specific_field['name'].' : ');
     }
     $form -> addElement ('html','</div>');
 }

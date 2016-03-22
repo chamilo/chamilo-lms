@@ -85,8 +85,13 @@ if (!$export_to_csv) {
 	echo '<div class="actions" style ="font-size:10pt;">';
 	if ($global) {
 
-        echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>' .
-                '<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a></div>';
+        echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
+                '.Display::return_icon('csv.gif').'
+                &nbsp;'.get_lang('ExportAsCSV').'</a>' .
+                '<a href="javascript: void(0);" onclick="javascript: window.print()">
+                '.Display::return_icon('printmgr.gif').'
+                &nbsp;'.get_lang('Print').'</a>
+                	</div>';
 
 		$menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('TeacherInterface').'</a>';
         if (api_is_platform_admin()) {
@@ -110,7 +115,9 @@ if (!$export_to_csv) {
 		     <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;|&nbsp';
         echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
 		echo ' | '.get_lang('ExamTracking').'';
-        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a><br /><br />';
+        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
+            '.Display::return_icon('excel.gif').'
+            &nbsp;'.get_lang('ExportAsXLS').'</a><br /><br />';
 
 	}
     echo '</div>';
@@ -120,12 +127,12 @@ if (!$export_to_csv) {
 $main_result = array();
 $session_id = 0;
 $user_list = array();
-//Getting course list
-foreach($course_list  as $current_course ) {
+// Getting course list
+foreach ($course_list  as $current_course ) {
 	$course_info = api_get_course_info($current_course['code']);
 	$_course = $course_info;
 
-	//Getting LP list
+	// Getting LP list
 	$list = new LearnpathList('', $current_course['code'], $session_id);
 	$lp_list = $list->get_flat_list();
 
@@ -134,7 +141,7 @@ foreach($course_list  as $current_course ) {
 	foreach ($lp_list as $lp_id =>$lp) {
 		$exercise_list = Event::get_all_exercises_from_lp($lp_id, $course_info['real_id']);
 		$attempt_result = array();
-		//Looping Chamilo Exercises in LP
+		// Looping Chamilo Exercises in LP
 		foreach ($exercise_list as $exercise) {
 			$exercise_stats = Event::get_all_exercise_event_from_lp(
 				$exercise['path'],

@@ -53,7 +53,7 @@ function show_icon_delete(element_html) {
 	elem_id=$(element_html).attr("id");
 	id_elem=elem_id.split("_");
 	ident="#img_"+id_elem[1];
-	$(ident).attr("src","../img/delete.png");
+	$(ident).attr("src","'.Display::returnIconPath('delete.png').'");
 	$(ident).attr("alt","'.get_lang('Delete', '').'");
 	$(ident).attr("title","'.get_lang('Delete', '').'");
 }
@@ -62,7 +62,7 @@ function hide_icon_delete(element_html)  {
 	elem_id=$(element_html).attr("id");
 	id_elem=elem_id.split("_");
 	ident="#img_"+id_elem[1];
-	$(ident).attr("src","../img/blank.gif");
+	$(ident).attr("src","'.Display::returnIconPath('blank.gif').'");
 	$(ident).attr("alt","");
 	$(ident).attr("title","");
 }

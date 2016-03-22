@@ -59,14 +59,15 @@ class ResultTable extends SortableTable
 	/**
 	 * Function used by SortableTable to get total number of items in the table
 	 */
-	function get_total_number_of_items () {
+	public function get_total_number_of_items ()
+    {
 		return $this->datagen->get_total_results_count();
 	}
 
 	/**
 	 * Function used by SortableTable to generate the data to display
 	 */
-	function get_table_data ($from = 1, $per_page = null, $column = null, $direction = null, $sort = null) {
+	public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null) {
 
 		$is_western_name_order = api_is_western_name_order();
 		$scoredisplay = ScoreDisplay :: instance();
@@ -148,24 +149,27 @@ class ResultTable extends SortableTable
 			$edit_column .= ' <a href="' . api_get_self() . '?delete_mark=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id().'&'.api_get_cidreq().'">'.
 				Display::return_icon('delete.png', get_lang('Delete'),'','22').'</a>';
 		}
+
 		if ($this->evaluation->get_course_code() == null) {
-			$edit_column.= '&nbsp;<a href="' . api_get_self() . '?resultdelete=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '" onclick="return confirmationuser();">
-			<img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
-		    $edit_column.= '&nbsp;<a href="user_stats.php?userid=' . $item['id'] . '&selecteval=' . $this->evaluation->get_id() . '&'.api_get_cidreq().'">
-		    <img src="../img/statistics.gif" width="17px" border="0" title="' . get_lang('Statistics') . '" alt="" /></a>';
+			$edit_column .= '&nbsp;<a href="' . api_get_self() . '?resultdelete=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '" onclick="return confirmationuser();">';
+			$edit_column .= Display::return_icon('delete.png', get_lang('Delete'));
+			$edit_column .= '</a>';
+		    $edit_column .= '&nbsp;<a href="user_stats.php?userid=' . $item['id'] . '&selecteval=' . $this->evaluation->get_id() . '&'.api_get_cidreq().'">';
+			$edit_column .= Display::return_icon('statistics.gif', get_lang('Statistics'));
+		    $edit_column .= '</a>';
 		}
+
 		// Evaluation's origin is a link
 		if ($this->evaluation->get_category_id() < 0) {
-			$link = LinkFactory :: get_evaluation_link ($this->evaluation->get_id());
-
+			$link = LinkFactory::get_evaluation_link($this->evaluation->get_id());
 			$doc_url = $link->get_view_url($item['id']);
 
 			if ($doc_url != null) {
-				$edit_column .= '&nbsp;<a href="'. $doc_url . '" target="_blank">'
-								.'<img src="'. api_get_path(WEB_CODE_PATH) . 'img/link.gif" border="0" title="' . get_lang('OpenDocument') . '" alt="" />'
-								.'</a>';
+				$edit_column .= '&nbsp;<a href="'. $doc_url . '" target="_blank">';
+				$edit_column .= Display::return_icon('link.gif', get_lang('OpenDocument').'</a>';
 			}
 		}
+
 		return $edit_column;
 	}
 }

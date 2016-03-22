@@ -44,11 +44,11 @@ class CourseSelectForm
 				el = document.getElementById('div_'+item);
 				if (el.style.display=='none'){
 					el.style.display='';
-					document.getElementById('img_'+item).src='../img/1.gif';
+					document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('1.gif'); ?>';
 				}
 				else{
 					el.style.display='none';
-					document.getElementById('img_'+item).src='../img/0.gif';
+					document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('O.gif'); ?>';
 				}
 			}
 
@@ -147,8 +147,8 @@ class CourseSelectForm
 		}
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
-
-		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
+        $icon = Display::returnIconPath('myprogress_bar.gif');
+		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.$icon.',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 
 		if (!empty($hidden_fields['destination_course']) &&
@@ -203,7 +203,7 @@ class CourseSelectForm
 					case RESOURCE_SCORM:
 						break;
                     default :
-						echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" />&nbsp;';
+						echo '<img id="img_'.$type.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$type'".');" />&nbsp;';
 						echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
 						echo '<div id="div_'.$type.'">';
 						if ($type == RESOURCE_LEARNPATH) {
@@ -244,7 +244,7 @@ class CourseSelectForm
         if (!empty($forum_categories)) {
             $type = RESOURCE_FORUMCATEGORY;
 
-            echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" />&nbsp;';
+            echo '<img id="img_'.$type.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$type'".');" />&nbsp;';
             echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[RESOURCE_FORUM].'</b><br />';
             echo '<div id="div_'.$type.'">';
 
@@ -581,11 +581,11 @@ class CourseSelectForm
 				el = document.getElementById('div_'+item);
 				if (el.style.display=='none'){
 					el.style.display='';
-					document.getElementById('img_'+item).src='../img/1.gif';
+					document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('1.gif'); ?>';
 				}
 				else{
 					el.style.display='none';
-					document.getElementById('img_'+item).src='../img/0.gif';
+					document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('0.gif'); ?>';
 				}
 			}
 			function setCheckbox(type,value) {
@@ -632,12 +632,13 @@ class CourseSelectForm
 
 		echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
-		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
+        $icon = Display::returnIconPath('progress_bar.gif');
+		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.$icon.'\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 		foreach ($list_course as $course){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
-					echo '<img id="img_'.$course->code.'" src="../img/1.gif" onclick="javascript:exp('."'$course->code'".');" />';
+					echo '<img id="img_'.$course->code.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$course->code'".');" />';
 					echo '<b  onclick="javascript:exp('."'$course->code'".');" > '.$course->code.'</b><br />';
 					echo '<div id="div_'.$course->code.'">';
 					echo '<blockquote>';

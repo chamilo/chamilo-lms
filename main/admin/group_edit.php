@@ -145,7 +145,7 @@ Display::display_header($tool_name);
 $image_path = GroupPortalManager::get_group_picture_path_by_id($group_id, 'web');
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
-$image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown_group.jpg');
+$image_file = ($image != '' ? $image_dir.$image : Display::returnIconPath('unknown_group.jpg'));
 $image_size = api_getimagesize($image_file);
 
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '

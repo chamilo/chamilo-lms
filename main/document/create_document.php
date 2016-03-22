@@ -18,7 +18,7 @@ var hide_bar = function() {
     $("#template_col").hide();
     $("#doc_form").removeClass("col-md-9");
     $("#doc_form").addClass("col-md-11");
-    $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
+    $("#hide_bar_template").css({"background-image" : \'url("'.Display::returnIconPath('hide2.png').'")\'})
 }
 
 $(document).ready(function() {

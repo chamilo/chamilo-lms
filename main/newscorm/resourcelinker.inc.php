@@ -1843,11 +1843,6 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
             $in_frames = in_array($ext, array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png'));
             $output = $filename;
             break;
-        /*
-        case 'externallink':
-            $output = '<img src="../img/links.gif" align="middle" /> <a href="'.$id.'"'.$styling.' '.$target.'>'.$id."</a><br />\n";
-            break;
-        */
     }
     return stripslashes($output);
 }

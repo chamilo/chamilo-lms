@@ -1455,7 +1455,6 @@ function _api_format_user($user, $add_password = false)
     $avatarString = explode('?', $originalFile);
     $result['avatar_no_query'] = reset($avatarString);
     $result['avatar_small'] = $smallFile;
-    //$result['avatar_sys_path'] = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
 
     if (isset($user['user_is_online'])) {
         $result['user_is_online'] = $user['user_is_online'] == true ? 1 : 0;

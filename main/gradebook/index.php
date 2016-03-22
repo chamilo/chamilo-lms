@@ -24,14 +24,9 @@ $_SESSION['gradebook_dest'] = 'index.php';
 
 $this_section = SECTION_COURSES;
 
-/*
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.min.css');
-$htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.min.js');
-$htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.donutRenderer.min.js');*/
-
 $htmlHeadXtra[] = '<script>
-var show_icon = "../img/view_more_stats.gif";
-var hide_icon = "../img/view_less_stats.gif";
+var show_icon = "'.Display::returnIconPath('view_more_stats.gif').'";
+var hide_icon = "'.Display::returnIconPath('view_less_stats.gif').'";
 
 $(document).ready(function() {
     $("body").on("click", ".view_children", function() {

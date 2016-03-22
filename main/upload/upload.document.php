@@ -162,7 +162,7 @@ if (isset($_GET['createdir'])) {
 ?>
 	<p>
         <a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1">
-            <img src="../img/new_folder.gif" border="0" align="absmiddle" alt ="" />
+            <?php echo Display::return_icon('new_folder.gif'); ?>
             <?php echo(get_lang('CreateDir'));?>
         </a>
     </p>
@@ -185,15 +185,15 @@ if (isset($_GET['createdir'])) {
 <input type="file" name="user_upload"/>
 </td>
 </tr>
-    <tr>
-    <td><?php echo get_lang('Title');?></td>
-    <td><input type="text" size="20" name="title" style="width:300px;"></td>
-    </tr>
-    <tr>
-    <td valign="top"><?php echo get_lang('Comment');?></td>
-    <td><textarea rows="3" cols="20" name="comment" wrap="virtual" style="width:300px;"></textarea></td>
-    </tr>
-    <tr>
+<tr>
+<td><?php echo get_lang('Title');?></td>
+<td><input type="text" size="20" name="title" style="width:300px;"></td>
+</tr>
+<tr>
+<td valign="top"><?php echo get_lang('Comment');?></td>
+<td><textarea rows="3" cols="20" name="comment" wrap="virtual" style="width:300px;"></textarea></td>
+</tr>
+<tr>
 <td valign="top">
 <?php echo get_lang('Options'); ?>
 </td>

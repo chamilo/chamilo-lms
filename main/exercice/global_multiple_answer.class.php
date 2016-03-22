@@ -45,7 +45,7 @@ class GlobalMultipleAnswer extends Question
 
         $html .='<th>' . get_lang('Comment') . '</th>';
         $html .='</tr>';
-        $form->addElement('label', get_lang('Answers') . '<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('Answers') . '<br /> '.Display::returnIconPath('fill_field.png'), $html);
         $defaults = array();
         $correct = 0;
         $answer = false;

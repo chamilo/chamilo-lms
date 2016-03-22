@@ -7469,4 +7469,5 @@ $DataTableSearch = "Cerca";
 $HideColumn = "Oculta columna";
 $DisplayColumn = "Mostra columna";
 $LegalAgreementAccepted = "Condicions legals acceptades";
+$FollowedStudentBosses = "Superiors d'estudiant seguits";
 ?>

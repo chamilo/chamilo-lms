@@ -126,7 +126,7 @@ class SortableTable extends HTML_Table
             $table_id = $table_name.uniqid();
         }
         $this->table_id = $table_id;
-        parent::__construct(array('class' => 'data_table', 'id' => $table_id));
+        parent::__construct(array('class' => 'data_table table', 'id' => $table_id));
         $this->table_name = $table_name;
         $this->additional_parameters = array();
         $this->param_prefix = $table_name.'_';
@@ -231,7 +231,9 @@ class SortableTable extends HTML_Table
      */
     public function display()
     {
+        
         echo $this->return_table();
+        
     }
 
     /**
@@ -335,7 +337,8 @@ class SortableTable extends HTML_Table
                 $html .= '</form>';
             }
         }
-        return $html;
+        
+        return '<div class="table-responsive">' . $html . '</div>';
     }
 
     /**
@@ -761,7 +764,7 @@ class SortableTable extends HTML_Table
      * @param string $td_attributes Additional attributes for the td-tags of the
      * column
      */
-    public function set_header($column, $label, $sortable = true, $th_attributes = null, $td_attributes = null)
+    public function set_header($column, $label, $sortable = true, $th_attributes = array('class' => 'th-header'), $td_attributes = null)
     {
         $this->headers[$column] = array(
             'label' => $label,

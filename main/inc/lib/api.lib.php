@@ -1295,6 +1295,9 @@ function api_get_navigator() {
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false) {
         $navigator = 'Chrome';
         list (, $version) = explode('Chrome', $_SERVER['HTTP_USER_AGENT']);
+    } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'safari') !== false) {
+        $navigator = 'Safari';
+        list (, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false) {
         $navigator = 'Mozilla';
         list (, $version) = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);
@@ -1306,9 +1309,6 @@ function api_get_navigator() {
         list (, $version) = explode('Konqueror', $_SERVER['HTTP_USER_AGENT']);
     } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'applewebkit') !== false) {
         $navigator = 'AppleWebKit';
-        list (, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
-    } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'safari') !== false) {
-        $navigator = 'Safari';
         list (, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
     }
     $version = str_replace('/', '', $version);

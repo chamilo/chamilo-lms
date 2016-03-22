@@ -7626,4 +7626,5 @@ $ResetToTheOriginalLogo = "Original logo recovered";
 $NewLogoUpdated = "New logo uploaded";
 $CurrentLogo = "Current logo";
 $UpdateLogo = "Update logo";
+$FollowedStudentBosses = "Followed student bosses";
 ?>

@@ -7613,4 +7613,5 @@ $ResetToTheOriginalLogo = "Logo original récupéré";
 $NewLogoUpdated = "Nouveau logo envoyé";
 $CurrentLogo = "Logo actif";
 $UpdateLogo = "Changer le logo";
+$FollowedStudentBosses = "Chefs d'apprenants suivis";
 ?>

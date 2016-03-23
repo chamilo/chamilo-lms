@@ -1,0 +1,37 @@
+{
+  "name": "ChamiloLMS",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.*",
+    "fontawesome": "4.4.*",
+    "jquery": "2.2.0",
+    "jquery-ui": "1.11.*",
+    "bootstrap-daterangepicker": "1.3.*",
+    "ckeditor": "4.*",
+    "jquery-timeago": "1.4.*",
+    "mediaelement": "2.*",
+    "modernizr": "2.8.*",
+    "jqueryui-timepicker-addon": "1.5.*",
+    "image-map-resizer": "0.5.*",
+    "fullcalendar": "2.3.2",
+    "simpleWebRTC": "1.15.*",
+    "select2": "4.*",
+    "MathJax": "2.5.*",
+    "webcamjs": "1.0.*",
+    "cropper": "1.0.*",
+    "jquery.scrollbar": "0.2.*"
+  },
+  "resolutions": {
+    "jquery": "2.1.4"
+  },
+  "_source": "/var/www/html/chamilo/src/Chamilo/CoreBundle/Resources/config/bower.json",
+  "_target": "*",
+  "_originalSource": "/var/www/html/chamilo/src/Chamilo/CoreBundle/Resources/config/bower.json",
+  "_direct": true
+}

@@ -1,0 +1,44 @@
+{
+    "name": "cocur/slugify",
+    "type": "library",
+    "description": "Converts a string into a slug.",
+    "keywords": ["slug", "slugify"],
+    "license": "MIT",
+    "authors": [
+    	{
+    		"name": "Florian Eckerstorfer",
+    		"email": "florian@eckerstorfer.co",
+    		"homepage": "https://florian.ec"
+    	},
+        {
+    		"name": "Ivo Bathke",
+    		"email": "ivo.bathke@gmail.com"
+    	}
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit":                      "~4.6",
+        "mockery/mockery":                      "~0.9",
+        "satooshi/php-coveralls":               "0.6.*",
+        "symfony/http-kernel":                  "~2.4",
+        "symfony/dependency-injection":         "~2.4",
+        "twig/twig":                            "~1",
+        "silex/silex":                          "~1.2",
+        "sami/sami":                            "~1.3",
+        "zendframework/zend-modulemanager":     "~2.2",
+        "zendframework/zend-view":              "~2.2",
+        "zendframework/zend-servicemanager":    "~2.2",
+        "codeclimate/php-test-reporter":        "dev-master",
+        "laravel/framework":                    "~4.1",
+        "nette/di":                             "~2.2",
+        "latte/latte":                          "~2.2",
+        "plumphp/plum":                         "~0.1"
+    },
+    "autoload": {
+    	"psr-4": {
+    		"Cocur\\Slugify\\": "src"
+    	}
+    }
+}

@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+$json  = file_get_contents('https://raw.github.com/cucumber/gherkin/master/lib/gherkin/i18n.json');
+$array = json_decode($json, true);
+
+foreach ($array as $lang => $keywords) {
+    foreach (array('given', 'when', 'then', 'and', 'but') as $type) {
+        $stepTypes = explode('|', $keywords[$type]);
+
+        if ('*' === $stepTypes[0]) {
+            array_shift($stepTypes);
+        }
+
+        usort($stepTypes, function($type1, $type2) {
+            return mb_strlen($type1, 'utf8') - mb_strlen($type2, 'utf8');
+        });
+
+        $array[$lang][$type] = implode('|', array_reverse($stepTypes));
+    }
+}
+
+file_put_contents(__DIR__.'/../i18n.php', '<?php return '.var_export($array, true).';');

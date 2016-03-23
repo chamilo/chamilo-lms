@@ -1,0 +1,51 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends "SonataUserBundle:Profile:action.html.twig" %}
+
+{% block sonata_profile_content %}
+    {% sonata_template_box 'This is the user profile template. Feel free to override it.' %}
+
+    <div class="row row-fluid">
+        {% set has_center = false %}
+        {% for block in blocks %}
+            {% if block.position == 'center' %}
+                {% set has_center = true %}
+            {% endif %}
+        {% endfor %}
+
+        <div class="{% if has_center %}span4 col-lg-4{% else %}span6 col-lg-6{% endif %}">
+            {% for block in blocks %}
+                {% if block.position == 'left' %}
+                    {{ sonata_block_render({ 'type': block.type, 'settings': block.settings}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        {% if has_center %}
+            <div class="span4 col-lg-4">
+                {% for block in blocks %}
+                    {% if block.position == 'center' %}
+                        {{ sonata_block_render({ 'type': block.type, 'settings': block.settings}) }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="{% if has_center %}span4 col-lg-4{% else %}span6 col-lg-6{% endif %}">
+            {% for block in blocks %}
+                {% if block.position == 'right' %}
+                    {{ sonata_block_render({ 'type': block.type, 'settings': block.settings}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

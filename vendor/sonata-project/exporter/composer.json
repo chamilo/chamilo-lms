@@ -1,0 +1,41 @@
+{
+    "name": "sonata-project/exporter",
+    "description": "Lightweight Exporter library",
+    "keywords": ["export", "csv", "xls", "data", "client"],
+    "homepage": "https://github.com/sonata-project/Exporter",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@gmail.com",
+            "homepage": "https://sonata-project.org/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "require-dev": {
+        "symfony/routing": "~2.3|~3.0",
+        "symfony/property-access": "~2.3|~3.0",
+        "symfony/phpunit-bridge": "~2.7|~3.0",
+        "propel/propel1": "~1.6",
+        "fabpot/php-cs-fixer": "~0.1|~1.0"
+    },
+    "suggest": {
+        "ext-curl": "*",
+        "symfony/routing": "~2.3|~3.0",
+        "symfony/property-access": "~2.3|~3.0",
+        "propel/propel1": "~1.6"
+    },
+    "autoload": {
+        "psr-0": {
+            "Exporter": "lib/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1-dev"
+        }
+    }
+}

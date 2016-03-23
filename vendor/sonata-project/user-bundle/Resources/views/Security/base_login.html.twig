@@ -1,0 +1,83 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends "SonataUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-info">
+
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'title_user_authentication'|trans({}, 'SonataUserBundle') }}</h2>
+                </div>
+
+                <div class="panel-body">
+
+                    {% if error %}
+                        <div class="alert alert-danger alert-error">{{ error|trans({}, 'FOSUserBundle') }}</div>
+                    {% endif %}
+
+                    <form action="{{ path("fos_user_security_check") }}" method="post" role="form"
+                          class="form-horizontal">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+
+                        <div class="form-group">
+                            <label for="username"
+                                   class="col-lg-3 col-sm-3 control-label">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
+
+                            <div class="col-lg-9 col-sm-9"><input type="text" class="form-control" id="username"
+                                                                  name="_username" value="{{ last_username }}"
+                                                                  required="required"/></div>
+                        </div>
+
+
+                        <div class="form-group control-group">
+                            <label for="password"
+                                   class="col-lg-3 col-sm-3 control-label">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+
+                            <div class="col-lg-9 col-sm-9"><input type="password" class="form-control" id="password"
+                                                                  name="_password" required="required"/></div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <div class="checkbox control-group">
+                                    <label for="remember_me">
+                                        <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
+                                        {{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group control-group">
+                            <div class="controls col-sm-offset-3 col-sm-9">
+                                <a href="{{ path('fos_user_resetting_request') }}">{{ 'forgotten_password'|trans({}, 'SonataUserBundle') }}</a>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <input type="submit" id="_submit" name="_submit" class="btn btn-primary"
+                                       value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            {% render controller("FOSUserBundle:Registration:register") %}
+        </div>
+    </div>
+{% endblock fos_user_content %}

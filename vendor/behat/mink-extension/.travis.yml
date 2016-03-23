@@ -1,0 +1,23 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+
+env:
+  - SYMFONY_VERSION='2.2.*'
+  - SYMFONY_VERSION='2.3.*'
+  - SYMFONY_VERSION='2.4.*@dev'
+
+matrix:
+  allow_failures:
+    - env: "SYMFONY_VERSION='2.4.*@dev'"
+
+before_script:
+  - curl http://getcomposer.org/installer | php
+  - php composer.phar require --no-update symfony/symfony=$SYMFONY_VERSION
+  - php composer.phar install --dev --prefer-source
+  - export PATH=./vendor/bin:$PATH
+
+script: behat -fprogress

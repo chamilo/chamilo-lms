@@ -46,16 +46,17 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
-    <a  name="1.10.2"></a>
+    <a name="1.10.4"></a>
 
-    <h1>Chamilo 1.10.4 - Bath, 15th of March 2016</h1>
+    <h1>Chamilo 1.10.4 - Bath, 22th of March 2016</h1>
     <h3>Release notes - summary</h3>
-    <p>Chamilo 1.10.4 is a minor, bugfix release of the 1.10.x branch, with a few new features and bugfixes on top of 1.10.0.</p>
+    <p>Chamilo 1.10.4 is a minor, bugfix release of the 1.10.x branch, with a few new features and bugfixes on top of 1.10.2.</p>
     <h3>Release name</h3>
     <p><a href="http://www.openstreetmap.org/node/1947201#map=14/51.3786/-2.3580">Bath</a> is a small city of the South of England that inspires peace and stability, with its roman-age public baths and buildings. We feel like 1.10.4 is a very comforting version, fixing little issues people have found on previous 1.10.x versions, and that the name suits it well.</p>
     <h3>Security fixes</h3>
     <ul>
-        <li>There were no specific security flaws detected during the development of 1.10.4 but standard development procedures and criterias were followed during the development to ensure a very high security level.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c3b9a10e">c3b9a10e</a> - <a href="https://support.chamilo.org/issues/8094">#8094</a>) Add security::removeXSS() to assignments tool</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9b9de176d3651f5a9a59fd3ae0bf63a098392027">9b9de176</a> - <a href="https://support.chamilo.org/issues/8090">#8090</a>) Fix issue allowing a user to delete a message from someone else on the social walls</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4ec97d924f0ed9344579e0af84cdc2a44f582712">4ec97d92</a>) Fix missing escape_string in LP title update</li>
     </ul>
     <h3>Possibly breaking changes</h3>
@@ -65,6 +66,7 @@
     <h3>Notable new Features</h3>
     <h4>For end-users, teachers and Chamilo admins</h4>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b1a5c910a633b81c869376561a5bba256ea5daae">b1a5c910</a>) Add filters to messags inbox/outbox</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cf7627c04079d38a23530965ebe1d12fc11913b1">cf7627c0</a> - <a href="https://support.chamilo.org/issues/8118">#8118</a>) Add feature to customize the logo of a stylesheet</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1c366ce8e0ab7a19b060af31996e47aae15d2f01">1c366ce8</a> - <a href="https://task.beeznest.com/issues/10960">BT#10960</a>) Take into account all lp ids not only lp with result</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/23173d5ea6e81c998a2012f66b96e3827adfe34f">23173d5e</a> - <a href="https://task.beeznest.com/issues/10951">BT#10951</a>) Add filters in announcements</li>
@@ -96,6 +98,24 @@
 
     <h3>Improvements (minor features) and debug</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5c22eb31dafc79138159a86648041eff3b1b3ad9">5c22eb31</a> - <a href="https://support.chamilo.org/issues/8140">#8140</a>) Fix issue deleting users</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/413889a082d1f79c9dac3b6a3c0850b441f8f17a">413889a0</a> - <a href="https://support.chamilo.org/issues/8150">#8150</a>) fix css table responsive platform</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/084dcfb10d06be229069cc84c2dbb441fa16c8c0">084dcfb1</a> - <a href="https://support.chamilo.org/issues/8148">#8148</a>) Fix hotspot questions when Practice Mode is enable</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/869e06df9c17cf2ceeae86af8ad216b2fd1fe59e">869e06df</a>) Add config variables for smtp: SMTP_DEBUG and SMTP_SECURE</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c046d3efbe9d4c3c55d2d2485decbc328a880129">c046d3ef</a> - <a href="https://support.chamilo.org/issues/8149">#8149</a>) Fix Issue when chamilo doesnt remember the selected languague if logged off</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ca61bcedb2488a6291ca8c8e53a7ba436fc310e9">ca61bced</a> - <a href="https://support.chamilo.org/issues/8143">#8143</a>) Fix UTC problem in session access start dates for users</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/18b4dfb998674cf9a801b504e11976383b82cca1">18b4dfb9</a> - <a href="https://support.chamilo.org/issues/8150">#8150</a>) Fix CSS tables reports course</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ad7c13162f5b4322d924c1253cb3e8161089b0b8">ad7c1316</a>) Remove the label FollowedStudentBosses</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/040b8da45b6e23bb1e3ea35105f764ed3e07bce4">040b8da4</a>) Fix icons using Display::return_icon or Display::returnIconPath</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7dd9ca2e1c46f45eb4c5d12ffadaed5f4fcfdac8">7dd9ca2e</a>) Fix icon rendering</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/bc736858a5797b5678e24a45b7f63b1ee7fb3673">bc736858</a>) Fix divide by zero error</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5d2a334536924fb50b7a4ca1c0c43ac269728c9a">5d2a3345</a>) Replace img/ paths with function</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e86630ac241dabdd359752010724934a925c22d8">e86630ac</a> - <a href="https://support.chamilo.org/issues/8148">#8148</a>) Fix hotspot question when answers are shuffle</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e0e55b708df6ea5023cc3159faba1ecbe41e53a7">e0e55b70</a> - <a href="https://support.chamilo.org/issues/8151">#8151</a>) Comment personal session duration link edition (will restore in 1.11)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/8b97be2b56363c2e8066d30c4abbc3b93d293385">8b97be2b</a>) Fix duration field in the DB</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1a865fa5fa097b73a31e62555623386891cd1f97">1a865fa5</a>) Complete fix to add supported image types to CSS upload handler</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/93b41798837427a0bb5dfe683a29d138e3b93ffb">93b41798</a> - <a href="https://support.chamilo.org/issues/8135">#8135</a>) Fix free busy calendar CSS in user list</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ade8665da4c09d2ff6bb1198084edca1fd9d74d0">ade8665d</a> - <a href="https://task.beeznest.com/issues/10948">BT#10948</a>) Only api_is_allowed_to_edit() users can create groups</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3d39554195b3ce0443b9cbb57c7bb306a6d067a0">3d395541</a>) Fix icon paths (needed for v2.0)</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9237518495ad917f69d4f83a7fa24526e07968b6">92375184</a>) use WEB_CODE_PATH</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0c4a683e80d84277f48026b483fd24f711177f08">0c4a683e</a>) Use <br /></li>

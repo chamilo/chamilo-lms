@@ -319,6 +319,12 @@ foreach ($configurationFiles as $file) {
 // if we use the non-javascript version (with the go button) we receive a post
 $user_language = '';
 $browser_language = '';
+
+// see #8149
+if (!empty($_SESSION['user_language_choice'])) {
+    $user_language = $_SESSION['user_language_choice'];
+}
+
 if (!empty($_GET['language'])) {
     $user_language = $_GET['language'];
 }

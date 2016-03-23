@@ -489,11 +489,11 @@ class UserManager
             return false;
         }
         $sql = "SELECT * FROM $table_course_user
-                WHERE status = '1' AND id = '".$user_id."'";
+                WHERE status = 1 AND user_id = ".$user_id;
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
             $sql = "SELECT id FROM $table_course_user
-                    WHERE status='1' AND c_id ='".Database::escape_string($course->c_id)."'";
+                    WHERE status=1 AND c_id = " . Database::escape_string($course->c_id);
             $res2 = Database::query($sql);
             if (Database::num_rows($res2) == 1) {
                 return false;
@@ -2455,10 +2455,10 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
                     'session_name' => $row['name'],
                     'session_id' => $row['id'],
-                    'access_start_date' => $row['access_start_date'],
-                    'access_end_date' => $row['access_end_date'],
-                    'coach_access_start_date' => $row['coach_access_start_date'],
-                    'coach_access_end_date' => $row['coach_access_end_date'],
+                    'access_start_date' => api_get_local_time($row['access_start_date']),
+                    'access_end_date' => api_get_local_time($row['access_end_date']),
+                    'coach_access_start_date' => api_get_local_time($row['coach_access_start_date']),
+                    'coach_access_end_date' => api_get_local_time($row['coach_access_end_date']),
                     'courses' => $courseList
                 );
             }

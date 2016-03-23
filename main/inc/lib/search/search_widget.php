@@ -67,7 +67,7 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix='') {
     // Process each prefix type term
     $i = 0;
     $max = count($sf_terms);
-    $multiple_selects .='';
+    $multiple_selects ='';
     foreach ($sf_terms as $prefix => $sf_term_array) {
         if ($prefix == $prefilter_prefix) continue;
         $multiple_select = '';
@@ -91,7 +91,7 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix='') {
         // get specific field name
         $sf_value = get_specific_field_list(array( 'code' => "'$prefix'" ));
         $sf_value = array_shift($sf_value);
-        $multiple_select .= '<td><label class="sf-select-multiple-title" for="sf_'. $prefix .'[]">'.$icons_for_search_terms[$prefix].' '.$sf_value['name'].'</label><br />';
+        $multiple_select .= '<td><label class="sf-select-multiple-title" for="sf_'. $prefix .'[]">' . $sf_value['name'].'</label><br />';
         $multiple_select .= format_one_specific_field_select($prefix, $sf_term_array, $op, 'multiple="multiple" size="7" class="sf-select-multiple"');
         $multiple_select .= '</td>';
         $multiple_selects .= $multiple_select;
@@ -134,8 +134,10 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
         $reset_button 	= '<button class="save"   type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />'. get_lang('SearchResetKeywords') .'</button> ';
 	}
 
+    $query = isset($_REQUEST['query']) ? Security::remove_XSS($_REQUEST['query']) : null;
+
     $form = '<form id="chamilo_search" action="'. $action .'" method="GET">
-            <input type="text" id="query" name="query" size="40" value="'.stripslashes(Security::remove_XSS($_REQUEST['query'])).'" />
+            <input type="text" id="query" name="query" size="40" value="' . $query . '" />
             <input type="hidden" name="mode" value="'. $mode .'"/>
             <input type="hidden" name="type" value="'. $type .'"/>
             <input type="hidden" name="tablename_page_nr" value="1" />
@@ -357,7 +359,7 @@ function search_widget_show($action='index.php')
     //check if URL params are defined (to see if we show the thesaurus or not)
     $show_thesaurus = false;
     foreach ($url_params as $param) {
-        if (is_array($_REQUEST[$param])) {
+        if (isset($_REQUEST[$param]) && is_array($_REQUEST[$param])) {
             $thesaurus_decided = FALSE;
             foreach ($_REQUEST[$param] as $term) {
                 if (!empty($term)) {

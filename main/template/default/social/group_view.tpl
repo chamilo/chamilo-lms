@@ -45,6 +45,7 @@
             </div>
         {% endif %}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
@@ -57,6 +58,9 @@
         </div>
         
 >>>>>>> d97f940... fix css tpl groups topics CT#8161
+=======
+        {{ social-forum }}
+>>>>>>> 29d36f7... arranging menu display list groups CT#8161
         {{ social_right_content }}
 
         <div id="display_response_id" class="col-md-5"></div>

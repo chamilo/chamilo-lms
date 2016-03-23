@@ -3891,7 +3891,7 @@ i.size-32.icon-new-work{
   vertical-align: bottom;
   margin-right: 5px;
 }
-.social-network-menu .nav li a{
+.social-network-menu .nav li a, #groups-acordeon .nav li a{
   padding: 5px;
   font-size: 12px;
 }

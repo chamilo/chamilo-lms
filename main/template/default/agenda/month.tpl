@@ -231,7 +231,7 @@ $(document).ready(function() {
                         delay: 2000
                     },
 		            content: event.attachment,
-		            position: { at:'top right' , my:'bottom right'}
+		            position: { at:'bottom right'}
 		        }).removeData('qtip'); // this is an special hack to add multiple qtip in the same target
             }
 			if (event.description) {
@@ -245,7 +245,7 @@ $(document).ready(function() {
                         delay: 2000
                     },
 		            content: event.description + ' ' + comment,
-		            position: { at:'top left' , my:'bottom left'}
+		            position: { at:'top right' , my:'bottom left'}
 		        });
 			}
 	    },

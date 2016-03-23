@@ -1456,6 +1456,7 @@ class Agenda
 
                 $eventsAdded[] = $event['unique_id'];
                 $attachmentList = $this->getAttachmentList($row['id'], $courseInfo);
+                $event['attachment'] = '';
 
                 if (!empty($attachmentList)) {
                     foreach ($attachmentList as $attachment) {
@@ -1464,9 +1465,6 @@ class Agenda
                         $url = api_get_path(WEB_CODE_PATH).'calendar/download.php?file='.$attachment['path'].'&course_id='.$course_id.'&'.api_get_cidreq();
                         $event['attachment'] .= $has_attachment.Display::url($user_filename, $url).'<br />';
                     }
-
-                } else {
-                    $event['attachment'] = '';
                 }
 
                 $event['title'] = $row['title'];

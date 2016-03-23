@@ -1315,7 +1315,12 @@ class Exercise
 
                 foreach ($specific_fields as $specific_field) {
                     $form->addElement ('text', $specific_field['code'], $specific_field['name']);
-                    $filter = array('c_id'=> "'". api_get_course_int_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $this->id, 'tool_id' => '\''. TOOL_QUIZ .'\'');
+                    $filter = array(
+                        'c_id' => api_get_course_int_id(),
+                        'field_id' => $specific_field['id'],
+                        'ref_id' => $this->id,
+                        'tool_id' => "'" . TOOL_QUIZ . "'"
+                    );
                     $values = get_specific_field_values_list($filter, array('value'));
                     if ( !empty($values) ) {
                         $arr_str_values = array();

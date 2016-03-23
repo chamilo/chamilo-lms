@@ -18,18 +18,21 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // user permissions
 api_protect_admin_script();
 
+$fieldId = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : 0;
+
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'settings.php?category=Search', 'name' => get_lang('PlatformConfigSettings'));
 $interbreadcrumb[] = array('url' => 'specific_fields.php', 'name' => get_lang('SpecificSearchFields'));
-if ($_GET['action']<>'edit') {
-  $tool_name = get_lang('AddSpecificSearchField');
-} else {
+
+$tool_name = get_lang('AddSpecificSearchField');
+
+if (isset($_GET['action']) && $_GET['action'] === 'edit') {
   $tool_name = get_lang('EditSpecificSearchField');
 }
 // Create the form
 $form = new FormValidator('specific_fields_add');
 // Field variable name
-$form->addElement('hidden','field_id',(int)$_REQUEST['field_id']);
+$form->addElement('hidden','field_id', $fieldId);
 $form->addElement('text','field_name',get_lang('FieldName'));
 $form->applyFilter('field_name','html_filter');
 $form->applyFilter('field_name','trim');
@@ -39,8 +42,8 @@ $form->addRule('field_name', '', 'maxlength',20);
 
 // Set default values (only not empty when editing)
 $defaults = array();
-if (is_numeric($_REQUEST['field_id'])) {
-    $form_information = get_specific_field_list(array( 'id' => (int)$_GET['field_id'] ));
+if ($fieldId) {
+    $form_information = get_specific_field_list(array( 'id' => $fieldId ));
     $defaults['field_name'] = $form_information[0]['name'];
 }
 $form->setDefaults($defaults);

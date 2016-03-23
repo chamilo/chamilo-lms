@@ -17,7 +17,6 @@ api_protect_admin_script();
 // Breadcrumb
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'settings.php?category=Search', 'name' => get_lang('PlatformConfigSettings'));
-$interbreadcrumb[] = array ('url' => 'specific_fields.php', 'name' => get_lang('SpecificSearchFields'));
 
 $libpath = api_get_path(LIBRARY_PATH);
 
@@ -30,16 +29,16 @@ $renderer->setCustomElementTemplate('<span>{element}</span> ');
 $form->addElement('static','search_advanced_link',null,'<a href="specific_fields_add.php">'.Display::return_icon('fieldadd.gif').get_lang('AddSpecificSearchField').'</a>');
 
 // Create a sortable table with specific fields data
-$column_show = array(1,1,1,1);
-$column_order = array(3,2,1,4);
+$column_show = array(1,1,1);
+$column_order = array(3,2,1);
 $extra_fields = get_specific_field_list();
 $number_of_extra_fields = count($extra_fields);
 
 $table = new SortableTableFromArrayConfig($extra_fields,2,50,'',$column_show,$column_order);
-$table->set_header(0, '', false,null,'width="2%"', 'style="display:none"');
+$table->set_header(0, '&nbsp;', false,null,'width="2%"', 'style="display:none"');
 $table->set_header(1, get_lang('Code'), TRUE, 'width="10%"');
 $table->set_header(2, get_lang('Name'));
-$table->set_header(3, get_lang('Modify'),true,'width="10%"');
+$table->set_header(3, get_lang('Modify'),false,'width="10%"');
 $table->set_column_filter(3, 'edit_filter');
 
 function edit_filter($id,$url_params,$row) {
@@ -49,15 +48,16 @@ function edit_filter($id,$url_params,$row) {
 	return $return;
 }
 
-if ($_REQUEST['action'] == 'delete') {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
 	delete_specific_field($_REQUEST['field_id']);
 	header('Location: specific_fields.php?message='.get_lang('FieldRemoved'));
+    exit;
 }
 
 // Start output
 
 // Displaying the header
-Display::display_header($nameTools);
+Display::display_header(get_lang('SpecificSearchFields'));
 echo Display::display_normal_message(get_lang('SpecificSearchFieldsIntro'));
 
 if(!empty($_GET['message'])) {

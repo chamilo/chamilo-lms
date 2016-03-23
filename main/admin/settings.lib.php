@@ -758,7 +758,7 @@ function handle_search()
         $group = array();
         $url =  Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
         if (empty($sf_values)) {
-            $form->addElement('html', get_lang('SearchPrefilterPrefix').$url);
+            $form->addElement('label', [get_lang('SearchPrefilterPrefix'), $url]);
         } else {
             $form->addElement('select', 'search_prefilter_prefix', array(get_lang('SearchPrefilterPrefix'), $url), $sf_values, '');
             $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
@@ -839,8 +839,14 @@ function handle_search()
             $list_of_programs = array('pdftotext','ps2pdf', 'catdoc','html2text','unrtf', 'catppt', 'xls2csv');
 
             foreach($list_of_programs as $program) {
-                $output = $ret_val = null;
+                $output = [];
+                $ret_val = null;
                 exec("which $program", $output, $ret_val);
+
+                if (!$output) {
+                    $output[] = '';
+                }
+
                 $icon = Display::return_icon('bullet_red.png', get_lang('NotInstalled'));
                 if (!empty($output[0])) {
                     $icon = Display::return_icon('bullet_green.png', get_lang('Installed'));

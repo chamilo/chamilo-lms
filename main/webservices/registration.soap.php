@@ -5992,6 +5992,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
+        'from'  => array('name' => 'from',  'type' => 'xsd:int'),
+        'to'    => array('name' => 'to',    'type' => 'xsd:int'),
         'date_start'  => array('name' => 'date_start',  'type' => 'xsd:string'),
         'date_end'    => array('name' => 'date_end',    'type' => 'xsd:string'),
         'secret_key'  => array('name' => 'secret_key',  'type' => 'xsd:string')
@@ -6048,8 +6050,9 @@ $server->register('WSListSessions',           // method name
  * @param array List of parameters (security key, date_start and date_end)
  * @return array Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
  */
-function WSListSessions($params) {
-    if(!WSHelperVerifyKey($params)) {
+function WSListSessions($params)
+{
+    if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
     $sql_params = array();
@@ -6060,7 +6063,10 @@ function WSListSessions($params) {
     if (!empty($params['date_end'])) {
         $sql_params['s.access_end_date'] = array('operator' => '<=', 'value' => $params['date_end']);
     }
-    $sessions_list = SessionManager::get_sessions_list($sql_params);
+    $from = isset($params['from']) ? $params['from'] : null;
+    $to = isset($params['to']) ? $params['to'] : null;
+
+    $sessions_list = SessionManager::get_sessions_list($sql_params, null, $from, $to);
     $return_list = array();
     foreach ($sessions_list as $session) {
         $return_list[] = array(

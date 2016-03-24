@@ -758,6 +758,26 @@ class UrlManager
     }
 
     /**
+     * Deletes user from all portals
+     * @author Julio Montoya
+     * @param int user id
+     *
+     * @return boolean true if success
+     * */
+    public static function deleteUserFromAllUrls($userId)
+    {
+        $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $result = true;
+        if (!empty($userId)) {
+            $sql= "DELETE FROM $table_url_rel_user
+                   WHERE user_id = ".intval($userId);
+            Database::query($sql);
+        }
+
+        return $result;
+    }
+
+    /**
     * Deletes an url and course relationship
     * @author Julio Montoya
     * @param  int  $courseId

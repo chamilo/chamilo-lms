@@ -2609,7 +2609,7 @@ class SessionManager
      * @return array An array with all sessions of the platform.
      * @todo   optional course code parameter, optional sorting parameters...
      */
-    public static function get_sessions_list($conditions = array(), $order_by = array())
+    public static function get_sessions_list($conditions = array(), $order_by = array(), $from = null, $to = null)
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -2677,6 +2677,12 @@ class SessionManager
             if (!empty($order)) {
                 $sql_query .= " ORDER BY $order $direction ";
             }
+        }
+
+        if (!is_null($from) && !is_null($to)) {
+            $to = intval($to);
+            $from = intval($from);
+            $sql_query .= "LIMIT $from, $to";
         }
 
         $sql_result = Database::query($sql_query);

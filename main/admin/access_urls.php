@@ -33,7 +33,7 @@ if (isset($_GET['action'])) {
         Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
     }
 
-    $url_id = intval($_GET['url_id']);
+    $url_id = (empty($_GET['url_id']) ? 0 : intval($_GET['url_id']));
 
     switch ($_GET['action']) {
         case 'delete_url':

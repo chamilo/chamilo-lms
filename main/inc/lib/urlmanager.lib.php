@@ -73,6 +73,25 @@ class UrlManager
     {
         $id = intval($id);
         $table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
+        $tableUser = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $tableCourse = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $tableSession = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $tableCourseCategory = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+        $tableGroup = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
+
+        $sql = "DELETE FROM $tableCourse WHERE access_url_id = ".$id;
+        $result = Database::query($sql);
+        /*
+        $sql = "DELETE FROM $tableCourseCategory WHERE access_url_id = ".$id;
+        $result = Database::query($sql);
+        */
+        $sql = "DELETE FROM $tableSession WHERE access_url_id = ".$id;
+        $result = Database::query($sql);
+        $sql = "DELETE FROM $tableGroup WHERE access_url_id = ".$id;
+        $result = Database::query($sql);
+        $sql = "DELETE FROM $tableUser WHERE access_url_id = ".$id;
+        $result = Database::query($sql);
+
         $sql= "DELETE FROM $table WHERE id = ".$id;
         $result = Database::query($sql);
 

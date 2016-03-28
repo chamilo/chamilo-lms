@@ -10,8 +10,10 @@ require_once dirname(__FILE__) . '/../inc/global.inc.php';
 
 function get_suggestions_from_search_engine($q)
 {
-    if (strlen($q)<2) { return null;}
+//    if (strlen($q)<2) { return null;}
     global $charset;
+
+    $json = [];
     $table_sfv     = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $q = Database::escape_string($q);
     $cid = api_get_course_id();
@@ -25,7 +27,12 @@ function get_suggestions_from_search_engine($q)
     $data = array();
     $i = 0;
     while ($row = Database::fetch_array($sql_result)) {
-        echo api_convert_encoding($row['value'],'UTF-8',$charset)."| value\n";
+        $json[] = [
+            'id' => api_convert_encoding($row['value'],'UTF-8',$charset),
+            'value' => api_convert_encoding($row['value'],'UTF-8',$charset),
+            'label' => api_convert_encoding($row['value'],'UTF-8',$charset)
+        ];
+
         if ($i<20) {
             $data[ $row['course_code'] ] [ $row['tool_id'] ] [ $row['ref_id'] ] = 1;
         }
@@ -90,20 +97,24 @@ function get_suggestions_from_search_engine($q)
                 }
                 foreach ($output as $i=>$out) {
                     if (api_stristr($out,$q) === false) {continue;}
-                    $s = api_convert_encoding(substr($out,0,-3),'UTF-8',$charset) . "| value\n";
+                    $s = api_convert_encoding(substr($out, 0, -3), 'UTF-8', $charset);
                     if (!in_array($s,$more_sugg)) {
                         $more_sugg[] = $s;
+                        $json[] = [
+                            'id' => $s,
+                            'value' => $s,
+                            'label' => $s
+                        ];
                     }
                 }
             }
         }
     }
-    foreach ($more_sugg as $sugg) {
-        echo $sugg;
-    }
+
+    echo json_encode($json);
 }
 
-$q = strtolower($_GET["q"]);
+$q = strtolower($_GET["term"]);
 if (!$q) return;
 //echo $q . "| value\n";
 get_suggestions_from_search_engine($q);

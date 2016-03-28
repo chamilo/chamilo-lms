@@ -8,12 +8,13 @@ $(document).ready(function() {
       $('#tags-clean').click(function() {
         // clear multiple select
         $('select option:selected').each(function () {
-            $(this).attr('selected', '');
+            $(this).prop('selected', false);
         });
         return false;
       });
       /* ajax suggestions */
-      $('#query').autocomplete('search_suggestions.php', {
+      $('#query').autocomplete({
+          source: 'search_suggestions.php',
         multiple: false,
         selectFirst: false,
         mustMatch: false,

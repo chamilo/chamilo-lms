@@ -147,12 +147,12 @@ if ($count > 0) {
 
         if ($mode == 'gallery') {
             $title = $a_prefix.str_replace('_',' ',$result['title']). $a_sufix;
-            $blocks[] = array(
+            $blocks[] = array(1 => 
                 $a_prefix .'<img src="'.$result['thumbnail'].'" />'. $a_sufix .'<br />'.$title.'<br />'.$result['author'],
             );
         } else {
             $title = '<div style="text-align:left;">'. $a_prefix . $result['title']. $a_sufix .(!empty($result['author']) ? ' '.$result['author'] : '').'<div>';
-            $blocks[] = array($title);
+            $blocks[] = array(1 => $title);
         }
     }
 }

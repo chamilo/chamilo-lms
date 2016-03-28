@@ -57,7 +57,7 @@ $courseSelect = $sessionFilter->addElement(
 
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
-    $parents = getParentsToString($courseInfo['categoryCode']);
+    $parents = CourseCategory::getParentsToString($courseInfo['categoryCode']);
 
     $courseSelect->addOption($parents . $courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
 }

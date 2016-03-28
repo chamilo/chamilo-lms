@@ -4,6 +4,7 @@
 *	@package chamilo.admin
 *	@author Julio Montoya <gugli100@gmail.com>
 */
+
 // resetting the course id
 $cidReset = true;
 
@@ -120,7 +121,7 @@ if ($ajax_search) {
             $userGroupList[$item['id']] = $item ;
         }
     }
-    $noUserGroupList = getCourseCategoryNotInList(array_keys($userGroupList));
+    $noUserGroupList = CourseCategory::getCourseCategoryNotInList(array_keys($userGroupList));
 }
 
 if ($add_type == 'multiple') {

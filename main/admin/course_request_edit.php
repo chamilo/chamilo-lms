@@ -57,7 +57,7 @@ if ($course_validation_feature) {
         );
 
         if (!empty($course_request_info['category_code'])) {
-            $data = getCategory($course_request_info['category_code']);
+            $data = CourseCategory::getCategory($course_request_info['category_code']);
 
             $courseSelect->addOption($data['name'], $data['code'], ['selected' => 'selected']);
         }

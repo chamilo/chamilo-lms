@@ -38,7 +38,7 @@ switch ($action) {
         break;
     case 'search_category':
         if (api_is_platform_admin() || api_is_allowed_to_create_course()) {
-            $categories = searchCategoryByKeyword($_REQUEST['q']);
+            $categories = CourseCategory::searchCategoryByKeyword($_REQUEST['q']);
 
             if (empty($categories)) {
                 echo json_encode([]);
@@ -91,7 +91,7 @@ switch ($action) {
                 $title = $course['title'];
 
                 if (!empty($course['category_code'])) {
-                    $parents = getParentsToString($course['category_code']);
+                    $parents = self::getParentsToString($course['category_code']);
                     $title = $parents . $course['title'];
                 }
 

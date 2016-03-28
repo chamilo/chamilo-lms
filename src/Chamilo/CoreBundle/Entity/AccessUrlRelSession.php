@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -29,8 +30,6 @@ class AccessUrlRelSession
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private $sessionId;
-
-
 
     /**
      * Set accessUrlId

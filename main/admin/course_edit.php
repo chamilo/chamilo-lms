@@ -185,7 +185,7 @@ $categorySelect = $form->addElement(
 );
 
 if (!empty($courseInfo['categoryCode'])) {
-    $data = getCategory($courseInfo['categoryCode']);
+    $data = CourseCategory::getCategory($courseInfo['categoryCode']);
     $categorySelect->addOption($data['name'], $data['code']);
 }
 

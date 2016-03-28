@@ -456,11 +456,9 @@ class IndexManager
 
         // Showing only the category of courses of the current access_url_id
         if (api_is_multiple_url_enabled()) {
-            $courseCategoryCondition = null;
-            if (isMultipleUrlSupport()) {
-                $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-                $courseCategoryCondition = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
-            }
+
+            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+            $courseCategoryCondition = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
 
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {

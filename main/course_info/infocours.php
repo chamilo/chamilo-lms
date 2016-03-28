@@ -142,7 +142,7 @@ while ($a_titulars = Database::fetch_array($q_result_titulars)) {
     $a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
 }
 
-$categories = getCategoriesCanBeAddedInCourse($_course['categoryCode']);
+$categories = CourseCategory::getCategoriesCanBeAddedInCourse($_course['categoryCode']);
 
 $linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed grey"></div></div>';
 

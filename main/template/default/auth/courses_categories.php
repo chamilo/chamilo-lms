@@ -23,7 +23,7 @@ $pageLength = isset($pageLength) ? $pageLength :
         10;
 $pageTotal = intval(ceil(intval($countCoursesInCategory) / $pageLength));
 $cataloguePagination = $pageTotal > 1 ?
-    getCataloguePagination($pageCurrent, $pageLength, $pageTotal) :
+    CourseCategory::getCatalogPagination($pageCurrent, $pageLength, $pageTotal) :
     '';
 $search_term = isset($search_term) ? $search_term :null;
 
@@ -111,7 +111,7 @@ $code = isset($code) ? $code : null;
         <?php
         if ($showCourses) {
             if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
-            <form class="form-horizontal" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
+            <form class="form-horizontal" method="post" action="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
                 <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                 <input type="hidden" name="search_course" value="1" />
                 <div class="input-group">
@@ -164,7 +164,7 @@ $code = isset($code) ? $code : null;
     if ($showSessions) { ?>
         <div class="col-md-4">
             <h5><?php echo get_lang('Sessions'); ?></h5>
-            <a class="btn btn-default btn-block" href="<?php echo getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
+            <a class="btn btn-default btn-block" href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
                 <?php echo get_lang('SessionList'); ?>
             </a>
         </div>

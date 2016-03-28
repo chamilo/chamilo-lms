@@ -12,37 +12,25 @@ $category = isset($_GET['category']) ? $_GET['category'] : null;
 
 $parentInfo = [];
 if (!empty($category)) {
-    $parentInfo = getCategory($category);
+    $parentInfo = CourseCategory::getCategory($category);
 }
 $categoryId = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
 if (!empty($categoryId)) {
-    $categoryInfo = getCategory($categoryId);
+    $categoryInfo = CourseCategory::getCategory($categoryId);
 }
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $errorMsg = '';
 if (!empty($action)) {
     if ($action == 'delete') {
-        if (api_get_multiple_access_url()) {
-            if (api_get_current_access_url_id() == 1 ||
-                (isset($_configuration['enable_multiple_url_support_for_course_category']) &&
-                $_configuration['enable_multiple_url_support_for_course_category'])
-            ) {
-                deleteNode($categoryId);
-                Display::addFlash(Display::return_message(get_lang('Deleted')));
-                header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
-                exit();
-            }
-        } else {
-            deleteNode($categoryId);
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
-            header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
-            exit();
-        }
+        CourseCategory::deleteNode($categoryId);
+        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
+        exit();
     } elseif (($action == 'add' || $action == 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
         if ($action == 'add') {
-            $ret = addNode(
+            $ret = CourseCategory::addNode(
                 $_POST['code'],
                 $_POST['name'],
                 $_POST['auth_course_child'],
@@ -51,7 +39,7 @@ if (!empty($action)) {
 
             Display::addFlash(Display::return_message(get_lang('Created')));
         } else {
-            $ret = editNode(
+            $ret = CourseCategory::editNode(
                 $_POST['code'],
                 $_POST['name'],
                 $_POST['auth_course_child'],
@@ -65,7 +53,7 @@ if (!empty($action)) {
             $errorMsg = get_lang('CatCodeAlreadyUsed');
         }
     } elseif ($action == 'moveUp') {
-        moveNodeUp($categoryId, $_GET['tree_pos'], $category);
+        CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
         Display::addFlash(Display::return_message(get_lang('Updated')));
         exit();
@@ -81,53 +69,45 @@ $interbreadcrumb[] = array(
 Display::display_header($tool_name);
 
 if ($action == 'add' || $action == 'edit') {
-    if ((api_get_multiple_access_url() && api_get_current_access_url_id() == 1) ||
-        !api_get_multiple_access_url() ||
-        (isset($_configuration['enable_multiple_url_support_for_course_category']) &&
-         $_configuration['enable_multiple_url_support_for_course_category'])
-    ) {
-        echo '<div class="actions">';
-        echo Display::url(
-            Display::return_icon('folder_up.png', get_lang("Back"), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.Security::remove_XSS($category)
-        );
-        echo '</div>';
+    echo '<div class="actions">';
+    echo Display::url(
+        Display::return_icon('folder_up.png', get_lang("Back"), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.Security::remove_XSS($category)
+    );
+    echo '</div>';
 
-        $form_title = ($action == 'add') ? get_lang('AddACategory') : get_lang('EditNode');
-        if (!empty($category)) {
-            $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
-        }
-        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($categoryId);
-        $form = new FormValidator('course_category', 'post', $url);
-        $form->addElement('header', '', $form_title);
-        $form->addElement('hidden', 'formSent', 1);
-
-        $form->addElement('text', 'code', get_lang("CategoryCode"));
-        $form->addElement('text', 'name', get_lang("CategoryName"));
-        $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');
-        $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
-        $group = array(
-            $form->createElement('radio', 'auth_course_child', get_lang("AllowCoursesInCategory"), get_lang('Yes'), 'TRUE'),
-            $form->createElement('radio', 'auth_course_child', null, get_lang('No'), 'FALSE')
-        );
-        $form->addGroup($group, null, get_lang("AllowCoursesInCategory"));
-
-        if (!empty($categoryInfo)) {
-            $class = "save";
-            $text = get_lang('Save');
-            $form->setDefaults($categoryInfo);
-            $form->addButtonSave($text);
-        } else {
-            $class = "add";
-            $text = get_lang('AddCategory');
-            $form->setDefaults(array('auth_course_child' => 'TRUE'));
-            $form->addButtonCreate($text);
-        }
-        $form->display();
-    } elseif (api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
-        // If multiple URLs and not main URL, prevent edition and inform user
-        Display::display_warning_message(get_lang('CourseCategoriesAreGlobal'));
+    $form_title = ($action == 'add') ? get_lang('AddACategory') : get_lang('EditNode');
+    if (!empty($category)) {
+        $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
     }
+    $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($categoryId);
+    $form = new FormValidator('course_category', 'post', $url);
+    $form->addElement('header', '', $form_title);
+    $form->addElement('hidden', 'formSent', 1);
+
+    $form->addElement('text', 'code', get_lang("CategoryCode"));
+    $form->addElement('text', 'name', get_lang("CategoryName"));
+    $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');
+    $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
+    $group = array(
+        $form->createElement('radio', 'auth_course_child', get_lang("AllowCoursesInCategory"), get_lang('Yes'), 'TRUE'),
+        $form->createElement('radio', 'auth_course_child', null, get_lang('No'), 'FALSE')
+    );
+    $form->addGroup($group, null, get_lang("AllowCoursesInCategory"));
+
+    if (!empty($categoryInfo)) {
+        $class = "save";
+        $text = get_lang('Save');
+        $form->setDefaults($categoryInfo);
+        $form->addButtonSave($text);
+    } else {
+        $class = "add";
+        $text = get_lang('AddCategory');
+        $form->setDefaults(array('auth_course_child' => 'TRUE'));
+        $form->addButtonCreate($text);
+    }
+    $form->display();
+
 } else {
     // If multiple URLs and not main URL, prevent deletion and inform user
     if ($action == 'delete' && api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
@@ -154,7 +134,7 @@ if ($action == 'add' || $action == 'edit') {
     if (!empty($parentInfo)) {
         echo Display::page_subheader($parentInfo['name'].' ('.$parentInfo['code'].')');
     }
-    echo listCategories($category);
+    echo CourseCategory::listCategories($category);
 }
 
 Display::display_footer();

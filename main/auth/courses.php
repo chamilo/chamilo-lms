@@ -18,7 +18,7 @@ require_once '../inc/global.inc.php';
 $ctok = Security::get_existing_token();
 
 // Get Limit data
-$limit = getLimitArray();
+$limit = CourseCategory::getLimitArray();
 
 // Section for the tabs.
 $this_section = SECTION_COURSES;
@@ -63,8 +63,7 @@ if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
 }
 
 $categoryCode = isset($_GET['category_code']) ? $_GET['category_code'] : 'ALL';
-
-$nameTools = getCourseCatalogNameTools($action);
+$nameTools = CourseCategory::getCourseCatalogNameTools($action);
 if (empty($nameTools)) {
     $nameTools = get_lang('CourseManagement');
 } else {

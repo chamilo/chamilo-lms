@@ -1006,8 +1006,8 @@ class UrlManager
 
         foreach ($list as $id) {
             UrlManager::addCourseCategoryToUrl($id, $urlId);
-            $categoryInfo = getCategoryById($id);
-            $children = getChildren($categoryInfo['code']);
+            $categoryInfo = CourseCategory::getCategoryById($id);
+            $children = CourseCategory::getChildren($categoryInfo['code']);
             if (!empty($children)) {
                 foreach ($children as $category) {
                     UrlManager::addCourseCategoryToUrl($category['id'], $urlId);
@@ -1019,9 +1019,9 @@ class UrlManager
         foreach ($existingItems as $id) {
             if (!in_array($id, $list)) {
                 UrlManager::deleteUrlRelCourseCategory($id, $urlId);
-                $categoryInfo = getCategoryById($id);
+                $categoryInfo = CourseCategory::getCategoryById($id);
 
-                $children = getChildren($categoryInfo['code']);
+                $children = CourseCategory::getChildren($categoryInfo['code']);
                 if (!empty($children)) {
                     foreach ($children as $category) {
                         UrlManager::deleteUrlRelCourseCategory($category['id'], $urlId);

@@ -6,19 +6,19 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AccessUrlRelUser
+ * AccessUrlRelCourseCategory
  *
- * @ORM\Table(name="access_url_rel_usergroup")
+ * @ORM\Table(name="access_url_rel_course_category")
  * @ORM\Entity
  */
-class AccessUrlRelUserGroup
+class AccessUrlRelCourseCategory
 {
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue()
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -26,23 +26,21 @@ class AccessUrlRelUserGroup
      * @var integer
      *
      * @ORM\Column(name="access_url_id", type="integer")
-
      */
     private $accessUrlId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="usergroup_id", type="integer")
+     * @ORM\Column(name="course_category_id", type="integer")
      */
-    private $userGroupId;
-
+    private $courseCategoryId;
 
     /**
      * Set accessUrlId
      *
      * @param integer $accessUrlId
-     * @return AccessUrlRelUser
+     * @return AccessUrlRelSession
      */
     public function setAccessUrlId($accessUrlId)
     {
@@ -64,37 +62,18 @@ class AccessUrlRelUserGroup
     /**
      * @return int
      */
-    public function getId()
+    public function getCourseCategoryId()
     {
-        return $this->id;
+        return $this->courseCategoryId;
     }
 
     /**
-     * @param int $id
-     * @return AccessUrlRelUserGroup
+     * @param int $courseCategoryId
+     * @return AccessUrlRelCourseCategory
      */
-    public function setId($id)
+    public function setCourseCategoryId($courseCategoryId)
     {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserGroupId()
-    {
-        return $this->userGroupId;
-    }
-
-    /**
-     * @param int $userGroupId
-     * @return AccessUrlRelUserGroup
-     */
-    public function setUserGroupId($userGroupId)
-    {
-        $this->userGroupId = $userGroupId;
+        $this->courseCategoryId = $courseCategoryId;
 
         return $this;
     }

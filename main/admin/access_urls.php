@@ -124,12 +124,10 @@ if ($userGroup->getUseMultipleUrl()) {
     );
 }
 
-if (isMultipleUrlSupport()) {
-    echo Display::url(
-        Display::return_icon('folder.png', get_lang('ManageCourseCategories'), array(), ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
-    );
-}
+echo Display::url(
+    Display::return_icon('folder.png', get_lang('ManageCourseCategories'), array(), ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
+);
 
 echo '</div>';
 

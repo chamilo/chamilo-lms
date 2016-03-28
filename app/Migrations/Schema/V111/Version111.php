@@ -50,6 +50,8 @@ class Version111 extends AbstractMigrationChamilo
         if (!$table->hasColumn('duration')) {
             $this->addSql("ALTER TABLE session_rel_user ADD duration INT DEFAULT NULL");
         }
+
+        $this->addSql('CREATE TABLE access_url_rel_course_category (id INT AUTO_INCREMENT NOT NULL, access_url_id INT NOT NULL, course_category_id INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
     }
 
     /**
@@ -65,6 +67,6 @@ class Version111 extends AbstractMigrationChamilo
     public function down(Schema $schema)
     {
         $this->addSql('DROP TABLE c_lp_category_user');
-
+        $this->addSql('DROP TABLE access_url_rel_course_category');
     }
 }

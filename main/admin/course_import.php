@@ -63,7 +63,7 @@ function validate_data($courses)
 
         // 4. Check whether course category exists.
         if (isset($course['CourseCategory']) && strlen($course['CourseCategory']) != 0) {
-            $categoryInfo = getCategory($course['CourseCategory']);
+            $categoryInfo = CourseCategory::getCategory($course['CourseCategory']);
             if (empty($categoryInfo)) {
                 //@todo this is so bad even all lang variables are wrong ...
                 $course['error'] = get_lang('UnkownCategoryCourseCode').' ('.$course['CourseCategory'].')';

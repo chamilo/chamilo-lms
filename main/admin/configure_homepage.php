@@ -773,7 +773,7 @@ if (!empty($action)) {
 	}// end of "else" in if($_POST['formSent']) condition
 } else {
 	//if $action is empty, then prepare a list of the course categories to display (?)
-	$Categories = getCategoriesToDisplayInHomePage();
+	$Categories = CourseCategory::getCategoriesToDisplayInHomePage();
 }
 
 // Display section

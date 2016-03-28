@@ -1154,25 +1154,25 @@ class MessageManager
                 // topics
                 $user_sender_info = api_get_user_info($topic['user_sender_id']);
                 $name = $user_sender_info['complete_name'];
-
+                $html .= '<div class="groups-messages">';
                 $html .= '<div class="row">';
 
                 $items = $topic['count'];
                 $reply_label = ($items == 1) ? get_lang('GroupReply') : get_lang('GroupReplies');
-                $label =  Display::label($items.' '.$reply_label);
+                $label =  '<i class="fa fa-envelope"></i> ' . $items . ' ' . $reply_label;
                 $topic['title'] = trim($topic['title']);
 
                 if (empty($topic['title'])) {
                     $topic['title'] = get_lang('Untitled');
                 }
 
-                $html .= '<div class="col-md-8">';
+                $html .= '<div class="col-xs-8 col-md-10">';
                 $html .= Display::tag(
                     'h4',
                     Display::url(
                         Security::remove_XSS($topic['title'], STUDENT, true),
                         api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$group_id.'&topic_id='.$topic['id']
-                    )
+                    ), array('class'=>'title')
                 );
                 $actions = '';
                 if ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
@@ -1186,22 +1186,22 @@ class MessageManager
                     if (!empty($topic['update_date']) &&
                         $topic['update_date'] != '0000-00-00 00:00:00'
                     ) {
-                        $date .= '<div class="message-group-date" > <i>'.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</i></div>';
+                        $date .= '<i class="fa fa-calendar"></i> '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']);
                     }
                 } else {
-                    $date .= '<div class="message-group-date"> <i>'.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</i></div>';
+                    $date .= '<i class="fa fa-calendar"></i> '.get_lang('Created').' '.date_to_str_ago($topic['send_date']);
                 }
-                $html .= $date.$label.$actions;
+                $html .= '<div class="date">'. $label.' - '.$date.$actions . '</div>';
                 $html .= '</div>';
 
                 $image = $user_sender_info['avatar'];
 
-                $user_info = '<td valign="top"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
-                $user_info .= '<div class="message-group-author"><img src="'.$image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
-                $user_info .= '</td>';
+                $user_info = '<div class="author"><img class="img-responsive img-circle" src="'.$image.'" alt="'.$name.'"  width="64" height="64" title="'.$name.'" /></div>';
+                $user_info .= '<div class="name"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';
 
-                $html .= '<div class="col-md-2">';
+                $html .= '<div class="col-xs-4 col-md-2">';
                 $html .= $user_info;
+                $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</div>';
 
@@ -1247,29 +1247,23 @@ class MessageManager
         $current_user_id = api_get_user_id();
 
         $items_per_page = 50;
-
         $query_vars = array('id' => $group_id, 'topic_id' => $topic_id, 'topics_page_nr' => 0);
 
         // Main message
         $links = '';
         $main_content = '';
-
-        $items_page_nr = null;
-
         $html = '';
-
-        $delete_button = '';
-        if (api_is_platform_admin()) {
-            $delete_button = Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), 'group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic_id);
-        }
-        $html .= Display::page_subheader(Security::remove_XSS($main_message['title'].$delete_button, STUDENT, true));
+        $items_page_nr = null;
 
         $user_sender_info = api_get_user_info($main_message['user_sender_id']);
         $files_attachments = self::get_links_message_attachment_files($main_message['id']);
         $name = $user_sender_info['complete_name'];
 
         $topic_page_nr = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : null;
-        $links.= '<div id="message-reply-link">';
+        
+        $links.= '<div class="pull-right">';
+        $links.= '<div class="btn-group">';
+        
         if (($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
             $my_group_role == GROUP_USER_PERMISSION_MODERATOR) ||
             $main_message['user_sender_id'] == $current_user_id
@@ -1286,22 +1280,25 @@ class MessageManager
                 'items_page_nr' => $items_page_nr,
                 'topic_id' => $main_message['id']
             ]);
-
+            if (api_is_platform_admin()) {
+                $links .= Display::url(
+                        Display::returnFontAwesomeIcon('trash'),
+                        'group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic_id,
+                        [
+                            'class' => 'btn btn-default'
+                        ]
+                        );
+            }            
             $links .= Display::url(
-                Display::return_icon(
-                    'edit.png',
-                    get_lang('Edit'),
-                    array(),
-                    ICON_SIZE_SMALL
-                ),
-                $urlEdit,
-                [
-                    'class' => 'ajax btn btn-default',
-                    'title' => get_lang('Edit'),
-                    'data-title' => get_lang('Edit'),
-                    'data-size' => 'lg'
-                ]
-            );
+                        Display::returnFontAwesomeIcon('pencil'),
+                        $urlEdit,
+                        [
+                            'class' => 'btn btn-default ajax',
+                            'title' => get_lang('Edit'),
+                            'data-title' => get_lang('Edit'),
+                            'data-size' => 'lg'
+                        ]
+                    );
         }
 
         $urlReply = api_get_path(WEB_CODE_PATH);
@@ -1317,36 +1314,39 @@ class MessageManager
         ]);
 
         $links .= Display::url(
-            Display::return_icon('talk.png', get_lang('Reply')),
+            Display::returnFontAwesomeIcon('commenting'),
             $urlReply,
             [
-                'class' => 'ajax btn btn-default',
+                'class' => 'btn btn-default ajax',
                 'title' => get_lang('Reply'),
                 'data-title' => get_lang('Reply'),
                 'data-size' => 'lg'
             ]
         );
-
         $links.= '</div>';
-
+        $links.= '</div>';
+        
+        $title = '<h4>'.Security::remove_XSS($main_message['title'].$delete_button, STUDENT, true).$links.'</h4>';
+        
         $userPicture = $user_sender_info['avatar'];
-        $main_content.= '<div class="message-group-author">
-                         <img src="'.$userPicture.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
-        $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$main_message['user_sender_id'].'">'.$name.'&nbsp;</a>';
+        $main_content .= '<div class="avatar-author">';
+        $main_content .= '<img src="'.$userPicture.'" alt="'.$name.'" class="img-responsive img-circle" width="64" height="64" title="'.$name.'" />';
+        $main_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$main_message['user_sender_id'].'">'.$name.'</a>';
+        $main_content .= '</div>';
 
         $date = '';
         if ($main_message['send_date'] != $main_message['update_date']) {
             if (!empty($main_message['update_date']) && $main_message['update_date'] != '0000-00-00 00:00:00') {
-                $date = '<div class="message-group-date"> '.get_lang('LastUpdate').' '.date_to_str_ago($main_message['update_date']).'</div>';
+                $date = '<div class="message-date"> '.get_lang('LastUpdate').' '.date_to_str_ago($main_message['update_date']).'</div>';
             }
         } else {
-            $date = '<div class="message-group-date"> '.get_lang('Created').' '.date_to_str_ago($main_message['send_date']).'</div>';
+            $date = '<div class="message-date"> '.get_lang('Created').' '.date_to_str_ago($main_message['send_date']).'</div>';
         }
         $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>';
-        $main_content.= '<div class="message-group-content">'.$links.$user_link.' '.$date.$main_message['content'].$attachment.'</div>';
-        $main_content = Security::remove_XSS($main_content, STUDENT, true);
+        $main_content.= '<div class="message-content"> '.$date.$main_message['content'].$attachment.'</div>';
+        //$main_content = Security::remove_XSS($main_content, STUDENT, true);
 
-        $html .= Display::div(Display::div(Display::div($main_content, array('class' => 'group_social_sub_item', 'style' => 'background-color:#fff;')), array('class' => 'group_social_item')), array('class' => 'group_social_grid'));
+        $html .= Display::div(Display::div($title . $main_content, array('class' => 'message-topic')), array('class' => 'sm-groups-message'));
 
         $topic_id = $main_message['id'];
 
@@ -1359,35 +1359,37 @@ class MessageManager
                 }
                 $items_page_nr = isset($_GET['items_'.$topic['id'].'_page_nr']) ? intval($_GET['items_'.$topic['id'].'_page_nr']) : null;
                 $links = '';
+                $links.= '<div class="pull-right">';
                 $html_items = '';
                 $user_sender_info = api_get_user_info($topic['user_sender_id']);
                 $files_attachments = self::get_links_message_attachment_files($topic['id']);
                 $name = $user_sender_info['complete_name'];
 
-                $links.= '<div id="message-reply-link">';
+                $links.= '<div class="btn-group">';
                 if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
-                    $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn" data-size="lg" data-title="'.get_lang('Edit').'" title="'.get_lang('Edit').'">'.
-                        Display :: return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+                    $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn btn-default" data-size="lg" data-title="'.get_lang('Edit').'" title="'.get_lang('Edit').'">'.
+                    Display::returnFontAwesomeIcon('pencil') . '</a>';
                 }
-                $links.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn" data-size="lg" data-title="'.get_lang('Reply').'" title="'.get_lang('Reply').'">';
-                $links.= Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
+                $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn btn-default" data-size="lg" data-title="'.get_lang('Reply').'" title="'.get_lang('Reply').'">';
+                $links.= Display::returnFontAwesomeIcon('commenting') . '</a>';
+                $links.= '</div>';
                 $links.= '</div>';
 
                 $userPicture = $user_sender_info['avatar'];
-
-                $html_items.= '<div class="message-group-author"><img src="'.$userPicture.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
-                $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
+                $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp</a>';
+                $html_items.= '<div class="avatar-author"><img src="'.$userPicture.'" alt="'.$name.'" class="img-responsive img-circle"  width="64" height="64" title="'.$name.'" />'.$user_link.'</div>';
+                
 
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
                     if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00') {
-                        $date = '<div class="message-group-date"> '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</div>';
+                        $date = '<div class="message-date"> '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</div>';
                     }
                 } else {
-                    $date = '<div class="message-group-date"> '.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</div>';
+                    $date = '<div class="message-date"> '.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</div>';
                 }
                 $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>';
-                $html_items.= '<div class="message-group-content">'.$links.$user_link.' '.$date.Security::remove_XSS($topic['content'], STUDENT, true).$attachment.'</div>';
+                $html_items.= '<div class="message-content">'.$links.' '.$date.Security::remove_XSS($topic['content'], STUDENT, true).$attachment.'</div>';
 
                 $base_padding = 20;
 
@@ -1396,12 +1398,8 @@ class MessageManager
                 } else {
                     $indent = intval($topic['indent_cnt']) * $base_padding + $base_padding;
                 }
-                $class = 'group_social_sub_item';
-                if (isset($message_id) && $message_id == $topic['id']) {
-                    $class .= ' group_social_sub_item_highlight';
-                }
 
-                $html_items = Display::div($html_items, array('class' => $class, 'id' => 'msg_'.$topic['id']));
+                $html_items = Display::div($html_items, array('class' => 'message-post', 'id' => 'msg_'.$topic['id']));
                 $html_items = Display::div($html_items, array('class' => '', 'style' => 'margin-left:'.$indent.'px'));
                 $array_html_items[] = array($html_items);
             }
@@ -1410,8 +1408,8 @@ class MessageManager
             $visibility = array(true, true, true, false);
 
             $style_class = array(
-                'item' => array('class' => 'group_social_item'),
-                'main' => array('class' => 'group_social_grid'),
+                'item' => array('class' => 'user-post'),
+                'main' => array('class' => 'user-list'),
             );
             if (!empty($array_html_items)) {
                 $html .= Display::return_sortable_grid(

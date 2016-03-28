@@ -284,16 +284,8 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
         $create_thread_link =  Display::div($create_thread_link, array('class'=>'pull-right'));
     }
     $headers = array(get_lang('Discussions'), get_lang('Members'));
-<<<<<<< HEAD
-<<<<<<< HEAD
-    $social_right_content .= Display::tabs($headers, array($content, $member_content),'tabs');
-=======
     $socialForum = Display::tabs($headers, array($content, $member_content),'tabs');
     
->>>>>>> d97f940... fix css tpl groups topics CT#8161
-=======
-    $socialForum = Display::tabs($headers, array($content, $member_content),'tabs');
->>>>>>> 29d36f7... arranging menu display list groups CT#8161
 } else {
     // if I already sent an invitation message
     if (!in_array(
@@ -322,14 +314,7 @@ $tpl->assign('is_group_member', $is_group_member);
 $tpl->assign('group_info', $group_info);
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_menu_block', $social_menu_block);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 $tpl->assign('social_forum', $socialForum);
->>>>>>> d97f940... fix css tpl groups topics CT#8161
-=======
-$tpl->assign('social-forum', $socialForum);
->>>>>>> 29d36f7... arranging menu display list groups CT#8161
 $tpl->assign('social_right_content', $social_right_content);
 $social_layout = $tpl->get_template('social/group_view.tpl');
 $tpl->display($social_layout);

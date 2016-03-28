@@ -156,7 +156,7 @@ $extraField = new ExtraField('user');
 
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 $userForm->addHeader(get_lang('User'));
-$extra = $extraField->addElements($userForm, api_get_user_id(), [], true, true, array('heures-disponibilites-par-semaines'));
+$extra = $extraField->addElements($userForm, api_get_user_id(), [], true, true, array('heures-disponibilite-par-semaine'));
 $userForm->addButtonSave(get_lang('Save'));
 $userFormToString = $userForm->returnForm();
 

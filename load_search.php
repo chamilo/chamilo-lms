@@ -171,6 +171,7 @@ if (!empty($filterToSend)) {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc';
 }
 
+
 // Autowidth
 $extra_params['autowidth'] = 'true';
 
@@ -225,6 +226,55 @@ $row = 0;
 $total = '0';
 $sumHours = '0';
 $numHours = '0';
+
+$field = 'heures-disponibilite-par-semaine';
+$extraField = new ExtraFieldValue('user');
+$data = $extraField->get_values_by_handler_and_field_variable($userToLoad, $field);
+$availableHoursPerWeek = 0;
+
+function dateDiffInWeeks($date1, $date2)
+{
+    if ($date1 > $date2) {
+        return dateDiffInWeeks($date2, $date1);
+    }
+    $first = new \DateTime($date1);
+    $second = new \DateTime($date2);
+
+    return floor($first->diff($second)->days / 7);
+}
+
+if ($data) {
+    $availableHoursPerWeek = $data['value'];
+    $numberWeeks = 0;
+
+    if ($form->validate()) {
+        $formData = $form->getSubmitValues();
+        if (isset($formData['extra_access_start_date']) && isset($formData['extra_access_end_date'])) {
+            $startDate = $formData['extra_access_start_date'];
+            $endDate = $formData['extra_access_end_date'];
+
+            $numberWeeks = dateDiffInWeeks($startDate, $endDate);
+        }
+    }
+
+    $total = $numberWeeks * $availableHoursPerWeek;
+
+    $sessions = SessionManager::getSessionsFollowedByUser($userToLoad);
+
+    if ($sessions) {
+        $sessionFieldValue = new ExtraFieldValue('session');
+
+        foreach ($sessions as $session) {
+            $sessionId = $session['id'];
+            $data = $sessionFieldValue->get_values_by_handler_and_field_variable($sessionId, 'temps-de-travail');
+            if ($data) {
+                $sumHours += $data['value'];
+            }
+        }
+    }
+}
+
+$numHours = $total - $sumHours;
 $headers = array(
     "Total d'heures disponibles" => $total,
     'Sommes des heures de sessions inscrites' => $sumHours,

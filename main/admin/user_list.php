@@ -131,7 +131,7 @@ $(document).ready(function() {
 //Load user calendar
 function load_calendar(user_id, month, year) {
  	var url = "'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id=" +user_id + "&month="+month+"&year="+year;
-	$("#dialog").load(url);
+	$(".modal-body").load(url);
 }
 </script>';
 

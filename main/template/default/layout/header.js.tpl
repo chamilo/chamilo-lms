@@ -232,11 +232,11 @@ $(document).scroll(function() {
         }
 
         if (fixed.attr('data-top') - fixed.outerHeight() <= $(this).scrollTop()) {
-            fixed.addClass('subnav-fixed');
+            fixed.addClass('navbar-fixed-top');
             fixed.css('width', '100%');
         } else {
-            fixed.removeClass('subnav-fixed');
-            fixed.css('width', '200px');
+            fixed.removeClass('navbar-fixed-top');
+            fixed.css('width', '100%');
         }
     }
 

@@ -5016,8 +5016,8 @@ class Exercise
             get_lang('YouWillBeRedirectedInXSeconds'),
             '<span id="counter_to_redirect" class="red_alert"></span>'
         );
-        $html .= '</div>';
-        $html .= '<div id="exercise_clock_warning" class="well count_down"></div>';
+        $html .= '</div>'; 
+        $html .= '<div id="exercise_clock_warning" class="count_down"></div>';
         return $html;
     }
 

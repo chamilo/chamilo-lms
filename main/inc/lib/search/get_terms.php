@@ -21,7 +21,7 @@ require_once dirname(__FILE__) . '../../../global.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloQuery.php';
 
 /**
- * search with filter and build base array avoding repeated terms
+ * Search with filter and build base array avoiding repeated terms
  * @param array $filter XapianQuery array
  * @param array $specific_fields
  * @return array $sf_terms

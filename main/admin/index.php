@@ -354,7 +354,7 @@ if (api_is_platform_admin()) {
 
         $items[] = array(
             'url' => "db.php?username=$username&db=$databaseName&server=$host",
-            'label' => get_lang('Database Manager')
+            'label' => get_lang('DatabaseManager')
         );
     }
 

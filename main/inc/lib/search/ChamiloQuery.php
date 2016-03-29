@@ -14,7 +14,7 @@ require 'xapian/XapianQuery.php';
  *
  * @param   string    $query_string   The search string
  * @param   int       $offset         Offset to the first item to retrieve. Optional
- * @param   int       lenght          Number of items to retrieve. Optional
+ * @param   int       length          Number of items to retrieve. Optional
  * @param   array     extra           Extra queries to join with. Optional
  * @return  array
  */

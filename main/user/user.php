@@ -870,11 +870,13 @@ $table->set_header($header_nr++, get_lang('LoginName'));
 $indexList['groups'] = $header_nr;
 $table->set_header($header_nr++, get_lang('GroupSingle'), false);
 
+/*
 if (api_is_allowed_to_edit(null, true) && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
 
 } else {
     $table->set_column_filter(0, 'hide_field');
 }
+*/
 
 $hideFields = api_get_configuration_value('hide_user_field_from_list');
 if (!empty($hideFields)) {

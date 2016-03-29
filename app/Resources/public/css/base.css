@@ -5018,7 +5018,7 @@ div#chat-remote-video video {
     width: 450px !important;
 }
 .ui-accordion .ui-accordion-content-active{
-
+    overflow: visible;
 }
 .ui-jqgrid-view .ui-widget-content a{
   color:#666666;

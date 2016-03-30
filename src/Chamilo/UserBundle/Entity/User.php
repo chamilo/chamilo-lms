@@ -8,12 +8,14 @@ use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\UserBundle\Entity\BaseUser as BaseUser;
+//use Sonata\UserBundle\Entity\BaseUser as BaseUser;
+use Sonata\UserBundle\Model\User as BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Security\Core\User\UserInterface;
+//use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use FOS\UserBundle\Model\UserInterface;
 
 //use Chamilo\CoreBundle\Component\Auth;
 //use FOS\MessageBundle\Model\ParticipantInterface;
@@ -27,6 +29,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 //use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
 
 /**
+ *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
  *  name="user",
@@ -35,12 +38,11 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *      @ORM\Index(name="status", columns={"status"})
  *  }
  * )
- * //Vich\Uploadable
  * @UniqueEntity("username")
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
  *
  */
-class User// extends BaseUser //implements ParticipantInterface, ThemeUser
+class User extends BaseUser //implements ParticipantInterface, ThemeUser
 {
     const COURSE_MANAGER = 1;
     const TEACHER = 1;
@@ -70,42 +72,42 @@ class User// extends BaseUser //implements ParticipantInterface, ThemeUser
      *
      * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
      */
-    protected $username;
+    //protected $username;
 
     /**
      * @var string
      *
      * * @ORM\Column(name="username_canonical", type="string", length=100, nullable=false, unique=true)
      */
-    protected $usernameCanonical;
+    //protected $usernameCanonical;
 
     /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=100, nullable=false, unique=false)
      */
-    protected $email;
+    //protected $email;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lastname", type="string", length=60, nullable=true, unique=false)
      */
-    protected $lastname;
+    //protected $lastname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=60, nullable=true, unique=false)
      */
-    protected $firstname;
+    //protected $firstname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
      */
-    protected $password;
+    //protected $password;
 
     /**
      * @var string
@@ -119,7 +121,7 @@ class User// extends BaseUser //implements ParticipantInterface, ThemeUser
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    private $status = STUDENT;
+    private $status;
 
     /**
      * @var string
@@ -271,14 +273,14 @@ class User// extends BaseUser //implements ParticipantInterface, ThemeUser
     /**
      * @ORM\Column(type="string", length=255)
      */
-    protected $salt;
+    //protected $salt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
      */
-    protected $lastLogin;
+    //protected $lastLogin;
 
     /**
      * Random string sent to the user email address in order to verify it
@@ -286,14 +288,14 @@ class User// extends BaseUser //implements ParticipantInterface, ThemeUser
      * @var string
      * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
      */
-    protected $confirmationToken;
+    //protected $confirmationToken;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="password_requested_at", type="datetime", nullable=true, unique=false)
      */
-    protected $passwordRequestedAt;
+    //protected $passwordRequestedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
@@ -375,6 +377,8 @@ class User// extends BaseUser //implements ParticipantInterface, ThemeUser
     public function __construct()
     {
         parent::__construct();
+        $this->status = self::STUDENT;
+
 
         $this->salt = sha1(uniqid(null, true));
         $this->isActive = true;
@@ -1564,6 +1568,12 @@ class User// extends BaseUser //implements ParticipantInterface, ThemeUser
         return $this->getPasswordRequestedAt() instanceof \DateTime &&
         $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
+
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
 
 
 }

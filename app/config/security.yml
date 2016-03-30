@@ -59,9 +59,9 @@ security:
             context: user
             form_login:
                 provider: fos_userbundle
-                login_path:     /login
+                login_path:     /administration/login
                 use_forward:    false
-                check_path:     /login_check
+                check_path:     /administration/login_check
                 failure_path:   null
                 default_target_path: /
 #                success_handler: chamilo_core.listener.login_success_handler
@@ -72,7 +72,7 @@ security:
                 invalidate_session: false
 #                handlers: ['sonata.page.cms_manager_selector']
             anonymous: ~
-            switch_user: true
+            switch_user: false
             # activate different ways to authenticate
 
             # http_basic: ~

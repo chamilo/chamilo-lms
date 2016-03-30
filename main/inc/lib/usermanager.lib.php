@@ -39,12 +39,11 @@ class UserManager
     private static $encryptionMethod;
 
     /**
-     * The default constructor only instanciates an empty user object
+     * Constructor
      * @assert () === null
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -65,7 +64,6 @@ class UserManager
     public static function getManager()
     {
         $encoderFactory = self::getEncoderFactory();
-
         $userManager = new Chamilo\UserBundle\Entity\Manager\UserManager(
             $encoderFactory,
             new \FOS\UserBundle\Util\Canonicalizer(),
@@ -139,19 +137,21 @@ class UserManager
 
     /**
      * Validates the password
-     * @param string $password
-     * @param User   $user
      *
+     * @param $encoded
+     * @param $raw
+     * @param $salt
      * @return bool
      */
-    public static function isPasswordValid($password, User $user)
+    public static function isPasswordValid($encoded, $raw, $salt)
     {
-        $encoder = self::getEncoder($user);
-        $validPassword = $encoder->isPasswordValid(
-            $user->getPassword(),
+        //$encoder = self::getEncoder($user);
+        $encoder = new \Chamilo\UserBundle\Security\Encoder(self::getPasswordEncryption());
+        /*$user->getPassword(),
             $password,
-            $user->getSalt()
-        );
+            $user->getSalt()*/
+        $validPassword = $encoder->isPasswordValid($encoded, $raw, $salt);
+
 
         return $validPassword;
     }
@@ -279,7 +279,9 @@ class UserManager
         }
 
         if (empty($password)) {
-            Display::addFlash(Display::return_message(get_lang('ThisFieldIsRequired').': '.get_lang('Password') , 'warning'));
+            Display::addFlash(
+                Display::return_message(get_lang('ThisFieldIsRequired').': '.get_lang('Password'), 'warning')
+            );
 
             return false;
         }
@@ -328,7 +330,12 @@ class UserManager
         $userManager = self::getManager();
 
         /** @var User $user */
-        $user = $userManager->createUser();
+        //$user = $userManager->createUser();
+
+        $em = Database::getManager();
+
+        /** @var User $user */
+        $user = new User();
         $user
             ->setLastname($lastName)
             ->setFirstname($firstName)
@@ -349,8 +356,12 @@ class UserManager
         if (!empty($expirationDate)) {
             $user->setExpirationDate($expirationDate);
         }
+        var_dump($user->getUsername());
 
-        $userManager->updateUser($user, true);
+        $em->persist($user);
+        $em->flush();
+
+        //$userManager->updateUser($user);
         $userId = $user->getId();
 
         if (!empty($userId)) {

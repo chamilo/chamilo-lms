@@ -173,7 +173,7 @@ swiftmailer:
     spool:     { type: memory }
 
 doctrine_migrations:
-    dir_name: %kernel.root_dir%/../app/Migrations/V111
+    dir_name: %kernel.root_dir%/../app/Migrations/Schema/V111
     namespace: Application\Migrations\Schema\V111
     table_name: version
     name: Chamilo Migrations

@@ -100,6 +100,22 @@ class Version20160330103045 extends AbstractMigration
         $this->addSql('DROP INDEX user_sco_course_sv_stack ON track_stored_values_stack');
         $this->addSql('ALTER TABLE session_rel_user ADD duration INT DEFAULT NULL');
         $this->addSql('DROP INDEX user_sco_course_sv ON track_stored_values');
+
+        $this->addSql('DROP INDEX UNIQ_8D93D649F85E0677 ON user');
+        $this->addSql(
+            'ALTER TABLE user ADD email_canonical VARCHAR(255) NOT NULL, ADD enabled TINYINT(1) NOT NULL, ADD locked TINYINT(1) NOT NULL, ADD expired TINYINT(1) NOT NULL, ADD expires_at DATETIME DEFAULT NULL, ADD roles LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\', ADD credentials_expired TINYINT(1) NOT NULL, ADD credentials_expire_at DATETIME DEFAULT NULL, CHANGE username username VARCHAR(255) NOT NULL, CHANGE username_canonical username_canonical VARCHAR(255) NOT NULL, CHANGE email email VARCHAR(255) NOT NULL'
+        );
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649A0D96FBF ON user (email_canonical)');
+
+        $sql = "UPDATE user SET email_canonical = email";
+        $this->addSql($sql);
+
+        $sql = "UPDATE user SET roles = 'a:0:{}'";
+        $this->addSql($sql);
+
+        $sql = "UPDATE user SET username_canonical = username";
+        $this->addSql($sql);
+
     }
 
     /**

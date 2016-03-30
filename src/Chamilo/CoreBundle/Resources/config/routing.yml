@@ -91,12 +91,12 @@ web.img:
 #        _controller: chamilo_course.controller.tool:indexAction
 
 # Redirects /url/ to /url
-remove_trailing_slash:
-    path: /{url}
-    defaults: { _controller: ChamiloCoreBundle:Redirecting:removeTrailingSlash }
-    requirements:
-        url: .*/$
-        _method: GET
+#remove_trailing_slash:
+#    path: /{url}
+#    defaults: { _controller: ChamiloCoreBundle:Redirecting:removeTrailingSlash }
+#    requirements:
+#        url: .*/$
+#        _method: GET
 
 
 ## Course settings

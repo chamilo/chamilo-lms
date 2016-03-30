@@ -267,7 +267,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
         // Lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status
+        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status, salt
                 FROM $user_table
                 WHERE username = '".Database::escape_string($login)."'";
         $result = Database::query($sql);
@@ -331,14 +331,15 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $uData['auth_source'] == CAS_AUTH_SOURCE
             ) {
                 $validPassword = false;
-                $user = $userManager->findUserByUsername($login);
+                //$user = $userManager->findUserByUsername($login);
 
-                if ($user) {
+
                     $validPassword = UserManager::isPasswordValid(
+                        $uData['password'],
                         $password,
-                        $user
+                        $uData['salt']
                     );
-                }
+
 
                 // The authentication of this user is managed by Chamilo itself
                 //$password = api_get_encrypted_password(trim(stripslashes($password)));

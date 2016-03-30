@@ -2043,7 +2043,6 @@ div.admin_section h4 {
     float: left;
 }
 
-
 .ribbon .rib-success, .ribbon .ribbon-total-success{
     background-color: #768E00;
     background-image: -ms-linear-gradient(top, #9CB80A, #768E00);
@@ -2106,11 +2105,6 @@ div.admin_section h4 {
 .ribbon .rib::before {left: 0;}
 .ribbon .rib::after {right: 0;}
 
-
-.ribbon .success {
-
-}
-
 .ribbon .error {
     color: red;
 }
@@ -2129,28 +2123,30 @@ div.admin_section h4 {
 .exercise_save_now_button, .exercise_button{
     /* padding:5px; */
 }
-
-.time_container_warning {
-    background-color:#FFD700;
-    border:1px solid #B8860B;
-}
-
 /* Exercise clock*/
 .count_down {
     padding: 3px;
-    font-size:22px;
+    font-size:20px;
     font-weight:bold;
-    color:#222;
-    padding: 12px;
+    color:#2E75A3;
+    padding: 5px;
     text-align: center;
-    width:200px;
+    margin-bottom: 10px;
+    background: url(../../main/img/clock-exercise.png) no-repeat center center #FFF;
+    border: 1px solid #DDD;
+    border-radius: 5px;
 }
-
+.count_down.navbar-fixed-top{
+    border-radius: 0px;
+}
+.time_container_warning {
+    background: url(../../main/img/clock-exercise.png) no-repeat center center #FFD700;
+    border:1px solid #B8860B;
+}
 .red_alert {
     color:red;
     font-weight: bold;
 }
-
 #question_feedback {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -2165,7 +2161,6 @@ div.admin_section h4 {
     margin-top:5px;
     padding:5px;
 }
-
 .userportal-order-courses-link {
     background-color: #F9F9F9;
     border-radius: 10px 10px 10px 10px;
@@ -5023,7 +5018,7 @@ div#chat-remote-video video {
     width: 450px !important;
 }
 .ui-accordion .ui-accordion-content-active{
-
+    overflow: visible;
 }
 .ui-jqgrid-view .ui-widget-content a{
   color:#666666;

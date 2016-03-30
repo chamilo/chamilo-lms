@@ -7857,8 +7857,8 @@ function api_create_protected_dir($name, $parentDirectory)
  * @param string    sender e-mail
  * @param array     extra headers in form $headers = array($name => $value) to allow parsing
  * @param array     data file (path and filename)
- * @param array     data to attach a file (optional)
  * @param bool      True for attaching a embedded file inside content html (optional)
+ * @param array     Additional parameters
  * @return          returns true if mail was sent
  * @see             class.phpmailer.php
  */
@@ -7979,7 +7979,22 @@ function api_mail_html(
 
     // Attachment ...
     if (!empty($data_file)) {
-        $mail->AddAttachment($data_file['path'], $data_file['filename']);
+        $o = 0;
+        foreach ($data_file as $file_attach) {
+            if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
+                $mail->AddAttachment($file_attach['path'], $file_attach['filename']);
+            }
+            $o++;
+        }
+    } elseif (is_array($_FILES)) {
+        $data_file = $_FILES;
+        $o = 0;
+        foreach ($data_file as $file_attach) {
+            if (!empty($file_attach['tmp_name']) && !empty($file_attach['name'])) {
+                $mail->AddAttachment($file_attach['tmp_name'], $file_attach['name']);
+            }
+            $o++;
+        }
     }
 
     // Only valid addresses are accepted.

@@ -35,11 +35,79 @@
     },
     "require": {
         "php": ">=5.4",
+        "ext-intl": "*",
+        "ext-gd": "*",
         "ext-curl": "*",
+        "ext-zlib": "*",
+        "ext-xml": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+
+        "twig/twig": "1.*",
+        "twig/extensions": "~1.0",
+
+        "symfony/symfony": "2.8.*",
+        "symfony/intl": "^3.0",
+        "symfony/assetic-bundle": "~2.3",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "symfony/monolog-bundle": "~2.4",
+
+        "sensio/distribution-bundle": "~4.0",
+        "sensio/framework-extra-bundle": "^3.0.2",
+        "sensio/generator-bundle": "~2.4",
+        "incenteev/composer-parameter-handler": "~2.0",
+
+        "jms/serializer-bundle": "~0.12",
+        "doctrine/orm": "~2.4",
+        "doctrine/dbal": "~2.4",
+        "doctrine/doctrine-bundle": "~1.5",
+        "doctrine/migrations": "~1.0@dev",
+        "doctrine/doctrine-migrations-bundle": "*@dev",
+        "doctrine/doctrine-fixtures-bundle": "~2.2",
+        "doctrine/data-fixtures": "~1.0@dev",
+        "symfony-cmf/routing-bundle": "~1.1",
+        "stof/doctrine-extensions-bundle": "~1.0",
+        "gedmo/doctrine-extensions": "~2.3",
+
+        "sonata-project/easy-extends-bundle": "~2.1@dev",
+        "sonata-project/seo-bundle": "~2.0",
+        "sonata-project/doctrine-extensions": "~1@dev",
+        "sonata-project/intl-bundle": "~2.2@dev",
+        "sonata-project/admin-bundle": "~2.4@dev",
+        "sonata-project/doctrine-orm-admin-bundle": "~2.4@dev",
+        "sonata-project/notification-bundle": "~2.2@dev",
+        "sonata-project/block-bundle": "~2.3@dev",
+        "sonata-project/media-bundle": "~2.4@dev",
+        "sonata-project/user-bundle": "~2.2@dev",
+        "sonata-project/cache-bundle": "~2.1@dev",
+        "sonata-project/cache": "~1.0@dev",
+        "sonata-project/page-bundle": "~2.4@dev",
+        "sonata-project/core-bundle": "2.3.x-dev",
+        "sonata-project/formatter-bundle": "~2.4@dev",
+        "sonata-project/news-bundle": "~2.3@dev",
+        "sonata-project/datagrid-bundle": "~2.2@dev",
+        "sonata-project/exporter": "~1.3@dev",
+        "sonata-project/timeline-bundle": "~2.3@dev",
+        "sonata-project/classification-bundle": "~2.2@dev",
+        "sonata-project/comment-bundle": "~2.2@dev",
+        "sonata-project/sonata-composer": "dev-master",
+
+        "friendsofsymfony/comment-bundle": "~2.0@dev",
+
+        "egeloen/ckeditor-bundle": "~3.0",
+        "helios-ag/fm-elfinder-bundle": "~5",
+        "friendsofsymfony/jsrouting-bundle": "~1.5",
+
+
+        "michelf/php-markdown": "~1.4",
+        "knplabs/knp-markdown-bundle": "~1.3",
+
+
+
+
         "sabre/vobject": "~3.1",
         "toin0u/digitalocean": "~1.4",
-        "twig/twig": "1.*",
-        "michelf/php-markdown": "1.4.1",
+
         "emojione/emojione": "1.3.0",
         "zendframework/zend-config": "2.3.3",
         "ezyang/htmlpurifier": "4.6.0",
@@ -49,12 +117,7 @@
         "barryvdh/elfinder-builds": "2.1.0.3",
         "jbroadway/urlify": "1.0.3-stable",
         "monolog/monolog": "~1.0",
-        "doctrine/orm": "~2.2,>=2.2.3,<2.5",
-        "doctrine/migrations": "1.0.*@dev",
-        "symfony/doctrine-bridge": "2.6.4",
-        "symfony/validator": "2.6.4",
-        "symfony/filesystem": "~2.6",
-        "symfony/security": "~2.6",
+
         "ircmaxell/password-compat": "~1.0.4",
         "sylius/attribute": "0.13.0",
         "sylius/translation": "0.13.0",
@@ -77,28 +140,52 @@
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",
-        "behat/mink": "1.4.*@stable",
+        "behat/mink": "1.7.*@stable",
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*",
         "behat/mink-selenium2-driver": "*"
     },
     "scripts": {
-        "pre-install-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
-        ],
-        "pre-update-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
-        ],
-        "post-update-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
-        ],
-        "post-install-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
-        ]
+      "pre-install-cmd": [
+        "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
+      ],
+      "pre-update-cmd": [
+        "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
+      ],
+      "post-install-cmd": [
+        "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles",
+        "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+      ],
+      "post-update-cmd": [
+        "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles",
+        "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+      ]
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "1.10.x-dev"
-        }
+      "symfony-app-dir": "app",
+      "symfony-web-dir": "web",
+      "symfony-assets-install": "relative",
+      "incenteev-parameters": {
+        "file": "app/config/parameters.yml"
+      },
+      "branch-alias": {
+        "dev-master": "1.11.x-dev"
+      },
+      "asset-installer-paths": {
+        "bower-asset-library": "web/assets/"
+      }
+    },
+    "config": {
+      "component-dir": "web/assets"
     }
 }

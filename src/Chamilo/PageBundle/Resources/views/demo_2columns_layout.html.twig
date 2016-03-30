@@ -1,0 +1,38 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+{% extends 'SonataPageBundle::2columns_layout.html.twig' %}
+
+{% block sonata_page_body_tag %}
+    {{ parent() }}
+
+    {% include "SonataSeoBundle:Block:_facebook_sdk.html.twig" %}
+    {% include "SonataSeoBundle:Block:_twitter_sdk.html.twig" %}
+    {% include "SonataSeoBundle:Block:_pinterest_sdk.html.twig" %}
+
+{% endblock %}
+
+{% block sonata_page_javascripts %}
+    <script type="text/javascript">
+        var basket_update_confirmation_message = '{{ 'sonata_basket_update_confirmation'|trans({}, 'SonataDemoBundle')|escape('js') }}';
+    </script>
+
+    <script src="{{ asset('assetic/sonata_front_js.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block sonata_page_container %}
+    <div class="demonstration-bar">{{ 'sonata.demo.demonstration.message'|trans({}, 'SonataDemoBundle') }}</div>
+
+    <a href="https://github.com/sonata-project"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
+
+    {{ parent() }}
+{% endblock %}
+
+{% block sonata_page_breadcrumb %}{% endblock %}

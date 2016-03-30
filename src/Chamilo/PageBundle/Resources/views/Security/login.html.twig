@@ -1,0 +1,20 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends "SonataUserBundle:Security:base_login.html.twig" %}
+
+{% block fos_user_content %}
+    {% if app.request.session.get('sonata_basket_delivery_redirect') %}
+        {% include 'SonataBasketBundle:Basket:stepper.html.twig' with {step: 'identification'} %}
+    {% endif %}
+
+    {{ parent() }}
+{% endblock fos_user_content %}

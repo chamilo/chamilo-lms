@@ -1,0 +1,143 @@
+services:
+    sonata.admin.session:
+        class: Chamilo\CoreBundle\Admin\SessionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, audit: true, group: "LMS", label: "Session" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\Session
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.session_category:
+        class: Chamilo\CoreBundle\Admin\SessionCategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Session category" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\SessionCategory
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.career:
+        class: Chamilo\CoreBundle\Admin\CareerAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Career" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\Career
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.promotion:
+        class: Chamilo\CoreBundle\Admin\PromotionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Promotion" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\Promotion
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.session_rel_course:
+        class: Chamilo\CoreBundle\Admin\SessionRelCourseAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "SessionRelCourseAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\SessionRelCourse
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.session_rel_user:
+            class: Chamilo\CoreBundle\Admin\SessionRelUserAdmin
+            tags:
+                - { name: sonata.admin, manager_type: orm, group: "LMS", label: "SessionRelUserAdmin" }
+            arguments:
+                - ~
+                - Chamilo\CoreBundle\Entity\SessionRelUser
+                - ~
+            calls:
+                - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.access_url:
+        class: Chamilo\CoreBundle\Admin\AccessUrlAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "AccessUrlAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\AccessUrl
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.access_url_rel_course:
+        class: Chamilo\CoreBundle\Admin\AccessUrlRelCourseAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "AccessUrlRelCourseAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\AccessUrlRelCourse
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.settings_current:
+        class: Chamilo\CoreBundle\Admin\SettingsCurrentAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Settings" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\SettingsCurrent
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.user_group:
+        class: Chamilo\CoreBundle\Admin\UserGroupAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "UserGroupAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\UserGroup
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.user_group_rel_user:
+        class: Chamilo\CoreBundle\Admin\UsergroupRelUser
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "UsergroupRelUser" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\UsergroupRelUser
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.tool:
+        class: Chamilo\CoreBundle\Admin\ToolAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Tool" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\Tool
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.tool_resource_rights:
+        class: Chamilo\CoreBundle\Admin\ToolResourceRightsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "ToolResourceRights" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\ToolResourceRights
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]

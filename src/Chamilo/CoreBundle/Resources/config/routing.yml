@@ -1,0 +1,113 @@
+index:
+    resource: '@ChamiloCoreBundle/Controller/IndexController.php'
+    type:     annotation
+
+userportal:
+    resource: '@ChamiloCoreBundle/Controller/UserPortalController.php'
+    type:     annotation
+    prefix:   /userportal
+
+front:
+    resource: '@ChamiloCoreBundle/Controller/FrontController.php'
+    type:     annotation
+    prefix:   /front
+
+user:
+    resource: '@ChamiloCoreBundle/Controller/User/UserController.php'
+    type:     annotation
+    prefix:   /user
+
+course:
+    resource: '@ChamiloCoreBundle/Controller/CourseController.php'
+    type:     annotation
+    prefix:   /course
+
+legacy_javascript:
+    resource: '@ChamiloCoreBundle/Controller/JavascriptLegacyController.php'
+    type:     annotation
+    prefix:   /js
+
+# Legacy routes
+main:
+    path: /main/{name}
+    defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
+    requirements:
+      name: .+
+
+# web url shortcuts for legacy templates
+web.ajax:
+    path: main/inc/ajax/
+
+web.main:
+    path: main/
+
+web.img:
+    path: bundles/chamilocore/img/
+
+# Core controllers
+core_admin:
+    resource: '@ChamiloCoreBundle/Controller/Admin'
+    type: annotation
+    prefix: /admin
+
+course_url:
+    path: courses
+
+core_tool:
+    resource: '@ChamiloCourseBundle/Controller'
+    type: annotation
+    prefix: /courses/{course}/
+
+core_tool_document:
+    pattern: /courses/{course}/document/{file}
+    defaults:
+        _controller: ChamiloCoreBundle:Resource:getDocument
+    requirements:
+        file: .+ # allow "/" in {file}
+
+#chamilo_course_tool_intro_create:
+#    path: /courses/{course}/introduction/{tool}/create/
+#    methods: [GET, POST]
+#    defaults:
+#        _controller: ChamiloCourseBundle:Introduction/Introduction:create
+#        _sylius:
+#            template: ChamiloCourseBundle:CToolIntro:create2.html.twig
+#            form: Chamilo\CourseBundle\Form\Type\CToolIntroType
+#
+#
+#    requirements:
+#        tool: "[a-zA-Z_]+"
+
+#chamilo_course_tool_intro_update:
+#    path: /courses/{course}/introduction/{tool}/update/
+#    methods: [GET]
+#    defaults:
+#        _controller: chamilo_course.controller.c_tool_intro:updateAction
+#
+#chamilo_course_tool_list:
+#    path: /courses/{course}/introduction
+#    methods: [GET]
+#    defaults:
+#        _controller: chamilo_course.controller.tool:indexAction
+
+# Redirects /url/ to /url
+remove_trailing_slash:
+    path: /{url}
+    defaults: { _controller: ChamiloCoreBundle:Redirecting:removeTrailingSlash }
+    requirements:
+        url: .*/$
+        _method: GET
+
+
+## Course settings
+#chamilo_course_settings:
+#    pattern: /courses/{course}/settings/{namespace}
+#    defaults:
+#        _controller: ChamiloCourseBundle:Settings:update
+#        template: ChamiloCourseBundle:Settings:default.html.twig
+##
+#chamilo_course_tool_index:
+#    pattern: /courses/{course}/tools
+#    methods: [GET, POST, HEAD, DELETE]
+#    defaults:
+#        _controller: chamilo_course.controller.tool:indexAction

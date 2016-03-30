@@ -1,0 +1,230 @@
+parameters:
+    chamilo_core.entity.manager.course_manager.class: Chamilo\CoreBundle\Entity\Manager\CourseManager
+    chamilo_core.entity.course: Chamilo\CoreBundle\Entity\Course
+
+    chamilo_core.entity.manager.session_manager.class: Chamilo\CoreBundle\Entity\Manager\SessionManager
+    chamilo_core.entity.session: Chamilo\CoreBundle\Entity\Session
+
+    chamilo_core.entity.manager.access_url_manager.class: Chamilo\CoreBundle\Entity\Manager\AccessUrlManager
+    chamilo_core.entity.access_url: Chamilo\CoreBundle\Entity\AccessUrl
+
+services:
+    # Managers
+    chamilo_core.entity.manager.course_manager:
+        class: %chamilo_core.entity.manager.course_manager.class%
+        arguments: [%chamilo_core.entity.course%, @doctrine]
+
+    chamilo_core.entity.manager.session_manager:
+        class: %chamilo_core.entity.manager.session_manager.class%
+        arguments: [%chamilo_core.entity.session%, @doctrine]
+
+    chamilo_core.manager.access_url:
+        class: %chamilo_core.entity.manager.access_url_manager.class%
+        arguments: [%chamilo_core.entity.access_url%, @doctrine]
+
+    # Chamilo Twig extension
+    twig.extension.chamilo_extension:
+        class: Chamilo\CoreBundle\Twig\Extension\ChamiloExtension
+        tags:
+            - { name: twig.extension }
+
+    # Security
+
+    # Chamilo custom password encoder
+    chamilo_user.security.encoder:
+        class: Chamilo\UserBundle\Security\Encoder
+        arguments: ['%password_encryption%']
+#
+#    # Course voter checks if a user has permissions to do actions in a course
+#    chamilo_core.security.authorization.voter.course_voter:
+#        class: Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter
+#        arguments: [ @doctrine.orm.entity_manager, @chamilo_core.entity.manager.course_manager, @service_container]
+#        public: false
+#        tags:
+#           - { name: security.voter }
+#
+#    # Session voter, checks if a user has permissions to do actions in a session
+#    chamilo_core.security.authorization.voter.session_voter:
+#        class: Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter
+#        arguments: [ @doctrine.orm.entity_manager, @chamilo_core.entity.manager.course_manager, @service_container]
+#        public: false
+#        tags:
+#           - { name: security.voter }
+#
+#    # Resource node voter, checks if a user has permissions to do actions
+#    chamilo_core.security.authorization.voter.resource_node_voter:
+#        class: Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter
+#        public: false
+#        arguments: [ @service_container ]
+#        tags:
+#            - { name: security.voter }
+
+    # User image naming
+#    chamilo_core.naming.user_image:
+#        class: Chamilo\CoreBundle\Naming\UserImage
+
+    # Form types
+
+    # Custom yes/no type, use in the platform settings
+    chamilo_core.form.type.yes_no:
+        class: Chamilo\CoreBundle\Form\Type\YesNoType
+        tags:
+            - { name: form.type, alias: yes_no }
+
+#    # Extra field attribute services
+#    chamilo_user.form.type.attribute_value_type:
+#        class: Chamilo\UserBundle\Form\Type\AttributeValueType
+#        arguments: [Chamilo\CoreBundle\Entity\ExtraFieldValues, ["registration"], "user", @sylius.repository.subject_name_attribute_value]
+#        tags:
+#            - { name: form.type, alias: chamilo_user_extra_field_value }
+##
+#
+#    chamilo_user.form.type.attribute_type:
+#        class: Chamilo\UserBundle\Form\Type\AttributeType
+#        arguments: [Chamilo\CoreBundle\Entity\ExtraField, ["registration"], "user"]
+##        arguments: [%sylius.attribute.attribute_types%]
+#        tags:
+#            - { name: form.type, alias: chamilo_user_attribute_type }
+#
+#    chamilo_user.form.type.attribute_choice_type:
+#        class: Chamilo\UserBundle\Form\Type\AttributeTypeChoiceType
+#        arguments: [%sylius.attribute.attribute_types%]
+#        tags:
+#            - { name: form.type, alias: chamilo_user_attribute_choice }
+
+    # html editor
+    chamilo_core.html_editor:
+        class: Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor
+        arguments: [@translator.default, @router]
+
+    # Listeners
+
+#    chamilo.doctrine.entity_listener_resolver:
+#        class: Chamilo\CoreBundle\Doctrine\EntityListenerResolver
+#        arguments: [ "@service_container" ]
+
+    # Check if users are online
+#    chamilo_core.listener.online:
+#        class: Chamilo\CoreBundle\EventListener\OnlineListener
+#        arguments: [@security.context, @doctrine.orm.entity_manager ]
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.controller, method: onCoreController }
+
+    # When Course entity is loaded
+#    chamilo_core.listener.course:
+#        class: Chamilo\CoreBundle\Entity\Listener\CourseListener
+#        arguments: [ "@chamilo_course.tool_chain" ]
+#        tags:
+#            - { name: doctrine.orm.entity_listener }
+
+    # When Session entity is loaded
+#    chamilo_core.listener.session:
+#        class: Chamilo\CoreBundle\Entity\Listener\SessionListener
+#        tags:
+#            - { name: doctrine.orm.entity_listener }
+#
+#    # Setting legacy variables
+#    chamilo_core.listener.legacy:
+#        class: Chamilo\CoreBundle\EventListener\LegacyListener
+#        arguments: [@service_container]
+#        tags:
+#          - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+#          - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+#          - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    # Setting locale
+#    chamilo_core.listener.locale:
+#        class: Chamilo\CoreBundle\EventListener\LocaleListener
+#        arguments: ["%kernel.default_locale%", "@service_container"]
+#        tags:
+#            - { name: kernel.event_subscriber }
+
+    # Setting user and platform locale
+#    chamilo_core.listener.user_locale_listener:
+#        class: Chamilo\CoreBundle\EventListener\UserLocaleListener
+#        arguments: ["@session", "@chamilo.settings.manager"]
+#        tags:
+#            - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
+##            - { name: kernel.event_listener, event: kernel.request, method: setLocaleForUnauthenticatedUser}
+#
+#    # Settings listener
+#    chamilo_core.listener.settings:
+#        class: Chamilo\CoreBundle\EventListener\SettingListener
+#        arguments: [@service_container]
+#        tags:
+#            - { name: kernel.event_listener, event: sylius.settings.pre_save, method: onSettingPreSave }
+#
+#    # Menu
+#    chamilo_core.listener.navbar_menu_listener:
+#        class: Chamilo\CoreBundle\EventListener\MenuListener
+#        arguments: [@service_container]
+#        tags:
+#            - { name: kernel.event_listener, event: theme.sidebar_setup_menu_knp, method: onSetupMenu }
+#            - { name: kernel.event_listener, event: theme.breadcrumb, method: onSetupMenu }
+#
+#    # Show the user information in the topbar
+#    chamilo_core.listener.navbar_user_listener:
+#        class: Chamilo\CoreBundle\EventListener\ShowUserListener
+#        arguments: [@service_container]
+#        tags:
+#            - { name: kernel.event_listener, event: theme.navbar_user, method: onShowUser }
+#            - { name: kernel.event_listener, event: theme.sidebar_user, method: onShowUser }
+#
+#    # Loads the message notifications in the top bar
+#    chamilo_core.listener.message_listener:
+#        class: Chamilo\CoreBundle\EventListener\MessageListener
+#        arguments: [@service_container]
+#        tags:
+#            - { name: kernel.event_listener, event: theme.messages, method: onListMessages }
+#
+#    # Login listener - When user logs in
+#    chamilo_core.listener.login_success_handler:
+#        class: Chamilo\CoreBundle\EventListener\LoginSuccessHandler
+#        arguments:  [@router, @security.authorization_checker]
+#
+#    # Logout listener - When user logs out
+#    chamilo_core.listener.logout_success_handler:
+#        class: Chamilo\CoreBundle\EventListener\LogoutSuccessHandler
+#        arguments:  [@router, @security.authorization_checker, @security.token_storage]
+#
+#    # Menus
+#
+#    # Side bar menu
+#    chamilo_core.menu.simple_menu:
+#        class: Chamilo\CoreBundle\Menu\SimpleMenuBuilder
+#        arguments: [@service_container]
+#
+#    # Main nav bar
+#    chamilo_core.menu.nav_builder:
+#        class: Chamilo\CoreBundle\Menu\NavBuilder
+#        arguments: [@knp_menu.factory, @router]
+#        tags:
+#         - { name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav }
+#
+#    chamilo_core.menu.course_menu_builder:
+#        class: Chamilo\CoreBundle\Menu\CourseMenuBuilder
+#        arguments: [@knp_menu.factory, @chamilo_core.entity.manager.course_manager, @router]
+#
+#    # Course block
+#    chamilo_core.block.course:
+#        class: Chamilo\CoreBundle\Block\CourseBlockService
+#        arguments: [chamilo_core.block.course, @templating]
+#        tags:
+#            - { name: sonata.block }
+#
+#    # Skill block
+#    chamilo_core.block.skill:
+#        class: Chamilo\CoreBundle\Block\SkillBlockService
+#        arguments: [chamilo_core.block.skill, @templating ]
+#        tags:
+#            - { name: sonata.block }
+#
+#    # Breadcrumb block
+#    chamilo_core.block.breadcrumb:
+#        class: Chamilo\CoreBundle\Block\BreadcrumbBlockService
+#        arguments: ["chamilo_core.block.breadcrumb", "breadcrumb", @templating, @knp_menu.menu_provider, @knp_menu.factory]
+#        tags:
+#            - { name: sonata.block }
+#            - { name: sonata.breadcrumb }
+
+

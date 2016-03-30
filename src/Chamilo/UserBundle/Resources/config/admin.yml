@@ -1,0 +1,15 @@
+parameters:
+    sonata.user.admin.groupname: sonata_user
+    sonata.user.admin.label_catalogue: ChamiloUserBundle
+    sonata.user.admin.groupicon: '<i class=''fa fa-users''></i>'
+
+services:
+    sonata.user.admin.user:
+        class: Chamilo\UserBundle\Admin\UserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, audit:true, group: 'LMS', label: users, label_catalogue: '%sonata.user.admin.label_catalogue%', label_translator_strategy: sonata.admin.label.strategy.underscore, icon: '%sonata.user.admin.groupicon%' }
+
+        arguments: ['', Chamilo\UserBundle\Entity\User, '%sonata.user.admin.user.controller%']
+        calls:
+            - [setUserManager, ['@fos_user.user_manager']]
+            - [setTranslationDomain, ['%sonata.user.admin.user.translation_domain%']]

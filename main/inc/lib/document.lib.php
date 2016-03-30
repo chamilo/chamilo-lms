@@ -2815,6 +2815,11 @@ class DocumentManager
 
             if ($upload_ok) {
                 // File got on the server without problems, now process it
+                if ($title) {
+                    $titleAndExt = explode('.', $files[$fileKey]['name']);
+                    $ext = end($titleAndExt);
+                    $files[$fileKey]['name'] = $title.'.'.$ext;
+                }
                 $new_path = handle_uploaded_document(
                     $course_info,
                     $files[$fileKey],

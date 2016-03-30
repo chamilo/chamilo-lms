@@ -370,7 +370,7 @@ class UserManager
             Database::query($sql);
 
             if ($isAdmin) {
-                UserManager::add_user_as_admin($userId);
+                UserManager::add_user_as_admin($user);
             }
 
             if (api_get_multiple_access_url()) {
@@ -4762,16 +4762,22 @@ EOF;
     }
 
     /**
-     * @param int $userId
+     * @param User $user
      */
-    static function add_user_as_admin($userId)
+    static function add_user_as_admin(User $user)
     {
         $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
-        $userId = intval($userId);
+        if ($user) {
+            $userId = $user->getId();
 
-        if (!self::is_admin($userId)) {
-            $sql = "INSERT INTO $table_admin SET user_id = $userId";
-            Database::query($sql);
+            if (!self::is_admin($userId)) {
+                $sql = "INSERT INTO $table_admin SET user_id = $userId";
+                Database::query($sql);
+            }
+
+            $user->addRole('ROLE_ADMIN');
+            self::getManager()->updateUser($user, true);
+            exit;
         }
     }
 

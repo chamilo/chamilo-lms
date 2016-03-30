@@ -58,7 +58,7 @@ sonata_user_admin_security_logout:
 
 _admin:
     resource: routing_admin.yml
-    prefix:   /administration
+    prefix:   /
 
 #_api:
 #    resource: routing_api.yml

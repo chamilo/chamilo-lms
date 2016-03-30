@@ -1546,6 +1546,18 @@ function api_get_user_info(
 }
 
 /**
+ * @param int $userId
+ * @return User
+ */
+function api_get_user_entity($userId)
+{
+    /** @var \Chamilo\UserBundle\Repository\UserRepository $repo */
+    $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
+
+    return $repo->find($userId);
+}
+
+/**
  * Finds all the information about a user from username instead of user id
  * @param string $username
  * @return array $user_info array user_id, lastname, firstname, username, email

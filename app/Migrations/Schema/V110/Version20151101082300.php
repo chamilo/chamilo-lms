@@ -252,7 +252,6 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $sessionRelUser->addColumn('moved_to', Type::INTEGER)->setNotnull(false);
         $sessionRelUser->addColumn('moved_status', Type::INTEGER)->setNotnull(false);
         $sessionRelUser->addColumn('moved_at', Type::DATETIME)->setNotnull(false);
-        $sessionRelUser->addColumn('duration', Type::INTEGER)->setNotnull(false);
 
         $sessionRelUser->addIndex(['session_id']);
         $sessionRelUser->addIndex(['user_id']);

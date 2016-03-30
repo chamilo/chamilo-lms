@@ -6,7 +6,7 @@ sonata_admin:
     security:
         handler: sonata.admin.security.handler.role
     title:      Chamilo #%sonata_admin.title%
-    title_logo: bundles/chamilocore/css/themes/chamilo/images/header-logo.png #%sonata_admin.logo_title%
+    title_logo: css/themes/chamilo/images/header-logo.png #%sonata_admin.logo_title%
     options:
         html5_validate: false # does not use html5 validation
         pager_links: 5 # pager max links to display
@@ -26,7 +26,7 @@ sonata_admin:
         list:    SonataAdminBundle:CRUD:list.html.twig
         show:    SonataAdminBundle:CRUD:show.html.twig
         edit:    SonataAdminBundle:CRUD:edit.html.twig
-        user_block: ChamiloCoreBundle:Admin:admin_topnav.html.twig
+#        user_block: ChamiloCoreBundle:Admin:admin_topnav.html.twig
 
     extensions:
 #        cmf_core.admin_extension.translatable:
@@ -43,8 +43,8 @@ sonata_admin:
     dashboard:
         blocks:
             - { position: left, type: sonata.admin.block.admin_list }
-            - { position: right, type: sonata.timeline.block.timeline, settings: { context: SONATA_ADMIN, max_per_page: 25, template: 'ChamiloTimelineBundle:Block:timeline.html.twig',}}
-            - { position: right, type: sonata.admin_doctrine_orm.block.audit}
+#            - { position: right, type: sonata.timeline.block.timeline, settings: { context: SONATA_ADMIN, max_per_page: 25, template: 'ChamiloTimelineBundle:Block:timeline.html.twig',}}
+#            - { position: right, type: sonata.admin_doctrine_orm.block.audit}
 
 #            - { position: center, type: sonata.block.service.text, settings: { content: "<h2>Welcome!</h2> You can customize this dashboard by editing the sonata_admin.yml file. The current dashboard presents the recent items from the NewsBundle and a timeline with the latest action"} }
             #- { position: center, type: sonata.news.block.recent_posts, settings: { title: Recent Posts, number: 7, mode: admin }}
@@ -105,7 +105,7 @@ sonata_admin:
                 #icon:  '<i class="fa fa-play-circle"></i>'
                 label_catalogue: SonataAdminBundle
                 items:
-                    - sonata.admin.course
+#                    - sonata.admin.course
                     - sonata.admin.course_category
                     - sonata.admin.course_request
                     - sonata.admin.c_group_info

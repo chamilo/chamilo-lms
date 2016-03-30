@@ -10,6 +10,7 @@ app/cache/*
 /app/config/events.conf.php
 /app/config/mail.conf.php
 /app/config/portfolio.conf.php
+/app/config/profile.conf.php
 /app/config/configuration.php
 
 # Courses

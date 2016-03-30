@@ -1,0 +1,19 @@
+<div class="dropdown">
+    <button type="button" id="dropdownMenu1" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true">
+        <span class="lang-sm lang-lbl-full"
+              lang="{{ app.request.locale }}"></span> <span
+                class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    {% for locale in locales %}
+        <li>
+        <a href="{{ locale.link }}"
+           title="{{ locale.locale_target_language }}">
+            <span class="lang-sm lang-lbl-full" lang="{{ locale.locale }}"></span>
+            {{ locale.locale_target_language }}
+        </a>
+        </li>
+    {% endfor %}
+    </ul>
+</div>

@@ -3,7 +3,6 @@
 
 namespace Chamilo\UserBundle\Entity;
 
-//use Chamilo\CoreBundle\Entity\UserFieldValues;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,7 +40,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
  *
  */
-class User extends BaseUser //implements ParticipantInterface, ThemeUser
+class User// extends BaseUser //implements ParticipantInterface, ThemeUser
 {
     const COURSE_MANAGER = 1;
     const TEACHER = 1;

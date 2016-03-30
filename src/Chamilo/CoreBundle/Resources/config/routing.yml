@@ -1,38 +1,38 @@
-index:
-    resource: '@ChamiloCoreBundle/Controller/IndexController.php'
-    type:     annotation
-
-userportal:
-    resource: '@ChamiloCoreBundle/Controller/UserPortalController.php'
-    type:     annotation
-    prefix:   /userportal
-
-front:
-    resource: '@ChamiloCoreBundle/Controller/FrontController.php'
-    type:     annotation
-    prefix:   /front
-
-user:
-    resource: '@ChamiloCoreBundle/Controller/User/UserController.php'
-    type:     annotation
-    prefix:   /user
-
-course:
-    resource: '@ChamiloCoreBundle/Controller/CourseController.php'
-    type:     annotation
-    prefix:   /course
-
-legacy_javascript:
-    resource: '@ChamiloCoreBundle/Controller/JavascriptLegacyController.php'
-    type:     annotation
-    prefix:   /js
+#index:
+#    resource: '@ChamiloCoreBundle/Controller/IndexController.php'
+#    type:     annotation
+#
+#userportal:
+#    resource: '@ChamiloCoreBundle/Controller/UserPortalController.php'
+#    type:     annotation
+#    prefix:   /userportal
+#
+#front:
+#    resource: '@ChamiloCoreBundle/Controller/FrontController.php'
+#    type:     annotation
+#    prefix:   /front
+#
+#user:
+#    resource: '@ChamiloCoreBundle/Controller/User/UserController.php'
+#    type:     annotation
+#    prefix:   /user
+#
+#course:
+#    resource: '@ChamiloCoreBundle/Controller/CourseController.php'
+#    type:     annotation
+#    prefix:   /course
+#
+#legacy_javascript:
+#    resource: '@ChamiloCoreBundle/Controller/JavascriptLegacyController.php'
+#    type:     annotation
+#    prefix:   /js
 
 # Legacy routes
-main:
-    path: /main/{name}
-    defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
-    requirements:
-      name: .+
+#main:
+#    path: /main/{name}
+#    defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
+#    requirements:
+#      name: .+
 
 # web url shortcuts for legacy templates
 web.ajax:
@@ -45,25 +45,25 @@ web.img:
     path: bundles/chamilocore/img/
 
 # Core controllers
-core_admin:
-    resource: '@ChamiloCoreBundle/Controller/Admin'
-    type: annotation
-    prefix: /admin
-
-course_url:
-    path: courses
-
-core_tool:
-    resource: '@ChamiloCourseBundle/Controller'
-    type: annotation
-    prefix: /courses/{course}/
-
-core_tool_document:
-    pattern: /courses/{course}/document/{file}
-    defaults:
-        _controller: ChamiloCoreBundle:Resource:getDocument
-    requirements:
-        file: .+ # allow "/" in {file}
+#core_admin:
+#    resource: '@ChamiloCoreBundle/Controller/Admin'
+#    type: annotation
+#    prefix: /admin
+#
+#course_url:
+#    path: courses
+#
+#core_tool:
+#    resource: '@ChamiloCourseBundle/Controller'
+#    type: annotation
+#    prefix: /courses/{course}/
+#
+#core_tool_document:
+#    pattern: /courses/{course}/document/{file}
+#    defaults:
+#        _controller: ChamiloCoreBundle:Resource:getDocument
+#    requirements:
+#        file: .+ # allow "/" in {file}
 
 #chamilo_course_tool_intro_create:
 #    path: /courses/{course}/introduction/{tool}/create/

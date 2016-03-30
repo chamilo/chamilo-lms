@@ -11,93 +11,93 @@ assetic:
         yui_css: { jar: "%kernel.root_dir%/../bin/yuicompressor.jar" }
 
     assets:
-        chamilo_bootstrap_css:
-            inputs:
-                - bundles/chamilocore/components/bootstrap/dist/css/bootstrap.min.css
-            filters:
-                - cssrewrite
-        chamilo_font_awesome_css:
-            inputs:
-                - bundles/chamilocore/components/fontawesome/css/font-awesome.min.css
-            filters:
-                - cssrewrite
-        chamilo_ionicons_css:
-            inputs:
-                - bundles/chamilocore/components/ionicons/css/ionicons.css
-            filters:
-                - cssrewrite
-
-        chamilo_css:
-            inputs:
-                - @chamilo_bootstrap_css
-                - @chamilo_font_awesome_css
-                - @chamilo_ionicons_css
-                - bundles/chamilocore/components/fullcalendar/dist/fullcalendar.min.css
-                - bundles/chamilocore/components/chosen-bower/chosen.css
-                - bundles/chamilocore/components/jquery-ui/themes/cupertino/jquery-ui.min.css
-                - bundles/chamilocore/components/bootflat/css/bootflat.css
-                - bundles/chamilocore/components/jqgrid/css/ui.jqgrid.css
-                - bundles/chamilocore/components/select2/dist/css/select2.css
-                - bundles/chamilocore/js/tag/style.css
-                - bundles/chamilocore/components/jquery-file-upload/css/jquery.fileupload.css
-                - bundles/chamilocore/components/jquery-file-upload/css/jquery.fileupload-ui.css
-                - bundles/chamilocore/components/bootstrap-language/languages.css
-                - bundles/chamilocore/css/grid.css
-
-#                - bundles/chamilocore/components/select2/select2-bootstrap.css
-#                - bundles/chamilocore/components/adminlte/css/jvectormap/*
-#                - bundles/chamilocore/components/adminlte/css/morris/*
-#                - bundles/chamilocore/components/adminlte/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.css
-#                - bundles/chamilocore/components/adminlte/css/bootstrap-slider/slider.css
-#                - bundles/chamilocore/components/adminlte/css/colorpicker/bootstrap-colorpicker.css
-#                - bundles/chamilocore/components/adminlte/css/datatables/dataTables.bootstrap.css
-#                - bundles/chamilocore/components/adminlte/css/daterangepicker/daterangepicker-bs3.css
-#                - bundles/chamilocore/components/adminlte/css/iCheck/all.css
-#                - bundles/chamilocore/components/adminlte/css/ionslider/ion.rangeSlider.css
-#                - bundles/chamilocore/components/adminlte/css/timepicker/bootstrap-timepicker.css
-                - bundles/chamilocore/components/bootstrap-daterangepicker/daterangepicker-bs3.css
-                - bundles/chamilocore/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css
-                - bundles/chamilocore/components/adminlte/dist/css/skins/_all-skins.min.css
-                - bundles/chamilocore/components/adminlte/dist/css/AdminLTE.css
-            filters:
-                - cssrewrite
-            output: js/chamilo.css
-
-        chamilo_js:
-            inputs:
-                - bundles/chamilocore/components/jquery/dist/jquery.js
-                - bundles/chamilocore/components/jquery-ui/jquery-ui.min.js
-#                - @bootstrap_js
-                - bundles/chamilocore/components/bootstrap/dist/js/bootstrap.min.js
-                - bundles/chamilocore/components/chosen-bower/chosen.jquery.js
-#                - @moment_js
-                - bundles/chamilocore/components/moment/moment.js
-                - bundles/chamilocore/components/fullcalendar/dist/fullcalendar.min.js
-                - bundles/chamilocore/components/jqgrid/js/jquery.jqGrid.js
-                - bundles/chamilocore/components/select2/dist/js/select2.js
-                - bundles/chamilocore/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
-                - bundles/chamilocore/components/jquery.scrollbar/jquery.scrollbar.js
-                - bundles/chamilocore/components/mediaelement/build/mediaelement-and-player.js
-                - bundles/chamilocore/js/upload.js
-                - bundles/chamilocore/js/pear/qfamsHandler.js
-                - bundles/chamilocore/components/image-map-resizer/js/imageMapResizer.js
-
-                - bundles/chamilocore/components/blueimp-load-image/js/load-image.all.min.js
-                - bundles/chamilocore/components/blueimp-canvas-to-blob/js/canvas-to-blob.min.js
-
-                - bundles/chamilocore/js/tag/jquery.fcbkcomplete.js
-
-                - bundles/chamilocore/components/jquery-file-upload/js/jquery.iframe-transport.js
-                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload.js
-                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload-process.js
-                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload-image.js
-                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload-audio.js
-                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload-video.js
-                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload-validate.js
-                - bundles/chamilocore/components/bootstrap-daterangepicker/daterangepicker.js
-                - bundles/chamilocore/components/adminlte/dist/js/app.js
-
-            output: js/chamilo.js
+#        chamilo_bootstrap_css:
+#            inputs:
+#                - bundles/chamilocore/components/bootstrap/dist/css/bootstrap.min.css
+#            filters:
+#                - cssrewrite
+#        chamilo_font_awesome_css:
+#            inputs:
+#                - bundles/chamilocore/components/fontawesome/css/font-awesome.min.css
+#            filters:
+#                - cssrewrite
+#        chamilo_ionicons_css:
+#            inputs:
+#                - bundles/chamilocore/components/ionicons/css/ionicons.css
+#            filters:
+#                - cssrewrite
+#
+#        chamilo_css:
+#            inputs:
+#                - @chamilo_bootstrap_css
+#                - @chamilo_font_awesome_css
+#                - @chamilo_ionicons_css
+#                - bundles/chamilocore/components/fullcalendar/dist/fullcalendar.min.css
+#                - bundles/chamilocore/components/chosen-bower/chosen.css
+#                - bundles/chamilocore/components/jquery-ui/themes/cupertino/jquery-ui.min.css
+#                - bundles/chamilocore/components/bootflat/css/bootflat.css
+#                - bundles/chamilocore/components/jqgrid/css/ui.jqgrid.css
+#                - bundles/chamilocore/components/select2/dist/css/select2.css
+#                - bundles/chamilocore/js/tag/style.css
+#                - bundles/chamilocore/components/jquery-file-upload/css/jquery.fileupload.css
+#                - bundles/chamilocore/components/jquery-file-upload/css/jquery.fileupload-ui.css
+#                - bundles/chamilocore/components/bootstrap-language/languages.css
+#                - bundles/chamilocore/css/grid.css
+#
+##                - bundles/chamilocore/components/select2/select2-bootstrap.css
+##                - bundles/chamilocore/components/adminlte/css/jvectormap/*
+##                - bundles/chamilocore/components/adminlte/css/morris/*
+##                - bundles/chamilocore/components/adminlte/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.css
+##                - bundles/chamilocore/components/adminlte/css/bootstrap-slider/slider.css
+##                - bundles/chamilocore/components/adminlte/css/colorpicker/bootstrap-colorpicker.css
+##                - bundles/chamilocore/components/adminlte/css/datatables/dataTables.bootstrap.css
+##                - bundles/chamilocore/components/adminlte/css/daterangepicker/daterangepicker-bs3.css
+##                - bundles/chamilocore/components/adminlte/css/iCheck/all.css
+##                - bundles/chamilocore/components/adminlte/css/ionslider/ion.rangeSlider.css
+##                - bundles/chamilocore/components/adminlte/css/timepicker/bootstrap-timepicker.css
+#                - bundles/chamilocore/components/bootstrap-daterangepicker/daterangepicker-bs3.css
+#                - bundles/chamilocore/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css
+#                - bundles/chamilocore/components/adminlte/dist/css/skins/_all-skins.min.css
+#                - bundles/chamilocore/components/adminlte/dist/css/AdminLTE.css
+#            filters:
+#                - cssrewrite
+#            output: js/chamilo.css
+#
+#        chamilo_js:
+#            inputs:
+#                - bundles/chamilocore/components/jquery/dist/jquery.js
+#                - bundles/chamilocore/components/jquery-ui/jquery-ui.min.js
+##                - @bootstrap_js
+#                - bundles/chamilocore/components/bootstrap/dist/js/bootstrap.min.js
+#                - bundles/chamilocore/components/chosen-bower/chosen.jquery.js
+##                - @moment_js
+#                - bundles/chamilocore/components/moment/moment.js
+#                - bundles/chamilocore/components/fullcalendar/dist/fullcalendar.min.js
+#                - bundles/chamilocore/components/jqgrid/js/jquery.jqGrid.js
+#                - bundles/chamilocore/components/select2/dist/js/select2.js
+#                - bundles/chamilocore/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
+#                - bundles/chamilocore/components/jquery.scrollbar/jquery.scrollbar.js
+#                - bundles/chamilocore/components/mediaelement/build/mediaelement-and-player.js
+#                - bundles/chamilocore/js/upload.js
+#                - bundles/chamilocore/js/pear/qfamsHandler.js
+#                - bundles/chamilocore/components/image-map-resizer/js/imageMapResizer.js
+#
+#                - bundles/chamilocore/components/blueimp-load-image/js/load-image.all.min.js
+#                - bundles/chamilocore/components/blueimp-canvas-to-blob/js/canvas-to-blob.min.js
+#
+#                - bundles/chamilocore/js/tag/jquery.fcbkcomplete.js
+#
+#                - bundles/chamilocore/components/jquery-file-upload/js/jquery.iframe-transport.js
+#                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload.js
+#                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload-process.js
+#                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload-image.js
+#                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload-audio.js
+#                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload-video.js
+#                - bundles/chamilocore/components/jquery-file-upload/js/jquery.fileupload-validate.js
+#                - bundles/chamilocore/components/bootstrap-daterangepicker/daterangepicker.js
+#                - bundles/chamilocore/components/adminlte/dist/js/app.js
+#
+#            output: js/chamilo.js
 
 
         # see https://sonata-project.org/blog/2012/5/15/assetic-package-configuration

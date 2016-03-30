@@ -331,8 +331,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $uData['auth_source'] == CAS_AUTH_SOURCE
             ) {
                 $validPassword = false;
-
                 $user = $userManager->findUserByUsername($login);
+
                 if ($user) {
                     $validPassword = UserManager::isPasswordValid(
                         $password,

@@ -11,7 +11,7 @@ imports:
     - { resource: mopa/mopa_bootstrap.yml }
 
     # FriendOfSymfony Bundles
-    #- { resource: fos/fos_comment.yml }r
+    #- { resource: fos/fos_comment.yml }
 #    - { resource: fos/fos_rest.yml }
     - { resource: fos/fos_user.yml }
     #- { resource: fos/fos_elastica.yml }
@@ -173,8 +173,8 @@ swiftmailer:
     spool:     { type: memory }
 
 doctrine_migrations:
-    dir_name: %kernel.root_dir%/../src/Chamilo/CoreBundle/Migrations/Schema/V2_0_0
-    namespace: Chamilo\CoreBundle\Migrations\Schema\V_2_0_0
+    dir_name: %kernel.root_dir%/../app/Migrations/V111
+    namespace: Application\Migrations\Schema\V111
     table_name: version
     name: Chamilo Migrations
 

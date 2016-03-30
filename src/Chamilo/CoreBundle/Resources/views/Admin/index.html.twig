@@ -1,0 +1,69 @@
+{% extends "::layout.html.twig" %}
+{% block page_content %}
+    {% autoescape false %}
+        <div id="settings">
+            {% for block_item in blocks %}
+                <div id="tabs-{{ loop.index }}" class="col-md-6">
+                    <div class="well_border">
+                        <h4>{{ block_item.icon }} {{ block_item.label }}</h4>
+
+                        <div>
+                            {{ block_item.search_form }}
+                        </div>
+                        {% if block_item.items is not empty %}
+                            <ul>
+                                {% for url in block_item.items %}
+                                    {% if url.url is not empty %}
+                                        <li>
+                                            <a href="{{ url.url }}">
+                                                {{ url.label }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {% if block_item.extra is not null %}
+                            <div>
+                                {{ block_item.extra }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="row">
+                {% for role in app.user.roles %}
+                    {% set role = role | lower | replace ({ 'role_' : ''}) %}
+
+                    {% if role in ['global_admin'] %}
+                        {% include "ChamiloCoreBundle:Admin:" ~ role ~ "/role_index.html.twig" %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <script>
+                $(function () {
+                    $.ajax({
+                        url: '{{ web_admin_ajax_url }}?a=version',
+                        success: function (version) {
+                            $(".admin-block-version").html(version);
+                        }
+                    });
+                });
+            </script>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="well_border">
+                        <h3>{{ 'VersionCheck' | trans }} </h3>
+
+                        <div class="admin-block-version"></div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endautoescape %}
+{% endblock %}

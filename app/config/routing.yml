@@ -67,21 +67,18 @@ _admin:
 elfinder:
      resource: "@FMElfinderBundle/Resources/config/routing.yml"
 
-chamilo_installer:
-    resource: "@ChamiloInstallerBundle/Resources/config/routing.yml"
+#chamilo_installer:
+#    resource: "@ChamiloInstallerBundle/Resources/config/routing.yml"
 
 # Always at the end
 core_bundle:
     resource: "@ChamiloCoreBundle/Resources/config/routing.yml"
 
-liip_theme:
-    resource: "@LiipThemeBundle/Resources/config/routing.xml"
-    prefix: /theme
+#liip_theme:
+#    resource: "@LiipThemeBundle/Resources/config/routing.xml"
+#    prefix: /theme
 
 # app/config/routing.yml
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
-oro_distribution_bundle:
-    resource: "@OroDistributionBundle/Controller"
-    type: annotation

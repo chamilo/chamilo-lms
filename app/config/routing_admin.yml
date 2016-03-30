@@ -11,7 +11,7 @@ sonata_user_admin_security:
     resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
 
 sonata_user_admin_resetting:
-    resource: '@SonataUserBundle/Resources/config/routing/admin_resetting.xml'
+    resource: '@SonataUserBundle/Resources/config/routing/sonata_resetting_1.xml'
     prefix: /resetting
 
 sonata_media_pixlr:

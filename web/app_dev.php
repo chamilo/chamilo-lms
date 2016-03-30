@@ -36,7 +36,7 @@ $response->send();
 $kernel->terminate($request, $response);*/
 
 require_once __DIR__.'/../app/AppKernel.php';
-require_once __DIR__.'/legacy.php';
+//require_once __DIR__.'/legacy.php';
 $request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
     'host_with_path_by_locale'
 );

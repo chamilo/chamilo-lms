@@ -875,9 +875,21 @@ class AddCourse
                                     );
                                     $image_id = Database:: insert_id();
 
-                                    Database::query(
-                                        "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                                        VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,NULL,NULL,0)"
+                                    Database::insert(
+                                        $TABLEITEMPROPERTY,
+                                        [
+                                            'c_id' => $course_id,
+                                            'tool' => 'document',
+                                            'insert_user_id' => api_get_user_id(),
+                                            'insert_date' => $now,
+                                            'lastedit_date' => $now,
+                                            'ref' => $image_id,
+                                            'lastedit_type' => 'DocumentAdded',
+                                            'lastedit_user_id' => api_get_user_id(),
+                                            'to_group_id' => null,
+                                            'to_user_id' =>  null,
+                                            'visibility' => 0
+                                        ]
                                     );
                                 }
                             }
@@ -921,11 +933,22 @@ class AddCourse
                                         if ($path_documents . $value['file'] == '/certificates/default.html') {
                                             $example_cert_id = $image_id;
                                         }
-                                        Database::query(
-                                            "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                                            VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,NULL,NULL,1)"
+                                        $docId = Database::insert(
+                                            $TABLEITEMPROPERTY,
+                                            [
+                                                'c_id' => $course_id,
+                                                'tool' => 'document',
+                                                'insert_user_id' => api_get_user_id(),
+                                                'insert_date' => $now,
+                                                'lastedit_date' => $now,
+                                                'ref' => $image_id,
+                                                'lastedit_type' => 'DocumentAdded',
+                                                'lastedit_user_id' => api_get_user_id(),
+                                                'to_group_id' => null,
+                                                'to_user_id' =>  null,
+                                                'visibility' => 1
+                                            ]
                                         );
-                                        $docId = Database:: insert_id();
                                         if ($docId) {
                                             $sql = "UPDATE $TABLEITEMPROPERTY SET id = iid WHERE iid = $docId";
                                             Database::query($sql);
@@ -1146,11 +1169,23 @@ class AddCourse
             $sql = "UPDATE $tableDocument SET id = iid WHERE iid = $docId";
             Database::query($sql);
 
-            Database::query(
-                "INSERT INTO $tableItem (id, c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                VALUES ($counter, $course_id,'document',1,'$now', '$now', $docId, 'DocumentAdded', 1, NULL, NULL, 0)"
+            $id = Database::insert(
+                $tableItem,
+                [
+                    'id' => $counter,
+                    'c_id' => $course_id,
+                    'tool' => 'document',
+                    'insert_user_id' => api_get_user_id(),
+                    'insert_date' => $now,
+                    'lastedit_date' => $now,
+                    'ref' => $docId,
+                    'lastedit_type' => 'DocumentAdded',
+                    'lastedit_user_id' => api_get_user_id(),
+                    'to_group_id' => null,
+                    'to_user_id' =>  null,
+                    'visibility' => 0
+                ]
             );
-            $id = Database:: insert_id();
             if ($id) {
                 $sql = "UPDATE $tableItem SET id = iid WHERE iid = $id";
                 Database::query($sql);

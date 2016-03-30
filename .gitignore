@@ -3,7 +3,14 @@ app/cache/*
 !app/cache/.htaccess
 
 # Chamilo configuration
-app/config/
+/app/config/parameters.yml
+/app/config/add_course.conf.php
+/app/config/auth.conf.php
+/app/config/course_info.conf.php
+/app/config/events.conf.php
+/app/config/mail.conf.php
+/app/config/portfolio.conf.php
+/app/config/configuration.php
 
 # Courses
 app/courses/*

@@ -152,7 +152,7 @@ class Database
         );
 
         AnnotationRegistry::registerFile(
-            $sysPath."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
+            $sysPath."vendor/symfony/symfony/src/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
         );
 
         // Registering gedmo extensions

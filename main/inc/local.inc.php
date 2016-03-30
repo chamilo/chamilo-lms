@@ -333,7 +333,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $validPassword = false;
 
                 $user = $userManager->findUserByUsername($login);
-
                 if ($user) {
                     $validPassword = UserManager::isPasswordValid(
                         $password,

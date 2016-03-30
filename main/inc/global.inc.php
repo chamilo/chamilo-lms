@@ -23,10 +23,11 @@
 
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
-
+// Include the libraries that are necessary everywhere
+require_once __DIR__.'/../../vendor/autoload.php';
 require_once __DIR__.'/../../app/AppKernel.php';
 
-$kernel = new AppKernel();
+$kernel = new AppKernel('', '');
 
 // Determine the directory path where this current file lies.
 // This path will be useful to include the other initialisation files.

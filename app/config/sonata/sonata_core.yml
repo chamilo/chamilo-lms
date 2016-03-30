@@ -1,0 +1,35 @@
+sonata_core:
+    form_type: horizontal
+
+    flashmessage:
+        success:
+            types:
+                - { type: my_custom_bundle_success }
+                - { type: my_other_bundle_success }
+
+        warning:
+            types:
+                - { type: my_custom_bundle_warning }
+                - { type: my_other_bundle_warning }
+        error:
+            css_class: danger # optionally, a CSS class can be defined
+            types:
+                - { type: my_custom_bundle }
+
+        confirmation: # You can add custom types too
+            types:
+                - { type: custom_bundle_type }
+
+        confirmation: # You can add custom types too
+            types:
+                - { type: custom_bundle_type }
+
+        confirm: # You can add custom types too
+            types:
+                - { type: custom_bundle_type }
+        normal:
+            types:
+                - { type: custom_bundle_type }
+        success: # You can add custom types too
+            types:
+                - { type: custom_bundle_type }

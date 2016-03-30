@@ -1,0 +1,47 @@
+
+sonata_seo:
+    encoding: UTF-8
+    page:
+        default:  sonata.seo.page.default
+        title: Chamilo
+        metas:
+            name:
+                keywords: 'chamilo e-learning'
+                description: 'chamilo e-learning'
+                robots: index, follow
+                viewport: width=device-width,initial-scale=1
+                apple-mobile-web-app-capable: yes
+                author: chamilo
+                Generator: Chamilo 2
+
+            property:
+                # Facebook application settings
+                #'fb:app_id':          XXXXXX
+                #'fb:admins':          admin1, admin2
+
+                # Open Graph information
+                # see http://developers.facebook.com/docs/opengraphprotocol/#types or http://ogp.me/
+#                'og:site_name':        %sonata_admin.title%
+#                'og:description':      %sonata_admin.title%
+
+            http-equiv:
+#                'Content-Type':         text/html; charset=utf-8
+                #'X-Ua-Compatible':      IE=EmulateIE7
+
+        head:
+            'xmlns':              http://www.w3.org/1999/xhtml
+
+#    sitemap:
+#        services:
+#            - sonata.product.seo_iterator
+#        doctrine_orm:
+#            # media
+#            - { connection: doctrine.dbal.default_connection, route: sonata_media_view, parameters: {id: null}, query: "SELECT id, updated_at as lastmod, 'weekly' as changefreq, '0.5' as prioriy FROM media__media WHERE enabled = true" }
+#            # blog post
+#            - { connection: doctrine.dbal.default_connection, route: sonata_news_view, parameters: {permalink: null}, query: "SELECT CONCAT_WS('/', YEAR(created_at), MONTH(created_at), DAY(created_at), slug) as permalink , updated_at as lastmod, 'weekly' as changefreq, '0.5' as prioriy FROM news__post WHERE enabled = 1 AND (publication_date_start IS NULL OR publication_date_start <= NOW())" }
+#            # page - works only for one site, please adapt the code if required
+#            - { connection: doctrine.dbal.default_connection, route: page_slug, parameters: {path: null}, query: "SELECT url as path, updated_at as lastmod, 'weekly' as changefreq, '0.5' as prioriy FROM page__snapshot WHERE route_name = 'page_slug' AND enabled = 1 AND (publication_date_start IS NULL OR publication_date_start <= NOW())" }
+#            # product categories
+#            - { connection: doctrine.dbal.default_connection, route: sonata_catalog_category, parameters: {category_id: null, category_slug: null}, query: "SELECT id as category_id, slug as category_slug, updated_at as lastmod, 'weekly' as changefreq, '0.5' as prioriy FROM classification__category WHERE enabled = true" }
+#            # products
+#            - { connection: doctrine.dbal.default_connection, route: sonata_product_view, parameters: {productId: null, slug: null}, query: "SELECT id as productId, slug, updated_at as lastmod, 'weekly' as changefreq, '0.5' as prioriy FROM product__product WHERE enabled = true" }

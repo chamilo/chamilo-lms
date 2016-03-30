@@ -147,7 +147,6 @@ class UserManager
     public static function isPasswordValid($password, User $user)
     {
         $encoder = self::getEncoder($user);
-
         $validPassword = $encoder->isPasswordValid(
             $user->getPassword(),
             $password,

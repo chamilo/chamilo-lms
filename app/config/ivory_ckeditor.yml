@@ -1,0 +1,41 @@
+ivory_ck_editor:
+    autoload: false
+    base_path: "bundles/ivoryckeditor"
+    js_path:   "bundles/ivoryckeditor/ckeditor.js"
+    default_config: default
+    configs:
+        chamilo:
+            filebrowserBrowseRoute: elfinder
+            filebrowserBrowseRouteParameters: []
+        default:
+            # default toolbar plus Format button
+            toolbar:
+            - [Bold, Italic, Underline, -, Cut, Copy, Paste, PasteText, PasteFromWord, -, Undo, Redo, -, NumberedList, BulletedList, -, Outdent, Indent, -, Blockquote, -, Image, Link, Unlink, Table]
+            - [Format, Maximize, Source]
+
+            filebrowserBrowseRoute: admin_chamilo_media_media_ckeditor_browser
+            filebrowserImageBrowseRoute: admin_chamilo_media_media_ckeditor_browser
+            # Display images by default when clicking the image dialog browse button
+            filebrowserImageBrowseRouteParameters:
+                provider: sonata.media.provider.image
+            filebrowserUploadRoute: admin_chamilo_media_media_ckeditor_upload
+            filebrowserUploadRouteParameters:
+                provider: sonata.media.provider.file
+            # Upload file as image when sending a file from the image dialog
+            filebrowserImageUploadRoute: admin_chamilo_media_media_ckeditor_upload
+            filebrowserImageUploadRouteParameters:
+                provider: sonata.media.provider.image
+                context: my-context # Optional, to upload in a custom context
+    plugins:
+        wordcount:
+            path:     "/bundles/chamilocore/ckeditor/plugins/wordcount"
+            filename: "plugin.js"
+#        adobeair:
+#            path:     "/bundles/chamilocore/components/ckeditor/plugins/adobeair"
+#            filename: "plugin.js"
+#        iframedialog:
+#            path:     "/bundles/chamilocore/components/ckeditor/plugins/iframedialog"
+#            filename: "plugin.js"
+#        docprops:
+#            path:     "/bundles/chamilocore/components/ckeditor/plugins/docprops"
+#            filename: "plugin.js"

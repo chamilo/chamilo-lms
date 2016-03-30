@@ -1,0 +1,28 @@
+sonata_timeline:
+    manager_type: orm
+
+    class:
+        timeline:         %spy_timeline.class.timeline%
+        action:           %spy_timeline.class.action%
+        component:        %spy_timeline.class.component%
+        action_component: %spy_timeline.class.action_component%
+
+spy_timeline:
+    drivers:
+        orm:
+            object_manager: doctrine.orm.entity_manager
+            classes:
+                query_builder: ~ # Spy\TimelineBundle\Driver\ORM\QueryBuilder\QueryBuilder
+                timeline:         Chamilo\TimelineBundle\Entity\Timeline
+                action:           Chamilo\TimelineBundle\Entity\Action
+                component:        Chamilo\TimelineBundle\Entity\Component
+                action_component: Chamilo\TimelineBundle\Entity\ActionComponent
+
+    filters:
+        data_hydrator:
+            priority:             20
+            service:              spy_timeline.filter.data_hydrator
+            filter_unresolved:    false
+            locators:
+                - spy_timeline.filter.data_hydrator.locator.doctrine_orm
+

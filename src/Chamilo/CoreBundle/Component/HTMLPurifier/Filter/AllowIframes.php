@@ -54,11 +54,16 @@ class AllowIframes extends HTMLPurifier_Filter
     protected function postFilterCallback($matches)
     {
         // Domain Whitelist
+        $hostName = array();
+        preg_match('#https?://(.*)#i', api_get_path(WEB_PATH), $hostName);
+
         $youTubeMatch = preg_match('#src="(https:)?//www.youtube(-nocookie)?.com/#i', $matches[1]);
         $vimeoMatch = preg_match('#://player.vimeo.com/#i', $matches[1]);
         $googleMapsMatch = preg_match('#src="https://maps.google.com/#i', $matches[1]);
+        $slideShare = preg_match('#src="(https?:)?//www.slideshare.net/#', $matches[1]);
+        $platformDomain = preg_match('#src="https?://(.+\.)?' . $hostName[1] . '#i', $matches[1]);
 
-        if ($youTubeMatch || $vimeoMatch || $googleMapsMatch) {
+        if ($youTubeMatch || $vimeoMatch || $googleMapsMatch || $slideShare || $platformDomain) {
             $extra = ' frameborder="0"';
             if ($youTubeMatch) {
                 $extra .= ' allowfullscreen';

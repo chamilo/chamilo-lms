@@ -364,9 +364,9 @@ class MessageManager
             $sender_info = api_get_user_info($user_sender_id);
             
             // add file attachment additional attributes
-            foreach ($file_attachments as $file_attach) {
-                $file_attachments['path'] = $file_attach['tmp_name'];
-                $file_attachments['filename'] = $file_attach['name'];
+            foreach ($file_attachments as $index => $file_attach) {
+                $file_attachments[$index]['path'] = $file_attach['tmp_name'];
+                $file_attachments[$index]['filename'] = $file_attach['name'];
             }
 
             if (empty($group_id)) {

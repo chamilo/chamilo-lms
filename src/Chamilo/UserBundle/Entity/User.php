@@ -42,7 +42,7 @@ use FOS\UserBundle\Model\UserInterface;
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
  *
  */
-class User extends BaseUser //implements ParticipantInterface, ThemeUser
+class User implements UserInterface//implements ParticipantInterface, ThemeUser
 {
     const COURSE_MANAGER = 1;
     const TEACHER = 1;
@@ -72,42 +72,42 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
      *
      * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
      */
-    //protected $username;
+    protected $username;
 
     /**
      * @var string
      *
      * * @ORM\Column(name="username_canonical", type="string", length=100, nullable=false, unique=true)
      */
-    //protected $usernameCanonical;
+    protected $usernameCanonical;
 
     /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=100, nullable=false, unique=false)
      */
-    //protected $email;
+    protected $email;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lastname", type="string", length=60, nullable=true, unique=false)
      */
-    //protected $lastname;
+    protected $lastname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=60, nullable=true, unique=false)
      */
-    //protected $firstname;
+    protected $firstname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
      */
-    //protected $password;
+    protected $password;
 
     /**
      * @var string
@@ -273,14 +273,14 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     /**
      * @ORM\Column(type="string", length=255)
      */
-    //protected $salt;
+    protected $salt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
      */
-    //protected $lastLogin;
+    protected $lastLogin;
 
     /**
      * Random string sent to the user email address in order to verify it
@@ -288,14 +288,14 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
      * @var string
      * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
      */
-    //protected $confirmationToken;
+    protected $confirmationToken;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="password_requested_at", type="datetime", nullable=true, unique=false)
      */
-    //protected $passwordRequestedAt;
+    protected $passwordRequestedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
@@ -376,9 +376,7 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
      */
     public function __construct()
     {
-        parent::__construct();
         $this->status = self::STUDENT;
-
 
         $this->salt = sha1(uniqid(null, true));
         $this->isActive = true;
@@ -398,6 +396,12 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
         //$this->userId = 0;
         //$this->createdAt = new \DateTime();
         //$this->updatedAt = new \DateTime();
+
+        $this->enabled = false;
+        $this->locked = false;
+        $this->expired = false;
+        $this->roles = array();
+        $this->credentialsExpired = false;
     }
 
     /**
@@ -609,31 +613,6 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
         return $this->getIsActive();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function isAccountNonExpired()
-    {
-        return true;
-        /*$now = new \DateTime();
-        return $this->getExpirationDate() < $now;*/
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function isAccountNonLocked()
-    {
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function isCredentialsNonExpired()
-    {
-        return true;
-    }
 
     /**
      * @inheritDoc
@@ -641,13 +620,6 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     public function isEnabled()
     {
         return $this->getActive() == 1;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function eraseCredentials()
-    {
     }
 
     /**
@@ -1572,6 +1544,821 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     public function getUsername()
     {
         return $this->username;
+    }
+
+    /**
+     * Returns the creation date.
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Sets the last update date.
+     *
+     * @param \DateTime|null $updatedAt
+     *
+     * @return User
+     */
+    public function setUpdatedAt(\DateTime $updatedAt = null)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Returns the last update date.
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Returns the expiration date.
+     *
+     * @return \DateTime|null
+     */
+    public function getExpiresAt()
+    {
+        return $this->expiresAt;
+    }
+
+    /**
+     * Returns the credentials expiration date.
+     *
+     * @return \DateTime
+     */
+    public function getCredentialsExpireAt()
+    {
+        return $this->credentialsExpireAt;
+    }
+
+    /**
+     * Sets the credentials expiration date.
+     *
+     * @param \DateTime|null $date
+     *
+     * @return User
+     */
+    public function setCredentialsExpireAt(\DateTime $date = null)
+    {
+        $this->credentialsExpireAt = $date;
+
+        return $this;
+    }
+
+    /**
+     * Sets the user groups.
+     *
+     * @param array $groups
+     *
+     * @return User
+     */
+    public function setGroups($groups)
+    {
+        foreach ($groups as $group) {
+            $this->addGroup($group);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets the two-step verification code.
+     *
+     * @param string $twoStepVerificationCode
+     *
+     * @return User
+     */
+    public function setTwoStepVerificationCode($twoStepVerificationCode)
+    {
+        $this->twoStepVerificationCode = $twoStepVerificationCode;
+
+        return $this;
+    }
+
+    /**
+     * Returns the two-step verification code.
+     *
+     * @return string
+     */
+    public function getTwoStepVerificationCode()
+    {
+        return $this->twoStepVerificationCode;
+    }
+
+    /**
+     * @param string $biography
+     *
+     * @return User
+     */
+    public function setBiography($biography)
+    {
+        $this->biography = $biography;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBiography()
+    {
+        return $this->biography;
+    }
+
+    /**
+     * @param \DateTime $dateOfBirth
+     *
+     * @return User
+     */
+    public function setDateOfBirth($dateOfBirth)
+    {
+        $this->dateOfBirth = $dateOfBirth;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateOfBirth()
+    {
+        return $this->dateOfBirth;
+    }
+
+    /**
+     * @param string $facebookData
+     *
+     * @return User
+     */
+    public function setFacebookData($facebookData)
+    {
+        $this->facebookData = $facebookData;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookData()
+    {
+        return $this->facebookData;
+    }
+
+    /**
+     * @param string $facebookName
+     *
+     * @return User
+     */
+    public function setFacebookName($facebookName)
+    {
+        $this->facebookName = $facebookName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookName()
+    {
+        return $this->facebookName;
+    }
+
+    /**
+     * @param string $facebookUid
+     *
+     * @return User
+     */
+    public function setFacebookUid($facebookUid)
+    {
+        $this->facebookUid = $facebookUid;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookUid()
+    {
+        return $this->facebookUid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @param string $gender
+     *
+     * @return User
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param string $gplusData
+     *
+     * @return User
+     */
+    public function setGplusData($gplusData)
+    {
+        $this->gplusData = $gplusData;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGplusData()
+    {
+        return $this->gplusData;
+    }
+
+    /**
+     * @param string $gplusName
+     *
+     * @return User
+     */
+    public function setGplusName($gplusName)
+    {
+        $this->gplusName = $gplusName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGplusName()
+    {
+        return $this->gplusName;
+    }
+
+    /**
+     * @param string $gplusUid
+     *
+     * @return User
+     */
+    public function setGplusUid($gplusUid)
+    {
+        $this->gplusUid = $gplusUid;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGplusUid()
+    {
+        return $this->gplusUid;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return User
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+     /**
+     * @param string $timezone
+     *
+     * @return User
+     */
+    public function setTimezone($timezone)
+    {
+        $this->timezone = $timezone;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimezone()
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * @param string $twitterData
+     *
+     * @return User
+     */
+    public function setTwitterData($twitterData)
+    {
+        $this->twitterData = $twitterData;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTwitterData()
+    {
+        return $this->twitterData;
+    }
+
+    /**
+     * @param string $twitterName
+     *
+     * @return User
+     */
+    public function setTwitterName($twitterName)
+    {
+        $this->twitterName = $twitterName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTwitterName()
+    {
+        return $this->twitterName;
+    }
+
+    /**
+     * @param string $twitterUid
+     *
+     * @return User
+     */
+    public function setTwitterUid($twitterUid)
+    {
+        $this->twitterUid = $twitterUid;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTwitterUid()
+    {
+        return $this->twitterUid;
+    }
+
+    /**
+     * @param string $website
+     *
+     * @return User
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    /**
+     * @param string $token
+     *
+     * @return User
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullname()
+    {
+        return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
+    }
+
+    /**
+     * @return array
+     */
+    public function getRealRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param array $roles
+     *
+     * @return User
+     */
+    public function setRealRoles(array $roles)
+    {
+        $this->setRoles($roles);
+
+        return $this;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     */
+    public function eraseCredentials()
+    {
+        $this->plainPassword = null;
+    }
+
+
+    public function getUsernameCanonical()
+    {
+        return $this->usernameCanonical;
+    }
+
+
+    public function getEmailCanonical()
+    {
+        return $this->emailCanonical;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+      /**
+     * Returns the user roles
+     *
+     * @return array The roles
+     */
+    public function getRoles()
+    {
+        $roles = $this->roles;
+
+        foreach ($this->getGroups() as $group) {
+            $roles = array_merge($roles, $group->getRoles());
+        }
+
+        // we need to make sure to have at least one role
+        $roles[] = static::ROLE_DEFAULT;
+
+        return array_unique($roles);
+    }
+
+    /**
+     * Never use this to check if this user has access to anything!
+     *
+     * Use the SecurityContext, or an implementation of AccessDecisionManager
+     * instead, e.g.
+     *
+     *         $securityContext->isGranted('ROLE_USER');
+     *
+     * @param string $role
+     *
+     * @return boolean
+     */
+    public function hasRole($role)
+    {
+        return in_array(strtoupper($role), $this->getRoles(), true);
+    }
+
+    public function isAccountNonExpired()
+    {
+        if (true === $this->expired) {
+            return false;
+        }
+
+        if (null !== $this->expiresAt && $this->expiresAt->getTimestamp() < time()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return !$this->locked;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        if (true === $this->credentialsExpired) {
+            return false;
+        }
+
+        if (null !== $this->credentialsExpireAt && $this->credentialsExpireAt->getTimestamp() < time()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isCredentialsExpired()
+    {
+        return !$this->isCredentialsNonExpired();
+    }
+
+    public function isExpired()
+    {
+        return !$this->isAccountNonExpired();
+    }
+
+    public function isLocked()
+    {
+        return !$this->isAccountNonLocked();
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->hasRole(static::ROLE_SUPER_ADMIN);
+    }
+
+    public function isUser(UserInterface $user = null)
+    {
+        return null !== $user && $this->getId() === $user->getId();
+    }
+
+    public function removeRole($role)
+    {
+        if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
+            unset($this->roles[$key]);
+            $this->roles = array_values($this->roles);
+        }
+
+        return $this;
+    }
+
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function setUsernameCanonical($usernameCanonical)
+    {
+        $this->usernameCanonical = $usernameCanonical;
+
+        return $this;
+    }
+
+
+    /**
+     * @param boolean $boolean
+     *
+     * @return User
+     */
+    public function setCredentialsExpired($boolean)
+    {
+        $this->credentialsExpired = $boolean;
+
+        return $this;
+    }
+
+    public function setEmailCanonical($emailCanonical)
+    {
+        $this->emailCanonical = $emailCanonical;
+
+        return $this;
+    }
+
+    public function setEnabled($boolean)
+    {
+        $this->enabled = (Boolean) $boolean;
+
+        return $this;
+    }
+
+    /**
+     * Sets this user to expired.
+     *
+     * @param Boolean $boolean
+     *
+     * @return User
+     */
+    public function setExpired($boolean)
+    {
+        $this->expired = (Boolean) $boolean;
+
+        return $this;
+    }
+
+    /**
+     * @param \DateTime $date
+     *
+     * @return User
+     */
+    public function setExpiresAt(\DateTime $date)
+    {
+        $this->expiresAt = $date;
+
+        return $this;
+    }
+
+    public function setSuperAdmin($boolean)
+    {
+        if (true === $boolean) {
+            $this->addRole(static::ROLE_SUPER_ADMIN);
+        } else {
+            $this->removeRole(static::ROLE_SUPER_ADMIN);
+        }
+
+        return $this;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+
+        return $this;
+    }
+
+    public function setLocked($boolean)
+    {
+        $this->locked = $boolean;
+
+        return $this;
+    }
+
+    public function setPasswordRequestedAt(\DateTime $date = null)
+    {
+        $this->passwordRequestedAt = $date;
+
+        return $this;
+    }
+
+
+    public function setRoles(array $roles)
+    {
+        $this->roles = array();
+
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Gets the groups granted to the user.
+     *
+     * @return Collection
+     */
+    public function getGroups()
+    {
+        return $this->groups ?: $this->groups = new ArrayCollection();
+    }
+
+    public function getGroupNames()
+    {
+        $names = array();
+        foreach ($this->getGroups() as $group) {
+            $names[] = $group->getName();
+        }
+
+        return $names;
+    }
+
+    public function hasGroup($name)
+    {
+        return in_array($name, $this->getGroupNames());
+    }
+
+    public function addGroup(GroupInterface $group)
+    {
+        if (!$this->getGroups()->contains($group)) {
+            $this->getGroups()->add($group);
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(GroupInterface $group)
+    {
+        if ($this->getGroups()->contains($group)) {
+            $this->getGroups()->removeElement($group);
+        }
+
+        return $this;
+    }
+
+    public function addRole($role)
+    {
+        $role = strtoupper($role);
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Serializes the user.
+     *
+     * The serialized data have to contain the fields used by the equals method and the username.
+     *
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->password,
+            $this->salt,
+            $this->usernameCanonical,
+            $this->username,
+            $this->expired,
+            $this->locked,
+            $this->credentialsExpired,
+            $this->enabled,
+            $this->id,
+        ));
+    }
+
+    /**
+     * Unserializes the user.
+     *
+     * @param string $serialized
+     */
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+        // add a few extra elements in the array to ensure that we have enough keys when unserializing
+        // older data which does not include all properties.
+        $data = array_merge($data, array_fill(0, 2, null));
+
+        list(
+            $this->password,
+            $this->salt,
+            $this->usernameCanonical,
+            $this->username,
+            $this->expired,
+            $this->locked,
+            $this->credentialsExpired,
+            $this->enabled,
+            $this->id
+            ) = $data;
     }
 
 

@@ -402,7 +402,7 @@ if ($form->validate()) {
                 $_FILES['picture']['name'],
                 $_FILES['picture']['tmp_name'],
                 $user['cropResult']
-                    
+
             );
 		}
 
@@ -465,9 +465,14 @@ if ($form->validate()) {
 			$up = UserManager::update_openid($user_id, $user['openid']);
 		}
         $currentUserId = api_get_user_id();
+
+        $userObj = api_get_user_entity($user_id);
+        UserManager::add_user_as_admin($userObj);
+
 		if ($user_id != $currentUserId) {
 			if ($platform_admin == 1) {
-                UserManager::add_user_as_admin($user_id);
+				$userObj = api_get_user_entity($user_id);
+                UserManager::add_user_as_admin($userObj);
 			} else {
                 UserManager::remove_user_admin($user_id);
 			}

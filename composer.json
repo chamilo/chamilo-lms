@@ -121,8 +121,6 @@
         "ircmaxell/password-compat": "~1.0.4",
         "sylius/attribute": "0.13.0",
         "sylius/translation": "0.13.0",
-        "gedmo/doctrine-extensions": "~2.3",
-        "sonata-project/user-bundle": "~2.2",
         "ramsey/array_column": "~1.1",
         "patchwork/utf8": "~1.2",
         "ddeboer/data-import": "@stable",

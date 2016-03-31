@@ -17,6 +17,10 @@
 
 use ChamiloSession as Session;
 
+ini_set('display_errors', '1');
+ini_set('log_errors', '1');
+error_reporting(-1);
+
 require_once __DIR__.'/../../vendor/autoload.php';
 
 define('SYSTEM_INSTALLATION', 1);
@@ -796,9 +800,9 @@ if (@$_POST['step2']) {
             $dbPortForm
         );
 
-        $metadataList = $manager->getMetadataFactory()->getAllMetadata();
+        $metadataList = $manager->getMetadataFactory()->getAllMetadata();        
         $schema = $manager->getConnection()->getSchemaManager()->createSchema();
-
+        
         // Create database schema
         $tool = new \Doctrine\ORM\Tools\SchemaTool($manager);
         $tool->createSchema($metadataList);

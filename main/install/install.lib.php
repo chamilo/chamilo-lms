@@ -2667,7 +2667,7 @@ function finishInstallation(
     $installationProfile = ''
 ) {
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
-
+    error_log('0.0.0');
     // Inserting data
     $data = file_get_contents($sysPath.'main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);
@@ -2721,7 +2721,7 @@ function finishInstallation(
     );
 
     // Set default language
-    $sql = "UPDATE language SET available=1 WHERE dokeos_folder = '$languageForm'";
+    $sql = "UPDATE language SET available = 1 WHERE dokeos_folder = '$languageForm'";
     Database::query($sql);
 
     // Install settings

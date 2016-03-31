@@ -330,12 +330,12 @@ class UserManager
         $userManager = self::getManager();
 
         /** @var User $user */
-        //$user = $userManager->createUser();
+        $user = $userManager->createUser();
 
         $em = Database::getManager();
 
         /** @var User $user */
-        $user = new User();
+        //$user = new User();
         $user
             ->setLastname($lastName)
             ->setFirstname($firstName)
@@ -356,13 +356,11 @@ class UserManager
         if (!empty($expirationDate)) {
             $user->setExpirationDate($expirationDate);
         }
-        var_dump($user->getUsername());
 
-        $em->persist($user);
-        $em->flush();
-
-        //$userManager->updateUser($user);
+        $userManager->updateUser($user);
         $userId = $user->getId();
+
+        error_log($userId);
 
         if (!empty($userId)) {
             $return = $userId;
@@ -4764,7 +4762,7 @@ EOF;
     /**
      * @param User $user
      */
-    static function add_user_as_admin(User $user)
+    public static function add_user_as_admin(User $user)
     {
         $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
         if ($user) {
@@ -4777,7 +4775,6 @@ EOF;
 
             $user->addRole('ROLE_ADMIN');
             self::getManager()->updateUser($user, true);
-            exit;
         }
     }
 

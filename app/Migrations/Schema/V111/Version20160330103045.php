@@ -110,6 +110,9 @@ class Version20160330103045 extends AbstractMigration
         $sql = "UPDATE user SET email_canonical = email";
         $this->addSql($sql);
 
+        $sql = "ALTER TABLE user ADD roles LONGTEXT NOT NULL COMMENT '(DC2Type:array)'";
+        $this->addSql($sql);
+
         $sql = "UPDATE user SET roles = 'a:0:{}'";
         $this->addSql($sql);
 

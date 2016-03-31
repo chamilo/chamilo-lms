@@ -323,6 +323,11 @@ class User implements UserInterface//implements ParticipantInterface, ThemeUser
     protected $dropBoxSentFiles;
 
     /**
+     * @ORM\Column(type="array")
+     */
+    protected $roles;
+
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user")
      **/
     //protected $jurySubscriptions;
@@ -386,7 +391,6 @@ class User implements UserInterface//implements ParticipantInterface, ThemeUser
         $this->courses = new ArrayCollection();
         $this->items = new ArrayCollection();
         $this->classes = new ArrayCollection();
-        //$this->roles = new ArrayCollection();
         $this->curriculumItems = new ArrayCollection();
         $this->portals = new ArrayCollection();
         $this->dropBoxSentFiles = new ArrayCollection();

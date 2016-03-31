@@ -135,6 +135,9 @@ class Database
 
         $config->setEntityNamespaces(
             array(
+                'ChamiloClassificationBundle' => 'Chamilo\ClassificationBundle\Entity',
+                'ChamiloMediaBundle' => 'Chamilo\MediaBundle\Entity',
+                'ChamiloPageBundle' => 'Chamilo\PageBundle\Entity',
                 'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
@@ -649,17 +652,18 @@ class Database
         $path = !empty($path) ? $path : api_get_path(SYS_PATH);
 
         $paths = array(
+            $path.'src/Chamilo/ClassificationBundle/Entity',
+            $path.'src/Chamilo/MediaBundle/Entity',
+            $path.'src/Chamilo/PageBundle/Entity',
             $path.'src/Chamilo/CoreBundle/Entity',
             $path.'src/Chamilo/UserBundle/Entity',
             $path.'src/Chamilo/CourseBundle/Entity',
             $path.'vendor/sonata-project/user-bundle/Entity',
             $path.'vendor/sonata-project/user-bundle/Model',
             $path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',
-
         );
 
         $proxyDir = $path.'app/cache/';
-        $proxyDir = '';
 
         return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
             $paths,

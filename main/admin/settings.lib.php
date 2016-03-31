@@ -1506,22 +1506,22 @@ function generate_settings_form($settings, $settings_by_access_list)
             case 'custom':
                 break;
             case 'select_course':
-                $courseSelect = $form->addElement(
-                    'select_ajax',
-                    $row['variable'],
-                    [
-                        get_lang($row['title']),
-                        get_lang($row['comment']),
-                    ],
-                    null,
-                    ['url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course']
-                );
+                $courseSelectOptions = [];
 
                 if (!empty($row['selected_value'])) {
                     $course = $em->find('ChamiloCoreBundle:Course', $row['selected_value']);
 
-                    $courseSelect->addOption($course->getTitle(), $course->getCode(), ['selected' => 'selected']);
+                    $courseSelectOptions[$course->getId()] = $course->getTitle();
                 }
+
+                $form->addElement(
+                    'select_ajax',
+                    $row['variable'],
+                    [get_lang($row['title']), get_lang($row['comment'])],
+                    $courseSelectOptions,
+                    ['url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course']
+                );
+                $default_values[$row['variable']] = $row['selected_value'];
                 break;
         }
 

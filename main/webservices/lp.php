@@ -641,6 +641,10 @@ function WSCreateLp($params)
             $extension = $info['extension'];
             $data = base64_decode($lpItem['data']);
 
+            if ($debug) {
+                error_log('create_document: '.$info['filename']);
+            }
+
             $documentId = $lp->create_document(
                 $courseInfo,
                 $data,

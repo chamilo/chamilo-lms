@@ -5869,18 +5869,22 @@ class learnpath
     /**
      * Creates the default learning path folder
      * @param array $course
+     * @param int $creatorId
+     *
      * @return bool
      */
-    public static function generate_learning_path_folder($course)
+    public static function generate_learning_path_folder($course, $creatorId = 0)
     {
         // Creating learning_path folder
         $dir = '/learning_path';
         $filepath = api_get_path(SYS_COURSE_PATH).$course['path'] . '/document';
+        $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
+
         $folder = false;
         if (!is_dir($filepath.'/'.$dir)) {
             $folderData = create_unexisting_directory(
                 $course,
-                api_get_user_id(),
+                $creatorId,
                 api_get_session_id(),
                 0,
                 0,
@@ -5895,15 +5899,18 @@ class learnpath
         } else {
             $folder = true;
         }
+
         return $folder;
     }
 
     /**
      * @param array $course
      * @param string $lp_name
+     * @param int $creatorId
+     *
      * @return array
      */
-    public function generate_lp_folder($course, $lp_name = null)
+    public function generate_lp_folder($course, $lp_name = '', $creatorId = 0)
     {
         $filepath = '';
         $dir = '/learning_path/';
@@ -5911,8 +5918,9 @@ class learnpath
         if (empty($lp_name)) {
             $lp_name = $this->name;
         }
+        $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
 
-        $folder = self::generate_learning_path_folder($course);
+        $folder = self::generate_learning_path_folder($course, $creatorId);
         // Creating LP folder
         if ($folder) {
             //Limits title size
@@ -5955,18 +5963,18 @@ class learnpath
      * @param string $content
      * @param string $title
      * @param string $extension
-     * @param int $userId creator id
+     * @param int $creatorId creator id
      *
      * @return string
      */
-    public function create_document($courseInfo, $content = '', $title = '', $extension = 'html', $userId = 0)
+    public function create_document($courseInfo, $content = '', $title = '', $extension = 'html', $creatorId = 0)
     {
         if (!empty($courseInfo)) {
             $course_id = $courseInfo['real_id'];
         } else {
             $course_id = api_get_course_int_id();
         }
-        $userId = empty($userId) ? api_get_user_id() : $userId;
+        $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
         $sessionId = api_get_session_id();
 
         global $charset;
@@ -5989,7 +5997,7 @@ class learnpath
 
         if (empty($_POST['dir']) && empty($_GET['dir'])) {
             //Generates folder
-            $result = $this->generate_lp_folder($courseInfo);
+            $result = $this->generate_lp_folder($courseInfo, $creatorId);
             $dir = $result['dir'];
             $filepath = $result['filepath'];
         }
@@ -6072,7 +6080,7 @@ class learnpath
                     true,
                     null,
                     $sessionId,
-                    $userId
+                    $creatorId
                 );
 
                 if ($document_id) {
@@ -6081,7 +6089,7 @@ class learnpath
                         TOOL_DOCUMENT,
                         $document_id,
                         'DocumentAdded',
-                        $userId,
+                        $creatorId,
                         null,
                         null,
                         null,
@@ -6089,7 +6097,7 @@ class learnpath
                         $sessionId
                     );
 
-                    $new_comment = (isset($_POST['comment'])) ? trim($_POST['comment']) : '';
+                    $new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
                     $new_title = $originalTitle;
 
                     if ($new_comment || $new_title) {

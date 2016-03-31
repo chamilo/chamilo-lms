@@ -360,7 +360,7 @@ class CourseCategory
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $parent = self::getCategory($row['parent_id']);
             $children[] = $row;
-            $subChildren = self::getParents($parent['code']);
+            $subChildren = self::getParents($parent ? $parent['code'] : null);
             $children = array_merge($children, $subChildren);
         }
 

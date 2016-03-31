@@ -36,6 +36,7 @@ ob_implicit_flush(true);
 session_start();
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once 'install.lib.php';
 

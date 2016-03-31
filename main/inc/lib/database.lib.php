@@ -150,7 +150,7 @@ class Database
         // Registering Constraints
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
-            $sysPath."vendor/symfony/validator"
+            $sysPath."vendor/symfony/symfony/src"
         );
 
         AnnotationRegistry::registerFile(

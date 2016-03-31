@@ -1201,6 +1201,8 @@ function filter_extension(&$filename)
  * @param bool $save_visibility
  * @param int $group_id
  * @param int $session_id Session ID, if any
+ * @param int $userId creator id
+ * 
  * @return int id if inserted document
  */
 function add_document(
@@ -1213,13 +1215,11 @@ function add_document(
     $readonly = 0,
     $save_visibility = true,
     $group_id = null,
-    $session_id = 0
+    $session_id = 0,
+    $userId = 0
 ) {
-    $session_id = intval($session_id);
-
-    if (empty($session_id)) {
-        $session_id = api_get_session_id();
-    }
+    $session_id = empty($session_id) ? api_get_session_id() : $session_id;
+    $userId = empty($userId) ? api_get_user_id() : $userId;
 
     $readonly = intval($readonly);
     $c_id = $_course['real_id'];
@@ -1241,7 +1241,7 @@ function add_document(
         Database::query($sql);
 
         if ($save_visibility) {
-            api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id, $_course);
+            api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id, $_course, $session_id, $userId);
         }
 
         return $documentId;

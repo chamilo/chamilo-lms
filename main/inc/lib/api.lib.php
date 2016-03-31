@@ -6870,12 +6870,13 @@ function api_is_global_chat_enabled()
  * @param int $group_id
  * @param array $courseInfo
  */
-function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseInfo = array(), $sessionId = null)
+function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseInfo = array(), $sessionId = 0, $userId = 0)
 {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $courseId = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
     $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
+    $userId = empty($userId) ? api_get_user_id() : $userId;
 
     $original_tool_id = $tool_id;
 
@@ -6924,7 +6925,7 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseIn
             $original_tool_id,
             $item_id,
             $visibility,
-            api_get_user_id(),
+            $userId,
             $group_id,
             null,
             null,

@@ -233,7 +233,6 @@ class learnpath
 
             $sql = "UPDATE $lp_table SET id = iid WHERE iid = ".$this->lp_view_id;
             Database::query($sql);
-
         }
 
         // Initialise items.
@@ -484,6 +483,8 @@ class learnpath
      * @param string $description
      * @param int $prerequisites
      * @param int $max_time_allowed
+     * @param int $userId
+     *
      * @return int
      */
     public function add_item(
@@ -494,7 +495,8 @@ class learnpath
         $title,
         $description,
         $prerequisites = 0,
-        $max_time_allowed = 0
+        $max_time_allowed = 0,
+        $userId = 0
     ) {
         $course_id = $this->course_info['real_id'];
         if ($this->debug > 0) {
@@ -505,6 +507,8 @@ class learnpath
             $this->course_info = api_get_course_info($this->cc);
             $course_id = $this->course_info['real_id'];
         }
+        $userId = empty($userId) ? api_get_user_id() : $userId;
+        $sessionId = api_get_session_id();
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $_course = $this->course_info;
         $parent = intval($parent);
@@ -658,31 +662,37 @@ class learnpath
                         '/audio',
                         'folder',
                         0,
-                        'audio'
+                        'audio',
+                        '',
+                        0,
+                        true,
+                        null,
+                        $sessionId,
+                        $userId
                     );
                     api_item_property_update(
                         $_course,
                         TOOL_DOCUMENT,
                         $audio_id,
                         'FolderCreated',
-                        api_get_user_id(),
+                        $userId,
                         null,
                         null,
                         null,
                         null,
-                        api_get_session_id()
+                        $sessionId
                     );
                     api_item_property_update(
                         $_course,
                         TOOL_DOCUMENT,
                         $audio_id,
                         'invisible',
-                        api_get_user_id(),
+                        $userId,
                         null,
                         null,
                         null,
                         null,
-                        api_get_session_id()
+                        $sessionId
                     );
                 }
 
@@ -691,7 +701,7 @@ class learnpath
                     $_FILES['mp3'],
                     api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document',
                     '/audio',
-                    api_get_user_id(),
+                    $userId,
                     '',
                     '',
                     '',
@@ -733,7 +743,8 @@ class learnpath
         $zipname = '',
         $publicated_on = '',
         $expired_on = '',
-        $categoryId = 0
+        $categoryId = 0,
+        $userId = 0
     ) {
         global $charset;
 
@@ -754,6 +765,8 @@ class learnpath
 
         // Session id.
         $session_id = api_get_session_id();
+
+        $userId = empty($userId) ? api_get_user_id() : $userId;
 
         $check_name = "SELECT * FROM $tbl_lp
                        WHERE c_id = $course_id AND name = '$name'";
@@ -861,9 +874,9 @@ class learnpath
                         TOOL_LEARNPATH,
                         $id,
                         'LearnpathAdded',
-                        api_get_user_id()
+                        $userId
                     );
-                    api_set_default_visibility($id, TOOL_LEARNPATH, 0, $courseInfo);
+                    api_set_default_visibility($id, TOOL_LEARNPATH, 0, $courseInfo, $session_id, $userId);
                     return $id;
                 }
                 break;
@@ -5942,16 +5955,19 @@ class learnpath
      * @param string $content
      * @param string $title
      * @param string $extension
+     * @param int $userId creator id
      *
      * @return string
      */
-    public function create_document($courseInfo, $content = '', $title = '', $extension = 'html')
+    public function create_document($courseInfo, $content = '', $title = '', $extension = 'html', $userId = 0)
     {
         if (!empty($courseInfo)) {
             $course_id = $courseInfo['real_id'];
         } else {
             $course_id = api_get_course_int_id();
         }
+        $userId = empty($userId) ? api_get_user_id() : $userId;
+        $sessionId = api_get_session_id();
 
         global $charset;
         $postDir = isset($_POST['dir']) ? $_POST['dir'] : '';
@@ -5994,11 +6010,8 @@ class learnpath
         }
 
         $title = disable_dangerous_file($title);
-
         $filename = $title;
-
         $content = !empty($content) ? $content : $_POST['content_lp'];
-
         $tmp_filename = $filename;
 
         $i = 0;
@@ -6053,7 +6066,13 @@ class learnpath
                     $save_file_path,
                     'file',
                     $file_size,
-                    $tmp_filename
+                    $tmp_filename,
+                    '',
+                    0, //readonly
+                    true,
+                    null,
+                    $sessionId,
+                    $userId
                 );
 
                 if ($document_id) {
@@ -6062,12 +6081,12 @@ class learnpath
                         TOOL_DOCUMENT,
                         $document_id,
                         'DocumentAdded',
-                        api_get_user_id(),
+                        $userId,
                         null,
                         null,
                         null,
                         null,
-                        api_get_session_id()
+                        $sessionId
                     );
 
                     $new_comment = (isset($_POST['comment'])) ? trim($_POST['comment']) : '';

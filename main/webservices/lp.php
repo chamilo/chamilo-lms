@@ -592,6 +592,7 @@ function WSCreateLp($params)
         }
     }
 
+    $userId = 1;
     $courseId = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
 
@@ -611,8 +612,22 @@ function WSCreateLp($params)
             return 'Session not found';
         }
     }*/
+    if ($debug) {
+        error_log('add_lp');
+    }
+    $lpId = learnpath::add_lp(
+        $courseCode,
+        $lpName,
+        '',
+        'chamilo',
+        'manual',
+        '',
+        '',
+        '',
+        0,
+        $userId
+    );
 
-    $lpId = learnpath::add_lp($courseCode, $lpName, '', 'chamilo', 'manual');
     if ($lpId) {
         if ($debug) {
             error_log('LP created');
@@ -630,7 +645,8 @@ function WSCreateLp($params)
                 $courseInfo,
                 $data,
                 $info['filename'],
-                $extension
+                $extension,
+                $userId
             );
 
             if ($documentId) {
@@ -644,7 +660,9 @@ function WSCreateLp($params)
                         $documentId,
                         $lpItem['title'],
                         '',
-                        ''
+                        '',
+                        0,
+                        $userId
                     );
 
                     $previousId = $itemId;

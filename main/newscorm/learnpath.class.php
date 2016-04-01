@@ -5930,7 +5930,7 @@ class learnpath
             if (!is_dir($filepath.'/'.$dir)) {
                 $folderData = create_unexisting_directory(
                     $course,
-                    api_get_user_id(),
+                    $creatorId,
                     0,
                     0,
                     0,
@@ -5997,7 +5997,7 @@ class learnpath
 
         if (empty($_POST['dir']) && empty($_GET['dir'])) {
             //Generates folder
-            $result = $this->generate_lp_folder($courseInfo, $creatorId);
+            $result = $this->generate_lp_folder($courseInfo, '', $creatorId);
             $dir = $result['dir'];
             $filepath = $result['filepath'];
         }

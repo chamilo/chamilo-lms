@@ -1489,7 +1489,7 @@ function create_unexisting_directory(
         $to_group_id
     );
 
-    if ($folderExists == true) {
+    if ($folderExists === true) {
         if ($generateNewNameIfExists) {
             $counter = 1;
             while (1) {
@@ -1500,7 +1500,7 @@ function create_unexisting_directory(
                     $to_group_id
                 );
 
-                if ($folderExists == false) {
+                if ($folderExists === false) {
                     break;
                 }
                 $counter++;
@@ -1529,7 +1529,7 @@ function create_unexisting_directory(
 
     if (!is_dir($base_work_dir.$systemFolderName)) {
         $result = mkdir(
-            $base_work_dir.$systemFolderName,
+            $base_work_dir . $systemFolderName,
             api_get_permissions_for_new_directories(),
             true
         );
@@ -1548,7 +1548,7 @@ function create_unexisting_directory(
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
-
+        
                 $document_id = add_document(
                     $_course,
                     $systemFolderName,
@@ -1558,7 +1558,9 @@ function create_unexisting_directory(
                     null,
                     0,
                     true,
-                    $to_group_id
+                    $to_group_id,
+                    $session_id,
+                    $user_id
                 );
 
                 if ($document_id) {

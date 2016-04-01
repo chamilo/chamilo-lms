@@ -1,0 +1,62 @@
+{% extends sonata_block.templates.block_base %}
+
+{% block block %}
+    <div class="box box-primary">
+        {% if settings.title is not empty %}
+            <div class="box-header with-border">
+                <h4 class="box-title">
+                    <i class="fa fa-clock-o fa-fw"></i> {{ settings.title }}
+                </h4>
+            </div>
+        {% endif %}
+
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="timeline">
+                        {% for entry in entries %}
+
+                            {% if currentDay is not defined or currentDay != entry.createdAt|format_date %}
+                                {% set currentDay = entry.createdAt|format_date %}
+                                <li class="time-label">
+                                    <span class="bg-red">{{ currentDay }}</span>
+                                </li>
+                            {% endif %}
+
+                            {% set subject = entry.getComponent('subject') %}
+                            {% set target = entry.getComponent('target') %}
+                            {% set target_text_component = entry.getComponent('target_text') %}
+
+                            {% if subject.data %}
+                                {% set subject_text = sonata_timeline_generate_link(subject, entry) %}
+                            {% else %}
+                                {% set subject_text = '<abbr title="' ~ 'element_reference_deleted'|trans({'%reference%': target.hash}, "SonataTimelineBundle") ~ '">' ~ 'element_deleted'|trans({}, "SonataTimelineBundle") ~ '</abbr>' %}
+                            {% endif %}
+
+                            {% if target.data is defined and target.data is not empty %}
+                                {% set target_text = sonata_timeline_generate_link(target, entry) %}
+                            {% elseif target_text_component %}
+                                {% set target_text = '<abbr title="' ~ 'element_deleted'|trans({}, "SonataTimelineBundle") ~ '">'~target_text_component~'</abbr>' %}
+                            {% else %}
+                                {% set target_text = '<abbr title="' ~ 'element_reference_deleted'|trans({'%reference%': target.hash}, "SonataTimelineBundle") ~ '">' ~ 'element_deleted'|trans({}, "SonataTimelineBundle") ~ '</abbr>' %}
+                            {% endif %}
+
+                            {% set verb = "actions."~entry.verb %}
+                            {% set icon = "actions.icon."~entry.verb %}
+
+                            <li>
+                                <i class="{{ icon|trans({}, "SonataTimelineBundle") }}"></i>
+                                <div class="timeline-item" style="background: #f3f4f5;">
+                                    <span class="time"><i class="fa fa-clock-o"></i> {{ entry.createdAt|format_time }}</span>
+                                    <div class="timeline-body" style="border-bottom: none;">{{ verb|trans({'%subject%': subject_text, '%target%': target_text}, "SonataTimelineBundle")|raw }}</div>
+                                </div>
+                            </li>
+                        {% else %}
+                            {{ 'no_action'|trans({}, "SonataTimelineBundle") }}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

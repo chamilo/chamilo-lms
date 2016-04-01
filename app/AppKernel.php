@@ -97,7 +97,7 @@ class AppKernel extends Kernel
              new Chamilo\ThemeBundle\ChamiloThemeBundle(),
             //new Chamilo\NotificationBundle\ChamiloNotificationBundle(),
             new Chamilo\AdminBundle\ChamiloAdminBundle(),
-            //new Chamilo\TimelineBundle\ChamiloTimelineBundle(),
+            new Chamilo\TimelineBundle\ChamiloTimelineBundle(),
 
             // Based in Sonata
             new Chamilo\ClassificationBundle\ChamiloClassificationBundle(),

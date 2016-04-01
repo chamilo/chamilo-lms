@@ -326,6 +326,18 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     protected $lastLogin;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="created_at", type="datetime", nullable=true, unique=false)
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true, unique=false)
+     */
+    protected $updatedAt;
+
+    /**
      * Random string sent to the user email address in order to verify it
      *
      * @var string
@@ -339,6 +351,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      * @ORM\Column(name="password_requested_at", type="datetime", nullable=true, unique=false)
      */
     protected $passwordRequestedAt;
+
+
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")

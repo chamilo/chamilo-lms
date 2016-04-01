@@ -1,3 +1,4 @@
+
 <?php
 /* For licensing terms, see /license.txt */
 
@@ -883,7 +884,6 @@ class UserManager
         }
 
         $userManager = self::getManager();
-
         /** @var Chamilo\UserBundle\Entity\User $user */
         $user = self::getRepository()->find($user_id);
 
@@ -912,6 +912,7 @@ class UserManager
             ->setPictureUri($picture_uri)
             ->setExpirationDate($expiration_date)
             ->setActive($active)
+            ->setEnabled($active)
             ->setHrDeptId($hr_dept_id)
         ;
 
@@ -4775,7 +4776,7 @@ EOF;
                 Database::query($sql);
             }
 
-            $user->addRole('ROLE_ADMIN');
+            $user->addRole('ROLE_SUPER_ADMIN');
             self::getManager()->updateUser($user, true);
         }
     }

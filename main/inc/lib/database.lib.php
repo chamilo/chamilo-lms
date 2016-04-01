@@ -135,14 +135,9 @@ class Database
 
         $config->setEntityNamespaces(
             array(
-                'ChamiloClassificationBundle' => 'Chamilo\ClassificationBundle\Entity',
-                'ChamiloMediaBundle' => 'Chamilo\MediaBundle\Entity',
-                'ChamiloPageBundle' => 'Chamilo\PageBundle\Entity',
                 'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'FosUserBundle' => 'FOS\UserBundle\Entity',
-                'SonataUserBundle' => 'Sonata\UserBundle\Entity',
             )
         );
 

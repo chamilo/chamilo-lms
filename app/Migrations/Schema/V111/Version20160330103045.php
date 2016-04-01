@@ -117,7 +117,10 @@ class Version20160330103045 extends AbstractMigration
 
         $sql = "UPDATE user SET roles = 'a:0:{}'";
         $this->addSql($sql);
-        $sql = "UPDATE user SET enabled = '1' WHERE active = 1" ;
+        $sql = "UPDATE user SET enabled = '1' WHERE active = 1";
+        $this->addSql($sql);
+
+        $sql = "ALTER TABLE user ADD created_at DATETIME DEFAULT NULL, ADD updated_at DATETIME DEFAULT NULL;";
         $this->addSql($sql);
 
         $sql = "UPDATE user SET username_canonical = username";

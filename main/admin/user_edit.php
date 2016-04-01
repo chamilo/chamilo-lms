@@ -467,6 +467,7 @@ if ($form->validate()) {
         $currentUserId = api_get_user_id();
 
         $userObj = api_get_user_entity($user_id);
+		
         UserManager::add_user_as_admin($userObj);
 
 		if ($user_id != $currentUserId) {

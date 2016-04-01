@@ -1701,12 +1701,23 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
                     '&lp=true';
             break;
         case TOOL_DOCUMENT:
-            $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-            $sql = "SELECT * FROM $tbl_doc WHERE c_id = $course_id AND id = $id";
-            $result = Database::query($sql);
-            $myrow = Database::fetch_array($result);
-            $docurl = str_replace('%2F', '/', urlencode($myrow['path']));
-            $link .= $main_course_path.'document'.$docurl.'?cidReq='.$course_code.'&id_session='.$session_id;
+            $documentInfo = DocumentManager::get_document_data_by_id(
+                $id,
+                $course_code,
+                true,
+                $session_id
+            );
+            $documentPathInfo = pathinfo($documentInfo['absolute_path']);
+            $jplayer_supported_files = ['mp4', 'ogv', 'flv', 'm4v'];
+            $showDirectUrl = !in_array($documentPathInfo['extension'], $jplayer_supported_files);
+
+            if ($showDirectUrl) {
+                $link = $documentInfo['direct_url'] . '?';
+                $link .= http_build_query(['cidReq' => $course_code, 'id_session' => $session_id]);
+            } else {
+                $link = $documentInfo['url'] . '&' . http_build_query(['origin' => 'learnpathitem']);
+            }
+
             $openmethod = 2;
             $officedoc = false;
             Session::write('openmethod',$openmethod);

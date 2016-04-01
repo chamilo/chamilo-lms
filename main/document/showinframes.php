@@ -331,7 +331,11 @@ if (!$jplayer_supported && $execute_iframe) {
     </script>';
 }
 
-Display::display_header('');
+if (isset($_GET['origin']) && $_GET['origin'] === 'learnpathitem') {
+    Display::display_reduced_header();
+} else {
+    Display::display_header('');
+}
 
 echo '<div align="center">';
 

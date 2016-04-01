@@ -3212,7 +3212,7 @@ class DocumentManager
     {
         //<button class="jp-video-play-icon" role="button" tabindex="0">play</button>
         $html = '
-        <div id="jp_container_1" class="jp-video" role="application" aria-label="media player">
+        <div id="jp_container_1" class="jp-video center-block" role="application" aria-label="media player">
             <div class="jp-type-single">
                 <div id="jquery_jplayer_1" class="jp-jplayer"></div>
                 <div class="jp-gui">

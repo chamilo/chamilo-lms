@@ -337,7 +337,7 @@ if (isset($_GET['origin']) && $_GET['origin'] === 'learnpathitem') {
     Display::display_header('');
 }
 
-echo '<div align="center">';
+echo '<div class="text-center">';
 
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
@@ -361,17 +361,15 @@ if ($show_web_odf) {
     echo '</div>';
 } else {
     // ViewerJS already have download button
-    echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank"><em class="fa fa-download"></em>
-'.get_lang('Download').'</a>';
+    echo '<p>';
+    echo Display::toolbarButton(get_lang('Download'), $file_url_web, 'download', 'default', ['target' => '_blank']);
+    echo '</p>';
 }
 
 echo '</div>';
 
 if ($jplayer_supported) {
-    echo '<br />';
-    echo '<div class="col-md-3 col-md-offset-3">';
     echo DocumentManager::generate_video_preview($document_data);
-    echo '</div>';
 
     // media_element blocks jplayer disable it
     Display::$global_template->assign('show_media_element', 0);

@@ -1,0 +1,67 @@
+{% block box_collapse %}
+    <button class="btn btn-{{ type|default('info') }} btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+{% endblock %}
+{% block box_remove %}
+    <button class="btn btn-{{ type|default('info') }} btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
+{% endblock %}
+
+{% block box_header_buttons %}
+    {% if collapse or remove %}
+        <div class="box-tools pull-right">
+            {% if collapse %}
+                {{ block('box_collapse') }}
+            {% endif %}
+            {% if remove %}
+                {{ block('box_remove') }}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% macro box_header(title, collapse, remove, type) %}
+    <div class="box-header">
+        <h3 class="box-title">{{ title }}</h3>
+        {{ block('box_header_buttons') }}
+    </div>
+{% endmacro %}
+
+{% macro menu_item(item) %}
+    <li id="{{ item.identifier }}" class=" {{ item.isActive ? 'active' : '' }} {{ item.hasChildren? 'treeview' : '' }}">
+        <a href="{{ item.hasChildren ? '#': '/' in item.route ? item.route : path(item.route, item.routeArgs) }}">
+            {% if item.icon %} <i class="{{ item.icon }}"></i> {% endif %}
+            <span>{{ item.label }}</span>
+            {% if item.badge %}
+                <small class="badge pull-right bg-{{ item.badgeColor }}">{{ item.badge }}</small>
+            {% endif %}
+        </a>
+
+        {% if item.hasChildren %}
+            <ul class="treeview-menu">
+                {% for child in item.children %}
+                    <li class="{{ child.isActive ? 'active':'' }}" id="{{ child.identifier }}">
+                        <a href="{{ '/' in child.route ? child.route : path(child.route, child.routeArgs) }}">
+                            <i class="fa fa-angle-double-right"></i>
+                            {{ child.label }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}
+
+
+{% macro panel(title, content) %}
+    {% autoescape false %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4> {{ title }} </h4>
+                </div>
+            </div>
+            <div class="panel-body">
+                {{ content }}
+            </div>
+        </div>
+    {% endautoescape %}
+{% endmacro %}

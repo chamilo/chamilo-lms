@@ -1,0 +1,37 @@
+<ol class="breadcrumb">
+    <li>
+        <a href="{{ path('home') }}">
+            <i class="fa fa-dashboard"></i>
+            {{ 'Home'|trans({}, 'ChamiloThemeBundle') }}
+        </a>
+    </li>
+
+    {% if course is defined %}
+    <li>
+        <a href="{{ url('course_home', {'course': course }) }}">
+            <i class="fa fa-book"></i>
+            {{ course.title }}
+        </a>
+    </li>
+    {% endif %}
+
+    {% if tool.name is defined and tool.name != '' %}
+        <li>
+            <a href="{{ url('chamilo_'~ tool.name ~'_index', {'course': course }) }}">
+                <i class="fa fa-cube"></i>
+                {{ tool.name }}
+            </a>
+        </li>
+    {% endif %}
+
+    {#{% if active %}#}
+        {#{% for item in active %}#}
+            {#<li>#}
+                {#<a href="{{ item.route is empty ? '#' : '/' in item.route ? item.route : path(item.route, item.routeArgs) }}">#}
+                    {#{{ item.label }}#}
+                {#</a>#}
+            {#</li>#}
+        {#{% endfor %}#}
+    {#{% endif %}#}
+    <li class="active">{{ title }}</li>
+</ol>

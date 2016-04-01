@@ -1,0 +1,52 @@
+{% extends '@ChamiloTheme/Layout/base-layout.html.twig' %}
+
+{% block page_content %}
+
+    <div class="row">
+        <div class="col-md-4">
+
+
+        </div>
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Form Theme</h3>
+                </div>
+                <div class="box-body">
+                    {{ form(form) }}
+                </div>
+                <div class="box-footer">
+                    <div class="pull-right">
+                        <button type="reset" class="btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="box box-solid box-primary">
+                {{ macro.box_header('built from macro', true, false, 'primary') }}
+                <div class="box-body">
+                    some content...
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block page_title %} Forms {% endblock %}
+{% block page_subtitle %} demonstration {% endblock %}

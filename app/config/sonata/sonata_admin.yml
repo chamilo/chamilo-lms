@@ -60,7 +60,7 @@ sonata_admin:
                 label_catalogue: SonataDemoBundle
                 #icon:            '<i class="fa fa-th"></i>'
                 items:
-#                    - sonata.page.admin.page
+                    - sonata.page.admin.page
 #                    - sonata.news.admin.comment
 #                    - sonata.news.admin.post
                     - sonata.media.admin.media

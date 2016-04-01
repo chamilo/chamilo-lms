@@ -1,0 +1,47 @@
+<!-- User Account: style can be found in dropdown.less -->
+{% import "ChamiloThemeBundle:Macros:image.html.twig" as macro_image %}
+<li class="dropdown user user-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="glyphicon glyphicon-user"></i>
+        <span>{{ user.username }} <i class="caret"></i></span>
+    </a>
+    <ul class="dropdown-menu">
+        <!-- User image -->
+        <li class="user-header bg-light-blue">
+            {{ macro_image.avatar(user.avatar, user.username) }}
+            <p>
+                {{ user.username }}
+                 <small>
+                    {{ 'Member since %date%'|trans({'%date%': user.memberSince|date('m.Y') }, 'ChamiloThemeBundle') }}
+                </small>
+            </p>
+        </li>
+        <!-- Menu Body -->
+        {#
+        <li class="user-body">
+            <div class="col-xs-4 text-center">
+                <a href="#">Followers</a>
+            </div>
+            <div class="col-xs-4 text-center">
+                <a href="#">Sales</a>
+            </div>
+            <div class="col-xs-4 text-center">
+                <a href="#">Friends</a>
+            </div>
+        </li>
+        #}
+        <!-- Menu Footer-->
+        <li class="user-footer">
+            <div class="pull-left">
+                <a href="{{ path('chamilo_core_user_user_profile', {'username' : user.identifier}) }}" class="btn btn-default btn-flat">
+                    {{'Profile'|trans({}, 'ChamiloThemeBundle')}}
+                </a>
+            </div>
+            <div class="pull-right">
+                <a href="{{ path('logout') }}" class="btn btn-default btn-flat">
+                    {{ 'Sign out'|trans({}, 'ChamiloThemeBundle') }}
+                </a>
+            </div>
+        </li>
+    </ul>
+</li>

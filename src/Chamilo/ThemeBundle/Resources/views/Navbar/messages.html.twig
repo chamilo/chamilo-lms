@@ -1,0 +1,37 @@
+{% import "ChamiloThemeBundle:Macros:image.html.twig" as macro_image %}
+<!-- Messages: style can be found in dropdown.less-->
+<li class="dropdown messages-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-envelope"></i>
+        <span class="label label-success">{{ total }}</span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="header">
+            {{ 'You have %total% messages'|trans({'%total%':total}, 'ChamiloThemeBundle') }}
+        </li>
+        <li>
+            <!-- inner menu: contains the actual data -->
+            <ul class="menu">
+                {% for msg in messages %}
+                    <li><!-- start message -->
+                        <a href="{{ path('fos_message_thread_view', {'messageid': msg.identifier}) }}">
+                            <div class="pull-left">
+                                {{ macro_image.avatar(msg.from.avatar, msg.from.username) }}
+                            </div>
+                            <h4>
+                                {{ msg.from.username }}
+                                <small><i class="fa fa-clock-o"></i> {{ msg.sentAt|date('d.m.Y H:i') }}</small>
+                            </h4>
+                            <p>{{ msg.subject }}</p>
+                        </a>
+                    </li><!-- end message -->
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="footer">
+            <a href="{{ path('fos_message_inbox') }}">
+                {{'See All Messages'|trans({}, 'ChamiloThemeBundle')}}
+            </a>
+        </li>
+    </ul>
+</li>

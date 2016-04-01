@@ -1,0 +1,24 @@
+<!-- Notifications: style can be found in dropdown.less -->
+<li class="dropdown notifications-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-warning"></i>
+        <span class="label label-warning">{{ total }}</span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="header">{{ 'You have %total% notifications'|trans({'%total%': total}, 'ChamiloThemeBundle') }}</li>
+        <li>
+            <!-- inner menu: contains the actual data -->
+            <ul class="menu">
+
+                {% for notice in notifications %}
+                    <li>
+                        <a href="{{ path('chamilo_admin_show_notification', {'notifyid':notice.identifier}) }}">
+                            <i class="{{ notice.icon }} {{ notice.type }}"></i> {{notice.message}}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="footer"><a href="{{ path('chamilo_admin_all_notifications') }}">{{'View all'|trans({}, 'ChamiloThemeBundle')}}</a></li>
+    </ul>
+</li>

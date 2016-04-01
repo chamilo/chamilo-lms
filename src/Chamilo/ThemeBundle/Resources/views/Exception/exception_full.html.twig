@@ -1,0 +1,94 @@
+{% extends '@ChamiloTheme/Layout/base-layout.html.twig' %}
+{% block page_title %} Error {% endblock %}
+{% block page_subtitle %} {{ status_code }} {% endblock %}
+
+{% block page_content %}
+    <div class="error-page">
+        <h2 class="headline">{{ status_code }}</h2>
+
+        <div class="error-content">
+            <h3>{{ 'Something seems to have gone wrong'|trans() }}</h3>
+
+            <p>{{ exception.message }}</p>
+        </div>
+    </div>
+
+    <div class="">
+
+    {% for n, position in exception.toarray %}
+
+        <div class="box box-danger">
+            <div class="box-header">
+                <i class="fa fa-warning"></i>
+
+                <h3 class="box-title">{{ position.class|abbr_class }}</h3>
+            </div>
+            <div class="box-body">
+
+                <div class="callout callout-danger">
+                    {{ position.message|nl2br|format_file_from_text }}
+                </div>
+
+                <div class="box-group" id="box-{{ n }}">
+
+
+                    <!-- trace -->
+                    <div class="panel box box-warning">
+                        <div class="box-header">
+                            <h4 class="box-title">
+                                <a data-toggle="collapse" data-parent="box-{{ n }}"
+                                   href="#trace-{{ n }}">
+                                    {{ 'Stack Trace'|trans() }}
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="trace-{{ n }}" class="panel-collapse collapse">
+                            <div class="box-body">
+                                <div class="panel">
+                                <ul class="timeline">
+                                    {% for i, trace in position.trace %}
+                                        <li class="time-label">
+                                                    <span class="bg-red">
+                                                        Stack #{{ i }}
+                                                    </span>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-code bg-blue"></i>
+
+                                            <div class="timeline-item">
+                                                <h3 class="timeline-header">
+                                                    {{ trace.file }}
+                                                </h3>
+
+                                                <div class="timeline-body">
+                                                    {% if trace.function %}
+                                                        at
+                                                        <strong>
+                                                            <abbr title="{{ trace.class }}">{{ trace.short_class }}</abbr>
+                                                            {{ trace.type ~ trace.function }}
+                                                        </strong>
+                                                        ({{ trace.args|format_args }})
+                                                    {% endif %}
+
+                                                    {% if trace.file is defined and trace.file and trace.line is defined and trace.line %}
+                                                        {{ trace.function ? '<br />' : '' }}
+                                                        in {{ trace.file|format_file(trace.line) }}&nbsp;
+                                                        {{ trace.file|file_excerpt(trace.line) }}
+
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

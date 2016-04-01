@@ -1,0 +1,15 @@
+{% macro avatar(image, alt, class) %}
+    {% if image %}
+        <img src="{{ asset(image) }}" class="{{class|default('img-circle')}}" alt="{{ alt }}" />
+    {% else %}
+        {#{% image '@avatar_img' %}#}
+        {#<img src="{{ asset_url }}" class="{{ class|default('img-circle') }}" alt="{{alt}}" />#}
+        {#{% endimage %}#}
+    {% endif %}
+{% endmacro %}
+
+{% macro avatar_from_media(media, alt, class) %}
+    {% if media %}
+        {% thumbnail media, 'small' with {'class': 'img-circle'} %}
+    {% endif %}
+{% endmacro %}

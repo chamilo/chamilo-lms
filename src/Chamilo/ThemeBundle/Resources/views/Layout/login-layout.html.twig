@@ -1,0 +1,48 @@
+{% import "ChamiloThemeBundle:Macros:box.html.twig" as macro %}
+<!doctype html>
+<!--[if lt IE 7 ]><html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]><html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]><html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>
+        {% block title %}
+            {#{{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}#}
+            Chamilo
+        {% endblock %}
+    </title>
+
+    {# Check chamilo_css key in assetic.yml #}
+    {#{%- stylesheets '@chamilo_css' -%}#}
+    {#<link rel="stylesheet" href="{{ asset_url }}" />#}
+    {#{% endstylesheets %}#}
+
+    {#{% block javascripts %}#}
+    {#{%- javascripts '@chamilo_js' -%}#}
+    {#<script src="{{ asset_url }}"></script>#}
+    {#{% endjavascripts %}#}
+    {#{% endblock %}#}
+
+    {% block stylesheets %}
+        {% for stylesheet in sonata_admin.adminPool.getOption('stylesheets', []) %}
+            <link rel="stylesheet" href="{{ asset(stylesheet) }}">
+        {% endfor %}
+    {% endblock %}
+
+</head>
+<body class="hold-transition login-page">
+
+<div class="login-box">
+    <div class="login-logo">
+        Chamilo
+    </div>
+    {% block page_content %}{% endblock %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% import "ChamiloThemeBundle:Macros:image.html.twig" as macro_image %}
+<!-- Sidebar user panel -->
+<div class="user-panel">
+    <div class="pull-left image">
+    {% if user.avatar %}
+        {{ macro_image.avatar_from_media(user.avatar, user.username) }}
+    {% else %}
+        {{ macro_image.avatar('bundles/chamilocore/img/unknown.jpg', user.username)  }}
+    {% endif %}
+    </div>
+
+    <div class="pull-left info">
+        <p>{{ 'Hello, %user%'| trans( {'%user%': user.username }, 'ChamiloThemeBundle') }}</p>
+        <a href="#">
+            <i class="fa fa-circle text-success"></i> {{ 'Online' | trans }}
+        </a>
+    </div>
+
+    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+    <a href="{{ path('home', {'_switch_user': '_exit'}) }}">
+        {{ 'Exit impersonation' | trans }}
+    </a>
+    {% endif %}
+</div>

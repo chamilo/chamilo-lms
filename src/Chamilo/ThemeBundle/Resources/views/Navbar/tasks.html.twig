@@ -1,0 +1,37 @@
+<!-- Tasks: style can be found in dropdown.less -->
+<li class="dropdown tasks-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-tasks"></i>
+        <span class="label label-danger">{{ total }}</span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="header">{{ 'You have %total% tasks' |trans({'%total%':total}, 'ChamiloThemeBundle') }}</li>
+        <li>
+            <!-- inner menu: contains the actual data -->
+            <ul class="menu">
+                {% for task in tasks %}
+                <li>
+                    <a href="{{ path('chamilo_admin_show_task', {'taskid': task.identifier}) }}">
+                        <h3>
+                            {{ task.title }}
+                            <small>{{ task.progress }}%</small>
+                        </h3>
+                        <div class="progress xs">
+                            <div class="progress-bar progress-bar-{{ task.color }}"
+                                 style="width: {{ task.progress }}%"
+                                 role="progressbar"
+                                 aria-valuenow="{{ task.progress }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                <span class="sr-only">{{ '%progress%% Complete'|trans({'%progress%':task.progress}, 'ChamiloThemeBundle') }}</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                {%  endfor  %}
+            </ul>
+        <li class="footer">
+            <a href="{{ path('chamilo_admin_all_tasks') }}">{{'View all tasks'|trans({}, 'ChamiloThemeBundle')}}</a>
+        </li>
+    </ul>
+</li>

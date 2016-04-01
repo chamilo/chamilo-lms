@@ -1,0 +1,164 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block widget_attributes %}
+    {% if attr.class is defined %}
+        {% set class = attr.class ~ ' form-control' %}
+    {% else %}
+        {% set class = 'form-control' %}
+    {% endif %}
+    {% set attr = attr|merge({'class' : class}) %}
+    {{ parent () }}
+{% endblock widget_attributes %}
+
+{% block choice_widget_expanded %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }}>
+            {% for child in form %}
+                {{ form_widget(child) }}
+            {% endfor %}
+        </div>
+    {% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block choice_widget_collapsed %}
+    {% set attr = attr|merge({'class' : 'form-control'}) %}
+    {{ parent() }}
+{% endblock %}
+
+{% block checkbox_widget %}
+    <div class="checkbox">
+        {% spaceless %}
+            {% if not compound %}
+                {% set label_attr = label_attr|merge({'for': id}) %}
+            {% endif %}
+            {% if required %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+            {% endif %}
+            {% if label is empty %}
+                {% set label = name|humanize %}
+            {% endif %}
+            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+            {% if label is not sameas(false) %}
+                {{ label|trans({}, translation_domain) }}
+            {% endif %}
+            </label>
+        {% endspaceless %}
+    </div>
+{% endblock checkbox_widget %}
+
+{% block radio_widget %}
+    <div class="radio">
+        {% spaceless %}
+            {% if not compound %}
+                {% set label_attr = label_attr|merge({'for': id}) %}
+            {% endif %}
+            {% if required %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+            {% endif %}
+            {% if label is empty %}
+                {% set label = name|humanize %}
+            {% endif %}
+            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+            {% if label is not sameas(false) %}
+                {{ label|trans({}, translation_domain) }}
+            {% endif %}
+            </label>
+        {% endspaceless %}
+    </div>
+{% endblock radio_widget %}
+
+{% block date_widget %}
+    {% if widget == 'single_text' %}
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+            </div>
+
+            {% if attr.class is defined %}
+                {% set class = attr.class ~ ' timepicker' %}
+            {% else %}
+                {% set class = ' timepicker' %}
+            {% endif %}
+            {% set attr = attr|merge({'class' : class, 'data-datepicker':'on'}) %}
+
+            {{ block('form_widget_simple') }}
+        </div>
+    {% else %}
+        {% set date_pattern = '<div class="row">' ~ date_pattern ~ '</div>'|raw %}
+        {{ date_pattern|replace({
+        '{{ year }}' : '<div class="col-xs-4">{{ year }}</div>',
+        '{{ month }}' : '<div class="col-xs-4">{{ month }}</div>',
+        '{{ day }}' : '<div class="col-xs-4">{{ day }}</div>',
+        })|raw|replace({
+        '{{ year }}':  form_widget(form.year),
+        '{{ month }}': form_widget(form.month),
+        '{{ day }}':   form_widget(form.day),
+        })|raw }}
+
+    {% endif %}
+{% endblock %}
+
+{% block time_widget %}
+    {% if widget == 'single_text' %}
+        <div class="bootstrap-timepicker">
+            <div class="input-group">
+                {% if attr.class is defined %}
+                    {% set class = attr.class ~ ' timepicker' %}
+                {% else %}
+                    {% set class = ' timepicker' %}
+                {% endif %}
+                {% set attr = attr|merge({'class' : class, 'data-timepicker':'on'}) %}
+                {{ block('form_widget_simple') }}
+                <div class="input-group-addon add-on">
+                    <i class="fa fa-clock-o"></i>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block form_row %}
+    {% set types = form.vars.block_prefixes %}
+    {% if 'checkbox' in types or 'radio' in types %}
+        <div class="form-group {{ errors|length > 0 ? 'has-error has-feedback'  : '' }}">
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
+    {% else %}
+        <div class="form-group {{ errors|length > 0 ? 'has-error has-feedback'  : '' }}">
+            {{ form_label(form) }}
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block form_label %}
+
+    {% if help is defined %}
+        &nbsp; <a href="#" data-toggle="tooltip" data-original-title="{{ help }}"><i class="fa fa-question-circle"></i></a>
+    {% endif %}
+
+    {{ parent() }}
+    {% if required %}
+        <span class="required" title="Dies ist ein Pflichtfeld">*</span>
+    {% endif %}
+
+{% endblock form_label %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <ul class="list-unstyled">
+                {% for error in errors %}
+                    <li class="text-danger">{{ error.message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+

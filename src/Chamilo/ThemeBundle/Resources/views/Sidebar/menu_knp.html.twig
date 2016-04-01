@@ -1,0 +1,38 @@
+<!-- sidebar menu: : style can be found in sidebar.less -->
+{% import "ChamiloThemeBundle:Macros:box.html.twig" as macro %}
+{% autoescape false %}
+
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    {#{{ macro.panel(#}
+    {#'Profile' | trans,#}
+    {#mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:mainMenu', {'automenu': 'pills', 'stacked':true})) }}#}
+
+    {{ macro.panel(
+    'Courses' | trans,
+    mopa_bootstrap_menu('ChamiloCoreBundle:CourseMenuBuilder:courseMenu', {'automenu': 'pills', 'stacked':true})) }}
+
+    {{ macro.panel(
+    'Skills' | trans,
+    mopa_bootstrap_menu('ChamiloCoreBundle:CourseMenuBuilder:skillsMenu', {'automenu': 'pills', 'stacked':true})) }}
+
+{% else %}
+    {{ locale_switcher(null, null, 'ChamiloCoreBundle:Admin:switcher_links.html.twig') }}
+    <div class="user-panel">
+
+    </div>
+    <form action="{{ path("fos_user_security_check") }}" method="post" role="form" class="sidebar-form">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+        <div class="form-group">
+            <label for="username">{{ 'security.login.username' | trans({}, 'FOSUserBundle') }}</label>
+            <input type="text" class="form-control" id="username" name="_username" >
+        </div>
+        <div class="form-group">
+            <label for="password">{{ 'security.login.password' | trans({}, 'FOSUserBundle') }}</label>
+            <input type="password" class="form-control" id="password" name="_password">
+        </div>
+        <button type="submit" class="btn btn-default">{{ 'security.login.submit' | trans({}, 'FOSUserBundle') }}</button>
+    </form>
+    {{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:notLoginMenu', {'automenu': 'pills', 'stacked':true}) }}
+{% endif %}
+
+{% endautoescape %}

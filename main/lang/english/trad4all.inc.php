@@ -7627,4 +7627,9 @@ $NewLogoUpdated = "New logo uploaded";
 $CurrentLogo = "Current logo";
 $UpdateLogo = "Update logo";
 $FollowedStudentBosses = "Followed student bosses";
+$DatabaseManager = "Database manager";
+$CourseTemplate = "Course template";
+$PickACourseAsATemplateForThisNewCourse = "Pick a course as template for this new course";
+$TeacherCanSelectCourseTemplateTitle = "Teacher can select a course as template";
+$TeacherCanSelectCourseTemplateComment = "Allow pick a course as template for the new course that teacher is creating";
 ?>

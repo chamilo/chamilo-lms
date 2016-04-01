@@ -103,6 +103,19 @@ $form->applyFilter('department_url', 'html_filter');
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
 $form->applyFilter('select_language', 'html_filter');
 
+if (api_get_setting('teacher_can_select_course_template') === 'true') {
+    $form->addElement(
+        'select_ajax',
+        'course_template',
+        [
+            get_lang('CourseTemplate'),
+            get_lang('PickACourseAsATemplateForThisNewCourse'),
+        ],
+        null,
+        ['url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course']
+    );
+}
+
 $form->addElement('checkbox', 'exemplary_content', '', get_lang('FillWithExemplaryContent'));
 
 $group = array();

@@ -115,4 +115,19 @@ JS;
 
         return parent::toHtml() . $html;
     }
+
+    /**
+     * We check the options and return only the values that _could_ have been
+     * selected. We also return a scalar value if select is not "multiple"
+     */
+    function exportValue(&$submitValues, $assoc = false)
+    {
+        $value = $this->_findValue($submitValues);
+
+        if (!$value) {
+            $value = '';
+        }
+
+        return $this->_prepareValue($value, $assoc);
+    }
 }

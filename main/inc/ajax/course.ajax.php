@@ -58,7 +58,7 @@ switch ($action) {
         }
         break;
     case 'search_course':
-        if (api_is_platform_admin()) {
+        if (api_is_teacher()) {
             if (!empty($_GET['session_id']) && intval($_GET['session_id'])) {
                 //if session is defined, lets find only courses of this session
                 $courseList = SessionManager::get_course_list_by_session_id(
@@ -68,16 +68,20 @@ switch ($action) {
             } else {
                 //if session is not defined lets search all courses STARTING with $_GET['q']
                 //TODO change this function to search not only courses STARTING with $_GET['q']
-                $courseList = CourseManager::get_courses_list(
-                    0, //offset
-                    0, //howMany
-                    1, //$orderby = 1
-                    'ASC',
-                    -1,  //visibility
-                    $_GET['q'],
-                    null, //$urlId
-                    true //AlsoSearchCode
-                );
+                if (api_is_platform_admin()) {
+                    $courseList = CourseManager::get_courses_list(
+                        0, //offset
+                        0, //howMany
+                        1, //$orderby = 1
+                        'ASC',
+                        -1,  //visibility
+                        $_GET['q'],
+                        null, //$urlId
+                        true //AlsoSearchCode
+                    );
+                } elseif (api_is_teacher()) {
+                    $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id(), $_GET['q']);
+                }
             }
 
             $results = array();
@@ -91,7 +95,7 @@ switch ($action) {
                 $title = $course['title'];
 
                 if (!empty($course['category_code'])) {
-                    $parents = self::getParentsToString($course['category_code']);
+                    $parents = CourseCategory::getParentsToString($course['category_code']);
                     $title = $parents . $course['title'];
                 }
 

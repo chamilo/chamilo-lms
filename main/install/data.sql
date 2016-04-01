@@ -1802,7 +1802,7 @@ VALUES
 ('show_full_skill_name_on_skill_wheel', 'true', 'Yes'),
 ('show_full_skill_name_on_skill_wheel', 'false', 'No');
 
--- Version 1.10.0.52
+-- Version 1.11.0.1
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
 VALUES
@@ -1815,4 +1815,15 @@ VALUES
 ('messaging_allow_send_push_notification', 'true', 'Yes'),
 ('messaging_allow_send_push_notification', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.52' WHERE variable = 'chamilo_database_version';
+-- Version 1.11.0.2
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
+VALUES
+('teacher_can_select_course_template', NULL, 'radio', 'Course', 'false', 'TeacherCanSelectCourseTemplateTitle', 'TeacherCanSelectCourseTemplateComment', NULL, NULL, 0);
+
+INSERT INTO settings_options (variable, value, display_text)
+VALUES
+('teacher_can_select_course_template', 'true', 'Yes'),
+('teacher_can_select_course_template', 'false', 'No');
+
+UPDATE settings_current SET selected_value = '1.11.0.2' WHERE variable = 'chamilo_database_version';

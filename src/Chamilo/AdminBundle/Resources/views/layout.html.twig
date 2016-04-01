@@ -1,0 +1,44 @@
+{# See vendor/sonata-project/admin-bundle/Resources/views/standard_layout.html.twig#}
+{% extends '@ChamiloAdmin/standard_layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet"
+          href="{{ asset('bundles/sonataformatter/markitup/skins/sonata/style.css') }}"
+          type="text/css" media="all"/>
+    <link rel="stylesheet"
+          href="{{ asset('bundles/sonataformatter/markitup/sets/markdown/style.css') }}"
+          type="text/css" media="all"/>
+    <link rel="stylesheet"
+          href="{{ asset('bundles/sonataformatter/markitup/sets/html/style.css') }}"
+          type="text/css" media="all"/>
+    <link rel="stylesheet"
+          href="{{ asset('bundles/sonataformatter/markitup/sets/textile/style.css') }}"
+          type="text/css" media="all"/>
+    <link rel="stylesheet"
+          href="{{ asset('bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('bundles/ivoryckeditor/ckeditor.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bundles/sonataformatter/markitup/sets/markdown/set.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bundles/sonataformatter/markitup/sets/html/set.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bundles/sonataformatter/markitup/sets/textile/set.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bundles/sonatacore/vendor/moment/min/moment.min.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"
+            type="text/javascript"></script>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

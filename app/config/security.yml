@@ -2,6 +2,7 @@
 # http://symfony.com/doc/current/book/security.html
 security:
     access_control:
+        - { path: ^/administrator, role: ROLE_ADMIN }
         - { path: ^/efconnect, role: ROLE_USER }
         - { path: ^/elfinder, role: ROLE_USER }
 
@@ -59,9 +60,9 @@ security:
             context: user
             form_login:
                 provider: fos_userbundle
-                login_path:     /administration/login
+                login_path:     /login
                 use_forward:    false
-                check_path:     /administration/login_check
+                check_path:     /login_check
                 failure_path:   null
                 default_target_path: /
 #                success_handler: chamilo_core.listener.login_success_handler
@@ -73,10 +74,4 @@ security:
 #                handlers: ['sonata.page.cms_manager_selector']
             anonymous: ~
             switch_user: false
-            # activate different ways to authenticate
 
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html

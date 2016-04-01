@@ -3,7 +3,7 @@ fos_user:
     firewall_name:  main
 
     # if you change the class configuration, please also alter the sonata_user.yml file
-    user_class:     Chamilo\UserBundle\Entity\User
+    user_class:     Chamilo\PageBundle\Entity\User
 
     group:
         group_class:   Chamilo\UserBundle\Entity\Group

@@ -351,7 +351,9 @@ class UserManager
             ->setLanguage($language)
             ->setRegistrationDate($now)
             ->setHrDeptId($hr_dept_id)
-            ->setActive($active);
+            ->setActive($active)
+            ->setEnabled($active)
+        ;
 
         if (!empty($expirationDate)) {
             $user->setExpirationDate($expirationDate);

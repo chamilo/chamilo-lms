@@ -235,7 +235,7 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../web/bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css
                 - %kernel.root_dir%/../web/bundles/sonatacore/vendor/select2/select2.css
-                - %kernel.root_dir%/../web/bundles/mopabootstrap/css/datepicker.css
+#                - %kernel.root_dir%/../web/bundles/mopabootstrap/css/datepicker.css
 #                - %kernel.root_dir%/../web/bundles/sonatademo/css/demo.css
 
             filters:

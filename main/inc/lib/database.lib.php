@@ -665,12 +665,14 @@ class Database
 
         $proxyDir = $path.'app/cache/';
 
-        return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+        $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
             $paths,
             $isDevMode,
             $proxyDir,
             $cache,
             $isSimpleMode
         );
+
+        return $config;
     }
 }

@@ -49,6 +49,7 @@ sonata_page:
         - fos_user(.*)
         - sylius_flow(.*)
 
+
     ignore_routes:
         - home
         - elfinder

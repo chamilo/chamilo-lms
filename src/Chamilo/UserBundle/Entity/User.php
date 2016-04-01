@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\GroupInterface;
 
 //use Chamilo\CoreBundle\Component\Auth;
 //use FOS\MessageBundle\Model\ParticipantInterface;
@@ -42,7 +43,7 @@ use FOS\UserBundle\Model\UserInterface;
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
  *
  */
-class User implements UserInterface//implements ParticipantInterface, ThemeUser
+class User implements UserInterface //implements ParticipantInterface, ThemeUser
 {
     const COURSE_MANAGER = 1;
     const TEACHER = 1;
@@ -77,9 +78,15 @@ class User implements UserInterface//implements ParticipantInterface, ThemeUser
     /**
      * @var string
      *
-     * * @ORM\Column(name="username_canonical", type="string", length=100, nullable=false, unique=true)
+     * @ORM\Column(name="username_canonical", type="string", length=100, nullable=false, unique=true)
      */
     protected $usernameCanonical;
+
+    /**
+     * @var string
+     * @ORM\Column(name="email_canonical", type="string", length=100, nullable=false, unique=true)
+     */
+    protected $emailCanonical;
 
     /**
      * @var string
@@ -87,6 +94,42 @@ class User implements UserInterface//implements ParticipantInterface, ThemeUser
      * @ORM\Column(name="email", type="string", length=100, nullable=false, unique=false)
      */
     protected $email;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="locked", type="boolean")
+     */
+    protected $locked;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="enabled", type="boolean")
+     */
+    protected $enabled;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="expired", type="boolean")
+     */
+    protected $expired;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="credentials_expired", type="boolean")
+     */
+    protected $credentialsExpired;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="credentials_expire_at", type="datetime", nullable=true, unique=false)
+     */
+    protected $credentialsExpireAt;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="expires_at", type="datetime", nullable=true, unique=false)
+     */
+    protected $expiresAt;
 
     /**
      * @var string
@@ -339,7 +382,7 @@ class User implements UserInterface//implements ParticipantInterface, ThemeUser
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
      * )
      */
-    //protected $groups;
+    protected $groups;
 
 
     //private $isActive;
@@ -2364,7 +2407,4 @@ class User implements UserInterface//implements ParticipantInterface, ThemeUser
             $this->id
             ) = $data;
     }
-
-
-
 }

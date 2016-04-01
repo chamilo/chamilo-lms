@@ -4,33 +4,30 @@ home:
 index:
     path: /
 
-oro_distribution_security_logout:
-    path: /logout
+#admin_dashboard:
+#    pattern: /administration/
+#    defaults:
+#        _controller: FrameworkBundle:Redirect:redirect
+#        route: sonata_admin_dashboard
+#        permanent: true # this for 301
 
-admin_dashboard:
-    pattern: /{_locale}/administration/
-    defaults:
-        _controller: FrameworkBundle:Redirect:redirect
-        route: sonata_admin_dashboard
-        permanent: true # this for 301
+#admin_without_locale:
+#    pattern: /administration
+#    defaults:
+#        _controller: FrameworkBundle:Redirect:redirect
+#        route: sonata_admin_dashboard
+#        permanent: true # this for 301
 
-admin_without_locale:
-    pattern: /administration
-    defaults:
-        _controller: FrameworkBundle:Redirect:redirect
-        route: sonata_admin_dashboard
-        permanent: true # this for 301
-
-admin_dashboard_without_locale:
-    pattern: /administration/dashboard
-    defaults:
-        _controller: FrameworkBundle:Redirect:redirect
-        route: sonata_admin_dashboard
-        permanent: true
+#admin_dashboard_without_locale:
+#    pattern: /administration/dashboard
+#    defaults:
+#        _controller: FrameworkBundle:Redirect:redirect
+#        route: sonata_admin_dashboard
+#        permanent: true
 
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
-    prefix: /{_locale}/administration
+    prefix: /administration
 
 #hwi_oauth_redirect:
 #    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
@@ -53,8 +50,8 @@ sonata_user_admin_security_logout:
 #_courses:
 #    resource: routing_courses.yml
 #
-#_front:
-#    resource: routing_front.yml
+_front:
+    resource: routing_front.yml
 
 _admin:
     resource: routing_admin.yml

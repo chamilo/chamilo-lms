@@ -32,6 +32,7 @@ class Encoder implements PasswordEncoderInterface
      */
     public function encodePassword($raw, $salt)
     {
+
         switch ($this->method) {
             case 'none':
                 $defaultEncoder = new PlaintextPasswordEncoder();

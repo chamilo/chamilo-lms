@@ -47,9 +47,9 @@ sonata_user:
             #- { route: 'sonata_customer_addresses', label: 'link_list_addresses', domain: 'SonataCustomerBundle'}
             #- { route: 'sonata_order_index', label: 'order_list', domain: 'SonataOrderBundle'}
         form:
-            type:                 chamilo_sonata_user_profile
+            type:                 sonata_user_registration
             handler:              sonata.user.profile.form.handler.default
-            name:                 chamilo_sonata_user_profile
+            name:                 sonata_user_registration_form
             validation_groups:
                 - Profile
 

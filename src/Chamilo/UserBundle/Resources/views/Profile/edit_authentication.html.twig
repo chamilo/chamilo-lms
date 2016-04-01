@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="span6 col-lg-6">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'title_user_edit_authentication'|trans({}, 'SonataUserBundle') }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ path('sonata_user_profile_edit_authentication') }}" method="POST" class="form-horizontal">
+                    {{ form_widget(form) }}
+
+                    <button type="submit" name="submit" class="btn btn-primary pull-right">{{ 'sonata_user_submit'|trans({}, 'SonataUserBundle') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="span6 col-lg-6">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'sonata_change_password_link'|trans({}, 'SonataUserBundle') }}</h3>
+            </div>
+            <div class="panel-body">
+                {% render url("sonata_user_change_password") %}
+            </div>
+        </div>
+    </div>
+</div>

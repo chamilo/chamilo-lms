@@ -1,0 +1,72 @@
+{% extends "ChamiloUserBundle:Profile:action.html.twig" %}
+
+{% block sonata_profile_title %}
+    {{ "title_user_account" | trans({}, 'SonataUserBundle')}} - {{ "title_user_edit_profile" | trans({}, 'SonataUserBundle')}}
+{% endblock %}
+
+{% block sonata_profile_content %}
+    {{ form_errors(form) }}
+
+
+
+    {% form_theme form _self %}
+
+    {#<script type="text/javascript">#}
+        {#// keep track of how many email fields have been rendered#}
+        {#var emailCount = '{{ form.extraFieldValues|length }}';#}
+
+        {#jQuery(document).ready(function() {#}
+            {#jQuery('#add-extra-field').click(function(e) {#}
+                {#e.preventDefault();#}
+
+                {#var emailList = jQuery('#field-list');#}
+
+                {#// grab the prototype template#}
+                {#var newWidget = emailList.attr('data-prototype');#}
+                {#// replace the "__name__" used in the id and name of the prototype#}
+                {#// with a number that's unique to your emails#}
+                {#// end name attribute looks like name="contact[emails][2]"#}
+                {#newWidget = newWidget.replace(/__name__/g, emailCount);#}
+                {#emailCount++;#}
+
+                {#// create a new list element and add it to the list#}
+                {#var newLi = jQuery('<li></li>').html(newWidget);#}
+                {#newLi.appendTo(emailList);#}
+            {#});#}
+        {#})#}
+    {#</script>#}
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ "title_user_account" | trans({}, 'SonataUserBundle')}}</h3>
+        </div>
+        <div class="panel-body">
+            <form action="{{ path('sonata_user_profile_edit') }}" method="POST" {{ form_enctype(form) }} class="form-horizontal">
+
+                {{ form_widget(form) }}
+
+                {#<ul id="field-list"#}
+                    {#data-prototype="{{ form_widget(form.extraFieldValues.vars.prototype)|e }}">#}
+                    {#{% for field in form.extraFieldValues %}#}
+                        {#<li>#}
+                            {#{{ form_errors(field) }}#}
+                            {#{{ form_widget(field) }}#}
+                        {#</li>#}
+                    {#{% endfor %}#}
+                {#</ul>#}
+                {#<a href="#" id="add-extra-field">Add</a>#}
+
+
+                <div class="form-actions">
+                    <button type="submit" name="submit"
+                            class="btn btn-primary pull-right">
+                        {{ 'sonata_user_submit'|trans({}, 'SonataUserBundle') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% render url("sonata_user_profile_edit_authentication") %}
+
+{% endblock %}

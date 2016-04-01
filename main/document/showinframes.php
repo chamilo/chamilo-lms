@@ -29,6 +29,7 @@ api_protect_course_script();
 $noPHP_SELF = true;
 $header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = intval($_GET['id']);
+$originIsLearnpath = isset($_GET['origin']) && $_GET['origin'] === 'learnpathitem';
 
 $courseInfo = api_get_course_info();
 $course_code = api_get_course_id();
@@ -331,7 +332,7 @@ if (!$jplayer_supported && $execute_iframe) {
     </script>';
 }
 
-if (isset($_GET['origin']) && $_GET['origin'] === 'learnpathitem') {
+if ($originIsLearnpath) {
     Display::display_reduced_header();
 } else {
     Display::display_header('');
@@ -359,7 +360,7 @@ if ($show_web_odf) {
             src="' . $pdfUrl. '">
         </iframe>';
     echo '</div>';
-} else {
+} elseif (!$originIsLearnpath) {
     // ViewerJS already have download button
     echo '<p>';
     echo Display::toolbarButton(get_lang('Download'), $file_url_web, 'download', 'default', ['target' => '_blank']);

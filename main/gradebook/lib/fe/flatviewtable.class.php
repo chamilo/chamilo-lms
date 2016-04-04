@@ -34,7 +34,7 @@ class FlatViewTable extends SortableTable
      * @param null $addparams
      * @param Category $mainCourseCategory
      */
-    public function FlatViewTable(
+    public function __construct(
         $selectcat,
         $users = array(),
         $evals = array(),

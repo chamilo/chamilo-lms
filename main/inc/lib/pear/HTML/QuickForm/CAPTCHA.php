@@ -112,7 +112,7 @@ class HTML_QuickForm_CAPTCHA extends HTML_QuickForm_input
      *
      * @access public
      */
-    function HTML_QuickForm_CAPTCHA($elementName = null, $elementLabel = null,
+    public function __construct($elementName = null, $elementLabel = null,
                                     $options = null, $attributes = null)
     {
         parent::__construct($elementName, $elementLabel, $attributes);

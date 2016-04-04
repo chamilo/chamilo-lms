@@ -31,6 +31,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
         $config = array()
     ) {
         if (empty($name)) {
+            
             return false;
         }
 

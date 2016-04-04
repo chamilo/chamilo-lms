@@ -18,6 +18,7 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 	 * Array of selected receivers
 	 */
 	var $receivers_selected;
+
 	/**
 	 * Constructor
 	 * @param string $elementName

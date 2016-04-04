@@ -67,8 +67,8 @@
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/HTML_Table
  */
-class HTML_Table_Storage extends HTML_Common {
-
+class HTML_Table_Storage extends HTML_Common
+{
     /**
      * Value to insert into empty cells
      * @var    string
@@ -126,7 +126,7 @@ class HTML_Table_Storage extends HTML_Common {
      *                                       <tbody> or not
      * @access   public
      */
-    function HTML_Table_Storage($tabOffset = 0, $useTGroups = false)
+    public function __construct($tabOffset = 0, $useTGroups = false)
     {
         parent::__construct(null, (int)$tabOffset);
         $this->_useTGroups = (boolean)$useTGroups;
@@ -769,7 +769,7 @@ class HTML_Table_Storage extends HTML_Common {
                     }
 
                     $typeContent = $tabs . $tab . $tab . $extraTab . "<$type" . $this->_getAttrString($attr) . '>';
-                    
+
                     if ($contents || is_numeric($contents)) {
                         $typeContent .= $contents;
                     } elseif (empty($contents)) {
@@ -777,7 +777,7 @@ class HTML_Table_Storage extends HTML_Common {
                             $contents = $this->_autoFill;
                         }
                     }
-                    
+
                     $typeContent .= "</$type>" . $lnEnd;
 
                     if (!empty($contents) || is_numeric($contents)) {

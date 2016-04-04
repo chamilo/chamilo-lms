@@ -19,7 +19,7 @@ class UserForm extends FormValidator
 	 * @param method
 	 * @param action
 	 */
-	public function UserForm($form_type, $user, $form_name, $method= 'post', $action= null)
+	public function __construct($form_type, $user, $form_name, $method= 'post', $action= null)
 	{
 		parent :: __construct($form_name, $method, $action);
 		$this->form_type= $form_type;

@@ -57,7 +57,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      * @since     1.0
      * @access    public
      */
-    function HTML_QuickForm_file($elementName=null, $elementLabel=null, $attributes=null)
+    public function __construct($elementName=null, $elementLabel=null, $attributes=null)
     {
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('file');
@@ -138,7 +138,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      * @access    public
      * @return    array
      */
-    function getValue()
+    public function getValue()
     {
         return $this->_value;
     } // end func getValue
@@ -156,7 +156,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      * @access    public
      * @return    bool
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent($event, $arg, &$caller)
     {
         switch ($event) {
             case 'updateValue':
@@ -169,18 +169,17 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 break;
             case 'addElement':
                 $this->onQuickFormEvent('createElement', $arg, $caller);
+
                 return $this->onQuickFormEvent('updateValue', null, $caller);
                 break;
             case 'createElement':
-                $className = get_class($this);
-                $this->$className($arg[0], $arg[1], $arg[2]);
+                //$className = get_class($this);
+                //$this &= new $className($arg[0], $arg[1], $arg[2]);
+
                 break;
         }
         return true;
-    } // end func onQuickFormEvent
-
-    // }}}
-    // {{{ moveUploadedFile()
+    }
 
     /**
      * Moves an uploaded file into the destination
@@ -190,17 +189,14 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      * @access   public
      * @return   bool    Whether the file was moved successfully
      */
-    function moveUploadedFile($dest, $fileName = '')
+    public function moveUploadedFile($dest, $fileName = '')
     {
         if ($dest != ''  && substr($dest, -1) != '/') {
             $dest .= '/';
         }
         $fileName = ($fileName != '') ? $fileName : basename($this->_value['name']);
         return move_uploaded_file($this->_value['tmp_name'], $dest . $fileName);
-    } // end func moveUploadedFile
-
-    // }}}
-    // {{{ isUploadedFile()
+    }
 
     /**
      * Checks if the element contains an uploaded file
@@ -211,11 +207,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     public function isUploadedFile()
     {
         return HTML_QuickForm_file::_ruleIsUploadedFile($this->_value);
-    } // end func isUploadedFile
-
-
-    // }}}
-    // {{{ _ruleIsUploadedFile()
+    }
 
     /**
      * Checks if the given element contains an uploaded file
@@ -232,10 +224,8 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         } else {
             return false;
         }
-    } // end func _ruleIsUploadedFile
+    }
 
-    // }}}
-    // {{{ _ruleCheckMaxFileSize()
 
    /**
     * Tries to find the element value from the values array
@@ -243,10 +233,10 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     * Needs to be redefined here as $_FILES is populated differently from
     * other arrays when element name is of the form foo[bar]
     *
-    * @access    private
+    * @access    public
     * @return    mixed
     */
-    function _findValue(&$values = null)
+    public function _findValue(&$values = null)
     {
         if (empty($_FILES)) {
             return null;
@@ -276,7 +266,4 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             return null;
         }
     }
-
-    // }}}
-} // end class HTML_QuickForm_file
-?>
+}

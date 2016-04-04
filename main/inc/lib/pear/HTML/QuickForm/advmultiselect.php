@@ -272,7 +272,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
      * @return     void
      * @since      version 0.4.0 (2005-06-25)
      */
-    public function HTML_QuickForm_advmultiselect(
+    public function __construct(
         $elementName = null,
         $elementLabel = null,
         $options = null,

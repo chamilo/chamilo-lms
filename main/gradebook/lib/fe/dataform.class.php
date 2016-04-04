@@ -21,7 +21,7 @@ class DataForm extends FormValidator
 	 * @param method
 	 * @param action
 	 */
-	public function DataForm($form_type, $form_name, $method = 'post', $action = null, $target='', $locked_status)
+	public function __construct($form_type, $form_name, $method = 'post', $action = null, $target='', $locked_status)
 	{
 		parent :: __construct($form_name, $method, $action,$target);
 		$this->form_type = $form_type;

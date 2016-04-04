@@ -30,7 +30,7 @@ class UserDataGenerator
 	private $scorecache;
 	private $avgcache;
 
-	public function UserDataGenerator($userid, $evals = array(), $links = array())
+	public function __construct($userid, $evals = array(), $links = array())
 	{
         $this->userid = $userid;
         $evals_filtered = array();

@@ -17,7 +17,7 @@ class LinkAddEditForm extends FormValidator
 	 * To add link, define category_object and link_type
 	 * To edit link, define link_object
 	 */
-	public function LinkAddEditForm(
+	public function __construct(
 		$form_type,
 		$category_object,
 		$link_type,

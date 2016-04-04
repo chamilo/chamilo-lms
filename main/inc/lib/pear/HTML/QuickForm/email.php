@@ -26,7 +26,7 @@ class HTML_QuickForm_email extends HTML_QuickForm_input
      * @return    void
      * @throws
      */
-    function HTML_QuickForm_email($elementName=null, $elementLabel=null, $attributes=null)
+    public function __construct($elementName=null, $elementLabel=null, $attributes=null)
     {
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('email');

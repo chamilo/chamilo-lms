@@ -26,7 +26,7 @@ class ResultsDataGenerator
     /**
      * Constructor
      */
-    public function ResultsDataGenerator(
+    public function __construct(
         $evaluation,
         $results = array(),
         $include_edit = false

@@ -14,7 +14,7 @@ class ScoreDisplayForm extends FormValidator
 	 * @param $form_name
 	 * @param null $action
 	 */
-	public function ScoreDisplayForm($form_name, $action= null)
+	public function __construct($form_name, $action= null)
 	{
 		parent :: __construct($form_name, 'post', $action);
 		$displayscore = ScoreDisplay :: instance();

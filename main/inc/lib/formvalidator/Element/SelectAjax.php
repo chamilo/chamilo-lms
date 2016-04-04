@@ -9,7 +9,7 @@ class SelectAjax extends HTML_QuickForm_select
     /**
      * Class constructor
      */
-    function SelectAjax($elementName = null, $elementLabel = null, $options = null, $attributes = null)
+    public function __construct($elementName = null, $elementLabel = null, $options = null, $attributes = null)
     {
         parent::__construct($elementName, $elementLabel, $options, $attributes);
     }
@@ -18,7 +18,7 @@ class SelectAjax extends HTML_QuickForm_select
      * The ajax call must contain an array of id and text
      * @return string
      */
-    function toHtml()
+    public function toHtml()
     {
         $html = api_get_asset('select2/dist/js/select2.min.js');
 
@@ -120,7 +120,7 @@ JS;
      * We check the options and return only the values that _could_ have been
      * selected. We also return a scalar value if select is not "multiple"
      */
-    function exportValue(&$submitValues, $assoc = false)
+    public function exportValue(&$submitValues, $assoc = false)
     {
         $value = $this->_findValue($submitValues);
 

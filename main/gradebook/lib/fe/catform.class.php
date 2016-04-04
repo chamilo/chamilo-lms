@@ -22,7 +22,7 @@ class CatForm extends FormValidator
      * @param string form name
      * @param method method
      */
-    public function CatForm(
+    public function __construct(
         $form_type,
         $category_object,
         $form_name,

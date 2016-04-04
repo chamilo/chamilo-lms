@@ -83,8 +83,8 @@
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/HTML_Table
  */
-class HTML_Table extends HTML_Common {
-
+class HTML_Table extends HTML_Common
+{
     /**
      * Value to insert into empty cells. This is used as a default for
      * newly-created tbodies.
@@ -162,7 +162,7 @@ class HTML_Table extends HTML_Common {
      *                                       <tbody> or not
      * @access   public
      */
-    function HTML_Table($attributes = null, $tabOffset = 0, $useTGroups = false)
+    public function __construct($attributes = null, $tabOffset = 0, $useTGroups = false)
     {
         parent::__construct($attributes, (int)$tabOffset);
         $this->_useTGroups = (boolean)$useTGroups;

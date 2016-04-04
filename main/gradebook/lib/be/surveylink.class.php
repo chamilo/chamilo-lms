@@ -19,9 +19,13 @@ class SurveyLink extends AbstractLink
 		$this->set_type(LINK_SURVEY);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_name()
 	{
 		$this->get_survey_data();
+		
 		return $this->survey_data['code'].': '.self::html_to_text($this->survey_data['title']);
 	}
 

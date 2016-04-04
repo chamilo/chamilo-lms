@@ -25,7 +25,7 @@ class LinkForm extends FormValidator
 	 * @param method
 	 * @param action
 	 */
-	public function LinkForm(
+	public function __construct(
 		$form_type,
 		$category_object,
 		$link_object,

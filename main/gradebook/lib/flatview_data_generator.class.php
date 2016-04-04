@@ -32,7 +32,7 @@ class FlatViewDataGenerator
      * @param array $params
      * @param null $mainCourseCategory
      */
-    public function FlatViewDataGenerator(
+    public function __construct(
         $users = array(),
         $evals = array(),
         $links = array(),

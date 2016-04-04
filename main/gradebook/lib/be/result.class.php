@@ -14,7 +14,10 @@ class Result
     private $created_at;
     private $score;
 
-    public function Result()
+    /**
+     * Result constructor.
+     */
+    public function __construct()
     {
         $this->created_at = api_get_utc_datetime();
     }

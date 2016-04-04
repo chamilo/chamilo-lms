@@ -650,6 +650,7 @@ function WSCreateLp($params)
                 $data,
                 $info['filename'],
                 $extension,
+                0,
                 $userId
             );
 

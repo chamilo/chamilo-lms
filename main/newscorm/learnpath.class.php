@@ -5969,8 +5969,7 @@ class learnpath
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
 
         $folder = self::generate_learning_path_folder($course, $creatorId);
-        // Creating LP folder
-        if ($folder) {
+
         // Limits title size
         $title = api_substr(api_replace_dangerous_char($lp_name), 0 , 80);
         $dir = $dir.$title;
@@ -6042,8 +6041,6 @@ class learnpath
        $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
        $sessionId = api_get_session_id();
 
-
-        //$dir = '/';
         // Generates folder
         $result = $this->generate_lp_folder($courseInfo);
         $dir = $result['dir'];

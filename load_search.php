@@ -91,7 +91,6 @@ $result = SessionManager::getGridColumns('simple', $extraFieldsToFilter);
 $columns = $result['columns'];
 $column_model = $result['column_model'];
 $defaults = [];
-
 $tagsData = [];
 if (!empty($items)) {
     /** @var ExtraFieldSavedSearch $item */
@@ -106,11 +105,48 @@ if (!empty($items)) {
 
 $form->setDefaults($defaults);
 
-$view = $form->returnForm();
 $filterToSend = '';
+
+if ($formSearch->validate()) {
+    $formSearchParams = $formSearch->getSubmitValues();
+    $filters = [];
+    foreach ($defaults as $key => $value) {
+        if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
+            continue;
+        }
+        if (!empty($value)) {
+            $filters[$key] = $value;
+        }
+    }
+
+    //$defaults
+    $filterToSend = [];
+    if (!empty($filters)) {
+        $filterToSend = ['groupOp' => 'AND'];
+        if ($filters) {
+            $count = 1;
+            $countExtraField = 1;
+            foreach ($result['column_model'] as $column) {
+                if ($count > 5) {
+                    if (isset($filters[$column['name']])) {
+                        $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
+                        $filterToSend['rules'][] = ['field' => $column['name'], 'op' => 'cn', 'data' => $filters[$column['name']]];
+                    }
+                    $countExtraField++;
+                }
+                $count++;
+            }
+        }
+    }
+}
 
 if ($form->validate()) {
     $params = $form->getSubmitValues();
+    if (isset($params['save'])) {
+        unset($params['save']);
+    }
+    $form->setDefaults($params);
+
     // Search
     $filters = [];
     // Parse params.
@@ -142,6 +178,8 @@ if ($form->validate()) {
     }
 }
 
+$view = $form->returnForm();
+
 $jsTag = '';
 if (!empty($tagsData)) {
     foreach ($tagsData as $extraField => $tags) {
@@ -150,7 +188,6 @@ if (!empty($tagsData)) {
         }
     }
 }
-
 
 $htmlHeadXtra[] ='
 <script>
@@ -162,7 +199,6 @@ $(function() {
 
 });
 </script>';
-
 
 if (!empty($filterToSend)) {
     $filterToSend = json_encode($filterToSend);
@@ -204,7 +240,6 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $griJs = Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
-
 $grid = '<div id="session-table" class="table-responsive">';
 $grid .= Display::grid_html('sessions');
 $grid .= '</div>';

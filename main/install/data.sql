@@ -1819,7 +1819,7 @@ VALUES
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
 VALUES
-('teacher_can_select_course_template', NULL, 'radio', 'Course', 'false', 'TeacherCanSelectCourseTemplateTitle', 'TeacherCanSelectCourseTemplateComment', NULL, NULL, 0);
+('teacher_can_select_course_template', NULL, 'radio', 'Course', 'true', 'TeacherCanSelectCourseTemplateTitle', 'TeacherCanSelectCourseTemplateComment', NULL, NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES

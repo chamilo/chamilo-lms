@@ -718,8 +718,8 @@ function display_requirements(
                 <td class="requirements-value">'.checkExtension('session', get_lang('Yes'), get_lang('ExtensionSessionsNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">MySQL</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.checkExtension('mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable')).'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">pdo_mysql</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.checkExtension('pdo_mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('support').'</td>
@@ -2667,7 +2667,7 @@ function finishInstallation(
     $installationProfile = ''
 ) {
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
-    
+
     // Inserting data
     $data = file_get_contents($sysPath.'main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);

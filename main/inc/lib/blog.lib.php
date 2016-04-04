@@ -1425,7 +1425,7 @@ class Blog
                 echo '<td>'.Security::remove_XSS($task['description']).'</td>';
                 echo '<td><span style="background-color: #'.$task['color'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>';
                 echo '<td width="50">';
-                echo '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=edit&task_id='.$task['task_id'].'">',
+                echo '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=edit&task_id='.$task['task_id'].'">';
                 echo Display::return_icon('edit.png', get_lang('EditTask'));
                       echo "</a>";
                       echo '<a href="'.$delete_link.'"';
@@ -1498,7 +1498,7 @@ class Blog
             echo '<td>'.stripslashes($assignment['description']).'</td>';
             echo '<td>'.$assignment['target_date'].'</td>';
             echo '<td width="50">';
-            echo '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=edit_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'">',
+            echo '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=edit_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'">';
 	            echo Display::return_icon('edit.png', get_lang('EditTask'));
 				echo "</a>";
 				echo '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'" ';

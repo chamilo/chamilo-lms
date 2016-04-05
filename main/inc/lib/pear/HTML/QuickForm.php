@@ -2059,7 +2059,7 @@ class HTML_QuickForm_Error extends PEAR_Error
     * Prefix for all error messages
     * @var string
     */
-    var $error_message_prefix = 'QuickForm Error: ';
+    public $error_message_prefix = 'QuickForm Error: ';
 
     /**
     * Creates a quickform error object, extending the PEAR_Error class
@@ -2069,7 +2069,7 @@ class HTML_QuickForm_Error extends PEAR_Error
     * @param int   $level intensity of the error (PHP error code)
     * @param mixed $debuginfo any information that can inform user as to nature of the error
     */
-    function HTML_QuickForm_Error($code = QUICKFORM_ERROR, $mode = PEAR_ERROR_RETURN,
+    public function __construct($code = QUICKFORM_ERROR, $mode = PEAR_ERROR_RETURN,
                          $level = E_USER_NOTICE, $debuginfo = null)
     {
         if (is_int($code)) {

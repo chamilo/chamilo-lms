@@ -462,7 +462,13 @@ class SessionManager
         if (!empty($accessStartDate) && !empty($accessEndDate)) {
             $accessStartDate = api_get_utc_datetime($accessStartDate);
             $accessEndDate = api_get_utc_datetime($accessEndDate);
-            $query .= " AND access_start_date > '$accessStartDate' AND access_end_date < '$accessEndDate' ";
+            $query .= " AND (
+
+                (access_start_date > '$accessStartDate' AND access_end_date < '$accessEndDate') OR
+                (access_start_date > '$accessStartDate' AND access_end_date IS NULL) OR
+                (access_start_date IS NULL AND access_end_date < '$accessEndDate') OR
+                (access_start_date IS NULL AND access_end_date IS NULL)            
+            )";
         }
 
         if (api_is_multiple_url_enabled()) {

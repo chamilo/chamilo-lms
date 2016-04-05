@@ -1,8 +1,8 @@
 
-home:
-    path: /
-index:
-    path: /
+#home:
+#    path: /
+#index:
+#    path: /
 
 #admin_dashboard:
 #    pattern: /administration/

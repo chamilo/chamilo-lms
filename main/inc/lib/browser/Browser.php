@@ -109,7 +109,7 @@ class Browser
 
     const OPERATING_SYSTEM_UNKNOWN = 'unknown';
 
-    public function Browser($userAgent = "")
+    public function __construct($userAgent = "")
     {
         $this->reset();
         if ($userAgent != "") {
@@ -259,8 +259,8 @@ class Browser
     * Is the browser from facebook?
     * @return boolean True if the browser is from facebook otherwise false
     */
-    public function isFacebook() 
-    { 
+    public function isFacebook()
+    {
         return $this->_is_facebook;
     }
 
@@ -304,9 +304,9 @@ class Browser
      * Set the Browser to be a Facebook request
      * @param boolean $value is the browser a robot or not
      */
-    protected function setFacebook($value = true) 
-    { 
-        $this->_is_facebook = $value; 
+    protected function setFacebook($value = true)
+    {
+        $this->_is_facebook = $value;
     }
 
     /**
@@ -419,7 +419,7 @@ class Browser
             $this->checkBrowserLynx() ||
             $this->checkBrowserShiretoko() ||
             $this->checkBrowserIceCat() ||
-            $this->checkBrowserIceweasel() || 
+            $this->checkBrowserIceweasel() ||
             $this->checkBrowserW3CValidator() ||
             $this->checkBrowserMozilla() /* Mozilla is such an open standard that you must check it last */
         );
@@ -493,7 +493,7 @@ class Browser
         }
         return false;
     }
-    
+
     /**
      * Determine if the browser is the BingBot or not (last updated 1.9)
      * @return boolean True if the browser is the BingBot otherwise false
@@ -1039,10 +1039,10 @@ class Browser
      * Detect Version for the Safari browser on iOS devices
      * @return boolean True if it detects the version correctly otherwise false
      */
-    protected function getSafariVersionOnIos() 
+    protected function getSafariVersionOnIos()
     {
         $aresult = explode('/',stristr($this->_agent,'Version'));
-        if( isset($aresult[1]) ) 
+        if( isset($aresult[1]) )
         {
             $aversion = explode(' ',$aresult[1]);
             $this->setVersion($aversion[0]);
@@ -1055,10 +1055,10 @@ class Browser
      * Detect Version for the Chrome browser on iOS devices
      * @return boolean True if it detects the version correctly otherwise false
      */
-    protected function getChromeVersionOnIos() 
+    protected function getChromeVersionOnIos()
     {
         $aresult = explode('/',stristr($this->_agent,'CriOS'));
-        if( isset($aresult[1]) ) 
+        if( isset($aresult[1]) )
         {
             $aversion = explode(' ',$aresult[1]);
             $this->setVersion($aversion[0]);
@@ -1149,71 +1149,71 @@ class Browser
      */
     protected function checkPlatform()
     {
-        if (stripos($this->_agent, 'windows') !== false) 
+        if (stripos($this->_agent, 'windows') !== false)
         {
             $this->_platform = self::PLATFORM_WINDOWS;
-        } 
-        else if (stripos($this->_agent, 'iPad') !== false) 
+        }
+        else if (stripos($this->_agent, 'iPad') !== false)
         {
             $this->_platform = self::PLATFORM_IPAD;
-        } 
-        else if (stripos($this->_agent, 'iPod') !== false) 
+        }
+        else if (stripos($this->_agent, 'iPod') !== false)
         {
             $this->_platform = self::PLATFORM_IPOD;
-        } 
-        else if (stripos($this->_agent, 'iPhone') !== false) 
+        }
+        else if (stripos($this->_agent, 'iPhone') !== false)
         {
             $this->_platform = self::PLATFORM_IPHONE;
-        } 
-        elseif (stripos($this->_agent, 'mac') !== false) 
+        }
+        elseif (stripos($this->_agent, 'mac') !== false)
         {
             $this->_platform = self::PLATFORM_APPLE;
-        } 
-        elseif (stripos($this->_agent, 'android') !== false) 
+        }
+        elseif (stripos($this->_agent, 'android') !== false)
         {
             $this->_platform = self::PLATFORM_ANDROID;
-        } 
-        elseif (stripos($this->_agent, 'linux') !== false) 
+        }
+        elseif (stripos($this->_agent, 'linux') !== false)
         {
             $this->_platform = self::PLATFORM_LINUX;
-        } 
-        else if (stripos($this->_agent, 'Nokia') !== false) 
+        }
+        else if (stripos($this->_agent, 'Nokia') !== false)
         {
             $this->_platform = self::PLATFORM_NOKIA;
-        } 
-        else if (stripos($this->_agent, 'BlackBerry') !== false) 
+        }
+        else if (stripos($this->_agent, 'BlackBerry') !== false)
         {
             $this->_platform = self::PLATFORM_BLACKBERRY;
-        } 
-        elseif (stripos($this->_agent, 'FreeBSD') !== false) 
+        }
+        elseif (stripos($this->_agent, 'FreeBSD') !== false)
         {
             $this->_platform = self::PLATFORM_FREEBSD;
-        } 
-        elseif (stripos($this->_agent, 'OpenBSD') !== false) 
+        }
+        elseif (stripos($this->_agent, 'OpenBSD') !== false)
         {
             $this->_platform = self::PLATFORM_OPENBSD;
-        } 
-        elseif (stripos($this->_agent, 'NetBSD') !== false) 
+        }
+        elseif (stripos($this->_agent, 'NetBSD') !== false)
         {
             $this->_platform = self::PLATFORM_NETBSD;
-        } 
-        elseif (stripos($this->_agent, 'OpenSolaris') !== false) 
+        }
+        elseif (stripos($this->_agent, 'OpenSolaris') !== false)
         {
             $this->_platform = self::PLATFORM_OPENSOLARIS;
-        } 
-        elseif (stripos($this->_agent, 'SunOS') !== false) 
+        }
+        elseif (stripos($this->_agent, 'SunOS') !== false)
         {
             $this->_platform = self::PLATFORM_SUNOS;
-        } 
-        elseif (stripos($this->_agent, 'OS\/2') !== false) 
+        }
+        elseif (stripos($this->_agent, 'OS\/2') !== false)
         {
             $this->_platform = self::PLATFORM_OS2;
-        } 
-        elseif (stripos($this->_agent, 'BeOS') !== false) 
+        }
+        elseif (stripos($this->_agent, 'BeOS') !== false)
         {
             $this->_platform = self::PLATFORM_BEOS;
-        } 
-        elseif (stripos($this->_agent, 'win') !== false) 
+        }
+        elseif (stripos($this->_agent, 'win') !== false)
         {
             $this->_platform = self::PLATFORM_WINDOWS;
         }

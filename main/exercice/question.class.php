@@ -115,6 +115,7 @@ abstract class Question
         $course_id = $course_info['real_id'];
 
         if (empty($course_id) || $course_id == -1 ) {
+
             return false;
         }
 
@@ -204,8 +205,6 @@ abstract class Question
      */
     public function selectDescription()
     {
-        $this->description = $this->description;
-
         return $this->description;
     }
 

@@ -197,7 +197,7 @@ define('TABLE_DROPBOX_POST', 'dropbox_post');
 define('TABLE_DROPBOX_FILE', 'dropbox_file');
 define('TABLE_DROPBOX_PERSON', 'dropbox_person');
 
-// Course quiz (or test, or exercice) tables
+// Course quiz (or test, or exercise) tables
 define('TABLE_QUIZ_QUESTION', 'quiz_question');
 define('TABLE_QUIZ_TEST', 'quiz');
 define('TABLE_QUIZ_ORDER', 'quiz_order');
@@ -206,6 +206,7 @@ define('TABLE_QUIZ_TEST_QUESTION', 'quiz_rel_question');
 define('TABLE_QUIZ_QUESTION_OPTION', 'quiz_question_option');
 define('TABLE_QUIZ_QUESTION_CATEGORY', 'quiz_question_category');
 define('TABLE_QUIZ_QUESTION_REL_CATEGORY', 'quiz_question_rel_category');
+define('TABLE_QUIZ_REL_CATEGORY', 'quiz_rel_category');
 
 // Linked resource table
 //@todo table exists?

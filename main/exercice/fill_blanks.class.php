@@ -33,6 +33,7 @@ class FillBlanks extends Question
      */
     public function createAnswersForm($form)
     {
+        $fillBlanksAllowedSeparator = self::getAllowedSeparator();
         $defaults = array();
 
         if (!empty($this->id)) {

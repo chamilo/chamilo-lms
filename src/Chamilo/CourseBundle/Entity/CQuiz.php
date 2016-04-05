@@ -190,6 +190,13 @@ class CQuiz
     private $passPercentage;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="question_selection_type", type="integer", nullable=true)
+     */
+    private $questionSelectionType;
+
+    /**
      * Set title
      *
      * @param string $title

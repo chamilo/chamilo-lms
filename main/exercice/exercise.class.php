@@ -68,10 +68,7 @@ class Exercise
     public $emailAlert;
     public $notifyUserByEmail = 0;
     public $sessionId = 0;
-    public $specialCategoryOrders = false;
     public $quizRelCategoryTable = false;
-    // CREATE TABLE c_quiz_rel_category (iid BIGINT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, category_id INT NOT NULL, exercise_id INT NOT NULL, count_questions INT NOT NULL, PRIMARY KEY(iid));
-    // ALTER TABLE c_quiz ADD COLUMN question_selection_type INT;
 
     /**
      * Constructor of the class
@@ -114,7 +111,6 @@ class Exercise
         }
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
-        $this->specialCategoryOrders = api_get_configuration_value('exercise_enable_category_order');
     }
 
     /**
@@ -436,25 +432,15 @@ class Exercise
      */
     public function updateRandomByCat($random)
     {
-        if ($this->specialCategoryOrders) {
-            if (in_array($random, array(
-                    EXERCISE_CATEGORY_RANDOM_SHUFFLED,
-                    EXERCISE_CATEGORY_RANDOM_ORDERED,
-                    EXERCISE_CATEGORY_RANDOM_DISABLED
-                )
-            )) {
-                $this->randomByCat = $random;
-            } else {
-                $this->randomByCat = EXERCISE_CATEGORY_RANDOM_DISABLED;
-            }
+        if (in_array($random, array(
+                EXERCISE_CATEGORY_RANDOM_SHUFFLED,
+                EXERCISE_CATEGORY_RANDOM_ORDERED,
+                EXERCISE_CATEGORY_RANDOM_DISABLED
+            )
+        )) {
+            $this->randomByCat = $random;
         } else {
-            if ($random == 1) {
-                $this->randomByCat = 1;
-            } else if ($random == 2) {
-                $this->randomByCat = 2;
-            } else {
-                $this->randomByCat = 0;
-            }
+            $this->randomByCat = EXERCISE_CATEGORY_RANDOM_DISABLED;
         }
     }
 
@@ -1094,84 +1080,38 @@ class Exercise
      */
     public function selectQuestionList($from_db = false)
     {
-        if ($this->specialCategoryOrders == false) {
-            if ($from_db && !empty($this->id)) {
-                $TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-                $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        if ($from_db && !empty($this->id)) {
+            $nbQuestions = $this->getQuestionCount();
+            $questionSelectionType = $this->getQuestionSelectionType();
 
-                $sql = "SELECT DISTINCT e.question_order
-                        FROM $TBL_EXERCISE_QUESTION e
-                        INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id = q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
-					    WHERE e.exercice_id	= ".intval($this->id);
-                $result = Database::query($sql);
-
-                $count_question_orders = Database::num_rows($result);
-
-                $sql = "SELECT DISTINCT e.question_id, e.question_order
-                        FROM $TBL_EXERCISE_QUESTION e
-                        INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
-					    WHERE e.exercice_id	= ".intval($this->id)."
-					    ORDER BY question_order";
-                $result = Database::query($sql);
-
-                // fills the array with the question ID for this exercise
-                // the key of the array is the question position
-                $temp_question_list = array();
-                $counter = 1;
-                $question_list = array();
-
-                while ($new_object = Database::fetch_object($result)) {
-                    $question_list[$new_object->question_order]=  $new_object->question_id;
-                    $temp_question_list[$counter] = $new_object->question_id;
-                    $counter++;
-                }
-
-                if (!empty($temp_question_list)) {
-                    if (count($temp_question_list) != $count_question_orders) {
-                        $question_list = $temp_question_list;
+            switch ($questionSelectionType) {
+                case EX_Q_SELECTION_ORDERED:
+                    $questionList = $this->getQuestionOrderedList();
+                    break;
+                case EX_Q_SELECTION_RANDOM:
+                    // Not a random exercise, or if there are not at least 2 questions
+                    if ($this->random == 0 || $nbQuestions < 2) {
+                        $questionList = $this->getQuestionOrderedList();
+                    } else {
+                        $questionList = $this->selectRandomList();
                     }
-                }
-
-                return $question_list;
+                    break;
+                default:
+                    $questionList = $this->getQuestionOrderedList();
+                    $result = $this->getQuestionListWithCategoryListFilteredByCategorySettings(
+                        $questionList,
+                        $questionSelectionType
+                    );
+                    $this->categoryWithQuestionList = $result['category_with_questions_list'];
+                    $questionList = $result['question_list'];
+                    break;
             }
 
-            return $this->questionList;
-        } else {
-
-            if ($from_db && !empty($this->id)) {
-
-                $nbQuestions = $this->getQuestionCount();
-                $questionSelectionType = $this->getQuestionSelectionType();
-
-                switch ($questionSelectionType) {
-                    case EX_Q_SELECTION_ORDERED:
-                        $questionList = $this->getQuestionOrderedList();
-                        break;
-                    case EX_Q_SELECTION_RANDOM:
-                        // Not a random exercise, or if there are not at least 2 questions
-                        if ($this->random == 0 || $nbQuestions < 2) {
-                            $questionList = $this->getQuestionOrderedList();
-                        } else {
-                            $questionList = $this->selectRandomList();
-                        }
-                        break;
-                    default:
-                        $questionList = $this->getQuestionOrderedList();
-                        $result = $this->getQuestionListWithCategoryListFilteredByCategorySettings(
-                            $questionList,
-                            $questionSelectionType
-                        );
-                        $this->categoryWithQuestionList = $result['category_with_questions_list'];
-                        $questionList = $result['question_list'];
-                        break;
-                }
-
-                return $questionList;
-            }
-            return $this->questionList;
+            return $questionList;
         }
+
+        return $this->questionList;
+
     }
 
     /**
@@ -1639,14 +1579,11 @@ class Exercise
                     'display_category_name' => $display_category_name,
                     'pass_percentage' => $pass_percentage,
                     'results_disabled' => $results_disabled,
+                    'question_selection_type' => $this->getQuestionSelectionType()
                 ];
             }
 
             $params = array_merge($params, $paramsExtra);
-
-            if ($this->specialCategoryOrders) {
-                $params['question_selection_type'] = intval($this->getQuestionSelectionType());
-            }
 
             Database::update(
                 $TBL_EXERCISES,
@@ -1716,12 +1653,10 @@ class Exercise
                 $sql = "UPDATE $TBL_EXERCISES SET id = iid WHERE iid = {$this->id} ";
                 Database::query($sql);
 
-                if ($this->quizRelCategoryTable) {
-                    $sql = "UPDATE $TBL_EXERCICES
-                            SET question_selection_type= ".intval($this->getQuestionSelectionType())."
-                            WHERE id = ".$this->id." AND c_id = ".$this->course_id;
-                    Database::query($sql);
-                }
+                $sql = "UPDATE $TBL_EXERCICES
+                        SET question_selection_type= ".intval($this->getQuestionSelectionType())."
+                        WHERE id = ".$this->id." AND c_id = ".$this->course_id;
+                Database::query($sql);
 
                 // insert into the item_property table
                 api_item_property_update(
@@ -2007,7 +1942,7 @@ class Exercise
                 }
             }
 
-            if ($this->specialCategoryOrders) {
+            if (true) {
                 $option = array(
                     EX_Q_SELECTION_ORDERED => get_lang('OrderedByUser'),
                     //  defined by user
@@ -2131,7 +2066,7 @@ class Exercise
             } else {
 
                 // number of random question
-
+                /*
                 $max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
                 $option = range(0, $max);
                 $option[0] = get_lang('No');
@@ -2157,7 +2092,7 @@ class Exercise
                 $radio_display_cat_name = array();
                 $radio_display_cat_name[] = $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1');
                 $radio_display_cat_name[] = $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0');
-                $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '');
+                $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '');*/
             }
             // Attempts
             $attempt_option = range(0, 10);
@@ -6252,9 +6187,6 @@ class Exercise
      */
     public function get_categories_in_exercise()
     {
-        if (!$this->specialCategoryOrders) {
-            return false;
-        }
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->id)) {
             $sql = "SELECT * FROM $table
@@ -6277,9 +6209,6 @@ class Exercise
      */
     public function get_categories_with_name_in_exercise($order = null)
     {
-        if (!$this->specialCategoryOrders) {
-            return false;
-        }
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT * FROM $table qc
@@ -6304,10 +6233,6 @@ class Exercise
      */
     public function getNumberQuestionExerciseCategory()
     {
-        if (!$this->specialCategoryOrders) {
-            return false;
-        }
-
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->id)) {
             $sql = "SELECT SUM(count_questions) count_questions
@@ -6328,9 +6253,6 @@ class Exercise
      */
     public function save_categories_in_exercise($categories)
     {
-        if (!$this->specialCategoryOrders) {
-            return false;
-        }
         if (!empty($categories) && !empty($this->id)) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table

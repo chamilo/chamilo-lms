@@ -78,6 +78,41 @@ $htmlHeadXtra[] = '<script>
     function check_results_disabled() {
         document.getElementById(\'exerciseType_2\').checked = true;
     }
+
+    function disabledHideRandom() {
+        $("#hidden_random option:eq(0)").prop("selected", true);
+        $("#hidden_random").hide();
+    }
+
+    function checkQuestionSelection() {
+        var selection = $("#questionSelection option:selected").val()
+        switch (selection) {
+            case "\'.EX_Q_SELECTION_ORDERED.\'":
+                disabledHideRandom();
+                $("#hidden_matrix").hide();
+                break;
+            case "\'.EX_Q_SELECTION_RANDOM.\'":
+                $("#hidden_random").show();
+                $("#hidden_matrix").hide();
+                break;
+            case "\'.EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED.\'":
+                disabledHideRandom();
+                $("#hidden_matrix").show();
+                break;
+            case "per_categories":
+                $("#questionSelection option:eq(\'.EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED.\')").prop("selected", true);
+                disabledHideRandom();
+                $("#hidden_matrix").show();
+                break;
+            default:
+                disabledHideRandom();
+                $("#hidden_matrix").show();
+                break;
+
+        }
+    }
+
+
 </script>';
 
 // to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;

@@ -126,6 +126,9 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 
 //we filter the type of questions we can add
 Question :: display_type_menu($objExercise);
+// Re sets the question list
+$objExercise->setQuestionList();
+
 echo '<div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();
@@ -149,11 +152,23 @@ if (!$inATest) {
     echo "</tr>";
     echo "</table>";
     echo "</div>";
+    echo "<div style='clear:both'>&nbsp;</div>";
 
     echo '<div id="question_list">';
     if ($nbrQuestions) {
         //Always getting list from DB
+        //$questionList = $objExercise->selectQuestionList(true);
+
+        $objExercise->setCategoriesGrouping(false);
+
+        // Show exercises as in category settings
+        //$questionList = $objExercise->getQuestionListWithMediasUncompressed();
+
+        // Show all questions no matter the category settings.
+        $tempCategoryOrder = $objExercise->specialCategoryOrders;
+        $objExercise->specialCategoryOrders = false;
         $questionList = $objExercise->selectQuestionList(true);
+        $objExercise->specialCategoryOrders = $tempCategoryOrder;
 
         // Style for columns
         $styleQuestion = "width:50%; float:left; margin-left: 25px;";
@@ -162,12 +177,15 @@ if (!$inATest) {
         $styleLevel = "width:6%; float:left; text-align:center;";
         $styleScore = "width:4%; float:left; text-align:center;";
 
+        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
+
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
                 //To avoid warning messages
                 if (!is_numeric($id)) {
                     continue;
                 }
+                /** @var Question $objQuestionTmp */
                 $objQuestionTmp = Question::read($id);
                 $question_class = get_class($objQuestionTmp);
 

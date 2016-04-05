@@ -1716,7 +1716,7 @@ class Exercise
                 $sql = "UPDATE $TBL_EXERCISES SET id = iid WHERE iid = {$this->id} ";
                 Database::query($sql);
 
-                if ($this->quizRelCategoryTable) {
+                if ($this->specialCategoryOrders) {
                     $sql = "UPDATE $TBL_EXERCICES
                             SET question_selection_type= ".intval($this->getQuestionSelectionType())."
                             WHERE id = ".$this->id." AND c_id = ".$this->course_id;

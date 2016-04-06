@@ -25,13 +25,14 @@
     "MathJax": "2.5.*",
     "webcamjs": "1.0.*",
     "cropper": "1.0.*",
-    "jquery.scrollbar": "0.2.*"
+    "jquery.scrollbar": "0.2.*",
+    "jquery-file-upload": "*"
   },
   "resolutions": {
     "jquery": "2.1.4"
   },
-  "_source": "/var/www/html/chamilo/src/Chamilo/CoreBundle/Resources/config/bower.json",
+  "_source": "/var/www/html/chamilo_111/src/Chamilo/CoreBundle/Resources/config/bower.json",
   "_target": "*",
-  "_originalSource": "/var/www/html/chamilo/src/Chamilo/CoreBundle/Resources/config/bower.json",
+  "_originalSource": "/var/www/html/chamilo_111/src/Chamilo/CoreBundle/Resources/config/bower.json",
   "_direct": true
 }

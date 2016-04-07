@@ -237,6 +237,13 @@ if (api_is_platform_admin()) {
         'label' => get_lang('TeacherTimeReport')
     );
 
+    if (api_get_configuration_value('chamilo_cms')) {
+        $items[] = array(
+            'url' => api_get_path(WEB_PATH) . 'web/app_dev.php/administration',
+            'label' => get_lang('CMS')
+        );
+    }
+
     /* Event settings */
 
     if (api_get_setting('activate_email_template') == 'true') {

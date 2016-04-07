@@ -87,9 +87,9 @@ sonata_admin:
                 label_catalogue: SonataAdminBundle
                 #icon:            '<i class="fa fa-cogs"></i>'
                 items:
-                    - sonata.notification.admin.message
-                    - sonata.admin.settings_current
-                    - sonata.admin.tool
+#                    - sonata.notification.admin.message
+#                    - sonata.admin.settings_current
+#                    - sonata.admin.tool
             sonata.admin.group.user:
                 label: Users
                 #icon:  '<i class="fa fa-play-circle"></i>'
@@ -100,31 +100,31 @@ sonata_admin:
 #                    - sonata.admin.user_group
 #                    - sonata.admin.user_field
 #                    - sonata.admin.user_field_values
-            sonata.admin.group.course:
-                label: Courses
-                #icon:  '<i class="fa fa-play-circle"></i>'
-                label_catalogue: SonataAdminBundle
-                items:
-#                    - sonata.admin.course
-                    - sonata.admin.course_category
-                    - sonata.admin.course_request
-                    - sonata.admin.c_group_info
-#                    - sonata.admin.notebook
-            sonata.admin.group.session:
-                  label: Sessions
-                  #icon:  '<i class="fa fa-play-circle"></i>'
-                  label_catalogue: SonataAdminBundle
-                  items:
-                      - sonata.admin.session
-                      - sonata.admin.session_category
-                      - sonata.admin.career
-                      - sonata.admin.promotion
-            sonata.admin.group.url:
-                  label: URLs
-                  #icon:  '<i class="fa fa-play-circle"></i>'
-                  label_catalogue: SonataAdminBundle
-                  items:
-                      - sonata.admin.access_url
+#            sonata.admin.group.course:
+#                label: Courses
+#                #icon:  '<i class="fa fa-play-circle"></i>'
+#                label_catalogue: SonataAdminBundle
+#                items:
+##                    - sonata.admin.course
+#                    - sonata.admin.course_category
+#                    - sonata.admin.course_request
+#                    - sonata.admin.c_group_info
+##                    - sonata.admin.notebook
+#            sonata.admin.group.session:
+#                  label: Sessions
+#                  #icon:  '<i class="fa fa-play-circle"></i>'
+#                  label_catalogue: SonataAdminBundle
+#                  items:
+#                      - sonata.admin.session
+#                      - sonata.admin.session_category
+#                      - sonata.admin.career
+#                      - sonata.admin.promotion
+#            sonata.admin.group.url:
+#                  label: URLs
+#                  #icon:  '<i class="fa fa-play-circle"></i>'
+#                  label_catalogue: SonataAdminBundle
+#                  items:
+#                      - sonata.admin.access_url
 
     assets:
         stylesheets:

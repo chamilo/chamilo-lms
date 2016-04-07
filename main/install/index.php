@@ -901,7 +901,9 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE timeline__action_component ADD CONSTRAINT FK_6ACD1B169D32F035 FOREIGN KEY (action_id) REFERENCES timeline__action (id) ON DELETE CASCADE;");
         $connection->executeQuery("ALTER TABLE timeline__action_component ADD CONSTRAINT FK_6ACD1B16E2ABAFFF FOREIGN KEY (component_id) REFERENCES timeline__component (id) ON DELETE CASCADE;");
         //$connection->executeQuery("CREATE UNIQUE INDEX UNIQ_8D93D649A0D96FBF ON user (email_canonical);");
-
+        $connection->executeQuery("ALTER TABLE fos_group ADD name VARCHAR(255) NOT NULL;");
+        $connection->executeQuery("ALTER TABLE fos_group ADD roles LONGTEXT NOT NULL COMMENT '(DC2Type:array)'");
+        
         $sysPath = api_get_path(SYS_PATH);
 
         finishInstallation(

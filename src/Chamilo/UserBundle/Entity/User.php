@@ -2102,7 +2102,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     public function getPlainPassword()
     {
-        return $this->plainPassword;
+        //return $this->plainPassword;
     }
 
       /**

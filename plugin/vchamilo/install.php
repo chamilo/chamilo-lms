@@ -1,18 +1,18 @@
 <?php
-/* PHP code to install the plugin 
+/* PHP code to install the plugin
  * For example:
- * 
+ *
     // To query something to the database
-  
+
     $table = Database::get_main_table(TABLE_MAIN_USER); // TABLE_MAIN_USER is a constant check the main/inc/database.constants.inc.php
     $sql = "SELECT firstname, lastname FROM $table_users ";
-    $users = Database::query($sql); 
-  
-    You can also use the Chamilo classes 
+    $users = Database::query($sql);
+
+    You can also use the Chamilo classes
     $users = UserManager::get_user_list();
-    
+
  */
- 
+
 $table = 'vchamilo';
 $tablename = Database::get_main_table($table);
 $sql = "CREATE TABLE IF NOT EXISTS $tablename (
@@ -20,18 +20,12 @@ $sql = "CREATE TABLE IF NOT EXISTS $tablename (
   `sitename` varchar(80) NOT NULL,
   `institution` varchar(80) NOT NULL,
   `root_web` varchar(120),
-
   `db_host` varchar(80) NOT NULL,
   `db_user` varchar(16) DEFAULT 'root',
-  `db_password` varchar(32),
-  `tracking_enabled` int(1) DEFAULT 0,
-  `single_database` int(1) DEFAULT 1,
+  `db_password` varchar(32),  
   `table_prefix` varchar(16),
   `db_prefix` varchar(16),
   `main_database` varchar(60) DEFAULT 'chamilo',
-  `statistics_database` varchar(60) DEFAULT 'chamilo',
-  `user_personal_database` varchar(60) DEFAULT 'chamilo',
-
   `url_append` varchar(32),
   `course_folder` varchar(80),
   `visible` int(1),

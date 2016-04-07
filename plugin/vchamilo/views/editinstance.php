@@ -4,16 +4,10 @@ define('CHAMILO_INTERNAL', true);
 
 global $plugininstance;
 
-require_once('../../../main/inc/global.inc.php');
-require_once($_configuration['root_sys'].'/local/classes/mootochamlib.php');
-require_once($_configuration['root_sys'].'/local/classes/database.class.php');
-
-global $DB;
-$DB = new DatabaseManager();
-
-require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php');
-require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/editinstance_form.php');
-HTML_QuickForm::registerElementType('cancel', api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/QuickForm/cancel.php', 'HTML_QuickForm_cancel');
+require_once '../../../main/inc/global.inc.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/editinstance_form.php';
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/js/host_form.js" type="text/javascript" language="javascript"></script>';
 
@@ -27,7 +21,6 @@ $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 // security
 api_protect_admin_script();
 
-
 if ($id) {
     $mode = 'update';
 } else {
@@ -39,18 +32,18 @@ $form->definition();
 
 $actions = '';
 $message = '';
-
-// call controller
-// $data = $form->get_data();
-if ($data = $form->get_data()){
+if ($data = $form->get_data()) {
     include(api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/editinstance.controller.php');
 }
 
 if ($id){
-    $vhost = $DB->get_record('vchamilo', array('id' => $id));
-    $vhost->vid = $vhost->id;
-    unset($vhost->id);
-    $form->set_data((array)$vhost);
+//    $vhost = $DB->get_record('vchamilo', array('id' => $id));
+    $sql = "SELECT * FROM vchamilo WHERE id = $id";
+    $result = Database::query($sql);
+    $vhost = Database::fetch_array($result);
+    $vhost['vid'] = $vhost['id'];
+    unset($vhost['id']);
+    $form->set_data($vhost);
 } else {
     $data = array();
     $data['db_host'] = 'localhost';

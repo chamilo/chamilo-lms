@@ -1,12 +1,8 @@
 <?php
 
-require_once('../../../main/inc/global.inc.php');
-require_once($_configuration['root_sys'].'local/classes/mootochamlib.php');
-require_once($_configuration['root_sys'].'local/classes/database.class.php');
-require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php');
-
-global $DB;
-$DB = new DatabaseManager();
+require_once '../../../main/inc/global.inc.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
 
 $action = $_GET['what'];
 define('CHAMILO_INTERNAL', true);
@@ -16,23 +12,16 @@ $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 
 api_protect_admin_script();
 
-require_js('host_list.js', 'vchamilo');
+//require_js('host_list.js', 'vchamilo');
 
-if ($action){
+if ($action) {
     require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/manage.controller.php');
 }
 
 $content = Display::page_header('VChamilo Instances');
 
 $table = 'vchamilo';
-
-$query = "
-    SELECT
-        *
-    FROM
-        $table
-";
-
+$query = "SELECT * FROM $table";
 $result = Database::query($query);
 $instances = array();
 while ($instance = Database::fetch_object($result)) {
@@ -101,4 +90,3 @@ $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-    

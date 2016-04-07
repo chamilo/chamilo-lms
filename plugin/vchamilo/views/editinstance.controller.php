@@ -9,6 +9,10 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     unset($data->what);
     unset($data->submitbutton);
     unset($data->id);
+    unset($data->vid);
+    unset($data->testconnection);
+    unset($data->testdatapath);
+
     $registeronly = $data->registeronly;
     unset($data->registeronly);
     $data->lastcron = 0;
@@ -19,13 +23,18 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         $template = $data->template;
         unset($data->template);
     }
-    
+
     ctrace("Registering VChamilo ");
     $tablename = Database::get_main_table('vchamilo');
-    if ($DB->record_exists('vchamilo', array('root_web' => $data->root_web))) {
-        $DB->update_record('vchamilo', $data, 'root_web');
+    $sql = "SELECT * FROM $tablename WHERE root_web = '".Database::escape_string($data->root_web)."'";
+    $result = Database::query($sql);
+
+    if (Database::num_rows($result)) {
+        $sql = "SELECT * FROM $tablename WHERE root_web = '".Database::escape_string($data->root_web)."'";
+        Database::update($tablename, $data, ['root_web = ?' => $data->root_web]);
+        //$DB->update_record('vchamilo', $data, 'root_web');
     } else {
-        $DB->insert_record('vchamilo', $data);
+        Database::insert($tablename, (array) $data);
     }
 
     if ($registeronly){
@@ -33,9 +42,9 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         ctrace("Registering only. out.");
         vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
     }
-    
+
     // or we continue with physical creation
-    
+
     // Create course directory for operations.
     // this is very important here (DO NOT USE api_get_path() !!) because storage may be remotely located
     $absalternatecourse = vchamilo_get_config('vchamilo', 'course_real_root');
@@ -54,7 +63,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         $INDEX = fopen($coursedir.'/index.html', 'w');
         fputs($INDEX, vchamilo_get_default_course_index_fragment());
         fclose($INDEX);
-        
+
         $HTACCESS = fopen($coursedir.'/.htaccess', 'w');
         fputs($HTACCESS, vchamilo_get_htaccess_fragment($data->course_folder));
         fclose($HTACCESS);
@@ -79,9 +88,9 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     }
 
     // create homedir
-    
+
     // Structure of virtualized home folders :
-    
+
     /*
      * {LegacyHomeContainer} => {VChamiloSubcontainer} => {BrandedAccessUrlHome}
      *
@@ -92,12 +101,12 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     $archive_folder = $matches[1]; // prepare it now but use it later
     if ($absalternatehome = vchamilo_get_config('vchamilo', 'home_real_root')){
         // absalternatehome is a vchamilo config setting that tells where the
-        // real physical storage for home pages are. 
+        // real physical storage for home pages are.
         $homedir = str_replace('//', '/', $absalternatehome.'/'.$home_folder);
     } else {
         // homedir is the home container at install level. This may contains
         // in reality home subdirs from branding suburls.
-        // In straight installs, this should be located as a hostname subrouted 
+        // In straight installs, this should be located as a hostname subrouted
         // dir in home dir of the chamilo install.
         // In delocated installs (clustered installations), the root 'home' directory
         // may be a symbolic link to a delocated path.
@@ -165,40 +174,29 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         // deploy template database
 
         ctrace("Creating databases from template $template ");
-
         vchamilo_create_databases($data);
-
         ctrace("Loading data template $template ");
-
         vchamilo_load_db_template($data, 'main_database', $template);
-        if (!empty($data->statistics_database) && $data->main_database != $data->statistics_database) {
-            vchamilo_load_db_template($data, 'statistics_database', $template);
-        }
-        if (!empty($data->user_personal_database) && ($data->main_database != $data->user_personal_database) && ($data->user_personal_database != $data->statistics_database)) {
-            vchamilo_load_db_template($data, 'user_personal_database', $template);
-        }
-
         ctrace("Coying files from template $template ");
-
         vchamilo_load_files_from_template($data, $template);
     }
 
     ctrace("Fixing records");
 
     // Builds a new database manager on new instance to operate records
-    $NDB = new DatabaseManager($data);
+//    $NDB = new DatabaseManager($data);
 
     // pluging in site name institution
-    $settingstable = $NDB->format_table_name(TABLE_MAIN_SETTINGS_CURRENT);
+    $settingstable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sitename = str_replace("'", "''", $data->sitename);
     $institution = str_replace("'", "''", $data->institution);
     $sqls[] = " UPDATE {$settingstable} SET selected_value = '{$sitename}' WHERE variable = 'siteName' AND category = 'Platform' ";
     $sqls[] = " UPDATE {$settingstable} SET selected_value = '{$institution}' WHERE variable = 'institution' AND category = 'Platform' ";
-    $accessurltable = $NDB->format_table_name('access_url');
+    $accessurltable = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $sqls[] = " UPDATE {$accessurltable} SET url = '{$data->root_web}' WHERE id = '1' ";
 
     foreach ($sqls as $sql) {
-        $NDB->execute_sql($sql);
+        Database::query($sql);
     }
 
     ctrace("Finished. ");

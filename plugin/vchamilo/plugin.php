@@ -11,11 +11,6 @@ require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.p
 require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php');
 
 global $_configuration;
-require_once($_configuration['root_sys'].'/local/classes/database.class.php');
-
-// replace chamilo Database API with stronger DB api
-global $DB;
-$DB = new DatabaseManager();
 
 /**
  * Plugin details (must be present)
@@ -33,10 +28,10 @@ $plugin_info['version']     = '1.0';
 $plugin_info['author']      = 'Valery Fremaux';
 
 
-/* Plugin optional settings */ 
+/* Plugin optional settings */
 
-/* 
- * This form will be showed in the plugin settings once the plugin was installed 
+/*
+ * This form will be showed in the plugin settings once the plugin was installed
  * in the plugin/hello_world/index.php you can have access to the value: $plugin_info['settings']['hello_world_show_type']
 */
 
@@ -83,7 +78,7 @@ $form->addElement('header', $plugininstance->get_lang('mysqlcmds'));
 $form->addElement('text', 'cmd_mysql', $plugininstance->get_lang('mysqlcmd'));
 $form->addElement('text', 'cmd_mysqldump', $plugininstance->get_lang('mysqldumpcmd'));
 
-$form->addElement('style_submit_button', 'submit_button', $plugininstance->get_lang('Save'));  
+$form->addButtonSave($plugininstance->get_lang('Save'));
 
 $plugin_info['settings_form'] = $form;
 

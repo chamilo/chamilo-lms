@@ -9,6 +9,7 @@
  * @author Juan Carlos Ra�a Trabado
  * @since 25/september/2010
 */
+
 require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/editdraw';
@@ -28,26 +29,25 @@ if (empty($document_data)) {
     $parent_id = DocumentManager::get_document_id(api_get_course_info(), $dir);
     $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
 }
-
-$dir= str_replace('\\', '/',$dir);//and urlencode each url $curdirpath (hack clean $curdirpath under Windows - Bug #3261)
+//and urlencode each url $curdirpath (hack clean $curdirpath under Windows - Bug #3261)
+$dir = str_replace('\\', '/', $dir);
 
 /* Constants & Variables */
 $current_session_id=api_get_session_id();
 $group_id = api_get_group_id();
 
 //path for svg-edit save
-$_SESSION['draw_dir']=Security::remove_XSS($dir);
-if ($_SESSION['draw_dir']=='/'){
+$_SESSION['draw_dir'] = Security::remove_XSS($dir);
+if ($_SESSION['draw_dir'] == '/') {
 	$_SESSION['draw_dir'] = '';
 }
-$_SESSION['draw_file']=basename(Security::remove_XSS($file_path));
+$_SESSION['draw_file'] = basename(Security::remove_XSS($file_path));
 $get_file = Security::remove_XSS($file_path);
 $file = basename($get_file);
-$temp_file = explode(".",$file);
-$filename=$temp_file[0];
-$nameTools = get_lang('EditDocument') . ': '.$filename;
-
-$courseDir   = $_course['path'].'/document';
+$temp_file = explode(".", $file);
+$filename = $temp_file[0];
+$nameTools = get_lang('EditDocument') . ': ' . $filename;
+$courseDir = $_course['path'] . '/document';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 /*	Other initialization code */
@@ -79,8 +79,10 @@ if (!is_dir($filepath)) {
 
 //groups //TODO:clean
 if (!empty($group_id)) {
-	$req_gid = '&amp;gidReq='.$group_id;
-	$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace'));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('GroupSpace'),
+    );
 	$group_document = true;
 	$noPHP_SELF = true;
 }
@@ -88,15 +90,18 @@ if (!empty($group_id)) {
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
 if (!$is_certificate_mode)
-	$interbreadcrumb[]= array("url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid, "name"=> get_lang('Documents'));
+    $interbreadcrumb[] = array(
+        "url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).'&'.api_get_cidreq(),
+        "name" => get_lang('Documents'),
+    );
 else
-	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
 } else {
-    foreach($document_data['parents'] as $document_sub_data) {
+    foreach ($document_data['parents'] as $document_sub_data) {
         if ($document_data['title'] == $document_sub_data['title']) {
             continue;
         }
@@ -115,8 +120,10 @@ Event::event_access_tool(TOOL_DOCUMENT);
 
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
-		echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-		echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&origin=editdraw">'.Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="document.php?id='.$parent_id.'">'.
+    Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.'&origin=editdraw">'.
+    Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (api_browser_support('svg')) {
@@ -125,13 +132,11 @@ if (api_browser_support('svg')) {
 	$langsvgedit  = api_get_language_isocode();
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
 	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'svg-edit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
-
-	$svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&amp;lang='.$langsvgedit;
+    //$svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&amp;lang='.$langsvgedit;
+    $svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../..'.api_get_path(REL_COURSE_PATH).$courseDir.$dir.$file.'&lang='.$langsvgedit;
 
 	?>
-
 	<script type="text/javascript">
-
 	document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
 	function resizeIframe() {
     	var height = window.innerHeight -50;
@@ -143,9 +148,7 @@ if (api_browser_support('svg')) {
 	};
 	document.getElementById('frame').onload = resizeIframe;
 	window.onresize = resizeIframe;
-
 	</script>
-
     <?php
     echo '<noscript>';
 	echo '<iframe style="height: 550px; width: 100%;" scrolling="no" frameborder="0\' src="'.$svg_url.'"<noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';

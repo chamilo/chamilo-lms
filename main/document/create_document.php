@@ -445,7 +445,7 @@ if ($form->validate()) {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
 	$values['title'] = trim($values['title']);
-    
+
     if (!empty($values['dirValue'])) {
         $dir = $values['dirValue'];
     }
@@ -489,7 +489,8 @@ if ($form->validate()) {
     }
 
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
-		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
+		//$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
+		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].api_get_path(REL_COURSE_PATH), $content);
 
 		fputs($fp, $content);
 		fclose($fp);
@@ -617,9 +618,9 @@ if ($form->validate()) {
 		$actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
             Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         }
-        
+
         echo $toolbar = Display::toolbarAction('actions-documents', array(0 => $actionsLeft, 1 => ''));
-                
+
 
 	if ($is_certificate_mode) {
 		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(api_get_user_id(), api_get_course_id());

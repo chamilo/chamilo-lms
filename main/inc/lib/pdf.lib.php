@@ -452,8 +452,7 @@ class PDF
                     if (strpos($old_src, 'http') === false) {
                         if (strpos($old_src, '/main/default_course_document') === false) {
                             if (strpos($old_src, '/main/inc/lib/') === false) {
-
-                                $old_src_fixed = str_replace('/courses/'.$course_data['path'].'/document/', '', $old_src);
+                                $old_src_fixed = str_replace(api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);
                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);
                                 $new_path = $document_path.$old_src_fixed;
                                 $document_html= str_replace($old_src, $new_path, $document_html);

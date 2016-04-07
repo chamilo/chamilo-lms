@@ -4,14 +4,13 @@
  * @package chamilo.notification
  * @author Julio Montoya <gugli100@gmail.com>
  */
-/**
- * Initialization
- */
-if (PHP_SAPI!='cli') {
+
+if (PHP_SAPI != 'cli') {
     die('Run this script through the command line or comment this line in the code');
 }
 
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
+
 /**
  * Notification sending
  */

@@ -6229,7 +6229,7 @@ class learnpath
             $file = $filepath . $row['path'];
 
             if ($fp = @ fopen($file, 'w')) {
-                $content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'] . '/courses/', $content);
+                $content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].api_get_path(REL_COURSE_PATH), $content);
 
                 // Change the path of mp3 to absolute.
                 // The first regexp deals with :// urls.
@@ -8325,11 +8325,11 @@ class learnpath
                               </div>';
             $audio_player .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
             $audio_player .= '<script>
-                                var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
-                                s1.addParam("allowscriptaccess","always");
-                                s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=true");
-                                s1.write("container");
-                            </script>';
+                var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
+                s1.addParam("allowscriptaccess","always");
+                s1.addParam("flashvars","file=../..'.api_get_path(REL_COURSE_PATH).$_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=true");
+                s1.write("container");
+            </script>';
         }
 
         $url = api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
@@ -9798,8 +9798,8 @@ class learnpath
                     }
                     $string = str_replace($old_new['orig'], $newDestination, $string);
 
-                    //Add files inside the HTMLs
-                    $new_path = str_replace('/courses/', '', $old_new['orig']);
+                    // Add files inside the HTMLs
+                    $new_path = str_replace(api_get_path(REL_COURSE_PATH), '', $old_new['orig']);
                     $destinationFile = $archive_path.$temp_dir_short.'/'.$old_new['dest'];
                     if (file_exists($sys_course_path.$new_path)) {
                         copy($sys_course_path.$new_path, $destinationFile);

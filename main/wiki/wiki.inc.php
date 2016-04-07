@@ -1972,9 +1972,9 @@ class Wiki
         $wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
 
         // replace relative path by absolute path for courses, so you can see items into this page wiki (images, mp3, etc..) exported in documents
-        if (api_strpos($wikiContents,'../../courses/') !== false) {
+        if (api_strpos($wikiContents,'../..'.api_get_path(REL_COURSE_PATH)) !== false) {
             $web_course_path = api_get_path(WEB_COURSE_PATH);
-            $wikiContents = str_replace('../../courses/',$web_course_path,$wikiContents);
+            $wikiContents = str_replace('../..'.api_get_path(REL_COURSE_PATH), $web_course_path, $wikiContents);
         }
 
         $i = 1;

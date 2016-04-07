@@ -363,7 +363,6 @@ function write_system_config_file($path)
     foreach ($config as $key => $value) {
         $content = str_replace($key, $value, $content);
     }
-
     $fp = @ fopen($path, 'w');
 
     if (!$fp) {
@@ -2280,8 +2279,7 @@ function fixIds(EntityManager $em)
                 if (isset($data['iid'])) {
                     $newId = $data['iid'];
                 }
-                $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
-                error_log($sql);
+                $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";                
                 $connection->executeQuery($sql);
             }
 

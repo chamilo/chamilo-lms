@@ -333,8 +333,6 @@ class UserManager
         /** @var User $user */
         $user = $userManager->createUser();
 
-        $em = Database::getManager();
-
         /** @var User $user */
         //$user = new User();
         $user
@@ -362,8 +360,6 @@ class UserManager
 
         $userManager->updateUser($user);
         $userId = $user->getId();
-
-        error_log($userId);
 
         if (!empty($userId)) {
             $return = $userId;
@@ -1445,6 +1441,7 @@ class UserManager
             // In exceptional cases, on some portals, the intermediate base user
             // directory might not have been created. Make sure it is before
             // going further.
+
             $rootPath = api_get_path(SYS_UPLOAD_PATH) . 'users/' . substr((string) $id, 0, 1);
             if (!is_dir($rootPath)) {
                 $perm = api_get_permissions_for_new_directories();

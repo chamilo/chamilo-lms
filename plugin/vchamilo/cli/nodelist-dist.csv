@@ -1,0 +1,12 @@
+#
+# root_web : a fully qualified domain as wwwroot for the instance
+# template : a VChamilo template name (stored from a vchamilo snapshot) or empty if no template
+# tracking_enabled : 0 or 1
+# single_database : 0 or 1
+# main_database : the main database
+# statistics_database : if empty, is using main_database
+# user_personal_database : if empty, is using main_database
+# course_folder : absolute path to course material
+#
+root_web;template;sitename;institution;db_host;db_user;db_password;table_prefix;db_prefix;tracking_enabled;single_database;main_database;statistics_database;user_personal_database;course_folder
+

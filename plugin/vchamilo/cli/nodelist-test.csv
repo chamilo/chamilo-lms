@@ -1,0 +1,17 @@
+#
+# root_web : a fully qualified domain as wwwroot for the instance
+# template : a VChamilo template name (stored from a vchamilo snapshot) or empty if no template
+# tracking_enabled : 0 or 1
+# single_database : 0 or 1
+# main_database : the main database
+# statistics_database : if empty, is using main_database
+# user_personal_database : if empty, is using main_database
+# course_folder : absolute path to course material
+# plugin_<pluginkey>|<variablekey>
+#
+root_web;template;sitename;institution;db_host;db_user;db_password;table_prefix;db_prefix;tracking_enabled;single_database;main_database;statistics_database;user_personal_database;course_folder;plugin_ent_installer|institution_id;plugin_ent_installer|enable_sync;plugin_ent_installer|real_used_auth
+#http://clone2.chamilo-atrium.fr;clone1.chamilo-atrium.fr;Lycée Clone 2;Lycées Atrium;localhost;root;spr1ngb0ks;;;0;1;chamilo19_clone2;;;courses_clone2;0131111A;1;cas
+http://clone3.chamilo-atrium.fr;clone1.chamilo-atrium.fr;Lycée Clone 3;Lycées Atrium;localhost;root;spr1ngb0ks;;;0;1;chamilo19_clone3;;;courses_clone3;0131111A;1;cas
+http://clone4.chamilo-atrium.fr;clone1.chamilo-atrium.fr;Lycée Clone 4;Lycées Atrium;localhost;root;spr1ngb0ks;;;0;1;chamilo19_clone4;;;courses_clone4;0132222B;1;cas
+#http://clone5.chamilo-atrium.fr;clone1.chamilo-atrium.fr;Lycée Clone 5;Lycées Atrium;localhost;root;spr1ngb0ks;;;0;1;chamilo19_clone5;;;courses_clone5;0133333C;1;cas
+http://clone6.chamilo-atrium.fr;clone1.chamilo-atrium.fr;Lycée Clone 6;Lycées Atrium;localhost;root;spr1ngb0ks;;;0;1;chamilo19_clone6;;;courses_clone6;0134444D;1;cas

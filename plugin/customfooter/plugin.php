@@ -6,8 +6,7 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
-require_once dirname(__FILE__).'/lib/customfooter_plugin.class.php';
+require_once __DIR__.'/lib/customfooter_plugin.class.php';
 
 /**
  * Plugin details (must be present)
@@ -16,19 +15,19 @@ require_once dirname(__FILE__).'/lib/customfooter_plugin.class.php';
 /* Plugin config */
 
 //the plugin title
-$plugin_info['title']       = 'Custom Footer';
+$plugin_info['title'] = 'Custom Footer';
 //the comments that go with the plugin
-$plugin_info['comment']     = "Drives configuration parameters that plugs custom footer notes";
+$plugin_info['comment'] = "Drives configuration parameters that plugs custom footer notes";
 //the plugin version
-$plugin_info['version']     = '1.0';
+$plugin_info['version'] = '1.0';
 //the plugin author
-$plugin_info['author']      = 'Valery Fremaux';
+$plugin_info['author'] = 'Valery Fremaux, Julio Montoya';
 
 
-/* Plugin optional settings */ 
+/* Plugin optional settings */
 
-/* 
- * This form will be showed in the plugin settings once the plugin was installed 
+/*
+ * This form will be showed in the plugin settings once the plugin was installed
  * in the plugin/hello_world/index.php you can have access to the value: $plugin_info['settings']['hello_world_show_type']
 */
 
@@ -48,7 +47,7 @@ foreach ($config as $fooid => $configrecord) {
 $form->addElement('text', 'footer_left', $plugininstance->get_lang('footerleft'));
 $form->addElement('text', 'footer_right', $plugininstance->get_lang('footerright'));
 
-$form->addElement('style_submit_button', 'submit_button', $plugininstance->get_lang('Save'));
+$form->addButtonSave($plugininstance->get_lang('Save'));
 
 $form->setDefaults($form_settings);
 

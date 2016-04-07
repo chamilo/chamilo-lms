@@ -364,6 +364,8 @@ if (isset($_POST['title'])) {
     }
 }
 
+$redirectTo = null;
+
 switch ($action) {
     case 'add_item':
         if (!$is_allowed_to_edit) {
@@ -1385,6 +1387,29 @@ switch ($action) {
             'lp_id' => $_SESSION['oLP']->lp_id
         ]));
         break;
+    case 'add_final_item':
+        var_dump($_POST, $_GET, $lp_found);
+        if (!$lp_found) {
+            Display::addFlash(
+                Display::return_message(get_lang('NoLPFound'), 'error')
+            );
+            break;
+        }
+
+        $_SESSION['refresh'] = 1;
+
+        if (!isset($_POST['submit']) || empty($post_title)) {
+            break;
+        }
+
+        $_SESSION['oLP']->getFinalItemForm();
+
+        $redirectTo = api_get_self() . '?' . http_build_query([
+            'action' => 'add_item',
+            'type' => 'step',
+            'lp_id' => intval($_SESSION['oLP']->lp_id)
+        ]);
+        break;
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);
         require 'lp_list.php';
@@ -1394,4 +1419,8 @@ switch ($action) {
 if (!empty($_SESSION['oLP'])) {
     $_SESSION['lpobject'] = serialize($_SESSION['oLP']);
     if ($debug > 0) error_log('New LP - lpobject is serialized in session', 0);
+}
+
+if (!empty($redirectTo)) {
+    header("Location: $redirectTo");
 }

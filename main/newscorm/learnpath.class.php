@@ -1946,7 +1946,7 @@ class learnpath
             error_log('New LP - In learnpath::get_last()', 0);
         }
         //This is just in case the lesson doesn't cointain a valid scheme, just to avoid "Notices"
-        if ($this->index > 0) {
+        if (count($this->ordered_items) > 0) {
             $this->index = count($this->ordered_items) - 1;
             return $this->ordered_items[$this->index];
         }
@@ -5613,7 +5613,11 @@ class learnpath
                 if (file_exists('../img/lp_' . $icon_name . '.gif')) {
                     $icon = Display::return_icon('lp_'.$icon_name.'.gif');
                 } else {
-                    $icon = Display::return_icon('folder_document.gif');
+                    if ($arrLP[$i]['item_type'] === 'final_item') {
+                        $icon = Display::return_icon('certificate.png');
+                    } else {
+                        $icon = Display::return_icon('folder_document.gif');
+                    }
                 }
             }
 
@@ -6289,6 +6293,7 @@ class learnpath
                     $res_step = Database::query($sql);
                     $row_step = Database :: fetch_array($res_step);
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
+                    var_dump($item_id, $row_step);
                     $return .= $this->display_document_form('edit', $item_id, $row_step);
                     break;
                 case TOOL_LINK :
@@ -6364,20 +6369,23 @@ class learnpath
         // Get al the forums.
         $forums = $this->get_forums(null, $course_code);
 
+        $finish = $this->getFinalItemForm();
+
         $headers = array(
             Display::return_icon('folder_document.png', get_lang('Documents'), array(), ICON_SIZE_BIG),
             Display::return_icon('quiz.png',  get_lang('Quiz'), array(), ICON_SIZE_BIG),
             Display::return_icon('links.png', get_lang('Links'), array(), ICON_SIZE_BIG),
             Display::return_icon('works.png', get_lang('Works'), array(), ICON_SIZE_BIG),
             Display::return_icon('forum.png', get_lang('Forums'), array(), ICON_SIZE_BIG),
-            Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'), array(), ICON_SIZE_BIG)
+            Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'), array(), ICON_SIZE_BIG),
+            Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         );
 
         echo Display::display_normal_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'));
         $chapter = $_SESSION['oLP']->display_item_form('chapter', get_lang('EnterDataNewChapter'), 'add_item');
         echo Display::tabs(
             $headers,
-            array($documents, $exercises, $links, $works, $forums, $chapter), 'resource_tab'
+            array($documents, $exercises, $links, $works, $forums, $chapter, $finish), 'resource_tab'
         );
 
         return true;
@@ -10691,6 +10699,102 @@ EOD;
         return $forumId;
     }
 
+    private function getFinalItem()
+    {
+        if (empty($this->items)) {
+            return null;
+        }
+
+        foreach ($this->items as $item) {
+            if ($item->type !== 'final_item') {
+                continue;
+            }
+
+            return $item;
+        }
+    }
+
+    private function getFinalItemTemplate()
+    {
+        $finalItem = $this->getFinalItem();
+
+        if (!$finalItem) {
+            return file_get_contents(api_get_path(SYS_CODE_PATH) . 'newscorm/final_item_template/template.html');
+        }
+
+        $doc = DocumentManager::get_document_data_by_id($finalItem->path, $this->cc);
+
+        return file_get_contents($doc['absolute_path']);
+    }
+
+    /**
+     * 
+     * @return html
+     */
+    public function getFinalItemForm()
+    {
+        $finalItem = $this->getFinalItem();
+        $title = '';
+        $content = '';
+
+        if ($finalItem) {
+            $title = $finalItem->title;
+            $content = $this->getFinalItemTemplate();
+        }
+
+        $courseInfo = api_get_course_info();
+        $result = $this->generate_lp_folder($courseInfo);
+        $relative_path = api_substr($result['dir'], 1, strlen($result['dir']));
+        $relative_prefix = '../../';
+
+        $editorConfig = [
+            'ToolbarSet' => 'LearningPathDocuments',
+            'Width' => '100%',
+            'Height' => '500',
+            'FullPage' => true,
+            'CreateDocumentDir' => $relative_prefix,
+            'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/document/',
+            'BaseHref' => api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/document/' . $relative_path
+        ];
+
+        $url = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+            'type' => 'document',
+            'lp_id' => $this->lp_id
+        ]);
+
+        $form = new FormValidator('final_item', 'POST', $url);
+        $form->addText('title', get_lang('Title'));
+        $form->addButtonSave(get_lang('LPCreateDocument'));
+        $renderer = $form->defaultRenderer();
+        $renderer->setElementTemplate('<div class="editor-lp">&nbsp;{label}{element}</div>', 'content');
+        $form->addHtmlEditor('content', null, null, true, $editorConfig, true);
+        $form->addHidden('action', 'add_final_item');
+        $form->addHidden('previous', $this->get_last());
+
+        $form->setDefaults(['title' => $title, 'content' => $content]);
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $lastItemId = $this->get_last();
+
+            if (!$finalItem) {
+                $documentId = $this->create_document($this->course_info, $values['content'], $values['title']);
+                $this->add_item(
+                    0,
+                    $lastItemId,
+                    'final_item',
+                    $documentId,
+                    $values['title'],
+                    ''
+                );
+            } else {
+                $this->edit_document($this->course_info);
+            }
+        }
+
+        return $form->returnForm();
+    }
 }
 
 if (!function_exists('trim_value')) {

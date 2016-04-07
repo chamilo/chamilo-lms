@@ -18,6 +18,7 @@
 
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Symfony\Component\Console\Helper\HelperSet;
+use Doctrine\DBAL\Types\Type;
 
 (@include_once __DIR__ . '/../vendor/autoload.php') || @include_once __DIR__ . '/../../../autoload.php';
 
@@ -41,6 +42,16 @@ if ( ! is_readable($configFile)) {
     echo 'Configuration file [' . $configFile . '] does not have read permission.' . "\n";
     exit(1);
 }
+
+Type::overrideType(
+    Type::DATETIME,
+    Database::getUTCDateTimeTypeClass()
+);
+
+Type::addType(
+    'json',
+    'Sonata\Doctrine\Types\JsonType'
+);
 
 $commands = array(
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),

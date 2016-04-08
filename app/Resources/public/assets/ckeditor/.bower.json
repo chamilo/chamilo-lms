@@ -16,14 +16,14 @@
   "homepage": "http://ckeditor.com",
   "main": "./ckeditor.js",
   "moduleType": "globals",
-  "version": "4.5.8",
-  "_release": "4.5.8",
+  "version": "4.5.9",
+  "_release": "4.5.9",
   "_resolution": {
     "type": "version",
-    "tag": "4.5.8",
-    "commit": "6345bc8f142bb72ffb83b4a964be4d88ad3905c8"
+    "tag": "4.5.9",
+    "commit": "ba2580967f7409784921b4320e297522175e45bb"
   },
-  "_source": "git://github.com/ckeditor/ckeditor-releases.git",
-  "_target": "4.*",
-  "_originalSource": "ckeditor"
+  "_source": "https://github.com/AngelFQC/ckeditor-releases.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/AngelFQC/ckeditor-releases.git"
 }

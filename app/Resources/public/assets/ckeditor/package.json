@@ -5,7 +5,7 @@
   "main": "ckeditor.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ckeditor/ckeditor-releases.git"
+    "url": "git+https://github.com/AngelFQC/ckeditor-releases.git"
   },
   "keywords": [
     "ckeditor",

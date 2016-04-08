@@ -225,11 +225,9 @@ function vchamilo_drop_databases(&$vchamilo){
  * @param    $outputfile        array        The variables to inject in setup template SQL.
  * @return    bool    If TRUE, loading database from template was sucessful, otherwise FALSE.
  */
-function vchamilo_create_databases($vchamilo, $cnx = null) {
-    global $_configuration, $DB;
-
+function vchamilo_create_databases($vchamilo, $cnx = null)
+{
     // availability of SQL commands
-
     $createstatement = 'CREATE DATABASE %DATABASE% DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ';
 
     $dbs = array($vchamilo->main_database);

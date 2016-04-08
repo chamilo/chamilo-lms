@@ -1,8 +1,10 @@
 <?php
-require_once('lib/bootlib.php');
-require_once('lib/vchamilo_plugin.class.php');
 
-function vchamilo_hook_configuration(&$_configuration) {
+require_once 'lib/bootlib.php';
+require_once 'lib/vchamilo_plugin.class.php';
+
+function vchamilo_hook_configuration(&$_configuration)
+{
     global $VCHAMILO;
 
     if (defined('CLI_SCRIPT') && !defined('CLI_VCHAMILO_OVERRIDE')) return;
@@ -59,7 +61,9 @@ function vchamilo_hook_configuration(&$_configuration) {
 */
 function vchamilo_get_hostname(&$_configuration) {
 
-    if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_configuration['force_https_forwarded_proto'])) {
+    if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+        $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_configuration['force_https_forwarded_proto'])
+    ) {
         $protocol = 'https';
     } else {
         $protocol = 'http';
@@ -528,9 +532,8 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad){
 * read manifest values in vchamilo template.
 * @uses $CFG
 */
-function vchamilo_get_vmanifest($version){
-    global $_configuration;
-
+function vchamilo_get_vmanifest($version)
+{
     include(api_get_path(SYS_PATH, SYS_PATH).'/plugin/vchamilo/templates/'.$version.'_sql/manifest.php');
     $manifest->templatewwwroot = $templatewwwroot;
     $manifest->templatevdbprefix = $templatevdbprefix;
@@ -541,7 +544,8 @@ function vchamilo_get_vmanifest($version){
 /**
 * make a fake vchamilo that represents the current host
 */
-function vchamilo_make_this(){
+function vchamilo_make_this()
+{
     global $_configuration;
 
     $thischamilo->root_web = $_configuration['root_web'];
@@ -560,7 +564,8 @@ function vchamilo_make_this(){
  * Get available templates for defining a new virtual host.
  * @return        array        The availables templates, or EMPTY array.
  */
-function vchamilo_get_available_templates() {
+function vchamilo_get_available_templates()
+{
     global $_configuration;
     global $plugininstance;
 
@@ -717,11 +722,7 @@ function copyDirContentTo($source, $destination, $move = true) {
     }
 }
 
-
-
 // from moot
-
-
 define('PARAM_BOOL', 1);
 define('PARAM_INT', 2);
 define('PARAM_TEXT', 3);

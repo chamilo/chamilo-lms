@@ -55,7 +55,7 @@ class ScoreDisplay
     /**
      * Protected constructor - call instance() to instantiate
      */
-    protected function ScoreDisplay($category_id = 0)
+    public function __construct($category_id = 0)
     {
         if (!empty($category_id)) {
             $this->category_id = $category_id;

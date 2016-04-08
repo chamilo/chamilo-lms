@@ -20,7 +20,7 @@ class ResultTable extends SortableTable
 	 */
     public function __construct($evaluation, $results = array(), $iscourse, $addparams = null,$forprint = false)
 	{
-    	parent :: __construct ('resultlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1);
+    	parent :: __construct('resultlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1);
 
 		$this->datagen = new ResultsDataGenerator($evaluation, $results, true);
 
@@ -140,7 +140,7 @@ class ResultTable extends SortableTable
 
 	private function build_edit_column ($item)
 	{
-		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		$locked_status = $this->evaluation->get_locked();
 		if (api_is_allowed_to_edit(null, true) && $locked_status == 0) {
 			//api_is_course_admin()
@@ -166,7 +166,7 @@ class ResultTable extends SortableTable
 
 			if ($doc_url != null) {
 				$edit_column .= '&nbsp;<a href="'. $doc_url . '" target="_blank">';
-				$edit_column .= Display::return_icon('link.gif', get_lang('OpenDocument').'</a>';
+				$edit_column .= Display::return_icon('link.gif', get_lang('OpenDocument')).'</a>';
 			}
 		}
 

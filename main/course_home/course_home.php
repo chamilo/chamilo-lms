@@ -264,11 +264,13 @@ $reqdate = "&reqdate=$temps";
 /*	MAIN CODE */
 
 /*	Introduction section (editable by course admins) */
-$content = Display::return_introduction_section(TOOL_COURSE_HOMEPAGE, array(
-		'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-		'CreateDocumentDir'    => 'document/',
-		'BaseHref'             => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
-	)
+$content = Display::return_introduction_section(
+    TOOL_COURSE_HOMEPAGE,
+    array(
+        'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
+        'CreateDocumentDir' => 'document/',
+        'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/',
+    )
 );
 
 /*	SWITCH TO A DIFFERENT HOMEPAGE VIEW

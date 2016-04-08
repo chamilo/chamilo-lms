@@ -260,8 +260,8 @@ class Diagnoser
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ),
-            'mysql' => array(
-                'link' => 'http://www.php.net/mysql',
+            'pdo_mysql' => array(
+                'link' => 'http://php.net/manual/en/ref.pdo-mysql.php',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ),

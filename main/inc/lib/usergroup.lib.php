@@ -971,7 +971,8 @@ class UserGroup extends Model
                 if ($picture) {
                     $params = array(
                         'id' => $id,
-                        'picture' => $picture
+                        'picture' => $picture,
+                        'group_type' => $params['group_type']
                     );
                     $this->update($params);
                 }

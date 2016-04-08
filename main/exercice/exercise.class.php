@@ -1653,7 +1653,7 @@ class Exercise
                 $sql = "UPDATE $TBL_EXERCISES SET id = iid WHERE iid = {$this->id} ";
                 Database::query($sql);
 
-                $sql = "UPDATE $TBL_EXERCICES
+                $sql = "UPDATE $TBL_EXERCISES
                         SET question_selection_type= ".intval($this->getQuestionSelectionType())."
                         WHERE id = ".$this->id." AND c_id = ".$this->course_id;
                 Database::query($sql);

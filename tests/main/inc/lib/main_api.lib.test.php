@@ -65,7 +65,7 @@ class TestMainApi extends UnitTestCase {
 		WEB_PLUGIN_PATH => 'plugin/',
 		SYS_ARCHIVE_PATH => 'archive/',
 		WEB_ARCHIVE_PATH => 'archive/',
-		INCLUDE_PATH => 'inc/',
+		SYS_INC_PATH => 'inc/',
 		LIBRARY_PATH => 'inc/lib/',
 		CONFIGURATION_PATH => 'inc/conf/',
 		WEB_LIBRARY_PATH => 'inc/lib/',

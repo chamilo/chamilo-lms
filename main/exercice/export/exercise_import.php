@@ -67,7 +67,7 @@ switch ($cmd) {
 
 
 // DISPLAY
-include api_get_path(INCLUDE_PATH) . '/header.inc.php';
+include api_get_path(SYS_INC_PATH) . '/header.inc.php';
 
 // Tool introduction
 // TODO: These settings to be checked when it is possible.
@@ -91,4 +91,4 @@ if (isset($display)) {
     echo $display;
 }
 
-include api_get_path(INCLUDE_PATH) . '/footer.inc.php';
+include api_get_path(SYS_INC_PATH) . '/footer.inc.php';

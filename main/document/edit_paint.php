@@ -148,7 +148,7 @@ $locktarget="true";
 $locktitle="false";
 
 if ($_SERVER['HTTP_HOST']=="localhost") {
-	$path_and_file= api_get_path(SYS_SERVER_ROOT_PATH).'/crossdomain.xml';
+	$path_and_file= api_get_path(SYS_PATH).'/crossdomain.xml';
 	if (!file_exists($path_and_file)) {
 		$crossdomain='<?xml version="1.0"?>
 			<!DOCTYPE cross-domain-policy SYSTEM "http://www.adobe.com/xml/dtds/cross-domain-policy.dtd">

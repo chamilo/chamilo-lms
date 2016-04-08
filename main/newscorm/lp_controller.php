@@ -368,6 +368,7 @@ $redirectTo = null;
 
 switch ($action) {
     case 'add_item':
+
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
@@ -1388,7 +1389,6 @@ switch ($action) {
         ]));
         break;
     case 'add_final_item':
-        var_dump($_POST, $_GET, $lp_found);
         if (!$lp_found) {
             Display::addFlash(
                 Display::return_message(get_lang('NoLPFound'), 'error')

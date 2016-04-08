@@ -6268,9 +6268,4 @@ class DocumentManager
                 WHERE c_id = $courseId AND session_id = $sessionId AND tool = '".TOOL_DOCUMENT."'";
         Database::query($sql);
     }
-
-    public static function generateFinalItemDocument()
-    {
-        
-    }
 }

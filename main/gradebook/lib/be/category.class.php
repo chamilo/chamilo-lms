@@ -1950,7 +1950,7 @@ class Category implements GradebookItem
         $userHasSkills = false;
 
         if ($skillToolEnabled) {
-            if (!$category->getGenerateCertificates()) {
+            if ($category->getGenerateCertificates()) {
                 $skill = new Skill();
                 $skill->add_skill_to_user(
                     $user_id,

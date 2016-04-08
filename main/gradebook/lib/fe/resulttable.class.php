@@ -166,7 +166,7 @@ class ResultTable extends SortableTable
 
 			if ($doc_url != null) {
 				$edit_column .= '&nbsp;<a href="'. $doc_url . '" target="_blank">';
-				$edit_column .= Display::return_icon('link.gif', get_lang('OpenDocument').'</a>';
+				$edit_column .= Display::return_icon('link.gif', get_lang('OpenDocument')).'</a>';
 			}
 		}
 

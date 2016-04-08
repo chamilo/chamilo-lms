@@ -4,12 +4,9 @@
  * Quick page to react to first login cases
  * @package chamilo.custompages
  */
-/**
- * Initialization
- */
 require_once('language.php');
 require_once(dirname(__FILE__).'/../main/inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+
 /**
  * Security checks
  */

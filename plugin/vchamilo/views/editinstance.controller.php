@@ -53,7 +53,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         $coursedir = str_replace('//', '/', $absalternatecourse.'/'.$data->course_folder);
     } else {
         // this is the standard local case
-        $coursedir = api_get_path(TO_SYS, SYS_PATH).$data->course_folder;
+        $coursedir = api_get_path(SYS_PATH).$data->course_folder;
     }
 
     if (!is_dir($coursedir)) {
@@ -110,7 +110,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         // dir in home dir of the chamilo install.
         // In delocated installs (clustered installations), the root 'home' directory
         // may be a symbolic link to a delocated path.
-        $homedir = api_get_path(TO_SYS, SYS_PATH).'home/'.$home_folder;
+        $homedir = api_get_path(SYS_PATH).'home/'.$home_folder;
     }
 
     ctrace("Making home dir as $homedir ");

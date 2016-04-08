@@ -28,7 +28,7 @@ if (!empty($absalternatecourse)){
     $coursedir = str_replace('//', '/', $absalternatecourse.'/'.$dataroot);
 } else {
     // this is the standard local case
-    $coursedir = api_get_path(TO_SYS, SYS_PATH).$dataroot;
+    $coursedir = api_get_path(SYS_PATH).$dataroot;
 }
 
 if (is_dir($coursedir)) {

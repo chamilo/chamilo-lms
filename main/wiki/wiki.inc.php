@@ -1933,7 +1933,7 @@ class Wiki
             </body>
             </html>';
 
-        $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/default.css';
+        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/default.css';
         if (file_exists($css_file)) {
             $css = @file_get_contents($css_file);
         } else {
@@ -1949,7 +1949,7 @@ class Wiki
         $css = str_replace('../../img/', $root_rel.'main/img/', $css);
 
         $asciimathmal_script = (api_contains_asciimathml($wikiContents) || api_contains_asciisvg($wikiContents))
-            ? '<script src="'.api_get_path(TO_REL, SCRIPT_ASCIIMATHML).'" type="text/javascript"></script>'."\n" : '';
+            ? '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/asciimath/ASCIIMathML.js" type="text/javascript"></script>'."\n" : '';
 
         $template = str_replace(array('{LANGUAGE}', '{ENCODING}', '{TEXT_DIRECTION}', '{TITLE}', '{CSS}', '{ASCIIMATHML_SCRIPT}'),
             array(api_get_language_isocode(), api_get_system_encoding(), api_get_text_direction(), $wikiTitle, $css, $asciimathmal_script),
@@ -2050,7 +2050,7 @@ class Wiki
 
         mpdf-->'.$content_pdf;
 
-        $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
+        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
         if (file_exists($css_file)) {
             $css = @file_get_contents($css_file);
         } else {

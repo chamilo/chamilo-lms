@@ -642,9 +642,9 @@ function vchamilo_load_files_from_template($vchamilo, $template)
     $vchamilo->virtual = true;
 
     // Get Vchamilo known record.
-    $vcoursepath = api_get_path(TO_SYS, SYS_COURSE_PATH, (array)$vchamilo);
-    $vhomepath = api_get_path(TO_SYS, SYS_HOME_PATH, (array)$vchamilo);
-    $varchivepath = api_get_path(TO_SYS, SYS_ARCHIVE_PATH, (array)$vchamilo);
+    $vcoursepath = api_get_path(SYS_COURSE_PATH, (array)$vchamilo);
+    $vhomepath = api_get_path(SYS_HOME_PATH, (array)$vchamilo);
+    $varchivepath = api_get_path(SYS_ARCHIVE_PATH, (array)$vchamilo);
 
     echo "archiveapth : $varchivepath";
 

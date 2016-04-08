@@ -74,7 +74,7 @@ if ($action == 'fulldeleteinstances') {
             $coursedir = str_replace('//', '/', $absalternatecourse.'/'.$instance->course_folder);
         } else {
             // this is the standard local case
-            $coursedir = api_get_path(TO_SYS, SYS_PATH).$instance->course_folder;
+            $coursedir = api_get_path(SYS_PATH).$instance->course_folder;
         }
         $standardlocation = str_replace('//', '/', $_configuration['root_sys'].'/'.$instance->course_folder); // where it should be
 
@@ -91,7 +91,7 @@ if ($action == 'fulldeleteinstances') {
         if ($absalternatehome = vchamilo_get_config('vchamilo', 'home_real_root')){
             $homedir = str_replace('//', '/', $absalternatehome.'/'.$home_folder);
         } else {
-            $homedir = api_get_path(TO_SYS, SYS_PATH).'home/'.$home_folder;
+            $homedir = api_get_path(SYS_PATH).'home/'.$home_folder;
         }
         $standardlocation = $_configuration['root_sys'].'home/'.$home_folder; // where it should be
 
@@ -201,16 +201,16 @@ if ($action == 'snapshotinstance') {
         if ($wwwroot == $_configuration['root_web']) {
             // Make fake Vchamilo record.
             $vchamilo = vchamilo_make_this();
-            $vcoursepath = api_get_path(TO_SYS, SYS_COURSE_PATH);
-            $vhomepath = api_get_path(TO_SYS, SYS_HOME_PATH);
-            $varchivepath = api_get_path(TO_SYS, SYS_ARCHIVE_PATH);
+            $vcoursepath = api_get_path(SYS_COURSE_PATH);
+            $vhomepath = api_get_path(SYS_HOME_PATH);
+            $varchivepath = api_get_path(SYS_ARCHIVE_PATH);
         } else {
             // Get Vchamilo known record.
             $vchamilos = Database::select('*', 'vchamilo', array('where' => array('root_web = ?' => array($wwwroot))));
             $vchamilo = (object)array_pop($vchamilos);
-            $vcoursepath = api_get_path(TO_SYS, SYS_COURSE_PATH, (array)$vchamilo);
-            $vhomepath = api_get_path(TO_SYS, SYS_HOME_PATH, (array)$vchamilo);
-            $varchivepath = api_get_path(TO_SYS, SYS_ARCHIVE_PATH, (array)$vchamilo);
+            $vcoursepath = api_get_path(SYS_COURSE_PATH, (array)$vchamilo);
+            $vhomepath = api_get_path(SYS_HOME_PATH, (array)$vchamilo);
+            $varchivepath = api_get_path(SYS_ARCHIVE_PATH, (array)$vchamilo);
         }
 
         if ($vchamilostep == 1) {

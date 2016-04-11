@@ -32,7 +32,7 @@ use ChamiloSession as Session;
 
 $use_anonymous = true;
 
-require_once dirname(__FILE__).'/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 // Delete LP sessions - commented out after seeing that normal
 // users in their first learnpath step (1st SCO of a SCORM)
@@ -199,8 +199,8 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
 /*Auto launch code */
 $show_autolaunch_lp_warning = false;
 $auto_launch = api_get_course_setting('enable_lp_auto_launch');
+$session_id = api_get_session_id();
 if (!empty($auto_launch)) {
-    $session_id = api_get_session_id();
     if ($auto_launch == 2) { //LP list
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
             $show_autolaunch_lp_warning = true;
@@ -256,6 +256,26 @@ if (!empty($auto_launch)) {
         }
     }
 }
+
+$forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
+if ($forumAutoLaunch == 1) {
+    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        Display::addFlash(Display::return_message(
+            get_lang('TheForumAutoLaunchSettingIsOnStudentsWillBeRedirectToTheForumTool'),
+            'warning'
+        ));
+    } else {
+        $forumKey = 'forum_auto_launch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
+        if (!isset($_SESSION[$forumKey])) {
+            //redirecting to the LP
+            $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&id_session='.$session_id;
+            $_SESSION[$forumKey] = true;
+            header("Location: $url");
+            exit;
+        }
+    }
+}
+
 
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 $temps = time();

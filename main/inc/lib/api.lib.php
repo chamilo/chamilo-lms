@@ -627,7 +627,7 @@ function api_get_path($path = '', $configuration = [])
 
     $course_folder = 'courses/';
     // Resolve master hostname.
-    if (!is_null($configuration) && array_key_exists('root_web', $configuration)) {
+    if (!empty($configuration) && array_key_exists('root_web', $configuration)) {
         $root_web = $configuration['root_web'];
     } else {
         // Try guess it from server.

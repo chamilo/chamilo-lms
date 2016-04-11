@@ -75,6 +75,7 @@ sonata_admin:
                     - sonata.classification.admin.category
                     - sonata.classification.admin.tag
                     - sonata.classification.admin.collection
+
             sonata.admin.group.site_builder:
                 label:           Site Builder
                 label_catalogue: SonataDemoBundle
@@ -82,6 +83,9 @@ sonata_admin:
                 items:
                     - sonata.page.admin.page
                     - sonata.page.admin.site
+                    - sonata.admin.faq_question
+                    - sonata.admin.faq_category
+
             sonata.admin.group.administration:
                 label:           sonata_administration
                 label_catalogue: SonataAdminBundle

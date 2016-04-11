@@ -35,6 +35,8 @@ class AppKernel extends Kernel
             new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
             // Data grid
             //new APY\DataGridBundle\APYDataGridBundle(),
+            new Chamilo\FaqBundle\ChamiloFaqBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
 
             // Sonata
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
@@ -48,7 +50,7 @@ class AppKernel extends Kernel
             new Sonata\NotificationBundle\SonataNotificationBundle(),
             new Sonata\DatagridBundle\SonataDatagridBundle(),
             new Sonata\MediaBundle\SonataMediaBundle(),
-            //new Sonata\TranslationBundle\SonataTranslationBundle(),
+            new Sonata\TranslationBundle\SonataTranslationBundle(),
             new Sonata\PageBundle\SonataPageBundle(),
 
             new Spy\TimelineBundle\SpyTimelineBundle(),
@@ -70,7 +72,7 @@ class AppKernel extends Kernel
             //new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
 
             //new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
-            //new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
+            new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
             //new Liip\ThemeBundle\LiipThemeBundle(),
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
             new FM\ElfinderBundle\FMElfinderBundle(),
@@ -112,6 +114,7 @@ class AppKernel extends Kernel
 
             // Extra
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+
             /*
             //new JMS\TranslationBundle\JMSTranslationBundle(),
             //new JMS\DiExtraBundle\JMSDiExtraBundle($this),

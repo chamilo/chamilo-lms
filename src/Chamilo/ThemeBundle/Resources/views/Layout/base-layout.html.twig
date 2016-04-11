@@ -28,25 +28,25 @@
 
     <title>
         {% block title %}
-            {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
+            {#{{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}#}
         {% endblock %}
     </title>
 
     {# Check chamilo_css key in assetic.yml #}
-    {%- stylesheets '@chamilo_css' -%}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
+    {#{%- stylesheets '@chamilo_css' -%}#}
+    {#<link rel="stylesheet" href="{{ asset_url }}"/>#}
+    {#{% endstylesheets %}#}
 
-    {% stylesheets
-    '@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less'
-    '@MopaBootstrapBundle/Resources/public/less/eyecon-datepicker.less'
-    %}
+    {#{% stylesheets#}
+    {#'@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less'#}
+    {#'@MopaBootstrapBundle/Resources/public/less/eyecon-datepicker.less'#}
+    {#%}#}
 
-    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
-    {% endstylesheets %}
+    {#<link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />#}
+    {#{% endstylesheets %}#}
 
     {# Chamilo theme #}
-    {% set theme = chamilo_settings_get('platform.theme') %}
+    {% set theme = 'chamilo' %}
 
     {% set bug_notification_link = '' %}
     {% set help_content = '' %}
@@ -74,9 +74,9 @@
 
     {# Check chamilo_js key in assetic.yml #}
     {% block javascripts %}
-    {%- javascripts '@chamilo_js' -%}
-    <script src="{{ asset_url }} "></script>
-    {% endjavascripts %}
+    {#{%- javascripts '@chamilo_js' -%}#}
+    {#<script src="{{ asset_url }} "></script>#}
+    {#{% endjavascripts %}#}
 
     <script src="{{ asset('bundles/ivoryckeditor/ckeditor.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
@@ -112,10 +112,10 @@
 
     {# topbar #}
     {% block topbar %}
-        {% include "@template_style/layout/topbar.html.twig" %}
-        {% if show_toolbar == 1 %}
+        {#{% include "@template_style/layout/topbar.html.twig" %}#}
+        {#{% if show_toolbar == 1 %}#}
             {#<div class="clear-header"></div>#}
-        {% endif %}
+        {#{% endif %}#}
     {% endblock %}
 
     <header>
@@ -134,9 +134,9 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="logo">
-                        <a href="{{ url('home') }}">
+                        {#<a href="{{ url('index') }}">#}
                         <img src="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/images/header-logo.png') }}"/>
-                        </a>
+                        {#</a>#}
                     </div>
                 </div>
                 <div class="col-lg-9">

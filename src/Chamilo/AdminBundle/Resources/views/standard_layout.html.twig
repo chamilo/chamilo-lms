@@ -27,8 +27,7 @@ file that was distributed with this source code.
     {% block meta_tags %}
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta charset="UTF-8">
-        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
-              name='viewport'>
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     {% endblock %}
 
     {% block stylesheets %}
@@ -46,7 +45,7 @@ file that was distributed with this source code.
                 USE_STICKYFORMS: {% if sonata_admin.adminPool.getOption('use_stickyforms') %}true{% else %}false{% endif %}
             };
             window.SONATA_TRANSLATIONS = {
-                CONFIRM_EXIT: '{{ 'confirm_exit'|trans({}, 'SonataAdminBundle')|escape('js') }}'
+                CONFIRM_EXIT:  '{{ 'confirm_exit'|trans({}, 'SonataAdminBundle')|escape('js') }}'
             };
 
             // http://getbootstrap.com/getting-started/#support-ie10-width
@@ -89,7 +88,7 @@ file that was distributed with this source code.
                     -
                     {% for menu in admin.breadcrumbs(action) %}
                         {% if not loop.first %}
-                            {% if loop.index != 2 %}
+                            {%  if loop.index != 2 %}
                                 &gt;
                             {% endif %}
 
@@ -97,7 +96,7 @@ file that was distributed with this source code.
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-            {% endif %}
+            {% endif%}
         {% endblock %}
     </title>
 </head>
@@ -118,8 +117,7 @@ file that was distributed with this source code.
                 {% spaceless %}
                     <a class="logo" href="{{ path('sonata_admin_dashboard') }}">
                         {% if 'single_image' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
-                            <img src="{{ asset(sonata_admin.adminPool.titlelogo) }}"
-                                 alt="{{ sonata_admin.adminPool.title }}">
+                            <img src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
                         {% endif %}
                         {% if 'single_text' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
                             <span>{{ sonata_admin.adminPool.title }}</span>
@@ -129,8 +127,7 @@ file that was distributed with this source code.
             {% endblock %}
             {% block sonata_nav %}
                 <nav class="navbar navbar-static-top" role="navigation">
-                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
-                       role="button">
+                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                         <span class="sr-only">Toggle navigation</span>
                     </a>
 
@@ -142,7 +139,7 @@ file that was distributed with this source code.
                                         {% if _breadcrumb is empty %}
                                             {% if action is defined %}
                                                 {% for menu in admin.breadcrumbs(action) %}
-                                                    {% if not loop.last %}
+                                                    {% if not loop.last  %}
                                                         <li>
                                                             {% if menu.uri is not empty %}
                                                                 <a href="{{ menu.uri }}">{{ menu.label|raw }}</a>
@@ -151,9 +148,7 @@ file that was distributed with this source code.
                                                             {% endif %}
                                                         </li>
                                                     {% else %}
-                                                        <li class="active">
-                                                            <span>{{ menu.label }}</span>
-                                                        </li>
+                                                        <li class="active"><span>{{ menu.label }}</span></li>
                                                     {% endif %}
                                                 {% endfor %}
                                             {% endif %}
@@ -170,18 +165,14 @@ file that was distributed with this source code.
                         <div class="navbar-custom-menu">
                             <ul class="nav navbar-nav">
                                 <li class="dropdown">
-                                    <a class="dropdown-toggle"
-                                       data-toggle="dropdown" href="#">
-                                        <i class="fa fa-plus-square fa-fw"></i>
-                                        <i class="fa fa-caret-down"></i>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        <i class="fa fa-plus-square fa-fw"></i> <i class="fa fa-caret-down"></i>
                                     </a>
                                     {% include sonata_admin.adminPool.getTemplate('add_block') %}
                                 </li>
                                 <li class="dropdown user-menu">
-                                    <a class="dropdown-toggle"
-                                       data-toggle="dropdown" href="#">
-                                        <i class="fa fa-user fa-fw"></i> <i
-                                                class="fa fa-caret-down"></i>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                                     </a>
                                     <ul class="dropdown-menu dropdown-user">
                                         {% include sonata_admin.adminPool.getTemplate('user_block') %}
@@ -202,17 +193,11 @@ file that was distributed with this source code.
                     {% block sonata_side_nav %}
                         {% block sonata_sidebar_search %}
                             {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
-                                <form action="{{ path('sonata_admin_search') }}"
-                                      method="GET" class="sidebar-form"
-                                      role="search">
+                                <form action="{{ path('sonata_admin_search') }}" method="GET" class="sidebar-form" role="search">
                                     <div class="input-group custom-search-form">
-                                        <input type="text" name="q"
-                                               value="{{ app.request.get('q') }}"
-                                               class="form-control"
-                                               placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
+                                        <input type="text" name="q" value="{{ app.request.get('q') }}" class="form-control" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-flat"
-                                                            type="submit">
+                                                    <button class="btn btn-flat" type="submit">
                                                         <i class="fa fa-search"></i>
                                                     </button>
                                                 </span>
@@ -228,12 +213,9 @@ file that was distributed with this source code.
                             {% endif %}
                         {% endblock side_bar_nav %}
                         {% block side_bar_after_nav %}
-                            <p class="text-center small"
-                               style="border-top: 1px solid #444444; padding-top: 10px">
+                            <p class="text-center small" style="border-top: 1px solid #444444; padding-top: 10px">
                                 {% block side_bar_after_nav_content %}
-                                    <a href="https://sonata-project.org"
-                                       rel="noreferrer" target="_blank">sonata
-                                        project</a>
+                                    <a href="https://sonata-project.org" rel="noreferrer" target="_blank">sonata project</a>
                                 {% endblock %}
                             </p>
                         {% endblock %}
@@ -249,14 +231,12 @@ file that was distributed with this source code.
                     {% block sonata_page_content_header %}
                         {% block sonata_page_content_nav %}
                             {% if _tab_menu is not empty or _actions is not empty or _list_filters_actions is not empty %}
-                                <nav class="navbar navbar-default"
-                                     role="navigation">
+                                <nav class="navbar navbar-default" role="navigation">
                                     <div class="container-fluid">
                                         {% block tab_menu_navbar_header %}
                                             {% if _navbar_title is not empty %}
                                                 <div class="navbar-header">
-                                                    <a class="navbar-brand"
-                                                       href="#">{{ _navbar_title|raw }}</a>
+                                                    <a class="navbar-brand" href="#">{{ _navbar_title|raw }}</a>
                                                 </div>
                                             {% endif %}
                                         {% endblock %}
@@ -271,9 +251,7 @@ file that was distributed with this source code.
                                             {% if admin is defined and action is defined and action == 'list' and admin.listModes|length > 1 %}
                                                 <div class="nav navbar-right btn-group">
                                                     {% for mode, settings in admin.listModes %}
-                                                        <a href="{{ admin.generateUrl('list', app.request.query.all|merge({_list_mode: mode})) }}"
-                                                           class="btn btn-default navbar-btn btn-sm{% if admin.getListMode() == mode %} active{% endif %}"><i
-                                                                    class="{{ settings.class }}"></i></a>
+                                                        <a href="{{ admin.generateUrl('list', app.request.query.all|merge({_list_mode: mode})) }}" class="btn btn-default navbar-btn btn-sm{% if admin.getListMode() == mode %} active{% endif %}"><i class="{{ settings.class }}"></i></a>
                                                     {% endfor %}
                                                 </div>
                                             {% endif %}
@@ -283,12 +261,8 @@ file that was distributed with this source code.
                                                     <ul class="nav navbar-nav navbar-right">
                                                         {% if _actions|split('</a>')|length > 2 %}
                                                             <li class="dropdown sonata-actions">
-                                                                <a href="#"
-                                                                   class="dropdown-toggle"
-                                                                   data-toggle="dropdown">{{ 'link_actions'|trans({}, 'SonataAdminBundle') }}
-                                                                    <b class="caret"></b></a>
-                                                                <ul class="dropdown-menu"
-                                                                    role="menu">
+                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ 'link_actions'|trans({}, 'SonataAdminBundle') }} <b class="caret"></b></a>
+                                                                <ul class="dropdown-menu" role="menu">
                                                                     {{ _actions|raw }}
                                                                 </ul>
                                                             </li>
@@ -356,17 +330,7 @@ file that was distributed with this source code.
     {% block bootlint %}
         {# Bootlint - https://github.com/twbs/bootlint#in-the-browser #}
         <script type="text/javascript">
-            javascript:(function () {
-                var s = document.createElement("script");
-                s.onload = function () {
-                    bootlint.showLintReportForCurrentDocument([], {
-                        hasProblems: false,
-                        problemFree: false
-                    });
-                };
-                s.src = "https://maxcdn.bootstrapcdn.com/bootlint/latest/bootlint.min.js";
-                document.body.appendChild(s)
-            })();
+            javascript:(function(){var s=document.createElement("script");s.onload=function(){bootlint.showLintReportForCurrentDocument([], {hasProblems: false, problemFree: false});};s.src="https://maxcdn.bootstrapcdn.com/bootlint/latest/bootlint.min.js";document.body.appendChild(s)})();
         </script>
     {% endblock %}
 {% endif %}

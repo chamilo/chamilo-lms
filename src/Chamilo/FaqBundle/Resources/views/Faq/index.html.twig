@@ -1,0 +1,34 @@
+<h1>FAQ</h1>
+
+<h2>Categories</h2>
+<ul>
+    {% for category in categories %}
+        {% if selectedCategory.slug is defined and selectedCategory.slug == category.slug%}
+            <li class="active"  >
+                <strong>{{ category.headline|e }}</strong>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ path('faq', { 'categorySlug': category.slug }) }}">{{ category.headline|e }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+
+{% if selectedCategory is not null %}
+    <h2>Questions</h2>
+    <ul>
+        {% for question in questions %}
+            {% if selectedQuestion.slug is defined and selectedQuestion.slug == question.slug%}
+                <li class="active"  >
+                    <strong>{{ question.headline|e }}</strong>
+                    <div>{{ selectedQuestion.body }}</div>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ path('faq', { 'categorySlug': selectedCategory.slug, 'questionSlug': question.slug }) }}">{{ question.headline|e }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endif %}

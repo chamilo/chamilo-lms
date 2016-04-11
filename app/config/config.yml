@@ -31,6 +31,7 @@ imports:
     - { resource: sonata/sonata_admin.yml }
     - { resource: sonata/sonata_page.yml }
     - { resource: sonata/sonata_media.yml }
+    - { resource: sonata/sonata_translation.yml }
 #    - { resource: sonata/sonata_news.yml }
 #    - { resource: sonata/sonata_user.yml }
 #    - { resource: sonata/sonata_notification.yml }

@@ -1,0 +1,8 @@
+faq:
+    pattern:  /faq/{categorySlug}/{questionSlug}
+    defaults: { _controller: ChamiloFaqBundle:Faq:index, categorySlug: null, questionSlug: null }
+
+# Shows the entire FAQ at once, without collapsing any categories or questions. Useful if your FAQ is not that big.
+faq_without_collapse:
+    pattern:  /faq-without-collapse/{categorySlug}
+    defaults: { _controller: ChamiloFaqBundle:Faq:indexWithoutCollapse, categorySlug: null }

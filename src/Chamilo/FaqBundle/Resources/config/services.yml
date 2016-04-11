@@ -1,0 +1,18 @@
+parameters:
+    genj_faq.entity.question.class: Chamilo\FaqBundle\Entity\Question
+    genj_faq.entity.category.class: Chamilo\FaqBundle\Entity\Category
+    genj_faq.entity.question_repository.class: Genj\FaqBundle\Entity\QuestionRepository
+    genj_faq.entity.category_repository.class: Genj\FaqBundle\Entity\CategoryRepository
+
+services:
+    genj_faq.entity.question_repository:
+        factory_service: doctrine
+        factory_method: getRepository
+        class: %genj_faq.entity.question_repository.class%
+        arguments: [%genj_faq.entity.question.class%]
+
+    genj_faq.entity.category_repository:
+        factory_service: doctrine
+        factory_method: getRepository
+        class: %genj_faq.entity.category_repository.class%
+        arguments: [%genj_faq.entity.category.class%]

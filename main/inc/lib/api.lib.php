@@ -320,18 +320,6 @@ define('SYS_DEFAULT_COURSE_DOCUMENT_PATH', 'SYS_DEFAULT_COURSE_DOCUMENT_PATH');
 define('REL_DEFAULT_COURSE_DOCUMENT_PATH', 'REL_DEFAULT_COURSE_DOCUMENT_PATH');
 define('WEB_DEFAULT_COURSE_DOCUMENT_PATH', 'WEB_DEFAULT_COURSE_DOCUMENT_PATH');
 
-// Constants for requesting path conversion.
-define('TO_WEB', 'TO_WEB');
-define('TO_SYS', 'TO_SYS');
-define('TO_REL', 'TO_REL');
-
-// Paths to registered specific resource files (scripts, players, etc.)
-define('FLASH_PLAYER_AUDIO', '{FLASH_PLAYER_AUDIO}');
-define('FLASH_PLAYER_VIDEO', '{FLASH_PLAYER_VIDEO}');
-define('SCRIPT_SWFOBJECT', '{SCRIPT_SWFOBJECT}');
-define('SCRIPT_ASCIIMATHML', '{SCRIPT_ASCIIMATHML}');
-define('DRAWING_ASCIISVG', '{DRAWING_ASCIISVG}');
-
 // Forcing PclZip library to use a custom temporary folder.
 define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
 
@@ -622,7 +610,7 @@ function api_get_path($path = '', $configuration = [])
     global $_configuration;
 
     if (empty($configuration)) {
-        $configuration = $_configuration;
+        $configuration = (array) $_configuration;
     }
 
     $course_folder = 'courses/';
@@ -653,10 +641,6 @@ function api_get_path($path = '', $configuration = [])
             // Here we give up, so we don't touch anything.
         }
     }
-
-    // define caches the path cache will know about effective root_web, from explicit configuration,
-    // or guess it from server information (install or early process time)
-    static $resourcePaths = null;
 
     if (empty($paths)) {
         $paths = [];
@@ -704,14 +688,6 @@ function api_get_path($path = '', $configuration = [])
             WEB_FONTS_PATH => 'fonts/',
             SYS_FONTS_PATH => 'fonts/',
         );
-
-        $resourcePaths[$root_web] = array(
-            FLASH_PLAYER_AUDIO => 'inc/lib/mediaplayer/player.swf',
-            FLASH_PLAYER_VIDEO => 'inc/lib/mediaplayer/player.swf',
-            SCRIPT_SWFOBJECT => 'inc/lib/swfobject/swfobject.js',
-            SCRIPT_ASCIIMATHML => 'inc/lib/javascript/asciimath/ASCIIMathML.js',
-            DRAWING_ASCIISVG => 'inc/lib/javascript/asciimath/d.svg',
-        );
     }
 
     //static $isInitialized = [];
@@ -753,7 +729,7 @@ function api_get_path($path = '', $configuration = [])
     if (!array_key_exists($root_web, $isInitialized)) {
         // process absolute global roots
         //$root_rel = $configuration['url_append'];
-        if (!is_null($configuration)) {
+        if (!empty($configuration)) {
             $code_folder = $configuration['code_append'];
         } else {
             $code_folder = $paths[$root_web][REL_CODE_PATH];

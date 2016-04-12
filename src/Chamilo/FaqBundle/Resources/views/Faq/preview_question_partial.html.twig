@@ -1,4 +1,4 @@
-<a target = "_blank" href="{{ url('faq', {'categorySlug': object.category.slug, 'questionSlug' : object.slug }) }}" class="btn btn-sm btn-default" title="{{ 'Preview'|trans({}, 'SonataAdminBundle') }}">
+<a target = "_blank" href="{{ url('faq', {'categorySlug': object.category.getSlug, 'questionSlug' : '' }) }}" class="btn btn-sm btn-default" title="{{ 'Preview'|trans({}, 'SonataAdminBundle') }}">
     <i class="fa fa-external-link"></i>
     {{ 'Preview'|trans({}, 'SonataAdminBundle') }}
 </a>

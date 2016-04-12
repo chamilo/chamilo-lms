@@ -10,7 +10,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 /**
  * Class QuestionAdmin
  *
- * @package Genj\FaqAdminBundle\Admin
+ * @package Chamilo\FaqBundle\Admin
  */
 class QuestionAdmin extends Admin
 {
@@ -26,10 +26,8 @@ class QuestionAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('headline')
-            ->add('body')
-            ->add('category')
-            ->add('slug');
+            ->add('id')
+        ;
     }
 
     /**
@@ -39,7 +37,7 @@ class QuestionAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('headline', null, array('identifier' => true))
+            //->add('translations', null, array('identifier' => true))
             ->add('Category')
             ->add('rank')
             ->add('_action', 'actions',
@@ -60,15 +58,13 @@ class QuestionAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('headline')
-            ->add('body', null, array('required' => true))
+            ->add('translations', 'a2lix_translations', array())
             ->add('category', null, array(
-                    'expanded' => true,
-                    'required' => true,
-                    'attr' => array('class' => 'radio-list vertical')
-                ))
+                'expanded' => true,
+                'required' => true,
+                'attr' => array('class' => 'radio-list vertical')
+            ))
             ->add('rank', null, array('required' => false))
-            ->add('slug', null, array('required' => false))
             ->add('onlyAuthUsers')
             ->end()
         ;

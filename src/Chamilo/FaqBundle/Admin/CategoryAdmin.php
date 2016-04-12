@@ -6,11 +6,12 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 
 /**
  * Class QuestionAdmin
  *
- * @package Genj\FaqAdminBundle\Admin
+ * @package Chamilo\FaqBundle\Admin
  */
 class CategoryAdmin extends Admin
 {
@@ -26,8 +27,8 @@ class CategoryAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('headline')
-            ->add('body')
+            //->add('headline')
+            //->add('body')
             ->add('rank')
             ->add('isActive')
         ;
@@ -39,7 +40,8 @@ class CategoryAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('headline', null, array('identifier' => true))
+            //->add('headline', null, array('identifier' => true))
+            ->add('translations', null, array('identifier' => true))
             ->add('rank')
             ->add('_action', 'actions',
                 array(
@@ -60,11 +62,12 @@ class CategoryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('headline')
-            ->add('body', null, array('required' => false))
+            ->add('translations', 'a2lix_translations', array())
             ->add('rank', null, array('required' => false))
-            ->add('slug')
+//            ->add('slug')
             ->add('isActive')
-            ->end();
+
+            ->end()
+        ;
     }
 }

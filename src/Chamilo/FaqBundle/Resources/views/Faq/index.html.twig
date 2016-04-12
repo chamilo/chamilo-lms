@@ -6,13 +6,13 @@
 <h2>Categories</h2>
 <ul>
     {% for category in categories %}
-        {% if selectedCategory.slug is defined and selectedCategory.slug == category.slug%}
+        {% if selectedCategory.getSlug is defined and selectedCategory.getSlug == category.getSlug %}
             <li class="active">
-                <strong>{{ category.headline|e }}</strong>
+                <strong>{{ category.getHeadline|e }}</strong>
             </li>
         {% else %}
             <li>
-                <a href="{{ path('faq', { 'categorySlug': category.slug }) }}">{{ category.headline|e }}</a>
+                <a href="{{ path('faq', { 'categorySlug': category.getSlug }) }}">{{ category.getHeadline|e }}</a>
             </li>
         {% endif %}
     {% endfor %}
@@ -22,14 +22,16 @@
     <h2>Questions</h2>
     <ul>
         {% for question in questions %}
-            {% if selectedQuestion.slug is defined and selectedQuestion.slug == question.slug%}
+            {% if selectedQuestion.getSlug is defined and selectedQuestion.getSlug == question.getSlug %}
                 <li class="active"  >
-                    <strong>{{ question.headline|e }}</strong>
-                    <div>{{ selectedQuestion.body }}</div>
+                    <strong>{{ question.getHeadline|e }}</strong>
+                    <div>{{ selectedQuestion.getBody }}</div>
                 </li>
             {% else %}
                 <li>
-                    <a href="{{ path('faq', { 'categorySlug': selectedCategory.slug, 'questionSlug': question.slug }) }}">{{ question.headline|e }}</a>
+                    <a href="{{ path('faq', { 'categorySlug': selectedCategory.getSlug, 'questionSlug': question.getSlug }) }}">
+                        {{ question.getHeadline|e }}
+                    </a>
                 </li>
             {% endif %}
         {% endfor %}

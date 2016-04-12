@@ -46,6 +46,26 @@ class CategoryRepository extends EntityRepository
     }
 
     /**
+     * @param string $slug
+     *
+     * @return mixed
+     */
+    public function getCategoryActiveBySlug($slug)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->join('c.translations', 't')
+            ->where('c.isActive = :isActive')
+            ->andWhere('t.slug = :slug')
+            ->getQuery();
+
+        $query->setParameter('isActive', true);
+        $query->setParameter('slug', $slug);
+
+        return $query->getSingleResult();
+    }
+
+
+    /**
      * @return Category|null
      */
     public function retrieveFirst()

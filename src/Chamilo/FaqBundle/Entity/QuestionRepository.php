@@ -20,7 +20,8 @@ class QuestionRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('q')
             ->join('q.category', 'c')
-            ->where('c.slug = :categorySlug')
+            ->join('c.translations', 't')
+            ->where('t.slug = :categorySlug')
             ->orderBy('q.rank', 'ASC')
             ->setMaxResults(1)
             ->getQuery();
@@ -29,4 +30,25 @@ class QuestionRepository extends EntityRepository
 
         return $query->getOneOrNullResult();
     }
+
+    /**
+     * @param string $slug
+     *
+     * @return Question|null
+     */
+    public function getQuestionBySlug($slug)
+    {
+        $query = $this->createQueryBuilder('q')
+            ->join('q.translations', 't')
+            ->where('t.slug = :slug')
+            ->orderBy('q.rank', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        $query->setParameter('slug', $slug);
+
+        return $query->getOneOrNullResult();
+    }
+
+
 }

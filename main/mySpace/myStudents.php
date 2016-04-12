@@ -781,25 +781,29 @@ if (!empty($student_id)) {
                 get_lang('LastConnexion')
             );
 
-            $query = $em
-                ->createQuery('
+            if (empty($sessionId)) {
+                $query = $em->createQuery('
                     SELECT lp FROM ChamiloCourseBundle:CLp lp
-                    WHERE lp.sessionId = :session AND lp.cId = :course
+                    WHERE lp.sessionId = 0 AND lp.cId = :course
                     ORDER BY lp.displayOrder ASC
                 ');
 
-            if (empty($sessionId)) {
                 $query->setParameters([
-                    'session' => 0,
                     'course' => $info_course['real_id']
                 ]);
             } else {
+                $query = $em->createQuery('
+                    SELECT lp FROM ChamiloCourseBundle:CLp lp
+                    WHERE lp.cId = :course
+                    ORDER BY lp.displayOrder ASC
+                ');
                 $query->setParameters([
-                    'session' => $sessionId,
                     'course' => $info_course['real_id']
                 ]);
             }
+
             $rs_lp = $query->getResult();
+
             if (count($rs_lp) > 0) {
                 ?>
                 <!-- LPs-->
@@ -808,21 +812,38 @@ if (!empty($student_id)) {
                 <thead>
                 <tr>
                     <th><?php echo get_lang('Learnpaths');?></th>
-                    <th><?php
+                    <th>
+                        <?php
                         echo get_lang('Time').' ';
-                        Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-                    <th><?php
+                        Display:: display_icon(
+                            'info3.gif',
+                            get_lang('TotalTimeByCourse'),
+                            array('align' => 'absmiddle', 'hspace' => '3px')
+                        );
+                    ?>
+                    </th>
+                    <th>
+                        <?php
                         echo get_lang('AverageScore').' ';
-                        Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInAllAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+                        Display:: display_icon(
+                            'info3.gif',
+                            get_lang('AverageIsCalculatedBasedInAllAttempts'),
+                            array('align' => 'absmiddle', 'hspace' => '3px')
+                        );
+                        ?>
+                    </th>
                     <th><?php
                         echo get_lang('LatestAttemptAverageScore').' ';
-                        Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInTheLatestAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+                        Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInTheLatestAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>
+                    </th>
                     <th><?php
                         echo get_lang('Progress').' ';
-                        Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
+                        Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
+                    </th>
                     <th><?php
                         echo get_lang('LastConnexion').' ';
-                        Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
+                        Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
+                    </th>
                     <?php
                     echo '<th>'.get_lang('Details').'</th>';
                     if (api_is_allowed_to_edit()) {
@@ -900,8 +921,11 @@ if (!empty($student_id)) {
                         true
                     );
 
-                    if ($i % 2 == 0) $css_class = "row_even";
-                    else $css_class = "row_odd";
+                    if ($i % 2 == 0) {
+                        $css_class = "row_even";
+                    } else {
+                        $css_class = "row_odd";
+                    }
 
                     $i++;
 
@@ -925,6 +949,7 @@ if (!empty($student_id)) {
                             $score = $score.'%';
                         }
                     }
+
                     echo Display::tag('td', $score);
 
                     if (!is_null($score_latest)) {

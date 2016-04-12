@@ -182,16 +182,6 @@ class TestSurvey extends UnitTestCase {
 
 	}
 
-
-	public function testGetCompleteSurveyStructure() {
-		$survey_id='';
-		$shared=0;
-		$res = $this->smanager->get_complete_survey_structure($survey_id, $shared);
-		$this->assertNull($res);
-		$this->assertTrue($res=== null);
-		//var_dump($res);
-	}
-
 	public function testIconQuestion() {
 		$type='open';
 		$res = $this->smanager->icon_question($type);

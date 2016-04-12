@@ -1255,9 +1255,7 @@ class SessionManager
             $result = Database::query($sql);
             $session = Database::fetch_assoc($result);
 
-            //We are not using this becaouse the range its to small and no other date match the condition of this function
-            //$clicks = Tracking::get_total_clicks($info['user_id'], $courseId, $sessionId, $info['login_course_date'], $info['logout_course_date']);
-            #building array to display
+            // building array to display
             $return[] = array(
                 'user_id' => $info['user_id'],
                 'logindate' => $info['login_course_date'],

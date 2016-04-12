@@ -1709,7 +1709,8 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             );
             $documentPathInfo = pathinfo($documentInfo['absolute_path']);
             $jplayer_supported_files = ['mp4', 'ogv', 'flv', 'm4v'];
-            $showDirectUrl = !in_array($documentPathInfo['extension'], $jplayer_supported_files);
+            $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
+            $showDirectUrl = !in_array($extension, $jplayer_supported_files);
 
             if ($showDirectUrl) {
                 $link = $documentInfo['direct_url'] . '?';

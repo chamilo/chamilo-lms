@@ -22,12 +22,11 @@ var hide_bar = function() {
 }
 
 $(document).ready(function() {
-    $(".scrollbar-macosx").scrollbar();
+    $(".scrollbar-light").scrollbar();
 
     if ($(window).width() <= 785 ) {
         hide_bar();
-    }
-    
+    }    
 
     $("#hide_bar_template").click(function() {
         
@@ -445,7 +444,7 @@ if ($form->validate()) {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
 	$values['title'] = trim($values['title']);
-    
+
     if (!empty($values['dirValue'])) {
         $dir = $values['dirValue'];
     }
@@ -617,9 +616,9 @@ if ($form->validate()) {
 		$actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
             Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         }
-        
+
         echo $toolbar = Display::toolbarAction('actions-documents', array(0 => $actionsLeft, 1 => ''));
-                
+
 
 	if ($is_certificate_mode) {
 		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(api_get_user_id(), api_get_course_id());
@@ -636,7 +635,7 @@ if ($form->validate()) {
             <div id="template_col" class="col-md-2">
                 <div class="panel panel-default">
                 <div class="panel-body">
-                    <div id="frmModel" class="items-templates scrollbar-macosx"></div>
+                    <div id="frmModel" class="items-templates scrollbar-light"></div>
                 </div>
                 </div>
             </div>

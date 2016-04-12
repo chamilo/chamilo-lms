@@ -5860,6 +5860,7 @@ $server->register('WSListCourses',                                              
 // define the method WSListCourses
 function WSListCourses($params)
 {
+    global $debug;
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -5872,9 +5873,11 @@ function WSListCourses($params)
     $from = isset($params['from']) ? $params['from'] : null;
     $to = isset($params['to']) ? $params['to'] : null;
 
-    error_log(print_r($params,1));
-    error_log($from);
-    error_log($to);
+    if ($debug) {
+        error_log(print_r($params, 1));
+        error_log($from);
+        error_log($to);
+    }
 
     $courses = CourseManager::get_courses_list($from, $to);
 

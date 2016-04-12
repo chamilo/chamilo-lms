@@ -173,7 +173,8 @@ class ExerciseLink extends AbstractLink
                     exe_exo_id   = ".(int)$this->get_ref_id();
         $result = Database::query($sql);
         $number=Database::fetch_row($result);
-        return ($number[0] != 0);
+
+        return $number[0] != 0;
     }
 
     /**
@@ -192,7 +193,7 @@ class ExerciseLink extends AbstractLink
 
         /* the following query should be similar (in conditions) to the one used
         in exercice/exercice.php, look for note-query-exe-results marker*/
-        $session_id = api_get_session_id();
+        $session_id = $this->get_session_id();
         $courseId = $this->getCourseId();
 	    $exercise = new Exercise($courseId);
         $exercise->read($this->get_ref_id());
@@ -207,8 +208,8 @@ class ExerciseLink extends AbstractLink
 			            orig_lp_item_id = 0 AND
 			            status <> 'incomplete' AND
 			            session_id = $session_id AND
-                                    c_id = $courseId 
-                                ";
+                        c_id = $courseId 
+                    ";
 		    } else {
 		        $lpId = null;
 		        if (!empty($exercise->lpList)) {
@@ -223,8 +224,8 @@ class ExerciseLink extends AbstractLink
 		                    orig_lp_id = $lpId AND
 		                    status <> 'incomplete' AND
 		                    session_id = $session_id AND
-                                    c_id = $courseId 
-                                ";
+                            c_id = $courseId 
+                        ";
 		    }
 
             if (!empty($stud_id) && $type != 'ranking') {

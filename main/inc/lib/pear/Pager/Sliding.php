@@ -49,8 +49,6 @@
  */
 class Pager_Sliding extends Pager_Common
 {
-    // {{{ Pager_Sliding()
-
     /**
      * Constructor
      *
@@ -58,7 +56,7 @@ class Pager_Sliding extends Pager_Common
      *
      * @access public
      */
-    function Pager_Sliding($options = array())
+    public function __construct($options = array())
     {
         //set default Pager_Sliding options
         $this->_delta                 = 2;

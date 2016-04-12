@@ -37,6 +37,7 @@ class AppKernel extends Kernel
             //new APY\DataGridBundle\APYDataGridBundle(),
             new Chamilo\FaqBundle\ChamiloFaqBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new A2lix\TranslationFormBundle\A2lixTranslationFormBundle(),
 
             // Sonata
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
@@ -77,6 +78,7 @@ class AppKernel extends Kernel
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
             new FM\ElfinderBundle\FMElfinderBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Knp\DoctrineBehaviors\Bundle\DoctrineBehaviorsBundle(),
 
             // User
             new FOS\UserBundle\FOSUserBundle(),
@@ -121,7 +123,8 @@ class AppKernel extends Kernel
             //new JMS\AopBundle\JMSAopBundle(),
             /*new Bazinga\Bundle\FakerBundle\BazingaFakerBundle(),
             //new Chamilo\CmsBundle\ChamiloCmsBundle(),
-            new Lunetics\LocaleBundle\LuneticsLocaleBundle(),  */
+             */
+            new Lunetics\LocaleBundle\LuneticsLocaleBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

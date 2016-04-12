@@ -1,6 +1,21 @@
-sonata_translation:
-    locales: [en, fr, it, nl, es]
-    default_locale: en
-    # here enable the types you need
-    gedmo:
-        enabled: true
+lunetics_locale:
+    guessing_order:
+        - query
+        - router
+        - session
+        #- browser
+
+    allowed_locales:
+      - en
+      - fr
+      - de
+      - it
+      - nl
+
+a2lix_translation_form:
+    locale_provider: default       # [1]
+    locales: [en, fr, es, de, nl]          # [1-a]
+    default_locale: en             # [1-b]
+    required_locales: [en]         # [1-c]
+    manager_registry: doctrine      # [2]
+    templating: "A2lixTranslationFormBundle::default.html.twig"      # [3]

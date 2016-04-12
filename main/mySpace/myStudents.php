@@ -252,13 +252,14 @@ while ($row = Database :: fetch_array($rs)) {
     }
 }
 
+
 // Get the list of sessions where the user is subscribed as student
 $sql = 'SELECT session_id, c_id
         FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
         WHERE user_id=' . intval($user_info['user_id']);
 $rs = Database::query($sql);
 $tmp_sessions = array();
-while ($row = Database :: fetch_array($rs)) {
+while ($row = Database :: fetch_array($rs, 'ASSOC')) {
     $tmp_sessions[] = $row['session_id'];
     if ($drh_can_access_all_courses) {
         if (in_array($row['session_id'], $tmp_sessions)) {
@@ -272,6 +273,8 @@ while ($row = Database :: fetch_array($rs)) {
         }
     }
 }
+
+
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
     api_get_course_info()
@@ -432,13 +435,13 @@ if (!empty($student_id)) {
 
     $coachs_name  = '';
     $session_name = '';
-    $nb_login = Tracking :: count_login_per_student($user_info['user_id'], $courseInfo['real_id']);
+    //$nb_login = Tracking :: count_login_per_student($user_info['user_id'], $courseInfo['real_id']);
     //get coach and session_name if there is one and if session_mode is activated
-    if ($sessionId > 0) {
+    /*if ($sessionId > 0) {
         $session_info  = api_get_session_info($sessionId);
         $session_coach_id = $session_info['session_admin_id'];
         $course_coachs = api_get_coachs_from_course($sessionId, $courseInfo['real_id']);
-        $nb_login = '';
+      //  $nb_login = '';
         if (!empty($course_coachs)) {
             $info_tutor_name = array();
             foreach ($course_coachs as $course_coach) {
@@ -452,7 +455,7 @@ if (!empty($student_id)) {
         }
         $coachs_name  = $courseInfo['tutor_name'];
         $session_name = $session_info['name'];
-    } // end
+    } // end*/
 
     $table_title = Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).$user_info['complete_name'];
 
@@ -571,11 +574,11 @@ if (!empty($student_id)) {
                     </td>
                 </tr>
                 <?php
-                if (!empty($nb_login)) {
+                /*if (!empty($nb_login)) {
                     echo '<tr><td align="right">'.get_lang('CountToolAccess').'</td>';
                     echo '<td align="left"> '.$nb_login.'</td>';
                     echo '</tr>';
-                }
+                }*/
             } ?>
             </tbody>
         </table>
@@ -599,16 +602,16 @@ if (!empty($student_id)) {
     </div>
     <?php
 
-    $table_title = '';
+    /*$table_title = '';
     if (!empty($sessionId)) {
         $session_name = api_get_session_name($sessionId);
-        $table_title  = $session_name ? Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.' ':'';
+        $table_title = $session_name ? Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.' ':'';
     }
     if (!empty($courseInfo['title'])) {
         $table_title .= $courseInfo ? Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$courseInfo['title'].'  ':'';
     }
 
-    echo Display::page_subheader($table_title);
+    echo Display::page_subheader($table_title);*/
 
     if (empty($_GET['details'])) {
         $csv_content[] = array();
@@ -623,32 +626,27 @@ if (!empty($student_id)) {
         );
 
         $attendance = new Attendance();
-
-        foreach ($courses_in_session as $key => $courses) {
-            $sessionId = $key;
-            $session_info = api_get_session_info($sessionId);
+        foreach ($courses_in_session as $sessionId => $courses) {
             $session_name = '';
+            $access_start_date = '';
+            $access_end_date = '';
+            $date_session = '';
+            $title = Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_SMALL).' '.get_lang('Courses');
+
+            $session_info = api_get_session_info($sessionId);
             if ($session_info) {
                 $session_name = $session_info['name'];
-            }
-            $access_start_date = '';
+                if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00') {
+                    $access_start_date = api_format_date($session_info['access_start_date'], DATE_FORMAT_SHORT);
+                }
 
-            if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00') {
-                $access_start_date = api_format_date($session_info['access_start_date'], DATE_FORMAT_SHORT);
-            }
+                if (!empty($session_info['access_end_date']) && $session_info['access_end_date'] != '0000-00-00') {
+                    $access_end_date = api_format_date($session_info['access_end_date'], DATE_FORMAT_SHORT);
+                }
 
-            $access_end_date = '';
-            if (!empty($session_info['access_end_date']) && $session_info['access_end_date'] != '0000-00-00') {
-                $access_end_date = api_format_date($session_info['access_end_date'], DATE_FORMAT_SHORT);
-            }
-            $date_session = '';
-            if (!empty($access_start_date) && !empty($access_end_date)) {
-                $date_session = get_lang('From') . ' ' . $access_start_date . ' ' . get_lang('Until') . ' ' . $access_end_date;
-            }
-            $title = '';
-            if (empty($sessionId)) {
-                $title = Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_SMALL).' '.get_lang('Courses');
-            } else {
+                if (!empty($access_start_date) && !empty($access_end_date)) {
+                    $date_session = get_lang('From') . ' ' . $access_start_date . ' ' . get_lang('Until') . ' ' . $access_end_date;
+                }
                 $title = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.($date_session?' ('.$date_session.')':'');
             }
 
@@ -734,7 +732,7 @@ if (!empty($student_id)) {
                         );
 
                         echo '<tr>
-                        <td ><a href="' . api_get_path(WEB_COURSE_PATH) . $courseInfoItem['directory'] .'/?id_session=' . $sessionId . '">'.
+                        <td ><a href="' .$courseInfoItem['course_public_url'] .'?id_session=' . $sessionId . '">'.
                             $courseInfoItem['title'].'</a></td>
                         <td >'.$time_spent_on_course .'</td>
                         <td >'.$progress.'</td>
@@ -806,7 +804,7 @@ if (!empty($student_id)) {
                 <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th><?php echo get_lang('Learnpaths');?></th>
+                    <th><?php echo get_lang('LearningPath');?></th>
                     <th>
                         <?php
                         echo get_lang('Time').' ';
@@ -829,15 +827,30 @@ if (!empty($student_id)) {
                     </th>
                     <th><?php
                         echo get_lang('LatestAttemptAverageScore').' ';
-                        Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInTheLatestAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>
+                        Display::display_icon(
+                            'info3.gif',
+                            get_lang('AverageIsCalculatedBasedInTheLatestAttempts'),
+                            array('align' => 'absmiddle', 'hspace' => '3px')
+                        );
+                        ?>
                     </th>
                     <th><?php
                         echo get_lang('Progress').' ';
-                        Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
+                        Display:: display_icon(
+                            'info3.gif',
+                            get_lang('LPProgressScore'),
+                            array('align' => 'absmiddle', 'hspace' => '3px')
+                        );
+                        ?>
                     </th>
                     <th><?php
                         echo get_lang('LastConnexion').' ';
-                        Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
+                        Display:: display_icon(
+                            'info3.gif',
+                            get_lang('LastTimeTheCourseWasUsed'),
+                            array('align' => 'absmiddle', 'hspace' => '3px')
+                        );
+                        ?>
                     </th>
                     <?php
                     echo '<th>'.get_lang('Details').'</th>';
@@ -971,7 +984,7 @@ if (!empty($student_id)) {
                             $from ='&from=myspace';
                         }
                         $link = Display::url(
-                            Display::return_icon('2rightarrow.png'),
+                            Display::return_icon('2rightarrow.png', get_lang('Details')),
                             'lp_tracking.php?cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).$from.'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
                         );
                         echo Display::tag('td', $link);
@@ -981,7 +994,7 @@ if (!empty($student_id)) {
                         echo '<td>';
                         if ($any_result === true) {
                             echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
-                            echo Display::return_icon('clean.png',get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
+                            echo Display::return_icon('clean.png', get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
                             echo '</a>';
                         }
                         echo '</td>';
@@ -990,8 +1003,6 @@ if (!empty($student_id)) {
                     $data_learnpath[$i][] = $lp_name;
                     $data_learnpath[$i][] = $progress . '%';
                 }
-            } else {
-                //echo '<tr><td colspan="6">'.get_lang('NoLearnpath').'</td></tr>';
             }
             ?>
             </tbody>
@@ -1036,11 +1047,33 @@ if (!empty($student_id)) {
         if (Database :: num_rows($result_exercices) > 0) {
             while ($exercices = Database :: fetch_array($result_exercices)) {
                 $exercise_id = intval($exercices['id']);
-                $count_attempts   = Tracking::count_student_exercise_attempts($student_id, $courseInfo['real_id'], $exercise_id, 0, 0, $sessionId, 2);
-                $score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $sessionId, 1, 0);
+                $count_attempts = Tracking::count_student_exercise_attempts(
+                    $student_id,
+                    $courseInfo['real_id'],
+                    $exercise_id,
+                    0,
+                    0,
+                    $sessionId,
+                    2
+                );
+                $score_percentage = Tracking::get_avg_student_exercise_score(
+                    $student_id,
+                    $course_code,
+                    $exercise_id,
+                    $sessionId,
+                    1,
+                    0
+                );
 
                 if (!isset($score_percentage) && $count_attempts > 0) {
-                    $scores_lp = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $sessionId, 2, 1);
+                    $scores_lp = Tracking::get_avg_student_exercise_score(
+                        $student_id,
+                        $course_code,
+                        $exercise_id,
+                        $sessionId,
+                        2,
+                        1
+                    );
                     $score_percentage = $scores_lp[0];
                     $lp_name = $scores_lp[1];
                 } else {
@@ -1079,11 +1112,11 @@ if (!empty($student_id)) {
 
                 $sql = 'SELECT exe_id FROM ' . $tbl_stats_exercices . '
                          WHERE
-                            exe_exo_id      ="'.$exercise_id.'" AND
-                            exe_user_id     ="'.$student_id.'" AND
-                            c_id            = '.$courseInfo['real_id'].' AND
-                            session_id      ="'.$sessionId.'" AND
-                            status          = ""
+                            exe_exo_id = "'.$exercise_id.'" AND
+                            exe_user_id ="'.$student_id.'" AND
+                            c_id = '.$courseInfo['real_id'].' AND
+                            session_id ="'.$sessionId.'" AND
+                            status = ""
                         ORDER BY exe_date DESC
                         LIMIT 1';
                 $result_last_attempt = Database::query($sql);
@@ -1125,7 +1158,7 @@ if (!empty($student_id)) {
         <?php
         }
 
-        //@when using sessions we do not show the survey list
+        // @when using sessions we do not show the survey list
         if (empty($sessionId)) {
             $survey_list = SurveyManager::get_surveys($course_code, $sessionId);
 

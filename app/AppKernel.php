@@ -51,7 +51,6 @@ class AppKernel extends Kernel
             new Sonata\NotificationBundle\SonataNotificationBundle(),
             new Sonata\DatagridBundle\SonataDatagridBundle(),
             new Sonata\MediaBundle\SonataMediaBundle(),
-            new Sonata\TranslationBundle\SonataTranslationBundle(),
             new Sonata\PageBundle\SonataPageBundle(),
 
             new Spy\TimelineBundle\SpyTimelineBundle(),

@@ -140,7 +140,6 @@
         "essence/essence": "^2.5",
         "jeroendesloovere/vcard": "^1.2",
         "a2lix/translation-form-bundle": "dev-master",
-        "sonata-project/translation-bundle" : "dev-master",
         "knplabs/doctrine-behaviors": "~1.1",
         "lunetics/locale-bundle": "^2.4"
     },

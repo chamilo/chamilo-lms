@@ -182,6 +182,7 @@ if (!empty($files)) {
 
     //start download of created file
     $name = $fileName .'.zip';
+    
     if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);
         @unlink($temp_zip_file);

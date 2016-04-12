@@ -5380,6 +5380,21 @@ function WSUnsuscribeCoursesFromSession($params) {
 /** WSListCourses **/
 
 $server->wsdl->addComplexType(
+    'listCourseInput',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
+        'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+        'from' => array('name' => 'from', 'type' => 'xsd:int'),
+        'to' => array('name' => 'to', 'type' => 'xsd:int')
+    )
+);
+
+
+$server->wsdl->addComplexType(
     'course',
     'complexType',
     'struct',
@@ -5411,7 +5426,7 @@ $server->wsdl->addComplexType(
 
 // Register the method to expose
 $server->register('WSListCourses',                                                  // method name
-    array('secret_key' => 'xsd:string', 'original_course_id_name' => 'xsd:string'), // input parameters
+    array('listCourseInput' => 'tns:listCourseInput'), // input parameters
     array('return' => 'tns:courses'),                                               // output parameters
     'urn:WSRegistration',                                                           // namespace
     'urn:WSRegistration#WSListCourses',                                             // soapaction
@@ -5422,16 +5437,20 @@ $server->register('WSListCourses',                                              
 
 // define the method WSListCourses
 function WSListCourses($params) {
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $course_field_name = $params['original_course_id_name'];
+    $course_field_name = isset($params['original_course_id_name']) ? $params['original_course_id_name'] : '';
 
     $courses_result = array();
     $category_names = array();
 
-    $courses = CourseManager::get_courses_list();
+    $from = isset($params['from']) ? $params['from'] : null;
+    $to = isset($params['to']) ? $params['to'] : null;
+
+    $courses = CourseManager::get_courses_list($from, $to);
+
     foreach($courses as $course) {
         $course_tmp = array();
         $course_tmp['id'] = $course['id'];
@@ -5441,7 +5460,7 @@ function WSListCourses($params) {
         $course_tmp['visibility'] = $course['visibility'];
 
         // Determining category name
-        if($category_names[$course['category_code']]) {
+        if ($category_names[$course['category_code']]) {
             $course_tmp['category_name'] = $category_names[$course['category_code']];
         } else {
             $category = CourseManager::get_course_category($course['category_code']);
@@ -5454,7 +5473,6 @@ function WSListCourses($params) {
 
         // Determining external course id
         $course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);
-
 
         $courses_result[] = $course_tmp;
     }
@@ -5534,6 +5552,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
+        'from'  => array('name' => 'from',  'type' => 'xsd:int'),
+        'to'    => array('name' => 'to',    'type' => 'xsd:int'),
         'date_start'  => array('name' => 'date_start',  'type' => 'xsd:string'),
         'date_end'    => array('name' => 'date_end',    'type' => 'xsd:string'),
         'secret_key'  => array('name' => 'secret_key',  'type' => 'xsd:string')
@@ -5590,8 +5610,9 @@ $server->register('WSListSessions',           // method name
  * @param array List of parameters (security key, date_start and date_end)
  * @return array Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
  */
-function WSListSessions($params) {
-    if(!WSHelperVerifyKey($params)) {
+function WSListSessions($params)
+{
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
     $sql_params = array();
@@ -5602,7 +5623,11 @@ function WSListSessions($params) {
     if (!empty($params['date_end'])) {
         $sql_params['s.date_end'] = array('operator' => '<=', 'value' => $params['date_end']);
     }
-    $sessions_list = SessionManager::get_sessions_list($sql_params);
+
+    $from = isset($params['from']) ? $params['from'] : null;
+    $to = isset($params['to']) ? $params['to'] : null;
+    
+    $sessions_list = SessionManager::get_sessions_list($sql_params, null, $from, $to);
     $return_list = array();
     foreach ($sessions_list as $session) {
         $return_list[] = array(

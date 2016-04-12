@@ -37,7 +37,7 @@ class QuestionAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
-            //->add('translations', null, array('identifier' => true))
+            ->add('translations', null, array('identifier' => true))
             ->add('Category')
             ->add('rank')
             ->add('_action', 'actions',

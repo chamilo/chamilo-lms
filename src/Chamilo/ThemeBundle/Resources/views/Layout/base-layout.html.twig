@@ -62,21 +62,26 @@
     {% set profile_link = '' %}
     {% set message_link = '' %}
 
-    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/base.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/scorm.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/learnpath.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/default.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assets/bootstrap/dist/css/bootstrap.css') }}"/>
 
-    <link rel="stylesheet" media="print" href="{{ asset('bundles/chamilocore/css/print.css') }}"/>
-    <link rel="stylesheet" media="print" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/print.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/base.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/scorm.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/themes/'~ theme ~'/learnpath.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/themes/'~ theme ~'/default.css') }}"/>
 
-    <script src="{{ asset('bundles/chamilocore/components/modernizr/modernizr.js') }}"></script>
+    <link rel="stylesheet" media="print" href="{{ asset('css/print.css') }}"/>
+    <link rel="stylesheet" media="print" href="{{ asset('css/themes/'~ theme ~'/print.css') }}"/>
+
+    <script src="{{ asset('assets/modernizr/modernizr.js') }}"></script>
 
     {# Check chamilo_js key in assetic.yml #}
     {% block javascripts %}
     {#{%- javascripts '@chamilo_js' -%}#}
     {#<script src="{{ asset_url }} "></script>#}
     {#{% endjavascripts %}#}
+
+    <script src="{{ asset('assets/jquery/jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/bootstrap/dist/js/bootstrap.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('bundles/ivoryckeditor/ckeditor.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
@@ -86,10 +91,11 @@
         {% include '@ChamiloTheme/Layout/header.js.twig' %}
     {% endblock %}
 
+    {#'@MopaBootstrapBundle/Resources/public/js/eyecon-bootstrap-datepicker.js'#}
+
     {% javascripts
-    '@MopaBootstrapBundle/Resources/public/js/mopabootstrap-collection.js'
-    '@MopaBootstrapBundle/Resources/public/js/mopabootstrap-subnav.js'
-    '@MopaBootstrapBundle/Resources/public/js/eyecon-bootstrap-datepicker.js'
+    'bundles/mopabootstrap/js/mopabootstrap-collection.js'
+    'bundles/mopabootstrap/js/mopabootstrap-subnav.js'
     %}
     <script type="text/javascript" src="{{ asset_url | replace({'/app_dev.php': ''}) }}"></script>
     {% endjavascripts %}
@@ -135,7 +141,7 @@
                 <div class="col-lg-3">
                     <div class="logo">
                         {#<a href="{{ url('index') }}">#}
-                        <img src="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/images/header-logo.png') }}"/>
+                        <img src="{{ asset('css/themes/'~ theme ~'/images/header-logo.png') }}"/>
                         {#</a>#}
                     </div>
                 </div>
@@ -178,7 +184,7 @@
                     <div class="container">
                         {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked':true}) }}
                         <div style="float:right">
-                            {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:rightMenu', {'automenu': 'navbar'} ) }}
+                            {#{{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:rightMenu', {'automenu': 'navbar'} ) }}#}
                         </div>
 
                     </div>
@@ -199,7 +205,7 @@
 <div id="top_main_content" class="container">
 
 {# course navigation links/shortcuts need to be activated by the admin #}
-    {% include "@template_style/layout/course_navigation.html.twig" %}
+    {#{% include "@template_style/layout/course_navigation.html.twig" %}#}
 {#{% endif %}#}
 
 {% block chamilo_header %}
@@ -221,8 +227,10 @@
     {#{% include 'SonataSeoBundle:Block:_facebook_sdk.html.twig' %}#}
     {#{% include 'SonataSeoBundle:Block:_twitter_sdk.html.twig' %}#}
     {#{% include 'SonataSeoBundle:Block:_pinterest_sdk.html.twig' %}#}
-    {% block page_content %}
-    {% endblock %}
+
+{% endblock %}
+
+{% block sonata_page_container %}
 {% endblock %}
 
 {#<!-- Right side column. Contains the navbar and content of the page -->#}
@@ -257,7 +265,7 @@
 {# End wrapper div #}
 
 {% block chamilo_footer %}
-    {% include "@template_style/layout/footer.html.twig" %}
+    {% include "@ChamiloCore/default/layout/footer.html.twig" %}
 {% endblock %}
 
 {% block chamilo_footer_js %}

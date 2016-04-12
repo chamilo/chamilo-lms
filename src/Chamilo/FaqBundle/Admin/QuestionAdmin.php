@@ -45,7 +45,8 @@ class QuestionAdmin extends Admin
             ->add('_action', 'actions',
                 array(
                     'actions' => array(
-                        'show' => array(),
+                        //'show' => array(),
+                        'preview' => array('template' => 'ChamiloFaqBundle:Faq:preview_question_partial.html.twig'),
                         'edit' => array(),
                         'delete' => array()
                     )
@@ -59,16 +60,17 @@ class QuestionAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('headline', null, array('attr' => array('class' => 'span12')))
-            ->add('body', null, array('required' => false, 'attr' => array('class' => 'span12')))
+            ->add('headline')
+            ->add('body', null, array('required' => true))
             ->add('category', null, array(
                     'expanded' => true,
                     'required' => true,
                     'attr' => array('class' => 'radio-list vertical')
                 ))
-            ->add('rank', null, array('required' => false, 'attr' => array('class' => 'span12')))
-            ->add('slug', null, array('required' => false, 'attr' => array('class' => 'span12')))
+            ->add('rank', null, array('required' => false))
+            ->add('slug', null, array('required' => false))
             ->add('onlyAuthUsers')
-            ->end();
+            ->end()
+        ;
     }
 }

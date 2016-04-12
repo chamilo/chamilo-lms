@@ -65,7 +65,7 @@ class NavBuilder extends ContainerAware
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
 
-            $menu->addChild(
+            /*$menu->addChild(
                 $translator->trans('MyCourses'),
                 array('route' => 'userportal')
             );
@@ -117,7 +117,7 @@ class NavBuilder extends ContainerAware
                         'route' => 'administration',
                     )
                 );
-            }
+            }*/
         }
 
         return $menu;

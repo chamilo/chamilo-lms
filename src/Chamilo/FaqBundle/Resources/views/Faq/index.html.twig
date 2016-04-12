@@ -1,13 +1,13 @@
-{% extends 'SonataPageBundle::layout.html.twig' %}
+{% extends '@ChamiloCore/layout_cms.html.twig' %}
 
-{% block page_content %}
+{% block sonata_page_container %}
 <h1>FAQ</h1>
 
 <h2>Categories</h2>
 <ul>
     {% for category in categories %}
         {% if selectedCategory.slug is defined and selectedCategory.slug == category.slug%}
-            <li class="active"  >
+            <li class="active">
                 <strong>{{ category.headline|e }}</strong>
             </li>
         {% else %}

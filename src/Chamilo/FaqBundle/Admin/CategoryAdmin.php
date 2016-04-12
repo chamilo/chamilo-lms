@@ -40,10 +40,12 @@ class CategoryAdmin extends Admin
     {
         $listMapper
             ->add('headline', null, array('identifier' => true))
+            ->add('rank')
             ->add('_action', 'actions',
                 array(
                     'actions' => array(
-                        'show' => array(),
+                        //'show' => array(),
+                        'preview' => array('template' => 'ChamiloFaqBundle:Faq:preview_category_partial.html.twig'),
                         'edit' => array(),
                         'delete' => array()
                     )
@@ -58,9 +60,9 @@ class CategoryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('headline', null, array('attr' => array('class' => 'span12')))
-            ->add('body', null, array('required' => false, 'attr' => array('class' => 'span12')))
-            ->add('rank', null, array('required' => false, 'attr' => array('class' => 'span12')))
+            ->add('headline')
+            ->add('body', null, array('required' => false))
+            ->add('rank', null, array('required' => false))
             ->add('slug')
             ->add('isActive')
             ->end();

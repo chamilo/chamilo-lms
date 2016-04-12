@@ -48,6 +48,10 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql("CREATE TABLE c_quiz_rel_category (iid BIGINT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, category_id INT NOT NULL, exercise_id INT NOT NULL, count_questions INT NOT NULL, PRIMARY KEY(iid))");
         $this->addSql("ALTER TABLE c_quiz ADD COLUMN question_selection_type INT");
 
+        $this->addSql("CREATE TABLE genj_faq_category (id INT AUTO_INCREMENT NOT NULL, headline VARCHAR(255) NOT NULL, body LONGTEXT DEFAULT NULL, rank INT NOT NULL, is_active TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, slug VARCHAR(50) NOT NULL, INDEX is_active_idx (is_active), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
+        $this->addSql("CREATE TABLE genj_faq_question (id INT AUTO_INCREMENT NOT NULL, category_id INT DEFAULT NULL, headline VARCHAR(255) NOT NULL, body LONGTEXT DEFAULT NULL, rank INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, slug VARCHAR(50) NOT NULL, INDEX IDX_375D163F12469DE2 (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
+        $this->addSql("ALTER TABLE genj_faq_question ADD CONSTRAINT FK_375D163F12469DE2 FOREIGN KEY (category_id) REFERENCES genj_faq_category (id);");
+
         $table = $schema->getTable('session_rel_user');
         if (!$table->hasColumn('duration')) {
             $this->addSql("ALTER TABLE session_rel_user ADD duration INT DEFAULT NULL");

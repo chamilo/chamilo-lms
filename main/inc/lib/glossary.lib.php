@@ -37,6 +37,7 @@ class GlossaryManager
      * Get glossary term by glossary id
      * @author Isaac Flores <florespaz@bidsoftperu.com>
      * @param int $glossary_id
+     *
      * @return string The glossary description
      */
     public static function get_glossary_term_by_glossary_id ($glossary_id)
@@ -45,7 +46,7 @@ class GlossaryManager
         $course_id = api_get_course_int_id();
         $sql = "SELECT description FROM $glossary_table
                 WHERE c_id = $course_id  AND glossary_id =".intval($glossary_id);
-        $rs=Database::query($sql);
+        $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs);
 

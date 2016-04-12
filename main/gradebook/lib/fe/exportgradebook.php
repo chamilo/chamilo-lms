@@ -145,7 +145,8 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
     $footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
 
     // preparing content pdf
-    $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
+    $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
+    
     if (file_exists($css_file)) {
         $css = @file_get_contents($css_file);
     } else {
@@ -259,7 +260,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
     $footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
 
     // preparing content pdf
-    $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
+    $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
     if (file_exists($css_file)) {
         $css = @file_get_contents($css_file);
     } else {

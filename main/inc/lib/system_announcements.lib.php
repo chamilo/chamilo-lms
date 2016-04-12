@@ -356,10 +356,13 @@ class SystemAnnouncementManager
         $end = api_get_utc_datetime($date_end);
 
 		//Fixing urls that are sent by email
-		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
-		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
+		//$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
+		//$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
+		$content = str_replace('src=\"'.api_get_path(REL_HOME_PATH), 'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
+		$content = str_replace('file='.api_get_path(REL_HOME_PATH), 'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
 
-        $lang = is_null($lang) ? '' : $lang;
+
+		$lang = is_null($lang) ? '' : $lang;
 
 		$current_access_url_id = 1;
 		if (api_is_multiple_url_enabled()) {
@@ -541,8 +544,10 @@ class SystemAnnouncementManager
         $end      = api_get_utc_datetime($date_end);
 
 		//Fixing urls that are sent by email
-		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
-		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
+		//$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
+		//$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
+        $content = str_replace('src=\"'.api_get_path(REL_HOME_PATH), 'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
+        $content = str_replace('file='.api_get_path(REL_HOME_PATH), 'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
 
         $id = intval($id);
 

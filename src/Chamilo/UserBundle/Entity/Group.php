@@ -32,7 +32,7 @@ class Group extends BaseGroup
      * @var string
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
-    private $code;
+    protected $code;
 
     /**
      * Get id

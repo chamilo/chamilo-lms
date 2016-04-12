@@ -2766,9 +2766,9 @@ class CourseRestorer
             }
 		}
 
-		$destination = '../../courses/'.$this->course->destination_path.'/work/';
-		$origin = '../../courses/'.$this->course->info['path'].'/work/';
-		self::allow_create_all_directory($origin,$destination,false);
+        $destination = '../..'.api_get_path(REL_COURSE_PATH).$this->course->destination_path.'/work/';
+        $origin = '../..'.api_get_path(REL_COURSE_PATH).$this->course->info['path'].'/work/';
+        self::allow_create_all_directory($origin, $destination, false);
 	}
 
     /**

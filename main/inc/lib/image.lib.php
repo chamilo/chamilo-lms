@@ -18,9 +18,6 @@ class Image
      */
     public function __construct($path)
     {
-        $path = preg_match(VALID_WEB_PATH, $path) ? (api_is_internal_path(
-            $path
-        ) ? api_get_path(TO_SYS, $path) : $path) : $path;
         if (IMAGE_PROCESSOR == 'gd') {
             $this->image_wrapper = new GDWrapper($path);
         } else {
@@ -51,7 +48,7 @@ class Image
             }
         }
     }
-    
+
     public function crop($cropParameters) {
         $image_size = $this->get_image_size($this->image_wrapper->path);
         $src_width = $image_size['width'];
@@ -114,7 +111,7 @@ abstract class ImageWrapper
         if (empty($path)) {
             return false;
         }
-        $this->path = preg_match(VALID_WEB_PATH, $path) ? (api_is_internal_path($path) ? api_get_path(TO_SYS, $path) : $path) : $path;
+        $this->path = $path;
         $this->set_image_wrapper();  //Creates image obj
     }
 
@@ -210,7 +207,7 @@ class ImagickWrapper extends ImageWrapper
 		$this->width  = $thumbw;
 		$this->height = $thumbh;
 	}
-    
+
     /**
      * @author José Loguercio <jose.loguercio@beeznest.com>
      * @param int $x coordinate of the cropped region top left corner
@@ -220,7 +217,7 @@ class ImagickWrapper extends ImageWrapper
      * @param int $src_width the source width of the original image
      * @param int $src_height the source height of the original image
      */
-    
+
     public function crop($x, $y, $width, $height, $src_width, $src_height) {
         if (!$this->image_validated) return false;
         $this->image->cropimage($width, $height, $x, $y);
@@ -376,7 +373,7 @@ class GDWrapper extends ImageWrapper
 		$this->bg = $dst_img;
 		@imagedestroy($src_img);
 	}
-    
+
     /**
      * @author José Loguercio <jose.loguercio@beeznest.com>
      * @param int $x coordinate of the cropped region top left corner

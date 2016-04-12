@@ -1,17 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls
  */
 require_once '../global.inc.php';
 
 //@todo for some reason nanogong doesn't like this variables
-//api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
-
 unset($_REQUEST['a']);
-$js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
+$js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
 
 //Fix in order to add the exe_id
 
@@ -33,13 +32,12 @@ switch ($action) {
 	case 'get_file':
 		if ($nano->get_param_value('user_id') == api_get_user_id() || api_is_allowed_to_edit()) {
 			$file_path = $nano->load_filename_if_exists();
-			//$file_path = '/var/www/rocio/courses/GREAT123/exercises/0/2/5/1/1-0-1-2-5-38.mp3';
 			if ($file_path) {
 				$info = pathinfo($file_path);
 				$user_info = api_get_user_info($nano->params['user_id']);
 				$name = get_lang('Quiz').'-'.$user_info['firstname'].'-'.$user_info['lastname'].'.'.$info['extension'];
 				$download = true;
-				if (isset($_REQUEST['download'])  && $_REQUEST['download'] == 0) {
+				if (isset($_REQUEST['download']) && $_REQUEST['download'] == 0) {
 					$download = false;
 				}
 				DocumentManager::file_send_for_download($file_path, $download);
@@ -69,8 +67,7 @@ switch ($action) {
 		echo $nano->return_form();
 		break;
     case 'save_file':
-    	//User access same as upload.php
-
+    	// User access same as upload.php
     	$return = $nano->upload_file($is_nano);
 
     	if ($is_nano) {

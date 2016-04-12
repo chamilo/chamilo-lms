@@ -1,22 +1,21 @@
 # see https://github.com/phiamo/MopaBootstrapBundle/blob/master/Resources/doc/misc/configuration-reference.md
-#mopa_bootstrap:
-#    # Adds twig form theme  support
-##        horizontal_label_class: 'aa'
-##        horizontal_input_wrapper_class: 'dd'
-#    menu: ~  # enables twig helpers for menu
-#    form:
-#          show_legend: true # default is true
-#          show_child_legend: false # default is true
-#          error_type: block # or inline which is default
-#          render_optional_text: true
-#
-#          collection:
-#              widget_remove_btn:
-#                  icon: trash
-#                  icon_color: white
-#                  attr:
-#                      class: btn btn-danger
-#              widget_add_btn:
-#                  icon: plus-sign
-#                  attr:
-#                      class: btn btn-primary
+mopa_bootstrap:
+    # Adds twig form theme  support
+#        horizontal_label_class: 'aa'
+#        horizontal_input_wrapper_class: 'dd'
+    menu: ~  # enables twig helpers for menu
+    form:
+          show_legend: true # default is true
+          show_child_legend: false # default is true
+          error_type: block # or inline which is default
+          render_optional_text: true
+
+          collection:
+              widget_remove_btn:
+                  icon: trash
+                  attr:
+                      class: btn btn-danger
+              widget_add_btn:
+                  icon: plus-sign
+                  attr:
+                      class: btn btn-primary

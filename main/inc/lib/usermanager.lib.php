@@ -333,8 +333,6 @@ class UserManager
         /** @var User $user */
         $user = $userManager->createUser();
 
-        $em = Database::getManager();
-
         /** @var User $user */
         //$user = new User();
         $user
@@ -362,8 +360,6 @@ class UserManager
 
         $userManager->updateUser($user);
         $userId = $user->getId();
-
-        error_log($userId);
 
         if (!empty($userId)) {
             $return = $userId;
@@ -1429,7 +1425,7 @@ class UserManager
      * function will attempt to create it. Probably not the right place to do it
      * but at least it avoids headaches in many other places.
      * @param   integer $id User ID
-     * @param   string  $type Type of path to return (can be 'system', 'web', 'rel', 'last')
+     * @param   string  $type Type of path to return (can be 'system', 'web', 'last')
      * @return  string  User folder path (i.e. /var/www/chamilo/app/upload/users/1/1/)
      */
     public static function getUserPathById($id, $type)
@@ -1445,6 +1441,7 @@ class UserManager
             // In exceptional cases, on some portals, the intermediate base user
             // directory might not have been created. Make sure it is before
             // going further.
+
             $rootPath = api_get_path(SYS_UPLOAD_PATH) . 'users/' . substr((string) $id, 0, 1);
             if (!is_dir($rootPath)) {
                 $perm = api_get_permissions_for_new_directories();
@@ -1461,9 +1458,6 @@ class UserManager
                 break;
             case 'web': // Base: absolute web path.
                 $userPath = api_get_path(WEB_UPLOAD_PATH).$userPath;
-                break;
-            case 'rel': // Relative to the document root (e.g. app/upload/users/1/13/)
-                $userPath = api_get_path(REL_UPLOAD_PATH).$userPath;
                 break;
             case 'last': // Only the last part starting with users/
                 break;

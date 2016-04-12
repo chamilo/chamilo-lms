@@ -170,7 +170,7 @@ class CourseManager
     /**
      * Returns all the information of a given course code
      * @param string $course_code , the course code
-     * @return an array with all the fields of the course table
+     * @return array with all the fields of the course table
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @assert ('') === false
      */
@@ -297,7 +297,7 @@ class CourseManager
      *
      * @param string $course_code , the course code
      * @todo for more consistency: use course_info call from database API
-     * @return an array with int fields "visibility", "subscribe", "unsubscribe"
+     * @return array with int fields "visibility", "subscribe", "unsubscribe"
      * @assert ('') === false
      */
     public static function get_access_settings($course_code)
@@ -5017,7 +5017,8 @@ class CourseManager
             'enable_lp_auto_launch',
             'pdf_export_watermark_text',
             'show_system_folders',
-            'exercise_invisible_in_session'
+            'exercise_invisible_in_session',
+            'enable_forum_auto_launch'
         );
 
         $allowLPReturnLink = api_get_setting('allow_lp_return_link');

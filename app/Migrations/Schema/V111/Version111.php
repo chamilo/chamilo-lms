@@ -45,6 +45,8 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','false','No') ");
         $this->addSql("ALTER TABLE c_forum_forum ADD moderated TINYINT(1) DEFAULT NULL");
         $this->addSql("ALTER TABLE c_forum_post ADD status INT DEFAULT NULL");
+        $this->addSql("CREATE TABLE c_quiz_rel_category (iid BIGINT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, category_id INT NOT NULL, exercise_id INT NOT NULL, count_questions INT NOT NULL, PRIMARY KEY(iid))");
+        $this->addSql("ALTER TABLE c_quiz ADD COLUMN question_selection_type INT");
 
         $table = $schema->getTable('session_rel_user');
         if (!$table->hasColumn('duration')) {

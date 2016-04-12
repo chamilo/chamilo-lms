@@ -23,7 +23,7 @@ class UserAdmin extends BaseUserAdmin
             ->tab('User')
             ->with('Profile', array('class' => 'col-md-6'))->end()
             ->with('General', array('class' => 'col-md-6'))->end()
-            ->with('Social', array('class' => 'col-md-6'))->end()
+            //->with('Social', array('class' => 'col-md-6'))->end()
             ->end()
             ->tab('Security')
             ->with('Status', array('class' => 'col-md-4'))->end()
@@ -42,7 +42,7 @@ class UserAdmin extends BaseUserAdmin
             ->with('General')
             ->add('username')
             ->add('email')
-            ->add(
+            /*->add(
                 'plainPassword',
                 'text',
                 array(
@@ -50,10 +50,10 @@ class UserAdmin extends BaseUserAdmin
                             $this->getSubject()->getId()
                         )),
                 )
-            )
+            )*/
             ->end()
             ->with('Profile')
-            ->add(
+            /*->add(
                 'dateOfBirth',
                 'sonata_type_date_picker',
                 array(
@@ -62,31 +62,31 @@ class UserAdmin extends BaseUserAdmin
                     'dp_max_date' => $now->format('c'),
                     'required' => false,
                 )
-            )
+            )*/
             ->add('firstname', null, array('required' => false))
             ->add('lastname', null, array('required' => false))
-            ->add('website', 'url', array('required' => false))
-            ->add('biography', 'text', array('required' => false))
-            ->add(
+            //->add('website', 'url', array('required' => false))
+            //->add('biography', 'text', array('required' => false))
+            /*->add(
                 'gender',
                 'sonata_user_gender',
                 array(
                     'required' => true,
                     'translation_domain' => $this->getTranslationDomain(),
                 )
-            )
-            ->add('locale', 'locale', array('required' => false))
-            ->add('timezone', 'timezone', array('required' => false))
-            ->add('phone', null, array('required' => false))
+            )*/
+            //->add('locale', 'locale', array('required' => false))
+            //->add('timezone', 'timezone', array('required' => false))
+            //->add('phone', null, array('required' => false))
             ->end()
-            ->with('Social')
+            /*->with('Social')
             ->add('facebookUid', null, array('required' => false))
             ->add('facebookName', null, array('required' => false))
             ->add('twitterUid', null, array('required' => false))
             ->add('twitterName', null, array('required' => false))
             ->add('gplusUid', null, array('required' => false))
             ->add('gplusName', null, array('required' => false))
-            ->end()
+            ->end()*/
             ->end();
 
         if ($this->getSubject() && !$this->getSubject()->hasRole(
@@ -127,13 +127,13 @@ class UserAdmin extends BaseUserAdmin
                 ->end();
         }
 
-        $formMapper
+        /*$formMapper
             ->tab('Security')
             ->with('Keys')
             ->add('token', null, array('required' => false))
             ->add('twoStepVerificationCode', null, array('required' => false))
             ->end()
-            ->end();
+            ->end();*/
 //
 //        $formMapper
 //            ->tab('ExtraFields')

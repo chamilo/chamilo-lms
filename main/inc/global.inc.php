@@ -43,11 +43,14 @@ if (file_exists($kernel->getConfigurationFile())) {
     $_configuration = array();
 }
 
+// Recalculate a system absolute path symlinks insensible.
+$includePath = $_configuration['root_sys'].'main/inc/';
+
 //Redirects to the main/install/ page
 if (!$alreadyInstalled) {
     $global_error_code = 2;
     // The system has not been installed yet.
-    require $includePath.'/global_error_message.inc.php';
+    require_once $includePath.'/global_error_message.inc.php';
     die();
 }
 
@@ -58,7 +61,8 @@ if (!isset($GLOBALS['_configuration'])) {
 }
 
 // Include the main Chamilo platform library file.
-require_once $includePath.'/lib/api.lib.php';
+
+require_once $_configuration['root_sys'].'main/inc/lib/api.lib.php';
 $passwordEncryption = api_get_configuration_value('password_encryption');
 
 if ($passwordEncryption == 'bcrypt') {

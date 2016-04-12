@@ -57,7 +57,7 @@ $introductionSection = Display::return_introduction_section(
     TOOL_LEARNPATH,
     array(
         'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-        'CreateDocumentDir' => '../../courses/'.api_get_course_path().'/document/',
+        'CreateDocumentDir' => '../..'.api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/',
         'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/',
     )
 );

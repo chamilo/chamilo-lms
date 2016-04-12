@@ -2000,7 +2000,7 @@ class HTML_QuickForm extends HTML_Common
      * @return  string  error message
      * @static
      */
-    function errorMessage($value)
+    public static function errorMessage($value)
     {
         // make the variable static so that it only has to do the defining on the first call
         static $errorMessages;
@@ -2054,12 +2054,11 @@ class HTML_QuickForm extends HTML_Common
  */
 class HTML_QuickForm_Error extends PEAR_Error
 {
-
     /**
     * Prefix for all error messages
     * @var string
     */
-    var $error_message_prefix = 'QuickForm Error: ';
+    public $error_message_prefix = 'QuickForm Error: ';
 
     /**
     * Creates a quickform error object, extending the PEAR_Error class
@@ -2069,13 +2068,16 @@ class HTML_QuickForm_Error extends PEAR_Error
     * @param int   $level intensity of the error (PHP error code)
     * @param mixed $debuginfo any information that can inform user as to nature of the error
     */
-    function HTML_QuickForm_Error($code = QUICKFORM_ERROR, $mode = PEAR_ERROR_RETURN,
-                         $level = E_USER_NOTICE, $debuginfo = null)
-    {
+    public function __construct(
+        $code = QUICKFORM_ERROR,
+        $mode = PEAR_ERROR_RETURN,
+        $level = E_USER_NOTICE,
+        $debuginfo = null
+    ) {
         if (is_int($code)) {
-            $this->PEAR_Error(HTML_QuickForm::errorMessage($code), $code, $mode, $level, $debuginfo);
+            parent::__construct(HTML_QuickForm::errorMessage($code), $code, $mode, $level, $debuginfo);
         } else {
-            $this->PEAR_Error("Invalid error code: $code", QUICKFORM_ERROR, $mode, $level, $debuginfo);
+            parent::__construct("Invalid error code: $code", QUICKFORM_ERROR, $mode, $level, $debuginfo);
         }
     }
 }

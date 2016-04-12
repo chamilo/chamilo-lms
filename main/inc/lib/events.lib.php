@@ -1796,7 +1796,7 @@ class Event
      * @param array $values (passing by reference)
      * @return boolean True if everything is OK, false otherwise
      */
-    function event_send_mail_filter_func(&$values)
+    public function event_send_mail_filter_func(&$values)
     {
         return true;
     }
@@ -1806,7 +1806,7 @@ class Event
      * @param array $values (passing by reference)
      * @return boolean True if everything is OK, false otherwise
      */
-    function user_registration_event_send_mail_filter_func(&$values)
+    public function user_registration_event_send_mail_filter_func(&$values)
     {
         $res = self::event_send_mail_filter_func($values);
         // proper logic for this filter
@@ -1818,7 +1818,7 @@ class Event
      * @param array $values (passing by reference)
      * @return boolean True if everything is OK, false otherwise
      */
-    function portal_homepage_edited_event_send_mail_filter_func(&$values)
+    public function portal_homepage_edited_event_send_mail_filter_func(&$values)
     {
         $res = self::event_send_mail_filter_func($values);
         // proper logic for this filter

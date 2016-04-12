@@ -78,9 +78,9 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 				$pos = $test_pos + 1;
 			}
 			$root_rel = substr($root_rel, 0, $pos);
-		} elseif (strpos($root_rel, '/courses/') !== false) {
+		} elseif (strpos($root_rel, api_get_path(REL_COURSE_PATH)) !== false) {
 			$pos = 0;
-			while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), '/courses/')) !== false) {
+			while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), api_get_path(REL_COURSE_PATH))) !== false) {
 				$pos = $test_pos + 1;
 			}
 			$root_rel = substr($root_rel, 0, $pos);

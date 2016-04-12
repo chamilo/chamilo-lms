@@ -10,14 +10,14 @@
 *	@package chamilo.whoisonline
 */
 
+use ChamiloSession as Session;
+
 /**
  * Insert a login reference for the current user into the track_e_online stats table.
  * This table keeps trace of the last login. Nothing else matters (we don't keep traces of anything older)
  * @param int user id
  * @return void
  */
-
-use ChamiloSession as Session;
 
 function LoginCheck($uid)
 {
@@ -154,7 +154,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     session_regenerate_id();
     Session::destroy();
     if ($logout_redirect) {
-        header("Location: index.php");
+        header("Location: ".api_get_path(WEB_PATH)."index.php");
         return;
     }
 }
@@ -397,11 +397,11 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
         $time_limit = intval($time_limit);
     }
 
-    $online_time 		= time() - $time_limit*60;
-    $current_date		= api_get_utc_datetime($online_time);
+    $online_time = time() - $time_limit * 60;
+    $current_date = api_get_utc_datetime($online_time);
     $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $course_code         = Database::escape_string($course_code);
-	$courseInfo = api_get_course_info($course_code);
+    $course_code = Database::escape_string($course_code);
+    $courseInfo = api_get_course_info($course_code);
 	$courseId = $courseInfo['real_id'];
 
     $from = intval($from);

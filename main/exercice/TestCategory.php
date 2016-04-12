@@ -314,40 +314,99 @@ class TestCategory
 	 * input : test_id
 	 * return : array of category id (integer)
 	 * hubert.borderiou 07-04-2011
+	 * @param int $exerciseId
 	 */
-	public static function getListOfCategoriesIDForTest($in_testid)
+	public static function getListOfCategoriesIDForTest($exerciseId)
     {
 		// parcourir les questions d'un test, recup les categories uniques dans un tableau
-		$result = array();
-		$quiz = new Exercise();
-		$quiz->read($in_testid);
-		$tabQuestionList = $quiz->selectQuestionList();
+		$exercise = new Exercise();
+		$exercise->read($exerciseId, false);
+		$categoriesInExercise = $exercise->getQuestionWithCategories();
 		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
-		for ($i=1; $i <= count($tabQuestionList); $i++) {
-			if (!in_array(TestCategory::getCategoryForQuestion($tabQuestionList[$i]), $result)) {
-				$result[] = TestCategory::getCategoryForQuestion($tabQuestionList[$i]);
+		$categories = array();
+        if (!empty($categoriesInExercise)) {
+			foreach ($categoriesInExercise as $category) {
+				//$category['id'] = $category['iid'];
+				$categories[$category['id']] = $category;
 			}
+		}
+
+		return $categories;
+	}
+
+	/**
+	 * @param Exercise $exercise_obj
+	 * @return array
+	 */
+	public static function getListOfCategoriesIDForTestObject(Exercise $exercise_obj)
+	{
+		// parcourir les questions d'un test, recup les categories uniques dans un tableau
+		$categories_in_exercise = array();
+		// $question_list = $exercise_obj->getQuestionList();
+		$question_list = $exercise_obj->getQuestionOrderedListByName();
+
+		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
+		foreach ($question_list as $questionInfo) {
+			$question_id = $questionInfo['question_id'];
+			$category_list = self::getCategoryForQuestion($question_id);
+			if (is_numeric($category_list)) {
+				$category_list = array($category_list);
+			}
+
+			if (!empty($category_list)) {
+				$categories_in_exercise = array_merge($categories_in_exercise, $category_list);
+			}
+		}
+		if (!empty($categories_in_exercise)) {
+			$categories_in_exercise = array_unique(array_filter($categories_in_exercise));
+		}
+		return $categories_in_exercise;
+	}
+
+	/**
+	 * Return the list of differents categories NAME for a test
+	 * @param int exercise id
+	 * @param bool
+	 * @return array of string
+	 *
+     * @author function rewrote by jmontoya
+	 */
+	public static function getListOfCategoriesNameForTest($exercise_id, $grouped_by_category = true)
+    {
+		$result = array();
+		$categories = self::getListOfCategoriesIDForTest($exercise_id, $grouped_by_category);
+
+		foreach ($categories as $catInfo) {
+			$categoryId = $catInfo['id'];
+			if (!empty($categoryId)) {
+				$result[$categoryId] = array(
+                    'title' => $catInfo['title'],
+                    //'parent_id' =>  $catInfo['parent_id'],
+					'parent_id' => '',
+                    'c_id' => $catInfo['c_id']
+                );
+		}
 		}
 
 		return $result;
 	}
 
 	/**
-	 * return the list of different categories NAME for a test
-	 * input : test_id
-	 * return : array of string
-	 * hubert.borderiou 07-04-2011
-     * @author function rewrote by jmontoya
+	 * @param Exercise $exercise_obj
+	 * @return array
 	 */
-	public static function getListOfCategoriesNameForTest($in_testid)
-    {
-		$tabcatName = array();
-		$tabcatID = self::getListOfCategoriesIDForTest($in_testid);
-		for ($i=0; $i < count($tabcatID); $i++) {
-			$cat = new TestCategory($tabcatID[$i]);
-			$tabcatName[$cat->id] = $cat->name;
+	public static function getListOfCategoriesForTest(Exercise $exercise_obj)
+	{
+		$result = array();
+		$categories = self::getListOfCategoriesIDForTestObject($exercise_obj);
+		foreach ($categories as $cat_id) {
+			$cat = new TestCategory($cat_id);
+			$cat = (array)$cat;
+			$cat['iid'] = $cat['id'];
+			$cat['title'] = $cat['name'];
+			$result[$cat['id']] = $cat;
 		}
-		return $tabcatName;
+		return $result;
 	}
 
 	/**
@@ -356,9 +415,9 @@ class TestCategory
 	 * return : integer
 	 * hubert.borderiou 07-04-2011
 	 */
-	public static function getNumberOfCategoriesForTest($in_testid)
+	public static function getNumberOfCategoriesForTest($id)
     {
-		return count(TestCategory::getListOfCategoriesIDForTest($in_testid));
+		return count(TestCategory::getListOfCategoriesIDForTest($id));
 	}
 
 	/**
@@ -397,7 +456,7 @@ class TestCategory
 		$nbquestionresult = 0;
 		$tabcatid = TestCategory::getListOfCategoriesIDForTest($exerciseId);
 		for ($i=0; $i < count($tabcatid); $i++) {
-			if ($tabcatid[$i] > 0) {	// 0 = no category for this questio
+			if ($tabcatid[$i] > 0 && $tabcatid[$i] > 0) {	// 0 = no category for this questio
 				$nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $tabcatid[$i]);
 				if ($nbQuestionInThisCat > $in_nbrandom) {
 					$nbquestionresult += $in_nbrandom;
@@ -407,6 +466,7 @@ class TestCategory
 				}
 			}
 		}
+
 		return $nbquestionresult;
 	}
 
@@ -433,43 +493,93 @@ class TestCategory
 	}
 
     /**
-    * return an array of question_id for each category
-    * tabres[0] = array of question id with category id = 0 (i.e. no category)
-    * tabres[24] = array of question id with category id = 24
-    * In this version, a question has 0 or 1 category
+     * Returns an array of question ids for each category
+     * $categories[1][30] = 10, array with category id = 1 and question_id = 10
+     * A question has "n" categories
+     * @param int exercise
+     * @param array $check_in_question_list
+     * @param array $categoriesAddedInExercise
     *
     * @param int $exerciseId
     * @return array
     */
-    public static function getQuestionsByCat($exerciseId)
-    {
-        $em = Database::getManager();
-        $qb = $em->createQueryBuilder();
-        $res = $qb
-            ->select('qrc.questionId', 'qrc.categoryId')
-            ->from('ChamiloCourseBundle:CQuizQuestionRelCategory', 'qrc')
-            ->innerJoin(
-                'ChamiloCourseBundle:CQuizRelQuestion',
-                'eq',
-                Doctrine\ORM\Query\Expr\Join::WITH,
-                'qrc.questionId = eq.questionId AND qrc.cId = eq.cId'
-            )
-            ->where(
-                $qb->expr()->eq('eq.exerciceId', $exerciseId)
-            )
-            ->andWhere(
-                $qb->expr()->eq('eq.cId', api_get_course_int_id())
-            )
-            ->getQuery()
-            ->getResult();
-        $list = array();
-        foreach ($res as $data) {
-            if (!isset($list[$data['categoryId']])) {
-                $list[$data['categoryId']] = array();
+    static function getQuestionsByCat(
+        $exerciseId,
+        $check_in_question_list = array(),
+        $categoriesAddedInExercise = array()
+    ) {
+        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $exerciseId = intval($exerciseId);
+        $courseId = api_get_course_int_id();
+
+        $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
+                FROM $TBL_QUESTION_REL_CATEGORY qrc
+                INNER JOIN $TBL_EXERCICE_QUESTION eq
+                ON (eq.question_id = qrc.question_id)
+                INNER JOIN $categoryTable c
+                ON (c.id = qrc.category_id)
+                INNER JOIN $tableQuestion q
+                ON (q.id = qrc.question_id )
+                WHERE
+                  exercice_id = $exerciseId AND
+                  qrc.c_id = ".$courseId."
+                ";
+
+        $res = Database::query($sql);
+        $categories = array();
+        while ($data = Database::fetch_array($res)) {
+            if (!empty($check_in_question_list)) {
+                if (!in_array($data['question_id'], $check_in_question_list)) {
+                    continue;
+                }
             }
-            $list[$data['categoryId']][] = $data['questionId'];
+
+            if (!isset($categories[$data['category_id']]) ||
+                !is_array($categories[$data['category_id']])
+            ) {
+                $categories[$data['category_id']] = array();
+            }
+
+            $categories[$data['category_id']][] = $data['question_id'];
         }
-		return $list;
+
+        if (!empty($categoriesAddedInExercise)) {
+            $newCategoryList = array();
+            foreach ($categoriesAddedInExercise as $category) {
+                $categoryId = $category['category_id'];
+                if (isset($categories[$categoryId])) {
+                    $newCategoryList[$categoryId] = $categories[$categoryId];
+                }
+            }
+
+            $checkQuestionsWithNoCategory = false;
+            foreach ($categoriesAddedInExercise as $category) {
+                if (empty($category['category_id'])) {
+                    // Check
+                    $checkQuestionsWithNoCategory = true;
+                    break;
+                }
+            }
+
+            // Select questions that don't have any category related
+            if ($checkQuestionsWithNoCategory) {
+                $originalQuestionList = $check_in_question_list;
+                foreach ($originalQuestionList as $questionId) {
+                    $categoriesFlatten = array_flatten($categories);
+                    if (!in_array($questionId, $categoriesFlatten)) {
+                        $newCategoryList[0][] = $questionId;
+                    }
+                }
+            }
+
+            $categories = $newCategoryList;
+
+        }
+
+        return $categories;
 	}
 
 	/**
@@ -554,6 +664,33 @@ class TestCategory
 	}
 
     /**
+	 * return total score for test exe_id for all question in the category $in_cat_id for user
+	 * If no question for this category, return ""
+	 */
+	public static function getCatScoreForExeidForUserid($in_cat_id, $in_exe_id, $in_user_id)
+	{
+		$tbl_track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+		$tbl_question_rel_category = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+		$in_cat_id = intval($in_cat_id);
+		$in_exe_id = intval($in_exe_id);
+		$in_user_id = intval($in_user_id);
+
+		$query = "SELECT DISTINCT
+		            marks, exe_id, user_id, ta.question_id, category_id
+                  FROM $tbl_track_attempt ta , $tbl_question_rel_category qrc
+                  WHERE
+                    ta.question_id=qrc.question_id AND
+                    qrc.category_id=$in_cat_id AND
+                    exe_id=$in_exe_id AND user_id=$in_user_id";
+		$res = Database::query($query);
+		$totalcatscore = "";
+		while ($data = Database::fetch_array($res)) {
+			$totalcatscore += $data['marks'];
+		}
+		return $totalcatscore;
+	}
+
+	/**
      * return the number max of question in a category
      * count the number of questions in all categories, and return the max
      * @param int $exerciseId
@@ -631,6 +768,202 @@ class TestCategory
     }
 
     /**
+	 * @return array
+	 */
+	function get_all_categories()
+	{
+		$table = Database::get_course_table(TABLE_QUIZ_CATEGORY);
+		$sql = "SELECT * FROM $table ORDER BY title ASC";
+		$res = Database::query($sql);
+		while ($row = Database::fetch_array($res,'ASSOC')) {
+			$array[] = $row;
+		}
+		return $array;
+	}
+
+	/**
+	 * @param Exercise $exercise
+	 * @param int $course_id
+	 * @param string $order
+	 * @param bool $shuffle
+	 * @param bool $excludeCategoryWithNoQuestions
+	 * @return array|bool
+	 */
+	public function getCategoryExerciseTree(
+		$exercise,
+		$course_id,
+		$order = null,
+		$shuffle = false,
+		$excludeCategoryWithNoQuestions = true
+	) {
+        if (empty($exercise)) {
+            return array();
+        }
+
+        if (!$exercise->specialCategoryOrders) {
+            return false;
+        }
+
+        $course_id = intval($course_id);
+		$table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
+        $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+		$sql = "SELECT * FROM $table qc
+              	LEFT JOIN $categoryTable c
+                ON (qc.c_id = c.c_id AND c.id = qc.category_id)
+                WHERE qc.c_id = $course_id AND exercise_id = {$exercise->id} ";
+
+		if (!empty($order)) {
+			$sql .= "ORDER BY $order";
+		}
+
+		$categories = array();
+
+		$result = Database::query($sql);
+		if (Database::num_rows($result)) {
+			while ($row = Database::fetch_array($result, 'ASSOC')) {
+				if ($excludeCategoryWithNoQuestions) {
+					if ($row['count_questions'] == 0) {
+						continue;
+					}
+				}
+				if (empty($row['title']) && empty($row['category_id'])) {
+					$row['title'] = get_lang('NoCategory');
+				}
+                $categories[$row['category_id']] = $row;
+			}
+		}
+
+		if ($shuffle) {
+			shuffle_assoc($categories);
+		}
+
+		return $categories;
+	}
+
+	public function getForm(& $form, $action = 'new')
+	{
+		switch($action) {
+			case 'new':
+				$header = get_lang('AddACategory');
+				$submit = get_lang('AddTestCategory');
+				break;
+			case 'edit':
+				$header = get_lang('EditCategory');
+				$submit = get_lang('ModifyCategory');
+				break;
+		}
+
+		// settting the form elements
+		$form->addElement('header', $header);
+		$form->addElement('hidden', 'category_id');
+		$form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
+		$form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
+		$category_parent_list = array();
+
+		$options = array(
+				'1' => get_lang('Visible'),
+				'0' => get_lang('Hidden')
+		);
+		$form->addElement('select', 'visibility', get_lang('Visibility'), $options);
+		$script = null;
+		if (!empty($this->parent_id)) {
+			$parent_cat = new TestCategory($this->parent_id);
+			$category_parent_list = array($parent_cat->id => $parent_cat->name);
+			$script .= '<script>$(function() { $("#parent_id").trigger("addItem",[{"title": "'.$parent_cat->name.'", "value": "'.$parent_cat->id.'"}]); });</script>';
+		}
+		$form->addElement('html', $script);
+
+		$form->addElement('select', 'parent_id', get_lang('Parent'), $category_parent_list, array('id' => 'parent_id'));
+		$form->addElement('style_submit_button', 'SubmitNote', $submit, 'class="add"');
+
+		// setting the defaults
+		$defaults = array();
+		$defaults["category_id"] = $this->id;
+		$defaults["category_name"] = $this->name;
+		$defaults["category_description"] = $this->description;
+		$defaults["parent_id"] = $this->parent_id;
+		$defaults["visibility"] = $this->visibility;
+		$form->setDefaults($defaults);
+
+		// setting the rules
+		$form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
+	}
+
+	/**
+	 * Returns the category form.
+	 * @param Exercise $exercise_obj
+	 * @return string
+	 */
+	public function returnCategoryForm(Exercise $exercise_obj)
+	{
+		$categories = $this->getListOfCategoriesForTest($exercise_obj);
+
+		$saved_categories = $exercise_obj->get_categories_in_exercise();
+		$return = null;
+
+		if (!empty($categories)) {
+			$nbQuestionsTotal = $exercise_obj->getNumberQuestionExerciseCategory();
+			$exercise_obj->setCategoriesGrouping(true);
+			$real_question_count = count($exercise_obj->getQuestionList());
+
+			$warning = null;
+			if ($nbQuestionsTotal != $real_question_count) {
+				$warning = Display::return_message(get_lang('CheckThatYouHaveEnoughQuestionsInYourCategories'), 'warning');
+			}
+
+			$return .= $warning;
+			$return .= '<table class="data_table">';
+			$return .= '<tr>';
+			$return .= '<th height="24">' . get_lang('Categories') . '</th>';
+			$return .= '<th width="70" height="24">' . get_lang('Number') . '</th></tr>';
+
+			$emptyCategory = array(
+				'id' => '0',
+				'name' => get_lang('NoCategory'),
+				'description' => '',
+				'iid' => '0',
+				'title' => get_lang('NoCategory')
+			);
+
+			$categories[] = $emptyCategory;
+
+			foreach ($categories as $category) {
+				$cat_id = $category['iid'];
+				$return .= '<tr>';
+				$return .= '<td>';
+				//$return .= Display::div(isset($category['parent_path']) ? $category['parent_path'] : '');
+				$return .= Display::div($category['name']);
+				$return .= '</td>';
+				$return .= '<td>';
+				$value = isset($saved_categories) && isset($saved_categories[$cat_id]) ? $saved_categories[$cat_id]['count_questions'] : -1;
+				$return .= '<input name="category['.$cat_id.']" value="' .$value.'" />';
+				$return .= '</td>';
+				$return .= '</tr>';
+			}
+
+			$return .= '</table>';
+			$return .= get_lang('ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected');
+			return $return;
+		}
+	}
+
+	/**
+	 * Sorts an array
+	 * @param $array
+	 * @return mixed
+	 */
+	public function sort_tree_array($array)
+	{
+		foreach ($array as $key => $row) {
+			$parent[$key] = $row['parent_id'];
+		}
+		if (count($array) > 0) {
+			array_multisort($parent, SORT_ASC, $array);
+		}
+		return $array;
+	}
+
+	/**
      * Return true if a category already exists with the same name
      * @param string $in_name
      *

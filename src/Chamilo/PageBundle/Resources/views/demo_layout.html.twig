@@ -1,12 +1,11 @@
-{% extends 'SonataPageBundle::layout.html.twig' %}
-{#{% extends '@ChamiloCore/layout_one_col.html.twig' %}#}
+{% extends '@ChamiloCore/layout_cms.html.twig' %}
 
 {% block sonata_page_body_tag %}
     {{ parent() }}
 
-    {% include "SonataSeoBundle:Block:_facebook_sdk.html.twig" %}
-    {% include "SonataSeoBundle:Block:_twitter_sdk.html.twig" %}
-    {% include "SonataSeoBundle:Block:_pinterest_sdk.html.twig" %}
+    {#{% include "SonataSeoBundle:Block:_facebook_sdk.html.twig" %}#}
+    {#{% include "SonataSeoBundle:Block:_twitter_sdk.html.twig" %}#}
+    {#{% include "SonataSeoBundle:Block:_pinterest_sdk.html.twig" %}#}
 
 {% endblock %}
 
@@ -20,7 +19,58 @@
 {% endblock %}
 
 {% block sonata_page_container %}
-    {{ parent() }}
-{% endblock %}
+    <div class="container">
+        <div class="content">
+            <div class="row page-header">
+                {{ sonata_page_render_container('header', 'global') }}
+            </div>
 
-{% block sonata_page_breadcrumb %}{% endblock %}
+            {% block sonata_page_breadcrumb %}
+                <div class="row">
+                    {% if sonata_seo_context is not defined %}
+                        {% set sonata_seo_context = 'homepage' %}
+                    {% endif %}
+                    {{ sonata_block_render_event('breadcrumb', { 'context': sonata_seo_context, 'current_uri': app.request.requestUri }) }}
+                </div>
+            {% endblock %}
+
+            {% if page is defined %}
+                <div class="row">
+                    {% if page.name != 'global'%}
+                        {{ sonata_page_render_container('content_top', 'global') }}
+                    {% endif %}
+                    {{ sonata_page_render_container('content_top', page) }}
+                </div>
+            {% endif %}
+
+            <div class="row">
+                {% block page_content %}
+                    {% if content is defined %}
+                        {{ content|raw }}
+                    {% else %}
+                        {% set content = block('content') %}
+                        {% if content|length > 0 %}
+                            {{ content|raw }}
+                        {% elseif page is defined %}
+                            {{ sonata_page_render_container('content', page) }}
+                        {% endif %}
+                    {% endif %}
+                {% endblock %}
+            </div>
+
+            {% if page is defined %}
+                <div class="row">
+                    {{ sonata_page_render_container('content_bottom', page) }}
+
+                    {% if page.name != 'global'%}
+                        {{ sonata_page_render_container('content_bottom', 'global') }}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        {#<footer class="row">#}
+            {#{{ sonata_page_render_container('footer', 'global') }}#}
+        {#</footer>#}
+    </div>
+{% endblock %}

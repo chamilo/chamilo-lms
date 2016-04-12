@@ -88,7 +88,7 @@ class ShibbolethSession
         $cidReset = false; //FALSE !!
 
         $mainDbName = Database :: get_main_database();
-        $includePath = api_get_path(INCLUDE_PATH);
+        $includePath = api_get_path(SYS_INC_PATH);
 
         $no_redirection = true;
         require("$includePath/local.inc.php");

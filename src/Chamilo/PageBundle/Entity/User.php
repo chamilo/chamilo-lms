@@ -18,20 +18,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\GroupInterface;
 
-/**
- *
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(
- *  name="user",
- *  indexes={
- *      @ORM\Index(name="idx_user_uid", columns={"user_id"}),
- *      @ORM\Index(name="status", columns={"status"})
- *  }
- * )
- * @UniqueEntity("username")
- * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
- *
- */
 class User extends BaseUser
 {
     const COURSE_MANAGER = 1;

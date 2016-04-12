@@ -1933,7 +1933,7 @@ class Wiki
             </body>
             </html>';
 
-        $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/default.css';
+        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/default.css';
         if (file_exists($css_file)) {
             $css = @file_get_contents($css_file);
         } else {
@@ -1949,7 +1949,7 @@ class Wiki
         $css = str_replace('../../img/', $root_rel.'main/img/', $css);
 
         $asciimathmal_script = (api_contains_asciimathml($wikiContents) || api_contains_asciisvg($wikiContents))
-            ? '<script src="'.api_get_path(TO_REL, SCRIPT_ASCIIMATHML).'" type="text/javascript"></script>'."\n" : '';
+            ? '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/asciimath/ASCIIMathML.js" type="text/javascript"></script>'."\n" : '';
 
         $template = str_replace(array('{LANGUAGE}', '{ENCODING}', '{TEXT_DIRECTION}', '{TITLE}', '{CSS}', '{ASCIIMATHML_SCRIPT}'),
             array(api_get_language_isocode(), api_get_system_encoding(), api_get_text_direction(), $wikiTitle, $css, $asciimathmal_script),
@@ -1972,9 +1972,9 @@ class Wiki
         $wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
 
         // replace relative path by absolute path for courses, so you can see items into this page wiki (images, mp3, etc..) exported in documents
-        if (api_strpos($wikiContents,'../../courses/') !== false) {
+        if (api_strpos($wikiContents,'../..'.api_get_path(REL_COURSE_PATH)) !== false) {
             $web_course_path = api_get_path(WEB_COURSE_PATH);
-            $wikiContents = str_replace('../../courses/',$web_course_path,$wikiContents);
+            $wikiContents = str_replace('../..'.api_get_path(REL_COURSE_PATH), $web_course_path, $wikiContents);
         }
 
         $i = 1;
@@ -2050,7 +2050,7 @@ class Wiki
 
         mpdf-->'.$content_pdf;
 
-        $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
+        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
         if (file_exists($css_file)) {
             $css = @file_get_contents($css_file);
         } else {

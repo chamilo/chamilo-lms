@@ -1,0 +1,15 @@
+#
+# root_web : a fully qualified domain as wwwroot for the instance
+# template : a VChamilo template name (stored from a vchamilo snapshot) or empty if no template
+# tracking_enabled : 0 or 1
+# single_database : 0 or 1
+# main_database : the main database
+# statistics_database : if empty, is using main_database
+# user_personal_database : if empty, is using main_database
+# course_folder : absolute path to course material
+#
+root_web;visible;template;sitename;institution;db_host;db_user;db_password;table_prefix;db_prefix;tracking_enabled;single_database;main_database;statistics_database;user_personal_database;course_folder;plugin_ent_installer|institution_id;plugin_ent_installer|enable_sync;plugin_ent_installer|real_used_auth
+#http://template.chamilo-preprod.atrium-paca.fr;0;template.chamilo-preprod.atrium-paca.fr;Lycée Modèle;Atrium Paca;ene-preprod-sgbd.realyce.fr;chamiloadm;%DBPASS%;;;0;1;vchm19_template;;;courses-template;;1;cas
+http://lgt-jean-cocteau-13141.chamilo-preprod.atrium-paca.fr;1;template.chamilo-preprod.atrium-paca.fr;Lycée Jean Cocteau;Atrium Paca;ene-preprod-sgbd.realyce.fr;chamiloadm;%DBPASS%;;;0;1;vchm19_lgt_jean_cocteau_13141;;;courses-lgt-jean-cocteau-13141;0133195C;1;cas
+http://lp-lyc-metier-frederic-mistral-13417.chamilo-preprod.atrium-paca.fr;1;template.chamilo-preprod.atrium-paca.fr;Lycée Métiers Frédéric Mistral;Atrium Paca;ene-preprod-sgbd.realyce.fr;chamiloadm;%DBPASS%;;;0;1;vchm19_lp_lyc_metier_frederic_mistral_13417;;;courses-lp-lyc-metier-frederic-mistral-13417;0130062X;1;cas
+http://lgt-saint-charles-13232.chamilo-preprod.atrium-paca.fr;1;template.chamilo-preprod.atrium-paca.fr;Lycée Saint Charles;Atrium Paca;ene-preprod-sgbd.realyce.fr;chamiloadm;%DBPASS%;;;0;1;vchm19_lgt_saint_charles_13232;;;courses-lgt-saint-charles-13232;0130039X;1;cas

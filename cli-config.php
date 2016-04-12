@@ -15,7 +15,7 @@
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
 require_once __DIR__.'/vendor/autoload.php';
-require_once __DIR__.'/main/inc/lib/api.lib.php';
+//require_once __DIR__.'/main/inc/lib/api.lib.php';
 $configurationFile = __DIR__.'/app/config/configuration.php';
 
 if (!is_file($configurationFile)) {

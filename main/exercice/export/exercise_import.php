@@ -1,14 +1,10 @@
-<?php // $Id:  $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
  * @package chamilo.exercise
  * @author claro team <cvs@claroline.net>
  */
-/**
- * Code
- */
-
 require '../../inc/global.inc.php';
 
 //SECURITY CHECK
@@ -30,15 +26,9 @@ $tbl_rel_exercise_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION
 //Tool title
 
 $nameTools = get_lang('ImportExercise');
-
-//bredcrump
-
 $interbredcrump[] = array('url' => '../exercise.php', 'name' => get_lang('Exercises'));
 
-//----------------------------------
 // EXECUTE COMMAND
-//----------------------------------
-
 $cmd = (isset($_REQUEST['cmd'])? $_REQUEST['cmd'] : 'show_import');
 
 switch ($cmd) {
@@ -75,33 +65,22 @@ switch ($cmd) {
         break;
 }
 
-//----------------------------------
-// FIND INFORMATION
-//----------------------------------
 
-//empty!
-
-//----------------------------------
 // DISPLAY
-//----------------------------------
-
-include api_get_path(INCLUDE_PATH) . '/header.inc.php';
-
-//display title
-
+include api_get_path(SYS_INC_PATH) . '/header.inc.php';
 
 // Tool introduction
 // TODO: These settings to be checked when it is possible.
-Display::display_introduction_section(TOOL_QUIZ, array(
+Display::display_introduction_section(
+    TOOL_QUIZ,
+    array(
 		'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-		'CreateDocumentDir' => '../../../courses/'.api_get_course_path().'/document/',
+        'CreateDocumentDir' => '../../..'.api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/',
 		'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
 	)
 );
 
-
-//Display Forms or dialog box(if needed)
-
+// Display Forms or dialog box(if needed)
 if (isset($dialogBox)) {
     echo Display::display_normal_message($dialogBox, false);
 }
@@ -112,7 +91,4 @@ if (isset($display)) {
     echo $display;
 }
 
-//footer display
-
-include api_get_path(INCLUDE_PATH) . '/footer.inc.php';
-?>
+include api_get_path(SYS_INC_PATH) . '/footer.inc.php';

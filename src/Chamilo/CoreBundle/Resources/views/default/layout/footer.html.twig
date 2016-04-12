@@ -1,0 +1,64 @@
+{#<footer {% block footer_open_attributes %}{% endblock footer_open_attributes %}>#}
+<footer>
+    <!-- start of #footer section -->
+    <div class="container">
+        <div class="row">
+            <div id="footer_left" class="col-md-4">
+                {% if session_teachers is not null %}
+                    <div id="session_teachers">
+                        {{ session_teachers }}
+                    </div>
+                {% endif %}
+
+                {% if teachers is not null %}
+                    <div id="teachers">
+                        {{ teachers }}
+                    </div>
+                {% endif %}
+
+                {#  Plugins for footer section #}
+                {% if plugin_footer_left is not null %}
+                    <div id="plugin_footer_left">
+                        {{ plugin_footer_left }}
+                    </div>
+                {% endif %}
+                 &nbsp;
+            </div>
+
+            <div id="footer_center" class="col-md-4">
+                {#   Plugins for footer section  #}
+                {% if plugin_footer_center is not null %}
+                    <div id="plugin_footer_center">
+                        {{ plugin_footer_center }}
+                    </div>
+                {% endif %}
+                 &nbsp;
+            </div>
+
+            <div id="footer_right" class="col-md-4">
+
+                <div id="admin_name">
+                    {{ 'Manager' | trans }}
+                </div>
+
+                <div id="software_name">
+                    {{ "Platform"|trans }}
+                    <a href="" target="_blank">
+                        {{ software_name }}
+                    </a>
+                    &copy; {{ "now"|date("Y") }}
+                </div>
+
+                {#   Plugins for footer section  #}
+                {% if plugin_footer_right is not null %}
+                    <div id="plugin_footer_right">
+                        {{ plugin_footer_right }}
+                    </div>
+                {% endif %}
+                &nbsp;
+            </div><!-- end of #footer_right -->
+        </div><!-- end of #row -->
+    </div><!-- end of #container -->
+</footer>
+
+{{ footer_extra_content }}

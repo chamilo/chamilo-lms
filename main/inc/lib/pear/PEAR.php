@@ -156,7 +156,7 @@ class PEAR
      * @access public
      * @return void
      */
-    function PEAR($error_class = null)
+    public function __construc($error_class = null)
     {
         $classname = strtolower(get_class($this));
         if ($this->_debug) {
@@ -253,7 +253,7 @@ class PEAR
         $GLOBALS['_PEAR_shutdown_funcs'][] = array($func, $args);
     }
 
-    // }}} 
+    // }}}
     // {{{ isError()
 
     /**
@@ -873,7 +873,7 @@ class PEAR_Error
      * @access public
      *
      */
-    function PEAR_Error($message = 'unknown error', $code = null,
+    public function __construct($message = 'unknown error', $code = null,
                         $mode = null, $options = null, $userinfo = null)
     {
         if ($mode === null) {

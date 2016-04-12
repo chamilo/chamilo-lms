@@ -1094,15 +1094,14 @@ class CourseHome
             $course_tools_table = Database :: get_course_table(TABLE_TOOL_LIST);
 
             /* 	Link to the Course homepage */
-
             $navigation_items['home']['image'] = 'home.gif';
             $navigation_items['home']['link'] = api_get_path(WEB_CODE_PATH).Security::remove_XSS($_SESSION['_course']['path']).'/index.php';
             $navigation_items['home']['name'] = get_lang('CourseHomepageLink');
 
-            $sql_menu_query = "SELECT * FROM $course_tools_table
-                               WHERE c_id = $course_id AND visibility='1' and admin='0'
-                               ORDER BY id ASC";
-            $sql_result = Database::query($sql_menu_query);
+            $sql = "SELECT * FROM $course_tools_table
+                    WHERE c_id = $course_id AND visibility='1' and admin='0'
+                    ORDER BY id ASC";
+            $sql_result = Database::query($sql);
             while ($row = Database::fetch_array($sql_result)) {
                 $navigation_items[$row['id']] = $row;
                 if (stripos($row['link'], 'http://') === false && stripos($row['link'], 'https://') === false) {
@@ -1116,9 +1115,9 @@ class CourseHome
               - Course rights (roles & rights overview) */
 
             if ($include_admin_tools) {
-                $course_settings_sql = "SELECT name,image FROM $course_tools_table
-                                        WHERE c_id = $course_id  AND link='course_info/infocours.php'";
-                $sql_result = Database::query($course_settings_sql);
+                $sql = "SELECT name, image FROM $course_tools_table
+                        WHERE c_id = $course_id  AND link='course_info/infocours.php'";
+                $sql_result = Database::query($sql);
                 $course_setting_info = Database::fetch_array($sql_result);
                 $course_setting_visual_name = CourseHome::translate_tool_name($course_setting_info);
                 if (api_get_session_id() == 0) {

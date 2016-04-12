@@ -159,7 +159,7 @@ class PDF
         $html = $tpl->fetch($tableTemplate);
         $html = api_utf8_encode($html);
 
-        $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';
+        $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
         $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
 
         $html = self::content_to_pdf(
@@ -273,7 +273,7 @@ class PDF
             }
 
             if ($addStyle) {
-                $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';
+                $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
                 $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
 
                 $this->pdf->WriteHTML($css, 1);
@@ -452,8 +452,7 @@ class PDF
                     if (strpos($old_src, 'http') === false) {
                         if (strpos($old_src, '/main/default_course_document') === false) {
                             if (strpos($old_src, '/main/inc/lib/') === false) {
-
-                                $old_src_fixed = str_replace('/courses/'.$course_data['path'].'/document/', '', $old_src);
+                                $old_src_fixed = str_replace(api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);
                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);
                                 $new_path = $document_path.$old_src_fixed;
                                 $document_html= str_replace($old_src, $new_path, $document_html);

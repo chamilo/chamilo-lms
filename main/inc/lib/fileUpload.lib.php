@@ -1201,6 +1201,8 @@ function filter_extension(&$filename)
  * @param bool $save_visibility
  * @param int $group_id
  * @param int $session_id Session ID, if any
+ * @param int $userId creator id
+ * 
  * @return int id if inserted document
  */
 function add_document(
@@ -1213,13 +1215,11 @@ function add_document(
     $readonly = 0,
     $save_visibility = true,
     $group_id = null,
-    $session_id = 0
+    $session_id = 0,
+    $userId = 0
 ) {
-    $session_id = intval($session_id);
-
-    if (empty($session_id)) {
-        $session_id = api_get_session_id();
-    }
+    $session_id = empty($session_id) ? api_get_session_id() : $session_id;
+    $userId = empty($userId) ? api_get_user_id() : $userId;
 
     $readonly = intval($readonly);
     $c_id = $_course['real_id'];
@@ -1241,7 +1241,7 @@ function add_document(
         Database::query($sql);
 
         if ($save_visibility) {
-            api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id, $_course);
+            api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id, $_course, $session_id, $userId);
         }
 
         return $documentId;
@@ -1489,7 +1489,7 @@ function create_unexisting_directory(
         $to_group_id
     );
 
-    if ($folderExists == true) {
+    if ($folderExists === true) {
         if ($generateNewNameIfExists) {
             $counter = 1;
             while (1) {
@@ -1500,7 +1500,7 @@ function create_unexisting_directory(
                     $to_group_id
                 );
 
-                if ($folderExists == false) {
+                if ($folderExists === false) {
                     break;
                 }
                 $counter++;
@@ -1529,7 +1529,7 @@ function create_unexisting_directory(
 
     if (!is_dir($base_work_dir.$systemFolderName)) {
         $result = mkdir(
-            $base_work_dir.$systemFolderName,
+            $base_work_dir . $systemFolderName,
             api_get_permissions_for_new_directories(),
             true
         );
@@ -1548,7 +1548,7 @@ function create_unexisting_directory(
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
-
+        
                 $document_id = add_document(
                     $_course,
                     $systemFolderName,
@@ -1558,7 +1558,9 @@ function create_unexisting_directory(
                     null,
                     0,
                     true,
-                    $to_group_id
+                    $to_group_id,
+                    $session_id,
+                    $user_id
                 );
 
                 if ($document_id) {

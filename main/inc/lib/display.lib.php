@@ -172,7 +172,7 @@ class Display
         $moduleId = $tool;
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
             $introduction_section = null;
-            require api_get_path(INCLUDE_PATH).'introductionSection.inc.php';
+            require api_get_path(SYS_INC_PATH).'introductionSection.inc.php';
             return $introduction_section;
         }
     }
@@ -2033,6 +2033,153 @@ class Display
         }
 
         return null;
+    }
+
+    /**
+     *
+     * @param int $nextValue
+     * @param array $list
+     * @param int $current
+     * @param int $fixedValue
+     * @param array $conditions
+     * @param string $link
+     * @param bool $isMedia
+     * @param bool $addHeaders
+     * @return string
+     */
+    public static function progressPaginationBar(
+        $nextValue,
+        $list,
+        $current,
+        $fixedValue = null,
+        $conditions = array(),
+        $link = null,
+        $isMedia = false,
+        $addHeaders = true,
+        $linkAttributes = array()
+    ) {
+        if ($addHeaders) {
+            $pagination_size = 'pagination-mini';
+            $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
+        } else {
+            $html = null;
+        }
+        $affectAllItems = false;
+        if ($isMedia && isset($fixedValue) && ($nextValue + 1 == $current)) {
+            $affectAllItems = true;
+        }
+        $localCounter = 0;
+        foreach ($list as $itemId) {
+            $isCurrent = false;
+            if ($affectAllItems) {
+                $isCurrent = true;
+            } else {
+                if (!$isMedia) {
+                    $isCurrent = $current == ($localCounter + $nextValue + 1) ? true : false;
+                }
+            }
+            $html .= self::parsePaginationItem(
+                $itemId,
+                $isCurrent,
+                $conditions,
+                $link,
+                $nextValue,
+                $isMedia,
+                $localCounter,
+                $fixedValue,
+                $linkAttributes
+            );
+            $localCounter++;
+        }
+        if ($addHeaders) {
+            $html .= '</ul></div>';
+        }
+        return $html;
+    }
+    /**
+     *
+     * @param int $itemId
+     * @param bool $isCurrent
+     * @param array $conditions
+     * @param string $link
+     * @param int $nextValue
+     * @param bool $isMedia
+     * @param int $localCounter
+     * @param int $fixedValue
+     * @return string
+     */
+    static function parsePaginationItem(
+        $itemId,
+        $isCurrent,
+        $conditions,
+        $link,
+        $nextValue = 0,
+        $isMedia = false,
+        $localCounter = null,
+        $fixedValue = null,
+        $linkAttributes = array())
+    {
+        $defaultClass = "before";
+        $class = $defaultClass;
+        foreach ($conditions as $condition) {
+            $array = isset($condition['items']) ? $condition['items'] : array();
+            $class_to_applied = $condition['class'];
+            $type = isset($condition['type']) ? $condition['type'] : 'positive';
+            $mode = isset($condition['mode']) ? $condition['mode'] : 'add';
+            switch ($type) {
+                case 'positive':
+                    if (in_array($itemId, $array)) {
+                        if ($mode == 'overwrite') {
+                            $class = " $defaultClass $class_to_applied";
+                        } else {
+                            $class .= " $class_to_applied";
+                        }
+                    }
+                    break;
+                case 'negative':
+                    if (!in_array($itemId, $array)) {
+                        if ($mode == 'overwrite') {
+                            $class = " $defaultClass $class_to_applied";
+                        } else {
+                            $class .= " $class_to_applied";
+                        }
+                    }
+                    break;
+            }
+        }
+        if ($isCurrent) {
+            $class = "before current";
+        }
+        if ($isMedia && $isCurrent) {
+            $class = "before current";
+        }
+        if (empty($link)) {
+            $link_to_show = "#";
+        } else {
+            $link_to_show = $link.($nextValue + $localCounter);
+        }
+        $label = $nextValue + $localCounter + 1;
+        if ($isMedia) {
+            $label = ($fixedValue + 1) .' '.chr(97 + $localCounter);
+            $link_to_show = $link.$fixedValue.'#questionanchor'.$itemId;
+        }
+        $link = Display::url($label.' ', $link_to_show, $linkAttributes);
+        return  '<li class = "'.$class.'">'.$link.'</li>';
+    }
+    
+    /**
+     * @param int $current
+     * @param int $total
+     * @return string
+     */
+    public static function paginationIndicator($current, $total)
+    {
+        $html = null;
+        if (!empty($current) && !empty($total)) {
+            $label = sprintf(get_lang('PaginationXofY'), $current, $total);
+            $html = self::url($label, '#', array('class' => 'btn disabled'));
+        }
+        return $html;
     }
 
     /**

@@ -17,8 +17,6 @@ class TestMainApi extends UnitTestCase {
             WEB_PATH,
             SYS_PATH,
             REL_PATH,
-            WEB_SERVER_ROOT_PATH,
-            SYS_SERVER_ROOT_PATH,
             WEB_COURSE_PATH,
             SYS_COURSE_PATH,
             REL_COURSE_PATH,
@@ -217,7 +215,6 @@ class TestMainApi extends UnitTestCase {
             SYS_PATH,
             REL_PATH,
             WEB_SERVER_ROOT_PATH,
-            SYS_SERVER_ROOT_PATH,
             WEB_COURSE_PATH,
             SYS_COURSE_PATH,
             REL_COURSE_PATH,
@@ -397,27 +394,7 @@ function api_get_path_1_8_6_1($path_type) {
         }
     }
 
-    switch ($path_type) {
-
-        case WEB_SERVER_ROOT_PATH:
-            // example: http://www.mychamilo.com/
-            $result = preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(WEB_PATH));
-            if (substr($result, -1) == '/') {
-                return $result;
-            } else {
-                return $result.'/';
-            }
-            break;
-
-        case SYS_SERVER_ROOT_PATH:
-            $result = preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(SYS_PATH));
-            if (substr($result, -1) == '/') {
-                return $result;
-            } else {
-                return $result.'/';
-            }
-            break;
-
+    switch ($path_type) {     
         case WEB_PATH :
             // example: http://www.mychamilo.com/ or http://www.mychamilo.com/chamilo/ if you're using
             // a subdirectory of your document root for Dokeos

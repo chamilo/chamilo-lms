@@ -26,6 +26,21 @@ class IndexManager
         $this->user_id = api_get_user_id();
         $this->load_directories_preview = false;
 
+        // Load footer plugins systematically
+        /*$config = api_get_settings_params(array('subkey = ? ' => 'customfooter', ' AND category = ? ' => 'Plugins'));
+        if (!empty($config)) {
+            foreach ($config as $fooid => $configrecord) {
+                $canonic = preg_replace('/^customfooter_/', '', $configrecord['variable']);
+                $footerconfig->$canonic = $configrecord['selected_value'];
+            }
+            if (!empty($footerconfig->footer_left)) {
+                $this->tpl->assign('plugin_footer_left', $footerconfig->footer_left);
+            }
+            if (!empty($footerconfig->footer_right)) {
+                $this->tpl->assign('plugin_footer_right', $footerconfig->footer_right);
+            }
+        }*/
+
         if (api_get_setting('show_documents_preview') == 'true') {
             $this->load_directories_preview = true;
         }

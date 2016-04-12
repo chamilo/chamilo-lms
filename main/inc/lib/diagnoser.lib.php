@@ -27,18 +27,17 @@ class Diagnoser
 
     public function show_html()
     {
-        $sections = array('chamilo', 'php', 'database', 'webserver');
+        $sections = array('chamilo', 'php', 'database', 'webserver', 'paths');
+        $currentSection = isset($_GET['section']) ? $_GET['section'] : 'chamilo';
 
-        if (!in_array(trim($_GET['section']), $sections)) {
-            $current_section = 'chamilo';
-        } else {
-            $current_section = $_GET['section'];
+        if (!in_array(trim($currentSection), $sections)) {
+            $currentSection = 'chamilo';
         }
 
         $html = '<div class="tabbable"><ul class="nav nav-tabs">';
 
         foreach ($sections as $section) {
-            if ($current_section == $section) {
+            if ($currentSection === $section) {
                 $html .= '<li class="active">';
             } else {
                 $html .= '<li>';
@@ -49,19 +48,63 @@ class Diagnoser
 
         $html .= '</ul><div class="tab-pane">';
 
-        $data = call_user_func(array($this, 'get_' . $current_section . '_data'));
+        $data = call_user_func(array($this, 'get_' . $currentSection . '_data'));
         echo $html;
-        $table = new SortableTableFromArray($data, 1, 100);
 
-        $table->set_header(0,'', false);
-        $table->set_header(1,get_lang('Section'), false);
-        $table->set_header(2,get_lang('Setting'), false);
-        $table->set_header(3,get_lang('Current'), false);
-        $table->set_header(4,get_lang('Expected'), false);
-        $table->set_header(5,get_lang('Comment'), false);
+        if ($currentSection != 'paths') {
+            $table = new SortableTableFromArray($data, 1, 100);
 
-        $table->display();
+            $table->set_header(0, '', false);
+            $table->set_header(1, get_lang('Section'), false);
+            $table->set_header(2, get_lang('Setting'), false);
+            $table->set_header(3, get_lang('Current'), false);
+            $table->set_header(4, get_lang('Expected'), false);
+            $table->set_header(5, get_lang('Comment'), false);
+
+            $table->display();
+        } else {
+            $headers = $data['headers'];
+            $results = $data['data'];
+            $table = new HTML_Table(array('class' => 'data_table'));
+
+            $column = 0;
+            foreach ($headers as $header) {
+                $table->setHeaderContents(0, $column, $header);
+                $column++;
+            }
+            $row = 1;
+            foreach ($results as $index => $rowData) {
+                $table->setCellContents(
+                    $row,
+                    0,
+                    $rowData
+                );
+                $table->setCellContents(
+                    $row,
+                    1,
+                    $index
+                );
+                $row++;
+            }
+
+            echo $table->display();
+        }
         echo '</div></div>';
+    }
+
+    /**
+     * @return array
+     */
+    public function get_paths_data()
+    {
+        global $paths;
+        $list = $paths[api_get_path(WEB_PATH)];
+        $list['url_append'] = api_get_configuration_value('url_append');
+        asort($list);
+        return [
+            'headers' => ['Path', 'constant'],
+            'data' => $list
+        ];
     }
 
     /**
@@ -217,8 +260,8 @@ class Diagnoser
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ),
-            'mysql' => array(
-                'link' => 'http://www.php.net/mysql',
+            'pdo_mysql' => array(
+                'link' => 'http://php.net/manual/en/ref.pdo-mysql.php',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ),

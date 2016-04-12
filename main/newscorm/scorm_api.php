@@ -2057,7 +2057,7 @@ function attach_glossary_into_scorm(type) {
 
     my_protocol = location.protocol;
     my_pathname=location.pathname;
-    work_path = my_pathname.substr(0,my_pathname.indexOf('/courses/'));
+    work_path = my_pathname.substr(0,my_pathname.indexOf('<?php echo api_get_path(REL_COURSE_PATH) ?>'));
     var ajaxRequestUrl = '<?php echo api_get_path(WEB_CODE_PATH).'glossary/glossary_ajax_request.php'; ?>';
 
     if (type == 'automatic') {

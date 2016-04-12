@@ -1,0 +1,12 @@
+rm -rf /app/www/chamilo19-ene-atrium/courses-lgt-*
+rm -rf /app/www/chamilo19-ene-atrium/courses-lp-*
+rm -rf /app/www/chamilo19-ene-atrium/archive/lp-*
+rm -rf /app/www/chamilo19-ene-atrium/archive/lgt-*
+rm -rf /app/www/chamilo19-ene-atrium/home/lp-*
+rm -rf /app/www/chamilo19-ene-atrium/home/lgt-*
+rm -rf /data/chamilodata/courses-lp-*
+rm -rf /data/chamilodata/courses-lgt-*
+rm -rf /data/chamilodata/home/lp-*
+rm -rf /data/chamilodata/home/lgt-*
+rm -rf /data/chamilodata/archives/lp-*
+rm -rf /data/chamilodata/archives/lgt-*

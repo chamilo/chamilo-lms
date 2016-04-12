@@ -363,7 +363,6 @@ function write_system_config_file($path)
     foreach ($config as $key => $value) {
         $content = str_replace($key, $value, $content);
     }
-
     $fp = @ fopen($path, 'w');
 
     if (!$fp) {
@@ -981,7 +980,7 @@ function display_requirements(
             <div class="row">
                 <div class="col-md-12">
                     <p><?php echo get_lang('OldVersionRootPath'); ?>:
-                        <input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath)) ? htmlentities($updatePath) : api_get_path(SYS_SERVER_ROOT_PATH).'old_version/'; ?>" />
+                        <input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath)) ? htmlentities($updatePath) : ''; ?>" />
                     </p>
                     <p>
                         <button type="submit" class="btn btn-default" name="step1" value="<?php echo get_lang('Back'); ?>" >
@@ -2281,7 +2280,6 @@ function fixIds(EntityManager $em)
                     $newId = $data['iid'];
                 }
                 $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
-                error_log($sql);
                 $connection->executeQuery($sql);
             }
 

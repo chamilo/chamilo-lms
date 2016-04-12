@@ -1,8 +1,8 @@
 
 home:
     path: /
-index:
-    path: /
+#index:
+#    path: /
 
 #admin_dashboard:
 #    pattern: /administration/
@@ -79,3 +79,5 @@ core_bundle:
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
+faq:
+    resource: "@ChamiloFaqBundle/Resources/config/routing.yml"

@@ -105,7 +105,7 @@ class Version20160330103045 extends AbstractMigration
         $this->addSql("ALTER TABLE timeline__timeline ADD CONSTRAINT FK_FFBC6AD523EDC87 FOREIGN KEY (subject_id) REFERENCES timeline__component (id) ON DELETE CASCADE;");
         $this->addSql("ALTER TABLE timeline__action_component ADD CONSTRAINT FK_6ACD1B169D32F035 FOREIGN KEY (action_id) REFERENCES timeline__action (id) ON DELETE CASCADE;");
         $this->addSql("ALTER TABLE timeline__action_component ADD CONSTRAINT FK_6ACD1B16E2ABAFFF FOREIGN KEY (component_id) REFERENCES timeline__component (id) ON DELETE CASCADE;");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_8D93D649A0D96FBF ON user (email_canonical);");
+        //$this->addSql("CREATE UNIQUE INDEX UNIQ_8D93D649A0D96FBF ON user (email_canonical);");
 
         $this->addSql('DROP TABLE extra_field_saved_search');
         $this->addSql('DROP INDEX user_sco_course_sv_stack ON track_stored_values_stack');
@@ -117,8 +117,6 @@ class Version20160330103045 extends AbstractMigration
             'ALTER TABLE user ADD email_canonical VARCHAR(255) NOT NULL, ADD credentials_expired TINYINT(1), ADD credentials_expire_at DATETIME DEFAULT NULL, ADD expires_at DATETIME DEFAULT NULL, ADD expired TINYINT(1), ADD locked TINYINT(1),ADD enabled TINYINT(1) NOT NULL, ADD locked TINYINT(1) NOT NULL, ADD expired TINYINT(1) NOT NULL, ADD expires_at DATETIME DEFAULT NULL, ADD roles LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\', ADD credentials_expired TINYINT(1) NOT NULL, ADD credentials_expire_at DATETIME DEFAULT NULL, CHANGE username username VARCHAR(255) NOT NULL, CHANGE username_canonical username_canonical VARCHAR(255) NOT NULL, CHANGE email email VARCHAR(255) NOT NULL'
         );
         $this->addSql('ALTER TABLE user ADD enabled TINYINT(1) NOT NULL;');
-
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649A0D96FBF ON user (email_canonical)');
 
         $sql = "UPDATE user SET email_canonical = email";
         $this->addSql($sql);

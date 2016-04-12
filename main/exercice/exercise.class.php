@@ -132,6 +132,7 @@ class Exercise
 
         $id  = intval($id);
         if (empty($this->course_id)) {
+
             return false;
         }
         $sql = "SELECT * FROM $TBL_EXERCISES WHERE c_id = ".$this->course_id." AND id = ".$id;
@@ -5797,10 +5798,10 @@ class Exercise
      */
     private function setMediaList($questionList)
     {
-        $mediaList= array();
+        $mediaList = array();
         if (!empty($questionList)) {
             foreach ($questionList as $questionId) {
-                $objQuestionTmp = Question::read($questionId);
+                $objQuestionTmp = Question::read($questionId, $this->course_id);
 
                 // If a media question exists
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {

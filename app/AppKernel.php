@@ -52,6 +52,7 @@ class AppKernel extends Kernel
             new Sonata\DatagridBundle\SonataDatagridBundle(),
             new Sonata\MediaBundle\SonataMediaBundle(),
             new Sonata\PageBundle\SonataPageBundle(),
+            new Theodo\Evolution\Bundle\SessionBundle\TheodoEvolutionSessionBundle(),
 
             new Spy\TimelineBundle\SpyTimelineBundle(),
             new Sonata\TimelineBundle\SonataTimelineBundle(),

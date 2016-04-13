@@ -540,5 +540,3 @@ $content = $tpl->fetch($admin_template);
 $tpl->assign('content', $content);
 $tpl->assign('message', $message);
 $tpl->display_one_col_template();
-
-// Note: version checking mechanism has now been moved to main/inc/ajax/admin.ajax.php

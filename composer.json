@@ -141,7 +141,8 @@
         "jeroendesloovere/vcard": "^1.2",
         "a2lix/translation-form-bundle": "~2.0",
         "knplabs/doctrine-behaviors": "~1.1",
-        "lunetics/locale-bundle": "^2.4"
+        "lunetics/locale-bundle": "^2.4",
+        "theodo-evolution/session-bundle": "1.0.*"
     },
     "require-dev": {
         "behat/behat": "@stable",

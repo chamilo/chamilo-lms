@@ -1,5 +1,8 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
+
 /**
  * Chamilo session (i.e. the session that maintains the connection open after usr login)
  *

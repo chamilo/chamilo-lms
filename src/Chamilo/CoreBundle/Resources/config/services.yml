@@ -132,12 +132,12 @@ services:
 #          - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
 #          - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
-    # Setting locale
-#    chamilo_core.listener.locale:
-#        class: Chamilo\CoreBundle\EventListener\LocaleListener
-#        arguments: ["%kernel.default_locale%", "@service_container"]
-#        tags:
-#            - { name: kernel.event_subscriber }
+    #Setting locale
+    chamilo_core.listener.legacy_login_listener:
+        class: Chamilo\CoreBundle\EventListener\LegacyLoginListener
+        arguments: ["@service_container", '@security.token_storage']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
     # Setting user and platform locale
 #    chamilo_core.listener.user_locale_listener:

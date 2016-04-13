@@ -65,11 +65,11 @@ class NavBuilder extends ContainerAware
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
 
-            /*$menu->addChild(
+            $menu->addChild(
                 $translator->trans('MyCourses'),
                 array('route' => 'userportal')
             );
-
+            /*
             $menu->addChild(
                 $translator->trans('Calendar'),
                 array(

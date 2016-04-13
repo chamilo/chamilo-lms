@@ -12,7 +12,9 @@
             </li>
         {% else %}
             <li>
-                <a href="{{ path('faq', { 'categorySlug': category.getSlug }) }}">{{ category.getHeadline|e }}</a>
+                <a href="{{ path('faq', { 'categorySlug': category.getSlug }) }}">
+                    {{ category.getHeadline|e }}
+                </a>
             </li>
         {% endif %}
     {% endfor %}
@@ -21,9 +23,14 @@
 {% if selectedCategory is not null %}
     <h2>Questions</h2>
     <ul>
-        {% for question in questions %}
+        {% set list = [false] %}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% set list = [false, true] %}
+        {% endif %}
+
+        {% for question in questions if question.onlyAuthUsers in list %}
             {% if selectedQuestion.getSlug is defined and selectedQuestion.getSlug == question.getSlug %}
-                <li class="active"  >
+                <li class="active">
                     <strong>{{ question.getHeadline|e }}</strong>
                     <div>{{ selectedQuestion.getBody }}</div>
                 </li>

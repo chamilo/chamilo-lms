@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Entity;
 
@@ -6,7 +7,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
-
 
 /**
  * Class Category
@@ -68,7 +68,6 @@ class Category
         return $this->proxyCurrentLocaleTranslation($method, $arguments);
     }
 
-
     /**
      * Get id
      *
@@ -78,7 +77,6 @@ class Category
     {
         return $this->id;
     }
-
 
     /**
      * Get rank
@@ -176,7 +174,6 @@ class Category
         return $this->updatedAt;
     }
 
-
     /**
      * Add question
      *
@@ -242,25 +239,4 @@ class Category
             'categorySlug' => $this->getSlug()
         );
     }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getTranslations()
-    {
-        return $this->translations;
-    }
-
-    /**
-     * @param ArrayCollection $translations
-     * @return Category
-     */
-    public function setTranslations($translations)
-    {
-        $this->translations = $translations;
-
-        return $this;
-    }
-
-
 }

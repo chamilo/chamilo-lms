@@ -67,15 +67,6 @@ sonata_admin:
                     - sonata.media.admin.gallery
 #                    - sonata.comment.admin.thread
 
-            sonata.admin.group.classification:
-                label:           sonata_classification
-                label_catalogue: SonataClassificationBundle
-                #icon:            '<i class="fa fa-sitemap"></i>'
-                items:
-                    - sonata.classification.admin.category
-                    - sonata.classification.admin.tag
-                    - sonata.classification.admin.collection
-
             sonata.admin.group.site_builder:
                 label:           Site Builder
                 label_catalogue: SonataDemoBundle
@@ -91,6 +82,15 @@ sonata_admin:
                 items:
                     - sonata.admin.faq_category
                     - sonata.admin.faq_question
+
+            sonata.admin.group.classification:
+                label:           sonata_classification
+                label_catalogue: SonataClassificationBundle
+                #icon:            '<i class="fa fa-sitemap"></i>'
+                items:
+                    - sonata.classification.admin.category
+                    - sonata.classification.admin.tag
+                    - sonata.classification.admin.collection
 
             sonata.admin.group.administration:
                 label:           sonata_administration

@@ -1,10 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
@@ -18,6 +18,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 class Question
 {
     use ORMBehaviors\Translatable\Translatable;
+    
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id

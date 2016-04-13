@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Entity;
 
@@ -38,6 +39,9 @@ class QuestionTranslation
      */
     protected $slug;
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return (string) $this->headline;
@@ -45,7 +49,7 @@ class QuestionTranslation
 
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getHeadline()
     {
@@ -53,7 +57,7 @@ class QuestionTranslation
     }
 
     /**
-     * @param mixed $headline
+     * @param string $headline
      * @return CategoryTranslation
      */
     public function setHeadline($headline)
@@ -64,7 +68,7 @@ class QuestionTranslation
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getBody()
     {
@@ -72,7 +76,7 @@ class QuestionTranslation
     }
 
     /**
-     * @param mixed $body
+     * @param string $body
      * @return CategoryTranslation
      */
     public function setBody($body)
@@ -83,7 +87,7 @@ class QuestionTranslation
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSlug()
     {
@@ -91,7 +95,7 @@ class QuestionTranslation
     }
 
     /**
-     * @param mixed $slug
+     * @param string $slug
      * @return QuestionTranslation
      */
     public function setSlug($slug)
@@ -100,8 +104,4 @@ class QuestionTranslation
 
         return $this;
     }
-
-
-
-
 }

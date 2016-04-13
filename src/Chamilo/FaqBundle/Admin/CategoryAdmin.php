@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Admin;
 
@@ -6,7 +7,6 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
 
 /**
  * Class QuestionAdmin
@@ -66,7 +66,6 @@ class CategoryAdmin extends Admin
             ->add('rank', null, array('required' => false))
 //            ->add('slug')
             ->add('isActive')
-
             ->end()
         ;
     }

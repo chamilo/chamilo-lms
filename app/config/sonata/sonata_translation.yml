@@ -5,17 +5,12 @@ lunetics_locale:
         - session
         #- browser
 
-    allowed_locales:
-      - en
-      - fr
-      - de
-      - it
-      - nl
+    allowed_locales: '%locales%'
 
 a2lix_translation_form:
     locale_provider: default       # [1]
-    locales: [en, fr, es, de, nl]          # [1-a]
-    default_locale: en             # [1-b]
+    locales: '%locales%'          # [1-a]
+    default_locale: '%locale%'             # [1-b]
     required_locales: [en]         # [1-c]
     manager_registry: doctrine      # [2]
     templating: "A2lixTranslationFormBundle::default.html.twig"      # [3]

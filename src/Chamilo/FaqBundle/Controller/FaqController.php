@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Controller;
 
@@ -103,8 +104,8 @@ class FaqController extends Controller
         $doRedirect = false;
         //$config = $this->container->getParameter('faq');
         $config = [];
-        $config['select_first_category_by_default'] = true;
-        $config['select_first_question_by_default'] = true;
+        $config['select_first_category_by_default'] = false;
+        $config['select_first_question_by_default'] = false;
 
         if (!$categorySlug && $config['select_first_category_by_default']) {
             $firstCategory = $this->getCategoryRepository()->retrieveFirst();

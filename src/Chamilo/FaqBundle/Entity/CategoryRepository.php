@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Entity;
 
@@ -61,7 +62,7 @@ class CategoryRepository extends EntityRepository
         $query->setParameter('isActive', true);
         $query->setParameter('slug', $slug);
 
-        return $query->getSingleResult();
+        return $query->getOneOrNullResult();
     }
 
 

@@ -59,8 +59,8 @@ function vchamilo_hook_configuration(&$_configuration)
 *
 *
 */
-function vchamilo_get_hostname(&$_configuration) {
-
+function vchamilo_get_hostname(&$_configuration)
+{
     if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
         $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_configuration['force_https_forwarded_proto'])
     ) {
@@ -71,7 +71,8 @@ function vchamilo_get_hostname(&$_configuration) {
 
     if (defined('CLI_VCHAMILO_OVERRIDE')) {
         $_configuration['vchamilo_web_root'] = CLI_VCHAMILO_OVERRIDE;
-        $_configuration['vchamilo_name'] = preg_replace('#https?://#', '', CLI_VCHAMILO_OVERRIDE); // remove radical from override for name
+        $_configuration['vchamilo_name'] = preg_replace('#https?://#', '', CLI_VCHAMILO_OVERRIDE);
+        // remove radical from override for name
 
         // fake the server signature
         global $_SERVER;
@@ -100,10 +101,15 @@ function vchamilo_get_hostname(&$_configuration) {
 * @param array $vchamilo
 * @return a connection
 */
-function vchamilo_boot_connection(&$_configuration, $binddb = false) {
-
+function vchamilo_boot_connection(&$_configuration, $binddb = false)
+{
     // Important : force new link here
-    $mysql_side_cnx = mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password'], true);
+    $mysql_side_cnx = mysql_connect(
+        $_configuration['db_host'],
+        $_configuration['db_user'],
+        $_configuration['db_password'],
+        true
+    );
     if (!$mysql_side_cnx) {
         // echo('Side connection failure with '.$_configuration['db_host'].', '.$_configuration['db_user'].', '.$_configuration['db_password']);
         echo('Side connection failure with '.$_configuration['db_host'].', '.$_configuration['db_user'].', ******** ');
@@ -134,8 +140,8 @@ function vchamilo_redirect($url) {
     }
 }
 
-function vchamilo_get_htaccess_fragment($course_folder) {
-
+function vchamilo_get_htaccess_fragment($course_folder)
+{
     $str = "
     # Change this file to fit your configuration and save it as .htaccess in the courses folder #
     # Chamilo mod rewrite
@@ -189,7 +195,8 @@ function vchamilo_template_exists($template) {
 * @param handle $side_cnx
 * return an array of errors or false if ok
 */
-function vchamilo_drop_databases(&$vchamilo){
+function vchamilo_drop_databases(&$vchamilo)
+{
     global $plugininstance;
 
     if (is_array($vchamilo)) $vchamilo = (object)$vchamilo;
@@ -262,7 +269,8 @@ function vchamilo_create_databases($vchamilo, $cnx = null)
 * @param object $vmoodledata the complete new host information
 * @return string the shell command
 */
-function vchamilo_get_database_dump_cmd($vchamilodata){
+function vchamilo_get_database_dump_cmd($vchamilodata)
+{
     global $CFG;
 
     $pgm = vchamilo_get_config('mysql_cmd');

@@ -265,14 +265,14 @@ if ($forumAutoLaunch == 1) {
             'warning'
         ));
     } else {
-        $forumKey = 'forum_auto_launch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
-        if (!isset($_SESSION[$forumKey])) {
+        //$forumKey = 'forum_auto_launch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
+        //if (!isset($_SESSION[$forumKey])) {
             //redirecting to the LP
             $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&id_session='.$session_id;
-            $_SESSION[$forumKey] = true;
+          //  $_SESSION[$forumKey] = true;
             header("Location: $url");
             exit;
-        }
+        //}
     }
 }
 

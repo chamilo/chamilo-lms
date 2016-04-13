@@ -7,7 +7,9 @@ function vchamilo_hook_configuration(&$_configuration)
 {
     global $VCHAMILO;
 
-    if (defined('CLI_SCRIPT') && !defined('CLI_VCHAMILO_OVERRIDE')) return;
+    if (defined('CLI_SCRIPT') && !defined('CLI_VCHAMILO_OVERRIDE')) {
+        return;
+    }
 
     // provides an effective value for the virtual root_web    based on domain analysis
     vchamilo_get_hostname($_configuration);
@@ -1130,7 +1132,8 @@ function print_object($obj) {
     echo '</pre>';
 }
 
-function require_js($file, $component, $return = false) {
+function require_js($file, $component, $return = false)
+{
     global $_configuration, $htmlHeadXtra;
 
     if (preg_match('/^local_/', $component)) {
@@ -1154,7 +1157,8 @@ function require_js($file, $component, $return = false) {
     echo $str;
 }
 
-function require_css($file, $component, $return = false) {
+function require_css($file, $component, $return = false)
+{
     global $_configuration, $htmlHeadXtra;
 
     if (preg_match('/^local_/', $component)) {
@@ -1181,7 +1185,8 @@ function require_css($file, $component, $return = false) {
 /**
  *
  */
-function required_param($key, $type = 0) {
+function required_param($key, $type = 0)
+{
     if (array_key_exists($key, $_REQUEST)) {
         $value = $_REQUEST[$key];
         $value = param_filter_type($value, $type);
@@ -1190,7 +1195,8 @@ function required_param($key, $type = 0) {
     die("Missing expected param $key in request input");
 }
 
-function optional_param($key, $default, $type = 0) {
+function optional_param($key, $default, $type = 0)
+{
     if (array_key_exists($key, $_REQUEST)) {
         $value = $_REQUEST[$key];
         $value = param_filter_type($value, $type);
@@ -1199,7 +1205,8 @@ function optional_param($key, $default, $type = 0) {
     return $default;
 }
 
-function param_filter_type($value, $type) {
+function param_filter_type($value, $type)
+{
     switch($type) {
         case 0:
             return $value; // no filtering

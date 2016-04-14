@@ -10,20 +10,17 @@ $cidReset = true;
 // including some necessary files
 require_once '../inc/global.inc.php';
 $xajax = new xajax();
-
 $xajax->registerFunction('search_users');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $id_session = intval($_GET['id_session']);
-
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 SessionManager::protectSession($id_session);
 
 // setting breadcrumbs
-//$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 
@@ -237,7 +234,6 @@ function search_users($needle, $type)
             $xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
         }
     }
-
     return $xajax_response;
 }
 
@@ -687,7 +683,6 @@ if (!empty($errorMsg)) {
 
     <div class="col-md-4">
         <label><?php echo get_lang('UserListInSession') ?> :</label>
-
         <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" class="form-control">
         <?php
         foreach ($sessionUsersList as $enreg) {

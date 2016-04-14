@@ -762,6 +762,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 if (isset($use_anonymous) && $use_anonymous) {
     //if anonymous mode is set, then try to set the current user as anonymous
     //if he doesn't have a login yet
+
     api_set_anonymous();
 } else {
     //if anonymous mode is not set, then check if this user is anonymous. If it

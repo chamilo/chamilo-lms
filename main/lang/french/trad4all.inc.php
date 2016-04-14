@@ -7614,4 +7614,15 @@ $NewLogoUpdated = "Nouveau logo envoyé";
 $CurrentLogo = "Logo actif";
 $UpdateLogo = "Changer le logo";
 $FollowedStudentBosses = "Chefs d'apprenants suivis";
+$DatabaseManager = "Gestion de la base de données";
+$CourseTemplate = "Modèle de cours";
+$PickACourseAsATemplateForThisNewCourse = "Choisissez un cours comme modèle de base pour ce nouveau cours";
+$TeacherCanSelectCourseTemplateTitle = "L'enseignant peut choisir un cours comme modèle";
+$TeacherCanSelectCourseTemplateComment = "Permettre le choix d'un cours comme modèle lors de la création d'un nouveau cours par l'enseignant. Dans ce cas, les ressources du cours modèle seront copiées automatiquement comme base du nouveau cours.";
+$TheForumAutoLaunchSettingIsOnStudentsWillBeRedirectToTheForumTool = "La fonctionnalité auto-démarrage du forum est activée. Les apprenants seront redirigés vers la liste de forums automatiquement lorsqu'ils entreront dans ce cours.";
+$RedirectToForumList = "Rediriger ver la liste de forums";
+$EnableForumAutoLaunch = "Activar l'auto-démarrage des forums";
+$NowDownloadYourCertificateClickHere = "Télécharge ton certificat en cliquant ici";
+$AdditionallyYouHaveObtainedTheFollowingSkills = "En plus, tu as acquis les compétences suivantes";
+$IHaveObtainedSkillXOnY = "J'ai acquis la compétence %s sur %s";
 ?>

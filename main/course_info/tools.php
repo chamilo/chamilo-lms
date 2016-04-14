@@ -118,12 +118,8 @@ switch ($action) {
         $iconsTools .= Display::page_header(get_lang('CustomizeIcons'), null, 'h4');
         $iconsTools .= '<div class="row">';
         foreach ($toolList as $tool) {
-
-            if ($tool['id']>20) {
-                $toolIconName = $tool['name'];
-            } else {
-                $toolIconName = get_lang('Tool'.api_underscore_to_camel_case($tool['name']));
-            }
+            $toolIconName = 'Tool' . api_underscore_to_camel_case($tool['name']);
+            $toolIconName = isset($$toolIconName) ? get_lang($toolIconName) : $tool['name'];
 
             $iconsTools .= '<div class="col-md-2">';
             $iconsTools .= '<div class="items-tools">';

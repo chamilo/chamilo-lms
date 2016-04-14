@@ -516,7 +516,7 @@ class UserGroup extends Model
      * Get the group list for a user
      * @param int $userId The user ID
      * @param int $filterByType Optional. The type of group
-     * @return type
+     * @return array
      */
     public function getUserGroupListByUser($userId, $filterByType = null)
     {
@@ -2355,6 +2355,44 @@ class UserGroup extends Model
         }
         $res = Database::query($sql);
         return $res;
+    }
+
+    /**
+     * Filter the groups/classes info to get a name list only
+     * @param int $userId The user ID
+     * @param int $filterByType Optional. The type of group
+     * @return array
+     */
+    public function getNameListByUser($userId, $filterByType = null)
+    {
+        $userClasses = $this->getUserGroupListByUser($userId, $filterByType);
+
+        return array_column($userClasses, 'name');
+    }
+
+    /**
+     * Get the HTML necessary for display the groups/classes name list
+     * @param int $userId The user ID
+     * @param int $filterByType Optional. The type of group
+     * @return string
+     */
+    public function getLabelsFromNameList($userId, $filterByType = null)
+    {
+        $groupsNameListParsed = $this->getNameListByUser($userId, $filterByType);
+
+        if (empty($groupsNameListParsed)) {
+            return '';
+        }
+
+        $nameList = '<ul class="list-unstyled">';
+
+        foreach ($groupsNameListParsed as $name) {
+            $nameList .= '<li>' . Display::span($name, ['class' => 'label label-info']) . '</li>';
+        }
+
+        $nameList .= '</ul>';
+
+        return $nameList;
     }
 }
 

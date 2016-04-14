@@ -28,11 +28,11 @@
 #    prefix:   /js
 
 # Legacy routes
-#main:
-#    path: /main/{name}
-#    defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
-#    requirements:
-#      name: .+
+main:
+    path: /main/{name}
+    defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
+    requirements:
+      name: .+
 
 # web url shortcuts for legacy templates
 web.ajax:

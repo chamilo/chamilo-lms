@@ -6498,6 +6498,9 @@ class TrackingCourseLog
             $user_row[]= $user['count_assignments'];
             $user_row[]= $user['count_messages'];
 
+            $userGroupManager = new UserGroup();
+            $user_row[] = $userGroupManager->getLabelsFromNameList($user['user_id'], UserGroup::NORMAL_CLASS);
+
             if (empty($session_id)) {
                 $user_row[]= $user['survey'];
             }

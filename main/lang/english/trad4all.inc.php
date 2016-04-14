@@ -7632,4 +7632,10 @@ $CourseTemplate = "Course template";
 $PickACourseAsATemplateForThisNewCourse = "Pick a course as template for this new course";
 $TeacherCanSelectCourseTemplateTitle = "Teacher can select a course as template";
 $TeacherCanSelectCourseTemplateComment = "Allow pick a course as template for the new course that teacher is creating";
+$TheForumAutoLaunchSettingIsOnStudentsWillBeRedirectToTheForumTool = "The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course.";
+$RedirectToForumList = "Redirect to forums list";
+$EnableForumAutoLaunch = "Enable forum auto-launch";
+$NowDownloadYourCertificateClickHere = "You can now download your certificate by clicking here";
+$AdditionallyYouHaveObtainedTheFollowingSkills = "Additionally, you have achieved the following skills";
+$IHaveObtainedSkillXOnY = "I have achieved skill %s on %s";
 ?>

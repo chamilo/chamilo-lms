@@ -7657,4 +7657,10 @@ $CourseTemplate = "Plantilla de curso";
 $PickACourseAsATemplateForThisNewCourse = "Elegir un curso como plantilla para este nuevo curso";
 $TeacherCanSelectCourseTemplateTitle = "El profesor puede seleccionar un curso como plantilla";
 $TeacherCanSelectCourseTemplateComment = "Permitir elegir un curso como plantilla para el nuevo curso que el profesor está creando";
+$TheForumAutoLaunchSettingIsOnStudentsWillBeRedirectToTheForumTool = "El parámetro de arranque automático del foro está activado. Los estudiantes serán redirigidos directamente a la herramienta de foro cuando entren a este curso.";
+$RedirectToForumList = "Redirigir a la lista de foros";
+$EnableForumAutoLaunch = "Activar auto-arranque de foro";
+$NowDownloadYourCertificateClickHere = "Puedes descargar tu certificado haciendo clic aquí";
+$AdditionallyYouHaveObtainedTheFollowingSkills = "Adicionalmente, has obtenido las competencias siguientes";
+$IHaveObtainedSkillXOnY = "He logrado la competencia %s en %s";
 ?>

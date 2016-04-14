@@ -51,17 +51,18 @@ class LegacyLoginListener implements EventSubscriberInterface
             if (!$isGranted) {
                 if (isset($_SESSION) && isset($_SESSION['_user'])) {
                     if ($_SESSION['_user']['active'] == 1) {
-
-                        $userManager = $this->container->get('fos_user.user_manager');
                         $username = $_SESSION['_user']['username'];
+                        $criteria = ['username' => $username];
                         /** @var User $user */
-                        $user = $userManager->findUserByUsername($username);
+                        $user = $this->container->get('sonata.user.user_manager')->findOneBy($criteria);
                         if ($user) {
+                            /** @var User $completeUser */
+                            $completeUser = $this->container->get('doctrine')->getRepository('ChamiloUserBundle:User')->findOneBy($criteria);
+                            $user->setLanguage($completeUser->getLanguage());
 
                             $token = new UsernamePasswordToken($user, null, "main", $user->getRoles());
 
                             $this->tokenStorage->setToken($token); //now the user is logged in
-
                             //now dispatch the login event
                             $event = new InteractiveLoginEvent($request, $token);
                             $this->container->get("event_dispatcher")->dispatch("security.interactive_login", $event);

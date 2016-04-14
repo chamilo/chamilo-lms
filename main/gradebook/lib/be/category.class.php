@@ -897,6 +897,8 @@ class Category implements GradebookItem
             if (!empty($cats)) {
                 /** @var Category $cat */
                 foreach ($cats as $cat) {
+                    $cat->set_session_id($session_id);
+                    $cat->set_course_code($course_code);
                     $cat->setStudentList($this->getStudentList());
                     $score = $cat->calc_score(
                         $stud_id,
@@ -2299,5 +2301,4 @@ class Category implements GradebookItem
     {
         $this->studentList = $list;
     }
-
 }

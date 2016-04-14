@@ -161,7 +161,7 @@ class SurveyManager
             $return['survey_type'] = $return['survey_type'];
             $return['one_question_per_page'] = $return['one_question_per_page'];
             $return['show_form_profile'] = $return['show_form_profile'];
-            $return['input_name_list']		= isset($return['input_name_list']) ? $return['input_name_list'] : null;
+            $return['input_name_list'] = isset($return['input_name_list']) ? $return['input_name_list'] : null;
             $return['shuffle'] = $return['shuffle'];
             $return['parent_id'] = $return['parent_id'];
             $return['survey_version'] = $return['survey_version'];
@@ -368,7 +368,7 @@ class SurveyManager
             }
 
             if (!isset($values['anonymous']) ||
-                isset($values['anonymous']) && $values['anonymous'] == ''
+                (isset($values['anonymous']) && $values['anonymous'] == '')
             ) {
                 $values['anonymous'] = 0;
             }
@@ -387,7 +387,7 @@ class SurveyManager
                 if ($values['show_form_profile'] == 1) {
                     $fields = explode(',',$values['input_name_list']);
                     $field_values = '';
-                    foreach ($fields as & $field) {
+                    foreach ($fields as &$field) {
                         if ($field != '') {
                             if (!isset($values[$field]) ||
                                 (isset($values[$field]) && $values[$field] == '')
@@ -835,25 +835,6 @@ class SurveyManager
         Database::query($sql);
     }
 
-    /**
-     * Gets a complete structure of a survey
-     * (all survey information, all question information  of all the questions
-     * and all the options of all the questions.
-     *
-     * @param integer $survey_id the id of the survey
-     * @param boolean $shared this parameter determines if we have to get the
-     * information of a survey from the central (shared) database or from the
-     * course database
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version February 2007
-     */
-    public static function get_complete_survey_structure($survey_id, $shared = 0)
-    {
-        $structure = SurveyManager::get_survey($survey_id, $shared);
-        $structure['questions'] = SurveyManager::get_questions($survey_id);
-    }
-
     /***
      * SURVEY QUESTION FUNCTIONS
      */
@@ -1073,7 +1054,6 @@ class SurveyManager
                 }
             }
             $additional = array();
-
             $course_id = api_get_course_int_id();
 
             if (!$empty_answer) {
@@ -1633,17 +1613,17 @@ class SurveyManager
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    static function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null)
+    public static function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null)
     {
         // Database table definition
-        $table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
-        $table_user					= Database :: get_main_table(TABLE_MAIN_USER);
+        $table_survey_answer = Database:: get_course_table(TABLE_SURVEY_ANSWER);
+        $table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
         // Variable initialisation
         $return = array();
 
         if (empty($course_id)) {
-            $course_id  = api_get_course_int_id();
+            $course_id = api_get_course_int_id();
         } else {
             $course_id = intval($course_id);
         }
@@ -1675,7 +1655,7 @@ class SurveyManager
         return $return;
     }
 
-    static function survey_generation_hash_available()
+    public static function survey_generation_hash_available()
     {
         if (extension_loaded('mcrypt')) {
             return true;
@@ -1683,13 +1663,13 @@ class SurveyManager
         return false;
     }
 
-    static function generate_survey_hash($survey_id, $course_id, $session_id, $group_id)
+    public static function generate_survey_hash($survey_id, $course_id, $session_id, $group_id)
     {
         $hash = hash('sha512', api_get_security_key().'_'.$course_id.'_'.$session_id.'_'.$group_id.'_'.$survey_id);
         return $hash;
     }
 
-    static function validate_survey_hash($survey_id, $course_id, $session_id, $group_id, $hash)
+    public static function validate_survey_hash($survey_id, $course_id, $session_id, $group_id, $hash)
     {
         $survey_generated_hash = self::generate_survey_hash($survey_id, $course_id, $session_id, $group_id);
         if ($survey_generated_hash == $hash) {
@@ -1698,7 +1678,7 @@ class SurveyManager
         return false;
     }
 
-    static function generate_survey_link($survey_id, $course_id, $session_id, $group_id)
+    public static function generate_survey_link($survey_id, $course_id, $session_id, $group_id)
     {
         $code = self::generate_survey_hash($survey_id, $course_id, $session_id, $group_id);
         return api_get_path(WEB_CODE_PATH).'survey/link.php?h='.$code.'&i='.$survey_id.'&c='.intval($course_id).'&s='.intval($session_id).'&g='.$group_id;
@@ -3230,7 +3210,7 @@ class SurveyUtil
      * @param	boolean	Whether to display user fields or not
      * @return	string	One line of the csv file
      */
-    static function export_complete_report_row_xls(
+    public static function export_complete_report_row_xls(
         $survey_data,
         $possible_options,
         $answers_of_user,
@@ -3301,7 +3281,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    static function display_comparative_report()
+    public static function display_comparative_report()
     {
         // Allowed question types for comparative report
         $allowed_question_types = array(
@@ -3351,7 +3331,7 @@ class SurveyUtil
         echo get_lang('SelectYAxis').': ';
         echo '<select name="yaxis">';
         echo '<option value="">---</option>';
-        foreach ($questions as $key => & $question) {
+        foreach ($questions as $key => &$question) {
             if (in_array($question['type'], $allowed_question_types)) {
                 echo '<option value="'.$question['question_id'].'"';
                 if (isset($_GET['yaxis']) && $_GET['yaxis'] == $question['question_id']) {
@@ -3534,7 +3514,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007 - Updated March 2008
      */
-    static function get_answers_of_question_by_user($survey_id, $question_id)
+    public static function get_answers_of_question_by_user($survey_id, $question_id)
     {
         $course_id = api_get_course_int_id();
         $table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
@@ -3566,7 +3546,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    static function comparative_check($answers_x, $answers_y, $option_x, $option_y, $value_x = 0, $value_y = 0)
+    public static function comparative_check($answers_x, $answers_y, $option_x, $option_y, $value_x = 0, $value_y = 0)
     {
         if ($value_x == 0) {
             $check_x = $option_x;
@@ -3605,7 +3585,7 @@ class SurveyUtil
      *
      * @todo use survey_id parameter instead of $_GET
      */
-    static function get_survey_invitations_data()
+    public static function get_survey_invitations_data()
     {
         $course_id = api_get_course_int_id();
         // Database table definition
@@ -3642,7 +3622,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    static function get_number_of_survey_invitations()
+    public static function get_number_of_survey_invitations()
     {
         $course_id = api_get_course_int_id();
 

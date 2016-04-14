@@ -68,7 +68,6 @@ class Exercise
     public $emailAlert;
     public $notifyUserByEmail = 0;
     public $sessionId = 0;
-    public $quizRelCategoryTable = false;
 
     /**
      * Constructor of the class
@@ -5748,7 +5747,7 @@ class Exercise
         $mediaList= array();
         if (!empty($questionList)) {
             foreach ($questionList as $questionId) {
-                $objQuestionTmp = Question::read($questionId);
+                $objQuestionTmp = Question::read($questionId, $this->course_id);
 
                 // If a media question exists
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {

@@ -1419,7 +1419,6 @@ class Tracking
         }
 
         $sql .= $condition_user;
-
         $rs = Database::query($sql);
     	$row = Database::fetch_array($rs);
 
@@ -2761,7 +2760,7 @@ class Tracking
      */
     public static function get_time_spent_in_lp($student_id, $course_code, $lp_ids = array(), $session_id = null)
     {
-        $course = CourseManager :: get_course_information($course_code);
+        $course = api_get_course_info($course_code);
         $student_id = intval($student_id);
         $total_time = 0;
 

@@ -29,17 +29,19 @@
         {% endif %}
 
         {% for question in questions if question.onlyAuthUsers in list %}
-            {% if selectedQuestion.getSlug is defined and selectedQuestion.getSlug == question.getSlug %}
-                <li class="active">
-                    <strong>{{ question.getHeadline|e }}</strong>
-                    <div>{{ selectedQuestion.getBody }}</div>
-                </li>
-            {% else %}
-                <li>
-                    <a href="{{ path('faq', { 'categorySlug': selectedCategory.getSlug, 'questionSlug': question.getSlug }) }}">
-                        {{ question.getHeadline|e }}
-                    </a>
-                </li>
+            {% if question.isActive %}
+                {% if selectedQuestion.getSlug is defined and selectedQuestion.getSlug == question.getSlug %}
+                    <li class="active">
+                        <strong>{{ question.getHeadline|e }}</strong>
+                        <div>{{ selectedQuestion.getBody }}</div>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ path('faq', { 'categorySlug': selectedCategory.getSlug, 'questionSlug': question.getSlug }) }}">
+                            {{ question.getHeadline|e }}
+                        </a>
+                    </li>
+                {% endif %}
             {% endif %}
         {% endfor %}
     </ul>

@@ -18,7 +18,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 class Question
 {
     use ORMBehaviors\Translatable\Translatable;
-    
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -55,6 +55,11 @@ class Question
      * @ORM\Column(name="only_auth_users", type="boolean", nullable=false)
      */
     protected $onlyAuthUsers;
+
+    /**
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    protected $isActive;
 
     /**
      * @param $method
@@ -234,5 +239,29 @@ class Question
         $this->onlyAuthUsers = $onlyAuthUsers;
 
         return $this;
+    }
+
+    /**
+     * Set is_active
+     *
+     * @param boolean $isActive
+     *
+     * @return Question
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }

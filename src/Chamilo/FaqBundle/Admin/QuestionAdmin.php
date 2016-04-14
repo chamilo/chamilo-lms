@@ -28,6 +28,7 @@ class QuestionAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
+            ->add('isActive')
         ;
     }
 
@@ -73,6 +74,7 @@ class QuestionAdmin extends Admin
             )
             ->add('rank', null, array('required' => false))
             ->add('onlyAuthUsers')
+            ->add('isActive')
             ->end();
     }
 }

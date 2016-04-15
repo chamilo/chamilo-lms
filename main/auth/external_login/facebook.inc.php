@@ -48,10 +48,10 @@ function facebookConnect()
         // see if we have a session
         if (isset($session)) {
             // graph api request for user data
-            $request = new FacebookRequest($session, 'GET', '/me');
+            $request = new FacebookRequest($session, 'GET', '/me?fields=id,first_name,last_name,email,locale');
             $response = $request->execute();
             // get response
-            $graphObject = $response->getGraphObject();
+            $graphObject = $response->getGraphObject(Facebook\GraphUser::className());
             $username = changeToValidChamiloLogin($graphObject->getProperty('email'));
             $email = $graphObject->getProperty('email');
             $locale = $graphObject->getProperty('locale');

@@ -1,0 +1,14 @@
+msgid "My courses"
+msgstr "Mes cours"
+
+msgid "Home"
+msgstr "Page d'accueil"
+
+msgid "Inbox"
+msgstr "Boîte de réception"
+
+msgid "Logout"
+msgstr "Quitter"
+
+
+

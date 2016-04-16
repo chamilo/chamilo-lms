@@ -73,7 +73,6 @@ framework:
     fragments:       ~
     http_method_override: true
 
-
 theodo_evolution_session:
     bag_manager:
           class: Theodo\Evolution\Bundle\SessionBundle\Manager\Symfony1\BagManager

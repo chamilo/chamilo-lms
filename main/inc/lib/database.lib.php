@@ -647,15 +647,15 @@ class Database
         $path = !empty($path) ? $path : api_get_path(SYS_PATH);
 
         $paths = array(
-            $path.'src/Chamilo/ClassificationBundle/Entity',
-            $path.'src/Chamilo/MediaBundle/Entity',
-            $path.'src/Chamilo/PageBundle/Entity',
+            //$path.'src/Chamilo/ClassificationBundle/Entity',
+            //$path.'src/Chamilo/MediaBundle/Entity',
+            //$path.'src/Chamilo/PageBundle/Entity',
             $path.'src/Chamilo/CoreBundle/Entity',
             $path.'src/Chamilo/UserBundle/Entity',
             $path.'src/Chamilo/CourseBundle/Entity',
-            $path.'vendor/sonata-project/user-bundle/Entity',
-            $path.'vendor/sonata-project/user-bundle/Model',
-            $path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',
+            //$path.'vendor/sonata-project/user-bundle/Entity',
+            //$path.'vendor/sonata-project/user-bundle/Model',
+            //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',
         );
 
         $proxyDir = $path.'app/cache/';

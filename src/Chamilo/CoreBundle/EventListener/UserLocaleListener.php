@@ -44,7 +44,7 @@ class UserLocaleListener
      */
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
-        $languages = ['english' => 'en', 'spanish' => 'es', 'french' => 'fr'];
+        $languages = ['german' => 'de', 'english' => 'en', 'spanish' => 'es', 'french' => 'fr'];
 
         /** @var User $user */
         $token = $event->getAuthenticationToken();

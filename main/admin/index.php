@@ -239,7 +239,7 @@ if (api_is_platform_admin()) {
 
     if (api_get_configuration_value('chamilo_cms')) {
         $items[] = array(
-            'url' => api_get_path(WEB_PATH) . 'web/app_dev.php/login',
+            'url' => api_get_path(WEB_PATH) . 'web/app_dev.php/administration/dashboard',
             'label' => get_lang('CMS')
         );
     }

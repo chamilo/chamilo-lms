@@ -60,6 +60,20 @@ class LegacyLoginListener implements EventSubscriberInterface
                             $completeUser = $this->container->get('doctrine')->getRepository('ChamiloUserBundle:User')->findOneBy($criteria);
                             $user->setLanguage($completeUser->getLanguage());
 
+                            $languages = ['german' => 'de', 'english' => 'en', 'spanish' => 'es', 'french' => 'fr'];
+
+                            if ($user && isset($languages[$user->getLanguage()])) {
+                                $locale = $languages[$user->getLanguage()];
+                                $user->setLocale($locale);
+
+                                $request->getSession()->set('_locale_user', $locale);
+
+                                // if no explicit locale has been set on this request, use one from the session
+                                $request->setLocale($locale);
+                                $request->getSession()->set('_locale', $locale);
+
+                            }
+
                             $token = new UsernamePasswordToken($user, null, "main", $user->getRoles());
 
                             $this->tokenStorage->setToken($token); //now the user is logged in

@@ -1,8 +1,9 @@
 lunetics_locale:
     guessing_order:
+        - session
         - query
         - router
-        - session
+
         #- browser
 
     allowed_locales: '%locales%'

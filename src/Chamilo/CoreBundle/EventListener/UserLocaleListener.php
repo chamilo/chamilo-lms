@@ -54,6 +54,7 @@ class UserLocaleListener
 
             if ($user && isset($languages[$user->getLanguage()])) {
                 $user->setLocale($languages[$user->getLanguage()]);
+                $event->getRequest()->setLocale($user->getLocale());
                 $this->session->set('_locale', $user->getLocale());
                 $this->session->set('_locale_user', $user->getLocale());
             }

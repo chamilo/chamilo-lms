@@ -24,13 +24,3 @@ msgstr "Panneau de contrôle"
 
 msgid "Administration"
 msgstr "Administration"
-
-
-
-
-
-
-
-
-
-

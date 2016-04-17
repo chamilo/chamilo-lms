@@ -1,0 +1,26 @@
+msgid "My courses"
+msgstr "Meine Kurse"
+
+msgid "Home"
+msgstr "Portal Startseite"
+
+msgid "Inbox"
+msgstr "Posteingang"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Personal agenda"
+msgstr "Mein Kalender"
+
+msgid "Reporting"
+msgstr "Meine Auswertung"
+
+msgid "Social network"
+msgstr "Soziales Netzwerk"
+
+msgid "Dashboard"
+msgstr "Kontroll-Anzeige"
+
+msgid "Administration"
+msgstr "Administration"

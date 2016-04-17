@@ -215,7 +215,6 @@ class NavBuilder extends ContainerAware
                 $translator->trans('Profile'),
                 array('route' => 'fos_user_profile_show')
             )->setAttribute('divider_append', true);*/
-
             $dropdown->addChild(
                 $translator->trans('Inbox'),
                 array(

@@ -2,13 +2,40 @@
 
 {% block sonata_page_container %}
 <h1>FAQ</h1>
-<ul>
 
+    <br />
+<div class="well">
+<ul>
+{% for category in categories %}
+    <li class="active">
+        <h3>{{ category.getHeadline|e }}</h3>
+    </li>
+    <ul>
+    {% set list = [false] %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% set list = [false, true] %}
+    {% endif %}
+
+    {% for question in category.questions if question.onlyAuthUsers in list %}
+        {% if question.isActive %}
+            <li>
+                <a href="#{{ question.id }}">
+                    {{ question.getHeadline|e }}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endfor %}
+</ul>
+</div>
+<br />
+
+<ul>
 {% for category in categories %}
     <li class="active">
         <h2>{{ category.getHeadline|e }}</h2>
     </li>
-
     <ul>
     {% set list = [false] %}
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -21,6 +48,7 @@
                <h3>
                    {{ question.getHeadline|e }}
                 </h3>
+                <a name="{{ question.id }}" id="{{ question.id }}"></a>
                 <p>{{ question.getBody }}</p>
             </li>
         {% endif %}

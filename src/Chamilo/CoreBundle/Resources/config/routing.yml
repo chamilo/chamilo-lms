@@ -29,7 +29,7 @@
 
 # Legacy routes
 main:
-    path: /main/{name}
+    path: ../../main/{name}
     defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
     requirements:
       name: .+

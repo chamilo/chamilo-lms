@@ -56,9 +56,15 @@ class LegacyLoginListener implements EventSubscriberInterface
                         /** @var User $user */
                         $user = $this->container->get('sonata.user.user_manager')->findOneBy($criteria);
                         if ($user) {
+                            $em = $this->container->get('doctrine');
                             /** @var User $completeUser */
-                            $completeUser = $this->container->get('doctrine')->getRepository('ChamiloUserBundle:User')->findOneBy($criteria);
+                            $completeUser = $em->getRepository('ChamiloUserBundle:User')->findOneBy($criteria);
                             $user->setLanguage($completeUser->getLanguage());
+
+                            $isAdminUser = $em->getRepository('ChamiloCoreBundle:Admin')->findOneBy(['userId' => $user->getId()]);
+                            if ($isAdminUser) {
+                                $user->setSuperAdmin(true);
+                            }
 
                             $languages = ['german' => 'de', 'english' => 'en', 'spanish' => 'es', 'french' => 'fr'];
 

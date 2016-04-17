@@ -71,9 +71,9 @@ class NavBuilder extends ContainerAware
                 $translator->trans('My courses'),
                 array('route' => 'userportal')
             );
-            /*
+
             $menu->addChild(
-                $translator->trans('Calendar'),
+                $translator->trans('Personal agenda'),
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
@@ -93,7 +93,7 @@ class NavBuilder extends ContainerAware
             );
 
             $menu->addChild(
-                $translator->trans('Social'),
+                $translator->trans('Social network'),
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
@@ -102,24 +102,28 @@ class NavBuilder extends ContainerAware
                 )
             );
 
-            $menu->addChild(
-                $translator->trans('Dashboard'),
-                array(
-                    'route' => 'main',
-                    'routeParameters' => array(
-                        'name' => 'dashboard/index.php',
-                    ),
-                )
-            );
-
             if ($checker->isGranted('ROLE_ADMIN')) {
+
+                $menu->addChild(
+                    $translator->trans('Dashboard'),
+                    array(
+                        'route' => 'main',
+                        'routeParameters' => array(
+                            'name' => 'dashboard/index.php',
+                        ),
+                    )
+                );
+
                 $menu->addChild(
                     $translator->trans('Administration'),
                     array(
-                        'route' => 'administration',
+                        'route' => 'main',
+                        'routeParameters' => array(
+                            'name' => 'social/home.php',
+                        )
                     )
                 );
-            }*/
+            }
         }
 
         // Getting site information
@@ -178,7 +182,6 @@ class NavBuilder extends ContainerAware
                         )
                     )->setAttribute('divider_append', true);
                 }
-
             }
         }
 
@@ -229,12 +232,12 @@ class NavBuilder extends ContainerAware
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
-                        'name' => '../../../index.php',
+                        'name' => '../index.php',
                         'logout' => 'logout',
                         'uid' => $user->getId(),
-
                     ),
                     'query' => '1',
+                    'icon' => 'fa fa-sign-out'
                 )
             );
 

@@ -336,8 +336,8 @@ class TicketManager
         $obj = Database::fetch_object($result);
         $message_id = $obj->total_messages + 1;
         $now = api_get_utc_datetime();
-
-        $sql_insert_message = "INSERT INTO $table_support_messages (
+        // insert msg
+        $sql = "INSERT INTO $table_support_messages (
             ticket_id,
             message_id,
             subject,
@@ -360,16 +360,19 @@ class TicketManager
             '" . $now . "',
             '$status'
         )";
-        Database::query($sql_insert_message);
-        $sql_update_total_message = "UPDATE $table_support_tickets
-                        SET sys_lastedit_user_id ='$user_id',
-                            sys_lastedit_datetime ='$now',
-                            total_messages = (
-                                SELECT COUNT(*) as total_messages
-                                  FROM $table_support_messages
-                                  WHERE ticket_id ='$ticket_id'
-                            ) WHERE ticket_id ='$ticket_id' ";
-        Database::query($sql_update_total_message);
+        Database::query($sql);
+
+        // update_total_message
+        $sql = "UPDATE $table_support_tickets
+                SET sys_lastedit_user_id ='$user_id',
+                    sys_lastedit_datetime ='$now',
+                    total_messages = (
+                        SELECT COUNT(*) as total_messages
+                        FROM $table_support_messages
+                        WHERE ticket_id ='$ticket_id'
+                    )
+                WHERE ticket_id ='$ticket_id' ";
+        Database::query($sql);
 
         $sql_message_att_id = "SELECT COUNT(*) as total_attach
                 FROM $table_support_message_attachments
@@ -1239,6 +1242,7 @@ class TicketManager
         $sql .= "  AND ticket.project_id != '' ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->unread;
     }
 
@@ -1512,7 +1516,6 @@ class TicketManager
             }
         }
 
-        //$sql .= " ORDER BY col$column $direction";
         $sql .= " LIMIT $from,$number_of_items";
 
         $result = Database::query($sql);

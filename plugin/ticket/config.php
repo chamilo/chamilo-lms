@@ -4,6 +4,7 @@
 /**
  * @package chamilo.plugin.ticket
  */
+
 /* Tables names constants */
 define('PLUGIN_NAME', 'ticket');
 define('TABLE_TICKET_ASSIGNED_LOG', 'plugin_ticket_assigned_log');

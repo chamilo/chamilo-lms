@@ -1054,11 +1054,12 @@ class IndexManager
             );
             $special_courses = $specialCourses['html'];
             // Display courses.
-            $courses = CourseManager::display_courses(
+            $courses = CourseManager::returnCourses(
                 $user_id,
                 $this->load_directories_preview
             );
-            $courses_html .= $courses['html'];
+            
+            $courses_html .= $courses['html']; 
             $courseCount = $specialCourses['course_count'] + $courses['course_count'];
         }
 

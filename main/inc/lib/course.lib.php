@@ -1858,6 +1858,52 @@ class CourseManager
         return $teachers;
     }
 
+    
+    /**
+     * Return user info array of all teacher-users registered in a course
+     * This only returns the users that are registered in this actual course, not linked courses.
+     *
+     * @param string $course_code
+     * @return array with user id
+     */
+    public static function getTeacheCourseCode($course_code)
+    {
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
+        if (empty($courseId)) {
+            return false;
+        }
+
+        $sql = "SELECT DISTINCT
+                    u.id as user_id,
+                    u.lastname,
+                    u.firstname,
+                    u.email,
+                    u.username,
+                    u.status
+                FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " cu
+                INNER JOIN " . Database::get_main_table(TABLE_MAIN_USER) . " u
+                ON (cu.user_id = u.id)
+                WHERE
+                    cu.c_id = $courseId AND
+                    cu.status = 1 ";
+        $rs = Database::query($sql);
+        $listTeachers = array();
+        $teachers = array();
+        $count = 0;
+        while ($teacher = Database::fetch_array($rs)) {
+            $teachers['id'] = $teacher['user_id'];
+            $teachers['lastname'] = $teacher['lastname'];
+            $teachers['firstname'] = $teacher['firstname'];
+            $teachers['email'] = $teacher['email'];
+            $teachers['username'] = $teacher['username'];
+            $teachers['status'] = $teacher['status'];
+            $count++;
+            $listTeachers[$count]=$teachers;
+        }
+        return $listTeachers;
+    }
+    
     /**
      * Returns a string list of teachers assigned to the given course
      * @param string $course_code
@@ -3556,7 +3602,324 @@ class CourseManager
             'course_count' => $courseCount
         ];
     }
+    
+    /**
+     * Display courses (without special courses) as several HTML divs
+     * of course categories, as class userportal-catalog-item.
+     * @uses displayCoursesInCategory() to display the courses themselves
+     * @param int        user id
+     * @param bool      Whether to show the document quick-loader or not
+     * @return string
+     */
+    public static function returnCourses($user_id, $load_dirs = false)
+    {
+        $user_id = intval($user_id);
+        if (empty($user_id)) {
+            $user_id = api_get_user_id();
+        }
 
+        // Step 1: We get all the categories of the user
+        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
+        $sql = "SELECT id, title FROM $table
+                WHERE user_id = '" . $user_id . "'
+                ORDER BY sort ASC";
+        $result = Database::query($sql);
+        
+        $html = null;
+        $courseCount = 0;
+        $listItems = array();
+        while ($row = Database::fetch_array($result)) {
+            // We simply display the title of the category.
+            $courseInCategory = self:: returnCoursesInCategory(
+                $row['id'],
+                $load_dirs
+            );
+            if(empty($courseInCategory)){
+                $courseInCategory = null;
+            }
+            $params = array(
+                'id_category' => $row ['id'],
+                'title_category' => $row['title'],
+                'courses' => $courseInCategory
+            );
+            //$courseCount += $courseInCategory['course_count'];
+            $courseCount ++;
+            $listItems['course_in_category'][$courseCount] = $params;
+            
+        }
+        
+        // Step 2: We display the course without a user category.
+        $courseInCategory = self::returnCoursesNotCategory(0, $load_dirs);
+        $listItems['course_not_category'] = $courseInCategory;
+
+        //$courseCount += $courseInCategory['course_count'];
+
+        return $listItems;
+        
+        }
+    
+    /**
+     *  Display courses inside a category (without special courses) as HTML dics of
+     *  class userportal-course-item.
+     * @param int      User category id
+     * @param bool      Whether to show the document quick-loader or not
+     * @return string
+     */
+    public static function returnCoursesInCategory($user_category_id, $load_dirs = false)
+    {
+        $user_id = api_get_user_id();
+        // Table definitions
+        $TABLECOURS = Database:: get_main_table(TABLE_MAIN_COURSE);
+        $TABLECOURSUSER = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
+        $TABLE_ACCESS_URL_REL_COURSE = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $current_url_id = api_get_current_access_url_id();
+
+        // Get course list auto-register
+        $special_course_list = self::get_special_course_list();
+
+        $without_special_courses = '';
+        if (!empty($special_course_list)) {
+            $without_special_courses = ' AND course.code NOT IN ("' . implode('","', $special_course_list) . '")';
+        }
+
+        //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+        $sql = "SELECT
+                course.id,
+                course.title,
+                course.code,
+                course.subscribe subscr,
+                course.unsubscribe unsubscr,
+                course_rel_user.status status,
+                course_rel_user.sort sort,
+                course_rel_user.user_course_cat user_course_cat
+                FROM $TABLECOURS course,
+                     $TABLECOURSUSER course_rel_user,
+                     $TABLE_ACCESS_URL_REL_COURSE url
+                WHERE
+                    course.id = course_rel_user.c_id AND
+                    url.c_id = course.id AND
+                    course_rel_user.user_id = '" . $user_id . "' AND
+                    course_rel_user.user_course_cat = '" . $user_category_id . "'
+                    $without_special_courses ";
+
+        // If multiple URL access mode is enabled, only fetch courses
+        // corresponding to the current URL.
+        if (api_get_multiple_access_url() && $current_url_id != -1) {
+            $sql .= " AND url.c_id = course.id AND access_url_id='" . $current_url_id . "'";
+        }
+        // Use user's classification for courses (if any).
+        $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
+
+        $result = Database::query($sql);
+        $html = '';
+
+        $course_list = array();
+        $listCourse = array();
+        $showCustomIcon = api_get_setting('course_images_in_courses_list');
+        $courseCount = 0;
+        // Browse through all courses.
+        while ($course = Database::fetch_array($result)) {
+            $course_info = api_get_course_info($course['code']);
+            if (isset($course_info['visibility']) &&
+                $course_info['visibility'] == COURSE_VISIBILITY_HIDDEN
+            ) {
+                continue;
+            }
+            $course_info['id_session'] = null;
+            $course_info['status'] = $course['status'];
+
+            //In order to avoid doubles
+            if (in_array($course_info['real_id'], $course_list)) {
+                continue;
+            } else {
+                $course_list[] = $course_info['real_id'];
+            }
+
+            $courseCount++;
+
+            // For each course, get if there is any notification icon to show
+            // (something that would have changed since the user's last visit).
+            $showNotification = Display::show_notification($course_info);
+
+            $thumbnails = null;
+            $image = null;
+            $iconName = basename($course_info['course_image']);
+            
+            
+            if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+                $thumbnails = $course_info['course_image'];
+                $image = $course_info['course_image_large'];
+            }
+
+            $params = array();
+            $params['course_id'] = $course['id'];
+            $params['actions'] = '';
+
+            if (api_is_platform_admin()) {
+                $params['actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
+            }
+
+            $courseUrl = '';
+            $courseUrl = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
+
+            if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                $teachers = CourseManager::getTeacheCourseCode($course['code']);
+            }
+            
+            $params['status'] = $course['status'];
+            $params['code_course'] =  $course_info['visual_code'];
+            $params['visibility'] = $course_info['visibility'];
+            $params['link'] = $courseUrl;
+            $params['thumbnails'] = $thumbnails;
+            $params['image'] = $image;
+            $params['title'] = $course_info['title'];
+            $params['teachers'] = $teachers;
+
+            if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
+                $params['notifications'] = $showNotification;
+            }
+
+            $isSubContent = true;
+            if (empty($user_category_id)) {
+                $isSubContent = false;
+            }
+            
+            //$html .= self::course_item_html($params, $isSubContent);
+            $listCourse[$courseCount] = $params;
+        }
+        
+        return $listCourse;
+        
+        
+    }
+
+    /**
+     *  Display courses inside a category (without special courses) as HTML dics of
+     *  class userportal-course-item.
+     * @param int      User category id
+     * @param bool      Whether to show the document quick-loader or not
+     * @return string
+     */
+    public static function returnCoursesNotCategory($user_category_id, $load_dirs = false)
+    {
+        $user_id = api_get_user_id();
+        // Table definitions
+        $TABLECOURS = Database:: get_main_table(TABLE_MAIN_COURSE);
+        $TABLECOURSUSER = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
+        $TABLE_ACCESS_URL_REL_COURSE = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $current_url_id = api_get_current_access_url_id();
+
+        // Get course list auto-register
+        $special_course_list = self::get_special_course_list();
+
+        $without_special_courses = '';
+        if (!empty($special_course_list)) {
+            $without_special_courses = ' AND course.code NOT IN ("' . implode('","', $special_course_list) . '")';
+        }
+
+        //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+        $sql = "SELECT
+                course.id,
+                course.title,
+                course.code,
+                course.subscribe subscr,
+                course.unsubscribe unsubscr,
+                course_rel_user.status status,
+                course_rel_user.sort sort,
+                course_rel_user.user_course_cat user_course_cat
+                FROM $TABLECOURS course,
+                     $TABLECOURSUSER course_rel_user,
+                     $TABLE_ACCESS_URL_REL_COURSE url
+                WHERE
+                    course.id = course_rel_user.c_id AND
+                    url.c_id = course.id AND
+                    course_rel_user.user_id = '" . $user_id . "' AND
+                    course_rel_user.user_course_cat = '" . $user_category_id . "'
+                    $without_special_courses ";
+
+        // If multiple URL access mode is enabled, only fetch courses
+        // corresponding to the current URL.
+        if (api_get_multiple_access_url() && $current_url_id != -1) {
+            $sql .= " AND url.c_id = course.id AND access_url_id='" . $current_url_id . "'";
+        }
+        // Use user's classification for courses (if any).
+        $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
+
+        $result = Database::query($sql);
+
+        $course_list = array();
+        $showCustomIcon = api_get_setting('course_images_in_courses_list');
+        $courseCount = 0;
+        // Browse through all courses.
+        while ($course = Database::fetch_array($result)) {
+            $course_info = api_get_course_info($course['code']);
+            if (isset($course_info['visibility']) &&
+                $course_info['visibility'] == COURSE_VISIBILITY_HIDDEN
+            ) {
+                continue;
+            }
+            $course_info['id_session'] = null;
+            $course_info['status'] = $course['status'];
+
+            //In order to avoid doubles
+            if (in_array($course_info['real_id'], $course_list)) {
+                continue;
+            } else {
+                $course_list[] = $course_info['real_id'];
+            }
+            
+            $courseCount++;
+
+            // For each course, get if there is any notification icon to show
+            // (something that would have changed since the user's last visit).
+            $showNotification = Display::show_notification($course_info);
+
+            $thumbnails = null;
+            $image = null;
+            
+            $iconName = basename($course_info['course_image']);
+            if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+                $thumbnails = $course_info['course_image'];
+                $image = $course_info['course_image_large'];
+            }
+
+            $params = array();
+            $params['edit_actions'] = '';
+
+            if (api_is_platform_admin()) {
+                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
+            }
+
+            $course_title_url = '';
+            $course_title_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
+
+            if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                $teachers = CourseManager::getTeacheCourseCode($course['code']);
+            }
+            $params['status'] = $course['status'];
+            $params['code_course'] = $course_info['visual_code'];
+            $params['visibility'] = $course_info['visibility'];
+            $params['link'] = $course_title_url;
+            $params['thumbnails'] = $thumbnails;
+            $params['image'] = $image;
+            $params['title'] = $course_info['title'];
+            $params['teachers'] = $teachers;
+
+            if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
+                $params['notifications'] = $showNotification;
+            }
+
+            $isSubContent = true;
+            if (empty($user_category_id)) {
+                $isSubContent = false;
+            }
+            
+            $listCourse[$courseCount] = $params;
+            
+        }
+
+        return $listCourse;
+    }
     /**
      *  Display courses inside a category (without special courses) as HTML dics of
      *  class userportal-course-item.

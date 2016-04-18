@@ -3,6 +3,7 @@
 
     {% if show_course_shortcut is not null %}
         <div class="col-md-12">
+            
             {{ show_course_shortcut }}
         </div>
     {% endif %}

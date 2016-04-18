@@ -5603,9 +5603,6 @@ class learnpath
                 $_SESSION['pathItem'] = $arrLP[$i]['path'];
             }
 
-
-
-
             if (($i % 2) == 0) {
                 $oddClass = 'row_odd';
             } else {
@@ -6386,12 +6383,13 @@ class learnpath
         // Get all the links.
         $links = $this->get_links();
 
-        // Get al the student publications.
+        // Get all the student publications.
         $works = $this->get_student_publications();
 
-        // Get al the forums.
+        // Get all the forums.
         $forums = $this->get_forums(null, $course_code);
 
+        // Get the final item form (see BT#11048) .
         $finish = $this->getFinalItemForm();
 
         $headers = array(

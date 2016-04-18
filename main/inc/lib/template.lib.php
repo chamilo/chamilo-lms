@@ -976,25 +976,32 @@ class Template
         $metaTitle = api_get_setting('meta_title');
         if (!empty($metaTitle)) {
             $socialMeta .= '<meta name="twitter:card" content="summary" />' . "\n";
-            $socialMeta .= '<meta property="og:title" content="' . $metaTitle . '" />' . "\n";
-            $socialMeta .= '<meta property="og:url" content="' . api_get_path(WEB_PATH) . '" />' . "\n";
-            $metaDescription = api_get_setting('meta_description');
-            if (!empty($metaDescription)) {
-                $socialMeta .= '<meta property="og:description" content="' . $metaDescription . '" />' . "\n";
-            }
-            $metaSite = api_get_setting('meta_twitter_site');
-            if (!empty($metaSite)) {
-                $socialMeta .= '<meta name="twitter:site" content="' . $metaSite . '" />' . "\n";
-                $metaCreator = api_get_setting('meta_twitter_creator');
-                if (!empty($metaCreator)) {
-                    $socialMeta .= '<meta name="twitter:creator" content="' . $metaCreator . '" />' . "\n";
+
+            // The following code is for user badge page if the twitter:card is enable
+            $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
+            $skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
+
+            if (!$userId && !$skillId) {
+                $socialMeta .= '<meta property="og:title" content="' . $metaTitle . '" />' . "\n";
+                $socialMeta .= '<meta property="og:url" content="' . api_get_path(WEB_PATH) . '" />' . "\n";
+                $metaDescription = api_get_setting('meta_description');
+                if (!empty($metaDescription)) {
+                    $socialMeta .= '<meta property="og:description" content="' . $metaDescription . '" />' . "\n";
                 }
-            }
-            $metaImage = api_get_setting('meta_image_path');
-            if (!empty($metaImage)) {
-                if (is_file(api_get_path(SYS_PATH) . $metaImage)) {
-                    $path = api_get_path(WEB_PATH) . $metaImage;
-                    $socialMeta .= '<meta property="og:image" content="' . $path . '" />' . "\n";
+                $metaSite = api_get_setting('meta_twitter_site');
+                if (!empty($metaSite)) {
+                    $socialMeta .= '<meta name="twitter:site" content="' . $metaSite . '" />' . "\n";
+                    $metaCreator = api_get_setting('meta_twitter_creator');
+                    if (!empty($metaCreator)) {
+                        $socialMeta .= '<meta name="twitter:creator" content="' . $metaCreator . '" />' . "\n";
+                    }
+                }
+                $metaImage = api_get_setting('meta_image_path');
+                if (!empty($metaImage)) {
+                    if (is_file(api_get_path(SYS_PATH) . $metaImage)) {
+                        $path = api_get_path(WEB_PATH) . $metaImage;
+                        $socialMeta .= '<meta property="og:image" content="' . $path . '" />' . "\n";
+                    }
                 }
             }
         }

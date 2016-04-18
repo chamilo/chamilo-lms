@@ -9,8 +9,8 @@ api_protect_course_script(true);
 $courseCode = api_get_course_id();
 $userId = api_get_user_id();
 $sessionId = api_get_session_id();
-$id = isset($_GET['id']) ? $_GET['id'] : 0;
-$lpId = isset($_GET['lp_id']) ? $_GET['lp_id'] : 0;
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
 
 if (!$id && !$lpId) {
     Display::display_warning_message(get_lang('FileNotFound'));

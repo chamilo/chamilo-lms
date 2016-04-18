@@ -194,7 +194,8 @@ if (isset($_GET['action'])) {
             break;
     }
 }
-//$nameTools = api_xml_http_response_encode($plugin->get_lang('MyTickets'));
+
+// $nameTools = api_xml_http_response_encode($plugin->get_lang('MyTickets'));
 $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 

@@ -27,6 +27,7 @@ define('MAX_FORM_FIELD_LENGTH', 80);
 
 // Including necessary libraries.
 require_once '../inc/lib/api.lib.php';
+require_once '../inc/lib/text.lib.php';
 
 api_check_php_version('../inc/');
 

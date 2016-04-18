@@ -28,7 +28,16 @@ class Version20150603181728 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $this->addSql('ALTER TABLE c_lp ADD max_attempts INT NOT NULL, ADD subscribe_users INT NOT NULL DEFAULT 0');
+        $table = $schema->getTable('c_lp');
+        if (!$table->hasColumn('max_attempts')) {
+            $this->addSql('ALTER TABLE c_lp ADD max_attempts INT NOT NULL');
+
+        }
+
+        if (!$table->hasColumn('subscribe_users')) {
+            $this->addSql('ALTER TABLE c_lp ADD subscribe_users INT NOT NULL DEFAULT 0');
+        }
+
         $this->addSql('
             ALTER TABLE c_item_property
             MODIFY c_id INT DEFAULT NULL,

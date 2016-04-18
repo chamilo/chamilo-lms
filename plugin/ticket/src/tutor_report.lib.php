@@ -32,8 +32,9 @@ function initializeReport($course_code)
     if (intval($obj->cant) != $weeksCount) {
 
         if (intval($obj->cant) > $weeksCount) {
-            $sql = "DELETE FROM $table_reporte_semanas WHERE  week_id > $weeksCount AND course_code = '$course_code'";
-            Database::query("DELETE FROM $table_reporte_semanas WHERE  week_id > $weeksCount AND course_code = '$course_code'");
+            $sql = "DELETE FROM $table_reporte_semanas
+                    WHERE  week_id > $weeksCount AND course_code = '$course_code'";
+            Database::query($sql);
         } else {
             for ($i = $obj->cant + 1; $i <= $weeksCount; $i++) {
                 if (!Database::query("INSERT INTO $table_reporte_semanas (week_id, course_code, forum_id, work_id, quiz_id, pc_id)
@@ -139,7 +140,6 @@ function showResults($courseInfo, $weeksCount, $page)
             <option value="14" ' . (($weeksCount == 14) ? 'selected="selected"' : "") . '>14 weeks</option>
             </select>';
 
-
     if ($weeksCount == 14) {
         $html .= '<span style="float:right;"><a href="tutor.php?page=' . (($page == 1) ? 2 : 1) . '">' . (($page == 1) ? "Siguiente" : "Anterior") . '</a></span>';
     }
@@ -196,6 +196,7 @@ function showStudentResult($datos, $pagina)
         $fila.= '<td align="center">' . (($dato['thread_ok'] == 1) ? Display::return_icon('check.png') : Display::return_icon('aspa.png')) . '</td>';
     }
     $fila.= '</tr>';
+
     return $fila;
 }
 

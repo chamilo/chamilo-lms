@@ -463,7 +463,7 @@ if (!empty($student_id)) {
 
     $userPicture = UserManager::getUserPicture($user_info['user_id']);
     $userGroupManager = new UserGroup();
-    $userGroups = $userGroupManager->getUserGroupListByUser($user_info['user_id'], UserGroup::NORMAL_CLASS);
+    $userGroups = $userGroupManager->getNameListByUser($user_info['user_id'], UserGroup::NORMAL_CLASS);
     ?>
     <img src="<?php echo $userPicture ?>">
     <div class="row">
@@ -592,7 +592,7 @@ if (!empty($student_id)) {
                 <tbody>
                     <?php foreach ($userGroups as $class) { ?>
                     <tr>
-                        <td><?php echo $class['name'] ?></td>
+                        <td><?php echo $class ?></td>
                     </tr>
                     <?php } ?>
                 </tbody>

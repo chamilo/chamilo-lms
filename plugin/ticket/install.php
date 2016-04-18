@@ -7,5 +7,5 @@
  * @package chamilo.plugin.ticket
  */
 
-require_once dirname(__FILE__).'/config.php';
+require_once __DIR__.'/config.php';
 TicketPlugin::create()->install();

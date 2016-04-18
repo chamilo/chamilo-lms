@@ -8047,6 +8047,15 @@ function api_mail_html(
     // Send the mail message.
     if (!$mail->Send()) {
         error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
+        if ($mail->SMTPDebug) {
+            error_log(
+                "Connection details :: " .
+                "Protocol: " . $mail->Mailer . ' :: ' .
+                "Host/Port: " . $mail->Host . ':' . $mail->Port . ' :: ' .
+                "Authent/Open: " . ($mail->SMTPAuth?'Authent':'Open') . ' :: ' .
+                ($mail->SMTPAuth?"  User/Pass: " . $mail->Username . ':' . $mail->Password:'')
+            );
+        }
         return 0;
     }
 

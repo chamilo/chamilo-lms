@@ -176,8 +176,8 @@ $form->addElement(
     $categories,
     ['style'=>'width:350px', 'id'=>'category_code']
 );
-$form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 
+$form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 $form->addText('department_name', get_lang('Department'), false);
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
@@ -187,23 +187,29 @@ $form->applyFilter('department_url', 'html_filter');
 
 // Picture
 $form->addElement('file', 'picture', get_lang('AddPicture'), array('id' => 'picture', 'class' => 'picture-form'));
-$form->addHtml(''
-            . '<div class="form-group">'
-                . '<label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>'
-                    . '<div class="col-sm-8">'
-                        . '<div id="cropImage" class="cropCanvas">'
-                            . '<img id="previewImage" >'
-                        . '</div>'
-                        . '<div>'
-                            . '<button class="btn btn-primary hidden" type="button" name="cropButton" id="cropButton"><em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>'
-                        . '</div>'
-                    . '</div>'
-            . '</div>'
-. '');
+$form->addHtml('<div class="form-group">
+                <label for="cropImage" id="labelCropImage" class="col-sm-2 control-label">
+                </label>
+                <div class="col-sm-8">
+                    <div id="cropImage" class="cropCanvas">
+                        <img id="previewImage" >
+                    </div>
+                    <div>
+                        <button class="btn btn-primary hidden" type="button" name="cropButton" id="cropButton">
+                            <em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'
+                        </button>
+                    </div>
+                </div>
+            </div>
+');
 $form->addHidden('cropResult', '');
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-//$form->addElement('html', '<div class="form-group "><div class="col-md-2"></div> <div class="col-md-8 help-image">'.get_lang('UniqueAnswerImagePreferredSize200x150').'</div></div>');
+$form->addRule(
+    'picture',
+    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+    'filetype',
+    $allowed_picture_types
+);
 $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
 
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
@@ -279,8 +285,6 @@ if (api_get_setting('documents_default_visibility_defined_in_course') == 'true')
     );
     $form->addGroup($group, '', array(get_lang("DocumentsDefaultVisibility")), '');
     $form->addButtonSave(get_lang('SaveSettings'),'submit_save');
-
-
     $form->addElement('html', '</div></div>');
 }
 
@@ -480,7 +484,7 @@ $form->setDefaults($values);
 // Validate form
 if ($form->validate() && is_settings_editable()) {
     $updateValues = $form->exportValues();
-    
+
     // update course picture
     $picture = $_FILES['picture'];
     if (!empty($picture['name'])) {
@@ -491,7 +495,7 @@ if ($form->validate() && is_settings_editable()) {
             $updateValues['cropResult']
         );
     }
-    
+
     $visibility = $updateValues['visibility'];
     $deletePicture = isset($updateValues['delete_picture']) ? $updateValues['delete_picture'] : '';
 

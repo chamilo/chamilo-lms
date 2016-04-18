@@ -425,36 +425,38 @@ if (count($a_students) > 0) {
     $headers['student_publication'] = get_lang('Student_publication');
     $table->set_header(10, get_lang('Messages'), false);
     $headers['messages'] = get_lang('Messages');
+    $table->set_header(11, get_lang('Classes'));
+    $headers['clasess'] = get_lang('Classes');
 
     if (empty($session_id)) {
-        $table->set_header(11, get_lang('Survey'), false);
+        $table->set_header(12, get_lang('Survey'), false);
         $headers['survey'] = get_lang('Survey');
+        $table->set_header(13, get_lang('FirstLoginInCourse'), false);
+        $headers['first_login'] = get_lang('FirstLoginInCourse');
+        $table->set_header(14, get_lang('LatestLoginInCourse'), false);
+        $headers['latest_login'] = get_lang('LatestLoginInCourse');
+        if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
+            $table->set_header(15, $extra_info['display_text'], false);
+            $headers['display_text'] = $extra_info['display_text'];
+            $table->set_header(16, get_lang('Details'), false);
+            $headers['details'] = get_lang('Details');
+        } else {
+            $table->set_header(15, get_lang('Details'), false);
+            $headers['details'] = get_lang('Details');
+        }
+    } else {
         $table->set_header(12, get_lang('FirstLoginInCourse'), false);
         $headers['first_login'] = get_lang('FirstLoginInCourse');
         $table->set_header(13, get_lang('LatestLoginInCourse'), false);
         $headers['latest_login'] = get_lang('LatestLoginInCourse');
+
         if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
             $table->set_header(14, $extra_info['display_text'], false);
             $headers['display_text'] = $extra_info['display_text'];
             $table->set_header(15, get_lang('Details'), false);
-            $headers['details'] = get_lang('Details');
-        } else {
-            $table->set_header(14, get_lang('Details'), false);
-            $headers['details'] = get_lang('Details');
-        }
-    } else {
-        $table->set_header(11, get_lang('FirstLoginInCourse'), false);
-        $headers['first_login'] = get_lang('FirstLoginInCourse');
-        $table->set_header(12, get_lang('LatestLoginInCourse'), false);
-        $headers['latest_login'] = get_lang('LatestLoginInCourse');
-
-        if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
-            $table->set_header(13, $extra_info['display_text'], false);
-            $headers['display_text'] = $extra_info['display_text'];
-            $table->set_header(14, get_lang('Details'), false);
             $headers['Details'] = get_lang('Details');
         } else {
-            $table->set_header(13, get_lang('Details'), false);
+            $table->set_header(14, get_lang('Details'), false);
             $headers['Details'] = get_lang('Details');
         }
     }

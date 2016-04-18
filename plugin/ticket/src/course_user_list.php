@@ -18,8 +18,6 @@ foreach ($coursesList as $key => $course) {
     $courseInfo = CourseManager::get_course_information($course['code']);
     $arrCourseList[$courseInfo['code']] = $courseInfo['title'];
 }
-//End Course List
-
 
 $userLabel = Display::tag('label', get_lang('User'), array('class' => 'control-label'));
 $personName = api_get_person_name($userInfo['firstname'], $userInfo['lastname']);
@@ -40,6 +38,7 @@ $courseControl = Display::div($courseSelect, array('class' => 'controls'));
 
 $userDiv = Display::div($userLabel . " " . $userControl, array('class' => 'control-group'));
 $courseDiv = Display::div($courseLabel . " " . $courseControl, array('class' => 'control-group'));
+
 echo $userDiv;
 echo $courseDiv;
 

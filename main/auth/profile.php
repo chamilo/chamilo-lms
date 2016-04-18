@@ -33,6 +33,7 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     var $image = $("#previewImage");
@@ -70,7 +71,7 @@ $(document).ready(function() {
             });
         };
     });
-    
+
     $("#cropButton").on("click", function() {
         var canvas = $image.cropper("getCroppedCanvas");
         var dataUrl = canvas.toDataURL();
@@ -80,7 +81,7 @@ $(document).ready(function() {
         return false;
     });
 
-    $(\'#id_generate_api_key\').on(\'click\', function (e) {
+    $("id_generate_api_key").on("click", function (e) {
         e.preventDefault();
 
         $.ajax({
@@ -93,6 +94,7 @@ $(document).ready(function() {
             }
         });
     });
+
 });
 
 function confirmation(name) {
@@ -146,6 +148,85 @@ $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
 $value_array = $array_list_key[$id_temp_key];
 $user_data['api_key_generate'] = $value_array;
+
+$htmlHeadXtra[] = '<script>
+$(document).ready(function() {
+    var address = "'.$user_data['address'].'";
+    initializeGeo(address, false);
+
+    $("#geolocalization").on("click", function() {
+        var address = $("#address").val();
+        initializeGeo(address, false);
+        return false;
+    });
+
+    $("#myLocation").on("click", function() {
+        myLocation();
+        return false;
+    });
+});
+
+function myLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            var latLng = new google.maps.LatLng(lat, lng);
+            initializeGeo(false, latLng)
+        });
+    }
+}
+
+function initializeGeo(address, latLng) {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    var myOptions = {
+        zoom: 15,
+        center: latlng,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+        },
+        navigationControl: true,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+    var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
+
+    if (geocoder && parameter) {
+        geocoder.geocode(parameter, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                    map.setCenter(results[0].geometry.location);
+                    console.log(results[0]);
+                    $("#address").val(results[0].formatted_address);
+                    var infowindow = new google.maps.InfoWindow({
+                        content: "<b>" + $("#address").val() + "</b>",
+                        size: new google.maps.Size(150, 50)
+                    });
+
+                    var marker = new google.maps.Marker({
+                        position: results[0].geometry.location,
+                        map: map,
+                        title: $("#address").val()
+                    });
+                    google.maps.event.addListener(marker, "click", function() {
+                        infowindow.open(map, marker);
+                    });
+                } else {
+                    alert("'.get_lang("NotFound").'");
+                }
+
+            } else {
+                alert("Geocode '.get_lang('Error').': " + status);
+            }
+        });
+    }
+}
+
+</script>';
 
 if ($user_data !== false) {
     if (api_get_setting('login_is_email') == 'true') {
@@ -248,6 +329,24 @@ if (api_get_setting('profile', 'phone') !== 'true') {
 $form->applyFilter('phone', 'stripslashes');
 $form->applyFilter('phone', 'trim');
 $form->applyFilter('phone', 'html_filter');
+
+// Geolocation
+$form->addElement('text', 'address', get_lang('AddressField'), ['id' => 'address']);
+$form->addButton('geolocalization', get_lang('geolocalization'), 'globe', 'default', 'default', 'null', ['id' => 'geolocalization']);
+$form->addButton('myLocation', get_lang('MyLocation'), 'map-marker', 'default', 'default', 'null', ['id' => 'myLocation']);
+
+$form->addHtml('
+    <div class="form-group">
+        <label for="map" class="col-sm-2 control-label">
+            '.get_lang('Map').'
+        </label>
+        <div class="col-sm-8">
+            <div name="map" id="map" style="width:100%; height:300px;">
+            </div>
+        </div>
+    </div>
+');
+
 
 //  PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
@@ -676,7 +775,7 @@ if ($form->validate()) {
     //Fixing missing variables
     $available_values_to_modify = array_merge(
         $available_values_to_modify,
-        array('competences', 'diplomas', 'openarea', 'teach', 'openid')
+        array('competences', 'diplomas', 'openarea', 'teach', 'openid', 'address')
     );
 
     // build SQL query

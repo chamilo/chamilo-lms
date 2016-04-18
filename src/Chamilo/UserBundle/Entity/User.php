@@ -181,6 +181,13 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     protected $phone;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=250, nullable=true, unique=false)
+     */
+    private $address;
+
+    /**
      * Vich\UploadableField(mapping="user_image", fileNameProperty="picture_uri")
      *
      * note This is not a mapped field of entity metadata, just a simple property.
@@ -946,6 +953,29 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     * @return User
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
     }
 
     /**

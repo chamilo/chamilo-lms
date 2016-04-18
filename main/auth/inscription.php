@@ -20,7 +20,8 @@ $allowedFields = [
     'phone',
     'status',
     'language',
-    'extra_fields'
+    'extra_fields',
+    'address'
 ];
 
 $allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');
@@ -30,6 +31,84 @@ if ($allowedFieldsConfiguration !== false) {
 }
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
+$htmlHeadXtra[] = '<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true" ></script>';
+$htmlHeadXtra[] = '<script>
+$(document).ready(function() {
+    initializeGeo(false, false);
+
+    $("#geolocalization").on("click", function() {
+        var address = $("#address").val();
+        initializeGeo(address, false);
+        return false;
+    });
+
+    $("#myLocation").on("click", function() {
+        myLocation();
+        return false;
+    });
+});
+
+function myLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            var latLng = new google.maps.LatLng(lat, lng);
+            initializeGeo(false, latLng)
+        });
+    }
+}
+
+function initializeGeo(address, latLng) {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(-75.503, 22.921);
+    var myOptions = {
+        zoom: 15,
+        center: latlng,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+        },
+        navigationControl: true,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+    var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : { "address": "Google" };
+
+    if (geocoder && parameter) {
+        geocoder.geocode(parameter, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                    map.setCenter(results[0].geometry.location);
+                    console.log(results[0]);
+                    $("#address").val(results[0].formatted_address);
+                    var infowindow = new google.maps.InfoWindow({
+                        content: "<b>" + $("#address").val() + "</b>",
+                        size: new google.maps.Size(150, 50)
+                    });
+
+                    var marker = new google.maps.Marker({
+                        position: results[0].geometry.location,
+                        map: map,
+                        title: $("#address").val()
+                    });
+                    google.maps.event.addListener(marker, "click", function() {
+                        infowindow.open(map, marker);
+                    });
+                } else {
+                    alert("'.get_lang("NotFound").'");
+                }
+
+            } else {
+                alert("Geocode '.get_lang('Error').': " + status);
+            }
+        });
+    }
+}
+
+</script>';
 
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
@@ -166,6 +245,26 @@ if ($user_already_registered_show_terms == false) {
             );
         }
     }
+
+    // Geolocation
+    if (in_array('address', $allowedFields)) {
+        $form->addElement('text', 'address', get_lang('AddressField'), ['id' => 'address']);
+        $form->addButton('geolocalization', get_lang('geolocalization'), 'globe', 'default', 'default', 'null', ['id' => 'geolocalization']);
+        $form->addButton('myLocation', get_lang('MyLocation'), 'map-marker', 'default', 'default', 'null', ['id' => 'myLocation']);
+
+        $form->addHtml('
+            <div class="form-group">
+                <label for="map" class="col-sm-2 control-label">
+                    '.get_lang('Map').'
+                </label>
+                <div class="col-sm-8">
+                    <div name="map" id="map" style="width:100%; height:300px;">
+                    </div>
+                </div>
+            </div>
+        ');
+    }
+
 
     // LANGUAGE
     if (in_array('language', $allowedFields)) {
@@ -483,7 +582,9 @@ if ($form->validate()) {
             0,
             $extras,
             null,
-            true
+            true,
+            false,
+            $values['address']
         );
 
         //update the extra fields

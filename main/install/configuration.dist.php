@@ -238,3 +238,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['messaging_gdc_project_number'] = '';
 //Api Key in the Google Developer Console
 //$_configuration['messaging_gdc_api_key'] = '';
+// Userportal template located in main/template/default/layout/user_portal
+//$_configuration['user_portal_tpl'] = 'index_grid.tpl';

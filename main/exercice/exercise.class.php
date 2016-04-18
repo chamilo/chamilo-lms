@@ -8267,4 +8267,38 @@ class Exercise
         }
         return 1;
     }
+
+    /**
+     * Get the correct answers in all attempts
+     * @param int $learnPathId
+     * @param int $learnPathItemId
+     * @return array
+     */
+    public function getCorrectAnswersInAllAttempts($learnPathId = 0, $learnPathItemId = 0)
+    {
+        $attempts = Event::getExerciseResultsByUser(
+            api_get_user_id(),
+            $this->id,
+            api_get_course_int_id(),
+            api_get_session_id(),
+            $learnPathId,
+            $learnPathItemId,
+            'asc'
+        );
+
+        $corrects = [];
+
+        foreach ($attempts as $attempt) {
+            foreach ($attempt['question_list'] as $answer) {
+                $objAnswer = new Answer($answer['question_id']);
+                $isCorrect = $objAnswer->isCorrectByAutoId($answer['answer']);
+
+                if ($isCorrect) {
+                    $corrects[$answer['question_id']][] = $answer;
+                }
+            }
+        }
+
+        return $corrects;
+    }
 }

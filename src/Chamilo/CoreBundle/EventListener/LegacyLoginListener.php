@@ -94,7 +94,7 @@ class LegacyLoginListener implements EventSubscriberInterface
 
 
                             $this->container->get("event_dispatcher")->addListener(
-                                KernelEvents::RESPONSE, array($this, 'redirectUserToProfilePage')
+                                KernelEvents::RESPONSE, array($this, 'redirectUser')
                             );
 
                         }

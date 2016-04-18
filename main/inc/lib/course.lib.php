@@ -5033,7 +5033,8 @@ class CourseManager
             'pdf_export_watermark_text',
             'show_system_folders',
             'exercise_invisible_in_session',
-            'enable_forum_auto_launch'
+            'enable_forum_auto_launch',
+            'show_course_in_user_language'
         );
 
         $allowLPReturnLink = api_get_setting('allow_lp_return_link');

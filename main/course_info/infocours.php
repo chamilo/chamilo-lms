@@ -178,6 +178,13 @@ $form->addElement(
 );
 $form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 
+$group = array(
+    $form->createElement('radio', 'show_course_in_user_language', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'show_course_in_user_language', null, get_lang('No'), 2),
+);
+
+$form->addGroup($group, '', array(get_lang("ShowCourseInUserLanguage")), '');
+
 $form->addText('department_name', get_lang('Department'), false);
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
@@ -456,12 +463,14 @@ $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 $form->addElement('html', '</div></div>');
 
 // Document settings
-$form->addElement('html', '<div><h3>'.Display::return_icon('folder.png', Security::remove_XSS(get_lang('Documents')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Documents')).'</h3><div>');
+$form->addElement(
+    'html',
+    '<div><h3>'.Display::return_icon('folder.png', Security::remove_XSS(get_lang('Documents')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Documents')).'</h3><div>'
+);
 
 $group = array(
     $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
     $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
-
 );
 $form->addGroup($group, '', array(get_lang("ShowSystemFolders")), '');
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');

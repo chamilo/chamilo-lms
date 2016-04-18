@@ -197,9 +197,8 @@ if (empty($template)) {
     $controller->tpl->assign('items', $courseAndSessions['items']);
     $userPortalTemplate = $controller->tpl->get_template('user_portal/'.$template);
     $content = $controller->tpl->fetch($userPortalTemplate);
+    $controller->tpl->assign('content', $content);
 }
-
-$controller->tpl->assign('content', $content);
 
 if (api_get_setting('allow_browser_sniffer') == 'true') {
     if (isset($_SESSION['sniff_navigator']) && $_SESSION['sniff_navigator'] != "checked") {

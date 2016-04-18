@@ -1040,7 +1040,7 @@ class IndexManager
             }
         }
 
-        $courses_html = '';
+        $listCourse = '';
         $special_courses = '';
         $sessionCount = 0;
         $courseCount = 0;
@@ -1059,8 +1059,12 @@ class IndexManager
                 $this->load_directories_preview
             );
             
-            $courses_html .= $courses['html']; 
+            $this->tpl->assign('courses', $courses);
+            $listCourse = $this->tpl->fetch(
+            $this->tpl->get_template('/user_portal/main_courses.tpl'));
+                            
             $courseCount = $specialCourses['course_count'] + $courses['course_count'];
+            
         }
 
         $sessions_with_category = '';
@@ -1362,7 +1366,7 @@ class IndexManager
         }
 
         return [
-            'html' => $sessions_with_category.$sessions_with_no_category.$courses_html.$special_courses,
+            'html' => $sessions_with_category.$sessions_with_no_category.$listCourse.$special_courses,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

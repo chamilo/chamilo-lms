@@ -3644,13 +3644,13 @@ class CourseManager
             );
             //$courseCount += $courseInCategory['course_count'];
             $courseCount ++;
-            $listItems['course_in_category'][$courseCount] = $params;
+            $listItems['in_category'][$courseCount] = $params;
             
         }
         
         // Step 2: We display the course without a user category.
         $courseInCategory = self::returnCoursesNotCategory(0, $load_dirs);
-        $listItems['course_not_category'] = $courseInCategory;
+        $listItems['not_category'] = $courseInCategory;
 
         //$courseCount += $courseInCategory['course_count'];
 
@@ -3881,6 +3881,8 @@ class CourseManager
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $thumbnails = $course_info['course_image'];
                 $image = $course_info['course_image_large'];
+            }else{
+                $image = Display::return_icon('session_default.png', null, null, null,null, true);
             }
 
             $params = array();

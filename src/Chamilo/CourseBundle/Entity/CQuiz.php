@@ -155,6 +155,12 @@ class CQuiz
     private $propagateNeg;
 
     /**
+     * @var boolean
+     * @ORm\Column(name="save_correct_answers", type="boolean", nullable=false)
+     */
+    private $saveCorrectAnswers;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="review_answers", type="integer", nullable=false)
@@ -562,6 +568,25 @@ class CQuiz
     public function getPropagateNeg()
     {
         return $this->propagateNeg;
+    }
+
+    /**
+     * @param $saveCorrectAnswers boolean
+     * @return CQuiz
+     */
+    public function setSaveCorrectAnswers($saveCorrectAnswers)
+    {
+        $this->saveCorrectAnswers = $saveCorrectAnswers;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getSaveCorrectAnswers()
+    {
+        return $this->saveCorrectAnswers;
     }
 
     /**

@@ -7663,4 +7663,6 @@ $EnableForumAutoLaunch = "Activar auto-arranque de foro";
 $NowDownloadYourCertificateClickHere = "Puedes descargar tu certificado haciendo clic aquí";
 $AdditionallyYouHaveObtainedTheFollowingSkills = "Adicionalmente, has obtenido las competencias siguientes";
 $IHaveObtainedSkillXOnY = "He logrado la competencia %s en %s";
+$AnotherAttempt = "Realizar otro intento";
+$RemainingXAttempts = "%s intentos restantes";
 ?>

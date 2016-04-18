@@ -7665,4 +7665,6 @@ $AdditionallyYouHaveObtainedTheFollowingSkills = "Adicionalmente, has obtenido l
 $IHaveObtainedSkillXOnY = "He logrado la competencia %s en %s";
 $AnotherAttempt = "Realizar otro intento";
 $RemainingXAttempts = "%s intentos restantes";
+$Map = "Mapa";
+$MyLocation = "Mi ubicación";
 ?>

@@ -4856,6 +4856,106 @@ div#chat-remote-video video {
   width: 100px;
   height: 100px;
 }
+/* list my course user*/
+
+.grid-courses .items{
+    /* position: relative; */
+    vertical-align: top;
+    white-space: normal;
+    margin: 0px 5px 15px 0px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+    text-align: left;
+    background-color: #fff;
+    min-height: 235px;
+    border: 1px solid #DFDFDF;
+    border-radius: 5px;
+}
+.grid-courses .items .title{
+    line-height: 1.4;
+    font-size: 13px;
+    min-height: 40px;
+    padding: 0px;
+    margin: 5px;
+}
+.grid-courses .items .image{
+    position: relative;
+}
+.grid-courses .items .image .black_shadow{
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    padding-top: 40px;
+    opacity: 0;
+    box-sizing: border-box;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.7) none repeat scroll 0% 0%;
+    padding: 10px;
+}
+.grid-courses .items .image .hovered_course{
+    opacity: 1;
+    transition: all 0.3s ease 0s;
+}
+.grid-courses .items .notifications{
+    margin-top: 5px;
+    text-align: center;
+}
+.grid-courses .items .admin-actions{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+.grid-courses .items .admin-actions .btn-sm{
+    border-radius: 0;
+    border: none;
+}
+.grid-courses .items .category{
+    position: absolute;
+    bottom: 0px;
+    right: -10px;
+    background-color: #35DF86;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    z-index: 2;
+}
+.grid-courses .items .cribbon{
+    width: 0;
+    height: 0;
+    border-top: 10px solid #19BF69;
+    border-right: 10px solid transparent;
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+}
+.grid-courses .items .description{
+    padding: 5px 10px;
+}
+.grid-courses .items .author-card{
+    display: flex;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+.grid-courses .items .author-card img{
+    border: 2px solid #fff;
+}
+.grid-courses .items .author-card .teachers-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.grid-courses .items .author-card .teachers-details h5{
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.grid-courses .items .author-card .teachers-details h5 a{
+    color: #fff;
+}
 /* Catalog session */
 #session-list .col-md-4:nth-child(3n+1) {
   clear: left;
@@ -5120,8 +5220,6 @@ div#chat-remote-video video {
 .ui-tabs .ui-widget-content a.btn-success{
     color: #fff;
 }
-
-
 .ui-priority-secondary,
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary{
@@ -5159,7 +5257,6 @@ div#chat-remote-video video {
 .ui-dialog .ui-dialog-buttonpane{
   border-top: 1px solid #DDD;
 }
-
 .ui-button.ui-widget.ui-state-default {
   background-color:#f5f5f5;
   background-image:-moz-linear-gradient(top,#fff,#e6e6e6);
@@ -5185,9 +5282,6 @@ div#chat-remote-video video {
   font-weight:normal;
   color:#333333;
 }
-
-
-
 .select2-container .select2-selection--single{
   height: 32px !important;
   border-color: #CCCCCC !important;

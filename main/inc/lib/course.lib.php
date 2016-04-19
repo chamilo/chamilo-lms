@@ -1892,12 +1892,15 @@ class CourseManager
         $teachers = array();
         $count = 0;
         while ($teacher = Database::fetch_array($rs)) {
+            $userPicture = UserManager::getUserPicture($teacher['user_id'], USER_IMAGE_SIZE_SMALL);
             $teachers['id'] = $teacher['user_id'];
             $teachers['lastname'] = $teacher['lastname'];
             $teachers['firstname'] = $teacher['firstname'];
             $teachers['email'] = $teacher['email'];
             $teachers['username'] = $teacher['username'];
             $teachers['status'] = $teacher['status'];
+            $teachers['avatar'] = $userPicture;
+            $teachers['url'] = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $teacher['user_id'];
             $count++;
             $listTeachers[$count]=$teachers;
         }
@@ -3734,9 +3737,9 @@ class CourseManager
             } else {
                 $course_list[] = $course_info['real_id'];
             }
-
+            
             $courseCount++;
-
+            
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
             $showNotification = Display::show_notification($course_info);
@@ -3905,6 +3908,7 @@ class CourseManager
             $params['thumbnails'] = $thumbnails;
             $params['image'] = $image;
             $params['title'] = $course_info['title'];
+            $params['category'] = $course_info['categoryName'];
             $params['teachers'] = $teachers;
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {

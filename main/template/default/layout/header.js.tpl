@@ -211,6 +211,11 @@ $(document).ready(function(){
             });
         });
     };
+    $(".black_shadow").mouseenter(function() {
+        $(this).addClass('hovered_course');
+    }).mouseleave(function() {
+         $(this).removeClass('hovered_course');
+    });
 });
 
 $(window).resize(function() {

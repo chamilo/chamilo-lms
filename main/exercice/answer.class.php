@@ -832,4 +832,25 @@ class Answer
             </script>";
     }
 
+	/**
+	 * Check if a answer is correct by an answer auto id
+	 * @param $needle int The answer auto id
+	 * @return bool
+	 */
+	public function isCorrectByAutoId($needle)
+	{
+		$key = 0;
+
+		foreach ($this->autoId as $autoIdKey => $autoId) {
+			if ($autoId == $needle) {
+				$key = $autoIdKey;
+			}
+		}
+
+		if (!$key) {
+			return false;
+		}
+
+		return $this->isCorrect($key) ? true : false;
+	}
 }

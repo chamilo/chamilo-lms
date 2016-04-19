@@ -7,5 +7,5 @@
  * the global database and the courses tables
  * @package chamilo.plugin.ticket
  */
-require_once dirname(__FILE__).'/config.php';
+require_once __DIR.'/config.php';
 TicketPlugin::create()->uninstall();

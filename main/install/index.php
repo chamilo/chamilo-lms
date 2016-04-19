@@ -31,6 +31,7 @@ define('MAX_FORM_FIELD_LENGTH', 80);
 
 // Including necessary libraries.
 require_once '../inc/lib/api.lib.php';
+require_once '../inc/lib/text.lib.php';
 
 api_check_php_version('../inc/');
 
@@ -214,6 +215,9 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
     }
 }
 
+
+$session_lifetime = 360000;
+
 if (!isset($_GET['running'])) {
     $dbHostForm = 'localhost';
     $dbUsernameForm = 'root';
@@ -251,7 +255,6 @@ if (!isset($_GET['running'])) {
     $allowSelfReg = 1;
     $allowSelfRegProf = 1;
     $encryptPassForm = 'sha1';
-    $session_lifetime = 360000;
     if (!empty($_GET['profile'])) {
         $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
     }
@@ -903,7 +906,16 @@ if (@$_POST['step2']) {
         //$connection->executeQuery("CREATE UNIQUE INDEX UNIQ_8D93D649A0D96FBF ON user (email_canonical);");
         $connection->executeQuery("ALTER TABLE fos_group ADD name VARCHAR(255) NOT NULL;");
         $connection->executeQuery("ALTER TABLE fos_group ADD roles LONGTEXT NOT NULL COMMENT '(DC2Type:array)'");
-        
+
+        $connection->executeQuery("CREATE TABLE faq_question_translation (id INT AUTO_INCREMENT NOT NULL, translatable_id INT DEFAULT NULL, headline VARCHAR(255) NOT NULL, body LONGTEXT DEFAULT NULL, slug VARCHAR(50) NOT NULL, locale VARCHAR(255) NOT NULL, INDEX IDX_C2D1A2C2AC5D3 (translatable_id), UNIQUE INDEX faq_question_translation_unique_translation (translatable_id, locale), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
+        $connection->executeQuery("CREATE TABLE faq_category_translation (id INT AUTO_INCREMENT NOT NULL, translatable_id INT DEFAULT NULL, headline VARCHAR(255) NOT NULL, body LONGTEXT DEFAULT NULL, slug VARCHAR(50) NOT NULL, locale VARCHAR(255) NOT NULL, INDEX IDX_5493B0FC2C2AC5D3 (translatable_id), UNIQUE INDEX faq_category_translation_unique_translation (translatable_id, locale), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
+        $connection->executeQuery("CREATE TABLE faq_category (id INT AUTO_INCREMENT NOT NULL, rank INT NOT NULL, is_active TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX is_active_idx (is_active), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
+        $connection->executeQuery("CREATE TABLE faq_question (id INT AUTO_INCREMENT NOT NULL, category_id INT DEFAULT NULL, is_active TINYINT(1) NOT NULL, rank INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, only_auth_users TINYINT(1) NOT NULL, INDEX IDX_4A55B05912469DE2 (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
+        $connection->executeQuery("ALTER TABLE faq_question_translation ADD CONSTRAINT FK_C2D1A2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_question (id) ON DELETE CASCADE;");
+        $connection->executeQuery("ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;");
+        $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
+
+
         $sysPath = api_get_path(SYS_PATH);
 
         finishInstallation(

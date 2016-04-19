@@ -1,7 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Controller;
 
+use Chamilo\FaqBundle\Entity\CategoryRepository;
+use Chamilo\FaqBundle\Entity\QuestionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Chamilo\FaqBundle\Entity\Category;
 use Chamilo\FaqBundle\Entity\Question;
@@ -9,7 +12,7 @@ use Chamilo\FaqBundle\Entity\Question;
 /**
  * Class FaqController
  *
- * @package Genj\FaqBundle\Controller
+ * @package Chamilo\FaqBundle\Controller
  */
 class FaqController extends Controller
 {
@@ -33,8 +36,8 @@ class FaqController extends Controller
         }
 
         // Otherwise get the selected category and/or question as usual
-        $questions        = array();
-        $categories       = $this->getCategoryRepository()->retrieveActive();
+        $questions = array();
+        $categories = $this->getCategoryRepository()->retrieveActive();
         $selectedCategory = $this->getSelectedCategory($categorySlug);
         $selectedQuestion = $this->getSelectedQuestion($questionSlug);
 
@@ -101,8 +104,8 @@ class FaqController extends Controller
         $doRedirect = false;
         //$config = $this->container->getParameter('faq');
         $config = [];
-        $config['select_first_category_by_default'] = true;
-        $config['select_first_question_by_default'] = true;
+        $config['select_first_category_by_default'] = false;
+        $config['select_first_question_by_default'] = false;
 
         if (!$categorySlug && $config['select_first_category_by_default']) {
             $firstCategory = $this->getCategoryRepository()->retrieveFirst();
@@ -136,14 +139,14 @@ class FaqController extends Controller
     /**
      * @param string $questionSlug
      *
-     * @return \Genj\FaqBundle\Entity\Question
+     * @return Question
      */
     protected function getSelectedQuestion($questionSlug = null)
     {
         $selectedQuestion = null;
 
         if ($questionSlug !== null) {
-            $selectedQuestion = $this->getQuestionRepository()->findOneBySlug($questionSlug);
+            $selectedQuestion = $this->getQuestionRepository()->getQuestionBySlug($questionSlug);
         }
 
         return $selectedQuestion;
@@ -152,32 +155,32 @@ class FaqController extends Controller
     /**
      * @param string $categorySlug
      *
-     * @return \Genj\FaqBundle\Entity\Category
+     * @return Category
      */
     protected function getSelectedCategory($categorySlug = null)
     {
         $selectedCategory = null;
 
         if ($categorySlug !== null) {
-            $selectedCategory = $this->getCategoryRepository()->findOneBy(array('isActive' => true, 'slug' => $categorySlug));
+            $selectedCategory = $this->getCategoryRepository()->getCategoryActiveBySlug($categorySlug);
         }
 
         return $selectedCategory;
     }
 
     /**
-     * @return \Genj\FaqBundle\Entity\QuestionRepository
+     * @return QuestionRepository
      */
     protected function getQuestionRepository()
     {
-        return $this->container->get('genj_faq.entity.question_repository');
+        return $this->container->get('faq.entity.question_repository');
     }
 
     /**
-     * @return \Genj\FaqBundle\Entity\CategoryRepository
+     * @return CategoryRepository
      */
     protected function getCategoryRepository()
     {
-        return $this->container->get('genj_faq.entity.category_repository');
+        return $this->container->get('faq.entity.category_repository');
     }
 }

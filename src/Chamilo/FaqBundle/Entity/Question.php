@@ -1,21 +1,24 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * Class Question
  *
- * @ORM\MappedSuperclass
  * @ORM\Entity(repositoryClass="Chamilo\FaqBundle\Entity\QuestionRepository")
  * @ORM\Table(name="faq_question")
- *
- * @package Genj\FaqBundle\Entity
+ * *
+ * @package Chamilo\FaqBundle\Entity
  */
 class Question
 {
+    use ORMBehaviors\Translatable\Translatable;
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -28,16 +31,6 @@ class Question
      * @ORM\OrderBy({"rank" = "asc"})
      */
     protected $category;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
-    protected $headline;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    protected $body;
 
     /**
      * @Gedmo\SortablePosition
@@ -58,16 +51,25 @@ class Question
     protected $updatedAt;
 
     /**
-     * @Gedmo\Slug(fields={"headline"}, updatable=false)
-     * @ORM\Column(type="string", length=50, nullable=false)
-     */
-    protected $slug;
-
-    /**
      * @var boolean
      * @ORM\Column(name="only_auth_users", type="boolean", nullable=false)
      */
     protected $onlyAuthUsers;
+
+    /**
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    protected $isActive;
+
+    /**
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     */
+    public function __call($method, $arguments)
+    {
+        return $this->proxyCurrentLocaleTranslation($method, $arguments);
+    }
 
     /**
      * Get id
@@ -79,43 +81,6 @@ class Question
         return $this->id;
     }
 
-    /**
-     * Set headline
-     *
-     * @param string $headline
-     *
-     * @return Question
-     */
-    public function setHeadline($headline)
-    {
-        $this->headline = $headline;
-
-        return $this;
-    }
-
-    /**
-     * Get headline
-     *
-     * @return string
-     */
-    public function getHeadline()
-    {
-        return $this->headline;
-    }
-
-    /**
-     * Set body
-     *
-     * @param string $body
-     *
-     * @return Question
-     */
-    public function setBody($body)
-    {
-        $this->body = $body;
-
-        return $this;
-    }
 
     /**
      * Get rank
@@ -141,15 +106,6 @@ class Question
         return $this;
     }
 
-    /**
-     * Get body
-     *
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
 
     /**
      * Set createdAt
@@ -197,30 +153,6 @@ class Question
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     *
-     * @return Question
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->slug;
     }
 
     /**
@@ -309,5 +241,27 @@ class Question
         return $this;
     }
 
+    /**
+     * Set is_active
+     *
+     * @param boolean $isActive
+     *
+     * @return Question
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
 
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
 }

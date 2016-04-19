@@ -67,9 +67,16 @@ framework:
     trusted_proxies: ~
     session:
         # handler_id set to null will use default session handler from php.ini
-        handler_id:  ~
+        handler_id: ~
+        name: ch_sid
+
     fragments:       ~
     http_method_override: true
+
+theodo_evolution_session:
+    bag_manager:
+          class: Theodo\Evolution\Bundle\SessionBundle\Manager\Symfony1\BagManager
+          configuration_class: Theodo\Evolution\Bundle\SessionBundle\Manager\Symfony1\BagConfiguration
 
 # Twig Configuration
 twig:

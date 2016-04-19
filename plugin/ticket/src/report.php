@@ -4,6 +4,7 @@
 /**
  * @package chamilo.plugin.ticket
  */
+
 $language_file = array('trad4all');
 $cidReset = true;
 require_once '../config.php';
@@ -14,7 +15,7 @@ api_block_anonymous_users();
 if (!api_is_allowed_to_edit()) {
     api_not_allowed();
 }
-//$nameTools = api_xml_http_response_encode(get_lang('Soporte Virtual'));
+
 $this_section = 'Reports';
 unset($_SESSION['this_section']);
 
@@ -24,7 +25,8 @@ $(document).ready(function(){
     $( "#keyword_start_date_start" ).datepicker({ dateFormat: ' . "'yy-mm-dd'" . ' });
     $( "#keyword_start_date_end" ).datepicker({ dateFormat: ' . "'yy-mm-dd'" . ' });
 });
-function validate(){
+
+function validate() {
     if( $("#keyword_start_date_start").val() != "" &&  $("#keyword_start_date_end").val() != ""){
         datestart = $("#keyword_start_date_start").val();
         dateend = $("#keyword_start_date_end").val();
@@ -35,6 +37,7 @@ function validate(){
         }
     }
 }
+
 function load_course_list (div_course,my_user_id) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
@@ -84,6 +87,7 @@ $tools['quiz'] = array('id' => 'quiz', 'name' => get_lang('Quiz'));
 $tools['student_publication'] = array('id' => 'student_publication', 'name' => get_lang('Student_publication'));
 $tools['user'] = array('id' => 'user', 'name' => get_lang('User'));
 $tools['forum'] = array('id' => 'forum', 'name' => get_lang('Forum'));
+
 /**
  * Returns the escaped string.
  * @param string $s

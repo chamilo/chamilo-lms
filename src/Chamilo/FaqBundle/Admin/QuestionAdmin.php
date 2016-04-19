@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Admin;
 
@@ -10,7 +11,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 /**
  * Class QuestionAdmin
  *
- * @package Genj\FaqAdminBundle\Admin
+ * @package Chamilo\FaqBundle\Admin
  */
 class QuestionAdmin extends Admin
 {
@@ -26,10 +27,9 @@ class QuestionAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('headline')
-            ->add('body')
-            ->add('category')
-            ->add('slug');
+            ->add('id')
+            ->add('isActive')
+        ;
     }
 
     /**
@@ -39,16 +39,19 @@ class QuestionAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('headline', null, array('identifier' => true))
+            ->add('translations', null, array('identifier' => true))
             ->add('Category')
             ->add('rank')
-            ->add('_action', 'actions',
+            ->add(
+                '_action',
+                'actions',
                 array(
                     'actions' => array(
-                        'show' => array(),
+                        //'show' => array(),
+                        'preview' => array('template' => 'ChamiloFaqBundle:Faq:preview_question_partial.html.twig'),
                         'edit' => array(),
-                        'delete' => array()
-                    )
+                        'delete' => array(),
+                    ),
                 )
             );
     }
@@ -59,16 +62,19 @@ class QuestionAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('headline', null, array('attr' => array('class' => 'span12')))
-            ->add('body', null, array('required' => false, 'attr' => array('class' => 'span12')))
-            ->add('category', null, array(
+            ->add('translations', 'a2lix_translations', array())
+            ->add(
+                'category',
+                null,
+                array(
                     'expanded' => true,
                     'required' => true,
-                    'attr' => array('class' => 'radio-list vertical')
-                ))
-            ->add('rank', null, array('required' => false, 'attr' => array('class' => 'span12')))
-            ->add('slug', null, array('required' => false, 'attr' => array('class' => 'span12')))
+                    'attr' => array('class' => 'radio-list vertical'),
+                )
+            )
+            ->add('rank', null, array('required' => false))
             ->add('onlyAuthUsers')
+            ->add('isActive')
             ->end();
     }
 }

@@ -689,7 +689,8 @@ class AddCourse
                 'default' => api_get_setting('allow_public_certificates') === 'true' ? 1 : '',
                 'category' =>'certificates'
             ],
-            'documents_default_visibility' => ['default' =>'visible', 'category' =>'document']
+            'documents_default_visibility' => ['default' =>'visible', 'category' =>'document'],
+            'show_course_in_user_language' => ['default' => 2],
         ];
 
         $counter = 1;

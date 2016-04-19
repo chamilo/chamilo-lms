@@ -49,15 +49,14 @@ switch ($action) {
         $currentUrl = api_get_self().'?action=edit_icon&id=' . $id.'&'.api_get_cidreq();
 
         $form = new FormValidator('icon_edit', 'post', $currentUrl);
-        $form->addElement('header', get_lang('EditIcon'));
+        $form->addHeader(get_lang('EditIcon'));
         $form->addHtml('<div class="col-md-7">');
-        $form->addElement('text', 'name', get_lang('Name'));
-        $form->addElement('text', 'link', get_lang('Links'));
+        $form->addText('name', get_lang('Name'));
+        $form->addText('link', get_lang('Links'));
         $allowed_picture_types = array ('jpg', 'jpeg', 'png');
-        $form->addElement('file', 'icon', get_lang('CustomIcon'));
+        $form->addFile('icon', get_lang('CustomIcon'));
         $form->addRule('icon', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'target',
             get_lang('LinkTarget'),
             [
@@ -65,14 +64,12 @@ switch ($action) {
                 '_blank' => get_lang('LinkOpenBlank')
             ]
         );
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'visibility',
             get_lang('Visibility'),
             array(1 => get_lang('Visible'), 0 => get_lang('Invisible'))
         );
-        $form->addElement(
-            'textarea',
+        $form->addTextarea(
             'description',
             get_lang('Description'),
             array('rows' => '3', 'cols' => '40')
@@ -118,12 +115,8 @@ switch ($action) {
         $iconsTools .= Display::page_header(get_lang('CustomizeIcons'), null, 'h4');
         $iconsTools .= '<div class="row">';
         foreach ($toolList as $tool) {
-
-            if ($tool['id']>20) {
-                $toolIconName = $tool['name'];
-            } else {
-                $toolIconName = get_lang('Tool'.api_underscore_to_camel_case($tool['name']));
-            }
+            $toolIconName = 'Tool' . api_underscore_to_camel_case($tool['name']);
+            $toolIconName = isset($$toolIconName) ? get_lang($toolIconName) : $tool['name'];
 
             $iconsTools .= '<div class="col-md-2">';
             $iconsTools .= '<div class="items-tools">';

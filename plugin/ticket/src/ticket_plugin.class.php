@@ -58,7 +58,7 @@ class TicketPlugin extends Plugin
         $settings = $this->get_settings();
         $plugSetting = current($settings);
 
-        //Delete settings
+        // Delete settings
         $sql = "DELETE FROM $tblSettings WHERE variable = 'ticket_tool_enable'";
         Database::query($sql);
 

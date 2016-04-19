@@ -49,8 +49,6 @@
  */
 class Pager_Sliding extends Pager_Common
 {
-    // {{{ Pager_Sliding()
-
     /**
      * Constructor
      *

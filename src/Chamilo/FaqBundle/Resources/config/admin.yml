@@ -3,7 +3,7 @@ services:
     sonata.admin.faq_question:
         class: Chamilo\FaqBundle\Admin\QuestionAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Content", label: "FAQ" }
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Question" }
         arguments:
             - ~
             - Chamilo\FaqBundle\Entity\Question
@@ -12,7 +12,7 @@ services:
     sonata.admin.faq_category:
         class: Chamilo\FaqBundle\Admin\CategoryAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Content", label: "FAQ category" }
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Category" }
         arguments:
             - ~
             - Chamilo\FaqBundle\Entity\Category

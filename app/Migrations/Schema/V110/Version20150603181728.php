@@ -28,7 +28,16 @@ class Version20150603181728 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $this->addSql('ALTER TABLE c_lp ADD max_attempts INT NOT NULL, ADD subscribe_users INT NOT NULL DEFAULT 0');
+        $table = $schema->getTable('c_lp');
+        if (!$table->hasColumn('max_attempts')) {
+            $this->addSql('ALTER TABLE c_lp ADD max_attempts INT NOT NULL');
+
+        }
+
+        if (!$table->hasColumn('subscribe_users')) {
+            $this->addSql('ALTER TABLE c_lp ADD subscribe_users INT NOT NULL DEFAULT 0');
+        }
+
         $this->addSql('
             ALTER TABLE c_item_property
             MODIFY c_id INT DEFAULT NULL,
@@ -64,7 +73,10 @@ class Version20150603181728 extends AbstractMigrationChamilo
         $this->addSql("DELETE FROM c_item_property WHERE c_id = 0");
         // Remove inconsistencies about non-existing users
         $this->addSql("DELETE FROM course_rel_user WHERE user_id = 0");
-        $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18191D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
+
+        $this->addSql("DELETE FROM c_item_property WHERE c_id NOT IN (SELECT id FROM course)");
+
+        $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18191D79BD3 FOREIGN KEY (c_id) REFERENCES course(id)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C181330D47E9 FOREIGN KEY (to_group_id) REFERENCES c_group_info (iid)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18129F6EE60 FOREIGN KEY (to_user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C1819C859CC3 FOREIGN KEY (insert_user_id) REFERENCES user (id)');

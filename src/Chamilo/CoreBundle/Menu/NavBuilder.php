@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Menu;
 
+use Chamilo\PageBundle\Entity\Page;
+use Chamilo\PageBundle\Entity\Site;
 use Chamilo\UserBundle\Entity\User;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
@@ -66,12 +68,12 @@ class NavBuilder extends ContainerAware
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
 
             $menu->addChild(
-                $translator->trans('MyCourses'),
+                $translator->trans('My courses'),
                 array('route' => 'userportal')
             );
 
             $menu->addChild(
-                $translator->trans('Calendar'),
+                $translator->trans('Personal agenda'),
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
@@ -91,7 +93,7 @@ class NavBuilder extends ContainerAware
             );
 
             $menu->addChild(
-                $translator->trans('Social'),
+                $translator->trans('Social network'),
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
@@ -100,25 +102,89 @@ class NavBuilder extends ContainerAware
                 )
             );
 
-            $menu->addChild(
-                $translator->trans('Dashboard'),
-                array(
-                    'route' => 'main',
-                    'routeParameters' => array(
-                        'name' => 'dashboard/index.php',
-                    ),
-                )
-            );
-
             if ($checker->isGranted('ROLE_ADMIN')) {
+
+                $menu->addChild(
+                    $translator->trans('Dashboard'),
+                    array(
+                        'route' => 'main',
+                        'routeParameters' => array(
+                            'name' => 'dashboard/index.php',
+                        ),
+                    )
+                );
+
                 $menu->addChild(
                     $translator->trans('Administration'),
                     array(
-                        'route' => 'administration',
+                        'route' => 'main',
+                        'routeParameters' => array(
+                            'name' => 'social/home.php',
+                        )
                     )
                 );
             }
         }
+
+        // Getting site information
+
+        $site = $this->container->get('sonata.page.site.selector');
+        $host = $site->getRequestContext()->getHost();
+        $siteManager = $this->container->get('sonata.page.manager.site');
+        /** @var Site $site */
+        $site = $siteManager->findOneBy(array(
+            'host'    => array($host, 'localhost'),
+            'enabled' => true,
+        ));
+
+        if ($site) {
+            $pageManager = $this->container->get('sonata.page.manager.page');
+
+            // Parents only of homepage
+            $criteria = ['site' => $site, 'enabled' => true, 'parent' => 1];
+            $pages = $pageManager->findBy($criteria);
+
+            //$pages = $pageManager->loadPages($site);
+            /** @var Page $page */
+            foreach ($pages as $page) {
+                /*if ($page->getRouteName() !== 'page_slug') {
+                    continue;
+                }*/
+
+                // Avoid home
+                if ($page->getUrl() === '/') {
+                    continue;
+                }
+
+                if (!$page->isCms()) {
+                    continue;
+                }
+
+                $subMenu = $menu->addChild(
+                    $page->getName(),
+                    [
+                        'route' => $page->getRouteName(),
+                        'routeParameters' => [
+                            'path' => $page->getUrl(),
+                        ],
+                    ]
+                );
+
+                /** @var Page $child */
+                foreach ($page->getChildren() as $child) {
+                    $subMenu->addChild(
+                        $child->getName(),
+                        array(
+                            'route' => $page->getRouteName(),
+                            'routeParameters' => array(
+                                'path' => $child->getUrl(),
+                            ),
+                        )
+                    )->setAttribute('divider_append', true);
+                }
+            }
+        }
+
 
         return $menu;
     }
@@ -142,18 +208,13 @@ class NavBuilder extends ContainerAware
             $token = $this->container->get('security.token_storage');
             /** @var User $user */
             $user = $token->getToken()->getUser();
-
             $menu->setChildrenAttribute('class', 'nav navbar-nav navbar-right');
+            $dropdown = $menu->addChild($user->getUsername())->setAttribute('dropdown', true);
 
-            $dropdown = $menu->addChild(
-                $user->getUsername()
-            )->setAttribute('dropdown', true);
-
-            $dropdown->addChild(
+            /*$dropdown->addChild(
                 $translator->trans('Profile'),
                 array('route' => 'fos_user_profile_show')
-            )->setAttribute('divider_append', true);
-
+            )->setAttribute('divider_append', true);*/
             $dropdown->addChild(
                 $translator->trans('Inbox'),
                 array(
@@ -164,12 +225,25 @@ class NavBuilder extends ContainerAware
                 )
             )->setAttribute('divider_append', true);
 
+            // legacy logout
+            $logoutLink = $menu->addChild(
+                $translator->trans('Logout'),
+                array(
+                    'route' => 'main',
+                    'routeParameters' => array(
+                        'name' => '../index.php',
+                        'logout' => 'logout',
+                        'uid' => $user->getId(),
+                    ),
+                    'query' => '1',
+                    'icon' => 'fa fa-sign-out'
+                )
+            );
 
-            $logoutLink = $menu->addChild('Logout', array('route' => 'logout'));
             $logoutLink
                 ->setLinkAttributes(array(
                     'id' => 'logout_button',
-                    'class' => 'fa fa-power-off'
+                    'class' => 'fa fa-power-off',
                 ))
                 ->setAttributes(array(
                     /*'id' => 'signin',

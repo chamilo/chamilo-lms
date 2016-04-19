@@ -154,7 +154,8 @@ class Login
             PERSON_NAME_EMAIL_ADDRESS
         );
         $email_admin = api_get_setting('emailAdministrator');
-
+        $email_body = nl2br($email_body);
+        
         $result = @api_mail_html(
             '',
             $email_to,
@@ -196,13 +197,20 @@ class Login
             $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
 
             $mailTemplate = new Template(null, false, false, false, false, false);
+            $mailLayout = $mailTemplate->get_template('mail/reset_password.tpl');
             $mailTemplate->assign('complete_user_name', $user->getCompleteName());
             $mailTemplate->assign('link', $url);
 
-            $mailLayout = $mailTemplate->get_template('mail/reset_password.tpl');
+
 
             $mailSubject = get_lang('ResetPasswordInstructions');
             $mailBody = $mailTemplate->fetch($mailLayout);
+            $mailBody = nl2br($mailBody);
+
+            $mailBody = sprintf(
+                get_lang('ResetPasswordCommentWithUrl'),
+                $url
+            );
 
             api_mail_html(
                 $user->getCompleteName(),

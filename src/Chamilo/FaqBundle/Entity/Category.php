@@ -1,9 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * Class Category
@@ -14,10 +17,12 @@ use Doctrine\ORM\Mapping as ORM;
  *     indexes={@ORM\Index(name="is_active_idx", columns={"is_active"})}
  * )
  *
- * @package Genj\FaqBundle\Entity
+ * @package Chamilo\FaqBundle\Entity
  */
 class Category
 {
+    use ORMBehaviors\Translatable\Translatable;
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -29,16 +34,6 @@ class Category
      * @ORM\OneToMany(targetEntity="Question", mappedBy="category")
      */
     protected $questions;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
-    protected $headline;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    protected $body;
 
     /**
      * @Gedmo\SortablePosition
@@ -64,10 +59,14 @@ class Category
     protected $updatedAt;
 
     /**
-     * @Gedmo\Slug(fields={"headline"}, updatable=false)
-     * @ORM\Column(type="string", length=50, nullable=false)
+     * @param $method
+     * @param $arguments
+     * @return mixed
      */
-    protected $slug;
+    public function __call($method, $arguments)
+    {
+        return $this->proxyCurrentLocaleTranslation($method, $arguments);
+    }
 
     /**
      * Get id
@@ -77,54 +76,6 @@ class Category
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set headline
-     *
-     * @param string $headline
-     *
-     * @return Category
-     */
-    public function setHeadline($headline)
-    {
-        $this->headline = $headline;
-
-        return $this;
-    }
-
-    /**
-     * Get headline
-     *
-     * @return string
-     */
-    public function getHeadline()
-    {
-        return $this->headline;
-    }
-
-    /**
-     * Get body
-     *
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * Set body
-     *
-     * @param string $body
-     *
-     * @return Question
-     */
-    public function setBody($body)
-    {
-        $this->body = $body;
-
-        return $this;
     }
 
     /**
@@ -221,30 +172,6 @@ class Category
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     *
-     * @return Category
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->slug;
     }
 
     /**

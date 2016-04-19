@@ -1,0 +1,11 @@
+{% if object.category %}
+    <a target = "_blank"
+       href="{{ url('faq', {'categorySlug': object.category.getSlug, 'questionSlug' : object.getSlug }) }}"
+       class="btn btn-sm btn-default"
+       title="{{ 'Preview'|trans({}, 'SonataAdminBundle') }}"
+    >
+        <i class="fa fa-external-link"></i>
+        {{ 'Preview'|trans({}, 'SonataAdminBundle') }}
+    </a>
+{% endif %}
+

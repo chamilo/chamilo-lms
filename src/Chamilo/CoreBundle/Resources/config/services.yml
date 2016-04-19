@@ -132,20 +132,28 @@ services:
 #          - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
 #          - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
-    # Setting locale
-#    chamilo_core.listener.locale:
-#        class: Chamilo\CoreBundle\EventListener\LocaleListener
-#        arguments: ["%kernel.default_locale%", "@service_container"]
-#        tags:
-#            - { name: kernel.event_subscriber }
+    #Setting locale
+    chamilo_core.listener.legacy_login_listener:
+        class: Chamilo\CoreBundle\EventListener\LegacyLoginListener
+        arguments: ["@service_container", '@security.token_storage']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
     # Setting user and platform locale
-#    chamilo_core.listener.user_locale_listener:
-#        class: Chamilo\CoreBundle\EventListener\UserLocaleListener
-#        arguments: ["@session", "@chamilo.settings.manager"]
-#        tags:
-#            - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
-##            - { name: kernel.event_listener, event: kernel.request, method: setLocaleForUnauthenticatedUser}
+    chamilo_core.listener.user_locale_listener:
+        class: Chamilo\CoreBundle\EventListener\UserLocaleListener
+        arguments: ["@session"]
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
+
+    chamilo_core.listener.locale:
+        class: Chamilo\CoreBundle\EventListener\LocaleListener
+        arguments: ["%kernel.default_locale%", "@service_container"]
+        tags:
+            - { name: kernel.event_subscriber }
+
+
+
 #
 #    # Settings listener
 #    chamilo_core.listener.settings:
@@ -177,7 +185,7 @@ services:
 #        tags:
 #            - { name: kernel.event_listener, event: theme.messages, method: onListMessages }
 #
-#    # Login listener - When user logs in
+    # Login listener - When user logs in
 #    chamilo_core.listener.login_success_handler:
 #        class: Chamilo\CoreBundle\EventListener\LoginSuccessHandler
 #        arguments:  [@router, @security.authorization_checker]

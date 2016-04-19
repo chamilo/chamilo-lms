@@ -1,39 +1,60 @@
-{% extends 'SonataPageBundle::layout.html.twig' %}
+{% extends '@ChamiloCore/layout_cms.html.twig' %}
 
-{% block page_content %}
+{% block sonata_page_container %}
 <h1>FAQ</h1>
 
-<h2>Categories</h2>
+    <br />
+<div class="well">
 <ul>
-    {% for category in categories %}
-        {% if selectedCategory.slug is defined and selectedCategory.slug == category.slug%}
-            <li class="active"  >
-                <strong>{{ category.headline|e }}</strong>
-            </li>
-        {% else %}
+{% for category in categories %}
+    <li class="active">
+        <h3>{{ category.getHeadline|e }}</h3>
+    </li>
+    <ul>
+    {% set list = [false] %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% set list = [false, true] %}
+    {% endif %}
+
+    {% for question in category.questions if question.onlyAuthUsers in list %}
+        {% if question.isActive %}
             <li>
-                <a href="{{ path('faq', { 'categorySlug': category.slug }) }}">{{ category.headline|e }}</a>
+                <a href="#{{ question.id }}">
+                    {{ question.getHeadline|e }}
+                </a>
             </li>
         {% endif %}
     {% endfor %}
-</ul>
-
-{% if selectedCategory is not null %}
-    <h2>Questions</h2>
-    <ul>
-        {% for question in questions %}
-            {% if selectedQuestion.slug is defined and selectedQuestion.slug == question.slug%}
-                <li class="active"  >
-                    <strong>{{ question.headline|e }}</strong>
-                    <div>{{ selectedQuestion.body }}</div>
-                </li>
-            {% else %}
-                <li>
-                    <a href="{{ path('faq', { 'categorySlug': selectedCategory.slug, 'questionSlug': question.slug }) }}">{{ question.headline|e }}</a>
-                </li>
-            {% endif %}
-        {% endfor %}
     </ul>
-{% endif %}
+{% endfor %}
+</ul>
+</div>
+<br />
+
+<ul>
+{% for category in categories %}
+    <li class="active">
+        <h2>{{ category.getHeadline|e }}</h2>
+    </li>
+    <ul>
+    {% set list = [false] %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% set list = [false, true] %}
+    {% endif %}
+
+    {% for question in category.questions if question.onlyAuthUsers in list %}
+        {% if question.isActive %}
+            <li>
+               <h3>
+                   {{ question.getHeadline|e }}
+                </h3>
+                <a name="{{ question.id }}" id="{{ question.id }}"></a>
+                <p>{{ question.getBody }}</p>
+            </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endfor %}
+</ul>
 
 {% endblock %}

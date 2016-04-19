@@ -138,7 +138,11 @@
         "php-ffmpeg/php-ffmpeg": "0.5.1",
         "imagine/imagine": "0.6.2",
         "essence/essence": "^2.5",
-        "jeroendesloovere/vcard": "^1.2"
+        "jeroendesloovere/vcard": "^1.2",
+        "a2lix/translation-form-bundle": "~2.0",
+        "knplabs/doctrine-behaviors": "~1.1",
+        "lunetics/locale-bundle": "^2.4",
+        "theodo-evolution/session-bundle": "1.0.*"
     },
     "require-dev": {
         "behat/behat": "@stable",

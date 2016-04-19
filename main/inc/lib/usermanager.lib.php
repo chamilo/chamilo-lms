@@ -1,4 +1,3 @@
-
 <?php
 /* For licensing terms, see /license.txt */
 
@@ -403,7 +402,7 @@ class UserManager
                         $url = api_get_access_url($access_url_id);
                     }
                 } else {
-                    $url = $_configuration['root_web'];
+                    $url = api_get_path(WEB_PATH);
                 }
                 $tplContent = new Template(null, false, false, false, false, false);
                 // variables for the default template
@@ -953,6 +952,8 @@ class UserManager
             } else {
                 $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$_configuration['root_web']."\n\n".get_lang('Problem')."\n\n".get_lang('SignatureFormula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
             }
+
+            $emailbody = nl2br($emailbody);
             api_mail_html(
                 $recipient_name,
                 $email,
@@ -1514,9 +1515,7 @@ class UserManager
         }
 
         $gravatarEnabled = api_get_setting('gravatar_enabled');
-
         $anonymousPath = Display::returnIconPath('unknown.png', $pictureAnonymousSize);
-
         if ($pictureWebFile == 'unknown.jpg' || empty($pictureWebFile)) {
 
             if ($gravatarEnabled === 'true') {

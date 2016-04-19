@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *
  * @package chamilo.plugin.ticket
@@ -64,7 +65,8 @@ while ($row = Database::fetch_assoc($result_forum)) {
 echo '</select></div><div>';
 echo '<div class="row">
         <div class="formw">
-        <button class="save" name="edit" type="button" value="' . get_lang('Edit') . '" onClick="save(' . "$id" . ');">' . get_lang('Edit') . '</button>
+        <button class="save" name="edit" type="button" value="' . get_lang('Edit') . '" onClick="save(' . "$id" . ');">' .
+            get_lang('Edit') . '</button>
         </div>
     </div>';
 echo '</form>';

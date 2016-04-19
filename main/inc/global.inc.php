@@ -346,7 +346,6 @@ if (empty($user_language) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !isset(
 }
 
 // Include all files (first english and then current interface language)
-
 $langpath = api_get_path(SYS_LANG_PATH);
 
 /* This will only work if we are in the page to edit a sub_language */
@@ -411,7 +410,6 @@ if (isset($this_script) && $this_script == 'sub_language') {
 }
 
 // Checking if we have a valid language. If not we set it to the platform language.
-
 $valid_languages = api_get_languages();
 
 if (!empty($valid_languages)) {
@@ -439,6 +437,7 @@ if (!empty($valid_languages)) {
     } else {
         $language_interface = api_get_setting('platformLanguage');
     }
+    
 
     if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false) {
         $language_interface = api_get_language_from_type($language_priority3);

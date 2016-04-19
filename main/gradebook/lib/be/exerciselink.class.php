@@ -192,7 +192,7 @@ class ExerciseLink extends AbstractLink
 
         /* the following query should be similar (in conditions) to the one used
         in exercice/exercice.php, look for note-query-exe-results marker*/
-        $session_id = api_get_session_id();
+        $session_id = $this->get_session_id();
         $courseId = $this->getCourseId();
 	    $exercise = new Exercise($courseId);
         $exercise->read($this->get_ref_id());

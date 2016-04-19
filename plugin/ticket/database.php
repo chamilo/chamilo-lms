@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Contains the SQL for the tickets management plugin database structure
  */
@@ -42,6 +44,7 @@ $categoRow = array(
     $objPlugin->get_lang('VirtualCampus') => $objPlugin->get_lang('TicketsAboutVirtualCampus'),
     $objPlugin->get_lang('OnlineEvaluation') => $objPlugin->get_lang('TicketsAboutOnlineEvaluation')
 );
+
 $i = 1;
 foreach ($categoRow as $category => $description) {
     //Online evaluation requires a course
@@ -67,7 +70,7 @@ foreach ($categoRow as $category => $description) {
     Database::insert($table, $attributes);
     $i++;
 }
-//END default categories
+
 $table = Database::get_main_table(TABLE_TICKET_MESSAGE);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         id int UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -117,6 +120,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         sys_lastedit_datetime datetime DEFAULT NULL,
         PRIMARY KEY (id))";
 Database::query($sql);
+
 //Default Priorities
 $defaultPriorities = array(
     'NRM' => $objPlugin->get_lang('PriorityNormal'),
@@ -134,7 +138,6 @@ foreach ($defaultPriorities as $pId => $priority) {
     Database::insert($table, $attributes);
     $i++;
 }
-//End
 
 $table = Database::get_main_table(TABLE_TICKET_PROJECT);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
@@ -150,6 +153,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         sys_lastedit_datetime datetime DEFAULT NULL,
         PRIMARY KEY (id))";
 Database::query($sql);
+
 //Default Project Table Ticket
 $attributes = array(
     'id' => 1,
@@ -157,7 +161,6 @@ $attributes = array(
     'name' => 'Ticket System'
 );
 Database::insert($table, $attributes);
-//END
 
 //STATUS
 $table = Database::get_main_table(TABLE_TICKET_STATUS);
@@ -168,6 +171,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         description varchar(255) DEFAULT NULL,
         PRIMARY KEY (id))";
 Database::query($sql);
+
 //Default status
 $defaultStatus = array(
     'NAT' => $objPlugin->get_lang('StatusNew'),
@@ -187,7 +191,6 @@ foreach ($defaultStatus as $abr => $status) {
     Database::insert($table, $attributes);
     $i ++;
 }
-//END
 
 $table = Database::get_main_table(TABLE_TICKET_TICKET);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (

@@ -182,11 +182,10 @@
             {% block menu %}
                 <nav class="navbar navbar-default">
                     <div class="container">
-                        {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked':true}) }}
-                        <div style="float:right">
-                            {#{{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:rightMenu', {'automenu': 'navbar'} ) }}#}
+                        <div class="collapse navbar-collapse">
+                        {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : false}) }}
+                        {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:rightMenu', {'automenu': 'navbar', 'pull-right' : true} ) }}
                         </div>
-
                     </div>
                 </nav>
                 {#{% include "@template_style/layout/menu.html.twig" %}#}
@@ -203,6 +202,7 @@
     </header>
 
 <div id="top_main_content" class="container">
+    {#{{ locale_switcher() }}#}
 
 {# course navigation links/shortcuts need to be activated by the admin #}
     {#{% include "@template_style/layout/course_navigation.html.twig" %}#}

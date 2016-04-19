@@ -209,19 +209,19 @@ $form->addElement('text', 'phone', get_lang('PhoneNumber'));
 $form->addElement('file', 'picture', get_lang('AddPicture'), array('id' => 'picture', 'class' => 'picture-form'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 
-$form->addHtml(''
-                . '<div class="form-group">'
-                    . '<label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>'
-                        . '<div class="col-sm-8">'
-                            . '<div id="cropImage" class="cropCanvas">'
-                                . '<img id="previewImage" >'
-                            . '</div>'
-                            . '<div>'
-                                . '<button class="btn btn-primary hidden" name="cropButton" id="cropButton"><em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>'
-                            . '</div>'
-                        . '</div>'
-                . '</div>'
-    . '');
+$form->addHtml('<div class="form-group">
+    <label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>
+    <div class="col-sm-8">
+        <div id="cropImage" class="cropCanvas">
+            <img id="previewImage" >
+        </div>
+        <div>
+        <button class="btn btn-primary hidden" name="cropButton" id="cropButton">
+        <em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>
+        </div>
+    </div>
+</div>');
+
 $form->addHidden('cropResult', '');
 
 $form->addRule(

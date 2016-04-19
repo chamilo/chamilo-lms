@@ -1227,7 +1227,11 @@ function api_is_self_registration_allowed()
  */
 function api_get_user_id()
 {
-    return empty($GLOBALS['_user']['user_id']) ? 0 : intval($GLOBALS['_user']['user_id']);
+    $userInfo = Session::read('_user');
+    if ($userInfo && isset($userInfo['user_id'])) {
+        return $userInfo['user_id'];
+    }
+    return 0;
 }
 
 /**
@@ -1282,7 +1286,6 @@ function _api_format_user($user, $add_password = false)
 
     $firstname = null;
     $lastname = null;
-
     if (isset($user['firstname']) && isset($user['lastname'])) {
         $firstname = $user['firstname'];
         $lastname = $user['lastname'];
@@ -1387,14 +1390,16 @@ function api_get_user_info(
     $loadExtraData = false,
     $loadOnlyVisibleExtraData = false
 ) {
+
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
         if (isset($userFromSession)) {
             return _api_format_user($userFromSession);
         }
-        // @todo trigger an exception here
+
         return false;
     }
+
 
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
             WHERE id='".intval($user_id)."'";
@@ -1908,7 +1913,8 @@ function api_check_password($password) {
  * @param bool      database check switch - passed to api_is_anonymous()
  * @return bool     true if succesfully unregistered, false if not anonymous.
  */
-function api_clear_anonymous($db_check = false) {
+function api_clear_anonymous($db_check = false)
+{
     global $_user;
     if (api_is_anonymous($_user['user_id'], $db_check)) {
         unset($_user['user_id']);
@@ -1980,7 +1986,6 @@ function api_set_anonymous() {
     if (!empty($_user['user_id'])) {
         return false;
     }
-
     $user_id = api_get_anonymous_id();
     if ($user_id == 0) {
         return false;
@@ -3178,10 +3183,12 @@ function api_is_allowed($tool, $action, $task_id = 0)
  * the session (false) to see if the current user is the anonymous user
  * @return bool     true if this user is anonymous, false otherwise
  */
-function api_is_anonymous($user_id = null, $db_check = false) {
+function api_is_anonymous($user_id = null, $db_check = false)
+{
     if (!isset($user_id)) {
         $user_id = api_get_user_id();
     }
+
     if ($db_check) {
         $info = api_get_user_info($user_id);
         if ($info['status'] == ANONYMOUS) {
@@ -3190,6 +3197,7 @@ function api_is_anonymous($user_id = null, $db_check = false) {
     }
 
     $_user = api_get_user_info();
+
     if (isset($_user['status']) && $_user['status'] == ANONYMOUS) {
         //if ($_user['user_id'] == 0) {
         // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
@@ -3202,7 +3210,7 @@ function api_is_anonymous($user_id = null, $db_check = false) {
         return true;
     }
 
-    return ((isset($_user['is_anonymous']) && $_user['is_anonymous'] === true) || $_user === false);
+    return (isset($_user['is_anonymous']) && $_user['is_anonymous'] === true) || $_user === false;
 }
 
 /**
@@ -4217,7 +4225,6 @@ function api_get_language_id($language)
 function api_get_language_from_type($lang_type)
 {
     $return = false;
-
     switch ($lang_type) {
         case 'platform_lang':
             $temp_lang = api_get_setting('platformLanguage');
@@ -4226,6 +4233,7 @@ function api_get_language_from_type($lang_type)
             break;
         case 'user_profil_lang':
             $_user = api_get_user_info();
+
             if (isset($_user['language']) && !empty($_user['language']))
                 $return = $_user['language'];
             break;
@@ -4237,6 +4245,7 @@ function api_get_language_from_type($lang_type)
             global $_course;
             $cidReq = null;
             if (empty($_course)) {
+
                 // Code modified because the local.inc.php file it's declarated after this work
                 // causing the function api_get_course_info() returns a null value
                 $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : null;
@@ -4249,8 +4258,16 @@ function api_get_language_from_type($lang_type)
                 }
             }
             $_course = api_get_course_info($cidReq);
-            if (isset($_course['language']) && !empty($_course['language']))
+            if (isset($_course['language']) && !empty($_course['language'])) {
                 $return = $_course['language'];
+                $showCourseInUserLanguage = api_get_course_setting('show_course_in_user_language');
+                if ($showCourseInUserLanguage == 1) {
+                    $userInfo = api_get_user_info();
+                    if (isset($userInfo['language'])) {
+                        $return = $userInfo['language'];
+                    }
+                }
+            }
             break;
         default:
             $return = false;
@@ -7936,6 +7953,15 @@ function api_mail_html(
     // Send the mail message.
     if (!$mail->Send()) {
         error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
+        if ($mail->SMTPDebug) {
+            error_log(
+                "Connection details :: " .
+                "Protocol: " . $mail->Mailer . ' :: ' .
+                "Host/Port: " . $mail->Host . ':' . $mail->Port . ' :: ' .
+                "Authent/Open: " . ($mail->SMTPAuth?'Authent':'Open') . ' :: ' .
+                ($mail->SMTPAuth?"  User/Pass: " . $mail->Username . ':' . $mail->Password:'')
+            );
+        }
         return 0;
     }
 

@@ -41,6 +41,7 @@ sonata_page:
         - ^/userportal/(.*)
         - ^/js/(.*)
         - ^/faq/(.*)
+        - ^/faq
         - ^/courses/(.*)
         - ^/front/editor
 

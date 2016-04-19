@@ -32,4 +32,4 @@ parameters:
     # sonata_media.cdn.host: /chamilo_master/web/uploads/media
 
     sonata_page.varnish.command: 'if [ ! -r "/etc/varnish/secret" ]; then echo "VALID ERROR :/"; else varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 {{ COMMAND }} "{{ EXPRESSION }}"; fi;'
-    locales: [en, fr, es]
+    locales: [en, fr, es, de]

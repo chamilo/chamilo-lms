@@ -1,6 +1,10 @@
 
 home:
-    path: /
+    path: ../../index.php
+
+userportal:
+    path: ../../user_portal.php
+
 #index:
 #    path: /
 

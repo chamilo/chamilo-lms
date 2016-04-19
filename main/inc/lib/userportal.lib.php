@@ -1045,6 +1045,7 @@ class IndexManager
         $sessionCount = 0;
         $courseCount = 0;
 
+        $items = [];
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             // Display special courses.
@@ -1059,6 +1060,7 @@ class IndexManager
                 $this->load_directories_preview
             );
             $courses_html .= $courses['html'];
+            $items = $courses['items'];
             $courseCount = $specialCourses['course_count'] + $courses['course_count'];
         }
 
@@ -1203,10 +1205,12 @@ class IndexManager
                             $this->tpl->assign('session', $params);
                             $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
 
-                            $sessions_with_no_category .= $this->tpl->fetch(
+                            $item = $this->tpl->fetch(
                                 $this->tpl->get_template('/user_portal/session.tpl')
                             );
 
+                            $sessions_with_no_category .= $item;
+                            $items[] = $item;
                             $sessionCount++;
                         }
                     }
@@ -1288,9 +1292,7 @@ class IndexManager
                                 $sessionParams['id'] = $session_id;
                                 $sessionParams['show_link_to_session'] = !api_is_drh() && $sessionTitleLink;
                                 $sessionParams['title'] = $session_box['title'];
-                                $sessionParams['subtitle'] = (!empty($session_box['coach'])
-                                    ? $session_box['coach'] . ' | '
-                                    : '') . $session_box['dates'];
+                                $sessionParams['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'] . ' | ': '') . $session_box['dates'];
                                 $sessionParams['show_actions'] = api_is_platform_admin();
                                 $sessionParams['courses'] = $html_courses_session;
                                 $sessionParams['show_simple_session_info'] = false;
@@ -1303,9 +1305,13 @@ class IndexManager
                                 }
 
                                 $this->tpl->assign('session', $sessionParams);
-                                $html_sessions .= $this->tpl->fetch(
+                                $item = $this->tpl->fetch(
                                     $this->tpl->get_template('user_portal/session.tpl')
                                 );
+
+                                $html_sessions .= $item;
+
+                                $items[] = $item;
 
                                 $sessionCount++;
                             }
@@ -1352,16 +1358,19 @@ class IndexManager
                         }
 
                         $this->tpl->assign('session_category', $categoryParams);
-                        $sessions_with_category .= $this->tpl->fetch(
-                            "{$this->tpl->templateFolder}/user_portal/session_category.tpl"
-                        );
+                        $item = $this->tpl->fetch("{$this->tpl->templateFolder}/user_portal/session_category.tpl");
+                        $sessions_with_category .= $item;
+                        $items[] = $item;
                     }
                 }
             }
         }
 
+        $items = array_reverse($items);
+        
         return [
             'html' => $sessions_with_category.$sessions_with_no_category.$courses_html.$special_courses,
+            'items' => $items,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];
@@ -1421,7 +1430,7 @@ class IndexManager
         if ($load_history) {
             $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
             if (empty($session_categories)) {
-                $html .=  get_lang('YouDoNotHaveAnySessionInItsHistory');
+                $html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
             }
         }
 
@@ -1473,7 +1482,7 @@ class IndexManager
         $listUserCategories[0] = '';
 
         $html = '<div class="session-view-block">';
-
+        $items = [];
         foreach ($listUserCategories as $userCategoryId => $userCatTitle) {
             // add user category
             $userCategoryHtml = '';
@@ -1529,7 +1538,7 @@ class IndexManager
                     }
                     $htmlSessionCategory .= '</div>'; // end session cat block
                     $htmlCategory .=  $htmlSessionCategory .'</div>' ;
-                    $htmlCategory .= '';   // end course block
+                    $items[] = $htmlSessionCategory;
                 }
                 $userCategoryHtml .= $htmlCategory;
             }
@@ -1538,32 +1547,35 @@ class IndexManager
             // if course not already added
             $htmlCategory = '';
             foreach ($listCoursesInfo as $i => $listCourse) {
+                $item = '';
                 if ($listCourse['userCatId'] == $userCategoryId && !isset($listCoursesAlreadyDisplayed[$listCourse['id']])) {
                     if ($userCategoryId != 0) {
-                        $htmlCategory .= '<div class="session-view-row" >';
+                        $item .= '<div class="session-view-row" >';
                     } else {
-                        $htmlCategory .= '<div class="session-view-well well">';
+                        $item .= '<div class="session-view-well well">';
                     }
-                    $htmlCategory .= self::getHtmlForCourse(
+                    $item .= self::getHtmlForCourse(
                         $listCourse['course'],
                         $userCategoryId,
                         0,
                         $loadDirs
                     );
-                    $htmlCategory .= '</div>';
+                    $item .= '</div>';
+                    $htmlCategory .= $item;
+                    $items[] = $item;
                 }
             }
-            $htmlCategory .= '';
             $userCategoryHtml .= $htmlCategory;   // end user cat block
             if ($userCategoryId != 0) {
                 $userCategoryHtml .= '</div>';
             }
-            $html .= $userCategoryHtml;   //
+            $html .= $userCategoryHtml;
         }
         $html .= '</div>';
 
         return [
             'html' => $html.$specialCourses,
+            'items' => $items,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

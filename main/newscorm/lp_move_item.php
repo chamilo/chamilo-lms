@@ -22,19 +22,30 @@ include 'resourcelinker.inc.php';
 /* Header and action code */
 $htmlHeadXtra[] = '<script type="text/javascript">'.
 $_SESSION['oLP']->get_js_dropdown_array() .
-'function load_cbo(id){' ."\n" .
-  'if (!id) {return false;}'.
-  'var cbo = document.getElementById(\'previous\');' .
-  'for(var i = cbo.length - 1; i > 0; i--) {' .
-    'cbo.options[i] = null;' .
- '}' ."\n" .
-  'var k=0;' .
-  'for(var i = 1; i <= child_name[id].length; i++){' ."\n" .
-  '  cbo.options[i] = new Option(child_name[id][i-1], child_value[id][i-1]);' ."\n" .
-  '  k=i;' ."\n" .
-  '}' ."\n" .
-  'cbo.options[k].selected = true;'."\n" .
-'}'."\n" .
+"
+    function load_cbo(id) {
+        if (!id) {
+            return false;
+        }
+
+        var cbo = document.getElementById('previous');
+
+        for(var i = cbo.length - 1; i > 0; i--) {
+            cbo.options[i] = null;
+        }
+
+        var k=0;
+
+        for(var i = 1; i <= child_name[id].length; i++) {
+            cbo.options[i] = new Option(child_name[id][i - 1], child_value[id][i - 1]);
+            k=i;
+        }
+
+        cbo.options[k].selected = true;
+        $('#previous').selectpicker('refresh');
+    }
+" .
+"\n" .
 '$().ready(function() {'."\n" .
   'if ($(\'#previous\')) {'."\n" .
     'if(\'parent is\'+$(\'#idParent\').val()) {'.

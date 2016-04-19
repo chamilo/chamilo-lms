@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Admin;
 
@@ -10,7 +11,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 /**
  * Class QuestionAdmin
  *
- * @package Genj\FaqAdminBundle\Admin
+ * @package Chamilo\FaqBundle\Admin
  */
 class CategoryAdmin extends Admin
 {
@@ -26,8 +27,8 @@ class CategoryAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('headline')
-            ->add('body')
+            //->add('headline')
+            //->add('body')
             ->add('rank')
             ->add('isActive')
         ;
@@ -39,11 +40,14 @@ class CategoryAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('headline', null, array('identifier' => true))
+            //->add('headline', null, array('identifier' => true))
+            ->add('translations', null, array('identifier' => true))
+            ->add('rank')
             ->add('_action', 'actions',
                 array(
                     'actions' => array(
-                        'show' => array(),
+                        //'show' => array(),
+                        'preview' => array('template' => 'ChamiloFaqBundle:Faq:preview_category_partial.html.twig'),
                         'edit' => array(),
                         'delete' => array()
                     )
@@ -58,11 +62,11 @@ class CategoryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('headline', null, array('attr' => array('class' => 'span12')))
-            ->add('body', null, array('required' => false, 'attr' => array('class' => 'span12')))
-            ->add('rank', null, array('required' => false, 'attr' => array('class' => 'span12')))
-            ->add('slug')
+            ->add('translations', 'a2lix_translations', array())
+            ->add('rank', null, array('required' => false))
+//            ->add('slug')
             ->add('isActive')
-            ->end();
+            ->end()
+        ;
     }
 }

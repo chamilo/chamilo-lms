@@ -239,7 +239,7 @@ if (api_is_platform_admin()) {
 
     if (api_get_configuration_value('chamilo_cms')) {
         $items[] = array(
-            'url' => api_get_path(WEB_PATH) . 'web/app_dev.php/login',
+            'url' => api_get_path(WEB_PATH) . 'web/app_dev.php/administration/dashboard',
             'label' => get_lang('CMS')
         );
     }
@@ -540,5 +540,3 @@ $content = $tpl->fetch($admin_template);
 $tpl->assign('content', $content);
 $tpl->assign('message', $message);
 $tpl->display_one_col_template();
-
-// Note: version checking mechanism has now been moved to main/inc/ajax/admin.ajax.php

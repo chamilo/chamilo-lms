@@ -28,11 +28,11 @@
 #    prefix:   /js
 
 # Legacy routes
-#main:
-#    path: /main/{name}
-#    defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
-#    requirements:
-#      name: .+
+main:
+    path: ../../main/{name}
+    defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
+    requirements:
+      name: .+
 
 # web url shortcuts for legacy templates
 web.ajax:
@@ -91,12 +91,12 @@ web.img:
 #        _controller: chamilo_course.controller.tool:indexAction
 
 # Redirects /url/ to /url
-#remove_trailing_slash:
-#    path: /{url}
-#    defaults: { _controller: ChamiloCoreBundle:Redirecting:removeTrailingSlash }
-#    requirements:
-#        url: .*/$
-#        _method: GET
+remove_trailing_slash:
+    path: /{url}
+    defaults: { _controller: ChamiloCoreBundle:Redirecting:removeTrailingSlash }
+    requirements:
+        url: .*/$
+        _method: GET
 
 
 ## Course settings

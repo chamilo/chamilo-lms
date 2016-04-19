@@ -369,11 +369,12 @@ class GradebookUtils
 
     /**
      * Checks if a resource is in the unique gradebook of a given course
-     * @param    string  Course code
-     * @param    int     Resource type (use constants defined in linkfactory.class.php)
-     * @param    int     Resource ID in the corresponding tool
-     * @param    int     Session ID (optional -  0 if not defined)
-     * @return   int     false on error or array of resource
+     * @param    string  $course_code Course code
+     * @param    int     $resource_type Resource type (use constants defined in linkfactory.class.php)
+     * @param    int     $resource_id Resource ID in the corresponding tool
+     * @param    int     $session_id Session ID (optional -  0 if not defined)
+     *
+     * @return   array     false on error or array of resource
      */
     public static function is_resource_in_course_gradebook($course_code, $resource_type, $resource_id, $session_id = 0)
     {
@@ -390,6 +391,7 @@ class GradebookUtils
             return false;
         }
         $row = Database::fetch_array($res, 'ASSOC');
+        
         return $row;
     }
 
@@ -769,7 +771,7 @@ class GradebookUtils
                 $row = Database::fetch_array($res);
                 $category_id = $row['id'];
             }
-            
+
             return $category_id;
         }
 

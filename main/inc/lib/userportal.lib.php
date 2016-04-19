@@ -1039,26 +1039,24 @@ class IndexManager
                 $html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
             }
         }
-
-        $listCourse = '';
-        $special_courses = '';
+        
         $sessionCount = 0;
         $courseCount = 0;
 
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             // Display special courses.
-            $specialCourses = CourseManager::display_special_courses(
+            $specialCourses = CourseManager::returnSpecialCourses(
                 $user_id,
                 $this->load_directories_preview
             );
-            $special_courses = $specialCourses['html'];
             // Display courses.
             $courses = CourseManager::returnCourses(
                 $user_id,
                 $this->load_directories_preview
             );
             
+            $this->tpl->assign('special_courses', $specialCourses);
             $this->tpl->assign('courses', $courses);
             $listCourse = $this->tpl->fetch(
             $this->tpl->get_template('/user_portal/main_courses.tpl'));

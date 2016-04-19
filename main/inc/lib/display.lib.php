@@ -2481,4 +2481,14 @@ HTML;
         }
         return $html;
     }
+    /**
+     * @param string $string
+     * @return null|string
+     */
+     
+    public static function shortName($string){
+        $ispace = strpos($string," ");
+        $text = substr($string, 0, $ispace);
+        return $text;
+    }
 }

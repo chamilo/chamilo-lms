@@ -1891,6 +1891,7 @@ class CourseManager
         $listTeachers = array();
         $teachers = array();
         $count = 0;
+        
         while ($teacher = Database::fetch_array($rs)) {
             $userPicture = UserManager::getUserPicture($teacher['user_id'], USER_IMAGE_SIZE_SMALL);
             $teachers['id'] = $teacher['user_id'];
@@ -3404,7 +3405,7 @@ class CourseManager
      * @param bool      Whether to show the document quick-loader or not
      * @return string
      */
-    public static function display_special_courses($user_id, $load_dirs = false)
+    public static function returnSpecialCourses($user_id, $load_dirs = false)
     {
         $user_id = intval($user_id);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -3418,6 +3419,7 @@ class CourseManager
         }
         $html = null;
         $courseCount = 0;
+        $listCourse = array();
         if (!empty($with_special_courses)) {
             $sql = "SELECT
                         course.id,
@@ -3435,7 +3437,7 @@ class CourseManager
 
             $rs_special_course = Database::query($sql);
             $number_of_courses = Database::num_rows($rs_special_course);
-
+            $showCustomIcon = api_get_setting('course_images_in_courses_list');
             $key = 0;
 
             if ($number_of_courses > 0) {
@@ -3455,97 +3457,46 @@ class CourseManager
                         $course['status'] = STUDENT;
                     }
 
-                    $params['icon'] = Display::return_icon(
-                        'blackboard.png',
-                        api_htmlentities($course_info['title']),
-                        array(),
-                        ICON_SIZE_LARGE
-                    );
-
-                    $params['right_actions'] = '';
+                    $params['edit_actions'] = '';
                     if (api_is_platform_admin()) {
-                        if ($load_dirs) {
-                            $params['right_actions'] .= '<a id="document_preview_' . $course['id'] . '_0" class="document_preview" href="javascript:void(0);">' .
-                                Display::return_icon(
-                                    'folder.png',
-                                    get_lang('Documents'),
-                                    array('align' => 'absmiddle'),
-                                    ICON_SIZE_SMALL
-                                ).'</a>';
-                            $params['right_actions'] .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'] . '">' .
-                                Display::return_icon(
-                                    'edit.png',
-                                    get_lang('Edit'),
-                                    array('align' => 'absmiddle'),
-                                    ICON_SIZE_SMALL
-                                ).'</a>';
-                            $params['right_actions'] .= Display::div('', array(
-                                    'id' => 'document_result_' . $course['id'] . '_0',
-                                    'class' => 'document_preview_container'
-                                ));
-                        } else {
-                            $params['right_actions'] .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'] . '">' .
-                                Display::return_icon('edit.png',
-                                    get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL) . '</a>';
-                        }
-                        if ($course['status'] == COURSEMANAGER) {
-                            //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style'=>'width: 11px; height: 11px;'));
-                        }
-                    } else {
-                        if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
-                            if ($load_dirs) {
-                                $params['right_actions'] .= '<a id="document_preview_' . $course['id'] . '_0" class="document_preview" href="javascript:void(0);">' .
-                                    Display::return_icon(
-                                        'folder.png',
-                                        get_lang('Documents'),
-                                        array('align' => 'absmiddle'),
-                                        ICON_SIZE_SMALL
-                                    ).'</a>';
-                                $params['right_actions'] .= Display::div('', array(
-                                        'id' => 'document_result_' . $course['id'] . '_0',
-                                        'class' => 'document_preview_container'
-                                    ));
-                            }
-                        }
-                    }
-
-                    if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-                        $course_title = '<a href="' . $course_info['course_public_url'] . '?id_session=0&autoreg=1">' . $course_info['title'] . '</a>';
-                    } else {
-                        $course_title = $course_info['title'] . " " . Display::tag('span', get_lang('CourseClosed'),
-                                array('class' => 'item_closed'));
-                    }
-
+                        $params['edit_actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
+                    } 
+                    $params['visibility'] = $course_info['visibility'];
+                    $params['status'] = $course['status'];
+                    $params['icon'] = Display::return_icon('drawing-pin.png',null, null, ICON_SIZE_LARGE, null);
+                    
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-                        $course_title .= ' (' . $course_info['visual_code'] . ') ';
+                        $params['status']  = $course_info['visual_code'];
                     }
-                    if (api_get_setting('display_teacher_in_courselist') == 'true') {
-                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string(
-                            $course['code'],
-                            self::USER_SEPARATOR,
-                            true
-                        );
-                    }
-                    $course_title .= '&nbsp;';
-                    $course_title .= Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
 
-                    $params['title'] = $course_title;
+                    $params['title'] = $course_info['title'];
                     $params['link'] = $course_info['course_public_url'].'?id_session=0&autoreg=1';
+                    if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                        $params['teachers'] = CourseManager::getTeacheCourseCode($course['code']);
+                    }
+                    
+                    $thumbnails = null;
+                    $image = null;
+                    $iconName = basename($course_info['course_image']);
+                    if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+                        $thumbnails = $course_info['course_image'];
+                        $image = $course_info['course_image_large'];
+                    }
+                    
+                    $params['thumbnails'] = $thumbnails;
+                    $params['image'] = $image;
 
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                         $params['notifications'] = $show_notification;
                     }
-
-                    $html .= self::course_item_html($params, false);
                     $key++;
+                    
+                    $listCourse[$key] = $params;
+                    
                 }
             }
         }
-
-        return [
-            'html' => $html,
-            'course_count' => $courseCount
-        ];
+        return $listCourse;
     }
 
     /**

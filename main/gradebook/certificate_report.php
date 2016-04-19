@@ -17,7 +17,7 @@ $this_section = SECTION_TRACKING;
 api_block_anonymous_users();
 
 $interbreadcrumb[] = array(
-    "url" => api_get_path(WEB_CODE_PATH) . "mySpace/index.php?".api_get_cidreq(),
+    "url" => api_is_student_boss()?"#":api_get_path(WEB_CODE_PATH) . "mySpace/index.php?".api_get_cidreq(),
     "name" => get_lang("MySpace")
 );
 

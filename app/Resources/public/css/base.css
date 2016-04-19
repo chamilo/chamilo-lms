@@ -4861,6 +4861,7 @@ div#chat-remote-video video {
     margin: 0;
     padding: 0;
     display: inline-block;
+    font-size: 12px;
 }
 .classic-courses .teachers li{
     display: inline-block;

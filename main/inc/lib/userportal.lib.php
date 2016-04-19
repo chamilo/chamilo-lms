@@ -1055,11 +1055,18 @@ class IndexManager
                 $user_id,
                 $this->load_directories_preview
             );
+            if($_configuration['view_grid_courses']==true){
+                $this->tpl->assign('special_courses', $specialCourses);
+                $this->tpl->assign('courses', $courses);
+                $listCourse = $this->tpl->fetch(
+                $this->tpl->get_template('/user_portal/grid_courses.tpl'));
+            }  else {
+                $this->tpl->assign('special_courses', $specialCourses);
+                $this->tpl->assign('courses', $courses);
+                $listCourse = $this->tpl->fetch(
+                $this->tpl->get_template('/user_portal/classic_courses.tpl'));
+            }
             
-            $this->tpl->assign('special_courses', $specialCourses);
-            $this->tpl->assign('courses', $courses);
-            $listCourse = $this->tpl->fetch(
-            $this->tpl->get_template('/user_portal/main_courses.tpl'));
                             
             $courseCount = $specialCourses['course_count'] + $courses['course_count'];
             

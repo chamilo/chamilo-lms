@@ -132,7 +132,7 @@ function add_image_form() {
     });
 
     img_remove = $("<img/>", {
-        src: "' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif"
+        src: "' . Display::returnIconPath('delete.png') . '"
     });
 
     new_filepath_id = $("#filepath_" + counter_image);
@@ -317,8 +317,7 @@ function show_form_send_ticket()
         )
     );
 
-    $form->addElement(
-        'html',
+    $form->addLabel('',
         Display::div(
             '',
             array(
@@ -394,18 +393,15 @@ function show_form_send_ticket()
             'for' => 'priority_id'
         )
     );
-
-    $form->addElement('html', '<span id="filepaths">');
-    $form->addElement('html', '<div id="filepath_1">');
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
-    $form->addElement('html', '</div>');
-    $form->addElement('html', '</span>');
+     $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 
-    $form->addElement('html', '<div class="controls">');
-    $form->addElement('html', '<span id="link-more-attach" >');
-    $form->addElement('html', '<span class="label label-info" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</span>');
-    $form->addElement('html', '</span>');
-    $form->addElement('html', '(' . sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))) . ')');
+    $form->addLabel('',
+        '<span id="link-more-attach">
+         <span class="btn btn-success" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</span>
+         </span>
+         ('.sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
+    ');
 
     $form->addElement('html', '<br/>');
     $form->addElement(
@@ -415,7 +411,7 @@ function show_form_send_ticket()
         null,
         null,
         null,
-        'save',
+        'btn btn-primary',
         array(
             'id' => 'btnsubmit'
         )

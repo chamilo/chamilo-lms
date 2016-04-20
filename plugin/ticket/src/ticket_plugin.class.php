@@ -28,11 +28,13 @@ class TicketPlugin extends Plugin
         $settings = array(
             'tool_enable' => 'boolean',
             'allow_student_add' => 'boolean',
-            'allow_category_edition' => 'boolean'
+            'allow_category_edition' => 'boolean',
+            'warn_admin_no_user_in_category' => 'boolean',
+            'send_warning_to_all_admins' => 'boolean'
         );
 
         parent::__construct(
-            '1.0',
+            '2.0',
             'Kenny Rodas Chavez, Genesis Lopez, Francis Gonzales, Yannick Warnier, Julio Montoya',
             $settings
         );

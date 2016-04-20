@@ -298,8 +298,8 @@ if ($isAdmin) {
 
         if ($plugin->get('allow_category_edition')) {
             echo Display::url(
-                    Display::return_icon('document.png'),
-                    api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/categories.php'
+                Display::return_icon('folder_document.gif'),
+                api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/categories.php'
             );
         }
 

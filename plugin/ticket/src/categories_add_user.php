@@ -5,7 +5,7 @@
  *
  * @package chamilo.plugin.ticket
  */
-
+$cidReset = true;
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
@@ -17,10 +17,7 @@ if (empty($categoryId)) {
 }
 
 $form = new FormValidator('edit', 'post', api_get_self().'?id='.$categoryId);
-
-
 $users = UserManager::get_user_list([], ['firstname']);
-
 $users = array_column($users, 'complete_name', 'user_id');
 
 $form->addElement(
@@ -48,5 +45,7 @@ if ($form->validate()) {
     header("Location: ".api_get_self()."?id=".$categoryId);
     exit;
 }
+
+$interbreadcrumb[] = array('url' => 'categories.php', 'name' => get_lang('Categories'));
 Display::display_header();
 $form->display();

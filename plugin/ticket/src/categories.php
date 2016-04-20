@@ -104,7 +104,6 @@ function modify_filter($id, $params, $row)
 	return $result;
 }
 
-
 Display::display_header($plugin->get_lang('MyTickets'));
 $table->set_header(0, '', false);
 $table->set_header(1, $plugin->get_lang('Title'), true);

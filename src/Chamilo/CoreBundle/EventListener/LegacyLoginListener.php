@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -45,6 +47,7 @@ class LegacyLoginListener implements EventSubscriberInterface
 
             return;
         }
+
         $token = $this->tokenStorage->getToken();
         if ($token) {
             $isGranted = $this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY');
@@ -67,23 +70,33 @@ class LegacyLoginListener implements EventSubscriberInterface
                             }
 
                             $languages = ['german' => 'de', 'english' => 'en', 'spanish' => 'es', 'french' => 'fr'];
-                            if ($user && isset($languages[$user->getLanguage()])) {
-                                $locale = $languages[$user->getLanguage()];
+                            $locale = isset($languages[$user->getLanguage()]) ? $languages[$user->getLanguage()] : '';
+                            if ($user && !empty($locale)) {
+
+                                error_log('legacyloginlistener');
+                                error_log($locale);
                                 $user->setLocale($locale);
 
-                                $request->getSession()->set('_locale_user', $locale);
+                                //$request->getSession()->set('_locale_user', $locale);
 
                                 // if no explicit locale has been set on this request, use one from the session
-                                $request->setLocale($locale);
                                 $request->getSession()->set('_locale', $locale);
+                                $request->setLocale($locale);
                             }
 
                             $token = new UsernamePasswordToken($user, null, "main", $user->getRoles());
 
                             $this->tokenStorage->setToken($token); //now the user is logged in
+
                             //now dispatch the login event
                             $event = new InteractiveLoginEvent($request, $token);
                             $this->container->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+
+
+                            $this->container->get("event_dispatcher")->addListener(
+                                KernelEvents::RESPONSE, array($this, 'redirectUser')
+                            );
+
                         }
                     }
                 }
@@ -98,7 +111,18 @@ class LegacyLoginListener implements EventSubscriberInterface
     {
         return array(
             // must be registered before the default Locale listener
-            KernelEvents::REQUEST => array(array('onKernelRequest', 17)),
+            KernelEvents::REQUEST => array(array('onKernelRequest', 15)),
         );
+    }
+
+    /**
+     * @param FilterResponseEvent $event
+     */
+    public function redirectUser(FilterResponseEvent $event)
+    {
+        $uri = $event->getRequest()->getUri();
+        // on effectue la redirection
+        $response = new RedirectResponse($uri);
+        $event->setResponse($response);
     }
 }

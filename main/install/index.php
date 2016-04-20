@@ -215,6 +215,9 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
     }
 }
 
+
+$session_lifetime = 360000;
+
 if (!isset($_GET['running'])) {
     $dbHostForm = 'localhost';
     $dbUsernameForm = 'root';
@@ -252,7 +255,6 @@ if (!isset($_GET['running'])) {
     $allowSelfReg = 1;
     $allowSelfRegProf = 1;
     $encryptPassForm = 'sha1';
-    $session_lifetime = 360000;
     if (!empty($_GET['profile'])) {
         $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
     }

@@ -144,6 +144,26 @@ if ($objExercise->selectAttempts() > 0) {
             Display::display_footer();
         }
         exit;
+    } else {
+        $attempt_count++;
+        $remainingAttempts = $objExercise->selectAttempts() - $attempt_count;
+
+        if ($remainingAttempts) {
+            $attemptButton = Display::toolbarButton(
+                get_lang('AnotherAttempt'),
+                api_get_patth(WEB_CODE_PATH) . 'exercice/overview.php?' . api_get_cidreq() . '&' . http_build_query([
+                    'exerciseId' => $objExercise->id
+                ]),
+                'pencil-square-o',
+                'info'
+            );
+            $attemptMessage = sprintf(get_lang('RemainingXAttempts'), $remainingAttempts);
+
+            Display::display_normal_message(
+                sprintf("<p>%s</p> %s", $attemptMessage, $attemptButton),
+                false
+            );
+        }
     }
 }
 

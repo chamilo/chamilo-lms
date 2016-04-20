@@ -437,6 +437,7 @@ if (!empty($valid_languages)) {
     } else {
         $language_interface = api_get_setting('platformLanguage');
     }
+    
 
     if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false) {
         $language_interface = api_get_language_from_type($language_priority3);

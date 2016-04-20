@@ -7643,4 +7643,5 @@ $RemainingXAttempts = "Remaining %d attempts";
 $Map = "Map";
 $MyLocation = "My location";
 $ShowCourseInUserLanguage = "Show course in user's language";
+$AccessData = "Access data";
 ?>

@@ -4867,7 +4867,7 @@ class CourseManager
      * @param   int $limit number of hottest courses
      * @return array
      */
-    public static function return_hot_courses($days = 30, $limit = 5)
+    public static function return_hot_courses($days = 30, $limit = 6)
     {
         if (api_is_invitee()) {
             return array();
@@ -4919,7 +4919,7 @@ class CourseManager
             $courses = Database::store_result($result, 'ASSOC');
             $courses = self::process_hot_course_item($courses, $my_course_code_list);
         }
-
+        
         return $courses;
     }
 
@@ -4940,9 +4940,9 @@ class CourseManager
             $course_info = api_get_course_info_by_id($courseId['c_id']);
             $courseCode = $course_info['code'];
             $categoryCode = !empty($course_info['categoryCode']) ? $course_info['categoryCode'] : "";
-            $my_course['extra_info'] = $course_info;
-            $my_course['extra_info']['go_to_course_button'] = '';
-            $my_course['extra_info']['register_button'] = '';
+            $my_course = $course_info;
+            $my_course['go_to_course_button'] = '';
+            $my_course['register_button'] = '';
 
             $access_link = self::get_access_link_by_user(
                 api_get_user_id(),
@@ -4952,7 +4952,7 @@ class CourseManager
 
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {
-                $my_course['extra_info']['register_button'] = Display::url(
+                $my_course['register_button'] = Display::url(
                     Display::returnFontAwesomeIcon('sign-in'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?action=subscribe&sec_token=' . $stok,
                     array('class' => 'btn btn-success btn-sm', 'title' => get_lang('Subscribe')));
@@ -4961,25 +4961,25 @@ class CourseManager
             if ($access_link && in_array('enter',
                     $access_link) || $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
             ) {
-                $my_course['extra_info']['go_to_course_button'] = Display::url(
+                $my_course['go_to_course_button'] = Display::url(
                     Display::returnFontAwesomeIcon('share'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php',
                     array('class' => 'btn btn-default btn-sm', 'title' => get_lang('GoToCourse')));
             }
 
             if ($access_link && in_array('unsubscribe', $access_link)) {
-                $my_course['extra_info']['unsubscribe_button'] = Display::url(
+                $my_course['unsubscribe_button'] = Display::url(
                     Display::returnFontAwesomeIcon('sign-out'),
                     api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
                     array('class' => 'btn btn-danger btn-sm', 'title' => get_lang('Unreg')));
             }
 
             //Description
-            $my_course['extra_info']['description_button'] = '';
+            $my_course['description_button'] = '';
             /* if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'],
                     $my_course_code_list)
             ) { */
-                $my_course['extra_info']['description_button'] = Display::url(
+                $my_course['description_button'] = Display::url(
                     Display::returnFontAwesomeIcon('info-circle'),
                     api_get_path(WEB_AJAX_PATH) . 'course_home.ajax.php?a=show_course_information&code=' . $course_info['code'],
                     [
@@ -4990,9 +4990,9 @@ class CourseManager
                 );
             //}
             /* get_lang('Description') */
-            $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
+            $my_course['teachers'] = CourseManager::getTeacheCourseCode($course_info['code']);
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
-            $my_course['extra_info']['rating_html'] = Display::return_rating_system('star_' . $course_info['real_id'],
+            $my_course['rating_html'] = Display::return_rating_system('star_' . $course_info['real_id'],
                 $ajax_url . '&course_id=' . $course_info['real_id'], $point_info);
 
             $hotCourses[] = $my_course;

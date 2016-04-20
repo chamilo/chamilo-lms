@@ -4896,6 +4896,9 @@ div#chat-remote-video video {
     right: -10px;
     z-index: 2;
 }
+.grid-courses .items .ranking{
+    font-size: 10px;
+}
 .grid-courses .items .image .black_shadow{
     top: 0px;
     left: 0px;

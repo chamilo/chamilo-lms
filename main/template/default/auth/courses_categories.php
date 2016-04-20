@@ -222,7 +222,7 @@ if ($showCourses && $action != 'display_sessions') {
             $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items">';
 
             // display thumbnail
-            $html .= return_thumbnail($course, $icon_title, $listCategory);
+            $html .= returnThumbnail($course, $listCategory[$course['category']]);
 
             // display course title and button bloc
             $html .= '<div class="description">';
@@ -288,10 +288,11 @@ echo $cataloguePagination;
 
 /**
  * Display the course catalog image of a course
- * @param $course
- * @param $icon_title
+ * @param array $course
+ * @param string $categoryTitle
+ * @return string HTML string
  */
-function return_thumbnail($course, $icon_title, $list = array())
+function returnThumbnail($course, $categoryTitle=null)
 {
     $html = '';
     $title = cut($course['title'], 70);
@@ -307,11 +308,9 @@ function return_thumbnail($course, $icon_title, $list = array())
     
         $html .= '<div class="image">';
         $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
-        foreach ($list as $cat) {
-                if($course['category'] == $cat['code']){
-                    $html .= '<span class="category">'. $cat['name'].'</span>';
-                    $html .= '<div class="cribbon"></div>';
-                }
+        if (!empty($categoryTitle)) {
+            $html .= '<span class="category">'. $categoryTitle.'</span>';
+            $html .= '<div class="cribbon"></div>';
         }
         $teachers = CourseManager::getTeacheCourseCode($course['code']);
         $html .= '<div class="black_shadow">';

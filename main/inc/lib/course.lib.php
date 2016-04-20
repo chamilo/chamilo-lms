@@ -2948,18 +2948,13 @@ class CourseManager
     public static function getListCategory()
     {
         $table_categories = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT * FROM $table_categories ";
-        $result =  Database::query($sql);
-        $count = 0;
-        $list = array();
+        $sql = "SELECT * FROM $table_categories";
+        $result = Database::query($sql);
         $category = array();
-        while($row = Database::fetch_array($result, 'ASSOC')){
-            $category['code'] = $row['code'];
-            $category['name'] = $row['name'];
-            $count++;
-            $list[$count] = $category;
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $category[$row['code']] = $row['name'];
         }
-        return $list;
+        return $category;
     }
 
     /**

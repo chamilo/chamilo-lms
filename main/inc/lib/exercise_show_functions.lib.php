@@ -120,7 +120,7 @@ class ExerciseShowFunctions
 	public static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $nano = null)
     {
         if (isset($nano)) {
-            echo $nano->show_audio_file();
+            echo $nano->showAudioFile();
         }
 
         if (empty($id)) {

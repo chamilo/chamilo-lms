@@ -1784,7 +1784,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
 
             // Last edit date
             $last_edit_date = api_get_local_time($document_data['lastedit_date']);
-            $display_date = date_to_str_ago($last_edit_date).
+            $display_date = date_to_str_ago($document_data['lastedit_date']).
                 ' <div class="muted"><small>'.$last_edit_date."</small></div>";
 
             $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;

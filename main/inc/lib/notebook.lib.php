@@ -274,7 +274,7 @@ class NotebookManager
 
             $updateValue = '';
             if ($row['update_date'] <> $row['creation_date']) {
-                $updateValue = ', ' . get_lang('UpdateDate') . ': ' . date_to_str_ago($update_date) . '&nbsp;&nbsp;<span class="dropbox_date">' . $update_date . '</span>';
+                $updateValue = ', ' . get_lang('UpdateDate') . ': ' . date_to_str_ago($row['update_date']) . '&nbsp;&nbsp;<span class="dropbox_date">' . $update_date . '</span>';
             }
 
             $actions = '<a href="' . api_get_self() . '?action=editnote&notebook_id=' . $row['notebook_id'] . '">' .
@@ -285,7 +285,7 @@ class NotebookManager
             echo Display::panel(
                 $row['description'],
                 $row['title'] . $session_img.' <div class="pull-right">'.$actions.'</div>',
-                get_lang('CreationDate') . ': ' . date_to_str_ago($creation_date) . '&nbsp;&nbsp;<span class="dropbox_date">' . $creation_date . $updateValue."</span>"
+                get_lang('CreationDate') . ': ' . date_to_str_ago($row['creation_date']) . '&nbsp;&nbsp;<span class="dropbox_date">' . $creation_date . $updateValue."</span>"
             );
         }
     }

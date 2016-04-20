@@ -1193,7 +1193,8 @@ class MessageManager
                     if (!empty($topic['update_date']) &&
                         $topic['update_date'] != '0000-00-00 00:00:00'
                     ) {
-                        $date .= '<div class="message-group-date" > <i>'.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</i></div>';
+                        $date .= '<div class="message-group-date" >
+                            <i>'.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</i></div>';
                     }
                 } else {
                     $date .= '<div class="message-group-date"> <i>'.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</i></div>';

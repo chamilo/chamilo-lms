@@ -41,7 +41,7 @@ if ($link) {
                 $categoryId,
                 $userId
             );
-            if (isset($certificate['pdf_url']) && isset($certificate['certificate_link'])) {
+            if (isset($certificate['pdf_url']) && isset($certificate['certificate_link']) && isset($certificate['badge_link'])) {
                 $downloadCertificateLink .= Display::url(Display::returnFontAwesomeIcon('file-pdf-o') .
                     get_lang('DownloadCertificatePdf'),
                     $certificate['pdf_url'],
@@ -56,9 +56,7 @@ if ($link) {
                         </div>
                     </div>
                 ";
-            }
 
-            if (isset($certificate['badge_link'])) {
                 $skillRelUser = new SkillRelUser();
                 $courseId = api_get_course_int_id();
                 $userSkills = $skillRelUser->get_user_skills($userId, $courseId, $sessionId);
@@ -100,6 +98,21 @@ if ($link) {
                         </div>
                     ";
                 }
+
+                $documentInfo = DocumentManager::get_document_data_by_id(
+                    $id,
+                    $courseCode,
+                    true,
+                    $sessionId
+                );
+
+                $finalItemTemplate = file_get_contents($documentInfo['absolute_path']);
+
+                $finalItemTemplate = str_replace('((certificate))', $downloadCertificateLink, $finalItemTemplate);
+                $finalItemTemplate = str_replace('((skill))', $badgeLink, $finalItemTemplate);
+            } else {
+                Display::display_warning_message(get_lang('LearnpathPrereqNotCompleted'));
+                $finalItemTemplate = '';
             }
 
             $currentScore = Category::getCurrentScore($userId, $categoryId, $courseCode, $sessionId, true);
@@ -107,18 +120,6 @@ if ($link) {
         }
     }
 }
-
-$documentInfo = DocumentManager::get_document_data_by_id(
-    $id,
-    $courseCode,
-    true,
-    $sessionId
-);
-
-$finalItemTemplate = file_get_contents($documentInfo['absolute_path']);
-
-$finalItemTemplate = str_replace('((certificate))', $downloadCertificateLink, $finalItemTemplate);
-$finalItemTemplate = str_replace('((skill))', $badgeLink, $finalItemTemplate);
 
 // Instance a new template : No page tittle, No header, No footer
 $tpl = new Template(null, false, false);

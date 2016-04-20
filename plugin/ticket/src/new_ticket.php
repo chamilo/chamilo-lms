@@ -394,7 +394,7 @@ function show_form_send_ticket()
         )
     );
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
-     $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
+    $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 
     $form->addLabel('',
         '<span id="link-more-attach">

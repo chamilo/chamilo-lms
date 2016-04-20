@@ -276,34 +276,42 @@ if (!isset($_POST['compose'])) {
               </style>";
     }
     if ($isAdmin) {
-        $senderData = get_lang('AddedBy') . ': &nbsp;' . $ticket['ticket']['user_url'] . ' (' . $ticket['usuario']['username'] . ')';
+        $senderData = get_lang('AddedBy') . ' ' . $ticket['ticket']['user_url'] . ' (' . $ticket['usuario']['username'] . ').';
     } else {
-        $senderData = get_lang('AddedBy') . ': &nbsp;' . $ticket['usuario']['complete_name'] . ' (' . $ticket['usuario']['username'] . ')';
+        $senderData = get_lang('AddedBy') . ' ' . $ticket['usuario']['complete_name'] . ' (' . $ticket['usuario']['username'] . ').';
     }
+
     echo '
 			<table width="100%" >
 				<tr>
 	              <td colspan="3" style="width:65%">
 	              ' . $titulo . '
 	              <p>
-	              '.$senderData.' ' . get_lang('Created') . ' '.date_to_str_ago($ticket['ticket']['start_date_from_db']).'
-
-	              ' . get_lang('Updated') . ': ' . date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']). '
+	                '.$senderData.' ' .
+                    get_lang('Created') . ' '.
+                    Display::url(
+                        date_to_str_ago($ticket['ticket']['start_date_from_db']),
+                        '#',
+                        ['title' => $ticket['ticket']['start_date'], 'data-toggle' => 'tooltip']
+                    ).' '.get_lang('Updated').' '.
+                    Display::url(
+                        date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
+                        '#',
+                        ['title' => $ticket['ticket']['sys_lastedit_datetime'], 'data-toggle' => 'tooltip']
+                    ).'
 	              </p>
-
 	              </td>
 	              <td style="width: 15%">' . $img_assing . '</td>
 	              <td style="width: 15%">' . $form_close_ticket . '</td>
 	            </tr>
 	            <tr>
-	               <td><p>' . get_lang('Category') . ': ' . $ticket['ticket']['name'] . '</p></td>
-	               <td><p ' . $bold . '>' . get_lang('Status') . ': ' . $ticket['ticket']['status'] . '</p></td>
-	               <td colspan="2"></td>
+	               <td><p><b>' . get_lang('Category') . ': </b>' . $ticket['ticket']['name'] . '</p></td>
 	            </tr>
 	            <tr>
-	                <td></td>
-	                <td ><p>' . $plugin->get_lang('Priority') . ':' . $ticket['ticket']['priority'] . '<p></td>
-	                <td colspan="2"></td>
+	               <td><p ' . $bold . '><b>' . get_lang('Status') . ':</b> ' . $ticket['ticket']['status'] . '</p></td>
+	            </tr>
+	            <tr>
+	                <td><p><b>' . $plugin->get_lang('Priority') . ': </b>' . $ticket['ticket']['priority'] . '<p></td>
 	            </tr>';
     if ($ticket['ticket']['course_url'] != null) {
         echo '<tr>

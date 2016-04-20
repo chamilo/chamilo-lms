@@ -225,7 +225,7 @@ if (isset($_REQUEST['action'])) {
 }
 
 $titulo = 'Ticket #' . $ticket['ticket']['ticket_code'];
-$firstMessage  = is_array($ticket['messages']) ? $ticket['messages'][0] : '';
+$firstMessage = is_array($ticket['messages']) ? $ticket['messages'][0] : '';
 $subTitle = '';
 if (!empty($firstMessage) && isset($firstMessage['subject'])) {
     $subTitle = $firstMessage['subject'];
@@ -294,7 +294,7 @@ if (!isset($_POST['compose'])) {
                         date_to_str_ago($ticket['ticket']['start_date_from_db']),
                         '#',
                         ['title' => $ticket['ticket']['start_date'], 'class' => 'boot-tooltip']
-                    ).' '.
+                    ).'. '.
                     get_lang('Updated').' '.
                     Display::url(
                         date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
@@ -321,6 +321,11 @@ if (!isset($_POST['compose'])) {
 	            <td colspan="2"></td>
 	          </tr>';
     }
+    echo '<tr>
+            <td><b>' . get_lang('Description') . ':</b> <br />
+            '.$firstMessage['message'].'</td>
+         </tr>
+        ';
 
     // select admins
     $select_admins = '<select  class ="chzn-select" style="width: 350px; " name = "admins" id="admins" ">';
@@ -341,8 +346,8 @@ if (!isset($_POST['compose'])) {
     echo '</div>';
     echo '</table>';
     $messages = $ticket['messages'];
-    echo "<div class='row'>";
-    echo "<div class='span8 offset2'>";
+
+    unset($messages[0]);
     foreach ($messages as $message) {
         $type = "success";
 
@@ -371,9 +376,8 @@ if (!isset($_POST['compose'])) {
         $entireMessage = $receivedMessage . $attachementLinks;
         echo Display::return_message($entireMessage, $type, false);
     }
-    echo "</div>";
-    echo "</div>";
-    $subject = get_lang('ReplyShort') .": " . $message['subject'];
+
+    $subject = get_lang('ReplyShort') .": " . $firstMessage['subject'];
     $user_admin = api_is_platform_admin();
     if ($ticket['ticket']['status_id'] != 'REE' AND $ticket['ticket']['status_id'] != 'CLS') {
         if (!$isAdmin && $ticket['ticket']['status_id'] != 'XCF') {

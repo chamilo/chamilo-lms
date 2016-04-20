@@ -36,6 +36,159 @@ class TicketManager
     }
 
     /**
+     * @param $from
+     * @param $numberItems
+     * @param $column
+     * @param $direction
+     * @return array
+     */
+    public static function getCategories($from, $numberItems, $column, $direction)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        $sql = "SELECT id, name, description, total_tickets
+                FROM $table";
+
+        if (!in_array($direction, array('ASC','DESC'))) {
+            $direction = 'ASC';
+        }
+        $column = intval($column);
+        $from 	= intval($from);
+        $numberItems = intval($numberItems);
+
+        //$sql .= " ORDER BY col$column $direction ";
+        $sql .= " LIMIT $from,$numberItems";
+
+        $result = Database::query($sql);
+        $types = array();
+        while ($row = Database::fetch_array($result)) {
+            $types[] = $row;
+        }
+
+        return $types;
+    }
+
+    /**
+     * @param int $id
+     * @return array|mixed
+     */
+    public static function getCategory($id)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        $id = intval($id);
+        $sql = "SELECT id, name, description, total_tickets
+                FROM $table WHERE id = $id";
+
+        $result = Database::query($sql);
+        $category = Database::fetch_array($result);
+
+        return $category;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getCategoriesCount()
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+
+        $sql = "SELECT count(id) count
+                FROM $table ";
+
+        $result = Database::query($sql);
+        $category = Database::fetch_array($result);
+
+        return $category['count'];
+    }
+
+    /**
+     * @param int $id
+     * @param array $params
+     */
+    public static function updateCategory($id, $params)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        $id = intval($id);
+         Database::update($table, $params, ['id = ?' => $id]);
+    }
+
+    /**
+     * @param int $id
+     */
+    public static function deleteCategory($id)
+    {
+        $id = intval($id);
+
+        $table = Database::get_main_table(TABLE_TICKET_TICKET);
+        $sql = "UPDATE $table SET category_id = NULL WHERE category_id = $id";
+        Database::query($sql);
+
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        $sql = "DELETE FROM $table WHERE id = $id";
+        Database::query($sql);
+    }
+
+    /**
+     * @param int $categoryId
+     * @param array $users
+     */
+    public static function addUsersToCategory($categoryId, $users)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
+        if (empty($users) || empty($categoryId)) {
+            return false;
+        }
+
+        foreach ($users as $userId) {
+            if (self::userIsAssignedToCategory($userId, $categoryId) == false) {
+                $params = [
+                    'category_id' => $categoryId,
+                    'user_id' => $userId
+                ];
+                Database::insert($table, $params);
+            }
+        }
+    }
+
+    /**
+     * @param int $userId
+     * @param int $categoryId
+     */
+    public static function userIsAssignedToCategory($userId, $categoryId)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
+        $userId = intval($userId);
+        $categoryId = intval($categoryId);
+        $sql = "SELECT * FROM $table WHERE category_id = $categoryId AND user_id = $userId";
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
+    }
+
+    /**
+     * @param int $categoryId
+     */
+    public static function getUsersInCategory($categoryId)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
+        $categoryId = intval($categoryId);
+        $sql = "SELECT * FROM $table WHERE category_id = $categoryId";
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
+    /**
+     * @param int $categoryId
+     */
+    public static function deleteAllUserInCategory($categoryId)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
+        $categoryId = intval($categoryId);
+        $sql = "DELETE FROM $table WHERE category_id = $categoryId";
+        Database::query($sql);
+    }
+
+    /**
      * Get all possible tickets statuses
      * @return array
      */
@@ -1551,4 +1704,5 @@ class TicketManager
 
         return $tickets;
     }
+
 }

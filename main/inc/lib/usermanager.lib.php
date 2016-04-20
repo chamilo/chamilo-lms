@@ -1282,7 +1282,7 @@ class UserManager
 
     /**
      * Get a list of users of which the given conditions match with an = 'cond'
-     * @param array $conditions a list of condition (exemple : status=>STUDENT)
+     * @param array $conditions a list of condition (example : status=>STUDENT)
      * @param array $order_by a list of fields on which sort
      * @return array An array with all users of the platform.
      * @todo optional course code parameter, optional sorting parameters...
@@ -1312,6 +1312,7 @@ class UserManager
         }
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
+            $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
             $return_array[] = $result;
         }
         return $return_array;

@@ -63,11 +63,6 @@ $skillInfo = [
 
 // Open Graph Markup
 $htmlHeadXtra[] = "
-    <script>
-        $(document).ready(function () {
-            $('meta[name=description]').remove();
-        });
-    </script>
     <meta property='og:type' content='article' />
     <meta property='og:title' content='".sprintf(get_lang('IHaveObtainedSkillXOnY'), $skillInfo['name'], api_get_setting('siteName'))."' />
     <meta property='og:url' content='".api_get_path(WEB_PATH)."badge/".$skillId."/user/".$userId."' />

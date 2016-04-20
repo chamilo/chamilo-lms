@@ -245,7 +245,6 @@ class SortableTable extends HTML_Table
         $empty_table = false;
 
         $content = $this->get_table_html();
-
         if ($this->get_total_number_of_items() == 0) {
             $cols = $this->getColCount();
             $this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
@@ -954,10 +953,18 @@ class SortableTable extends HTML_Table
      */
     public function get_table_data($from = null, $per_page = null, $column = null, $direction = null, $sort = null)
     {
+        $data = [];
         if (!is_null($this->get_data_function)) {
-            return call_user_func($this->get_data_function, $from, $this->per_page, $this->column, $this->direction);
+            $data = call_user_func(
+                $this->get_data_function,
+                $from,
+                $this->per_page,
+                $this->column,
+                $this->direction
+            );
         }
-        return array();
+
+        return $data;
     }
 
 

@@ -85,3 +85,6 @@ $strings['PleaseBeforeRegisterATicketSelectOneUser'] = "Please select a user bef
 $strings['RequestConfirmation'] = "Request confirmation";
 $strings['TicketUpdated'] = "Ticket updated";
 $strings['TicketClosed'] = "Ticket closed";
+
+$strings['allow_category_edition'] = "Allow category edition";
+

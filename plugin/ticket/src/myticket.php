@@ -12,8 +12,8 @@ $course_plugin = 'ticket';
 require_once '../config.php';
 
 $plugin = TicketPlugin::create();
-$tool_name = $plugin->get_lang('LastEdit');
 
+$tool_name = $plugin->get_lang('LastEdit');
 api_block_anonymous_users();
 
 $libPath = api_get_path(LIBRARY_PATH);
@@ -289,12 +289,22 @@ if ($isAdmin) {
 
     echo '<div class="actions" >';
     if (api_is_platform_admin()) {
-        echo '<span class="fleft">' .
+        echo '<span class="left">' .
                 '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .
                     Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', '32') . '</a>' .
                 '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' .
-                    Display::return_icon('export_excel.png', get_lang('Export'), '', '32') . '</a>' .
-             '</span>';
+                    Display::return_icon('export_excel.png', get_lang('Export'), '', '32') . '</a>';
+
+
+        if ($plugin->get('allow_category_edition')) {
+            echo Display::url(
+                    Display::return_icon('document.png'),
+                    api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/categories.php'
+            );
+        }
+
+        echo '</span>';
+
     }
     $form->display();
     echo '</div>';

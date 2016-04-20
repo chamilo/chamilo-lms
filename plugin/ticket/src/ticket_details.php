@@ -31,13 +31,13 @@ $(document).ready(function(){
 		width: 600,
 		modal: true,
 		buttons: {
-                    ' . get_lang('Accept') . ': function(){
-                        $("#frmResponsable").submit()
-                    },
-                    ' . ucfirst(get_lang('Close')) . ': function() {
-                        $(this).dialog("close");
-                    }
-                }
+            ' . get_lang('Accept') . ': function(){
+                $("#frmResponsable").submit()
+            },
+            ' . ucfirst(get_lang('Close')) . ': function() {
+                $(this).dialog("close");
+            }
+            }
         });
 
         $("a#assign").click(function () {
@@ -224,17 +224,16 @@ if (isset($_REQUEST['action'])) {
     }
 }
 
-$titulo = '<h1>Ticket #' . $ticket['ticket']['ticket_code'] . '</h1>';
+$titulo = 'Ticket #' . $ticket['ticket']['ticket_code'];
 $firstMessage  = is_array($ticket['messages']) ? $ticket['messages'][0] : '';
-
+$subTitle = '';
 if (!empty($firstMessage) && isset($firstMessage['subject'])) {
-    $titulo .= "<h2> ".$firstMessage['subject']." </h2>";
+    $subTitle = $firstMessage['subject'];
 }
 
 if (!isset($_POST['compose'])) {
-    if (isset($_POST['close'])) {
-        $_GET['ticket_id'] = $_POST['ticket_id'];
-        TicketManager::close_ticket($_GET['ticket_id'], $user_id);
+    if (isset($_REQUEST['close'])) {
+        TicketManager::close_ticket($_REQUEST['ticket_id'], $user_id);
         $ticket['ticket']['status_id'] = 'CLS';
         $ticket['ticket']['status'] = $plugin->get_lang('Closed');
     }
@@ -247,10 +246,8 @@ if (!isset($_POST['compose'])) {
     if ($ticket['ticket']['status_id'] != 'REE' && $ticket['ticket']['status_id'] != 'CLS' && $isAdmin) {
         if (intval($ticket['ticket']['assigned_last_user']) == $user_id) {
             if ($ticket['ticket']['status_id'] != 'CLS') {
-                $form_close_ticket.= '<form enctype="multipart/form-data" action="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '" method="post" name="close_ticket" id="close_ticket" >';
-                $form_close_ticket.= '<input type="hidden" name="ticket_id" value="' . $ticket['ticket']['ticket_id'] . '"/>
-                                        <button class="minus" name="close" type="submit" id="close" >' . get_lang('Close') . '</button>';
-                $form_close_ticket.= '</form>';
+                $form_close_ticket.= '<a href="' . api_get_self() . '?close=1&ticket_id=' . $ticket['ticket']['ticket_id'] . '" id="close" class="btn btn-danger" >';
+                $form_close_ticket.= get_lang('Close') . '</a>';
             }
         }
     }
@@ -258,11 +255,12 @@ if (!isset($_POST['compose'])) {
     $img_assing = '';
     if ($isAdmin && $ticket['ticket']['status_id'] != 'CLS' && $ticket['ticket']['status_id'] != 'REE') {
         if ($ticket['ticket']['assigned_last_user'] != 0 && $ticket['ticket']['assigned_last_user'] == $user_id) {
-            $img_assing = '<a href="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '&amp;action=unassign" id="unassign">
-                            <img src="' . api_get_path(WEB_CODE_PATH) . 'img/admin_star.png"  style="height: 32px; width: 32px;" border="0" title="Unassign" align="center"/>
+            $img_assing = '<a class="btn btn-warning" href="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '&amp;action=unassign" id="unassign">
+                           '.get_lang('Unassign').'
                            </a>';
         } else {
-            $img_assing = '<a href="#" id="assign"><img src="' . api_get_path(WEB_CODE_PATH) . 'img/admin_star_na.png" style="height: 32px; width: 32px;" title="Assign" align="center"/></a>';
+            $img_assing = '<a href="#" id="assign" class="btn btn-success">'.get_lang('Assign').'</a>';
+
         }
     }
     $bold = '';
@@ -285,24 +283,26 @@ if (!isset($_POST['compose'])) {
 			<table width="100%" >
 				<tr>
 	              <td colspan="3" style="width:65%">
-	              ' . $titulo . '
+
+
+	              <h1>' . $titulo . ' '.$form_close_ticket.' '.$img_assing.' </h1>
+	              <h2>'.$subTitle.'</h2>
 	              <p>
 	                '.$senderData.' ' .
                     get_lang('Created') . ' '.
                     Display::url(
                         date_to_str_ago($ticket['ticket']['start_date_from_db']),
                         '#',
-                        ['title' => $ticket['ticket']['start_date'], 'data-toggle' => 'tooltip']
-                    ).' '.get_lang('Updated').' '.
+                        ['title' => $ticket['ticket']['start_date'], 'class' => 'boot-tooltip']
+                    ).' '.
+                    get_lang('Updated').' '.
                     Display::url(
                         date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
                         '#',
-                        ['title' => $ticket['ticket']['sys_lastedit_datetime'], 'data-toggle' => 'tooltip']
+                        ['title' => $ticket['ticket']['sys_lastedit_datetime'], 'class' => 'boot-tooltip']
                     ).'
 	              </p>
 	              </td>
-	              <td style="width: 15%">' . $img_assing . '</td>
-	              <td style="width: 15%">' . $form_close_ticket . '</td>
 	            </tr>
 	            <tr>
 	               <td><p><b>' . get_lang('Category') . ': </b>' . $ticket['ticket']['name'] . '</p></td>
@@ -322,7 +322,7 @@ if (!isset($_POST['compose'])) {
 	          </tr>';
     }
 
-    //select admins
+    // select admins
     $select_admins = '<select  class ="chzn-select" style="width: 350px; " name = "admins" id="admins" ">';
 
     $admins = UserManager::get_user_list_like(array("status" => "1"), array("username"), true);

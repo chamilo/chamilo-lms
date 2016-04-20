@@ -7638,4 +7638,9 @@ $EnableForumAutoLaunch = "Enable forum auto-launch";
 $NowDownloadYourCertificateClickHere = "You can now download your certificate by clicking here";
 $AdditionallyYouHaveObtainedTheFollowingSkills = "Additionally, you have achieved the following skills";
 $IHaveObtainedSkillXOnY = "I have achieved skill %s on %s";
+$AnotherAttempt = "Another attempt";
+$RemainingXAttempts = "Remaining %d attempts";
+$Map = "Map";
+$MyLocation = "My location";
+$ShowCourseInUserLanguage = "Show course in user's language";
 ?>

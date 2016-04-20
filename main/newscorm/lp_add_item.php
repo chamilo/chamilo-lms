@@ -275,7 +275,7 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
         case 'module':
             echo $learnPath->display_item_form($type, get_lang('EnterDataNewModule'));
             break;
-        case 'document':
+        case TOOL_DOCUMENT:
             if (isset($_GET['file']) && is_numeric($_GET['file'])) {
                 echo $learnPath->display_document_form('add', 0, $_GET['file']);
             } else {
@@ -285,20 +285,20 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
         case 'hotpotatoes':
             echo $learnPath->display_hotpotatoes_form('add', 0, $_GET['file']);
             break;
-        case 'quiz':
+        case TOOL_QUIZ:
             echo Display::display_warning_message(get_lang('ExerciseCantBeEditedAfterAddingToTheLP'));
             echo $learnPath->display_quiz_form('add', 0, $_GET['file']);
             break;
-        case 'forum':
+        case TOOL_FORUM:
             echo $learnPath->display_forum_form('add', 0, $_GET['forum_id']);
             break;
         case 'thread':
             echo $learnPath->display_thread_form('add', 0, $_GET['thread_id']);
             break;
-        case 'link':
+        case TOOL_LINK:
             echo $learnPath->display_link_form('add', 0, $_GET['file']);
             break;
-        case 'student_publication':
+        case TOOL_STUDENTPUBLICATION:
             $extra = isset($_GET['file']) ? $_GET['file'] : null;
             echo $learnPath->display_student_publication_form('add', 0, $extra);
             break;

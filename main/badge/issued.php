@@ -59,6 +59,17 @@ $skillInfo = [
     'courses' => []
 ];
 
+
+
+// Open Graph Markup
+$htmlHeadXtra[] = "
+    <meta property='og:type' content='article' />
+    <meta property='og:title' content='".sprintf(get_lang('IHaveObtainedSkillXOnY'), $skillInfo['name'], api_get_setting('siteName'))."' />
+    <meta property='og:url' content='".api_get_path(WEB_PATH)."badge/".$skillId."/user/".$userId."' />
+    <meta property='og:description' content='".$skillInfo['description']."' />
+    <meta property='og:image' content='".$skillInfo['badge_image']."' />
+";
+
 $badgeAssertions = [];
 
 foreach ($userSkills as $userSkill) {

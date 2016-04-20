@@ -161,7 +161,6 @@ echo $_SESSION['oLP']->build_action_menu();
 
 echo '<div class="row">';
 echo '<div class="col-md-3">';
-
 $path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
 $path_item = Database::escape_string($path_item);
 $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
@@ -191,6 +190,10 @@ if (isset($is_success) && $is_success === true) {
     echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
 } else {
     echo $_SESSION['oLP']->display_edit_item($_GET['id']);
+    if (isset($_SESSION['finalItem'])) {
+        echo '<script>$("#frmModel").remove()</script>';
+    }
+    unset($_SESSION['finalItem']);
 }
 
 echo '</div>';

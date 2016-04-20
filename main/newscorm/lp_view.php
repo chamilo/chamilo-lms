@@ -25,7 +25,6 @@ if ($lp_controller_touched != 1) {
 }
 
 require_once '../inc/global.inc.php';
-
 //To prevent the template class
 $show_learnpath = true;
 
@@ -155,6 +154,7 @@ if (!isset($src)) {
             $_SESSION['oLP']->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $preReqCheck = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+
             if ($preReqCheck === true) {
                 $src = $_SESSION['oLP']->get_link(
                     'http',

@@ -2938,6 +2938,29 @@ class CourseManager
         $sql = "SELECT * FROM $table_categories WHERE code = '$code';";
         return Database::fetch_array(Database::query($sql));
     }
+    
+    /**
+     * Returns the details of a course category
+     *
+     * @param string Category code
+     * @return array Course category
+     */
+    public static function getListCategory()
+    {
+        $table_categories = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $sql = "SELECT * FROM $table_categories ";
+        $result =  Database::query($sql);
+        $count = 0;
+        $list = array();
+        $category = array();
+        while($row = Database::fetch_array($result, 'ASSOC')){
+            $category['code'] = $row['code'];
+            $category['name'] = $row['name'];
+            $count++;
+            $list[$count] = $category;
+        }
+        return $list;
+    }
 
     /**
      *  Get count rows of a table inside a course database

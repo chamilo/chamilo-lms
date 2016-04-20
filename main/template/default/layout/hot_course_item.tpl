@@ -27,6 +27,7 @@
                     {% endfor %}
                     </div>
                 </div>
+                <div class="user-actions">{{ item.description_button }}</div>
             </div>
             <div class="description">
                 <h4 class="title">
@@ -37,7 +38,7 @@
                 </div>
                 <div class="toolbar">
                     <div class="btn-group" role="group">
-                        {{ item.description_button }}
+                        
                         {{ item.register_button }}
                         {{ item.unsubscribe_button }}
                     </div>

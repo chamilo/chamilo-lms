@@ -161,7 +161,8 @@ Wami.setup = function(options) {
 		}
 
 		var params = {
-			allowScriptAccess : "always"
+			allowScriptAccess : "always",
+			wmode: 'transparent'
 		}
 
 		if (supportsTransparency()) {

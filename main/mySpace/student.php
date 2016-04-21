@@ -19,7 +19,7 @@ api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
 
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = array ("url" => api_is_student_boss()?"#":"index.php", "name" => get_lang('MySpace'));
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
     $interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));

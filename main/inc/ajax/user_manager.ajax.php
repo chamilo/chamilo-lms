@@ -7,6 +7,24 @@ require_once '../global.inc.php';
 $action = $_GET['a'];
 
 switch ($action) {
+    case 'get_user_like':
+
+        $query = $_REQUEST['q'];
+        $conditions = [
+            'username' => $query,
+            'firstname' => $query,
+            'lastname' => $query,
+        ];
+        $users = UserManager::get_user_list_like($conditions, [], false, 'OR');
+        $result = [];
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                $result[] = ['id' => $user['id'], 'text' => $user['complete_name'].' ('.$user['username'].')'];
+            }
+            $result['items'] = $result;
+        }
+        echo json_encode($result);
+        break;
     case 'get_user_popup':
         $user_info = api_get_user_info($_REQUEST['user_id']);
         $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';

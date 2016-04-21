@@ -220,6 +220,13 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         KEY FK_ticket_category (project_id,category_id))";
 Database::query($sql);
 
+$table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
+$sql = "CREATE TABLE IF NOT EXISTS ".$table." (
+        id int UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+        category_id INT NOT NULL,
+        user_id INT NOT NULL
+)";
+
 //Menu main tabs
 $rsTab = $objPlugin->addTab('Ticket', 'plugin/ticket/src/myticket.php');
 

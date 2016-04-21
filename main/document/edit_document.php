@@ -475,8 +475,8 @@ if ($owner_id == api_get_user_id() ||
 
 	if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
 		// Updated on field
-		$last_edit_date = api_get_local_time($last_edit_date);
-        $display_date = date_to_str_ago($last_edit_date).' <span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
+        $display_date = date_to_str_ago($last_edit_date).
+			' <span class="dropbox_date">'.api_format_date(api_get_local_time($last_edit_date)).'</span>';
 		$form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
 	}
 

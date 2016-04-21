@@ -51,18 +51,10 @@ class UserLocaleListener
 
         if ($token) {
             $user = $token->getUser();
-
-            if ($user && isset($languages[$user->getLanguage()])) {
-                $user->setLocale($languages[$user->getLanguage()]);
-                $event->getRequest()->setLocale($user->getLocale());
-                $this->session->set('_locale', $user->getLocale());
-                $this->session->set('_locale_user', $user->getLocale());
+            $locale = isset($languages[$user->getLanguage()]) ? $languages[$user->getLanguage()] : '';
+            if ($user && !empty($locale)) {
+                $this->session->set('_locale', $locale);
             }
         }
-
-        /*if (null !== $user->getLocale()) {
-            $this->session->set('_locale', $user->getLocale());
-            $this->session->set('_locale_user', $user->getLocale());
-        }*/
     }
 }

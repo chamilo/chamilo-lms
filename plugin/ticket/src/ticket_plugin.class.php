@@ -12,21 +12,32 @@ class TicketPlugin extends Plugin
     /**
      * Set the result
      * @staticvar null $result
-     * @return type
+     * @return TicketPlugin
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
     }
 
+    /**
+     * TicketPlugin constructor.
+     */
     protected function __construct()
     {
         $settings = array(
             'tool_enable' => 'boolean',
-            'allow_student_add' => 'boolean'
+            'allow_student_add' => 'boolean',
+            'allow_category_edition' => 'boolean',
+            'warn_admin_no_user_in_category' => 'boolean',
+            'send_warning_to_all_admins' => 'boolean'
         );
-        parent::__construct('1.0', 'Kenny Rodas Chavez, Genesis Lopez, Francis Gonzales, Yannick Warnier', $settings);
+
+        parent::__construct(
+            '2.0',
+            'Kenny Rodas Chavez, Genesis Lopez, Francis Gonzales, Yannick Warnier, Julio Montoya',
+            $settings
+        );
     }
 
     /**
@@ -36,7 +47,6 @@ class TicketPlugin extends Plugin
     {
         // Create database tables and insert a Tab
         require_once api_get_path(SYS_PLUGIN_PATH) . PLUGIN_NAME . '/database.php';
-
     }
 
     /**
@@ -87,4 +97,6 @@ class TicketPlugin extends Plugin
             echo "<script>location.href = '" . $_SERVER['REQUEST_URI'] . "';</script>";
         }
     }
+
+
 }

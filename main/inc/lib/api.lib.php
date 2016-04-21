@@ -1392,7 +1392,7 @@ function api_get_user_info(
 ) {
 
     if (empty($user_id)) {
-        $userFromSession = Session::read('_user');        
+        $userFromSession = Session::read('_user');
         if (isset($userFromSession)) {
             return _api_format_user($userFromSession);
         }
@@ -4245,6 +4245,7 @@ function api_get_language_from_type($lang_type)
             global $_course;
             $cidReq = null;
             if (empty($_course)) {
+
                 // Code modified because the local.inc.php file it's declarated after this work
                 // causing the function api_get_course_info() returns a null value
                 $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : null;
@@ -4257,8 +4258,16 @@ function api_get_language_from_type($lang_type)
                 }
             }
             $_course = api_get_course_info($cidReq);
-            if (isset($_course['language']) && !empty($_course['language']))
+            if (isset($_course['language']) && !empty($_course['language'])) {
                 $return = $_course['language'];
+                $showCourseInUserLanguage = api_get_course_setting('show_course_in_user_language');
+                if ($showCourseInUserLanguage == 1) {
+                    $userInfo = api_get_user_info();
+                    if (isset($userInfo['language'])) {
+                        $return = $userInfo['language'];
+                    }
+                }
+            }
             break;
         default:
             $return = false;

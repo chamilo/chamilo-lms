@@ -36,6 +36,173 @@ class TicketManager
     }
 
     /**
+     * @param $from
+     * @param $numberItems
+     * @param $column
+     * @param $direction
+     * @return array
+     */
+    public static function getCategories($from, $numberItems, $column, $direction)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        $sql = "SELECT id, name, description, total_tickets
+                FROM $table";
+
+        if (!in_array($direction, array('ASC','DESC'))) {
+            $direction = 'ASC';
+        }
+        $column = intval($column);
+        $from 	= intval($from);
+        $numberItems = intval($numberItems);
+
+        //$sql .= " ORDER BY col$column $direction ";
+        $sql .= " LIMIT $from,$numberItems";
+
+        $result = Database::query($sql);
+        $types = array();
+        while ($row = Database::fetch_array($result)) {
+            $types[] = $row;
+        }
+
+        return $types;
+    }
+
+    /**
+     * @param int $id
+     * @return array|mixed
+     */
+    public static function getCategory($id)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        $id = intval($id);
+        $sql = "SELECT id, name, description, total_tickets
+                FROM $table WHERE id = $id";
+
+        $result = Database::query($sql);
+        $category = Database::fetch_array($result);
+
+        return $category;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getCategoriesCount()
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+
+        $sql = "SELECT count(id) count
+                FROM $table ";
+
+        $result = Database::query($sql);
+        $category = Database::fetch_array($result);
+
+        return $category['count'];
+    }
+
+    /**
+     * @param int $id
+     * @param array $params
+     */
+    public static function updateCategory($id, $params)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        $id = intval($id);
+        Database::update($table, $params, ['id = ?' => $id]);
+    }
+
+    /**
+     * @param int $id
+     * @param array $params
+     */
+    public static function addCategory($params)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        Database::insert($table, $params);
+    }
+
+    /**
+     * @param int $id
+     */
+    public static function deleteCategory($id)
+    {
+        $id = intval($id);
+
+        $table = Database::get_main_table(TABLE_TICKET_TICKET);
+        $sql = "UPDATE $table SET category_id = NULL WHERE category_id = $id";
+        Database::query($sql);
+
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        $sql = "DELETE FROM $table WHERE id = $id";
+        Database::query($sql);
+    }
+
+    /**
+     * @param int $categoryId
+     * @param array $users
+     */
+    public static function addUsersToCategory($categoryId, $users)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
+        if (empty($users) || empty($categoryId)) {
+            return false;
+        }
+
+        foreach ($users as $userId) {
+            if (self::userIsAssignedToCategory($userId, $categoryId) == false) {
+                $params = [
+                    'category_id' => $categoryId,
+                    'user_id' => $userId
+                ];
+                Database::insert($table, $params);
+            }
+        }
+    }
+
+    /**
+     * @param int $userId
+     * @param int $categoryId
+     *
+     * @return bool
+     */
+    public static function userIsAssignedToCategory($userId, $categoryId)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
+        $userId = intval($userId);
+        $categoryId = intval($categoryId);
+        $sql = "SELECT * FROM $table WHERE category_id = $categoryId AND user_id = $userId";
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
+    }
+
+    /**
+     * @param int $categoryId
+     *
+     * @return array
+     */
+    public static function getUsersInCategory($categoryId)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
+        $categoryId = intval($categoryId);
+        $sql = "SELECT * FROM $table WHERE category_id = $categoryId";
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
+    /**
+     * @param int $categoryId
+     */
+    public static function deleteAllUserInCategory($categoryId)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
+        $categoryId = intval($categoryId);
+        $sql = "DELETE FROM $table WHERE category_id = $categoryId";
+        Database::query($sql);
+    }
+
+    /**
      * Get all possible tickets statuses
      * @return array
      */
@@ -78,7 +245,7 @@ class TicketManager
         $email,
         $subject,
         $content,
-        $personalEmail = "",
+        $personalEmail = '',
         $file_attachments,
         $source = 'VRT',
         $priority = 'NRM',
@@ -91,6 +258,9 @@ class TicketManager
         $table_support_category = Database::get_main_table(
             TABLE_TICKET_CATEGORY
         );
+
+        $now = api_get_utc_datetime();
+        $user_id = api_get_user_id();
         $course_id = intval($course_id);
         $category_id = intval($category_id);
         $project_id = intval($project_id);
@@ -107,8 +277,6 @@ class TicketManager
         $personalEmail = Database::escape_string($personalEmail);
         $status = Database::escape_string($status);
 
-        $now = api_get_utc_datetime();
-        $user_id = api_get_user_id();
         if ($status == '') {
             $status = NEWTCK;
             if ($other_area > 0) {
@@ -116,10 +284,31 @@ class TicketManager
             }
         }
 
-        if ($request_user == '' && $source == 'VRT') {
-            $request_user = $user_id;
+        if (!empty($category_id)) {
+            if (empty($request_user)) {
+                $usersInCategory = TicketManager::getUsersInCategory($category_id);
+                if (!empty($usersInCategory) && count($usersInCategory) > 0) {
+                    $userCategoryInfo = $usersInCategory[0];
+                    if (isset($userCategoryInfo['user_id'])) {
+                        $assigned_user = $userCategoryInfo['user_id'];
+                    }
+                }
+            }
         }
-        $sql_insert_ticket = "INSERT INTO $table_support_tickets
+
+        if (empty($request_user)) {
+            $request_user = $user_id;
+        }        
+        
+        $assignedUserInfo = api_get_user_info($assigned_user);
+
+        if (empty($assignedUserInfo)) {
+
+            return false;
+        }
+
+        // insert_ticket
+        $sql = "INSERT INTO $table_support_tickets
             (
             project_id,
             category_id,
@@ -143,58 +332,173 @@ class TicketManager
             '$personalEmail',
             '$status',
             '$now',
-            $user_id,
+             $request_user,
             '$now',
-            '$user_id',
+            '$request_user',
             '$now',
             '$source'
         )";
-        Database::query($sql_insert_ticket);
+        Database::query($sql);
         $ticket_id = Database::insert_id();
-
-        if ($assigned_user != 0) {
-            self::assign_ticket_user($ticket_id, $assigned_user);
-        }
 
         if ($ticket_id != 0) {
             $ticket_code = "A" . str_pad(
                 (int) $ticket_id, 11, "0", STR_PAD_LEFT
             );
-            $sql_update_code = "UPDATE $table_support_tickets
-                                SET ticket_code = '$ticket_code'
-                                WHERE ticket_id = '$ticket_id'";
-            Database::query($sql_update_code);
+
+            if ($assigned_user != 0) {
+                self::assign_ticket_user($ticket_id, $assigned_user);
+
+                Display::addFlash(Display::return_message(
+                    sprintf(
+                        $plugin->get_lang('TicketXAssignedToUserX'),
+                        $ticket_code,
+                        $assignedUserInfo['complete_name']
+                    ),
+                    'normal',
+                    false
+                ));
+            } else {
+                Display::addFlash(Display::return_message(
+                    sprintf(
+                        $plugin->get_lang('TicketXCreated'),
+                        $ticket_code
+                    ),
+                    'normal',
+                    false
+                ));
+            }
+
+            // Update code
+            $sql = "UPDATE $table_support_tickets
+                    SET ticket_code = '$ticket_code'
+                    WHERE ticket_id = '$ticket_id'";
+            Database::query($sql);
+
             $data_files = array();
-            $sql_update_total = "UPDATE $table_support_category
-                                 SET total_tickets = total_tickets +1
-                                 WHERE category_id = '$category_id';";
-            Database::query($sql_update_total);
-            if (self::insert_message($ticket_id, $subject, $content, $file_attachments, $request_user)) {
+            // Update total
+            $sql = "UPDATE $table_support_category
+                    SET total_tickets = total_tickets +1
+                    WHERE category_id = '$category_id'";
+            Database::query($sql);
+
+            if (self::insert_message(
+                $ticket_id,
+                $subject,
+                $content,
+                $file_attachments,
+                $request_user)
+            ) {
+                $user = api_get_user_info($request_user);
+                $helpDeskMessage =
+                    '<table>
+                            <tr>
+                                <td width="100px"><b>' . get_lang('User') . '</b></td>
+                                <td width="400px">' . $user['firstname']. ' ' . $user['lastname'] . '</td>
+                            </tr>
+                            <tr>
+                                <td width="100px"><b>' . get_lang('Username') . '</b></td>
+                                <td width="400px">' . $user['username'] . '</td>
+                            </tr>
+                            <tr>
+                                <td width="100px"><b>' . get_lang('Email') . '</b></td>
+                                <td width="400px">' . $user['email'] . '</td>
+                            </tr>
+                            <tr>
+                                <td width="100px"><b>' . get_lang('Phone') . '</b></td>
+                                <td width="400px">' . $user['phone'] . '</td>
+                            </tr>
+                            <tr>
+                                <td width="100px"><b>' . get_lang('Date') . '</b></td>
+                                <td width="400px">' . api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG) . '</td>
+                            </tr>
+                            <tr>
+                                <td width="100px"><b>' . get_lang('Title') . '</b></td>
+                                <td width="400px">' . $subject . '</td>
+                            </tr>
+                            <tr>
+                                <td width="100px"><b>' . get_lang('Description') . '</b></td>
+                                <td width="400px">' . $content . '</td>
+                            </tr>
+                        </table>';
+
+                if (empty($category_id)) {
+                    if ($plugin->get('send_warning_to_all_admins')) {
+                        $warningSubject = sprintf(
+                            $plugin->get_lang('TicketXCreatedWithNoCategory'),
+                            $ticket_code
+                        );
+                        Display::addFlash(Display::return_message($warningSubject));
+
+                        $admins = UserManager::get_all_administrators();
+                        foreach ($admins as $userId => $data) {
+                            if ($data['active']) {
+                                MessageManager::send_message_simple(
+                                    $userId,
+                                    $warningSubject,
+                                    $message
+                                );
+                            }
+                        }
+                    }
+                } else {
+
+                    $categoryInfo = TicketManager::getCategory($category_id);
+                    $usersInCategory = TicketManager::getUsersInCategory($category_id);
+
+                    $message = '<h2>'.$plugin->get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
+
+                    if ($plugin->get('warn_admin_no_user_in_category')) {
+                        $usersInCategory = TicketManager::getUsersInCategory($category_id);
+                        if (empty($usersInCategory)) {
+                            $subject = sprintf(
+                                $plugin->get_lang('WarningCategoryXDoesntHaveUsers'),
+                                $categoryInfo['name']
+                            );
+
+                            if ($plugin->get('send_warning_to_all_admins')) {
+                                Display::addFlash(Display::return_message(
+                                    sprintf(
+                                        $plugin->get_lang('CategoryWithNoUserNotificationSentToAdmins'),
+                                        $categoryInfo['name']
+                                    ),
+                                    null,
+                                    false
+                                ));
+
+                                $admins = UserManager::get_all_administrators();
+                                foreach ($admins as $userId => $data) {
+                                    if ($data['active']) {
+                                        MessageManager::send_message_simple(
+                                            $userId,
+                                            $subject,
+                                            $message
+                                        );
+                                    }
+                                }
+                            } else {
+                                Display::addFlash(Display::return_message($subject));
+                            }
+                        }
+                    }
+
+                    // Send notification to all users
+                    if (!empty($usersInCategory)) {
+                        foreach ($usersInCategory as $data) {
+                            if ($data['user_id']) {
+                                MessageManager::send_message_simple(
+                                    $data['user_id'],
+                                    $subject,
+                                    $message
+                                );
+                            }
+                        }
+                    }
+                }
+
+
                 global $data_files;
                 if ($other_area) {
-                    $user = api_get_user_info($request_user);
-                    $helpDeskMessage = '<table>
-                                            <tr>
-                                                <td width="100px"><b>' . get_lang('User') . '</b></td>
-                                                <td width="400px">' . $user['firstname']. ' ' . $user['lastname'] . '</td>
-                                            </tr>
-                                            <tr>
-                                                <td width="100px"><b>' . get_lang('Username') . '</b></td>
-                                                <td width="400px">' . $user['username'] . '</td>
-                                            </tr>
-                                            <tr>
-                                                <td width="100px"><b>' . get_lang('Date') . '</b></td>
-                                                <td width="400px">' . api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG) . '</td>
-                                            </tr>
-                                            <tr>
-                                                <td width="100px"><b>' . get_lang('Topic') . '</b></td>
-                                                <td width="400px">' . $subject . '</td>
-                                            </tr>
-                                            <tr>
-                                                <td width="100px"><b>' . get_lang('Description') . '</b></td>
-                                                <td width="400px">' . $content . '</td>
-                                            </tr>
-                                        </table>';
 
                     // Send email to "other area" email
                     api_mail_html(
@@ -226,6 +530,9 @@ class TicketManager
                         $ticket_id, get_lang('MessageResent'), $studentMessage, null, 1
                     );
                 }
+
+
+
 
                 return true;
             } else {
@@ -637,6 +944,7 @@ class TicketManager
                 )";
             }
         }
+
         if ($keyword_unread == 'yes') {
             $sql .= " AND ticket.ticket_id IN (SELECT ticket.ticket_id
                 FROM $table_support_tickets ticket,
@@ -1012,12 +1320,15 @@ class TicketManager
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_assoc($result)) {
                 $row['course'] = null;
+                $row['start_date_from_db'] = $row['start_date'];
                 $row['start_date'] = api_convert_and_format_date(
                         api_get_local_time($row['start_date']), DATE_TIME_FORMAT_LONG, _api_get_timezone()
                 );
+                $row['end_date_from_db'] = $row['end_date'];
                 $row['end_date'] = api_convert_and_format_date(
                         api_get_local_time($row['end_date']), DATE_TIME_FORMAT_LONG, _api_get_timezone()
                 );
+                $row['sys_lastedit_datetime_from_db'] = $row['sys_lastedit_datetime'];
                 $row['sys_lastedit_datetime'] = api_convert_and_format_date(
                         api_get_local_time($row['sys_lastedit_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()
                 );
@@ -1550,5 +1861,19 @@ class TicketManager
         }
 
         return $tickets;
+    }
+
+    /**
+     * @param string $url
+     * @return FormValidator
+     */
+    public static function getCategoryForm($url)
+    {
+        $form = new FormValidator('category', 'post', $url);
+        $form->addText('name', get_lang('Name'));
+        $form->addHtmlEditor('description', get_lang('Description'));
+        $form->addButtonUpdate(get_lang('Save'));
+
+        return $form;
     }
 }

@@ -185,17 +185,12 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
     }
 }
 
-
-//Show the chamilo mascot
+// Show the chamilo mascot
 if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
 	$controller->tpl->assign('welcome_to_course_block', $controller->return_welcome_to_course_block());
 }
-if($_configuration['course_grid']){
-  $controller->tpl->assign('content', $courseAndSessions['html']);
-}else{
-  $controller->tpl->assign('content', $courseAndSessions['html']);  
-}
 
+$controller->tpl->assign('content', $courseAndSessions['html']);
 
 if (api_get_setting('allow_browser_sniffer') == 'true') {
     if (isset($_SESSION['sniff_navigator']) && $_SESSION['sniff_navigator'] != "checked") {

@@ -83,5 +83,18 @@ $strings['AreYouSure'] = "Are you sure?";
 $strings['allow_student_add'] = "Allow students to generate tickets";
 $strings['PleaseBeforeRegisterATicketSelectOneUser'] = "Please select a user before you register a ticket.";
 $strings['RequestConfirmation'] = "Request confirmation";
+
 $strings['TicketUpdated'] = "Ticket updated";
 $strings['TicketClosed'] = "Ticket closed";
+
+$strings['TicketXCreated'] = "Ticket <b>%s</b>created";
+$strings['allow_category_edition'] = "Allow category edition";
+$strings['warn_admin_no_user_in_category'] = "Warn admin if category doesn't have users related";
+$strings['send_warning_to_all_admins'] = "Send warning to all admins, if category doesn't have users related";
+$strings['WarningCategoryXDoesntHaveUsers'] = "Warning: The category '%s' doesn't have users assigned";
+$strings['TicketInformation'] = 'Ticket information';
+$strings['CategoryWithNoUserNotificationSentToAdmins'] = 'Category <b>%s</b> with no user sent to all administrators.';
+$strings['TicketXAssignedToUserX'] = 'Ticket <b>#%s</b> assigned to user <b>%s</b>';
+$strings['TicketXCreatedWithNoCategory'] = 'Ticket <b>#%s</b> created with no category';
+
+

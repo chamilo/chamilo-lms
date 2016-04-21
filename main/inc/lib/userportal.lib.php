@@ -1043,6 +1043,7 @@ class IndexManager
         $sessionCount = 0;
         $courseCount = 0;
 
+        $items = [];
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             // Display special courses.
@@ -1050,6 +1051,7 @@ class IndexManager
                 $user_id,
                 $this->load_directories_preview
             );
+           
             // Display courses.
             $courses = CourseManager::returnCourses(
                 $user_id,
@@ -1296,9 +1298,7 @@ class IndexManager
                                 $sessionParams['id'] = $session_id;
                                 $sessionParams['show_link_to_session'] = !api_is_drh() && $sessionTitleLink;
                                 $sessionParams['title'] = $session_box['title'];
-                                $sessionParams['subtitle'] = (!empty($session_box['coach'])
-                                    ? $session_box['coach'] . ' | '
-                                    : '') . $session_box['dates'];
+                                $sessionParams['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'] . ' | ': '') . $session_box['dates'];
                                 $sessionParams['show_actions'] = api_is_platform_admin();
                                 $sessionParams['courses'] = $html_courses_session;
                                 $sessionParams['show_simple_session_info'] = false;
@@ -1429,7 +1429,7 @@ class IndexManager
         if ($load_history) {
             $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
             if (empty($session_categories)) {
-                $html .=  get_lang('YouDoNotHaveAnySessionInItsHistory');
+                $html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
             }
         }
 

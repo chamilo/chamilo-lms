@@ -325,6 +325,7 @@ class Plugin
 
             //1. Loading english if exists
             $english_path = $root.$plugin_name."/lang/english.php";
+
             if (is_readable($english_path)) {
                 $strings = array();
                 include $english_path;
@@ -332,6 +333,7 @@ class Plugin
             }
 
             $path = $root.$plugin_name."/lang/$language_interface.php";
+
             //2. Loading the system language
             if (is_readable($path)) {
                 include $path;

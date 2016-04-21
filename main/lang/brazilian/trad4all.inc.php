@@ -7418,7 +7418,7 @@ $FieldTypeLettersSpaces = "letras e espaços de texto";
 $CronRemindCourseFinishedActivateTitle = "Enviar curso terminou notificação";
 $FieldTypeAlphanumericSpaces = "caracteres alfanuméricos texto e espaços";
 $CronRemindCourseFinishedActivateComment = "Se enviar um e-mail para os alunos quando seu curso (sessão) é acabados. Isto requer tarefas cron para ser configurado (ver/cron/diretório principal).";
-$ThanksForRegisteringToSite = "Obrigado por registrar em %s.";
+$ThanksForRegisteringToSite = "Obrigado por registrar-se em %s.";
 $AllowCoachFeedbackExercisesTitle = "Permitir que os treinadores para comentar na avaliação de exercícios";
 $AllowCoachFeedbackExercisesComment = "Permitir que os treinadores para editar o feedback durante a revisão de exercícios";
 $PreventMultipleSimultaneousLoginTitle = "Impedir o login simultânea";
@@ -7558,4 +7558,5 @@ $NewLogoUpdated = "Novo logotipo carregado";
 $CurrentLogo = "Logo atual";
 $UpdateLogo = "Logotipo atualização";
 $FollowedStudentBosses = "chefes de estudantes seguiram";
+$AccessData = "Dados de acesso";
 ?>

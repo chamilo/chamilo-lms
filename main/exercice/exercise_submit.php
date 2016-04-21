@@ -1116,7 +1116,17 @@ if (!empty($error)) {
             }
         }
 
-        $user_choice = isset($attempt_list[$questionId]) ? $attempt_list[$questionId] : null;
+        $user_choice = null;
+
+        if (isset($attempt_list[$questionId])) {
+            $user_choice = $attempt_list[$questionId];
+        } elseif ($objExercise->saveCorrectAnswers) {
+            $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts($learnpath_id, $learnpath_item_id);
+
+            if (isset($correctAnswers[$questionId])) {
+                $user_choice = $correctAnswers[$questionId];
+            }
+        }
 
         $remind_highlight = '';
 

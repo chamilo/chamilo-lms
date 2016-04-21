@@ -31,7 +31,6 @@ $userInput = Display::tag(
     )
 );
 $userControl = Display::div($userInput, array('class' => 'controls'));
-
 $courseLabel = Display::tag('label', get_lang('Course'), array('class' => 'control-label'));
 $courseSelect = Display::select('course_id', $arrCourseList, 0, array(), false);
 $courseControl = Display::div($courseSelect, array('class' => 'controls'));

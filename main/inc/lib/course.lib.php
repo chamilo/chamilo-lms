@@ -3540,6 +3540,7 @@ class CourseManager
         $result = Database::query($sql);
         $html = null;
         $courseCount = 0;
+        $items = [];
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $params = array(
@@ -3556,10 +3557,14 @@ class CourseManager
                 $load_dirs
             );
 
-            $html .= self::course_item_parent(
+            $item = self::course_item_parent(
                 self::course_item_html($params, true),
                 $courseInCategory['html']
             );
+
+            $html .= $item;
+
+            $items[] = $item;
             $courseCount += $courseInCategory['course_count'];
         }
 
@@ -3567,10 +3572,16 @@ class CourseManager
         $courseInCategory = self::displayCoursesInCategory(0, $load_dirs);
 
         $html .= $courseInCategory['html'];
+
+        if (!empty($courseInCategory['items'])) {
+            $items = array_merge($items, $courseInCategory['items']);
+        }
+
         $courseCount += $courseInCategory['course_count'];
 
         return [
             'html' => $html,
+            'items' => $items,
             'course_count' => $courseCount
         ];
     }
@@ -3949,6 +3960,7 @@ class CourseManager
 
         $result = Database::query($sql);
         $html = '';
+        $items = [];
 
         $course_list = array();
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
@@ -4067,11 +4079,14 @@ class CourseManager
             if (empty($user_category_id)) {
                 $isSubContent = false;
             }
-            $html .= self::course_item_html($params, $isSubContent);
+            $item = self::course_item_html($params, $isSubContent);
+            $html .= $item;
+            $items[] = $item;
         }
 
         return [
             'html' => $html,
+            'items' => $items,
             'course_count' => $courseCount
         ];
     }
@@ -5356,7 +5371,8 @@ class CourseManager
             'pdf_export_watermark_text',
             'show_system_folders',
             'exercise_invisible_in_session',
-            'enable_forum_auto_launch'
+            'enable_forum_auto_launch',
+            'show_course_in_user_language'
         );
 
         $allowLPReturnLink = api_get_setting('allow_lp_return_link');
@@ -5766,7 +5782,7 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        $form->addElement('advmultiselect', 'users', get_lang('Users'), $result);
+        return $form->addElement('advmultiselect', 'users', get_lang('Users'), $result);
     }
 
     /**

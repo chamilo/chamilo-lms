@@ -7625,4 +7625,10 @@ $EnableForumAutoLaunch = "Activar l'auto-démarrage des forums";
 $NowDownloadYourCertificateClickHere = "Télécharge ton certificat en cliquant ici";
 $AdditionallyYouHaveObtainedTheFollowingSkills = "En plus, tu as acquis les compétences suivantes";
 $IHaveObtainedSkillXOnY = "J'ai acquis la compétence %s sur %s";
+$AnotherAttempt = "Nouvelle tentative";
+$RemainingXAttempts = "%s tentatives restantes";
+$Map = "Carte";
+$MyLocation = "Ma position";
+$ShowCourseInUserLanguage = "Afficher les cours dans la langue de l'utilisateur";
+$AccessData = "Données d'accès";
 ?>

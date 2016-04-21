@@ -65,7 +65,7 @@ class SelectAjax extends HTML_QuickForm_select
             $id = $this->getAttribute('name');
             $this->setAttribute('id', $id);
         }
-
+        // URL must return ajax json_encode arrady [items => [['id'=>1, 'text'='content']]
         $url = $this->getAttribute('url');
 
         if (!$url) {

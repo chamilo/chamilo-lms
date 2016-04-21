@@ -1352,6 +1352,11 @@ class UserManager
         }
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
+
+            $result['complete_name'] = api_get_person_name(
+                $result['firstname'],
+                $result['lastname']               
+            );
             $return_array[] = $result;
         }
         return $return_array;

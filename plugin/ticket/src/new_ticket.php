@@ -18,13 +18,6 @@ if (!api_is_platform_admin() &&
 
 api_block_anonymous_users();
 
-$scrollTop = '';
-if (api_is_platform_admin()) {
-    $scrollTol = '$("html, body").animate({
-                    scrollTop: $(".divTicket").offset().top - 20
-                  }, "slow");';
-}
-
 $htmlHeadXtra[] = '
 <script>
 function load_course_list (div_course, my_user_id, user_email) {
@@ -38,7 +31,6 @@ function load_course_list (div_course, my_user_id, user_email) {
             $("#user_id_request").val(my_user_id);
             $("#personal_email").val(user_email);
             $("#btnsubmit").attr("disabled", false);
-            ' . $scrollTol . '
         }
     });
 }
@@ -73,10 +65,7 @@ function validate() {
     document.getElementById("content").value= fckEditor1val;
     var selected = document.getElementById("category_id").selectedIndex;
     var id = document.getElementById("category_id").options[selected].value;
-    if (document.getElementById("user_id_request").value == "") {
-        alert("' . $plugin->get_lang("ValidUser") . '");
-        return false;
-    } else if(id == 0) {
+    if (id == 0) {
         alert("' . $plugin->get_lang("ValidType") . '");
         return false;
     } else if(document.getElementById("subject").value == "") {
@@ -86,8 +75,10 @@ function validate() {
         alert("' . $plugin->get_lang("ValidCourse") . '");
         return false;
     } else if(id != "CUR" && parseInt(course_required[id]) != 1  && !re.test(document.getElementById("personal_email").value)) {
-        alert("' . $plugin->get_lang("ValidEmail") . '");
-        return false;
+        if (document.getElementById("personal_email").value != "") {
+            alert("' . $plugin->get_lang("ValidEmail") . '");
+            return false;
+        }
     } else if(fckEditor1val == "") {
         alert("' . $plugin->get_lang("ValidMessage") . '");
         return false;
@@ -200,7 +191,6 @@ function js_array($array, $name, $key)
 function show_form_send_ticket()
 {
     global $types, $plugin;
-    echo '<div class="divTicket">';
 
     // Category List
     $categoryList = array();
@@ -263,8 +253,7 @@ function show_form_send_ticket()
         "",
         array(
             'enctype' => 'multipart/form-data',
-            'onsubmit' => 'return validate()',
-            'class' => 'span8 offset1 form-horizontal'
+            'onsubmit' => 'return validate()'
         )
     );
 
@@ -317,6 +306,48 @@ function show_form_send_ticket()
         )
     );
 
+    $form->addElement(
+        'text',
+        'subject',
+        get_lang('Subject'),
+        array(
+            'id' => 'subject'
+        )
+    );
+
+    $form->addHtmlEditor(
+        'content',
+        get_lang('Message'),
+        false,
+        false,
+        array(
+            'ToolbarSet' => 'Profile',
+            'Height' => '250'
+        )
+    );
+    
+    //if (api_is_platform_admin()) {
+        $form->addElement(
+            'SelectAjax',
+            'user_id',
+            get_lang('Assign'),
+            null,
+            ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like']
+        );
+    //}
+
+    
+
+    $form->addElement(
+        'text',
+        'personal_email',
+        $plugin->get_lang('PersonalEmail'),
+        array(
+            'id' => 'personal_email'
+        )
+    );
+
+
     $form->addLabel('',
         Display::div(
             '',
@@ -336,42 +367,21 @@ function show_form_send_ticket()
 
     $form->addElement(
         'select',
+        'priority_id',
+        $plugin->get_lang('Priority'),
+        $priorityList,
+        array(
+            'id' => 'priority_id',
+            'for' => 'priority_id'
+        )
+    );
+
+    $form->addElement(
+        'select',
         'source_id',
         $plugin->get_lang('Source'),
         $sourceList,
         $sourceAttributes
-    );
-
-    $form->addElement(
-        'text',
-        'subject',
-        get_lang('Subject'),
-        array(
-            'id' => 'subject',
-            'style' => 'width: 550px;'
-        )
-    );
-
-    $form->addElement(
-        'text',
-        'personal_email',
-        $plugin->get_lang('PersonalEmail'),
-        array(
-            'id' => 'personal_email',
-            'style' => 'width: 550px;'
-        )
-    );
-
-    $form->addHtmlEditor(
-        'content',
-        get_lang('Message'),
-        false,
-        false,
-        array(
-            'ToolbarSet' => 'Profile',
-            'Width' => '600',
-            'Height' => '250'
-        )
     );
 
     $form->addElement(
@@ -383,16 +393,7 @@ function show_form_send_ticket()
         )
     );
 
-    $form->addElement(
-        'select',
-        'priority_id',
-        $plugin->get_lang('Priority'),
-        $priorityList,
-        array(
-            'id' => 'priority_id',
-            'for' => 'priority_id'
-        )
-    );
+
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
     $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 
@@ -431,18 +432,19 @@ function save_ticket()
     if ($_POST['phone'] != "") {
         $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . Security::remove_XSS($_POST['phone']). '</p>';
     }
-    $course_id = $_POST['course_id'];
+    $course_id = isset($_POST['course_id']) ? $_POST['course_id'] : 0;
     $project_id = $_POST['project_id'];
     $subject = $_POST['subject'];
     $other_area = (int) $_POST['other_area'];
     $email = $_POST['email'];
     $personal_email = $_POST['personal_email'];
     $source = $_POST['source_id'];
-    $user_id = $_POST['user_id_request'];
+    $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
     $priority = $_POST['priority_id'];
     $status = $_POST['status_id'];
     $file_attachments = $_FILES;
     $responsible = (api_is_platform_admin() ? api_get_user_id() : 0);
+  
     if (TicketManager::insert_new_ticket(
         $category_id,
         $course_id,
@@ -577,6 +579,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 if (!isset($_POST['compose'])) {
     if (api_is_platform_admin()) {
         Display::display_header(get_lang('ComposeMessage'));
+
+        /*
         $message = $plugin->get_lang('PleaseBeforeRegisterATicketSelectOneUser');
         Display::display_warning_message($message);
         echo '
@@ -613,7 +617,7 @@ if (!isset($_POST['compose'])) {
         $table->set_header(5, get_lang('Email'));
         $table->set_header(6, get_lang('Action'));
         $table->display();
-        echo '</div>';
+        echo '</div>';*/
     } else {
         $userInfo = api_get_user_info();
         $htmlHeadXtra[] = "

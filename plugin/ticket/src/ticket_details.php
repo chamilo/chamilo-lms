@@ -283,8 +283,6 @@ if (!isset($_POST['compose'])) {
 			<table width="100%" >
 				<tr>
 	              <td colspan="3" style="width:65%">
-
-
 	              <h1>' . $titulo . ' '.$form_close_ticket.' '.$img_assing.' </h1>
 	              <h2>'.$subTitle.'</h2>
 	              <p>
@@ -295,7 +293,7 @@ if (!isset($_POST['compose'])) {
                         '#',
                         ['title' => $ticket['ticket']['start_date'], 'class' => 'boot-tooltip']
                     ).'. '.
-                    get_lang('Updated').' '.
+                    $plugin->get_lang('TicketUpdated').' '.
                     Display::url(
                         date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
                         '#',

@@ -47,7 +47,7 @@ Database::query("UPDATE session SET id_coach = NULL WHERE id_coach = 0");
 Database::query("UPDATE session SET session_category_id = NULL WHERE session_category_id = 0");
 Database::query("ALTER TABLE session ADD CONSTRAINT FK_D044D5D4D1DC2CFC FOREIGN KEY (id_coach) REFERENCES user (id)");
 Database::query("ALTER TABLE session ADD CONSTRAINT FK_D044D5D4EE1F8395 FOREIGN KEY (session_category_id) REFERENCES session_category (id)");
-Database::query("ALTER TABLE session_rel_user ADD moved_status INT DEFAULT NULL, ADD moved_at DATETIME DEFAULT NULL, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE session_id session_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL, CHANGE relation_type relation_type INT NOT NULL, CHANGE duration moved_to INT DEFAULT NULL");
+Database::query("ALTER TABLE session_rel_user ADD moved_status INT DEFAULT NULL, ADD moved_at DATETIME DEFAULT NULL, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE session_id session_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL, CHANGE relation_type relation_type INT NOT NULL");
 Database::query("ALTER TABLE session_rel_user ENGINE=InnoDB");
 Database::query("ALTER TABLE session_rel_user ADD CONSTRAINT FK_B0D7D4C0613FECDF FOREIGN KEY (session_id) REFERENCES session (id)");
 Database::query("ALTER TABLE session_rel_user ADD CONSTRAINT FK_B0D7D4C0A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)");

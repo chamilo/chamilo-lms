@@ -6266,7 +6266,7 @@ class learnpath
                 $_SESSION['parent_item_id'] = ($row['item_type'] == 'dokeos_chapter' || $row['item_type'] == 'dokeos_module' || $row['item_type'] == 'dir') ? $item_id : 0;
 
                 // Prevents wrong parent selection for document, see Bug#1251.
-                if ($row['item_type'] != 'dokeos_chapter' || $row['item_type'] != 'dokeos_module') {
+                if ($row['item_type'] != 'dokeos_chapter' && $row['item_type'] != 'dokeos_module') {
                     $_SESSION['parent_item_id'] = $row['parent_item_id'];
                 }
 

@@ -90,7 +90,7 @@ if (isset($_GET['details'])) {
                 );
             } else {
                 $interbreadcrumb[] = array (
-                    "url" => "index.php",
+                    "url" => api_is_student_boss()?"#":"index.php",
                     "name" => get_lang('MySpace')
                 );
                 if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
@@ -128,7 +128,7 @@ if (isset($_GET['details'])) {
         }
     } else {
         $interbreadcrumb[] = array (
-            "url" => "index.php",
+            "url" => api_is_student_boss()?"#":"index.php",
             "name" => get_lang('MySpace')
         );
         if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {

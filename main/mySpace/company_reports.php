@@ -16,7 +16,7 @@ if ($userNotAllowed) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('MySpace'));
+$interbreadcrumb[] = array ('url' => api_is_student_boss()?'#':'index.php', 'name' => get_lang('MySpace'));
 $tool_name = get_lang('Report');
 
 $this_section = SECTION_TRACKING;

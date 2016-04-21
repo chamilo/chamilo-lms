@@ -7630,4 +7630,5 @@ $RemainingXAttempts = "%s tentatives restantes";
 $Map = "Carte";
 $MyLocation = "Ma position";
 $ShowCourseInUserLanguage = "Afficher les cours dans la langue de l'utilisateur";
+$AccessData = "Données d'accès";
 ?>

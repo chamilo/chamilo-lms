@@ -235,7 +235,6 @@ VALUES
 ('accessibility_font_resize',NULL,'radio','Platform','false','EnableAccessibilityFontResizeTitle','EnableAccessibilityFontResizeComment',NULL,NULL, 1),
 ('hide_courses_in_sessions',NULL,'radio', 'Session','false','HideCoursesInSessionsTitle',	'HideCoursesInSessionsComment','platform',NULL, 1),
 ('enable_quiz_scenario',  NULL,'radio','Course','true','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1),
-('enable_nanogong',NULL,'radio','Tools','false','EnableNanogongTitle','EnableNanogongComment',NULL,NULL, 0),
 ('filter_terms',NULL,'textarea','Security','','FilterTermsTitle','FilterTermsComment',NULL,NULL, 0),
 ('header_extra_content', NULL, 'textarea', 'Tracking', '', 'HeaderExtraContentTitle', 'HeaderExtraContentComment', NULL, NULL, 1),
 ('footer_extra_content', NULL, 'textarea', 'Tracking', '', 'FooterExtraContentTitle', 'FooterExtraContentComment', NULL, NULL, 1),
@@ -270,7 +269,6 @@ VALUES
 ('login_is_email', NULL, 'radio', 'Platform', 'false', 'LoginIsEmailTitle', 'LoginIsEmailComment', NULL, NULL, 0),
 ('courses_default_creation_visibility', NULL, 'radio', 'Course', '2', 'CoursesDefaultCreationVisibilityTitle', 'CoursesDefaultCreationVisibilityComment', NULL, NULL, 1),
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
-('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
 ('gradebook_enable_grade_model', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableGradeModelTitle', 'GradebookEnableGradeModelComment', NULL, NULL, 1),
 ('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
 ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
@@ -537,8 +535,6 @@ VALUES
 ('hide_courses_in_sessions','false','No'),
 ('enable_quiz_scenario', 'true', 'Yes'),
 ('enable_quiz_scenario', 'false', 'No'),
-('enable_nanogong','true','Yes'),
-('enable_nanogong','false','No'),
 ('show_documents_preview', 'true', 'Yes'),
 ('show_documents_preview', 'false', 'No'),
 ('htmlpurifier_wiki', 'true', 'Yes'),
@@ -593,8 +589,6 @@ VALUES
 ('courses_default_creation_visibility', '0', 'CourseVisibilityClosed'),
 ('allow_browser_sniffer', 'true', 'Yes'),
 ('allow_browser_sniffer', 'false', 'No'),
-('enable_wami_record', 'true', 'Yes'),
-('enable_wami_record', 'false', 'No'),
 ('teachers_can_change_score_settings', 'true', 'Yes'),
 ('teachers_can_change_score_settings', 'false', 'No'),
 ('teachers_can_change_grade_model_settings', 'true', 'Yes'),
@@ -1826,4 +1820,11 @@ VALUES
 ('teacher_can_select_course_template', 'true', 'Yes'),
 ('teacher_can_select_course_template', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.11.0.2' WHERE variable = 'chamilo_database_version';
+-- Version 1.11.0.3
+
+INSERT INTO settings_current
+(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
+VALUES
+('enable_record_audio',NULL,'radio','Tools','true','EnableRecordAudioTitle','EnableRecordAudioComment',NULL,NULL, 0);
+
+UPDATE settings_current SET selected_value = '1.11.0.3' WHERE variable = 'chamilo_database_version';

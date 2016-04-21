@@ -19,6 +19,7 @@ class CategoryAdmin
     {
         $formMapper
             ->add('name')
+            ->add('email')
         ;
     }
 
@@ -29,6 +30,7 @@ class CategoryAdmin
     {
         $datagridMapper
             ->add('name')
+            ->add('email')
         ;
     }
 }

@@ -427,7 +427,7 @@ if ($isAdmin) {
     $table->set_header(3, $plugin->get_lang('Category'));
     $table->set_header(4, $plugin->get_lang('Status'), false);
     $table->set_header(5, get_lang('Actions'), false);
-}
+}       
 
 $table->display();
 Display::display_footer();

@@ -108,7 +108,17 @@ class TicketManager
     {
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $id = intval($id);
-         Database::update($table, $params, ['id = ?' => $id]);
+        Database::update($table, $params, ['id = ?' => $id]);
+    }
+
+    /**
+     * @param int $id
+     * @param array $params
+     */
+    public static function addCategory($params)
+    {
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        Database::insert($table, $params);
     }
 
     /**
@@ -275,42 +285,6 @@ class TicketManager
         }
 
         if (!empty($category_id)) {
-            $categoryInfo = TicketManager::getCategory($category_id);
-
-            if ($plugin->get('warn_admin_no_user_in_category')) {
-                $usersInCategory = TicketManager::getUsersInCategory($category_id);
-                if (empty($usersInCategory)) {
-                    $subject = sprintf(
-                        $plugin->get_lang('WarningCategoryXDoesntHaveUsers'),
-                        $categoryInfo['name']
-                    );
-
-                    $message = '<h2>'.$plugin->get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
-
-                    if ($plugin->get('send_warning_to_all_admins')) {
-
-                        Display::addFlash(Display::return_message(
-                            $plugin->get_lang('CategoryWithNoUserNotificationSentToAdmins')
-                        ));
-                        
-                        $admins = UserManager::get_all_administrators();
-                        foreach ($admins as $userId => $data) {
-                            if ($data['active']) {
-                                MessageManager::send_message_simple(
-                                    $userId,
-                                    $subject,
-                                    $message
-                                );
-                            }
-                        }
-                    }
-                }
-            } else {
-
-
-                
-            }
-
             if (empty($request_user)) {
                 $usersInCategory = TicketManager::getUsersInCategory($category_id);
                 if (!empty($usersInCategory) && count($usersInCategory) > 0) {
@@ -372,29 +346,6 @@ class TicketManager
                 (int) $ticket_id, 11, "0", STR_PAD_LEFT
             );
 
-            if (empty($category_id)) {
-                if ($plugin->get('send_warning_to_all_admins')) {
-
-                    Display::addFlash(Display::return_message(
-                        sprintf(
-                            $plugin->get_lang('TicketXCreatedWithNoCategory')
-
-                        )
-                    ));
-
-                    $admins = UserManager::get_all_administrators();
-                    foreach ($admins as $userId => $data) {
-                        if ($data['active']) {
-                            MessageManager::send_message_simple(
-                                $userId,
-                                $subject,
-                                $message
-                            );
-                        }
-                    }
-                }
-            }
-
             if ($assigned_user != 0) {
                 self::assign_ticket_user($ticket_id, $assigned_user);
 
@@ -427,11 +378,17 @@ class TicketManager
             $data_files = array();
             // Update total
             $sql = "UPDATE $table_support_category
-                     SET total_tickets = total_tickets +1
-                     WHERE category_id = '$category_id';";
+                    SET total_tickets = total_tickets +1
+                    WHERE category_id = '$category_id'";
             Database::query($sql);
-            if (self::insert_message($ticket_id, $subject, $content, $file_attachments, $request_user)) {
 
+            if (self::insert_message(
+                $ticket_id,
+                $subject,
+                $content,
+                $file_attachments,
+                $request_user)
+            ) {
                 $user = api_get_user_info($request_user);
                 $helpDeskMessage =
                     '<table>
@@ -456,7 +413,7 @@ class TicketManager
                                 <td width="400px">' . api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG) . '</td>
                             </tr>
                             <tr>
-                                <td width="100px"><b>' . get_lang('Topic') . '</b></td>
+                                <td width="100px"><b>' . get_lang('Title') . '</b></td>
                                 <td width="400px">' . $subject . '</td>
                             </tr>
                             <tr>
@@ -464,6 +421,81 @@ class TicketManager
                                 <td width="400px">' . $content . '</td>
                             </tr>
                         </table>';
+
+                if (empty($category_id)) {
+                    if ($plugin->get('send_warning_to_all_admins')) {
+                        $warningSubject = sprintf(
+                            $plugin->get_lang('TicketXCreatedWithNoCategory'),
+                            $ticket_code
+                        );
+                        Display::addFlash(Display::return_message($warningSubject));
+
+                        $admins = UserManager::get_all_administrators();
+                        foreach ($admins as $userId => $data) {
+                            if ($data['active']) {
+                                MessageManager::send_message_simple(
+                                    $userId,
+                                    $warningSubject,
+                                    $message
+                                );
+                            }
+                        }
+                    }
+                } else {
+
+                    $categoryInfo = TicketManager::getCategory($category_id);
+                    $usersInCategory = TicketManager::getUsersInCategory($category_id);
+
+                    $message = '<h2>'.$plugin->get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
+
+                    if ($plugin->get('warn_admin_no_user_in_category')) {
+                        $usersInCategory = TicketManager::getUsersInCategory($category_id);
+                        if (empty($usersInCategory)) {
+                            $subject = sprintf(
+                                $plugin->get_lang('WarningCategoryXDoesntHaveUsers'),
+                                $categoryInfo['name']
+                            );
+
+                            if ($plugin->get('send_warning_to_all_admins')) {
+                                Display::addFlash(Display::return_message(
+                                    sprintf(
+                                        $plugin->get_lang('CategoryWithNoUserNotificationSentToAdmins'),
+                                        $categoryInfo['name']
+                                    ),
+                                    null,
+                                    false
+                                ));
+
+                                $admins = UserManager::get_all_administrators();
+                                foreach ($admins as $userId => $data) {
+                                    if ($data['active']) {
+                                        MessageManager::send_message_simple(
+                                            $userId,
+                                            $subject,
+                                            $message
+                                        );
+                                    }
+                                }
+                            } else {
+                                Display::addFlash(Display::return_message($subject));
+                            }
+                        }
+                    }
+
+                    // Send notification to all users
+                    if (!empty($usersInCategory)) {
+                        foreach ($usersInCategory as $data) {
+                            if ($data['user_id']) {
+                                MessageManager::send_message_simple(
+                                    $data['user_id'],
+                                    $subject,
+                                    $message
+                                );
+                            }
+                        }
+                    }
+                }
+
 
                 global $data_files;
                 if ($other_area) {
@@ -1831,4 +1863,17 @@ class TicketManager
         return $tickets;
     }
 
+    /**
+     * @param string $url
+     * @return FormValidator
+     */
+    public static function getCategoryForm($url)
+    {
+        $form = new FormValidator('category', 'post', $url);
+        $form->addText('name', get_lang('Name'));
+        $form->addHtmlEditor('description', get_lang('Description'));
+        $form->addButtonUpdate(get_lang('Save'));
+
+        return $form;
+    }
 }

@@ -1043,7 +1043,6 @@ class IndexManager
         $sessionCount = 0;
         $courseCount = 0;
 
-        $items = [];
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             // Display special courses.

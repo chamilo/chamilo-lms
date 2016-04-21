@@ -1,0 +1,66 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\ContactBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+class Category
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue()
+     */
+    protected $id;
+
+    /**
+     * @var string
+     * @ORM\Column(name="name", type="string", nullable=false, length="255")
+     */
+    protected $name;
+
+    /**
+     * @var string
+     * @ORM\Column(name="email", type="string", length="255")
+     */
+    protected $email;
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return Category
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     * @return Category
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        return $this;
+    }
+}

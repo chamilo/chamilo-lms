@@ -939,6 +939,11 @@ class Template
         $this->assign('message_link', $message_link);
         $this->assign('message_url', $message_url);
 
+        //Certificate Link
+        $certificatesUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';
+        $certificateLink = Display::url(get_lang('MyCertificates'), $certificatesUrl);
+        $this->assign('certificate_link', $certificateLink);
+
         $institution = api_get_setting('Institution');
         $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
 

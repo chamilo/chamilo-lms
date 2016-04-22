@@ -26,13 +26,17 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('category', EntityType::class, ['class' => 'Chamilo\ContactBundle\Entity\Category'])
-             ->add('firstname')
+            ->add(
+                'category',
+                EntityType::class,
+                ['class' => 'Chamilo\ContactBundle\Entity\Category']
+            )
+            ->add('firstname')
             ->add('lastname')
             ->add('email')
             ->add('subject')
             ->add('message', 'textarea')
-            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-primary']])
+            ->add('send', SubmitType::class, ['attr' => ['class' => 'btn btn-primary']])
         ;
     }
 

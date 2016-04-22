@@ -7,7 +7,7 @@
  */
 // Initialize context
 $_in_course = true;
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
 
 // Make sure no anonymous user gets here without permission

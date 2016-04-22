@@ -3401,16 +3401,9 @@ class CourseManager
                     if (api_is_platform_admin()) {
                         $params['edit_actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
                         if ($load_dirs) {
-                            $params['document'] .= '<a id="document_preview_' . $course_info['real_id'] . '_' . $course_info['id_session'] . '" class="document_preview" href="javascript:void(0);">' .
-                                Display::return_icon('folder.png',
-                                    get_lang('Documents'),
-                                    array('align' => 'absmiddle'),
-                                    ICON_SIZE_SMALL
-                                ) . '</a>';
-                            $params['document'] .= Display::div('', array(
-                                'id' => 'document_result_' . $course_info['real_id'] . '_' . $course_info['id_session'],
-                                'class' => 'document_preview_container'
-                            ));
+                            $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                               . Display::returnFontAwesomeIcon('folder-open') . '</a>';
+                            $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
                         }
                     }
                     
@@ -3739,8 +3732,13 @@ class CourseManager
 
             if (api_is_platform_admin()) {
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
+                if($load_dirs){
+                    $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                               . Display::returnFontAwesomeIcon('folder-open') . '</a>';
+                    $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
+                }
             }
-
+            
             $course_title_url = '';
             $course_title_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
 
@@ -3760,7 +3758,7 @@ class CourseManager
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;
             }
-
+            
             $isSubContent = true;
             if (empty($user_category_id)) {
                 $isSubContent = false;

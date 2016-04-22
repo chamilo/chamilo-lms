@@ -85,7 +85,7 @@
         "sonata-project/cache-bundle": "~2.1@dev",
         "sonata-project/cache": "~1.0@dev",
         "sonata-project/page-bundle": "dev-master",
-        "sonata-project/core-bundle": "2.3.x-dev",
+        "sonata-project/core-bundle": "3.x-dev",
         "sonata-project/formatter-bundle": "~2.4@dev",
 
         "sonata-project/datagrid-bundle": "~2.2@dev",

@@ -31,7 +31,20 @@
                     </div>
                 </div>
                 {% if item.edit_actions != '' %}
-                    <div class="admin-actions"><a class="btn btn-default btn-sm" href="{{ item.edit_actions }}"><i class="fa fa-pencil" aria-hidden="true"></i></a></div>
+                    <div class="admin-actions">
+                        {% if item.document == '' %}
+                            <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </a>
+                        {% else %}
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </a>
+                                {{ item.document }}
+                            </div> 
+                        {% endif %}
+                    </div>
                 {% endif %}
             </div>
             <div class="description">
@@ -83,7 +96,20 @@
                     </div>
                 </div>
                 {% if item.edit_actions != '' %}
-                    <div class="admin-actions"><a class="btn btn-default btn-sm" href="{{ item.edit_actions }}"><i class="fa fa-pencil" aria-hidden="true"></i></a></div>
+                    <div class="admin-actions">
+                        {% if item.document == '' %}
+                            <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </a>
+                        {% else %}
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </a>
+                                {{ item.document }}
+                            </div> 
+                        {% endif %}
+                    </div>
                 {% endif %}
             </div>
             <div class="description">

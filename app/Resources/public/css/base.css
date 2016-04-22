@@ -1655,39 +1655,24 @@ div.admin_section h4 {
 }
 
 .document_preview_container {
-
-    -webkit-border-radius: 6px;
-    -opera-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-
-    -webkit-box-shadow: 0 2px 5px #C8C8C8;
-    -opera-box-shadow: 0 2px 5px #C8C8C8;
-    -moz-box-shadow: 0 2px 5px #C8C8C8;
-    box-shadow: 0 2px 5px #C8C8C8;
-
-    background-color: #F9F9F9;
-
+    border-radius: 5px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+    background-color: #FFF;
+    border: 1px solid #DDD;
     position: absolute;
     z-index: 20;
     margin:5px;
     padding:5px;
-    width: 400px;
-    height:280px;
+    width: 310px;
+    height: 200px;
     overflow-y: auto;
-
+    top: -5px;
+    left: 25px;
 }
-
 
 #course_settings h3 img {
     margin-left: 25px;
 }
-
-.document_preview_container {
-    font-size: 12px !important;
-    color: #111 ! important;
-}
-
 /* Exercise comment*/
 #comments {
     position:absolute;

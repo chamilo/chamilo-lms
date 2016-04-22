@@ -5684,6 +5684,12 @@ a.sessionView {
 .modal-body .sectioncomment{
     color: #666;
 }
+
+.wami-container {
+    height: 144px;
+    position: relative;
+}
+
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

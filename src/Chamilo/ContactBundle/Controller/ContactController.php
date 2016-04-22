@@ -67,7 +67,6 @@ class ContactController extends Controller
                                 'firstname' => $form->get('firstname')->getData(),
                                 'lastname' => $form->get('lastname')->getData(),
                                 'subject' => $form->get('subject')->getData(),
-
                                 'email' => $form->get('email')->getData(),
                                 'message' => $form->get('message')->getData()
                             )

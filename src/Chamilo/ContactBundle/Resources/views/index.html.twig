@@ -1,6 +1,12 @@
-{% extends '@ChamiloTheme/Layout/base-layout.html.twig' %}
+{% extends '@ChamiloCore/layout_one_col.html.twig' %}
 
-{% block sonata_page_container %}
+{% block content %}
+
+<section id="main_content">
+    <div class="page-header"><h2>{{ 'Contact' | trans  }}</h2>
+    </div>
     {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_widget(form, {'attr': {'class': ''}}) }}
+    {{ form_end(form) }}
+</section>
 {% endblock %}

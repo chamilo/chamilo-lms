@@ -32,7 +32,7 @@ class ContactType extends AbstractType
             ->add('email')
             ->add('subject')
             ->add('message', 'textarea')
-            ->add('save', SubmitType::class)
+            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-primary']])
         ;
     }
 

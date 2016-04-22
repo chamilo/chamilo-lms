@@ -4072,7 +4072,7 @@ class learnpath
 
     /**
      * Check that all prerequisites are fulfilled. Returns true and an
-     * empty string on succes, returns false
+     * empty string on success, returns false
      * and the prerequisite string on error.
      * This function is based on the rules for aicc_script language as
      * described in the SCORM 1.2 CAM documentation page 108.

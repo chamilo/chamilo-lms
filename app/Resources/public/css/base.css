@@ -5873,6 +5873,15 @@ a.sessionView {
     color: black !important;
 }
 
+.skill-badge-img{
+    width: 150px;
+    overflow: hidden;
+}
+
+.text-light{
+    color: #00CCFF;
+}
+
 
 #dropzone {
     position: relative;

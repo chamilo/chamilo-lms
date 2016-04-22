@@ -1565,16 +1565,21 @@ class SocialManager extends UserManager
      */
     public static function readContentWithOpenGraph($link)
     {
+        $domain = parse_url($link);
+        $domain['scheme'] = isset($domain['scheme']) ? $domain['scheme'] : 'http';
+        $domain['host'] = isset($domain['host']) ? $domain['host'] : $domain['path'] ? $domain['path'] : $link;
+
         $graph = OpenGraph::fetch($link);
         if (!$graph) {
             return false;
         }
+
         $url = $graph->url;
         $image = $graph->image;
-        $domain = empty($url) ? parse_url($link) : parse_url($url);
+        $description = $graph->description;
         $domain = $domain['scheme'].'://'.$domain['host'];
         // Trick to verify if the Image Url Exist because of some bad metatag dev
-        if (self::verifyUrl($image) == false){
+        if (self::verifyUrl($image) == false && $image){
             if (!($image[0] == '/')){
                 $domain = $domain . '/';
             }
@@ -1582,11 +1587,13 @@ class SocialManager extends UserManager
         }
         $title = $graph->title;
         
-        $html  = '<div class="thumbnail">';
-        $html .= '<a target="_blank" href="'.$link.'"><h3>'.$title.'</h3>';
-        $html .= empty($image) ? '' : '<img alt="" src="'.$image.'" /></a>';
-        $html .= empty($graph->description) ? '' : '<p class="description">'.$graph->description.'</p>';
-        $html .= '<a href="'.$link.'">'.$link.'</a>';
+        $html  = '<div class="thumbnail social-thumbnail">';
+        $html .= empty($image) ? '' : '<a target="_blank" href="'.$url.'"><img class="img-responsive" src="'.$image.'" /></a>';
+        $html .= '<div class="social-description">';
+        $html .= '<a target="_blank" href="'.$url.'"><h5 class="social-title"><b>'.$title.'</b></h5></a>';
+        $html .= empty($description) ? '' : '<p class="description">'.$description.'</p>';
+        $html .= empty($description) ? '' : '<p class="description">'.$description.'</p>';
+        $html .= '</div>';
         $html .= '</div>';
 
         return $html;

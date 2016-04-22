@@ -27,6 +27,10 @@ $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
 
+//Default OpenGraph search time
+unset($_SESSION['ogSearch']);
+$_SESSION['ogSearch'] = false;
+
 //Initialize blocks
 $social_extra_info_block = null;
 $social_course_block = null;
@@ -301,8 +305,11 @@ $socialAutoExtendLink = Display::url(
 // Added a Jquery Function to return the Preview of OpenGraph URL Content
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
-    
-    $("[name=\'social_wall_new_msg_main\']").on("paste", function(e) {
+
+    var getUrl = $("[name=\'social_wall_new_msg_main\']");
+    var matchUrl = /https?:\/\/w{0,3}\w*?\.(\w*?\.)?\w{2,3}\S*|www\.(\w*?\.)?\w*?\.\w{2,3}\S*|(\w*?\.)?\w*?\.\w{2,3}[\/\?]\S*/ ;
+
+    getUrl.on("paste", function(e) {
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
             beforeSend: function() {
@@ -331,6 +338,41 @@ $(document).ready(function() {
                 }
             }
         });
+    });
+
+    getUrl.keyup(function(e) {
+        if (e.keyCode == 32) {
+            if (matchUrl.test(getUrl.val())) {
+                $.ajax({
+                    contentType: "application/x-www-form-urlencoded",
+                    beforeSend: function() {
+                        $("[name=\'wall_post_button\']").prop( "disabled", true );
+                        $(".panel-preview").hide();
+                        $(".spinner").html("' .
+                            '<div class=\'text-center\'>' .
+                                '<em class=\'fa fa-spinner fa-pulse fa-1x\'></em>' .
+                                '<p>' . get_lang('Loading') . ' ' . get_lang('Preview') . '</p>' .
+                            '</div>' .
+                        '");
+                    },
+                    type: "POST",
+                    url: "' . api_get_path(WEB_AJAX_PATH) . 'social.ajax.php?a=readUrlWithOpenGraph",
+                    data: "social_wall_new_msg_main=" + getUrl.val(),
+                    success: function(response) {
+                        $("[name=\'wall_post_button\']").prop( "disabled", false );
+                        if (!response == false) {
+                            $(".spinner").html("");
+                            $(".panel-preview").show();
+                            $(".url_preview").html(response);
+                            $("[name=\'url_content\']").val(response);
+                            $(".url_preview img").addClass("img-responsive");
+                        } else {
+                            $(".spinner").html("");
+                        }
+                    }
+                });
+            }
+        }
     });
 });
 </script>';

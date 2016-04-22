@@ -708,6 +708,18 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 .social-home-anonymous-online {
     width: 200px;
 }
+.social-thumbnail {
+    padding: 0px;
+}
+.social-title {
+    font-size: 18px;
+    font-family: helvetica, arial, sans-serif;
+    color: #000;
+}
+.social-description {
+    padding: 8px;
+    color: #000;
+}
 
 .menulist {
     margin: 0px;

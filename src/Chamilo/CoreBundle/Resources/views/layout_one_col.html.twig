@@ -1,0 +1,37 @@
+{% extends "@ChamiloTheme/Layout/base-layout.html.twig" %}
+
+{% block page_content %}
+
+    {% if js is defined %}
+        {% autoescape false %}
+        {% for item in js %}
+            {{ item }}
+        {% endfor %}
+        {% endautoescape %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            {# Breadcrumb #}
+            {% block chamilo_breadcrumb %}
+                {# {% include '@ChamiloCore/breadcrumb.html.twig' %}#}
+                {% endblock %}
+
+            {% block chamilo_messages %}
+            {# Flash messages #}
+            {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
+            {% endblock %}
+
+            {# Content #}
+            {% block content %}
+            <section id="main_content">
+                {% autoescape false %}
+                    {{ content }}
+                {% endautoescape %}
+            </section>
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+
+

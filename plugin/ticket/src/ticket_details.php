@@ -330,7 +330,7 @@ if (!isset($_POST['compose'])) {
 
     $admins = UserManager::get_user_list_like(array("status" => "1"), array("username"), true);
     foreach ($admins as $admin) {
-        $select_admins.= "<option value = '" . $admin['user_id'] . "' " . (($user_id == $admin['user_id']) ? ("selected='selected'") : "") . ">" . $admin['lastname'] . " ," . $admin['firstname'] . "</option>";
+        $select_admins.= "<option value = '" . $admin['user_id'] . "' " . (($user_id == $admin['user_id']) ? ("selected='selected'") : "") . ">" . $admin['lastname'] . ", " . $admin['firstname'] . "</option>";
     }
     $select_admins .= "</select>";
     echo '<div id="dialog-form" title="' . $plugin->get_lang('AssignTicket') . '" >';
@@ -457,17 +457,14 @@ function show_form_send_message()
         );
     }
 
-
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
     $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
-
     $form->addLabel('',
         '<span id="link-more-attach">
          <span class="btn btn-success" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</span>
          </span>
          ('.sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
     ');
-
 
     $form->addElement('html', '<br/>');
     $form->addElement(

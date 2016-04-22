@@ -939,6 +939,11 @@ class Template
         $this->assign('message_link', $message_link);
         $this->assign('message_url', $message_url);
 
+        //Certificate Link
+        $certificatesUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';
+        $certificateLink = Display::url(get_lang('MyCertificates'), $certificatesUrl);
+        $this->assign('certificate_link', $certificateLink);
+
         $institution = api_get_setting('Institution');
         $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
 
@@ -999,12 +1004,6 @@ class Template
         $metaTitle = api_get_setting('meta_title');
         if (!empty($metaTitle)) {
             $socialMeta .= '<meta name="twitter:card" content="summary" />' . "\n";
-            $socialMeta .= '<meta property="og:title" content="' . $metaTitle . '" />' . "\n";
-            $socialMeta .= '<meta property="og:url" content="' . api_get_path(WEB_PATH) . '" />' . "\n";
-            $metaDescription = api_get_setting('meta_description');
-            if (!empty($metaDescription)) {
-                $socialMeta .= '<meta property="og:description" content="' . $metaDescription . '" />' . "\n";
-            }
             $metaSite = api_get_setting('meta_twitter_site');
             if (!empty($metaSite)) {
                 $socialMeta .= '<meta name="twitter:site" content="' . $metaSite . '" />' . "\n";
@@ -1013,11 +1012,29 @@ class Template
                     $socialMeta .= '<meta name="twitter:creator" content="' . $metaCreator . '" />' . "\n";
                 }
             }
-            $metaImage = api_get_setting('meta_image_path');
-            if (!empty($metaImage)) {
-                if (is_file(api_get_path(SYS_PATH) . $metaImage)) {
-                    $path = api_get_path(WEB_PATH) . $metaImage;
-                    $socialMeta .= '<meta property="og:image" content="' . $path . '" />' . "\n";
+
+            // The user badge page emits its own meta tags, so if this is
+            // enabled, ignore the global ones
+            $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
+            $skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
+
+            if (!$userId && !$skillId) {
+                // no combination of user and skill ID has been defined,
+                // so print the normal OpenGraph meta tags
+                $socialMeta .= '<meta property="og:title" content="' . $metaTitle . '" />' . "\n";
+                $socialMeta .= '<meta property="og:url" content="' . api_get_path(WEB_PATH) . '" />' . "\n";
+
+                $metaDescription = api_get_setting('meta_description');
+                if (!empty($metaDescription)) {
+                    $socialMeta .= '<meta property="og:description" content="' . $metaDescription . '" />' . "\n";
+                }
+
+                $metaImage = api_get_setting('meta_image_path');
+                if (!empty($metaImage)) {
+                    if (is_file(api_get_path(SYS_PATH) . $metaImage)) {
+                        $path = api_get_path(WEB_PATH) . $metaImage;
+                        $socialMeta .= '<meta property="og:image" content="' . $path . '" />' . "\n";
+                    }
                 }
             }
         }

@@ -829,6 +829,7 @@ class TicketManager
                 status.name AS col7,
                 ticket.total_messages AS col8,
                 msg.message AS col9,
+                msg.subject AS subject,
                 ticket.request_user AS user_id,
                 ticket.assigned_last_user AS responsible
             FROM $table_support_tickets ticket,
@@ -1052,7 +1053,7 @@ class TicketManager
                 }
 
                 $ticket = array(
-                    $row['col0'],
+                    $row['col0'].' '.$row['subject'],
                     api_format_date($row['col1'], '%d/%m/%y - %I:%M:%S %p'),
                     api_format_date($row['col2'], '%d/%m/%y - %I:%M:%S %p'),
                     $row['col3'],
@@ -1061,7 +1062,7 @@ class TicketManager
                     $row['col7'],
                     $row['col8'],
                     $actions,
-                    $row['col9']
+                    //$row['col9']
                 );
             } else {
                 $actions = "";
@@ -1069,7 +1070,7 @@ class TicketManager
                                 'synthese_view.gif', get_lang('Info')
                         ) . '</a>&nbsp;&nbsp;';
                 $row['col0'] = Display::return_icon(
-                                $img_source, get_lang('Info')
+                        $img_source, get_lang('Info')
                         ) . '<a href="ticket_details.php?ticket_id=' . $row['col0'] . '">' . $row['ticket_code'] . '</a>';
                 $now = api_strtotime(api_get_utc_datetime());
                 $last_edit_date = api_strtotime($row['sys_lastedit_datetime']);

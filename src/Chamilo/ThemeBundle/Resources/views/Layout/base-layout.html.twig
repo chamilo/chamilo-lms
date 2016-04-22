@@ -74,6 +74,8 @@
 
     <script src="{{ asset('assets/modernizr/modernizr.js') }}"></script>
 
+    <script src="{{ asset('assets/moment/moment.js') }}"></script>
+
     {# Check chamilo_js key in assetic.yml #}
     {% block javascripts %}
     {#{%- javascripts '@chamilo_js' -%}#}
@@ -93,12 +95,12 @@
 
     {#'@MopaBootstrapBundle/Resources/public/js/eyecon-bootstrap-datepicker.js'#}
 
-    {% javascripts
-    'bundles/mopabootstrap/js/mopabootstrap-collection.js'
-    'bundles/mopabootstrap/js/mopabootstrap-subnav.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url | replace({'/app_dev.php': ''}) }}"></script>
-    {% endjavascripts %}
+    {#{% javascripts#}
+    {#'bundles/mopabootstrap/js/mopabootstrap-collection.js'#}
+    {#'bundles/mopabootstrap/js/mopabootstrap-subnav.js'#}
+    {#%}#}
+    {#<script type="text/javascript" src="{{ asset_url | replace({'/app_dev.php': ''}) }}"></script>#}
+    {#{% endjavascripts %}#}
 </head>
 {#<body class="{{ admin_skin|default('skin-blue')}}">#}
 <body>
@@ -222,6 +224,8 @@
     {#</header>#}
 {% endblock %}
 
+    {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
+
 {% block chamilo_content %}
     {#Check sonata_block.yml settings#}
     {#{% include 'SonataSeoBundle:Block:_facebook_sdk.html.twig' %}#}
@@ -229,6 +233,10 @@
     {#{% include 'SonataSeoBundle:Block:_pinterest_sdk.html.twig' %}#}
 
 {% endblock %}
+
+{% block page_content %}
+{% endblock %}
+
 
 {% block sonata_page_container %}
 {% endblock %}

@@ -1,0 +1,9 @@
+services:
+    sonata.admin.contact_category:
+        class: Chamilo\ContactBundle\Admin\CategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Contact category" }
+        arguments:
+            - ~
+            - Chamilo\ContactBundle\Entity\Category
+            - ~

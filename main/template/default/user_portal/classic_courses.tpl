@@ -16,7 +16,20 @@
                     </div>
                     <div class="col-md-10">
                         {% if item.edit_actions != '' %}
-                            <div class="pull-right"><a class="btn btn-default btn-sm" href="{{ item.edit_actions }}"><i class="fa fa-pencil" aria-hidden="true"></i></a></div>
+                            <div class="pull-right">
+                                {% if item.document == '' %}
+                                    <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    </a>
+                                {% else %}
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </a>
+                                        {{ item.document }}
+                                    </div> 
+                                {% endif %}
+                            </div>
                         {% endif %}
                         <h4 class="course-items-title">
                             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
@@ -69,7 +82,20 @@
                     </div>
                     <div class="col-md-10">
                         {% if item.edit_actions != '' %}
-                            <div class="pull-right"><a class="btn btn-default btn-sm" href="{{ item.edit_actions }}"><i class="fa fa-pencil" aria-hidden="true"></i></a></div>
+                            <div class="pull-right">
+                                {% if item.document == '' %}
+                                    <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    </a>
+                                {% else %}
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </a>
+                                        {{ item.document }}
+                                    </div> 
+                                {% endif %}
+                            </div>
                         {% endif %}
                         <h4 class="course-items-title">
                             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}

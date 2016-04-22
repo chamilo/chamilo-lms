@@ -1,9 +1,11 @@
-You had a new message from portal: {{ url('home')  }}
+{{ 'You had a new message from  %url%' | trans({'%url%': url(app.request.attributes.get('_route'))} ) }}
 
-New message from: {{ firstname }} {{ lastname }}
+{{ 'Firstname' | trans }} : {{ firstname }}
+{{ 'Lirstname' | trans }} : {{ lastname }}
+
 Email: {{ email }}
 IP: {{ ip }}
 
-Subject: {{ subject }}
-Message:
+{{ 'Subject' | trans }} : {{ subject }}
+{{ 'Message' | trans }} :
 {{ message|raw }}

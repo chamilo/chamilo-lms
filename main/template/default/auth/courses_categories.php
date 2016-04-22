@@ -190,7 +190,7 @@ if ($showCourses && $action != 'display_sessions') {
     if (!empty($search_term)) {
         echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
     }
-    $listCategory = CourseManager::getListCategory();
+    $listCategory = CourseManager::getCategoriesList();
     
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $user_id = api_get_user_id();
@@ -312,24 +312,25 @@ function returnThumbnail($course, $categoryTitle=null)
             $html .= '<span class="category">'. $categoryTitle.'</span>';
             $html .= '<div class="cribbon"></div>';
         }
-        $teachers = CourseManager::getTeacheCourseCode($course['code']);
-        $html .= '<div class="black_shadow">';
+        $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
+        $html .= '<div class="black-shadow">';
         $html .= '<div class="author-card">';
         $count = 0;
         foreach ($teachers as $value) {
-            if($count<=3){
-                $name = $value['firstname'].' ' . $value['lastname'];
-                $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">';
-                $html .= '<img src="'.$value['avatar'].'"/>';
-                $html .= '</a>';
-                $html .= '<div class="teachers-details">';
-                $html .= '<h5>';
-                $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">';
-                $html .= $name;
-                $html .= '</a>';
-                $html .= '</h5>';
-                $html .= '</div>';
+            if($count>2){
+                break;
             }
+            $name = $value['firstname'].' ' . $value['lastname'];
+            $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">';
+            $html .= '<img src="'.$value['avatar'].'"/>';
+            $html .= '</a>';
+            $html .= '<div class="teachers-details">';
+            $html .= '<h5>';
+            $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">';
+            $html .= $name;
+            $html .= '</a>';
+            $html .= '</h5>';
+            $html .= '</div>';
             $count ++;
         }
         $html .= '</div>';

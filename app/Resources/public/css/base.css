@@ -4880,7 +4880,7 @@ div#chat-remote-video video {
     border: 1px solid #DFDFDF;
     border-radius: 5px;
 }
-#hot_courses .grid-courses .items{
+.hot-courses .grid-courses .items{
    min-height: 275px;
 }
 .grid-courses .items .title{
@@ -4905,7 +4905,7 @@ div#chat-remote-video video {
 .grid-courses .items .ranking{
     font-size: 10px;
 }
-.grid-courses .items .image .black_shadow{
+.grid-courses .items .image .black-shadow{
     top: 0px;
     left: 0px;
     width: 100%;
@@ -4917,7 +4917,7 @@ div#chat-remote-video video {
     background: rgba(0, 0, 0, 0.7) none repeat scroll 0% 0%;
     padding: 10px;
 }
-.grid-courses .items .image .hovered_course{
+.grid-courses .items .image .hovered-course{
     opacity: 1;
     transition: all 0.3s ease 0s;
 }
@@ -5942,7 +5942,6 @@ a.sessionView {
 .elfinder-cwd-filename {
     color: black !important;
 }
-
 
 #dropzone {
     position: relative;

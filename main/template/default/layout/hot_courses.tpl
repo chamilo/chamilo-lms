@@ -20,7 +20,7 @@ $(document).ready( function() {
     });
 });
 </script>
-<section id="hot_courses">
+<section class="hot-courses">
     <div class="hot-course-head">
         <h4 class="hot-course-title">
             {{ "HottestCourses"|get_lang}}

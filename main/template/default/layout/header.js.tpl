@@ -211,10 +211,10 @@ $(document).ready(function(){
             });
         });
     };
-    $(".black_shadow").mouseenter(function() {
-        $(this).addClass('hovered_course');
+    $(".black-shadow").mouseenter(function() {
+        $(this).addClass('hovered-course');
     }).mouseleave(function() {
-         $(this).removeClass('hovered_course');
+         $(this).removeClass('hovered-course');
     });
 });
 

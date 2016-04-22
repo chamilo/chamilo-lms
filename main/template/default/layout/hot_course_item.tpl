@@ -8,7 +8,7 @@
                 <span class="category">{{ item.categoryName }}</span>
                 <div class="cribbon"></div>
                 {% endif %}
-                <div class="black_shadow">
+                <div class="black-shadow">
                     <div class="author-card">  
                     {% for teacher in item.teachers %}
                         {% set counter = counter + 1 %}

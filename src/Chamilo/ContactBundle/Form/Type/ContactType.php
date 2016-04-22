@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * Class ContactType
@@ -25,13 +26,12 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('category')
-            ->add('firstname')
+            ->add('category', EntityType::class, ['class' => 'Chamilo\ContactBundle\Entity\Category'])
+             ->add('firstname')
             ->add('lastname')
             ->add('email')
             ->add('subject')
-            ->add('message')
+            ->add('message', 'textarea')
             ->add('save', SubmitType::class)
         ;
     }
@@ -42,8 +42,15 @@ class ContactType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $collectionConstraint = new Collection(array(
-            'name' => array(
-                new NotBlank(array('message' => 'Name should not be blank.')),
+            'category' => array(
+                new NotBlank(array('message' => 'Category should not be blank.'))
+            ),
+            'firstname' => array(
+                new NotBlank(array('message' => 'firstname should not be blank.')),
+                new Length(array('min' => 2))
+            ),
+            'lastname' => array(
+                new NotBlank(array('message' => 'lastname should not be blank.')),
                 new Length(array('min' => 2))
             ),
             'email' => array(

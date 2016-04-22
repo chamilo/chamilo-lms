@@ -126,12 +126,12 @@ $(document).ready(function() {
         });
     }
 
-    $(".accordion_jquery").accordion({
-        autoHeight: false,
-        active: false, // all items closed by default
-        collapsible: true,
-        header: ".accordion-heading"
-    });
+    {#$(".accordion_jquery").accordion({#}
+        {#autoHeight: false,#}
+        {#active: false, // all items closed by default#}
+        {#collapsible: true,#}
+        {#header: ".accordion-heading"#}
+    {#});#}
 
     // Global popup
     $('body').on('click', 'a.ajax', function(e) {
@@ -212,7 +212,7 @@ $(document).ready(function() {
     );
 
     /* Make responsive image maps */
-    $('map').imageMapResize();
+   // $('map').imageMapResize();
 
     jQuery.fn.filterByText = function(textbox) {
         return this.each(function() {

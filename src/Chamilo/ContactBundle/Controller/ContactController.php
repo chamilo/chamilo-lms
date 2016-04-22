@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ContactController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="contact")
      *
      * @param Request $request
      * @return mixed
@@ -47,25 +47,26 @@ class ContactController extends Controller
                     ->setTo($category->getEmail())
                     ->setBody(
                         $this->renderView(
-                            'ChamiloContact:contact.html.twig',
+                            '@ChamiloContact/contact.html.twig',
                             array(
                                 'ip' => $request->getClientIp(),
                                 'firstname' => $form->get('firstname')->getData(),
                                 'lastname' => $form->get('lastname')->getData(),
                                 'subject' => $form->get('subject')->getData(),
+
+                                'email' => $form->get('email')->getData(),
                                 'message' => $form->get('message')->getData()
                             )
                         )
                     );
 
                 $this->get('mailer')->send($message);
-
-                $request->getSession()->getFlashBag()->add(
+                $this->addFlash(
                     'success', 
                     'Your email has been sent! Thanks!'
                 );
 
-                return $this->redirect($this->generateUrl('index'));
+                return $this->redirect($this->generateUrl('contact'));
             }
         }
 

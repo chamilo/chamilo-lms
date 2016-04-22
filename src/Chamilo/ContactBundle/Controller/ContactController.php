@@ -5,18 +5,23 @@ namespace Chamilo\ContactBundle\Controller;
 
 use Chamilo\ContactBundle\Entity\Category;
 use Chamilo\ContactBundle\Form\Type\ContactType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ *
  * Class ContactController
+ *
+ * @Route("/")
+ *
  * @package Chamilo\ContactBundle\Controller
  */
 class ContactController extends Controller
 {
     /**
-     * @Route("/contact")
+     * @Route("/")
      *
      * @param Request $request
      * @return mixed
@@ -42,7 +47,7 @@ class ContactController extends Controller
                     ->setTo($category->getEmail())
                     ->setBody(
                         $this->renderView(
-                            'ContactBundle:contact.html.twig',
+                            'ChamiloContact:contact.html.twig',
                             array(
                                 'ip' => $request->getClientIp(),
                                 'firstname' => $form->get('firstname')->getData(),
@@ -65,7 +70,7 @@ class ContactController extends Controller
         }
 
         return $this->render(
-            '@ContactBundle/index.html.twig',
+            '@ChamiloContact/index.html.twig',
             array(
                 'form' => $form->createView()
             )

@@ -5,6 +5,16 @@ namespace Chamilo\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Class Category
+ *
+ * @ORM\Entity
+ * @ORM\Table(
+ *     name="contact_category"
+ * )
+ *
+ * @package Chamilo\FaqBundle\Entity
+ */
 class Category
 {
     /**
@@ -18,13 +28,13 @@ class Category
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", nullable=false, length="255")
+     * @ORM\Column(name="name", type="string", nullable=false)
      */
     protected $name;
 
     /**
      * @var string
-     * @ORM\Column(name="email", type="string", length="255")
+     * @ORM\Column(name="email", type="string")
      */
     protected $email;
 

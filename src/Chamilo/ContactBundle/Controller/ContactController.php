@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  *
@@ -29,7 +30,20 @@ class ContactController extends Controller
     public function indexAction(Request $request)
     {
         $type = new ContactType();
-        $form = $this->createForm($type);
+        /** @var User $user */
+        $user = $this->getUser();
+        $data = [];
+
+        if ($user) {
+            $data = [
+                'firstname' => $user->getFirstname(),
+                'lastname' =>  $user->getFirstname(),
+                'email' =>  $user->getEmail(),
+
+            ];
+        }
+
+        $form = $this->createForm($type, $data);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);

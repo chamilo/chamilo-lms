@@ -8387,12 +8387,14 @@ class learnpath
         $i = 0;
 
         while ($row_zero = Database :: fetch_array($res_zero)) {
-            if ($row_zero['item_type'] == TOOL_QUIZ) {
-                $row_zero['title'] = Exercise::get_formated_title_variable($row_zero['title']);
+            if ($row_zero['item_type'] !== TOOL_LP_FINAL_ITEM) {
+                if ($row_zero['item_type'] == TOOL_QUIZ) {
+                    $row_zero['title'] = Exercise::get_formated_title_variable($row_zero['title']);
+                }
+                $js_var = json_encode(get_lang('After').' '.$row_zero['title']);
+                $return .= 'child_name[0][' . $i . '] = '.$js_var.' ;' . "\n";
+                $return .= 'child_value[0][' . $i++ . '] = "' . $row_zero['id'] . '";' . "\n";
             }
-            $js_var = json_encode(get_lang('After').' '.$row_zero['title']);
-            $return .= 'child_name[0][' . $i . '] = '.$js_var.' ;' . "\n";
-            $return .= 'child_value[0][' . $i++ . '] = "' . $row_zero['id'] . '";' . "\n";
         }
         $return .= "\n";
         $sql = "SELECT * FROM " . $tbl_lp_item . "

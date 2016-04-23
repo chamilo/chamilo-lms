@@ -83,11 +83,11 @@ if ($accessGranted == false) {
                         $userId
                     );
                     if (!empty($certificate['pdf_url']) || !empty($certificate['badge_link'])) {
-                        if (isset($certificate['pdf_url'])) {
+                        if (is_array($certificate) && isset($certificate['pdf_url'])) {
                             $downloadCertificateLink = generateLPFinalItemTemplateCertificateLinks($certificate);
                         }
 
-                        if (isset($certificate['badge_link'])) {
+                        if (is_array($certificate) && isset($certificate['badge_link'])) {
                             $courseId = api_get_course_int_id();
                             $badgeLink = generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId);
                         }

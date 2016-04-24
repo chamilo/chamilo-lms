@@ -1,6 +1,6 @@
 <?php
 
-require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 $table = Database::get_main_table('vchamilo');
 
@@ -13,14 +13,14 @@ if ($action == 'newinstance' || $action == 'instance') {
     vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/editinstance.php?registeronly='.$registeronly);
 }
 
-if ($action == 'editinstance') {
+if ($action == 'editinstance' || $action == 'updateinstance') {
     $vid = $_REQUEST['vid'];
     vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/editinstance.php?vid='.$vid);
 }
 
 if ($action == 'deleteinstances' || $action == 'disableinstances') {
 
-    ctrace("Disabling instance");
+    Display::addFlash(Display::return_message("Disabling instance"));
     // Make it not visible.
     $vidlist = implode("','", $_REQUEST['vids']);
     $sql = "
@@ -36,7 +36,7 @@ if ($action == 'deleteinstances' || $action == 'disableinstances') {
 }
 if ($action == 'enableinstances') {
 
-    ctrace("Enabling instance");
+    Display::addFlash(Display::return_message("Enabling instance"));
     $vidlist = implode("','", $_REQUEST['vids']);
     $sql = "
         UPDATE 
@@ -49,9 +49,10 @@ if ($action == 'enableinstances') {
     Database::query($sql);
     vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
 }
+
 if ($action == 'fulldeleteinstances') {
 
-    ctrace("Destroying instance");
+    Display::addFlash(Display::return_message("Destroying instance"));
     // Removes everything.
     if (empty($automation)) {
         $vidlist = implode("','", $_REQUEST['vids']);
@@ -131,7 +132,7 @@ if ($action == 'fulldeleteinstances') {
 }
 if ($action == 'snapshotinstance') {
 
-    $vid = $_REQUEST['vid'];
+    $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : '';
     if ($vid) {
         $vhosts = Database::select('*', 'vchamilo', array('where' => array('id = ?' => $vid)));
         $vhost = (object)array_pop($vhosts);
@@ -140,22 +141,21 @@ if ($action == 'snapshotinstance') {
     }
 
     // Parsing url for building the template name.
-    $wwwroot    = $vhost->root_web;
-    $vchamilostep    = $_REQUEST['step'];
+    $wwwroot = $vhost->root_web;
+    $vchamilostep = isset($_REQUEST['step']) ? $_REQUEST['step'] : '';
     preg_match('#https?://([^/]+)#', $wwwroot, $matches);
     $hostname = $matches[1];
 
     // Make template directory (files and SQL).
-    $separator    =    DIRECTORY_SEPARATOR;
-    $templatefoldername    =    'plugin'.$separator.'vchamilo'.$separator.'templates';
-    $relative_datadir    =    $templatefoldername.$separator.$hostname.'_vchamilodata';
-    $absolute_datadir    =    $_configuration['root_sys'].$relative_datadir;
-    $relative_sqldir     =    $templatefoldername.$separator.$hostname.'_sql';
-    $absolute_sqldir     =    $_configuration['root_sys'].$separator.$relative_sqldir;
-//    $absolute_templatesdir = api_get_path(SYS_PATH, CHAMILO_ARCHIVE_PATH).$separator.$templatefoldername; // can be problematic as self containing
+    $separator = DIRECTORY_SEPARATOR;
+    $templatefoldername = 'plugin'.$separator.'vchamilo'.$separator.'templates';
+    $relative_datadir = $templatefoldername.$separator.$hostname.'_vchamilodata';
+    $absolute_datadir = $_configuration['root_sys'].$relative_datadir;
+    $relative_sqldir = $templatefoldername.$separator.$hostname.'_sql';
+    $absolute_sqldir = $_configuration['root_sys'].$separator.$relative_sqldir;
     $absolute_templatesdir = $_configuration['root_sys'].$templatefoldername;
 
-    if (preg_match('/ /', $absolute_sqldir)){
+    if (preg_match('/ /', $absolute_sqldir)) {
         $erroritem = new StdClass();
         $erroritem->message = $plugininstance->get_lang('errorspacesinpath');
         vchamilo_print_error(array($erroritem));
@@ -177,15 +177,15 @@ if ($action == 'snapshotinstance') {
         }
         if (empty($fullautomation)) {
             $actionurl = $_configuration['root_web'].'/plugin/vchamilo/views/manage.php';
-            $content .= '<form name"single" action="'.$actionurl.'">';
+            $content = '<form name"single" action="'.$actionurl.'">';
             $content .= '<input type="hidden" name="what" value="snapshotinstance" />';
             $content .= '<input type="hidden" name="vid" value="'.$vhost->id.'" />';
             $content .= '<input type="hidden" name="step" value="1" />';
             $content .= '<input type="submit" name="go_btn" value="'.$plugininstance->get_lang('continue').'" />';
             $content .= '</form>';
             $content .= '</div>';
-    
-            $tpl = new Template($tool_name, true, true, false, true, false);
+
+            $tpl = new Template(get_lang('VChamilo'), true, true, false, true, false);
             $tpl->assign('actions', '');
             $tpl->assign('message', $plugininstance->get_lang('vchamilosnapshot1'));
             $tpl->assign('content', $content);
@@ -196,7 +196,7 @@ if ($action == 'snapshotinstance') {
             // continue next step
             $vchamilostep = 1;
         }
-    } 
+    }
     if ($vchamilostep >= 1) {
         if ($wwwroot == $_configuration['root_web']) {
             // Make fake Vchamilo record.
@@ -213,6 +213,7 @@ if ($action == 'snapshotinstance') {
             $varchivepath = api_get_path(SYS_ARCHIVE_PATH, (array)$vchamilo);
         }
 
+        $content = '';
         if ($vchamilostep == 1) {
             // Auto dump the databases in a master template folder.
             // this will create three files : chamilo_master_main.sql, chamilo_master_statistics.sql, chamilo_master_user_personal.sql
@@ -239,8 +240,8 @@ if ($action == 'snapshotinstance') {
                     $content .= '<input type="submit" name="go_btn" value="'.$plugininstance->get_lang('continue').'" />';
                     $content .= '</form>';
                 }
-    
-                $tpl = new Template($tool_name, true, true, false, true, false);
+
+                $tpl = new Template(get_lang('VChamilo'), true, true, false, true, false);
                 $tpl->assign('actions', '');
                 $tpl->assign('message', $message);
                 $tpl->assign('content', $content);
@@ -250,25 +251,13 @@ if ($action == 'snapshotinstance') {
             }
         }
 
-    // end of process
-
-        // copy chamilo data dirs and protect against copy recursion.
-        /*
-        echo "<pre>";
-        echo "copyDirTo($vcoursepath, $absolute_datadir, false);
-        copyDirTo($varchivepath, $absolute_datadir.'/archive, false);
-        copyDirTo($vhomepath, $absolute_datadir.'/home', false);";
-        echo "</pre>";
-        */
-
-        echo "<pre>";
-        echo ("Copying from $vcoursepath to $absolute_datadir \n");
+        Display::addFlash(Display::return_message("Copying from $vcoursepath to $absolute_datadir "));
         copyDirTo($vcoursepath, $absolute_datadir, false);
-        echo ("Copying from $varchivepath to {$absolute_datadir}/archive \n");
+        Display::addFlash(Display::return_message("Copying from $varchivepath to {$absolute_datadir}/archive "));
         copyDirTo($varchivepath, $absolute_datadir.'/archive', false);
-        echo ("Copying from $vhomepath to {$absolute_datadir}/home \n");
+        Display::addFlash(Display::return_message("Copying from $vhomepath to {$absolute_datadir}/home "));
         copyDirTo($vhomepath, $absolute_datadir.'/home', false);
-        echo "</pre>";
+
 
         // Store original hostname and some config info for further database or filestore replacements.
         $FILE = fopen($absolute_sqldir.$separator.'manifest.php', 'w');
@@ -281,18 +270,14 @@ if ($action == 'snapshotinstance') {
 
         // Every step was SUCCESS.
         if (empty($fullautomation)){
-            $message_object->message = $plugininstance->get_lang('successfinishedcapture');
-            $message_object->style = 'notifysuccess';
+            Display::addFlash($plugininstance->get_lang('successfinishedcapture'));
 
-            // Save confirm message before redirection.
-            $_SESSION['confirm_message'] = $message_object;
             $actionurl = $_configuration['root_web'].'/plugin/vchamilo/views/manage.php';
-            $content .= '<div>'.$message_object->message.'</div>';
             $content .= '<form name"single" action="'.$actionurl.'">';
             $content .= '<input type="submit" name="go_btn" value="'.$plugininstance->get_lang('backtoindex').'" />';
             $content .= '</form>';
 
-            $tpl = new Template($tool_name, true, true, false, true, false);
+            $tpl = new Template(get_lang('VChamilo'), true, true, false, true, false);
             $tpl->assign('actions', '');
             $tpl->assign('message', $plugininstance->get_lang('vchamilosnapshot3'));
             $tpl->assign('content', $content);
@@ -305,7 +290,7 @@ if ($action == 'snapshotinstance') {
 
 if ($action == 'clearcache') {
 
-    ctrace("Clearing cache");
+    Display::addFlash(Display::return_message("Clearing cache"));
     // Removes cache directory.
     if (empty($automation)) {
         if (array_key_exists('vids', $_REQUEST))  {
@@ -344,10 +329,6 @@ if ($action == 'clearcache') {
 }
 
 if ($action == 'setconfigvalue') {
-
-    if ($_REQUEST['confirm']) {
-    }
-
     $select = '<select name="preset" onchange="setpreset(this.form, this)">';
     $vars = $DB->get_records('settings_current', array(), 'id,variable,subkey', 'variable,subkey');
     foreach($vars as $setting) {

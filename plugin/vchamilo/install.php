@@ -31,8 +31,7 @@ $sql = "CREATE TABLE IF NOT EXISTS $tablename (
   `visible` int(1),
   `lastcrongap` int(11),
   `lastcron` int(11),
-  `croncount` int(11),
-
+  `croncount` int(11)
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 ";

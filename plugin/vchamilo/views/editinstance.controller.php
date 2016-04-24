@@ -1,6 +1,6 @@
 <?php
 
-require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 if (!defined('CHAMILO_INTERNAL')) die('You cannot use this script this way');
 
@@ -117,7 +117,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
 
     if (!is_dir($homedir)){
         ctrace("Creating home dir ");
-        if (!mkdir($homedir, 0777, true)){
+        if (!mkdir($homedir, 0777, true)) {
             ctrace("Error creating home dir $homedir \n");
         }
     }
@@ -147,7 +147,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
 
     if (!is_dir($archivedir)) {
         ctrace("Creating archive dir ");
-        if(!mkdir($archivedir, 0777, true)) {
+        if (!mkdir($archivedir, 0777, true)) {
             ctrace("Error creating archive dir $archivedir\n");
         }
     }
@@ -183,9 +183,6 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
 
     ctrace("Fixing records");
 
-    // Builds a new database manager on new instance to operate records
-//    $NDB = new DatabaseManager($data);
-
     // pluging in site name institution
     $settingstable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sitename = str_replace("'", "''", $data->sitename);
@@ -201,11 +198,11 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
 
     ctrace("Finished. ");
 
-    if (!$automation) {
+    //if (!$automation) {
         echo '<a href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php'.'">Continue</a>';
         // vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
         die;
-    }
+    //}
 }
 
 if ($data->what == 'updateinstance') {
@@ -217,12 +214,12 @@ if ($data->what == 'updateinstance') {
     $data->lastcron = 0;
     $data->lastcrongap = 0;
     $data->croncount = 0;
-    $data->id = $data->vid;
+    $id = $data->vid;
+    unset($data->vid);
+    unset($data->testconnection);
+    unset($data->testdatapath);
     unset($data->vid);
 
-    if (!$DB->update_record('vchamilo', $data, 'id')) {
-        error_log('Vchamilo update error');
-    }
-
+    Database::update('vchamilo', (array) $data, array('id = ?' => $id), true);
     vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
 }

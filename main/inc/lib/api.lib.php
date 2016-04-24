@@ -615,6 +615,8 @@ function api_get_path($path = '', $configuration = [])
     }
 
     $course_folder = 'courses/';
+    $root_sys = $_configuration['root_sys'];
+
     // Resolve master hostname.
     if (!empty($configuration) && array_key_exists('root_web', $configuration)) {
         $root_web = $configuration['root_web'];
@@ -694,11 +696,6 @@ function api_get_path($path = '', $configuration = [])
     //static $isInitialized = [];
     $isInitialized = [];
 
-    // Configuration data for all installed systems is unique.
-    if (empty($root_sys)) {
-        $root_sys = $configuration['root_sys'];
-    }
-
     $loadNewConfig = false;
 
     // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
@@ -711,25 +708,15 @@ function api_get_path($path = '', $configuration = [])
         }
     }
 
-    if (isset($configuration['course_folder'])) {
-        $course_folder = $configuration['course_folder'];
-    }
+    $course_folder = isset($configuration['course_folder']) ? $configuration['course_folder'] : $course_folder;
+    $root_rel = isset($configuration['url_append']) ? $configuration['url_append'] : '';
 
-    $configuration['code_append'] = isset($configuration['code_append']) ? $configuration['code_append'] : 'main';
-
-    if (preg_match('#https?://([^\.]+)#', $root_web, $matches)) {
-        $web_host = $matches[1];
-    } else {
-        die('malformed root_web url');
-    }
+    $configuration['code_append'] = 'main';
 
     // Web server base and system server base.
-    $root_rel = isset($configuration['url_append']) ? $configuration['url_append'] : '';
-    $server_base_sys = preg_replace('@'.$root_rel.'$@', '', $root_sys); // No trailing slash.
 
     if (!array_key_exists($root_web, $isInitialized)) {
         // process absolute global roots
-        //$root_rel = $configuration['url_append'];
         if (!empty($configuration)) {
             $code_folder = $configuration['code_append'];
         } else {
@@ -846,13 +833,6 @@ function api_get_path($path = '', $configuration = [])
         }
         // Replacement of the present web server base with a slash '/'.
         $path = preg_replace(VALID_WEB_SERVER_BASE, '/', $path);
-    } elseif (strpos($path, $server_base_sys) === 0) {
-        $path = preg_replace('@^'.$server_base_sys.'@', '', $path);
-    } elseif (strpos($path, '/') === 0) {
-        // Leading slash - we assume that this path is semi-absolute (REL),
-        // then path is left without furthes modifications.
-    } else {
-        return null; // Probably implementation of this case won't be needed.
     }
 
     // Path now is semi-absolute. It is convenient at this moment repeated slashes to be removed.

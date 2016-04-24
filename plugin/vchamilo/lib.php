@@ -24,35 +24,33 @@ function vchamilo_hook_configuration(&$_configuration)
 
     // pre hook to chamilo main table and get alternate configuration.
     // sure Database object is not set up. Soo use bootstrap connection
-    $side_cnx = vchamilo_boot_connection($_configuration, 'main');
+    /** @var \Doctrine\DBAL\Connection $connection */
+    $connection = vchamilo_boot_connection($_configuration);
 
     $table = 'vchamilo';
-
     $query = "
         SELECT * FROM $table WHERE root_web = '{$_configuration['vchamilo_web_root']}'
     ";
+    $result = $connection->executeQuery($query);
 
     $excludes = array('id', 'name');
 
-    $res = mysql_query($query, $side_cnx);
-    if ($res) {
-        if (mysql_num_rows($res)) {
-            $vchamilo = mysql_fetch_assoc($res);
-            foreach($vchamilo as $key => $value){
-                if (!in_array($key, $excludes)){
-                    $_configuration[$key] = $value;
-                }
+    if ($result->rowCount()) {
+        $data = $result->fetchAll();
 
-                // take first domain fragment as radical
-                $arr = preg_replace('#https?://#', '', $_configuration['vchamilo_name']);
-                $domain = explode('.', $arr);
-                $vchamilo_radical = array_shift($domain);
-                $VCHAMILO = $vchamilo_radical;
+        foreach($data as $key => $value){
+            if (!in_array($key, $excludes)){
+                $_configuration[$key] = $value;
             }
-        } else {
-            die ("VChamilo : No configuration for this host. May be faked.");
+
+            // take first domain fragment as radical
+            $arr = preg_replace('#https?://#', '', $_configuration['vchamilo_name']);
+            $domain = explode('.', $arr);
+            $vchamilo_radical = array_shift($domain);
+            $VCHAMILO = $vchamilo_radical;
         }
     } else {
+        //die ("VChamilo : No configuration for this host. May be faked.");
         die ("VChamilo : Could not fetch virtual chamilo configuration");
     }
 }
@@ -103,35 +101,28 @@ function vchamilo_get_hostname(&$_configuration)
 * @param array $vchamilo
 * @return a connection
 */
-function vchamilo_boot_connection(&$_configuration, $binddb = false)
+function vchamilo_boot_connection(&$_configuration)
 {
-    // Important : force new link here
-    $mysql_side_cnx = mysql_connect(
-        $_configuration['db_host'],
-        $_configuration['db_user'],
-        $_configuration['db_password'],
-        true
+    $dbParams = array(
+        'driver' => 'pdo_mysql',
+        'host' => $_configuration['db_host'],
+        'user' => $_configuration['db_user'],
+        'password' => $_configuration['db_password'],
+        'dbname' => $_configuration['main_database'],
+        // Only relevant for pdo_sqlite, specifies the path to the SQLite database.
+        'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
+        // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
+        'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : ''
     );
-    if (!$mysql_side_cnx) {
-        // echo('Side connection failure with '.$_configuration['db_host'].', '.$_configuration['db_user'].', '.$_configuration['db_password']);
+    try {
+        $database = new \Database();
+        $connection = $database->connect($dbParams, $_configuration['root_sys'], $_configuration['root_sys'], true);
+    } catch (Exception $e) {
         echo('Side connection failure with '.$_configuration['db_host'].', '.$_configuration['db_user'].', ******** ');
-        return false;
+        die();
     }
-    mysql_set_charset('utf8', $mysql_side_cnx);
-    if (!empty($binddb)) {
-        if (!in_array($binddb, array('main'), true)) {
-            echo('Not a chamilo database. should be one of "main", "statistics" or "user_personal"');
-            mysql_close($mysql_side_cnx);
-            return false;
-        }
 
-        if (!mysql_select_db($_configuration[$binddb.'_database'], $mysql_side_cnx)) {
-            echo("vchamilo_make_connection : Database not found<br/>");
-            mysql_close($mysql_side_cnx);
-            return false;
-        }
-    }
-    return $mysql_side_cnx;
+    return $connection;
 }
 
 function vchamilo_redirect($url) {
@@ -254,7 +245,7 @@ function vchamilo_create_databases($vchamilo, $cnx = null)
     }
 
     foreach($dbs as $adb){
-        ctrace("Creating DB $adb ");
+        Display::addFlash(Display::return_message("Creating DB $adb"));
         $sql = str_replace('%DATABASE%', $adb, $createstatement);
         Database::query($sql);
         /*if(!$DB->execute_sql($sql)){
@@ -278,18 +269,18 @@ function vchamilo_get_database_dump_cmd($vchamilodata)
     $pgm = vchamilo_get_config('mysql_cmd');
 
     // Checks the needed program.
-    ctrace("load_database_from_dump : checking database command");
-    if(!$pgm){
+    Display::addFlash(Display::return_message("load_database_from_dump : checking database command"));
+    if (!$pgm){
         $pgm = '/usr/bin/mysql';
-        ctrace("Using default database command $pgm ");
+        Display::addFlash(Display::return_message("Using default database command $pgm "));
     }
 
     $phppgm = str_replace("\\", '/', $pgm);
     $phppgm = str_replace("\"", '', $phppgm);
     $pgm = str_replace("/", DIRECTORY_SEPARATOR, $pgm);
 
-    ctrace('load_database_from_dump : checking command is available');
-    if(!is_executable($phppgm)){
+    Display::addFlash(Display::return_message('load_database_from_dump : checking command is available'));
+    if (!is_executable($phppgm)){
         print_error('databasecommanddoesnotmatchanexecutablefile');
         return false;
     }
@@ -326,7 +317,7 @@ function vchamilo_load_db_template($vchamilo, $dbtemplate, $template){
     $filerad = preg_replace('/_database$/', '', $dbtemplate);
     $sqlfile = 'chamilo_master_'.$filerad.'.sql';
 
-    if(!$sqlcmd = vchamilo_get_database_dump_cmd($vchamilo)){
+    if (!$sqlcmd = vchamilo_get_database_dump_cmd($vchamilo)){
         return false;
     }
 
@@ -336,7 +327,7 @@ function vchamilo_load_db_template($vchamilo, $dbtemplate, $template){
     $import = $sqlcmd.$absolute_datadir.'/'.$sqlfile;
 
     // Execute the command.
-    ctrace("load_database_from_dump : executing feeding sql as \n $import ");
+    Display::addFlash(Display::return_message("load_database_from_dump : executing feeding sql as \n $import "));
 
     if (!defined('CLI_SCRIPT')){
         putenv('LANG=en_US.utf-8');
@@ -346,7 +337,8 @@ function vchamilo_load_db_template($vchamilo, $dbtemplate, $template){
 
     exec($import, $output, $return);
 
-    ctrace(implode("\n", $output)."\n");
+    Display::addFlash(Display::return_message(implode("\n", $output)."\n"));
+
     return true;
 }
 
@@ -439,7 +431,8 @@ function vchamilo_execute_db_sql(&$vchamilo, $bulkfile, $cnx = null, $vars=null,
  * @param        $outputfilerad    string        The output SQL file radical.
  * @return        bool    If TRUE, dumping database was a success, otherwise FALSE.
  */
-function vchamilo_dump_databases($vchamilo, $outputfilerad){
+function vchamilo_dump_databases($vchamilo, $outputfilerad)
+{
     global $CFG;
 
     // Separating host and port, if sticked.
@@ -453,7 +446,7 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad){
     $pass = '';
     $pgm = null;
 
-    if (empty($port)){
+    if (empty($port)) {
         $port = 3306;
     }
 
@@ -464,7 +457,8 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad){
 
     // Making the commands for each database.
     $cmds = array();
-    if ($CFG->ostype == 'WINDOWS'){
+    //if ($CFG->ostype == 'WINDOWS') {
+    if (false) {
         $cmd_main = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->main_database}";
         $cmds[] = $cmd_main . ' > ' . $outputfilerad.'_main.sql';
 
@@ -481,25 +475,17 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad){
     } else {
         $cmd_main = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->main_database}";
         $cmds[] = $cmd_main . ' > ' . escapeshellarg($outputfilerad.'_main.sql');
-
-        if ($vchamilo->statistics_database != $vchamilo->main_database){
-            $cmd_stats = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->statistics_database}";
-            $cmds[] = $cmd_stats . ' > ' . escapeshellarg($outputfilerad.'_statistics.sql');
-        }
-
-        if (($vchamilo->user_personal_database != $vchamilo->main_database) && ($vchamilo->user_personal_database != $vchamilo->statistics_database)) {
-            $cmd_user = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->user_personal_database}";
-            $cmds[] = $cmd_user . ' > ' . escapeshellarg($outputfilerad.'_user_personal.sql');
-        }
     }
 
     $mysqldumpcmd = vchamilo_get_config('vchamilo', 'cmd_mysqldump', true);
 
-    $pgm = (!empty($mysqldumpcmd)) ? stripslashes($mysqldumpcmd) : false ;
+    $pgm = !empty($mysqldumpcmd) ? stripslashes($mysqldumpcmd) : false ;
 
-    if(!$pgm){
+    if (!$pgm) {
         $erroritem = new StdClass();
-        $erroritem->message = "Database dump command not available";
+        $erroritem->message = "Database dump command not available check here: ";
+        $url = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=vchamilo';
+        $erroritem->message .= Display::url($url, $url);
         return array($erroritem);
     } else {
         $phppgm = str_replace("\\", '/', $pgm);
@@ -517,8 +503,6 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad){
 
             // Final command.
             $cmd = $pgm.' '.$cmd;
-            // ctrace($cmd); // Be carefull there, this could divulgate DB password
-
             // Prints log messages in the page and in 'cmd.log'.
             if ($LOG = fopen(dirname($outputfilerad).'/cmd.log', 'a')){
                 fwrite($LOG, $cmd."\n");
@@ -558,16 +542,14 @@ function vchamilo_make_this()
 {
     global $_configuration;
 
-    $thischamilo->root_web = $_configuration['root_web'];
+    $thisPortal = new stdClass();
+    $thisPortal->root_web = $_configuration['root_web'];
+    $thisPortal->db_host = $_configuration['db_host'];
+    $thisPortal->db_user = $_configuration['db_user'];
+    $thisPortal->db_password = $_configuration['db_password'];
+    $thisPortal->main_database = $_configuration['main_database'];
 
-    $thischamilo->db_host = $_configuration['db_host'];
-    $thischamilo->db_user = $_configuration['db_user'];
-    $thischamilo->db_password = $_configuration['db_password'];
-    $thischamilo->db_prefix = $_configuration['db_prefix'];
-    $thischamilo->main_database = $_configuration['main_database'];    ;
-    $thischamilo->table_prefix = $_configuration['table_prefix'];
-
-    return $thischamilo;
+    return $thisPortal;
 }
 
 /**
@@ -585,7 +567,7 @@ function vchamilo_get_available_templates()
     $absolute_templatesdir = $_configuration['root_sys'].$templatefoldername;
 
     // Scans the templates.
-    if(!is_dir($absolute_templatesdir)){
+    if (!is_dir($absolute_templatesdir)){
         mkdir($absolute_templatesdir, 0777, true);
     }
     $dirs = glob($absolute_templatesdir.'/*');
@@ -604,8 +586,8 @@ function vchamilo_get_available_templates()
     return $templatesarray;
 }
 
-function vchamilo_print_error($errortrace, $return = false){
-
+function vchamilo_print_error($errortrace, $return = false)
+{
     $str = '';
     if (!empty($errortrace)){
         $str .= '<div class="vchamilo-errors" style="border:1px solid #a0a0a0;background-color:#ffa0a0;padding:5px;font-size:10px">';
@@ -619,7 +601,7 @@ function vchamilo_print_error($errortrace, $return = false){
     }
 
     if ($return) return $str;
-    echo $str;
+    Display::addFlash(Display::return_message($str));
 }
 
 /**
@@ -639,6 +621,7 @@ function vchamilo_get_config($module, $key, $isplugin = true)
     if ($result) {
         return $result['selected_value'];
     }
+
     return false;
 }
 
@@ -670,9 +653,9 @@ function vchamilo_load_files_from_template($vchamilo, $template)
     $originarchivedir = preg_replace('/https?:\/\//', '', $manifest->templatewwwroot);
     $originhomedir = preg_replace('/https?:\/\//', '', $manifest->templatewwwroot);
 
-    ctrace("Copying {$absolute_template_datadir}/{$manifest->coursefolder} => $vcoursepath");
-    ctrace("Copying {$absolute_template_datadir}/archive/{$originarchivedir} => $varchivepath");
-    ctrace("Copying {$absolute_template_datadir}/home/{$originhomedir} => $vhomepath");
+    Display::addFlash(Display::return_message("Copying {$absolute_template_datadir}/{$manifest->coursefolder} => $vcoursepath"));
+    Display::addFlash(Display::return_message("Copying {$absolute_template_datadir}/archive/{$originarchivedir} => $varchivepath"));
+    Display::addFlash(Display::return_message("Copying {$absolute_template_datadir}/home/{$originhomedir} => $vhomepath"));
 
     copyDirContentTo(chop_last_slash($absolute_template_datadir.'/'.$manifest->coursefolder), chop_last_slash($vcoursepath), false);
     copyDirContentTo(chop_last_slash($absolute_template_datadir.'/archive/'.$originarchivedir), chop_last_slash($varchivepath), false);
@@ -764,8 +747,8 @@ function get_config($module, $key = false, $isplugin = true) {
             return $dyna_setting;
         }
 
-        if(empty($config)){
-            ctrace("Wrap to static setting $module,$configkey ");
+        if (empty($config)) {
+            Display::addFlash(Display::return_message("Wrap to static setting $module,$configkey "));
             if (array_key_exists($key, $static_settings)){
                 return $static_settings[$key];
             }
@@ -927,7 +910,7 @@ function mtrace($message){
 
 function ctrace($str) {
     if (!defined('CLI_SCRIPT')) echo "<pre>";
-    echo $str;
+    Display::addFlash(Display::return_message($str));
     if (!defined('CLI_SCRIPT')) echo "</pre>";
 }
 

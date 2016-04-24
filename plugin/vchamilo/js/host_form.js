@@ -2,7 +2,6 @@
  * Pop-up testing connection with database.
  */
 function opencnxpopup(webroot) {
-
     // Inputted data.
     var dbhost = document.getElementById('id_vdbhost').value;
     var dblogin = document.getElementById('id_vdbuser').value;
@@ -11,14 +10,11 @@ function opencnxpopup(webroot) {
     // PHP file linked the pop-up, and name.
     var url = webroot+"/plugin/vchamilo/views/manage.testcnx.php" + "?" + "vdbhost=" + dbhost + "&" + "vdblogin=" + dblogin
             + "&" + "vdbpass=" + dbpass;
-
     // Pop-up's options.
     var options = "width=500,height=300,toolbar=no,menubar=no,location=no,scrollbars=no,status=no";
 
     // Opening the pop-up (title not working in Firefox).
     var windowobj = window.open(url, '', options);
-    // Needed to be valid in IE.
-    // windowobj.document.title = vchamilo_testconnection;
 }
 
 /**

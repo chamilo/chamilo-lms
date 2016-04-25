@@ -93,7 +93,7 @@
                 var gui = new Wami.GUI({
                     id : 'record-audio-wami',
                     singleButton : true,
-                    recordUrl : '{{ _p.web_lib }}wami-recorder/record_document.php?' + $.param({
+                    recordUrl : '{{ _p.web_ajax }}record_audio_wami.ajax.php?' + $.param({
                         waminame: 'rec_' + (new Date()).getTime() + '.wav',
                         wamidir: '{{ cur_dir_path }}',
                         wamiuserid: {{ _u.user_id }},

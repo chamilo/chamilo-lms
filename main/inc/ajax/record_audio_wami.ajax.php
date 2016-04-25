@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once '../../../inc/global.inc.php';
+require_once '../global.inc.php';
 
 // Add security from Chamilo
 api_protect_course_script();

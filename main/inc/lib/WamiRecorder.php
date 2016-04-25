@@ -208,7 +208,7 @@ class WamiRecorder
                     var gui = new Wami.GUI({
                         id : \'wami\',
                         singleButton : true,
-                        recordUrl: \'' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/record_document.php?waminame=\' + waminame + \'&wamidir=' . $wamidir . '&wamiuserid=' . $wamiuserid . '\',
+                        recordUrl: \'' . api_get_path(WEB_AJAX_PATH) . 'record_audio_wami.ajax.php?waminame=\' + waminame + \'&wamidir=' . $wamidir . '&wamiuserid=' . $wamiuserid . '\',
                         playUrl: \'' . $wamiurlplay . '\' + waminame_play,
                         buttonUrl: \'' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/buttons.png\',
                         swfUrl: \'' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/Wami.swf\'

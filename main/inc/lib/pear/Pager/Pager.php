@@ -140,18 +140,7 @@ class Pager
      */
     public function __construct($options = array())
     {
-        //this check evaluates to true on 5.0.0RC-dev,
-        //so i'm using another one, for now...
-        //if (version_compare(phpversion(), '5.0.0') == -1) {
-        if (get_class($this) == 'pager') { //php4 lowers class names
-            // assign factoried method to this for PHP 4
-            eval('$this = Pager::factory($options);');
-        } else { //php5 is case sensitive
-            $msg = 'Pager constructor is deprecated.'
-                  .' You must use the "Pager::factory($params)" method'
-                  .' instead of "new Pager($params)"';
-            trigger_error($msg, E_USER_ERROR);
-        }
+
     }
 
     // }}}

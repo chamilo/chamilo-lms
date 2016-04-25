@@ -3700,11 +3700,18 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
             'contains_file' => $contains_file,
             'active' => $active,
             'accepted' => '1',
+            'qualificator_id' => 0,
+            'document_id' => 0,
+            'weight' => 0,
+            'allow_text_assignment' => 0,
             'post_group_id' => $groupId,
             'sent_date' => api_get_utc_datetime(),
             'parent_id' => $workInfo['id'],
             'session_id' => $sessionId,
             'user_id' => $userId,
+            'has_properties' => 0,
+            'qualification' => 0
+
             //'filesize' => $filesize
         ];
         $workId = Database::insert($work_table, $params);

@@ -41,8 +41,6 @@ $interbreadcrumb[] = array(
 );
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddDocument'));
 
-$error_message = null;
-
 switch ($action) {
     case 'delete':
         if (!empty($workId) && !empty($docId)) {

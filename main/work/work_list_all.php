@@ -82,11 +82,8 @@ $interbreadcrumb[] = array(
     'name' =>  $my_folder_data['title']
 );
 
-$error_message = null;
-
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $itemId = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
-$message = null;
 
 switch ($action) {
     case 'export_to_doc':
@@ -104,9 +101,13 @@ switch ($action) {
         if ($itemId) {
             $fileDeleted = deleteWorkItem($itemId, $courseInfo);
             if (!$fileDeleted) {
-                $message = Display::return_message(get_lang('YouAreNotAllowedToDeleteThisDocument'), 'error');
+                Display::addFlash(
+                    Display::return_message(get_lang('YouAreNotAllowedToDeleteThisDocument'), 'error')
+                );
             } else {
-                $message = Display::return_message(get_lang('TheDocumentHasBeenDeleted'), 'confirmation');
+                Display::addFlash(
+                    Display::return_message(get_lang('TheDocumentHasBeenDeleted'), 'confirmation')
+                );
             }
         }
         break;
@@ -117,7 +118,9 @@ switch ($action) {
                 if (isset($itemId) && $itemId == 'all') {
                 } else {
                     makeVisible($itemId, $courseInfo);
-                    $message = Display::return_message(get_lang('FileVisible'), 'confirmation');
+                    Display::addFlash(
+                        Display::return_message(get_lang('FileVisible'), 'confirmation')
+                    );
                 }
             }
         }
@@ -128,7 +131,9 @@ switch ($action) {
             if (isset($itemId) && $itemId == 'all') {
             } else {
                 makeInvisible($itemId, $courseInfo);
-                $message = Display::return_message(get_lang('FileInvisible'), 'confirmation');
+                Display::addFlash(
+                    Display::return_message(get_lang('FileInvisible'), 'confirmation')
+                );
             }
         }
         break;
@@ -146,18 +151,13 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-upload'));
 
 Display :: display_header(null);
 
-echo $message;
-
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
-$actionsLeft = '';
-$actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
+$actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
 
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
-    /*echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'">';
-    echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';*/
-    
+
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
     $actionsLeft .= Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
 
@@ -178,21 +178,15 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
 
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
     $actionsLeft .= Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
-    
+
     $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
     $actionsLeft .= Display::toolbarButton(get_lang('UploadCorrections'), $url, 'upload', 'success');
 }
 
-echo Display::toolbarAction('toolbar-worklist', array( 0 => $actionsLeft), 1);
+echo Display::toolbarAction('toolbar-worklist', array($actionsLeft), 1);
 
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);
-}
-
-$error_message = Session::read('error_message');
-if (!empty($error_message)) {
-    echo $error_message;
-    Session::erase('error_message');
 }
 
 if (!empty($my_folder_data['description'])) {
@@ -378,7 +372,7 @@ $extra_params = array(
     'sortable' => 'false'
 );
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_all&work_id='.$workId.'&type='.$type;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_all&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();
 ?>
 <script>
 $(function() {

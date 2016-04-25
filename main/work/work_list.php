@@ -71,12 +71,6 @@ if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);
 }
 
-$error_message = Session::read('error_message');
-if (!empty($error_message)) {
-    echo $error_message;
-    Session::erase('error_message');
-}
-
 if (!empty($my_folder_data['description'])) {
     $contentWork = Security::remove_XSS($my_folder_data['description']);
     $html = '';
@@ -92,9 +86,9 @@ switch ($action) {
         $fileDeleted = deleteWorkItem($item_id, $courseInfo);
 
         if (!$fileDeleted) {
-            Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
+            Display::addFlash(Display::return_message(get_lang('YouAreNotAllowedToDeleteThisDocument')));
         } else {
-            Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
+            Display::addFlash(Display::return_message(get_lang('TheDocumentHasBeenDeleted')));
         }
         break;
 }

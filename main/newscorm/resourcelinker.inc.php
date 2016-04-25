@@ -1724,6 +1724,9 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             Session::write('openmethod',$openmethod);
             Session::write('officedoc',$officedoc);
             break;
+        case TOOL_LP_FINAL_ITEM:
+            $link .= api_get_path(WEB_CODE_PATH).'newscorm/lp_final_item.php?'.api_get_cidreq().'&id='.$id.'&lp_id='.$learnpath_id;
+            break;
         case 'assignments':
             $link .= $main_dir_path.'work/work.php?origin='.$origin;
             break;

@@ -976,7 +976,8 @@ class SocialManager extends UserManager
         }
 
         if ($show_delete_account_button) {
-            $html .= '<div class="sidebar-nav"><ul><li>';
+            $html .= '<div class="panel panel-default"><div class="panel-body">';
+            $html .= '<ul class="nav nav-pills nav-stacked"><li>';
             $url = api_get_path(WEB_CODE_PATH).'auth/unsubscribe_account.php';
             $html .= Display::url(
                 Display::return_icon(
@@ -987,7 +988,8 @@ class SocialManager extends UserManager
                 ).get_lang('Unsubscribe'),
                 $url
             );
-            $html .= '</li></ul></div>';
+            $html .= '</li></ul>';
+            $html .= '</div></div>';
         }
         $html .= '';
 

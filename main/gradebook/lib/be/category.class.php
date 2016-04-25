@@ -1895,6 +1895,7 @@ class Category implements GradebookItem
     }
 
     /**
+     * Generates a certificate for this user if everything matches
      * @param int $category_id
      * @param int $user_id
      * @return bool|string
@@ -1952,15 +1953,13 @@ class Category implements GradebookItem
         $userHasSkills = false;
 
         if ($skillToolEnabled) {
-            if (!$category->getGenerateCertificates()) {
-                $skill = new Skill();
-                $skill->add_skill_to_user(
-                    $user_id,
-                    $category_id,
-                    $courseId,
-                    $sessionId
-                );
-            }
+            $skill = new Skill();
+            $skill->add_skill_to_user(
+                $user_id,
+                $category_id,
+                $courseId,
+                $sessionId
+            );
 
             $objSkillRelUser = new SkillRelUser();
             $userSkills = $objSkillRelUser->get_user_skills($user_id, $courseId, $sessionId);

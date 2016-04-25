@@ -1250,7 +1250,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     $courseCode,
                     $session_id
                 );
-                if (isset($user_id) && $isUserSubscribedInCourse === true && !api_is_anonymous($user_id)) {
+                if (isset($user_id) && ($is_platformAdmin || $isUserSubscribedInCourse === true) && !api_is_anonymous($user_id)) {
                     $is_allowed_in_course = true;
                 }
                 break;

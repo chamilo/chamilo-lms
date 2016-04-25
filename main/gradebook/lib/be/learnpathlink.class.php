@@ -120,7 +120,7 @@ class LearnpathLink extends AbstractLink
 		$scores = Database::query($sql);
 		// for 1 student
 		if (isset($stud_id)) {
-			if ($data = Database::fetch_array($scores)) {
+			if ($data = Database::fetch_assoc($scores)) {
 				return array ($data['progress'], 100);
 			} else
 				return null;

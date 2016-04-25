@@ -20,7 +20,7 @@ class ScoreDisplay
     /**
      * Protected constructor - call instance() to instantiate
      */
-    protected function __constructor($category_id = 0)
+    public function __construct($category_id = 0)
     {
         if (!empty($category_id)) {
             $this->category_id = $category_id;
@@ -154,7 +154,6 @@ class ScoreDisplay
      */
     public function get_custom_score_display_settings()
     {
-
         return $this->custom_display;
     }
 
@@ -562,7 +561,8 @@ class ScoreDisplay
      */
     private function sort_display($item1, $item2)
     {
-        if ($item1['score'] == $item2['score']) {
+        if ($item1['score'] === $item2['score']) {
+
             return 0;
         } else {
             return ($item1['score'] < $item2['score'] ? -1 : 1);

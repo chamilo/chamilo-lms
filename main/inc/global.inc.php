@@ -39,19 +39,17 @@ $alreadyInstalled = false;
 if (file_exists($kernel->getConfigurationFile())) {
     require_once $kernel->getConfigurationFile();
     $alreadyInstalled = true;
+    // Recalculate a system absolute path symlinks insensible.
+    $includePath = $_configuration['root_sys'].'main/inc/';
 } else {
     $_configuration = array();
-}
-
-// Recalculate a system absolute path symlinks insensible.
-$includePath = $_configuration['root_sys'].'main/inc/';
-
-//Redirects to the main/install/ page
-if (!$alreadyInstalled) {
-    $global_error_code = 2;
-    // The system has not been installed yet.
-    require_once $includePath.'/global_error_message.inc.php';
-    die();
+    //Redirects to the main/install/ page
+    if (!$alreadyInstalled) {
+        $global_error_code = 2;
+        // The system has not been installed yet.
+        require_once __DIR__ . '/../inc/global_error_message.inc.php';
+        die();
+    }
 }
 
 // Ensure that _configuration is in the global scope before loading

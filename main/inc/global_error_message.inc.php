@@ -50,7 +50,7 @@ $TechnicalIssuesDescription = 'This portal is currently experiencing technical i
 
 if (is_int($global_error_code) && $global_error_code > 0) {
 
-    if (class_exists('Template')) {
+    if (class_exists('Template') && function_exists('api_get_configuration_value')) {
         $theme = Template::getThemeFallback().'/';
     } else {
         $theme = 'chamilo';
@@ -70,20 +70,26 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);
 	if (!empty($root_rel)) {
-		$pos = strrpos($root_rel, '/');
+		// If we could obtain a relative path for the chamilo dir from the $_SERVER array
+		$pos = strrpos($root_rel, '/'); //search for last "/" in path
 		$root_rel = substr($root_rel, 0, $pos - strlen($root_rel) + 1);
 		if (strpos($root_rel, '/main/') !== false) {
+			// If the current path contains '/main/', then
 			$pos = 0;
 			while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), '/main/')) !== false) {
 				$pos = $test_pos + 1;
 			}
 			$root_rel = substr($root_rel, 0, $pos);
-		} elseif (strpos($root_rel, api_get_path(REL_COURSE_PATH)) !== false) {
+		} elseif (strpos($root_rel, '/courses/') !== false && function_exists('api_get_path') && strpos($root_rel, api_get_path(REL_COURSE_PATH)) !== false) {
 			$pos = 0;
 			while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), api_get_path(REL_COURSE_PATH))) !== false) {
 				$pos = $test_pos + 1;
 			}
 			$root_rel = substr($root_rel, 0, $pos);
+		} elseif (!function_exists('api_get_path')) {
+			// Sometimes the api_get_path() function might be unavailable (system not installed, for example)
+			// In this case, we assume the root folder, although this might trigger issues with Chamilo installed in a subfolder
+			$root_rel = '/';
 		}
 	}
 

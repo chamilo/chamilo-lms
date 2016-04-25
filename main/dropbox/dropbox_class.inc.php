@@ -68,7 +68,7 @@ class Dropbox_Work
      * @param unknown_type $arg6
      * @return Dropbox_Work
      */
-    public function Dropbox_Work($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
+    public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
     {
         if (func_num_args() > 1) {
             $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
@@ -248,7 +248,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 * @param unknown_type $arg7
 	 * @return Dropbox_SentWork
 	 */
-	function Dropbox_SentWork($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null)
+	public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null)
     {
 		if (func_num_args() > 1) {
 		    $this->_createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
@@ -274,7 +274,7 @@ class Dropbox_SentWork extends Dropbox_Work
         $_course = api_get_course_info();
 
 		// Call constructor of Dropbox_Work object
-        $this->Dropbox_Work(
+        parent::__construct(
             $uploader_id,
             $title,
             $description,
@@ -361,7 +361,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 *
 	 * @param unknown_type $id
 	 */
-	function _createExistingSentWork($id)
+	public function _createExistingSentWork($id)
     {
         $dropbox_cnf = getDropboxConf();
         $id = intval($id);
@@ -369,7 +369,7 @@ class Dropbox_SentWork extends Dropbox_Work
 		$course_id = api_get_course_int_id();
 
 		// Call constructor of Dropbox_Work object
-		$this->Dropbox_Work($id);
+		parent::__construct($id);
 
 		// Fill in recipients array
 		$this->recipients = array();
@@ -417,7 +417,7 @@ class Dropbox_Person
 	 * @param bool $isCourseTutor
 	 * @return Dropbox_Person
 	 */
-	function Dropbox_Person($userId, $isCourseAdmin, $isCourseTutor)
+	public function __construct($userId, $isCourseAdmin, $isCourseTutor)
     {
 	    $course_id = api_get_course_int_id();
 

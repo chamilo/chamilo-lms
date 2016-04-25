@@ -714,7 +714,6 @@ function api_get_path($path = '', $configuration = [])
     $configuration['code_append'] = 'main';
 
     // Web server base and system server base.
-
     if (!array_key_exists($root_web, $isInitialized)) {
         // process absolute global roots
         if (!empty($configuration)) {

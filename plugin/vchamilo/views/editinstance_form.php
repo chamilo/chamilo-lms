@@ -78,15 +78,8 @@ abstract class ChamiloForm
         }
 
         $cform =& $this->_form;
-        if ($cancel) {
-            //when two elements we need a group
-            $buttonarray = array();
-            $buttonarray[] = &$cform->createElement('submit', 'submitbutton', $submitlabel);
-            $cform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
-        } else {
-            //no group needed
-            $cform->addElement('submit', 'submitbutton', $submitlabel);
-        }
+
+        $cform->addButtonSave($submitlabel, 'submitbutton');
     }
 
     /**
@@ -374,9 +367,6 @@ class InstanceForm extends ChamiloForm
 
         $cform = $this->_form;
 
-        // Settings variables.
-        $size_input_text_big = 'size="60"';
-
         /*
          * Host's id.
          */
@@ -439,15 +429,13 @@ class InstanceForm extends ChamiloForm
 
         // Db's prefix.
         $cform->addElement('text', 'db_prefix', $this->_plugin->get_lang('dbprefix'));
-
         $cform->addElement('header', $this->_plugin->get_lang('datalocation'));
 
-        // Path for "moodledata".
         $cform->addElement(
             'text',
             'course_folder',
             $this->_plugin->get_lang('coursefolder'),
-            array('size' => $size_input_text_big, 'id' => 'id_vdatapath')
+            array('id' => 'id_vdatapath')
         );
 
         // Button for testing database connection.
@@ -455,6 +443,10 @@ class InstanceForm extends ChamiloForm
             'button',
             'testconnection',
             $this->_plugin->get_lang('testconnection'),
+            'check',
+            'default',
+            'default',
+            '',
             'onclick="opencnxpopup(\''.$_configuration['root_web'].'\'); return false;"'
         );
 
@@ -463,6 +455,10 @@ class InstanceForm extends ChamiloForm
             'button',
             'testdatapath',
             $this->_plugin->get_lang('testdatapath'),
+            'check',
+            'default',
+            'default',
+            '',
             'onclick="opendatapathpopup(\''.$_configuration['root_web'].'\'); return true;"'
         );
 

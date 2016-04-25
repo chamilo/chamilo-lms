@@ -1,5 +1,6 @@
 <?php
 
+$cidReset = true;
 define('CHAMILO_INTERNAL', true);
 
 global $plugininstance;
@@ -53,7 +54,9 @@ if ($id) {
 
 $content = $form->return_form();
 
-$tpl = new Template(get_lang('VChamilo'), true, true, false, true, false);
+$interbreadcrumb[] = array('url' => 'manage.php', 'name' => get_lang('VChamilo'));
+
+$tpl = new Template(get_lang('Instances'), true, true, false, true, false);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

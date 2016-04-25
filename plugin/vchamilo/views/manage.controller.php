@@ -63,8 +63,7 @@ if ($action == 'fulldeleteinstances') {
 
     foreach ($todelete as $fooid => $instance) {
 
-        echo "<pre>";
-        echo ("Dropping instance databases \n");
+        Display::addFlash(Display::return_message("Dropping instance databases"));
         vchamilo_drop_databases($instance);
 
         // Remove all files and eventual symlinks
@@ -79,7 +78,7 @@ if ($action == 'fulldeleteinstances') {
         }
         $standardlocation = str_replace('//', '/', $_configuration['root_sys'].'/'.$instance->course_folder); // where it should be
 
-        echo ("Deleting $coursedir \n");
+        Display::addFlash(Display::return_message("Deleting $coursedir"));
         removeDir($coursedir);
         if (is_link($standardlocation)) {
             unlink($standardlocation);
@@ -96,7 +95,7 @@ if ($action == 'fulldeleteinstances') {
         }
         $standardlocation = $_configuration['root_sys'].'home/'.$home_folder; // where it should be
 
-        echo ("Deleting $homedir \n");
+        Display::addFlash(Display::return_message("Deleting $homedir"));
         removeDir($homedir);
         if (is_link($standardlocation)) {
             unlink($standardlocation);
@@ -110,27 +109,22 @@ if ($action == 'fulldeleteinstances') {
         }
         $standardlocation = $_configuration['root_sys'].'archive/'.$archive_folder; // where it should be
 
-        echo ("Deleting $archivedir \n");
+        Display::addFlash(Display::return_message("Deleting $archivedir"));
         removeDir($archivedir);
         if (is_link($standardlocation)) {
             unlink($standardlocation);
         }
         echo '</pre>';
 
-        echo ("Removing vchamilo record \n");
-        $sql = "
-            DELETE FROM
-                {$table}
-            WHERE
-                id = {$instance->id}
-        ";
+        Display::addFlash(Display::return_message("Removing vchamilo record"));
+        $sql = "DELETE FROM {$table} WHERE id = {$instance->id}";
         Database::query($sql);
-
     }
 
     // vchamilo_redirect($_configuration['root_web'].'/plugin/vchamilo/views/manage.php');
 }
 if ($action == 'snapshotinstance') {
+    $interbreadcrumb[]=array('url' => 'manage.php','name' => get_lang('VChamilo'));
 
     $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : '';
     if ($vid) {
@@ -181,11 +175,11 @@ if ($action == 'snapshotinstance') {
             $content .= '<input type="hidden" name="what" value="snapshotinstance" />';
             $content .= '<input type="hidden" name="vid" value="'.$vhost->id.'" />';
             $content .= '<input type="hidden" name="step" value="1" />';
-            $content .= '<input type="submit" name="go_btn" value="'.$plugininstance->get_lang('continue').'" />';
+            $content .= '<input type="submit" class="btn btn-primary"  name="go_btn" value="'.$plugininstance->get_lang('continue').'" />';
             $content .= '</form>';
             $content .= '</div>';
 
-            $tpl = new Template(get_lang('VChamilo'), true, true, false, true, false);
+            $tpl = new Template(get_lang('Snapshot'), true, true, false, true, false);
             $tpl->assign('actions', '');
             $tpl->assign('message', $plugininstance->get_lang('vchamilosnapshot1'));
             $tpl->assign('content', $content);
@@ -237,11 +231,11 @@ if ($action == 'snapshotinstance') {
                     $content .= '<input type="hidden" name="what" value="snapshotinstance" />';
                     $content .= '<input type="hidden" name="vid" value="'.$vhost->id.'" />';
                     $content .= '<input type="hidden" name="step" value="2" />';
-                    $content .= '<input type="submit" name="go_btn" value="'.$plugininstance->get_lang('continue').'" />';
+                    $content .= '<input class="btn btn-primary"  type="submit" name="go_btn" value="'.$plugininstance->get_lang('continue').'" />';
                     $content .= '</form>';
                 }
 
-                $tpl = new Template(get_lang('VChamilo'), true, true, false, true, false);
+                $tpl = new Template(get_lang('Snapshot'), true, true, false, true, false);
                 $tpl->assign('actions', '');
                 $tpl->assign('message', $message);
                 $tpl->assign('content', $content);
@@ -269,15 +263,15 @@ if ($action == 'snapshotinstance') {
         fclose($FILE);
 
         // Every step was SUCCESS.
-        if (empty($fullautomation)){
-            Display::addFlash($plugininstance->get_lang('successfinishedcapture'));
+        if (empty($fullautomation)) {
+            Display::addFlash(Display::return_message($plugininstance->get_lang('successfinishedcapture'), 'success'));
 
             $actionurl = $_configuration['root_web'].'/plugin/vchamilo/views/manage.php';
             $content .= '<form name"single" action="'.$actionurl.'">';
-            $content .= '<input type="submit" name="go_btn" value="'.$plugininstance->get_lang('backtoindex').'" />';
+            $content .= '<input class="btn btn-primary" type="submit" name="go_btn" value="'.$plugininstance->get_lang('backtoindex').'" />';
             $content .= '</form>';
 
-            $tpl = new Template(get_lang('VChamilo'), true, true, false, true, false);
+            $tpl = new Template(get_lang('Snapshot'), true, true, false, true, false);
             $tpl->assign('actions', '');
             $tpl->assign('message', $plugininstance->get_lang('vchamilosnapshot3'));
             $tpl->assign('content', $content);

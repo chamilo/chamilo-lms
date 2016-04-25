@@ -13,6 +13,8 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     unset($data->testconnection);
     unset($data->testdatapath);
 
+    var_dump($data);exit;
+
     $registeronly = $data->registeronly;
     unset($data->registeronly);
     $data->lastcron = 0;
@@ -48,7 +50,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     // Create course directory for operations.
     // this is very important here (DO NOT USE api_get_path() !!) because storage may be remotely located
     $absalternatecourse = vchamilo_get_config('vchamilo', 'course_real_root');
-    if (!empty($absalternatecourse)){
+    if (!empty($absalternatecourse)) {
         // this is the relocated case
         $coursedir = str_replace('//', '/', $absalternatecourse.'/'.$data->course_folder);
     } else {
@@ -77,7 +79,6 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
 
         // The standard location dir SHOULD NOT EXIST YET
         assert(!is_dir($standardlocation));
-
         ctrace("Linking virtual coursedir ");
         chdir(dirname($standardlocation));
         if (!symlink($coursedir, basename($coursedir))) {
@@ -96,22 +97,10 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
      *
      */
 
-    preg_match('#https?://([^\.]+)#', $data->root_web, $matches);
-    $home_folder = $matches[1];
-    $archive_folder = $matches[1]; // prepare it now but use it later
-    if ($absalternatehome = vchamilo_get_config('vchamilo', 'home_real_root')){
-        // absalternatehome is a vchamilo config setting that tells where the
-        // real physical storage for home pages are.
-        $homedir = str_replace('//', '/', $absalternatehome.'/'.$home_folder);
-    } else {
-        // homedir is the home container at install level. This may contains
-        // in reality home subdirs from branding suburls.
-        // In straight installs, this should be located as a hostname subrouted
-        // dir in home dir of the chamilo install.
-        // In delocated installs (clustered installations), the root 'home' directory
-        // may be a symbolic link to a delocated path.
-        $homedir = api_get_path(SYS_PATH).'home/'.$home_folder;
-    }
+    $absalternatehome = vchamilo_get_config('vchamilo', 'home_real_root');
+    // absalternatehome is a vchamilo config setting that tells where the
+    // real physical storage for home pages are.
+    $homedir = str_replace('//', '/', $absalternatehome.'/'.$home_folder);
 
     ctrace("Making home dir as $homedir ");
 
@@ -137,9 +126,10 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     */
 
     // create archive
-    if($absalternatearchive = vchamilo_get_config('vchamilo', 'archive_real_root')){
-        $archivedir = str_replace('//', '/', $absalternatearchive.'/'.$archive_folder);
-    } else {
+    $absalternatearchive = vchamilo_get_config('vchamilo', 'archive_real_root');
+
+    $archivedir = str_replace('//', '/', $absalternatearchive.'/'.$archive_folder);
+    if (is_dir($archivedir)) {
         $archivedir = $_configuration['root_sys'].'archive/'.$archive_folder;
     }
 
@@ -168,11 +158,10 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
 
     if (!$template) {
         // Create empty database for install
-        ctrace("Creating databases (empty) ");
+        ctrace("Creating databases (empty)");
         vchamilo_create_databases($data);
     } else {
-        // deploy template database
-
+        // Deploy template database
         ctrace("Creating databases from template $template ");
         vchamilo_create_databases($data);
         ctrace("Loading data template $template ");
@@ -185,24 +174,22 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
 
     // pluging in site name institution
     $settingstable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $sitename = str_replace("'", "''", $data->sitename);
-    $institution = str_replace("'", "''", $data->institution);
-    $sqls[] = " UPDATE {$settingstable} SET selected_value = '{$sitename}' WHERE variable = 'siteName' AND category = 'Platform' ";
-    $sqls[] = " UPDATE {$settingstable} SET selected_value = '{$institution}' WHERE variable = 'institution' AND category = 'Platform' ";
+    $sitename = Database::escape_string($data->sitename);
+    $institution = Database::escape_string($data->institution);
+    $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$sitename}' WHERE variable = 'siteName' AND category = 'Platform' ";
+    $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$institution}' WHERE variable = 'institution' AND category = 'Platform' ";
     $accessurltable = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-    $sqls[] = " UPDATE {$accessurltable} SET url = '{$data->root_web}' WHERE id = '1' ";
+    $sqls[] = "UPDATE {$accessurltable} SET url = '{$data->root_web}' WHERE id = '1' ";
 
     foreach ($sqls as $sql) {
         Database::query($sql);
     }
 
-    ctrace("Finished. ");
+    ctrace("Finished");
 
-    //if (!$automation) {
-        echo '<a href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php'.'">Continue</a>';
-        // vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
-        die;
-    //}
+    echo '<a class="btn btn-primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php'.'">Continue</a>';
+    // vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
+    die;
 }
 
 if ($data->what == 'updateinstance') {
@@ -221,5 +208,6 @@ if ($data->what == 'updateinstance') {
     unset($data->vid);
 
     Database::update('vchamilo', (array) $data, array('id = ?' => $id), true);
+    Display::addFlash(Display::return_message(get_lang('Updated')));
     vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
 }

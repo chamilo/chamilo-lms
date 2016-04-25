@@ -8,14 +8,9 @@
  */
 
 // Loading configuration.
-require_once('../../../main/inc/global.inc.php');
-require_once($_configuration['root_sys'].'/local/classes/mootochamlib.php');
-require_once($_configuration['root_sys'].'/local/classes/database.class.php');
-require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php');
-require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php');
-
-global $DB;
-$DB = new DatabaseManager();
+require_once '../../../main/inc/global.inc.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
 
 $plugininstance = VChamiloPlugin::create();
 
@@ -49,7 +44,7 @@ if (is_dir($coursedir)) {
     }
     echo stripslashes($coursedir);
 } else {
-    if (mkdir($coursedir, 02777, true)) {
+    if (@mkdir($coursedir, 02777, true)) {
         echo '<div class="success">'.$plugininstance->get_lang('datapathcreated').'</div>';
     } else {
         echo '<div class="error">'.$plugininstance->get_lang('couldnotcreatedataroot').'</div>';
@@ -61,5 +56,5 @@ echo "</p>";
 
 $closestr = $plugininstance->get_lang('closewindow');
 echo "<center>";
-echo "<input type=\"button\" name=\"close\" value=\"$closestr\" onclick=\"self.close();\" />";
+echo "<input class='btn' type=\"button\" name=\"close\" value=\"$closestr\" onclick=\"self.close();\" />";
 echo "</center>";

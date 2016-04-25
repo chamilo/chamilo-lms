@@ -14,10 +14,12 @@ function vchamilo_hook_configuration(&$_configuration)
     // provides an effective value for the virtual root_web    based on domain analysis
     vchamilo_get_hostname($_configuration);
 
-    $plugin = VChamiloPlugin::create();
+    //$plugin = VChamiloPlugin::create();
 
     // We are on physical chamilo. Let original config play
-    if ($_configuration['root_web'] == $_configuration['vchamilo_web_root'].'/'){
+    $virtualChamiloWebRoot = $_configuration['vchamilo_web_root'].'/';
+
+    if ($_configuration['root_web'] == $virtualChamiloWebRoot){
         $VCHAMILO = 'main';
         return;
     }
@@ -28,26 +30,20 @@ function vchamilo_hook_configuration(&$_configuration)
     $connection = vchamilo_boot_connection($_configuration);
 
     $table = 'vchamilo';
-    $query = "
-        SELECT * FROM $table WHERE root_web = '{$_configuration['vchamilo_web_root']}'
-    ";
+    $query = "SELECT * FROM $table WHERE root_web = '$virtualChamiloWebRoot'";
     $result = $connection->executeQuery($query);
 
     $excludes = array('id', 'name');
 
     if ($result->rowCount()) {
-        $data = $result->fetchAll();
+        $data = $result->fetch();
 
-        foreach($data as $key => $value){
+        foreach ($data as $key => $value){
             if (!in_array($key, $excludes)){
                 $_configuration[$key] = $value;
             }
-
-            // take first domain fragment as radical
-            $arr = preg_replace('#https?://#', '', $_configuration['vchamilo_name']);
-            $domain = explode('.', $arr);
-            $vchamilo_radical = array_shift($domain);
-            $VCHAMILO = $vchamilo_radical;
+            $_configuration['virtual'] = $data['root_web'].'/';
+            $VCHAMILO = $data['root_web'];
         }
     } else {
         //die ("VChamilo : No configuration for this host. May be faked.");
@@ -56,9 +52,8 @@ function vchamilo_hook_configuration(&$_configuration)
 }
 
 /**
-*
-*
-*/
+ * @param array $_configuration
+ */
 function vchamilo_get_hostname(&$_configuration)
 {
     if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
@@ -108,7 +103,7 @@ function vchamilo_boot_connection(&$_configuration)
         'host' => $_configuration['db_host'],
         'user' => $_configuration['db_user'],
         'password' => $_configuration['db_password'],
-        'dbname' => $_configuration['main_database'],
+        'dbname' => isset($_configuration['main_database']) ? $_configuration['main_database'] : '',
         // Only relevant for pdo_sqlite, specifies the path to the SQLite database.
         'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
         // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
@@ -131,6 +126,7 @@ function vchamilo_redirect($url) {
     } else {
         header('location: ' . api_get_path(WEB_PATH).$url);
     }
+    exit;
 }
 
 function vchamilo_get_htaccess_fragment($course_folder)

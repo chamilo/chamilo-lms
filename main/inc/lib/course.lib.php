@@ -3473,7 +3473,7 @@ class CourseManager
         $listItems = array();
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
-            $courseInCategory = self:: returnCoursesInCategory(
+            $courseInCategory = self:: returnCoursesCategories(
                 $row['id'],
                 $load_dirs
             );
@@ -3492,7 +3492,7 @@ class CourseManager
         }
         
         // Step 2: We display the course without a user category.
-        $courseInCategory = self::returnCoursesNotCategory(0, $load_dirs);
+        $courseInCategory = self::returnCoursesWithoutCategories(0, $load_dirs);
         $listItems['not_category'] = $courseInCategory;
 
         //$courseCount += $courseInCategory['course_count'];
@@ -3508,7 +3508,7 @@ class CourseManager
      * @param bool      Whether to show the document quick-loader or not
      * @return string
      */
-    public static function returnCoursesInCategory($user_category_id, $load_dirs = false)
+    public static function returnCoursesCategories($user_category_id, $load_dirs = false)
     {
         $user_id = api_get_user_id();
         // Table definitions
@@ -3624,7 +3624,7 @@ class CourseManager
      * @param bool      Whether to show the document quick-loader or not
      * @return string
      */
-    public static function returnCoursesNotCategory($user_category_id, $load_dirs = false)
+    public static function returnCoursesWithoutCategories($user_category_id, $load_dirs = false)
     {
         $user_id = api_get_user_id();
         // Table definitions

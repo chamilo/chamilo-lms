@@ -57,7 +57,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      * @since     1.0
      * @access    public
      */
-    function HTML_QuickForm_file($elementName=null, $elementLabel=null, $attributes=null)
+    public function __construct($elementName=null, $elementLabel=null, $attributes=null)
     {
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('file');
@@ -172,8 +172,8 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 return $this->onQuickFormEvent('updateValue', null, $caller);
                 break;
             case 'createElement':
-                $className = get_class($this);
-                $this->$className($arg[0], $arg[1], $arg[2]);
+                //$className = get_class($this);
+                //$this->$className($arg[0], $arg[1], $arg[2]);
                 break;
         }
         return true;
@@ -190,7 +190,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      * @access   public
      * @return   bool    Whether the file was moved successfully
      */
-    function moveUploadedFile($dest, $fileName = '')
+    public function moveUploadedFile($dest, $fileName = '')
     {
         if ($dest != ''  && substr($dest, -1) != '/') {
             $dest .= '/';
@@ -210,7 +210,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      */
     public function isUploadedFile()
     {
-        return HTML_QuickForm_file::_ruleIsUploadedFile($this->_value);
+        return self::_ruleIsUploadedFile($this->_value);
     } // end func isUploadedFile
 
 
@@ -276,7 +276,4 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             return null;
         }
     }
-
-    // }}}
-} // end class HTML_QuickForm_file
-?>
+}

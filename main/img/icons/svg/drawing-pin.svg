@@ -215,7 +215,10 @@
      transform="translate(0,-924.36219)">
     <g
        id="g4326"
-       transform="matrix(2.6666667,0,0,2.6666667,-638.27483,680.85161)">
+       transform="matrix(2.6666667,0,0,2.6666667,-638.27483,680.85161)"
+       inkscape:export-filename="/var/www/chamilo11/main/img/icons/22/drawing-pin.png"
+       inkscape:export-xdpi="15.46875"
+       inkscape:export-ydpi="15.46875">
       <rect
          y="91.316467"
          x="239.35306"

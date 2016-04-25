@@ -3413,12 +3413,12 @@ class CourseManager
                     }
                     
                     $params['visibility'] = $course_info['visibility'];
-                    $params['status'] = $course['status'];
+                    $params['status'] = $course_info['status'];
                     $params['category'] = $course_info['categoryName'];
                     $params['icon'] = Display::return_icon('drawing-pin.png',null, null, ICON_SIZE_LARGE, null);
                     
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-                        $params['status']  = $course_info['visual_code'];
+                        $params['code_course']  = '(' . $course_info['visual_code'] . ')';
                     }
 
                     $params['title'] = $course_info['title'];
@@ -3594,10 +3594,14 @@ class CourseManager
             }
             
             $params['status'] = $course['status'];
-            $params['code_course'] =  $course_info['visual_code'];
+            
+            if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                $params['code_course'] = '(' . $course_info['visual_code'] . ') ';
+            }
+            
             $params['visibility'] = $course_info['visibility'];
             $params['link'] = $courseUrl;
-            $params['title'] = $course_info['title'];
+            $params['title'] = $course_info['title'] . $visualCode;
             $params['teachers'] = $teachers;
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
@@ -3610,6 +3614,7 @@ class CourseManager
             }
             
             $courseList[] = $params;
+            
         }
         
         return $courseList;
@@ -3722,7 +3727,11 @@ class CourseManager
                 $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
             }
             $params['status'] = $course['status'];
-            $params['code_course'] = $course_info['visual_code'];
+            
+            if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                $params['code_course'] = '(' . $course_info['visual_code'] . ') ';
+            }
+            
             $params['visibility'] = $course_info['visibility'];
             $params['link'] = $course_title_url;
             $params['thumbnails'] = $thumbnails;

@@ -50,9 +50,9 @@
             <div class="description">
                 <h4 class="title">
                     {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
-                        {{ item.title }}
+                        {{ item.title }} {{ item.code_course }}
                     {% else %}
-                        <a href="{{ item.link }}">{{ item.title }}</a>
+                        <a href="{{ item.link }}">{{ item.title }} {{ item.code_course }}</a>
                     {% endif %}
                 </h4>
                 <div class="notifications">{{ item.notifications }}</div>
@@ -115,9 +115,9 @@
             <div class="description">
                 <h4 class="title">
                     {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
-                        {{ item.title }}
+                        {{ item.title }} {{ item.code_course }}
                     {% else %}
-                        <a href="{{ item.link }}">{{ item.title }}</a>
+                        <a href="{{ item.link }}">{{ item.title }} {{ item.code_course }}</a>
                     {% endif %}
                 </h4>
                 <div class="notifications">{{ item.notifications }}</div>

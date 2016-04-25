@@ -33,10 +33,10 @@
                         {% endif %}
                         <h4 class="course-items-title">
                             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
-                                {{ item.title }}
+                                {{ item.title }} {{ item.code_course }}
                             {% else %}
                                 <a href="{{ item.link }}">
-                                    {{ item.title }}
+                                    {{ item.title }} {{ item.code_course }}
                                 </a>
                                 {{ item.notifications }}
                                 {{ 'klipper.png' | img(22, 'CourseAutoRegister'|get_lang ) }}
@@ -99,10 +99,10 @@
                         {% endif %}
                         <h4 class="course-items-title">
                             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
-                                {{ item.title }}
+                                {{ item.title }} {{ item.code_course }}
                             {% else %}
                                 <a href="{{ item.link }}">
-                                    {{ item.title }}
+                                    {{ item.title }} {{ item.code_course }}
                                 </a>
                                 {{ item.notifications }}
                             {% endif %}

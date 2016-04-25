@@ -218,7 +218,6 @@ $class = 'save';
 $form->addButtonUpdate($text);
 
 $form->setDefaults($defaults);
-$error_message = null;
 $_course = api_get_course_info();
 $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$_course['path'] . '/';
 
@@ -262,10 +261,10 @@ if ($form->validate()) {
             }
 
             if ($_POST['qualification'] > $_POST['qualification_over']) {
-                $error_message .= Display::return_message(
+                Display::addFlash(Display::return_message(
                     get_lang('QualificationMustNotBeMoreThanQualificationOver'),
                     'error'
-                );
+                ));
             } else {
                 $sql = "UPDATE  " . $work_table . "
                         SET	title = '".Database::escape_string($title)."',
@@ -284,16 +283,12 @@ if ($form->validate()) {
             );
 
             $succeed = true;
-            $error_message .= Display::return_message(get_lang('ItemUpdated'));
+            Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         }
         Security::clear_token();
     } else {
         // Bad token or can't add works
-        $error_message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
-    }
-
-    if (!empty($error_message)) {
-        Session::write('error_message', $error_message);
+        Display::addFlash(Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error'));
     }
 
     $script = 'work_list.php';

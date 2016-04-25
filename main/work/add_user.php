@@ -40,8 +40,6 @@ $interbreadcrumb[] = array(
 );
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddUsers'));
 
-$error_message = null;
-
 switch ($action) {
     case 'add':
         $data = getUserToWork($userId, $workId, api_get_course_int_id());

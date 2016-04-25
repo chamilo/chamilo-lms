@@ -27,9 +27,7 @@ if (empty($work_id)) {
 }
 
 protectWork($course_info, $work_id);
-
 $workInfo = get_work_data_by_id($work_id);
-
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
     $user_id,
     $course_id,
@@ -88,8 +86,6 @@ setWorkUploadForm($form, $workInfo['allow_text_assignment']);
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'sec_token', $token);
 
-$error_message = null;
-
 $succeed = false;
 if ($form->validate()) {
 
@@ -112,7 +108,9 @@ if ($form->validate()) {
         exit;
     } else {
         // Bad token or can't add works
-        $error_message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
+        Display::addFlash(
+            Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error')
+        );
     }
 }
 
@@ -143,10 +141,10 @@ if (!empty($work_id)) {
     } elseif ($student_can_edit_in_session && $validationStatus['has_ended'] == false) {
         echo $tabs;
     } else {
-        Display::display_error_message(get_lang('ActionNotAllowed'));
+        Display::addFlash(Display::return_message(get_lang('ActionNotAllowed'), 'error'));
     }
 } else {
-    Display::display_error_message(get_lang('ActionNotAllowed'));
+    Display::addFlash(Display::return_message(get_lang('ActionNotAllowed'), 'error'));
 }
 
 Display :: display_footer();

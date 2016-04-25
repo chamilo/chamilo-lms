@@ -553,7 +553,7 @@ if ($form->validate() && is_settings_editable()) {
         'activate_legal'
     );
 
-    $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : '';
+    $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : 0;
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
     $params = [

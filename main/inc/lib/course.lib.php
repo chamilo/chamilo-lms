@@ -5040,7 +5040,7 @@ class CourseManager
             // Create
             Database::insert(
                 $courseSettingTable,
-                array('value' => $value, 'c_id' => $courseId, 'variable' => $variable)
+                ['title' => $variable, 'value' => $value, 'c_id' => $courseId, 'variable' => $variable]
             );
         }
         return true;

@@ -148,9 +148,10 @@ class Dropbox_Work
                 'upload_date' => $this->upload_date,
                 'last_upload_date' => $this->last_upload_date,
                 'session_id' => api_get_session_id(),
+                'cat_id' => 0
 			];
-			$this->id = Database::insert($dropbox_cnf['tbl_file'], $params);
 
+			$this->id = Database::insert($dropbox_cnf['tbl_file'], $params);
 			if ($this->id) {
 				$sql = "UPDATE ".$dropbox_cnf['tbl_file']." SET id = iid WHERE iid = {$this->id}";
 				Database::query($sql);
@@ -314,12 +315,14 @@ class Dropbox_SentWork extends Dropbox_Work
         $session_id = api_get_session_id();
         $uploader_id = $this->uploader_id;
         $user  = api_get_user_id();
+        $now = api_get_utc_datetime();
+
 		// Insert data in dropbox_post and dropbox_person table for each recipient
 		foreach ($this->recipients as $rec) {
             $file_id = (int)$this->id;
             $user_id = (int)$rec['id'];
-			$sql = "INSERT INTO $table_post (c_id, file_id, dest_user_id, session_id)
-                    VALUES ($course_id, $file_id, $user_id, $session_id)";
+			$sql = "INSERT INTO $table_post (c_id, file_id, dest_user_id, session_id, feedback_date, cat_id)
+                    VALUES ($course_id, $file_id, $user_id, $session_id, '$now', 0)";
 	        Database::query($sql);
             // If work already exists no error is generated
 

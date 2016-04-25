@@ -167,8 +167,8 @@ class Blog
             }
 
 			// Put it on course homepage
-			$sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, session_id)
-					VALUES ($course_id, '".Database::escape_string($title)."','blog/blog.php?blog_id=".(int)$this_blog_id."','blog.gif','1','0','pastillegris.gif',0,'$session_id')";
+			$sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, session_id, target)
+					VALUES ($course_id, '".Database::escape_string($title)."','blog/blog.php?blog_id=".(int)$this_blog_id."','blog.gif','1','0','pastillegris.gif',0,'$session_id', '')";
 			Database::query($sql);
 
             $toolId = Database::insert_id();

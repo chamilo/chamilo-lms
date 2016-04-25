@@ -3357,9 +3357,8 @@ class CourseManager
         if (!empty($special_course_list)) {
             $with_special_courses = ' course.code IN ("' . implode('","', $special_course_list) . '")';
         }
-        $html = null;
-        $courseCount = 0;
-        $listCourse = array();
+        
+        $courseList = array();
         if (!empty($with_special_courses)) {
             $sql = "SELECT
                         course.id,
@@ -3378,7 +3377,6 @@ class CourseManager
             $rs_special_course = Database::query($sql);
             $number_of_courses = Database::num_rows($rs_special_course);
             $showCustomIcon = api_get_setting('course_images_in_courses_list');
-            $key = 0;
 
             if ($number_of_courses > 0) {
                 while ($course = Database::fetch_array($rs_special_course)) {
@@ -3386,7 +3384,7 @@ class CourseManager
                     if ($course_info['visibility'] == COURSE_VISIBILITY_HIDDEN) {
                         continue;
                     }
-                    $courseCount++;
+
                     $params = array();
                     // Get notifications.
                     $course_info['id_session'] = null;
@@ -3398,9 +3396,16 @@ class CourseManager
                     }
 
                     $params['edit_actions'] = '';
+                    $params['document'] = '';
                     if (api_is_platform_admin()) {
                         $params['edit_actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
                         if ($load_dirs) {
+                            $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                               . Display::returnFontAwesomeIcon('folder-open') . '</a>';
+                            $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
+                        }
+                    }else{
+                        if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED && $load_dirs) {
                             $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
                                . Display::returnFontAwesomeIcon('folder-open') . '</a>';
                             $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
@@ -3409,6 +3414,7 @@ class CourseManager
                     
                     $params['visibility'] = $course_info['visibility'];
                     $params['status'] = $course['status'];
+                    $params['category'] = $course_info['categoryName'];
                     $params['icon'] = Display::return_icon('drawing-pin.png',null, null, ICON_SIZE_LARGE, null);
                     
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
@@ -3421,28 +3427,23 @@ class CourseManager
                         $params['teachers'] = CourseManager::getTeachersFromCourseByCode($course['code']);
                     }
                     
-                    $thumbnails = null;
-                    $image = null;
                     $iconName = basename($course_info['course_image']);
                     if ($showCustomIcon === 'true' && $iconName != 'course.png') {
-                        $thumbnails = $course_info['course_image'];
-                        $image = $course_info['course_image_large'];
+                        $params['thumbnails'] = $course_info['course_image'];
+                        $params['image'] = $course_info['course_image_large'];
                     }
-                    
-                    $params['thumbnails'] = $thumbnails;
-                    $params['image'] = $image;
 
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                         $params['notifications'] = $show_notification;
                     }
-                    $key++;
                     
-                    $listCourse[$key] = $params;
+                    $courseList[] = $params;
+                    
                 }
             }
         }
    
-    return $listCourse;
+    return $courseList;
 }
    
     /**
@@ -3553,12 +3554,9 @@ class CourseManager
         $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
 
         $result = Database::query($sql);
-        $html = '';
 
-        $course_list = array();
-        $listCourse = array();
+        $courseList = array();
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
-        $courseCount = 0;
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             $course_info = api_get_course_info($course['code']);
@@ -3569,28 +3567,15 @@ class CourseManager
             }
             $course_info['id_session'] = null;
             $course_info['status'] = $course['status'];
-
-            //In order to avoid doubles
-            if (in_array($course_info['real_id'], $course_list)) {
-                continue;
-            } else {
-                $course_list[] = $course_info['real_id'];
-            }
-            
-            $courseCount++;
             
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
             $showNotification = Display::show_notification($course_info);
-
-            $thumbnails = null;
-            $image = null;
             $iconName = basename($course_info['course_image']);
-            
-            
+
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
-                $thumbnails = $course_info['course_image'];
-                $image = $course_info['course_image_large'];
+                $params['thumbnails'] = $course_info['course_image'];
+                $params['image'] = $course_info['course_image_large'];
             }
 
             $params = array();
@@ -3612,8 +3597,6 @@ class CourseManager
             $params['code_course'] =  $course_info['visual_code'];
             $params['visibility'] = $course_info['visibility'];
             $params['link'] = $courseUrl;
-            $params['thumbnails'] = $thumbnails;
-            $params['image'] = $image;
             $params['title'] = $course_info['title'];
             $params['teachers'] = $teachers;
 
@@ -3626,11 +3609,10 @@ class CourseManager
                 $isSubContent = false;
             }
             
-            //$html .= self::course_item_html($params, $isSubContent);
-            $listCourse[$courseCount] = $params;
+            $courseList[] = $params;
         }
         
-        return $listCourse;
+        return $courseList;
         
         
     }
@@ -3686,12 +3668,9 @@ class CourseManager
         }
         // Use user's classification for courses (if any).
         $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
-
         $result = Database::query($sql);
 
-        $course_list = array();
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
-        $courseCount = 0;
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             $course_info = api_get_course_info($course['code']);
@@ -3702,15 +3681,6 @@ class CourseManager
             }
             $course_info['id_session'] = null;
             $course_info['status'] = $course['status'];
-
-            //In order to avoid doubles
-            if (in_array($course_info['real_id'], $course_list)) {
-                continue;
-            } else {
-                $course_list[] = $course_info['real_id'];
-            }
-            
-            $courseCount++;
 
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
@@ -3729,7 +3699,7 @@ class CourseManager
 
             $params = array();
             $params['edit_actions'] = '';
-
+            $params['document'] = '';
             if (api_is_platform_admin()) {
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
                 if($load_dirs){
@@ -3738,6 +3708,12 @@ class CourseManager
                     $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
                 }
             }
+            if ($load_dirs) {
+                $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                    . Display::returnFontAwesomeIcon('folder-open') . '</a>';
+                $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
+            }
+            
             
             $course_title_url = '';
             $course_title_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
@@ -3764,11 +3740,11 @@ class CourseManager
                 $isSubContent = false;
             }
             
-            $listCourse[$courseCount] = $params;
+            $courseList[] = $params;
             
         }
 
-        return $listCourse;
+        return $courseList;
     }
     
     /**

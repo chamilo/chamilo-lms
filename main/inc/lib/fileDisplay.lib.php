@@ -287,7 +287,7 @@ function get_total_folder_size($path, $can_see_invisible = false)
     $visibility_rule = ' props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');
 
     $sql = "SELECT SUM(table1.size) FROM (
-                SELECT size
+                SELECT props.ref, size
                 FROM $table_itemproperty AS props, $table_document AS docs
                 WHERE
                     docs.c_id 	= $course_id AND

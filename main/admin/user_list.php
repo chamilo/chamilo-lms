@@ -688,8 +688,8 @@ if (!empty($action)) {
 					$number_of_deleted_users = 0;
 					if (is_array($_POST['id'])) {
 						foreach ($_POST['id'] as $index => $user_id) {
-							if($user_id != $_user['user_id']) {
-								if(UserManager :: delete_user($user_id)) {
+							if ($user_id != $_user['user_id']) {
+								if (UserManager::delete_user($user_id)) {
 									$number_of_deleted_users++;
 								}
 							}

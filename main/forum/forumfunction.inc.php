@@ -601,6 +601,7 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
  */
 function store_forum($values, $courseInfo = array(), $returnId = false)
 {
+    $now = api_get_utc_datetime();
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $course_id = $courseInfo['real_id'];
     $session_id = api_get_session_id();
@@ -739,7 +740,9 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
-            'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
+            'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0,
+            'locked' => 0,
+            'forum_id' => 0
         ];
         $last_id = Database::insert($table_forums, $params);
         if ($last_id > 0) {
@@ -3290,6 +3293,7 @@ function store_reply($current_forum, $values)
                 'thread_id' => $values['thread_id'],
                 'forum_id' => $values['forum_id'],
                 'poster_id' => api_get_user_id(),
+                'post_id' => 0,
                 'post_date' => $post_date,
                 'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : null,
                 'post_parent_id' => isset($values['post_parent_id']) ? $values['post_parent_id'] : null,

@@ -27,10 +27,6 @@ $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
 
-//Default OpenGraph search time
-unset($_SESSION['ogSearch']);
-$_SESSION['ogSearch'] = false;
-
 //Initialize blocks
 $social_extra_info_block = null;
 $social_course_block = null;
@@ -291,8 +287,7 @@ $social_wall_block = $wallSocialAddPost;
 // Social Post Wall
 $posts = SocialManager::getWallMessagesByUser($my_user_id, $friendId) ;
 
-$posts = empty($posts) ? '<p>'.get_lang("NoPosts").'</p>' : $posts;
-$social_post_wall_block = Display::panel($posts, get_lang('Posts'));
+$social_post_wall_block = empty($posts) ? '<p>'.get_lang("NoPosts").'</p>' : $posts;
 
 $socialAutoExtendLink = Display::url(
     get_lang('SeeMore'),
@@ -338,41 +333,6 @@ $(document).ready(function() {
                 }
             }
         });
-    });
-
-    getUrl.keyup(function(e) {
-        if (e.keyCode == 32) {
-            if (matchUrl.test(getUrl.val())) {
-                $.ajax({
-                    contentType: "application/x-www-form-urlencoded",
-                    beforeSend: function() {
-                        $("[name=\'wall_post_button\']").prop( "disabled", true );
-                        $(".panel-preview").hide();
-                        $(".spinner").html("' .
-                            '<div class=\'text-center\'>' .
-                                '<em class=\'fa fa-spinner fa-pulse fa-1x\'></em>' .
-                                '<p>' . get_lang('Loading') . ' ' . get_lang('Preview') . '</p>' .
-                            '</div>' .
-                        '");
-                    },
-                    type: "POST",
-                    url: "' . api_get_path(WEB_AJAX_PATH) . 'social.ajax.php?a=readUrlWithOpenGraph",
-                    data: "social_wall_new_msg_main=" + getUrl.val(),
-                    success: function(response) {
-                        $("[name=\'wall_post_button\']").prop( "disabled", false );
-                        if (!response == false) {
-                            $(".spinner").html("");
-                            $(".panel-preview").show();
-                            $(".url_preview").html(response);
-                            $("[name=\'url_content\']").val(response);
-                            $(".url_preview img").addClass("img-responsive");
-                        } else {
-                            $(".spinner").html("");
-                        }
-                    }
-                });
-            }
-        }
     });
 });
 </script>';

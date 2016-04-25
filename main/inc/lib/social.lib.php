@@ -1565,34 +1565,25 @@ class SocialManager extends UserManager
      */
     public static function readContentWithOpenGraph($link)
     {
-        $domain = parse_url($link);
-        $domain['scheme'] = isset($domain['scheme']) ? $domain['scheme'] : 'http';
-        $domain['host'] = isset($domain['host']) ? $domain['host'] : $domain['path'] ? $domain['path'] : $link;
-
+        if(strpos($link,"://")===false && substr($link,0,1)!="/") $link = "http://".$link;
         $graph = OpenGraph::fetch($link);
+        $link = parse_url($link);
+        $host = $link['host'] ? strtoupper($link['host']) : $link['path'];
         if (!$graph) {
             return false;
         }
-
         $url = $graph->url;
         $image = $graph->image;
         $description = $graph->description;
-        $domain = $domain['scheme'].'://'.$domain['host'];
-        // Trick to verify if the Image Url Exist because of some bad metatag dev
-        if (self::verifyUrl($image) == false && $image){
-            if (!($image[0] == '/')){
-                $domain = $domain . '/';
-            }
-            $image = $domain . $image;
-        }
         $title = $graph->title;
-        
         $html  = '<div class="thumbnail social-thumbnail">';
-        $html .= empty($image) ? '' : '<a target="_blank" href="'.$url.'"><img class="img-responsive" src="'.$image.'" /></a>';
+        $html .= empty($image) ? '' : '<a target="_blank" href="'.$url.'"><img class="img-responsive social-image" src="'.$image.'" /></a>';
         $html .= '<div class="social-description">';
         $html .= '<a target="_blank" href="'.$url.'"><h5 class="social-title"><b>'.$title.'</b></h5></a>';
-        $html .= empty($description) ? '' : '<p class="description">'.$description.'</p>';
-        $html .= empty($description) ? '' : '<p class="description">'.$description.'</p>';
+        $html .= empty($description) ? '' : '<span>'.$description.'</span>';
+        $html .= '<br />';
+        $html .= '<br />';
+        $html .= empty($host) ? '' : '<span class="social-host">'.$host.'</span>';
         $html .= '</div>';
         $html .= '</div>';
 
@@ -1914,7 +1905,7 @@ class SocialManager extends UserManager
             $post = $message['html'];
             $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $message['id']);
 
-            $html .= $post.$comment;
+            $html .= Display::panel($post.$comment, '');
         }
 
         return $html;

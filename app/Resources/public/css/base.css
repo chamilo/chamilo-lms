@@ -720,6 +720,12 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     padding: 8px;
     color: #000;
 }
+.social-image {
+    max-height: 300px;
+}
+.social-host {
+    color: #999;
+}
 
 .menulist {
     margin: 0px;

@@ -16,13 +16,12 @@ function vchamilo_hook_configuration(&$_configuration)
     // provides an effective value for the virtual root_web    based on domain analysis
     vchamilo_get_hostname($_configuration);
 
-    //$plugin = VChamiloPlugin::create();
-
     // We are on physical chamilo. Let original config play
     $virtualChamiloWebRoot = $_configuration['vchamilo_web_root'].'/';
 
-    if ($_configuration['root_web'] == $virtualChamiloWebRoot){
-        $VCHAMILO = 'main';
+    if ($_configuration['root_web'] == $virtualChamiloWebRoot) {
+        $VCHAMILO = [];
+
         return;
     }
 
@@ -37,16 +36,47 @@ function vchamilo_hook_configuration(&$_configuration)
 
     $excludes = array('id', 'name');
 
+    $query = "SELECT * FROM settings_current WHERE subkey = 'vchamilo'";
+    $virtualSettings = $connection->executeQuery($query);
+    $virtualSettings = $virtualSettings->fetchAll();
+
+    $homePath = '';
+    $coursePath = '';
+    $archivePath = '';
+
+    foreach ($virtualSettings as $setting) {
+        switch ($setting['variable']) {
+            case 'vchamilo_home_real_root':
+                $homePath = $setting['selected_value'];
+                break;
+            case 'vchamilo_course_real_root':
+                $coursePath = $setting['selected_value'];
+                break;
+            case 'vchamilo_archive_real_root':
+                $archivePath = $setting['selected_value'];
+                break;
+        }
+    }
+
+    if (empty($homePath) || empty($coursePath) || empty($archivePath)) {
+        echo 'Configure correctly the vchamilo plugin';
+        exit;
+    }
+
     if ($result->rowCount()) {
         $data = $result->fetch();
-
         foreach ($data as $key => $value){
-            if (!in_array($key, $excludes)){
+            if (!in_array($key, $excludes)) {
                 $_configuration[$key] = $value;
             }
             $_configuration['virtual'] = $data['root_web'].'/';
-            $VCHAMILO = $data['root_web'];
         }
+
+        $data['SYS_ARCHIVE_PATH'] = $homePath.'/'.$data['slug'];
+        $data['SYS_HOME_PATH'] = $coursePath.'/'.$data['slug'];
+        $data['SYS_COURSE_PATH'] = $archivePath.'/'.$data['slug'];
+
+        $VCHAMILO = $data;
     } else {
         //die ("VChamilo : No configuration for this host. May be faked.");
         die ("VChamilo : Could not fetch virtual chamilo configuration");

@@ -72,10 +72,11 @@ if ($action == 'syncthis') {
         foreach ($vchamilos as $vcid => $chm) {
             $table = $chm['main_database'].".settings_current";
             if ($delifempty && empty($value)) {
-                $sql = "DELETE FROM $table WHERE  
-                    selected_value = '$value' AND   
-                    variable = '{{$setting['variable']}}' AND 
-                    access_url = '{$setting['access_url']}'
+                $sql = "DELETE FROM $table 
+                        WHERE  
+                            selected_value = '$value' AND   
+                            variable = '{{$setting['variable']}}' AND 
+                            access_url = '{$setting['access_url']}'
                 ";
                 Database::query($sql);
 

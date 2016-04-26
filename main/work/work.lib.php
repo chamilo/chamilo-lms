@@ -3343,7 +3343,7 @@ function getWorkCommentForm($work, $page = 'view')
     );
 
     $form->addElement('file', 'file', get_lang('Attachment'));
-    $form->addElement('textarea', 'comment', get_lang('Comment'), array('rows' => '8'));
+    $form->addHtmlEditor('comment', get_lang('Comment'));
     $form->addElement('hidden', 'id', $work['id']);
     $form->addElement('hidden', 'page', $page);
     if (api_is_allowed_to_edit()) {

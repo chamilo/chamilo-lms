@@ -3926,6 +3926,12 @@ function WSCreateSession($params)
             }
             $results[] = 0;
             continue;
+        } elseif (empty($id_coach)) {
+            $results[] = 0;
+            if ($debug) {
+                error_log("Coach id must not be empty");
+            }
+            continue;
         } elseif (empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start))) {
             if ($debug) {
                 error_log("There's an error with the start date: $month_start - $day_start - $year_start");
@@ -4188,6 +4194,9 @@ function WSEditSession($params)
         }
         if (empty($name)) {
             $results[] = 0; //SessionNameIsRequired
+            continue;
+        } elseif (empty($id_coach)) { // Session must have coach
+            $results[] = 0;
             continue;
         } elseif (empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start))) {
             $results[] = 0; //InvalidStartDate

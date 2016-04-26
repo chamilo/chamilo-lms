@@ -37,8 +37,7 @@ $headers = array(
     '',
     $plugininstance->get_lang('sitename'),
     $plugininstance->get_lang('institution'),
-    $plugininstance->get_lang('rootweb'),
-    $plugininstance->get_lang('dbhost'),
+    $plugininstance->get_lang('dbhost').' - '.get_lang('Database'),
     $plugininstance->get_lang('coursefolder'),
     $plugininstance->get_lang('enabled'),
     $plugininstance->get_lang('lastcron'),
@@ -51,7 +50,8 @@ $i = 0;
 foreach ($instances as $instance) {
     $checkbox = '<input type="checkbox" class="vnodessel" name="vids[]" value="'.$instance->id.'" />';
 
-    $sitelink = '<a href="'.$instance->root_web.'" target="_blank">'.$instance->sitename.'</a>';
+    //$sitelink = '<a href="'.$instance->root_web.'" target="_blank">'.$instance->sitename.'</a>';
+    $sitelink = $instance->sitename;
 
     if ($instance->visible) {
         $status = '<a href="'.$thisurl.'?what=disableinstances&vids[]='.$instance->id.'" >
@@ -77,10 +77,9 @@ foreach ($instances as $instance) {
     $crondate = ($instance->lastcron) ? date('r', $instance->lastcron) : '';
     $data = array(
         $checkbox,
-        $sitelink,
+        $sitelink.' ('.Display::url($instance->root_web, $instance->root_web).')',
         $instance->institution,
-        Display::url($instance->root_web, $instance->root_web),
-        $instance->db_host,
+        $instance->db_host.' - '.$instance->main_database,
         $instance->slug,
         $status,
         $crondate,

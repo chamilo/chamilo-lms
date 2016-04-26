@@ -59,12 +59,25 @@ $wwwroot = $_configuration['root_web'];
 
 //A simple select
 $options = array(0 => $plugininstance->get_lang('no'), 1 => $plugininstance->get_lang('yes'));
-$form->addlabel('', '<a href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.$plugininstance->get_lang('manage_instances').'</a>');
+$form->addlabel('', '<a href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.
+    $plugininstance->get_lang('manage_instances').'</a>');
 $form->addElement('header', $plugininstance->get_lang('enabling'));
 $form->addElement('select', 'enable_virtualisation', $plugininstance->get_lang('enable_virtualisation'), $options);
-$form->addElement('text', 'course_real_root', $plugininstance->get_lang('courserealroot'));
-$form->addElement('text', 'archive_real_root', $plugininstance->get_lang('archiverealroot'));
-$form->addElement('text', 'home_real_root', $plugininstance->get_lang('homerealroot'));
+$form->addElement(
+    'text',
+    'course_real_root',
+    [$plugininstance->get_lang('courserealroot'), 'Example: '.api_get_path(SYS_PATH).'var/courses/']
+);
+$form->addElement(
+    'text',
+    'archive_real_root',
+    [$plugininstance->get_lang('archiverealroot'), 'Example: '.api_get_path(SYS_PATH).'var/archive/']
+);
+$form->addElement(
+    'text',
+    'home_real_root',
+    [$plugininstance->get_lang('homerealroot'), 'Example: '.api_get_path(SYS_PATH).'var/home/']
+);
 
 $form->addElement('header', $plugininstance->get_lang('proxysettings'));
 $form->addElement('text', 'httpproxyhost', $plugininstance->get_lang('httpproxyhost'));
@@ -74,8 +87,8 @@ $form->addElement('text', 'httpproxyuser', $plugininstance->get_lang('httpproxyu
 $form->addElement('text', 'httpproxypassword', $plugininstance->get_lang('httpproxypassword'));
 
 $form->addElement('header', $plugininstance->get_lang('mysqlcmds'));
-$form->addElement('text', 'cmd_mysql', $plugininstance->get_lang('mysqlcmd'));
-$form->addElement('text', 'cmd_mysqldump', $plugininstance->get_lang('mysqldumpcmd'));
+$form->addElement('text', 'cmd_mysql', [$plugininstance->get_lang('mysqlcmd'), 'Example: /usr/bin/mysql']);
+$form->addElement('text', 'cmd_mysqldump', [$plugininstance->get_lang('mysqldumpcmd'), 'Example: /usr/bin/mysqldump']);
 
 $form->addButtonSave($plugininstance->get_lang('Save'));
 

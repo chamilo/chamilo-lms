@@ -50,46 +50,52 @@ $TechnicalIssuesDescription = 'This portal is currently experiencing technical i
 
 if (is_int($global_error_code) && $global_error_code > 0) {
 
-    if (class_exists('Template')) {
+    if (class_exists('Template') && function_exists('api_get_configuration_value')) {
         $theme = Template::getThemeFallback().'/';
     } else {
         $theme = 'chamilo';
     }
 
-	$css_path = 'app/Resources/public/css/';
-	$css_web_assets = 'web/assets/';
-	$css_web_path = 'web/css/';
+    $css_path = 'app/Resources/public/css/';
+    $css_web_assets = 'web/assets/';
+    $css_web_path = 'web/css/';
     $themePath = $css_path.'themes/'.$theme.'/default.css';
     $css_web_fontawesome = $css_web_assets.'fontawesome/css/font-awesome.css';
-	$bootstrap_file = $css_web_assets.'bootstrap/dist/css/bootstrap.min.css';
-	$css_base_file = $css_web_path.'base.css';
+    $bootstrap_file = $css_web_assets.'bootstrap/dist/css/bootstrap.min.css';
+    $css_base_file = $css_web_path.'base.css';
 
     $css_list = array($bootstrap_file, $css_base_file, $themePath);
 
     $web_img = 'main/img';
-	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
-	$root_rel = htmlentities($_SERVER['PHP_SELF']);
-	if (!empty($root_rel)) {
-		$pos = strrpos($root_rel, '/');
-		$root_rel = substr($root_rel, 0, $pos - strlen($root_rel) + 1);
-		if (strpos($root_rel, '/main/') !== false) {
-			$pos = 0;
-			while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), '/main/')) !== false) {
-				$pos = $test_pos + 1;
-			}
-			$root_rel = substr($root_rel, 0, $pos);
-		} elseif (strpos($root_rel, api_get_path(REL_COURSE_PATH)) !== false) {
-			$pos = 0;
-			while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), api_get_path(REL_COURSE_PATH))) !== false) {
-				$pos = $test_pos + 1;
-			}
-			$root_rel = substr($root_rel, 0, $pos);
-		}
-	}
+    $root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
+    $root_rel = htmlentities($_SERVER['PHP_SELF']);
+    if (!empty($root_rel)) {
+        // If we could obtain a relative path for the chamilo dir from the $_SERVER array
+        $pos = strrpos($root_rel, '/'); //search for last "/" in path
+        $root_rel = substr($root_rel, 0, $pos - strlen($root_rel) + 1);
+        if (strpos($root_rel, '/main/') !== false) {
+            // If the current path contains '/main/', then
+            $pos = 0;
+            while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), '/main/')) !== false) {
+                $pos = $test_pos + 1;
+            }
+            $root_rel = substr($root_rel, 0, $pos);
+        } elseif (strpos($root_rel, '/courses/') !== false && function_exists('api_get_path') && strpos($root_rel, api_get_path(REL_COURSE_PATH)) !== false) {
+            $pos = 0;
+            while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), api_get_path(REL_COURSE_PATH))) !== false) {
+                $pos = $test_pos + 1;
+            }
+            $root_rel = substr($root_rel, 0, $pos);
+        } elseif (!function_exists('api_get_path')) {
+            // Sometimes the api_get_path() function might be unavailable (system not installed, for example)
+            // In this case, we assume the root folder, although this might trigger issues with Chamilo installed in a subfolder
+            $root_rel = '/';
+        }
+    }
 
-	$installation_guide_url = $root_rel.'documentation/installation_guide.html';
+    $installation_guide_url = $root_rel.'documentation/installation_guide.html';
 
-	$css_def = '';
+    $css_def = '';
     foreach ($css_list as $css_item) {
         $css_base_chamilo_file = $root_sys.$css_item;
         if (file_exists($css_base_chamilo_file)) {
@@ -97,34 +103,34 @@ if (is_int($global_error_code) && $global_error_code > 0) {
         }
     }
 
-	$global_error_message = array();
+    $global_error_message = array();
 
-	switch ($global_error_code) {
-		case 1:
-			$global_error_message['section'] = $SectionSystemRequirementsProblem;
-			$global_error_message['title'] = $IncorrectPhpVersionTitle;
-			$php_version = function_exists('phpversion') ? phpversion() : (defined('PHP_VERSION') ? PHP_VERSION : '');
-			$php_version = empty($php_version) ? '' : '(PHP '.$php_version.')';
-			$IncorrectPhpVersionDescription = str_replace('%s1', $php_version, $IncorrectPhpVersionDescription);
-			$IncorrectPhpVersionDescription = str_replace('%s2', REQUIRED_PHP_VERSION, $IncorrectPhpVersionDescription);
-			$pos = strpos($IncorrectPhpVersionDescription, '%s3');
-			if ($pos !== false) {
-				$length = strlen($IncorrectPhpVersionDescription);
-				$read_installation_guide = substr($IncorrectPhpVersionDescription, $pos + 3, $length);
-				$IncorrectPhpVersionDescription = substr($IncorrectPhpVersionDescription, 0, $pos);
-				$IncorrectPhpVersionDescription .= '<br /><a class="btn btn-default" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
-			}
-			$global_error_message['description'] = $IncorrectPhpVersionDescription;
-			break;
-		case 2:
-			$global_error_message['section'] = $SectionInstallation;
-			$global_error_message['title'] = $InstallationTitle;
-			if (($pos = strpos($InstallationDescription, '%s')) === false) {
-				$InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation guide';
-			}
-			$read_installation_guide = substr($InstallationDescription, $pos + 2);
-			$InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
-			<div class="row"><div class="col-md-12">
+    switch ($global_error_code) {
+        case 1:
+            $global_error_message['section'] = $SectionSystemRequirementsProblem;
+            $global_error_message['title'] = $IncorrectPhpVersionTitle;
+            $php_version = function_exists('phpversion') ? phpversion() : (defined('PHP_VERSION') ? PHP_VERSION : '');
+            $php_version = empty($php_version) ? '' : '(PHP '.$php_version.')';
+            $IncorrectPhpVersionDescription = str_replace('%s1', $php_version, $IncorrectPhpVersionDescription);
+            $IncorrectPhpVersionDescription = str_replace('%s2', REQUIRED_PHP_VERSION, $IncorrectPhpVersionDescription);
+            $pos = strpos($IncorrectPhpVersionDescription, '%s3');
+            if ($pos !== false) {
+                $length = strlen($IncorrectPhpVersionDescription);
+                $read_installation_guide = substr($IncorrectPhpVersionDescription, $pos + 3, $length);
+                $IncorrectPhpVersionDescription = substr($IncorrectPhpVersionDescription, 0, $pos);
+                $IncorrectPhpVersionDescription .= '<br /><a class="btn btn-default" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
+            }
+            $global_error_message['description'] = $IncorrectPhpVersionDescription;
+            break;
+        case 2:
+            $global_error_message['section'] = $SectionInstallation;
+            $global_error_message['title'] = $InstallationTitle;
+            if (($pos = strpos($InstallationDescription, '%s')) === false) {
+                $InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation guide';
+            }
+            $read_installation_guide = substr($InstallationDescription, $pos + 2);
+            $InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
+            <div class="row"><div class="col-md-12">
 
                     <div class="office">
                     <h2 class="title">Welcome to the Chamilo installation wizard</h2>
@@ -135,38 +141,38 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                           </p>
                     </div>
             </form>';
-			$global_error_message['description'] = $InstallationDescription;
-			break;
-		case 3:
-		case 4:
-		case 5:
-			$global_error_message['section'] = $SectionDatabaseUnavailable;
-			$global_error_message['title'] = $DatabaseUnavailableTitle;
-			$global_error_message['description'] = $DatabaseUnavailableDescription;
-			break;
-		case 6:
-			$global_error_message['section'] = $SectionProtection;
-			$global_error_message['title'] = $AlreadyInstalledTitle;
-			$global_error_message['description'] = $AlreadyInstalledDescription;
-			break;
-		default:
-			$global_error_message['section'] = $SectionTechnicalIssues;
-			$global_error_message['title'] = $TechnicalIssuesTitle;
-			$global_error_message['description'] = $TechnicalIssuesDescription;
-			break;
-	}
+            $global_error_message['description'] = $InstallationDescription;
+            break;
+        case 3:
+        case 4:
+        case 5:
+            $global_error_message['section'] = $SectionDatabaseUnavailable;
+            $global_error_message['title'] = $DatabaseUnavailableTitle;
+            $global_error_message['description'] = $DatabaseUnavailableDescription;
+            break;
+        case 6:
+            $global_error_message['section'] = $SectionProtection;
+            $global_error_message['title'] = $AlreadyInstalledTitle;
+            $global_error_message['description'] = $AlreadyInstalledDescription;
+            break;
+        default:
+            $global_error_message['section'] = $SectionTechnicalIssues;
+            $global_error_message['title'] = $TechnicalIssuesTitle;
+            $global_error_message['description'] = $TechnicalIssuesDescription;
+            break;
+    }
 
-	$show_error_codes = defined('SHOW_ERROR_CODES') && SHOW_ERROR_CODES && $global_error_code != 2;
-	$global_error_message['code'] = $show_error_codes ? $ErrorCode.': '.$global_error_code.'<br /><br />' : '';
-	$global_error_message['details'] = empty($global_error_message['details']) ? '' : ($show_error_codes ? ': '.$global_error_message['details'] : $global_error_message['details']);
-	$global_error_message['organisation'] = $Organisation;
-	$global_error_message['powered_by'] = $PoweredBy;
-	$global_error_message['encoding'] = 'UTF-8';
-	$global_error_message['chamilo_logo'] = "data:image/png;base64,".base64_encode(file_get_contents($root_sys.'web/css/themes/'.$theme.'/images/header-logo.png'));
+    $show_error_codes = defined('SHOW_ERROR_CODES') && SHOW_ERROR_CODES && $global_error_code != 2;
+    $global_error_message['code'] = $show_error_codes ? $ErrorCode.': '.$global_error_code.'<br /><br />' : '';
+    $global_error_message['details'] = empty($global_error_message['details']) ? '' : ($show_error_codes ? ': '.$global_error_message['details'] : $global_error_message['details']);
+    $global_error_message['organisation'] = $Organisation;
+    $global_error_message['powered_by'] = $PoweredBy;
+    $global_error_message['encoding'] = 'UTF-8';
+    $global_error_message['chamilo_logo'] = "data:image/png;base64,".base64_encode(file_get_contents($root_sys.'web/css/themes/'.$theme.'/images/header-logo.png'));
 
     $installChamiloImage = base64_encode(file_get_contents("$root_sys/main/img/install-chamilo.gif"));
 
-	$global_error_message_page =
+    $global_error_message_page =
 <<<EOM
 <!DOCTYPE html>
 <html>
@@ -236,9 +242,9 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		</body>
 </html>
 EOM;
-	foreach ($global_error_message as $key => $value) {
-		$global_error_message_page = str_replace('{'.strtoupper($key).'}', $value, $global_error_message_page);
-	}
-	header('Content-Type: text/html; charset='.$global_error_message['encoding']);
-	die($global_error_message_page);
+    foreach ($global_error_message as $key => $value) {
+        $global_error_message_page = str_replace('{'.strtoupper($key).'}', $value, $global_error_message_page);
+    }
+    header('Content-Type: text/html; charset='.$global_error_message['encoding']);
+    die($global_error_message_page);
 }

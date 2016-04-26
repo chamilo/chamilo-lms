@@ -3796,6 +3796,7 @@ $server->wsdl->addComplexType(
         'nb_days_access_after' => array('name' => 'nb_days_access_after', 'type' => 'xsd:string'),
         'nolimit' => array('name' => 'nolimit', 'type' => 'xsd:string'),
         'user_id' => array('name' => 'user_id', 'type' => 'xsd:string'),
+        'duration' => array('name' => 'duration', 'type' => 'xsd:string'),
         'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string'),
         'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
         'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
@@ -3892,6 +3893,7 @@ function WSCreateSession($params)
         $nb_days_access_after = intval($session_param['nb_days_access_after']);
         $id_coach = $session_param['user_id'];
         $nolimit = $session_param['nolimit'];
+        $duration = $session_param['duration'];
         $original_session_id_name = $session_param['original_session_id_name'];
         $original_session_id_value = $session_param['original_session_id_value'];
         $orig_session_id_value[] = $session_param['original_session_id_value'];
@@ -3977,7 +3979,7 @@ function WSCreateSession($params)
                     0,
                     1,
                     false,
-                    null,
+                    $duration,
                     null,
                     0,
                     array(),
@@ -4063,6 +4065,7 @@ $server->wsdl->addComplexType(
         'nb_days_access_after' => array('name' => 'nb_days_access_after', 'type' => 'xsd:string'),
         'nolimit' => array('name' => 'nolimit', 'type' => 'xsd:string'),
         'user_id' => array('name' => 'user_id', 'type' => 'xsd:string'),
+        'duration' => array('name' => 'duration', 'type' => 'xsd:string'),
         'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string'),
         'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
         'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
@@ -4161,6 +4164,7 @@ function WSEditSession($params)
         $coach_username = $session_param['coach_username'];
         $nolimit = $session_param['nolimit'];
         $id_coach = $session_param['user_id'];
+        $duration = intval($session_param['duration']);
         $extra_list = $session_param['extra'];
 
         $id = SessionManager::getSessionIdFromOriginalId(
@@ -4172,6 +4176,8 @@ function WSEditSession($params)
             $results[] = 0;
             continue;
         }
+
+        if (empty($nolimit) && $duration) $nolimit = 1;
 
         if (empty($nolimit)) {
             $date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start).' 00:00:00';
@@ -4223,7 +4229,7 @@ function WSEditSession($params)
                 $sessionInfo['visibility'],
                 $sessionInfo['description'],
                 $sessionInfo['show_description'],
-                $sessionInfo['duration'],
+                $duration,
                 null,
                 $_user['user_id']
             );

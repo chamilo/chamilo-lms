@@ -16,13 +16,12 @@ api_protect_admin_script();
 require_js('host_list.js', 'vchamilo');
 
 if ($action) {
-    require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/manage.controller.php');
+    require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/manage.controller.php';
 }
 
 $content = Display::page_header('VChamilo Instances');
 
-$table = 'vchamilo';
-$query = "SELECT * FROM $table";
+$query = "SELECT * FROM vchamilo";
 $result = Database::query($query);
 $instances = array();
 while ($instance = Database::fetch_object($result)) {
@@ -74,7 +73,6 @@ foreach ($instances as $instance) {
         $cmd .= '<a href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugininstance->get_lang('deleteinstances').'">
         <img src="'.$plugininstance->pix_url('delete').'" /></a>';
     }
-    
 
     $crondate = ($instance->lastcron) ? date('r', $instance->lastcron) : '';
     $data = array(
@@ -120,9 +118,9 @@ $items = [
     ]
 ];
 
-$content .=  Display::actions($items);
-$content .=  '<form action="'.$thisurl.'">';
-$content .=  $table->toHtml();
+$content .= Display::actions($items);
+$content .= '<form action="'.$thisurl.'">';
+$content .= $table->toHtml();
 
 $selectionoptions = array('<option value="0" selected="selected">'.$plugininstance->get_lang('choose').'</option>');
 $selectionoptions[] = '<option value="deleteinstances">'.$plugininstance->get_lang('deleteinstances').'</option>';

@@ -264,7 +264,7 @@ if ($action == 'clearcache') {
             $vidlist = implode("','", $_REQUEST['vids']);
             $toclear = Database::select('*', 'vchamilo', array('where' => array("id IN ('$vidlist')" => array())));
         } else {
-            $vid = $_REQUEST['vid'];
+            $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : 0;
             if ($vid) {
                 $vhosts = Database::select('*', 'vchamilo', array('where' => array('id = ?' => $vid)));
                 $vhost = (object)array_pop($vhosts);
@@ -284,31 +284,42 @@ if ($action == 'clearcache') {
     foreach ($toclear as $fooid => $instance) {
         if ($fooid == 0) {
             Display::addFlash(Display::return_message("Clearing master template cache"));
+            $templatepath = api_get_path(SYS_ARCHIVE_PATH).'twig';
+            Display::addFlash(Display::return_message("Deleting cache $templatepath \n"));
+            removeDir($templatepath);
         } else {
-            Display::addFlash(Display::return_message("Clearing instance template cache"));
+            $coursePath = vchamilo_get_config('vchamilo', 'course_real_root');
+            $homePath = vchamilo_get_config('vchamilo', 'home_real_root');
+            $archivePath = vchamilo_get_config('vchamilo', 'archive_real_root');
+
+            // Get instance archive
+            $archivepath = api_get_path(SYS_ARCHIVE_PATH, (array)$instance);
+            $templatepath = $archivePath.'/'.$instance['slug'].'/twig';
+            Display::addFlash(Display::return_message("Deleting cache $templatepath \n"));
+            removeDir($templatepath);
         }
 
-        // Get instance archive
-        $archivepath = api_get_path(SYS_ARCHIVE_PATH, (array)$instance);
-        $templatepath = $archivepath.'twig';
-        Display::addFlash(Display::return_message("Deleting $templatepath \n"));
-        removeDir($templatepath);
     }
 }
 
 if ($action == 'setconfigvalue') {
     $select = '<select name="preset" onchange="setpreset(this.form, this)">';
-    $vars = $DB->get_records('settings_current', array(), 'id,variable,subkey', 'variable,subkey');
-    foreach($vars as $setting) {
-        $select .= '<option name="'.$setting->variable.'/'.$setting->subkey.'">'.$setting->variable.' / '.$setting->subkey.'</option>';
+    $settings = api_get_settings();
+    foreach ($settings as $setting) {
+        $select .= '<option name="'.$setting['variable'].'/'.$setting['subkey'].'">'.
+            $setting['variable'].' - '.$setting['subkey'].
+        '</option>';
     }
     $select .= '</select>';
 
-    Display::display_header();
+    $vidlist = isset($_REQUEST['vids']) ? implode("','", $_REQUEST['vids']) : '';
+    if (empty($vidlist)) {
+        api_not_allowed(true, 'No virtual chamilo selected');
+    }
 
+    Display::display_header();
     echo '<h2>'.$plugininstance->get_lang('sendconfigvalue').'</h2>';
     echo '<form name="setconfigform">';
-    $vidlist = implode("','", $_REQUEST['vids']);
     echo '<input type="hidden" name="vidlist" value="'.$vidlist.'" />';
     echo '<input type="hidden" name="confirm" value="1" />';
     echo '<table>';
@@ -316,7 +327,8 @@ if ($action == 'setconfigvalue') {
     echo '<tr><td><input type="text" name="variable" value="" size="30" /></td>';
     echo '<td><input type="text" name="subkey" value="" size="30" /></td></tr>';
     echo '<tr><td colspan="2">'.$select.'</td></tr>';
-    echo '<tr><td colspan="2"><input type="submit" name="go_btn" value="'.$plugininstance->get_lang('distributevalue').'"</td></tr>';
+    echo '<tr><td colspan="2">';
+    echo '<input class="btn btn-primary" type="submit" name="go_btn" value="'.$plugininstance->get_lang('distributevalue').'"</td></tr>';
     echo '</table>';
     echo '</form>';
     Display::display_footer();

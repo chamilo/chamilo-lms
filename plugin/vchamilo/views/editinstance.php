@@ -23,7 +23,7 @@ $course_real_root = vchamilo_get_config('vchamilo', 'course_real_root');
 $homePath = vchamilo_get_config('vchamilo', 'home_real_root');
 
 if (empty($course_real_root) || empty($homePath)) {
-    api_not_allowed('You have to setup the course real root');
+    api_not_allowed(true, 'You have to setup the course real root');
 }
 
 // security

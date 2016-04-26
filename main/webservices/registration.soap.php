@@ -4174,8 +4174,8 @@ function WSEditSession($params)
         }
 
         if (empty($nolimit)) {
-            $date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-            $date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
+            $date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start).' 00:00:00';
+            $date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end).' 23:59:59';
         } else {
             $date_start="";
             $date_end="";
@@ -4209,7 +4209,7 @@ function WSEditSession($params)
             }
             $sessionInfo = api_get_session_info($id);
 
-            SessionManager::edit_session(
+            $editResult = SessionManager::edit_session(
                 $id,
                 $name,
                 $date_start,
@@ -4241,7 +4241,7 @@ function WSEditSession($params)
                 }
             }
 
-            $results[] = 1;
+            $results[] = $editResult?1:0;
             continue;
         }
 

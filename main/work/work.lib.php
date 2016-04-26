@@ -3658,7 +3658,7 @@ function getWorkCommentForm($work)
     );
 
     $form->addElement('file', 'file', get_lang('Attachment'));
-    $form->addElement('textarea', 'comment', get_lang('Comment'), array('class' => 'span5', 'rows' => '8'));
+    $form->add_html_editor('comment', get_lang('Comment'));
     $form->addElement('hidden', 'id', $work['id']);
     if (api_is_allowed_to_edit()) {
         $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));

@@ -31,7 +31,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         return ;
     }
 
-    ctrace("Registering VChamilo");
+    ctrace("Registering: ".$data->root_web);
     $tablename = Database::get_main_table('vchamilo');
     $sql = "SELECT * FROM $tablename 
             WHERE root_web = '".Database::escape_string($data->root_web)."'";
@@ -114,8 +114,6 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         }
     }
 
-    ctrace("Checking direct home dir ");
-
     // if real homedir IS NOT under chamilo install, link to it
     // Seems not be necessary as we can globally link the whole Home container
     /*
@@ -141,8 +139,6 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         }
     }
 
-    ctrace("Checking direct archive dir ");
-
     // if real archivedir IS NOT under chamilo install, link to it
     // Seems not be necessary as we can globally link the whole Home container
     /*
@@ -164,7 +160,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         ctrace("Creating databases from template $template ");
         vchamilo_create_databases($data);
         ctrace("Loading data template $template ");
-        vchamilo_load_db_template($data, 'main_database', $template);
+        vchamilo_load_db_template($data, $template);
         ctrace("Coying files from template $template ");
         vchamilo_load_files_from_template($data, $template);
     }

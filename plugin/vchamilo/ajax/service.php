@@ -12,7 +12,7 @@ $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 api_protect_admin_script();
 
 if ($action == 'syncthis') {
-    $res = include_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/syncparams.controller.php');
+    $res = include_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/syncparams.controller.php';
     if (!$res) {
         echo '<span class="ok">Success</span>';
     } else {

@@ -63,6 +63,8 @@ if ($action == 'syncthis') {
             'variable' => $setting['variable'],
             'subkey' => $setting['subkey'],
             'category' => $setting['category'],
+            'type' => $setting['type'],
+            'comment' => $setting['comment'],
             'access_url' => $setting['access_url'],
         );
 
@@ -71,10 +73,10 @@ if ($action == 'syncthis') {
             $table = $chm['main_database'].".settings_current";
             if ($delifempty && empty($value)) {
                 $sql = "DELETE FROM $table WHERE  
-                            selected_value = '$value' AND   
-                            variable = '{{$setting['variable']}}' AND 
-                            access_url = '{$setting['access_url']}'
-                        ";
+                    selected_value = '$value' AND   
+                    variable = '{{$setting['variable']}}' AND 
+                    access_url = '{$setting['access_url']}'
+                ";
                 Database::query($sql);
 
                 //$res = $DB->delete_records('settings_current', $params, $chm->main_database);
@@ -82,10 +84,10 @@ if ($action == 'syncthis') {
             } else {
 
                 $sql = " SELECT * FROM $table 
-                     WHERE 
-                        variable = '{{$setting['variable']}}' AND 
-                        subkey = '{$setting['subkey']}'
-                    ";
+                         WHERE 
+                            variable = '".$setting['variable']."' AND 
+                            access_url = '{$setting['access_url']}'
+                        ";
                 $result = Database::query($sql);
 
                 if (Database::num_rows($result)) {
@@ -94,7 +96,7 @@ if ($action == 'syncthis') {
                       WHERE id = $settingId";
                     Database::query($sql);
                 } else {
-                    Database::insert($table, $params);
+                    Database::insert($table, $params, true);
                 }
             }
         }

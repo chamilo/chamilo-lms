@@ -1,7 +1,7 @@
 <?php
 
 use Cocur\Slugify\Slugify;
-
+use Symfony\Component\Finder\Finder;
 require_once 'lib/bootlib.php';
 require_once 'lib/vchamilo_plugin.class.php';
 
@@ -109,7 +109,7 @@ function vchamilo_boot_connection(&$_configuration)
         // Only relevant for pdo_sqlite, specifies the path to the SQLite database.
         'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
         // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
-        'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : ''
+        'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : '',
     );
     try {
         $database = new \Database();
@@ -167,15 +167,16 @@ function vchamilo_get_default_course_index_fragment() {
     return "<html><head></head><body></body></html>";
 }
 
-function vchamilo_template_exists($template) {
+function vchamilo_template_exists($template)
+{
     global $_configuration;
 
     // Find and checktemplate directory (files and SQL).
-    $separator    =    DIRECTORY_SEPARATOR;
-    $templatefoldername    =    'plugin'.$separator.'vchamilo'.$separator.'templates';
+    $separator = DIRECTORY_SEPARATOR;
+    $templatefoldername = 'plugin'.$separator.'vchamilo'.$separator.'templates';
     $absolute_templatesdir = $_configuration['root_sys'].$templatefoldername;
-    $relative_datadir    =    $templatefoldername.$separator.$template.'_sql';
-    $absolute_datadir    =    $_configuration['root_sys'].$relative_datadir;
+    $relative_datadir = $templatefoldername.$separator.$template.'_sql';
+    $absolute_datadir = $_configuration['root_sys'].$relative_datadir;
 
     return is_dir($absolute_datadir);
 }
@@ -206,14 +207,14 @@ function vchamilo_drop_databases(&$vchamilo)
     foreach($sqls as $sql){
         $res = Database::query($sql);
         if (!$res){
-            $erroritem = new StdClass();
+            $erroritem = new stdClass();
             $erroritem->message = $plugininstance->get_lang('couldnotdropdb');
             $erroritem->on = 'db';
             $erroritems[] = $erroritem;
         }
     }
 
-    if (!empty($erroritems)){
+    if (!empty($erroritems)) {
         return $erroritems;
     }
 
@@ -254,13 +255,9 @@ function vchamilo_create_databases($vchamilo)
 */
 function vchamilo_get_database_dump_cmd($vchamilodata)
 {
-    global $CFG;
+    $pgm = vchamilo_get_config('vchamilo', 'mysql_cmd');
 
-    $pgm = vchamilo_get_config('mysql_cmd');
-
-    // Checks the needed program.
-    Display::addFlash(Display::return_message("load_database_from_dump : checking database command"));
-    if (!$pgm){
+    if (!$pgm) {
         $pgm = '/usr/bin/mysql';
         Display::addFlash(Display::return_message("Using default database command $pgm "));
     }
@@ -269,7 +266,6 @@ function vchamilo_get_database_dump_cmd($vchamilodata)
     $phppgm = str_replace("\"", '', $phppgm);
     $pgm = str_replace("/", DIRECTORY_SEPARATOR, $pgm);
 
-    Display::addFlash(Display::return_message('load_database_from_dump : checking command is available'));
     if (!is_executable($phppgm)){
         print_error('databasecommanddoesnotmatchanexecutablefile');
         return false;
@@ -277,49 +273,44 @@ function vchamilo_get_database_dump_cmd($vchamilodata)
 
     // Retrieves the host configuration (more secure).
     $vchamilodata = vchamilo_make_this();
-    if (strstr($vchamilodata->db_host, ':') !== false){
-        list($vchamilodata->db_host, $vchamilodata->db_port) = split(':', $vchamilodata->db_host);
+    if (strstr($vchamilodata->db_host, ':') !== false) {
+        list($vchamilodata->db_host, $vchamilodata->db_port) = explode(':', $vchamilodata->db_host);
     }
 
     // Password.
-    if (!empty($vchamilodata->db_password)){
+    if (!empty($vchamilodata->db_password)) {
         $vchamilodata->db_password = '-p'.escapeshellarg($vchamilodata->db_password).' ';
     }
 
     // Making the command line (see 'vconfig.php' file for defining the right paths).
-    $sqlcmd    = $pgm.' -h'.$vchamilodata->db_host.(isset($vchamilodata->db_port) ? ' -P'.$vchamilodata->db_port.' ' : ' ' );
+    $sqlcmd = $pgm.' -h'.$vchamilodata->db_host.(isset($vchamilodata->db_port) ? ' -P'.$vchamilodata->db_port.' ' : ' ' );
     $sqlcmd .= '-u'.$vchamilodata->db_user.' '.$vchamilodata->db_password;
     $sqlcmd .= '%DATABASE% < ';
 
     return $sqlcmd;
 }
 
-function vchamilo_load_db_template($vchamilo, $dbtemplate, $template){
+function vchamilo_load_db_template($vchamilo, $template) {
     global $_configuration;
 
     // Make template directory (files and SQL).
-    $separator    =    DIRECTORY_SEPARATOR;
-    $templatefoldername    =    'plugin'.$separator.'vchamilo'.$separator.'templates';
-    $absolute_templatesdir = $_configuration['root_sys'].$templatefoldername;
-    $relative_datadir    =    $templatefoldername.$separator.$template.'_sql';
-    $absolute_datadir    =    $_configuration['root_sys'].$relative_datadir;
+    $separator = DIRECTORY_SEPARATOR;
+    $templatefoldername = 'plugin'.$separator.'vchamilo'.$separator.'templates';
+    $absolute_datadir = $_configuration['root_sys'].$templatefoldername.$separator.$template.$separator.'dump.sql';
 
-    $filerad = preg_replace('/_database$/', '', $dbtemplate);
-    $sqlfile = 'chamilo_master_'.$filerad.'.sql';
-
-    if (!$sqlcmd = vchamilo_get_database_dump_cmd($vchamilo)){
+    if (!$sqlcmd = vchamilo_get_database_dump_cmd($vchamilo)) {
         return false;
     }
 
-    $sqlcmd = str_replace('%DATABASE%', $vchamilo->$dbtemplate, $sqlcmd);
+    $sqlcmd = str_replace('%DATABASE%', $vchamilo->main_database, $sqlcmd);
 
     // Make final commands to execute, depending on the database type.
-    $import = $sqlcmd.$absolute_datadir.'/'.$sqlfile;
+    $import = $sqlcmd.$absolute_datadir;
 
     // Execute the command.
     Display::addFlash(Display::return_message("load_database_from_dump : executing feeding sql as \n $import "));
 
-    if (!defined('CLI_SCRIPT')){
+    if (!defined('CLI_SCRIPT')) {
         putenv('LANG=en_US.utf-8');
     }
     // ensure utf8 is correctly handled by php exec()
@@ -339,13 +330,13 @@ function vchamilo_load_db_template($vchamilo, $dbtemplate, $template){
 * @param handle $cnx
 * @param array $vars an array of vars to inject in the bulk file before processing
 */
-function vchamilo_execute_db_sql(&$vchamilo, $bulkfile, $cnx = null, $vars=null, $filter=null){
-    global $_configuration;
-
-   if (file_exists($bulkfile)){
-        $erroritem = new StdClass();
+function vchamilo_execute_db_sql(&$vchamilo, $bulkfile, $cnx = null, $vars = null, $filter = null)
+{
+   if (file_exists($bulkfile)) {
+        $erroritem = new stdClass();
         $erroritem->message = "vchamilo_load_db_template : Bulk file $bulkfile not found";
         $erroritems[] = $erroritem;
+
         return $erroritem;
     }
 
@@ -391,7 +382,7 @@ function vchamilo_execute_db_sql(&$vchamilo, $bulkfile, $cnx = null, $vars=null,
             if ($query == '') continue; // avoid empty queries
             $query = mb_convert_encoding($query, 'iso-8859-1', 'auto');
             if (!$res = vchamilo_execute_query($vchamilo, $query, $cnx)){
-                $erroritem = new StdClass();
+                $erroritem = new stdClass();
                 $erroritem->message = "vchamilo_load_db_template : Load error on query $l";
                 $erroritem->content = $query;
                 $erroritems[] = $erroritem;
@@ -459,7 +450,7 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad)
     $pgm = !empty($mysqldumpcmd) ? stripslashes($mysqldumpcmd) : false ;
 
     if (!$pgm) {
-        $erroritem = new StdClass();
+        $erroritem = new stdClass();
         $erroritem->message = "Database dump command not available check here: ";
         $url = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=vchamilo';
         $erroritem->message .= Display::url($url, $url);
@@ -470,7 +461,7 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad)
         $pgm = str_replace('/', DIRECTORY_SEPARATOR, $pgm);
 
         if (!is_executable($phppgm)){
-            $erroritem = new StdClass();
+            $erroritem = new stdClass();
             $erroritem->message = "Database dump command $phppgm does not match any executable";
             return array($erroritem);
         }
@@ -501,15 +492,23 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad)
 
 /**
 * read manifest values in vchamilo template.
-* @uses $CFG
 */
 function vchamilo_get_vmanifest($version)
 {
-    include(api_get_path(SYS_PATH, SYS_PATH).'/plugin/vchamilo/templates/'.$version.'_sql/manifest.php');
-    $manifest->templatewwwroot = $templatewwwroot;
-    $manifest->templatevdbprefix = $templatevdbprefix;
-    $manifest->coursefolder = $coursefolder;
-    return $manifest;
+    $file = api_get_path(SYS_PATH).'/plugin/vchamilo/templates/'.$version.'/manifest.php';
+    if (file_exists($file)) {
+
+        include($file);
+
+        $manifest = new stdClass();
+        $manifest->templatewwwroot = $templatewwwroot;
+        //    $manifest->templatevdbprefix = $templatevdbprefix;
+        //    $manifest->coursefolder = $coursefolder;
+
+        return $manifest;
+    }
+
+    return false;
 }
 
 /**
@@ -544,19 +543,21 @@ function vchamilo_get_available_templates()
     $absolute_templatesdir = $_configuration['root_sys'].$templatefoldername;
 
     // Scans the templates.
-    if (!is_dir($absolute_templatesdir)){
+    if (!is_dir($absolute_templatesdir)) {
         mkdir($absolute_templatesdir, 0777, true);
     }
-    $dirs = glob($absolute_templatesdir.'/*');
-    $vtemplates = preg_grep("/[^\/](.*)_vchamilodata$/", $dirs);
+
+    $finder = new \Symfony\Component\Finder\Finder();
+    $dirs = $finder->in($absolute_templatesdir)->depth('== 0');
 
     // Retrieves template(s) name(s). Should be hostnames.
     $templatesarray = array('' => $plugininstance->get_lang('emptysite'));
-    if ($vtemplates){
-        foreach($vtemplates as $vtemplatedir){
-            preg_match("/([^\/]*)_vchamilodata/", $vtemplatedir, $matches);
-            $templatesarray[$matches[1]] = $matches[1];
-            if (!isset($first)) $first = $matches[1];
+    if ($dirs) {
+        /** @var Symfony\Component\Finder\SplFileInfo $dir */
+        foreach ($dirs as $dir) {
+            if (is_dir($dir->getPathname())) {
+                $templatesarray[$dir->getRelativePathname()] = $dir->getRelativePathname();
+            }
         }
     }
 
@@ -607,12 +608,8 @@ function vchamilo_load_files_from_template($vchamilo, $template)
     global $_configuration;
 
     // Make template directory (files and SQL).
-    $separator    =    DIRECTORY_SEPARATOR;
-    $templatefoldername    =    'plugin'.$separator.'vchamilo'.$separator.'templates';
-    $relative_template_datadir    =    $templatefoldername.$separator.$template.'_vchamilodata';
-
-    $absolute_templatesdir = $_configuration['root_sys'].$templatefoldername;
-    $absolute_template_datadir = $_configuration['root_sys'].$relative_template_datadir;
+    $separator = DIRECTORY_SEPARATOR;
+    $absolute_template_datadir = $_configuration['root_sys'].'plugin'.$separator.'vchamilo'.$separator.'templates'.$separator.$template;
 
     $vchamilo->virtual = true;
 
@@ -621,75 +618,44 @@ function vchamilo_load_files_from_template($vchamilo, $template)
     $vhomepath = api_get_path(SYS_HOME_PATH, (array)$vchamilo);
     $varchivepath = api_get_path(SYS_ARCHIVE_PATH, (array)$vchamilo);
 
-    echo "archiveapth : $varchivepath";
+    Display::addFlash(Display::return_message("archiveapth : $varchivepath"));
 
     // Rename some dirs top match instance requirements
     $manifest = vchamilo_get_vmanifest($template);
+    if ($manifest) {
 
-    // get the protocol free hostname
-    $originarchivedir = preg_replace('/https?:\/\//', '', $manifest->templatewwwroot);
-    $originhomedir = preg_replace('/https?:\/\//', '', $manifest->templatewwwroot);
+        // get the protocol free hostname
+        Display::addFlash(
+            Display::return_message("Copying {$absolute_template_datadir}/data/courses => $vcoursepath")
+        );
+        Display::addFlash(
+            Display::return_message("Copying {$absolute_template_datadir}/data/archive => $varchivepath")
+        );
+        Display::addFlash(
+            Display::return_message("Copying {$absolute_template_datadir}/data/home => $vhomepath")
+        );
 
-    Display::addFlash(Display::return_message("Copying {$absolute_template_datadir}/{$manifest->coursefolder} => $vcoursepath"));
-    Display::addFlash(Display::return_message("Copying {$absolute_template_datadir}/archive/{$originarchivedir} => $varchivepath"));
-    Display::addFlash(Display::return_message("Copying {$absolute_template_datadir}/home/{$originhomedir} => $vhomepath"));
-
-    copyDirContentTo(chop_last_slash($absolute_template_datadir.'/'.$manifest->coursefolder), chop_last_slash($vcoursepath), false);
-    copyDirContentTo(chop_last_slash($absolute_template_datadir.'/archive/'.$originarchivedir), chop_last_slash($varchivepath), false);
-    copyDirContentTo(chop_last_slash($absolute_template_datadir.'/home/'.$originhomedir), chop_last_slash($vhomepath), false);
+        copyDirTo(
+            chop_last_slash($absolute_template_datadir.'/data/courses'),
+            chop_last_slash($vcoursepath),
+            false
+        );
+        copyDirTo(
+            chop_last_slash($absolute_template_datadir.'/data/archive'),
+            chop_last_slash($varchivepath),
+            false
+        );
+        copyDirTo(
+            chop_last_slash($absolute_template_datadir.'/data/home'),
+            chop_last_slash($vhomepath),
+            false
+        );
+    }
 }
 
 function chop_last_slash($path)
 {
     return preg_replace('/\/$/', '', $path);
-}
-
-/**
- * Moves a directory and its content to an other area
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - $orig_dir_path (string) - the path of the directory to move
- * @param  - $destination (string) - the path of the new area
- * @return - no return
- */
-function copyDirContentTo($source, $destination, $move = true) {
-
-    // Extract directory name - create it at destination - update destination trail
-    if (!is_dir($source)) {
-        return;
-    }
-
-    if (!is_dir($destination)) {
-        mkdir($destination, api_get_permissions_for_new_directories());
-    }
-
-    $DIR = opendir($source);
-
-    while ($element = readdir($DIR)) {
-        if ($element == '.' || $element == '..') {
-            continue; // Skip the current and parent directories
-        } elseif (is_file($source.'/'.$element)) {
-            copy($source.'/'.$element, $destination.'/'.$element);
-
-            if ($move) {
-                unlink($source.'/'.$element) ;
-            }
-        } elseif (is_dir($source.'/'.$element)) {
-            $dirs_to_copy[] = $element;
-        }
-    }
-
-    closedir($DIR) ;
-
-    if (sizeof($dirs_to_copy) > 0) {
-        foreach ($dirs_to_copy as $dir) {
-            copyDirContentTo($source.'/'.$dir, $destination.'/'.$dir, $move); // Recursivity
-        }
-    }
-
-    if ($move) {
-        rmdir($source) ;
-    }
 }
 
 // from moot
@@ -752,8 +718,8 @@ function get_config($module, $key = false, $isplugin = true) {
     }
 }
 
-function set_config($key, $value, $module, $isplugin = false) {
-
+function set_config($key, $value, $module, $isplugin = false)
+{
     if ($isplugin) {
         $key = $module.'_'.$key;
     }
@@ -770,7 +736,7 @@ function set_config($key, $value, $module, $isplugin = false) {
  * gets a string from a component
  *
  */
-function get_string($key, $component = 'local_ent_installer', $a = ''){
+function get_string($key, $component = 'local_ent_installer', $a = '') {
     global $_configuration;
     static $strings;
     static $fallbackstrings;
@@ -906,7 +872,19 @@ function ctrace($str) {
  * @param int       The changeability of this setting for non-master urls
  * @return boolean  true on success, false on failure
  */
-function api_update_setting($val, $var, $sk = null, $type = 'textfield', $c = null, $title = '', $com = '', $sc = null, $skt = null, $a = 1, $v = 0) {
+function api_update_setting(
+    $val,
+    $var,
+    $sk = null,
+    $type = 'textfield',
+    $c = null,
+    $title = '',
+    $com = '',
+    $sc = null,
+    $skt = null,
+    $a = 1,
+    $v = 0
+) {
     global $_setting;
 
     if (empty($var) || !isset($val)) {
@@ -1012,6 +990,7 @@ function api_update_setting($val, $var, $sk = null, $type = 'textfield', $c = nu
  */
 function make_tms($time) {
     $tms = date('Y-m-d H:i:s', $time);
+
     return $tms;
 }
 

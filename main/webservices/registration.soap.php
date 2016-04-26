@@ -5150,7 +5150,6 @@ function WSSuscribeUsersToSession($params)
         $original_session_id_name = $usersession_params['original_session_id_name'];
         $original_user_id_name = $usersession_params['original_user_id_name'];
         $original_user_id_values = $usersession_params['original_user_id_values'];
-        $orig_session_id_value[] = $original_session_id_value;
 
         $sessionId = SessionManager::getSessionIdFromOriginalId(
             $original_session_id_value,
@@ -5158,11 +5157,15 @@ function WSSuscribeUsersToSession($params)
         );
 
         if (empty($sessionId)) {
+            $orig_session_id_value[] = $original_session_id_value;
             $results[] = 0;
             continue;
         }
 
         foreach ($original_user_id_values as $key => $row_original_user_list) {
+            $orig_session_id_value[] = $original_session_id_value;
+            $orig_user_id_value[] = $row_original_user_list['original_user_id_value'];
+
             $user_id = UserManager::get_user_id_from_original_id(
                 $row_original_user_list['original_user_id_value'],
                 $original_user_id_name
@@ -5173,6 +5176,7 @@ function WSSuscribeUsersToSession($params)
             }
 
             if ($user_id == 0) {
+                $results[] = 0;
                 continue; // user_id doesn't exist.
             } else {
                 $sql = "SELECT user_id FROM $user_table
@@ -5180,12 +5184,11 @@ function WSSuscribeUsersToSession($params)
                 $resu = Database::query($sql);
                 $r_check_user = Database::fetch_row($resu);
                 if (!empty($r_check_user[0])) {
+                    $results[] = 0;
                     continue; // user_id is not active.
                 }
 
                 SessionManager::suscribe_users_to_session($sessionId, array($user_id), SESSION_VISIBLE_READ_ONLY, false);
-                $orig_user_id_value[] = $row_original_user_list['original_user_id_value'];
-                $orig_session_id_value[] = $original_session_id_value;
                 $results[] = 1;
 
                 if ($debug) error_log("subscribe user:$user_id to session $sessionId");
@@ -5380,7 +5383,6 @@ function WSUnsuscribeUsersFromSession($params)
         $original_session_id_name = $usersession_params['original_session_id_name'];
         $original_user_id_name = $usersession_params['original_user_id_name'];
         $original_user_id_values = $usersession_params['original_user_id_values'];
-        $orig_session_id_value[] = $original_session_id_value;
 
         $id_session = SessionManager::getSessionIdFromOriginalId(
             $original_session_id_value,
@@ -5388,17 +5390,21 @@ function WSUnsuscribeUsersFromSession($params)
         );
 
         if (empty($id_session)) {
+            $orig_session_id_value[] = $original_session_id_value;
             $results[] = 0;
             continue;
         }
 
         foreach ($original_user_id_values as $key => $row_original_user_list) {
+            $orig_session_id_value[] = $original_session_id_value;
+            $orig_user_id_value[] = $row_original_user_list['original_user_id_value'];
             $user_id = UserManager::get_user_id_from_original_id(
                 $row_original_user_list['original_user_id_value'],
                 $original_user_id_name
             );
 
             if ($user_id == 0) {
+                $results[] = 0;
                 continue; // user_id doesn't exist.
             } else {
                 $sql = "SELECT user_id FROM $user_table
@@ -5406,6 +5412,7 @@ function WSUnsuscribeUsersFromSession($params)
                 $resu = Database::query($sql);
                 $r_check_user = Database::fetch_row($resu);
                 if (!empty($r_check_user[0])) {
+                    $results[] = 0;
                     continue; // user_id is not active.
                 }
 
@@ -5414,8 +5421,6 @@ function WSUnsuscribeUsersFromSession($params)
                     $user_id
                 );
 
-                $orig_user_id_value[] = $row_original_user_list['original_user_id_value'];
-                $orig_session_id_value[] = $original_session_id_value;
                 $results[] = 1;
 
                 if ($debug) error_log("Unsubscribe user:$user_id to session:$id_session");

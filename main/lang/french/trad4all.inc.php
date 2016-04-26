@@ -7631,4 +7631,5 @@ $Map = "Carte";
 $MyLocation = "Ma position";
 $ShowCourseInUserLanguage = "Afficher les cours dans la langue de l'utilisateur";
 $AccessData = "Données d'accès";
+$InvalidImageDimensions = "Dimensiones incorrectas de la imagen. Por favor, respete las sugerencias indicadas al lado del campo de imagen.";
 ?>

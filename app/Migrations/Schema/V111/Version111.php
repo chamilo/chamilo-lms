@@ -65,6 +65,8 @@ class Version111 extends AbstractMigrationChamilo
         }
 
         $this->addSql('CREATE TABLE access_url_rel_course_category (id INT AUTO_INCREMENT NOT NULL, access_url_id INT NOT NULL, course_category_id INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+
+        $this->addSql('ALTER TABLE notification CHANGE content content TEXT');
     }
 
     /**

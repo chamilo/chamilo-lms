@@ -262,10 +262,12 @@ function move($source, $target, $forceMove = false, $moveContent = false)
 function copyDirTo($orig_dir_path, $destination, $move = true)
 {
     $fs = new \Symfony\Component\Filesystem\Filesystem();
-    $fs->mirror($orig_dir_path, $destination);
+    if (is_dir($orig_dir_path)) {
+        $fs->mirror($orig_dir_path, $destination);
 
-    if ($move) {
-        $fs->remove($orig_dir_path);
+        if ($move) {
+            $fs->remove($orig_dir_path);
+        }
     }
 }
 

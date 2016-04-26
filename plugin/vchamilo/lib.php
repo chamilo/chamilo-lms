@@ -1,5 +1,7 @@
 <?php
 
+use Cocur\Slugify\Slugify;
+
 require_once 'lib/bootlib.php';
 require_once 'lib/vchamilo_plugin.class.php';
 
@@ -225,20 +227,12 @@ function vchamilo_drop_databases(&$vchamilo)
  * @param    $outputfile        array        The variables to inject in setup template SQL.
  * @return    bool    If TRUE, loading database from template was sucessful, otherwise FALSE.
  */
-function vchamilo_create_databases($vchamilo, $cnx = null)
+function vchamilo_create_databases($vchamilo)
 {
     // availability of SQL commands
     $createstatement = 'CREATE DATABASE %DATABASE% DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ';
 
     $dbs = array($vchamilo->main_database);
-
-    if (!empty($vchamilo->statistics_database) && $vchamilo->main_database != $vchamilo->statistics_database){
-        $dbs[] = $vchamilo->statistics_database;
-    }
-
-    if (!empty($vchamilo->user_personal_database) && ($vchamilo->main_database != $vchamilo->user_personal_database) && ($vchamilo->statistics_database != $vchamilo->user_personal_database)){
-        $dbs[] = $vchamilo->user_personal_database;
-    }
 
     foreach($dbs as $adb){
         Display::addFlash(Display::return_message("Creating DB $adb"));
@@ -429,8 +423,6 @@ function vchamilo_execute_db_sql(&$vchamilo, $bulkfile, $cnx = null, $vars=null,
  */
 function vchamilo_dump_databases($vchamilo, $outputfilerad)
 {
-    global $CFG;
-
     // Separating host and port, if sticked.
     if (strstr($vchamilo->db_host, ':') !== false){
         list($host, $port) = split(':', $vchamilo->db_host);
@@ -447,7 +439,7 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad)
     }
 
     // Password.
-    if (!empty($vchamilo->db_password)){
+    if (!empty($vchamilo->db_password)) {
         $pass = "-p".escapeshellarg($vchamilo->db_password);
     }
 
@@ -456,21 +448,10 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad)
     //if ($CFG->ostype == 'WINDOWS') {
     if (false) {
         $cmd_main = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->main_database}";
-        $cmds[] = $cmd_main . ' > ' . $outputfilerad.'_main.sql';
-
-        if ($vchamilo->statistics_database != $vchamilo->main_database){
-            $cmd_stats = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->statistics_database}";
-            $cmds[] = $cmd_stats . ' > ' . $outputfilerad.'_statistics.sql';
-        }
-
-        if (($vchamilo->user_personal_database != $vchamilo->main_database) && ($vchamilo->user_personal_database != $vchamilo->statistics_database)) {
-            $cmd_user = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->user_personal_database}";
-            $cmds[] = $cmd_user . ' > ' . $outputfilerad.'_user_personal.sql';
-        }
-
+        $cmds[] = $cmd_main . ' > ' . $outputfilerad;
     } else {
         $cmd_main = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->main_database}";
-        $cmds[] = $cmd_main . ' > ' . escapeshellarg($outputfilerad.'_main.sql');
+        $cmds[] = $cmd_main . ' > ' . escapeshellarg($outputfilerad);
     }
 
     $mysqldumpcmd = vchamilo_get_config('vchamilo', 'cmd_mysqldump', true);
@@ -500,17 +481,17 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad)
             // Final command.
             $cmd = $pgm.' '.$cmd;
             // Prints log messages in the page and in 'cmd.log'.
-            if ($LOG = fopen(dirname($outputfilerad).'/cmd.log', 'a')){
+            /*if ($LOG = fopen(dirname($outputfilerad).'/cmd.log', 'a')){
                 fwrite($LOG, $cmd."\n");
-            }
+            }*/
 
             // Executes the SQL command.
             exec($cmd, $execoutput, $returnvalue);
-            if ($LOG){
+            /*if ($LOG){
                 foreach($execoutput as $execline) fwrite($LOG, $execline."\n");
                 fwrite($LOG, $returnvalue."\n");
                 fclose($LOG);
-            }
+            }*/
         }
     }
 
@@ -1204,4 +1185,11 @@ function param_filter_type($value, $type)
 
 function redirect($url) {
     header("Location: $url\n\n");
+}
+
+function vchamilo_get_slug_from_url($url)
+{
+    $slugify = new Slugify();
+    $urlInfo = parse_url($url);
+    return $slugify->slugify($urlInfo['host']);
 }

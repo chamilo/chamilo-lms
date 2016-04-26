@@ -383,22 +383,26 @@ class InstanceForm extends ChamiloForm
         $cform->applyFilter('sitename', 'trim');
 
         // Shortname.
-        $cform->addElement(
+        $elementInstitution = $cform->addElement(
             'text',
             'institution',
-            $this->_plugin->get_lang('institution'),
-            ($this->_mode == 'edit' ? 'disabled="disabled" ' : '')
+            $this->_plugin->get_lang('institution')
         );
+
         $cform->applyFilter('institution', 'trim');
 
         // Host's name.
-        $cform->addElement(
+        $elementWeb = $cform->addElement(
             'text',
             'root_web',
-            $this->_plugin->get_lang('rootweb'),
-            ($this->_mode == 'edit' ? 'disabled="disabled" ' : '')
+            $this->_plugin->get_lang('rootweb')
         );
         $cform->applyFilter('root_web', 'trim');
+
+        if ($this->_mode == 'update') {
+            $elementInstitution->freeze();
+            $elementWeb->freeze();
+        }
 
         /*
          * Database fieldset.
@@ -428,15 +432,15 @@ class InstanceForm extends ChamiloForm
         //$cform->addElement('text', 'table_prefix', $this->_plugin->get_lang('tableprefix'));
 
         // Db's prefix.
-        $cform->addElement('text', 'db_prefix', $this->_plugin->get_lang('dbprefix'));
-        $cform->addElement('header', $this->_plugin->get_lang('datalocation'));
+        //$cform->addElement('text', 'db_prefix', $this->_plugin->get_lang('dbprefix'));
+        //$cform->addElement('header', $this->_plugin->get_lang('datalocation'));
 
-        $cform->addElement(
+        /*$cform->addElement(
             'text',
             'course_folder',
             $this->_plugin->get_lang('coursefolder'),
             array('id' => 'id_vdatapath')
-        );
+        );*/
 
         // Button for testing database connection.
         $cform->addElement(
@@ -451,7 +455,7 @@ class InstanceForm extends ChamiloForm
         );
 
         // Button for testing datapath.
-        $cform->addElement(
+        /*$cform->addElement(
             'button',
             'testdatapath',
             $this->_plugin->get_lang('testdatapath'),
@@ -460,7 +464,7 @@ class InstanceForm extends ChamiloForm
             'default',
             '',
             'onclick="opendatapathpopup(\''.$_configuration['root_web'].'\'); return true;"'
-        );
+        );*/
 
         /*
          * Template selection.
@@ -496,13 +500,13 @@ class InstanceForm extends ChamiloForm
                 null,
                 'client'
             );
-            $cform->addRule(
+            /*$cform->addRule(
                 'course_folder',
                 $this->_plugin->get_lang('coursefolderinputerror'),
                 'required',
                 null,
                 'client'
-            );
+            );*/
         }
     }
 
@@ -516,9 +520,6 @@ class InstanceForm extends ChamiloForm
         global $plugininstance;
 
         $errors = array();
-        if (!preg_match('/^courses[_-]/', $data['course_folder'])){
-            $errors['course_folder'] = $plugininstance->get_lang('errormuststartwithcourses');
-        }
 
         $tablename = Database::get_main_table('vchamilo');
         $vchamilo = Database::select(

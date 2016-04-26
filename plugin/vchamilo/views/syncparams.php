@@ -62,7 +62,8 @@ $message = '';
 
 $message = require_js('ajax.js', 'vchamilo', true);
 
-$tpl = new Template(get_lang('VChamilo'), true, true, false, true, false);
+$interbreadcrumb[] = array('url' => 'manage.php', 'name' => get_lang('VChamilo'));
+$tpl = new Template($plugininstance->get_lang('sync_settings'), true, true, false, true, false);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

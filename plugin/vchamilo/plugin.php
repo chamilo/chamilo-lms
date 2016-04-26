@@ -19,13 +19,13 @@ global $_configuration;
 /* Plugin config */
 
 //the plugin title
-$plugin_info['title']       = 'Chamilo Virtualization';
+$plugin_info['title'] = 'Chamilo Virtualization';
 //the comments that go with the plugin
-$plugin_info['comment']     = "Holds chamilo virtualisation tools";
+$plugin_info['comment'] = "Holds chamilo virtualisation tools";
 //the plugin version
-$plugin_info['version']     = '1.0';
+$plugin_info['version'] = '1.0';
 //the plugin author
-$plugin_info['author']      = 'Valery Fremaux';
+$plugin_info['author'] = 'Valery Fremaux, Julio Montoya';
 
 
 /* Plugin optional settings */
@@ -59,8 +59,7 @@ $wwwroot = $_configuration['root_web'];
 
 //A simple select
 $options = array(0 => $plugininstance->get_lang('no'), 1 => $plugininstance->get_lang('yes'));
-$form->addElement('static', 'enable_vchamilo_manager', '<a href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.$plugininstance->get_lang('manage_instances').'</a>');
-$form->addElement('static', 'sync_vchamilo_settings', '<a href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/syncparams.php">'.$plugininstance->get_lang('sync_settings').'</a>');
+$form->addlabel('', '<a href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.$plugininstance->get_lang('manage_instances').'</a>');
 $form->addElement('header', $plugininstance->get_lang('enabling'));
 $form->addElement('select', 'enable_virtualisation', $plugininstance->get_lang('enable_virtualisation'), $options);
 $form->addElement('text', 'course_real_root', $plugininstance->get_lang('courserealroot'));
@@ -83,4 +82,4 @@ $form->addButtonSave($plugininstance->get_lang('Save'));
 $plugin_info['settings_form'] = $form;
 
 //set the templates that are going to be used
-$plugin_info['templates']   = array('template.tpl');
+$plugin_info['templates'] = array('template.tpl');

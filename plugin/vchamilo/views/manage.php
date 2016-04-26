@@ -67,23 +67,61 @@ foreach ($instances as $instance) {
     $cmd .= '&nbsp;<a href="'.$thisurl.'?what=snapshotinstance&vid='.$instance->id.'" title="'.$plugininstance->get_lang('snapshotinstance').'">
         <img src="'.$plugininstance->pix_url('snapshot').'" /></a>';
 
-    if (!$instance->visible){
+    if (!$instance->visible) {
         $cmd .= '<a href="'.$thisurl.'?what=fulldeleteinstances&vids[]='.$instance->id.'" title="'.$plugininstance->get_lang('destroyinstances').'">
         <img src="'.$plugininstance->pix_url('delete').'" /></a>';
     } else {
         $cmd .= '<a href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugininstance->get_lang('deleteinstances').'">
         <img src="'.$plugininstance->pix_url('delete').'" /></a>';
     }
+    
 
     $crondate = ($instance->lastcron) ? date('r', $instance->lastcron) : '';
-    $data = array($checkbox, $sitelink, $instance->institution, $instance->root_web, $instance->db_host, $instance->course_folder, $status, $crondate, $cmd);
+    $data = array(
+        $checkbox,
+        $sitelink,
+        $instance->institution,
+        Display::url($instance->root_web, $instance->root_web),
+        $instance->db_host,
+        $instance->slug,
+        $status,
+        $crondate,
+        $cmd,
+    );
     $attrs = array('center' => 'left');
     $table->addRow($data, $attrs, 'td');
     $i++;
 }
 
-$content .=  '<form action="'.$thisurl.'">';
+$items = [
+    [
+        'url' => $thisurl.'?what=newinstance',
+        'content' => $plugininstance->get_lang('newinstance')
+    ],
+    [
+        'url' => $thisurl.'?what=instance&registeronly=1',
+        'content' => $plugininstance->get_lang('registerinstance')
+    ],
+    [
+        'url' => $thisurl.'?what=snapshotinstance&vid=0',
+        'content' => $plugininstance->get_lang('snapshotmaster')
+    ],
+    [
+        'url' => $thisurl.'?what=clearcache&vid=0',
+        'content' => $plugininstance->get_lang('clearmastercache')
+    ],
+    [
+        'url' => api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/syncparams.php',
+        'content' => $plugininstance->get_lang('sync_settings')
+    ],
+    [
+        'url' => api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=vchamilo',
+        'content' => get_lang('Settings')
+    ]
+];
 
+$content .=  Display::actions($items);
+$content .=  '<form action="'.$thisurl.'">';
 $content .=  $table->toHtml();
 
 $selectionoptions = array('<option value="0" selected="selected">'.$plugininstance->get_lang('choose').'</option>');
@@ -94,9 +132,11 @@ $selectionoptions[] = '<option value="clearcache">'.$plugininstance->get_lang('c
 $selectionoptions[] = '<option value="setconfigvalue">'.$plugininstance->get_lang('setconfigvalue').'</option>';
 $selectionaction = '<select name="what" onchange="this.form.submit()">'.implode('', $selectionoptions).'</select>';
 
-$content .=  '<div class"vchamilo-right"><div></div><div><a href="javascript:selectallhosts()">'.$plugininstance->get_lang('selectall').'</a> - <a href="javascript:deselectallhosts()">'.$plugininstance->get_lang('selectnone').'</a> - <a href="'.$thisurl.'?what=newinstance">'.$plugininstance->get_lang('newinstance').'</a> - <a href="'.$thisurl.'?what=instance&registeronly=1">'.$plugininstance->get_lang('registerinstance').'</a>&nbsp; - '.$plugininstance->get_lang('withselection').' '.$selectionaction.'</div></div>';
-$content .=  '<div class"vchamilo-right"><div> <a href="'.$thisurl.'?what=snapshotinstance&vid=0">'.$plugininstance->get_lang('snapshotmaster').' <img src="'.$plugininstance->pix_url('snapshot').'" /></a></div>';
-$content .=  '<div class"vchamilo-right"><div> <a href="'.$thisurl.'?what=clearcache&vid=0">'.$plugininstance->get_lang('clearmastercache').'</a></div></div>';
+$content .=  '<div class"vchamilo-right"><div></div><div>
+<a href="javascript:selectallhosts()">'.$plugininstance->get_lang('selectall').'</a> - 
+<a href="javascript:deselectallhosts()">'.$plugininstance->get_lang('selectnone').'</a> - 
+&nbsp; - '.$plugininstance->get_lang('withselection').' '.$selectionaction.'</div></div>';
+
 $content .=  '</form>';
 
 $actions = '';

@@ -18,6 +18,7 @@ $tablename = Database::get_main_table($table);
 $sql = "CREATE TABLE IF NOT EXISTS $tablename (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sitename` varchar(80) NOT NULL,
+   slug varchar(255) NOT NULL,
   `institution` varchar(80) NOT NULL,
   `root_web` varchar(120),
   `db_host` varchar(80) NOT NULL,

@@ -15,9 +15,16 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/js/hos
 // get parameters
 $id = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : '';
 $action = isset($_REQUEST['what']) ? $_REQUEST['what'] : '';
-$registeronly = @$_REQUEST['registeronly'];
+$registeronly = isset($_REQUEST['registeronly']) ? $_REQUEST['registeronly'] : 0;
 $plugininstance = VChamiloPlugin::create();
 $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
+
+$course_real_root = vchamilo_get_config('vchamilo', 'course_real_root');
+$homePath = vchamilo_get_config('vchamilo', 'home_real_root');
+
+if (empty($course_real_root) || empty($homePath)) {
+    api_not_allowed('You have to setup the course real root');
+}
 
 // security
 api_protect_admin_script();

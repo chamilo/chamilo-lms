@@ -13,8 +13,6 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     unset($data->testconnection);
     unset($data->testdatapath);
 
-    var_dump($data);exit;
-
     $registeronly = $data->registeronly;
     unset($data->registeronly);
     $data->lastcron = 0;
@@ -26,20 +24,31 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         unset($data->template);
     }
 
-    ctrace("Registering VChamilo ");
+    $mainDatabase = api_get_configuration_value('main_database');
+
+    if ($mainDatabase == $data->main_database) {
+        Display::addFlash(Display::return_message('You cannot use the same database as the chamilo master', 'error'));
+        return ;
+    }
+
+    ctrace("Registering VChamilo");
     $tablename = Database::get_main_table('vchamilo');
-    $sql = "SELECT * FROM $tablename WHERE root_web = '".Database::escape_string($data->root_web)."'";
+    $sql = "SELECT * FROM $tablename 
+            WHERE root_web = '".Database::escape_string($data->root_web)."'";
     $result = Database::query($sql);
 
     if (Database::num_rows($result)) {
-        $sql = "SELECT * FROM $tablename WHERE root_web = '".Database::escape_string($data->root_web)."'";
+        $sql = "SELECT * FROM $tablename 
+                WHERE root_web = '".Database::escape_string($data->root_web)."'";
         Database::update($tablename, $data, ['root_web = ?' => $data->root_web]);
-        //$DB->update_record('vchamilo', $data, 'root_web');
+        $virtualInfo = Database::fetch_array($result);
+        $slug = $virtualInfo['slug'];
     } else {
+        $slug = $data->slug = vchamilo_get_slug_from_url($data->root_web);
         Database::insert($tablename, (array) $data);
     }
 
-    if ($registeronly){
+    if ($registeronly) {
         // Stop it now.
         ctrace("Registering only. out.");
         vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
@@ -50,13 +59,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     // Create course directory for operations.
     // this is very important here (DO NOT USE api_get_path() !!) because storage may be remotely located
     $absalternatecourse = vchamilo_get_config('vchamilo', 'course_real_root');
-    if (!empty($absalternatecourse)) {
-        // this is the relocated case
-        $coursedir = str_replace('//', '/', $absalternatecourse.'/'.$data->course_folder);
-    } else {
-        // this is the standard local case
-        $coursedir = api_get_path(SYS_PATH).$data->course_folder;
-    }
+    $coursedir = $absalternatecourse.'/'.$slug;
 
     if (!is_dir($coursedir)) {
         ctrace("Creating physical course dir in $coursedir");
@@ -67,14 +70,15 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         fclose($INDEX);
 
         $HTACCESS = fopen($coursedir.'/.htaccess', 'w');
-        fputs($HTACCESS, vchamilo_get_htaccess_fragment($data->course_folder));
+        fputs($HTACCESS, vchamilo_get_htaccess_fragment($slug));
         fclose($HTACCESS);
     }
 
     // if real coursedir IS NOT under chamilo install, link to it
-    $standardlocation = str_replace('//', '/', $_configuration['root_sys'].'/'.$data->course_folder); // where it should be
+    /*$standardlocation = str_replace('//', '/', $_configuration['root_sys'].'/'.$data->course_folder); // where it should be
     ctrace("Checking course dir against standard $standardlocation ");
     ctrace("checking standard location : ".is_dir($standardlocation));
+
     if ($coursedir != $standardlocation) {
 
         // The standard location dir SHOULD NOT EXIST YET
@@ -86,7 +90,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         }
     } else {
         ctrace("Course dir in standard location");
-    }
+    }*/
 
     // create homedir
 
@@ -96,16 +100,15 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
      * {LegacyHomeContainer} => {VChamiloSubcontainer} => {BrandedAccessUrlHome}
      *
      */
-
     $absalternatehome = vchamilo_get_config('vchamilo', 'home_real_root');
     // absalternatehome is a vchamilo config setting that tells where the
     // real physical storage for home pages are.
-    $homedir = str_replace('//', '/', $absalternatehome.'/'.$home_folder);
+    $homedir = str_replace('//', '/', $absalternatehome.'/'.$slug);
 
-    ctrace("Making home dir as $homedir ");
+    ctrace("Making home dir as $homedir");
 
     if (!is_dir($homedir)){
-        ctrace("Creating home dir ");
+        ctrace("Creating home dir");
         if (!mkdir($homedir, 0777, true)) {
             ctrace("Error creating home dir $homedir \n");
         }
@@ -127,16 +130,12 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
 
     // create archive
     $absalternatearchive = vchamilo_get_config('vchamilo', 'archive_real_root');
-
-    $archivedir = str_replace('//', '/', $absalternatearchive.'/'.$archive_folder);
-    if (is_dir($archivedir)) {
-        $archivedir = $_configuration['root_sys'].'archive/'.$archive_folder;
-    }
+    $archivedir = $absalternatearchive.'/'.$slug;
 
     ctrace("Making archive dir as $archivedir ");
 
     if (!is_dir($archivedir)) {
-        ctrace("Creating archive dir ");
+        ctrace("Creating archive dir");
         if (!mkdir($archivedir, 0777, true)) {
             ctrace("Error creating archive dir $archivedir\n");
         }

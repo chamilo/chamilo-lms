@@ -7644,4 +7644,5 @@ $Map = "Map";
 $MyLocation = "My location";
 $ShowCourseInUserLanguage = "Show course in user's language";
 $AccessData = "Access data";
+$InvalidImageDimensions = "Image dimensions do not match the requirements. Please check the suggestions next to the image field.";
 ?>

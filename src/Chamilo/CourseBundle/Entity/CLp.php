@@ -247,14 +247,14 @@ class CLp
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="publicated_on", type="datetime", nullable=false)
+     * @ORM\Column(name="publicated_on", type="datetime", nullable=true)
      */
     private $publicatedOn;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expired_on", type="datetime", nullable=false)
+     * @ORM\Column(name="expired_on", type="datetime", nullable=true)
      */
     private $expiredOn;
 

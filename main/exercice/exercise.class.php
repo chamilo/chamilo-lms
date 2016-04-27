@@ -87,10 +87,10 @@ class Exercise
         $this->active = 1;
         $this->questionList = array();
         $this->timeLimit = 0;
-        $this->end_time = '0000-00-00 00:00:00';
-        $this->start_time = '0000-00-00 00:00:00';
+        $this->end_time = '';
+        $this->start_time = '';
         $this->results_disabled = 1;
-        $this->expired_time = '0000-00-00 00:00:00';
+        $this->expired_time = 0;
         $this->propagate_neg = 0;
         $this->saveCorrectAnswers = 0;
         $this->review_answers = false;
@@ -187,11 +187,11 @@ class Exercise
                 $this->edit_exercise_in_lp = true;
             }
 
-            if ($object->end_time != '0000-00-00 00:00:00') {
-                $this->end_time 	= $object->end_time;
+            if (!empty($object->end_time)) {
+                $this->end_time = $object->end_time;
             }
-            if ($object->start_time != '0000-00-00 00:00:00') {
-                $this->start_time 	= $object->start_time;
+            if (!empty($object->start_time)) {
+                $this->start_time = $object->start_time;
             }
 
             //control time
@@ -1541,8 +1541,8 @@ class Exercise
         $random = $this->random;
         $random_answers = $this->random_answers;
         $active = $this->active;
-        $propagate_neg = $this->propagate_neg;
-        $saveCorrectAnswers = isset($this->saveCorrectAnswers) && $this->saveCorrectAnswers ? true : false;
+        $propagate_neg = (int) $this->propagate_neg;
+        $saveCorrectAnswers = isset($this->saveCorrectAnswers) && $this->saveCorrectAnswers ? 1 : 0;
         $review_answers = isset($this->review_answers) && $this->review_answers ? 1 : 0;
         $randomByCat = intval($this->randomByCat);
         $text_when_finished = $this->text_when_finished;
@@ -1562,16 +1562,16 @@ class Exercise
         // Exercise already exists
         if ($id) {
             // we prepare date in the database using the api_get_utc_datetime() function
-            if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
+            if (!empty($this->start_time)) {
                 $start_time = $this->start_time;
             } else {
-                $start_time = '0000-00-00 00:00:00';
+                $start_time = null;
             }
 
-            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+            if (!empty($this->end_time)) {
                 $end_time = $this->end_time;
             } else {
-                $end_time = '0000-00-00 00:00:00';
+                $end_time = null;
             }
 
             $params = [
@@ -1632,16 +1632,16 @@ class Exercise
             // In this function, api_set_default_visibility,
             // the Quiz is saved too, with an $id and api_get_utc_datetime() is done.
             // If we do it now, it will be done twice (cf. https://support.chamilo.org/issues/6586)
-            if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
+            if (!empty($this->start_time)) {
                 $start_time = $this->start_time;
             } else {
-                $start_time = '0000-00-00 00:00:00';
+                $start_time = null;
             }
 
-            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+            if (!empty($this->end_time)) {
                 $end_time = $this->end_time;
             } else {
-                $end_time = '0000-00-00 00:00:00';
+                $end_time = null;
             }
 
             $params = [
@@ -1665,7 +1665,8 @@ class Exercise
                 'text_when_finished' => $text_when_finished,
                 'display_category_name' => $display_category_name,
                 'pass_percentage' => $pass_percentage,
-                'save_correct_answers' => $saveCorrectAnswers
+                'save_correct_answers' => (int) $saveCorrectAnswers,
+                'propagate_neg' => $propagate_neg
             ];
 
             $this->id = Database::insert($TBL_EXERCISES, $params);
@@ -2154,10 +2155,11 @@ class Exercise
 
             $var = Exercise::selectTimeLimit();
 
-            if (($this->start_time != '0000-00-00 00:00:00'))
-                $form->addElement('html','<div id="start_date_div" style="display:block;">');
-            else
-                $form->addElement('html','<div id="start_date_div" style="display:none;">');
+            if (!empty($this->start_time)) {
+                $form->addElement('html', '<div id="start_date_div" style="display:block;">');
+            } else {
+                $form->addElement('html', '<div id="start_date_div" style="display:none;">');
+            }
 
             $form->addElement('date_time_picker', 'start_time');
 
@@ -2165,10 +2167,11 @@ class Exercise
 
             $form->addElement('checkbox', 'activate_end_date_check', null , get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
 
-            if (($this->end_time != '0000-00-00 00:00:00'))
-                $form->addElement('html','<div id="end_date_div" style="display:block;">');
-            else
-                $form->addElement('html','<div id="end_date_div" style="display:none;">');
+            if (!empty($this->end_time)) {
+                $form->addElement('html', '<div id="end_date_div" style="display:block;">');
+            } else {
+                $form->addElement('html', '<div id="end_date_div" style="display:none;">');
+            }
 
             $form->addElement('date_time_picker', 'end_time');
             $form->addElement('html','</div>');
@@ -2310,15 +2313,15 @@ class Exercise
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
 
-                if (($this->start_time != '0000-00-00 00:00:00')) {
+                if (!empty($this->start_time)) {
                     $defaults['activate_start_date_check'] = 1;
                 }
-                if ($this->end_time != '0000-00-00 00:00:00') {
+                if (!empty($this->end_time)) {
                     $defaults['activate_end_date_check'] = 1;
                 }
 
-                $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00') ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
-                $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00') ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
+                $defaults['start_time'] = !empty($this->start_time) ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
+                $defaults['end_time'] = empty($this->end_time) ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
 
                 // Get expired time
                 if ($this->expired_time != '0') {
@@ -2418,14 +2421,14 @@ class Exercise
             $start_time = $form->getSubmitValue('start_time');
             $this->start_time = api_get_utc_datetime($start_time);
         } else {
-            $this->start_time = '0000-00-00 00:00:00';
+            $this->start_time = null;
         }
 
         if ($form->getSubmitValue('activate_end_date_check') == 1) {
             $end_time = $form->getSubmitValue('end_time');
             $this->end_time = api_get_utc_datetime($end_time);
         } else {
-            $this->end_time   = '0000-00-00 00:00:00';
+            $this->end_time = null;
         }
 
         if ($form->getSubmitValue('enabletimercontrol') == 1) {
@@ -5612,8 +5615,7 @@ class Exercise
         }
 
         //3. We check if the time limits are on
-        if ((!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00')
-            || (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00')) {
+        if ((!empty($this->start_time)) || (!empty($this->end_time))) {
             $limitTimeExists = true;
         } else {
             $limitTimeExists = false;
@@ -5627,12 +5629,11 @@ class Exercise
             $existsEndDate = false;
             $nowIsBeforeEndDate = true;
 
-
-            if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
+            if (!empty($this->start_time)) {
                 $existsStartDate = true;
             }
 
-            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+            if (!empty($this->end_time)) {
                 $existsEndDate = true;
             }
 

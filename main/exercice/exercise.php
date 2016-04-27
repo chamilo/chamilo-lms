@@ -596,7 +596,7 @@ if (!empty($exercise_list)) {
             $session_img = api_get_session_image($row['session_id'], $userInfo['status']);
 
             $time_limits = false;
-            if ($row['start_time'] != '0000-00-00 00:00:00' || $row['end_time'] != '0000-00-00 00:00:00') {
+            if (!empty($row['start_time']) || !empty($row['end_time'])) {
                 $time_limits = true;
             }
 
@@ -604,11 +604,11 @@ if (!empty($exercise_list)) {
             if ($time_limits) {
                 // check if start time
                 $start_time = false;
-                if ($row['start_time'] != '0000-00-00 00:00:00') {
+                if (!empty($row['start_time'])) {
                     $start_time = api_strtotime($row['start_time'], 'UTC');
                 }
                 $end_time = false;
-                if ($row['end_time'] != '0000-00-00 00:00:00') {
+                if (!empty($row['end_time'])) {
                     $end_time = api_strtotime($row['end_time'], 'UTC');
                 }
                 $now = time();
@@ -638,9 +638,7 @@ if (!empty($exercise_list)) {
             if (isset($_custom['exercises_hidden_when_no_start_date']) &&
                 $_custom['exercises_hidden_when_no_start_date']
             ) {
-                if (empty($row['start_time']) ||
-                    $row['start_time'] == '0000-00-00 00:00:00'
-                ) {
+                if (empty($row['start_time'])) {
                     $time_limits = true;
                     $is_actived_time = false;
                 }
@@ -939,7 +937,7 @@ if (!empty($exercise_list)) {
                     } else {
                         //Quiz not ready due to time limits 	700 	$attempt_text = get_lang('NotAttempted');
                         //@todo use the is_visible function
-                        if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
+                        if (!empty($row['start_time']) && !empty($row['end_time'])) {
                             $today = time();
                             $start_time = api_strtotime($row['start_time'], 'UTC');
                             $end_time = api_strtotime($row['end_time'], 'UTC');
@@ -953,11 +951,17 @@ if (!empty($exercise_list)) {
 
                         } else {
                             //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
-                            if ($row['start_time'] != '0000-00-00 00:00:00') {
-                                $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
+                            if (!empty($row['start_time'])) {
+                                $attempt_text = sprintf(
+                                    get_lang('ExerciseAvailableFromX'),
+                                    api_convert_and_format_date($row['start_time'])
+                                );
                             }
-                            if ($row['end_time'] != '0000-00-00 00:00:00') {
-                                $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));
+                            if (!empty($row['end_time'])) {
+                                $attempt_text = sprintf(
+                                    get_lang('ExerciseAvailableUntilX'),
+                                    api_convert_and_format_date($row['end_time'])
+                                );
                             }
                         }
                     }

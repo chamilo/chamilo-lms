@@ -67,6 +67,16 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('CREATE TABLE access_url_rel_course_category (id INT AUTO_INCREMENT NOT NULL, access_url_id INT NOT NULL, course_category_id INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
 
         $this->addSql('ALTER TABLE notification CHANGE content content TEXT');
+
+        $this->addSql('ALTER TABLE c_lp CHANGE publicated_on publicated_on DATETIME');
+        $this->addSql('ALTER TABLE c_lp CHANGE expired_on expired_on DATETIME');
+
+
+        $this->addSql('UPDATE TABLE c_quiz SET start_time = "" WHERE start_time = "0000-00-00 00:00:00"');
+        $this->addSql('UPDATE TABLE c_quiz SET end_time = "" WHERE end_time = "0000-00-00 00:00:00"');
+
+        $this->addSql('ALTER TABLE c_quiz CHANGE start_time start_time DATETIME');
+        $this->addSql('ALTER TABLE c_quiz CHANGE end_time end_time DATETIME');
     }
 
     /**

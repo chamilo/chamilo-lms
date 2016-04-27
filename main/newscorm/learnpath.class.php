@@ -788,7 +788,7 @@ class learnpath
         }
 
         if ($expired_on == '0000-00-00 00:00:00' || empty($expired_on)) {
-            $expired_on = '';
+            $expired_on = null;
         } else {
             $expired_on = Database::escape_string(api_get_utc_datetime($expired_on));
         }

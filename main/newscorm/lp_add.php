@@ -120,13 +120,13 @@ $form->addElement('select', 'category_id', get_lang('Category'), $items);
 // Start date
 $form->addElement('checkbox', 'activate_start_date_check', null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 $form->addElement('html','<div id="start_date_div" style="display:block;">');
-$form->addElement('DatePicker', 'publicated_on', get_lang('PublicationDate'));
+$form->addDatePicker('publicated_on', get_lang('PublicationDate'));
 $form->addElement('html','</div>');
 
 //End date
 $form->addElement('checkbox', 'activate_end_date_check', null, get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
 $form->addElement('html','<div id="end_date_div" style="display:none;">');
-$form->addElement('DatePicker', 'expired_on', get_lang('ExpirationDate'));
+$form->addDatePicker('expired_on', get_lang('ExpirationDate'));
 $form->addElement('html','</div>');
 
 $form->addElement('html','</div>');

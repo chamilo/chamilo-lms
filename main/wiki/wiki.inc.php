@@ -774,7 +774,7 @@ class Wiki
             }
 
             $form->addElement('html', '<div id="start_date" style="'.$style.'">');
-            $form->addElement('DatePicker', 'startdate_assig');
+            $form->addDatePicker('startdate_assig', '');
             $form->addElement('html', '</div>');
             $form->addElement('checkbox', 'initenddate', null, get_lang('EndDate'), array('id' => 'end_date_toggle'));
 
@@ -786,7 +786,7 @@ class Wiki
             }
 
             $form->addElement('html', '<div id="end_date" style="'.$style.'">');
-            $form->addElement('DatePicker', 'enddate_assig');
+            $form->addDatePicker('enddate_assig', '');
             $form->addElement('html', '</div>');
             $form->addElement('checkbox', 'delayedsubmit', null, get_lang('AllowLaterSends'));
             $form->addElement('text', 'max_text', get_lang('NMaxWords'));

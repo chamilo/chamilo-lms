@@ -734,7 +734,7 @@ if ($limit_time_exists) {
         $permission_to_start = true;
     }
     if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-        if ($objExercise->end_time != '0000-00-00 00:00:00') {
+        if (!empty($objExercise->end_time)) {
             $exercise_timeover = (($time_now - $exercise_end_time) > 0) ? true : false;
         } else {
             $exercise_timeover = false;

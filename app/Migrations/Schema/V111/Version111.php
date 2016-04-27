@@ -71,7 +71,6 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_lp CHANGE publicated_on publicated_on DATETIME');
         $this->addSql('ALTER TABLE c_lp CHANGE expired_on expired_on DATETIME');
 
-
         $this->addSql('UPDATE TABLE c_quiz SET start_time = "" WHERE start_time = "0000-00-00 00:00:00"');
         $this->addSql('UPDATE TABLE c_quiz SET end_time = "" WHERE end_time = "0000-00-00 00:00:00"');
 

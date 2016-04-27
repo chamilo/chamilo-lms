@@ -1554,6 +1554,7 @@ class SocialManager extends UserManager
         $html .= '<p>'. Security::remove_XSS($message['content']).'</p>';
         $html .= '</div>';
         $html .= '</div>'; // end mediaPost
+        $html .= '<div class="popularity-mediapost"><em class="fa fa-star-o"></em><em class="fa fa-star-o"></em><em class="fa fa-star-o"></em><em class="fa fa-star-o"></em><em class="fa fa-star-o"></em>  0 '.get_lang('Votes').'</div>';
 
         return $html;
     }
@@ -1581,9 +1582,7 @@ class SocialManager extends UserManager
         $html .= '<div class="social-description">';
         $html .= '<a target="_blank" href="'.$url.'"><h5 class="social-title"><b>'.$title.'</b></h5></a>';
         $html .= empty($description) ? '' : '<span>'.$description.'</span>';
-        $html .= '<br />';
-        $html .= '<br />';
-        $html .= empty($host) ? '' : '<span class="social-host">'.$host.'</span>';
+        $html .= empty($host) ? '' : '<p>'.$host.'</p>';
         $html .= '</div>';
         $html .= '</div>';
 

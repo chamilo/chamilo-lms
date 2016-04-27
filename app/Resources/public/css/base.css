@@ -723,7 +723,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 .social-image {
     max-height: 300px;
 }
-.social-host {
+.social-host p {;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    line-height: 22px;
     color: #999;
 }
 
@@ -4008,6 +4012,12 @@ i.size-32.icon-new-work{
   max-width: 50px;
   max-height: 50px;
 }
+.top-mediapost {
+    border-bottom: 1px solid #ECF0F1;
+}
+.popularity-mediapost {
+    margin-bottom: 30px;
+}
 .top-mediapost .user-image,
 .sub-mediapost .user-image
 {
@@ -4035,13 +4045,13 @@ i.size-32.icon-new-work{
 }
 .top-mediapost .msg-content p,
 .sub-mediapost .rep-post .msg-content p{
-  border-top:1px solid #ECF0F1;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  /* border-top:1px solid #ECF0F1; */
+  /* padding-top: 10px; */
+  /* padding-bottom: 20px; */
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
   line-height: 22px;
-  padding-left: 10px;
+  /* padding-left: 10px; */
   padding-right: 10px;
   color: #666666;
 }

@@ -25,27 +25,35 @@ $column = 0;
 $row = 0;
 
 // $table->set_additional_parameters($parameters);
-$headers = array('', $plugininstance->get_lang('variable'), $plugininstance->get_lang('subkey'), $plugininstance->get_lang('category'), $plugininstance->get_lang('accessurl'), $plugininstance->get_lang('value'), '');
+$headers = array(
+    '',
+    $plugininstance->get_lang('variable').' ['.$plugininstance->get_lang('subkey').']',
+    $plugininstance->get_lang('category'),
+    $plugininstance->get_lang('accessurl'),
+    $plugininstance->get_lang('value'),
+    '',
+);
 $attrs = array('center' => 'left');
 $table->addRow($headers, $attrs, 'th');
 
 foreach ($settings as $param) {
+
+    if ($param['subkey'] == 'vchamilo') {
+        continue;
+    }
     // $check = '<input type="checkbox" name="sync_'.$param->id.'" value="'.$param->selected_value.'" />';
+    //<input type="checkbox" name="del_'.$param['id'].'" value="1" title="'.$plugininstance->get_lang('deleteifempty').'" />
     $check = '';
     $attrs = array('center' => 'left');
     $syncthisbutton = '<input type="button" name="syncthis" value="'.$plugininstance->get_lang('syncthis').'" onclick="ajax_sync_setting(\''.$_configuration['root_web'].'\', \''.$param['id'].'\')" /> 
-        <input type="checkbox" name="del_'.$param['id'].'" value="1" title="'.$plugininstance->get_lang('deleteifempty').'" /> <span id="res_'.$param['id'].'"></span>';
+         <span id="res_'.$param['id'].'"></span>';
     $data = array(
         $check,
-        $param['variable'],
-        $param['subkey'],
+        isset($param['subkey']) && !empty($param['subkey']) ? $param['variable'].' ['.$param['subkey'].']' : $param['variable'],
         $param['category'],
         $param['access_url'],
-        '<input type="text" name="value_'.$param['id'].'" value="'.htmlspecialchars(
-            $param['selected_value'],
-            ENT_COMPAT,
-            'UTF-8'
-        ).'" />',
+        '<input type="text" name="value_'.$param['id'].'" value="'.htmlspecialchars($param['selected_value'], ENT_COMPAT, 'UTF-8' ).'" />'.
+        '<br />Master value: '.$param['selected_value'],
         $syncthisbutton,
     );
     $row = $table->addRow($data, $attrs, 'td');
@@ -59,11 +67,13 @@ $content .=  $table->toHtml();
 $content .=  '</form>';
 
 $actions = '';
-$message = '';
+
+Display::addFlash(Display::return_message($plugininstance->get_lang('Sync your master settings to all instances.')));
 
 $message = require_js('ajax.js', 'vchamilo', true);
 
 $interbreadcrumb[] = array('url' => 'manage.php', 'name' => get_lang('VChamilo'));
+
 $tpl = new Template($plugininstance->get_lang('sync_settings'), true, true, false, true, false);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);

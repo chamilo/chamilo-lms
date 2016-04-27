@@ -100,7 +100,7 @@ if ($form->validate()) {
 
     if ($user['auth_source'] == 'extldap') {
         Display::addFlash(
-            Display::return_message(get_lang('CouldNotResetPassword'), 'info', false)
+            Display::return_message(get_lang('CouldNotResetPasswordBecauseLDAP'), 'info', false)
         );
         header('Location: ' . api_get_path(WEB_PATH));
         exit;

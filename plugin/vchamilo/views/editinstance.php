@@ -25,10 +25,6 @@ $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 $coursePath = vchamilo_get_config('vchamilo', 'course_real_root');
 $homePath = vchamilo_get_config('vchamilo', 'home_real_root');
 
-if (empty($coursePath) || empty($homePath)) {
-    api_not_allowed(true, 'You have to setup the course real root');
-}
-
 if ($id) {
     $mode = 'update';
 } else {

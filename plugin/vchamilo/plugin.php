@@ -6,9 +6,9 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-require_once(api_get_path(LIBRARY_PATH).'plugin.class.php');
-require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php');
-require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php');
+require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
 
 global $_configuration;
 
@@ -59,7 +59,7 @@ $wwwroot = $_configuration['root_web'];
 
 //A simple select
 $options = array(0 => $plugininstance->get_lang('no'), 1 => $plugininstance->get_lang('yes'));
-$form->addlabel('', '<a href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.
+$form->addlabel('', '<a class="btn btn-primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.
     $plugininstance->get_lang('manage_instances').'</a>');
 $form->addElement('header', $plugininstance->get_lang('enabling'));
 $form->addElement('select', 'enable_virtualisation', $plugininstance->get_lang('enable_virtualisation'), $options);

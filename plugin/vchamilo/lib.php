@@ -65,18 +65,21 @@ function vchamilo_hook_configuration(&$_configuration)
 
     if ($result->rowCount()) {
         $data = $result->fetch();
-        foreach ($data as $key => $value){
-            if (!in_array($key, $excludes)) {
-                $_configuration[$key] = $value;
+        // Only load if is visible
+        if ($data['visible']) {
+            foreach ($data as $key => $value) {
+                if (!in_array($key, $excludes)) {
+                    $_configuration[$key] = $value;
+                }
+                $_configuration['virtual'] = $data['root_web'].'/';
             }
-            $_configuration['virtual'] = $data['root_web'].'/';
+
+            $data['SYS_ARCHIVE_PATH'] = $homePath.'/'.$data['slug'];
+            $data['SYS_HOME_PATH'] = $coursePath.'/'.$data['slug'];
+            $data['SYS_COURSE_PATH'] = $archivePath.'/'.$data['slug'];
+
+            $VCHAMILO = $data;
         }
-
-        $data['SYS_ARCHIVE_PATH'] = $homePath.'/'.$data['slug'];
-        $data['SYS_HOME_PATH'] = $coursePath.'/'.$data['slug'];
-        $data['SYS_COURSE_PATH'] = $archivePath.'/'.$data['slug'];
-
-        $VCHAMILO = $data;
     } else {
         //die ("VChamilo : No configuration for this host. May be faked.");
         die ("VChamilo : Could not fetch virtual chamilo configuration");
@@ -339,8 +342,9 @@ function vchamilo_load_db_template($vchamilo, $template)
     // @see http://stackoverflow.com/questions/10028925/call-a-program-via-shell-exec-with-utf-8-text-input
 
     exec($import, $output, $return);
-
-    Display::addFlash(Display::return_message(implode("\n", $output)."\n"));
+    if (!empty($output)) {
+        Display::addFlash(Display::return_message(implode("\n", $output)."\n"));
+    }
 
     return true;
 }
@@ -556,7 +560,7 @@ function vchamilo_make_this()
  * Get available templates for defining a new virtual host.
  * @return        array        The available templates, or EMPTY array.
  */
-function vchamilo_get_available_templates($addEmptyTemplate = true)
+function vchamilo_get_available_templates()
 {
     global $_configuration;
     global $plugininstance;
@@ -576,9 +580,9 @@ function vchamilo_get_available_templates($addEmptyTemplate = true)
 
     // Retrieves template(s) name(s). Should be hostnames.
     $templates = [];
-    if ($addEmptyTemplate) {
+    /*if ($addEmptyTemplate) {
         $templates = array('' => $plugininstance->get_lang('emptysite'));
-    }
+    }*/
 
     $template = vchamilo_get_config('vchamilo', 'default_template');
 
@@ -655,8 +659,6 @@ function vchamilo_load_files_from_template($vchamilo, $template)
     $vcoursepath = api_get_path(SYS_COURSE_PATH, (array)$vchamilo);
     $vhomepath = api_get_path(SYS_HOME_PATH, (array)$vchamilo);
     $varchivepath = api_get_path(SYS_ARCHIVE_PATH, (array)$vchamilo);
-
-    Display::addFlash(Display::return_message("archiveapth : $varchivepath"));
 
     // Rename some dirs top match instance requirements
     $manifest = vchamilo_get_vmanifest($template);
@@ -1209,4 +1211,27 @@ function vchamilo_get_slug_from_url($url)
     $slugify = new Slugify();
     $urlInfo = parse_url($url);
     return $slugify->slugify($urlInfo['host']);
+}
+
+/**
+ * Check if all settings are complete
+ */
+function vchamilo_check_settings()
+{
+    $enabled = vchamilo_get_config('vchamilo', 'enable_virtualisation');
+
+    if (empty($enabled)) {
+        api_not_allowed(true, 'Plugin is not enabled');
+    }
+
+    $coursePath = vchamilo_get_config('vchamilo', 'course_real_root');
+    $homePath = vchamilo_get_config('vchamilo', 'home_real_root');
+    $archivePath = vchamilo_get_config('vchamilo', 'archive_real_root');
+    $cmdSql = vchamilo_get_config('vchamilo', 'cmd_mysql');
+    $cmdMySql = vchamilo_get_config('vchamilo', 'cmd_mysqldump');
+
+    if (empty($coursePath) || empty($homePath) || empty($archivePath) || empty($cmdSql)|| empty($cmdMySql)) {
+        api_not_allowed(true, 'You have to complete all plugin settings.');
+    }
+
 }

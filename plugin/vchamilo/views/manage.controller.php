@@ -8,6 +8,8 @@ if (!defined('CHAMILO_INTERNAL')) {
     die('You cannot use this script this way');
 }
 
+$vidlist = isset($_REQUEST['vids']) ? implode("','", array_map('intval', $_REQUEST['vids'])) : '';
+
 if ($action == 'newinstance' || $action == 'instance') {
     $registeronly = $_REQUEST['registeronly'];
     vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/editinstance.php?registeronly='.$registeronly);
@@ -19,29 +21,32 @@ if ($action == 'editinstance' || $action == 'updateinstance') {
 }
 
 if ($action == 'deleteinstances' || $action == 'disableinstances') {
+    if (!empty($vidlist)) {
+        Display::addFlash(Display::return_message("Disabling instance"));
+        // Make it not visible.
 
-    Display::addFlash(Display::return_message("Disabling instance"));
-    // Make it not visible.
-    $vidlist = implode("','", $_REQUEST['vids']);
-    $sql = "UPDATE $table SET visible = 0 WHERE id IN ('$vidlist')";
-    Database::query($sql);
+        $sql = "UPDATE $table SET visible = 0 WHERE id IN ('$vidlist')";
+        Database::query($sql);
+    }
     vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
 }
 if ($action == 'enableinstances') {
-
-    Display::addFlash(Display::return_message("Enabling instance"));
-    $vidlist = implode("','", $_REQUEST['vids']);
-    $sql = " UPDATE $table SET  visible = 1 WHERE id IN ('$vidlist') ";
-    Database::query($sql);
+    if (!empty($vidlist)) {
+        Display::addFlash(Display::return_message("Enabling instance"));
+        $sql = " UPDATE $table SET visible = 1 WHERE id IN ('$vidlist') ";
+        Database::query($sql);
+    }
     vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
 }
 
 if ($action == 'fulldeleteinstances') {
 
+    $todelete = [];
     // Removes everything.
     if (empty($automation)) {
-        $vidlist = implode("','", $_REQUEST['vids']);
-        $todelete = Database::select('*', 'vchamilo', array('where' => array("id IN ('$vidlist')" => array())));
+        if (!empty($vidlist)) {
+            $todelete = Database::select('*', 'vchamilo', array('where' => array("id IN ('$vidlist')" => array())));
+        }
     } else {
         $todelete = Database::select('*', 'vchamilo', array('where' => array("root_web = '{$n->root_web}' " => array())));
     }
@@ -49,19 +54,18 @@ if ($action == 'fulldeleteinstances') {
         foreach ($todelete as $fooid => $instance) {
             $slug = $instance['slug'];
 
-            Display::addFlash(Display::return_message("Removing instance: ".$instance->root_web));
+            Display::addFlash(Display::return_message("Removing instance: ".$instance['root_web']));
 
             vchamilo_drop_databases($instance);
 
             // Remove all files and eventual symlinks
-
             $absalternatecourse = vchamilo_get_config('vchamilo', 'course_real_root');
             $coursedir = $absalternatecourse.$slug;
 
             Display::addFlash(Display::return_message("Deleting $coursedir"));
 
             if ($absalternatehome = vchamilo_get_config('vchamilo', 'home_real_root')) {
-                $homedir = str_replace('//', '/', $absalternatehome.'/'.$slug);
+                $homedir = $absalternatehome.'/'.$slug;
 
                 Display::addFlash(Display::return_message("Deleting $homedir"));
                 removeDir($homedir);
@@ -69,7 +73,7 @@ if ($action == 'fulldeleteinstances') {
 
             // delete archive
             if ($absalternatearchive = vchamilo_get_config('vchamilo', 'archive_real_root')) {
-                $archivedir = str_replace('//', '/', $absalternatearchive.'/'.$slug);
+                $archivedir = $absalternatearchive.'/'.$slug;
 
                 Display::addFlash(Display::return_message("Deleting $archivedir"));
                 removeDir($archivedir);
@@ -260,12 +264,9 @@ if ($action == 'snapshotinstance') {
 }
 
 if ($action == 'clearcache') {
-
-    Display::addFlash(Display::return_message("Clearing cache"));
     // Removes cache directory.
     if (empty($automation)) {
         if (array_key_exists('vids', $_REQUEST))  {
-            $vidlist = implode("','", $_REQUEST['vids']);
             $toclear = Database::select('*', 'vchamilo', array('where' => array("id IN ('$vidlist')" => array())));
         } else {
             $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : 0;
@@ -287,9 +288,8 @@ if ($action == 'clearcache') {
 
     foreach ($toclear as $fooid => $instance) {
         if ($fooid == 0) {
-            Display::addFlash(Display::return_message("Clearing master template cache"));
             $templatepath = api_get_path(SYS_ARCHIVE_PATH).'twig';
-            Display::addFlash(Display::return_message("Deleting cache $templatepath \n"));
+            Display::addFlash(Display::return_message("Deleting master cache $templatepath \n"));
             removeDir($templatepath);
         } else {
             $coursePath = vchamilo_get_config('vchamilo', 'course_real_root');
@@ -302,7 +302,6 @@ if ($action == 'clearcache') {
             Display::addFlash(Display::return_message("Deleting cache $templatepath \n"));
             removeDir($templatepath);
         }
-
     }
 }
 
@@ -316,7 +315,6 @@ if ($action == 'setconfigvalue') {
     }
     $select .= '</select>';
 
-    $vidlist = isset($_REQUEST['vids']) ? implode("','", $_REQUEST['vids']) : '';
     if (empty($vidlist)) {
         api_not_allowed(true, 'No virtual chamilo selected');
     }

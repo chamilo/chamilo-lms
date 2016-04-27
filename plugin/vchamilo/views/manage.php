@@ -8,6 +8,8 @@ require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.p
 // security
 api_protect_admin_script();
 
+vchamilo_check_settings();
+
 $action = isset($_GET['what']) ? $_GET['what'] : '';
 define('CHAMILO_INTERNAL', true);
 

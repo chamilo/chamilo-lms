@@ -58,31 +58,6 @@ abstract class ChamiloForm
     }
 
     /**
-     * Use this method to a cancel and submit button to the end of your form. Pass a param of false
-     * if you don't want a cancel button in your form. If you have a cancel button make sure you
-     * check for it being pressed using is_cancelled() and redirecting if it is true before trying to
-     * get data with get_data().
-     *
-     * @param boolean $cancel whether to show cancel button, default true
-     * @param string $submitlabel label for submit button, defaults to get_string('savechanges')
-     */
-    public function add_action_buttons($cancel = true, $submitlabel = null, $cancellabel = null)
-    {
-        // TODO : refine lang fetch to effective global strings.
-        if (is_null($submitlabel)) {
-            $submitlabel = get_lang('save');
-        }
-
-        if (is_null($cancellabel)) {
-            $submitlabel = get_lang('cancel');
-        }
-
-        $cform =& $this->_form;
-
-        $cform->addButtonSave($submitlabel, 'submitbutton');
-    }
-
-    /**
      * Return submitted data if properly submitted or returns NULL if validation fails or
      * if there is no submitted data.
      *
@@ -455,11 +430,9 @@ class InstanceForm extends ChamiloForm
             }
         }
 
-        $submitstr = $this->_plugin->get_lang('savechanges');
-        $this->add_action_buttons(true, $submitstr);
+        $cform->addButtonSave($this->_plugin->get_lang('savechanges'), 'submitbutton');
 
-        // Rules for the add mode.
-
+        // Rules
         $cform->addRule('sitename', $this->_plugin->get_lang('sitenameinputerror'), 'required', null, 'client');
         $cform->addRule(
             'institution',

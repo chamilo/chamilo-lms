@@ -112,8 +112,7 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
 
     ctrace("Making home dir as $homedir");
 
-    if (!is_dir($homedir)){
-        ctrace("Creating home dir");
+    if (!is_dir($homedir)) {
         if (!mkdir($homedir, 0777, true)) {
             ctrace("Error creating home dir $homedir \n");
         }
@@ -138,7 +137,6 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     ctrace("Making archive dir as $archivedir ");
 
     if (!is_dir($archivedir)) {
-        ctrace("Creating archive dir");
         if (!mkdir($archivedir, 0777, true)) {
             ctrace("Error creating archive dir $archivedir\n");
         }
@@ -170,17 +168,18 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         vchamilo_load_files_from_template($data, $template);
     }
 
-    ctrace("Fixing records");
 
     // pluging in site name institution
-    $settingstable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $settingstable = $data->main_database.'.settings_current';
+    $accessurltable = $data->main_database.'.access_url';
+
     $sitename = Database::escape_string($data->sitename);
     $institution = Database::escape_string($data->institution);
     $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$sitename}' 
                WHERE variable = 'siteName' AND category = 'Platform' ";
     $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$institution}' 
                WHERE variable = 'institution' AND category = 'Platform' ";
-    $accessurltable = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+
     $sqls[] = "UPDATE {$accessurltable} SET url = '{$data->root_web}' WHERE id = '1' ";
 
     foreach ($sqls as $sql) {

@@ -166,31 +166,27 @@ class ExerciseLib
                 $s .= $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanog
-                if (api_get_setting('enable_nanogong') == 'true') {
+                if (api_get_setting('enable_record_audio') == 'true') {
                     //@todo pass this as a parameter
                     global $exercise_stat_info, $exerciseId, $exe_id;
 
                     if (!empty($exercise_stat_info)) {
-                        $wamiRecorder = new WamiRecorder(
-                            0,
-                            0,
-                            0,
+                        $objQuestionTmp->initFile(
+                            api_get_session_id(),
+                            api_get_user_id(),
                             $exercise_stat_info['exe_exo_id'],
-                            $questionId,
                             $exercise_stat_info['exe_id']
                         );
                     } else {
-                        $wamiRecorder = new WamiRecorder(
-                            0,
-                            0,
-                            0,
+                        $objQuestionTmp->initFile(
+                            api_get_session_id(),
+                            api_get_user_id(),
                             $exerciseId,
-                            $questionId,
                             'temp_exe'
                         );
                     }
 
-                    echo $wamiRecorder->getButton();
+                    echo $objQuestionTmp->returnRecorder();
                 }
 
                 $form = new FormValidator('free_choice_'.$questionId);

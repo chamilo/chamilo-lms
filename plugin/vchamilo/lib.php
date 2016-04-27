@@ -74,9 +74,9 @@ function vchamilo_hook_configuration(&$_configuration)
                 $_configuration['virtual'] = $data['root_web'].'/';
             }
 
-            $data['SYS_ARCHIVE_PATH'] = $homePath.'/'.$data['slug'];
-            $data['SYS_HOME_PATH'] = $coursePath.'/'.$data['slug'];
-            $data['SYS_COURSE_PATH'] = $archivePath.'/'.$data['slug'];
+            $data['SYS_ARCHIVE_PATH'] = $archivePath.'/'.$data['slug'];
+            $data['SYS_HOME_PATH'] = $homePath.'/'.$data['slug'];
+            $data['SYS_COURSE_PATH'] = $coursePath.'/'.$data['slug'];
 
             $VCHAMILO = $data;
         }

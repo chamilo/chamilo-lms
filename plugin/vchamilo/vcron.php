@@ -2,8 +2,8 @@
 
 /**
  * This file is a cron microclock script.
- * It will be used as replacement of setting individual 
- * cron lines for all virtual instances. 
+ * It will be used as replacement of setting individual
+ * cron lines for all virtual instances.
  *
  * Setup this vcron to run at the smallest period possible, as
  * it will schedule all availables vchamilos to be run as required.
@@ -11,7 +11,7 @@
  * or may be run more than one cron.
  *
  * If used on a big system with clustering, ensure hostnames are adressed
- * at the load balancer entry and not on physical hosts 
+ * at the load balancer entry and not on physical hosts
  *
  * @package plugin/vchamilo
  * @category plugins
@@ -49,17 +49,17 @@ if (!is_dir($_configuration['root_sys'].'plugin/vchamilo/log')) {
 *
 */
 function fire_vhost_cron($vhost) {
-    global $VCRON,$DB;
+    global $VCRON;
 
     if ($VCRON->TRACE_ENABLE) {
         $CRONTRACE = fopen($VCRON->TRACE, 'a');
     }
     $ch = curl_init($vhost->root_web.'/main/cron/run.php');
 
-    $http_proxy_host =     api_get_setting('vchamilo_httpproxyhost', 'vchamilo');
-    $http_proxy_port =     api_get_setting('vchamilo_httpproxyport', 'vchamilo');
-    $http_proxy_bypass =   api_get_setting('vchamilo_httpproxybypass', 'vchamilo');
-    $http_proxy_user =     api_get_setting('vchamilo_httpproxyuser', 'vchamilo');
+    $http_proxy_host = api_get_setting('vchamilo_httpproxyhost', 'vchamilo');
+    $http_proxy_port = api_get_setting('vchamilo_httpproxyport', 'vchamilo');
+    $http_proxy_bypass = api_get_setting('vchamilo_httpproxybypass', 'vchamilo');
+    $http_proxy_user = api_get_setting('vchamilo_httpproxyuser', 'vchamilo');
     $http_proxy_password = api_get_setting('vchamilo_httpproxypassword', 'vchamilo');
 
     curl_setopt($ch, CURLOPT_TIMEOUT, $VCRON->TIMEOUT);
@@ -118,7 +118,7 @@ function fire_vhost_cron($vhost) {
             fputs($CRONTRACE, "VCron start on $vhost->vhostname : ".api_time_to_hms($timestamp_send)."\n" );
             fputs($CRONTRACE, $rawresponse."\n");
             fputs($CRONTRACE, "VCron stop on $vhost->vhostname : ".api_time_to_hms($timestamp_receive)."\n#################\n\n" );
-            fclose($CRONTRACE);    
+            fclose($CRONTRACE);
         }
     }
     echo("VCron start on $vhost->root_web : ".api_time_to_hms($timestamp_send)."\n" );
@@ -127,7 +127,7 @@ function fire_vhost_cron($vhost) {
     $vhost->lastcrongap = time() - $vhost->lastcron;
     $vhost->lastcron = $timestamp_send;
     $vhost->croncount++;
-    
+
     $vhostid = $vhost->id;
     unset($vhost->id);
 
@@ -158,7 +158,7 @@ function exec_vhost_cron($vhost) {
             fputs($CRONTRACE, "VCron start on $vhost->root_web : $timestamp_send\n" );
             fputs($CRONTRACE, $rawresponse."\n");
             fputs($CRONTRACE, "VCron stop on $vhost->root_web : $timestamp_receive\n#################\n\n" );
-            fclose($CRONTRACE);    
+            fclose($CRONTRACE);
         }
     }
 
@@ -183,11 +183,10 @@ function exec_vhost_cron($vhost) {
  * @param string $url url to check
  * @return boolean true if we should bypass the proxy
  */
-function is_proxybypass( $url ) {
-    global $CFG;
-
-    $http_proxy_host   = api_get_setting('vchamilo_httpproxyhost', 'vchamilo');
-    $http_proxy_port   = api_get_setting('vchamilo_httpproxyport', 'vchamilo');
+function is_proxybypass($url)
+{
+    $http_proxy_host = api_get_setting('vchamilo_httpproxyhost', 'vchamilo');
+    $http_proxy_port = api_get_setting('vchamilo_httpproxyport', 'vchamilo');
     $http_proxy_bypass = api_get_setting('vchamilo_httpproxybypass', 'vchamilo');
 
     // sanity check
@@ -196,12 +195,12 @@ function is_proxybypass( $url ) {
     }
 
     // get the host part out of the url
-    if (!$host = parse_url( $url, PHP_URL_HOST )) {
+    if (!$host = parse_url($url, PHP_URL_HOST)) {
         return false;
     }
 
     // get the possible bypass hosts into an array
-    $matches = explode(',', $http_proxy_bypass );
+    $matches = explode(',', $http_proxy_bypass);
 
     // check for a match
     // (IPs need to match the left hand side and hosts the right of the url,

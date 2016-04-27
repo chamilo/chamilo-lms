@@ -5,13 +5,14 @@ require_once '../../../main/inc/global.inc.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
 
+// security
+api_protect_admin_script();
+
 $action = isset($_GET['what']) ? $_GET['what'] : '';
 define('CHAMILO_INTERNAL', true);
 
 $plugininstance = VChamiloPlugin::create();
 $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
-
-api_protect_admin_script();
 
 require_js('host_list.js', 'vchamilo');
 
@@ -19,13 +20,21 @@ if ($action) {
     require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/manage.controller.php';
 }
 
-$content = Display::page_header('VChamilo Instances');
-
 $query = "SELECT * FROM vchamilo";
 $result = Database::query($query);
 $instances = array();
 while ($instance = Database::fetch_object($result)) {
     $instances[$instance->id] = $instance;
+}
+
+$templates = vchamilo_get_available_templates(false);
+
+if (empty($templates)) {
+    $url = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php?what=snapshotinstance';
+    $url = Display::url($url, $url);
+    Display::addFlash(
+        Display::return_message('You need to create a snapshot of master first here:'.$url, 'info', false)
+    );
 }
 
 $table = new HTML_Table(array('class' => 'data_table'));
@@ -117,6 +126,8 @@ $items = [
     ]
 ];
 
+$content = Display::page_header('VChamilo Instances');
+
 $content .= Display::actions($items);
 $content .= '<form action="'.$thisurl.'">';
 $content .= $table->toHtml();
@@ -124,23 +135,24 @@ $content .= $table->toHtml();
 $selectionoptions = array('<option value="0" selected="selected">'.$plugininstance->get_lang('choose').'</option>');
 $selectionoptions[] = '<option value="deleteinstances">'.$plugininstance->get_lang('deleteinstances').'</option>';
 $selectionoptions[] = '<option value="enableinstances">'.$plugininstance->get_lang('enableinstances').'</option>';
-$selectionoptions[] = '<option value="fulldeleteinstances">'.$plugininstance->get_lang('destroyinstances').'</option>';
+$selectionoptions[] = '<option value="fulldeleteinstances">'.$plugininstance->get_lang(
+        'destroyinstances'
+    ).'</option>';
 $selectionoptions[] = '<option value="clearcache">'.$plugininstance->get_lang('clearcache').'</option>';
 $selectionoptions[] = '<option value="setconfigvalue">'.$plugininstance->get_lang('setconfigvalue').'</option>';
 $selectionaction = '<select name="what" onchange="this.form.submit()">'.implode('', $selectionoptions).'</select>';
 
-$content .=  '<div class"vchamilo-right"><div></div><div>
+$content .= '<div class"vchamilo-right"><div></div><div>
 <a href="javascript:selectallhosts()">'.$plugininstance->get_lang('selectall').'</a> - 
 <a href="javascript:deselectallhosts()">'.$plugininstance->get_lang('selectnone').'</a> - 
 &nbsp; - '.$plugininstance->get_lang('withselection').' '.$selectionaction.'</div></div>';
 
-$content .=  '</form>';
+$content .= '</form>';
 
-$actions = '';
-$message = '';
+if (empty($templates)) {
+    $content = '';
+}
 
 $tpl = new Template(get_lang('VChamilo'), true, true, false, true, false);
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

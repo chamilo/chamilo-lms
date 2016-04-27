@@ -6,13 +6,15 @@
 require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
 require_once dirname(__FILE__).'/lib/vchamilo_plugin.class.php';
 
+api_protect_admin_script();
+
 global $VCHAMILO;
 
 $plugininstance = VChamiloPlugin::create();
 
-// See also the share_user_info plugin 
+// See also the share_user_info plugin
 
-$_template['show_message']   = true;
+$_template['show_message'] = true;
 $_template['title'] = $plugininstance->get_lang('hostlist');
 
 $tablename = Database::get_main_table('vchamilo');

@@ -204,7 +204,6 @@ function vchamilo_template_exists($template)
     // Find and checktemplate directory (files and SQL).
     $separator = DIRECTORY_SEPARATOR;
     $templatefoldername = 'plugin'.$separator.'vchamilo'.$separator.'templates';
-    $absolute_templatesdir = $_configuration['root_sys'].$templatefoldername;
     $relative_datadir = $templatefoldername.$separator.$template.'_sql';
     $absolute_datadir = $_configuration['root_sys'].$relative_datadir;
 
@@ -223,29 +222,21 @@ function vchamilo_drop_databases(&$vchamilo)
 
     if (is_array($vchamilo)) $vchamilo = (object)$vchamilo;
 
+    if (empty($vchamilo->main_database)) {
+        Display::addFlash(Display::return_message('No database found'));
+        return;
+    }
+
     // Drop databases you need to drop
     $sqls = array(" DROP DATABASE `{$vchamilo->main_database}` ");
 
-    if (!empty($vchamilo->statistics_database) && ($vchamilo->main_database != $vchamilo->statistics_database)) {
-        $sqls[] = " DROP DATABASE `{$vchamilo->statistics_database}` ";
-    };
+    Display::addFlash(Display::return_message("Dropping database: ".$vchamilo->main_database));
 
-    if (!empty($vchamilo->user_personal_database) && ($vchamilo->user_personal_database != $vchamilo->statistics_database) && ($vchamilo->main_database != $vchamilo->user_personal_database)) {
-        $sqls[] = " DROP DATABASE `{$vchamilo->user_personal_database}` ";
-    }
-
-    foreach($sqls as $sql){
+    foreach ($sqls as $sql){
         $res = Database::query($sql);
-        if (!$res){
-            $erroritem = new stdClass();
-            $erroritem->message = $plugininstance->get_lang('couldnotdropdb');
-            $erroritem->on = 'db';
-            $erroritems[] = $erroritem;
+        if (!$res) {
+            Display::addFlash(Display::return_message($plugininstance->get_lang('couldnotdropdb')));
         }
-    }
-
-    if (!empty($erroritems)) {
-        return $erroritems;
     }
 
     return false;
@@ -320,7 +311,8 @@ function vchamilo_get_database_dump_cmd($vchamilodata)
     return $sqlcmd;
 }
 
-function vchamilo_load_db_template($vchamilo, $template) {
+function vchamilo_load_db_template($vchamilo, $template)
+{
     global $_configuration;
 
     // Make template directory (files and SQL).
@@ -480,24 +472,26 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad)
     $pgm = !empty($mysqldumpcmd) ? stripslashes($mysqldumpcmd) : false ;
 
     if (!$pgm) {
-        $erroritem = new stdClass();
-        $erroritem->message = "Database dump command not available check here: ";
+        $message = "Database dump command not available check here: ";
         $url = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=vchamilo';
-        $erroritem->message .= Display::url($url, $url);
-        return array($erroritem);
+        $message .= Display::url($url, $url);
+        Display::addFlash(Display::return_message($message));
+
+        return false;
     } else {
         $phppgm = str_replace("\\", '/', $pgm);
         $phppgm = str_replace("\"", '', $phppgm);
         $pgm = str_replace('/', DIRECTORY_SEPARATOR, $pgm);
 
-        if (!is_executable($phppgm)){
-            $erroritem = new stdClass();
-            $erroritem->message = "Database dump command $phppgm does not match any executable";
-            return array($erroritem);
+        if (!is_executable($phppgm)) {
+            $message = "Database dump command $phppgm does not match any executable";
+            Display::addFlash(Display::return_message($message));
+
+            return false;
         }
 
         // executing all commands
-        foreach($cmds as $cmd){
+        foreach ($cmds as $cmd){
 
             // Final command.
             $cmd = $pgm.' '.$cmd;
@@ -517,7 +511,7 @@ function vchamilo_dump_databases($vchamilo, $outputfilerad)
     }
 
     // End with success.
-    return 0;
+    return 1;
 }
 
 /**
@@ -560,38 +554,52 @@ function vchamilo_make_this()
 
 /**
  * Get available templates for defining a new virtual host.
- * @return        array        The availables templates, or EMPTY array.
+ * @return        array        The available templates, or EMPTY array.
  */
-function vchamilo_get_available_templates()
+function vchamilo_get_available_templates($addEmptyTemplate = true)
 {
     global $_configuration;
     global $plugininstance;
 
     $separator = DIRECTORY_SEPARATOR;
 
-    $templatefoldername    = 'plugin'.$separator.'vchamilo'.$separator.'templates';
-    $absolute_templatesdir = $_configuration['root_sys'].$templatefoldername;
+    $templatefoldername = 'plugin'.$separator.'vchamilo'.$separator.'templates';
+    $tempDir = $_configuration['root_sys'].$templatefoldername;
 
     // Scans the templates.
-    if (!is_dir($absolute_templatesdir)) {
-        mkdir($absolute_templatesdir, 0777, true);
+    if (!is_dir($tempDir)) {
+        mkdir($tempDir, 0777, true);
     }
 
     $finder = new \Symfony\Component\Finder\Finder();
-    $dirs = $finder->in($absolute_templatesdir)->depth('== 0');
+    $dirs = $finder->in($tempDir)->depth('== 0');
 
     // Retrieves template(s) name(s). Should be hostnames.
-    $templatesarray = array('' => $plugininstance->get_lang('emptysite'));
+    $templates = [];
+    if ($addEmptyTemplate) {
+        $templates = array('' => $plugininstance->get_lang('emptysite'));
+    }
+
+    $template = vchamilo_get_config('vchamilo', 'default_template');
+
     if ($dirs) {
         /** @var Symfony\Component\Finder\SplFileInfo $dir */
         foreach ($dirs as $dir) {
             if (is_dir($dir->getPathname())) {
-                $templatesarray[$dir->getRelativePathname()] = $dir->getRelativePathname();
+                // A template is considered when a dump.sql exists.
+                if (file_exists($dir->getPathname().'/dump.sql')) {
+
+                    $templateName = $dir->getRelativePathname();
+                    if ($templateName == $template) {
+                        $templateName .= ' (default)';
+                    }
+                    $templates[$dir->getRelativePathname()] = $templateName;
+                }
             }
         }
     }
 
-    return $templatesarray;
+    return $templates;
 }
 
 function vchamilo_print_error($errortrace, $return = false)

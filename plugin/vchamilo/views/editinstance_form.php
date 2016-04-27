@@ -268,7 +268,7 @@ abstract class ChamiloForm
      * @param mixed $default_values object or array of default values
      * @param bool $slashed true if magic quotes applied to data values
      */
-    public function set_data($default_values, $slashed=false)
+    public function set_data($default_values, $slashed = false)
     {
         if (is_object($default_values)) {
             $default_values = (array)$default_values;
@@ -336,15 +336,14 @@ abstract class ChamiloForm
 class InstanceForm extends ChamiloForm
 {
     public $_plugin;
+    public $instance;
 
     /**
      * InstanceForm constructor.
      * @param $plugin
      * @param string $mode
-     * @param null $returnurl
-     * @param null $cancelurl
      */
-    public function __construct($plugin, $mode = 'add', $returnurl = null, $cancelurl = null)
+    public function __construct($plugin, $mode = 'add', $instance = [])
     {
         global $_configuration;
 
@@ -356,6 +355,8 @@ class InstanceForm extends ChamiloForm
 
         $cancelurl = $_configuration['root_web'].'plugin/vchamilo/views/manage.php';
         parent::__construct($mode, $returnurl, $cancelurl);
+        $this->instance = $instance;
+        $this->definition();
     }
 
     /**
@@ -382,8 +383,7 @@ class InstanceForm extends ChamiloForm
         $cform->addElement('text', 'sitename', $this->_plugin->get_lang('sitename'));
         $cform->applyFilter('sitename', 'trim');
 
-        // Shortname.
-        $elementInstitution = $cform->addElement(
+        $cform->addElement(
             'text',
             'institution',
             $this->_plugin->get_lang('institution')
@@ -400,7 +400,6 @@ class InstanceForm extends ChamiloForm
         $cform->applyFilter('root_web', 'trim');
 
         if ($this->_mode == 'update') {
-            $elementInstitution->freeze();
             $elementWeb->freeze();
         }
 
@@ -428,20 +427,6 @@ class InstanceForm extends ChamiloForm
         // Database name.
         $cform->addElement('text', 'main_database', $this->_plugin->get_lang('maindatabase'));
 
-        // Table's prefix.
-        //$cform->addElement('text', 'table_prefix', $this->_plugin->get_lang('tableprefix'));
-
-        // Db's prefix.
-        //$cform->addElement('text', 'db_prefix', $this->_plugin->get_lang('dbprefix'));
-        //$cform->addElement('header', $this->_plugin->get_lang('datalocation'));
-
-        /*$cform->addElement(
-            'text',
-            'course_folder',
-            $this->_plugin->get_lang('coursefolder'),
-            array('id' => 'id_vdatapath')
-        );*/
-
         // Button for testing database connection.
         $cform->addElement(
             'button',
@@ -454,18 +439,6 @@ class InstanceForm extends ChamiloForm
             'onclick="opencnxpopup(\''.$_configuration['root_web'].'\'); return false;"'
         );
 
-        // Button for testing datapath.
-        /*$cform->addElement(
-            'button',
-            'testdatapath',
-            $this->_plugin->get_lang('testdatapath'),
-            'check',
-            'default',
-            'default',
-            '',
-            'onclick="opendatapathpopup(\''.$_configuration['root_web'].'\'); return true;"'
-        );*/
-
         /*
          * Template selection.
          */
@@ -476,38 +449,33 @@ class InstanceForm extends ChamiloForm
 
             // Template choice
             $cform->addElement('select', 'template', $this->_plugin->get_lang('template'), $templateoptions);
+        } else {
+            if ($this->instance) {
+                $cform->addLabel($this->_plugin->get_lang('template'), $this->instance->template);
+            }
         }
 
         $submitstr = $this->_plugin->get_lang('savechanges');
-        $cancelstr = $this->_plugin->get_lang('cancel');
-        $this->add_action_buttons(true, $submitstr, $cancelstr);
+        $this->add_action_buttons(true, $submitstr);
 
         // Rules for the add mode.
-        if ($this->is_in_add_mode()) {
-            $cform->addRule('sitename', $this->_plugin->get_lang('sitenameinputerror'), 'required', null, 'client');
-            $cform->addRule(
-                'institution',
-                $this->_plugin->get_lang('institutioninputerror'),
-                'required',
-                null,
-                'client'
-            );
-            $cform->addRule('root_web', $this->_plugin->get_lang('rootwebinputerror'), 'required', null, 'client');
-            $cform->addRule(
-                'main_database',
-                $this->_plugin->get_lang('databaseinputerror'),
-                'required',
-                null,
-                'client'
-            );
-            /*$cform->addRule(
-                'course_folder',
-                $this->_plugin->get_lang('coursefolderinputerror'),
-                'required',
-                null,
-                'client'
-            );*/
-        }
+
+        $cform->addRule('sitename', $this->_plugin->get_lang('sitenameinputerror'), 'required', null, 'client');
+        $cform->addRule(
+            'institution',
+            $this->_plugin->get_lang('institutioninputerror'),
+            'required',
+            null,
+            'client'
+        );
+        $cform->addRule('root_web', $this->_plugin->get_lang('rootwebinputerror'), 'required', null, 'client');
+        $cform->addRule(
+            'main_database',
+            $this->_plugin->get_lang('databaseinputerror'),
+            'required',
+            null,
+            'client'
+        );
     }
 
     /**

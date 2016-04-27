@@ -403,7 +403,7 @@ class Plugin
                 $variable = $setting['name'];
                 $value ='';
                 if (isset($setting['init_value'])) {
-                    $value = ($setting['init_value']);
+                    $value = $setting['init_value'];
                 }
 
                 $type = 'textfield';

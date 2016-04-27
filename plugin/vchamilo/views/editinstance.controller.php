@@ -2,6 +2,8 @@
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
+api_protect_admin_script();
+
 if (!defined('CHAMILO_INTERNAL')) die('You cannot use this script this way');
 
 if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
@@ -19,15 +21,18 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     $data->lastcrongap = 0;
     $data->croncount = 0;
 
-    if (isset($data->template)) {
+    if (!empty($data->template)) {
         $template = $data->template;
-        unset($data->template);
+    } else {
+        $template = '';
     }
 
     $mainDatabase = api_get_configuration_value('main_database');
 
     if ($mainDatabase == $data->main_database) {
-        Display::addFlash(Display::return_message('You cannot use the same database as the chamilo master', 'error'));
+        Display::addFlash(
+            Display::return_message('You cannot use the same database as the chamilo master', 'error')
+        );
         return ;
     }
 
@@ -171,8 +176,10 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
     $settingstable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sitename = Database::escape_string($data->sitename);
     $institution = Database::escape_string($data->institution);
-    $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$sitename}' WHERE variable = 'siteName' AND category = 'Platform' ";
-    $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$institution}' WHERE variable = 'institution' AND category = 'Platform' ";
+    $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$sitename}' 
+               WHERE variable = 'siteName' AND category = 'Platform' ";
+    $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$institution}' 
+               WHERE variable = 'institution' AND category = 'Platform' ";
     $accessurltable = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $sqls[] = "UPDATE {$accessurltable} SET url = '{$data->root_web}' WHERE id = '1' ";
 

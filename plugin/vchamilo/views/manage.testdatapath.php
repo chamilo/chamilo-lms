@@ -12,6 +12,8 @@ require_once '../../../main/inc/global.inc.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
 
+api_protect_admin_script();
+
 $plugininstance = VChamiloPlugin::create();
 
 // Retrieve parameters for database connection test.

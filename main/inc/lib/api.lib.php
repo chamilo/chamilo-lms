@@ -4999,7 +4999,6 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
     } else {
         $select .= " AND access_url = 1 ";
     }
-
     $res = Database::query($select);
     if (Database::num_rows($res) > 0) {
         // Found item for this access_url.
@@ -5020,7 +5019,6 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                 $select .= " AND category = '$cat'";
             }
             $res = Database::query($select);
-
             if (Database::num_rows($res) > 0) {
                 // We have a setting for access_url 1, but none for the current one, so create one.
                 $row = Database::fetch_array($res);

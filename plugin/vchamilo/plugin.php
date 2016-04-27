@@ -79,17 +79,15 @@ $form->addElement(
     [$plugininstance->get_lang('homerealroot'), 'Example: '.api_get_path(SYS_PATH).'var/home/']
 );
 
+$form->addElement('header', $plugininstance->get_lang('mysqlcmds'));
+$form->addElement('text', 'cmd_mysql', [$plugininstance->get_lang('mysqlcmd'), 'Example: /usr/bin/mysql']);
+$form->addElement('text', 'cmd_mysqldump', [$plugininstance->get_lang('mysqldumpcmd'), 'Example: /usr/bin/mysqldump']);
 $form->addElement('header', $plugininstance->get_lang('proxysettings'));
 $form->addElement('text', 'httpproxyhost', $plugininstance->get_lang('httpproxyhost'));
 $form->addElement('text', 'httpproxyport', $plugininstance->get_lang('httpproxyport'));
 $form->addElement('text', 'httpproxybypass', $plugininstance->get_lang('httpproxybypass'));
 $form->addElement('text', 'httpproxyuser', $plugininstance->get_lang('httpproxyuser'));
 $form->addElement('text', 'httpproxypassword', $plugininstance->get_lang('httpproxypassword'));
-
-$form->addElement('header', $plugininstance->get_lang('mysqlcmds'));
-$form->addElement('text', 'cmd_mysql', [$plugininstance->get_lang('mysqlcmd'), 'Example: /usr/bin/mysql']);
-$form->addElement('text', 'cmd_mysqldump', [$plugininstance->get_lang('mysqldumpcmd'), 'Example: /usr/bin/mysqldump']);
-
 $form->addButtonSave($plugininstance->get_lang('Save'));
 
 $plugin_info['settings_form'] = $form;

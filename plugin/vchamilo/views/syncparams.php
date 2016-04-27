@@ -3,6 +3,8 @@
 $cidReset = true;
 require_once '../../../main/inc/global.inc.php';
 
+api_protect_admin_script();
+
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
 
@@ -11,8 +13,6 @@ define('CHAMILO_INTERNAL', true);
 
 $plugininstance = VChamiloPlugin::create();
 $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
-
-api_protect_admin_script();
 
 if ($action){
     require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/syncparams.controller.php');

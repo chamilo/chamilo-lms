@@ -4768,12 +4768,12 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_hide_toc_frame()', 0);
         }
-        if (intval($hide) == $hide){
+        if (intval($hide) == $hide) {
             $this->hide_toc_frame = $hide;
             $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
             $lp_id = $this->get_id();
             $sql = "UPDATE $lp_table SET
-                    hide_toc_frame = '" . $this->hide_toc_frame . "'
+                    hide_toc_frame = '" . (int) $this->hide_toc_frame . "'
                     WHERE c_id = ".$course_id." AND id = '$lp_id'";
             if ($this->debug > 2) {
                 error_log('New LP - lp updated with new preview hide_toc_frame : ' . $this->author, 0);
@@ -4890,17 +4890,18 @@ class learnpath
         if (!empty($expired_on)) {
             $this->expired_on = api_get_utc_datetime($expired_on);
         } else {
-            $this->expired_on = '';
+            $this->expired_on = null;
         }
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET
-                expired_on = '" . Database::escape_string($this->expired_on) . "'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new expired_on : ' . $this->expired_on, 0);
         }
-        Database::query($sql);
+
+        $params = [
+            'expired_on' => $this->expired_on,
+        ];
+        Database::update($lp_table, $params, ['c_id = ? AND id = ?' => [$course_id, $lp_id]], true);
 
         return true;
     }
@@ -4953,6 +4954,7 @@ class learnpath
             error_log('New LP - lp updated with new expired_on : ' . $this->modified_on, 0);
         }
         Database::query($sql);
+
         return true;
     }
 
@@ -5500,7 +5502,7 @@ class learnpath
 
         // we need to start a form when we want to update all the mp3 files
         if ($update_audio == 'true') {
-            $return .= '<form action="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&updateaudio=' . Security :: remove_XSS($_GET['updateaudio']) .'&action=' . Security :: remove_XSS($_GET['action']) . '&lp_id=' . $_SESSION['oLP']->lp_id . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
+            $return .= '<form action="' . api_get_self() . '?'.api_get_cidreq().'&updateaudio=' . Security :: remove_XSS($_GET['updateaudio']) .'&action=' . Security :: remove_XSS($_GET['action']) . '&lp_id=' . $_SESSION['oLP']->lp_id . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
         }
         $return .= '<div id="message"></div>';
         if (count($this->items) == 0) {
@@ -5516,7 +5518,10 @@ class learnpath
                 $return .= '<div class="col-md-12">';
                 $return .= self::return_new_tree($update_audio);
                 $return .='</div>';
-                $return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'btn btn-primary')), array('style'=>'float:left; margin-top:15px;width:100%'));
+                $return .= Display::div(
+                    Display::url(get_lang('Save'), '#', array('id' => 'listSubmit', 'class' => 'btn btn-primary')),
+                    array('style' => 'float:left; margin-top:15px;width:100%')
+                );
             } else {
                 $return_audio .= self::return_new_tree($update_audio);
                 $return .= $return_audio.'</table>';
@@ -5525,9 +5530,12 @@ class learnpath
             // We need to close the form when we are updating the mp3 files.
             if ($update_audio == 'true') {
                 $return .= '<div class="footer-audio">';
-                $return .= Display::button('save_audio','<em class="fa fa-file-audio-o"></em> '. get_lang('SaveAudioAndOrganization'),array('class'=>'btn btn-primary','type'=>'submit'));
+                $return .= Display::button(
+                    'save_audio',
+                    '<em class="fa fa-file-audio-o"></em> '.get_lang('SaveAudioAndOrganization'),
+                    array('class' => 'btn btn-primary', 'type' => 'submit')
+                );
                 $return .= '</div>';
-                //$return .= '<div><button class="btn btn-primary" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
             }
         }
 
@@ -5535,6 +5543,7 @@ class learnpath
         if ($update_audio == 'true' && count($this->arrMenu) != 0) {
             $return .= '</form>';
         }
+        
         return $return;
     }
 

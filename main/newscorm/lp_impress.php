@@ -58,11 +58,11 @@ if ($is_allowed_to_edit) {
     echo '<div style="position: fixed; top: 0px; left: 0px; pointer-events: auto;width:100%">';
     global $interbreadcrumb;
     $interbreadcrumb[] = array(
-        'url' => 'lp_controller.php?action=list&isStudentView=false',
+        'url' => 'lp_controller.php?action=list&isStudentView=false&'.api_get_cidreq(),
         'name' => get_lang('LearningPaths'),
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false",
+        'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false&".api_get_cidreq(),
         'name' => $_SESSION['oLP']->get_name(),
     );
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));

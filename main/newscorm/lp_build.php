@@ -131,15 +131,18 @@ if (isset($is_success) && $is_success === true) {
     echo Display::page_subheader(get_lang('LearnPathAddedTitle'));
 
     echo '<ul id="lp_overview" class="thumbnails">';
-
-    echo show_block('lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=add_item&type=step&lp_id=' . $_SESSION['oLP']->lp_id, get_lang("NewStep"), get_lang('NewStepComment'), 'tools.png');
-
-//    echo show_block('lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=admin_view&updateaudio=true&lp_id=' . $_SESSION['oLP']->lp_id, get_lang("BasicOverview"), get_lang('BasicOverviewComment'), 'audio.png');
-
-    echo show_block('lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=view&lp_id=' . $_SESSION['oLP']->lp_id, get_lang("Display"), get_lang('DisplayComment'), 'view.png');
-
-    //echo show_block('lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=edit&lp_id=' . $_SESSION['oLP']->lp_id, get_lang("Settings"), null, 'reference.png');
-
+    echo show_block(
+        'lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=add_item&type=step&lp_id='.$_SESSION['oLP']->lp_id,
+        get_lang("NewStep"),
+        get_lang('NewStepComment'),
+        'tools.png'
+    );
+    echo show_block(
+        'lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=view&lp_id='.$_SESSION['oLP']->lp_id,
+        get_lang("Display"),
+        get_lang('DisplayComment'),
+        'view.png'
+    );
     echo '</ul>';
 }
 echo '</div>';
@@ -148,14 +151,14 @@ echo '</div>';
 
 function show_block($link, $title, $subtitle, $icon) {
     $html = '<li class="col-md-4">';
-        $html .=  '<div class="thumbnail">';
-        $html .=  '<a href="'.$link.'" title="'.$title.'">';
-        $html .=  Display::return_icon($icon, $title, array(), ICON_SIZE_BIG);
-        $html .=  '</a>';
-        $html .=  '<div class="caption">';
-        $html .=  '<strong>'.$title.'</strong></a> '.$subtitle;
-        $html .=  '</div>';
-        $html .=  '</div>';
+    $html .=  '<div class="thumbnail">';
+    $html .=  '<a href="'.$link.'" title="'.$title.'">';
+    $html .=  Display::return_icon($icon, $title, array(), ICON_SIZE_BIG);
+    $html .=  '</a>';
+    $html .=  '<div class="caption">';
+    $html .=  '<strong>'.$title.'</strong></a> '.$subtitle;
+    $html .=  '</div>';
+    $html .=  '</div>';
     $html .=  '</li>';
     return $html;
 }

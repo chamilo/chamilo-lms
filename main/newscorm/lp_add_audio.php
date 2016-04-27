@@ -51,11 +51,17 @@ $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpa
 
 switch ($type) {
     case 'chapter':
-        $interbreadcrumb[]= array('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id(), 'name' => get_lang('NewStep'));
-        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewChapter'));
+        $interbreadcrumb[] = array(
+            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id().'&'.api_get_cidreq(),
+            'name' => get_lang('NewStep'),
+        );
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewChapter'));
         break;
     case 'document':
-        $interbreadcrumb[]= array('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id(), 'name' => get_lang('NewStep'));
+        $interbreadcrumb[] = array(
+            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id().'&'.api_get_cidreq(),
+            'name' => get_lang('NewStep'),
+        );
         break;
     default:
         $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewStep'));

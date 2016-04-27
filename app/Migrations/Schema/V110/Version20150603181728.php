@@ -54,27 +54,17 @@ class Version20150603181728 extends AbstractMigrationChamilo
         $this->addSql("UPDATE c_item_property SET to_user_id = NULL WHERE to_user_id = 0");
         $this->addSql("UPDATE c_item_property SET start_visible = NULL WHERE start_visible = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE c_item_property SET end_visible = NULL WHERE end_visible = '0000-00-00 00:00:00'");
-        $this->addSql("
-            UPDATE c_item_property SET to_user_id = NULL WHERE to_user_id NOT IN (
-                SELECT id FROM user
-            )
-        ");
-        $this->addSql("
-            UPDATE c_item_property SET insert_user_id = NULL WHERE insert_user_id NOT IN (
-                SELECT id FROM user
-            )
-        ");
-        $this->addSql("
-            UPDATE c_item_property SET session_id = NULL WHERE session_id NOT IN (
-                SELECT id FROM session
-            )
-        ");
+        $this->addSql("UPDATE c_item_property SET to_user_id = NULL WHERE to_user_id NOT IN (SELECT id FROM user)");
+        $this->addSql("UPDATE c_item_property SET insert_user_id = NULL WHERE insert_user_id NOT IN (SELECT id FROM user)");
+        $this->addSql("UPDATE c_item_property SET session_id = NULL WHERE session_id NOT IN (SELECT id FROM session)");
+
         // Remove inconsistencies about non-existing courses
         $this->addSql("DELETE FROM c_item_property WHERE c_id = 0");
         // Remove inconsistencies about non-existing users
         $this->addSql("DELETE FROM course_rel_user WHERE user_id = 0");
 
         $this->addSql("DELETE FROM c_item_property WHERE c_id NOT IN (SELECT id FROM course)");
+        $this->addSql("DELETE FROM c_item_property WHERE to_group_id NOT IN (SELECT id FROM c_group_info)");
 
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18191D79BD3 FOREIGN KEY (c_id) REFERENCES course(id)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C181330D47E9 FOREIGN KEY (to_group_id) REFERENCES c_group_info (iid)');

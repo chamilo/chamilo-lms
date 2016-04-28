@@ -556,6 +556,8 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
             'cat_comment' => isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '',
             'cat_order' => $new_max,
             'session_id' => $session_id,
+            'locked' => 0,
+            'cat_id' => 0
         ];
         $last_id = Database::insert($table_categories, $params);
 
@@ -742,8 +744,11 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0,
             'locked' => 0,
-            'forum_id' => 0
+            'forum_id' => 0,
+            'start_time' => null,
+            'end_time' => null
         ];
+
         $last_id = Database::insert($table_forums, $params);
         if ($last_id > 0) {
 
@@ -2424,15 +2429,17 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 'thread_title' => $clean_post_title,
                 'forum_id' => $values['forum_id'],
                 'thread_poster_id' => $_user['user_id'],
-                'thread_poster_name' => stripslashes(isset($values['poster_name']) ? $values['poster_name'] : ''),
+                'thread_poster_name' => isset($values['poster_name']) ? $values['poster_name'] : '',
                 'thread_date' => $post_date,
-                'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : '',
+                'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : 0,
                 'thread_title_qualify' => isset($values['calification_notebook_title']) ? $values['calification_notebook_title'] : '',
-                'thread_qualify_max' => isset($values['numeric_calification']) ? $values['numeric_calification'] : '',
-                'thread_weight' => isset($values['weight_calification']) ? $values['weight_calification'] : '',
-                'thread_peer_qualify' => isset($values['thread_peer_qualify']) ? $values['thread_peer_qualify'] : '',
+                'thread_qualify_max' => isset($values['numeric_calification']) ? (int) $values['numeric_calification'] : 0,
+                'thread_weight' => isset($values['weight_calification']) ? (int) $values['weight_calification'] : 0,
+                'thread_peer_qualify' => isset($values['thread_peer_qualify']) ? (int) $values['thread_peer_qualify'] : 0,
                 'session_id' => api_get_session_id(),
-                'lp_item_id' => isset($values['lp_item_id']) ? intval($values['lp_item_id']) : 0
+                'lp_item_id' => isset($values['lp_item_id']) ? (int) $values['lp_item_id'] : 0,
+                'thread_id' => 0,
+                'locked' => 0
             ]
         );
 
@@ -2520,9 +2527,10 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             'poster_id' => $_user['user_id'],
             'poster_name' => isset($values['poster_name']) ? $values['poster_name'] : '',
             'post_date' => $post_date,
-            'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : '',
+            'post_notification' => isset($values['post_notification']) ? (int) $values['post_notification'] : 0,
             'post_parent_id' => 0,
             'visible' => $visible,
+            'post_id' => 0
         ];
         $last_post_id = Database::insert($table_posts, $params);
 
@@ -2762,8 +2770,6 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
 {
     $_user = api_get_user_info();
     $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
-
-    // Initialize the object.
     $myThread = isset($_GET['thread']) ? $_GET['thread'] : '';
     $my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
     $my_post = isset($_GET['post']) ? $_GET['post'] : '';
@@ -2963,7 +2969,8 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
             }
             Security::clear_token();
 
-            return $values;
+            // Add new thread in table forum_thread.
+            store_thread($current_forum, $values);
         }
     } else {
         $token = Security::get_token();
@@ -2978,7 +2985,7 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $ajaxHtml = $attachmentAjaxTable;
         $form->addElement('html', $ajaxHtml);
 
-        return $form;
+        $form->display();
     }
 }
 

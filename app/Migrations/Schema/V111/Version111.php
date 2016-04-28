@@ -76,6 +76,9 @@ class Version111 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_quiz CHANGE start_time start_time DATETIME');
         $this->addSql('ALTER TABLE c_quiz CHANGE end_time end_time DATETIME');
+
+        $this->addSql('ALTER TABLE c_forum_forum CHANGE start_time start_time DATETIME');
+        $this->addSql('ALTER TABLE c_forum_forum CHANGE end_time end_time DATETIME');
     }
 
     /**

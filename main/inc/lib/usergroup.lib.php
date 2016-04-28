@@ -18,6 +18,7 @@ class UserGroup extends Model
         'group_type',
         'picture',
         'url',
+        'allow_members_leave_group',
         'visibility',
         'updated_at',
         'created_at'
@@ -949,6 +950,7 @@ class UserGroup extends Model
     {
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
         $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
+        $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
 
         $groupExists = $this->usergroup_exists(trim($params['name']));
         if ($groupExists == false) {
@@ -991,6 +993,7 @@ class UserGroup extends Model
     {
         $values['updated_on'] = api_get_utc_datetime();
         $values['group_type'] = isset($values['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
+        $values['allow_members_leave_group'] = isset($values['allow_members_leave_group']) ? 1 : 0;
 
         if (isset($values['id'])) {
             $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
@@ -1349,6 +1352,8 @@ class UserGroup extends Model
 
         $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $this->getGroupStatusList());
         $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
+
+        $form->addElement('checkbox', 'allow_members_leave_group', '', get_lang('AllowMemberLeaveGroup'));
 
         // Setting the form elements
         if ($type == 'add') {
@@ -1994,9 +1999,16 @@ class UserGroup extends Model
                 // I'm just a reader
                 $relation_group_title = get_lang('IAmAReader');
                 $links .=  '<li><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
-                $links .=  '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                            Display::return_icon('group_leave.png', get_lang('LeaveGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                            Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace'=>'6')).
+                    '<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.
+                    get_lang('InviteFriends').'</span></a></li>';
+
+                if (UserGroup::canLeave($group_info)) {
+                    $links .=  '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
+                        Display::return_icon('group_leave.png', get_lang('LeaveGroup'), array('hspace'=>'6')).
+                        '<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                }
+
                 break;
             case GROUP_USER_PERMISSION_ADMIN:
                 $relation_group_title = get_lang('IAmAnAdmin');
@@ -2006,8 +2018,15 @@ class UserGroup extends Model
                             Display::return_icon('waiting_list.png', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="'.($show=='waiting_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('WaitingList').'</span></a></li>';
                 $links .=  '<li><a href="group_invitation.php?id='.$group_id.'">'.
                             Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
-                $links .=  '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                            Display::return_icon('group_leave.png', get_lang('LeaveGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+
+                if (UserGroup::canLeave($group_info)) {
+                    $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
+                        Display::return_icon(
+                            'group_leave.png',
+                            get_lang('LeaveGroup'),
+                            array('hspace' => '6')
+                        ).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                }
                 break;
             case GROUP_USER_PERMISSION_PENDING_INVITATION:
 //				$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('YouHaveBeenInvitedJoinNow'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a></li>';
@@ -2026,8 +2045,14 @@ class UserGroup extends Model
                 }
                 $links .=  '<li><a href="group_invitation.php?id='.$group_id.'">'.
                             Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
-                $links .=  '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                            Display::return_icon('group_leave.png', get_lang('LeaveGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                if (UserGroup::canLeave($group_info)) {
+                    $links .=  '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
+                        Display::return_icon(
+                            'group_leave.png',
+                            get_lang('LeaveGroup'),
+                            array('hspace' => '6')
+                        ).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                }
                 break;
             case GROUP_USER_PERMISSION_HRM:
                 $relation_group_title = get_lang('IAmAHRM');
@@ -2394,5 +2419,15 @@ class UserGroup extends Model
 
         return $nameList;
     }
+
+    /**
+     * @param array $groupInfo
+     * @return bool
+     */
+    public static function canLeave($groupInfo)
+    {
+        return $groupInfo['allow_members_leave_group'] == 1 ? true : false;
+    }
+
 }
 

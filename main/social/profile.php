@@ -151,7 +151,6 @@ $userIsOnline = user_is_online($user_id);
 
 $libpath = api_get_path(LIBRARY_PATH);
 
-require_once $libpath.'magpierss/rss_fetch.inc';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
 $javascriptDir = api_get_path(LIBRARY_PATH) . 'javascript/';

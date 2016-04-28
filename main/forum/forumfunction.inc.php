@@ -2939,8 +2939,8 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
                 return false;
             }
             Security::clear_token();
-
-            return $values;
+            
+            store_thread($current_forum, $values);
         }
     } else {
         $token = Security::get_token();

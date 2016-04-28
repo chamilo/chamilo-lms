@@ -208,6 +208,9 @@ class SocialManager extends UserManager
                 'send_date' => $now,
                 'title' => $message_title,
                 'content'  => $message_content,
+                'group_id' => 0,
+                'parent_id' => 0,
+                'update_date' => $now
             ];
             Database::insert($tbl_message, $params);
 
@@ -439,7 +442,7 @@ class SocialManager extends UserManager
                 continue;
             }
             $channel = Reader::import($url);
-            
+
             $i = 1;
             if (!empty($channel)) {
                 $icon_rss = '';
@@ -1246,17 +1249,20 @@ class SocialManager extends UserManager
         $friendId = intval($friendId);
         $messageId = intval($messageId);
 
-        //Just in case we replace the and \n and \n\r while saving in the DB
+        // Just in case we replace the and \n and \n\r while saving in the DB
         $messageContent = str_replace(array("\n", "\n\r"), '<br />', $messageContent);
+        $now = api_get_utc_datetime();
 
         $attributes = array(
             'user_sender_id' => $userId,
             'user_receiver_id' => $friendId,
             'msg_status' => $messageStatus,
-            'send_date' => api_get_utc_datetime(),
+            'send_date' => $now,
             'title' => '',
             'content' => $messageContent,
             'parent_id' => $messageId,
+            'group_id' => 0,
+            'update_date' => $now
         );
 
         return Database::insert($tblMessage, $attributes);

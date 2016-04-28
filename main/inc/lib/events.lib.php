@@ -408,7 +408,7 @@ class Event
      * @param	integer	Position
      * @param	integer Exercise ID (from c_quiz)
      * @param	bool update results?
-     * @param	string  Filename (for audio answers - using nanogong)
+     * @param	$fileName string  Filename (for audio answers - using nanogong)
      * @param	integer User ID The user who's going to get this score. Default value of null means "get from context".
      * @param	integer	Course ID (from the "id" column of course table). Default value of null means "get from context".
      * @param	integer	Session ID (from the session table). Default value of null means "get from context".
@@ -424,7 +424,7 @@ class Event
         $position,
         $exercise_id = 0,
         $updateResults = false,
-        $nano = null,
+        $fileName = null,
         $user_id = null,
         $course_id = null,
         $session_id = null,
@@ -481,11 +481,6 @@ class Event
             $answer = 0;
         }
 
-        $file = '';
-        if (isset($nano)) {
-            $file = Database::escape_string(basename($nano->load_filename_if_exists(false)));
-        }
-
         $session_id = api_get_session_id();
 
         if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
@@ -498,7 +493,7 @@ class Event
                 'session_id' => $session_id,
                 'position' => $position,
                 'tms' => $now,
-                'filename' => $file,
+                'filename' => !empty($fileName) ? basename($fileName) : $fileName,
             );
 
             // Check if attempt exists.

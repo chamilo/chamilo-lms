@@ -90,17 +90,12 @@ $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' 
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 $pathinfo = pathinfo($header_file);
 
-if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true'){
-	echo '<div align="center">';
-		echo '<br/>';
-		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="95" >';
-			echo '<param name="SoundFileURL" value="'.$file_url_web.'" />';
-			echo '<param name="ShowSaveButton" value="false" />';
-			echo '<param name="ShowTime" value="true" />';
-			echo '<param name="ShowRecordButton" value="false" />';
-		echo '</applet>';
-	echo '</div>';
+if ($pathinfo['extension']=='swf') {
+	$width='83%';
+	$height='83%';
 } else {
-	if ($pathinfo['extension']=='swf') { $width='83%'; $height='83%';} else {$width='100%'; $height='100%';}
-	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 1000).'"></iframe>';
+	$width='100%';
+	$height='100%';
 }
+
+echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 1000).'"></iframe>';

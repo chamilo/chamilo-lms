@@ -100,8 +100,8 @@ if (isset($lp_item->audio) && !empty($lp_item->audio)) {
     $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio.'?'.api_get_cidreq();
 
     if (!file_exists($file)) {
-        $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio;
-        $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio.'?'.api_get_cidreq();
+        $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'] . '/' . $lp_item->audio;
+        $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'] . '/' . $lp_item->audio.'?'.api_get_cidreq();
     }
 }
 
@@ -117,20 +117,24 @@ $recordVoiceForm = Display::page_subheader(get_lang('RecordYourVoice'));
 
 $page .= '<div id="doc_form" class="col-md-8">';
 
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'rtc/RecordRTC.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/recorder.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/gui.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'swfobject/swfobject.js"></script>';
+
 $tpl = new Template(null);
 $tpl->assign('unique_file_id', api_get_unique_id());
 $tpl->assign('course_code', api_get_course_id());
 $tpl->assign('php_session_id', session_id());
 $tpl->assign('filename', $lp_item->get_title().'_nano.wav');
-$tpl->assign('enable_nanogong', api_get_setting('enable_nanogong') == 'true' ? 1 : 0);
-$tpl->assign('enable_wami', api_get_setting('enable_wami_record') == 'true' ? 1 : 0);
+$tpl->assign('enable_record_audio', api_get_setting('enable_record_audio') === 'true');
 $tpl->assign('cur_dir_path', '/audio');
 $tpl->assign('lp_item_id', $lp_item_id);
 $tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
 $recordVoiceForm .= $tpl->fetch('default/learnpath/record_voice.tpl');
 $form->addElement('header', get_lang('Or'));
 $form->addElement('header', get_lang('AudioFile'));
-$form->addElement('html', sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title()));
+$form->addLabel(null, sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title()));
 
 if (!empty($file)) {
     $audioPlayer = '<div id="preview">'.

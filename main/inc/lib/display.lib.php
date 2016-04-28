@@ -2007,12 +2007,6 @@ class Display
         $fileInfo = pathinfo($file);
 
         switch ($fileInfo['extension']) {
-            case 'wav':
-                if (isset($params['url'])) {
-                    $url = DocumentManager::generateAudioTempFile(basename($file), $file);
-                    return DocumentManager::readNanogongFile($url);
-                }
-                break;
             case 'mp3':
             case 'webm':
                 $autoplay = null;
@@ -2029,6 +2023,13 @@ class Display
                             <param name="flashvars" value="controls=true&file='.$params['url'].'" />
                           </object>';
                 $html .= '</audio>';
+
+                return $html;
+                break;
+            case 'wav':
+                //no break;
+            case 'ogg':
+                $html = '<audio src="' . $params['url'] . '" controls class="skip"></audio>';
 
                 return $html;
                 break;

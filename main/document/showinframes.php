@@ -300,11 +300,6 @@ if ($is_freemind_available) {
     $execute_iframe = false;
 }
 
-$is_nanogong_available = $pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true';
-if ($is_nanogong_available) {
-    $execute_iframe = false;
-}
-
 if (!$jplayer_supported && $execute_iframe) {
 
     $htmlHeadXtra[] = '<script type="text/javascript">
@@ -343,10 +338,8 @@ echo '<div class="text-center">';
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
 
-if (!$is_nanogong_available) {
-    if (in_array(strtolower($pathinfo['extension']) , array('html', "htm"))) {
-        echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank">'.get_lang('CutPasteLink').'</a>';
-    }
+if (in_array(strtolower($pathinfo['extension']), array('html', "htm"))) {
+    echo '<a class="btn btn-default" href="' . $file_url_web . '" target="_blank">' . get_lang('CutPasteLink') . '</a>';
 }
 
 if ($show_web_odf) {
@@ -439,17 +432,6 @@ if ($is_freemind_available) {
         // ]]>
     </script>
 <?php
-}
-
-if ($is_nanogong_available) {
-    $file_url_web = DocumentManager::generateAudioTempFolder($file_url_sys);
-    echo '<div align="center">';
-    echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank"><em class="fa fa-download"></em> '.get_lang('Download').'</a>';
-    echo '<br/>';
-    echo '<br/>';
-    echo DocumentManager::readNanogongFile($to_url);
-    // Erase temp file in tmp directory when return to documents
-    echo '</div>';
 }
 
 if ($execute_iframe) {

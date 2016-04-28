@@ -29,6 +29,7 @@ if ($form->validate()) {
     $values = $form->exportValues();
     $values['group_type'] = UserGroup::SOCIAL_CLASS;
     $values['relation_type'] = GROUP_USER_PERMISSION_ADMIN;
+
     $groupId = $usergroup->save($values);
     Display::addFlash(Display::return_message(get_lang('GroupAdded')));
     header('Location: group_view.php?id='.$groupId);

@@ -732,8 +732,8 @@ class AnnouncementManager
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         if (!empty($user_id) && is_numeric($user_id)) {
-            $user_id = intval($user_id);
-            $sql = "SELECT DISTINCT announcement.title, announcement.content
+            $user_id = (int) $user_id;
+            $sql = "SELECT DISTINCT announcement.title, announcement.content, display_order
 					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 					WHERE
 						announcement.c_id = $course_id AND

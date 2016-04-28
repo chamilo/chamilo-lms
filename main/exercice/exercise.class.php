@@ -3170,7 +3170,7 @@ class Exercise
         $totalScore = 0;
 
         // Destruction of the Question object
-        unset($objQuestionTmp);
+        //unset($objQuestionTmp);
 
         // Construction of the Answer object
         $objAnswerTmp = new Answer($questionId);
@@ -3188,25 +3188,20 @@ class Exercise
             $nbrAnswers = 1;
         }
 
-        $nano = null;
-
         if ($answerType == ORAL_EXPRESSION) {
             $exe_info = Event::get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
 
-            $params = array();
-            $params['course_id'] = $course_id;
-            $params['session_id'] = api_get_session_id();
-            $params['user_id'] = isset($exe_info['exe_user_id'])? $exe_info['exe_user_id'] : api_get_user_id();
-            $params['exercise_id'] = isset($exe_info['exe_exo_id'])? $exe_info['exe_exo_id'] : $this->id;
-            $params['question_id'] = $questionId;
-            $params['exe_id'] = isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId;
-
-            $nano = new Nanogong($params);
+            $objQuestionTmp->initFile(
+                api_get_session_id(),
+                isset($exe_info['exe_user_id']) ? $exe_info['exe_user_id'] : api_get_user_id(),
+                isset($exe_info['exe_exo_id']) ? $exe_info['exe_exo_id'] : $this->id,
+                isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId
+            );
 
             //probably this attempt came in an exercise all question by page
             if ($feedback_type == 0) {
-                $nano->replace_with_real_exe($exeId);
+                $objQuestionTmp->replaceWithRealExe($exeId);
             }
         }
 
@@ -3839,10 +3834,11 @@ class Exercise
                         $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
                                    WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resq   = Database::query($query);
-                        $choice = Database::result($resq,0,'answer');
+                        $row = Database::fetch_assoc($resq);
+                        $choice = $row['answer'];
                         $choice = str_replace('\r\n', '', $choice);
                         $choice = stripslashes($choice);
-                        $questionScore = Database::result($resq,0,"marks");
+                        $questionScore = $row['marks'];
                         if ($questionScore==-1) {
                             $totalScore+=0;
                         } else {
@@ -4189,7 +4185,8 @@ class Exercise
                                 $choice,
                                 0,
                                 0,
-                                $nano);
+                                $objQuestionTmp->getFileUrl()
+                            );
                             //}
                         } elseif ($answerType == HOT_SPOT) {
                             //if ($origin != 'learnpath') {
@@ -4521,7 +4518,7 @@ class Exercise
                                     $choice,
                                     $exeId,
                                     $questionId,
-                                    $nano
+                                    $objQuestionTmp->getFileUrl()
                                 ) . '</td>
                                 </tr>
                                 </table>';
@@ -5037,7 +5034,16 @@ class Exercise
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
-                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
+                Event::saveQuestionAttempt(
+                    $questionScore,
+                    $answer,
+                    $quesId,
+                    $exeId,
+                    0,
+                    $this->id,
+                    false,
+                    $objQuestionTmp->getAbsoluteFilePath()
+                );
             } elseif (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION])) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
@@ -6842,6 +6848,7 @@ class Exercise
 
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
             $course_id = api_get_course_int_id();
+            $sessionId = api_get_session_id();
             $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
 
             // For "matching" type here, we need something a little bit special
@@ -6906,27 +6913,28 @@ class Exercise
                 $s .= $form->return_form();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanogong
-                if (api_get_setting('document.enable_nanogong') == 'true') {
+                if (api_get_setting('enable_record_audio') === 'true') {
 
                     //@todo pass this as a parameter
                     global $exercise_stat_info, $exerciseId;
 
                     if (!empty($exercise_stat_info)) {
-                        $params = array(
-                            'exercise_id' => $exercise_stat_info['exe_exo_id'],
-                            'exe_id' => $exercise_stat_info['exe_id'],
-                            'question_id' => $questionId
+                        $objQuestionTmp->initFile(
+                            api_get_session_id(),
+                            api_get_user_id(),
+                            $exercise_stat_info['exe_exo_id'],
+                            $exercise_stat_info['exe_id']
                         );
                     } else {
-                        $params = array(
-                            'exercise_id' => $exerciseId,
-                            'exe_id' => 'temp_exe',
-                            'question_id' => $questionId
+                        $objQuestionTmp->initFile(
+                            api_get_session_id(),
+                            api_get_user_id(),
+                            $exerciseId,
+                            'temp_exe'
                         );
                     }
 
-                    $nano = new Nanogong($params);
-                    $s .= $nano->show_button();
+                    $s .= $objQuestionTmp->returnRecorder();
                 }
 
                 $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => 'TestFreeAnswer'));

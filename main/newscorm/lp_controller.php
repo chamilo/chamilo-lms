@@ -1047,13 +1047,15 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($debug > 0) error_log('New LP - delete item action triggered', 0);
-        if (!$lp_found) { error_log('New LP - No learnpath given for delete item', 0); require 'lp_list.php'; }
-        else {
+        if (!$lp_found) {
+            error_log('New LP - No learnpath given for delete item', 0);
+            require 'lp_list.php';
+        } else {
             //$_SESSION['refresh'] = 1;
             if (!empty($_REQUEST['id'])) {
                 $_SESSION['oLP']->delete_item($_REQUEST['id']);
             }
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']).api_get_cidreq();
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
         }

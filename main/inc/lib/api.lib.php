@@ -96,6 +96,7 @@ define('SURVEY_VISIBLE_PUBLIC', 2);
 // CONSTANTS defining all tools, using the english version
 /* When you add a new tool you must add it into function api_get_tools_lists() too */
 define('TOOL_DOCUMENT', 'document');
+define('TOOL_LP_FINAL_ITEM', 'final_item');
 define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
@@ -614,6 +615,8 @@ function api_get_path($path = '', $configuration = [])
     }
 
     $course_folder = 'courses/';
+    $root_sys = $_configuration['root_sys'];
+
     // Resolve master hostname.
     if (!empty($configuration) && array_key_exists('root_web', $configuration)) {
         $root_web = $configuration['root_web'];
@@ -693,11 +696,6 @@ function api_get_path($path = '', $configuration = [])
     //static $isInitialized = [];
     $isInitialized = [];
 
-    // Configuration data for all installed systems is unique.
-    if (empty($root_sys)) {
-        $root_sys = $configuration['root_sys'];
-    }
-
     $loadNewConfig = false;
 
     // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
@@ -710,25 +708,14 @@ function api_get_path($path = '', $configuration = [])
         }
     }
 
-    if (isset($configuration['course_folder'])) {
-        $course_folder = $configuration['course_folder'];
-    }
+    $course_folder = isset($configuration['course_folder']) ? $configuration['course_folder'] : $course_folder;
+    $root_rel = isset($configuration['url_append']) ? $configuration['url_append'] : '';
 
-    $configuration['code_append'] = isset($configuration['code_append']) ? $configuration['code_append'] : 'main';
-
-    if (preg_match('#https?://([^\.]+)#', $root_web, $matches)) {
-        $web_host = $matches[1];
-    } else {
-        die('malformed root_web url');
-    }
+    $configuration['code_append'] = 'main';
 
     // Web server base and system server base.
-    $root_rel = isset($configuration['url_append']) ? $configuration['url_append'] : '';
-    $server_base_sys = preg_replace('@'.$root_rel.'$@', '', $root_sys); // No trailing slash.
-
     if (!array_key_exists($root_web, $isInitialized)) {
         // process absolute global roots
-        //$root_rel = $configuration['url_append'];
         if (!empty($configuration)) {
             $code_folder = $configuration['code_append'];
         } else {
@@ -752,12 +739,6 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][REL_COURSE_PATH] = $root_rel.$course_folder;
         $paths[$root_web][REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][REL_PATH].'main/default_course_document/';
 
-        // PATCH : Take VChamilo into account
-        /*global $VCHAMILO;
-        if (!empty($VCHAMILO) || !empty($configuration['virtual'])){
-            $paths[$root_web][SYS_ARCHIVE_PATH] .= $web_host.'/';
-            $paths[$root_web][SYS_HOME_PATH] .= $web_host.'/';
-        }*/
         $paths[$root_web][WEB_PATH] = $slashed_root_web;
         $paths[$root_web][WEB_CODE_PATH] = $slashed_root_web.$code_folder;
         $paths[$root_web][WEB_COURSE_PATH] = $slashed_root_web.$course_folder;
@@ -765,6 +746,7 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][WEB_APP_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_APP_PATH];
         $paths[$root_web][WEB_PLUGIN_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_PLUGIN_PATH];
         $paths[$root_web][WEB_ARCHIVE_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_ARCHIVE_PATH];
+
         $paths[$root_web][WEB_CSS_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_CSS_PATH];
         $paths[$root_web][WEB_IMG_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_IMG_PATH];
         $paths[$root_web][WEB_LIBRARY_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_PATH];
@@ -792,15 +774,15 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][SYS_PLUGIN_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_PLUGIN_PATH];
         $paths[$root_web][SYS_INC_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_INC_PATH];
 
-        /*// ADD : Take VChamilo into account
-        global $VCHAMILO;
-        if (!empty($VCHAMILO) || !empty($configuration['virtual'])) {
-            $paths[$root_web][WEB_ARCHIVE_PATH] .= $web_host.'/';
-            $paths[$root_web][WEB_HOME_PATH] .= $web_host.'/';
-        }*/
-
         $paths[$root_web][LIBRARY_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][LIBRARY_PATH];
         $paths[$root_web][CONFIGURATION_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][CONFIGURATION_PATH];
+
+        global $VCHAMILO;
+        if (!empty($VCHAMILO)) {
+            $paths[$root_web][SYS_ARCHIVE_PATH] = $VCHAMILO[SYS_ARCHIVE_PATH];
+            $paths[$root_web][SYS_HOME_PATH] = $VCHAMILO[SYS_HOME_PATH];
+            $paths[$root_web][SYS_COURSE_PATH] = $VCHAMILO[SYS_COURSE_PATH];
+        }
 
         $isInitialized[$root_web] = true;
     }
@@ -845,13 +827,6 @@ function api_get_path($path = '', $configuration = [])
         }
         // Replacement of the present web server base with a slash '/'.
         $path = preg_replace(VALID_WEB_SERVER_BASE, '/', $path);
-    } elseif (strpos($path, $server_base_sys) === 0) {
-        $path = preg_replace('@^'.$server_base_sys.'@', '', $path);
-    } elseif (strpos($path, '/') === 0) {
-        // Leading slash - we assume that this path is semi-absolute (REL),
-        // then path is left without furthes modifications.
-    } else {
-        return null; // Probably implementation of this case won't be needed.
     }
 
     // Path now is semi-absolute. It is convenient at this moment repeated slashes to be removed.
@@ -5024,7 +4999,6 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
     } else {
         $select .= " AND access_url = 1 ";
     }
-
     $res = Database::query($select);
     if (Database::num_rows($res) > 0) {
         // Found item for this access_url.
@@ -5045,7 +5019,6 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                 $select .= " AND category = '$cat'";
             }
             $res = Database::query($select);
-
             if (Database::num_rows($res) > 0) {
                 // We have a setting for access_url 1, but none for the current one, so create one.
                 $row = Database::fetch_array($res);

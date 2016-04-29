@@ -364,8 +364,11 @@ if (isset($_POST['title'])) {
     }
 }
 
+$redirectTo = null;
+
 switch ($action) {
     case 'add_item':
+
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
@@ -441,7 +444,7 @@ switch ($action) {
                             $maxTimeAllowed
                         );
                     }
-                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                     header('Location: '.$url);
                     exit;
                 }
@@ -600,8 +603,10 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($debug > 0) error_log('New LP - admin_view action triggered', 0);
-        if (!$lp_found) { error_log('New LP - No learnpath given for admin_view', 0); require 'lp_list.php'; }
-        else {
+        if (!$lp_found) {
+            error_log('New LP - No learnpath given for admin_view', 0);
+            require 'lp_list.php';
+        } else {
             $_SESSION['refresh'] = 1;
             require 'lp_admin_view.php';
         }
@@ -630,7 +635,7 @@ switch ($action) {
         else {
             $_SESSION['refresh'] = 1;
             //require 'lp_build.php';
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
         }
@@ -641,8 +646,10 @@ switch ($action) {
         }
         if ($debug > 0) error_log('New LP - edit item action triggered', 0);
 
-        if (!$lp_found) { error_log('New LP - No learnpath given for edit item', 0); require 'lp_list.php'; }
-        else {
+        if (!$lp_found) {
+            error_log('New LP - No learnpath given for edit item', 0);
+            require 'lp_list.php';
+        } else {
             $_SESSION['refresh'] = 1;
             if (isset($_POST['submit_button']) && !empty($post_title)) {
 
@@ -677,7 +684,7 @@ switch ($action) {
                 }
                 $is_success = true;
 
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
             }
@@ -949,7 +956,10 @@ switch ($action) {
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
-            $_SESSION['oLP']->setSubscribeUsers($_REQUEST['subscribe_users']);
+
+            if (isset($_REQUEST['subscribe_users'])) {
+                $_SESSION['oLP']->setSubscribeUsers($_REQUEST['subscribe_users']);
+            }
 
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
             	$publicated_on  = $_REQUEST['publicated_on'];
@@ -1037,13 +1047,15 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($debug > 0) error_log('New LP - delete item action triggered', 0);
-        if (!$lp_found) { error_log('New LP - No learnpath given for delete item', 0); require 'lp_list.php'; }
-        else {
+        if (!$lp_found) {
+            error_log('New LP - No learnpath given for delete item', 0);
+            require 'lp_list.php';
+        } else {
             //$_SESSION['refresh'] = 1;
             if (!empty($_REQUEST['id'])) {
                 $_SESSION['oLP']->delete_item($_REQUEST['id']);
             }
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']).api_get_cidreq();
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
         }
@@ -1265,12 +1277,14 @@ switch ($action) {
         break;
     case 'set_previous_step_as_prerequisite':
         $_SESSION['oLP']->set_previous_step_as_prerequisite_for_all_items();
-        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&message=ItemUpdated";
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
+        Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         header('Location: '.$url);
         break;
     case 'clear_prerequisites':
         $_SESSION['oLP']->clear_prerequisites();
-        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&message=ItemUpdated";
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
+        Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         header('Location: '.$url);
         break;
     case 'toggle_seriousgame': //activate/deactive seriousgame_mode
@@ -1400,6 +1414,28 @@ switch ($action) {
             'lp_id' => $_SESSION['oLP']->lp_id
         ]));
         break;
+    case 'add_final_item':
+        if (!$lp_found) {
+            Display::addFlash(
+                Display::return_message(get_lang('NoLPFound'), 'error')
+            );
+            break;
+        }
+
+        $_SESSION['refresh'] = 1;
+
+        if (!isset($_POST['submit']) || empty($post_title)) {
+            break;
+        }
+
+        $_SESSION['oLP']->getFinalItemForm();
+
+        $redirectTo = api_get_self() . '?' . http_build_query([
+            'action' => 'add_item',
+            'type' => 'step',
+            'lp_id' => intval($_SESSION['oLP']->lp_id)
+        ]);
+        break;
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);
         require 'lp_list.php';
@@ -1409,4 +1445,8 @@ switch ($action) {
 if (!empty($_SESSION['oLP'])) {
     $_SESSION['lpobject'] = serialize($_SESSION['oLP']);
     if ($debug > 0) error_log('New LP - lpobject is serialized in session', 0);
+}
+
+if (!empty($redirectTo)) {
+    header("Location: $redirectTo");
 }

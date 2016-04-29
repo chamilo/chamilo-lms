@@ -26,10 +26,10 @@ class DatePicker extends HTML_QuickForm_text
     }
 
     /**
-    * HTML code to display this datepicker
+     * HTML code to display this datepicker
      *
      * @return string
-    */
+     */
     public function toHtml()
     {
         if ($this->_flagFrozen) {

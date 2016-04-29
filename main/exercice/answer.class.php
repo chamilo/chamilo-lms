@@ -275,7 +275,7 @@ class Answer
 	 */
     public function selectAutoId($id)
     {
-		return isset($this->autoId[$id]) ? $this->autoId[$id] : null;
+		return isset($this->autoId[$id]) ? $this->autoId[$id] : 0;
 	}
 
 	/**
@@ -572,12 +572,13 @@ class Answer
         $params = [
             'answer' => $answer,
             'comment' => $comment,
-            'correct' => $correct,
+            'correct' => intval($correct),
             'ponderation' => $weighting,
             'position' => $position,
             'destination' => $destination,
             'hotspot_coordinates' => $hotspot_coordinates,
-            'hotspot_type' => $hotspot_type,
+            'hotspot_type' => $hotspot_type
+
         ];
 
         Database::update($answerTable, $params, ['id_auto = ?' => $autoId]);
@@ -610,10 +611,11 @@ class Answer
 
             if (!isset($this->position[$i])) {
                 $params = [
+                    'id_auto' => $autoId,
                     'c_id' => $c_id,
                     'question_id' => $questionId,
                     'answer' => $answer,
-                    'correct' => $correct,
+                    'correct' => intval($correct),
                     'comment' => $comment,
                     'ponderation' => $weighting,
                     'position' => $position,

@@ -261,54 +261,14 @@ function move($source, $target, $forceMove = false, $moveContent = false)
  */
 function copyDirTo($orig_dir_path, $destination, $move = true)
 {
-	if ($orig_dir_path == $destination) {
-		return false;
-	}
+    $fs = new \Symfony\Component\Filesystem\Filesystem();
+    if (is_dir($orig_dir_path)) {
+        $fs->mirror($orig_dir_path, $destination);
 
-	$save_dir = getcwd();
-	// Extract directory name - create it at destination - update destination trail
-	$dir_name = basename($orig_dir_path);
-    $dir_to_copy = array();
-	if (is_dir($orig_dir_path)) {
-		if (!is_dir($destination.'/'.$dir_name)) {
-			mkdir(
-				$destination.'/'.$dir_name,
-				api_get_permissions_for_new_directories()
-			);
-		}
-		$destination_trail = $destination.'/'.$dir_name;
-		if (is_dir($destination)) {
-			chdir($orig_dir_path) ;
-			$handle = opendir($orig_dir_path);
-
-			while ($element = readdir($handle)) {
-				if ($element == '.' || $element == '..') {
-					continue; // Skip the current and parent directories
-				} elseif (is_file($element)) {
-					copy($element, $destination_trail.'/'.$element);
-
-					if ($move) {
-						unlink($element) ;
-					}
-				} elseif (is_dir($element)) {
-					$dir_to_copy[] = $orig_dir_path.'/'.$element;
-				}
-			}
-
-			closedir($handle) ;
-
-			if (sizeof($dir_to_copy) > 0) {
-				foreach ($dir_to_copy as $this_dir) {
-					copyDirTo($this_dir, $destination_trail, $move); // Recursivity
-				}
-			}
-
-			if ($move) {
-				rmdir($orig_dir_path) ;
-			}
-			chdir($save_dir);
-		}
-	}
+        if ($move) {
+            $fs->remove($orig_dir_path);
+        }
+    }
 }
 
 

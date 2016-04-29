@@ -1590,18 +1590,10 @@ if ($is_allowed_to_edit ||
         }
 
         // Record audio (nanogong)
-        if (api_get_setting('enable_nanogong') == 'true') {
+        if (api_get_setting('enable_record_audio') === 'true') {
             $actionsLeft .= Display::url(
                 Display::return_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM),
-                api_get_path(WEB_CODE_PATH).'document/record_audio.php?'.api_get_cidreq().'&id='.$document_id
-            );
-        }
-
-        // Record  audio (wami record)
-        if (api_get_setting('enable_wami_record') == 'true') {
-            $actionsLeft .= Display::url(
-                Display::return_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM),
-                api_get_path(WEB_CODE_PATH).'document/record_audio_wami.php?'.api_get_cidreq().'&id='.$document_id
+                api_get_path(WEB_CODE_PATH) . 'document/record_audio.php?' . api_get_cidreq() . '&id=' . $document_id
             );
         }
 

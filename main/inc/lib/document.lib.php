@@ -5318,7 +5318,7 @@ class DocumentManager
             if ($filetype == 'file') {
                 // Sound preview with jplayer
                 if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
-                    (preg_match('/wav$/i', urldecode($checkExtension)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
+                    (preg_match('/wav$/i', urldecode($checkExtension))) ||
                     preg_match('/ogg$/i', urldecode($checkExtension))
                 ) {
                     return '<span style="float:left" ' . $visibility_class . '>' .
@@ -5333,12 +5333,7 @@ class DocumentManager
                     preg_match('/jpg$/i', urldecode($checkExtension)) ||
                     preg_match('/jpeg$/i', urldecode($checkExtension)) ||
                     preg_match('/bmp$/i', urldecode($checkExtension)) ||
-                    preg_match('/svg$/i', urldecode($checkExtension)) ||
-                    (
-                        preg_match('/wav$/i', urldecode($checkExtension)) &&
-                        preg_match('/_chnano_.wav$/i', urldecode($checkExtension)) &&
-                        api_get_setting('enable_nanogong') == 'true'
-                    )
+                    preg_match('/svg$/i', urldecode($checkExtension))
                 ) {
                     // Simpler version of showinframesmin.php with no headers
                     $url = 'show_content.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
@@ -5388,7 +5383,7 @@ class DocumentManager
                 if ($filetype == 'file') {
                     //Sound preview with jplayer
                     if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
-                        (preg_match('/wav$/i', urldecode($checkExtension)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
+                        (preg_match('/wav$/i', urldecode($checkExtension))) ||
                         preg_match('/ogg$/i', urldecode($checkExtension))) {
                         $sound_preview = DocumentManager::generate_media_preview($counter);
 
@@ -5401,12 +5396,7 @@ class DocumentManager
                         preg_match('/jpg$/i', urldecode($checkExtension)) ||
                         preg_match('/jpeg$/i', urldecode($checkExtension)) ||
                         preg_match('/bmp$/i', urldecode($checkExtension)) ||
-                        preg_match('/svg$/i', urldecode($checkExtension)) ||
-                        (
-                            preg_match('/wav$/i', urldecode($checkExtension)) &&
-                            preg_match('/_chnano_.wav$/i', urldecode($checkExtension)) &&
-                            api_get_setting('enable_nanogong') == 'true'
-                        )
+                        preg_match('/svg$/i', urldecode($checkExtension))
                     ) {
                         $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
@@ -5426,7 +5416,7 @@ class DocumentManager
                 if ($filetype == 'file') {
                     // Sound preview with jplayer
                     if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
-                        (preg_match('/wav$/i', urldecode($checkExtension)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
+                        (preg_match('/wav$/i', urldecode($checkExtension))) ||
                         preg_match('/ogg$/i', urldecode($checkExtension))) {
                         $sound_preview = DocumentManager::generate_media_preview($counter);
 
@@ -5441,12 +5431,7 @@ class DocumentManager
                         preg_match('/jpg$/i', urldecode($checkExtension)) ||
                         preg_match('/jpeg$/i', urldecode($checkExtension)) ||
                         preg_match('/bmp$/i', urldecode($checkExtension)) ||
-                        preg_match('/svg$/i', urldecode($checkExtension)) ||
-                        (
-                            preg_match('/wav$/i', urldecode($checkExtension)) &&
-                            preg_match('/_chnano_.wav$/i', urldecode($checkExtension)) &&
-                            api_get_setting('enable_nanogong') == 'true'
-                        )
+                        preg_match('/svg$/i', urldecode($checkExtension))
                     ) {
                         $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id']; //without preview
                         return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
@@ -5479,12 +5464,7 @@ class DocumentManager
         if ($type == 'file') {
             $icon = choose_image($basename);
 
-            if (preg_match('/_chnano_.wav$/i', $basename)) {
-                $icon = "jplayer_play.png";
-                $basename = 'wav' . ' ' . '(Nanogong)';
-            } else {
-                $basename = substr(strrchr($basename, '.'), 1);
-            }
+            $basename = substr(strrchr($basename, '.'), 1);
         } else {
             if ($path == '/shared_folder') {
                 $icon = 'folder_users.gif';

@@ -98,10 +98,11 @@ class AppKernel extends Kernel
             new Chamilo\CoreBundle\ChamiloCoreBundle(),
             new Chamilo\CourseBundle\ChamiloCourseBundle(),
             // new Chamilo\SettingsBundle\ChamiloSettingsBundle(),
-             new Chamilo\ThemeBundle\ChamiloThemeBundle(),
+            new Chamilo\ThemeBundle\ChamiloThemeBundle(),
             //new Chamilo\NotificationBundle\ChamiloNotificationBundle(),
             new Chamilo\AdminBundle\ChamiloAdminBundle(),
             new Chamilo\TimelineBundle\ChamiloTimelineBundle(),
+            new \Chamilo\ContactBundle\ChamiloContactBundle(),
 
             // Based in Sonata
             new Chamilo\ClassificationBundle\ChamiloClassificationBundle(),

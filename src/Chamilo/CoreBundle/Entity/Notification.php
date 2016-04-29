@@ -36,7 +36,7 @@ class Notification
     /**
      * @var string
      *
-     * @ORM\Column(name="content", type="string", length=255, nullable=true)
+     * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
 

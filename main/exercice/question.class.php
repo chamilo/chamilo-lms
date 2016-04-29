@@ -1357,7 +1357,7 @@ abstract class Question
      */
     public static function get_question_type($type)
     {
-        if ($type == ORAL_EXPRESSION && api_get_setting('enable_nanogong') != 'true') {
+        if ($type == ORAL_EXPRESSION && api_get_setting('enable_record_audio') !== 'true') {
             return null;
         }
         return self::$questionTypes[$type];
@@ -1368,7 +1368,7 @@ abstract class Question
      */
     public static function get_question_type_list()
     {
-        if (api_get_setting('enable_nanogong') != 'true') {
+        if (api_get_setting('enable_record_audio') !== 'true') {
             self::$questionTypes[ORAL_EXPRESSION] = null;
             unset(self::$questionTypes[ORAL_EXPRESSION]);
         }

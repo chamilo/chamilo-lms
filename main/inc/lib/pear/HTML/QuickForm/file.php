@@ -206,7 +206,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      */
     public function isUploadedFile()
     {
-        return HTML_QuickForm_file::_ruleIsUploadedFile($this->_value);
+        return self::_ruleIsUploadedFile($this->_value);
     }
 
     /**

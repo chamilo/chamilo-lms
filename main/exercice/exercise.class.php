@@ -87,10 +87,10 @@ class Exercise
         $this->active = 1;
         $this->questionList = array();
         $this->timeLimit = 0;
-        $this->end_time = '0000-00-00 00:00:00';
-        $this->start_time = '0000-00-00 00:00:00';
+        $this->end_time = '';
+        $this->start_time = '';
         $this->results_disabled = 1;
-        $this->expired_time = '0000-00-00 00:00:00';
+        $this->expired_time = 0;
         $this->propagate_neg = 0;
         $this->saveCorrectAnswers = 0;
         $this->review_answers = false;
@@ -187,11 +187,11 @@ class Exercise
                 $this->edit_exercise_in_lp = true;
             }
 
-            if ($object->end_time != '0000-00-00 00:00:00') {
-                $this->end_time 	= $object->end_time;
+            if (!empty($object->end_time)) {
+                $this->end_time = $object->end_time;
             }
-            if ($object->start_time != '0000-00-00 00:00:00') {
-                $this->start_time 	= $object->start_time;
+            if (!empty($object->start_time)) {
+                $this->start_time = $object->start_time;
             }
 
             //control time
@@ -1541,8 +1541,8 @@ class Exercise
         $random = $this->random;
         $random_answers = $this->random_answers;
         $active = $this->active;
-        $propagate_neg = $this->propagate_neg;
-        $saveCorrectAnswers = isset($this->saveCorrectAnswers) && $this->saveCorrectAnswers ? true : false;
+        $propagate_neg = (int) $this->propagate_neg;
+        $saveCorrectAnswers = isset($this->saveCorrectAnswers) && $this->saveCorrectAnswers ? 1 : 0;
         $review_answers = isset($this->review_answers) && $this->review_answers ? 1 : 0;
         $randomByCat = intval($this->randomByCat);
         $text_when_finished = $this->text_when_finished;
@@ -1562,16 +1562,16 @@ class Exercise
         // Exercise already exists
         if ($id) {
             // we prepare date in the database using the api_get_utc_datetime() function
-            if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
+            if (!empty($this->start_time)) {
                 $start_time = $this->start_time;
             } else {
-                $start_time = '0000-00-00 00:00:00';
+                $start_time = null;
             }
 
-            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+            if (!empty($this->end_time)) {
                 $end_time = $this->end_time;
             } else {
-                $end_time = '0000-00-00 00:00:00';
+                $end_time = null;
             }
 
             $params = [
@@ -1632,16 +1632,16 @@ class Exercise
             // In this function, api_set_default_visibility,
             // the Quiz is saved too, with an $id and api_get_utc_datetime() is done.
             // If we do it now, it will be done twice (cf. https://support.chamilo.org/issues/6586)
-            if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
+            if (!empty($this->start_time)) {
                 $start_time = $this->start_time;
             } else {
-                $start_time = '0000-00-00 00:00:00';
+                $start_time = null;
             }
 
-            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+            if (!empty($this->end_time)) {
                 $end_time = $this->end_time;
             } else {
-                $end_time = '0000-00-00 00:00:00';
+                $end_time = null;
             }
 
             $params = [
@@ -1665,7 +1665,8 @@ class Exercise
                 'text_when_finished' => $text_when_finished,
                 'display_category_name' => $display_category_name,
                 'pass_percentage' => $pass_percentage,
-                'save_correct_answers' => $saveCorrectAnswers
+                'save_correct_answers' => (int) $saveCorrectAnswers,
+                'propagate_neg' => $propagate_neg
             ];
 
             $this->id = Database::insert($TBL_EXERCISES, $params);
@@ -2154,10 +2155,11 @@ class Exercise
 
             $var = Exercise::selectTimeLimit();
 
-            if (($this->start_time != '0000-00-00 00:00:00'))
-                $form->addElement('html','<div id="start_date_div" style="display:block;">');
-            else
-                $form->addElement('html','<div id="start_date_div" style="display:none;">');
+            if (!empty($this->start_time)) {
+                $form->addElement('html', '<div id="start_date_div" style="display:block;">');
+            } else {
+                $form->addElement('html', '<div id="start_date_div" style="display:none;">');
+            }
 
             $form->addElement('date_time_picker', 'start_time');
 
@@ -2165,10 +2167,11 @@ class Exercise
 
             $form->addElement('checkbox', 'activate_end_date_check', null , get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
 
-            if (($this->end_time != '0000-00-00 00:00:00'))
-                $form->addElement('html','<div id="end_date_div" style="display:block;">');
-            else
-                $form->addElement('html','<div id="end_date_div" style="display:none;">');
+            if (!empty($this->end_time)) {
+                $form->addElement('html', '<div id="end_date_div" style="display:block;">');
+            } else {
+                $form->addElement('html', '<div id="end_date_div" style="display:none;">');
+            }
 
             $form->addElement('date_time_picker', 'end_time');
             $form->addElement('html','</div>');
@@ -2310,15 +2313,15 @@ class Exercise
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
 
-                if (($this->start_time != '0000-00-00 00:00:00')) {
+                if (!empty($this->start_time)) {
                     $defaults['activate_start_date_check'] = 1;
                 }
-                if ($this->end_time != '0000-00-00 00:00:00') {
+                if (!empty($this->end_time)) {
                     $defaults['activate_end_date_check'] = 1;
                 }
 
-                $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00') ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
-                $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00') ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
+                $defaults['start_time'] = !empty($this->start_time) ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
+                $defaults['end_time'] = empty($this->end_time) ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
 
                 // Get expired time
                 if ($this->expired_time != '0') {
@@ -2418,14 +2421,14 @@ class Exercise
             $start_time = $form->getSubmitValue('start_time');
             $this->start_time = api_get_utc_datetime($start_time);
         } else {
-            $this->start_time = '0000-00-00 00:00:00';
+            $this->start_time = null;
         }
 
         if ($form->getSubmitValue('activate_end_date_check') == 1) {
             $end_time = $form->getSubmitValue('end_time');
             $this->end_time = api_get_utc_datetime($end_time);
         } else {
-            $this->end_time   = '0000-00-00 00:00:00';
+            $this->end_time = null;
         }
 
         if ($form->getSubmitValue('enabletimercontrol') == 1) {
@@ -2837,7 +2840,7 @@ class Exercise
             $safe_lp_item_id = 0;
         }
         if (empty($clock_expired_time)) {
-            $clock_expired_time = 0;
+            $clock_expired_time = null;
         }
 
         $questionList = array_map('intval', $questionList);
@@ -2854,12 +2857,14 @@ class Exercise
             'orig_lp_item_id'  => $safe_lp_item_id,
             'orig_lp_item_view_id'  => $safe_lp_item_view_id,
             'exe_weighting'=> $weight,
-            'user_ip' => api_get_real_ip()
+            'user_ip' => api_get_real_ip(),
+            'exe_date' => api_get_utc_datetime(),
+            'exe_result' => 0,
+            'steps_counter' => 0,
+            'exe_duration' => 0,
+            'expired_time_control' => $clock_expired_time,
+            'questions_to_check' => ''
         );
-
-        if ($this->expired_time != 0) {
-            $params['expired_time_control'] = $clock_expired_time;
-        }
 
         $id = Database::insert($track_exercises, $params);
 
@@ -3167,7 +3172,7 @@ class Exercise
         $totalScore = 0;
 
         // Destruction of the Question object
-        unset($objQuestionTmp);
+        //unset($objQuestionTmp);
 
         // Construction of the Answer object
         $objAnswerTmp = new Answer($questionId);
@@ -3185,25 +3190,20 @@ class Exercise
             $nbrAnswers = 1;
         }
 
-        $nano = null;
-
         if ($answerType == ORAL_EXPRESSION) {
             $exe_info = Event::get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
 
-            $params = array();
-            $params['course_id'] = $course_id;
-            $params['session_id'] = api_get_session_id();
-            $params['user_id'] = isset($exe_info['exe_user_id'])? $exe_info['exe_user_id'] : api_get_user_id();
-            $params['exercise_id'] = isset($exe_info['exe_exo_id'])? $exe_info['exe_exo_id'] : $this->id;
-            $params['question_id'] = $questionId;
-            $params['exe_id'] = isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId;
-
-            $nano = new Nanogong($params);
+            $objQuestionTmp->initFile(
+                api_get_session_id(),
+                isset($exe_info['exe_user_id']) ? $exe_info['exe_user_id'] : api_get_user_id(),
+                isset($exe_info['exe_exo_id']) ? $exe_info['exe_exo_id'] : $this->id,
+                isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId
+            );
 
             //probably this attempt came in an exercise all question by page
             if ($feedback_type == 0) {
-                $nano->replace_with_real_exe($exeId);
+                $objQuestionTmp->replaceWithRealExe($exeId);
             }
         }
 
@@ -3836,10 +3836,11 @@ class Exercise
                         $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
                                    WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resq   = Database::query($query);
-                        $choice = Database::result($resq,0,'answer');
+                        $row = Database::fetch_assoc($resq);
+                        $choice = $row['answer'];
                         $choice = str_replace('\r\n', '', $choice);
                         $choice = stripslashes($choice);
-                        $questionScore = Database::result($resq,0,"marks");
+                        $questionScore = $row['marks'];
                         if ($questionScore==-1) {
                             $totalScore+=0;
                         } else {
@@ -4186,7 +4187,8 @@ class Exercise
                                 $choice,
                                 0,
                                 0,
-                                $nano);
+                                $objQuestionTmp->getFileUrl()
+                            );
                             //}
                         } elseif ($answerType == HOT_SPOT) {
                             //if ($origin != 'learnpath') {
@@ -4518,7 +4520,7 @@ class Exercise
                                     $choice,
                                     $exeId,
                                     $questionId,
-                                    $nano
+                                    $objQuestionTmp->getFileUrl()
                                 ) . '</td>
                                 </tr>
                                 </table>';
@@ -5034,7 +5036,16 @@ class Exercise
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
-                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
+                Event::saveQuestionAttempt(
+                    $questionScore,
+                    $answer,
+                    $quesId,
+                    $exeId,
+                    0,
+                    $this->id,
+                    false,
+                    $objQuestionTmp->getAbsoluteFilePath()
+                );
             } elseif (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION])) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
@@ -5076,7 +5087,6 @@ class Exercise
             $sql = 'UPDATE ' . $stat_table . ' SET
                         exe_result = exe_result + ' . floatval($questionScore) . '
                     WHERE exe_id = ' . $exeId;
-            if ($debug) error_log($sql);
             Database::query($sql);
         }
 
@@ -5612,8 +5622,7 @@ class Exercise
         }
 
         //3. We check if the time limits are on
-        if ((!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00')
-            || (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00')) {
+        if ((!empty($this->start_time)) || (!empty($this->end_time))) {
             $limitTimeExists = true;
         } else {
             $limitTimeExists = false;
@@ -5627,12 +5636,11 @@ class Exercise
             $existsEndDate = false;
             $nowIsBeforeEndDate = true;
 
-
-            if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
+            if (!empty($this->start_time)) {
                 $existsStartDate = true;
             }
 
-            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+            if (!empty($this->end_time)) {
                 $existsEndDate = true;
             }
 
@@ -6110,7 +6118,7 @@ class Exercise
             if (empty($exercise_info['questions_to_check'])) {
                 if ($action == 'add') {
                     $sql = "UPDATE $track_exercises SET questions_to_check = '$question_id' WHERE exe_id = $exe_id ";
-                    $result = Database::query($sql);
+                    Database::query($sql);
                 }
             } else {
                 $remind_list = explode(',',$exercise_info['questions_to_check']);
@@ -6841,6 +6849,7 @@ class Exercise
 
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
             $course_id = api_get_course_int_id();
+            $sessionId = api_get_session_id();
             $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
 
             // For "matching" type here, we need something a little bit special
@@ -6905,27 +6914,28 @@ class Exercise
                 $s .= $form->return_form();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanogong
-                if (api_get_setting('document.enable_nanogong') == 'true') {
+                if (api_get_setting('enable_record_audio') === 'true') {
 
                     //@todo pass this as a parameter
                     global $exercise_stat_info, $exerciseId;
 
                     if (!empty($exercise_stat_info)) {
-                        $params = array(
-                            'exercise_id' => $exercise_stat_info['exe_exo_id'],
-                            'exe_id' => $exercise_stat_info['exe_id'],
-                            'question_id' => $questionId
+                        $objQuestionTmp->initFile(
+                            api_get_session_id(),
+                            api_get_user_id(),
+                            $exercise_stat_info['exe_exo_id'],
+                            $exercise_stat_info['exe_id']
                         );
                     } else {
-                        $params = array(
-                            'exercise_id' => $exerciseId,
-                            'exe_id' => 'temp_exe',
-                            'question_id' => $questionId
+                        $objQuestionTmp->initFile(
+                            api_get_session_id(),
+                            api_get_user_id(),
+                            $exerciseId,
+                            'temp_exe'
                         );
                     }
 
-                    $nano = new Nanogong($params);
-                    $s .= $nano->show_button();
+                    $s .= $objQuestionTmp->returnRecorder();
                 }
 
                 $form->addElement('html_editor', "choice[".$questionId."]", null, array('id' => "choice[".$questionId."]"), array('ToolbarSet' => 'TestFreeAnswer'));

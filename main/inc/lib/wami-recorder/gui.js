@@ -34,13 +34,14 @@ Wami.GUI = function(options) {
 	}
 
 	function setupDOM() {
-		var guidiv = createDiv(null,
-				"position: absolute; width: 214px; height: 137px;");
+        var guidiv = createDiv(
+            null,
+            'position:absolute;width:214px;height:144px;padding-left:79px;padding-top:45px;left:50%;margin-left: -107px'
+        );
 		document.getElementById(options.id).appendChild(guidiv);
 
 		var rid = Wami.createID();
-		var recordDiv = createDiv(rid,
-				"position: absolute; left: 40px; top: 25px");
+        var recordDiv = createDiv(rid, '');
 		guidiv.appendChild(recordDiv);
 
 		recordButton = new Button(rid, RECORD_BUTTON, options.buttonUrl);
@@ -51,8 +52,7 @@ Wami.GUI = function(options) {
 		
 //Chamilo hack single button
 		var pid = Wami.createID();
-		var playDiv = createDiv(pid,
-					"position: absolute; right: 40px; top: 25px");
+		var playDiv = createDiv(pid, '');
 			guidiv.appendChild(playDiv);
 		if (!options.singleButton) {
 			playButton = new Button(pid, PLAY_BUTTON, options.buttonUrl);

@@ -62,8 +62,6 @@ $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('hidden', 'id', $workId);
 $form->addButtonUpload(get_lang('Upload'));
 
-$error_message = null;
-
 $succeed = false;
 if ($form->validate()) {
 
@@ -199,10 +197,10 @@ if (!empty($workId)) {
     if ($is_allowed_to_edit) {
         $form->display();
     } else {
-        Display::display_error_message(get_lang('ActionNotAllowed'));
+        api_not_allowed();
     }
 } else {
-    Display::display_error_message(get_lang('ActionNotAllowed'));
+    api_not_allowed();
 }
 
 Display :: display_footer();

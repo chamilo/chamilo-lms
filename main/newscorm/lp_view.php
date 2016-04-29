@@ -25,7 +25,6 @@ if ($lp_controller_touched != 1) {
 }
 
 require_once '../inc/global.inc.php';
-
 //To prevent the template class
 $show_learnpath = true;
 
@@ -174,6 +173,7 @@ if (!isset($src)) {
             $_SESSION['oLP']->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $preReqCheck = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+
             if ($preReqCheck === true) {
                 $src = $_SESSION['oLP']->get_link(
                     'http',
@@ -416,7 +416,7 @@ if ($is_allowed_to_edit) {
         'name' => get_lang('LearningPaths')
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_self() . "?action=add_item&type=step&lp_id={$_SESSION['oLP']->lp_id}&isStudentView=false",
+        'url' => api_get_self() . "?action=add_item&type=step&lp_id={$_SESSION['oLP']->lp_id}&isStudentView=false&".api_get_cidreq(),
         'name' => $_SESSION['oLP']->get_name()
     );
     $interbreadcrumb[] = array(

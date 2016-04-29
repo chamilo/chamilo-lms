@@ -127,8 +127,10 @@ class Database
      * @param string $entityRootPath
      *
      * @throws \Doctrine\ORM\ORMException
+     * 
+     * @return 
      */
-    public function connect($params = array(), $sysPath = '', $entityRootPath = '')
+    public function connect($params = array(), $sysPath = '', $entityRootPath = '', $returnConnection = false)
     {
         $config = self::getDoctrineConfig($entityRootPath);
         $config->setAutoGenerateProxyClasses(true);
@@ -175,6 +177,10 @@ class Database
         $listener = new \Gedmo\Sortable\SortableListener();
         $entityManager->getEventManager()->addEventSubscriber($listener);
         $connection = $entityManager->getConnection();
+        
+        if ($returnConnection) {
+            return $connection;
+        }
 
         $this->setConnection($connection);
         $this->setManager($entityManager);

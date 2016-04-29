@@ -6,9 +6,9 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-require_once(api_get_path(LIBRARY_PATH).'plugin.class.php');
-require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php');
-require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php');
+require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
 
 global $_configuration;
 
@@ -19,13 +19,13 @@ global $_configuration;
 /* Plugin config */
 
 //the plugin title
-$plugin_info['title']       = 'Chamilo Virtualization';
+$plugin_info['title'] = 'Chamilo Virtualization';
 //the comments that go with the plugin
-$plugin_info['comment']     = "Holds chamilo virtualisation tools";
+$plugin_info['comment'] = "Holds chamilo virtualisation tools";
 //the plugin version
-$plugin_info['version']     = '1.0';
+$plugin_info['version'] = '1.0';
 //the plugin author
-$plugin_info['author']      = 'Valery Fremaux';
+$plugin_info['author'] = 'Valery Fremaux, Julio Montoya';
 
 
 /* Plugin optional settings */
@@ -59,28 +59,38 @@ $wwwroot = $_configuration['root_web'];
 
 //A simple select
 $options = array(0 => $plugininstance->get_lang('no'), 1 => $plugininstance->get_lang('yes'));
-$form->addElement('static', 'enable_vchamilo_manager', '<a href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.$plugininstance->get_lang('manage_instances').'</a>');
-$form->addElement('static', 'sync_vchamilo_settings', '<a href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/syncparams.php">'.$plugininstance->get_lang('sync_settings').'</a>');
+$form->addlabel('', '<a class="btn btn-primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.
+    $plugininstance->get_lang('manage_instances').'</a>');
 $form->addElement('header', $plugininstance->get_lang('enabling'));
 $form->addElement('select', 'enable_virtualisation', $plugininstance->get_lang('enable_virtualisation'), $options);
-$form->addElement('text', 'course_real_root', $plugininstance->get_lang('courserealroot'));
-$form->addElement('text', 'archive_real_root', $plugininstance->get_lang('archiverealroot'));
-$form->addElement('text', 'home_real_root', $plugininstance->get_lang('homerealroot'));
+$form->addElement(
+    'text',
+    'course_real_root',
+    [$plugininstance->get_lang('courserealroot'), 'Example: '.api_get_path(SYS_PATH).'var/courses/']
+);
+$form->addElement(
+    'text',
+    'archive_real_root',
+    [$plugininstance->get_lang('archiverealroot'), 'Example: '.api_get_path(SYS_PATH).'var/archive/']
+);
+$form->addElement(
+    'text',
+    'home_real_root',
+    [$plugininstance->get_lang('homerealroot'), 'Example: '.api_get_path(SYS_PATH).'var/home/']
+);
 
+$form->addElement('header', $plugininstance->get_lang('mysqlcmds'));
+$form->addElement('text', 'cmd_mysql', [$plugininstance->get_lang('mysqlcmd'), 'Example: /usr/bin/mysql']);
+$form->addElement('text', 'cmd_mysqldump', [$plugininstance->get_lang('mysqldumpcmd'), 'Example: /usr/bin/mysqldump']);
 $form->addElement('header', $plugininstance->get_lang('proxysettings'));
 $form->addElement('text', 'httpproxyhost', $plugininstance->get_lang('httpproxyhost'));
 $form->addElement('text', 'httpproxyport', $plugininstance->get_lang('httpproxyport'));
 $form->addElement('text', 'httpproxybypass', $plugininstance->get_lang('httpproxybypass'));
 $form->addElement('text', 'httpproxyuser', $plugininstance->get_lang('httpproxyuser'));
 $form->addElement('text', 'httpproxypassword', $plugininstance->get_lang('httpproxypassword'));
-
-$form->addElement('header', $plugininstance->get_lang('mysqlcmds'));
-$form->addElement('text', 'cmd_mysql', $plugininstance->get_lang('mysqlcmd'));
-$form->addElement('text', 'cmd_mysqldump', $plugininstance->get_lang('mysqldumpcmd'));
-
 $form->addButtonSave($plugininstance->get_lang('Save'));
 
 $plugin_info['settings_form'] = $form;
 
 //set the templates that are going to be used
-$plugin_info['templates']   = array('template.tpl');
+$plugin_info['templates'] = array('template.tpl');

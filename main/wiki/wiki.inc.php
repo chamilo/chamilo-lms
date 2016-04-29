@@ -280,8 +280,8 @@ class Wiki
             'fprogress1' => '',
             'fprogress2' => '',
             'fprogress3' => '',
-            'max_text' => '',
-            'max_version' => '',
+            'max_text' => 0,
+            'max_version' => 0,
             'delayedsubmit' => '',
             'assignment' => 0
         );
@@ -360,7 +360,9 @@ class Wiki
             'session_id' => $session_id,
             'page_id' => $values['page_id'],
             'editlock' => 0,
-            'is_editing' => 0
+            'is_editing' => 0,
+            'time_edit' => $time,
+            'tag' => ''
         ];
 
         $id = Database::insert($tbl_wiki, $params);
@@ -398,8 +400,8 @@ class Wiki
                 'fprogress1' => $_clean['fprogress1'],
                 'fprogress2' => $_clean['fprogress2'],
                 'fprogress3' => $_clean['fprogress3'],
-                'max_text' => $_clean['max_text'],
-                'max_version' => $_clean['max_version'],
+                'max_text' => intval($_clean['max_text']),
+                'max_version' => intval($_clean['max_version']),
                 'startdate_assig' => $_clean['startdate_assig'],
                 'enddate_assig' => $_clean['enddate_assig'],
                 'delayedsubmit' => $_clean['delayedsubmit']
@@ -415,8 +417,8 @@ class Wiki
                 'fprogress1' => $_clean['fprogress1'],
                 'fprogress2' => $_clean['fprogress2'],
                 'fprogress3' => $_clean['fprogress3'],
-                'max_text' => $_clean['max_text'],
-                'max_version' => $_clean['max_version'],
+                'max_text' => intval($_clean['max_text']),
+                'max_version' => intval($_clean['max_version']),
                 'startdate_assig' => $_clean['startdate_assig'],
                 'enddate_assig' => $_clean['enddate_assig'],
                 'delayedsubmit' => $_clean['delayedsubmit']
@@ -772,7 +774,7 @@ class Wiki
             }
 
             $form->addElement('html', '<div id="start_date" style="'.$style.'">');
-            $form->addElement('DatePicker', 'startdate_assig');
+            $form->addDatePicker('startdate_assig', '');
             $form->addElement('html', '</div>');
             $form->addElement('checkbox', 'initenddate', null, get_lang('EndDate'), array('id' => 'end_date_toggle'));
 
@@ -784,7 +786,7 @@ class Wiki
             }
 
             $form->addElement('html', '<div id="end_date" style="'.$style.'">');
-            $form->addElement('DatePicker', 'enddate_assig');
+            $form->addDatePicker('enddate_assig', '');
             $form->addElement('html', '</div>');
             $form->addElement('checkbox', 'delayedsubmit', null, get_lang('AllowLaterSends'));
             $form->addElement('text', 'max_text', get_lang('NMaxWords'));
@@ -4950,7 +4952,7 @@ class Wiki
                         }
                     }
 
-                    if (!empty($row['max_text']) && $row['max_text']<=self::word_count($row['content'])) {
+                    if (!empty($row['max_text']) && $row['max_text'] <= self::word_count($row['content'])) {
                         $message = get_lang('HasReachedMaxNumWords');
                         Display::addFlash(
                             Display::return_message(

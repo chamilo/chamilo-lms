@@ -178,7 +178,7 @@ $show_only_total_score = false;
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
     // if the results_disabled of the Quiz is 1 when block the script
-    $result_disabled		= $track_exercise_info['results_disabled'];
+    $result_disabled = $track_exercise_info['results_disabled'];
 
     if (!(api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) ) {
         if ($result_disabled == 1) {
@@ -398,7 +398,6 @@ foreach ($questionList as $questionId) {
         $questionScore = $question_result['score'];
         $totalScore += $question_result['score'];
     } elseif ($answerType == FREE_ANSWER) {
-        $answer = $str;
         $question_result = $objExercise->manage_answer(
             $id,
             $questionId,
@@ -413,7 +412,6 @@ foreach ($questionList as $questionId) {
         $questionScore = $question_result['score'];
         $totalScore += $question_result['score'];
     } elseif ($answerType == ORAL_EXPRESSION) {
-        $answer = $str;
         $question_result = $objExercise->manage_answer(
             $id,
             $questionId,

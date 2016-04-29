@@ -243,8 +243,7 @@ class NotebookManager
         }
 
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-        $order_by = "";
+        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);        
         if ($_SESSION['notebook_view'] == 'creation_date' || $_SESSION['notebook_view'] == 'update_date') {
             $order_by = " ORDER BY " . $_SESSION['notebook_view'] . " $sort_direction ";
         } else {
@@ -255,7 +254,7 @@ class NotebookManager
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
-        $cond_extra = ($_SESSION['notebook_view'] == 'update_date') ? " AND update_date <> '0000-00-00 00:00:00'" : " ";
+        $cond_extra = ($_SESSION['notebook_view'] == 'update_date') ? " AND update_date <> ''" : " ";
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $t_notebook

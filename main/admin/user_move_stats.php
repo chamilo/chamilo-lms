@@ -374,7 +374,7 @@ if (isset($_REQUEST['load_ajax'])) {
 	                                       qualification    = '".$parent_data['qualification'] ."',
 	                                       parent_id    = '',
 	                                       qualificator_id  = '',
-	                                       date_of_qualification    = '0000-00-00 00:00:00',
+	                                       date_of_qualification    = '',
 	                                       session_id   = ".$new_session_id;
                                     $rest_insert     = Database::query($sql_add_publication);
                                     if ($debug) echo ($sql_add_publication);

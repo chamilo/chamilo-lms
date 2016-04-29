@@ -147,11 +147,9 @@ switch ($action) {
                 $file['name'] = 'rec_'.date('Y-m-d_His').'_'.uniqid().'.'.$fileInfo['extension'];
                 $file['file'] = $file;
 
-                $lpPathInfo['dir'] = api_remove_trailing_slash($lpPathInfo['dir']);
-
                 $result = DocumentManager::upload_document(
                     $file,
-                    $lpPathInfo['dir'],
+                    '/audio',
                     $file['name'],
                     null,
                     0,

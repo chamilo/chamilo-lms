@@ -1,0 +1,11 @@
+{{ 'You had a new message from  %url%' | trans({'%url%': url(app.request.attributes.get('_route'))} ) }}
+
+{{ 'Firstname' | trans }} : {{ firstname }}
+{{ 'Lirstname' | trans }} : {{ lastname }}
+
+Email: {{ email }}
+IP: {{ ip }}
+
+{{ 'Subject' | trans }} : {{ subject }}
+{{ 'Message' | trans }} :
+{{ message|raw }}

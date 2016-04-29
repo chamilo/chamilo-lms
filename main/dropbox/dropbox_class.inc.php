@@ -68,7 +68,7 @@ class Dropbox_Work
      * @param unknown_type $arg6
      * @return Dropbox_Work
      */
-    public function Dropbox_Work($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
+    public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
     {
         if (func_num_args() > 1) {
             $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
@@ -148,9 +148,10 @@ class Dropbox_Work
                 'upload_date' => $this->upload_date,
                 'last_upload_date' => $this->last_upload_date,
                 'session_id' => api_get_session_id(),
+                'cat_id' => 0
 			];
-			$this->id = Database::insert($dropbox_cnf['tbl_file'], $params);
 
+			$this->id = Database::insert($dropbox_cnf['tbl_file'], $params);
 			if ($this->id) {
 				$sql = "UPDATE ".$dropbox_cnf['tbl_file']." SET id = iid WHERE iid = {$this->id}";
 				Database::query($sql);
@@ -248,7 +249,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 * @param unknown_type $arg7
 	 * @return Dropbox_SentWork
 	 */
-	function Dropbox_SentWork($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null)
+	public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null)
     {
 		if (func_num_args() > 1) {
 		    $this->_createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
@@ -274,7 +275,7 @@ class Dropbox_SentWork extends Dropbox_Work
         $_course = api_get_course_info();
 
 		// Call constructor of Dropbox_Work object
-        $this->Dropbox_Work(
+        parent::__construct(
             $uploader_id,
             $title,
             $description,
@@ -314,12 +315,14 @@ class Dropbox_SentWork extends Dropbox_Work
         $session_id = api_get_session_id();
         $uploader_id = $this->uploader_id;
         $user  = api_get_user_id();
+        $now = api_get_utc_datetime();
+
 		// Insert data in dropbox_post and dropbox_person table for each recipient
 		foreach ($this->recipients as $rec) {
             $file_id = (int)$this->id;
             $user_id = (int)$rec['id'];
-			$sql = "INSERT INTO $table_post (c_id, file_id, dest_user_id, session_id)
-                    VALUES ($course_id, $file_id, $user_id, $session_id)";
+			$sql = "INSERT INTO $table_post (c_id, file_id, dest_user_id, session_id, feedback_date, cat_id)
+                    VALUES ($course_id, $file_id, $user_id, $session_id, '$now', 0)";
 	        Database::query($sql);
             // If work already exists no error is generated
 
@@ -361,7 +364,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 *
 	 * @param unknown_type $id
 	 */
-	function _createExistingSentWork($id)
+	public function _createExistingSentWork($id)
     {
         $dropbox_cnf = getDropboxConf();
         $id = intval($id);
@@ -369,7 +372,7 @@ class Dropbox_SentWork extends Dropbox_Work
 		$course_id = api_get_course_int_id();
 
 		// Call constructor of Dropbox_Work object
-		$this->Dropbox_Work($id);
+		parent::__construct($id);
 
 		// Fill in recipients array
 		$this->recipients = array();
@@ -417,7 +420,7 @@ class Dropbox_Person
 	 * @param bool $isCourseTutor
 	 * @return Dropbox_Person
 	 */
-	function Dropbox_Person($userId, $isCourseAdmin, $isCourseTutor)
+	public function __construct($userId, $isCourseAdmin, $isCourseTutor)
     {
 	    $course_id = api_get_course_int_id();
 

@@ -44,6 +44,7 @@ sonata_page:
         - ^/faq
         - ^/courses/(.*)
         - ^/front/editor
+        - ^/contact(.*) # sonata admin
 
     ignore_route_patterns:
         - (.*)administration(.*)     # ignore admin route, ie route containing 'admin'  # sonata admin

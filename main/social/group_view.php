@@ -124,14 +124,17 @@ if ($group_id != 0) {
 
     if (isset($_GET['action']) && $_GET['action']=='leave') {
         $user_leaved = intval($_GET['u']);
-        //I can "leave me myself"
+        // I can "leave me myself"
         if (api_get_user_id() == $user_leaved) {
-            $usergroup->delete_user_rel_group($user_leaved, $group_id);
-            Display::addFlash(
-                Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'confirmation', false)
-            );
+            if (UserGroup::canLeave($group_info)) {
+                $usergroup->delete_user_rel_group($user_leaved, $group_id);
+                Display::addFlash(
+                    Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'confirmation', false)
+                );
+            }
         }
     }
+
     // add a user to a group if its open
     if (isset($_GET['action']) && $_GET['action']=='join') {
         // we add a user only if is a open group

@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Zend\Feed\Reader\Reader;
+use Zend\Feed\Reader\Entry\Rss;
+
 /**
  * Class SocialManager
  *
@@ -132,7 +135,7 @@ class SocialManager extends UserManager
                     'firstName' => $my_user_info['firstName'],
                     'lastName' => $my_user_info['lastName'],
                     'username' => $my_user_info['username'],
-                    'image' => $my_user_info['avatar']
+                    'image' => $my_user_info['avatar'],
                 );
             } else {
                 $list_ids_friends[] = $row;
@@ -205,6 +208,9 @@ class SocialManager extends UserManager
                 'send_date' => $now,
                 'title' => $message_title,
                 'content'  => $message_content,
+                'group_id' => 0,
+                'parent_id' => 0,
+                'update_date' => $now
             ];
             Database::insert($tbl_message, $params);
 
@@ -420,10 +426,8 @@ class SocialManager extends UserManager
      */
     public static function get_user_feeds($user, $limit = 5)
     {
-        if (!function_exists('fetch_rss')) {
-            return '';
-        }
         $feed = UserManager::get_extra_user_data_by_field($user, 'rssfeeds');
+
         if (empty($feed)) {
             return '';
         }
@@ -432,13 +436,15 @@ class SocialManager extends UserManager
             return '';
         }
         $res = '';
+
         foreach ($feeds as $url) {
             if (empty($url)) {
                 continue;
             }
-            $rss = @fetch_rss($url);
+            $channel = Reader::import($url);
+
             $i = 1;
-            if (!empty($rss->items)) {
+            if (!empty($channel)) {
                 $icon_rss = '';
                 if (!empty($feed)) {
                     $icon_rss = Display::url(
@@ -448,20 +454,22 @@ class SocialManager extends UserManager
                     );
                 }
 
-                $res .= '<h3 class="title-rss">'.$icon_rss.' '.$rss->channel['title'].'</h3>';
+                $res .= '<h3 class="title-rss">'.$icon_rss.' '.$channel->getTitle().'</h3>';
                 $res .= '<div class="rss-items">';
-                foreach ($rss->items as $item) {
+                /** @var Rss $item */
+                foreach ($channel as $item) {
                     if ($limit >= 0 and $i > $limit) {
                         break;
                     }
-                    $res .= '<h4 class="rss-title"><a href="'.$item['link'].'">'.$item['title'].'</a></h4>';
-                    $res .= '<div class="rss-date">'.api_get_local_time($item['date_timestamp']).'</div>';
-                    $res .= '<div class="rss-content"><p>'.$item['description'].'</p></div>';
+                    $res .= '<h4 class="rss-title"><a href="'.$item->getLink().'">'.$item->getTitle().'</a></h4>';
+                    $res .= '<div class="rss-date">'.api_get_local_time($item->getDateCreated()).'</div>';
+                    $res .= '<div class="rss-content"><p>'.$item->getDescription().'</p></div>';
                     $i++;
                 }
                 $res .= '</div>';
             }
         }
+
         return $res;
     }
 
@@ -590,7 +598,7 @@ class SocialManager extends UserManager
             'member_list',
             'invite_friends',
             'waiting_list',
-            'browse_groups'
+            'browse_groups',
         );
 
         $template = new Template(null, false, false, false, false, false);
@@ -631,7 +639,7 @@ class SocialManager extends UserManager
                     'normal' => UserManager::getUserPicture(
                         $user_id,
                         USER_IMAGE_SIZE_MEDIUM
-                    )
+                    ),
                 ]
             );
         }
@@ -694,7 +702,7 @@ class SocialManager extends UserManager
             'member_list',
             'invite_friends',
             'waiting_list',
-            'browse_groups'
+            'browse_groups',
         );
 
         // get count unread message and total invitations
@@ -799,7 +807,7 @@ class SocialManager extends UserManager
             $links .= $myFiles;
 
             $links .='</ul>';
-            
+
             $html .= Display::panelCollapse(
                     get_lang('SocialNetwork'),
                     $links,
@@ -890,7 +898,7 @@ class SocialManager extends UserManager
                     . 'user_manager.ajax.php?'
                     . http_build_query([
                         'a' => 'get_user_popup',
-                        'user_id' => $user_id
+                        'user_id' => $user_id,
                     ]);
 
                 $links .= '<li>';
@@ -900,7 +908,7 @@ class SocialManager extends UserManager
                     [
                         'class' => 'ajax',
                         'title' => $sendMessageText,
-                        'data-title' => $sendMessageText
+                        'data-title' => $sendMessageText,
                     ]
                 );
                 $links .= '</li>';
@@ -976,7 +984,8 @@ class SocialManager extends UserManager
         }
 
         if ($show_delete_account_button) {
-            $html .= '<div class="sidebar-nav"><ul><li>';
+            $html .= '<div class="panel panel-default"><div class="panel-body">';
+            $html .= '<ul class="nav nav-pills nav-stacked"><li>';
             $url = api_get_path(WEB_CODE_PATH).'auth/unsubscribe_account.php';
             $html .= Display::url(
                 Display::return_icon(
@@ -987,7 +996,8 @@ class SocialManager extends UserManager
                 ).get_lang('Unsubscribe'),
                 $url
             );
-            $html .= '</li></ul></div>';
+            $html .= '</li></ul>';
+            $html .= '</div></div>';
         }
         $html .= '';
 
@@ -1239,17 +1249,20 @@ class SocialManager extends UserManager
         $friendId = intval($friendId);
         $messageId = intval($messageId);
 
-        //Just in case we replace the and \n and \n\r while saving in the DB
+        // Just in case we replace the and \n and \n\r while saving in the DB
         $messageContent = str_replace(array("\n", "\n\r"), '<br />', $messageContent);
+        $now = api_get_utc_datetime();
 
         $attributes = array(
             'user_sender_id' => $userId,
             'user_receiver_id' => $friendId,
             'msg_status' => $messageStatus,
-            'send_date' => api_get_utc_datetime(),
+            'send_date' => $now,
             'title' => '',
             'content' => $messageContent,
-            'parent_id' => $messageId
+            'parent_id' => $messageId,
+            'group_id' => 0,
+            'update_date' => $now
         );
 
         return Database::insert($tblMessage, $attributes);
@@ -1701,7 +1714,7 @@ class SocialManager extends UserManager
         $template->assign('social_avatar_block', $socialAvatarBlock);
         $template->assign('profile_edition_link', $profileEditionLink);
         //Added the link to export the vCard to the Template
-        
+
         //If not friend $show_full_profile is False and the user can't see Email Address and Vcard Download Link
         if ($show_full_profile) {
             $template->assign('vcard_user_link', $vCardUserLink);
@@ -1869,7 +1882,7 @@ class SocialManager extends UserManager
                 api_get_path(WEB_CODE_PATH).'social/profile.php'.$userId,
                 null,
                 array('enctype' => 'multipart/form-data') ,
-                FormValidator::LAYOUT_HORIZONTAL    
+                FormValidator::LAYOUT_HORIZONTAL
             );
 
             $socialWallPlaceholder = isset($_GET['u']) ? get_lang('SocialWallWriteNewPostToFriend') : get_lang('SocialWallWhatAreYouThinkingAbout');
@@ -1879,7 +1892,7 @@ class SocialManager extends UserManager
                 null,
                 [
                     'placeholder' => $socialWallPlaceholder,
-                    'cols-size' => [1, 10, 1]
+                    'cols-size' => [1, 10, 1],
                 ]
             );
             $form->addHidden('url_content', '');

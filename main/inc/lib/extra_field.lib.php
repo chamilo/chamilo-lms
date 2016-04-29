@@ -623,6 +623,8 @@ class ExtraField extends Model
         if (!isset($params['field_order'])) {
             $max_order = self::get_max_field_order();
             $params['field_order'] = $max_order;
+        } else {
+            $params['field_order'] = (int) $params['field_order'];
         }
 
         return $params;
@@ -1624,55 +1626,55 @@ EOF;
                 'align' => 'left',
             ),
             array(
-                'name'     => 'variable',
-                'index'    => 'variable',
-                'width'    => '',
-                'align'    => 'left',
-                'sortable' => 'true'
+                'name' => 'variable',
+                'index' => 'variable',
+                'width' => '',
+                'align' => 'left',
+                'sortable' => 'true',
             ),
             array(
-                'name'     => 'field_type',
-                'index'    => 'field_type',
-                'width'    => '',
-                'align'    => 'left',
-                'sortable' => 'true'
+                'name' => 'field_type',
+                'index' => 'field_type',
+                'width' => '',
+                'align' => 'left',
+                'sortable' => 'true',
             ),
             array(
-                'name'     => 'changeable',
-                'index'    => 'changeable',
-                'width'    => '50',
-                'align'    => 'left',
-                'sortable' => 'true'
+                'name' => 'changeable',
+                'index' => 'changeable',
+                'width' => '50',
+                'align' => 'left',
+                'sortable' => 'true',
             ),
             array(
-                'name'     => 'visible',
-                'index'    => 'visible',
-                'width'    => '40',
-                'align'    => 'left',
-                'sortable' => 'true'
+                'name' => 'visible',
+                'index' => 'visible',
+                'width' => '40',
+                'align' => 'left',
+                'sortable' => 'true',
             ),
             array(
-                'name'     => 'filter',
-                'index'    => 'filter',
-                'width'    => '30',
-                'align'    => 'left',
-                'sortable' => 'true'
+                'name' => 'filter',
+                'index' => 'filter',
+                'width' => '30',
+                'align' => 'left',
+                'sortable' => 'true',
             ),
             array(
-                'name'     => 'field_order',
-                'index'    => 'field_order',
-                'width'    => '40',
-                'align'    => 'left',
-                'sortable' => 'true'
+                'name' => 'field_order',
+                'index' => 'field_order',
+                'width' => '40',
+                'align' => 'left',
+                'sortable' => 'true',
             ),
             array(
-                'name'      => 'actions',
-                'index'     => 'actions',
-                'width'     => '100',
-                'align'     => 'left',
+                'name' => 'actions',
+                'index' => 'actions',
+                'width' => '100',
+                'align' => 'left',
                 'formatter' => 'action_formatter',
-                'sortable'  => 'false'
-            )
+                'sortable' => 'false',
+            ),
         );
     }
 
@@ -1777,7 +1779,7 @@ EOF;
         $form->addGroup($group, '', get_lang('FieldLoggeable'), '', false);
         */
 
-        $form->addElement('text', 'field_order', get_lang('FieldOrder'), array('class' => 'span1'));
+        $form->addElement('text', 'field_order', get_lang('FieldOrder'));
 
         if ($action == 'edit') {
             $option = new ExtraFieldOption($this->type);

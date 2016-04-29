@@ -29,7 +29,6 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id(), 'name' => $_SESSION['oLP']->get_name());
-//$interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id", 'name' => get_lang('NewStep'));
 
 $htmlHeadXtra[] = '<script>
 function activate_start_date() {
@@ -165,7 +164,7 @@ if ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on)) {
 }
 
 $form->addElement('html','<div id="start_date_div" style="display:'.$display_date.';">');
-$form->addElement('DatePicker', 'publicated_on', get_lang('PublicationDate'));
+$form->addDatePicker('publicated_on', get_lang('PublicationDate'));
 $form->addElement('html','</div>');
 
 //End date
@@ -177,7 +176,7 @@ if ($expired_on!='0000-00-00 00:00:00' && !empty($expired_on)) {
 }
 
 $form->addElement('html','<div id="end_date_div" style="display:'.$display_date.';">');
-$form->addElement('DatePicker', 'expired_on', get_lang('ExpirationDate'));
+$form->addDatePicker('expired_on', get_lang('ExpirationDate'));
 $form->addElement('html','</div>');
 
 if (api_is_platform_admin()) {

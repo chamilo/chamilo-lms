@@ -403,7 +403,6 @@ if ($isAdmin) {
     }
 }
 
-
 if ($isAdmin) {
     $table->set_header(0, $plugin->get_lang('TicketNum'), true);
     $table->set_header(1, $plugin->get_lang('Date'), true);
@@ -414,7 +413,6 @@ if ($isAdmin) {
     $table->set_header(6, $plugin->get_lang('Status'), true);
     $table->set_header(7, $plugin->get_lang('Message'), true);
     $table->set_header(8, get_lang('Actions'), true);
-    $table->set_header(9, get_lang('Description'), true, array("style" => "width:200px"));
 } else {
     echo '<center><h1>' . $plugin->get_lang('MyTickets') . '</h1></center>';
     echo '<center><p>' . $plugin->get_lang('MsgWelcome') . '</p></center>';

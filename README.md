@@ -111,6 +111,17 @@ Typically:
     DELETE FROM access_url_rel_course WHERE access_url_id NOT IN (SELECT id FROM access_url);
 </pre>
 
+### Upgrading from non-Git Chamilo 1.10 ###
+
+In the *very unlikely* case of upgrading a "normal" Chamilo 1.10 installation (done with the downloadable zip package) to a Git-based installation, make sure you delete the contents of a few folders first. These folders are re-generated later by the ```composer update``` command. This is likely to increase the downtime of your Chamilo portal of a few additional minutes (plan for 10 minutes on a reasonnable internet connection).
+
+```
+rm composer.lock
+rm -rf web/*
+rm -rf vendor/*
+```
+
+
 # For developers and testers only
 
 This section is for developers only (or for people who have a good reason to use
@@ -149,6 +160,11 @@ src/Chamilo/CoreBundle/Migrations/Schema/V110/), then check the datetime of the
 version and type the following (assuming you want to execute Version20150527120703)
 ```
 php bin/doctrine.php migrations:execute 20150527120703 --up --configuration=app/config/migrations.yml
+```
+
+You can also print the differences between your database and what it should be by issuing the following command from the Chamilo base folder:
+```
+php bin/doctrine.php orm:schema:update --dump-sql
 ```
 
 ## Contributing

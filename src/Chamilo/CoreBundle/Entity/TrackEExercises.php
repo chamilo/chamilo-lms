@@ -120,7 +120,7 @@ class TrackEExercises
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expired_time_control", type="datetime", nullable=false)
+     * @ORM\Column(name="expired_time_control", type="datetime", nullable=true)
      */
     private $expiredTimeControl;
 

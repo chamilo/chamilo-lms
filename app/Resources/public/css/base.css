@@ -4339,13 +4339,11 @@ ul.exercise-draggable-answer .touch-items{
   background-image: -ms-linear-gradient(top, #ffffff, #cfcfcf);
   background-image: -o-linear-gradient(top, #ffffff, #cfcfcf);
   background-image: linear-gradient(to bottom, #ffffff, #cfcfcf);
-  -webkit-border-radius: 4;
-  -moz-border-radius: 4;
   border-radius: 4px;
   font-family: Arial;
   color: #2e2e2e;
   font-size: 13px;
-  padding: 10px 20px 10px 20px;
+  padding: 5px 10px;
   border: solid #b0b0b0 1px;
   text-decoration: none;
   z-index: 100;
@@ -4363,15 +4361,15 @@ ul.exercise-draggable-answer .touch-items:hover{
   padding: 10px 20px;
 }
 .question_options .droppable {
-  margin: 0 20px 20px 0;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
   background-color: #ECF0F1;
-  border: dotted #dddddd 4px;
+  border: dotted #dddddd 2px;
   border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
   color:#666666;
+}
+.question_options .ui-helper-reset{
+    margin-top: -25px;
 }
 .question_options .droppable .gallery .btn-default {
   background: #D9534F;
@@ -4384,12 +4382,17 @@ ul.exercise-draggable-answer .touch-items:hover{
   border-color: #AC2925;
 }
 .question_options .droppable .gallery .exercise-draggable-answer-option {
-  margin-bottom: 15px;
-  background-color: #286090;
-  color: #ffffff;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 4px;
+  margin-bottom: 0;
+background: #feffff;
+background: -moz-linear-gradient(top, #feffff 0%, #d2ebf9 100%);
+background: -webkit-linear-gradient(top, #feffff 0%,#d2ebf9 100%);
+background: linear-gradient(to bottom, #feffff 0%,#d2ebf9 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#d2ebf9',GradientType=0 );
+  border: 1px solid #DDDDDD;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 /***    Matching Draggable answer ***/

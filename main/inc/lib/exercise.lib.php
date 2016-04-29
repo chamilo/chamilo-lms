@@ -832,7 +832,7 @@ class ExerciseLib
                             $parsed_answer,
                             [
                                 'id' => "window_$windowId",
-                                'class' => "window{$questionId}_question_draggable exercise-draggable-answer-option btn btn-info"
+                                'class' => "window{$questionId}_question_draggable exercise-draggable-answer-option"
                             ]
                         );
                         $selectedValue = 0;
@@ -1058,12 +1058,16 @@ HTML;
 
                     if ($answerCorrect) {
                         $s .= Display::div(
-                            '&nbsp;',
-                            [
-                                'id' => "drop_$windowId",
-                                'class' => 'col-md-2 droppable'
-                            ]
-                        );
+                                Display::div('&nbsp;',
+                                        [
+                                            'id' => "drop_$windowId",
+                                            'class' => 'droppable'
+                                        ])
+                                ,
+                                [
+                                    'class' => 'col-md-3'
+                                ]
+                                );
 
                         $counterAnswer++;
                     }

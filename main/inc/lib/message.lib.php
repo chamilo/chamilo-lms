@@ -438,7 +438,7 @@ class MessageManager
             $receiver_user_id,
             $subject,
             $message,
-            [],
+            $_FILES ? $_FILES : [],
             [],
             null,
             null,

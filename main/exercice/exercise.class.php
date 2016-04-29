@@ -2840,7 +2840,7 @@ class Exercise
             $safe_lp_item_id = 0;
         }
         if (empty($clock_expired_time)) {
-            $clock_expired_time = 0;
+            $clock_expired_time = null;
         }
 
         $questionList = array_map('intval', $questionList);
@@ -2857,12 +2857,14 @@ class Exercise
             'orig_lp_item_id'  => $safe_lp_item_id,
             'orig_lp_item_view_id'  => $safe_lp_item_view_id,
             'exe_weighting'=> $weight,
-            'user_ip' => api_get_real_ip()
+            'user_ip' => api_get_real_ip(),
+            'exe_date' => api_get_utc_datetime(),
+            'exe_result' => 0,
+            'steps_counter' => 0,
+            'exe_duration' => 0,
+            'expired_time_control' => $clock_expired_time,
+            'questions_to_check' => ''
         );
-
-        if ($this->expired_time != 0) {
-            $params['expired_time_control'] = $clock_expired_time;
-        }
 
         $id = Database::insert($track_exercises, $params);
 
@@ -5085,7 +5087,6 @@ class Exercise
             $sql = 'UPDATE ' . $stat_table . ' SET
                         exe_result = exe_result + ' . floatval($questionScore) . '
                     WHERE exe_id = ' . $exeId;
-            if ($debug) error_log($sql);
             Database::query($sql);
         }
 
@@ -6117,7 +6118,7 @@ class Exercise
             if (empty($exercise_info['questions_to_check'])) {
                 if ($action == 'add') {
                     $sql = "UPDATE $track_exercises SET questions_to_check = '$question_id' WHERE exe_id = $exe_id ";
-                    $result = Database::query($sql);
+                    Database::query($sql);
                 }
             } else {
                 $remind_list = explode(',',$exercise_info['questions_to_check']);

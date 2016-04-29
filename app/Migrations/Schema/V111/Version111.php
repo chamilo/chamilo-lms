@@ -76,6 +76,10 @@ class Version111 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_forum_forum CHANGE start_time start_time DATETIME');
         $this->addSql('ALTER TABLE c_forum_forum CHANGE end_time end_time DATETIME');
+
+        $this->addSql('ALTER TABLE track_e_exercises CHANGE expired_time_control expired_time_control DATETIME');
+
+
     }
 
     /**

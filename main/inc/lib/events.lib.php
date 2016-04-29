@@ -494,6 +494,8 @@ class Event
                 'position' => $position,
                 'tms' => $now,
                 'filename' => !empty($fileName) ? basename($fileName) : $fileName,
+                'teacher_comment' => '',
+                'course_code' => ''
             );
 
             // Check if attempt exists.
@@ -582,8 +584,15 @@ class Event
      * @return	boolean	Result of the insert query
      * @uses Course code and user_id from global scope $_cid and $_user
      */
-    public static function saveExerciseAttemptHotspot($exe_id, $question_id, $answer_id, $correct, $coords, $updateResults = false, $exerciseId = 0)
-    {
+    public static function saveExerciseAttemptHotspot(
+        $exe_id,
+        $question_id,
+        $answer_id,
+        $correct,
+        $coords,
+        $updateResults = false,
+        $exerciseId = 0
+    ) {
         global $safe_lp_id, $safe_lp_item_id;
 
         if ($updateResults == false) {

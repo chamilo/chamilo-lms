@@ -227,6 +227,18 @@ EOT;
      *
      * @return mixed
      */
+    public function addSelectLanguage($name, $label, $options = [], $attributes = [])
+    {
+        return $this->addElement('SelectLanguage', $name, $label, $options, $attributes);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array $attributes
+     *
+     * @return mixed
+     */
     public function addDateTimePicker($name, $label, $attributes = [])
     {
         return $this->addElement('DateTimePicker', $name, $label, $attributes);

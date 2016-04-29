@@ -2,8 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* A dropdownlist with all languages to use with QuickForm
-*/
+ * Class SelectLanguage
+ * A dropdownlist with all languages to use with QuickForm
+ */
 class SelectLanguage extends HTML_QuickForm_select
 {
 	/**
@@ -18,9 +19,9 @@ class SelectLanguage extends HTML_QuickForm_select
 		$this->_values = array();
 		foreach ($languages['name'] as $index => $name) {
 			if ($languages['folder'][$index] == api_get_setting('platformLanguage')) {
-				$this->addOption($name,$languages['folder'][$index],array('selected'=>'selected'));
+				$this->addOption($name, $languages['folder'][$index], array('selected'=>'selected'));
 			} else {
-				$this->addOption($name,$languages['folder'][$index]);
+				$this->addOption($name, $languages['folder'][$index]);
 			}
 		}
 	}

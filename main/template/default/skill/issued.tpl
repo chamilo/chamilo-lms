@@ -22,7 +22,7 @@
             </div>
         {% if badge_error %}
             <div class="alert alert-danger"> {{ 'BakedBadgeProblem'|get_lang }}</div>
-        {% else %}
+        {% elseif personal_badge is not empty %}
             <p class="text-center">
                 <a href="{{ personal_badge }}" class="btn btn-primary" target="_new" download="badge">
                     <em class="fa fa-download fa-fw"></em> {{ 'DownloadBadge'|get_lang }}

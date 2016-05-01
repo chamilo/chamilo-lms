@@ -34,10 +34,16 @@ foreach ($logs as $log) {
     if ($showDate) {
       echo $log['date']->format('Y-m-d H:i:s').' '.substr($log['sha1'],0,8).PHP_EOL;
     }
+    // Check for messages to ignore...
     if (strncasecmp($log['message'], 'Minor', 5) === 0) {
         //Skip minor messages
         continue;
     }
+    if ($log['message'] == 'Update language terms') {
+        //Skip language update messages
+        continue;
+    }
+    // Look for tasks references
     $issueLink = '';
     $matches = array();
     if (preg_match_all('/((BT)?#(\d){2,5})/', $log['message'], $matches)) {

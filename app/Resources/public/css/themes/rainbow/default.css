@@ -85,6 +85,31 @@ a:focus {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.section-notice{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.section-notice .items{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.section-notice .items .title a{
+    color: #E53140;
+    font-size: 20px;
+    font-weight: 700;
+}
+.section-notice .items .date{
+    color: #888;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+.section-title{
+    font-size: 32px;
+    color: #E53140;
+    text-align: center;
+}
 .stadistics .icon-color{
     color: #E53140;
 }

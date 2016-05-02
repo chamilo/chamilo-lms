@@ -12,7 +12,6 @@
    
     {% if show_footer == true %}
         </div> <!-- end of #col" -->
-        
         </div> <!-- end of #container" -->
     {% endif %}
     {% include template ~ "/layout/main_footer.tpl" %}

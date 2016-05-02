@@ -62,6 +62,7 @@
                 {{ home_page_block }}
             </section>
         {% endif %}
+
         </div>
     </div>    
 </div>	
@@ -91,23 +92,13 @@
                 {{ course_category_block }}
             </section>
         {% endif %}
-
+        
+        <!-- HOT COURSE -->
         {% include template ~ "/layout/hot_courses.tpl" %}
-
-       
-        {% if plugin_content_bottom %}
-            <div id="plugin_content_bottom">
-                {{plugin_content_bottom}}
-            </div>
-        {% endif %}
-      
+        <!-- END HOT COURSE -->
+        <!-- CMS -->
+        {% include template ~ "/layout/cms.tpl" %}
+        <!-- END CSS -->
 	</div>
-
-    
-    {% if plugin_main_bottom %}
-        <div id="plugin_main_bottom" class="col-md-12">
-            {{ plugin_main_bottom }}
-        </div>
-    {% endif %}
 
 {% endblock %}

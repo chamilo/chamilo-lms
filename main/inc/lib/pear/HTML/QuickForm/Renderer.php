@@ -40,7 +40,7 @@ class HTML_QuickForm_Renderer
     *
     * @access public
     */
-    function HTML_QuickForm_Renderer()
+    public function __construct()
     {
     } // end constructor
 

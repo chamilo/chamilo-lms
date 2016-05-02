@@ -25,13 +25,13 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 	 * @param array $attributes This should contain the keys 'receivers' and
 	 * 'receivers_selected'
 	 */
-	function HTML_QuickForm_receivers($elementName = null, $elementLabel = null, $attributes = null)
+	public function __construct($elementName = null, $elementLabel = null, $attributes = null)
 	{
 		$this->receivers = $attributes['receivers'];
 		$this->receivers_selected = $attributes['receivers_selected'];
 		unset($attributes['receivers']);
 		unset($attributes['receivers_selected']);
-		$this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+		parent::__construct($elementName, $elementLabel, $attributes);
 		$this->_persistantFreeze = true;
 		$this->_appendName = true;
 		$this->_type = 'receivers';
@@ -50,7 +50,7 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 	/**
 	 * HTML representation
 	 */
-	function toHtml()
+	public function toHtml()
 	{
 		include_once ('HTML/QuickForm/Renderer/Default.php');
 		$this->_separator = '<br/>';
@@ -62,10 +62,11 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 		$js = $this->getElementJS();
 		return $renderer->toHtml().$js;
 	}
+
 	/**
 	 * Get the necessary javascript
 	 */
-	function getElementJS()
+    public function getElementJS()
 	{
 		$js = "<script type=\"text/javascript\">
 					/* <![CDATA[ */

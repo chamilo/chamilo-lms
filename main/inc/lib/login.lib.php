@@ -155,7 +155,7 @@ class Login
         );
         $email_admin = api_get_setting('emailAdministrator');
         $email_body = nl2br($email_body);
-        
+
         $result = @api_mail_html(
             '',
             $email_to,
@@ -245,7 +245,8 @@ class Login
                     firstname AS firstName,
                     username AS loginName,
                     password,
-                    email
+                    email,
+                    auth_source
                 FROM " . $tbl_user . "
                 WHERE user_id = $id";
         $result = Database::query($sql);
@@ -253,6 +254,11 @@ class Login
 
         if ($result && $num_rows > 0) {
             $user = Database::fetch_array($result);
+
+            if ($user['auth_source'] == 'extldap') {
+                
+                return get_lang('CouldNotResetPassword');
+            }
         } else {
             return get_lang('CouldNotResetPassword');
         }
@@ -853,8 +859,19 @@ class Login
         }
 
 		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$query = "SELECT user_id AS uid, lastname AS lastName, firstname AS firstName, username AS loginName, password, email,
-                         status AS status, official_code, phone, picture_uri, creator_id
+		$query = "SELECT 
+		            user_id AS uid, 
+		            lastname AS lastName, 
+		            firstname AS firstName, 
+		            username AS loginName, 
+		            password, 
+		            email,
+                    status AS status, 
+                    official_code, 
+                    phone, 
+                    picture_uri, 
+                    creator_id,
+                    auth_source
 				 FROM $tbl_user
 				 WHERE ( $condition AND active = 1) ";
 		$result = Database::query($query);
@@ -862,6 +879,7 @@ class Login
         if ($result && $num_rows > 0) {
             return Database::fetch_assoc($result);
         }
+        
         return false;
     }
 }

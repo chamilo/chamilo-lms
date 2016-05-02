@@ -45,7 +45,7 @@ if ($reset && $userId) {
     }
 
     Display::addFlash(
-        Display::return_message($messageText)
+        Display::return_message($messageText, 'info', false)
     );
     header('Location: ' . api_get_path(WEB_PATH));
     exit;
@@ -72,7 +72,7 @@ if ($form->validate()) {
         }
 
         Display::addFlash(
-            Display::return_message($messageText, 'error')
+            Display::return_message($messageText, 'error', false)
         );
         header('Location: ' . api_get_self());
         exit;
@@ -92,7 +92,15 @@ if ($form->validate()) {
         }
 
         Display::addFlash(
-            Display::return_message($messageText)
+            Display::return_message($messageText, 'info', false)
+        );
+        header('Location: ' . api_get_path(WEB_PATH));
+        exit;
+    }
+
+    if ($user['auth_source'] == 'extldap') {
+        Display::addFlash(
+            Display::return_message(get_lang('CouldNotResetPasswordBecauseLDAP'), 'info', false)
         );
         header('Location: ' . api_get_path(WEB_PATH));
         exit;
@@ -101,11 +109,9 @@ if ($form->validate()) {
     $userResetPasswordSetting = api_get_setting('user_reset_password');
 
     if ($userResetPasswordSetting === 'true') {
-        $user = Database::getManager()
-            ->getRepository('ChamiloUserBundle:User')
-            ->find($user['uid']);
+        $userObj = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user['uid']);
 
-        Login::sendResetEmail($user, true);
+        Login::sendResetEmail($userObj, true);
 
         if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
             CustomPages::display(
@@ -130,7 +136,7 @@ if ($form->validate()) {
     }
 
     Display::addFlash(
-        Display::return_message($messageText)
+        Display::return_message($messageText, 'info', false)
     );
     header('Location: ' . api_get_path(WEB_PATH));
     exit;

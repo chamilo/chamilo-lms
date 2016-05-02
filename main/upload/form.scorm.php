@@ -37,21 +37,25 @@ function get_zip_files_in_garbage() {
  * Just display the form needed to upload a SCORM and give its settings
  */
 $nameTools = get_lang("FileUpload");
-$interbreadcrumb[] = array("url" => "../newscorm/lp_controller.php?action=list", "name" => get_lang("ToolLearnpath"));
+$interbreadcrumb[] = array(
+    "url" => api_get_path(WEB_CODE_PATH)."newscorm/lp_controller.php?action=list?".api_get_cidreq(),
+    "name" => get_lang("ToolLearnpath"),
+);
+
 Display::display_header($nameTools, "Path");
 
 require_once '../newscorm/content_makers.inc.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 echo '<div class="actions">';
-echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('ReturnToLearningPaths'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 $form = new FormValidator(
     '',
     'POST',
-    'upload.php',
+    'upload.php?'.api_get_cidreq(),
     '',
     array(
         'id' => "upload_form",
@@ -129,5 +133,4 @@ Display::display_normal_message(
 );
 $form->display();
 
-// footer
 Display::display_footer();

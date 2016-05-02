@@ -60,6 +60,8 @@ if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
 $nameTools = get_lang('StudentDetails');
 $em = Database::getManager();
 
+$em = Database::getManager();
+
 if (isset($_GET['details'])) {
     if ($origin == 'user_course') {
         if (empty ($cidReq)) {
@@ -774,6 +776,13 @@ if (!empty($student_id)) {
                 get_lang('LastConnexion')
             );
 
+            $query = $em
+                ->createQuery('
+                    SELECT lp FROM ChamiloCourseBundle:CLp lp
+                    WHERE lp.sessionId = :session AND lp.cId = :course
+                    ORDER BY lp.displayOrder ASC
+                ');
+
             if (empty($sessionId)) {
                 $query = $em->createQuery('
                     SELECT lp FROM ChamiloCourseBundle:CLp lp
@@ -1276,6 +1285,8 @@ if (!empty($student_id)) {
         </table>
         </div>
     <?php
+        echo Tracking::displayUserSkills($user_info['user_id'], $info_course['id'], $sessionId);
+
     } //end details
 }
 

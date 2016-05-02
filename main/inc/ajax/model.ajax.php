@@ -57,6 +57,8 @@ if (!in_array(
     api_protect_teacher_script(true);
 }
 
+$toRemove = ['extra_access_start_date', 'extra_access_end_date'];
+
 // Search features
 
 //@todo move this in the display_class or somewhere else
@@ -108,15 +110,22 @@ $searchString = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : f
 $search = isset($_REQUEST['_search']) ? $_REQUEST['_search'] : false;
 $forceSearch = isset($_REQUEST['_force_search']) ? $_REQUEST['_force_search'] : false;
 $extra_fields = array();
+$accessStartDate = '';
+$accessEndDate = '';
 
-if (($search || $forceSearch) && ($search !== 'false')) {
+if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) && ($search !== 'false')) {
     $whereCondition = ' 1 = 1 ';
     $whereConditionInForm = getWhereClause($searchField, $searchOperator, $searchString);
 
     if (!empty($whereConditionInForm)) {
         $whereCondition .= ' AND '.$whereConditionInForm;
     }
+
     $filters = isset($_REQUEST['filters']) && !is_array($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+
+    if (isset($_REQUEST['filters2'])) {
+        $filters = json_decode($_REQUEST['filters2']);
+    }
 
     if (!empty($filters)) {
         if (in_array($action, ['get_questions', 'get_sessions'])) {
@@ -132,7 +141,23 @@ if (($search || $forceSearch) && ($search !== 'false')) {
             if (!empty($type)) {
                 // Extra field.
                 $extraField = new ExtraField($type);
+
+                foreach ($filters->rules as $key => $data) {
+                    if ($data->field == 'extra_access_start_date') {
+                        $accessStartDate = $data->data;
+                    }
+
+                    if ($data->field == 'extra_access_end_date') {
+                        $accessEndDate = $data->data;
+                    }
+
+                    if (in_array($data->field, $toRemove)) {
+                        unset($filters->rules[$key]);
+                    }
+                }
+
                 $result = $extraField->getExtraFieldRules($filters, 'extra_');
+
                 $extra_fields = $result['extra_fields'];
                 $condition_array = $result['condition_array'];
 
@@ -146,11 +171,11 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                 $whereCondition .= $extraCondition;
 
                 // Question field
-
                 $resultQuestion = $extraField->getExtraFieldRules($filters, 'question_');
                 $questionFields = $resultQuestion['extra_fields'];
                 $condition_array = $resultQuestion['condition_array'];
 
+                $extraQuestionCondition = '';
                 if (!empty($condition_array)) {
                     $extraQuestionCondition = ' AND ( ';
                     $extraQuestionCondition .= implode($filters->groupOp, $condition_array);
@@ -453,10 +478,28 @@ switch ($action) {
         break;
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+
+
+        $loadExtraFields = isset($_REQUEST['load_extra_field']) ? $_REQUEST['load_extra_field'] : '';
+        if (!empty($loadExtraFields)) {
+            $loadExtraFields = explode(',', $loadExtraFields);
+            $extraFieldsToLoad = array();
+            foreach ($loadExtraFields as $fieldId) {
+                $extraField = new ExtraField('session');
+                $fieldData = $extraField->get($fieldId);
+                $extraFieldsToLoad[] = $fieldData;
+            }
+        }
+
         if ($list_type == 'simple') {
+
+
             $count = SessionManager::get_sessions_admin(
                 array('where' => $whereCondition, 'extra' => $extra_fields),
-                true
+                true,
+                $accessStartDate,
+                $accessEndDate,
+                $extraFieldsToLoad
             );
         } else {
             $count = SessionManager::get_count_admin_complete(
@@ -994,8 +1037,7 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-
-        $session_columns = SessionManager::getGridColumns($list_type);
+        $session_columns = SessionManager::getGridColumns($list_type, $extraFieldsToLoad);
         $columns = $session_columns['simple_column_name'];
 
         if ($list_type == 'simple') {
@@ -1006,7 +1048,10 @@ switch ($action) {
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ),
-                false
+                false,
+                $accessStartDate,
+                $accessEndDate,
+                $extraFieldsToLoad
             );
         } else {
             $result = SessionManager::get_sessions_admin_complete(
@@ -1041,6 +1086,9 @@ switch ($action) {
             $whereCondition = str_replace(
                 'category_name',
                 'sc.name',
+
+
+
                 $whereCondition
             );
 
@@ -1696,7 +1744,7 @@ if (in_array($action, $allowed_actions)) {
         }
     }
 
-    header('Content-Type: application/json;charset=utf-8');
+    //header('Content-Type: application/json;charset=utf-8');
     echo json_encode($response);
 }
 exit;

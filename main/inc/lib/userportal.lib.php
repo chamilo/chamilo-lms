@@ -208,6 +208,8 @@ class IndexManager
                     $html .= '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
                 }
             }
+
+
             $html .= '</ul>';
         }
 
@@ -932,6 +934,8 @@ class IndexManager
         $show_create_link = false;
         $show_course_link = false;
 
+        $userInfo = api_get_user_info();
+
         if ((api_get_setting('allow_users_to_create_courses') == 'false' &&
             !api_is_platform_admin()) || api_is_student()
         ) {
@@ -994,6 +998,14 @@ class IndexManager
             } else {
                 $my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
             }
+        }
+
+        $my_account_content .= '<li class="add-course"><a href="' . api_get_path(WEB_PATH) . 'search.php">'.
+            Display::return_icon('new-course.png',  get_lang('Diagnosis')) . get_lang('Diagnosis').'</a></li>';
+
+        if ($userInfo['status'] == DRH) {
+            $my_account_content .= '<li class="add-course"><a href="' . api_get_path(WEB_PATH) . 'load_search.php">' .
+                Display::return_icon('new-course.png', get_lang('ManageDiagnosis')) . get_lang('Diagnosis') . '</a></li>';
         }
 
         $my_account_content .= '</ul>';

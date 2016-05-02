@@ -388,7 +388,7 @@ class SessionManager
      * @return mixed Integer for number of rows, or array of results
      * @assert (array(),true) !== false
      */
-    public static function get_sessions_admin($options = array(), $get_count = false)
+    public static function get_sessions_admin($options = array(), $get_count = false, $accessStartDate = '', $accessEndDate = '', $extraFieldsToLoad = array())
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -410,7 +410,7 @@ class SessionManager
             $where .=" AND s.id_coach = $user_id ";
         }
 
-        $extra_field = new ExtraField('session');
+        $extra_field = new \ExtraField('session');
         $conditions = $extra_field->parseConditions($options);
         $inject_joins = $conditions['inject_joins'];
         $where .= $conditions['where'];
@@ -425,19 +425,22 @@ class SessionManager
         if ($get_count == true) {
             $select = " SELECT count(*) as total_rows";
         } else {
-            $select =
-                "SELECT DISTINCT ".
-                " s.name, ".
-                " s.display_start_date, ".
-                " s.display_end_date, ".
-                " access_start_date, ".
-                " access_end_date, ".
-                " s.visibility, ".
-                " s.session_category_id, ".
-                " $inject_extra_fields ".
-                " s.id ";
-
-            $isMakingOrder = strpos($options['order'], 'category_name') === 0;
+            $select ="
+                SELECT DISTINCT
+                    s.name,
+                    s.display_start_date,
+                    s.display_end_date,
+                    access_start_date,
+                    access_end_date,
+                    s.visibility,
+                    s.session_category_id,
+                    $inject_extra_fields
+                    s.id
+                "
+            ;
+            if (isset($options['order'])) {
+                $isMakingOrder = strpos($options['order'], 'category_name') === 0;
+            }
         }
 
         $isFilteringSessionCategory = strpos($where, 'category_name') !== false;
@@ -456,6 +459,18 @@ class SessionManager
 
         $query = "$select FROM $tbl_session s $inject_joins $where $inject_where";
 
+        if (!empty($accessStartDate) && !empty($accessEndDate)) {
+            $accessStartDate = api_get_utc_datetime($accessStartDate);
+            $accessEndDate = api_get_utc_datetime($accessEndDate);
+            $query .= " AND (
+
+                (access_start_date > '$accessStartDate' AND access_end_date < '$accessEndDate') OR
+                (access_start_date > '$accessStartDate' AND access_end_date IS NULL) OR
+                (access_start_date IS NULL AND access_end_date < '$accessEndDate') OR
+                (access_start_date IS NULL AND access_end_date IS NULL)            
+            )";
+        }
+
         if (api_is_multiple_url_enabled()) {
             $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
@@ -470,6 +485,7 @@ class SessionManager
 
         $query .= $order;
         $query .= $limit;
+
         $result = Database::query($query);
 
         $categories = self::get_all_session_category();
@@ -490,7 +506,36 @@ class SessionManager
 
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
-                $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
+                $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                if (api_is_drh()) {
+                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                }
+                if (api_is_platform_admin()) {
+                    $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                }
+                $session['name'] = Display::url(
+                    $session['name'],
+                    $url
+                );
+
+
+                if (!empty($extraFieldsToLoad)) {
+                    foreach ($extraFieldsToLoad as $field) {
+                        $extraFieldValue = new ExtraFieldValue('session');
+                        $fieldData = $extraFieldValue->getAllValuesByItemAndField($session['id'], $field['id']);
+                        $fieldDataArray = array();
+                        $fieldDataToString = '';
+                        if (!empty($fieldData)) {
+                            foreach ($fieldData as $data) {
+
+                                $fieldDataArray[] = $data['value'];
+                            }
+                            $fieldDataToString = implode(', ', $fieldDataArray);
+
+                        }
+                        $session[$field['variable']] = $fieldDataToString;
+                    }
+                }
 
                 if (isset($session['session_active']) && $session['session_active'] == 1) {
                     $session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), ICON_SIZE_SMALL);
@@ -537,6 +582,8 @@ class SessionManager
                         }
                     }
                 }
+
+
                 $formatted_sessions[$session_id] = $session;
                 $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
                 $formatted_sessions[$session_id]['category_name'] = $categoryName;
@@ -2033,6 +2080,7 @@ class SessionManager
                             session_id = $session_id AND
 		                    user_id = $user_id AND
 		                    relation_type <> " . SESSION_RELATION_TYPE_RRHH . "";
+
         $result = Database::query($delete_sql);
         $return = Database::affected_rows($result);
 
@@ -2071,7 +2119,6 @@ class SessionManager
                 }
             }
         }
-
         return true;
     }
 
@@ -6755,6 +6802,23 @@ class SessionManager
         $form->addButtonAdvancedSettings('advanced_params');
         $form->addElement('html','<div id="advanced_params_options" style="display:none">');
 
+        if (empty($sessionId)) {
+            $sessions = SessionManager::get_sessions_admin();
+
+            $sessionList = [];
+            $sessionList[] = '';
+            foreach ($sessions as $session) {
+                $sessionList[$session['id']] = $session['name'];
+            }
+
+            $form->addSelect(
+                'session_template',
+                get_lang('SessionTemplate'),
+                $sessionList,
+                ['id' => 'system_template']
+            );
+        }
+
         $form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
             'id' => 'session_category'
         ));
@@ -7003,7 +7067,7 @@ class SessionManager
      * @param string $list_type
      * @return array
      */
-    public static function getGridColumns($list_type = 'simple')
+    public static function getGridColumns($list_type = 'simple', $extraFields = array())
     {
         // Column config
         $operators = array('cn', 'nc');
@@ -7058,11 +7122,32 @@ class SessionManager
                 break;
         }
 
+        if (!empty($extraFields)) {
+            foreach ($extraFields as $field) {
+                $columns[] = $field['display_text'];
+                $column_model[] = array(
+                    'name' => $field['variable'],
+                    'index' => $field['variable'],
+                    'width' => '80',
+                    'align' => 'left',
+                    'search' => 'false'
+                );
+            }
+        }
+
         // Inject extra session fields
         $session_field = new ExtraField('session');
         $rules = $session_field->getRules($columns, $column_model);
 
-        $column_model[] = array('name'=>'actions', 'index'=>'actions', 'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false');
+        $column_model[] = array(
+            'name' => 'actions',
+            'index' => 'actions',
+            'width' => '80',
+            'align' => 'left',
+            'formatter' => 'action_formatter',
+            'sortable' => 'false',
+            'search' => 'false',
+        );
         $columns[] = get_lang('Actions');
 
         foreach ($column_model as $col_model) {

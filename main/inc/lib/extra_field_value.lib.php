@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 
 /**
  * Class ExtraFieldValue
@@ -143,7 +144,7 @@ class ExtraFieldValue extends Model
                         ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                         ->findBy([
                             'fieldId' => $extraFieldInfo['id'],
-                            'itemId' => $params['item_id']
+                            'itemId' => $params['item_id'],
                         ]);
 
                     foreach ($currentTags as $extraFieldtag) {
@@ -160,7 +161,7 @@ class ExtraFieldValue extends Model
                             ->getRepository('ChamiloCoreBundle:Tag')
                             ->findBy([
                                 'tag' => $tagValue,
-                                'fieldId' => $extraFieldInfo['id']
+                                'fieldId' => $extraFieldInfo['id'],
                             ]);
 
                         if (empty($tagsResult)) {
@@ -178,7 +179,7 @@ class ExtraFieldValue extends Model
                         $tagUses = $em
                             ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                             ->findBy([
-                                'tagId' => $tag->getId()
+                                'tagId' => $tag->getId(),
                             ]);
 
                         $tag->setCount(count($tagUses) + 1);
@@ -188,7 +189,7 @@ class ExtraFieldValue extends Model
                     $em->flush();
 
                     foreach ($tags as $tag) {
-                        $fieldRelTag = new Chamilo\CoreBundle\Entity\ExtraFieldRelTag();
+                        $fieldRelTag = new ExtraFieldRelTag();
                         $fieldRelTag->setFieldId($extraFieldInfo['id']);
                         $fieldRelTag->setItemId($params['item_id']);
                         $fieldRelTag->setTagId($tag->getId());
@@ -228,7 +229,7 @@ class ExtraFieldValue extends Model
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
                             'value' => $fileDirStored . $fileName,
-                            'comment' => $comment
+                            'comment' => $comment,
                         );
 
                         self::save($newParams);
@@ -264,7 +265,7 @@ class ExtraFieldValue extends Model
                         $new_params = array(
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
-                            'value' => $fileDirStored . $fileName
+                            'value' => $fileDirStored . $fileName,
                         );
 
                         if ($this->type !== 'session' && $this->type !== 'course') {
@@ -297,7 +298,7 @@ class ExtraFieldValue extends Model
                         'item_id' => $params['item_id'],
                         'field_id' => $extraFieldInfo['id'],
                         'value' => $value,
-                        'comment' => $comment
+                        'comment' => $comment,
                     );
 
                     self::save($newParams);
@@ -444,7 +445,7 @@ class ExtraFieldValue extends Model
                         if (empty($optionExists)) {
                             $optionParams = array(
                                 'field_id' => $params['field_id'],
-                                'option_value' => $params['value']
+                                'option_value' => $params['value'],
                             );
                             $optionId = $option->saveOptions($optionParams);
                         } else {
@@ -782,7 +783,8 @@ class ExtraFieldValue extends Model
         $itemId = intval($itemId);
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
-        $sql = "SELECT s.value, sf.variable FROM {$this->table} s
+        $sql = "SELECT s.value, sf.variable, sf.field_type, sf.id
+                FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
@@ -791,12 +793,56 @@ class ExtraFieldValue extends Model
                 ORDER BY s.value";
 
         $result = Database::query($sql);
-
+        $idList = [];
         if (Database::num_rows($result)) {
-            return Database::store_result($result, 'ASSOC');
+            $result = Database::store_result($result, 'ASSOC');
+            $finalResult = [];
+            foreach ($result as $item) {
+                $finalResult[$item['id']] = $item;
+            }
+            $idList = array_column($result, 'id');
         }
 
-        return false;
+        $em = Database::getManager();
+
+        $extraField = new ExtraField($this->type);
+        $allData = $extraField->get_all(['filter = ?' => 1]);
+        $allResults = [];
+        foreach ($allData as $field) {
+            if (in_array($field['id'], $idList)) {
+                $allResults[] = $finalResult[$field['id']];
+            } else {
+                if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                    $tagResult = [];
+                    $tags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                        ->findBy(
+                            [
+                                'fieldId' => $field['id'],
+                                'itemId' => $itemId,
+                            ]
+                        );
+                    if ($tags) {
+                        /** @var ExtraFieldRelTag $extraFieldTag */
+                        foreach ($tags as $extraFieldTag) {
+                            /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
+                            $tag = $em->find('ChamiloCoreBundle:Tag', $extraFieldTag->getTagId());
+                            $tagResult[] = [
+                                'id' => $extraFieldTag->getTagId(),
+                                'value' => $tag->getTag()
+                            ];
+                        }
+                    }
+                    $allResults[] = [
+                        'value' => $tagResult,
+                        'variable' => $field['variable'],
+                        'field_type' => $field['field_type'],
+                        'id' => $field['id'] ,
+                    ];
+                }
+            }
+        }
+
+        return $allResults;
     }
 
     /**
@@ -965,14 +1011,14 @@ class ExtraFieldValue extends Model
 
         foreach ($fieldValues as $fieldValue) {
             $item = [
-                'value' => $fieldValue
+                'value' => $fieldValue,
             ];
 
             switch ($fieldValue->getField()->getFieldType()) {
                 case ExtraField::FIELD_TYPE_SELECT:
                     $item['option'] = $fieldOptionsRepo->findOneBy([
                         'field' => $fieldValue->getField(),
-                        'value' => $fieldValue->getValue()
+                        'value' => $fieldValue->getValue(),
                     ]);
                     break;
             }

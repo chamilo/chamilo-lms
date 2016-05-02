@@ -78,6 +78,55 @@ $(function() {
 });
 </script>';
 
+$result = SessionManager::getGridColumns($list_type);
+
+$columns = $result['columns'];
+$column_model = $result['column_model'];
+
+// Autowidth
+$extra_params['autowidth'] = 'true';
+
+// height auto
+$extra_params['height'] = 'auto';
+$extra_params['postData'] = array(
+    'filters' => array(
+        "groupOp" => "AND",
+        "rules" => $result['rules'],
+        /*array(
+            array( "field" => "display_start_date", "op" => "gt", "data" => ""),
+            array( "field" => "display_end_date", "op" => "gt", "data" => "")
+        ),*/
+        //'groups' => $groups
+    )
+);
+
+$defaultValues = [];
+
+$filters = isset($_GET['filters']) ? $_GET['filters'] : '';
+$filterToSend = [];
+if (!empty($filters)) {
+    $filterToSend = ['groupOp' => 'AND'];
+    $filters = unserialize(urldecode($filters));
+    if ($filters) {
+        $count = 1;
+        $countExtraField = 1;
+        foreach ($result['column_model'] as $column) {
+            if ($count > 5) {
+                if (isset($filters[$column['name']])) {
+                    $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
+                    $filterToSend['rules'][] = ['field' => $column['name'], 'op' => 'cn', 'data' => $filters[$column['name']]];
+                }
+                $countExtraField++;
+            }
+            $count++;
+        }
+    }
+}
+
+
+$defaultValues = json_encode($defaultValues);
+
+
 // jqgrid will use this URL to do the selects
 if (!empty($courseId)) {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&course_id='.$courseId;
@@ -98,30 +147,8 @@ if (isset($_REQUEST['id_category'])) {
     }
 }
 
+
 $url .= '&list_type='.$list_type;
-
-$result = SessionManager::getGridColumns($list_type);
-
-$columns = $result['columns'];
-$column_model = $result['column_model'];
-
-// Autowidth
-$extra_params['autowidth'] = 'true';
-
-// height auto
-$extra_params['height'] = 'auto';
-
-$extra_params['postData'] =array(
-    'filters' => array(
-        "groupOp" => "AND",
-        "rules" => $result['rules'],
-        /*array(
-            array( "field" => "display_start_date", "op" => "gt", "data" => ""),
-            array( "field" => "display_end_date", "op" => "gt", "data" => "")
-        ),*/
-        //'groups' => $groups
-    )
-);
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
@@ -167,7 +194,6 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
         function show_cols(grid, added_cols) {
             grid.showCol('name').trigger('reloadGrid');
             for (key in added_cols) {
-                //console.log('show: ' + key);
                 grid.showCol(key);
             };
         }
@@ -227,7 +253,7 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
                     overlay : false,
                     width: 'auto',
                     caption: '<?php echo addslashes(get_lang('Search')); ?>',
-                    formclass:'data_table',
+                    formclass : 'data_table',
                     onSearch : function() {
                         var postdata = grid.jqGrid('getGridParam', 'postData');
 
@@ -242,10 +268,7 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
                                         if (subvalue.data == undefined) {
                                         }
 
-                                        //if (added_cols[value.field] == undefined) {
                                         added_cols[subvalue.field] = subvalue.field;
-                                        //}
-                                        //grid.showCol(value.field);
                                     });
                                 }
                             });
@@ -280,16 +303,28 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
             gbox.before(searchDialog);
             gbox.css({clear:"left"});
 
-            //Select first elements by default
+            // Select first elements by default
             $('.input-elm').each(function(){
                 $(this).find('option:first').attr('selected', 'selected');
             });
 
+            var defaultValues = jQuery.parseJSON('<?php echo $defaultValues; ?>');
+            if (defaultValues) {
+                $('.input-elm').each(function() {
+                    if (defaultValues.hasOwnProperty($(this).attr('id'))) {
+                        $(this).val(defaultValues[$(this).attr('id')]);
+                    }
+                });
+            }
+
             $('.delete-rule').each(function(){
                 $(this).click(function(){
-                    $('.input-elm').each(function(){
+                    /*$('.input-elm').each(function(){
                         $(this).find('option:first').attr('selected', 'selected');
-                    });
+                    });*/
+                    /*if (defaultValues.hasOwnProperty($(this).attr('id'))) {
+                        $(this).val(defaultValues[$(this).attr('id')]);
+                    }*/
                 });
             });
         });

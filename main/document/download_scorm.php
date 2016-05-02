@@ -27,21 +27,19 @@ if (isset($_SESSION['oLP'])) {
     api_not_allowed();
 }
 
-//If is visible for the current user
+// If is visible for the current user
 if (!learnpath::is_lp_visible_for_student($obj->get_id(), api_get_user_id())) {
     api_not_allowed();
 }
 
 $doc_url = isset($_GET['doc_url']) ? $_GET['doc_url'] : null;
-
 // Change the '&' that got rewritten to '///' by mod_rewrite back to '&'
 $doc_url = str_replace('///', '&', $doc_url);
 // Still a space present? it must be a '+' (that got replaced by mod_rewrite)
 $doc_url = str_replace(' ', '+', $doc_url);
-
 $doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), $doc_url); //echo $doc_url;
 
-if (strpos($doc_url,'../') OR strpos($doc_url,'/..')) {
+if (strpos($doc_url,'../') || strpos($doc_url,'/..')) {
     $doc_url = '';
 }
 

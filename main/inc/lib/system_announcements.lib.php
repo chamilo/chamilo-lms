@@ -804,8 +804,9 @@ class SystemAnnouncementManager
 
         $template = new Template(null, false, false);
         $template->assign('announcements', $announcements);
+        $layout = $template->get_template('announcement/slider.tpl');
 
-        return $template->fetch('default/announcement/slider.tpl');
+        return $template->fetch($layout);
     }
 
     /**
@@ -854,7 +855,8 @@ class SystemAnnouncementManager
 
         $template = new Template(null, false, false);
         $template->assign('announcement', $announcement);
+        $layout = $template->get_template('announcement/view.tpl');
 
-        return $template->fetch('default/announcement/view.tpl');
+        return $template->fetch($layout);
     }
 }

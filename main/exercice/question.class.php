@@ -1190,7 +1190,7 @@ abstract class Question
      * @author Olivier Brouckaert
      * @param integer $deleteFromEx - exercise ID if the question is only removed from one exercise
      */
-    function delete($deleteFromEx = 0)
+    public function delete($deleteFromEx = 0)
     {
         $course_id = api_get_course_int_id();
 
@@ -1199,7 +1199,7 @@ abstract class Question
         $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $TBL_QUIZ_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
-        $id = $this->id;
+        $id = intval($this->id);
 
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
@@ -1223,27 +1223,33 @@ abstract class Question
             }
 
             $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $course_id AND question_id = " . intval($id) . "";
+                    WHERE c_id = $course_id AND question_id = " . $id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_QUESTIONS
-                    WHERE c_id = $course_id AND id = " . intval($id) . "";
+                    WHERE c_id = $course_id AND id = " . $id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES
-                    WHERE c_id = $course_id AND question_id = " . intval($id) . "";
+                    WHERE c_id = $course_id AND question_id = " . $id;
             Database::query($sql);
 
             // remove the category of this question in the question_rel_category table
             $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
-                    WHERE c_id = $course_id AND question_id = " . intval($id) . " AND c_id=" . api_get_course_int_id();
+                    WHERE 
+                        c_id = $course_id AND 
+                        question_id = " . $id;
             Database::query($sql);
 
-            api_item_property_update($this->course, TOOL_QUIZ, $id, 'QuizQuestionDeleted', api_get_user_id());
+            api_item_property_update(
+                $this->course,
+                TOOL_QUIZ,
+                $id,
+                'QuizQuestionDeleted',
+                api_get_user_id()
+            );
             $this->removePicture();
 
-            // resets the object
-            $this->Question();
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx);
@@ -1251,7 +1257,14 @@ abstract class Question
                 // disassociate question with this exercise
                 $this->search_engine_edit($deleteFromEx, FALSE, TRUE);
             }
-            api_item_property_update($this->course, TOOL_QUIZ, $id, 'QuizQuestionDeleted', api_get_user_id());
+
+            api_item_property_update(
+                $this->course,
+                TOOL_QUIZ,
+                $id,
+                'QuizQuestionDeleted',
+                api_get_user_id()
+            );
         }
     }
 
@@ -1259,10 +1272,10 @@ abstract class Question
      * Duplicates the question
      *
      * @author Olivier Brouckaert
-     * @param  array   Course info of the destination course
+     * @param  array   $course_info Course info of the destination course
      * @return int     ID of the new question
      */
-    public function duplicate($course_info = null)
+    public function duplicate($course_info = [])
     {
         if (empty($course_info)) {
             $course_info = $this->course;
@@ -1348,6 +1361,7 @@ abstract class Question
     public function get_question_type_name()
     {
         $key = self::$questionTypes[$this->type];
+        
         return get_lang($key[1]);
     }
 

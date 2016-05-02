@@ -1605,7 +1605,7 @@ class Tracking
     	$rs = Database::query($sql);
     	if (Database::num_rows($rs) > 0) {
     		if ($last_login_date = Database::result($rs, 0, 0)) {
-                if (empty($last_login_date) || $last_login_date == '0000-00-00 00:00:00') {
+                if (empty($last_login_date)) {
                     return false;
                 }
                 //see #5736

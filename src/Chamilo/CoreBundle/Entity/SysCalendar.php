@@ -29,14 +29,14 @@ class SysCalendar
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="start_date", type="datetime", nullable=false)
+     * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
     private $startDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="end_date", type="datetime", nullable=false)
+     * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
     private $endDate;
 

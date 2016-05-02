@@ -158,7 +158,7 @@ $form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDes
 //Start date
 $form->addElement('checkbox', 'activate_start_date_check', null,get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 $display_date = 'none';
-if ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on)) {
+if (!empty($publicated_on)) {
 	$display_date = 'block';
 	$defaults['activate_start_date_check'] = 1;
 }
@@ -170,7 +170,7 @@ $form->addElement('html','</div>');
 //End date
 $form->addElement('checkbox', 'activate_end_date_check',  null, get_lang('EnableEndTime'),  array('onclick' => 'activate_end_date()'));
 $display_date = 'none';
-if ($expired_on!='0000-00-00 00:00:00' && !empty($expired_on)) {
+if (!empty($expired_on)) {
 	$display_date = 'block';
 	$defaults['activate_end_date_check'] = 1;
 }
@@ -209,8 +209,8 @@ if ($enableLpExtraFields) {
 }
 
 
-$defaults['publicated_on']  = ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');
-$defaults['expired_on']     = ($expired_on   !='0000-00-00 00:00:00' && !empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00',time()+84600);
+$defaults['publicated_on'] = (!empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');
+$defaults['expired_on'] = (!empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00',time()+84600);
 //$defaults['max_attempts'] = $_SESSION['oLP']->get_max_attempts();
 $defaults['subscribe_users'] = $_SESSION['oLP']->getSubscribeUsers();
 $form->setDefaults($defaults);

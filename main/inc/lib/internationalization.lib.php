@@ -660,6 +660,10 @@ function api_format_date($time, $format = null, $language = null)
 
 function date_to_str_ago($date, $timeZone = 'UTC')
 {
+    if ($date == '0000-00-00 00:00:00')  {
+        return '';
+    }
+    
     $timeAgo = new TimeAgo($timeZone, api_get_language_isocode());
 
     return $timeAgo->inWords($date);

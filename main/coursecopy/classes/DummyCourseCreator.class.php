@@ -41,8 +41,8 @@ class DummyCourseCreator
 		$this->default_property['to_group_id'] = '0';
 		$this->default_property['to_user_id'] = null;
 		$this->default_property['visibility'] = '1';
-		$this->default_property['start_visible'] = '0000-00-00 00:00:00';
-		$this->default_property['end_visible'] =  '0000-00-00 00:00:00';
+		$this->default_property['start_visible'] = null;
+		$this->default_property['end_visible'] =  null;
 
 		$course = api_get_course_info($course_code);
 		$this->course = new Course();

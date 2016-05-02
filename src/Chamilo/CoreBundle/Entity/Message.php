@@ -71,7 +71,7 @@ class Message
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="update_date", type="datetime", nullable=false)
+     * @ORM\Column(name="update_date", type="datetime", nullable=true)
      */
     private $updateDate;
 

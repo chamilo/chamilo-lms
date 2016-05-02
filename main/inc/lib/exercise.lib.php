@@ -2265,13 +2265,13 @@ HOTSPOT;
 
         if ($check_publication_dates) {
             //start and end are set
-            $time_conditions = " AND ((start_time <> '0000-00-00 00:00:00' AND start_time < '$now' AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now' )  OR ";
+            $time_conditions = " AND ((start_time <> '' AND start_time < '$now' AND end_time <> '' AND end_time > '$now' )  OR ";
             // only start is set
-            $time_conditions .= " (start_time <> '0000-00-00 00:00:00' AND start_time < '$now' AND end_time = '0000-00-00 00:00:00') OR ";
+            $time_conditions .= " (start_time <> '' AND start_time < '$now' AND end_time is NULL) OR ";
             // only end is set
-            $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now') OR ";
+            $time_conditions .= " (start_time IS NULL AND end_time <> '' AND end_time > '$now') OR ";
             // nothing is set
-            $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time = '0000-00-00 00:00:00'))  ";
+            $time_conditions .= " (start_time IS NULL AND end_time IS NULL))  ";
         }
 
         $needle_where = !empty($search) ? " AND title LIKE '?' " : '';
@@ -2807,7 +2807,6 @@ HOTSPOT;
         foreach ($exercises as $exercise_item) {
             if (isset($exercise_item['end_time']) &&
                 !empty($exercise_item['end_time']) &&
-                $exercise_item['end_time'] != '0000-00-00 00:00:00' &&
                 api_strtotime($exercise_item['end_time'], 'UTC') < $now
             ) {
                 $result[] = $exercise_item;

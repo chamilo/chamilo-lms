@@ -65,21 +65,71 @@ class Version111 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE notification CHANGE content content TEXT');
 
+        // Needed to update 0000-00-00 00:00:00 values
+        $this->addSql('SET sql_mode = ""');
+
+        $this->addSql('UPDATE c_lp SET publicated_on = NULL WHERE publicated_on = "0000-00-00 00:00:00"');
+        $this->addSql('UPDATE c_lp SET expired_on = NULL WHERE expired_on = "0000-00-00 00:00:00"');
+
         $this->addSql('ALTER TABLE c_lp CHANGE publicated_on publicated_on DATETIME');
         $this->addSql('ALTER TABLE c_lp CHANGE expired_on expired_on DATETIME');
 
-        $this->addSql('UPDATE TABLE c_quiz SET start_time = "" WHERE start_time = "0000-00-00 00:00:00"');
-        $this->addSql('UPDATE TABLE c_quiz SET end_time = "" WHERE end_time = "0000-00-00 00:00:00"');
+        $this->addSql('UPDATE c_quiz SET start_time = NULL WHERE start_time = "0000-00-00 00:00:00"');
+        $this->addSql('UPDATE c_quiz SET end_time = NULL WHERE end_time = "0000-00-00 00:00:00"');
 
         $this->addSql('ALTER TABLE c_quiz CHANGE start_time start_time DATETIME');
         $this->addSql('ALTER TABLE c_quiz CHANGE end_time end_time DATETIME');
 
+        $this->addSql('UPDATE c_calendar_event SET start_date = NULL WHERE start_date = "0000-00-00 00:00:00"');
+        $this->addSql('UPDATE c_calendar_event SET end_date = NULL WHERE end_date = "0000-00-00 00:00:00"');
+
+        $this->addSql('ALTER TABLE c_calendar_event CHANGE start_date start_date DATETIME');
+        $this->addSql('ALTER TABLE c_calendar_event CHANGE end_date end_date DATETIME');
+
+        $this->addSql('UPDATE personal_agenda SET date = NULL WHERE date = "0000-00-00 00:00:00"');
+        $this->addSql('UPDATE personal_agenda SET enddate = NULL WHERE enddate = "0000-00-00 00:00:00"');
+
+        $this->addSql('ALTER TABLE personal_agenda CHANGE date date DATETIME');
+        $this->addSql('ALTER TABLE personal_agenda CHANGE enddate enddate DATETIME');
+
+        $this->addSql('UPDATE c_forum_forum SET start_time = NULL WHERE start_time = "0000-00-00 00:00:00"');
+        $this->addSql('UPDATE c_forum_forum SET end_time = NULL WHERE end_time = "0000-00-00 00:00:00"');
+
         $this->addSql('ALTER TABLE c_forum_forum CHANGE start_time start_time DATETIME');
         $this->addSql('ALTER TABLE c_forum_forum CHANGE end_time end_time DATETIME');
 
+        $this->addSql('UPDATE sys_calendar SET start_date = NULL WHERE start_date = "0000-00-00 00:00:00"');
+        $this->addSql('UPDATE sys_calendar SET end_date = NULL WHERE end_date = "0000-00-00 00:00:00"');
+
+        $this->addSql('ALTER TABLE sys_calendar CHANGE start_date start_date DATETIME');
+        $this->addSql('ALTER TABLE sys_calendar CHANGE end_date end_date DATETIME');
+
+        $this->addSql('UPDATE message SET update_date = NULL WHERE update_date = "0000-00-00 00:00:00"');
+        $this->addSql('ALTER TABLE message CHANGE update_date update_date DATETIME');
+
+        $this->addSql('UPDATE c_wiki_conf SET startdate_assig = NULL WHERE startdate_assig = "0000-00-00 00:00:00"');
+        $this->addSql('UPDATE c_wiki_conf SET enddate_assig = NULL WHERE enddate_assig = "0000-00-00 00:00:00"');
+
+        $this->addSql('ALTER TABLE c_wiki_conf CHANGE startdate_assig startdate_assig DATETIME');
+        $this->addSql('ALTER TABLE c_wiki_conf CHANGE enddate_assig enddate_assig DATETIME');
+
+        $this->addSql('UPDATE c_wiki SET time_edit = NULL WHERE time_edit = "0000-00-00 00:00:00"');
+        $this->addSql('ALTER TABLE c_wiki CHANGE time_edit time_edit DATETIME');
+
+        $this->addSql('UPDATE c_wiki SET dtime = NULL WHERE dtime = "0000-00-00 00:00:00"');
+        $this->addSql('ALTER TABLE c_wiki CHANGE dtime dtime DATETIME');
+
+        $this->addSql('UPDATE access_url SET tms = NULL WHERE tms = "0000-00-00 00:00:00"');
+        $this->addSql('ALTER TABLE access_url CHANGE tms tms DATETIME');
+
+        $this->addSql('UPDATE track_e_attempt SET tms = NULL WHERE tms = "0000-00-00 00:00:00"');
+        $this->addSql('ALTER TABLE track_e_attempt CHANGE tms tms DATETIME');
+
+        $this->addSql('UPDATE track_e_default SET default_date = NULL WHERE default_date = "0000-00-00 00:00:00"');
+        $this->addSql('ALTER TABLE track_e_default CHANGE default_date default_date DATETIME');
+
+
         $this->addSql('ALTER TABLE track_e_exercises CHANGE expired_time_control expired_time_control DATETIME');
-
-
     }
 
     /**

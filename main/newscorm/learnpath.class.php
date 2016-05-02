@@ -149,11 +149,11 @@ class learnpath
                 $this->ref = $row['ref'];
                 $this->categoryId = $row['category_id'];
 
-                if ($row['publicated_on'] != '0000-00-00 00:00:00') {
+                if (!empty($row['publicated_on'])) {
                     $this->publicated_on = $row['publicated_on'];
                 }
 
-                if ($row['expired_on'] != '0000-00-00 00:00:00') {
+                if (!empty($row['expired_on'])) {
                     $this->expired_on  = $row['expired_on'];
                 }
                 if ($this->type == 2) {
@@ -774,7 +774,7 @@ class learnpath
 
         $res_name = Database::query($check_name);
 
-        if ($publicated_on == '0000-00-00 00:00:00' || empty($publicated_on)) {
+        if (empty($publicated_on)) {
             //by default the publication date is the same that the creation date
             //The behaviour above was changed due BT#2800
             global $_custom;
@@ -787,7 +787,7 @@ class learnpath
             $publicated_on = Database::escape_string(api_get_utc_datetime($publicated_on));
         }
 
-        if ($expired_on == '0000-00-00 00:00:00' || empty($expired_on)) {
+        if (empty($expired_on)) {
             $expired_on = null;
         } else {
             $expired_on = Database::escape_string(api_get_utc_datetime($expired_on));
@@ -2350,9 +2350,7 @@ class learnpath
             // Also check the time availability of the LP
             if ($is_visible) {
                 // Adding visibility restrictions
-                if (!empty($row['publicated_on']) &&
-                    $row['publicated_on'] != '0000-00-00 00:00:00'
-                ) {
+                if (!empty($row['publicated_on'])) {
                     if ($now < api_strtotime($row['publicated_on'], 'UTC')) {
                         //api_not_allowed();
                         $is_visible = false;
@@ -2364,13 +2362,13 @@ class learnpath
                 if (isset($_custom['lps_hidden_when_no_start_date']) &&
                     $_custom['lps_hidden_when_no_start_date']
                 ) {
-                    if (empty($row['publicated_on']) || $row['publicated_on'] == '0000-00-00 00:00:00') {
+                    if (empty($row['publicated_on'])) {
                         //api_not_allowed();
                         $is_visible = false;
                     }
                 }
 
-                if (!empty($row['expired_on']) && $row['expired_on'] != '0000-00-00 00:00:00') {
+                if (!empty($row['expired_on'])) {
                     if ($now > api_strtotime($row['expired_on'], 'UTC')) {
                         //api_not_allowed();
                         $is_visible = false;
@@ -5543,7 +5541,7 @@ class learnpath
         if ($update_audio == 'true' && count($this->arrMenu) != 0) {
             $return .= '</form>';
         }
-        
+
         return $return;
     }
 

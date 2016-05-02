@@ -78,10 +78,10 @@ class LearnpathList
 
         if ($check_publication_dates) {
             $time_conditions = " AND (
-                (publicated_on <> '0000-00-00 00:00:00' AND publicated_on < '$now' AND expired_on <> '0000-00-00 00:00:00' AND expired_on > '$now' )  OR
-                (publicated_on <> '0000-00-00 00:00:00' AND publicated_on < '$now' AND expired_on = '0000-00-00 00:00:00') OR
-                (publicated_on = '0000-00-00 00:00:00' AND expired_on <> '0000-00-00 00:00:00' AND expired_on > '$now') OR
-                (publicated_on = '0000-00-00 00:00:00' AND expired_on = '0000-00-00 00:00:00' ))
+                (publicated_on <> '' AND publicated_on < '$now' AND expired_on <> '' AND expired_on > '$now') OR
+                (publicated_on <> '' AND publicated_on < '$now' AND expired_on IS NULL) OR
+                (publicated_on IS NULL AND expired_on <> '' AND expired_on > '$now') OR
+                (publicated_on IS NULL AND expired_on IS NULL ))
             ";
         }
 
@@ -137,25 +137,25 @@ class LearnpathList
                 $session_id
             );
 
-            if (!empty($row['created_on']) && $row['created_on'] != '0000-00-00 00:00:00') {
+            if (!empty($row['created_on'])) {
                 $row['created_on'] = $row['created_on'];
             } else {
                 $row['created_on'] = '';
             }
 
-            if (!empty($row['modified_on']) && $row['modified_on'] != '0000-00-00 00:00:00') {
+            if (!empty($row['modified_on'])) {
                 $row['modified_on'] = $row['modified_on'];
             } else {
                 $row['modified_on'] = '';
             }
 
-            if (!empty($row['publicated_on']) && $row['publicated_on'] != '0000-00-00 00:00:00') {
+            if (!empty($row['publicated_on'])) {
                 $row['publicated_on'] = $row['publicated_on'];
             } else {
                 $row['publicated_on'] = '';
             }
 
-            if (!empty($row['expired_on']) && $row['expired_on'] != '0000-00-00 00:00:00') {
+            if (!empty($row['expired_on'])) {
                 $row['expired_on'] = $row['expired_on'];
             } else {
                 $row['expired_on'] = '';

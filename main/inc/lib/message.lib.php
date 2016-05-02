@@ -362,7 +362,7 @@ class MessageManager
             // Load user settings.
             $notification = new Notification();
             $sender_info = api_get_user_info($user_sender_id);
-            
+
             // add file attachment additional attributes
             foreach ($file_attachments as $index => $file_attach) {
                 $file_attachments[$index]['path'] = $file_attach['tmp_name'];
@@ -1190,9 +1190,7 @@ class MessageManager
 
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
-                    if (!empty($topic['update_date']) &&
-                        $topic['update_date'] != '0000-00-00 00:00:00'
-                    ) {
+                    if (!empty($topic['update_date'])) {
                         $date .= '<div class="message-group-date" >
                             <i>'.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</i></div>';
                     }
@@ -1344,7 +1342,7 @@ class MessageManager
 
         $date = '';
         if ($main_message['send_date'] != $main_message['update_date']) {
-            if (!empty($main_message['update_date']) && $main_message['update_date'] != '0000-00-00 00:00:00') {
+            if (!empty($main_message['update_date'])) {
                 $date = '<div class="message-group-date"> '.get_lang('LastUpdate').' '.date_to_str_ago($main_message['update_date']).'</div>';
             }
         } else {
@@ -1388,7 +1386,7 @@ class MessageManager
 
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
-                    if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00') {
+                    if (!empty($topic['update_date'])) {
                         $date = '<div class="message-group-date"> '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</div>';
                     }
                 } else {

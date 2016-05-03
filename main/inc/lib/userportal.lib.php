@@ -1072,10 +1072,10 @@ class IndexManager
             $this->tpl->assign('courses', $courses);
             if ($_configuration['view_grid_courses']==true) {
                 $listCourse = $this->tpl->fetch(
-                $this->tpl->get_template('/user_portal/grid_courses.tpl'));
+                $this->tpl->get_template('user_portal/grid_courses.tpl'));
             } else {
                 $listCourse = $this->tpl->fetch(
-                $this->tpl->get_template('/user_portal/classic_courses.tpl'));
+                $this->tpl->get_template('user_portal/classic_courses.tpl'));
             }          
             $courseCount = $specialCourses['course_count'] + $courses['course_count'];
         }

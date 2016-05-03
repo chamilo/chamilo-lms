@@ -1,6 +1,7 @@
 {% extends template ~ "/layout/main.tpl" %}
 
 {% block body %}
+{% if section_name != 'section-mycourses' %}
 <div class="container">
     <div class="row">
         <div class="col-md-3 menu-column">
@@ -31,7 +32,9 @@
                 {{ home_page_block }}
             </section>
             {% endif %}
-            <div class="stadistics">
+            
+            <!-- block statistics -->
+            <div class="statistics">
                 <div class="row">
                     <div class="col-md-4">
                         <ul class="items">
@@ -62,10 +65,33 @@
                     </div>
                 </div>
             </div>
+            <!-- end block stadistics -->
+            
+            <!-- HOT COURSE -->
+            {% include template ~ "/layout/hot_courses.tpl" %}
+            <!-- END HOT COURSE -->
+            <!-- CMS -->
+            {% include template ~ "/layout/cms.tpl" %}
+            <!-- END CSS -->
+        
         </div>
     </div>    
-</div>	
-	<div class="col-md-12">
+</div>
+{% endif %}
+
+{% if section_name != 'section-mycampus' %}
+<div class="container">
+<div class="row">
+    <div class="col-md-3 menu-column">
+        {% if _u.logged  == 1 %}
+            {{ user_image_block }}
+        {% endif %}
+        {{ profile_block }}
+        {{ course_block }}
+        {{ skills_block }}
+        {{ certificates_search_block }}
+    </div>
+    <div class="col-md-9">
         {{ sniff_notification }}
 
         {% block page_body %}
@@ -91,13 +117,10 @@
                 {{ course_category_block }}
             </section>
         {% endif %}
-        
-        <!-- HOT COURSE -->
-        {% include template ~ "/layout/hot_courses.tpl" %}
-        <!-- END HOT COURSE -->
-        <!-- CMS -->
-        {% include template ~ "/layout/cms.tpl" %}
-        <!-- END CSS -->
-	</div>
 
+        
+    </div>
+</div>
+</div>
+{% endif %}
 {% endblock %}

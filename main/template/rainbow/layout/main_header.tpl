@@ -63,7 +63,7 @@
                 {% endif %}
                 <div class="row">
                     <div class="col-xs-6 col-md-4">
-                        <h2>{{ _s.site_name }}</h2>
+                        <h2><a href="{{ _p.web }}">{{ _s.site_name }}</a></h2>
                     </div>
                     <div class="col-xs-6 col-md-4">
                          

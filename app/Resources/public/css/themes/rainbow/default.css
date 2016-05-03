@@ -110,29 +110,40 @@ a:focus {
     color: #E53140;
     text-align: center;
 }
-.stadistics .icon-color{
+.statistics .icon-color{
     color: #E53140;
 }
-.stadistics .number{
+.statistics .number{
     color: #162A83;
     font-weight: 700;
 }
-.stadistics .text{
+.statistics .text{
     color: #162A83;
 }
-.stadistics .items{
+.statistics .items{
     padding: 0;
     margin: 0;
     list-style: none;
     margin-left: 90px;
 }
-.stadistics .items li{
+.statistics .items li{
     display: inline-block;
     padding-right: 10px;
 }
-.stadistics .items li h2{
+.statistics .items li h2{
     padding: 0;
     margin: 0;
+}
+.welcome-home-top-temp{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+.welcome-home-top-temp h1{
+    color: #E53140;
+}
+.welcome-home-top-temp p{
+    font-size: 20px;
 }
 #carousel-announcement .carousel-indicators .active{
     background: #009EE0;

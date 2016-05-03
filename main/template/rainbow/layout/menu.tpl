@@ -12,19 +12,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
-                <li class="item-menu menu-one"><a href="#">Accueli</a></li>
-                <li class="item-menu menu-two dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                        FAQ
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
-                        <li><a href="#">Page 4</a></li>
-                    </ul>
-                </li>
+                <li class="item-menu menu-one"><a href="{{ _p.web }}">Accueli</a></li>
+                <li class="item-menu menu-two"><a href="#">FAQ</a></li>
                 <li class="item-menu menu-three"><a href="#">Inscription</a></li>
                 <li class="item-menu menu-four"><a href="#">Démo</a></li>
                 <li class="item-menu menu-five"><a href="#">Contact</a></li>

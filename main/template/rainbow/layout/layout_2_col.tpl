@@ -65,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            <!-- end block stadistics -->
+            <!-- end block statistics -->
             
             <!-- HOT COURSE -->
             {% include template ~ "/layout/hot_courses.tpl" %}

@@ -406,7 +406,8 @@ class MessageManager
                     $new_user_list,
                     $subject,
                     $content,
-                    $group_info
+                    $group_info,
+                    $file_attachments
                 );
             }
 

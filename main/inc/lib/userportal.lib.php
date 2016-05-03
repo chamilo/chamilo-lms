@@ -567,13 +567,13 @@ class IndexManager
                         $courses_list_string .= "<li>";
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
                         $course_details = array();
-                        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                        if (api_get_setting('display_coursecode_in_courselist') === 'true') {
                             $course_details[] = $course['visual_code'];
                         }
-                        if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                        if (api_get_setting('display_teacher_in_courselist') === 'true') {
                             $course_details[] = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
                         }
-                        if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
+                        if (api_get_setting('show_different_course_language') === 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
                             $course_details[] = $course['course_language'];
                         }
                         $courses_list_string .= implode(' - ', $course_details);
@@ -614,7 +614,7 @@ class IndexManager
 //                        if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
 //                        $courses_list_string .= ' - ';
 //                }
-                    if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                    if (api_get_setting('display_teacher_in_courselist') === 'true') {
                         if (!empty($course['tutor_name'])) {
                             $course_details[] = $course['tutor_name'];
                         }
@@ -1058,17 +1058,14 @@ class IndexManager
             );
             $this->tpl->assign('special_courses', $specialCourses);
             $this->tpl->assign('courses', $courses);
-            if($_configuration['view_grid_courses']==true){
+            if ($_configuration['view_grid_courses']==true) {
                 $listCourse = $this->tpl->fetch(
                 $this->tpl->get_template('/user_portal/grid_courses.tpl'));
-            }  else {
+            } else {
                 $listCourse = $this->tpl->fetch(
                 $this->tpl->get_template('/user_portal/classic_courses.tpl'));
-            }
-            
-                            
+            }          
             $courseCount = $specialCourses['course_count'] + $courses['course_count'];
-            
         }
 
         $sessions_with_category = '';

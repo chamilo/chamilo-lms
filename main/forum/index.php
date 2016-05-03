@@ -508,7 +508,7 @@ if (is_array($forumCategories)) {
                         $html .= '</div>';
                         $html .= '</div>';
 
-                        $iconEmpty='';
+                        $iconEmpty = '';
 
                         // The number of topics and posts.
                         if ($forum['forum_of_group'] !== '0') {

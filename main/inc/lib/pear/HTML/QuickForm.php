@@ -1065,8 +1065,9 @@ class HTML_QuickForm extends HTML_Common
                 }
             }
         }
+        
         return $el;
-    } // end func removeElement
+    }
 
     /**
      * Adds a validation rule for the given field
@@ -1086,7 +1087,7 @@ class HTML_QuickForm extends HTML_Common
      * @access   public
      * @throws   HTML_QuickForm_Error
      */
-    function addRule(
+    public function addRule(
         $element,
         $message,
         $type,
@@ -1148,15 +1149,17 @@ class HTML_QuickForm extends HTML_Common
             $this->_rules[$element] = array();
         }
         if ($validation == 'client') {
-            $this->updateAttributes(array('onsubmit' => 'try { var myValidator = validate_' . $this->_attributes['id'] . '; } catch(e) { return true; } return myValidator(this);'));
+            $this->updateAttributes(
+                array('onsubmit' => 'try { var myValidator = validate_' . $this->_attributes['id'] . '; } catch(e) { return true; } return myValidator(this);')
+            );
         }
         $this->_rules[$element][] = array(
-            'type'        => $type,
-            'format'      => $format,
-            'message'     => $message,
-            'validation'  => $validation,
-            'reset'       => $reset,
-            'dependent'   => $dependent
+            'type' => $type,
+            'format' => $format,
+            'message' => $message,
+            'validation' => $validation,
+            'reset' => $reset,
+            'dependent' => $dependent,
         );
     }
 

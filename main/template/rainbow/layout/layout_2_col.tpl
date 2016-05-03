@@ -26,6 +26,11 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
+            {% if home_page_block %}
+            <section id="homepage-home">
+                {{ home_page_block }}
+            </section>
+            {% endif %}
             <div class="stadistics">
                 <div class="row">
                     <div class="col-md-4">
@@ -57,12 +62,6 @@
                     </div>
                 </div>
             </div>
-        {% if home_page_block %}
-            <section id="homepage-home">
-                {{ home_page_block }}
-            </section>
-        {% endif %}
-
         </div>
     </div>    
 </div>	

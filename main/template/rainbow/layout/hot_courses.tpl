@@ -20,9 +20,9 @@ $(document).ready( function() {
     });
 });
 </script>
-<section id="hot_courses" class="container">
+<section class="hot-courses container">
     <div class="hot-course-head">
-        <h4 class="hot-course-title">
+        <h2 class="section-title">
             {{ "HottestCourses"|get_lang}}
             {% if _u.is_admin %}
             <span class="pull-right">
@@ -31,9 +31,9 @@ $(document).ready( function() {
                 </a>
             </span>
             {% endif %}
-        </h4>
+        </h2>
     </div>
-    <div id="hot-course">
+    <div class="grid-courses">
         <div class="row">
             {% include template ~ '/layout/hot_course_item.tpl' %}
         </div>

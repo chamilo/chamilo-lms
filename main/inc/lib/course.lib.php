@@ -3423,7 +3423,7 @@ class CourseManager
 
                     $params['title'] = $course_info['title'];
                     $params['link'] = $course_info['course_public_url'].'?id_session=0&autoreg=1';
-                    if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                    if (api_get_setting('display_teacher_in_courselist') === 'true') {
                         $params['teachers'] = CourseManager::getTeachersFromCourseByCode($course['code']);
                     }
                     
@@ -3460,15 +3460,12 @@ class CourseManager
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
-
         // Step 1: We get all the categories of the user
         $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT id, title FROM $table
                 WHERE user_id = '" . $user_id . "'
                 ORDER BY sort ASC";
         $result = Database::query($sql);
-        
-        $html = null;
         $courseCount = 0;
         $listItems = array();
         while ($row = Database::fetch_array($result)) {
@@ -3477,7 +3474,7 @@ class CourseManager
                 $row['id'],
                 $load_dirs
             );
-            if(empty($courseInCategory)){
+            if (empty($courseInCategory)) {
                 $courseInCategory = null;
             }
             $params = array(
@@ -3485,21 +3482,15 @@ class CourseManager
                 'title_category' => $row['title'],
                 'courses' => $courseInCategory
             );
-            //$courseCount += $courseInCategory['course_count'];
             $courseCount ++;
             $listItems['in_category'][$courseCount] = $params;
-            
-        }
-        
+            }
         // Step 2: We display the course without a user category.
         $courseInCategory = self::returnCoursesWithoutCategories(0, $load_dirs);
         $listItems['not_category'] = $courseInCategory;
 
-        //$courseCount += $courseInCategory['course_count'];
-
-        return $listItems;
-        
-        }
+        return $listItems;       
+    }
     
     /**
      *  Display courses inside a category (without special courses) as HTML dics of
@@ -3589,7 +3580,7 @@ class CourseManager
             $courseUrl = '';
             $courseUrl = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
 
-            if (api_get_setting('display_teacher_in_courselist') == 'true') {
+            if (api_get_setting('display_teacher_in_courselist') === 'true') {
                 $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
             }
             
@@ -3723,7 +3714,7 @@ class CourseManager
             $course_title_url = '';
             $course_title_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
 
-            if (api_get_setting('display_teacher_in_courselist') == 'true') {
+            if (api_get_setting('display_teacher_in_courselist') === 'true') {
                 $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
             }
             $params['status'] = $course['status'];
@@ -3985,7 +3976,7 @@ class CourseManager
             $session_title .= ' (' . $course_info['visual_code'] . ') ';
         }
 
-        if (api_get_setting('display_teacher_in_courselist') == 'true') {
+        if (api_get_setting('display_teacher_in_courselist') === 'true') {
 
             $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string(
                 $course_info['code'],
@@ -5801,7 +5792,7 @@ class CourseManager
             $course_title .= ' ('.$course_info['visual_code'].') ';
         }
         $teachers = '';
-        if (api_get_setting('display_teacher_in_courselist') == 'true') {
+        if (api_get_setting('display_teacher_in_courselist') === 'true') {
             $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], self::USER_SEPARATOR, true);
         }
         $params['link'] = $course_title_url;

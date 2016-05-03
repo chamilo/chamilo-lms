@@ -306,37 +306,29 @@ function returnThumbnail($course, $categoryTitle=null)
         $course_medium_image = Display::returnIconPath('session_default.png');
     }
     
-        $html .= '<div class="image">';
-        $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
-        if (!empty($categoryTitle)) {
-            $html .= '<span class="category">'. $categoryTitle.'</span>';
-            $html .= '<div class="cribbon"></div>';
+    $html .= '<div class="image">';
+    $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
+    if (!empty($categoryTitle)) {
+        $html .= '<span class="category">'. $categoryTitle.'</span>';
+        $html .= '<div class="cribbon"></div>';
+    }
+    $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
+    $html .= '<div class="black-shadow">';
+    $html .= '<div class="author-card">';
+    $count = 0;
+    foreach ($teachers as $value) {
+        if ($count>2) {
+            break;
         }
-        $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
-        $html .= '<div class="black-shadow">';
-        $html .= '<div class="author-card">';
-        $count = 0;
-        foreach ($teachers as $value) {
-            if($count>2){
-                break;
-            }
-            $name = $value['firstname'].' ' . $value['lastname'];
-            $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">';
-            $html .= '<img src="'.$value['avatar'].'"/>';
-            $html .= '</a>';
-            $html .= '<div class="teachers-details">';
-            $html .= '<h5>';
-            $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">';
-            $html .= $name;
-            $html .= '</a>';
-            $html .= '</h5>';
-            $html .= '</div>';
-            $count ++;
-        }
-        $html .= '</div>';
-        $html .= '</div>';
-    // }
-    $html .= '</div>';
+        $name = $value['firstname'].' ' . $value['lastname'];
+        $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
+                <img src="'.$value['avatar'].'"/></a>';
+        $html .= '<div class="teachers-details"><h5>
+                <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
+                . $name . '</a></h5></div>';
+        $count ++;
+    }
+    $html .= '</div></div></div>';
 
     return $html;
 }

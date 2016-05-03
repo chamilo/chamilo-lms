@@ -3484,7 +3484,7 @@ class CourseManager
             );
             $courseCount ++;
             $listItems['in_category'][$courseCount] = $params;
-            }
+        }
         // Step 2: We display the course without a user category.
         $courseInCategory = self::returnCoursesWithoutCategories(0, $load_dirs);
         $listItems['not_category'] = $courseInCategory;

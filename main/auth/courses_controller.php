@@ -142,6 +142,7 @@ class CoursesController
         }
 
         // render to the view
+        
         $this->view->set_data($data);
         $this->view->set_layout('catalog_layout');
         $this->view->set_template('courses_categories');

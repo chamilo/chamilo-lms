@@ -306,15 +306,43 @@ class scorm extends learnpath
                 $row = Database::fetch_array($res_max);
                 $dsp = $row[0] + 1;
             }
-            $myname = $oOrganization->get_name();
-            $myname = api_utf8_decode($myname);
+            $myname = api_utf8_decode($oOrganization->get_name());
 
-            $sql = "INSERT INTO $new_lp (c_id, lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id, use_max_score)" .
-                   "VALUES ($courseId , 2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $sessionId, $userMaxScore)";
-            if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting path: '. $sql, 0); }
+            $now = api_get_utc_datetime();
 
-            Database::query($sql);
-            $lp_id = Database::insert_id();
+            $params = [
+                'c_id' => $courseId,
+                'lp_type' => 2,
+                'name' => $myname,
+                'ref' => $oOrganization->get_ref(),
+                'description' => '',
+                'path' => $this->subdir,
+                'force_commit' => 0,
+                'default_view_mod' => 'embedded',
+                'default_encoding' => $this->manifest_encoding,
+                'js_lib' => 'scorm_api.php',
+                'display_order' => $dsp,
+                'session_id' => $sessionId,
+                'use_max_score' => $userMaxScore,
+                'content_maker' => '',
+                'content_license' => '',
+                'debug' => 0,
+                'theme' => '',
+                'preview_image' => '',
+                'author' => '',
+                'prerequisite' => 0,
+                'hide_toc_frame' => 0,
+                'seriousgame_mode' => 0,
+                'autolaunch' => 0,
+                'category_id' => 0,
+                'max_attempts' => 0,
+                'subscribe_users' => 0,
+                'created_on' => $now,
+                'modified_on' => $now,
+                'publicated_on' => $now
+            ];
+            
+            $lp_id = Database::insert($new_lp, $params);
 
             if ($lp_id) {
                 $sql = "UPDATE $new_lp SET id = iid WHERE iid = $lp_id";

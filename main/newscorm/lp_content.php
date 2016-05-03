@@ -17,7 +17,7 @@ if (empty($lp_controller_touched)) {
     if ($debug > 0) {
         error_log('New lp - In lp_content.php - Redirecting to lp_controller', 0);
     }
-    header('location: lp_controller.php?action=content&lp_id='.Security::remove_XSS($_REQUEST['lp_id']).'&item_id='.Security::remove_XSS($_REQUEST['item_id']).'&'.api_get_cidreq());
+    header('location: lp_controller.php?action=content&lp_id='.intval($_REQUEST['lp_id']).'&item_id='.intval($_REQUEST['item_id']).'&'.api_get_cidreq());
     exit;
 }
 $_SESSION['oLP']->error = '';
@@ -37,11 +37,12 @@ $list = $_SESSION['oLP']->get_toc();
 $dokeos_chapter = false;
 
 foreach ($list as $toc) {
-    if ($toc['id'] == $lp_item_id && ($toc['type'] == 'dokeos_chapter' || $toc['type'] == 'dokeos_module' || $toc['type'] == 'dir')) {
+    if ($toc['id'] == $lp_item_id &&
+        ($toc['type'] == 'dokeos_chapter' || $toc['type'] == 'dokeos_module' || $toc['type'] == 'dir')
+    ) {
         $dokeos_chapter = true;
     }
 }
-
 if ($dokeos_chapter) {
     $src = 'blank.php';
 } else {
@@ -63,6 +64,7 @@ if ($dokeos_chapter) {
         case 2:
             $_SESSION['oLP']->stop_previous_item();
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+
             if ($prereq_check === true) {
                 $src = $_SESSION['oLP']->get_link('http', $lp_item_id);
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
@@ -103,7 +105,10 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 // Define the 'doc.inc.php' as language file.
 $nameTools = $_SESSION['oLP']->get_name();
-$interbreadcrumb[] = array('url' => './lp_list.php', 'name' => get_lang('Doc'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'newscorm/lp_list.php?'.api_get_cidreq(),
+    'name' => get_lang('Doc'),
+);
 // Update global setting to avoid displaying right menu.
 $save_setting = api_get_setting('show_navigation_menu');
 global $_setting;

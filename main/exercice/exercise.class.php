@@ -2228,7 +2228,10 @@ class Exercise
                 array(get_lang('PassPercentage'), null, '%'),
                 array('id' => 'pass_percentage')
             );
+
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
+            $form->addRule('pass_percentage', get_lang('ValueTooSmall'), 'min_numeric_length', 0);
+            $form->addRule('pass_percentage', get_lang('ValueTooBig'), 'max_numeric_length', 100);
 
             // add the text_when_finished textbox
             $form->addHtmlEditor(

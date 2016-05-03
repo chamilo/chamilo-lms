@@ -238,4 +238,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['messaging_gdc_project_number'] = '';
 //Api Key in the Google Developer Console
 //$_configuration['messaging_gdc_api_key'] = '';
-//$_configuration['view_grid_courses'] = true (new grid view courses);
+// New grid view the list of courses
+//$_configuration['view_grid_courses'] = true;

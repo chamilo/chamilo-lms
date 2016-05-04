@@ -794,8 +794,8 @@ class Template
                 $category = Database::fetch_array($result, 'ASSOC');
                 $faqCategories[] = $category;
             }
-            $this->assign('faq_categories', $faqCategories);
         }
+        $this->assign('faq_categories', $faqCategories);
 
         $this->assign('system_charset', api_get_system_encoding());
 

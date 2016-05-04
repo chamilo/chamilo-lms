@@ -2801,6 +2801,7 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         'post_text',
         get_lang('Text'),
         true,
+        false,
         api_is_allowed_to_edit(null, true) ? array(
             'ToolbarSet' => 'Forum',
             'Width' => '100%',

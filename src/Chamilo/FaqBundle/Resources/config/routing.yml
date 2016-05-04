@@ -1,3 +1,7 @@
+faq_index:
+    pattern:  /faq
+    defaults: { _controller: ChamiloFaqBundle:Faq:index, categorySlug: null, questionSlug: null }
+
 faq:
     pattern:  /faq/{categorySlug}/{questionSlug}
     defaults: { _controller: ChamiloFaqBundle:Faq:index, categorySlug: null, questionSlug: null }

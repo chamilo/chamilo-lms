@@ -29,3 +29,19 @@ Feature: Forum tool
       | post_text  | This is a the first thread in a forum for test |
     And I press "SubmitPost"
     Then I should see "The new thread has been added"
+
+  Scenario: Reply to forum message
+    Given I am on "/main/forum/reply.php?forum=1&thread=1&post=1&action=replymessage"
+    When I fill in the following:
+      | post_text | This is a reply to the first message for test |
+    And I press "SubmitPost"
+    Then I should see "The reply has been added"
+
+  Scenario: Delete a forum message
+    Given I am on "/main/forum/viewthread.php?forum=1&thread=1&action=delete&content=post&id=2"
+    Then I should see "Post has been deleted"
+
+  Scenario: Quote a forum message
+    Given I am on "/main/forum/reply.php?forum=1&thread=1&post=1&action=quote"
+    When I press "SubmitPost"
+    Then I should see "The reply has been added"

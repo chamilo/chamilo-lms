@@ -128,8 +128,6 @@
                 {{ course_category_block }}
             </section>
         {% endif %}
-
-
     </div>
 </div>
 </div>

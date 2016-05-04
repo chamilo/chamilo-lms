@@ -55,27 +55,25 @@ a:focus {
 }
 /* Menu Option */
 .item-menu a{
-    padding-left: 30% !important;
-    padding-right: 30% !important;
     color: #fff !important;
     font-size: 15px;
 }
 .navbar-collapse{
     padding: 0;
 }
-.menu-one{
+.menu-1{
     background: #41A62A;
 }
-.menu-two{
+.menu-2{
     background: #97BF0D;
 }
-.menu-three{
+.menu-3{
     background: #F9B200;
 }
-.menu-four{
+.menu-4{
     background: #E53140;
 }
-.menu-five{
+.menu-5{
     background: #E2007A;
 }
 /* end Menu Option */
@@ -177,6 +175,8 @@ a:focus {
   line-height: 22px;
   padding-top: 12.5px;
   padding-bottom: 12.5px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .navbar-collapse{
   overflow: hidden !important;
@@ -189,7 +189,7 @@ a:focus {
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus{
   color: #fff;
-  background:#000080;
+  background:#07578A;
 }
 .navbar-default .navbar-nav > li > a{
   color: #333333;

@@ -9,13 +9,22 @@
                 <span class="icon-bar"></span>
             </button>
         </div>
+        
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
-                <li class="item-menu menu-one"><a href="{{ _p.web }}">Accueli</a></li>
-
-
-                <li class="item-menu menu-two dropdown">
+                {% if _u.logged == 1 %}
+                    {% for items in menu.possible_tabs %}     
+                        {% if items.key != 'profile' and items.key != 'dashboard' and items.key != 'my-space' and items.key != 'admin' %}
+                        {% set counter = counter + 1 %}
+                            <li class="item-menu menu-{{ counter }} {{ items.key }} {{ items.current }}"><a href="{{ items.url }}">{{ items.title }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if _u.logged == 0 %}
+                    <li class="item-menu menu-1"><a href="{{ _p.web }}">Accueli</a></li>
+                {% endif %}
+                <li class="item-menu menu-2 dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                         FAQ
                         <b class="caret"></b>
@@ -30,10 +39,11 @@
                     {% endfor %}
                     </ul>
                 </li>
-
-                <li class="item-menu menu-three"><a href="#">Inscription</a></li>
-                <li class="item-menu menu-four"><a href="#">Démo</a></li>
-                <li class="item-menu menu-five"><a href="#">Contact</a></li>
+                {% if _u.logged == 0 %}
+                    <li class="item-menu menu-3"><a href="#">Inscription</a></li>
+                    <li class="item-menu menu-4"><a href="#">Démo</a></li>
+                    <li class="item-menu menu-5"><a href="#">Contact</a></li>
+                {% endif %}
             </ul>
            {% if _u.logged == 1 %}
            <ul class="nav navbar-nav navbar-right">
@@ -50,7 +60,6 @@
                             {{ profile_link }}
                             {{ message_link }}
                             {{ certificate_link }}
-                            {{ menu }}
                         </li>
                     </ul>
                 </li>

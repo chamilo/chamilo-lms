@@ -781,7 +781,8 @@ class Template
         $navigation            = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
 
-        $locale = 'en';
+        $locale = api_get_language_isocode();
+
         $categories = Database::getManager()->getRepository('ChamiloFaqBundle:Category')->retrieveActive();
         $faqCategories = [];
         if ($categories) {

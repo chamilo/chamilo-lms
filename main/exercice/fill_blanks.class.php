@@ -149,15 +149,11 @@ class FillBlanks extends Question
         if (isset($listAnswersInfo) && count($listAnswersInfo["tabweighting"]) > 0) {
 
             foreach ($listAnswersInfo["tabweighting"] as $i => $weighting) {
-                if (!empty($i)) {
-                    echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
-                }
+                echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
             }
             foreach ($listAnswersInfo["tabinputsize"] as $i => $sizeOfInput) {
-                if (!empty($i)) {
-                    echo 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
-                    echo '$("#samplesize\\\['.$i.'\\\]").width('.$sizeOfInput.');';
-                }
+                echo 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
+                echo '$("#samplesize\\\['.$i.'\\\]").width('.$sizeOfInput.');';
             }
         }
 

@@ -234,6 +234,7 @@ class WSCMForum extends WSCM
     {
         if($this->verifyUserPass($username, $password) == "valid")
         {
+            $em = Database::getManager();
             $course_db = CourseManager::get_course_information($course_code);
 
             $user_id = UserManager::get_user_id_from_username($username);
@@ -251,19 +252,23 @@ class WSCMForum extends WSCM
             $title = htmlentities($title);
             $content = htmlentities($content);
 
-            $sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id, post_date, post_notification, post_parent_id, visible)
-                            VALUES ('".Database::escape_string($title)."',
-                                            '".Database::escape_string(isset($content) ? (api_html_entity_decode($content)) : null)."',
-                                            '".Database::escape_string($thread_id)."',
-                                            '".Database::escape_string($forum_id)."',
-                                            '".Database::escape_string($user_id)."',
-                                            '".Database::escape_string($post_date)."',
-                                            '".Database::escape_string(isset($post_notification)?$post_notification:null)."',
-                                            '".Database::escape_string(isset($my_post)?$my_post:null)."',
-                                            '".Database::escape_string($visible)."')";
+            $postDate = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
 
+            $post = new \Chamilo\CourseBundle\Entity\CForumPost();
+            $post
+                ->setPostTitle($title)
+                ->setPostText(isset($content) ? (api_html_entity_decode($content)) : null)
+                ->setThreadId($thread_id)
+                ->setForumId($forum_id)
+                ->setPosterId($user_id)
+                ->setPostDate($postDate)
+                ->setPostNotification(isset($post_notification) ? $post_notification : null)
+                ->setPostParentId(isset($my_post) ? $my_post : null)
+                ->setVisible($visible);
 
-            $result=Database::query($sql);
+            $em->persist($post);
+            $em->flush();
+
             return "Post enviado!";
 //return $sql;
 

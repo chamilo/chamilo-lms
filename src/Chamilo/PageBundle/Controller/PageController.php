@@ -3,6 +3,7 @@
 
 namespace Chamilo\PageBundle\Controller;
 
+use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Snapshot;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +31,12 @@ class PageController extends Controller
         // Get latest pages
         $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
         $pagesToShow = [];
+        /** @var Page $page */
         foreach ($pages as $page) {
+            // Skip homepage
+            if ($page->getUrl() === '/') {
+                continue;
+            }
             $criteria = ['pageId' => $page];
             /** @var Snapshot $snapshot */
             // Check if page has a valid snapshot

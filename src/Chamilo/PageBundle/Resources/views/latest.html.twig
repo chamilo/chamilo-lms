@@ -1,4 +1,21 @@
-{% for page in pages %}
-    <h2>{{ page.name  }}</h2>
-    <p>{{ sonata_page_render_container('content', page) }}</p>
-{% endfor %}
+<div class="container section-notice">
+    <h2 class="section-title">Nouveau</h2>
+    <div class="row">
+        {% for page in pages %}
+            <div class="col-md-4">
+            <div class="items">
+                <div class="image"></div>
+                <div class="description">
+                    <h2 class="title"><a href="#">{{ page.name }}</a></h2>
+                    <div class="date">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>{{ page.createdAt | format_datetime }}
+                    </div>
+                    <p>
+                        {{ sonata_page_render_container('content', page) }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

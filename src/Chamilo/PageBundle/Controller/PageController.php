@@ -3,6 +3,7 @@
 
 namespace Chamilo\PageBundle\Controller;
 
+use Chamilo\PageBundle\Entity\Snapshot;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,13 +25,24 @@ class PageController extends Controller
     {
         $site = $this->container->get('sonata.page.site.selector')->retrieve();
 
-        $criteria = ['enabled' => 1, 'site' => $site, 'decorate' => 1];
-        $order = ['publicationDateStart' => 'desc'];
-        $order = [];
+        $criteria = ['enabled' => 1, 'site' => $site, 'decorate' => 1, 'routeName' => 'page_slug'];
+        $order = ['createdAt' => 'desc'];
+        // Get latest pages
         $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
-        //$pages = $this->container->get('sonata.page.manager.snapshot')->findBy($criteria, $order, $number);
+        $pagesToShow = [];
+        foreach ($pages as $page) {
+            $criteria = ['pageId' => $page];
+            /** @var Snapshot $snapshot */
+            // Check if page has a valid snapshot
+            $snapshot = $this->container->get('sonata.page.manager.snapshot')->findEnableSnapshot($criteria);
+            if ($snapshot) {
+                $pagesToShow[] = $page;
+            }
+        }
 
-        //$site = $this->container->get('sonata.page.site.selector.host')->retrieve();
-        return $this->render('@ChamiloPage/latest.html.twig', ['pages' => $pages]);
+        return $this->render(
+            '@ChamiloPage/latest.html.twig',
+            [ 'pages' => $pagesToShow ]
+        );
     }
 }

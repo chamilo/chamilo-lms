@@ -1,9 +1,4 @@
-
 {% for page in pages %}
-{#{{ page.content.name }}#}
-
-    {#{{ page.content.blocks | var_dump }}#}
-    {{ page.name  }}
-    {{ sonata_page_render_container('content', page) }}
-
+    <h2>{{ page.name  }}</h2>
+    <p>{{ sonata_page_render_container('content', page) }}</p>
 {% endfor %}

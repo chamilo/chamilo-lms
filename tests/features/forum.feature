@@ -23,7 +23,7 @@ Feature: Forum tool
     Then I should see "The forum has been added"
 
   Scenario: Create a forum thread
-    Given I am on "/main/forum/newthread.php?forum=5"
+    Given I am on "/main/forum/newthread.php?forum=1"
     When I fill in the following:
       | post_title | Thread One                                     |
       | post_text  | This is a the first thread in a forum for test |

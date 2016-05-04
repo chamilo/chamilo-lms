@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Menu;
 
+use Chamilo\FaqBundle\Entity\Category;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Site;
 use Chamilo\UserBundle\Entity\User;
@@ -120,14 +121,36 @@ class NavBuilder extends ContainerAware
                         'route' => 'main',
                         'routeParameters' => array(
                             'name' => 'social/home.php',
-                        )
+                        ),
                     )
                 );
             }
         }
 
-        // Getting site information
+        $categories = $this->container->get('faq.entity.category_repository')->retrieveActive();
+        if ($categories) {
+            $faq = $menu->addChild(
+                'FAQ',
+                [
+                    'route' => 'faq_index',
+                ]
+            );
+            /** @var Category $category */
+            foreach ($categories as $category) {
+                 $faq->addChild(
+                    $category->getHeadline(),
+                    array(
+                        'route' => 'faq',
+                        'routeParameters' => array(
+                            'categorySlug' => $category->getSlug(),
+                            'questionSlug' => '',
+                        ),
+                    )
+                )->setAttribute('divider_append', true);
+            }
+        }
 
+        // Getting site information
         $site = $this->container->get('sonata.page.site.selector');
         $host = $site->getRequestContext()->getHost();
         $siteManager = $this->container->get('sonata.page.manager.site');
@@ -236,7 +259,7 @@ class NavBuilder extends ContainerAware
                         'uid' => $user->getId(),
                     ),
                     'query' => '1',
-                    'icon' => 'fa fa-sign-out'
+                    'icon' => 'fa fa-sign-out',
                 )
             );
 

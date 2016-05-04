@@ -13,7 +13,24 @@
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
                 <li class="item-menu menu-one"><a href="{{ _p.web }}">Accueli</a></li>
-                <li class="item-menu menu-two"><a href="#">FAQ</a></li>
+
+
+                <li class="item-menu menu-two dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                        FAQ
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu menu_level_1" role="menu">
+                     {% for category in faq_categories %}
+                         <li divider_append="divider_append" class="first last">
+                            <a href="{{ _p.web }}web/app_dev.php/faq/{{ category.slug }}">
+                                {{ category.headline }}
+                            </a>
+                         </li>
+                    {% endfor %}
+                    </ul>
+                </li>
+
                 <li class="item-menu menu-three"><a href="#">Inscription</a></li>
                 <li class="item-menu menu-four"><a href="#">Démo</a></li>
                 <li class="item-menu menu-five"><a href="#">Contact</a></li>

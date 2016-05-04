@@ -127,8 +127,8 @@ class Database
      * @param string $entityRootPath
      *
      * @throws \Doctrine\ORM\ORMException
-     * 
-     * @return 
+     *
+     * @return
      */
     public function connect($params = array(), $sysPath = '', $entityRootPath = '', $returnConnection = false)
     {
@@ -140,6 +140,7 @@ class Database
                 'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
+                'ChamiloFaqBundle' => 'Chamilo\FaqBundle\Entity'
             )
         );
 
@@ -177,7 +178,7 @@ class Database
         $listener = new \Gedmo\Sortable\SortableListener();
         $entityManager->getEventManager()->addEventSubscriber($listener);
         $connection = $entityManager->getConnection();
-        
+
         if ($returnConnection) {
             return $connection;
         }

@@ -32,7 +32,7 @@
                 {{ home_page_block }}
             </section>
             {% endif %}
-            
+
             <!-- block statistics -->
             <div class="statistics">
                 <div class="row">
@@ -66,16 +66,27 @@
                 </div>
             </div>
             <!-- end block statistics -->
-            
+
             <!-- HOT COURSE -->
             {% include template ~ "/layout/hot_courses.tpl" %}
             <!-- END HOT COURSE -->
             <!-- CMS -->
-            {% include template ~ "/layout/cms.tpl" %}
+
+            {#{% include template ~ "/layout/cms.tpl" %}#}
+            <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: "{{ _p.web }}web/app_dev.php/cms/page/latest/3",
+                    success: function (data) {
+                        $('#latest_pages').html(data);
+                    }
+                });
+            });
+            </script>
+            <div id="latest_pages"></div>
             <!-- END CSS -->
-        
         </div>
-    </div>    
+    </div>
 </div>
 {% endif %}
 
@@ -118,7 +129,7 @@
             </section>
         {% endif %}
 
-        
+
     </div>
 </div>
 </div>

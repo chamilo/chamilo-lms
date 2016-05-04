@@ -118,7 +118,8 @@ class FillBlanks extends Question
                         // get input size
                         var lainputsize = 200;
                         if ($("#samplesize\\\["+i+"\\\]").width()) {
-                            lainputsize = $("#samplesize\\\["+i+"\\\]").width();
+                        // this is a weird patch to avoid to reduce the size of input blank when you are writing in the ckeditor.
+                            lainputsize = $("#samplesize\\\["+i+"\\\]").width() + 9;
                         }
 
                         if (document.getElementById("weighting["+i+"]")) {

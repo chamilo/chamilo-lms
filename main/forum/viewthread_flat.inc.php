@@ -62,27 +62,30 @@ if (isset($current_thread['thread_id'])) {
             ) {
                 if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
                     if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-
-                        $buttonReply = Display::tag(
-                            'a',
-                            '<em class="fa fa-reply"></em> ' . get_lang('ReplyToMessage'),
-                            array(
-                                'href' => 'reply.php?' . api_get_cidreq()
-                                    . "&forum=$clean_forum_id&thread=$clean_thread_id&post="
-                                    . "{$row['post_id']}&action=replymessage&origin=$origin",
-                                'class' => 'btn btn-primary'
-                            )
+                        $buttonReply = Display::toolbarButton(
+                            get_lang('ReplyToMessage'),
+                            'reply.php?' . api_get_cidreq() . '&' . http_build_query([
+                                'forum' => $clean_forum_id,
+                                'thread' => $clean_thread_id,
+                                'post' => $row['post_id'],
+                                'action' => 'replymessage'
+                            ]),
+                            'reply',
+                            'primary',
+                            ['id' => "reply-to-post-{$row['post_id']}"]
                         );
 
-                        $buttonQuote = Display::tag(
-                            'a',
-                            '<em class="fa fa-quote-left"></em> ' . get_lang('QuoteMessage'),
-                            array(
-                                'href' => 'reply.php?' . api_get_cidreq()
-                                    . "&forum=$clean_forum_id&thread=$clean_thread_id"
-                                    . "&post={$row['post_id']}&action=quote&origin=$origin",
-                                'class' => 'btn btn-success'
-                            )
+                        $buttonQuote = Display::toolbarButton(
+                            get_lang('QuoteMessage'),
+                            'reply.php?' . api_get_cidreq() . '&' . http_build_query([
+                                'forum' => $clean_forum_id,
+                                'thread' => $clean_thread_id,
+                                'post' => $row['post_id'],
+                                'action' => 'quote'
+                            ]),
+                            'quote-left',
+                            'success',
+                            ['id' => "quote-post-{$row['post_id']}"]
                         );
                     }
                 }
@@ -188,14 +191,23 @@ if (isset($current_thread['thread_id'])) {
                 ) {
 
                     if ($locked == false) {
-                        $iconEdit .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&forum="
-                            . $clean_forum_id . "&thread=" . $clean_thread_id
-                            . "&action=delete&content=post&id=" . $row['post_id'] . "&origin="
-                            . $origin . "\" onclick=\"javascript:if(!confirm('"
-                            . addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))
-                            . "')) return false;\">"
-                            . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL)
-                            . "</a>";
+                        $deleteUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                            'forum' => $clean_forum_id,
+                            'thread' => $clean_thread_id,
+                            'action' => 'delete',
+                            'content' => 'post',
+                            'id' => $row['post_id']
+                        ]);
+                        $iconEdit .= Display::url(
+                            Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL),
+                            $deleteUrl,
+                            [
+                                'onclick' => "javascript:if(!confirm('"
+                                    . addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))
+                                    . "')) return false;",
+                                'id' => "delete-post-{$row['post_id']}"
+                            ]
+                        );
                     }
                 }
                 if (

@@ -3358,7 +3358,7 @@ class CourseManager
             $with_special_courses = ' course.code IN ("' . implode('","', $special_course_list) . '")';
         }
         
-        $courseList = array();
+        $courseList = [];
         if (!empty($with_special_courses)) {
             $sql = "SELECT
                         course.id,
@@ -3385,7 +3385,7 @@ class CourseManager
                         continue;
                     }
 
-                    $params = array();
+                    $params = [];
                     // Get notifications.
                     $course_info['id_session'] = null;
                     $course_info['status'] = $course['status'];
@@ -3402,13 +3402,13 @@ class CourseManager
                         if ($load_dirs) {
                             $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
                                . Display::returnFontAwesomeIcon('folder-open') . '</a>';
-                            $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
+                            $params['document'] .= Display::div('', ['id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container']);
                         }
                     }else{
                         if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED && $load_dirs) {
                             $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
                                . Display::returnFontAwesomeIcon('folder-open') . '</a>';
-                            $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
+                            $params['document'] .= Display::div('', ['id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container']);
                         }
                     }
                     
@@ -3426,9 +3426,8 @@ class CourseManager
                     if (api_get_setting('display_teacher_in_courselist') === 'true') {
                         $params['teachers'] = CourseManager::getTeachersFromCourseByCode($course['code']);
                     }
-                    
-                    $iconName = basename($course_info['course_image']);
-                    if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+
+                    if ($showCustomIcon === 'true') {
                         $params['thumbnails'] = $course_info['course_image'];
                         $params['image'] = $course_info['course_image_large'];
                     }

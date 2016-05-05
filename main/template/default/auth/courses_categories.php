@@ -190,7 +190,6 @@ if ($showCourses && $action != 'display_sessions') {
     if (!empty($search_term)) {
         echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
     }
-    $listCategory = CourseManager::getCategoriesList();
     
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $user_id = api_get_user_id();
@@ -222,7 +221,7 @@ if ($showCourses && $action != 'display_sessions') {
             $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items">';
 
             // display thumbnail
-            $html .= returnThumbnail($course, $listCategory[$course['category']]);
+            $html .= returnThumbnail($course);
 
             // display course title and button bloc
             $html .= '<div class="description">';
@@ -289,10 +288,9 @@ echo $cataloguePagination;
 /**
  * Display the course catalog image of a course
  * @param array $course
- * @param string $categoryTitle
  * @return string HTML string
  */
-function returnThumbnail($course, $categoryTitle=null)
+function returnThumbnail($course)
 {
     $html = '';
     $title = cut($course['title'], 70);
@@ -308,7 +306,10 @@ function returnThumbnail($course, $categoryTitle=null)
     
     $html .= '<div class="image">';
     $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
+    $categoryTitle = $course['category'];
     if (!empty($categoryTitle)) {
+        $listCategory = CourseManager::getCategoriesList();
+        $categoryTitle = $listCategory[$categoryTitle];
         $html .= '<span class="category">'. $categoryTitle.'</span>';
         $html .= '<div class="cribbon"></div>';
     }

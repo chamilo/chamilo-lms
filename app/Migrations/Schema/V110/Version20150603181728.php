@@ -66,6 +66,8 @@ class Version20150603181728 extends AbstractMigrationChamilo
         $this->addSql("DELETE FROM c_item_property WHERE c_id NOT IN (SELECT id FROM course)");
         $this->addSql("DELETE FROM c_item_property WHERE to_group_id NOT IN (SELECT id FROM c_group_info)");
 
+        $this->addSql('UPDATE c_item_property cip SET cip.to_group_id = (SELECT cgi.iid FROM c_group_info cgi WHERE cgi.c_id = cip.c_id AND cgi.id = cip.to_group_id)');
+
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18191D79BD3 FOREIGN KEY (c_id) REFERENCES course(id)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C181330D47E9 FOREIGN KEY (to_group_id) REFERENCES c_group_info (iid)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18129F6EE60 FOREIGN KEY (to_user_id) REFERENCES user (id)');

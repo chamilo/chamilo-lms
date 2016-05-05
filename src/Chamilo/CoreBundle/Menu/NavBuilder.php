@@ -121,7 +121,7 @@ class NavBuilder extends ContainerAware
                         'route' => 'main',
                         'routeParameters' => array(
                             'name' => 'social/home.php',
-                        ),
+                        )
                     )
                 );
             }
@@ -151,6 +151,7 @@ class NavBuilder extends ContainerAware
         }
 
         // Getting site information
+
         $site = $this->container->get('sonata.page.site.selector');
         $host = $site->getRequestContext()->getHost();
         $siteManager = $this->container->get('sonata.page.manager.site');
@@ -259,7 +260,7 @@ class NavBuilder extends ContainerAware
                         'uid' => $user->getId(),
                     ),
                     'query' => '1',
-                    'icon' => 'fa fa-sign-out',
+                    'icon' => 'fa fa-sign-out'
                 )
             );
 

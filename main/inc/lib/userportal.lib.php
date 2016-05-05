@@ -208,8 +208,6 @@ class IndexManager
                     $html .= '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
                 }
             }
-
-
             $html .= '</ul>';
         }
 
@@ -934,8 +932,6 @@ class IndexManager
         $show_create_link = false;
         $show_course_link = false;
 
-        $userInfo = api_get_user_info();
-
         if ((api_get_setting('allow_users_to_create_courses') == 'false' &&
             !api_is_platform_admin()) || api_is_student()
         ) {
@@ -1000,14 +996,6 @@ class IndexManager
             }
         }
 
-        $my_account_content .= '<li class="add-course"><a href="' . api_get_path(WEB_PATH) . 'search.php">'.
-            Display::return_icon('new-course.png',  get_lang('Diagnosis')) . get_lang('Diagnosis').'</a></li>';
-
-        if ($userInfo['status'] == DRH) {
-            $my_account_content .= '<li class="add-course"><a href="' . api_get_path(WEB_PATH) . 'load_search.php">' .
-                Display::return_icon('new-course.png', get_lang('ManageDiagnosis')) . get_lang('Diagnosis') . '</a></li>';
-        }
-
         $my_account_content .= '</ul>';
 
         if (!empty($my_account_content)) {
@@ -1062,7 +1050,7 @@ class IndexManager
                 $user_id,
                 $this->load_directories_preview
             );
-           
+
             // Display courses.
             $courses = CourseManager::returnCourses(
                 $user_id,
@@ -1070,14 +1058,16 @@ class IndexManager
             );
             $this->tpl->assign('special_courses', $specialCourses);
             $this->tpl->assign('courses', $courses);
-            if ($_configuration['view_grid_courses']==true) {
+            if (isset($_configuration['view_grid_courses']) && $_configuration['view_grid_courses']) {
                 $listCourse = $this->tpl->fetch(
-                $this->tpl->get_template('user_portal/grid_courses.tpl'));
+                $this->tpl->get_template('/user_portal/grid_courses.tpl'));
             } else {
                 $listCourse = $this->tpl->fetch(
-                $this->tpl->get_template('user_portal/classic_courses.tpl'));
-            }          
-            $courseCount = $specialCourses['course_count'] + $courses['course_count'];
+                $this->tpl->get_template('/user_portal/classic_courses.tpl'));
+            }
+            if (!empty($specialCourses['course_count']) && !empty($courses['course_count'])) {
+                $courseCount = intval($specialCourses['course_count']) + intval($courses['course_count']);
+            }
         }
 
         $sessions_with_category = '';
@@ -1377,7 +1367,7 @@ class IndexManager
         }
 
         return [
-            'html' => $sessions_with_category.$sessions_with_no_category.$listCourse.$special_courses,
+            'html' => $sessions_with_category.$sessions_with_no_category.$listCourse,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

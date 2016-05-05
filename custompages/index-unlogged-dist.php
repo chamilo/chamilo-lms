@@ -101,12 +101,12 @@ $rootWeb = api_get_path('WEB_PATH');
 			<div id="links">
 
                 <?php if (api_get_setting('allow_registration') === 'true') { ?>
-                <a href="<?php echo api_get_path(WEB_PATH); ?>main/auth/inscription.php?language=<?php echo api_get_interface_language(); ?>">
+                <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/inscription.php?language=<?php echo api_get_interface_language(); ?>">
                     <?php echo custompages_get_lang('Registration')?>
                 </a><br />
                 <?php } ?>
 
-                <a href="<?php echo api_get_path(WEB_PATH); ?>main/auth/lostPassword.php?language=<?php echo api_get_interface_language(); ?>">
+                <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/lostPassword.php?language=<?php echo api_get_interface_language(); ?>">
                     <?php echo custompages_get_lang('LostPassword')?>
                 </a>
 			</div>

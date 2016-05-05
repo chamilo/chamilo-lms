@@ -1050,7 +1050,7 @@ class IndexManager
                 $user_id,
                 $this->load_directories_preview
             );
-           
+
             // Display courses.
             $courses = CourseManager::returnCourses(
                 $user_id,
@@ -1058,14 +1058,16 @@ class IndexManager
             );
             $this->tpl->assign('special_courses', $specialCourses);
             $this->tpl->assign('courses', $courses);
-            if ($_configuration['view_grid_courses']==true) {
+            if (isset($_configuration['view_grid_courses']) && $_configuration['view_grid_courses']) {
                 $listCourse = $this->tpl->fetch(
                 $this->tpl->get_template('/user_portal/grid_courses.tpl'));
             } else {
                 $listCourse = $this->tpl->fetch(
                 $this->tpl->get_template('/user_portal/classic_courses.tpl'));
-            }          
-            $courseCount = $specialCourses['course_count'] + $courses['course_count'];
+            }
+            if (!empty($specialCourses['course_count']) && !empty($courses['course_count'])) {
+                $courseCount = intval($specialCourses['course_count']) + intval($courses['course_count']);
+            }
         }
 
         $sessions_with_category = '';
@@ -1365,7 +1367,7 @@ class IndexManager
         }
 
         return [
-            'html' => $sessions_with_category.$sessions_with_no_category.$listCourse.$special_courses,
+            'html' => $sessions_with_category.$sessions_with_no_category.$listCourse,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

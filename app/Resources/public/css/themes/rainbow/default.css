@@ -284,7 +284,7 @@ a:focus {
   background-color: #ECF0F1;
 }
 .breadcrumb > .active{
-  color: #95a5a6;
+    color: #FF0;
 }
 .panel-default{
   border-color: #ECF0F1;

@@ -1922,7 +1922,6 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
         ->addCriteria($criteria)
         ->addOrderBy('p.postId', $orderDirection);
 
-
     $posts = $qb->getQuery()->getResult();
 
     $depth++;

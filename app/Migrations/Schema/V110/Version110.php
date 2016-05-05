@@ -34,6 +34,7 @@ class Version110 extends AbstractMigrationChamilo
     public function up(Schema $schema)
     {
         // Use $schema->createTable
+        $this->addSql('set sql_mode=""');
 
         $this->addSql("CREATE TABLE IF NOT EXISTS course_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME)");
         $this->addSql("CREATE TABLE IF NOT EXISTS session_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME)");
@@ -49,8 +50,17 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE skill_rel_user MODIFY COLUMN acquired_skill_at datetime default NULL");
         $this->addSql("ALTER TABLE track_e_access MODIFY COLUMN access_date datetime DEFAULT NULL");
         $this->addSql("ALTER TABLE track_e_lastaccess MODIFY COLUMN access_date datetime DEFAULT NULL");
-        $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id");
-        $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id");
+
+        $table = $schema->getTable('skill_rel_user');
+
+        if (!$table->hasColumn('course_id')) {
+            $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id");
+        }
+
+        if (!$table->hasColumn('session_id')) {
+            $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id");
+        }
+
         $this->addSql("ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id)");
 
         // Delete info of session_rel_user if session does not exists;
@@ -113,9 +123,9 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
 
-        $this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned DEFAULT null");
+        $this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE user DROP PRIMARY KEY");
-        $this->addSql("ALTER TABLE user ADD COLUMN id INT DEFAULT null");
+        $this->addSql("ALTER TABLE user ADD COLUMN id INT DEFAULT NULL");
         $this->addSql("UPDATE user SET id = user_id");
         $this->addSql("ALTER TABLE user MODIFY COLUMN id INT NOT NULL PRIMARY KEY AUTO_INCREMENT AFTER user_id");
 

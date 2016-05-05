@@ -1594,7 +1594,8 @@ class learnpath
             error_log('New LP - In learnpath::get_brother_chapters()', 0);
         }
 
-        if (empty($id)|| $id != strval(intval($id))) {
+        if (empty($id) || $id != strval(intval($id))) {
+
             return array ();
         }
 
@@ -1605,21 +1606,24 @@ class learnpath
         if (Database :: num_rows($res_parent) > 0) {
             $row_parent = Database :: fetch_array($res_parent);
             $parent = $row_parent['parent_item_id'];
-            $sql_bros = "SELECT * FROM $lp_item
-                        WHERE
-                            c_id = ".$course_id." AND
-                            parent_item_id = $parent AND
-                            id = $id AND
-                            item_type='dokeos_chapter'
-                        ORDER BY display_order";
-            $res_bros = Database::query($sql_bros);
-            $list = array ();
+            $sql = "SELECT * FROM $lp_item
+                    WHERE
+                        c_id = ".$course_id." AND
+                        parent_item_id = $parent AND
+                        id = $id AND
+                        item_type='dokeos_chapter'
+                    ORDER BY display_order";
+            $res_bros = Database::query($sql);
+
+            $list = array();
             while ($row_bro = Database :: fetch_array($res_bros)) {
                 $list[] = $row_bro;
             }
+
             return $list;
         }
-        return array ();
+
+        return array();
     }
 
     /**
@@ -1958,7 +1962,7 @@ class learnpath
      * Gets the navigation bar for the learnpath display screen
      * @return	string	The HTML string to use as a navigation bar
      */
-    public function get_navigation_bar($idBar = null, $display=null) {
+    public function get_navigation_bar($idBar = null, $display = null) {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_navigation_bar()', 0);
         }
@@ -3296,6 +3300,7 @@ class learnpath
                 $html .= '</div>';
             }
         }
+
         return $html;
 
     }
@@ -6274,18 +6279,18 @@ class learnpath
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
             switch ($row['item_type']) {
-                case 'dokeos_chapter' :
-                case 'dir' :
-                case 'asset' :
-                case 'sco' :
-                    if (isset ($_GET['view']) && $_GET['view'] == 'build') {
+                case 'dokeos_chapter':
+                case 'dir':
+                case 'asset':
+                case 'sco':
+                    if (isset($_GET['view']) && $_GET['view'] == 'build') {
                         $return .= $this->display_manipulate($item_id, $row['item_type']);
                         $return .= $this->display_item_form($row['item_type'], get_lang('EditCurrentChapter') . ' :', 'edit', $item_id, $row);
                     } else {
                         $return .= $this->display_item_small_form($row['item_type'], get_lang('EditCurrentChapter') . ' :', $row);
                     }
                     break;
-                case TOOL_DOCUMENT :
+                case TOOL_DOCUMENT:
                     $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                     $sql = "SELECT lp.*, doc.path as dir
                             FROM " . $tbl_lp_item . " as lp
@@ -6300,7 +6305,7 @@ class learnpath
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_document_form('edit', $item_id, $row_step);
                     break;
-                case TOOL_LINK :
+                case TOOL_LINK:
                     $link_id = (string) $row['path'];
                     if (ctype_digit($link_id)) {
                         $tbl_link = Database :: get_course_table(TABLE_LINK);
@@ -6315,7 +6320,7 @@ class learnpath
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_link_form('edit', $item_id, $row);
                     break;
-                case TOOL_LP_FINAL_ITEM :
+                case TOOL_LP_FINAL_ITEM:
                     $_SESSION['finalItem'] = true;
                     $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                     $sql = "SELECT lp.*, doc.path as dir
@@ -6331,7 +6336,7 @@ class learnpath
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_document_form('edit', $item_id, $row_step);
                     break;
-                case 'dokeos_module' :
+                case 'dokeos_module':
                     if (isset ($_GET['view']) && $_GET['view'] == 'build') {
                         $return .= $this->display_manipulate($item_id, $row['item_type']);
                         $return .= $this->display_item_form($row['item_type'], get_lang('EditCurrentModule') . ' :', 'edit', $item_id, $row);
@@ -6339,23 +6344,23 @@ class learnpath
                         $return .= $this->display_item_small_form($row['item_type'], get_lang('EditCurrentModule') . ' :', $row);
                     }
                     break;
-                case TOOL_QUIZ :
+                case TOOL_QUIZ:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_quiz_form('edit', $item_id, $row);
                     break;
-                case TOOL_HOTPOTATOES :
+                case TOOL_HOTPOTATOES:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_hotpotatoes_form('edit', $item_id, $row);
                     break;
-                case TOOL_STUDENTPUBLICATION :
+                case TOOL_STUDENTPUBLICATION:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_student_publication_form('edit', $item_id, $row);
                     break;
-                case TOOL_FORUM :
+                case TOOL_FORUM:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_forum_form('edit', $item_id, $row);
                     break;
-                case TOOL_THREAD :
+                case TOOL_THREAD:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_thread_form('edit', $item_id, $row);
                     break;

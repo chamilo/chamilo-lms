@@ -4578,6 +4578,7 @@ $server->wsdl->addComplexType(
     array(
         'course'       => array('name' => 'course',     'type' => 'xsd:string'), //Course string code
         'user_id'      => array('name' => 'user_id',    'type' => 'xsd:string'), //Chamilo user_id
+        'status'       => array('name' => 'status',     'type' => 'xsd:int'),
         'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
 );
@@ -4619,6 +4620,9 @@ function WSSubscribeUserToCourseSimple($params) {
     $user_id      = $params['user_id']; //chamilo user id
     $status       = STUDENT;
 
+    if (!empty($params['status'])) {
+        $status = $params['status'];
+    }
     // Get user id
     $user_data = api_get_user_info($user_id);
 

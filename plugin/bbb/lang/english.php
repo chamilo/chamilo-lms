@@ -5,35 +5,34 @@
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
+// Needed in order to show the plugin title
+$strings['plugin_title'] = "Videoconference";
+$strings['plugin_comment'] = "Add a videoconference room in a Chamilo course using BigBlueButton (BBB)";
 
-//Needed in order to show the plugin title
-$strings['plugin_title']        = "Videoconference";
-$strings['plugin_comment']      = "Add a videoconference room in a Chamilo course using BigBlueButton (BBB)";
-
-$strings['Videoconference']     = "Videoconference";
-$strings['MeetingOpened']       = "Meeting opened";
-$strings['MeetingClosed']       = "Meeting closed";
+$strings['Videoconference'] = "Videoconference";
+$strings['MeetingOpened'] = "Meeting opened";
+$strings['MeetingClosed'] = "Meeting closed";
 $strings['MeetingClosedComment'] = "If you have asked for your sessions to be recorded, the recording will be available in the list below when it has been completely generated.";
-$strings['CloseMeeting']        = "Close meeting";
+$strings['CloseMeeting'] = "Close meeting";
 
-$strings['VideoConferenceXCourseX']             = "Videoconference #%s course %s";
-$strings['VideoConferenceAddedToTheCalendar']   = "Videoconference added to the calendar";
-$strings['VideoConferenceAddedToTheLinkTool']   = "Videoconference added to the link tool";
+$strings['VideoConferenceXCourseX'] = "Videoconference #%s course %s";
+$strings['VideoConferenceAddedToTheCalendar'] = "Videoconference added to the calendar";
+$strings['VideoConferenceAddedToTheLinkTool'] = "Videoconference added to the link tool";
 
-$strings['GoToTheVideoConference']   = "Go to the videoconference";
+$strings['GoToTheVideoConference'] = "Go to the videoconference";
 
-$strings['Records']             = "Recording";
-$strings['Meeting']             = "Meeting";
+$strings['Records'] = "Recording";
+$strings['Meeting'] = "Meeting";
 
-$strings['ViewRecord']          = "View recording";
-$strings['CopyToLinkTool']      = "Copy to link tool";
+$strings['ViewRecord'] = "View recording";
+$strings['CopyToLinkTool'] = "Copy to link tool";
 
-$strings['EnterConference']     = "Enter the videoconference";
-$strings['RecordList']          = "Recording list";
-$strings['ServerIsNotRunning']  = "Videoconference server is not running";
-$strings['ServerIsNotConfigured']  = "Videoconference server is not configured";
+$strings['EnterConference'] = "Enter the videoconference";
+$strings['RecordList'] = "Recording list";
+$strings['ServerIsNotRunning'] = "Videoconference server is not running";
+$strings['ServerIsNotConfigured'] = "Videoconference server is not configured";
 
-$strings['XUsersOnLine']        = "%s user(s) online";
+$strings['XUsersOnLine'] = "%s user(s) online";
 
 $strings['host'] = 'BigBlueButton host';
 $strings['host_help'] = 'This is the name of the server where your BigBlueButton server is running. Might be localhost, an IP address (e.g. 192.168.13.54) or a domain name (e.g. my.video.com).';

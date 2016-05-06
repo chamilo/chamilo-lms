@@ -24,17 +24,27 @@ class BBBPlugin extends Plugin
         )
     );
 
+    /**
+     * BBBPlugin constructor.
+     */
+    protected function __construct()
+    {
+        parent::__construct(
+            '2.2',
+            'Julio Montoya, Yannick Warnier',
+            array('tool_enable' => 'boolean', 'host' => 'text', 'salt' => 'text')
+        );
+    }
+
     public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
     }
 
-    protected function __construct()
-    {
-        parent::__construct('2.2', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
-    }
-
+    /**
+     * Install
+     */
     public function install()
     {
         $table = Database::get_main_table('plugin_bbb_meeting');
@@ -61,6 +71,9 @@ class BBBPlugin extends Plugin
         $this->install_course_fields_in_all_courses();
     }
 
+    /**
+     * Uninstall
+     */
     public function uninstall()
     {
         $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);

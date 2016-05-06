@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This script initiates a video conference session, calling the BigBlueButton API
  * @package chamilo.plugin.bigbluebutton
@@ -8,7 +7,7 @@
 require __DIR__ . '/../../vendor/autoload.php';
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
-require_once dirname(__FILE__).'/config.php';
+require_once __DIR__.'/config.php';
 
 $tool_name = get_lang('Videoconference');
 $tpl = new Template($tool_name);
@@ -16,8 +15,6 @@ $tpl = new Template($tool_name);
 $vmIsEnabled = false;
 $host = null;
 $salt = null;
-
-
 $bbb = new bbb();
 
 if ($bbb->plugin_enabled) {
@@ -64,12 +61,12 @@ if ($bbb->plugin_enabled) {
                     $url = $bbb->createMeeting($meeting_params);
                     $bbb->redirectToBBB($url);
                 } else {
-                    $url = 'listing.php?'.api_get_cidreq();
+                    $url = $bbb->getListingUrl();
                     $bbb->redirectToBBB($url);
                 }
             }
         } else {
-            $url = 'listing.php?'.api_get_cidreq();
+            $url = $bbb->getListingUrl();
             header('Location: ' . $url);
             exit;
         }

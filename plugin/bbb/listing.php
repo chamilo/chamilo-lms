@@ -1,14 +1,12 @@
 <?php
 /**
- * This script initiates a videoconference session, calling the BigBlueButton API
+ * This script initiates a video conference session, calling the BigBlueButton API
  * @package chamilo.plugin.bigbluebutton
- */
-/**
- * Initialization
  */
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
-require_once dirname(__FILE__).'/config.php';
+require_once __DIR__.'/config.php';
+
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $tpl = new Template($tool_name);
@@ -17,6 +15,7 @@ $bbb = new bbb();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $teacher = $bbb->isTeacher();
+$courseInfo = api_get_course_info();
 
 api_protect_course_script(true);
 $message = null;
@@ -32,7 +31,7 @@ if ($teacher) {
             $title = sprintf(get_lang('VideoConferenceXCourseX'), $id, $course_info['name']);
             $content = Display::url(get_lang('GoToTheVideoConference'), $_GET['url']);
 
-            $event_id = $agenda->addEvent(
+            $eventId = $agenda->addEvent(
                 $_REQUEST['start'],
                 null,
                 'true',
@@ -40,7 +39,7 @@ if ($teacher) {
                 $content,
                 array('everyone')
             );
-            if (!empty($event_id)) {
+            if (!empty($eventId)) {
                 $message = Display::return_message(get_lang('VideoConferenceAddedToTheCalendar'), 'success');
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
@@ -102,8 +101,8 @@ $meetings = $bbb->getCourseMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
-$users_online   = $bbb->getUsersOnlineInCurrentRoom();
-$status         = $bbb->isServerRunning();
+$users_online = $bbb->getUsersOnlineInCurrentRoom();
+$status = $bbb->isServerRunning();
 $meeting_exists = $bbb->meetingExists(api_get_course_id().'-'.api_get_session_id());
 $show_join_button = false;
 if ($meeting_exists || $teacher) {
@@ -112,13 +111,12 @@ if ($meeting_exists || $teacher) {
 
 $tpl->assign('allow_to_edit', $teacher);
 $tpl->assign('meetings', $meetings);
-$conferenceUrl = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?launch=1&'.api_get_cidreq();
+$conferenceUrl = $bbb->getConferenceUrl();
 $tpl->assign('conference_url', $conferenceUrl);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $show_join_button);
 
-//$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);

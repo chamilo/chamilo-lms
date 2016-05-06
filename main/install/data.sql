@@ -1828,3 +1828,7 @@ VALUES
 ('enable_record_audio',NULL,'radio','Tools','true','EnableRecordAudioTitle','EnableRecordAudioComment',NULL,NULL, 0);
 
 UPDATE settings_current SET selected_value = '1.11.0.3' WHERE variable = 'chamilo_database_version';
+
+INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 1);
+INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 2);
+INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 3);

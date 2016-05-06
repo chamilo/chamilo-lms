@@ -276,7 +276,14 @@ class IndexManager
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
             //$home_notice = Display::div($home_notice, array('class'  => 'homepage_notice'));
-            $html = self::show_right_block(get_lang('Notice'), $home_notice, 'notice_block', null, 'notices', 'noticesCollapse');
+            $html = self::show_right_block(
+                get_lang('Notice'),
+                $home_notice,
+                'notice_block',
+                null,
+                'notices',
+                'noticesCollapse'
+            );
         }
         return $html;
     }
@@ -300,7 +307,14 @@ class IndexManager
             $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
             $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
             $home_menu_content .= '</ul>';
-            $html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block', null, 'helps', 'helpsCollapse');
+            $html .= self::show_right_block(
+                get_lang('MenuGeneral'),
+                $home_menu_content,
+                'help_block',
+                null,
+                'helps',
+                'helpsCollapse'
+            );
         }
         return $html;
     }
@@ -693,17 +707,30 @@ class IndexManager
 
     /**
      * @todo use the template system
+     * @param $title
+     * @param $content
+     * @param string $id
+     * @param array $params
+     * @param string $idAccordion
+     * @param string $idCollapse
+     * @return null|string
      */
-    function show_right_block($title, $content, $id = null, $params = null, $idAccordion = null, $idCollpase = null)
-    {
+    public function show_right_block(
+        $title,
+        $content,
+        $id = '',
+        $params = [],
+        $idAccordion = '',
+        $idCollapse = ''
+    ) {
         if (!empty($idAccordion)) {
             $html = null;
             $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">' . PHP_EOL;
             $html .= '<div class="panel panel-default" id="'.$id.'">' . PHP_EOL;
             $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">' . PHP_EOL;
-            $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollpase.'" aria-expanded="true" aria-controls="'.$idCollpase.'">'.$title.'</a>' . PHP_EOL;
+            $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollapse.'" aria-expanded="true" aria-controls="'.$idCollapse.'">'.$title.'</a>' . PHP_EOL;
             $html .= '</h4></div>' . PHP_EOL;
-            $html .= '<div id="'.$idCollpase.'" class="panel-collapse collapse in" role="tabpanel">' . PHP_EOL;
+            $html .= '<div id="'.$idCollapse.'" class="panel-collapse collapse in" role="tabpanel">' . PHP_EOL;
             $html .= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
             $html .= '</div></div></div>' . PHP_EOL;
 
@@ -1052,8 +1079,11 @@ class IndexManager
         $sessions_with_category = '';
         $sessions_with_no_category = '';
 
-        $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
-        $sessionTitleLink = $sessionTitleLink === false ? 1 : $sessionTitleLink;
+        $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
+        $coursesListSessionStyle = $coursesListSessionStyle === false ? 1 : $coursesListSessionStyle;
+        if (api_is_drh()) {
+            $coursesListSessionStyle = 1;
+        }
 
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
@@ -1160,7 +1190,8 @@ class IndexManager
                                 : null;
 
                             $params['extra_fields'] = $session_box['extra_fields'];
-                            $params['show_link_to_session'] = !api_is_drh() && $sessionTitleLink;
+                            $params['course_list_session_style'] = $coursesListSessionStyle;
+
                             $params['title'] = $session_box['title'];
                             $params['subtitle'] = $extra_info;
                             $params['show_actions'] = api_is_platform_admin() ? true : false;
@@ -1269,11 +1300,12 @@ class IndexManager
                             }
 
                             $sessionParams = array();
-                            //Category
+                            // Category
                             if ($count > 0) {
                                 $session_box = Display:: get_session_title_box($session_id);
                                 $sessionParams['id'] = $session_id;
-                                $sessionParams['show_link_to_session'] = !api_is_drh() && $sessionTitleLink;
+                                //$sessionParams['show_link_to_session'] = !api_is_drh() && $sessionTitleLink;
+                                $sessionParams['course_list_session_style'] = $coursesListSessionStyle;
                                 $sessionParams['title'] = $session_box['title'];
                                 $sessionParams['subtitle'] = (!empty($session_box['coach'])
                                     ? $session_box['coach'] . ' | '

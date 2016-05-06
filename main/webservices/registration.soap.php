@@ -3613,8 +3613,6 @@ function WSEditCourseDescription($params) {
             continue; // Original_course_id_value doesn't exist.
         }
 
-        $t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-
         $course_desc_id = Database::escape_string($course_desc_id);
         $course_desc_title = Database::escape_string($course_desc_title);
         $course_desc_content = Database::escape_string($course_desc_content);
@@ -5595,15 +5593,23 @@ function WSSuscribeCoursesToSession($params) {
         $original_session_id_name = $coursesession_param['original_session_id_name'];
         $original_course_id_name = $coursesession_param['original_course_id_name'];
         $original_course_id_values = $coursesession_param['original_course_id_values'];
-        $orig_session_id_value[] = $original_session_id_value;
 
         $sessionId = SessionManager::getSessionIdFromOriginalId(
             $original_session_id_value,
             $original_session_id_name
         );
 
+        if (empty($sessionId)) {
+            $orig_session_id_value[] = $original_session_id_value;
+            $results[] = 0;
+            continue;
+        }
+
         // Get course list from row_original_course_id_values
         foreach ($original_course_id_values as $row_original_course_list) {
+            $orig_session_id_value[] = $original_session_id_value;
+            $orig_course_id_value[] = $row_original_course_list['course_code'];
+
             $courseInfo = CourseManager::getCourseInfoFromOriginalId(
                 $row_original_course_list['course_code'],
                 $original_course_id_name
@@ -5624,8 +5630,6 @@ function WSSuscribeCoursesToSession($params) {
                 if ($debug) error_log("add_courses_to_session: course:$courseCode to session:$sessionId");
 
                 $results[] = 1;
-                $orig_course_id_value[] = $original_session_id_value;
-                $orig_session_id_value[] = $row_original_course_list['course_code'];
             }
         }
     }

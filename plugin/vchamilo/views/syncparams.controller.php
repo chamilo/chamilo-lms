@@ -1,9 +1,10 @@
 <?php
 
+api_protect_admin_script();
+
 $sql = "SELECT * FROM vchamilo";
 $result = Database::query($sql);
 $vchamilos = Database::store_result($result);
-
 
 // propagate in all known vchamilos a setting
 if ($action == 'syncall') {

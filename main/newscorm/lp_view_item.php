@@ -111,8 +111,6 @@ if ($mode == 'fullpage') {
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 ?>
 <script>
-/* <![CDATA[ */
-
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
     str=str.replace(/\\"/g,'"');
@@ -131,7 +129,7 @@ function confirmation(name) {
 </script>
 <?php
 
-$id = (isset($new_item_id)) ? $new_item_id : $_GET['id'];
+$id = isset($new_item_id) ? $new_item_id : $_GET['id'];
 if (is_object($_SESSION['oLP'])) {
     switch ($mode) {
         case 'fullpage':
@@ -150,5 +148,4 @@ if (is_object($_SESSION['oLP'])) {
             echo $_SESSION['oLP']->display_item($id, null, false);
             break;
     }
-
 }

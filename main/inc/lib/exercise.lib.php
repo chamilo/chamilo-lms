@@ -166,25 +166,27 @@ class ExerciseLib
                 $s .= $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanog
-                if (api_get_setting('enable_nanogong') == 'true') {
+                if (api_get_setting('enable_record_audio') == 'true') {
                     //@todo pass this as a parameter
                     global $exercise_stat_info, $exerciseId, $exe_id;
 
                     if (!empty($exercise_stat_info)) {
-                        $params = array(
-                            'exercise_id' => $exercise_stat_info['exe_exo_id'],
-                            'exe_id' => $exercise_stat_info['exe_id'],
-                            'question_id' => $questionId
+                        $objQuestionTmp->initFile(
+                            api_get_session_id(),
+                            api_get_user_id(),
+                            $exercise_stat_info['exe_exo_id'],
+                            $exercise_stat_info['exe_id']
                         );
                     } else {
-                        $params = array(
-                            'exercise_id' => $exerciseId,
-                            'exe_id' => 'temp_exe',
-                            'question_id' => $questionId
+                        $objQuestionTmp->initFile(
+                            api_get_session_id(),
+                            api_get_user_id(),
+                            $exerciseId,
+                            'temp_exe'
                         );
                     }
-                    $nano = new Nanogong($params);
-                    echo $nano->show_button();
+
+                    echo $objQuestionTmp->returnRecorder();
                 }
 
                 $form = new FormValidator('free_choice_'.$questionId);
@@ -830,7 +832,7 @@ class ExerciseLib
                             $parsed_answer,
                             [
                                 'id' => "window_$windowId",
-                                'class' => "window{$questionId}_question_draggable exercise-draggable-answer-option btn btn-info"
+                                'class' => "window{$questionId}_question_draggable exercise-draggable-answer-option"
                             ]
                         );
                         $selectedValue = 0;
@@ -1056,12 +1058,16 @@ HTML;
 
                     if ($answerCorrect) {
                         $s .= Display::div(
-                            '&nbsp;',
-                            [
-                                'id' => "drop_$windowId",
-                                'class' => 'col-md-2 droppable'
-                            ]
-                        );
+                                Display::div('&nbsp;',
+                                        [
+                                            'id' => "drop_$windowId",
+                                            'class' => 'droppable'
+                                        ])
+                                ,
+                                [
+                                    'class' => 'col-md-3'
+                                ]
+                                );
 
                         $counterAnswer++;
                     }
@@ -2263,13 +2269,13 @@ HOTSPOT;
 
         if ($check_publication_dates) {
             //start and end are set
-            $time_conditions = " AND ((start_time <> '0000-00-00 00:00:00' AND start_time < '$now' AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now' )  OR ";
+            $time_conditions = " AND ((start_time <> '' AND start_time < '$now' AND end_time <> '' AND end_time > '$now' )  OR ";
             // only start is set
-            $time_conditions .= " (start_time <> '0000-00-00 00:00:00' AND start_time < '$now' AND end_time = '0000-00-00 00:00:00') OR ";
+            $time_conditions .= " (start_time <> '' AND start_time < '$now' AND end_time is NULL) OR ";
             // only end is set
-            $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now') OR ";
+            $time_conditions .= " (start_time IS NULL AND end_time <> '' AND end_time > '$now') OR ";
             // nothing is set
-            $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time = '0000-00-00 00:00:00'))  ";
+            $time_conditions .= " (start_time IS NULL AND end_time IS NULL))  ";
         }
 
         $needle_where = !empty($search) ? " AND title LIKE '?' " : '';
@@ -2805,7 +2811,6 @@ HOTSPOT;
         foreach ($exercises as $exercise_item) {
             if (isset($exercise_item['end_time']) &&
                 !empty($exercise_item['end_time']) &&
-                $exercise_item['end_time'] != '0000-00-00 00:00:00' &&
                 api_strtotime($exercise_item['end_time'], 'UTC') < $now
             ) {
                 $result[] = $exercise_item;

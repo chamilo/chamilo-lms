@@ -29,7 +29,6 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id(), 'name' => $_SESSION['oLP']->get_name());
-//$interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id", 'name' => get_lang('NewStep'));
 
 $htmlHeadXtra[] = '<script>
 function activate_start_date() {
@@ -159,25 +158,25 @@ $form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDes
 //Start date
 $form->addElement('checkbox', 'activate_start_date_check', null,get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 $display_date = 'none';
-if ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on)) {
+if (!empty($publicated_on)) {
 	$display_date = 'block';
 	$defaults['activate_start_date_check'] = 1;
 }
 
 $form->addElement('html','<div id="start_date_div" style="display:'.$display_date.';">');
-$form->addElement('DatePicker', 'publicated_on', get_lang('PublicationDate'));
+$form->addDatePicker('publicated_on', get_lang('PublicationDate'));
 $form->addElement('html','</div>');
 
 //End date
 $form->addElement('checkbox', 'activate_end_date_check',  null, get_lang('EnableEndTime'),  array('onclick' => 'activate_end_date()'));
 $display_date = 'none';
-if ($expired_on!='0000-00-00 00:00:00' && !empty($expired_on)) {
+if (!empty($expired_on)) {
 	$display_date = 'block';
 	$defaults['activate_end_date_check'] = 1;
 }
 
 $form->addElement('html','<div id="end_date_div" style="display:'.$display_date.';">');
-$form->addElement('DatePicker', 'expired_on', get_lang('ExpirationDate'));
+$form->addDatePicker('expired_on', get_lang('ExpirationDate'));
 $form->addElement('html','</div>');
 
 if (api_is_platform_admin()) {
@@ -210,8 +209,8 @@ if ($enableLpExtraFields) {
 }
 
 
-$defaults['publicated_on']  = ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');
-$defaults['expired_on']     = ($expired_on   !='0000-00-00 00:00:00' && !empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00',time()+84600);
+$defaults['publicated_on'] = (!empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');
+$defaults['expired_on'] = (!empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00',time()+84600);
 //$defaults['max_attempts'] = $_SESSION['oLP']->get_max_attempts();
 $defaults['subscribe_users'] = $_SESSION['oLP']->getSubscribeUsers();
 $form->setDefaults($defaults);

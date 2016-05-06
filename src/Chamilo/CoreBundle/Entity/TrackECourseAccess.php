@@ -79,7 +79,6 @@ class TrackECourseAccess
     private $courseAccessId;
 
 
-
     /**
      * Set cId
      *

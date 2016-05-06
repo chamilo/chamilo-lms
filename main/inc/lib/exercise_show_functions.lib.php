@@ -117,10 +117,14 @@ class ExerciseShowFunctions
         }
 	}
 
-	public static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $nano = null)
+	public static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $fileUrl = null)
     {
-        if (isset($nano)) {
-            echo $nano->show_audio_file();
+        if (isset($fileUrl)) {
+            echo '
+                <tr>
+                    <td><audio src="' . $fileUrl . '" controls></audio></td>
+                </tr>
+            ';
         }
 
         if (empty($id)) {

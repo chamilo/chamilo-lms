@@ -14,8 +14,8 @@ api_protect_admin_script();
 if ($action == 'syncthis') {
     $res = include_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/syncparams.controller.php';
     if (!$res) {
-        echo '<span class="ok">Success</span>';
+        echo '<span class="label label-success">Success</span>';
     } else {
-        echo '<span class="failed">Failure<br/>'.$errors.'</span>';
+        echo '<span class="label label-danger">Failure<br/>'.$errors.'</span>';
     }
 }

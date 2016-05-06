@@ -159,14 +159,14 @@ switch ($action) {
                     false
                 );
 
-                if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
+                if (empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
-                    $label      = get_lang('LearnpathAdded');
+                    $label = get_lang('LearnpathAdded');
                 } else {
-                    $lp_date    = api_get_local_time($lp_item['modified_on']);
-                    $image      = 'moderator_star.png';
-                    $label      = get_lang('LearnpathUpdated');
+                    $lp_date = api_get_local_time($lp_item['modified_on']);
+                    $image = 'moderator_star.png';
+                    $label = get_lang('LearnpathUpdated');
                 }
 
                 $icons = '';

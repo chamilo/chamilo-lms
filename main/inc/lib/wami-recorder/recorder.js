@@ -127,6 +127,8 @@ Wami.setup = function(options) {
 
 		var container = document.createElement('div');
 		container.style.position = 'absolute';
+        container.style.marginLeft = '-107px';
+        container.style.left = '50%';
         _options.cid = Wami.createID();
 		container.setAttribute('id', _options.cid);
 
@@ -161,7 +163,8 @@ Wami.setup = function(options) {
 		}
 
 		var params = {
-			allowScriptAccess : "always"
+			allowScriptAccess : "always",
+			wmode: 'transparent'
 		}
 
 		if (supportsTransparency()) {
@@ -239,7 +242,7 @@ Wami.setup = function(options) {
 
 			var augmentedfn = Wami.nameCallback(function() {
 				checkRemembered(finishedfn);
-				container.style.cssText = "position: absolute;";
+                container.style.cssText = "position: absolute; left:50%; margin-left:-107px";
 			});
 
 			container.style.cssText = "position: absolute; z-index: 99999";

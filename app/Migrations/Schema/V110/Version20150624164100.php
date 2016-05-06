@@ -17,8 +17,8 @@ class Version20150624164100 extends AbstractMigrationChamilo
     public function up(Schema $schema)
     {
         $this->addSql("INSERT INTO extra_field
-            (extra_field_type, field_type, variable, display_text, visible, changeable)
-            VALUES (3, 16, 'image', 'Image', 1, 1)");
+            (extra_field_type, field_type, variable, display_text, visible, changeable, created_at)
+            VALUES (3, 16, 'image', 'Image', 1, 1, NOW())");
     }
 
     /**

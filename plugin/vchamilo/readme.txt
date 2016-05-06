@@ -1,7 +1,7 @@
 Virtual Chamilo
 ##############################
 
-Author : Valery Fremaux (valery.fremaux@gmail.com)
+Author : Valery Fremaux (valery.fremaux@gmail.com), Julio Montoya
 
 Virtual chamilo is a feature that allows running several chamilo instances sharing the same
 code base.
@@ -10,7 +10,7 @@ Version features
 ##############################
 This is a yet prototypal version that is not full featured in back-office tools.
 At the moment, the setup of virtual clones still is a technical operation and has no
-middle-office GUI. Developement is in progress to offer a sufficiant medium-level
+middle-office GUI. Development is in progress to offer a sufficient medium-level
 administrability of the process.
 
 How to setup :
@@ -18,13 +18,13 @@ How to setup :
 
 You need :
 
-1/ Install the vchamilo package into the <chamiloroot>/plugin directory
-2/ Install the plugin in chamilo administration
-3/ Insert the virtualisation hook into the chamilo master configuration :
+1. Install the vchamilo package into the <chamiloroot>/plugin directory
+2. Install the plugin in chamilo administration
+3. Insert the virtualisation hook into the chamilo master configuration :
 
 file : <chamiloroot>/app/config/configuration.php
 
-insert the hook:
+Insert the hook:
 
 include_once $_configuration['root_sys'].'plugin/vchamilo/lib.php';
 vchamilo_hook_configuration($_configuration);
@@ -39,7 +39,7 @@ just before the login module section :
  * Login modules settings
  */
 
-Setup of virtual nodes :
+Setup of virtual nodes:
 
 what you need for a virtual node is :
 
@@ -52,7 +52,7 @@ as the chamilo instance domain name.
 the effective "configuration.php" information.
 - an appropriate multiroot home root setup in the local chamilo instance
 
-# Prerequisites for VCHamilo working nice
+# Prerequisites for VChamilo working nice
 
 Multiple URL access must be enabled :
 

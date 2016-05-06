@@ -27,7 +27,8 @@ if (api_is_platform_admin()) {
     $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 }
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
-if($allowTutors == 'true') {
+$extra_field_list = [];
+if ($allowTutors == 'true') {
     // Database Table Definitions
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -45,7 +46,7 @@ if($allowTutors == 'true') {
     $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
     // Checking for extra field with filter on
-    $extra_field_list= UserManager::get_extra_fields();
+    $extra_field_list = UserManager::get_extra_fields();
     $new_field_list = array();
     if (is_array($extra_field_list)) {
     	foreach ($extra_field_list as $extra_field) {
@@ -184,7 +185,7 @@ if($allowTutors == 'true') {
     		$rs = Database::query($sql);
             $i=0;
     		if ($type == 'single') {
-    			while ($user = Database :: fetch_array($rs)) {
+    			while ($user = Database::fetch_array($rs)) {
     	            $i++;
     	            if ($i<=10) {
                 		$person_name = api_get_person_name($user['firstname'], $user['lastname']);

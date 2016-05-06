@@ -316,13 +316,13 @@ class Wiki
         if (isset($values['initstartdate']) && $values['initstartdate'] == 1) {
             $_clean['startdate_assig'] = $values['startdate_assig'];
         } else {
-            $_clean['startdate_assig'] = '0000-00-00 00:00:00';
+            $_clean['startdate_assig'] = null;
         }
 
         if (isset($values['initenddate']) && $values['initenddate']==1) {
             $_clean['enddate_assig'] = $values['enddate_assig'];
         } else {
-            $_clean['enddate_assig'] = '0000-00-00 00:00:00';
+            $_clean['enddate_assig'] = null;
         }
 
         if (isset($values['delayedsubmit'])) {
@@ -622,13 +622,13 @@ class Wiki
         if (isset($values['initstartdate']) && $values['initstartdate'] == 1) {
             $_clean['startdate_assig'] = $values['startdate_assig'];
         } else {
-            $_clean['startdate_assig'] = '0000-00-00 00:00:00';
+            $_clean['startdate_assig'] = null;
         }
 
         if (isset($values['initenddate']) && $values['initenddate'] == 1) {
             $_clean['enddate_assig'] = $values['enddate_assig'];
         } else {
-            $_clean['enddate_assig'] = '0000-00-00 00:00:00';
+            $_clean['enddate_assig'] = null;
         }
 
         $_clean['delayedsubmit'] = isset($values['delayedsubmit']) ? $values['delayedsubmit'] : '';
@@ -768,25 +768,25 @@ class Wiki
 
             $style = "display:block";
             $row['initstartdate'] = 1;
-            if ($row['startdate_assig'] == '0000-00-00 00:00:00') {
+            if (empty($row['startdate_assig'])) {
                 $style = "display:none";
                 $row['initstartdate'] = null;
             }
 
             $form->addElement('html', '<div id="start_date" style="'.$style.'">');
-            $form->addElement('DatePicker', 'startdate_assig');
+            $form->addDatePicker('startdate_assig', '');
             $form->addElement('html', '</div>');
             $form->addElement('checkbox', 'initenddate', null, get_lang('EndDate'), array('id' => 'end_date_toggle'));
 
             $style = "display:block";
             $row['initenddate'] = 1;
-            if ($row['enddate_assig'] == '0000-00-00 00:00:00') {
+            if (empty($row['enddate_assig'])) {
                 $style = "display:none";
                 $row['initenddate'] = null;
             }
 
             $form->addElement('html', '<div id="end_date" style="'.$style.'">');
-            $form->addElement('DatePicker', 'enddate_assig');
+            $form->addDatePicker('enddate_assig', '');
             $form->addElement('html', '</div>');
             $form->addElement('checkbox', 'delayedsubmit', null, get_lang('AllowLaterSends'));
             $form->addElement('text', 'max_text', get_lang('NMaxWords'));
@@ -2655,7 +2655,7 @@ class Wiki
 
         $sql = 'UPDATE '.$tbl_wiki.' SET
                 is_editing = "0",
-                time_edit="0000-00-00 00:00:00"
+                time_edit = NULL
                 WHERE
                     c_id = '.$course_id.' AND
                     is_editing="'.$isEditing.'" '.
@@ -3006,24 +3006,26 @@ class Wiki
 
         //Creation date of the oldest wiki page and version
 
-        $first_wiki_date='0000-00-00 00:00:00';
+        $first_wiki_date = null;
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
-                ORDER BY dtime ASC LIMIT 1';
-        $allpages=Database::query($sql);
-        while ($row=Database::fetch_array($allpages)) {
-            $first_wiki_date=$row['dtime'];
+                ORDER BY dtime ASC 
+                LIMIT 1';
+        $allpages = Database::query($sql);
+        while ($row = Database::fetch_array($allpages)) {
+            $first_wiki_date = $row['dtime'];
         }
 
         // Date of publication of the latest wiki version.
 
-        $last_wiki_date='0000-00-00 00:00:00';
+        $last_wiki_date = null;
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
-                ORDER BY dtime DESC LIMIT 1';
-        $allpages=Database::query($sql);
+                ORDER BY dtime DESC 
+                LIMIT 1';
+        $allpages = Database::query($sql);
         while ($row=Database::fetch_array($allpages)) {
-            $last_wiki_date=$row['dtime'];
+            $last_wiki_date = $row['dtime'];
         }
 
         // Average score of all wiki pages. (If a page has not scored zero rated)
@@ -4903,11 +4905,9 @@ class Wiki
                 } else {
                     // Check tasks
 
-                    if (!empty($row['startdate_assig']) &&
-                        $row['startdate_assig']!='0000-00-00 00:00:00' &&
-                        time()<strtotime($row['startdate_assig'])
+                    if (!empty($row['startdate_assig']) &&  time() < api_strtotime($row['startdate_assig'])
                     ) {
-                        $message = get_lang('TheTaskDoesNotBeginUntil').': '.api_get_local_time($row['startdate_assig'], null, date_default_timezone_get());
+                        $message = get_lang('TheTaskDoesNotBeginUntil').': '.api_get_local_time($row['startdate_assig']);
 
                         Display::addFlash(
                             Display::return_message(
@@ -4922,12 +4922,10 @@ class Wiki
                     }
 
                     if (!empty($row['enddate_assig']) &&
-                        $row['enddate_assig']!='0000-00-00 00:00:00' &&
                         time() > strtotime($row['enddate_assig']) &&
-                        $row['enddate_assig']!='0000-00-00 00:00:00' &&
                         $row['delayedsubmit']==0
                     ) {
-                        $message = get_lang('TheDeadlineHasBeenCompleted').': '.api_get_local_time($row['enddate_assig'], null, date_default_timezone_get());
+                        $message = get_lang('TheDeadlineHasBeenCompleted').': '.api_get_local_time($row['enddate_assig']);
                         Display::addFlash(
                             Display::return_message(
                                 $message,
@@ -4967,16 +4965,16 @@ class Wiki
 
                     if (!empty($row['task'])) {
                         //previous change 0 by text
-                        if ($row['startdate_assig']=='0000-00-00 00:00:00') {
+                        if (!empty($row['startdate_assig'])) {
                             $message_task_startdate  =get_lang('No');
                         } else {
-                            $message_task_startdate = api_get_local_time($row['startdate_assig'], null, date_default_timezone_get());
+                            $message_task_startdate = api_get_local_time($row['startdate_assig']);
                         }
 
-                        if ($row['enddate_assig']=='0000-00-00 00:00:00') {
+                        if (!empty($row['enddate_assig'])) {
                             $message_task_enddate = get_lang('No');
                         } else {
-                            $message_task_enddate = api_get_local_time($row['enddate_assig'], null, date_default_timezone_get());
+                            $message_task_enddate = api_get_local_time($row['enddate_assig']);
                         }
 
                         if ($row['delayedsubmit']==0) {

@@ -63,6 +63,13 @@ $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/js/hotspot.js"></script>';
 
+if (api_get_setting('enable_record_audio') === 'true') {
+    $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'rtc/RecordRTC.js"></script>';
+    $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/recorder.js"></script>';
+    $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/gui.js"></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'swfobject/swfobject.js"></script>';
+}
+
 $template = new Template();
 
 // General parameters passed via POST/GET
@@ -721,20 +728,20 @@ if ($is_visible_return['value'] == false) {
     exit;
 }
 
-$limit_time_exists = (($objExercise->start_time != '0000-00-00 00:00:00') || ($objExercise->end_time != '0000-00-00 00:00:00')) ? true : false;
+$limit_time_exists = (!empty($objExercise->start_time) || !empty($objExercise->end_time)) ? true : false;
 
 if ($limit_time_exists) {
     $exercise_start_time = api_strtotime($objExercise->start_time, 'UTC');
     $exercise_end_time = api_strtotime($objExercise->end_time, 'UTC');
     $time_now = time();
 
-    if ($objExercise->start_time != '0000-00-00 00:00:00') {
+    if (!empty($objExercise->start_time)) {
         $permission_to_start = (($time_now - $exercise_start_time) > 0) ? true : false;
     } else {
         $permission_to_start = true;
     }
     if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-        if ($objExercise->end_time != '0000-00-00 00:00:00') {
+        if (!empty($objExercise->end_time)) {
             $exercise_timeover = (($time_now - $exercise_end_time) > 0) ? true : false;
         } else {
             $exercise_timeover = false;
@@ -761,7 +768,7 @@ global $_custom;
 if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     $_custom['exercises_hidden_when_no_start_date']
 ) {
-	if (empty($objExercise->start_time) || $objExercise->start_time == '0000-00-00 00:00:00') {
+	if (empty($objExercise->start_time)) {
         Display:: display_warning_message(
             sprintf(
                 get_lang('ExerciseNoStartedYet'),

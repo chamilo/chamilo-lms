@@ -167,6 +167,7 @@ echo '</div>';
 
 // Set forum attachment data into $_SESSION
 getAttachedFiles($current_forum['forum_id'], 0, 0);
+
 $values = show_add_post_form(
     $current_forum,
     $forum_setting,

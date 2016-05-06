@@ -303,9 +303,9 @@ foreach ($final_array as $session_data) {
                     if (!empty($best_score_data)) {
                         $best_score = ExerciseLib::show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
                     }
+                    
                     // Exercise results
                     $counter = 1;
-
                     foreach ($exercise_data as $exercise_item) {
                         $result_list     = $exercise_item['results'];
                         $exercise_info   = $exercise_item['exercise_data'];

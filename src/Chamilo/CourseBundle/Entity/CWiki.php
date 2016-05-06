@@ -90,7 +90,7 @@ class CWiki
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dtime", type="datetime", nullable=false)
+     * @ORM\Column(name="dtime", type="datetime", nullable=true)
      */
     private $dtime;
 
@@ -181,7 +181,7 @@ class CWiki
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="time_edit", type="datetime", nullable=false)
+     * @ORM\Column(name="time_edit", type="datetime", nullable=true)
      */
     private $timeEdit;
 

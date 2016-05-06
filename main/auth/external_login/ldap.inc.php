@@ -311,7 +311,7 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
     $auth_source   = 'ldap';
 
     // No expiration date for students (recover from LDAP's shadow expiry)
-    $expiration_date = '0000-00-00 00:00:00';
+    $expiration_date = '';
     $active          = 1;
     if (empty($status)) {
         $status = 5;

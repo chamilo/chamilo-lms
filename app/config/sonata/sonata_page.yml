@@ -45,13 +45,14 @@ sonata_page:
         - ^/courses/(.*)
         - ^/front/editor
         - ^/contact(.*) # sonata admin
+        - ^/cms/pages/latest
+        - ^/cms/pages/latest/(.*)
 
     ignore_route_patterns:
         - (.*)administration(.*)     # ignore admin route, ie route containing 'admin'  # sonata admin
         - ^_(.*)            # ignore symfony routes
         - fos_user(.*)
         - sylius_flow(.*)
-
 
     ignore_routes:
         - home
@@ -75,6 +76,7 @@ sonata_page:
         - sylius_flow_display
         - sylius_flow_forward
         - chamilo_core_user_user_mycourses
+        - chamilo_page_page_getlatestpages
 
     cache_invalidation:
         service:  sonata.page.cache.invalidation.simple

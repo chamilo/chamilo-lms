@@ -1655,39 +1655,24 @@ div.admin_section h4 {
 }
 
 .document_preview_container {
-
-    -webkit-border-radius: 6px;
-    -opera-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-
-    -webkit-box-shadow: 0 2px 5px #C8C8C8;
-    -opera-box-shadow: 0 2px 5px #C8C8C8;
-    -moz-box-shadow: 0 2px 5px #C8C8C8;
-    box-shadow: 0 2px 5px #C8C8C8;
-
-    background-color: #F9F9F9;
-
+    border-radius: 5px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+    background-color: #FFF;
+    border: 1px solid #DDD;
     position: absolute;
     z-index: 20;
     margin:5px;
     padding:5px;
-    width: 400px;
-    height:280px;
+    width: 310px;
+    height: 200px;
     overflow-y: auto;
-
+    top: -5px;
+    left: 25px;
 }
-
 
 #course_settings h3 img {
     margin-left: 25px;
 }
-
-.document_preview_container {
-    font-size: 12px !important;
-    color: #111 ! important;
-}
-
 /* Exercise comment*/
 #comments {
     position:absolute;
@@ -4339,13 +4324,11 @@ ul.exercise-draggable-answer .touch-items{
   background-image: -ms-linear-gradient(top, #ffffff, #cfcfcf);
   background-image: -o-linear-gradient(top, #ffffff, #cfcfcf);
   background-image: linear-gradient(to bottom, #ffffff, #cfcfcf);
-  -webkit-border-radius: 4;
-  -moz-border-radius: 4;
   border-radius: 4px;
   font-family: Arial;
   color: #2e2e2e;
   font-size: 13px;
-  padding: 10px 20px 10px 20px;
+  padding: 5px 10px;
   border: solid #b0b0b0 1px;
   text-decoration: none;
   z-index: 100;
@@ -4363,15 +4346,15 @@ ul.exercise-draggable-answer .touch-items:hover{
   padding: 10px 20px;
 }
 .question_options .droppable {
-  margin: 0 20px 20px 0;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
   background-color: #ECF0F1;
-  border: dotted #dddddd 4px;
+  border: dotted #dddddd 2px;
   border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
   color:#666666;
+}
+.question_options .ui-helper-reset{
+    margin-top: -25px;
 }
 .question_options .droppable .gallery .btn-default {
   background: #D9534F;
@@ -4384,12 +4367,17 @@ ul.exercise-draggable-answer .touch-items:hover{
   border-color: #AC2925;
 }
 .question_options .droppable .gallery .exercise-draggable-answer-option {
-  margin-bottom: 15px;
-  background-color: #286090;
-  color: #ffffff;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 4px;
+  margin-bottom: 0;
+background: #feffff;
+background: -moz-linear-gradient(top, #feffff 0%, #d2ebf9 100%);
+background: -webkit-linear-gradient(top, #feffff 0%,#d2ebf9 100%);
+background: linear-gradient(to bottom, #feffff 0%,#d2ebf9 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#d2ebf9',GradientType=0 );
+  border: 1px solid #DDDDDD;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 /***    Matching Draggable answer ***/
@@ -4855,6 +4843,137 @@ div#chat-remote-video video {
   border: 1px solid #ddd;
   width: 100px;
   height: 100px;
+}
+/* list courses classic*/
+.classic-courses .teachers{
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-size: 12px;
+}
+.classic-courses .teachers li{
+    display: inline-block;
+}
+/* list my course user*/
+
+.grid-courses .items{
+    /* position: relative; */
+    vertical-align: top;
+    white-space: normal;
+    margin: 0px 5px 15px 0px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+    text-align: left;
+    background-color: #fff;
+    min-height: 235px;
+    border: 1px solid #DFDFDF;
+    border-radius: 5px;
+}
+.hot-courses .grid-courses .items{
+   min-height: 275px;
+}
+.grid-courses .items .title{
+    line-height: 1.4;
+    font-size: 13px;
+    min-height: 40px;
+    padding: 0px;
+    margin: 5px;
+}
+.grid-courses .items .toolbar{
+    text-align: right;
+}
+.grid-courses .items .image{
+    position: relative;
+}
+.grid-courses .items .image .pin{
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    z-index: 2;
+}
+.grid-courses .items .ranking{
+    font-size: 10px;
+}
+.grid-courses .items .image .black-shadow{
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    padding-top: 40px;
+    opacity: 0;
+    box-sizing: border-box;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.7) none repeat scroll 0% 0%;
+    padding: 10px;
+}
+.grid-courses .items .image .hovered-course{
+    opacity: 1;
+    transition: all 0.3s ease 0s;
+}
+.grid-courses .items .notifications{
+    padding-top: 5px;
+    text-align: center;
+}
+.grid-courses .items .buycourses-price{
+    margin-top: 5px;
+    text-align: left;
+}
+.grid-courses .items .separator{
+    margin-top: 5px;
+}
+.grid-courses .items .admin-actions, .grid-courses .items .user-actions{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+.grid-courses .items .admin-actions .btn-sm,.grid-courses .items .user-actions .btn-sm{
+    border-radius: 0;
+    border: none;
+}
+.grid-courses .items .category{
+    position: absolute;
+    bottom: 0px;
+    right: -10px;
+    background-color: #FD6600;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    z-index: 2;
+}
+.grid-courses .items .cribbon{
+    width: 0;
+    height: 0;
+    border-top: 10px solid #FD3414;
+    border-right: 10px solid transparent;
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+}
+.grid-courses .items .description{
+    padding: 5px 10px;
+}
+.grid-courses .items .author-card{
+    display: flex;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+.grid-courses .items .author-card img{
+    border: 2px solid #fff;
+}
+.grid-courses .items .author-card .teachers-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.grid-courses .items .author-card .teachers-details h5{
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.grid-courses .items .author-card .teachers-details h5 a{
+    color: #fff;
 }
 /* Catalog session */
 #session-list .col-md-4:nth-child(3n+1) {
@@ -5684,6 +5803,12 @@ a.sessionView {
 .modal-body .sectioncomment{
     color: #666;
 }
+
+.wami-container {
+    height: 144px;
+    position: relative;
+}
+
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
@@ -5866,6 +5991,10 @@ a.sessionView {
     }
     .gallery .canvas-two{
         width: 100%;
+    }
+    .grid-courses .items{
+        margin-left: 5%;
+        margin-right: 5%;
     }
 }
 

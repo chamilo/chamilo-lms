@@ -348,19 +348,7 @@ if (is_array($forumCategories)) {
 
         echo '<div class="forum_display">';
         if (!empty($forumsInCategory)) {
-
-            // Step 4: The interim headers (for the forum).
-            /* echo '<tr class="forum_header">';
-            echo '<td></td>';
-            echo '<td>'.get_lang('Forum').'</td>';
-            echo '<td>'.get_lang('Topics').'</td>';
-            echo '<td>'.get_lang('Posts').'</td>';
-            echo '<td>'.get_lang('LastPosts').'</td>';
-            echo '<td>'.get_lang('Actions').'</td>';
-            echo '</tr>'; */
-
-            // Step 5: We display all the forums in this category.
-
+            // We display all the forums in this category.
             foreach ($forum_list as $forum) {
                 // Here we clean the whatnew_post_info array a little bit because to display the icon we
                 // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
@@ -420,10 +408,7 @@ if (is_array($forumCategories)) {
                         // Showing the image
                         if (!empty($forum['forum_image'])) {
 
-                            $image_path = api_get_path(WEB_COURSE_PATH)
-                                . api_get_course_path()
-                                . '/upload/forum/images/'
-                                . $forum['forum_image'];
+                            $image_path = api_get_path(WEB_COURSE_PATH). api_get_course_path(). '/upload/forum/images/'. $forum['forum_image'];
                             $image_size = api_getimagesize($image_path);
                             $img_attributes = '';
                             if (!empty($image_size)) {
@@ -501,23 +486,21 @@ if (is_array($forumCategories)) {
                             null,
                             ICON_SIZE_MEDIUM
                         );
-                        $linkForum  = '';
-                        $linkForum .= Display::tag(
+                        $linkForum = Display::tag(
                             'a',
                             $forum['forum_title'],
                             array (
                                 'href' => 'viewforum.php?' . api_get_cidreq()
                                     . '&gidReq=' . intval($groupid)
                                     . '&forum=' . intval($forum['forum_id']),
-                                'class' => return_visible_invisible( strval( intval($forum['visibility']) ) )
+                                'class' => return_visible_invisible(strval(intval($forum['visibility'])))
                             )
                         );
 
                         $html .= '<h3 class="title">' . $iconForum . $linkForum . '</h3>';
-
                         $html .= Display::tag(
                             'p',
-                            strip_tags($forum['forum_comment']),
+                            Security::remove_XSS($forum['forum_comment']),
                             array(
                                 'class'=>'description'
                             )
@@ -525,7 +508,7 @@ if (is_array($forumCategories)) {
                         $html .= '</div>';
                         $html .= '</div>';
 
-                        $iconEmpty='';
+                        $iconEmpty = '';
 
                         // The number of topics and posts.
                         if ($forum['forum_of_group'] !== '0') {
@@ -597,8 +580,7 @@ if (is_array($forumCategories)) {
                         $html .= '</div>';
                         $html .= '<div class="col-md-4">';
 
-                        if (
-                            api_is_allowed_to_edit(false, true) &&
+                        if (api_is_allowed_to_edit(false, true) &&
                             !($forum['session_id'] == 0 && intval($sessionId) != 0)
                         ) {
                             $html .= '<a href="'.api_get_self() . '?' . api_get_cidreq()
@@ -613,16 +595,19 @@ if (is_array($forumCategories)) {
                                 . "')) return false;\">"
                                 . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL)
                                 . '</a>';
+
                             $html .= return_visible_invisible_icon(
                                 'forum',
                                 $forum['forum_id'],
                                 $forum['visibility']
                             );
+
                             $html .= return_lock_unlock_icon(
                                 'forum',
                                 $forum['forum_id'],
                                 $forum['locked']
                             );
+
                             $html .= return_up_down_icon(
                                 'forum',
                                 $forum['forum_id'],

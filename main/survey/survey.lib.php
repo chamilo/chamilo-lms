@@ -3605,11 +3605,12 @@ class SurveyUtil
                     survey_invitation.survey_id = '".intval($_GET['survey_id'])."' AND
                     session_id='".api_get_session_id()."'  ";
         $res = Database::query($sql);
+        $data = [];
         while ($row = Database::fetch_array($res)) {
-            $survey_invitation_data[] = $row;
+            $data[] = $row;
         }
 
-        return $survey_invitation_data;
+        return $data;
     }
 
     /**
@@ -3650,7 +3651,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    static function save_invite_mail($mailtext, $mail_subject, $reminder = 0)
+    public static function save_invite_mail($mailtext, $mail_subject, $reminder = 0)
     {
         $course_id = api_get_course_int_id();
         // Database table definition
@@ -3663,8 +3664,7 @@ class SurveyUtil
             $mail_field = 'reminder_mail';
         }
 
-        $sql = "UPDATE $table_survey
-		        SET
+        $sql = "UPDATE $table_survey SET
 		        mail_subject='".Database::escape_string($mail_subject)."',
 		        $mail_field = '".Database::escape_string($mailtext)."'
 		        WHERE c_id = $course_id AND survey_id = '".intval($_GET['survey_id'])."'";
@@ -3934,7 +3934,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    static function update_count_invited($survey_code)
+    public static function update_count_invited($survey_code)
     {
         $course_id = api_get_course_int_id();
 
@@ -4050,7 +4050,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version September 2007
      */
-    static function get_invitations($survey_code)
+    public static function get_invitations($survey_code)
     {
         $course_id = api_get_course_int_id();
         // Database table definition
@@ -4079,47 +4079,17 @@ class SurveyUtil
      * @todo use quickforms
      * @todo consider moving this to surveymanager.inc.lib.php
      */
-    static function display_survey_search_form()
+    public static function display_survey_search_form()
     {
-        echo '<form class="form-horizontal" method="get" action="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?search=advanced">';
-        echo '<legend>'.get_lang('SearchASurvey').'</legend>';
-        echo '	<div class="control-group">
-					<label class="control-label">
-						'.get_lang('Title').'
-					</label>
-					<div class="controls">
-						<input type="text" id="search_title" name="keyword_title"/>
-					</div>
-				</div>';
-        echo '	<div class="control-group">
-					<label class="control-label">
-						'.get_lang('Code').'
-					</label>
-					<div class="controls">
-						<input type="text" name="keyword_code"/>
-					</div>
-				</div>';
-        echo '	<div class="control-group">
-					<label class="control-label">
-						'.get_lang('Language').'
-					</label>
-					<div class="controls">';
-        echo '			<select name="keyword_language"><option value="%">'.get_lang('All').'</option>';
-        $languages = api_get_languages();
-        foreach ($languages['name'] as $index => & $name) {
-            echo '<option value="'.$languages['folder'][$index].'">'.$name.'</option>';
-        }
-        echo '			</select>';
-        echo '		</div>
-				</div>';
-        echo '<input type="hidden" name="cidReq" value="'.api_get_course_id().'"/>';
-        echo '	<div class="control-group">
-					<div class="controls">
-						<button class="search" type="submit" name="do_search">'.get_lang('Search').'</button>
-					</div>
-				</div>';
-        echo '</form>';
-        echo '<div style="clear: both;margin-bottom: 10px;"></div>';
+        $url = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?search=advanced&'.api_get_cidreq();
+        $form = new FormValidator('search', 'get', $url);
+        $form->addHeader(get_lang('SearchASurvey'));
+        $form->addText('keyword_title', get_lang('Title'));
+        $form->addText('keyword_code', get_lang('Code'));
+        $form->addSelectLanguage('keyword_language', get_lang('Language'));
+        $form->addHidden('cidReq', api_get_course_id());
+        $form->addButtonSearch(get_lang('Search'), 'do_search');
+        $form->display();
     }
 
     /**
@@ -4156,7 +4126,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    static function display_survey_list()
+    public static function display_survey_list()
     {
         $parameters = array();
         $parameters['cidReq'] = api_get_course_id();
@@ -4187,7 +4157,10 @@ class SurveyUtil
         $table->display();
     }
 
-    function display_survey_list_for_coach()
+    /**
+     * Survey list for coach
+     */
+    public static function display_survey_list_for_coach()
     {
         $parameters = array();
         $parameters['cidReq']=api_get_course_id();
@@ -4227,7 +4200,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    static function modify_filter($survey_id, $drh = false)
+    public static function modify_filter($survey_id, $drh = false)
     {
         $survey_id = Security::remove_XSS($survey_id);
         $return = '';
@@ -4273,7 +4246,7 @@ class SurveyUtil
         return $return;
     }
 
-    static function modify_filter_for_coach($survey_id)
+    public static function modify_filter_for_coach($survey_id)
     {
         $survey_id = Security::remove_XSS($survey_id);
         //$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&action=edit&survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
@@ -4283,7 +4256,7 @@ class SurveyUtil
         $return = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/preview.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
         $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.Display::return_icon('mail_send.png', get_lang('Publish'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
         $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=empty&survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-        //$return .= '<a href="reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
+
         return $return;
     }
 
@@ -4292,7 +4265,7 @@ class SurveyUtil
      * @param	integer	Whether anonymous or not
      * @return	string	"Yes" or "No" in the current language
      */
-    static function anonymous_filter($anonymous)
+    public static function anonymous_filter($anonymous)
     {
         if ($anonymous == 1) {
             return get_lang('Yes');
@@ -4309,7 +4282,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    static function survey_search_restriction()
+    public static function survey_search_restriction()
     {
         if (isset($_GET['do_search'])) {
             if ($_GET['keyword_title'] != '') {
@@ -4337,7 +4310,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    static function get_number_of_surveys()
+    public static function get_number_of_surveys()
     {
         $table_survey = Database :: get_course_table(TABLE_SURVEY);
         $course_id = api_get_course_int_id();
@@ -4355,7 +4328,7 @@ class SurveyUtil
         return $obj->total_number_of_items;
     }
 
-    static function get_number_of_surveys_for_coach()
+    public static function get_number_of_surveys_for_coach()
     {
         $survey_tree = new SurveyTree();
         return count($survey_tree->get_last_children_from_branch($survey_tree->surveylist));
@@ -4375,7 +4348,7 @@ class SurveyUtil
      * @author Julio Montoya <gugli100@gmail.com>, Beeznest - Adding intvals
      * @version January 2007
      */
-    static function get_survey_data($from, $number_of_items, $column, $direction, $isDrh = false)
+    public static function get_survey_data($from, $number_of_items, $column, $direction, $isDrh = false)
     {
         $table_survey = Database :: get_course_table(TABLE_SURVEY);
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -4413,14 +4386,14 @@ class SurveyUtil
 					survey.session_id AS session_id,
 					survey.answered,
 					survey.invited
-				 FROM $table_survey survey
-                    LEFT JOIN $table_survey_question survey_question
-                    ON (survey.survey_id = survey_question.survey_id AND survey_question.c_id = $course_id)
-                    LEFT JOIN $table_user user
-                    ON (survey.author = user.user_id)
-				 WHERE survey.c_id = $course_id
-				 $search_restriction
-				 $condition_session ";
+                FROM $table_survey survey
+                LEFT JOIN $table_survey_question survey_question
+                ON (survey.survey_id = survey_question.survey_id AND survey_question.c_id = $course_id)
+                LEFT JOIN $table_user user
+                ON (survey.author = user.user_id)
+                WHERE survey.c_id = $course_id
+                $search_restriction
+                $condition_session ";
         $sql .= " GROUP BY survey.survey_id";
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";
@@ -4465,7 +4438,7 @@ class SurveyUtil
         return $surveys;
     }
 
-    static function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
+    public static function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
     {
         $survey_tree = new SurveyTree();
         $last_version_surveys = $survey_tree->get_last_children_from_branch($survey_tree->surveylist);
@@ -4486,13 +4459,12 @@ class SurveyUtil
             $direction = 'asc';
         }
 
-        $table_survey 			= Database :: get_course_table(TABLE_SURVEY);
-        $table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
+        $table_survey = Database:: get_course_table(TABLE_SURVEY);
+        $table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
+        $table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
         $course_id = api_get_course_int_id();
 
-        //IF(is_shared<>0,'V','-')	 					AS col6,
         $sql = "SELECT ".
             "survey.survey_id							AS col0, ".
             "survey.title	                            AS col1, ".
@@ -4518,6 +4490,7 @@ class SurveyUtil
         while ($survey = Database::fetch_array($res)) {
             $surveys[] = $survey;
         }
+
         return $surveys;
     }
 
@@ -4640,7 +4613,7 @@ class SurveyUtil
      * @return array[value_name][name]
      * 		   array[value_name][visibilty]
      */
-    static function make_field_list()
+    public static function make_field_list()
     {
         //	LAST NAME and FIRST NAME
         $field_list_array = array();
@@ -4786,7 +4759,7 @@ class SurveyUtil
      * @param int $user_id_answer - User in survey answer table (user id or anonymus)
      * @return boolean
      */
-    static function show_link_available($user_id, $survey_code, $user_answer)
+    public static function show_link_available($user_id, $survey_code, $user_answer)
     {
         $table_survey             = Database :: get_course_table(TABLE_SURVEY);
         $table_survey_invitation  = Database :: get_course_table(TABLE_SURVEY_INVITATION);

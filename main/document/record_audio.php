@@ -2,13 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This file allows creating new svg and png documents with an online editor.
- *
- *	@package chamilo.document
- *
- * @author Juan Carlos Raña Trabado herodoto@telefonica.net
- * @since 5/mar/2011
-*/
+ * This file allows record audio files.
+ * @package chamilo.document
+ */
 
 require_once '../inc/global.inc.php';
 
@@ -19,27 +15,26 @@ $nameTools = get_lang('VoiceRecord');
 
 api_protect_course_script();
 api_block_anonymous_users();
-$groupId = api_get_group_id();
-$document_data  = array();
 
-if (isset($_GET['id'])) {
-	$document_data = DocumentManager::get_document_data_by_id(
-		$_GET['id'],
-		api_get_course_id(),
-		true
-	);
-}
-
+$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
 if (empty($document_data)) {
-    if (api_is_in_group()) {
-        $group_properties = GroupManager::get_group_properties($groupId);
-        $document_id = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
-        $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
-    }
+	if (api_is_in_group()) {
+		$group_properties   = GroupManager::get_group_properties(api_get_group_id());
+		$document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
+		$document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+	}
 }
 
 $document_id = $document_data['id'];
 $dir = $document_data['path'];
+
+//make some vars
+$wamidir=$dir;
+if($wamidir=="/"){
+	$wamidir="";
+}
+$wamiurlplay = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$wamidir."/";
+$groupId = api_get_group_id();
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -68,8 +63,10 @@ if (!is_dir($filepath)) {
 	$dir = '/';
 }
 
+//groups //TODO: clean
 if (!empty($groupId)) {
 	$interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
+	$noPHP_SELF = true;
 	$group = GroupManager :: get_group_properties($groupId);
 	$path = explode('/', $dir);
 	if ('/'.$path[1] != $group['directory']) {
@@ -102,101 +99,43 @@ if (isset ($group)) {
 // Interbreadcrumb for the current directory root path
 $counter = 0;
 if (isset($document_data['parents'])) {
-    foreach($document_data['parents'] as $document_sub_data) {
-        //fixing double group folder in breadcrumb
-        if (api_get_group_id()) {
-            if ($counter == 0) {
-                $counter++;
-                continue;
-            }
-        }
-        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
-        $counter++;
-    }
-}
-Display :: display_header($nameTools, 'Doc');
-
-echo '<div class="actions">';
-		echo '<a href="document.php?'.api_get_cidreq().'&id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
-?>
-<script type="text/javascript">
-function submitVoice() {
-	//lang vars
-	var lang_no_applet="<?php echo get_lang('NanogongNoApplet'); ?>";
-	var lang_record_before_save="<?php echo get_lang('NanogongRecordBeforeSave'); ?>";
-	var lang_give_a_title="<?php echo get_lang('NanogongGiveTitle'); ?>";
-	var lang_failled_to_submit="<?php echo get_lang('NanogongFailledToSubmit'); ?>";
-	var lang_submitted="<?php echo get_lang('NanogongSubmitted'); ?>";
-	// user and group id
-	var nano_user_id="<?php echo api_get_user_id(); ?>";
-	var nano_group_id="<?php echo api_get_group_id(); ?>";
-	var nano_session_id="<?php echo api_get_session_id(); ?>";
-	//path, url and filename
-	var filename = document.getElementById("audio_title").value+"_chnano_.wav";//adding name file, tag and extension
-	var filename = filename.replace(/\s/g, "_");//replace spaces by _
-	var filename = encodeURIComponent(filename);
-	var filepath="<?php echo urlencode($filepath); ?>";
-	var dir="<?php echo urlencode($dir); ?>";
-	var course_code="<?php echo urlencode($course_code); ?>";
-	//
-	var urlnanogong="../inc/lib/nanogong/receiver.php?filename="+filename+"&filepath="+filepath+"&dir="+dir+"&course_code="+course_code+"&nano_group_id="+nano_group_id+"&nano_session_id="+nano_session_id+"&nano_user_id="+nano_user_id;
-	var cookie="<?php  echo 'ch_sid='.session_id(); ?>";
-
-	//check
-	var recorder
-	if (!(recorder = document.getElementById("nanogong"))) {
-    	alert(lang_no_applet)
-	  	return
-	}
-	var duration = parseInt(recorder.sendGongRequest("GetMediaDuration", "audio")) || 0
-	if (duration <= 0) {
-	  	alert(lang_record_before_save)
-	  	return
-	}
-	if (!document.getElementById("audio_title").value) {
-		alert(lang_give_a_title)
-		return
-	}
-	//
-	var applet = document.getElementById("nanogong");
-	var ret = applet.sendGongRequest( "PostToForm", urlnanogong, "voicefile", cookie, "temp");//'PostToForm', postURL, inputname, cookie, filename
-
-	if (ret == null)  {
-	    alert(lang_failled_to_submit);
-	} else {
-	    alert(lang_submitted+"\n"+ret);
-	    $("#status").attr('value', '1');
+	foreach($document_data['parents'] as $document_sub_data) {
+		//fixing double group folder in breadcrumb
+		if (api_get_group_id()) {
+			if ($counter == 0) {
+				$counter++;
+				continue;
+			}
+		}
+		$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+		$counter++;
 	}
 }
-</script>
 
-<?php
+//make some vars
+$wamiuserid = api_get_user_id();
 
-echo '<div align="center">';
-Display::display_icon('microphone.png', get_lang('PressRecordButton'),'','128');
-echo '<br/>';
-echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="95" ALIGN="middle">';
-	//echo '<param name="ShowRecordButton" value="false" />'; // default true
-	// echo '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
-	//echo '<param name="ShowSpeedButton" value="false" />'; // default true
-	//echo '<param name="ShowAudioLevel" value="false" />'; //  it displays the audiometer | (default true)
-	echo '<param name="ShowTime" value="true" />'; // default false
-	//echo '<param name="Color" value="#C0E0FF" />'; // default #FFFFFF
-	//echo '<param name="StartTime" value="10.5" />';
-	//echo '<param name="EndTime" value="65" />';
-	echo '<param name="AudioFormat" value="ImaADPCM" />';// ImaADPCM (more speed), Speex (more compression)|(default Speex)
-	//echo '<param name="SamplingRate" value="32000" />';//Quality for ImaADPCM (low 8000, medium 11025, normal 22050, hight 44100) OR Quality for Speex (low 8000, medium 16000, normal 32000, hight 44100) | (default 44100)
-	//echo '<param name="MaxDuration" value="60" />';
-	//echo '<param name="SoundFileURL" value="http://somewhere.com/mysoundfile.wav" />';//load a file |(default "")
-echo '</applet>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'rtc/RecordRTC.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/recorder.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/gui.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'swfobject/swfobject.js"></script>';
 
-echo '<form name="form_nanogong">';
-	echo '<input placeholder="'.get_lang('InputNameHere').'" type="text" id="audio_title">';
-	echo '<input id="status" type="hidden" name="status" value="0">';
-	echo '<button class="upload" type="submit" value="'.get_lang('Send').'" onClick="submitVoice()" />'.get_lang('Send').'</button>';
-echo '</form>';
+$actions = Display::toolbarButton(
+	get_lang('BackTo') . ' ' . get_lang('DocumentsOverview'),
+	'document.php?' . api_get_cidreq() . "&id=$document_id",
+	'arrow-left',
+	'default',
+	[],
+	false
+);
 
-echo '</div>';
-Display :: display_footer();
+$template = new Template($nameTools);
+$template->assign('directory', $wamidir);
+$template->assign('user_id', api_get_user_id());
+
+$layout = $template->get_template('document/record_audio.tpl');
+$content = $template->fetch($layout);
+
+$template->assign('actions', $actions);
+$template->assign('content', $content);
+$template->display_one_col_template();

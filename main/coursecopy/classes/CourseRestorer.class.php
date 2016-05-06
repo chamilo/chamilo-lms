@@ -1166,7 +1166,7 @@ class CourseRestorer
         $params['forum_id'] = $forum_id;
         $params['thread_poster_id'] = $this->first_teacher_id;
         $params['thread_date'] = api_get_utc_datetime();
-        $params['thread_close_date']  = '0000-00-00 00:00:00';
+        $params['thread_close_date'] = null;
         $params['thread_last_post'] = 0;
         $params['thread_replies'] = 0;
         $params['thread_views'] = 0;
@@ -3179,8 +3179,8 @@ class CourseRestorer
                             }
 
                             //$obj->params['qualification'] = empty($row['enable_qualification']) ? true : false;
-                            $obj->params['enableExpiryDate'] = $row['expires_on'] == '0000-00-00 00:00:00' ? false : true;
-                            $obj->params['enableEndDate'] = $row['ends_on'] == '0000-00-00 00:00:00' ? false : true;
+                            $obj->params['enableExpiryDate'] = empty($row['expires_on']) ? false : true;
+                            $obj->params['enableEndDate'] = empty($row['ends_on']) ? false : true;
                             $obj->params['expires_on'] = $row['expires_on'];
                             $obj->params['ends_on'] = $row['ends_on'];
                             $obj->params['enable_qualification'] = $row['enable_qualification'];

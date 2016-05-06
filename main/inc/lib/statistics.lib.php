@@ -293,7 +293,7 @@ class Statistics
                 }
             }
 
-            if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {
+            if (!empty($row['default_date'])) {
                 $row['default_date'] = api_get_local_time($row['default_date']);
             } else {
                 $row['default_date'] = '-';
@@ -530,7 +530,7 @@ class Statistics
             Statistics::printStats(get_lang('Logins'), $totalLogin, false);
         }
     }
-    
+
     /**
      * get the number of recent logins
      * @param bool    $distinct   Whether to only give distinct users stats, or *all* logins
@@ -555,15 +555,15 @@ class Statistics
             $field = 'DISTINCT(login_user_id)';
         }
         $sql = "SELECT count($field) AS number, date(login_date) as login_date FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 15 DAY) >= '$now' $where_url GROUP BY date(login_date)";
-        
+
         $res = Database::query($sql);
         while($row = Database::fetch_array($res,'ASSOC')){
             $totalLogin[$row['login_date']] = $row['number'];
         }
-        
+
         return $totalLogin;
     }
-    
+
     /**
      * Show some stats about the accesses to the different course tools
      */

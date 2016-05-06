@@ -15,6 +15,15 @@ class TrackEDownloads
     /**
      * @var integer
      *
+     * @ORM\Column(name="down_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $downId;
+    
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="down_user_id", type="integer", nullable=true)
      */
     private $downUserId;
@@ -46,17 +55,6 @@ class TrackEDownloads
      * @ORM\Column(name="down_session_id", type="integer", nullable=false)
      */
     private $downSessionId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="down_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $downId;
-
-
 
     /**
      * Set downUserId

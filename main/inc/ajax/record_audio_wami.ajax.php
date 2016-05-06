@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once '../../../inc/global.inc.php';
+require_once '../global.inc.php';
 
 // Add security from Chamilo
 api_protect_course_script();
@@ -56,7 +56,6 @@ if (!is_dir($saveDir)) {
 
 //avoid duplicates
 $waminame_to_save = $waminame;
-$title_to_save    = str_replace('_', ' ', $waminame);
 $waminame_noex    = basename($waminame, ".wav");
 if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
     $i = 1;
@@ -64,8 +63,6 @@ if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
         $i++;
     }
     $waminame_to_save = $waminame_noex.'_'.$i.'.'.$ext;
-    $title_to_save    = $waminame_noex.'_'.$i.'.'.$ext;
-    $title_to_save    = str_replace('_', ' ', $title_to_save);
 }
 
 $documentPath = $saveDir.'/'.$waminame_to_save;
@@ -83,11 +80,16 @@ $file = array(
         'name' => $fileInfo['basename'],
         'tmp_name' => $documentPath,
         'size' => filesize($documentPath),
+        'type' => 'audio/wav',
         'from_file' => true
     )
 );
 $output = true;
 ob_start();
+
+// Strangely the file path changes with a double extension
+copy($documentPath, $documentPath . '.wav');
+
 $documentData = DocumentManager::upload_document(
     $file,
     $wamidir,
@@ -130,6 +132,10 @@ if (!empty($documentData)) {
             );
         }
     }
+
+    // Strangely the file path changes with a double extension
+    // Remove file with one extension
+    unlink($documentPath);
 } else {
     Display::addFlash($contents);
 }

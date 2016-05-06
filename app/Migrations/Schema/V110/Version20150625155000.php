@@ -17,8 +17,8 @@ class Version20150625155000 extends AbstractMigrationChamilo
     public function up(Schema $schema)
     {
         $this->addSql("INSERT INTO extra_field
-            (extra_field_type, field_type, variable, display_text, visible, changeable)
-            VALUES (1, 1, 'captcha_blocked_until_date', 'Account locked until', 0, 0)");
+            (extra_field_type, field_type, variable, display_text, visible, changeable, created_at)
+            VALUES (1, 1, 'captcha_blocked_until_date', 'Account locked until', 0, 0, NOW())");
     }
 
     /**

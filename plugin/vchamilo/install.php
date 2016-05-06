@@ -13,6 +13,8 @@
 
  */
 
+api_protect_admin_script();
+
 $table = 'vchamilo';
 $tablename = Database::get_main_table($table);
 $sql = "CREATE TABLE IF NOT EXISTS $tablename (
@@ -33,6 +35,7 @@ $sql = "CREATE TABLE IF NOT EXISTS $tablename (
   `lastcrongap` int(11),
   `lastcron` int(11),
   `croncount` int(11),
+  `template` varchar(255),
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 ";

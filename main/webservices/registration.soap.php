@@ -3546,6 +3546,7 @@ $server->wsdl->addComplexType(
     '',
     array(
         'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+        'course_desc_id' => array('name' => 'course_desc_id', 'type' => 'xsd:string'),
         'result' => array('name' => 'result', 'type' => 'xsd:string')
     )
 );
@@ -3587,6 +3588,10 @@ function WSEditCourseDescription($params) {
     $courses_params = $params['course_desc'];
     $results = array();
     $orig_course_id_value = array();
+    $course_description_id = array();
+
+    $courseDescription = new CourseDescription();
+    $defaultDescTitle = $courseDescription->get_default_description_title();
 
     foreach ($courses_params as $course_param) {
 
@@ -3596,6 +3601,7 @@ function WSEditCourseDescription($params) {
         $course_desc_title = $course_param['course_desc_title'];
         $course_desc_content = $course_param['course_desc_content'];
         $orig_course_id_value[] = $original_course_id_value;
+        $course_description_id[] = $course_desc_id;
 
         $courseInfo = CourseManager::getCourseInfoFromOriginalId(
             $original_course_id_value,
@@ -3619,30 +3625,32 @@ function WSEditCourseDescription($params) {
             continue;
         }
 
-        // Check whether data already exits into course_description table.
-        $sql_check_id = "SELECT * FROM $t_course_desc
-                        WHERE c_id = {$courseInfo['real_id']} AND id ='$course_desc_id'";
-        $res_check_id = Database::query($sql_check_id);
-
-        if (Database::num_rows($res_check_id) > 0) {
-            $sql = "UPDATE $t_course_desc SET
-                    title = '$course_desc_title',
-                    content = '$course_desc_content'
-                    WHERE
-                        c_id = {$courseInfo['real_id']} AND
-                        id = '".$course_desc_id."'";
-            Database::query($sql);
-        } else {
-            $sql = "INSERT IGNORE INTO $t_course_desc SET
-                    c_id = {$courseInfo['real_id']},
-                    id = '".$course_desc_id."',
-                    title = '$course_desc_title',
-                    content = '$course_desc_content'";
-            Database::query($sql);
+        // if title is empty set default title instead
+        if (empty($course_desc_title)) {
+            $course_desc_title = $defaultDescTitle[$course_desc_id];
         }
 
-        $results[] = 1;
+        $courseId = $courseInfo['real_id'];
+        $courseDescription->set_id(null);
+        $courseDescription->set_course_id($courseId);
+        $courseDescription->set_session_id(0);
+        $courseDescription->set_title($course_desc_title);
+        $courseDescription->set_content($course_desc_content);
+        $courseDescription->set_description_type($course_desc_id);
 
+        $data = $courseDescription->get_data_by_description_type($course_desc_id, $courseId);
+        if ($data) {
+            // Update existing description
+            $courseDescription->set_id($data['id']);
+            $result = $courseDescription->update();
+            //error_log("update course description");
+        }
+        else { // Insert new description
+            $result = $courseDescription->insert();
+            //error_log("insert course description");
+        }
+
+        $results[] = $result?1:0;
     } // end principal foreach
 
     $count_results = count($results);
@@ -3650,6 +3658,7 @@ function WSEditCourseDescription($params) {
     for($i = 0; $i < $count_results; $i++) {
         $output[] = array(
             'original_course_id_value' => $orig_course_id_value[$i],
+            'course_desc_id' => $course_description_id[$i],
             'result' => $results[$i],
         );
     }

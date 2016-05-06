@@ -4910,8 +4910,15 @@ div#chat-remote-video video {
     transition: all 0.3s ease 0s;
 }
 .grid-courses .items .notifications{
-    margin-top: 5px;
+    padding-top: 5px;
     text-align: center;
+}
+.grid-courses .items .buycourses-price{
+    margin-top: 5px;
+    text-align: left;
+}
+.grid-courses .items .separator{
+    margin-top: 5px;
 }
 .grid-courses .items .admin-actions, .grid-courses .items .user-actions{
     position: absolute;

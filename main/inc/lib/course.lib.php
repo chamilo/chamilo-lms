@@ -4624,6 +4624,8 @@ class CourseManager
 
         $stok = Security::get_existing_token();
 
+        $user_id = api_get_user_id();
+
         foreach ($courses as $courseId) {
             $course_info = api_get_course_info_by_id($courseId['c_id']);
             $courseCode = $course_info['code'];
@@ -4637,6 +4639,30 @@ class CourseManager
                 $course_info,
                 $my_course_code_list
             );
+
+            $user_registerd_in_course = CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']);
+            $user_registerd_in_course_as_teacher = CourseManager::is_course_teacher($user_id, $course_info['code']);
+            $user_registerd_in_course_as_student = ($user_registerd_in_course && !$user_registerd_in_course_as_teacher);
+
+            // if user registered as student
+            if ($user_registerd_in_course_as_student) {
+                $icon = '<em class="fa fa-graduation-cap"></em>';
+                $title = get_lang("AlreadyRegisteredToCourse");
+                $my_course['already_register_as'] = Display::tag(
+                    'button',
+                    $icon,
+                    array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
+                );
+            } elseif ($user_registerd_in_course_as_teacher) {
+                // if user registered as teacher
+                $icon = '<em class="fa fa-suitcase"></em>';
+                $title = get_lang("YouAreATeacherOfThisCourse");
+                $my_course['already_register_as'] = Display::tag(
+                    'button',
+                    $icon,
+                    array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
+                );
+            }
 
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {
@@ -4661,6 +4687,20 @@ class CourseManager
                     api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
                     array('class' => 'btn btn-danger btn-sm', 'title' => get_lang('Unreg')));
             }
+
+            // start buycourse validation
+            // display the course price and buy button if the buycourses plugin is enabled and this course is configured
+            $plugin = BuyCoursesPlugin::create();
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course_info);
+            if ($isThisCourseInSale) {
+                // set the price label
+                $my_course['price'] = $isThisCourseInSale['html'];
+                // set the Buy button instead register.
+                if ($isThisCourseInSale['verificator']) {
+                    $my_course['register_button'] = $plugin->returnBuyCourseButton($course_info);
+                }
+            }
+            // end buycourse validation
 
             //Description
             $my_course['description_button'] = '';

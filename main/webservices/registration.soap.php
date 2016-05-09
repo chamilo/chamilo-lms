@@ -2586,6 +2586,30 @@ function WSEditUserPasswordCrypted($params)
     return 0;
 }
 
+// Prepare output params for actions on users (delete, disable, enable), will return an array
+$server->wsdl->addComplexType(
+    'result_actionUsers',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'result' => array('name' => 'result', 'type' => 'xsd:string')
+    )
+);
+
+$server->wsdl->addComplexType(
+    'results_actionUsers',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_actionUsers[]')),
+    'tns:result_actionUsers'
+);
+
 /** WSDeleteUsers **/
 $server->wsdl->addComplexType(
     'user_id',
@@ -2626,27 +2650,45 @@ function WSHelperActionOnUsers($params, $type) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
+    $results = array();
+    $orig_user_id_value = array();
+
     $original_user_ids = $params['ids'];
     foreach($original_user_ids as $original_user_id) {
+        $result = false;
+        $orig_user_id_value[] = $original_user_id['original_user_id_value'];
         $user_id = UserManager::get_user_id_from_original_id(
             $original_user_id['original_user_id_value'],
             $original_user_id['original_user_id_name']
         );
         if($user_id > 0) {
             if($type == "delete") {
-                UserManager::delete_user($user_id);
+                $result = UserManager::delete_user($user_id);
             } else if($type == "disable") {
-                UserManager::disable($user_id);
+                $result = UserManager::disable($user_id);
             } else if($type == "enable") {
-                UserManager::enable($user_id);
+                $result = UserManager::enable($user_id);
             }
         }
+        $results[] = $result?1:0;
     }
+
+
+    $count_results = count($results);
+    $output = array();
+    for ($i = 0; $i < $count_results; $i++) {
+        $output[] = array(
+            'original_user_id_value' => $orig_user_id_value[$i],
+            'result' => $results[$i],
+        );
+    }
+
+    return $output;
 }
 
 $server->register('WSDeleteUsers',                         // method name
     array('user_ids' => 'tns:user_ids'),                   // input parameters
-    array(),                                               // output parameters
+    array('return' => 'tns:results_actionUsers'),          // output parameters
     'urn:WSRegistration',                                  // namespace
     'urn:WSRegistration#WSDeleteUsers',                    // soapaction
     'rpc',                                                 // style
@@ -2655,13 +2697,13 @@ $server->register('WSDeleteUsers',                         // method name
 );
 
 function WSDeleteUsers($params) {
-    WSHelperActionOnUsers($params, "delete");
+    return WSHelperActionOnUsers($params, "delete");
 }
 
 /** WSDisableUsers **/
 $server->register('WSDisableUsers',                         // method name
     array('user_ids' => 'tns:user_ids'),                    // input parameters
-    array(),                                                // output parameters
+    array('return' => 'tns:results_actionUsers'),           // output parameters
     'urn:WSRegistration',                                   // namespace
     'urn:WSRegistration#WSDisableUsers',                    // soapaction
     'rpc',                                                  // style
@@ -2670,13 +2712,13 @@ $server->register('WSDisableUsers',                         // method name
 );
 
 function WSDisableUsers($params) {
-    WSHelperActionOnUsers($params, "disable");
+    return WSHelperActionOnUsers($params, "disable");
 }
 
 /** WSEnableUsers **/
 $server->register('WSEnableUsers',            // method name
     array('user_ids' => 'tns:user_ids'),      // input parameters
-    array(),                                  // output parameters
+    array('return' => 'tns:results_actionUsers'),      // output parameters
     'urn:WSRegistration',                     // namespace
     'urn:WSRegistration#WSEnableUsers',       // soapaction
     'rpc',                                    // style
@@ -2684,8 +2726,9 @@ $server->register('WSEnableUsers',            // method name
     'Enables users provided as parameters'    // documentation
 );
 
+
 function WSEnableUsers($params) {
-    WSHelperActionOnUsers($params, "enable");
+    return WSHelperActionOnUsers($params, "enable");
 }
 
 

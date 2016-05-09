@@ -3466,29 +3466,30 @@ class CourseManager
                 ORDER BY sort ASC";
         $result = Database::query($sql);
         $courseCount = 0;
-        $listItems = array();
+        $listItems = [];
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $courseInCategory = self:: returnCoursesCategories(
                 $row['id'],
                 $load_dirs
             );
-            if (empty($courseInCategory)) {
-                $courseInCategory = null;
-            }
-            $params = array(
+
+            $params = [
                 'id_category' => $row ['id'],
                 'title_category' => $row['title'],
                 'courses' => $courseInCategory
-            );
+            ];
             $courseCount ++;
             $listItems['in_category'][$courseCount] = $params;
         }
-        // Step 2: We display the course without a user category.
-        $courseInCategory = self::returnCoursesWithoutCategories(0, $load_dirs);
-        $listItems['not_category'] = $courseInCategory;
 
-        return $listItems;       
+        // Step 2: We display the course without a user category.
+        $coursesNotCategory = self::returnCoursesWithoutCategories(0, $load_dirs);
+        if ($coursesNotCategory) {
+            $listItems['not_category'] = $coursesNotCategory;
+        }
+
+        return $listItems;
     }
     
     /**
@@ -3627,6 +3628,7 @@ class CourseManager
         $TABLECOURSUSER = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
         $TABLE_ACCESS_URL_REL_COURSE = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
+        $courseList = [];
 
         // Get course list auto-register
         $special_course_list = self::get_special_course_list();

@@ -676,4 +676,14 @@ class Database
 
         return $config;
     }
+
+    /**
+     * @param string $table
+     *
+     * @return bool
+     */
+    public static function tableExists($table)
+    {
+        return self::getManager()->getConnection()->getSchemaManager()->tablesExist($table);
+    }
 }

@@ -233,6 +233,27 @@ EOT;
     }
 
     /**
+     * @param $name
+     * @param $label
+     * @param array $options
+     * @param array $attributes
+     * @throws
+     */
+    public function addSelectAjax($name, $label, $options = [], $attributes = [])
+    {
+        if (!isset($attributes['url'])) {
+            throw new \Exception('select_ajax needs an URL');
+        }
+        $this->addElement(
+            'select_ajax',
+            $name,
+            $label,
+            $options,
+            $attributes
+        );
+    }
+
+    /**
      * @param string $name
      * @param string $label
      * @param array $attributes

@@ -105,6 +105,7 @@ if ($conferenceManager) {
             break;
     }
 }
+    
 
 $meetings = $bbb->getMeetings();
 if (!empty($meetings)) {

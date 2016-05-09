@@ -27,6 +27,7 @@ class bbb
     public $pluginEnabled = false;
     public $enableGlobalConference = false;
     public $isGlobalConference = false;
+    public $groupSupport = false;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -48,6 +49,9 @@ class bbb
         $this->table = Database::get_main_table('plugin_bbb_meeting');
         $this->enableGlobalConference = $plugin->get('enable_global_conference');
         $this->isGlobalConference = (bool) $isGlobalConference;
+
+        $columns = Database::listTableColumns($this->table);
+        $this->groupSupport = isset($columns['group_id']) ? true : false;
 
         if ($bbbPlugin === true) {
             $userInfo = api_get_user_info();
@@ -88,6 +92,14 @@ class bbb
         }
 
         return (bool) $this->isGlobalConference;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasGroupSupport()
+    {
+        return $this->groupSupport;
     }
 
     /**
@@ -137,6 +149,10 @@ class bbb
         $params['c_id'] = api_get_course_int_id();
         $params['session_id'] = api_get_session_id();
 
+        if ($this->hasGroupSupport()) {
+            $params['group_id'] = api_get_group_id();
+        }
+
         $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $courseCode;
         $attendeePassword =  $params['attendee_pw'];
         $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
@@ -166,7 +182,7 @@ class bbb
                 error_log("create_meeting: $id ");
             }
 
-            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : api_get_course_id().'-'.api_get_session_id();
+            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName();
             $welcomeMessage = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
             $record = isset($params['record']) && $params['record'] ? 'true' : 'false';
             $duration = isset($params['duration']) ? intval($params['duration']) : 0;
@@ -235,17 +251,31 @@ class bbb
 
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
+        $conditions =  array(
+            'where' => array(
+                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 ' =>
+                    array($courseId, $sessionId, $meetingName)
+            )
+        );
+
+        if ($this->hasGroupSupport()) {
+            $groupId = api_get_group_id();
+            $conditions =  array(
+                'where' => array(
+                    'c_id = ? AND session_id = ? AND meeting_name = ? AND group_id = ? AND status = 1 ' =>
+                        array($courseId, $sessionId, $meetingName, $groupId)
+                )
+            );
+        }
+
         $meetingData = Database::select(
             '*',
             $this->table,
-            array(
-                'where' => array(
-                    'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 ' =>
-                        array($courseId, $sessionId, $meetingName)
-                )
-            ),
+            $conditions,
             'first'
         );
+
+
         if ($this->debug) {
             error_log("meeting_exists ".print_r($meetingData, 1));
         }
@@ -396,17 +426,32 @@ class bbb
     public function getMeetings()
     {
         $pass = $this->getUserMeetingPassword();
+        $courseId = api_get_course_int_id();
+        $sessionId  = api_get_session_id();
+
+        $conditions =  array(
+            'where' => array(
+                'c_id = ? AND session_id = ? ' => array(
+                    $courseId,
+                    $sessionId,
+                ),
+            ),
+        );
+
+        if ($this->hasGroupSupport()) {
+            $groupId = api_get_group_id();
+            $conditions =  array(
+                'where' => array(
+                    'c_id = ? AND session_id = ? AND group_id = ? ' =>
+                        array($courseId, $sessionId, $groupId)
+                )
+            );
+        }
+
         $meetingList = Database::select(
             '*',
             $this->table,
-            array(
-                'where' => array(
-                    'c_id = ? AND session_id = ? ' => array(
-                        api_get_course_int_id(),
-                        api_get_session_id(),
-                    ),
-                ),
-            )
+            $conditions
         );
         $isGlobal = $this->isGlobalConference();
         $newMeetingList = array();
@@ -732,12 +777,35 @@ class bbb
     {
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
+
+        $conditions = array(
+            'where' => array(
+                'c_id = ? AND session_id = ? AND status = 1 ' => array(
+                    $courseId,
+                    $sessionId,
+                ),
+            ),
+        );
+
+        if ($this->hasGroupSupport()) {
+            $groupId = api_get_group_id();
+            $conditions = array(
+                'where' => array(
+                    'c_id = ? AND session_id = ? AND group_id = ? AND status = 1 ' => array(
+                        $courseId,
+                        $sessionId,
+                        $groupId
+                    ),
+                ),
+            );
+        }
         $meetingData = Database::select(
             '*',
             $this->table,
-            array('where' => array('c_id = ? AND session_id = ? AND status = 1 ' => array($courseId, $sessionId))),
+            $conditions,
             'first'
         );
+
         if (empty($meetingData)) {
             return 0;
         }
@@ -926,6 +994,11 @@ class bbb
             return 'url_'.api_get_current_access_url_id();
         }
 
+        if ($this->hasGroupSupport()) {
+
+            return api_get_course_id().'-'.api_get_session_id().'-'.api_get_group_id();
+        }
+        
         return api_get_course_id().'-'.api_get_session_id();
     }
 

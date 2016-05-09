@@ -3570,11 +3570,33 @@ class CourseManager
             }
 
             $params = array();
+            
+            $thumbnails = null;
+            $image = null;
+            
+            
+            if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+                $thumbnails = $course_info['course_image'];
+                $image = $course_info['course_image_large'];
+            }else{
+                $image = Display::return_icon('session_default.png', null, null, null,null, true);
+            }
+            
             $params['course_id'] = $course['id'];
-            $params['actions'] = '';
-
+            $params['edit_actions'] = '';
+            $params['document'] = '';
             if (api_is_platform_admin()) {
-                $params['actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
+                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
+                if($load_dirs){
+                    $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                               . Display::returnFontAwesomeIcon('folder-open') . '</a>';
+                    $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
+                }
+            }
+            if ($load_dirs) {
+                $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                    . Display::returnFontAwesomeIcon('folder-open') . '</a>';
+                $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
             }
 
             $courseUrl = '';
@@ -3592,8 +3614,11 @@ class CourseManager
             
             $params['visibility'] = $course_info['visibility'];
             $params['link'] = $courseUrl;
-            $params['title'] = $course_info['title'] . $visualCode;
+            $params['thumbnails'] = $thumbnails;
+            $params['image'] = $image;
+            $params['title'] = $course_info['title'];
             $params['teachers'] = $teachers;
+            
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;

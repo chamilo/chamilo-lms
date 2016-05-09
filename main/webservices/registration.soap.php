@@ -1911,6 +1911,7 @@ function WSEditUser($params)
 
     if (!empty($expiration_date)) {
         $expiration_date = new DateTime($expiration_date);
+        $user->setExpirationDate($expiration_date);
     }
 
     $user
@@ -1919,7 +1920,6 @@ function WSEditUser($params)
         ->setOfficialCode($official_code)
         ->setPhone($phone)
         ->setPictureUri($picture_uri)
-        ->setExpirationDate($expiration_date)
         ->setHrDeptId($hr_dept_id)
         ->setActive(true);
 

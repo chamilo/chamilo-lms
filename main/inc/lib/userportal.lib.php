@@ -1401,7 +1401,7 @@ class IndexManager
         }
 
         return [
-            'html' => $sessions_with_category.$sessions_with_no_category.$listCourse,
+            'html' => $sessions_with_category.$sessions_with_no_category,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

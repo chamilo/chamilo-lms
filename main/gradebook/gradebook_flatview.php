@@ -154,9 +154,15 @@ if (isset($_GET['exportpdf']))	{
         'name' => get_lang('FlatView')
     );
 
-    $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : '';
-    $perPage = isset($_GET['flatviewlist_per_page']) ? intval($_GET['flatviewlist_per_page']) : '';
-    $url = api_get_self().'?exportpdf=&offset='.$offset.'&selectcat='.intval($_GET['selectcat']).'&'.api_get_cidreq().'&flatviewlist_page_nr='.$pageNum.'&flatviewlist_per_page='.$perPage;
+    $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : null;
+    $perPage = isset($_GET['flatviewlist_per_page']) ? intval($_GET['flatviewlist_per_page']) : null;
+    $url = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+        'exportpdf' => '',
+        'offset' => $offset,
+        'selectcat' => intval($_GET['selectcat']),
+        'flatviewlist_page_nr' => $pageNum,
+        'flatviewlist_per_page' => $perPage
+    ]);
 
     $export_pdf_form = new DataForm(
         DataForm::TYPE_EXPORT_PDF,

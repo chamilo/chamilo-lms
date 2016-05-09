@@ -672,4 +672,13 @@ $connection->executeQuery('set sql_mode=""');
     {
         return self::getManager()->getConnection()->getSchemaManager()->tablesExist($table);
     }
+
+    /**
+     * @param $table
+     * @return \Doctrine\DBAL\Schema\Column[]
+     */
+    public static function listTableColumns($table) 
+    {
+        return self::getManager()->getConnection()->getSchemaManager()->listTableColumns($table);
+    }
 }

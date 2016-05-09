@@ -13,11 +13,12 @@ $tool_name = get_lang('Videoconference');
 $tpl = new Template($tool_name);
 
 $vmIsEnabled = false;
-$host = null;
-$salt = null;
-$bbb = new bbb();
+$host = '';
+$salt = '';
+$isGlobal = isset($_GET['global']) ? true : false;
+$bbb = new bbb('', '', $isGlobal);
 
-if ($bbb->plugin_enabled) {
+if ($bbb->pluginEnabled) {
     if ($bbb->isServerRunning()) {
 
         if (isset($_GET['launch']) && $_GET['launch'] == 1) {
@@ -25,8 +26,8 @@ if ($bbb->plugin_enabled) {
             if (file_exists(__DIR__ . '/config.vm.php')) {
                 $config = require __DIR__ . '/config.vm.php';
                 $vmIsEnabled = true;
-                $host = null;
-                $salt = null;
+                $host = '';
+                $salt = '';
 
                 require __DIR__ . '/lib/vm/AbstractVM.php';
                 require __DIR__ . '/lib/vm/VMInterface.php';
@@ -35,7 +36,7 @@ if ($bbb->plugin_enabled) {
 
                 $vm = new VM($config);
 
-                if ($vm->IsEnabled()) {
+                if ($vm->isEnabled()) {
                     try {
                         $vm->resizeToMaxLimit();
                     } catch (\Exception $e) {
@@ -45,20 +46,20 @@ if ($bbb->plugin_enabled) {
                 }
             }
 
-            $meeting_params = array();
-            $meeting_params['meeting_name'] = api_get_course_id().'-'.api_get_session_id();
+            $meetingParams = array();
+            $meetingParams['meeting_name'] = $bbb->getCurrentVideoConferenceName();
 
-            if ($bbb->meetingExists($meeting_params['meeting_name'])) {
-                $url = $bbb->joinMeeting($meeting_params['meeting_name']);
+            if ($bbb->meetingExists($meetingParams['meeting_name'])) {
+                $url = $bbb->joinMeeting($meetingParams['meeting_name']);
                 if ($url) {
                     $bbb->redirectToBBB($url);
                 } else {
-                    $url = $bbb->createMeeting($meeting_params);
+                    $url = $bbb->createMeeting($meetingParams);
                     $bbb->redirectToBBB($url);
                 }
             } else {
-                if ($bbb->isTeacher()) {
-                    $url = $bbb->createMeeting($meeting_params);
+                if ($bbb->isConferenceManager()) {
+                    $url = $bbb->createMeeting($meetingParams);
                     $bbb->redirectToBBB($url);
                 } else {
                     $url = $bbb->getListingUrl();

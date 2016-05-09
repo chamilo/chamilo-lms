@@ -11,24 +11,33 @@ $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $tpl = new Template($tool_name);
 
-$bbb = new bbb();
+$isGlobal = isset($_GET['global']) ? true : false;
+
+$bbb = new bbb('', '', $isGlobal);
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$teacher = $bbb->isTeacher();
-$courseInfo = api_get_course_info();
+$conferenceManager = $bbb->isConferenceManager();
+if ($bbb->isGlobalConference()) {
+    api_block_anonymous_users();
+} else {
+    api_protect_course_script(true);
+}
 
-api_protect_course_script(true);
 $message = null;
 
-if ($teacher) {
+if ($conferenceManager) {
     switch ($action) {
         case 'add_to_calendar':
-            $course_info = api_get_course_info();
+            if ($bbb->isGlobalConference()) {
+
+                return false;
+            }
+            $courseInfo = api_get_course_info();
             $agenda = new Agenda();
             $agenda->type = 'course';
 
             $id = intval($_GET['id']);
-            $title = sprintf(get_lang('VideoConferenceXCourseX'), $id, $course_info['name']);
+            $title = sprintf(get_lang('VideoConferenceXCourseX'), $id, $courseInfo['name']);
             $content = Display::url(get_lang('GoToTheVideoConference'), $_GET['url']);
 
             $eventId = $agenda->addEvent(
@@ -96,26 +105,27 @@ if ($teacher) {
             break;
     }
 }
+    
 
-$meetings = $bbb->getCourseMeetings();
+$meetings = $bbb->getMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
 $users_online = $bbb->getUsersOnlineInCurrentRoom();
 $status = $bbb->isServerRunning();
-$meeting_exists = $bbb->meetingExists(api_get_course_id().'-'.api_get_session_id());
-$show_join_button = false;
-if ($meeting_exists || $teacher) {
-    $show_join_button = true;
+$meetingExists = $bbb->meetingExists($bbb->getCurrentVideoConferenceName());
+$showJoinButton = false;
+if ($meetingExists || $conferenceManager) {
+    $showJoinButton = true;
 }
 
-$tpl->assign('allow_to_edit', $teacher);
+$tpl->assign('allow_to_edit', $conferenceManager);
 $tpl->assign('meetings', $meetings);
 $conferenceUrl = $bbb->getConferenceUrl();
 $tpl->assign('conference_url', $conferenceUrl);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);
-$tpl->assign('show_join_button', $show_join_button);
+$tpl->assign('show_join_button', $showJoinButton);
 
 $tpl->assign('message', $message);
 $listing_tpl = 'bbb/listing.tpl';

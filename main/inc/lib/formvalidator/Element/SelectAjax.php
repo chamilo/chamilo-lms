@@ -74,6 +74,15 @@ class SelectAjax extends HTML_QuickForm_select
             $url = "'$url'";
         }
 
+        $tags = !empty($this->getAttribute('tags')) ? (bool) $this->getAttribute('tags') : false;
+        $tags = $tags ? 'true' : 'false';
+
+        $multiple = !empty($this->getAttribute('multiple')) ? (bool) $this->getAttribute('multiple') : false;
+        $multiple = $multiple ? 'true' : 'false';
+
+        $max = $this->getAttribute('maximumSelectionLength');
+        $max = !empty($max) ? "maximumSelectionLength: $max, ": '';
+
         $html .= <<<JS
             <script>
                 $(function(){
@@ -83,6 +92,7 @@ class SelectAjax extends HTML_QuickForm_select
                         allowClear: true,
                         width: '$width',
                         minimumInputLength: '$minimumInputLength',
+                        tags: $tags,
                         ajax: {
                             url: $url,
                             dataType: 'json',
@@ -107,6 +117,8 @@ JS;
 
         $this->removeAttribute('formatResult');
         $this->removeAttribute('minimumInputLength');
+        $this->removeAttribute('maximumSelectionLength');
+        $this->removeAttribute('tags');
         $this->removeAttribute('placeholder');
         $this->removeAttribute('class');
         $this->removeAttribute('url');

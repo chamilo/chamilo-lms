@@ -36,9 +36,6 @@
  */
 class HTML_QuickForm_select extends HTML_QuickForm_element
 {
-
-    // {{{ properties
-
     /**
      * Contains the select options
      *
@@ -47,7 +44,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * @access    private
      */
     protected $_options = array();
-
     private $_optgroups = array();
 
     /**
@@ -60,9 +56,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     protected $_values = null;
 
     private $columnsSize;
-
-    // }}}
-    // {{{ constructor
 
     /**
      * Class constructor
@@ -97,10 +90,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         if (isset($options)) {
             $this->load($options);
         }
-    } //end constructor
-
-    // }}}
-    // {{{ apiVersion()
+    }
 
     /**
      * Returns the current API version
@@ -657,9 +647,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             return $this->_prepareValue($cleanValue, $assoc);
         }
     }
-
-    // }}}
-    // {{{ onQuickFormEvent()
 
     function onQuickFormEvent($event, $arg, &$caller)
     {

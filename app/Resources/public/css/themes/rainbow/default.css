@@ -39,6 +39,7 @@ body {
   margin: 0;
   font-family: 'Open Sans', sans-serif;
   line-height: 1.72222;
+  background: url('images/bg.png') center center repeat-x;
 }
 
 a {
@@ -55,27 +56,25 @@ a:focus {
 }
 /* Menu Option */
 .item-menu a{
-    padding-left: 30% !important;
-    padding-right: 30% !important;
     color: #fff !important;
     font-size: 15px;
 }
 .navbar-collapse{
     padding: 0;
 }
-.menu-one{
+.menu-1{
     background: #41A62A;
 }
-.menu-two{
+.menu-2{
     background: #97BF0D;
 }
-.menu-three{
+.menu-3{
     background: #F9B200;
 }
-.menu-four{
+.menu-4{
     background: #E53140;
 }
-.menu-five{
+.menu-5{
     background: #E2007A;
 }
 /* end Menu Option */
@@ -177,6 +176,8 @@ a:focus {
   line-height: 22px;
   padding-top: 12.5px;
   padding-bottom: 12.5px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .navbar-collapse{
   overflow: hidden !important;
@@ -189,7 +190,7 @@ a:focus {
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus{
   color: #fff;
-  background:#000080;
+  background:#07578A;
 }
 .navbar-default .navbar-nav > li > a{
   color: #333333;
@@ -225,7 +226,14 @@ a:focus {
 .nav > li > a:hover, .nav > li > a:focus{
    background-color: transparent;
 }
-
+.btn-primary{
+    background-color: #E53140;
+    border-color: #E53140;
+}
+.btn-primary:hover{
+    background-color: #CE2D30;
+    border-color: #CE2D30;
+}
 .navbar-inverse li a{
   line-height: 30px;
   background: none !important;
@@ -284,7 +292,7 @@ a:focus {
   background-color: #ECF0F1;
 }
 .breadcrumb > .active{
-  color: #95a5a6;
+    color: #FF0;
 }
 .panel-default{
   border-color: #ECF0F1;
@@ -300,7 +308,7 @@ a:focus {
 }
 /* End Jquery UI */
 footer{
-  background-color:#009EE0;
+  background-color:#E53140;
 }
 footer{
   color: #ffffff;

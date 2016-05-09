@@ -41,7 +41,7 @@
                             <li><i class="fa fa-user fa-4x icon-color" aria-hidden="true"></i></li>
                             <li>
                                 <h2 class="number">450+</h2>
-                                <p class="text">Les utilisateurs enregistrés</p>
+                                <p class="text">{{ "RegisteredUsers"|get_lang }}</p>
                             </li>
                         </ul>
                     </div>
@@ -50,7 +50,7 @@
                             <li><i class="fa fa-book fa-4x icon-color" aria-hidden="true"></i></li>
                             <li>
                                 <h2 class="number">30</h2>
-                                <p class="text">Les cours ouverts</p>
+                                <p class="text">{{ "OpenCourses"|get_lang }}</p>
                             </li>
                         </ul>
                     </div>
@@ -59,7 +59,7 @@
                             <li><i class="fa fa-signal fa-4x icon-color" aria-hidden="true"></i></li>
                             <li>
                                 <h2 class="number">300+</h2>
-                                <p class="text">Les diplomés</p>
+                                <p class="text">{{ "Certificates"|get_lang }}</p>
                             </li>
                         </ul>
                     </div>
@@ -128,8 +128,6 @@
                 {{ course_category_block }}
             </section>
         {% endif %}
-
-
     </div>
 </div>
 </div>

@@ -138,12 +138,23 @@ foreach ($rows as $post) {
         !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
     ) {
         if ($locked == false) {
-            $iconEdit .="<a href=\"" . api_get_self() . "?" . api_get_cidreq()
-                . "&forum=$clean_forum_id&thread=$clean_thread_id&action=delete&content=post&id={$post['post_id']}"
-                . "\" onclick=\"javascript:if(!confirm('"
-                . addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES)) . "')) return false;\">"
-                . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL)
-                . "</a>";
+            $deleteUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                    'forum' => $clean_forum_id,
+                    'thread' => $clean_thread_id,
+                    'action' => 'delete',
+                    'content' => 'post',
+                    'id' => $post['post_id']
+                ]);
+            $iconEdit .= Display::url(
+                Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL),
+                $deleteUrl,
+                [
+                    'onclick' => "javascript:if(!confirm('"
+                        . addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))
+                        . "')) return false;",
+                    'id' => "delete-post-{$post['post_id']}"
+                ]
+            );
         }
     }
 
@@ -206,27 +217,30 @@ foreach ($rows as $post) {
     ) {
         if ($userId || ($current_forum['allow_anonymous'] == 1 && !$userId)) {
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-
-                $buttonReply = Display::tag(
-                    'a',
-                    '<em class="fa fa-reply"></em> ' . get_lang('ReplyToMessage'),
-                    array(
-                        'href' => 'reply.php?' . api_get_cidreq()
-                            . "&forum=$clean_forum_id'&thread=$clean_thread_id"
-                            . "&post={$post['post_id']}&action=replymessage&origin=$origin",
-                        'class' => 'btn btn-primary'
-                    )
+                $buttonReply = Display::toolbarButton(
+                    get_lang('ReplyToMessage'),
+                    'reply.php?' . api_get_cidreq() . '&' . http_build_query([
+                        'forum' => $clean_forum_id,
+                        'thread' => $clean_thread_id,
+                        'post' => $post['post_id'],
+                        'action' => 'replymessage'
+                    ]),
+                    'reply',
+                    'primary',
+                    ['id' => "reply-to-post-{$post['post_id']}"]
                 );
 
-                $buttonQuote = Display::tag(
-                    'a',
-                    '<em class="fa fa-quote-left"></em> ' . get_lang('QuoteMessage'),
-                    array(
-                        'href' => 'reply.php?' . api_get_cidreq()
-                            . "&forum=$clean_forum_id&thread=$clean_thread_id"
-                            . "&post={$post['post_id']}&action=quote&origin=$origin",
-                        'class' => 'btn btn-success'
-                    )
+                $buttonQuote = Display::toolbarButton(
+                    get_lang('QuoteMessage'),
+                    'reply.php?' . api_get_cidreq() . '&' . http_build_query([
+                        'forum' => $clean_forum_id,
+                        'thread' => $clean_thread_id,
+                        'post' => $post['post_id'],
+                        'action' => 'quote'
+                    ]),
+                    'quote-left',
+                    'success',
+                    ['id' => "quote-post-{$post['post_id']}"]
                 );
             }
         }

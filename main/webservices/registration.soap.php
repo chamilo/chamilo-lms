@@ -1789,6 +1789,7 @@ $server->wsdl->addComplexType(
         'status' => array('name' => 'status', 'type' => 'xsd:string'),
         'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
         'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+        'enable' => array('name' => 'enable', 'type' => 'xsd:boolean'),
         'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
         'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
@@ -1831,7 +1832,7 @@ function WSEditUser($params)
     $phone = $params['phone'];
     $picture_uri = '';
     $expiration_date = $params['expiration_date'];
-    $active = 1;
+    $enable = $params['enable'];
     $creator_id = null;
     $hr_dept_id = 0;
     $extra = null;
@@ -1850,7 +1851,7 @@ function WSEditUser($params)
 
     if ($user_id == 0) {
         return 0;
-    } else {
+    } else if (empty($enable) || !$enable) {
         $sql = "SELECT user_id FROM $table_user
                 WHERE user_id ='$user_id' AND active= '0'";
         $resu = Database::query($sql);

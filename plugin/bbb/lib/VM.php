@@ -34,6 +34,7 @@ class VM
         $config = $this->getConfig();
 
         if (!isset($config)) {
+            
             return false;
         }
 

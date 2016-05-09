@@ -14,9 +14,9 @@ if (file_exists(__DIR__ . '/config.vm.php')) {
 
     $vm = new VM($config);
 
-    if ($vm->IsEnabled()) {
+    if ($vm->isEnabled()) {
         $bbb = new bbb();
-        if ($bbb->plugin_enabled) {
+        if ($bbb->pluginEnabled) {
             $activeSessions = $bbb->getActiveSessionsCount();
             if (empty($activeSessions)) {
                 $vm->runCron();

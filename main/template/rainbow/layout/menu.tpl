@@ -22,11 +22,12 @@
                     {% endfor %}
                 {% endif %}
                 {% if _u.logged == 0 %}
-                    <li class="item-menu menu-1"><a href="{{ _p.web }}">Accueli</a></li>
+                    <li class="item-menu menu-1"><a href="{{ _p.web }}">{{ "CampusHomepage"|get_lang }}</a></li>
                 {% endif %}
-                <li class="item-menu menu-2 dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                        FAQ
+                    <li class="item-menu menu-2"><a href="{{ _p.web }}web/app_dev.php/faq">{{ "FAQ"|get_lang }}</a></li>
+                <!-- <li class="item-menu menu-2 dropdown">
+                    <a href="{{ _p.web }}web/app_dev.php/faq" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                        {{ "FAQ"|get_lang }}
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu menu_level_1" role="menu">
@@ -37,12 +38,12 @@
                             </a>
                          </li>
                     {% endfor %}
-                    </ul>
-                </li>
+                    </ul> 
+                </li> -->
                 {% if _u.logged == 0 %}
-                    <li class="item-menu menu-3"><a href="#">Inscription</a></li>
-                    <li class="item-menu menu-4"><a href="#">Démo</a></li>
-                    <li class="item-menu menu-5"><a href="#">Contact</a></li>
+                    <li class="item-menu menu-3"><a href="{{ _p.web }}main/auth/inscription.php">{{ "Subscription"|get_lang }}</a></li>
+                    <li class="item-menu menu-4"><a href="#">{{ "Demo"|get_lang }}</a></li>
+                    <li class="item-menu menu-5"><a href="#">{{ "Contact"|get_lang }}</a></li>
                 {% endif %}
             </ul>
            {% if _u.logged == 1 %}

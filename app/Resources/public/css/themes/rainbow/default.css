@@ -39,6 +39,7 @@ body {
   margin: 0;
   font-family: 'Open Sans', sans-serif;
   line-height: 1.72222;
+  background: url('images/bg.jpg') center center repeat-x;
 }
 
 a {
@@ -225,7 +226,14 @@ a:focus {
 .nav > li > a:hover, .nav > li > a:focus{
    background-color: transparent;
 }
-
+.btn-primary{
+    background-color: #E53140;
+    border-color: #E53140;
+}
+.btn-primary:hover{
+    background-color: #CE2D30;
+    border-color: #CE2D30;
+}
 .navbar-inverse li a{
   line-height: 30px;
   background: none !important;
@@ -300,7 +308,7 @@ a:focus {
 }
 /* End Jquery UI */
 footer{
-  background-color:#009EE0;
+  background-color:#E53140;
 }
 footer{
   color: #ffffff;

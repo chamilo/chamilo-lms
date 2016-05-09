@@ -46,13 +46,14 @@
     {#{% endstylesheets %}#}
 
     {# Chamilo theme #}
-    {% set theme = 'chamilo' %}
+    {% set theme = 'rainbow' %}
+    
 
     {% set bug_notification_link = '' %}
     {% set help_content = '' %}
     {% set header_extra_content = '' %}
 
-    {% set template = 'default' %}
+    {% set template = 'rainbow' %}
     {% set notification_menu = '' %}
     {% set accessibility = '' %}
     {% set containerClass = '' %}
@@ -140,40 +141,17 @@
                 </div>
             {% endif %}
             <div class="row">
-                <div class="col-lg-3">
-                    <div class="logo">
-                        {#<a href="{{ url('index') }}">#}
-                        <img src="{{ asset('css/themes/'~ theme ~'/images/header-logo.png') }}"/>
-                        {#</a>#}
-                    </div>
-                </div>
-                <div class="col-lg-9">
-                    <div class="col-sm-4">
-                        {% if plugin_header_left is not null %}
-                            <div id="plugin_header_left">
-                                {{ plugin_header_left }}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-sm-4">
-                        {% if plugin_header_center is not null %}
-                            <div id="plugin_header_center">
-                                {{ plugin_header_center }}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-sm-4">
-                        {% if plugin_header_right is not null %}
-                            <div id="plugin_header_right">
-                                {{ plugin_header_right }}
-                            </div>
-                        {% endif %}
-                        <div class="section-notifications">
-                            <ul id="notifications" class="nav nav-pills pull-right">
-                                {{ notification_menu }}
-                            </ul>
+                <div class="col-xs-6 col-md-4"></div>
+                <div class="col-xs-6 col-md-4">
+                    {% if plugin_header_center is not null %}
+                        <div id="plugin_header_center">
+                            {{ plugin_header_center }}
                         </div>
-                        {{ accessibility }}
+                    {% endif %}
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    <div class="logo pull-right">
+                        <img src="{{ asset('css/themes/'~ theme ~'/images/header-logo.png') }}"/>
                     </div>
                 </div>
             </div>
@@ -182,14 +160,14 @@
         <section id="menu-bar">
             {# menu #}
             {% block menu %}
-                <nav class="navbar navbar-default">
-                    <div class="container">
+                <div class="container">
+                    <nav class="navbar navbar-default">
                         <div class="collapse navbar-collapse">
                         {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : false}) }}
                         {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:rightMenu', {'automenu': 'navbar', 'pull-right' : true} ) }}
                         </div>
-                    </div>
-                </nav>
+                    </nav>
+                </div>
                 {#{% include "@template_style/layout/menu.html.twig" %}#}
             {% endblock %}
         </section>

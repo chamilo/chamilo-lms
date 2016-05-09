@@ -508,6 +508,10 @@ function return_menu()
     return $menu;
 }
 
+/**
+ * Returns an array of elements to print as the main menu
+ * @return array Array of arrays with ['possible_tabs'] as the main element
+ */
 function returnMenuArray()
 {
     $mainNavigation = return_navigation_array();

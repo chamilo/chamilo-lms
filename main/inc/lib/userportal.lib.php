@@ -1048,11 +1048,12 @@ class IndexManager
         global $_configuration;
 
         $gamificationModeIsActive = api_get_setting('gamification_mode');
-
+        $listCourse = '';
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
         if ($load_history) {
             // Load sessions in category in *history*
             $session_categories = UserManager::get_sessions_by_category($user_id, true);
+            
         } else {
             // Load sessions in category
             $session_categories = UserManager::get_sessions_by_category($user_id, false);
@@ -1086,7 +1087,7 @@ class IndexManager
 
             $this->tpl->assign('special_courses', $specialCourses);
             $this->tpl->assign('courses', $courses);
-            $listCourse = '';
+            
             if (api_get_configuration_value('view_grid_courses') && ($courses || $specialCourses)) {
                 $listCourse = $this->tpl->fetch(
                 $this->tpl->get_template('/user_portal/grid_courses.tpl'));

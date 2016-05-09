@@ -189,20 +189,67 @@ class DisplayGradebook
         $header .= '<a href="' . $url . '?' . api_get_cidreq() . '&selectcat=' . $select_cat . '">' .
             Display::return_icon('back.png', get_lang('FolderView'), '', ICON_SIZE_MEDIUM) . '</a>';
 
-        $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : '';
-        $perPage = isset($_GET['flatviewlist_per_page']) ? intval($_GET['flatviewlist_per_page']) : '';
+        $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : null;
+        $perPage = isset($_GET['flatviewlist_per_page']) ? intval($_GET['flatviewlist_per_page']) : null;
         $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
-        $header .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&export_format=csv&export_report=export_report&selectcat=' . $catobj->get_id() . '">' .
-            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM) . '</a>';
-        $header .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&export_format=xls&export_report=export_report&selectcat=' . $catobj->get_id() . '">' .
-            Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM) . '</a>';
-        $header .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&export_format=doc&export_report=export_report&selectcat=' . $catobj->get_id() . '">' .
-            Display::return_icon('export_doc.png', get_lang('ExportAsDOC'), '', ICON_SIZE_MEDIUM) . '</a>';
-        $header .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&print=&selectcat=' . $catobj->get_id() . '" target="_blank">' .
-            Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM) . '</a>';
-        $header .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&exportpdf=&selectcat=' . $catobj->get_id().'&offset='.$offset.'&flatviewlist_page_nr='.$pageNum.'&flatviewlist_per_page='.$perPage.'" >' .
-            Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM) . '</a>';
+        $exportCsvUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+            'export_format' => 'csv',
+            'export_report' => 'export_report',
+            'selectcat' => $catobj->get_id()
+        ]);
+
+        $header .= Display::url(
+            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM),
+            $exportCsvUrl
+        );
+
+        $exportXlsUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+            'export_format' => 'xls',
+            'export_report' => 'export_report',
+            'selectcat' => $catobj->get_id()
+        ]);
+
+        $header .= Display::url(
+            Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM),
+            $exportXlsUrl
+        );
+
+        $exportDocUrl = api_get_self() . '?' .  api_get_cidreq() . '&' . http_build_query([
+            'export_format' => 'doc',
+            'export_report' => 'export_report',
+            'selectcat' => $catobj->get_id()
+        ]);
+
+        $header .= Display::url(
+            Display::return_icon('export_doc.png', get_lang('ExportAsDOC'), '', ICON_SIZE_MEDIUM),
+            $exportDocUrl
+        );
+
+        $exportPrintUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                'print' => '',
+                'selectcat' => $catobj->get_id(),
+            ]);
+
+        $header .= Display::url(
+            Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM),
+            $exportPrintUrl,
+            ['target' => '_blank']
+        );
+
+        $exportPdfUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+            'exportpdf' => '',
+            'selectcat' => $catobj->get_id(),
+            'offset' => $offset,
+            'flatviewlist_page_nr' => $pageNum,
+            'flatviewlist_per_page' => $perPage
+        ]);
+
+        $header .= Display::url(
+            Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM),
+            $exportPdfUrl
+        );
+
         $header .= '</div>';
         echo $header;
     }

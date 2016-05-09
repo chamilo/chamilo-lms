@@ -1790,6 +1790,7 @@ $server->wsdl->addComplexType(
         'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
         'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
         'enable' => array('name' => 'enable', 'type' => 'xsd:boolean'),
+        'language' => array('name' => 'language', 'type' => 'xsd:string'),
         'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
         'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
@@ -1833,6 +1834,7 @@ function WSEditUser($params)
     $picture_uri = '';
     $expiration_date = $params['expiration_date'];
     $enable = $params['enable'];
+    $language = $params['language'];
     $creator_id = null;
     $hr_dept_id = 0;
     $extra = null;
@@ -1913,6 +1915,9 @@ function WSEditUser($params)
     if (!empty($expiration_date)) {
         $expiration_date = new DateTime($expiration_date);
         $user->setExpirationDate($expiration_date);
+    }
+    if (!empty($language)) {
+        $user->setLanguage($language);
     }
 
     $user

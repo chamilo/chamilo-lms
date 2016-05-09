@@ -1334,7 +1334,7 @@ class SessionManager
      * @param integer   $sessionCategoryId
      * @param int       $visibility
      * @param string    $description
-     * @param bool      $showDescription
+     * @param int       $showDescription
      * @param int       $duration
      * @param array     $extraFields
      * @param int       $sessionAdminId

@@ -9,6 +9,10 @@ class VM
     protected $config;
     public $virtualMachine;
 
+    /**
+     * VM constructor.
+     * @param $config
+     */
     public function __construct($config)
     {
         $this->config = $config;
@@ -30,6 +34,7 @@ class VM
         $config = $this->getConfig();
 
         if (!isset($config)) {
+            
             return false;
         }
 

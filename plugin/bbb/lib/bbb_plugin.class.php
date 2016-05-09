@@ -16,7 +16,7 @@ class BBBPlugin extends Plugin
 {
     public $isCoursePlugin = true;
 
-    //When creating a new course this settings are added to the course
+    // When creating a new course this settings are added to the course
     public $course_settings = array(
         array(
             'name' => 'big_blue_button_record_and_store',
@@ -24,17 +24,35 @@ class BBBPlugin extends Plugin
         )
     );
 
+    /**
+     * BBBPlugin constructor.
+     */
+    protected function __construct()
+    {
+        parent::__construct(
+            '2.3',
+            'Julio Montoya, Yannick Warnier',
+            [
+                'tool_enable' => 'boolean',
+                'host' => 'text',
+                'salt' => 'text',
+                'enable_global_conference' => 'boolean',
+            ]
+        );
+    }
+
+    /**
+     * @return BBBPlugin|null
+     */
     public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
     }
 
-    protected function __construct()
-    {
-        parent::__construct('2.2', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
-    }
-
+    /**
+     * Install
+     */
     public function install()
     {
         $table = Database::get_main_table('plugin_bbb_meeting');
@@ -61,14 +79,16 @@ class BBBPlugin extends Plugin
         $this->install_course_fields_in_all_courses();
     }
 
+    /**
+     * Uninstall
+     */
     public function uninstall()
     {
         $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
-        //New settings
-
+        // New settings
         $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_tool_enable'";
         Database::query($sql);
         $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_salt'";

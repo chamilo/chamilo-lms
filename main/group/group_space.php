@@ -20,7 +20,6 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 
 /*	MAIN CODE */
-
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
 $current_group = GroupManager::get_group_properties($group_id);
@@ -30,7 +29,7 @@ if (empty($current_group)) {
 
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('GroupSpace');
-$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidReq(), 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
 
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
 

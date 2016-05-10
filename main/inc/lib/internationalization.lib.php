@@ -155,14 +155,6 @@ function get_lang($variable, $reserved = null, $language = null) {
         } else {
             $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
         }
-    } else {
-        /*if (isset($$variable)) {
-            $langvar = $$variable;
-        } elseif (isset(${"lang$variable"})) {
-            $langvar = ${"lang$variable"};
-        } else {
-            $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
-        }*/
     }
     if (empty($langvar) || !is_string($langvar)) {
         $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
@@ -672,7 +664,7 @@ function date_to_str_ago($date, $timeZone = 'UTC')
     if ($date == '0000-00-00 00:00:00')  {
         return '';
     }
-    
+
     $timeAgo = new TimeAgo($timeZone, api_get_language_isocode());
 
     return $timeAgo->inWords($date);

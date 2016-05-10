@@ -2911,23 +2911,6 @@ function WSCreateCourse($params)
             $course_language = $course_param['course_language'];
         }
 
-        // Set default values
-        if (isset($_user['language']) && $_user['language'] != '') {
-            $values['course_language'] = $_user['language'];
-        } else {
-            $values['course_language'] = api_get_setting('platformLanguage');
-        }
-
-        if (isset($_user['firstName'])) {
-            $values['tutor_name'] = api_get_person_name(
-                $_user['firstName'],
-                $_user['lastName'],
-                null,
-                null,
-                $values['course_language']
-            );
-        }
-
         $params = array();
         $params['title'] = $title;
         $params['wanted_code'] = $wanted_code;

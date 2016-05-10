@@ -17,12 +17,16 @@ class BBBPlugin extends Plugin
     public $isCoursePlugin = true;
 
     // When creating a new course this settings are added to the course
-    public $course_settings = array(
-        array(
+    public $course_settings = [
+        [
             'name' => 'big_blue_button_record_and_store',
-            'type' => 'checkbox'
-        )
-    );
+            'type' => 'checkbox',
+        ],
+        [
+            'name' => 'bbb_enable_conference_in_groups',
+            'type' => 'checkbox',
+        ]
+    ];
 
     /**
      * BBBPlugin constructor.

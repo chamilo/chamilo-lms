@@ -55,6 +55,9 @@ class bbb
 
         if ($this->groupSupport) {
             $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
+            if ($this->groupSupport) {
+                $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+            }
         }
 
         if ($bbbPlugin === true) {

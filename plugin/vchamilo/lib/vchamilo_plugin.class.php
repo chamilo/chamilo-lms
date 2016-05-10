@@ -1,16 +1,12 @@
 <?php
 
-
-global $_configuration;
-require_once 'bootlib.php';
-require_once vchamilo_boot_api_get_path($_configuration) . 'plugin.class.php';
-
 /**
  * Description of VChamilo
  *
  * @copyright (c) 2014 VF Consulting
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Valery Fremaux <valery.fremaux@gmail.com>
+ * @author Julio Montoya
  */
 class VChamiloPlugin extends Plugin
 {
@@ -32,6 +28,9 @@ class VChamiloPlugin extends Plugin
         return $result ? $result : $result = new self();
     }
 
+    /**
+     * @return string
+     */
     public function get_name()
     {
         return 'vchamilo';

@@ -8,7 +8,7 @@ require_once dirname(__FILE__).'/lib/vchamilo_plugin.class.php';
 
 api_protect_admin_script();
 
-global $VCHAMILO;
+global $virtualChamilo;
 
 $plugininstance = VChamiloPlugin::create();
 
@@ -28,7 +28,7 @@ $sql = "
         visible = 1
 ";
 
-if ($VCHAMILO == '%'){
+if ($virtualChamilo == '%'){
     $result = Database::query($sql);
     $_template['hosts'] = array();
     if ($result){

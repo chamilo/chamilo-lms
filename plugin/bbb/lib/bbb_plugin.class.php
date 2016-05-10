@@ -37,6 +37,7 @@ class BBBPlugin extends Plugin
                 'host' => 'text',
                 'salt' => 'text',
                 'enable_global_conference' => 'boolean',
+                'enable_conference_in_course_groups' => 'boolean',
             ]
         );
     }
@@ -76,7 +77,7 @@ class BBBPlugin extends Plugin
                 )";
         Database::query($sql);
 
-        //Installing course settings
+        // Installing course settings
         $this->install_course_fields_in_all_courses();
     }
 
@@ -89,25 +90,26 @@ class BBBPlugin extends Plugin
         $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
-        // New settings
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_tool_enable'";
-        Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_salt'";
-        Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_host'";
-        Database::query($sql);
+        $variables = [
+            'bbb_salt',
+            'bbb_host',
+            'bbb_tool_enable',
+            'enable_global_conference',
+            'enable_conference_in_course_groups',
+            'bbb_plugin',
+            'bbb_plugin_host',
+            'bbb_plugin_salt'
+        ];
 
-        //Old settings deleting just in case
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin'";
-        Database::query($sql);
+        foreach ($variables as $variable) {
+            $sql = "DELETE FROM $t_settings WHERE variable = '$variable'";
+            Database::query($sql);
+        }
+
         $sql = "DELETE FROM $t_options WHERE variable  = 'bbb_plugin'";
         Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin_host'";
-        Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin_salt'";
-        Database::query($sql);
 
-        //hack to get rid of Database::query warning (please add c_id...)
+        // hack to get rid of Database::query warning (please add c_id...)
         $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
         Database::query($sql);
 
@@ -115,7 +117,7 @@ class BBBPlugin extends Plugin
         $sql = "DROP TABLE IF EXISTS $t";
         Database::query($sql);
 
-        //Deleting course settings
+        // Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
     }
 }

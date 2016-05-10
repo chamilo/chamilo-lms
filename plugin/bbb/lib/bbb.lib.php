@@ -53,6 +53,10 @@ class bbb
         $columns = Database::listTableColumns($this->table);
         $this->groupSupport = isset($columns['group_id']) ? true : false;
 
+        if ($this->groupSupport) {
+            $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
+        }
+
         if ($bbbPlugin === true) {
             $userInfo = api_get_user_info();
             $this->user_complete_name = $userInfo['complete_name'];
@@ -998,7 +1002,7 @@ class bbb
 
             return api_get_course_id().'-'.api_get_session_id().'-'.api_get_group_id();
         }
-        
+
         return api_get_course_id().'-'.api_get_session_id();
     }
 

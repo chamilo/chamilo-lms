@@ -372,8 +372,7 @@ class AppPlugin
                         $_template['plugin_info'] = $plugin_info;
                     }
 
-                    // Setting the plugin info available in the template if exists
-
+                    // Setting the plugin info available in the template if exists.
                     $template->assign($plugin_name, $_template);
 
                     // Loading the Twig template plugin files if exists

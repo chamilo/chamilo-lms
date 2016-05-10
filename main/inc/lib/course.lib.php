@@ -4723,7 +4723,7 @@ class CourseManager
                 // set the price label
                 $my_course['price'] = $isThisCourseInSale['html'];
                 // set the Buy button instead register.
-                if ($isThisCourseInSale['verificator']) {
+                if ($isThisCourseInSale['verificator'] && !empty($my_course['register_button'])) {
                     $my_course['register_button'] = $plugin->returnBuyCourseButton($course_info);
                 }
             }

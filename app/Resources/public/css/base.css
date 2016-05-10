@@ -2954,6 +2954,9 @@ a:active{
 tr.forum_category_header a {
     color: #fff;
 }
+.forum-description {
+    display: inline-block;
+}
 /* **** FORUM **** */
 .forum_header {
     background-color: #EEF;

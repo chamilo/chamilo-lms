@@ -80,7 +80,7 @@ $(document).ready( function() {
 });
  </script>';
 
-$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidReq(), 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
 
 $course_id = api_get_course_int_id();
 
@@ -91,7 +91,7 @@ if (isset($_GET['id'])) {
     $form = new FormValidator(
         'group_category',
         'post',
-        api_get_self().'?id='.$category['id'].'&'.api_get_cidReq()
+        api_get_self().'?id='.$category['id'].'&'.api_get_cidreq()
     );
 	$form->addElement('hidden', 'id');
 } else {

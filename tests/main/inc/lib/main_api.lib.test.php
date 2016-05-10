@@ -488,13 +488,6 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue($_plugins[$location]);
 	}
 
-	function testApiIsPluginInstalled(){
-		$plugin_name = false;
-		$plugin_list = true;
-		$res = api_is_plugin_installed($plugin_list, $plugin_name);
-		$this->assertTrue(is_bool($res));
-	}
-
 	function testApiTimeToHms(){
 		$seconds = -1;
 		ob_start();

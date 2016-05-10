@@ -3617,6 +3617,7 @@ class CourseManager
             $params['thumbnails'] = $thumbnails;
             $params['image'] = $image;
             $params['title'] = $course_info['title'];
+            $params['category'] = $course_info['categoryName'];
             $params['teachers'] = $teachers;
             
 

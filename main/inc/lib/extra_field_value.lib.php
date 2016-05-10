@@ -223,7 +223,7 @@ class ExtraFieldValue extends Model
 
                     if ($value['error'] == 0) {
 
-                        //Crop the image to adjust 4:3 ratio
+                        //Crop the image to adjust 16:9 ratio
                         $crop = new Image($value['tmp_name']);
                         $crop->crop($value['crop_parameters']);
 

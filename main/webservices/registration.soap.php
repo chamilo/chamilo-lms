@@ -520,6 +520,7 @@ function WSCreateUser($params) {
 
             if (!empty($params['expiration_date'])) {
                 $expiration_date = new DateTime($params['expiration_date']);
+                $user->setExpirationDate($expiration_date);
             }
 
             $user->setLastname($lastName)
@@ -529,7 +530,6 @@ function WSCreateUser($params) {
                 ->setStatus($status)
                 ->setOfficialCode($official_code)
                 ->setPhone($phone)
-                ->setExpirationDate($expiration_date)
                 ->setHrDeptId($hr_dept_id)
                 ->setActive(true);
             $userManager->updateUser($user, true);

@@ -84,7 +84,7 @@ $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => g
 Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
 
 echo '<div class="actions">';
-echo '<a href="lp_controller.php?cidReq='.$_course['sysCode'].'">'.
+echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 

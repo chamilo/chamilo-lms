@@ -1666,8 +1666,8 @@ div.admin_section h4 {
     width: 310px;
     height: 200px;
     overflow-y: auto;
-    top: -5px;
-    left: 25px;
+    top: 0;
+    right: 0;
 }
 
 #course_settings h3 img {
@@ -2953,6 +2953,9 @@ a:active{
 }
 tr.forum_category_header a {
     color: #fff;
+}
+.forum-description {
+    display: inline-block;
 }
 /* **** FORUM **** */
 .forum_header {

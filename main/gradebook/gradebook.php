@@ -381,7 +381,7 @@ if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
         Display :: display_header(get_lang('FlatView'));
     } elseif (isset ($_GET['search'])) {
         if ($_SESSION['gradebook_dest'] == 'index.php') {
-            $gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']).'?cidReq='.Security::remove_XSS($_GET['course']).'&amp;';
+            $gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']).'?'.api_get_cidreq().'&amp;';
         } else {
             $gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']);
         }

@@ -127,9 +127,10 @@ function import_pdfs($file, $subDir = '/')
                 api_set_default_visibility($docId, TOOL_DOCUMENT);
                 $errors[] = array('Line' => 0, 'Code' => $course['code'], 'Title' => $course['title']);
                 // Now add a link to the file from the Course description tool
-                $link = '<p>Sílabo de la asignatura <a href="'.api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$course['code'].'&id_session=0&gidReq=0&action=download&id='.$docId.'" target="_blank">
-                          '.Display::return_icon('pdf.png').'
-                          </a></p>';
+                $link = '<p>Sílabo de la asignatura 
+                 <a href="'.api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq_params($course['code']).'&action=download&id='.$docId.'" target="_blank">
+                      '.Display::return_icon('pdf.png').'
+                 </a></p>';
                 $course_description = new CourseDescription();
                 $session_id = api_get_session_id();
                 $course_description->set_course_id($course['real_id']);

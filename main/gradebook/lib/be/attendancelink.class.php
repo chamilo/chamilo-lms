@@ -281,7 +281,7 @@ class AttendanceLink extends AbstractLink
 		$result = Database::query($sql);
 		$row = Database::fetch_array($result,'ASSOC');
 		$attendance_id = $row['id'];
-		$url = api_get_path(WEB_PATH).'main/attendance/index.php?action=attendance_sheet_list&gradebook=view&attendance_id='.$attendance_id.'&session_id='.$session_id.'&cidReq='.$this->get_course_code();
+		$url = api_get_path(WEB_PATH).'main/attendance/index.php?action=attendance_sheet_list&gradebook=view&attendance_id='.$attendance_id.'&'.api_get_cidreq_params($this->get_course_code(), $session_id);
 
 		return $url;
 	}

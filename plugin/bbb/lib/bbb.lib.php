@@ -20,19 +20,21 @@ class bbb
     public $url;
     public $salt;
     public $api;
-    public $user_complete_name = '';
+    public $userCompleteName = '';
     public $protocol = 'http://';
     public $debug = false;
     public $logoutUrl = '';
     public $pluginEnabled = false;
     public $enableGlobalConference = false;
     public $isGlobalConference = false;
+    public $groupSupport = false;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
      * required for the connection to the video conference server)
      * @param string $host
      * @param string $salt
+     * @param bool $isGlobalConference
      */
     public function __construct($host = '', $salt = '', $isGlobalConference = false)
     {
@@ -49,9 +51,22 @@ class bbb
         $this->enableGlobalConference = $plugin->get('enable_global_conference');
         $this->isGlobalConference = (bool) $isGlobalConference;
 
+        $columns = Database::listTableColumns($this->table);
+        $this->groupSupport = isset($columns['group_id']) ? true : false;
+
+        if ($this->groupSupport) {
+            $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
+            if ($this->groupSupport) {
+                $courseInfo = api_get_course_info();
+                if ($courseInfo) {
+                    $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+                }
+            }
+        }
+
         if ($bbbPlugin === true) {
             $userInfo = api_get_user_info();
-            $this->user_complete_name = $userInfo['complete_name'];
+            $this->userCompleteName = $userInfo['complete_name'];
             $this->salt = $bbb_salt;
             $info = parse_url($bbb_host);
             $this->url = $bbb_host.'/bigbluebutton/';
@@ -88,6 +103,14 @@ class bbb
         }
 
         return (bool) $this->isGlobalConference;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasGroupSupport()
+    {
+        return $this->groupSupport;
     }
 
     /**
@@ -129,13 +152,18 @@ class bbb
         # a user joins. If after this period, a user hasn't joined, the meeting is
         # removed from memory.
         defaultMeetingCreateJoinDuration=5
-     *
+     * 
+     * @return mixed
      */
     public function createMeeting($params)
     {
         $courseCode = api_get_course_id();
         $params['c_id'] = api_get_course_int_id();
         $params['session_id'] = api_get_session_id();
+
+        if ($this->hasGroupSupport()) {
+            $params['group_id'] = api_get_group_id();
+        }
 
         $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $courseCode;
         $attendeePassword =  $params['attendee_pw'];
@@ -166,7 +194,7 @@ class bbb
                 error_log("create_meeting: $id ");
             }
 
-            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : api_get_course_id().'-'.api_get_session_id();
+            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName();
             $welcomeMessage = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
             $record = isset($params['record']) && $params['record'] ? 'true' : 'false';
             $duration = isset($params['duration']) ? intval($params['duration']) : 0;
@@ -235,17 +263,31 @@ class bbb
 
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
+        $conditions =  array(
+            'where' => array(
+                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 ' =>
+                    array($courseId, $sessionId, $meetingName)
+            )
+        );
+
+        if ($this->hasGroupSupport()) {
+            $groupId = api_get_group_id();
+            $conditions =  array(
+                'where' => array(
+                    'c_id = ? AND session_id = ? AND meeting_name = ? AND group_id = ? AND status = 1 ' =>
+                        array($courseId, $sessionId, $meetingName, $groupId)
+                )
+            );
+        }
+
         $meetingData = Database::select(
             '*',
             $this->table,
-            array(
-                'where' => array(
-                    'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 ' =>
-                        array($courseId, $sessionId, $meetingName)
-                )
-            ),
+            $conditions,
             'first'
         );
+
+
         if ($this->debug) {
             error_log("meeting_exists ".print_r($meetingData, 1));
         }
@@ -345,7 +387,7 @@ class bbb
         if ($meetingInfoExists) {
             $joinParams = array(
                 'meetingId' => $meetingData['remote_id'],	//	-- REQUIRED - A unique id for the meeting
-                'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
+                'username' => $this->userCompleteName,	//-- REQUIRED - The name that will display for the user in the meeting
                 'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
                 //'createTime' => api_get_utc_datetime(),			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
                 'userID' => api_get_user_id(),				//-- OPTIONAL - string
@@ -396,17 +438,32 @@ class bbb
     public function getMeetings()
     {
         $pass = $this->getUserMeetingPassword();
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
+        $conditions =  array(
+            'where' => array(
+                'c_id = ? AND session_id = ? ' => array(
+                    $courseId,
+                    $sessionId,
+                ),
+            ),
+        );
+
+        if ($this->hasGroupSupport()) {
+            $groupId = api_get_group_id();
+            $conditions =  array(
+                'where' => array(
+                    'c_id = ? AND session_id = ? AND group_id = ? ' =>
+                        array($courseId, $sessionId, $groupId)
+                )
+            );
+        }
+
         $meetingList = Database::select(
             '*',
             $this->table,
-            array(
-                'where' => array(
-                    'c_id = ? AND session_id = ? ' => array(
-                        api_get_course_int_id(),
-                        api_get_session_id(),
-                    ),
-                ),
-            )
+            $conditions
         );
         $isGlobal = $this->isGlobalConference();
         $newMeetingList = array();
@@ -614,7 +671,7 @@ class bbb
             if ($meetingDB['status'] == 1) {
                 $joinParams = array(
                     'meetingId' => $meetingDB['remote_id'],		//-- REQUIRED - A unique id for the meeting
-                    'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
+                    'username' => $this->userCompleteName,	//-- REQUIRED - The name that will display for the user in the meeting
                     'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
                     'createTime' => '',			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
                     'userID' => '',			//	-- OPTIONAL - string
@@ -732,12 +789,35 @@ class bbb
     {
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
+
+        $conditions = array(
+            'where' => array(
+                'c_id = ? AND session_id = ? AND status = 1 ' => array(
+                    $courseId,
+                    $sessionId,
+                ),
+            ),
+        );
+
+        if ($this->hasGroupSupport()) {
+            $groupId = api_get_group_id();
+            $conditions = array(
+                'where' => array(
+                    'c_id = ? AND session_id = ? AND group_id = ? AND status = 1 ' => array(
+                        $courseId,
+                        $sessionId,
+                        $groupId
+                    ),
+                ),
+            );
+        }
         $meetingData = Database::select(
             '*',
             $this->table,
-            array('where' => array('c_id = ? AND session_id = ? AND status = 1 ' => array($courseId, $sessionId))),
+            $conditions,
             'first'
         );
+
         if (empty($meetingData)) {
             return 0;
         }
@@ -850,7 +930,7 @@ class bbb
     }
 
     /**
-     * Checks if the videoconference server is running.
+     * Checks if the video conference server is running.
      * Function currently disabled (always returns 1)
      * @return bool True if server is running, false otherwise
      * @assert () === false
@@ -890,12 +970,6 @@ class bbb
             header("Location: $url");
             exit;
         }
-
-        // js
-        /*echo '<script>';
-        echo 'window.location = "'.$url.'"';
-        echo '</script>';
-        exit;*/
     }
 
     /**
@@ -924,6 +998,11 @@ class bbb
     {
         if ($this->isGlobalConference()) {
             return 'url_'.api_get_current_access_url_id();
+        }
+
+        if ($this->hasGroupSupport()) {
+
+            return api_get_course_id().'-'.api_get_session_id().'-'.api_get_group_id();
         }
 
         return api_get_course_id().'-'.api_get_session_id();

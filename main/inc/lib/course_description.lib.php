@@ -241,7 +241,7 @@ class CourseDescription
     {
         $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
         $description_id = $this->get_id_by_description_type($description_type);
-        $course_id = api_get_real_course_id();
+        $course_id = api_get_course_int_id();
         $course_code = api_get_course_id();
         $item_property_id = api_get_item_property_id(
             $course_code,

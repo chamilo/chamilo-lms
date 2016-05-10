@@ -187,7 +187,7 @@ if ($form->validate()) {
     echo '<div class="actions">';
 
     if ($objExercise->id != 0) {
-        echo '<a href="admin.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id.'">' .
+        echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">' .
             Display :: return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){

@@ -11114,6 +11114,51 @@ EOD;
 
         return $form->returnForm();
     }
+
+    /**
+     * Check if the current lp item is first, both, last or none from lp list
+     *
+     * @return string
+     */
+    public function isFirstOrLastItem()
+    {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::isFirstOrLastItem', 0);
+        }
+
+        $lpItemId = [];
+        $currentItemId = $this->get_current_item_id();
+
+        $typeListNotToVerify = self::getChapterTypes();
+        foreach ($this->items as $item) {
+            if (!in_array($item->get_type(), $typeListNotToVerify)) {
+                $lpItemId[] = $item->get_id();
+            }
+        }
+
+        $answer = '';
+        $lastLpItemIndex = count($lpItemId) - 1;
+        $position = array_search($currentItemId, $lpItemId);
+
+        switch ($position) {
+            case 0:
+                if (!$lastLpItemIndex) {
+                    $answer = 'both';
+                    break;
+                }
+
+                $answer = 'first';
+                break;
+            case $lastLpItemIndex:
+                $answer = 'last';
+                break;
+            default:
+                $answer = 'none';
+        }
+
+        return $answer;
+    }
+
 }
 
 if (!function_exists('trim_value')) {

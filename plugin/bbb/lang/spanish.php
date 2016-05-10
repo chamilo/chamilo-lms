@@ -40,7 +40,8 @@ $strings['tool_enable_help'] = "Escoja si desea activar la herramienta de videoc
     Una vez activada, se mostrará como una herramienta adicional en todas las páginas principales de cursos, y los profesores podrán iniciar una conferencia en cualquier momento. Los estudiantes no podrían lanzar una conferencia, solo juntarse a una existente. Si no tiene un servidor de videoconferencia BigBlueButton, por favor <a target=\"_blank\" href=\"http://bigbluebutton.org/\">configure uno</a> antes de seguir, o pida una cotización a uno de los proveedores oficiales de Chamilo. BigBlueButton es una herramienta de software libre (y gratuita), pero su instalación requiere de competencias que quizás no sean inmediatamente disponibles para todos. Puede instalarla usted mismo o buscar ayuda profesional. Esta ayuda podría no obstante generar algunos costos (por lo menos el tiempo de la persona quien lo ayude). En el puro espíritu del software libre, le ofrecemos las herramientas para hacer su trabajo más simple, en la medida de nuestras posibilidades, y le recomendamos profesionales (los proveedores oficiales de Chamilo) para ayudarlo en caso esto fuera demasiado complicado.<br />";
 
 $strings['big_blue_button_welcome_message'] = 'Mensaje de bienvenida de BigBlueButton';
-$strings['big_blue_button_record_and_store'] = 'Grabar las sesiones de videoconferencia';
+$strings['big_blue_button_record_and_store'] = 'Grabar las sesiones de videoconferencia.';
+$strings['bbb_enable_conference_in_groups'] = 'Activar la creación de videoconferencia en los grupos.';
 
 $strings['plugin_tool_bbb'] = 'Video';
 

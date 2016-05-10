@@ -47,6 +47,24 @@ class BBBPlugin extends Plugin
     }
 
     /**
+     * @param string $variable
+     * @return bool
+     */
+    public function validateCourseSetting($variable)
+    {
+        if ($variable == 'bbb_enable_conference_in_groups') {
+            if ($this->get('enable_conference_in_course_groups') === 'true') {
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @return BBBPlugin|null
      */
     public static function create()

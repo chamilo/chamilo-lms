@@ -547,6 +547,9 @@ class AppPlugin
 
                 $groups = array();
                 foreach ($obj->course_settings as $setting) {
+                    if ($obj->validateCourseSetting($setting['name']) === false) {
+                        continue;
+                    }
                     if ($setting['type'] != 'checkbox') {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
                     } else {

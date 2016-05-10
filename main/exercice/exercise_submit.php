@@ -260,33 +260,6 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
     $learnpath_item_view_id
 );
 
-//if (1) {
-$questionListInSession = Session::read('questionList');
-if (!isset($questionListInSession)) {
-    // Selects the list of question ID
-    $questionList = $objExercise->getQuestionList();
-
-    // Media questions.
-    $media_is_activated = $objExercise->mediaIsActivated();
-
-    //Getting order from random
-    if ($media_is_activated == false &&
-        $objExercise->isRandom() &&
-        isset($exercise_stat_info) &&
-        !empty($exercise_stat_info['data_tracking'])
-    ) {
-        $questionList = explode(',', $exercise_stat_info['data_tracking']);
-    }
-    Session::write('questionList', $questionList);
-    if ($debug > 0) {
-        error_log('$_SESSION[questionList] was set');
-    }
-} else {
-    if (isset($objExercise) && isset($exerciseInSession)) {
-        $questionList = Session::read('questionList');
-    }
-}
-
 // Fix in order to get the correct question list.
 $questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed();
 
@@ -354,6 +327,35 @@ if (empty($exercise_stat_info)) {
     }
 
     if ($debug)  error_log("5  exercise_stat_info[] exists getting exe_id $exe_id ");
+}
+
+$questionListInSession = Session::read('questionList');
+
+if (!isset($questionListInSession)) {
+    // Selects the list of question ID
+    $questionList = $objExercise->getQuestionList();
+
+    // Media questions.
+    $media_is_activated = $objExercise->mediaIsActivated();
+
+    //Getting order from random
+    if ($media_is_activated == false &&
+        $objExercise->isRandom() &&
+        isset($exercise_stat_info) &&
+        !empty($exercise_stat_info['data_tracking'])
+    ) {
+        $questionList = explode(',', $exercise_stat_info['data_tracking']);
+    }
+
+    Session::write('questionList', $questionList);
+
+    if ($debug > 0) {
+        error_log('$_SESSION[questionList] was set');
+    }
+} else {
+    if (isset($objExercise) && isset($exerciseInSession)) {
+        $questionList = Session::read('questionList');
+    }
 }
 
 // Array to check in order to block the chat

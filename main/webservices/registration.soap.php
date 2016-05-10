@@ -2766,6 +2766,8 @@ $server->wsdl->addComplexType(
         'tutor_name' => array('name' => 'tutor_name', 'type' => 'xsd:string'),
         'course_language' => array('name' => 'course_language', 'type' => 'xsd:string'),
         'disk_quota' => array('name' => 'disk_quota', 'type' => 'xsd:string'), // disk_quota in MB
+        'subscribe' => array('name' => 'subscribe', 'type' => 'xsd:string'),
+        'unsubscribe' => array('name' => 'unsubscribe', 'type' => 'xsd:string'),
         'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
         'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
         'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
@@ -2856,6 +2858,8 @@ function WSCreateCourse($params)
         $original_course_id_value = $course_param['original_course_id_value'];
         $orig_course_id_value[] = $course_param['original_course_id_value'];
         $visibility = null;
+        $subscribe = $course_param['subscribe'];
+        $unsubscribe = $course_param['unsubscribe'];
 
         if (isset($course_param['visibility'])) {
             if ($course_param['visibility'] &&
@@ -2921,6 +2925,13 @@ function WSCreateCourse($params)
         $params['user_id'] = api_get_user_id();
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
+
+        if (isset($subscribe) && $subscribe != "") { // Valid values: 0, 1
+            $params['subscribe'] = $subscribe;
+        }
+        if (isset($unsubscribe) && $subscribe != "") { // Valid values: 0, 1
+            $params['unsubscribe'] = $unsubscribe;
+        }
 
         $course_info = CourseManager::create_course($params);
 

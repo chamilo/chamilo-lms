@@ -20,7 +20,7 @@ class bbb
     public $url;
     public $salt;
     public $api;
-    public $user_complete_name = '';
+    public $userCompleteName = '';
     public $protocol = 'http://';
     public $debug = false;
     public $logoutUrl = '';
@@ -34,6 +34,7 @@ class bbb
      * required for the connection to the video conference server)
      * @param string $host
      * @param string $salt
+     * @param bool $isGlobalConference
      */
     public function __construct($host = '', $salt = '', $isGlobalConference = false)
     {
@@ -53,9 +54,19 @@ class bbb
         $columns = Database::listTableColumns($this->table);
         $this->groupSupport = isset($columns['group_id']) ? true : false;
 
+        if ($this->groupSupport) {
+            $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
+            if ($this->groupSupport) {
+                $courseInfo = api_get_course_info();
+                if ($courseInfo) {
+                    $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+                }
+            }
+        }
+
         if ($bbbPlugin === true) {
             $userInfo = api_get_user_info();
-            $this->user_complete_name = $userInfo['complete_name'];
+            $this->userCompleteName = $userInfo['complete_name'];
             $this->salt = $bbb_salt;
             $info = parse_url($bbb_host);
             $this->url = $bbb_host.'/bigbluebutton/';
@@ -141,7 +152,8 @@ class bbb
         # a user joins. If after this period, a user hasn't joined, the meeting is
         # removed from memory.
         defaultMeetingCreateJoinDuration=5
-     *
+     * 
+     * @return mixed
      */
     public function createMeeting($params)
     {
@@ -375,7 +387,7 @@ class bbb
         if ($meetingInfoExists) {
             $joinParams = array(
                 'meetingId' => $meetingData['remote_id'],	//	-- REQUIRED - A unique id for the meeting
-                'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
+                'username' => $this->userCompleteName,	//-- REQUIRED - The name that will display for the user in the meeting
                 'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
                 //'createTime' => api_get_utc_datetime(),			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
                 'userID' => api_get_user_id(),				//-- OPTIONAL - string
@@ -427,7 +439,7 @@ class bbb
     {
         $pass = $this->getUserMeetingPassword();
         $courseId = api_get_course_int_id();
-        $sessionId  = api_get_session_id();
+        $sessionId = api_get_session_id();
 
         $conditions =  array(
             'where' => array(
@@ -659,7 +671,7 @@ class bbb
             if ($meetingDB['status'] == 1) {
                 $joinParams = array(
                     'meetingId' => $meetingDB['remote_id'],		//-- REQUIRED - A unique id for the meeting
-                    'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
+                    'username' => $this->userCompleteName,	//-- REQUIRED - The name that will display for the user in the meeting
                     'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
                     'createTime' => '',			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
                     'userID' => '',			//	-- OPTIONAL - string
@@ -918,7 +930,7 @@ class bbb
     }
 
     /**
-     * Checks if the videoconference server is running.
+     * Checks if the video conference server is running.
      * Function currently disabled (always returns 1)
      * @return bool True if server is running, false otherwise
      * @assert () === false
@@ -958,12 +970,6 @@ class bbb
             header("Location: $url");
             exit;
         }
-
-        // js
-        /*echo '<script>';
-        echo 'window.location = "'.$url.'"';
-        echo '</script>';
-        exit;*/
     }
 
     /**
@@ -998,7 +1004,7 @@ class bbb
 
             return api_get_course_id().'-'.api_get_session_id().'-'.api_get_group_id();
         }
-        
+
         return api_get_course_id().'-'.api_get_session_id();
     }
 

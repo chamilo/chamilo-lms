@@ -746,4 +746,13 @@ class Plugin
             }
         }
     }
+
+    /**
+     * @param string $variable
+     * @return bool
+     */
+    public function validateCourseSetting($variable)
+    {
+        return true;
+    }
 }

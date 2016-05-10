@@ -96,7 +96,7 @@ if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
 $form = new FormValidator(
 	'publish_form',
 	'post',
-	api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidReq()
+	api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidreq()
 );
 $form->addElement('header', '', $tool_name);
 

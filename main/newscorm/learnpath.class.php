@@ -8430,7 +8430,7 @@ class learnpath
             </script>';
         }
 
-        $url = api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
+        $url = api_get_self().'?cidReq='.api_get_cidreq().'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
 
         $return .= Display::url(
             Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),

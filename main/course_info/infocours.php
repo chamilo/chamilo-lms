@@ -572,7 +572,7 @@ if ($form->validate() && is_settings_editable()) {
             if ($num >= $_configuration[$urlId]['hosting_limit_active_courses']) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
                 api_set_failure(get_lang('PortalActiveCoursesLimitReached'));
-                $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=course_active_warning&cidReq='.$course_code;
+                $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=course_active_warning&'.api_get_cidreq();
                 header("Location: $url");
                 exit;
             }
@@ -639,7 +639,7 @@ if ($form->validate() && is_settings_editable()) {
     $cidReset = true;
     $cidReq = $course_code;
     require '../inc/local.inc.php';
-    $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=show_message&cidReq='.$course_code;
+    $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=show_message&'.api_get_cidreq();
     header("Location: $url");
     exit;
 }

@@ -285,7 +285,7 @@ function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
     $url = $_SERVER['HTTP_HOST'].$self;
     $url = substr($url, 0, -14); // 14 is the length of this file's name (/scorm_api.php).
     echo $url;
-    ?>/lp_controller.php?cidReq=<?php echo api_get_course_id();?>&action=save&lp_id=<?php echo $oLP->get_id();?>&" + param + "";
+    ?>/lp_controller.php?<?php echo api_get_cidreq(); ?>&action=save&lp_id=<?php echo $oLP->get_id();?>&" + param + "";
     logit_lms('saving data (status='+lesson_status+')',1);
     xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location);
     //xajax_update_pgs();

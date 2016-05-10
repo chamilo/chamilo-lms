@@ -1565,8 +1565,26 @@ function api_get_anonymous_id()
 }
 
 /**
- * Returns the cidreq parameter name + current course id taken from
- * $GLOBALS['_cid'] and returns a string like 'cidReq=ABC&id_session=123
+ * @param string $courseCode
+ * @param int $sessionId
+ * @param int $groupId
+ * @return string
+ */
+function api_get_cidreq_params($courseCode, $sessionId = 0, $groupId = 0)
+{
+    $courseCode = !empty($courseCode) ? htmlspecialchars($courseCode) : '';
+    $sessionId = !empty($sessionId) ? (int) $sessionId : 0;
+    $groupId = !empty($groupId) ? (int) $groupId : 0;
+
+    $url = 'cidReq='.$courseCode;
+    $url .= '&id_session='.$sessionId;
+    $url .= '&gidReq='.$groupId;
+
+    return $url;
+}
+
+/**
+ * Returns the current course url part including session, group, and gradebook params
  *
  * @param bool $addSessionId
  * @param bool $addGroupId
@@ -1575,7 +1593,8 @@ function api_get_anonymous_id()
  */
 function api_get_cidreq($addSessionId = true, $addGroupId = true)
 {
-    $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
+    $courseCode = api_get_course_id();
+    $url = empty($courseCode) ? '' : 'cidReq='.htmlspecialchars($courseCode);
     $origin = api_get_origin();
 
     if ($addSessionId) {
@@ -1590,8 +1609,10 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true)
         }
     }
 
-    $url .= '&gradebook='.intval(api_is_in_gradebook());
-    $url .= '&origin='.$origin;
+    if (!empty($url)) {
+        $url .= '&gradebook='.intval(api_is_in_gradebook());
+        $url .= '&origin='.$origin;
+    }
 
     return $url;
 }

@@ -378,9 +378,8 @@ switch ($action) {
             }
             $file_link = Display::url(
                 get_lang('SeeFile'),
-                api_get_path(WEB_CODE_PATH).'social/myfiles.php?'.
-                    'cidReq='.$cidReq.'&amp;id_session='.$id_session.'&amp;'.
-                    'gidReq='.$gidReq.'&amp;parent_id='.$parent_id
+                api_get_path(WEB_CODE_PATH).'social/myfiles.php?'.api_get_cidreq_params($cidReq, $id_session, $gidReq).
+                '&parent_id='.$parent_id
             );
 
             if (api_get_setting('allow_my_files') === 'false') {
@@ -499,9 +498,7 @@ switch ($action) {
                     $file_link = Display::url(
                         get_lang('SeeFile'),
                         api_get_path(WEB_CODE_PATH) .
-                        'document/showinframes.php?' . 'cidReq=' . $cidReq .
-                        '&id_session=' . $id_session . '&' .
-                        'gidReq=' . $gidReq . '&id=' . current($result)
+                        'document/showinframes.php?'.api_get_cidreq_params($cidReq, $id_session, $gidReq).'&id=' . current($result)
                     );
                     Display::addFlash(Display::return_message(
                         get_lang('CopyMade') . ' ' . $file_link,

@@ -167,10 +167,6 @@ foreach ($evaluations as $evaluationRow) {
 }
 
 $my_api_cidreq = api_get_cidreq();
-if ($my_api_cidreq == '') {
-    $my_api_cidreq = 'cidReq='.$my_category['course_code'];
-}
-
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&selectcat='.$my_selectcat;
 
 $form = new FormValidator('auto_weight', 'post', $currentUrl);

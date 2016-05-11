@@ -215,6 +215,7 @@
             });
 
             loadForumThead({{ lp_id }}, {{ lp_current_item_id }});
+            checkCurrentItemPosition({{ lp_current_item_id }});
 
             {% if glossary_extra_tools in glossary_tool_availables %}
                 // Loads the glossary library.

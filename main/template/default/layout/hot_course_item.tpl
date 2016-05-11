@@ -9,7 +9,7 @@
                         <div class="cribbon"></div>
                     {% endif %}
                     <div class="black-shadow">
-                        <div class="author-card">  
+                        <div class="author-card">
                         {% for teacher in item.teachers %}
                             {% set counter = counter + 1 %}
                             {% if counter <= 3 %}
@@ -36,10 +36,16 @@
                     <div class="ranking">
                         {{ item.rating_html }}
                     </div>
+                    {% if item.price %}
+                        {{ item.price }}
+                    {% else %}
+                        <div class="separator">&nbsp;</div>
+                    {% endif %}
                     <div class="toolbar">
                         <div class="btn-group" role="group">
                             {{ item.register_button }}
                             {{ item.unsubscribe_button }}
+                            {{ item.already_register_as }}
                         </div>
                     </div>
                 </div>

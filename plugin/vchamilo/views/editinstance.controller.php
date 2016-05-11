@@ -70,13 +70,11 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         ctrace("Creating physical course dir in $coursedir");
         mkdir($coursedir, 0777, true);
         // initiate default index
-        $INDEX = fopen($coursedir.'/index.html', 'w');
-        fputs($INDEX, vchamilo_get_default_course_index_fragment());
-        fclose($INDEX);
+        $indexFile = fopen($coursedir.'/index.html', 'w');
+        file_put_contents($indexFile, vchamilo_get_default_course_index_fragment());
 
-        $HTACCESS = fopen($coursedir.'/.htaccess', 'w');
-        fputs($HTACCESS, vchamilo_get_htaccess_fragment($slug));
-        fclose($HTACCESS);
+        $htaccessFile = fopen($coursedir.'/.htaccess', 'w');
+        file_put_contents($htaccessFile, vchamilo_get_htaccess_fragment($slug));
     }
 
     // if real coursedir IS NOT under chamilo install, link to it

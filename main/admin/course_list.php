@@ -232,21 +232,20 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
 function modify_filter($code)
 {
     $icourse = api_get_course_info($code);
+    $path = api_get_path(WEB_CODE_PATH);
 
     return
         '<a href="course_information.php?code='.$code.'">'.
         Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;'.
-        //'<a href="../course_home/course_home.php?cidReq='.$code.'">'.
-        //Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'. // This is not the preferable way to go to the homepage.
         '<a href="'.api_get_path(WEB_COURSE_PATH).$icourse['path'].'/index.php">'.
         Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'.
-        '<a href="../tracking/courseLog.php?cidReq='.$code.'">'.
+        '<a href="'.$path.'tracking/courseLog.php?'.api_get_cidreq_params($code).'">'.
         Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;'.
-        '<a href="course_edit.php?id='.$icourse['real_id'].'">'.
+        '<a href="'.$path.'admin/course_edit.php?id='.$icourse['real_id'].'">'.
         Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;'.
-        '<a href="../coursecopy/create_backup.php?cidReq='.$code.'">'.
+        '<a href="'.$path.'coursecopy/create_backup.php?'.api_get_cidreq_params($code).'">'.
         Display::return_icon('backup.gif', get_lang('CreateBackup')).'</a>&nbsp;'.
-        '<a href="course_list.php?delete_course='.$code.'"  onclick="javascript: if (!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.
+        '<a href="'.$path.'admin/course_list.php?delete_course='.$code.'"  onclick="javascript: if (!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.
         Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
 }
 

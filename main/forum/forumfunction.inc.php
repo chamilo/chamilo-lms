@@ -5478,8 +5478,10 @@ function get_all_post_from_user($user_id, $course_code)
                 $forum_results .='<div id="social-forum-title">'.
                     Display::return_icon('forum.gif', get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum['forum_title'], STUDENT).
                     '<div style="float:right;margin-top:-35px">
-                                        <a href="../forum/viewforum.php?cidReq='.$course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a>
-                                    </div></div>';
+                        <a href="../forum/viewforum.php?'.api_get_cidreq_params($course_code).'&forum='.$forum['forum_id'].' " >'.
+                            get_lang('SeeForum').'    
+                        </a>
+                     </div></div>';
                 $forum_results .='<br / >';
                 if ($post_counter > 0) {
                     $forum_results .=$hand_forums;

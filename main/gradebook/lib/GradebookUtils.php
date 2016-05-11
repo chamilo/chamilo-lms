@@ -216,6 +216,8 @@ class GradebookUtils
                 );
             }
 
+            $courseParams = api_get_cidreq_params($cat->get_course_code(), $cat->get_session_id());
+
             if (api_is_allowed_to_edit(null, true)) {
 
                 // Locking button
@@ -239,7 +241,7 @@ class GradebookUtils
                     if ($cat->is_locked() && !api_is_platform_admin()) {
                         $modify_icons .= Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
                     } else {
-                        $modify_icons .= '<a href="gradebook_edit_cat.php?' .'editcat=' . $cat->get_id() . '&cidReq=' .$cat->get_course_code() . '&id_session='.$cat->get_session_id().'">' .
+                        $modify_icons .= '<a href="gradebook_edit_cat.php?editcat=' . $cat->get_id() . '&'.$courseParams.'">' .
                             Display::return_icon(
                                 'edit.png',
                                 get_lang('Modify'),
@@ -249,7 +251,7 @@ class GradebookUtils
                     }
                 }
 
-               $modify_icons .= '<a href="gradebook_edit_all.php?selectcat=' .$cat->get_id() . '&cidReq=' . $cat->get_course_code() . '&id_session='.$cat->get_session_id().'">' .
+               $modify_icons .= '<a href="gradebook_edit_all.php?selectcat=' .$cat->get_id() . '&' . $courseParams.'">' .
                     Display::return_icon(
                         'percentage.png',
                         get_lang('EditAllWeights'),
@@ -257,14 +259,14 @@ class GradebookUtils
                         ICON_SIZE_SMALL
                     ) . '</a>';
 
-                $modify_icons .= '<a href="gradebook_flatview.php?selectcat=' .$cat->get_id() . '&cidReq=' . $cat->get_course_code() . '&id_session='.$cat->get_session_id(). '">' .
+                $modify_icons .= '<a href="gradebook_flatview.php?selectcat=' .$cat->get_id() . '&' . $courseParams. '">' .
                     Display::return_icon(
                         'stats.png',
                         get_lang('FlatView'),
                         '',
                         ICON_SIZE_SMALL
                     ) . '</a>';
-                $modify_icons .= '&nbsp;<a href="' . api_get_self() .'?visiblecat=' . $cat->get_id() . '&' .$visibility_command . '=&selectcat=' . $selectcat .'&cidReq=' . $cat->get_course_code() . '&id_session='.$cat->get_session_id(). '">' .
+                $modify_icons .= '&nbsp;<a href="' . api_get_self() .'?visiblecat=' . $cat->get_id() . '&' .$visibility_command . '=&selectcat=' . $selectcat .'&' . $courseParams. '">' .
                     Display::return_icon(
                         $visibility_icon . '.png',
                         get_lang('Visible'),
@@ -275,7 +277,7 @@ class GradebookUtils
                 if ($cat->is_locked() && !api_is_platform_admin()) {
                     $modify_icons .= Display::return_icon('delete_na.png', get_lang('DeleteAll'), '', ICON_SIZE_SMALL);
                 } else {
-                    $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&selectcat=' . $selectcat . '&cidReq=' . $cat->get_course_code() . '&id_session='.$cat->get_session_id(). '" onclick="return confirmation();">' .
+                    $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&selectcat=' . $selectcat . '&' . $courseParams. '" onclick="return confirmation();">' .
                         Display::return_icon('delete.png', get_lang('DeleteAll'), '', ICON_SIZE_SMALL) . '</a>';
                 }
             }
@@ -297,27 +299,30 @@ class GradebookUtils
         $cat = new Category();
         $message_eval = $cat->show_message_resource_delete($eval->get_course_code());
 
+        $courseParams = api_get_cidreq_params($eval->get_course_code(), $eval->getSessionId());
+
         if ($message_eval === false && api_is_allowed_to_edit(null, true)) {
             $visibility_icon = ($eval->is_visible() == 0) ? 'invisible' : 'visible';
             $visibility_command = ($eval->is_visible() == 0) ? 'set_visible' : 'set_invisible';
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
             } else {
-                $modify_icons = '<a href="gradebook_edit_eval.php?editeval=' . $eval->get_id() . '&cidReq=' . $eval->get_course_code() . '&id_session='.$eval->getSessionId(). '">' .
+                $modify_icons = '<a href="gradebook_edit_eval.php?editeval=' . $eval->get_id() . '&' . $courseParams. '">' .
                     Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
             }
 
-            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visibleeval=' . $eval->get_id() . '&' . $visibility_command . '=&selectcat=' . $selectcat . '&id_session='.$eval->getSessionId(). ' ">' .
+            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visibleeval=' . $eval->get_id() . '&' . $visibility_command . '=&selectcat=' . $selectcat . '&'.$courseParams. ' ">' .
                 Display::return_icon($visibility_icon . '.png', get_lang('Visible'), '', ICON_SIZE_SMALL) . '</a>';
             if (api_is_allowed_to_edit(null, true)) {
-                $modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&selectcat=' . $selectcat . ' &cidReq=' . $eval->get_course_code() . '&id_session='.$eval->getSessionId(). '">' .
+                $modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&selectcat=' . $selectcat . ' &' . $courseParams. '">' .
                     Display::return_icon('history.png', get_lang('GradebookQualifyLog'), '', ICON_SIZE_SMALL) . '</a>';
             }
 
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
             } else {
-                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deleteeval=' . $eval->get_id() . '&selectcat=' . $selectcat . ' &cidReq=' . $eval->get_course_code() . '&id_session='.$eval->getSessionId(). '" onclick="return confirmation();">' . Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
+                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deleteeval=' . $eval->get_id() . '&selectcat=' . $selectcat . ' &' . $courseParams. '" onclick="return confirmation();">' .
+                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
             }
             return $modify_icons;
         }
@@ -340,6 +345,8 @@ class GradebookUtils
             return null;
         }
 
+        $courseParams = api_get_cidreq_params($link->get_course_code(), $link->get_session_id());
+
         if ($message_link === false) {
             $visibility_icon = ($link->is_visible() == 0) ? 'invisible' : 'visible';
             $visibility_command = ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
@@ -347,12 +354,12 @@ class GradebookUtils
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
             } else {
-                $modify_icons = '<a href="gradebook_edit_link.php?editlink=' . $link->get_id() . '&cidReq=' . $link->get_course_code() . '&id_session='.$link->get_session_id().'">' .
+                $modify_icons = '<a href="gradebook_edit_link.php?editlink=' . $link->get_id() . '&' . $courseParams.'">' .
                     Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
             }
-            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&' . $visibility_command . '=&selectcat=' . $selectcat . '&id_session='.$link->get_session_id(). ' ">' .
+            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&' . $visibility_command . '=&selectcat=' . $selectcat . '&'.$courseParams. ' ">' .
                 Display::return_icon($visibility_icon . '.png', get_lang('Visible'), '', ICON_SIZE_SMALL) . '</a>';
-            $modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink=' . $link->get_id() . '&selectcat=' . $selectcat . '&cidReq=' . $link->get_course_code() . '&id_session='.$link->get_session_id(). '">' .
+            $modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink=' . $link->get_id() . '&selectcat=' . $selectcat . '&' . $courseParams. '">' .
                 Display::return_icon('history.png', get_lang('GradebookQualifyLog'), '', ICON_SIZE_SMALL) . '</a>';
 
             //If a work is added in a gradebook you can only delete the link in the work tool
@@ -360,9 +367,10 @@ class GradebookUtils
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
             } else {
-                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . ' &cidReq=' . $link->get_course_code() . '&id_session='.$link->get_session_id(). '" onclick="return confirmation();">' .
+                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . ' &' . $courseParams. '" onclick="return confirmation();">' .
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
             }
+            
             return $modify_icons;
         }
     }

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Chat tool
  * @package chamilo.chat
@@ -17,10 +19,8 @@ $target = isset($_GET["target"]) ? Security::remove_XSS($_GET["target"]) : null;
 if ($origin != 'whoisonline') {
     api_protect_course_script(true);
 } else {
-    $origin = $_SESSION['origin'];
-    $target = $_SESSION['target'];
-    $_SESSION['origin']= $origin;
-    $_SESSION['target']= $target;
+    $origin = Session::read('origin');
+    $target = Session::read('target');
 }
 
 api_protect_course_group(GroupManager::GROUP_TOOL_CHAT, false);

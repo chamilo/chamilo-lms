@@ -123,8 +123,8 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
 
-        $this->addSql("ALTER TABLE user DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE user DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE user ADD COLUMN id INT DEFAULT NULL");
         $this->addSql("UPDATE user SET id = user_id");
         $this->addSql("ALTER TABLE user MODIFY COLUMN id INT NOT NULL PRIMARY KEY AUTO_INCREMENT AFTER user_id");

@@ -11118,16 +11118,16 @@ EOD;
     /**
      * Check if the current lp item is first, both, last or none from lp list
      *
+     * @param int $currentItemId
      * @return string
      */
-    public function isFirstOrLastItem()
+    public function isFirstOrLastItem($currentItemId)
     {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::isFirstOrLastItem', 0);
         }
 
         $lpItemId = [];
-        $currentItemId = $this->get_current_item_id();
 
         $typeListNotToVerify = self::getChapterTypes();
         foreach ($this->items as $item) {
@@ -11136,7 +11136,6 @@ EOD;
             }
         }
 
-        $answer = '';
         $lastLpItemIndex = count($lpItemId) - 1;
         $position = array_search($currentItemId, $lpItemId);
 

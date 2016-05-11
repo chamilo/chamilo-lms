@@ -445,7 +445,7 @@ See https://support.chamilo.org/issues/6976
 .icon-toolbar{
     border-radius: 100%;
     width: 35px;
-    display: inline-block !important;
+    display: inline-block;
     margin: 0px 5px 5px 0px;
     color: #fff;
     

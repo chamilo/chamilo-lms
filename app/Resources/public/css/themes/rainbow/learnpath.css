@@ -25,7 +25,9 @@
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
-
+.lp-view-include-breadcrumb {
+  background-color: #ffffff;
+}
 
 div.text {
 	margin-left : 6;

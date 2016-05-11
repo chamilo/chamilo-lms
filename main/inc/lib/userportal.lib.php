@@ -1168,7 +1168,7 @@ class IndexManager
                             }
 
                             if (
-                                $session_now > $allowed_time
+                                $session_now >= $allowed_time
                                 //($coachAccessEndDate > $dif_time_after - 1)
                             ) {
                                 // Read only and accessible.
@@ -1307,7 +1307,7 @@ class IndexManager
                                 }
 
                                 if (
-                                    $session_now > $allowed_time //&&
+                                    $session_now >= $allowed_time //&&
                                     //$coachAccessEndDate > $dif_time_after - 1
                                 ) {
                                     if (api_get_setting('hide_courses_in_sessions') == 'false') {

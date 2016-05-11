@@ -11124,7 +11124,7 @@ EOD;
     public function isFirstOrLastItem($currentItemId)
     {
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::isFirstOrLastItem', 0);
+            error_log('New LP - In learnpath::isFirstOrLastItem('.$currentItemId.')', 0);
         }
 
         $lpItemId = [];

@@ -10,4 +10,4 @@
 $use_anonymous = true;
 
 require_once '../inc/global.inc.php';
-header('location: lp_controller.php?'.api_get_cidReq().'&action=list');
+header('location: lp_controller.php?'.api_get_cidreq().'&action=list');

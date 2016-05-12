@@ -2843,7 +2843,7 @@ class Exercise
             $safe_lp_item_id = 0;
         }
         if (empty($clock_expired_time)) {
-            $clock_expired_time = null;
+            $clock_expired_time = 0;
         }
 
         $questionList = array_map('intval', $questionList);

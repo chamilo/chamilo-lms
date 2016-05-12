@@ -116,58 +116,34 @@ class GradeBookResult
 
     /**
      * Exports the complete report as a DOCX file
-     * @return	boolean		False on error
+     * @param $data The table data
+     * @return bool
      */
     public function exportCompleteReportDOC($data)
     {
-        $_course = api_get_course_info();
-        $filename = 'gb_results_'.$_course['code'].'_'.gmdate('YmdGis');
-        $filepath = api_get_path(SYS_ARCHIVE_PATH).$filename;
-        require_once api_get_path(LIBRARY_PATH).'phpdocx/classes/CreateDocx.inc';
-        $docx = new CreateDocx();
-        $paramsHeader = array(
-            'font' => 'Courrier',
-            'jc' => 'left',
-            'textWrap' => 5,
-        );
-        $docx->addHeader(get_lang('FlatView'), $paramsHeader);
-        $params = array(
-            'font' => 'Courrier',
-            'border' => 'single',
-            'border_sz' => 20
-        );
-        $lines = 0;
-        $values[] = implode("\t",$data[0]);
-        foreach ($data[1] as $line) {
-            $values[] = implode("\t",$line);
-            $lines++;
-        }
-        //$data = array();
-        //$docx->addTable($data, $params);
-        $docx->addList($values, $params);
-        //$docx->addFooter('', $paramsHeader);
-        $paramsPage = array(
-            //    'titlePage' => 1,
-            'orient' => 'landscape',
-            //    'top' => 4000,
-            //    'bottom' => 4000,
-            //    'right' => 4000,
-            //    'left' => 4000
-        );
-        $docx->createDocx($filepath,$paramsPage);
-        //output the results
-        $data = file_get_contents($filepath.'.docx');
-        $len = strlen($data);
-        //header("Content-type: application/vnd.ms-word");
-        header('Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-        //header('Content-Type: application/force-download');
-        header('Content-length: '.$len);
-        header("Content-Disposition: attachment; filename=\"$filename.docx\"");
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0,pre-check=0');
-        header('Pragma: public');
-        echo $data;
+        $filename = 'gradebook_results_'.api_get_local_time() . '.docx';
 
+        $doc = new \PhpOffice\PhpWord\PhpWord();
+        $section = $doc->addSection(['orientation' => 'landscape']);
+        $table = $section->addTable();
+        $table->addRow();
+
+        for ($i = 0; $i < count($data[0]); $i++) {
+            $table->addCell(1750)->addText(strip_tags($data[0][$i]));
+        }
+
+        foreach ($data[1] as $dataLine) {
+            $table->addRow();
+
+            for ($i = 0; $i < count($dataLine); $i++) {
+                $table->addCell(1750)->addText(strip_tags($dataLine[$i]));
+            }
+        }
+
+        $file = api_get_path(SYS_ARCHIVE_PATH) . api_replace_dangerous_char($filename);
+        $doc->save($file, 'Word2007');
+
+        DocumentManager::file_send_for_download($file, true, $filename);
         return true;
     }
 }

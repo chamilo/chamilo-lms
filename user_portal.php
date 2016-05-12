@@ -80,7 +80,7 @@ if ($load_dirs) {
 }
 if ($displayMyCourseViewBySessionLink) {
     $htmlHeadXtra[] = '
-    <script type="text/javascript">
+    <script>
         userId = ' . $userId . '
         $(document).ready(function() {
             changeMyCoursesView($.cookie("defaultMyCourseView"+userId));
@@ -101,8 +101,7 @@ if ($displayMyCourseViewBySessionLink) {
                 $("#viewBySession").removeClass("btn-primary");
             }
         }
-	</script>
-';
+	</script>';
 }
 
 $controller = new IndexManager(get_lang('MyCourses'));

@@ -363,11 +363,11 @@ $inATest = isset($exerciseId) && $exerciseId > 0;
 if ($inATest) {
     echo '<div class="actions">';
     if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidReq().'">'.
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 
     if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) &&  !isset($_GET['editQuestion'])) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/exercise.php?'.api_get_cidReq().'">'.
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.
@@ -375,7 +375,7 @@ if ($inATest) {
 
     echo Display::url(
         Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id
+        api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
     );
 
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.

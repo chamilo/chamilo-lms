@@ -1154,8 +1154,14 @@ if (!empty($error)) {
         }
 
         // Showing the exercise description
-        if (!empty($objExercise->description)){
-            if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i==1)) {
+        if (!empty($objExercise->description)) {
+            if ($objExercise->type == ONE_PER_PAGE ||
+                ($objExercise->type != ONE_PER_PAGE && $i==1)
+            ) {
+                $open = false;
+                if ($objExercise->type != ONE_PER_PAGE) {
+                    $open = true;
+                }
                 echo Display::panelCollapse('<span>'.
                     get_lang('ExerciseDescriptionLabel').'</span>',
                     $objExercise->description,
@@ -1163,7 +1169,7 @@ if (!empty($error)) {
                     [],
                     'description',
                     'exercise-collapse',
-                    false,
+                    $open,
                     true
                 );
             }

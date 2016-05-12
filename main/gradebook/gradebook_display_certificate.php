@@ -218,7 +218,7 @@ if (count($certificate_list) == 0 ) {
             $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$value_certificate['id'];
             $certificates = Display::url(get_lang('Certificate'), $url, array('target'=>'_blank', 'class' => 'btn btn-default'));
             echo $certificates;
-            echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&cidReq='.$course_code.'&action=delete&cat_id='.$cat_id.'&certificate_id='.$value_certificate['id'].'">
+            echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$cat_id.'&certificate_id='.$value_certificate['id'].'">
                     '.Display::return_icon('delete.png',get_lang('Delete')).'
                   </a>';
             echo '</td></tr>';

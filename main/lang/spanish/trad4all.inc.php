@@ -7669,4 +7669,8 @@ $Quote = "Citar";
 $ValueTooSmall = "Valor demasiado bajo.";
 $ValueTooBig = "Valor demasiado alto.";
 $YouAreATeacherOfThisCourse = "Usted es profesor en este curso";
+$CouldNotResetPasswordBecauseLDAP = "No se pudo reiniciar la contraseña LDAP, por favor contacte su equipo de soporte.";
+$ValueTooSmall = "Valor demasiado bajo.";
+$ValueTooBig = "Valor demasiado alto.";
+$YouAreATeacherOfThisCourse = "Usted es profesor en este curso";
 ?>

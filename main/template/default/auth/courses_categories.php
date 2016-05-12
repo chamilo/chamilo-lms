@@ -130,7 +130,7 @@ $code = isset($code) ? $code : null;
         <?php
 
             $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-            $action = (!empty($_REQUEST['action'])?Security::remove_XSS($_REQUEST['action']):'display_courses');
+            $action = (!empty($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']):'display_courses');
             $pageLength = (!empty($_REQUEST['pageLength'])?intval($_REQUEST['pageLength']):10);
             $pageCurrent = (!empty($_REQUEST['pageCurrent'])?intval($_REQUEST['pageCurrent']):1);
             $form = '<form action="'.$webAction.'" method="GET" class="form-horizontal">';
@@ -214,8 +214,7 @@ if ($showCourses && $action != 'display_sessions') {
             $course_unsubscribe_allowed = ($course['unsubscribe'] == 1);
             $count_connections = $course['count_connections'];
             $creation_date = substr($course['creation_date'],0,10);
-            
-            $icon_title = null;
+
             $html = null;
             // display the course bloc
             $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items">';
@@ -223,16 +222,33 @@ if ($showCourses && $action != 'display_sessions') {
             // display thumbnail
             $html .= returnThumbnail($course);
 
+            $separator = '<div class="separator">&nbsp;</div>';
+            $subscribeButton = return_register_button($course, $stok, $code, $search_term);
+
+            // start buycourse validation
+            // display the course price and buy button if the buycourses plugin is enabled and this course is configured
+            $plugin = BuyCoursesPlugin::create();
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course);
+
+            if ($isThisCourseInSale) {
+                // set the Price label
+                $separator = $isThisCourseInSale['html'];
+                // set the Buy button instead register.
+                if ($isThisCourseInSale['verificator']) {
+                    $subscribeButton = $plugin->returnBuyCourseButton($course);
+                }
+            }
+            // end buycourse validation
+
             // display course title and button bloc
             $html .= '<div class="description">';
             $html .= return_title($course);
+            $html .= $separator;
+
             // display button line
             $html .= '<div class="toolbar">';
             $html .= '<div class="btn-group">';
             // if user registered as student
-
-            $html .= return_description_button($course, $icon_title);
-
             if ($user_registerd_in_course_as_student) {
                 $html .= return_already_registered_label('student');
 
@@ -243,8 +259,6 @@ if ($showCourses && $action != 'display_sessions') {
                 }
             } elseif ($user_registerd_in_course_as_teacher) {
                 // if user registered as teacher
-                
-
                 if ($course_unsubscribe_allowed) {
                     $html .= return_unregister_button($course, $stok, $search_term, $code);
                 }
@@ -254,9 +268,8 @@ if ($showCourses && $action != 'display_sessions') {
                 // if user not registered in the course
                 if (!$course_closed) {
                     if (!$course_private) {
-                        
                         if ($course_subscribe_allowed) {
-                            $html .= return_register_button($course, $stok, $code, $search_term);
+                            $html .= $subscribeButton;
                         }
                     }
                 }
@@ -318,7 +331,7 @@ function returnThumbnail($course)
     $html .= '<div class="author-card">';
     $count = 0;
     foreach ($teachers as $value) {
-        if ($count>2) {
+        if ($count > 2) {
             break;
         }
         $name = $value['firstname'].' ' . $value['lastname'];
@@ -329,7 +342,10 @@ function returnThumbnail($course)
                 . $name . '</a></h5></div>';
         $count ++;
     }
-    $html .= '</div></div></div>';
+    $html .= '</div></div>';
+    $html .= '<div class="user-actions">';
+    $html .= return_description_button($course);
+    $html .= '</div></div>';
 
     return $html;
 }
@@ -338,6 +354,7 @@ function returnThumbnail($course)
 /**
  * Display the title of a course in course catalog
  * @param $course
+ * @return string HTML string
  */
 function return_title($course)
 {
@@ -355,9 +372,9 @@ function return_title($course)
 /**
  * Display the description button of a course in the course catalog
  * @param $course
- * @param $icon_title
+ * @return string HTML string
  */
-function return_description_button($course, $icon_title)
+function return_description_button($course)
 {
     $title = $course['title'];
     $html = '';
@@ -372,6 +389,7 @@ function return_description_button($course, $icon_title)
 /**
  * Display the goto course button of a course in the course catalog
  * @param $course
+ * @return string HTML string
  */
 function return_goto_button($course)
 {
@@ -384,17 +402,21 @@ function return_goto_button($course)
 /**
  * Display the already registerd text in a course in the course catalog
  * @param $in_status
+ * @return string HTML string
  */
 function return_already_registered_label($in_status)
 {
-    $icon = Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY);
+    $icon = '<em class="fa fa-suitcase"></em>';
+    $title = get_lang("YouAreATeacherOfThisCourse");
     if ($in_status == 'student') {
-        $icon = Display::return_icon('user.png', get_lang('Student'), null, ICON_SIZE_TINY);
+        $icon = '<em class="fa fa-graduation-cap"></em>';
+        $title = get_lang("AlreadyRegisteredToCourse");
     }
+
     $html = Display::tag(
         'button',
         $icon,
-        array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => get_lang("AlreadyRegisteredToCourse"))
+        array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
     );
 
     return $html;
@@ -406,6 +428,7 @@ function return_already_registered_label($in_status)
  * @param $stok
  * @param $code
  * @param $search_term
+ * @return html
  */
 function return_register_button($course, $stok, $code, $search_term)
 {
@@ -420,6 +443,7 @@ function return_register_button($course, $stok, $code, $search_term)
  * @param $stok
  * @param $search_term
  * @param $code
+ * @return html
  */
 function return_unregister_button($course, $stok, $search_term, $code)
 {

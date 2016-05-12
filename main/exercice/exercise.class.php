@@ -2416,6 +2416,7 @@ class Exercise
         $this->setModelType($form->getSubmitValue('model_type'));
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
         $this->setHideQuestionTitle($form->getSubmitValue('hide_question_title'));
+        $this->sessionId = api_get_session_id();
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
         $this->setScoreTypeModel($form->getSubmitValue('score_type_model'));
         $this->setGlobalCategoryId($form->getSubmitValue('global_category_id'));

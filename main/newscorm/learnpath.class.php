@@ -8430,7 +8430,7 @@ class learnpath
             </script>';
         }
 
-        $url = api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
+        $url = api_get_self().'?cidReq='.api_get_cidreq().'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
 
         $return .= Display::url(
             Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
@@ -11114,6 +11114,50 @@ EOD;
 
         return $form->returnForm();
     }
+
+    /**
+     * Check if the current lp item is first, both, last or none from lp list
+     *
+     * @param int $currentItemId
+     * @return string
+     */
+    public function isFirstOrLastItem($currentItemId)
+    {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::isFirstOrLastItem('.$currentItemId.')', 0);
+        }
+
+        $lpItemId = [];
+
+        $typeListNotToVerify = self::getChapterTypes();
+        foreach ($this->items as $item) {
+            if (!in_array($item->get_type(), $typeListNotToVerify)) {
+                $lpItemId[] = $item->get_id();
+            }
+        }
+
+        $lastLpItemIndex = count($lpItemId) - 1;
+        $position = array_search($currentItemId, $lpItemId);
+
+        switch ($position) {
+            case 0:
+                if (!$lastLpItemIndex) {
+                    $answer = 'both';
+                    break;
+                }
+
+                $answer = 'first';
+                break;
+            case $lastLpItemIndex:
+                $answer = 'last';
+                break;
+            default:
+                $answer = 'none';
+        }
+
+        return $answer;
+    }
+
 }
 
 if (!function_exists('trim_value')) {

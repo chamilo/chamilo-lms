@@ -1,4 +1,5 @@
 <?php
+exit;
 /**
  * This script is to be used from PHP command line and will create a set
  * of Virtual VChamilo automatically from a CSV nodelist description.

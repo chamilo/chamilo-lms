@@ -344,7 +344,7 @@ class GroupManager
      */
     public static function create_class_groups($category_id)
     {
-        $options['where'] = array(" usergroup.course_id = ? " =>  api_get_real_course_id());
+        $options['where'] = array(" usergroup.course_id = ? " =>  api_get_course_int_id());
         $obj = new UserGroup();
         $classes = $obj->getUserGroupInCourse($options);
         $group_ids = array();

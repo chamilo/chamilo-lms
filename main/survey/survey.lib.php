@@ -4598,10 +4598,6 @@ class SurveyUtil
                 $current_user_id = api_get_user_id();
             }
             $link_available = self::show_link_available(api_get_user_id(),$row['code'],$current_user_id);
-            //todo check this link
-            if ($link_add === true && $link_available === true) {
-                //echo '<tr><td><a href="fillsurvey.php?user_id='.api_get_user_id().'&course='.$_course['sysCode'].'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'">'.get_lang('CompleteTheSurveysQuestions').'</a></td><td></td></tr>';
-            }
         }
         echo '</table>';
     }

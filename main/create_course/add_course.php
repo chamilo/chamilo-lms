@@ -308,8 +308,7 @@ if ($form->validate()) {
                 $message = $tpl->fetch($add_course_tpl);*/
 
                 $url = api_get_path(WEB_CODE_PATH);
-                $url .= 'course_info/start.php?cidReq=';
-                $url .= $course_info['code'];
+                $url .= 'course_info/start.php?'.api_get_cidreq_params($course_info['code']);
                 $url .= '&first=1';
                 header('Location: ' . $url);
                 exit;

@@ -115,6 +115,55 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * This function verify if the plugin is enable and return the price info for a course in the new grid catalog
+     * for 1.11.x , the main purpose is to show if a course is in sale it shows in the main platform course catalog
+     * so the old buycourses plugin catalog can be deprecated.
+     * @param Array $course course info
+     * @return mixed bool|string html
+     */
+    public function buyCoursesForGridCatalogVerificator($course) {
+        $return = [];
+        $paypal = $this->get('paypal_enable') === 'true';
+        $transfer = $this->get('transfer_enable') === 'true';
+
+        if ($paypal || $transfer) {
+            $item = $this->getItemByProduct(intval($course['real_id']), self::PRODUCT_TYPE_COURSE);
+            $return['html'] = '<div class="buycourses-price">';
+            if ($item) {
+                $return['html'] .= '<span class="label label-primary"><b>'. $item['iso_code'] .' ' . $item['price'] . '</b></span>';
+                $return['verificator'] = true;
+            } else {
+                $return['html'] .= '<span class="label label-primary"><b>'. $this->get_lang('Free'). '</b></span>';
+                $return['verificator'] = false;
+            }
+            $return['html'] .= '</div>';
+        } else {
+            return false;
+        }
+
+        return $return;
+    }
+
+    /**
+     * Return the buyCourses plugin button to buy the course
+     * @param array $course course info
+     * @return string $html
+     */
+    public function returnBuyCourseButton($course) {
+        $url = api_get_path(WEB_PLUGIN_PATH) .
+            'buycourses/src/process.php?i=' .
+            intval($course['real_id']) .
+            '&t=' .
+            self::PRODUCT_TYPE_COURSE
+        ;
+
+        $html = ' <a class="btn btn-success btn-sm" title="' . $this->get_lang('Buy') . '" href="' . $url . '">' .
+            Display::returnFontAwesomeIcon('fa fa-shopping-cart') . '</a>';
+
+        return $html;
+    }
+
+    /**
      * Get the currency for sales
      * @return array The selected currency. Otherwise return false
      */

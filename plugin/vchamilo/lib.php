@@ -2,12 +2,12 @@
 
 use Cocur\Slugify\Slugify;
 use Symfony\Component\Finder\Finder;
-require_once 'lib/bootlib.php';
+
 require_once 'lib/vchamilo_plugin.class.php';
 
 function vchamilo_hook_configuration(&$_configuration)
 {
-    global $VCHAMILO;
+    global $virtualChamilo;
 
     if (defined('CLI_SCRIPT') && !defined('CLI_VCHAMILO_OVERRIDE')) {
         return;
@@ -20,7 +20,7 @@ function vchamilo_hook_configuration(&$_configuration)
     $virtualChamiloWebRoot = $_configuration['vchamilo_web_root'].'/';
 
     if ($_configuration['root_web'] == $virtualChamiloWebRoot) {
-        $VCHAMILO = [];
+        $virtualChamilo = [];
 
         return;
     }
@@ -78,11 +78,10 @@ function vchamilo_hook_configuration(&$_configuration)
             $data['SYS_HOME_PATH'] = $homePath.'/'.$data['slug'];
             $data['SYS_COURSE_PATH'] = $coursePath.'/'.$data['slug'];
 
-            $VCHAMILO = $data;
+            $virtualChamilo = $data;
         }
     } else {
-        //die ("VChamilo : No configuration for this host. May be faked.");
-        die ("VChamilo : Could not fetch virtual chamilo configuration");
+        die("VChamilo : Could not fetch virtual chamilo configuration");
     }
 }
 
@@ -146,7 +145,12 @@ function vchamilo_boot_connection(&$_configuration)
     );
     try {
         $database = new \Database();
-        $connection = $database->connect($dbParams, $_configuration['root_sys'], $_configuration['root_sys'], true);
+        $connection = $database->connect(
+            $dbParams,
+            $_configuration['root_sys'],
+            $_configuration['root_sys'],
+            true
+        );
     } catch (Exception $e) {
         echo('Side connection failure with '.$_configuration['db_host'].', '.$_configuration['db_user'].', ******** ');
         die();
@@ -164,6 +168,10 @@ function vchamilo_redirect($url) {
     exit;
 }
 
+/**
+ * @param string $course_folder
+ * @return string
+ */
 function vchamilo_get_htaccess_fragment($course_folder)
 {
     $str = "
@@ -194,9 +202,15 @@ function vchamilo_get_htaccess_fragment($course_folder)
     RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
     </IfModule>
     ";
+
+    return $str;
 }
 
-function vchamilo_get_default_course_index_fragment() {
+/**
+ * @return string
+ */
+function vchamilo_get_default_course_index_fragment()
+{
     return "<html><head></head><body></body></html>";
 }
 
@@ -223,7 +237,9 @@ function vchamilo_drop_databases(&$vchamilo)
 {
     global $plugininstance;
 
-    if (is_array($vchamilo)) $vchamilo = (object)$vchamilo;
+    if (is_array($vchamilo)) {
+        $vchamilo = (object)$vchamilo;
+    }
 
     if (empty($vchamilo->main_database)) {
         Display::addFlash(Display::return_message('No database found'));
@@ -263,12 +279,8 @@ function vchamilo_create_databases($vchamilo)
         Display::addFlash(Display::return_message("Creating DB $adb"));
         $sql = str_replace('%DATABASE%', $adb, $createstatement);
         Database::query($sql);
-        /*if(!$DB->execute_sql($sql)){
-            print_error('noexecutionfor','block_vmoodle', $sql);
-            return false;
-        }*/
-
     }
+
     return true;
 }
 
@@ -347,89 +359,6 @@ function vchamilo_load_db_template($vchamilo, $template)
     }
 
     return true;
-}
-
-/**
-* load a bulk sql in database that is given through a vchamilo configuration record.
-* @param object $vchamilo
-* @param string $bulfile a bulk file of queries to process on the database
-* @param handle $cnx
-* @param array $vars an array of vars to inject in the bulk file before processing
-*/
-function vchamilo_execute_db_sql(&$vchamilo, $bulkfile, $cnx = null, $vars = null, $filter = null)
-{
-   if (file_exists($bulkfile)) {
-        $erroritem = new stdClass();
-        $erroritem->message = "vchamilo_load_db_template : Bulk file $bulkfile not found";
-        $erroritems[] = $erroritem;
-
-        return $erroritem;
-    }
-
-    $local_cnx = 0;
-    if (is_null($cnx)){
-        $cnx = vchamilo_make_connection($vchamilo, true);
-        $local_cnx = 1;
-    }
-
-    /// get dump file
-    $sql = file($bulkfile);
-
-    // converts into an array of text lines
-    $dumpfile = implode('', $sql);
-    if ($filter){
-        foreach($filter as $from => $to){
-            $dumpfile = mb_ereg_replace(preg_quote($from), $to, $dumpfile);
-        }
-    }
-    // insert any external vars
-    if (!empty($vars)){
-        foreach($vars as $key => $value){
-            // for debug : echo "$key => $value";
-            $dumpfile = str_replace("<%%$key%%>", $value, $dumpfile);
-        }
-    }
-    $sql = explode ("\n", $dumpfile);
-    // cleanup unuseful things
-    $sql = preg_replace("/^--.*/", "", $sql);
-    $sql = preg_replace("/^\/\*.*/", "", $sql);
-    $dumpfile = implode("\n", $sql);
-
-    /// split into single queries
-    $dumpfile = str_replace("\r\n", "\n", $dumpfile); // translates to Unix LF
-    $queries = preg_split("/;\n/", $dumpfile);
-    /// feed queries in database
-    $i = 0;
-    $j = 0;
-    $l = 0;
-    if (!empty($queries)){
-        foreach($queries as $query){
-            $query = trim($query); // get rid of trailing spaces and returns
-            if ($query == '') continue; // avoid empty queries
-            $query = mb_convert_encoding($query, 'iso-8859-1', 'auto');
-            if (!$res = vchamilo_execute_query($vchamilo, $query, $cnx)){
-                $erroritem = new stdClass();
-                $erroritem->message = "vchamilo_load_db_template : Load error on query $l";
-                $erroritem->content = $query;
-                $erroritems[] = $erroritem;
-                $j++;
-            } else {
-                $i++;
-            }
-            $l++;
-        }
-    }
-    echo "loaded : $i queries succeeded, $j queries failed<br/>";
-
-    if ($local_cnx){
-        vchamilo_close_connection($vchamilo, $cnx);
-    }
-
-    if (!empty($erroritems)){
-        return $erroritems;
-    }
-
-    return false;
 }
 
 /**
@@ -526,7 +455,7 @@ function vchamilo_get_vmanifest($version)
     $file = api_get_path(SYS_PATH).'/plugin/vchamilo/templates/'.$version.'/manifest.php';
     if (file_exists($file)) {
 
-        include($file);
+        include $file;
 
         $manifest = new stdClass();
         $manifest->templatewwwroot = $templatewwwroot;
@@ -606,24 +535,6 @@ function vchamilo_get_available_templates()
     return $templates;
 }
 
-function vchamilo_print_error($errortrace, $return = false)
-{
-    $str = '';
-    if (!empty($errortrace)){
-        $str .= '<div class="vchamilo-errors" style="border:1px solid #a0a0a0;background-color:#ffa0a0;padding:5px;font-size:10px">';
-        $str .= '<pre>';
-        foreach($errortrace as $error){
-            $str .= $error->message.'<br/>';
-            $str .= @$error->content;
-        }
-        $str .= '</pre>';
-        $str .= '</div>';
-    }
-
-    if ($return) return $str;
-    Display::addFlash(Display::return_message($str));
-}
-
 /**
 * this function set will map standard moodle API calls to chamilo
 * internal primitives. This avoids too many changes to do in imported
@@ -645,6 +556,10 @@ function vchamilo_get_config($module, $key, $isplugin = true)
     return false;
 }
 
+/**
+ * @param  $vchamilo
+ * @param string $template
+ */
 function vchamilo_load_files_from_template($vchamilo, $template)
 {
     global $_configuration;
@@ -822,7 +737,6 @@ function get_string($key, $component = 'local_ent_installer', $a = '') {
             if (is_object($a)) {
                 return replace_string_vars($a, $fallbackstrings[$key]);
             }
-            debugging('String insertion not supported', 1);
             die;
         }
 
@@ -862,13 +776,6 @@ function print_error($key, $component = '', $passthru = false, $extrainfo = ''){
         $str = get_string($string, $component);
     }
     ctrace('ERROR: '. $str);
-    if (!empty($extrainfo)){
-        ctrace('Extra: '. $extrainfo);
-    }
-    if ($debugdisplay >= 3){
-        debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-    }
-    if (!$passthru) die;
 }
 
 function debugging($message, $level) {
@@ -881,14 +788,6 @@ function debugging($message, $level) {
             debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         }
     }
-}
-
-/**
- * Wrap moodle to chamilo side
- *
- */
-function mtrace($message){
-    ctrace($message);
 }
 
 function ctrace($str) {

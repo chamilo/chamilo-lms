@@ -1,5 +1,5 @@
 <?php
-
+exit;
 global $debuglevel;
 global $debugdisplay;
 $debuglevel = 4;

@@ -246,8 +246,7 @@ if (
     $table_list = Display::page_subheader(get_lang('ThreadUsersList') . ': ' . get_name_thread_by_id($_GET['id']));
 
     if ($nrorow3 > 0 || $nrorow3 == -2) {
-        $url = 'cidReq=' . Security::remove_XSS($_GET['cidReq']) .
-            '&forum=' . Security::remove_XSS($my_forum) . '&action='
+        $url = api_get_cidreq() .'&forum=' . intval($my_forum) . '&action='
             . Security::remove_XSS($_GET['action']) . '&content='
             . Security::remove_XSS($_GET['content'], STUDENT) . '&id=' . intval($_GET['id']);
         $tabs = array(

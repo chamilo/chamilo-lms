@@ -3466,29 +3466,30 @@ class CourseManager
                 ORDER BY sort ASC";
         $result = Database::query($sql);
         $courseCount = 0;
-        $listItems = array();
+        $listItems = [];
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $courseInCategory = self:: returnCoursesCategories(
                 $row['id'],
                 $load_dirs
             );
-            if (empty($courseInCategory)) {
-                $courseInCategory = null;
-            }
-            $params = array(
+
+            $params = [
                 'id_category' => $row ['id'],
                 'title_category' => $row['title'],
                 'courses' => $courseInCategory
-            );
+            ];
             $courseCount ++;
             $listItems['in_category'][$courseCount] = $params;
         }
-        // Step 2: We display the course without a user category.
-        $courseInCategory = self::returnCoursesWithoutCategories(0, $load_dirs);
-        $listItems['not_category'] = $courseInCategory;
 
-        return $listItems;       
+        // Step 2: We display the course without a user category.
+        $coursesNotCategory = self::returnCoursesWithoutCategories(0, $load_dirs);
+        if ($coursesNotCategory) {
+            $listItems['not_category'] = $coursesNotCategory;
+        }
+
+        return $listItems;
     }
     
     /**
@@ -3569,11 +3570,33 @@ class CourseManager
             }
 
             $params = array();
+            
+            $thumbnails = null;
+            $image = null;
+            
+            
+            if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+                $thumbnails = $course_info['course_image'];
+                $image = $course_info['course_image_large'];
+            }else{
+                $image = Display::return_icon('session_default.png', null, null, null,null, true);
+            }
+            
             $params['course_id'] = $course['id'];
-            $params['actions'] = '';
-
+            $params['edit_actions'] = '';
+            $params['document'] = '';
             if (api_is_platform_admin()) {
-                $params['actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
+                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'];
+                if($load_dirs){
+                    $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                               . Display::returnFontAwesomeIcon('folder-open') . '</a>';
+                    $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
+                }
+            }
+            if ($load_dirs) {
+                $params['document'] = '<a id="document_preview_' . $course_info['real_id'] . '_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                    . Display::returnFontAwesomeIcon('folder-open') . '</a>';
+                $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
             }
 
             $courseUrl = '';
@@ -3591,8 +3614,12 @@ class CourseManager
             
             $params['visibility'] = $course_info['visibility'];
             $params['link'] = $courseUrl;
-            $params['title'] = $course_info['title'] . $visualCode;
+            $params['thumbnails'] = $thumbnails;
+            $params['image'] = $image;
+            $params['title'] = $course_info['title'];
+            $params['category'] = $course_info['categoryName'];
             $params['teachers'] = $teachers;
+            
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;
@@ -3627,6 +3654,7 @@ class CourseManager
         $TABLECOURSUSER = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
         $TABLE_ACCESS_URL_REL_COURSE = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
+        $courseList = [];
 
         // Get course list auto-register
         $special_course_list = self::get_special_course_list();
@@ -4624,6 +4652,8 @@ class CourseManager
 
         $stok = Security::get_existing_token();
 
+        $user_id = api_get_user_id();
+
         foreach ($courses as $courseId) {
             $course_info = api_get_course_info_by_id($courseId['c_id']);
             $courseCode = $course_info['code'];
@@ -4637,6 +4667,30 @@ class CourseManager
                 $course_info,
                 $my_course_code_list
             );
+
+            $user_registerd_in_course = CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']);
+            $user_registerd_in_course_as_teacher = CourseManager::is_course_teacher($user_id, $course_info['code']);
+            $user_registerd_in_course_as_student = ($user_registerd_in_course && !$user_registerd_in_course_as_teacher);
+
+            // if user registered as student
+            if ($user_registerd_in_course_as_student) {
+                $icon = '<em class="fa fa-graduation-cap"></em>';
+                $title = get_lang("AlreadyRegisteredToCourse");
+                $my_course['already_register_as'] = Display::tag(
+                    'button',
+                    $icon,
+                    array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
+                );
+            } elseif ($user_registerd_in_course_as_teacher) {
+                // if user registered as teacher
+                $icon = '<em class="fa fa-suitcase"></em>';
+                $title = get_lang("YouAreATeacherOfThisCourse");
+                $my_course['already_register_as'] = Display::tag(
+                    'button',
+                    $icon,
+                    array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => $title)
+                );
+            }
 
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {
@@ -4661,6 +4715,20 @@ class CourseManager
                     api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
                     array('class' => 'btn btn-danger btn-sm', 'title' => get_lang('Unreg')));
             }
+
+            // start buycourse validation
+            // display the course price and buy button if the buycourses plugin is enabled and this course is configured
+            $plugin = BuyCoursesPlugin::create();
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course_info);
+            if ($isThisCourseInSale) {
+                // set the price label
+                $my_course['price'] = $isThisCourseInSale['html'];
+                // set the Buy button instead register.
+                if ($isThisCourseInSale['verificator'] && !empty($my_course['register_button'])) {
+                    $my_course['register_button'] = $plugin->returnBuyCourseButton($course_info);
+                }
+            }
+            // end buycourse validation
 
             //Description
             $my_course['description_button'] = '';

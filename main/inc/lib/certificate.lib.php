@@ -184,7 +184,7 @@ class Certificate extends Model
 
             //If the gradebook is related to skills we added the skills to the user
 
-            $courseId = api_get_real_course_id();
+            $courseId = api_get_course_int_id();
             $sessionId = api_get_session_id();
 
             $skill = new Skill();

@@ -151,7 +151,7 @@ if ($objExercise->selectAttempts() > 0) {
         if ($remainingAttempts) {
             $attemptButton = Display::toolbarButton(
                 get_lang('AnotherAttempt'),
-                api_get_patth(WEB_CODE_PATH) . 'exercice/overview.php?' . api_get_cidreq() . '&' . http_build_query([
+                api_get_path(WEB_CODE_PATH) . 'exercice/overview.php?' . api_get_cidreq() . '&' . http_build_query([
                     'exerciseId' => $objExercise->id
                 ]),
                 'pencil-square-o',
@@ -204,7 +204,7 @@ if ($origin != 'learnpath') {
 	Display::display_footer();
 } else {
 	$lp_mode = isset($_SESSION['lp_mode']) ? $_SESSION['lp_mode'] : null;
-	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
+	$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
 	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {

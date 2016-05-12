@@ -110,9 +110,13 @@ require 'header_frame.inc.php';
 </form>
 <?php
 
-if (isset($_SESSION["origin"]) && $_SESSION["origin"] == 'whoisonline') {
+
+$origin = Session::read('origin');
+$target = Session::read('target');
+
+if ($origin == 'whoisonline') {
     //check if our target has denied our request or not
-    $talk_to = $_SESSION["target"];
+    $talk_to = (int) $target;
     $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
     $sql = "select chatcall_text from $track_user_table where ( user_id = $talk_to )";
     $result = Database::query($sql);

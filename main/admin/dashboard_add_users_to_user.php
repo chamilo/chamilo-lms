@@ -294,7 +294,7 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
             $affected_rows = UserManager::suscribe_users_to_hr_manager($user_id, $user_list);
             break;
         case STUDENT_BOSS:
-            $affected_rows = UserManager::subscribeUsersToBoss($user_id, $user_list);
+            $affected_rows = UserManager::subscribeBossToUsers($user_id, $user_list);
             break;
         default:
             $affected_rows = 0;

@@ -670,7 +670,7 @@ class Template
             'bootstrap/dist/js/bootstrap.min.js',
             'jquery-ui/jquery-ui.min.js',
             'moment/min/moment-with-locales.min.js',
-            'ckeditor/ckeditor.js',
+            api_is_anonymous() ? '' : 'ckeditor/ckeditor.js',
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
             'mediaelement/build/mediaelement-and-player.min.js',

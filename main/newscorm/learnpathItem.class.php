@@ -2153,8 +2153,10 @@ class learnpathItem
         //  (looking for less-inclusives first).
 
         if ($prereqs_string == '_true_') {
+
             return true;
         }
+
         if ($prereqs_string == '_false_') {
             if (empty($this->prereq_alert)) {
                 $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
@@ -2211,6 +2213,7 @@ class learnpathItem
                             $refs_list,
                             $user_id
                         );
+
                         if (!$andstatus) {
                             if (self::debug > 1) {
                                 error_log(
@@ -2234,9 +2237,11 @@ class learnpathItem
                         if (empty($this->prereq_alert) && !$returnstatus) {
                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                         }
+
                         return $returnstatus;
                     }
                     $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+
                     return false;
                 }
             } else {
@@ -2245,6 +2250,7 @@ class learnpathItem
                 if (self::debug > 1) {
                     error_log('New LP - Didnt find any AND, looking for =', 0);
                 }
+
                 if (strpos($prereqs_string, '=') !== false) {
                     if (self::debug > 1) {
                         error_log('New LP - Found =, looking into it', 0);
@@ -2255,7 +2261,7 @@ class learnpathItem
                         // Right number of operands.
                         if (isset($items[$refs_list[$params[0]]])) {
                             $status = $items[$refs_list[$params[0]]]->get_status(true);
-                            $returnstatus = ($status == $params[1]);
+                            $returnstatus = $status == $params[1];
                             if (empty($this->prereq_alert) && !$returnstatus) {
                                 $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                             }
@@ -2274,6 +2280,7 @@ class learnpathItem
                             0
                         );
                     }
+
                     if (strpos($prereqs_string, '<>') !== false) {
                         if (self::debug > 1) {
                             error_log('New LP - Found <>, looking into it', 0);
@@ -2284,7 +2291,7 @@ class learnpathItem
                             // Right number of operands.
                             if (isset($items[$refs_list[$params[0]]])) {
                                 $status = $items[$refs_list[$params[0]]]->get_status(true);
-                                $returnstatus = ($status != $params[1]);
+                                $returnstatus = $status != $params[1];
                                 if (empty($this->prereq_alert) && !$returnstatus) {
                                     $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                 }
@@ -2292,6 +2299,7 @@ class learnpathItem
                                 return $returnstatus;
                             }
                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+
                             return false;
                         }
                     } else {
@@ -2432,7 +2440,7 @@ class learnpathItem
                                         foreach ($list as $cond) {
                                             if (isset($items[$refs_list[$cond]])) {
                                                 $status = $items[$refs_list[$cond]]->get_status(true);
-                                                if ($status == $this->possible_status[2] OR
+                                                if ($status == $this->possible_status[2] ||
                                                     $status == $this->possible_status[3]
                                                 ) {
                                                     $mycond = true;
@@ -2604,6 +2612,7 @@ class learnpathItem
                                                 $returnstatus = false;
                                             }
                                         }
+
                                         return $returnstatus;
                                     } else {
                                         $status = $items[$refs_list[$prereqs_string]]->get_status(false);
@@ -2745,12 +2754,13 @@ class learnpathItem
                 }
                 if (isset($items[$refs_list[$list[0]]])) {
                     $status = $items[$refs_list[$list[0]]]->get_status(true);
-                    $returnstatus = (($status == 'completed') || ($status == 'passed'));
+                    $returnstatus = $status == 'completed' || $status == 'passed';
                     if (!$returnstatus && empty($this->prereq_alert)) {
                         $this->prereq_alert = get_lang(
                             'LearnpathPrereqNotCompleted'
                         );
                     }
+                    
                     return $returnstatus;
                 }
             }

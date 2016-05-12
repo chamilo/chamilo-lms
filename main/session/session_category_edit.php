@@ -18,8 +18,8 @@ $errorMsg = '';
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $tool_name = get_lang('EditSessionCategory');
 $interbreadcrumb[] = array(
-    'url' => 'index.php',
-    "name" => get_lang('PlatformAdmin')
+    'url' => 'session_list.php',
+    "name" => get_lang('SessionList')
 );
 $interbreadcrumb[] = array(
     'url' => "session_category_list.php",

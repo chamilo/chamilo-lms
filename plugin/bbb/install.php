@@ -4,9 +4,6 @@
  * includes things to execute in the main database (settings_current table)
  * @package chamilo.plugin.bigbluebutton
  */
-/**
- * Initialization
- */
 
-require_once dirname(__FILE__).'/config.php';
+require_once __DIR__.'/config.php';
 BBBPlugin::create()->install();

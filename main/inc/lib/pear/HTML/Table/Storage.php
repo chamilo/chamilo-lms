@@ -126,7 +126,7 @@ class HTML_Table_Storage extends HTML_Common {
      *                                       <tbody> or not
      * @access   public
      */
-    function HTML_Table_Storage($tabOffset = 0, $useTGroups = false)
+    public function __construct($tabOffset = 0, $useTGroups = false)
     {
         parent::__construct(null, (int)$tabOffset);
         $this->_useTGroups = (boolean)$useTGroups;
@@ -137,7 +137,7 @@ class HTML_Table_Storage extends HTML_Common {
      * @param   boolean   $useTGroups
      * @access  public
      */
-    function setUseTGroups($useTGroups)
+    public function setUseTGroups($useTGroups)
     {
         $this->_useTGroups = $useTGroups;
     }
@@ -147,7 +147,7 @@ class HTML_Table_Storage extends HTML_Common {
      * @access   public
      * @return   boolean
      */
-    function getUseTGroups()
+    public function getUseTGroups()
     {
         return $this->_useTGroups;
     }
@@ -157,7 +157,7 @@ class HTML_Table_Storage extends HTML_Common {
      * @param   mixed   $fill
      * @access  public
      */
-    function setAutoFill($fill)
+    public function setAutoFill($fill)
     {
         $this->_autoFill = $fill;
     }
@@ -167,7 +167,7 @@ class HTML_Table_Storage extends HTML_Common {
      * @access   public
      * @return   mixed
      */
-    function getAutoFill()
+    public function getAutoFill()
     {
         return $this->_autoFill;
     }
@@ -177,7 +177,7 @@ class HTML_Table_Storage extends HTML_Common {
      * @param    bool   $fill
      * @access   public
      */
-    function setAutoGrow($grow)
+    public function setAutoGrow($grow)
     {
         $this->_autoGrow = $grow;
     }
@@ -187,7 +187,7 @@ class HTML_Table_Storage extends HTML_Common {
      * @access   public
      * @return   mixed
      */
-    function getAutoGrow()
+    public function getAutoGrow()
     {
         return $this->_autoGrow;
     }

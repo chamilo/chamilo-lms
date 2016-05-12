@@ -5024,11 +5024,11 @@ class CourseManager
         $settingList = self::getCourseSettingVariables($appPlugin);
 
         if (!in_array($variable, $settingList)) {
+
             return false;
         }
 
         $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
-
         if (self::hasCourseSetting($variable, $courseId)) {
             // Update
             Database::update(
@@ -5040,7 +5040,7 @@ class CourseManager
             // Create
             Database::insert(
                 $courseSettingTable,
-                array('value' => $value, 'c_id' => $courseId, 'variable' => $variable)
+                ['title' => $variable, 'value' => $value, 'c_id' => $courseId, 'variable' => $variable]
             );
         }
         return true;

@@ -13,7 +13,7 @@ class Number extends HTML_QuickForm_text
      * @param string $elementLabel
      * @param array  $attributes
      */
-    public function Number($elementName = null, $elementLabel = null, $attributes = null)
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;

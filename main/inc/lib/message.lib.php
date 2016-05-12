@@ -406,7 +406,8 @@ class MessageManager
                     $new_user_list,
                     $subject,
                     $content,
-                    $group_info
+                    $group_info,
+                    $file_attachments
                 );
             }
 
@@ -438,7 +439,7 @@ class MessageManager
             $receiver_user_id,
             $subject,
             $message,
-            [],
+            $_FILES ? $_FILES : [],
             [],
             null,
             null,

@@ -175,7 +175,7 @@ class Database
         $listener = new \Gedmo\Sortable\SortableListener();
         $entityManager->getEventManager()->addEventSubscriber($listener);
         $connection = $entityManager->getConnection();
-
+$connection->executeQuery('set sql_mode=""');
         $this->setConnection($connection);
         $this->setManager($entityManager);
     }
@@ -661,5 +661,24 @@ class Database
             $cache,
             $isSimpleMode
         );
+    }
+
+    /**
+     * @param string $table
+     *
+     * @return bool
+     */
+    public static function tableExists($table)
+    {
+        return self::getManager()->getConnection()->getSchemaManager()->tablesExist($table);
+    }
+
+    /**
+     * @param $table
+     * @return \Doctrine\DBAL\Schema\Column[]
+     */
+    public static function listTableColumns($table) 
+    {
+        return self::getManager()->getConnection()->getSchemaManager()->listTableColumns($table);
     }
 }

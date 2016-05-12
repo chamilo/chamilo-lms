@@ -514,10 +514,9 @@ if (is_array($forumCategories)) {
                         );
 
                         $html .= '<h3 class="title">' . $iconForum . $linkForum . '</h3>';
-
                         $html .= Display::tag(
                             'p',
-                            strip_tags($forum['forum_comment']),
+                            Security::remove_XSS($forum['forum_comment']),
                             array(
                                 'class'=>'description'
                             )
@@ -525,7 +524,7 @@ if (is_array($forumCategories)) {
                         $html .= '</div>';
                         $html .= '</div>';
 
-                        $iconEmpty='';
+                        $iconEmpty = '';
 
                         // The number of topics and posts.
                         if ($forum['forum_of_group'] !== '0') {

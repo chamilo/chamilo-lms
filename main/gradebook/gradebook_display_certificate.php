@@ -181,15 +181,15 @@ if ($filter === 'true') {
 }
 
 echo '<div class="btn-group">';
-$url = api_get_self().'?action=generate_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
+$url = api_get_self().'?action=generate_all_certificates'.'&'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
 echo Display::url(get_lang('GenerateCertificates'), $url, array('class' => 'btn btn-default'));
 
-$url = api_get_self().'?action=delete_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
+$url = api_get_self().'?action=delete_all_certificates'.'&'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
 echo Display::url(get_lang('DeleteAllCertificates'), $url, array('class' => 'btn btn-default'));
 
 $hideCertificateExport = api_get_setting('hide_certificate_export_link');
 if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
-    $url = api_get_self().'?action=export_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
+    $url = api_get_self().'?action=export_all_certificates'.'&'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
     echo Display::url(get_lang('ExportAllCertificatesToPDF'), $url, array('class' => 'btn btn-default'));
 }
 echo '</div>';

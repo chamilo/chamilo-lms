@@ -40,21 +40,25 @@ class HTML_QuickForm_Rule_Range extends HTML_QuickForm_Rule
      * @access    public
      * @return    boolean   true if value is valid
      */
-    function validate($value, $options)
+    public function validate($value, $options)
     {
-        // Modified by Ivan Tcholakov, 16-MAR-2010.
-        //$length = strlen($value);
         $length = api_strlen($value);
-        //
+
         switch ($this->name) {
-            case 'minlength': return ($length >= $options);
-            case 'maxlength': return ($length <= $options);
-            default:          return ($length >= $options[0] && $length <= $options[1]);
+            case 'min_numeric_length':
+                return (float) $value >= $options;
+            case 'max_numeric_length':
+                return (float) $value <= $options;
+            case 'minlength':
+                return $length >= $options;
+            case 'maxlength':
+                return $length <= $options;
+            default:
+                return $length >= $options[0] && $length <= $options[1];
         }
-    } // end func validate
+    }
 
-
-    function getValidationScript($options = null)
+    public function getValidationScript($options = null)
     {
         switch ($this->name) {
             case 'minlength':
@@ -67,7 +71,5 @@ class HTML_QuickForm_Rule_Range extends HTML_QuickForm_Rule
                 $test = '({jsVar}.length < '.$options[0].' || {jsVar}.length > '.$options[1].')';
         }
         return array('', "{jsVar} != '' && {$test}");
-    } // end func getValidationScript
-
-} // end class HTML_QuickForm_Rule_Range
-?>
+    }
+}

@@ -1584,7 +1584,8 @@ class Attendance
 			$params = array(
 				'c_id' =>  $course_id,
 				'date_time' => $this->date_time,
-				'attendance_id' => $attendance_id
+				'attendance_id' => $attendance_id,
+                'done_attendance' => 0
 			);
 			$id = Database::insert($tbl_attendance_calendar, $params);
 

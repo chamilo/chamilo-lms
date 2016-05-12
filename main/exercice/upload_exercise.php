@@ -58,7 +58,7 @@ lp_upload_quiz_main();
 
 function lp_upload_quiz_actions()
 {
-    $return = '<a href="exercise.php?'.api_get_cidReq().'">'.
+    $return = '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     return $return;
 }
@@ -622,7 +622,7 @@ function lp_upload_quiz_action_handling() {
             exit;
         } else {
             //  header('location: exercice.php?' . api_get_cidreq());
-            echo '<script>window.location.href = "'.api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidReq().'&exerciseId='.$quiz_id.'&session_id='.api_get_session_id().'"</script>';
+            echo '<script>window.location.href = "'.api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&exerciseId='.$quiz_id.'&session_id='.api_get_session_id().'"</script>';
         }
     }
 }

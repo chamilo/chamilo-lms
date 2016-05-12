@@ -1097,10 +1097,12 @@ switch ($action) {
         if (!$lp_found) {
             error_log('New LP - No learnpath given for content', 0);
             require 'lp_list.php';
-        }
-        else {
+        } else {
+            if ($debug > 0) error_log('New LP - save_last()', 0);
             $_SESSION['oLP']->save_last();
+            if ($debug > 0) error_log('New LP - set_current_item()', 0);
             $_SESSION['oLP']->set_current_item($_GET['item_id']);
+            if ($debug > 0) error_log('New LP - start_current_item()', 0);
             $_SESSION['oLP']->start_current_item();
             require 'lp_content.php';
         }

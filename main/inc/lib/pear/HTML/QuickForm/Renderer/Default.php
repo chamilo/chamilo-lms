@@ -167,7 +167,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     *
     * @access public
     */
-    public function HTML_QuickForm_Renderer_Default()
+    public function __construct()
     {
         parent::__construct();
     } // end constructor
@@ -280,7 +280,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     {
         $name = $element->getName();
         $label = $element->getLabel();
-        $labelForId = $element->getAttribute('id');        
+        $labelForId = $element->getAttribute('id');
         $icon = $element->getIconToHtml();
 
         if (is_array($label)) {

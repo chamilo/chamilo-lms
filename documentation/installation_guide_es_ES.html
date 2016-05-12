@@ -694,7 +694,8 @@ por ejemplo. El efecto debería ser inmediato.
 
   location / {
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued.php?skill=$1&user=$2 last;
     try_files $uri @rewrite;
   }
 
@@ -710,7 +711,6 @@ por ejemplo. El efecto debería ser inmediato.
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
-    rewrite "^/badge/(\d{1,})/user/(\d{1,})$" main/badge/issued.php?skill=$1&user=$2 last;
 
     fastcgi_pass unix:/var/run/php5-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;
@@ -805,9 +805,9 @@ Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería
 </div>
 
 <hr />
-    <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
+    <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
 	<a href="http://jigsaw.w3.org/css-validator/">
-		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
+		<img src="//jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
 	</a>
 </body>
 </html>

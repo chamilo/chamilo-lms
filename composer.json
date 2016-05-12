@@ -73,7 +73,8 @@
         "php-ffmpeg/php-ffmpeg": "0.5.1",
         "imagine/imagine": "0.6.2",
         "essence/essence": "^2.5",
-        "jeroendesloovere/vcard": "^1.2"
+        "jeroendesloovere/vcard": "^1.2",
+        "phpoffice/phpword": "^0.12.1"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",

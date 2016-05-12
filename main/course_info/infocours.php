@@ -483,7 +483,7 @@ $form->setDefaults($values);
 
 // Validate form
 if ($form->validate() && is_settings_editable()) {
-    $updateValues = $form->exportValues();
+    $updateValues = $form->getSubmitValues();
 
     // update course picture
     $picture = $_FILES['picture'];
@@ -553,7 +553,7 @@ if ($form->validate() && is_settings_editable()) {
         'activate_legal'
     );
 
-    $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : '';
+    $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : 0;
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
     $params = [
@@ -571,7 +571,6 @@ if ($form->validate() && is_settings_editable()) {
     ];
 
     Database::update($table_course, $params, ['id = ?' => $courseId]);
-
     // Insert/Updates course_settings table
     foreach ($courseSettings as $setting) {
         $value = isset($updateValues[$setting]) ? $updateValues[$setting] : null;

@@ -28,6 +28,7 @@
                         <li>
                             {{ profile_link }}
                             {{ message_link }}
+                            {{ certificate_link }}
                         </li>
                     </ul>
                 </li>

@@ -7037,13 +7037,7 @@ Modificar valores de \$result con el nombre de los atributos de Shibboleth
 Ir a Plug-in para añadir el botón 'Shibboleth Login' en su campus de Chamilo.";
 $LdapDescriptionTitle = "<h3>Autentificacion LDAP</h3>";
 $FacebookMainActivateTitle = "Autenticación con Facebook";
-$FacebookMainActivateComment = "En primer lugar, se tiene que crear una aplicación de Facebook (ver https://developers.facebook.com/apps) con una cuenta de Facebook. En los parámetros de aplicaciones de Facebook, el valor de dirección URL del sitio debe tener \"una acción = fbconnect\" un parámetro GET (http://mychamilo.com/?action=fbconnect, por ejemplo).
-
-Entonces, editar el archivo <strong> main/auth/external_login/facebook.conf.php </strong>
-
-e ingresar en \"appId\" y \"secret\" los valores de \$facebook_config.
-
-Ir a Plug-in para añadir un botón configurable \"Facebook Login\" para el campus de Chamilo.";
+$FacebookMainActivateComment = "<p>En primer lugar, ustede tiene que crear una Aplicación Facebook (ver <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) con su cuenta de Facebook. En la configuración de Aplicaciones de Facebook, el valor de la URL del sitio debe ser la URL de este campus.</p><p>Luego, edite el archivo <code>/app/config/auth.conf.php</code> e ingresa los valores de '<code>appId</code>' y '<code>secret</code>' para <code>&#36;facebook_config</code>.</p><p>Ir a <a href='settings.php?category=Plugins'>Plugins</a> para agregar un botón configurable de <em>Incio de sesión con Facebook</em> para su campus Chamilo.</p>";
 $AnnouncementForGroup = "Anuncios para un grupo";
 $AllGroups = "Todos los grupos";
 $LanguagePriority1Title = "Prioridad del idioma 1";
@@ -7669,4 +7663,10 @@ $Map = "Mapa";
 $MyLocation = "Mi ubicación";
 $ShowCourseInUserLanguage = "Mostrar el curso en el idioma del usuario";
 $AccessData = "Datos de acceso";
+$InvalidImageDimensions = "Las dimensiones de la imagen no corresponden a los requerimientos. Por favor verifique las sugerencias cerca del campo de imagen.";
+$CouldNotResetPasswordBecauseLDAP = "No se pudo reiniciar la contraseña LDAP, por favor contacte su equipo de soporte.";
+$Quote = "Citar";
+$ValueTooSmall = "Valor demasiado bajo.";
+$ValueTooBig = "Valor demasiado alto.";
+$YouAreATeacherOfThisCourse = "Usted es profesor en este curso";
 ?>

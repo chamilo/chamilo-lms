@@ -14,7 +14,7 @@ class Url extends HTML_QuickForm_text
      * @param type $elementLabel
      * @param type $attributes
      */
-    public function Url($elementName = null, $elementLabel = null, $attributes = null)
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;

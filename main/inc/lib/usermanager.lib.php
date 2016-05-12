@@ -459,6 +459,7 @@ class UserManager
             ));
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
         }
+
         return $return;
     }
 
@@ -649,9 +650,6 @@ class UserManager
                 WHERE lastedit_user_id = '".$user_id."'";
         Database::query($sql);
 
-
-
-
         // Delete user from database
         $sql = "DELETE FROM $table_user WHERE id = '".$user_id."'";
         Database::query($sql);
@@ -690,7 +688,7 @@ class UserManager
      * @assert (-1) === false
      * @assert (array(-1)) === false
      */
-    static function delete_users($ids = array())
+    public static function delete_users($ids = array())
     {
         $result = false;
         $ids = is_array($ids) ? $ids : func_get_args();
@@ -715,7 +713,7 @@ class UserManager
      * @assert (null) === false
      * @assert (array(-1)) === false
      */
-    static function deactivate_users($ids = array())
+    public static function deactivate_users($ids = array())
     {
         if (empty($ids)) {
             return false;
@@ -745,7 +743,7 @@ class UserManager
      * @assert (null) === false
      * @assert (array(-1)) === false
      */
-    static function activate_users($ids = array())
+    public static function activate_users($ids = array())
     {
         if (empty($ids)) {
             return false;
@@ -1271,6 +1269,7 @@ class UserManager
         while ($row = Database::fetch_array($rs)) {
             $result[] = $row;
         }
+
         return $result;
     }
 
@@ -1282,8 +1281,12 @@ class UserManager
      * @todo optional course code parameter, optional sorting parameters...
      * @todo security filter order by
      */
-    public static function get_user_list($conditions = array(), $order_by = array(), $limit_from = false, $limit_to = false)
-    {
+    public static function get_user_list(
+        $conditions = array(),
+        $order_by = array(),
+        $limit_from = false,
+        $limit_to = false
+    ) {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
@@ -1319,8 +1322,12 @@ class UserManager
      * @todo optional course code parameter, optional sorting parameters...
      * @todo security filter order_by
      */
-    public static function get_user_list_like($conditions = array(), $order_by = array(), $simple_like = false, $condition = 'AND')
-    {
+    public static function get_user_list_like(
+        $conditions = array(),
+        $order_by = array(),
+        $simple_like = false,
+        $condition = 'AND'
+    ) {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
@@ -1442,7 +1449,7 @@ class UserManager
                 try {
                     mkdir($rootPath, $perm);
                 } catch (Exception $e) {
-                    //
+                    error_log($e->getMessage());
                 }
             }
         }
@@ -1511,7 +1518,6 @@ class UserManager
         }
 
         $gravatarEnabled = api_get_setting('gravatar_enabled');
-
         $anonymousPath = Display::returnIconPath('unknown.png', $pictureAnonymousSize);
 
         if ($pictureWebFile == 'unknown.jpg' || empty($pictureWebFile)) {
@@ -1804,8 +1810,8 @@ class UserManager
     /**
      * Remove a user production.
      *
-     * @param   int $user_id        User id
-     * @param   string $production    The production to remove
+     * @param int $user_id        User id
+     * @param string $production    The production to remove
      */
     public static function remove_user_production($user_id, $production)
     {
@@ -2053,6 +2059,7 @@ class UserManager
     {
         $extraField = new ExtraField('user');
         $data = $extraField->get_handler_field_info_by_field_variable($variable);
+
         return empty($data) ? true : false;
     }
 
@@ -2720,7 +2727,8 @@ class UserManager
 
         $sql = "SELECT DISTINCT
                     c.visibility,
-                    c.id as real_id
+                    c.id as real_id,                    
+                    sc.position
                 FROM $tbl_session_course_user as scu
                 INNER JOIN $tbl_session_course sc
                 ON (scu.session_id = sc.session_id AND scu.c_id = sc.c_id)
@@ -2747,7 +2755,9 @@ class UserManager
 
         if (api_is_allowed_to_create_course()) {
             $sql = "SELECT DISTINCT
-                        c.visibility, c.id as real_id
+                        c.visibility, 
+                        c.id as real_id,
+                        sc.position
                     FROM $tbl_session_course_user as scu
                     INNER JOIN $tbl_session as s
                     ON (scu.session_id = s.id)

@@ -28,10 +28,10 @@ if (empty($id)) {
 
 $is_allowedToEdit = api_is_allowed_to_edit(null,true) || $is_courseTutor;
 
-//Getting results from the exe_id. This variable also contain all the information about the exercise
+// Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
 
-//No track info
+// No track info
 if (empty($track_exercise_info)) {
     api_not_allowed($show_headers);
 }

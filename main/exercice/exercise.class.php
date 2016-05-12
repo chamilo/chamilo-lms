@@ -1945,10 +1945,40 @@ class Exercise
 
                 // Type of results display on the final page
                 $radios_results_disabled = array();
-                $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
-                $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
-                $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2', array('id'=>'result_disabled_2'));
+                $radios_results_disabled[] = $form->createElement(
+                    'radio',
+                    'results_disabled',
+                    null,
+                    get_lang('ShowScoreAndRightAnswer'),
+                    '0',
+                    array('id' => 'result_disabled_0')
+                );
+                $radios_results_disabled[] = $form->createElement(
+                    'radio',
+                    'results_disabled',
+                    null,
+                    get_lang('DoNotShowScoreNorRightAnswer'),
+                    '1',
+                    array('id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()')
+                );
+                $radios_results_disabled[] = $form->createElement(
+                    'radio',
+                    'results_disabled',
+                    null,
+                    get_lang('OnlyShowScore'),
+                    '2',
+                    array('id' => 'result_disabled_2')
+                );
                 //$radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable'),  '3', array('id'=>'result_disabled_3','onclick' => 'check_results_disabled()'));
+
+                $radios_results_disabled[] = $form->createElement(
+                    'radio',
+                    'results_disabled',
+                    null,
+                    get_lang('ShowScoreEveryAttemptShowAnswersLastAttempt'),
+                    '4',
+                    array('id' => 'result_disabled_4')
+                );
 
                 $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
 
@@ -7720,7 +7750,7 @@ class Exercise
 
         $exercise_content = null;
 
-        //Hide results
+        // Hide results
         $show_results = false;
         $show_only_score = false;
 
@@ -7728,7 +7758,13 @@ class Exercise
             $show_results = true;
         }
 
-        if (in_array($this->results_disabled, array(RESULT_DISABLE_SHOW_SCORE_ONLY, RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES))) {
+        $showScoreOptions = [
+            RESULT_DISABLE_SHOW_SCORE_ONLY,
+            RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
+            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT
+        ];
+
+        if (in_array($this->results_disabled, $showScoreOptions)) {
             $show_only_score = true;
         }
 

@@ -456,6 +456,7 @@ define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS', 0); //show score and ex
 define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score nor answers
 define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
 define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final score only with categories
+define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4); //Show final score only with categories
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 

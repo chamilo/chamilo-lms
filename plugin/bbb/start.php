@@ -17,7 +17,6 @@ $host = '';
 $salt = '';
 $isGlobal = isset($_GET['global']) ? true : false;
 $bbb = new bbb('', '', $isGlobal);
-
 if ($bbb->pluginEnabled) {
     if ($bbb->isServerRunning()) {
 

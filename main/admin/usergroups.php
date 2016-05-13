@@ -76,8 +76,8 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'">' . Display::return_icon('user_to_class.png', get_lang('SubscribeUsersToClass'), null, ICON_SIZE_SMALL) . '</a>'
     .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'">' . Display::return_icon('course_to_class.png', get_lang('SubscribeClassToCourses'), null, ICON_SIZE_SMALL) . '</a>'
     .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'">' . Display::return_icon('sessions_to_class.png', get_lang('SubscribeClassToSessions'), null, ICON_SIZE_SMALL) . '</a>'
-    .' <a href="?action=edit&id=\'+options.rowId+\'">' . Display::return_icon('edit.png', get_lang('Edit'), null, ICON_SIZE_TINY) . '</a>'
-    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">' . Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_TINY) . '</a>\';
+    .' <a href="?action=edit&id=\'+options.rowId+\'">' . Display::return_icon('edit.png', get_lang('Edit'), null, ICON_SIZE_SMALL) . '</a>'
+    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">' . Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_SMALL) . '</a>\';
 }';
 
 ?>
@@ -85,11 +85,21 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
 $(function() {
 <?php
     // grid definition see the $usergroup>display() function
-    echo Display::grid_js('usergroups', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+    echo Display::grid_js(
+        'usergroups',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
 ?>
 });
 </script>
 <?php
+
 // Tool introduction
 Display::display_introduction_section(get_lang('Classes'));
 

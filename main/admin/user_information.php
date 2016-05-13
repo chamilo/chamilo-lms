@@ -381,7 +381,6 @@ if (api_is_multiple_url_enabled()) {
     }
 }
 
-
 $studentBossList = UserManager::getStudentBossList($userId);
 $studentBossListToString = '';
 if ($studentBossList) {

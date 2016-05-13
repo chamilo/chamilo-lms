@@ -1059,12 +1059,12 @@ class MessageManager
                 $message_content .= $user_image;
                 $message_content .= '</div>';
 
-                $message_content .= '<div class="col-md-3">';
+                $message_content .= '<div class="col-md-4">';
                 $message_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> ';
                 $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name'];
                 $message_content .= '</div>';
 
-                $message_content .= '<div class="col-md-2 col-md-offset-6">';
+                $message_content .= '<div class="col-md-2 col-md-offset-5">';
                 $message_content .= Display::tip(date_to_str_ago($row['send_date']), api_get_local_time($row['send_date']));
                 $message_content .= '</div>';
 
@@ -1073,11 +1073,11 @@ class MessageManager
                 $message_content .= $user_image;
                 $message_content .= '</div>';
 
-                $message_content .= '<div class="col-md-3">';
+                $message_content .= '<div class="col-md-4">';
                 $message_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> ';
                 $message_content .= '</div>';
 
-                $message_content .= '<div class="col-md-2 col-md-offset-6">';
+                $message_content .= '<div class="col-md-2 col-md-offset-5">';
                 $message_content .= Display::tip(date_to_str_ago($row['send_date']), api_get_local_time($row['send_date']));
                 $message_content .= '</div>';
             }

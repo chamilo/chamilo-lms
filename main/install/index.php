@@ -119,7 +119,8 @@ $update_from_version_8 = array(
     '1.9.8.1',
     '1.9.8.2',
     '1.9.10',
-    '1.9.10.2'
+    '1.9.10.2',
+    '1.9.10.4'
 );
 
 $my_old_version = '';
@@ -713,7 +714,7 @@ if (@$_POST['step2']) {
             case '1.9.8.2':
             case '1.9.10':
             case '1.9.10.2':
-
+            case '1.9.10.4':
                 // Fix type "enum" before running the migration with Doctrine
                 Database::query("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
                 Database::query("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");

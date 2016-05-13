@@ -114,9 +114,8 @@ class Version20160330103045 extends AbstractMigration
 
         $this->addSql('DROP INDEX UNIQ_8D93D649F85E0677 ON user');
         $this->addSql(
-            'ALTER TABLE user ADD email_canonical VARCHAR(255) NOT NULL, ADD credentials_expired TINYINT(1), ADD credentials_expire_at DATETIME DEFAULT NULL, ADD locked TINYINT(1),ADD enabled TINYINT(1) NOT NULL, ADD expired TINYINT(1) NOT NULL, ADD expires_at DATETIME DEFAULT NULL, ADD roles LONGTEXT NOT NULL COMMENT "(DC2Type:array)", CHANGE username username VARCHAR(255) NOT NULL, CHANGE username_canonical username_canonical VARCHAR(255) NOT NULL, CHANGE email email VARCHAR(255) NOT NULL'
+            'ALTER TABLE user ADD email_canonical VARCHAR(255) NOT NULL, ADD credentials_expired TINYINT(1), ADD credentials_expire_at DATETIME DEFAULT NULL, ADD locked TINYINT(1),ADD enabled TINYINT(1) NOT NULL, ADD expired TINYINT(1) NOT NULL, ADD expires_at DATETIME DEFAULT NULL, CHANGE username username VARCHAR(255) NOT NULL, CHANGE username_canonical username_canonical VARCHAR(255) NOT NULL, CHANGE email email VARCHAR(255) NOT NULL'
         );
-        $this->addSql('ALTER TABLE user ADD enabled TINYINT(1) NOT NULL;');
 
         $sql = "UPDATE user SET email_canonical = email";
         $this->addSql($sql);
@@ -126,6 +125,7 @@ class Version20160330103045 extends AbstractMigration
 
         $sql = "UPDATE user SET roles = 'a:0:{}'";
         $this->addSql($sql);
+        
         $sql = "UPDATE user SET enabled = '1' WHERE active = 1";
         $this->addSql($sql);
 

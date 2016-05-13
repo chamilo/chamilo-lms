@@ -57,15 +57,7 @@ define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);
 // For backward compatibility this format has been set to Eastern order.
 define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 
-// The following constants are used for tuning language detection functionality.
-// We reduce the text for language detection to the given number of characters
-// for increasing speed and to decrease memory consumption.
-define('LANGUAGE_DETECT_MAX_LENGTH', 2000);
-// Maximum allowed difference in so called delta-points for aborting certain language detection.
-// The value 80000 is good enough for speed and detection accuracy.
-// If you set the value of $max_delta too low, no language will be recognized.
-// $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
-define('LANGUAGE_DETECT_MAX_DELTA', 140000);
+
 
 /**
  * Returns a translated (localized) string, called by its identificator.
@@ -275,7 +267,8 @@ function api_get_language_isocode($language = null, $default_code = 'en')
 function api_get_platform_isocodes()
 {
     $iso_code = array();
-    $sql = "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." ORDER BY isocode ";
+    $sql = "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+            ORDER BY isocode ";
     $sql_result = Database::query($sql);
     if (Database::num_rows($sql_result)) {
         while ($row = Database::fetch_array($sql_result)) {;
@@ -976,9 +969,6 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8
     }
 
     return mb_convert_encoding($string, 'HTML-ENTITIES', 'UTF-8');
-/*
-    return html_entity_decode($string, $quote_style, $encoding);
-    return mb_convert_encoding($string, 'HTML-ENTITIES', 'UTF-8');*/
 }
 
 /**

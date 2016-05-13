@@ -34,8 +34,7 @@ define('ANONYMOUS', 6);
 /** global status of a user: low security, necessary for inserting data from
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
-
-//Soft user status
+// Soft user status
 define('PLATFORM_ADMIN', 11);
 define('SESSION_COURSE_COACH', 12);
 define('SESSION_GENERAL_COACH', 13);
@@ -272,7 +271,6 @@ define('MBSTRING_INSTALLED', function_exists('mb_strlen'));         // mbstring 
 define('REPEATED_SLASHES_PURIFIER', '/\/{2,}/');                    // $path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);
 define('VALID_WEB_PATH', '/https?:\/\/[^\/]*(\/.*)?/i');            // $is_valid_path = preg_match(VALID_WEB_PATH, $path);
 define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');            // $new_path = preg_replace(VALID_WEB_SERVER_BASE, $new_base, $path);
-
 
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 // basic (leaf elements)
@@ -970,25 +968,13 @@ function api_valid_url($url, $absolute = false) {
 
 /**
  * Checks whether a given string looks roughly like an email address.
- * Tries to use PHP built-in validator in the filter extension (from PHP 5.2), falls back to a reasonably competent regex validator.
- * Conforms approximately to RFC2822
- * @link http://www.hexillion.com/samples/#Regex Original pattern found here
- * This function is an adaptation from the method PHPMailer::ValidateAddress(), PHPMailer module.
- * @link http://phpmailer.worxware.com
+ *
  * @param string $address   The e-mail address to be checked.
  * @return mixed            Returns the e-mail if it is valid, FALSE otherwise.
  */
 function api_valid_email($address)
 {
     return filter_var($address, FILTER_VALIDATE_EMAIL);
-    /*
-    // disable for now because the results are incoherent - YW 20110926
-
-    if (function_exists('filter_var')) { // Introduced in PHP 5.2.
-        return filter_var($address, FILTER_VALIDATE_EMAIL);
-    } else {
-        return preg_match('/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/', $address) ? $address : false;
-    }*/
 }
 
 
@@ -1070,7 +1056,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
     }
 
-    //Check session visibility
+    // Check session visibility
     $session_id = api_get_session_id();
 
     if (!empty($session_id)) {
@@ -2308,56 +2294,6 @@ function api_get_session_condition(
         }
     }
     return $condition_session;
-}
-
-/**
- * This function returns information about coaches from a course in session
- * @param int       optional, session id
- * @param int $courseId
- * @return array     array containing user_id, lastname, firstname, username
- * @deprecated use CourseManager::get_coaches_from_course
- */
-function api_get_coachs_from_course($session_id = 0, $courseId = '')
-{
-    if (!empty($session_id)) {
-        $session_id = intval($session_id);
-    } else {
-        $session_id = api_get_session_id();
-    }
-
-    if (!empty($courseId)) {
-        $courseId = intval($courseId);
-    } else {
-        $courseId = api_get_course_int_id();
-    }
-
-    $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
-    $tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $coaches = array();
-
-    $sql = "SELECT
-                u.user_id,
-                u.lastname,
-                u.firstname,
-                u.username
-            FROM $tbl_user u, $tbl_session_course_user scu
-            WHERE
-              u.user_id = scu.user_id AND
-              scu.session_id = '$session_id' AND
-              scu.c_id = '$courseId' AND
-              scu.status = 2";
-    $rs = Database::query($sql);
-
-    if (Database::num_rows($rs) > 0) {
-        while ($row = Database::fetch_array($rs)) {
-            $coaches[] = $row;
-        }
-
-        return $coaches;
-    } else {
-
-        return false;
-    }
 }
 
 /**

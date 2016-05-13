@@ -169,6 +169,13 @@ if ($current_browser == 'Internet Explorer') {
     $btn_class = '';
 }
 
+$blockShowAnswers = false;
+if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+    if (count($attempts) < $objExercise->attempts ) {
+        $blockShowAnswers = true;
+    }
+}
+
 if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
@@ -213,7 +220,8 @@ if (!empty($attempts)) {
             array(
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
-                RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES
+                RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT
             )
         )) {
             $row['result'] = $score;
@@ -223,23 +231,36 @@ if (!empty($attempts)) {
                 $objExercise->results_disabled,
                 array(
                     RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
-                    RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES
+                    RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
+                    RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT
                 )
             )
             || (
                 $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
                 $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END)
         ) {
+            if ($blockShowAnswers) {
+                $attempt_link = '';
+            }
+
             $row['attempt_link'] = $attempt_link;
         }
         $my_attempt_array[] = $row;
         $i--;
     }
 
+    $header_names = [];
     $table = new HTML_Table(array('class' => 'table table-striped table-hover'));
 
-    //Hiding score and answer
+    // Hiding score and answer
     switch ($objExercise->results_disabled) {
+        case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+            if ($blockShowAnswers) {
+                $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'));
+            } else {
+                $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'), get_lang('Details'));
+            }
+            break;
         case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS:
         case RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES:
             $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'), get_lang('Details'));

@@ -1697,7 +1697,7 @@ class SocialManager extends UserManager
             $groupId,
             $userId
         );
-
+        
         $profileEditionLink = null;
 
         if ($currentUserId === $userId) {

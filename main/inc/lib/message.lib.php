@@ -1038,25 +1038,50 @@ class MessageManager
 
         $from_user = api_get_user_info($user_sender_id);
         $name = $from_user['complete_name'];
-        $user_image = Display::img($from_user['avatar'], $name, array('title' => $name));
-
         $message_content = Display::page_subheader(str_replace("\\", "", $title));
-
+        $user_image = '';
         if (api_get_setting('allow_social_tool') == 'true') {
-            $message_content .= $user_image.' ';
+            $user_image = Display::img(
+                $from_user['avatar_no_query'],
+                $name,
+                array('title' => $name, 'class' => 'img-responsive img-circle', 'style' => 'max-width:35px')
+            );
         }
 
         $receiverUserInfo = api_get_user_info($row['user_receiver_id']);
 
         $message_content .='<tr>';
         if (api_get_setting('allow_social_tool') == 'true') {
+            $message_content .= '<div class="row">';
+
             if ($source == 'outbox') {
-                $message_content .= get_lang('From').': <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.
-                    api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name'].'</b>';
+                $message_content .= '<div class="col-md-1">';
+                $message_content .= $user_image;
+                $message_content .= '</div>';
+
+                $message_content .= '<div class="col-md-3">';
+                $message_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> ';
+                $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name'];
+                $message_content .= '</div>';
+
+                $message_content .= '<div class="col-md-2 col-md-offset-6">';
+                $message_content .= Display::tip(date_to_str_ago($row['send_date']), api_get_local_time($row['send_date']));
+                $message_content .= '</div>';
+
             } else {
-                $message_content .= get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.
-                    api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b>';
+                $message_content .= '<div class="col-md-1">';
+                $message_content .= $user_image;
+                $message_content .= '</div>';
+
+                $message_content .= '<div class="col-md-3">';
+                $message_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> ';
+                $message_content .= '</div>';
+
+                $message_content .= '<div class="col-md-2 col-md-offset-6">';
+                $message_content .= Display::tip(date_to_str_ago($row['send_date']), api_get_local_time($row['send_date']));
+                $message_content .= '</div>';
             }
+            $message_content .= '</div>';
         } else {
             if ($source == 'outbox') {
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.$receiverUserInfo['complete_name'].'</b>';
@@ -1064,7 +1089,7 @@ class MessageManager
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b>';
             }
         }
-        $message_content .=' '.get_lang('Date').':  '.api_get_local_time($row['send_date']).'
+        $message_content .='
 		        <br />
 		        <hr style="color:#ddd" />
 		        <table height="209px" width="100%">
@@ -1094,6 +1119,7 @@ class MessageManager
 		      <td width=10></td>
 		    </tr>
 		</table>';
+
         return $message_content;
     }
 

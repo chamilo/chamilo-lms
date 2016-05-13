@@ -3,7 +3,7 @@
 /**
 *	@package chamilo.messages
 */
-$cidReset= true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 if (api_get_setting('allow_message_tool')!='true') {
@@ -19,7 +19,7 @@ if (isset($_REQUEST['f']) && $_REQUEST['f'] == 'social') {
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
 }
 
-$social_right_content = null;
+$social_right_content = '';
 
 if (isset($_GET['f']) && $_GET['f']=='social') {
 	$social_parameter = '?f=social';
@@ -57,10 +57,10 @@ $message  = '';
 
 // LEFT COLUMN
 if (api_get_setting('allow_social_tool') == 'true') {
-    //Block Social Menu
+    // Block Social Menu
     $social_menu_block = SocialManager::show_social_menu($show_menu);
 }
-//MAIN CONTENT
+// MAIN CONTENT
 $message .= MessageManager::show_message_box($id_message, $source);
 
 if (!empty($message)) {

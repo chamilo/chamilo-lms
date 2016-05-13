@@ -28,10 +28,6 @@ class ScriptHandler
     {
         $paths = [
             __DIR__.'/../../../../archive/',
-            __DIR__.'/../../../../main/admin/add_users_to_group.php',
-            __DIR__.'/../../../../main/admin/group_add.php',
-            __DIR__.'/../../../../main/admin/group_edit.php',
-            __DIR__.'/../../../../main/admin/group_list.php',
             __DIR__.'/../../../../main/conference/',
             __DIR__.'/../../../../main/course_notice/',
             __DIR__.'/../../../../main/metadata/',
@@ -69,7 +65,12 @@ class ScriptHandler
 
         $files = [
             __DIR__.'/../../../../main/admin/statistics/statistics.lib.php',
+            __DIR__.'/../../../../main/admin/add_users_to_group.php',
+            __DIR__.'/../../../../main/admin/group_add.php',
+            __DIR__.'/../../../../main/admin/group_edit.php',
+            __DIR__.'/../../../../main/admin/group_list.php',
             __DIR__.'/../../../../main/announcements/resources/announcements.inc.php',
+            __DIR__.'/../../../../main/exercice/addlimits.php',
             __DIR__.'/../../../../main/calendar/agenda.inc.php',
             __DIR__.'/../../../../main/calendar/agenda.lib.php',
             __DIR__.'/../../../../main/announcements/resources/announcements_email.class.php',

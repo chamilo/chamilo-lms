@@ -11,7 +11,8 @@
                         <i class="fa fa-calendar" aria-hidden="true"></i>{{ page.createdAt | format_datetime }}
                     </div>
                     <p>
-                        {{ sonata_page_render_container('content', page) }}
+                        {{ page.metaDescription }}
+                        {# sonata_page_render_container('content', page) #}
                     </p>
                 </div>
             </div>

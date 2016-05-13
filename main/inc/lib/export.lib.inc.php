@@ -41,6 +41,7 @@ class Export
     public static function arrayToCsv($data, $filename = 'export')
     {
         if (empty($data)) {
+            
             return false;
         }
 

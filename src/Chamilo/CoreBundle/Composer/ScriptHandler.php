@@ -28,6 +28,10 @@ class ScriptHandler
     {
         $paths = [
             __DIR__.'/../../../../archive/',
+            __DIR__.'/../../../../main/admin/add_users_to_group.php',
+            __DIR__.'/../../../../main/admin/group_add.php',
+            __DIR__.'/../../../../main/admin/group_edit.php',
+            __DIR__.'/../../../../main/admin/group_list.php',
             __DIR__.'/../../../../main/conference/',
             __DIR__.'/../../../../main/course_notice/',
             __DIR__.'/../../../../main/metadata/',
@@ -38,7 +42,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/reservation/',
             __DIR__.'/../../../../main/inc/lib/symfony/',
             __DIR__.'/../../../../main/inc/entity/',
-            //__DIR__.'/../../../../main/inc/lib/phpdocx/',
+            __DIR__.'/../../../../main/inc/lib/phpdocx/',
             __DIR__.'/../../../../main/inc/lib/phpqrcode/',
             __DIR__.'/../../../../main/inc/lib/ezpdf',
             __DIR__.'/../../../../main/inc/lib/javascript/bootstrap',
@@ -57,6 +61,10 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/pchart/',
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',
             __DIR__.'/../../../../main/announcements/resources',
+            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelGroup.php',
+            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
+            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelUser.php',
+            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/Groups.php'
         ];
 
         $files = [

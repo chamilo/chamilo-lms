@@ -63,6 +63,7 @@ class bbb
                 }
             }
         }
+
         if ($bbbPlugin === 'true') {
             $userInfo = api_get_user_info();
             $this->userCompleteName = $userInfo['complete_name'];

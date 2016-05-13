@@ -1928,6 +1928,16 @@ class Exercise
                     array('id' => 'result_disabled_2')
                 );
 
+
+                $radios_results_disabled[] = $form->createElement(
+                    'radio',
+                    'results_disabled',
+                    null,
+                    get_lang('ShowScoreEveryAttemptShowAnswersLastAttempt'),
+                    '4',
+                    array('id' => 'result_disabled_4')
+                );
+
                 $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
 
                 // Type of questions disposition on page
@@ -7705,7 +7715,13 @@ class Exercise
             $show_results = true;
         }
 
-        if (in_array($this->results_disabled, array(RESULT_DISABLE_SHOW_SCORE_ONLY, RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES))) {
+        $showScoreOptions = [
+            RESULT_DISABLE_SHOW_SCORE_ONLY,
+            RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
+            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT
+        ];
+
+        if (in_array($this->results_disabled, $showScoreOptions)) {
             $show_only_score = true;
         }
 

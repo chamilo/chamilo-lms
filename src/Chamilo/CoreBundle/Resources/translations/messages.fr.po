@@ -24,3 +24,6 @@ msgstr "Panneau de contrôle"
 
 msgid "Administration"
 msgstr "Administration"
+
+msgid "Latest publications"
+msgstr "Dernières publications"

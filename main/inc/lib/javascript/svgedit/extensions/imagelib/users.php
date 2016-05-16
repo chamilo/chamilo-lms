@@ -59,7 +59,7 @@ if (!empty($png_svg_files)) {
 			$new_sizes = api_resize_image($image, 60, 60);
 		}
 
-			echo '<li style="display:inline; padding:8px;"><a href="'.$user_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$user_web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+		echo '<li style="display:inline; padding:8px;"><a href="'.$user_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$user_web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
 	}
 	echo '</ul>';
 } else {
@@ -68,52 +68,52 @@ if (!empty($png_svg_files)) {
 ?>
 </body>
 <script>
-$('a').click(function() {
-	var href = this.href;
+	$('a').click(function() {
+		var href = this.href;
 
-	// Convert Non-SVG images to data URL first
-	// (this could also have been done server-side by the library)
-	if(this.href.indexOf('.svg') === -1) {
+		// Convert Non-SVG images to data URL first
+		// (this could also have been done server-side by the library)
+		if(this.href.indexOf('.svg') === -1) {
 
-		var meta_str = JSON.stringify({
-			name: $(this).text(),
-			id: href
-		});
-		window.top.postMessage(meta_str, "*");
+			var meta_str = JSON.stringify({
+				name: $(this).text(),
+				id: href
+			});
+			window.top.postMessage(meta_str, "*");
 
-		var img = new Image();
-		img.onload = function() {
-			var canvas = document.createElement("canvas");
-			canvas.width = this.width;
-			canvas.height = this.height;
-			// load the raster image into the canvas
-			canvas.getContext("2d").drawImage(this,0,0);
-			// retrieve the data: URL
-			try {
-				var dataurl = canvas.toDataURL();
-			} catch(err) {
-				// This fails in Firefox with file:// URLs :(
-				alert("Data URL conversion failed: " + err);
-				var dataurl = "";
+			var img = new Image();
+			img.onload = function() {
+				var canvas = document.createElement("canvas");
+				canvas.width = this.width;
+				canvas.height = this.height;
+				// load the raster image into the canvas
+				canvas.getContext("2d").drawImage(this,0,0);
+				// retrieve the data: URL
+				try {
+					var dataurl = canvas.toDataURL();
+				} catch(err) {
+					// This fails in Firefox with file:// URLs :(
+					alert("Data URL conversion failed: " + err);
+					var dataurl = "";
+				}
+				window.top.postMessage('|' + href + '|' + dataurl, "*");
 			}
-			window.top.postMessage('|' + href + '|' + dataurl, "*");
-		}
-		img.src = href;
-	} else {
-		// Send metadata (also indicates file is about to be sent)
-		var meta_str = JSON.stringify({
-			name: $(this).text(),
-			id: href
-		});
-		window.top.postMessage(meta_str, "*");
-		// Do ajax request for image's href value
-		$.get(href, function(data) {
-			data = '|' + href + '|' + data;
-			// This is where the magic happens!
-			window.top.postMessage(data, "*");
+			img.src = href;
+		} else {
+			// Send metadata (also indicates file is about to be sent)
+			var meta_str = JSON.stringify({
+				name: $(this).text(),
+				id: href
+			});
+			window.top.postMessage(meta_str, "*");
+			// Do ajax request for image's href value
+			$.get(href, function(data) {
+				data = '|' + href + '|' + data;
+				// This is where the magic happens!
+				window.top.postMessage(data, "*");
 
-		}, 'html'); // 'html' is necessary to keep returned data as a string
-	}
-	return false;
-});
+			}, 'html'); // 'html' is necessary to keep returned data as a string
+		}
+		return false;
+	});
 </script>

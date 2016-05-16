@@ -745,17 +745,19 @@ window.HotspotQuestion = (function () {
         var startHotspotsAdmin = function (questionInfo) {
             var image = new Image();
             image.onload = function () {
+                $(config.selector).html('');
+
                 var hotspotsCollection = new HotspotsCollection(),
                     hotspotsSVG = new AdminHotspotsSVG(hotspotsCollection, this);
 
                 $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
 
                 $(config.selector).parent().prepend('\n\
-                <div id="hotspot-messages" class="alert alert-info">\n\
-                    <h4><span class="fa fa-info-circle" aria-hidden="true"></span> ' + lang.HotspotStatus1 + '</h4>\n\
-                    <span></span>\n\
-                </div>\n\
-            ');
+                    <div id="hotspot-messages" class="alert alert-info">\n\
+                        <h4><span class="fa fa-info-circle" aria-hidden="true"></span> ' + lang.HotspotStatus1 + '</h4>\n\
+                        <span></span>\n\
+                    </div>\n\
+                ');
 
                 $(config.selector).parent().prepend('<div class="row"></div>');
 
@@ -944,6 +946,8 @@ window.HotspotQuestion = (function () {
         var startHotspotsUser = function (questionInfo) {
             var image = new Image();
             image.onload = function () {
+                $(config.selector).html('');
+
                 var hotspotsCollection = new HotspotsCollection(),
                     answersCollection = new AnswersCollection(),
                     hotspotsSVG = new UserHotspotsSVG(hotspotsCollection, answersCollection, this);
@@ -1063,6 +1067,8 @@ window.HotspotQuestion = (function () {
         var startHotspotsSolution = function (questionInfo) {
             var image = new Image();
             image.onload = function () {
+                $(config.selector).html('');
+
                 var hotspotsCollection = new HotspotsCollection(),
                     answersCollection = new AnswersCollection(),
                     hotspotsSVG = new SolutionHotspotsSVG(hotspotsCollection, answersCollection, this);
@@ -1126,6 +1132,11 @@ window.HotspotQuestion = (function () {
         if (!config.questionId || !config.selector) {
             return;
         }
+
+        $(config.selector).html('\n\
+            <span class="fa fa-spinner fa-spin fa-3x" aria-hidden="hidden"></span>\n\
+            <span class="sr-only">Loading</span>\n\
+        ');
 
         var xhrQuestion = null;
 
@@ -1497,6 +1508,8 @@ window.DelineationQuestion = (function () {
     var startAdminSvg = function (questionInfo) {
         var image = new Image();
         image.onload = function () {
+            $(config.selector).html('');
+
             var polygonCollection = new PolygonCollection(),
                 adminSvg = new AdminSvg(polygonCollection, image);
 
@@ -1625,6 +1638,8 @@ window.DelineationQuestion = (function () {
     var startUserSvg = function (questionInfo) {
         var image = new Image();
         image.onload = function () {
+            $(config.selector).html('');
+
             var answerModel = new AnswerModel({
                     points: []
                 }),
@@ -1684,6 +1699,8 @@ window.DelineationQuestion = (function () {
     var startPreviewSvg = function (questionInfo) {
         var image = new Image();
         image.onload = function () {
+            $(config.selector).html('');
+
             var polygonCollection = new PolygonCollection(),
                 previewSvg = new AdminSvg(polygonCollection, image);
 
@@ -1739,6 +1756,11 @@ window.DelineationQuestion = (function () {
             if (!config.questionId || !config.selector) {
                 return;
             }
+
+        $(config.selector).html('\n\
+            <span class="fa fa-spinner fa-spin fa-3x" aria-hidden="hidden"></span>\n\
+            <span class="sr-only">Loading</span>\n\
+        ');
 
             var xhrQuestion = null;
 

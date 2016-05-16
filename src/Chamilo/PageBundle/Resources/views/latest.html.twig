@@ -4,15 +4,17 @@
         {% for page in pages %}
             <div class="col-md-4">
             <div class="items">
-                <div class="image"></div>
+                <div class="image"> {{ sonata_page_render_container('image_preview', page)  }}</div>
                 <div class="description">
-                    <h2 class="title"><a href="#">{{ page.name }}</a></h2>
+                    <h2 class="title">
+                        <a href="{{ url(page.routeName, {'path' : page.url}) }}">{{ page.name }}</a>
+                    </h2>
                     <div class="date">
-                        <i class="fa fa-calendar" aria-hidden="true"></i>{{ page.createdAt | format_datetime }}
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        {{ page.createdAt | format_datetime }}
                     </div>
                     <p>
                         {{ page.metaDescription }}
-                        {# sonata_page_render_container('content', page) #}
                     </p>
                 </div>
             </div>

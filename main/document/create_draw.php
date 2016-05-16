@@ -23,21 +23,21 @@ api_block_anonymous_users();
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
-        $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
-        $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+        $group_properties = GroupManager::get_group_properties(api_get_group_id());
+        $document_id = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
+        $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
     }
 }
 
-$document_id   = $document_data['id'];
-$dir           = $document_data['path'];
+$document_id = $document_data['id'];
+$dir = $document_data['path'];
 
 /*	Constants and variables */
 
 //path for svg-edit save
 $_SESSION['draw_dir'] = Security::remove_XSS($dir);
-if ($_SESSION['draw_dir']=='/'){
-    $_SESSION['draw_dir']='';
+if ($_SESSION['draw_dir'] == '/') {
+    $_SESSION['draw_dir'] = '';
 }
 
 $dir = isset($dir) ? Security::remove_XSS($dir) : (isset($_POST['dir']) ? Security::remove_XSS($_POST['dir']) : '/');
@@ -71,7 +71,10 @@ if (!is_dir($filepath)) {
 $groupId = api_get_group_id();
 
 if (!empty($groupId)) {
-	$interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
+	$interbreadcrumb[] = array (
+        "url" => "../group/group_space.php?".api_get_cidreq(),
+        "name" => get_lang('GroupSpace')
+    );
 	$noPHP_SELF = true;
 	$group = GroupManager :: get_group_properties($groupId);
 	$path = explode('/', $dir);
@@ -80,14 +83,21 @@ if (!empty($groupId)) {
 	}
 }
 
-$interbreadcrumb[] = array ("url" => "./document.php?".api_get_cidreq(), "name" => get_lang('Documents'));
+$interbreadcrumb[] = array(
+	"url" => "./document.php?".api_get_cidreq(),
+	"name" => get_lang('Documents')
+);
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
 
 if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] ||
-	DocumentManager::is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir), api_get_session_id()))) {
+	DocumentManager::is_my_shared_folder(
+		api_get_user_id(),
+		Security::remove_XSS($dir),
+		api_get_session_id()))
+) {
 	api_not_allowed(true);
 }
 
@@ -111,8 +121,11 @@ $array_len = count($dir_array);
 if (empty($document_data['parents'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
 } else {
-    foreach($document_data['parents'] as $document_sub_data) {
-        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+    foreach ($document_data['parents'] as $document_sub_data) {
+        $interbreadcrumb[] = array(
+			'url' => $document_sub_data['document_url'],
+			'name' => $document_sub_data['title']
+		);
     }
 }
 Display :: display_header($nameTools, 'Doc');

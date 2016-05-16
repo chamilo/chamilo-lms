@@ -3,8 +3,7 @@
  * @author Juan Carlos Raña Trabado
  * @since 25/september/2010
 */
-//Chamilo load libraries
-require_once '../../../../../inc/global.inc.php';
+require_once '../../../../../../inc/global.inc.php';
 
 //Add security from Chamilo
 api_protect_course_script();
@@ -15,8 +14,10 @@ $user_disk_path = UserManager::getUserPathById($userId, 'system').'my_files/';
 $user_web_path = UserManager::getUserPathById($userId, 'web').'my_files/';
 
 //get all files and folders
-$scan_files = scandir($user_disk_path);
-
+$scan_files = [];
+if (is_dir($user_disk_path)) {
+	$scan_files = scandir($user_disk_path);
+}
 //get all svg and png files
 $accepted_extensions = array('.svg', '.png');
 

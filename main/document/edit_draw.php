@@ -17,7 +17,11 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 api_block_anonymous_users();
 
-$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
+$document_data = DocumentManager::get_document_data_by_id(
+    $_GET['id'],
+    api_get_course_id(),
+    true
+);
 
 if (empty($document_data)) {
     api_not_allowed();
@@ -26,7 +30,7 @@ if (empty($document_data)) {
     $file_path = $document_data['path'];
     $dir = dirname($document_data['path']);
     $parent_id = DocumentManager::get_document_id(api_get_course_info(), $dir);
-    $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
+    $my_cur_dir_path = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : '';
 }
 
 $dir= str_replace('\\', '/',$dir);//and urlencode each url $curdirpath (hack clean $curdirpath under Windows - Bug #3261)
@@ -36,16 +40,16 @@ $current_session_id=api_get_session_id();
 $group_id = api_get_group_id();
 
 //path for svg-edit save
-$_SESSION['draw_dir']=Security::remove_XSS($dir);
-if ($_SESSION['draw_dir']=='/'){
-	$_SESSION['draw_dir'] = '';
+$_SESSION['draw_dir'] = Security::remove_XSS($dir);
+if ($_SESSION['draw_dir'] == '/') {
+    $_SESSION['draw_dir'] = '';
 }
-$_SESSION['draw_file']=basename(Security::remove_XSS($file_path));
+$_SESSION['draw_file'] = basename(Security::remove_XSS($file_path));
 $get_file = Security::remove_XSS($file_path);
 $file = basename($get_file);
-$temp_file = explode(".",$file);
-$filename=$temp_file[0];
-$nameTools = get_lang('EditDocument') . ': '.$filename;
+$temp_file = explode(".", $file);
+$filename = $temp_file[0];
+$nameTools = get_lang('EditDocument').': '.$filename;
 
 $courseDir   = $_course['path'].'/document';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -79,7 +83,6 @@ if (!is_dir($filepath)) {
 
 //groups //TODO:clean
 if (!empty($group_id)) {
-	$req_gid = '&amp;gidReq='.$group_id;
 	$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace'));
 	$group_document = true;
 	$noPHP_SELF = true;
@@ -88,7 +91,10 @@ if (!empty($group_id)) {
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
 if (!$is_certificate_mode)
-	$interbreadcrumb[]= array("url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid, "name"=> get_lang('Documents'));
+	$interbreadcrumb[] = array(
+		"url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).'&'.api_get_cidreq(),
+		"name" => get_lang('Documents')
+	);
 else
 	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 
@@ -116,23 +122,19 @@ Event::event_access_tool(TOOL_DOCUMENT);
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 		echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-		echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&origin=editdraw">'.Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'',ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.'&origin=editdraw">'.Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (api_browser_support('svg')) {
-	//automatic loading the course language
+	// Automatic loading the course language
 	$svgedit_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
-	$langsvgedit  = api_get_language_isocode();
+	$langsvgedit = api_get_language_isocode();
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
-	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'svg-edit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
-
-	$svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&amp;lang='.$langsvgedit;
-
+	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'javascript/svgedit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
+	$svg_url = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/svg-editor.php?url=../../../../../courses/'.$courseDir.$dir.$file.'&lang='.$langsvgedit;
 	?>
-
-	<script type="text/javascript">
-
-	document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
+	<script>
+	document.write('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
 	function resizeIframe() {
     	var height = window.innerHeight -50;
 		//max lower size

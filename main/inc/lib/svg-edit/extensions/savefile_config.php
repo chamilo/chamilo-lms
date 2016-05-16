@@ -12,10 +12,9 @@
  * @since 25/september/2010
 */
 
-//Chamilo load libraries
 require_once '../../../../../inc/global.inc.php';
 
-//Add security from Chamilo
+// Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
 
@@ -25,15 +24,15 @@ if(!isset($_POST['output_svg']) && !isset($_POST['output_png'])) {
 }
 
 $file = '';
-$suffix = isset($_POST['output_svg'])?'svg':'png';
+$suffix = isset($_POST['output_svg']) ? 'svg' : 'png';
 
-if(isset($_POST['filename']) && strlen($_POST['filename']) > 0) {
+if (isset($_POST['filename']) && strlen($_POST['filename']) > 0) {
     $file = $_POST['filename'];
 } else {
     $file = 'image';
 }
 
-if($suffix == 'svg') {
+if ($suffix == 'svg') {
     $mime = 'image/svg+xml';
     $contents = rawurldecode($_POST['output_svg']);
 } else {
@@ -44,27 +43,27 @@ if($suffix == 'svg') {
 }
 
 //get SVG-Edit values
-$filename=$file;//from svg-edit
-$extension=$suffix;// from svg-edit
-$content=$contents;//from svg-edit
+$filename = $file;//from svg-edit
+$extension = $suffix;// from svg-edit
+$content = $contents;//from svg-edit
 
 $title = Database::escape_string(str_replace('_',' ',$filename));
 
 //get Chamilo variables
 
-if(!isset($_SESSION['draw_dir']) && !isset($_SESSION['whereami'])) {
+if (!isset($_SESSION['draw_dir']) && !isset($_SESSION['whereami'])) {
     api_not_allowed();//from Chamilo
     die();
 }
 
 $current_session_id = api_get_session_id();
-$groupId    =  api_get_group_id();
-$relativeUrlPath=$_SESSION['draw_dir'];
-$currentTool=$_SESSION['whereami'];
+$groupId = api_get_group_id();
+$relativeUrlPath = $_SESSION['draw_dir'];
+$currentTool = $_SESSION['whereami'];
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $saveDir=$dirBaseDocuments.$_SESSION['draw_dir'];
 
-//a bit title security
+// a bit title security
 
 $filename = addslashes(trim($filename));
 $filename = Security::remove_XSS($filename);
@@ -95,7 +94,7 @@ if (phpversion() >= '5.3' && extension_loaded('fileinfo')) {
 */
 
 //checks if the file exists, then rename the new
-if (file_exists($saveDir.'/'.$filename.$i.'.'.$extension) && $currentTool=='document/createdraw') {
+if (file_exists($saveDir.'/'.$filename.'.'.$extension) && $currentTool=='document/createdraw') {
     $message = get_lang('FileExistsChangeToSave');
     $params = array(
         'message' => $message,

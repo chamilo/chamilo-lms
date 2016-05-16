@@ -131,7 +131,7 @@ if (api_browser_support('svg')) {
 	$langsvgedit = api_get_language_isocode();
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
 	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'javascript/svgedit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
-	$svg_url = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&amp;lang='.$langsvgedit;
+	$svg_url = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/svg-editor.php?url=../../../../../courses/'.$courseDir.$dir.$file.'&lang='.$langsvgedit;
 	?>
 	<script>
 	document.write('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');

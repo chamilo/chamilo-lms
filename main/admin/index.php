@@ -386,6 +386,7 @@ if (api_is_platform_admin()) {
         $items[] = array('url' => 'skills_wheel.php', 'label' => get_lang('SkillsWheel'));
         $items[] = array('url' => 'skills_import.php', 'label' => get_lang('SkillsImport'));
         $items[] = array('url' => 'skill_list.php', 'label' => get_lang('ManageSkills'));
+        $items[] = array('url'=>'skill.php',   'label' => get_lang('ManageSkillsLevels'));
         //$items[] = array('url'=>'skills_profile.php',   'label' => get_lang('SkillsProfile'));
         $items[] = array(
             'url' => api_get_path(WEB_CODE_PATH) . 'social/skills_ranking.php',

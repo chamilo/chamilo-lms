@@ -2222,7 +2222,7 @@ class User extends BaseUser
      *
      * @return User
      */
-    public function setExpiresAt(\DateTime $date)
+    public function setExpiresAt(\DateTime $date = null)
     {
         $this->expiresAt = $date;
 

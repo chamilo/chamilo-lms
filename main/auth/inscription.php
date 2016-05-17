@@ -31,7 +31,7 @@ if ($allowedFieldsConfiguration !== false) {
 }
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
-$htmlHeadXtra[] = '<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true" ></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     initializeGeo(false, false);

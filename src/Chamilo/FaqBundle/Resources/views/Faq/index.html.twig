@@ -7,15 +7,15 @@
           backToTopScroll();
         }
         $(document).on('ready', function(){
-            var posicionActual, posicionNueva = 0;
+            var positionActual, positionNew = 0;
             $(window).scroll(function(){
-            posicionNueva = $(this).scrollTop();
-            if(posicionNueva>posicionActual){
+            positionNew = $(this).scrollTop();
+            if(positionNew>positionActual){
                 $('#barra').show('slow');
-            } else if(posicionNueva<posicionActual){
+            } else if(positionNew<positionActual){
                 $('#barra').hide('slow');
             }
-            posicionActual=posicionNueva;
+            positionActual=positionNew;
             });
         });
     </script>

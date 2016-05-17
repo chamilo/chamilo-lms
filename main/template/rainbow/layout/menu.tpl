@@ -15,7 +15,7 @@
             <ul class="nav navbar-nav">
                 {% if _u.logged == 1 %}
                     {% for items in menu.possible_tabs %}     
-                        {% if items.key != 'profile' and items.key != 'my-space' and items.key != 'admin' %}
+                        {% if items.key != 'profile' and items.key != 'dashboard' %}
                         {% set counter = counter + 1 %}
                             <li class="item-menu menu-{{ counter }} {{ items.key }} {{ items.current }}"><a href="{{ items.url }}">{{ items.title }}</a></li>
                         {% endif %}

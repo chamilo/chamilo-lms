@@ -256,8 +256,10 @@ $(document).scroll(function() {
                 }
                 $('.new_actions').attr('data-top', offset.top + more_top);
             }
-
-            if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop()) {
+            // Check if the height is enough before fixing the icons menu (or otherwise removing it)
+            // Added a 30px offset otherwise sometimes the menu plays ping-pong when scrolling to
+            // the bottom of the page on short pages.
+            if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop() + 30) {
                 $('.new_actions').addClass('new_actions-fixed');
             } else {
                 $('.new_actions').removeClass('new_actions-fixed');

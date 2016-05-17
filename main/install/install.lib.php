@@ -939,7 +939,7 @@ function display_requirements(
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'lang/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'lang/', true).' <br />('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'lang/', true).' <br />('.get_lang('SuggestionOnlyToEnableSubLanguageFeatureOrUpgradeProcess').')</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_PATH).'vendor/</td>

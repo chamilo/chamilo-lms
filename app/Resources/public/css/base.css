@@ -2124,7 +2124,7 @@ div.admin_section h4 {
     /* padding:5px; */
 }
 /* Exercise clock*/
-.count_down {
+.count_down{
     padding: 3px;
     font-size:20px;
     font-weight:bold;
@@ -2139,13 +2139,15 @@ div.admin_section h4 {
 .count_down.navbar-fixed-top{
     border-radius: 0px;
 }
-.time_container_warning {
+.time_warning_two {
     background: url(../../main/img/clock-exercise.png) no-repeat center center #FFD700;
-    border:1px solid #B8860B;
+    border:1px solid #FFCC00;
+    color: #C00;
 }
-.red_alert {
-    color:red;
-    font-weight: bold;
+.time_warning_one {
+    background: url(../../main/img/clock-exercise.png) no-repeat center center #FB3A35;
+    border:1px solid #FB3A35;
+    color: #FFF;
 }
 #question_feedback {
     -webkit-border-radius: 10px;

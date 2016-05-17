@@ -28,13 +28,13 @@
         var div_clock = $('#exercise_clock_warning');
         
         // 60000 = 60 seconds
-        if (dist <= 180000) {  //3min
+        if (dist <= 300000) {  //5min
             if (!(div_clock.hasClass('time_warning_two'))) {
                 div_clock.addClass('time_warning_two');
             }
         }
         
-        if (dist <= 60000) { //1min
+        if (dist <= 120000) { //2min
             div_clock.removeClass('time_warning_two');
             if (!(div_clock.hasClass('time_warning_one'))) {                
                 div_clock.addClass('time_warning_one');

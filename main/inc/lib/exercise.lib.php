@@ -613,6 +613,7 @@ class ExerciseLib
                     $s .= $answer;
 
                 } elseif ($answerType == CALCULATED_ANSWER) {
+
                     /*
                      * In the CALCULATED_ANSWER test
                      * you mustn't have [ and ] in the textarea
@@ -641,6 +642,7 @@ class ExerciseLib
                             );
                         }
                     }
+
                     list($answer) = explode('@@', $answer);
                     // $correctAnswerList array of array with correct anwsers 0=> [0=>[\p] 1=>[plop]]
                     api_preg_match_all(
@@ -648,6 +650,7 @@ class ExerciseLib
                         $answer,
                         $correctAnswerList
                     );
+
                     // get student answer to display it if student go back to previous calculated answer question in a test
                     if (isset($user_choice[0]['answer'])) {
                         api_preg_match_all(
@@ -686,11 +689,13 @@ class ExerciseLib
                             $studentAnswerList[] = $answerCorrected;
                         }
                     }
+
                     // If display preview of answer in test view for exemple, set the student answer to the correct answers
                     if ($debug_mark_answer) {
                         // contain the rights answers surronded with brackets
                         $studentAnswerList = $correctAnswerList[0];
                     }
+
                     /*
                     Split the response by bracket
                     tabComments is an array with text surrounding the text to find
@@ -3541,7 +3546,7 @@ HOTSPOT;
 
                 // creates a temporary Question object
                 $objQuestionTmp = Question::read($questionId);
-
+                
                 // This variable came from exercise_submit_modal.php
                 ob_start();
 

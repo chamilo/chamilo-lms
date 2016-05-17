@@ -154,7 +154,7 @@ if (!empty($exercise_stat_info)) {
 
 $max_score = $objExercise->get_max_score();
 
-Display :: display_normal_message(get_lang('Saved').'<br />',false);
+Display::display_normal_message(get_lang('Saved').'<br />',false);
 
 // Display and save questions
 ExerciseLib::display_question_list_by_attempt($objExercise, $exe_id, true);
@@ -165,6 +165,7 @@ ExerciseLib::exercise_time_control_delete(
     $learnpath_id,
     $learnpath_item_id
 );
+
 ExerciseLib::delete_chat_exercise_session($exe_id);
 
 if ($origin != 'learnpath') {
@@ -180,7 +181,6 @@ if ($origin != 'learnpath') {
         Session::erase('objExercise');
         Session::erase('exe_id');
     }
-
 	Display::display_footer();
 } else {
 	$lp_mode = isset($_SESSION['lp_mode']) ? $_SESSION['lp_mode'] : null;

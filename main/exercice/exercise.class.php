@@ -3280,7 +3280,6 @@ class Exercise
         if ($debug) error_log('Start answer loop ');
 
         $answer_correct_array = array();
-
         $orderedHotspots = [];
 
         if ($answerType == HOT_SPOT) {
@@ -3294,7 +3293,6 @@ class Exercise
                     ['hotspotId' => 'ASC']
                 );
         }
-
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -3757,9 +3755,7 @@ class Exercise
                             $listCorrectAnswers
                         );
                     }
-
                     break;
-                // for calculated answer
                 case CALCULATED_ANSWER:
                     $answer = $objAnswerTmp->selectAnswer($_SESSION['calculatedAnswerId'][$questionId]);
                     $preArray = explode('@@', $answer);

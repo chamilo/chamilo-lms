@@ -29,10 +29,10 @@ class Diagnoser
     {
         $sections = array('chamilo', 'php', 'database', 'webserver');
 
-        if (!in_array(trim($_GET['section']), $sections)) {
-            $current_section = 'chamilo';
-        } else {
+        if (isset($_GET['section']) && in_array(trim($_GET['section']), $sections)) {
             $current_section = $_GET['section'];
+        } else {
+            $current_section = 'chamilo';
         }
 
         $html = '<div class="tabbable"><ul class="nav nav-tabs">';
@@ -78,6 +78,7 @@ class Diagnoser
             api_get_path(SYS_APP_PATH) .'upload/users/',
             api_get_path(SYS_PATH) .'main/default_course_document/images/',
         );
+
         foreach ($writable_folders as $index => $folder) {
             $writable = is_writable($folder);
             $status = $writable ? self :: STATUS_OK : self :: STATUS_ERROR;
@@ -95,10 +96,60 @@ class Diagnoser
 
         $exists = file_exists(api_get_path(SYS_CODE_PATH).'install');
         $status = $exists ? self :: STATUS_WARNING : self :: STATUS_OK;
-        $array[] = $this->build_setting($status, '[FILES]', get_lang('DirectoryExists') . ': /install', 'http://be2.php.net/file_exists', $exists, 0, 'yes_no', get_lang('DirectoryShouldBeRemoved'));
+        $array[] = $this->build_setting(
+            $status,
+            '[FILES]',
+            get_lang('DirectoryExists') . ': /install',
+            'http://be2.php.net/file_exists',
+            $exists,
+            0,
+            'yes_no', get_lang('DirectoryShouldBeRemoved')
+        );
 
         $app_version = api_get_setting('chamilo_database_version');
-        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[DB]', 'chamilo_database_version', '#', $app_version, 0, null,  'Chamilo DB version');
+
+        $array[] = $this->build_setting(
+            self :: STATUS_INFORMATION,
+            '[DB]',
+            'chamilo_database_version',
+            '#',
+            $app_version,
+            0,
+            null,
+            'Chamilo DB version'
+        );
+
+        $access_url_id = api_get_current_access_url_id();
+
+        if ($access_url_id === 1) {
+            global $_configuration;
+            $message2 = '';
+            if ($access_url_id === 1) {
+                if (api_is_windows_os()) {
+                    $message2 .= get_lang('SpaceUsedOnSystemCannotBeMeasuredOnWindows');
+                } else {
+                    $dir = api_get_path(SYS_PATH);
+                    $du = exec('du -sh ' . $dir, $err);
+                    list($size, $none) = explode("\t", $du);
+                    $limit = $_configuration[$access_url_id]['hosting_limit_disk_space'];
+                    $message2 .= sprintf(get_lang('TotalSpaceUsedByPortalXLimitIsYMB'), $size, $limit);
+                }
+            }
+
+            $array[] = $this->build_setting(
+                self :: STATUS_OK,
+                '[FILES]',
+                'hosting_limit_disk_space',
+                '#',
+                $size,
+                0,
+                null,
+                $message2
+            );
+        }
+
+
+
 
         return $array;
     }

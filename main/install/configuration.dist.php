@@ -99,11 +99,12 @@ $_configuration[1]['hosting_limit_disk_space'] = 0;
 // Should always be lower than the hosting_limit_courses.
 // If set, defining a course as "hidden" will free room for
 // new courses (up to the hosting_limit_courses, if any value is set there).
-// hosting_limit_enabled_courses is the maximum number of courses that are *not* hidden.
+// hosting_limit_active_courses is the maximum number of courses that are *not* hidden.
 $_configuration[1]['hosting_limit_active_courses'] = 0;
 // Email to warn if limit was reached.
 //$_configuration[1]['hosting_contact_mail'] = 'example@example.org';
 // Portal size limit in MB (set to 1024 for 1GB, 5120 for 5GB, etc).
+// Check main/cron/hosting_total_size_limit.php for how to use this limit.
 $_configuration['hosting_total_size_limit'] = 0;
 
 /**

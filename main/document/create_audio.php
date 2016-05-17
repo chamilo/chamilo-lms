@@ -79,7 +79,10 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (!empty($groupId)) {
-	$interbreadcrumb[] = array("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
+	$interbreadcrumb[] = array(
+		"url" => "../group/group_space.php?".api_get_cidreq(),
+		"name" => get_lang('GroupSpace')
+	);
 	$group = GroupManager :: get_group_properties($groupId);
 	$path = explode('/', $dir);
 	if ('/'.$path[1] != $group['directory']) {
@@ -87,7 +90,10 @@ if (!empty($groupId)) {
 	}
 }
 
-$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(), "name" => get_lang('Documents'));
+$interbreadcrumb[] = array (
+    "url" => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(),
+    "name" => get_lang('Documents')
+);
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
@@ -143,7 +149,7 @@ echo '</div>';
 
 ?>
 <!-- javascript and styles for textareaCounter-->
-<script type="text/javascript">
+<script>
 var info;
 $(document).ready(function(){
 	var options = {
@@ -204,32 +210,28 @@ $options = $options_pedia = array();
 $selected_language = null;
 
 while ($row = Database::fetch_array($result_select)) {
-	$options[$row['isocode']] =$row['original_name'].' ('.$row['english_name'].')';
-	if (in_array($row['isocode'], array('de', 'en', 'es', 'fr'))){
-		$options_pedia[$row['isocode']] =$row['original_name'].' ('.$row['english_name'].')';
-	}
+    $options[$row['isocode']] = $row['original_name'].' ('.$row['english_name'].')';
+    if (in_array($row['isocode'], array('de', 'en', 'es', 'fr'))) {
+        $options_pedia[$row['isocode']] = $row['original_name'].' ('.$row['english_name'].')';
+    }
 }
-
-$icon = Display::return_icon('text2audio.png', get_lang('HelpText2Audio'),'',ICON_SIZE_MEDIUM);
-echo '<div class="page-header"><h2>'.$icon.get_lang('HelpText2Audio').'</h2></div>';
 
 if (Security::remove_XSS($_GET['dt2a']) == 'google') {
 	$selected_language = api_get_language_isocode();//lang default is the course language
-	echo '<div>';
+
 	$form = new FormValidator('form1', 'post', null, '', array('id' => 'form1'));
+    $form->addHeader(get_lang('HelpText2Audio'));
 	$form->addElement('hidden', 'text2voice_mode', 'google');
 	$form->addElement('hidden', 'id', $document_id);
 	$form->addElement('text', 'title', get_lang('Title'));
 	$form->addElement('select', 'lang', get_lang('Language'), $options);
 	$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_google'));
-	//echo Display :: return_icon('info3.gif', get_lang('HelpGoogleAudio'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
-	$form->addButtonSave(get_lang('SaveMP3'));
+    $form->addButtonSave(get_lang('SaveMP3'));
 	$defaults = array();
 	$defaults['lang'] = $selected_language;
 	$form->setDefaults($defaults);
 	$form->display();
 
-	echo '</div>';
 }
 
 if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
@@ -237,20 +239,20 @@ if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
 	$selected_language = "defaultmessage";
 	$options_pedia['defaultmessage'] =get_lang('FirstSelectALanguage');
 	$options['defaultmessage'] =get_lang('FirstSelectALanguage');
-	echo '<div>';
 
 	$form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
+    $form->addHeader(get_lang('HelpText2Audio'));
 	$form->addElement('hidden', 'text2voice_mode','pediaphon');
 	$form->addElement('hidden', 'id', $document_id);
 	$form->addElement('text', 'title', get_lang('Title'));
-	$form->addElement('select', 'lang', get_lang('Language'), $options_pedia, array('onclick' => 'update_voices(this.selectedIndex);'));
-	$form->addElement('select', 'voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array());
-	$speed_options = array();
-	$speed_options['1']     = get_lang('Normal');
-	$speed_options['0.75']  = get_lang('GoFaster');
-	$speed_options['0.8']   = get_lang('Fast');
-	$speed_options['1.2']   = get_lang('Slow');
-	$speed_options['1.6']   = get_lang('SlowDown');
+	$form->addSelect('lang', get_lang('Language'), $options_pedia, array('class' => 'lang'));
+    $form->addSelect('voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array('id' => 'voices'));
+    $speed_options = array();
+    $speed_options['1'] = get_lang('Normal');
+    $speed_options['0.75'] = get_lang('GoFaster');
+    $speed_options['0.8'] = get_lang('Fast');
+    $speed_options['1.2'] = get_lang('Slow');
+    $speed_options['1.6'] = get_lang('SlowDown');
 
 	$form->addElement('select', 'speed', get_lang('Speed'), $speed_options, array());
 	$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_pediaphon'));
@@ -260,38 +262,43 @@ if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
 	$defaults['lang'] = $selected_language;
 	$form->setDefaults($defaults);
 	$form->display();
-	echo '</div>';
-
 	?>
 
 	<!-- javascript form name form2 update voices -->
-	<script type="text/javascript">
-	var langslist=document.form2.lang
-	var voiceslist=document.form2.voices
-	var voices=new Array()
+	<script>
+    var langslist = document.form2.lang
+    var voiceslist = document.form2.voices
+    var voices = new Array()
 
 	<!--German -->
-	voices[0]=["<?php echo get_lang('Female').' (de1)'; ?>|de1", "<?php echo get_lang('Male').' (de2)'; ?>|de2", "<?php echo get_lang('Female').' (de3)'; ?>|de3", "<?php echo get_lang('Male').' (de4)'; ?>|de4", "<?php echo get_lang('Female').' (de5)'; ?>|de5", "<?php echo get_lang('Male').' (de6)'; ?>|de6", "<?php echo get_lang('Female').' (de7)'; ?>|de7", "<?php echo get_lang('Female').' (de8 HQ)'; ?>|de8"]
+	voices['de']=["<?php echo get_lang('Female').' (de1)'; ?>|de1", "<?php echo get_lang('Male').' (de2)'; ?>|de2", "<?php echo get_lang('Female').' (de3)'; ?>|de3", "<?php echo get_lang('Male').' (de4)'; ?>|de4", "<?php echo get_lang('Female').' (de5)'; ?>|de5", "<?php echo get_lang('Male').' (de6)'; ?>|de6", "<?php echo get_lang('Female').' (de7)'; ?>|de7", "<?php echo get_lang('Female').' (de8 HQ)'; ?>|de8"]
 
 	<!--English -->
-	voices[1]=["<?php echo get_lang('Male').' (en1)'; ?>|en1", "<?php echo get_lang('Male').' (en2 HQ)'; ?>|en2", "<?php echo get_lang('Female').' (us1)'; ?>| us1", "<?php echo get_lang('Male').' (us2)'; ?>|us2", "<?php echo get_lang('Male').' (us3)'; ?>|us3", "<?php echo get_lang('Female').'(us4 HQ)'; ?>|us4"]
+	voices['en']=["<?php echo get_lang('Male').' (en1)'; ?>|en1", "<?php echo get_lang('Male').' (en2 HQ)'; ?>|en2", "<?php echo get_lang('Female').' (us1)'; ?>|us1", "<?php echo get_lang('Male').' (us2)'; ?>|us2", "<?php echo get_lang('Male').' (us3)'; ?>|us3", "<?php echo get_lang('Female').'(us4 HQ)'; ?>|us4"]
 
 	<!--Spanish -->
-	voices[2]=["<?php echo get_lang('Male').' (es5 HQ)'; ?>|es5"]
+	voices['es']=["<?php echo get_lang('Male').' (es5 HQ)'; ?>|es5"]
 
 	<!--French -->
-	voices[3]=["<?php echo get_lang('Female').' (fr8 HQ)'; ?>|fr8"]
+	voices['fr']=["<?php echo get_lang('Female').' (fr8 HQ)'; ?>|fr8"]
 
-	function update_voices(selectedvoicegroup){
-	voiceslist.options.length=0
-	for (i=0; i<voices[selectedvoicegroup].length; i++)
-		voiceslist.options[voiceslist.options.length]=new Option(voices[selectedvoicegroup][i].split("|")[0], voices[selectedvoicegroup][i].split("|")[1])
-	}
+    $(document).ready(function() {
+        $('.lang').on('change', function() {
+            var selectedvoicegroup = this.value;
+            $('#voices').empty();
+            for (i=0; i < voices[selectedvoicegroup].length; i++) {
+                var value = voices[selectedvoicegroup][i].split("|")[1];
+                var text = voices[selectedvoicegroup][i].split("|")[0];
+
+                var newOption = $('<option value="'+value+'">'+text+'</option>');
+                $('#voices').append(newOption);
+                $('#voices').selectpicker('refresh');
+            }
+        });
+    });
 	</script>
 <?php
 }//end pediaphon
-
-echo '</div>';
 
 Display :: display_footer();
 
@@ -343,28 +350,15 @@ function downloadMP3_google($filepath, $dir)
 	}
 
 	$documentPath = $filepath.'/'.$audio_filename;
-	/*
 
-	//prev for a fine unicode, borrowed from main api TODO:clean
-	// Safe replacements for some non-letter characters (whitout blank spaces)
-	$search  = array("\0", "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
-	$replace = array('',  '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
-	$filename=$clean_text;
-	// Encoding detection.
-	$encoding = api_detect_encoding($filename);
-	// Converting html-entities into encoded characters.
-	$filename = api_html_entity_decode($filename, ENT_QUOTES, $encoding);
-	// Transliteration to ASCII letters, they are not dangerous for filesystems.
-	$filename = api_transliterate($filename, 'x', $encoding);
-    // Replacing remaining dangerous non-letter characters.
-    $clean_text = str_replace($search, $replace, $filename);*/
 	$clean_text = api_replace_dangerous_char($clean_text);
 
 	// adding the file
 	// add new file to disk
 
 	$proxySettings = api_get_configuration_value('proxy_settings');
-	$url = "http://translate.google.com/translate_tts?tl=".$clean_lang."&q=".urlencode($clean_text)."";
+    $key = api_get_configuration_value('translate_app_google_key');
+	$url = "https://www.googleapis.com/language/translate/v2?key=$key&".$clean_lang."&target=$clean_lang&q=".urlencode($clean_text)."";
 
 	if (empty($proxySettings)) {
 		$content = file_get_contents($url);
@@ -418,20 +412,21 @@ function downloadMP3_pediaphon($filepath, $dir)
 {
 	$location='create_audio.php?'.api_get_cidreq().'&id='.intval($_POST['id']).'&dt2a=pediaphon';
 	//security
-	if(!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
+	if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
 		echo '<script>window.location.href="'.$location.'"</script>';
 		return;
 	}
-	$_course = api_get_course_info();
-	$_user = api_get_user_info();
-	$clean_title=trim($_POST['title']);
-	$clean_title= Database::escape_string($clean_title);
-	$clean_text=trim($_POST['text']);
-	$clean_voices=Security::remove_XSS($_POST['voices']);
-	if(empty($clean_title) || empty($clean_text) || empty($clean_voices)){
-		echo '<script>window.location.href="'.$location.'"</script>';
-		return;
-	}
+    $_course = api_get_course_info();
+    $_user = api_get_user_info();
+    $clean_title = trim($_POST['title']);
+    $clean_title = Database::escape_string($clean_title);
+    $clean_text = trim($_POST['text']);
+    $clean_voices = Security::remove_XSS($_POST['voices']);
+    if (empty($clean_title) || empty($clean_text) || empty($clean_voices)) {
+        echo '<script>window.location.href="'.$location.'"</script>';
+
+        return;
+    }
 	$clean_title = Security::remove_XSS($clean_title);
 	$clean_title = Database::escape_string($clean_title);
 	$clean_title = str_replace(' ', '_', $clean_title);//compound file names
@@ -453,25 +448,11 @@ function downloadMP3_pediaphon($filepath, $dir)
 	}
 
 	$documentPath = $filepath.'/'.$audio_filename;
-
-	/*//prev for a fine unicode, borrowed from main api TODO:clean
-	// Safe replacements for some non-letter characters (whitout blank spaces)
-	$search  = array("\0", "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
-	$replace = array('',  '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
-	$filename=$clean_text;
-	// Encoding detection.
-	$encoding = api_detect_encoding($filename);
-	// Converting html-entities into encoded characters.
-	$filename = api_html_entity_decode($filename, ENT_QUOTES, $encoding);
-	// Transliteration to ASCII letters, they are not dangerous for filesystems.
-	$filename = api_transliterate($filename, 'x', $encoding);
-    // Replacing remaining dangerous non-letter characters.
-    $clean_text = str_replace($search, $replace, $filename);*/
 	$clean_text = api_replace_dangerous_char($clean_text);
 
 	//adding the file
 
-	if ($clean_lang=='de') {
+	if ($clean_lang == 'de') {
 		$url_pediaphon='http://www.pediaphon.org/~bischoff/radiopedia/sprich_multivoice.cgi';
 		$find_t2v = '/http\:\/\/www\.pediaphon\.org\/\~bischoff\/radiopedia\/mp3\/(.*)\.mp3\"/';
 	} else {
@@ -488,6 +469,7 @@ function downloadMP3_pediaphon($filepath, $dir)
 		 'content' => $data
 		)
 	);
+
 	$context  = stream_context_create($opts);
 	// Download the whole HTML page
 	$previous_returntext2voice = file_get_contents($url_pediaphon,false,$context);

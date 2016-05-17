@@ -71,7 +71,6 @@ class Answer
         $objExercise = new Exercise($this->course_id);
         $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
         $objExercise->read($exerciseId);
-
         if ($objExercise->random_answers == '1') {
             $this->readOrderedBy('rand()', '');// randomize answers
         } else {

@@ -622,17 +622,20 @@ class ExerciseLib
                      * the text to find mustn't contains HTML tags
                      * the text to find mustn't contains char "
                      */
-                    if ($origin !== null) {
-                        global $exe_id;
-                        $trackAttempts = Database::get_main_table(
-                            TABLE_STATISTIC_TRACK_E_ATTEMPT
-                        );
-                        $sql = 'SELECT answer FROM ' . $trackAttempts . '
-                                WHERE exe_id=' . $exe_id . ' AND question_id=' . $questionId;
-                        $rsLastAttempt = Database::query($sql);
-                        $rowLastAttempt = Database::fetch_array($rsLastAttempt);
-                        $answer = $rowLastAttempt['answer'];
-                        if (empty($answer)) {
+                    global $exe_id;
+                    $trackAttempts = Database::get_main_table(
+                        TABLE_STATISTIC_TRACK_E_ATTEMPT
+                    );
+                    $sql = 'SELECT answer FROM ' . $trackAttempts . '
+                            WHERE exe_id=' . $exe_id . ' AND question_id=' . $questionId;
+                    $rsLastAttempt = Database::query($sql);
+                    $rowLastAttempt = Database::fetch_array($rsLastAttempt);
+                    $answer = $rowLastAttempt['answer'];
+
+                    $calculatedAnswerId = Session::read('calculatedAnswerId');
+                    $calculatedAnswerInfo = Session::read('calculatedAnswerInfo');
+                    if (empty($answer)) {
+                        if (empty($calculatedAnswerId)) {
                             $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
                                 1,
                                 $nbrAnswers
@@ -640,6 +643,14 @@ class ExerciseLib
                             $answer = $objAnswerTmp->selectAnswer(
                                 $_SESSION['calculatedAnswerId'][$questionId]
                             );
+
+                            Session::write('calculatedAnswerInfo', [$questionId => $answer]);
+
+                        } else {
+                            $calculatedAnswerInfo = Session::read('calculatedAnswerInfo');
+                            if (isset($calculatedAnswerInfo[$questionId])) {
+                                $answer = $calculatedAnswerInfo[$questionId];
+                            }
                         }
                     }
 
@@ -650,6 +661,7 @@ class ExerciseLib
                         $answer,
                         $correctAnswerList
                     );
+
 
                     // get student answer to display it if student go back to previous calculated answer question in a test
                     if (isset($user_choice[0]['answer'])) {

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *  Shows the exercise results
  *
@@ -11,8 +13,6 @@
  * @todo small letters for table variables
  *
  */
-
-use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $debug = false;
@@ -27,10 +27,10 @@ if ($origin == 'learnpath') {
 }
 
 // Database table definitions
-$TBL_EXERCISE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCISES    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$TBL_TRACK_ATTEMPT		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 // General parameters passed via POST/GET
 if ($debug) { error_log('Entered exercise_result.php: '.print_r($_POST,1)); }
@@ -77,13 +77,13 @@ if (empty($track_exercise_info)) {
     api_not_allowed(true);
 }
 
-$exercise_id        = $track_exercise_info['id'];
-$exercise_date      = $track_exercise_info['start_date'];
-$student_id         = $track_exercise_info['exe_user_id'];
-$learnpath_id       = $track_exercise_info['orig_lp_id'];
-$learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];
-$lp_item_view_id    = $track_exercise_info['orig_lp_item_view_id'];
-$current_user_id    = api_get_user_id();
+$exercise_id = $track_exercise_info['id'];
+$exercise_date = $track_exercise_info['start_date'];
+$student_id = $track_exercise_info['exe_user_id'];
+$learnpath_id = $track_exercise_info['orig_lp_id'];
+$learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
+$lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
+$current_user_id = api_get_user_id();
 
 if (api_is_excluded_user_type(true, $student_id)) {
     api_not_allowed(true);
@@ -116,7 +116,7 @@ $fromlink = '';
 
 $interbreadcrumb[]= array("url" => "exercise.php?".api_get_cidreq(),"name" => get_lang('Exercises'));
 $interbreadcrumb[]= array("url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),"name" => $objExercise->name);
-$interbreadcrumb[]= array("url" => "#","name" => get_lang('Result'));
+$interbreadcrumb[]= array("url" => "#", "name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
 
@@ -300,7 +300,6 @@ foreach ($questionList as $questionId) {
 $counter = 1;
 $exercise_content = null;
 $category_list = array();
-
 $useAdvancedEditor = true;
 
 if (!empty($maxEditors) && count($questionList) > $maxEditors) {
@@ -313,10 +312,10 @@ foreach ($questionList as $questionId) {
 	// destruction of the Question object
 	unset($objQuestionTmp);
 
-	// creates a temporary Question object
-	$objQuestionTmp 	= Question::read($questionId);
-	$questionWeighting	= $objQuestionTmp->selectWeighting();
-	$answerType			= $objQuestionTmp->selectType();
+    // creates a temporary Question object
+    $objQuestionTmp = Question::read($questionId);
+    $questionWeighting = $objQuestionTmp->selectWeighting();
+    $answerType = $objQuestionTmp->selectType();
 
 	// Start buffer
     ob_start();
@@ -370,6 +369,20 @@ foreach ($questionList as $questionId) {
         $totalScore += $question_result['score'];
         echo '</table>';
     } elseif ($answerType == FILL_IN_BLANKS) {
+        $question_result = $objExercise->manage_answer(
+            $id,
+            $questionId,
+            $choice,
+            'exercise_show',
+            array(),
+            false,
+            true,
+            $show_results,
+            $objExercise->selectPropagateNeg()
+        );
+        $questionScore = $question_result['score'];
+        $totalScore += $question_result['score'];
+    } elseif ($answerType == CALCULATED_ANSWER) {
         $question_result = $objExercise->manage_answer(
             $id,
             $questionId,
@@ -610,7 +623,8 @@ foreach ($questionList as $questionId) {
             }
 
             //showing the score
-            $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = ".intval($id)." and question_id= ".intval($questionId)."";
+            $queryfree = "SELECT marks FROM ".$TBL_TRACK_ATTEMPT." 
+                          WHERE exe_id = ".intval($id)." and question_id= ".intval($questionId)."";
             $resfree = Database::query($queryfree);
             $questionScore= Database::result($resfree,0,"marks");
             $totalScore+=$questionScore;
@@ -675,7 +689,13 @@ foreach ($questionList as $questionId) {
 				}
 			}
             echo '<br />';
-            echo Display::url($url_name, 'javascript://', array('class' => 'btn', 'onclick'=>"showfck('".$name."', '".$marksname."');"));
+            echo Display::url(
+                $url_name,
+                'javascript://',
+                array(
+                    'class' => 'btn btn-default',
+                    'onclick' => "showfck('".$name."', '".$marksname."');")
+            );
 			echo '<br />';
 
             echo '<div id="feedback_'.$name.'" style="width:100%">';
@@ -804,9 +824,9 @@ foreach ($questionList as $questionId) {
     $score = array();
     if ($show_results) {
 		$score['result'] = get_lang('Score')." : ".ExerciseLib::show_score($my_total_score, $my_total_weight, false, false);
-        $score['pass']   = $my_total_score >= $my_total_weight ? true : false;
-        $score['type']   = $answerType;
-        $score['score']  = $my_total_score;
+        $score['pass'] = $my_total_score >= $my_total_weight ? true : false;
+        $score['type'] = $answerType;
+        $score['score'] = $my_total_score;
         $score['weight'] = $my_total_weight;
         $score['comments'] = isset($comnt) ? $comnt : null;
     }
@@ -815,11 +835,9 @@ foreach ($questionList as $questionId) {
 	$i++;
 
     $contents = ob_get_clean();
-
     $question_content = '<div class="question_row">';
-
  	if ($show_results) {
-        //Shows question title an description
+        // Shows question title an description
 	    $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
 	}
 	$counter++;

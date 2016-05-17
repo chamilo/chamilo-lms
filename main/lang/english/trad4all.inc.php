@@ -5525,7 +5525,7 @@ $ReminderMessage = "Send a reminder";
 $DateSent = "Date sent";
 $ViewUsersWithoutTask = "View missing assignments";
 $AsciiSvgTitle = "Enable AsciiSVG";
-$SuggestionOnlyToEnableSubLanguageFeature = "Only required by the sub-languages feature";
+$SuggestionOnlyToEnableSubLanguageFeatureOrUpgradeProcess = "Only required by the sub-languages feature or version upgrade process";
 $ThematicAdvance = "Thematic advance";
 $EditProfile = "Edit profile";
 $TabsDashboard = "Dashboard";
@@ -7650,4 +7650,6 @@ $Quote = "Quote";
 $ValueTooSmall = "Value is too small.";
 $ValueTooBig = "Value is too big.";
 $YouAreATeacherOfThisCourse = "You are a teacher of this course";
+$StudentBossList = "Student bosses list";
+$ShowScoreEveryAttemptShowAnswersLastAttempt = "Show score on every attempt, show correct answers only on last attempt (only works with an attempts limit)";
 ?>

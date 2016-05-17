@@ -126,7 +126,7 @@ class CalculatedAnswer extends Question
         $form->addElement(
             'html_editor',
             'answer',
-            Display::returnIconPath('fill_field.png'),
+            Display::return_icon('fill_field.png'),
             array(
                 'id' => 'answer',
                 'onkeyup' => 'javascript: updateBlanks(this);'

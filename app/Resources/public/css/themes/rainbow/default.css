@@ -54,6 +54,59 @@ a:focus {
 a:focus {
   outline: none;
 }
+.title{
+    position: static;
+    font-size: 25px;
+    margin-top: 32px;
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: #E72D40;
+}
+.list-faq{
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    margin-top: 25px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.list-items-faq{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.list-faq .list-title{
+    font-size: 16px;
+    font-weight: bold;
+}
+.block-faq .title{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #E72D40;
+}
+.page-faq{
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.block-faq .panel-default .panel-heading{
+    font-weight: bold;
+    font-size: 16px;
+    background: #F2F2F2;
+}
+.back_to_top{
+    font-size: 16px;
+    text-align: center;
+}
+.back_to_top_wrap{
+    cursor: pointer;
+    position: fixed;
+    right: 0;
+    top: 50px;
+    display: none;
+}
+.back_to_top_wrap:hover{
+    color: #FFFFFF;
+}
 /* Menu Option */
 .item-menu a{
     color: #fff !important;

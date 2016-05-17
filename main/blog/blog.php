@@ -13,8 +13,8 @@ if (empty($blog_id)) {
     api_not_allowed(true);
 }
 
-$this_section   = SECTION_COURSES;
-$current_course_tool  = TOOL_BLOGS;
+$this_section = SECTION_COURSES;
+$current_course_tool = TOOL_BLOGS;
 
 /* 	ACCESS RIGHTS */
 // notice for unauthorized people.
@@ -72,7 +72,6 @@ if (!empty($_POST['new_comment_submit'])) {
 }
 
 if (!empty($_POST['new_task_submit'])) {
-
 	Blog:: create_task(
 		$blog_id,
 		$safe_task_name,

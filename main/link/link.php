@@ -16,17 +16,15 @@
  * @author Patrick Cool
  * @author René Haentjens, added CSV file import (October 2004)
  * @package chamilo.link
-
  */
 
-// Including libraries
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_LINK;
 
 $this_section = SECTION_COURSES;
-api_protect_course_script();
+api_protect_course_script(true);
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
     $(document).ready( function() {
         for (i=0;i<$(".actions").length;i++) {
             if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
@@ -41,7 +39,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
         $("#url_id_"+id).html(loading);
         $("#url_id_"+id).load(url);
      }
- </script>';
+</script>';
 
 // @todo change the $_REQUEST into $_POST or $_GET
 // @todo remove this code

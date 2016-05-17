@@ -5525,7 +5525,7 @@ $ReminderMessage = "Enviar un recordatorio";
 $DateSent = "Fecha de envío";
 $ViewUsersWithoutTask = "Ver estudiantes que no han enviado la tarea";
 $AsciiSvgTitle = "Activar AsciiSVG";
-$SuggestionOnlyToEnableSubLanguageFeature = "Solamente necesario si desea habilitar la funcionalidad de sub-idiomas";
+$SuggestionOnlyToEnableSubLanguageFeatureOrUpgradeProcess = "Solamente necesario si desea habilitar la funcionalidad de sub-idiomas o para el proceso de actualización de la versión";
 $ThematicAdvance = "Temporalización de la unidad didáctica";
 $EditProfile = "Editar perfil";
 $TabsDashboard = "Panel de control";
@@ -7669,4 +7669,6 @@ $Quote = "Citar";
 $ValueTooSmall = "Valor demasiado bajo.";
 $ValueTooBig = "Valor demasiado alto.";
 $YouAreATeacherOfThisCourse = "Usted es profesor en este curso";
+$StudentBossList = "Lista de superiores";
+$ShowScoreEveryAttemptShowAnswersLastAttempt = "Mostrar la nota a cada intento, mostrar las respuestas correctas solo en el último intento (solo funciona si hay un límite de intentos)";
 ?>

@@ -455,17 +455,20 @@ class TestCategory
     {
 		$nbquestionresult = 0;
 		$tabcatid = TestCategory::getListOfCategoriesIDForTest($exerciseId);
-		for ($i=0; $i < count($tabcatid); $i++) {
-			if ($tabcatid[$i] > 0 && $tabcatid[$i] > 0) {	// 0 = no category for this questio
-				$nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $tabcatid[$i]);
-				if ($nbQuestionInThisCat > $in_nbrandom) {
-					$nbquestionresult += $in_nbrandom;
-				}
-				else {
-					$nbquestionresult += $nbQuestionInThisCat;
-				}
-			}
-		}
+
+        foreach ($tabcatid as $category) {
+            if (empty($category['id'])) {
+                continue;
+            }
+
+            $nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $category['id']);
+
+            if ($nbQuestionInThisCat > $in_nbrandom) {
+                $nbquestionresult += $in_nbrandom;
+            } else {
+                $nbquestionresult += $nbQuestionInThisCat;
+            }
+        }
 
 		return $nbquestionresult;
 	}
@@ -701,14 +704,18 @@ class TestCategory
         $res_num_max = 0;
         // foreach question
 		$tabcatid = TestCategory::getListOfCategoriesIDForTest($exerciseId);
-		for ($i=0; $i < count($tabcatid); $i++) {
-			if ($tabcatid[$i] > 0) {	// 0 = no category for this question
-				$nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $tabcatid[$i]);
-                if ($nbQuestionInThisCat > $res_num_max) {
-                    $res_num_max = $nbQuestionInThisCat;
-                }
-			}
-		}
+
+        foreach ($tabcatid as $category) {
+            if (empty($category['id'])) {
+                continue;
+            }
+
+            $nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $category['id']);
+
+            if ($nbQuestionInThisCat > $res_num_max) {
+                $res_num_max = $nbQuestionInThisCat;
+            }
+        }
         return $res_num_max;
     }
 

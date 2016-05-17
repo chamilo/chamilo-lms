@@ -36,6 +36,7 @@ class Answer
     public $new_nbrAnswers;
     public $new_destination; // id of the next question if feedback option is set to Directfeedback
     public $course; //Course information
+    public $iid;
 
     /**
      * constructor of the class
@@ -127,6 +128,7 @@ class Answer
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
             $this->autoId[$i] = $object->id_auto;
+            $this->iid[$i] = $object->iid;
             $i++;
         }
         $this->nbrAnswers = $i-1;
@@ -223,7 +225,8 @@ class Answer
 		            hotspot_coordinates,
 		            hotspot_type,
 		            destination,
-		            id_auto
+		            id_auto,
+                    iid
                 FROM $TBL_ANSWER
                 WHERE
                     c_id = {$this->course_id} AND
@@ -248,6 +251,7 @@ class Answer
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
             $this->autoId[$i] = $object->id_auto;
+            $this->iid[$i] = $object->iid;
             $i++;
 		}
 
@@ -261,6 +265,7 @@ class Answer
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $doubt_data->destination;
             $this->autoId[$i] = $doubt_data->id_auto;
+            $this->iid[$i] = $doubt_data->iid;
             $i++;
 	    }
         $this->nbrAnswers = $i-1;
@@ -544,7 +549,7 @@ class Answer
      * Updates an answer
      *
      * @author Toon Keppens
-     *
+     * @param int $iid
      * @param string $answer
      * @param string $comment
      * @param string $correct
@@ -555,7 +560,7 @@ class Answer
      * @param string $hotspot_type
      */
     public function updateAnswers(
-        $autoId,
+        $iid,
         $answer,
         $comment,
         $correct,
@@ -566,7 +571,6 @@ class Answer
         $hotspot_type
     ) {
         $answerTable = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-        $autoId = intval($autoId);
 
         $params = [
             'answer' => $answer,
@@ -577,10 +581,9 @@ class Answer
             'destination' => $destination,
             'hotspot_coordinates' => $hotspot_coordinates,
             'hotspot_type' => $hotspot_type
-
         ];
 
-        Database::update($answerTable, $params, ['id_auto = ?' => $autoId]);
+        Database::update($answerTable, $params, ['iid = ?' => intval($iid)]);
 	}
 
 	/**
@@ -607,6 +610,7 @@ class Answer
 			$hotspot_type = $this->new_hotspot_type[$i];
 			$destination = $this->new_destination[$i];
             $autoId = $this->selectAutoId($i);
+            $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
 
             if (!isset($this->position[$i])) {
                 $params = [
@@ -622,9 +626,9 @@ class Answer
                     'hotspot_type' => $hotspot_type,
                     'destination' => $destination
                 ];
-                $autoId = Database::insert($answerTable, $params);
-                if ($autoId) {
-                    $sql = "UPDATE $answerTable SET id = iid, id_auto = iid WHERE iid = $autoId";
+                $iid = Database::insert($answerTable, $params);
+                if ($iid) {
+                    $sql = "UPDATE $answerTable SET id = iid, id_auto = iid WHERE iid = $iid";
                     Database::query($sql);
 
                     $questionType = $this->getQuestionType();
@@ -642,7 +646,7 @@ class Answer
                         Database::update(
                             $answerTable,
                             ['correct' => $correctAnswerAutoId ? $correctAnswerAutoId : 0],
-                            ['iid = ?' => $autoId]
+                            ['iid = ?' => $iid]
                         );
                     }
                 }
@@ -652,7 +656,7 @@ class Answer
                 // Feed function updateAnswers with none escaped strings
 
                 $this->updateAnswers(
-                    $autoId,
+                    $iid,
                     $this->new_answer[$i],
                     $this->new_comment[$i],
                     $this->new_correct[$i],
@@ -664,10 +668,10 @@ class Answer
                 );
             }
 
-            $answerList[$i] = $autoId;
+            $answerList[$i] = $iid;
 
             if ($correct) {
-                $correctList[$autoId] = true;
+                $correctList[$iid] = true;
             }
         }
 

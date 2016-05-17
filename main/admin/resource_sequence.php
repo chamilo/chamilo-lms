@@ -22,7 +22,7 @@ if (!empty($sessionListFromDatabase)) {
     }
 }
 
-$formSequence = new FormValidator('sequence_form', 'post', api_get_self(),null,null,'inline');
+$formSequence = new FormValidator('sequence_form', 'post', api_get_self(), null, null, 'inline');
 $formSequence->addText('name', get_lang('Sequence'), true, ['cols-size' => [3, 8, 1]]);
 $formSequence->addButtonCreate(get_lang('AddSequence'), 'submit_sequence', false, ['cols-size' => [3, 8, 1]]);
 
@@ -77,7 +77,6 @@ $form->addHtml("</div>");
 $formSave = new FormValidator('');
 $formSave->addHidden('sequence_type', 'session');
 $formSave->addButton('save_resource', get_lang('SaveSettings'), 'floppy-o', 'success', null, null, ['cols-size' => [1, 10, 1]]);
-
 
 $tpl->assign('create_sequence', $formSequence->returnForm());
 $tpl->assign('select_sequence', $selectSequence->returnForm());

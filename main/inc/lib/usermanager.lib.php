@@ -2282,22 +2282,20 @@ class UserManager
      * @param string the internal value of the field
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-    public static function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true)
+    public static function get_extra_user_data_by_value($field_variable, $field_value)
     {
         $extraField = new ExtraFieldValue('user');
 
-        $data = $extraField->get_values_by_handler_and_field_variable(
+        $data = $extraField->get_item_id_from_field_variable_and_field_value(
             $field_variable,
             $field_value,
-            null,
-            true,
-            intval($all_visibility)
+            true
         );
 
         $result = [];
         if (!empty($data)) {
             foreach ($data as $data) {
-                $result[] = $data['item_id'];
+                $result[] = $data;
             }
         }
 

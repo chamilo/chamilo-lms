@@ -1545,18 +1545,7 @@ class learnpath
         // TODO: Update the item object (can be ignored for now because refreshed).
         return true;
     }
-
-    /**
-     * Escapes a string with the available database escape function
-     * @param	string	String to escape
-     * @return	string	String escaped
-     * @deprecated use  Database::escape_string
-     */
-    public function escape_string($string)
-    {
-        return Database::escape_string($string);
-    }
-
+    
     /**
      * Static admin function exporting a learnpath into a zip file
      * @param	string	Export type (scorm, zip, cd)

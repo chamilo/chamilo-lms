@@ -77,36 +77,10 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         file_put_contents($htaccessFile, vchamilo_get_htaccess_fragment($slug));
     }
 
-    // if real coursedir IS NOT under chamilo install, link to it
-    /*$standardlocation = str_replace('//', '/', $_configuration['root_sys'].'/'.$data->course_folder); // where it should be
-    ctrace("Checking course dir against standard $standardlocation ");
-    ctrace("checking standard location : ".is_dir($standardlocation));
-
-    if ($coursedir != $standardlocation) {
-
-        // The standard location dir SHOULD NOT EXIST YET
-        assert(!is_dir($standardlocation));
-        ctrace("Linking virtual coursedir ");
-        chdir(dirname($standardlocation));
-        if (!symlink($coursedir, basename($coursedir))) {
-            ctrace("Could not link $standardlocation => $coursedir ");
-        }
-    } else {
-        ctrace("Course dir in standard location");
-    }*/
-
-    // create homedir
-
-    // Structure of virtualized home folders :
-
-    /*
-     * {LegacyHomeContainer} => {VChamiloSubcontainer} => {BrandedAccessUrlHome}
-     *
-     */
     $absalternatehome = vchamilo_get_config('vchamilo', 'home_real_root');
     // absalternatehome is a vchamilo config setting that tells where the
     // real physical storage for home pages are.
-    $homedir = str_replace('//', '/', $absalternatehome.'/'.$slug);
+    $homedir = $absalternatehome.'/'.$slug;
 
     ctrace("Making home dir as $homedir");
 
@@ -165,7 +139,6 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         ctrace("Coying files from template $template ");
         vchamilo_load_files_from_template($data, $template);
     }
-
 
     // pluging in site name institution
     $settingstable = $data->main_database.'.settings_current';

@@ -106,15 +106,15 @@
     border-left-color: #CCC;
 }
 .input-group.hotspot-5.active {
-    border-color: rgb(215, 215, 21);
-    box-shadow: 1px 1px 10px rgb(215, 215, 21);
+    border-color: rgb(215, 215, 215);
+    box-shadow: 1px 1px 10px rgb(215, 215, 215);
     border-radius: 4px;
 }
 .input-group.hotspot-5.active .input-group-addon {
-    border-color: rgb(215, 215, 21);
+    border-color: rgb(215, 215, 215);
 }
 .input-group.hotspot-5.active select {
-    border-color: rgb(215, 215, 21);
+    border-color: rgb(215, 215, 215);
     border-left-color: #CCC;
 }
 .input-group.hotspot-6.active {
@@ -153,7 +153,7 @@
     border-color: rgb(79, 146, 66);
     border-left-color: #CCC;
 }
-.input-group.hotspot-8.active {
+.input-group.hotspot-9.active {
     border-color: rgb(244, 235, 36);
     box-shadow: 1px 1px 10px rgb(244, 235, 36);
     border-radius: 4px;
@@ -165,7 +165,7 @@
     border-color: rgb(244, 235, 36);
     border-left-color: #CCC;
 }
-.input-group.hotspot-8.active {
+.input-group.hotspot-10.active {
     border-color: rgb(237, 32, 36);
     box-shadow: 1px 1px 10px rgb(237, 32, 36);
     border-radius: 4px;
@@ -256,8 +256,8 @@ svg .hotspot-4 {
     fill: rgba(214, 49, 115, 0.75);
 }
 svg .hotspot-5 {
-    stroke: rgb(215, 215, 21);
-    fill: rgba(215, 215, 21, 0.75);
+    stroke: rgb(215, 215, 215);
+    fill: rgba(215, 215, 215, 0.75);
 }
 svg .hotspot-6 {
     stroke: rgb(144, 175, 221);

@@ -25,7 +25,7 @@ $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 /*	Constants and variables */
 
 $htmlHeadXtra[]='
-<script language="javascript">
+<script>
 function validate(form, list) {
 	if(list.selectedIndex<0) {
     	alert("Please select someone to send the message to.")
@@ -39,12 +39,6 @@ function validate(form, list) {
 
 $htmlHeadXtra[] = '<script>
 var counter_image = 1;
-/*
-function remove_image_form(id_elem1) {
-	var elem1 = document.getElementById(id_elem1);
-	elem1.parentNode.removeChild(elem1);
-}
-*/
 function add_image_form() {
 	// Multiple filepaths for image form
 	var filepaths = document.getElementById("filepaths");
@@ -68,7 +62,6 @@ function add_image_form() {
 }
 </script>';
 $nameTools = get_lang('ComposeMessage');
-/*		FUNCTIONS  */
 
 /**
 * Shows the compose area + a list of users to select from.
@@ -184,18 +177,20 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
     }
 
     if (empty($group_id)) {
-
-        $form->addElement('label', '', '<div  id="filepaths" class="form-group">
-                    <div id="filepath_1">
-                    <label>'.get_lang('FilesAttachment').'</label>
-                    <input type="file" name="attach_1"/>
-                    <label>'.get_lang('Description').'</label>
-                    <input id="file-descrtiption" type="text" name="legend[]" class="form-control"/>
-                    </div>
-                </div>'
+        $form->addElement(
+            'label',
+            '',
+            '<div id="filepaths" class="form-group">
+                <div id="filepath_1">
+                <label>'.get_lang('FilesAttachment').'</label>
+                <input type="file" name="attach_1"/>
+                <label>'.get_lang('Description').'</label>
+                <input id="file-descrtiption" type="text" name="legend[]" />
+                </div>
+            </div>'
         );
 
-        $form->addElement('label', '', '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
+        $form->addLabel('', '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
     }
 
     $form->addButtonSend(get_lang('SendMessage'), 'compose');

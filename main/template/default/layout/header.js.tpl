@@ -1,74 +1,75 @@
 <script>
-// External plugins not part of the default Ckeditor package.
-var plugins = [
-    'asciimath',
-    'asciisvg',
-    'audio',
-    'ckeditor_wiris',
-    'dialogui',
-    'glossary',
-    'leaflet',
-    'mapping',
-    'maximize',
-    'mathjax',
-    'oembed',
-    'toolbar',
-    'toolbarswitch',
-    'video',
-    'wikilink',
-    'wordcount',
-    'youtube'
-];
+    {% if _u.logged %}
+        // External plugins not part of the default Ckeditor package.
+        var plugins = [
+            'asciimath',
+            'asciisvg',
+            'audio',
+            'ckeditor_wiris',
+            'dialogui',
+            'glossary',
+            'leaflet',
+            'mapping',
+            'maximize',
+            'mathjax',
+            'oembed',
+            'toolbar',
+            'toolbarswitch',
+            'video',
+            'wikilink',
+            'wordcount',
+            'youtube'
+        ];
 
-plugins.forEach(function(plugin) {
-    CKEDITOR.plugins.addExternal(plugin, '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/plugins/' }}' + plugin + '/');
-});
-
-/**
- * Function use to load templates in a div
- **/
-var showTemplates = function (ckeditorName) {
-    var editorName = 'content';
-    if (ckeditorName && ckeditorName.length > 0) {
-        editorName = ckeditorName;
-    }
-    CKEDITOR.editorConfig(CKEDITOR.config);
-    CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a){
-        var templatesConfig = CKEDITOR.getTemplates("default");
-
-        var $templatesUL = $("<ul>");
-
-        $.each(templatesConfig.templates, function () {
-            var template = this;
-            var $templateLi = $("<li>");
-
-            var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
-            templateHTML += "<b>" + template.title + "</b>";
-
-            if (template.description) {
-                templateHTML += "<div class=description>" + template.description + "</div>";
-            }
-
-            templateHTML += "</div>";
-
-            $("<a>", {
-                href: "#",
-                html: templateHTML,
-                click: function (e) {
-                    e.preventDefault();
-                    if (CKEDITOR.instances[editorName]) {
-                        CKEDITOR.instances[editorName].setData(template.html, function () {
-                            this.checkDirty();
-                        });
-                    }
-                }
-            }).appendTo($templateLi);
-            $templatesUL.append($templateLi);
+        plugins.forEach(function(plugin) {
+            CKEDITOR.plugins.addExternal(plugin, '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/plugins/' }}' + plugin + '/');
         });
-        $templatesUL.appendTo("#frmModel");
-    });
-};
 
+        /**
+         * Function use to load templates in a div
+         **/
+        var showTemplates = function (ckeditorName) {
+            var editorName = 'content';
+            if (ckeditorName && ckeditorName.length > 0) {
+                editorName = ckeditorName;
+            }
+            CKEDITOR.editorConfig(CKEDITOR.config);
+            CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a){
+                var templatesConfig = CKEDITOR.getTemplates("default");
+
+                var $templatesUL = $("<ul>");
+
+                $.each(templatesConfig.templates, function () {
+                    var template = this;
+                    var $templateLi = $("<li>");
+
+                    var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
+                    templateHTML += "<b>" + template.title + "</b>";
+
+                    if (template.description) {
+                        templateHTML += "<div class=description>" + template.description + "</div>";
+                    }
+
+                    templateHTML += "</div>";
+
+                    $("<a>", {
+                        href: "#",
+                        html: templateHTML,
+                        click: function (e) {
+                            e.preventDefault();
+                            if (CKEDITOR.instances[editorName]) {
+                                CKEDITOR.instances[editorName].setData(template.html, function () {
+                                    this.checkDirty();
+                                });
+                            }
+                        }
+                    }).appendTo($templateLi);
+                    $templatesUL.append($templateLi);
+                });
+                $templatesUL.appendTo("#frmModel");
+            });
+        };
+    {% endif %}
 $(document).ready(function(){
     $("#open-view-list").click(function(){
         $("#student-list-work").fadeIn(300);

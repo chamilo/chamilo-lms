@@ -77,6 +77,9 @@ a:focus {
 .menu-5{
     background: #E2007A;
 }
+.menu-6{
+    background: #8E91FD;
+}
 /* end Menu Option */
 .statistics{
     padding-top: 20px;
@@ -281,7 +284,6 @@ a:focus {
   background:#3C4147 !important;
   color: #fff;
 }
-
 .badge-warning{
   background-color: #FD6600;
 }
@@ -290,9 +292,6 @@ a:focus {
   margin-bottom: 21px;
   list-style: outside none none;
   background-color: #ECF0F1;
-}
-.breadcrumb > .active{
-    color: #FF0;
 }
 .panel-default{
   border-color: #ECF0F1;

@@ -4604,6 +4604,8 @@ class Exercise
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled
+                                $results_disabled,
+                                $answerId
                             );
                             break;
                         case HOT_SPOT_DELINEATION:

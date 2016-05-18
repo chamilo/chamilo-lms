@@ -4373,11 +4373,11 @@ ul.exercise-draggable-answer .touch-items:hover{
 }
 .question_options .droppable .gallery .exercise-draggable-answer-option {
   margin-bottom: 0;
-background: #feffff;
-background: -moz-linear-gradient(top, #feffff 0%, #d2ebf9 100%);
-background: -webkit-linear-gradient(top, #feffff 0%,#d2ebf9 100%);
-background: linear-gradient(to bottom, #feffff 0%,#d2ebf9 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#d2ebf9',GradientType=0 );
+  background: #feffff;
+  background: -moz-linear-gradient(top, #feffff 0%, #d2ebf9 100%);
+  background: -webkit-linear-gradient(top, #feffff 0%,#d2ebf9 100%);
+  background: linear-gradient(to bottom, #feffff 0%,#d2ebf9 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#d2ebf9',GradientType=0 );
   border: 1px solid #DDDDDD;
   padding: 5px;
   border-radius: 5px;

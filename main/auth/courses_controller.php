@@ -562,11 +562,11 @@ class CoursesController
             ]);
 
             $result = Display::toolbarButton(
-                get_lang('Subscribe'),
+                null,
                 $url,
-                'check-circle',
-                'primary',
-                ['class' => 'btn-lg btn-block']
+                'sign-in',
+                'success',
+                ['class' => 'btn-sm']
             );
         }
 
@@ -591,11 +591,11 @@ class CoursesController
      */
     public function getAlreadyRegisteredInSessionLabel()
     {
-        $icon = '<em class="fa fa-smile-o"></em>';
+        $icon = '<em class="fa fa-graduation-cap"></em>';
 
         return Display::div(
-            $icon . ' ' . get_lang("AlreadyRegisteredToSession"),
-            array('class' => 'info-catalog')
+            $icon,
+            array('class' => 'btn btn-default btn-sm', 'title' => get_lang("AlreadyRegisteredToSession"))
         );
     }
 
@@ -789,14 +789,22 @@ class CoursesController
                 $hasRequirements = true;
                 break;
             }
-
+            $coachId = $session->getGeneralCoach()->getId();
+            $coachName = $session->getGeneralCoach()->getCompleteName();
+            $actions = null;
+            if (api_is_platform_admin()) {
+                $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session->getId();
+            }
             $sessionsBlock = array(
                 'id' => $session->getId(),
                 'name' => $session->getName(),
                 'image' => isset($imageField['value']) ? $imageField['value'] : null,
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),
-                'coach_name' => $session->getGeneralCoach()->getCompleteName(),
+                'coach_id' => $coachId,
+                'coach_url' => api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $coachId,
+                'coach_name' => $coachName,
+                'coach_avatar' => UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL),
                 'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
@@ -806,9 +814,11 @@ class CoursesController
                     $hasRequirements
                 ),
                 'show_description' => $session->getShowDescription(),
+                'category' => $session->getCategory()->getName(),
                 'tags' => $sessionCourseTags,
+                'edit_actions' => $actions
             );
-
+              
             $sessionsBlock = array_merge($sessionsBlock, $sequences);
             $sessionsBlocks[] = $sessionsBlock;
         }

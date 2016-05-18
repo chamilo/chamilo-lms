@@ -80,13 +80,12 @@ class vcalendar {
     var $valueInit;
     //  component xCal declaration container
     var $xcaldecl;
-    /*
- * constructor for calendar object
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.2.13 - 2007-12-30
- * @return void
- */
+    /**
+     * constructor for calendar object
+     *
+     * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+     * @since 2.2.13 - 2007-12-30
+     */
     function __construct() {
         $this->_makeVersion();
         $this->calscale   = null;
@@ -6941,7 +6940,6 @@ class vevent extends calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-10-31
-     * @return void
      */
     function __construct() {
         $this->calendarComponent();
@@ -7079,7 +7077,6 @@ class vtodo extends calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-10-31
-     * @return void
      */
     function __construct() {
         $this->calendarComponent();
@@ -7208,7 +7205,6 @@ class vjournal extends calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-10-31
-     * @return void
      */
     function __construct() {
         $this->calendarComponent();
@@ -7308,7 +7304,6 @@ class vfreebusy extends calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-10-31
-     * @return void
      */
     function __construct() {
         $this->calendarComponent();
@@ -7380,7 +7375,6 @@ class valarm extends calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-10-31
-     * @return void
      */
     function __construct() {
         $this->calendarComponent();
@@ -7443,19 +7437,20 @@ class vtimezone extends calendarComponent {
     var $xprop;
     //  component subcomponents container
     var $components;
+
     /**
      * constructor for calendar component VTIMEZONE object
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-10-31
      * @param string $timezonetype optional, default FALSE ( STANDARD / DAYLIGHT )
-     * @return void
      */
-    function __construct( $timezonetype=FALSE ) {
-        if( !$timezonetype )
+    function __construct($timezonetype=false) {
+        if (!$timezonetype) {
             $this->timezonetype = 'VTIMEZONE';
-        else
+        } else {
             $this->timezonetype = strtoupper( $timezonetype );
+        }
         $this->calendarComponent();
 
         $this->comment         = '';
@@ -7503,4 +7498,4 @@ class vtimezone extends calendarComponent {
         return $component;
     }
 }
-?>
+

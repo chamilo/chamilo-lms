@@ -708,7 +708,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 .social-home-anonymous-online {
     width: 200px;
 }
-
 .menulist {
     margin: 0px;
     list-style: none;
@@ -717,38 +716,15 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     list-style-position:outside;
     list-style-type:none;
 }
-
 .menulist li {
     /* float:left; */
     /* margin-left:10px; */
     margin-bottom:10px;
     display:list-item;
 }
-
 .menulist li {
     margin-top: 10px;
 }
-
-.group_social_item {
-    float:left;
-    width:95%;
-}
-
-.group_social_sub_item {
-    float:left;
-    /* width:600px; */
-    background-color: #E9F4FA;
-    background-repeat: repeat-x;
-
-    margin: 8px;
-    padding:5px;
-    width:100%;
-}
-
-.group_social_sub_item_highlight {
-    background-color: #FFFFDD;
-}
-
 #profile .control-group .controls .files-production{
   padding: 5px 25px;
     -webkit-border-radius: 10px;
@@ -766,128 +742,16 @@ a.personal_agenda:hover, a.personal_agenda:hover {
   padding-bottom: 3px;
 }
 
-.message-group-content {
-    float:right;
-    width:90%;
-    line-height: 100%;
-}
-
-.message-group-date  {
-    font-style:italic;
-    text-align:left;
-    margin-top:4px;
-}
-.message-reply-link {
-    float:right;
-}
-
-.group_social_main_item  {
-    float:left;
-    width:600px;
-    background-color: #fff;
-    background-repeat: repeat-x;
-    margin: 8px;
-    padding:5px;
-}
-
-.group_discussions_replies  {
-    background-color: #E9F4FA;
-    background-repeat: repeat-x;
-    border: 1px solid #D0E2EC;
-    border-radius: 3px 3px 3px 3px;
-    color: #999999;
-    float: left;
-    font-size: 0.8em;
-    margin-right: 10px;
-    overflow: hidden;
-    padding: 13px;
-    text-align: center;
-    width: 47px;
-    margin-bottom: 65px;
-}
-
-.group_discussions_replies span {
-    display: block;
-    font-size: 2em;
-}
-
-.group_discussions_info {
-    width:400px;
-    height: 80px;
-    overflow: hidden;
-    width: 400px;
-}
-
-.group_social_grid {
-    float:left;
-    width:100%;
-}
-
-.message-attach {
-    float:left;
-}
 #sn-extra-information .list-group-item{
     padding: 5px 10px;
     border: none;
 }
-
 /** BUTTONS **/
-
 .left {
     float:left !important;
 }
-
 .right {
     text-align: right;
-}
-
-/* Nice buttons v2 */
-
-button.next.disabled {
-    cursor: default;
-    opacity: 0.65;
-}
-
-.round {
-    -webkit-border-radius: 1em;
-    -moz-border-radius: 1em;
-    border-radius: 1em;
-}
-
-.bigger {
-    font-size: 16px;
-    font-weight: bold;
-    padding: .8em 2em .62em;
-}
-
-.big {
-    font-size: 14px;
-    font-weight: bold;
-    padding: .8em 2em .62em;
-}
-.medium {
-    font-size: 12px;
-    padding: .4em 1.5em .42em;
-}
-.small {
-    font-size: 11px;
-    padding: .2em 1em .275em;
-}
-
-.no_link {
-    cursor:default;
-
-}
-
-.no_link:hover {
-    cursor:default;
-}
-.no_link:active {
-    cursor:default;
-
-}
-.content-chat{
-    height: 200px;
 }
 /* Note */
 .note {
@@ -1040,10 +904,6 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 #inbox-menu ul li {
     padding:2px 0px;
 }
-
-#message-reply-link {
-    float:right;
-}
 .message-item {
     -moz-background-clip:border;
     -moz-background-inline-policy:continuous;
@@ -1057,43 +917,26 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
     padding:10px;
 }
 .message-topic {
-    -moz-background-clip:border;
-    -moz-background-inline-policy:continuous;
-    -moz-background-origin:padding;
-    -moz-border-radius-bottomleft:8px;
-    -moz-border-radius-bottomright:8px;
-    -moz-border-radius-topleft:8px;
-    -moz-border-radius-topright:8px;
-    background:#E6EEFB  none repeat scroll 0 0;
-    margin:0 0 5px;
-    padding:10px;
-
+    padding: 15px;
+    border-radius: 5px;
+    display: inline-block;
+    border: 1px solid #DDD;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
 }
-.message-group-title-topic {
-    font-size:180%;
-    margin:5px 0px 5px 0px;
+.message-topic .avatar-author{
+    float: right;
 }
-.message-group-title {
-    font-size:120%;
+.thread-body{
+    padding-bottom: 20px;
+    padding-top: 20px;
 }
-.message-group-author {
-    margin:0px 5px 5px 0px;
-    float:left;
+.message-post{
+    border: 1px solid #DDD;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
 }
-
-.message-group-content {
-    margin: 5px 0px 8px 0px;
-}
-.message-group-date {
-    color:#999;
-    width:100%;
-    font-size:98%;
-}
-.view-message-content {
-    line-height:150%;
-    font-size:110%;
-}
-
 .message_view_table {
     cellspacing:0;
     cellpadding:0;
@@ -1114,15 +957,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
     margin-top:23px;
     margin-left:20px;
 }
-
 /* styles from the my.profile.php file */
-.message-content {
-    /*  float:right;
-        background:#FFF;
-        padding: 10px 0 0 5px;
-        width:125px;
-        position:relative;*/
-}
 .message-content .message-delete {
     position: absolute;
     top: 10px;
@@ -1240,8 +1075,6 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
     text-decoration:none;
     outline-style:none;
     background:#ffffff;
-}
-.message-content-body-right:hover {
 }
 
 a.unread {
@@ -1483,10 +1316,7 @@ div.admin_section h4 {
 .toolbar-groups{
     margin-bottom: 30px;
 }
-#group_edit .form-group label span{
-    display: block;
-    font-size: 12px;
-}
+
 .group_invitation_grid_container { width:100%;}
 .group_invitation_grid_item {
     border:1px dotted #CCCCCC;
@@ -2175,18 +2005,11 @@ div.admin_section h4 {
     border-bottom: 1px solid #CCCCCC;
     margin-bottom: 20px;
 }
-
 #div_content_table {
     border-bottom:1px solid #EAEAEA;
     margin-bottom:20px;
     padding-bottom:10px;
 }
-
-.group_description {
-    word-wrap: break-word;
-    font-size:11px;
-}
-
 /* Forms */
 div.row div.form_header {
     white-space: nowrap;
@@ -3961,7 +3784,12 @@ i.size-32.icon-new-work{
 }
 .sm-groups .social-profile .img-responsive{
   display: inline-block;
-  width: 100px;
+}
+.sm-groups-content .groups-messages{
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 .social-post .mediaPost{
   padding-top:10px;
@@ -4066,7 +3894,7 @@ i.size-32.icon-new-work{
   vertical-align: bottom;
   margin-right: 5px;
 }
-.social-network-menu .nav li a{
+.social-network-menu .nav li a, #groups-acordeon .nav li a{
   padding: 5px;
   font-size: 12px;
 }
@@ -4373,11 +4201,11 @@ ul.exercise-draggable-answer .touch-items:hover{
 }
 .question_options .droppable .gallery .exercise-draggable-answer-option {
   margin-bottom: 0;
-background: #feffff;
-background: -moz-linear-gradient(top, #feffff 0%, #d2ebf9 100%);
-background: -webkit-linear-gradient(top, #feffff 0%,#d2ebf9 100%);
-background: linear-gradient(to bottom, #feffff 0%,#d2ebf9 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#d2ebf9',GradientType=0 );
+  background: #feffff;
+  background: -moz-linear-gradient(top, #feffff 0%, #d2ebf9 100%);
+  background: -webkit-linear-gradient(top, #feffff 0%,#d2ebf9 100%);
+  background: linear-gradient(to bottom, #feffff 0%,#d2ebf9 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#d2ebf9',GradientType=0 );
   border: 1px solid #DDDDDD;
   padding: 5px;
   border-radius: 5px;
@@ -5435,14 +5263,21 @@ div#chat-remote-video video {
 #toolbar-agenda .show-tick{
     width: 420px;
 }
-.tab-wrapper .tab-content{
-    padding: 25px 0px 25px 0px;
-}
 .description-upload{
     margin-bottom: 10px;
 }
 .files-table{
     padding-top: 20px;
+}
+.user-list{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.items-user{
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  min-height: 170px;
 }
 #whoisonline .items-user{
   text-align: center;
@@ -5990,9 +5825,6 @@ a.sessionView {
     .items-course{
         padding: 5px;
         min-height: 300px;
-    }
-    .col-xs-6{
-        width: 100%;
     }
     .gallery .canvas-two{
         width: 100%;

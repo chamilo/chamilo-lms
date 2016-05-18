@@ -612,14 +612,14 @@ class SocialManager extends UserManager
             $userGroupImage = $userGroup->get_picture_group(
                 $group_id,
                 $group_info['picture'],
-                160,
+                128,
                 GROUP_IMAGE_SIZE_BIG
             );
 
             $template->assign('show_group', true);
             $template->assign('group_id', $group_id);
             $template->assign('user_group_image', $userGroupImage);
-            $template->assign('user_group', $group_info);
+            //$template->assign('user_group', $group_info);
             $template->assign(
                 'user_is_group_admin',
                 $userGroup->is_group_admin(

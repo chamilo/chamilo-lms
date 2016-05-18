@@ -4991,11 +4991,23 @@ $server->wsdl->addComplexType(
     )
 );
 
+$server->wsdl->addComplexType(
+    'unSubscribeUserToCourseSimple_return',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_value'    => array('name' => 'original_user_id_value',    'type' => 'xsd:string'),
+        'original_course_id_value'  => array('name' => 'original_course_id_value',  'type' => 'xsd:string'),
+        'result'                    => array('name' => 'result',                    'type' => 'xsd:int')
+    )
+);
 
 // Register the method to expose
 $server->register('WSUnSubscribeUserFromCourseSimple',                         // method name
     array('unSubscribeUserFromCourseSimple' => 'tns:unSubscribeUserFromCourseSimple'), // input parameters
-    array('return' => 'tns:result_createUsersPassEncrypt'),           // output parameters
+    array('return' => 'tns:unSubscribeUserToCourseSimple_return'),           // output parameters
     'urn:WSRegistration',                                                // namespace
     'urn:WSRegistration#WSUnSubscribeUserFromCourseSimple',                    // soapaction
     'rpc',                                                               // style
@@ -5021,6 +5033,7 @@ function WSUnSubscribeUserFromCourseSimple($params)
 
     $result = array();
     $result['original_user_id_value'] = $original_user_id_value;
+    $result['original_course_id_value'] = $original_course_id_value;
     $result['result'] = 0;
 
     $user_id = UserManager::get_user_id_from_original_id(

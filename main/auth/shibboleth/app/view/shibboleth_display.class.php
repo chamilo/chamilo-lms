@@ -27,6 +27,9 @@ class ShibbolethDisplay
         return $result;
     }
 
+    /**
+     * @param string $message
+     */
     public function error_page($message)
     {
         $page_title = get_lang('ShibbolethLogin');
@@ -37,6 +40,9 @@ class ShibbolethDisplay
         die;
     }
     
+    /**
+     * @param string $message
+     */
     public function message_page($message, $title = '')
     {
         $title = $title ? $title : get_lang('ShibbolethLogin');

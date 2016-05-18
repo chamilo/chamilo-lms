@@ -288,7 +288,7 @@ function prepare_user_sql_query($is_count)
  * This function defines globals.
  * @param  int $userId
  *
- * @return bool    False on failure, redirection on success
+ * @return false|null    False on failure, redirection on success
  * @author Evie Embrechts
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
 */

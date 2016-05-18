@@ -28,7 +28,7 @@ $interbreadcrumb[] = array('url' => 'languages.php', 'name' => get_lang('Platfor
  * @param   string  ISO code (fr_FR, ...)
  * @param   int     Whether the sublanguage is published (0=unpublished, 1=published)
  * @param   int     ID del idioma padre
- * @return  int     New sub language ID or false on error
+ * @return  false|string     New sub language ID or false on error
  */
 function add_sub_language($original_name, $english_name, $isocode, $sublanguage_available, $parent_id)
 {

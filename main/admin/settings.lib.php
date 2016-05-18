@@ -1031,7 +1031,7 @@ function get_template_data($from, $number_of_items, $column, $direction)
  * display the edit and delete icons in the sortable table
  *
  * @param integer $id the id of the template
- * @return html code for the link to edit and delete the template
+ * @return string code for the link to edit and delete the template
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
@@ -1050,7 +1050,7 @@ function actions_filter($id)
  * Display the image of the template in the sortable table
  *
  * @param string $image the image
- * @return html code for the image
+ * @return string code for the image
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
@@ -1257,7 +1257,7 @@ function select_timezone_value()
 /**
  * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
  * This function is called through a call_user_func() in the generate_settings_form function.
- * @return array List of gradebook_number_decimals options
+ * @return string[] List of gradebook_number_decimals options
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */

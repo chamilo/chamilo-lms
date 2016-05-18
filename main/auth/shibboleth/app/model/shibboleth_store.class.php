@@ -17,7 +17,7 @@ class ShibbolethStore
 
     /**
      *
-     * @return ShibbolethData 
+     * @return ShibbolethStore 
      */
     public static function instance()
     {

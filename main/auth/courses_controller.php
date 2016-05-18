@@ -33,6 +33,7 @@ class CoursesController
      * render to courses_list view
      * @param string   	action
      * @param string    confirmation message(optional)
+     * @param string $action
      */
     public function courses_list($action, $message = '')
     {
@@ -79,7 +80,7 @@ class CoursesController
     /**
      * It's used for listing courses with categories,
      * render to courses_categories view
-     * @param $action
+     * @param string $action
      * @param string $category_code
      * @param string $message
      * @param string $error

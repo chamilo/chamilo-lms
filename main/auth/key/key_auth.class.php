@@ -65,6 +65,7 @@ class KeyAuth
      * If empty it disables authentication.
      *
      * !! 10 chars max !!
+     * @param string $_
      */
     public static function enable_services($_)
     {
@@ -254,6 +255,9 @@ class KeyAuth
         return Request::get('cidReq', 0);
     }
 
+    /**
+     * @return integer
+     */
     public function get_group_id()
     {
         return Request::get('gidReq', 0);

@@ -98,7 +98,7 @@ class PGTStorageFile extends PGTStorage
    * This method returns an informational string giving the type of storage
    * used by the object (used for debugging purposes).
    *
-   * @return an informational string.
+   * @return string informational string.
    * @public
    */
   function getStorageType()
@@ -110,7 +110,7 @@ class PGTStorageFile extends PGTStorage
    * This method returns an informational string giving informations on the
    * parameters of the storage.(used for debugging purposes).
    *
-   * @return an informational string.
+   * @return string informational string.
    * @public
    */
   function getStorageInfo()
@@ -125,9 +125,9 @@ class PGTStorageFile extends PGTStorage
   /**
    * The class constructor, called by CASClient::SetPGTStorageFile().
    *
-   * @param $cas_parent the CASClient instance that creates the object.
-   * @param $format the format used to store the PGT's (`plain' and `xml' allowed).
-   * @param $path the path where the PGT's should be stored
+   * @param CASClient $cas_parent the CASClient instance that creates the object.
+   * @param string $format the format used to store the PGT's (`plain' and `xml' allowed).
+   * @param string $path the path where the PGT's should be stored
    *
    * @public
    */
@@ -202,7 +202,7 @@ class PGTStorageFile extends PGTStorage
    *
    * @param $pgt_iou the PGT iou.
    *
-   * @return a filename
+   * @return string filename
    * @private
    */
   function getPGTIouFilename($pgt_iou)
@@ -243,7 +243,7 @@ class PGTStorageFile extends PGTStorage
    *
    * @param $pgt_iou the PGT iou
    *
-   * @return the corresponding PGT, or FALSE on error
+   * @return false|string corresponding PGT, or FALSE on error
    *
    * @public
    */

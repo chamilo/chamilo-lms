@@ -87,7 +87,7 @@ class vcalendar {
  * @since 2.2.13 - 2007-12-30
  * @return void
  */
-  function vcalendar () {
+  function __construct() {
     $this->_makeVersion();
     $this->calscale   = null;
     $this->method     = null;
@@ -1312,7 +1312,7 @@ class vcalendar {
             case 'VEVENT':
               $comp = new vevent();
               break;
-            case 'VFREEBUSY';
+            case 'VFREEBUSY':
               $comp = new vfreebusy();
               break;
             case 'VJOURNAL':
@@ -1690,7 +1690,7 @@ class calendarComponent {
  * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
  * @since 2.4.19 - 2008-10-23
  */
-  function calendarComponent() {
+  function __construct() {
     $this->objName         = ( isset( $this->timezonetype )) ?
                           strtolower( $this->timezonetype )  :  get_class ( $this );
     $this->uid             = array();
@@ -1819,8 +1819,10 @@ class calendarComponent {
                 break;
               case 'MEMBER':
                 $attendee11 = $this->intAttrDelimiter.'MEMBER=';
+                //no break
               case 'DELEGATED-TO':
                 $attendee11 = ( !$attendee11 ) ? $this->intAttrDelimiter.'DELEGATED-TO='   : $attendee11;
+                //no break
               case 'DELEGATED-FROM':
                 $attendee11 = ( !$attendee11 ) ? $this->intAttrDelimiter.'DELEGATED-FROM=' : $attendee11;
                 foreach( $optparamvalue  as $cix => $calUserAddress ) {
@@ -4258,19 +4260,41 @@ class calendarComponent {
     $output = array();
     foreach( $datetime as $dateKey => $datePart ) {
       switch ( $dateKey ) {
-        case '0': case 'year':   $output['year']  = $datePart; break;
-        case '1': case 'month':  $output['month'] = $datePart; break;
-        case '2': case 'day':    $output['day']   = $datePart; break;
+        case '0':
+        case 'year':
+            $output['year']  = $datePart;
+            break;
+        case '1':
+        case 'month':
+            $output['month'] = $datePart;
+            break;
+        case '2':
+        case 'day':
+            $output['day']   = $datePart;
+            break;
       }
       if( 3 != $parno ) {
         switch ( $dateKey ) {
           case '0':
           case '1':
-          case '2': break;
-          case '3': case 'hour': $output['hour']  = $datePart; break;
-          case '4': case 'min' : $output['min']   = $datePart; break;
-          case '5': case 'sec' : $output['sec']   = $datePart; break;
-          case '6': case 'tz'  : $output['tz']    = $datePart; break;
+          case '2':
+              break;
+          case '3':
+          case 'hour':
+              $output['hour']  = $datePart;
+              break;
+          case '4':
+          case 'min':
+              $output['min']   = $datePart;
+              break;
+          case '5':
+          case 'sec':
+              $output['sec']   = $datePart;
+              break;
+          case '6':
+          case 'tz':
+              $output['tz']    = $datePart;
+              break;
         }
       }
     }
@@ -4406,11 +4430,26 @@ class calendarComponent {
       foreach( $duration as $durKey => $durValue ) {
         if( empty( $durValue )) continue;
         switch ( $durKey ) {
-          case '0': case 'week': $output['week']  = $durValue; break;
-          case '1': case 'day':  $output['day']   = $durValue; break;
-          case '2': case 'hour': $output['hour']  = $durValue; break;
-          case '3': case 'min':  $output['min']   = $durValue; break;
-          case '4': case 'sec':  $output['sec']   = $durValue; break;
+          case '0':
+          case 'week':
+              $output['week']  = $durValue;
+              break;
+          case '1':
+          case 'day':
+              $output['day']   = $durValue;
+              break;
+          case '2':
+          case 'hour':
+              $output['hour']  = $durValue;
+              break;
+          case '3':
+          case 'min':
+              $output['min']   = $durValue;
+              break;
+          case '4':
+          case 'sec':
+              $output['sec']   = $durValue;
+              break;
         }
       }
     }
@@ -4665,21 +4704,18 @@ class calendarComponent {
       $content1  = $content2  = null;
       foreach( $therule['value'] as $rulelabel => $rulevalue ) {
         switch( $rulelabel ) {
-          case 'FREQ': {
+          case 'FREQ':
             $content1 .= "FREQ=$rulevalue";
             break;
-          }
-          case 'UNTIL': {
+          case 'UNTIL':
             $content2 .= ";UNTIL=";
             $content2 .= $this->_format_date_time( $rulevalue );
             break;
-          }
           case 'COUNT':
           case 'INTERVAL':
-          case 'WKST': {
+          case 'WKST':
             $content2 .= ";$rulelabel=$rulevalue";
             break;
-          }
           case 'BYSECOND':
           case 'BYMINUTE':
           case 'BYHOUR':
@@ -4687,19 +4723,18 @@ class calendarComponent {
           case 'BYYEARDAY':
           case 'BYWEEKNO':
           case 'BYMONTH':
-          case 'BYSETPOS': {
+          case 'BYSETPOS':
             $content2 .= ";$rulelabel=";
-            if( is_array( $rulevalue )) {
+            if (is_array( $rulevalue )) {
               foreach( $rulevalue as $vix => $valuePart ) {
                 $content2 .= ( $vix ) ? ',' : null;
                 $content2 .= $valuePart;
               }
+            } else {
+              $content2 .= $rulevalue;
             }
-            else
-             $content2 .= $rulevalue;
             break;
-          }
-          case 'BYDAY': {
+          case 'BYDAY':
             $content2 .= ";$rulelabel=";
             $bydaycnt = 0;
             foreach( $rulevalue as $vix => $valuePart ) {
@@ -4727,11 +4762,9 @@ class calendarComponent {
               }
             }
             break;
-          }
-          default: {
+          default:
             $content2 .= ";$rulelabel=$rulevalue";
             break;
-          }
         }
       }
       $output .= $this->_createElement( $recurlabel, $attributes, $content1.$content2 );
@@ -6426,8 +6459,10 @@ class calendarComponent {
             else
               $line = reset( $content );
           }
+          //no break
         case 'X-':
           $propname = ( isset( $propname2 )) ? $propname2 : $propname;
+          //no break
         case 'COMMENT':
         case 'CONTACT':
         case 'DESCRIPTION':
@@ -6492,7 +6527,7 @@ class calendarComponent {
             $value3 = explode( '=', $value2, 2 );
             $rulelabel = strtoupper( $value3[0] );
             switch( $rulelabel ) {
-              case 'BYDAY': {
+              case 'BYDAY':
                 $value4 = explode( ',', $value3[1] );
                 if( 1 < count( $value4 )) {
                   foreach( $value4 as $v5ix => $value5 ) {
@@ -6529,14 +6564,12 @@ class calendarComponent {
                 }
                 $recur[$rulelabel] = $value4;
                 break;
-              }
-              default: {
+              default:
                 $value4 = explode( ',', $value3[1] );
                 if( 1 < count( $value4 ))
                   $value3[1] = $value4;
                 $recur[$rulelabel] = $value3[1];
                 break;
-              }
             } // end - switch $rulelabel
           } // end - foreach( $values.. .
           $this->setProperty( $propname, $recur, $propattr );
@@ -6910,7 +6943,7 @@ class vevent extends calendarComponent {
  * @since 2.5.1 - 2008-10-31
  * @return void
  */
-  function vevent() {
+  function __construct() {
     $this->calendarComponent();
 
     $this->attach          = '';
@@ -7048,7 +7081,7 @@ class vtodo extends calendarComponent {
  * @since 2.5.1 - 2008-10-31
  * @return void
  */
-  function vtodo() {
+  function __construct() {
     $this->calendarComponent();
 
     $this->attach          = '';
@@ -7177,7 +7210,7 @@ class vjournal extends calendarComponent {
  * @since 2.5.1 - 2008-10-31
  * @return void
  */
-  function vjournal() {
+  function __construct() {
     $this->calendarComponent();
 
     $this->attach          = '';
@@ -7277,7 +7310,7 @@ class vfreebusy extends calendarComponent {
  * @since 2.5.1 - 2008-10-31
  * @return void
  */
-  function vfreebusy() {
+  function __construct() {
     $this->calendarComponent();
 
     $this->attendee        = '';
@@ -7349,7 +7382,7 @@ class valarm extends calendarComponent {
  * @since 2.5.1 - 2008-10-31
  * @return void
  */
-  function valarm() {
+  function __construct() {
     $this->calendarComponent();
 
     $this->action          = '';
@@ -7418,7 +7451,7 @@ class vtimezone extends calendarComponent {
  * @param string $timezonetype optional, default FALSE ( STANDARD / DAYLIGHT )
  * @return void
  */
-  function vtimezone( $timezonetype=FALSE ) {
+  function __construct( $timezonetype=FALSE ) {
     if( !$timezonetype )
       $this->timezonetype = 'VTIMEZONE';
     else

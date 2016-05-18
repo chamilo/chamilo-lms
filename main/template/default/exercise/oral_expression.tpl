@@ -1,28 +1,26 @@
-<div class="alert alert-warning">
-    <span class="fa fa-warning fa-fw" aria-hidden="true"></span> {{ 'WamiNeedFilename'|get_lang }}
-</div>
-
 <div id="record-audio-recordrtc" class="row text-center">
-    <form>
-        <div class="row">
-            <div class="col-sm-4 col-sm-offset-4">
-                <div class="form-group">
-                    <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
-                    <span class="sr-only">{{ 'RecordAudio'|get_lang }}</span>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-groups">
-                    <button class="btn btn-primary" type="button" id="btn-start-record">
-                        <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
-                    </button>
-                    <button class="btn btn-success" type="button" id="btn-stop-record" disabled>
-                        <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|get_lang }}
-                    </button>
-                </div>
-            </div>
+    <div class="col-sm-4 col-sm-offset-4">
+        <div class="form-group">
+            <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
+            <span class="sr-only">{{ 'RecordAudio'|get_lang }}</span>
         </div>
-    </form>
+    </div>
+    <div class="col-sm-12">
+        <div class="form-group">
+            <button class="btn btn-primary" type="button" id="btn-start-record">
+                <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
+            </button>
+            <button class="btn btn-danger" type="button" id="btn-stop-record" disabled>
+                <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|get_lang }}
+            </button>
+            <button class="btn btn-success" type="button" id="btn-save-record" disabled>
+                <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'SaveRecordedAudio'|get_lang }}
+            </button>
+        </div>
+        <div class="form-group">
+            <audio class="skip hidden center-block" controls id="record-preview"></audio>
+        </div>
+    </div>
 </div>
 
 <div class="row" id="record-audio-wami">
@@ -38,7 +36,9 @@
             var mediaConstraints = {audio: true},
                     recordRTC = null,
                     btnStart = $('#btn-start-record'),
-                    btnStop = $('#btn-stop-record');
+                    btnStop = $('#btn-stop-record'),
+                    btnSave = $('#btn-save-record'),
+                    tagAudio = $('#record-preview');
 
             btnStart.on('click', function () {
                 navigator.getUserMedia = navigator.getUserMedia ||
@@ -59,8 +59,10 @@
                     });
                     recordRTC.startRecording();
 
+                    btnSave.prop('disabled', true);
                     btnStop.prop('disabled', false);
                     btnStart.prop('disabled', true);
+                    tagAudio.removeClass('show').addClass('hidden');
                 }
 
                 function errorCallback(error) {
@@ -74,22 +76,43 @@
                 }
 
                 recordRTC.stopRecording(function (audioURL) {
-                    var recordedBlob = recordRTC.getBlob(),
-                            fileName = '{{ file_name }}',
-                            fileExtension = '.' + recordedBlob.type.split('/')[1];
+                    btnStart.prop('disabled', false);
+                    btnStop.prop('disabled', true);
+                    btnSave.prop('disabled', false);
 
-                    var formData = new FormData();
-                    formData.append('audio_blob', recordedBlob, fileName + fileExtension);
-                    formData.append('audio_dir', '{{ directory }}');
+                    tagAudio
+                            .removeClass('hidden')
+                            .addClass('show')
+                            .prop('src', audioURL);
+                });
+            });
 
-                    $.ajax({
-                        url: '{{ _p.web_ajax }}record_audio_rtc.ajax.php',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        type: 'POST'
-                    });
+            btnSave.on('click', function () {
+                if (!recordRTC) {
+                    return;
+                }
 
+                var recordedBlob = recordRTC.getBlob();
+
+                if (!recordedBlob) {
+                    return;
+                }
+
+                var fileName = '{{ file_name }}',
+                        fileExtension = '.' + recordedBlob.type.split('/')[1];
+
+                var formData = new FormData();
+                formData.append('audio_blob', recordedBlob, fileName + fileExtension);
+                formData.append('audio_dir', '{{ directory }}');
+
+                $.ajax({
+                    url: '{{ _p.web_ajax }}record_audio_rtc.ajax.php',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST'
+                }).then(function () {
+                    btnSave.prop('disabled', true);
                     btnStop.prop('disabled', true);
                     btnStart.prop('disabled', false);
                 });

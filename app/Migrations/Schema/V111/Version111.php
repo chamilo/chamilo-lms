@@ -131,8 +131,12 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('UPDATE track_e_default SET default_date = NULL WHERE default_date = "0000-00-00 00:00:00"');
         $this->addSql('ALTER TABLE track_e_default CHANGE default_date default_date DATETIME');
 
-
         $this->addSql('ALTER TABLE track_e_exercises CHANGE expired_time_control expired_time_control DATETIME');
+
+        $this->addSql('DROP TABLE group_rel_user');
+        $this->addSql('DROP TABLE group_rel_tag');
+        $this->addSql('DROP TABLE group_rel_group');
+        $this->addSql('DROP TABLE groups');
     }
 
     /**

@@ -3850,95 +3850,6 @@ function get_whats_new()
 }
 
 /**
- * With this function we find the number of posts and topics in a given forum.
- *
- * @todo consider to call this function only once and let it return an array where the key is the forum id and the value is an array with number_of_topics and number of post
- * as key of this array and the value as a value. This could reduce the number of queries needed (especially when there are more forums)
- * @todo consider merging both in one query.
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version february 2006, dokeos 1.8
- *
- * @deprecated the counting mechanism is now inside the function get_forums
- */
-function get_post_topics_of_forum($forum_id)
-{
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
-    $course_id = api_get_course_int_id();
-
-    if (api_is_allowed_to_edit(null, true)) {
-        $sql = "SELECT count(*) as number_of_posts
-                FROM $table_posts posts, $table_threads threads, $table_item_property item_property
-                WHERE
-                posts.c_id = $course_id AND
-                item_property.c_id = $course_id AND
-                posts.forum_id='".Database::escape_string($forum_id)."'
-                AND posts.thread_id=threads.thread_id
-                AND item_property.ref=threads.thread_id
-                AND item_property.visibility<>2
-                AND item_property.tool='".TOOL_FORUM_THREAD."'
-                ";
-    } else {
-        $sql = "SELECT count(*) as number_of_posts
-                FROM $table_posts posts, $table_threads threads, $table_item_property item_property
-                WHERE
-                posts.c_id = $course_id AND
-                item_property.c_id = $course_id AND
-                posts.forum_id='".Database::escape_string($forum_id)."'
-                AND posts.thread_id=threads.thread_id
-                AND item_property.ref=threads.thread_id
-                AND item_property.visibility=1
-                AND posts.visible=1
-                AND item_property.tool='".TOOL_FORUM_THREAD."'
-                ";
-    }
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
-    $number_of_posts = $row['number_of_posts'];
-
-    // We could loop through the result array and count the number of different group_ids, but I have chosen to use a second sql statement.
-    if (api_is_allowed_to_edit(null, true)) {
-        $sql = "SELECT count(*) as number_of_topics
-                FROM $table_threads threads, $table_item_property item_property
-                WHERE
-                threads.c_id = $course_id AND
-                item_property.c_id = $course_id AND
-                threads.forum_id='".Database::escape_string($forum_id)."'
-                AND item_property.ref=threads.thread_id
-                AND item_property.visibility<>2
-                AND item_property.tool='".TOOL_FORUM_THREAD."'
-                ";
-    } else {
-        $sql = "SELECT count(*) as number_of_topics
-                FROM $table_threads threads, $table_item_property item_property
-                WHERE
-                threads.c_id = $course_id AND
-                item_property.c_id = $course_id AND
-                threads.forum_id='".Database::escape_string($forum_id)."'
-                AND item_property.ref=threads.thread_id
-                AND item_property.visibility=1
-                AND item_property.tool='".TOOL_FORUM_THREAD."'
-                ";
-    }
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
-    $number_of_topics = $row['number_of_topics'];
-    if ($number_of_topics == '') {
-        $number_of_topics = 0; // Due to the nature of the group by this can result in an empty string.
-    }
-
-    $return = array(
-        'number_of_topics' => $number_of_topics,
-        'number_of_posts' => $number_of_posts,
-    );
-
-    return $return;
-}
-
-/**
  * This function approves a post = change
  *
  * @param int $post_id the id of the post that will be deleted
@@ -5663,34 +5574,6 @@ function editAttachedFile($array, $id, $courseId = null) {
 }
 
 /**
- * Return a form to upload asynchronously attachments to forum post.
- * @param int $forumId Forum ID from where the post are
- * @param int $threadId Thread ID where forum post are
- * @param int $postId Post ID to identify Post
- * @deprecated this function seems to never been used
- * @return string The Forum Attachment Ajax Form
- *
- */
-function getAttachmentAjaxForm($forumId, $threadId, $postId)
-{
-    $forumId = intval($forumId);
-    $postId = intval($postId);
-    $threadId = !empty($threadId) ? intval($threadId) : isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
-    if ($forumId === 0) {
-        // Forum Id must be defined
-
-        return '';
-    }
-
-    $url = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&forum=' . $forumId . '&thread=' . $threadId . '&postId=' . $postId . '&a=upload_file';
-
-    $multipleForm = new FormValidator('post');
-    $multipleForm->addMultipleUpload($url);
-
-    return $multipleForm->returnForm();
-}
-
-/**
  * Return a table where the attachments will be set
  * @param int $postId Forum Post ID
  *
@@ -5715,6 +5598,7 @@ function getAttachmentsAjaxTable($postId = null)
             }
         }
     }
+    
     // Get data to fill into attachment files table
     if (!empty($_SESSION['forum']['upload_file'][$courseId]) &&
         is_array($_SESSION['forum']['upload_file'][$courseId])

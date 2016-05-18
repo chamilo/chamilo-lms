@@ -56,7 +56,7 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
         // Group folder?
         $gid_req = ($_GET['gidReq']) ? '&gidReq='.Security::remove_XSS($_GET['gidReq']) : '';
         // Create the path
-        $document_explorer = api_get_path(WEB_CODE_PATH).'document/document.php?curdirpath='.urlencode($doc_url).'&'.api_get_cidreq_params(Security::remove_XSS($_GET['cidReq'], 0, $gid_req);
+        $document_explorer = api_get_path(WEB_CODE_PATH).'document/document.php?curdirpath='.urlencode($doc_url).'&'.api_get_cidreq_params(Security::remove_XSS($_GET['cidReq'], 0, $gid_req));
         // Redirect
         header('Location: '.$document_explorer);
     }

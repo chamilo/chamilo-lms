@@ -2876,7 +2876,7 @@ class CourseManager
         $courseId = $courseInfo['real_id'];
 
         $extraFieldValues = new ExtraFieldValue('course');
-        $result = $extraFieldValues->get_values_by_handler_and_field_variable($variable, $courseId);
+        $result = $extraFieldValues->get_values_by_handler_and_field_variable($courseId, $variable);
         if (!empty($result['value'])) {
             return $result['value'];
         }

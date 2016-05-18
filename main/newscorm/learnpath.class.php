@@ -1545,18 +1545,7 @@ class learnpath
         // TODO: Update the item object (can be ignored for now because refreshed).
         return true;
     }
-
-    /**
-     * Escapes a string with the available database escape function
-     * @param	string	String to escape
-     * @return	string	String escaped
-     * @deprecated use  Database::escape_string
-     */
-    public function escape_string($string)
-    {
-        return Database::escape_string($string);
-    }
-
+    
     /**
      * Static admin function exporting a learnpath into a zip file
      * @param	string	Export type (scorm, zip, cd)
@@ -11114,6 +11103,50 @@ EOD;
 
         return $form->returnForm();
     }
+
+    /**
+     * Check if the current lp item is first, both, last or none from lp list
+     *
+     * @param int $currentItemId
+     * @return string
+     */
+    public function isFirstOrLastItem($currentItemId)
+    {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::isFirstOrLastItem('.$currentItemId.')', 0);
+        }
+
+        $lpItemId = [];
+
+        $typeListNotToVerify = self::getChapterTypes();
+        foreach ($this->items as $item) {
+            if (!in_array($item->get_type(), $typeListNotToVerify)) {
+                $lpItemId[] = $item->get_id();
+            }
+        }
+
+        $lastLpItemIndex = count($lpItemId) - 1;
+        $position = array_search($currentItemId, $lpItemId);
+
+        switch ($position) {
+            case 0:
+                if (!$lastLpItemIndex) {
+                    $answer = 'both';
+                    break;
+                }
+
+                $answer = 'first';
+                break;
+            case $lastLpItemIndex:
+                $answer = 'last';
+                break;
+            default:
+                $answer = 'none';
+        }
+
+        return $answer;
+    }
+
 }
 
 if (!function_exists('trim_value')) {

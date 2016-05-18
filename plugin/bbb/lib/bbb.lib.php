@@ -64,7 +64,7 @@ class bbb
             }
         }
 
-        if ($bbbPlugin === true) {
+        if ($bbbPlugin === 'true') {
             $userInfo = api_get_user_info();
             $this->userCompleteName = $userInfo['complete_name'];
             $this->salt = $bbb_salt;

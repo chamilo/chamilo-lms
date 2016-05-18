@@ -6541,7 +6541,6 @@ function WSCreateGroup($params)
         'name' => $params['name']
     ];
     return $userGroup->save($params);
-    //return GroupPortalManager::add($params['name'], null, null, 1);
 }
 
 /* Create group Web Service end */
@@ -6588,17 +6587,8 @@ function WSUpdateGroup($params)
     $params['allow_member_group_to_leave'] = null;
 
     $userGroup = new UserGroup();
-    return $userGroup->update($params);
 
-    /*return GroupPortalManager::update(
-        $params['id'],
-        $params['name'],
-        $params['description'],
-        $params['url'],
-        $params['visibility'],
-        $params['picture_uri'],
-        $params['allow_member_group_to_leave']
-    );*/
+    return $userGroup->update($params);
 }
 
 /* Update group Web Service end */
@@ -6639,8 +6629,6 @@ function WSDeleteGroup($params)
     $userGroup = new UserGroup();
 
     return $userGroup->delete($params['id']);
-
-    //return GroupPortalManager::delete($params['id']);
 }
 
 /* Delete group Web Service end */
@@ -6682,8 +6670,6 @@ function GroupBindToParent($params)
     $userGroup = new UserGroup();
 
     return $userGroup->set_parent_group($params['id'], $params['parent_id']);
-
-    //return GroupPortalManager::set_parent_group($params['id'], $params['parent_id']);
 }
 
 /* Bind group Web Service end */

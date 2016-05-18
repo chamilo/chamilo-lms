@@ -435,29 +435,12 @@ if (!empty($student_id)) {
 
     $coachs_name  = '';
     $session_name = '';
-    //$nb_login = Tracking :: count_login_per_student($user_info['user_id'], $courseInfo['real_id']);
-    //get coach and session_name if there is one and if session_mode is activated
-    /*if ($sessionId > 0) {
-        $session_info  = api_get_session_info($sessionId);
-        $session_coach_id = $session_info['session_admin_id'];
-        $course_coachs = api_get_coachs_from_course($sessionId, $courseInfo['real_id']);
-      //  $nb_login = '';
-        if (!empty($course_coachs)) {
-            $info_tutor_name = array();
-            foreach ($course_coachs as $course_coach) {
-                $info_tutor_name[] = api_get_person_name($course_coach['firstname'], $course_coach['lastname']);
-            }
-            $courseInfo['tutor_name'] = implode(",", $info_tutor_name);
-        } elseif ($session_coach_id != 0) {
-            $session_coach_id = intval($session_info['id_coach']);
-            $coach_info = api_get_user_info($session_coach_id);
-            $courseInfo['tutor_name'] = $coach_info['complete_name'];
-        }
-        $coachs_name  = $courseInfo['tutor_name'];
-        $session_name = $session_info['name'];
-    } // end*/
-
-    $table_title = Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).$user_info['complete_name'];
+    $table_title = Display::return_icon(
+            'user.png',
+            get_lang('User'),
+            array(),
+            ICON_SIZE_SMALL
+        ).$user_info['complete_name'];
 
     echo Display::page_subheader($table_title);
 

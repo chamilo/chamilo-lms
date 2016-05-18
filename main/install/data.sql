@@ -1827,6 +1827,11 @@ INSERT INTO settings_current
 VALUES
 ('enable_record_audio',NULL,'radio','Tools','true','EnableRecordAudioTitle','EnableRecordAudioComment',NULL,NULL, 0);
 
+INSERT INTO settings_options (variable, value, display_text)
+VALUES
+('enable_record_audio', 'true', 'Yes'),
+('enable_record_audio', 'false', 'No');
+
 UPDATE settings_current SET selected_value = '1.11.0.3' WHERE variable = 'chamilo_database_version';
 
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 1);

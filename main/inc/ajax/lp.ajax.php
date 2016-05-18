@@ -281,6 +281,16 @@ switch ($action) {
 
         echo json_encode($jsonGamification);
         break;
+    case 'check_item_position':
+        $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
+        $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
+        if ($lp) {
+            $position = $_SESSION['oLP']->isFirstOrLastItem($lpItemId);
+        }
+
+        echo json_encode($position);
+
+        break;
     default:
         echo '';
 }

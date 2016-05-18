@@ -1,3 +1,4 @@
+
 <div class="panel panel-default">
     {% if not session.show_simple_session_info %}
         {% set collapsable = '' %}

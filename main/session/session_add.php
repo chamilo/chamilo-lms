@@ -45,7 +45,7 @@ $(document).ready(function() {
             $image.cropper("destroy");
 
             $image.cropper({
-                aspectRatio: 4 / 3,
+                aspectRatio: 16 / 9,
                 responsive : true,
                 center : false,
                 guides : false,

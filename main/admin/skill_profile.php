@@ -4,7 +4,8 @@
 
 /**
  * Add a skill Profile
- * @package chamilo.skills
+ *
+ * @package chamilo.skill
  */
 
 $cidReset = true;
@@ -43,6 +44,7 @@ if (!empty($item)) {
 $formToDisplay = $form->returnForm();
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ('url' => 'skill.php', 'name' => get_lang('ManageSkillsLevels'));
 $interbreadcrumb[] = array ('url' =>  api_get_self(), 'name' => get_lang('SkillProfile'));
 
 $tpl = new Template($action);

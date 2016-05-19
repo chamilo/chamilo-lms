@@ -4,7 +4,8 @@
 
 /**
  * Add a skill Level
- * @package chamilo.skills
+ *
+ * @package chamilo.skill
  */
 
 $cidReset = true;

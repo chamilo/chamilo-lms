@@ -4,7 +4,8 @@
 
 /**
  * This script manages the skills, levels and profiles assignments.
- * @package chamilo.skills
+ *
+ * @package chamilo.skill
  */
 
 $cidReset = true;
@@ -52,7 +53,7 @@ if (!empty($item)) {
 $formToDisplay = $form->returnForm();
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Skill'));
+$interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('ManageSkillsLevels'));
 
 $tpl = new Template($action);
 switch ($action) {

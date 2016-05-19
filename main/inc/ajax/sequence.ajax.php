@@ -40,7 +40,14 @@ switch ($action) {
                     $graph = $sequence->getUnSerializeGraph();
                     $graph->setAttribute('graphviz.node.fontname', 'arial');
                     $graphviz = new \Graphp\GraphViz\GraphViz();
-                    echo $graphviz->createImageHtml($graph);
+                    $graphImage = '';
+                    try {
+                        $graphImage = $graphviz->createImageHtml($graph);
+                    } catch (UnexpectedValueException $e) {
+                        error_log($e->getMessage() . ' - Graph could not be rendered in resources sequence because GraphViz command "dot" could not be executed - Make sure graphviz is installed.');
+                        $graphImage = '<p class="text-center"><small>'.get_lang('MissingChartLibraryPleaseCheckLog').'</small></p>';
+                    }
+                    echo $graphImage;
                 }
                 break;
         }

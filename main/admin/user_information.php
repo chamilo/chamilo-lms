@@ -58,7 +58,7 @@ if (api_is_platform_admin()) {
         ),
         api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.$userId
     );
-    
+
 }
 
 // Show info about who created this user and when
@@ -390,7 +390,7 @@ if ($studentBossList) {
 
     $row = 1;
     foreach ($studentBossList as $studentBossId) {
-        $studentBoss = api_get_user_info($studentBossId);
+        $studentBoss = api_get_user_info($studentBossId['boss_id']);
         $table->setCellContents($row, 0, $studentBoss['complete_name_with_username']);
         $csvContent[] = array($studentBoss['complete_name_with_username']);
         $row++;

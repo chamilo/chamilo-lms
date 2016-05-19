@@ -3826,9 +3826,11 @@ class Exercise
                         $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                       WHERE
                                         exe_id = '".$exeId."' AND
-                                        question_id= ".intval($questionId)."";
+                                        question_id= ".intval($questionId);
                         $resfill = Database::query($queryfill);
-                        $answer = Database::result($resfill, 0, 'answer');
+                        $rowFill = Database::fetch_assoc($resfill);
+                        $answer = $rowFill['answer'];
+                        $questionScore = $rowFill['marks'];
                     }
 
                     for ($i = 0; $i < count($realCorrectTags); $i++) {
@@ -4604,6 +4606,8 @@ class Exercise
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled
+                                $results_disabled,
+                                $answerId
                             );
                             break;
                         case HOT_SPOT_DELINEATION:

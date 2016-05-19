@@ -891,7 +891,7 @@ class Skill extends Model
     public function get_user_skills($user_id, $get_skill_data = false)
     {
         $user_id = intval($user_id);
-        $sql = 'SELECT DISTINCT s.id, s.name, s.icon
+        $sql = 'SELECT DISTINCT s.id, s.name, s.icon, u.id as issue
                 FROM '.$this->table_skill_rel_user.' u
                 INNER JOIN '.$this->table.' s
                 ON u.skill_id = s.id
@@ -1446,6 +1446,57 @@ class Skill extends Model
         $result   = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
+    }
+
+    /**
+     * Check if the $fromUser can comment the $toUser skill issue
+     * @param Chamilo\UserBundle\Entity\User $fromUser
+     * @param Chamilo\UserBundle\Entity\User $toUser
+     * @return boolean
+     */
+    public static function userCanAddFeedbackToUser($fromUser, $toUser)
+    {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        $entityManager = Database::getManager();
+        $userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
+        $fromUserStatus = $fromUser->getStatus();
+
+        switch ($fromUserStatus) {
+            case SESSIONADMIN:
+                if (api_get_setting('allow_session_admins_to_manage_all_sessions') === 'true') {
+                    if ($toUser->getCreatorId() === $fromUser->getId()) {
+                        return true;
+                    }
+                }
+
+                $sessionAdmins = $userRepo->getSessionAdmins($toUser);
+
+                foreach ($sessionAdmins as $sessionAdmin) {
+                    if ($sessionAdmin->getId() !== $fromUser->getId()) {
+                        continue;
+                    }
+
+                    return true;
+                }
+                break;
+            case STUDENT_BOSS:
+                $studentBosses = $userRepo->getStudentBosses($toUser);
+
+                foreach ($studentBosses as $studentBoss) {
+                    if ($studentBoss->getId() !== $fromUser->getId()) {
+                        continue;
+                    }
+
+                    return true;
+                }
+            case DRH:
+                return UserManager::is_user_followed_by_drh($toUser->getId(), $fromUser->getId());
+        }
+
+        return false;
     }
 
 }

@@ -3826,7 +3826,7 @@ class Exercise
                         $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                       WHERE
                                         exe_id = '".$exeId."' AND
-                                        question_id= ".intval($questionId);
+                                        question_id= ".intval($questionId)  ;
                         $resfill = Database::query($queryfill);
                         $rowFill = Database::fetch_assoc($resfill);
                         $answer = $rowFill['answer'];
@@ -4605,7 +4605,6 @@ class Exercise
                                 $answer,
                                 $studentChoice,
                                 $answerComment,
-                                $results_disabled
                                 $results_disabled,
                                 $answerId
                             );

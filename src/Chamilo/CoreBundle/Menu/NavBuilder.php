@@ -64,14 +64,14 @@ class NavBuilder extends ContainerAware
         $menu->addChild(
             $translator->trans('Home'),
             array('route' => 'home')
-        );
+        )->setAttribute('class', 'item-menu menu-1 homepage');
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
 
             $menu->addChild(
                 $translator->trans('My courses'),
                 array('route' => 'userportal')
-            );
+            )->setAttribute('class', 'item-menu menu-2 my-course');
 
             $menu->addChild(
                 $translator->trans('Personal agenda'),
@@ -81,7 +81,7 @@ class NavBuilder extends ContainerAware
                         'name' => 'calendar/agenda_js.php',
                     ),
                 )
-            );
+            )->setAttribute('class', 'item-menu menu-3 agenda');
 
             $menu->addChild(
                 $translator->trans('Reporting'),
@@ -91,7 +91,7 @@ class NavBuilder extends ContainerAware
                         'name' => 'mySpace/index.php',
                     ),
                 )
-            );
+            )->setAttribute('class', 'item-menu menu-4 my-space');
 
             $menu->addChild(
                 $translator->trans('Social network'),
@@ -101,7 +101,7 @@ class NavBuilder extends ContainerAware
                         'name' => 'social/home.php',
                     ),
                 )
-            );
+            )->setAttribute('class', 'item-menu menu-5 social-network ');
 
             if ($checker->isGranted('ROLE_ADMIN')) {
 
@@ -113,7 +113,7 @@ class NavBuilder extends ContainerAware
                             'name' => 'dashboard/index.php',
                         ),
                     )
-                );
+                )->setAttribute('class', 'item-menu menu-6 dashboard');
 
                 $menu->addChild(
                     $translator->trans('Administration'),
@@ -123,7 +123,7 @@ class NavBuilder extends ContainerAware
                             'name' => 'social/home.php',
                         )
                     )
-                );
+                )->setAttribute('class', 'item-menu menu-7 admin');
             }
         }
 
@@ -134,7 +134,8 @@ class NavBuilder extends ContainerAware
                 [
                     'route' => 'faq_index',
                 ]
-            );
+            )->setAttribute('class', 'item-menu menu-2');
+            
             /** @var Category $category */
             foreach ($categories as $category) {
                  $faq->addChild(

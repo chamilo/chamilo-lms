@@ -7,6 +7,7 @@ $strings['include_sessions'] = "Incluir sessões";
 $strings['paypal_enable'] = "Ativar PayPal";
 $strings['transfer_enable'] = "Permitir transferência bancária";
 $strings['unregistered_users_enable'] = "Permitir que usuários anônimos";
+$strings['Free'] = "GRÁTIS";
 
 $strings['banktransfer'] = "Transferência Bancária";
 $strings['SaleStatusPending'] = "Venda pendente";

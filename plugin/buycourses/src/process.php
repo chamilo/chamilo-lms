@@ -21,8 +21,12 @@ $includeSession = $plugin->get('include_sessions') === 'true';
 $paypalEnabled = $plugin->get('paypal_enable') === 'true';
 $transferEnabled = $plugin->get('transfer_enable') === 'true';
 
+if (!$paypalEnabled && !$transferEnabled) {
+    api_not_allowed(true);
+}
+
 if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
-    die;
+    api_not_allowed(true);
 }
 
 $buyingCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_COURSE;

@@ -616,7 +616,7 @@ function returnMenuArray()
             }
         }
     }
-    
+
     if (count($mainNavigation['possible_tabs']) > 0) {
         //$pre_lis = '';
         $activeSection = '';
@@ -646,7 +646,7 @@ function returnMenuArray()
             $mainNavigation['possible_tabs'][$section]['current'] = '';
         }
         $mainNavigation['possible_tabs'][$activeSection]['current'] = 'active';
-        
+
     }
     return $mainNavigation;
 }

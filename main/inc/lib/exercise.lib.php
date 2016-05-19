@@ -3488,6 +3488,32 @@ HOTSPOT;
             $show_only_score = false;
         }
 
+        if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            $show_only_score = true;
+            if ($objExercise->attempts > 0) {
+                $attempts = Event::getExerciseResultsByUser(
+                    api_get_user_id(),
+                    $objExercise->id,
+                    api_get_course_int_id(),
+                    api_get_session_id(),
+                    $exercise_stat_info['orig_lp_id'],
+                    $exercise_stat_info['orig_lp_item_id'],
+                    'desc'
+                );
+
+                if ($attempts) {
+                    $numberAttempts = count($attempts);
+                    if ($save_user_result) {
+                        $numberAttempts++;
+                    }
+                    if ($numberAttempts >= $objExercise->attempts) {
+                        $show_results = true;
+                        $show_only_score = false;
+                    };
+                }
+            }
+        }
+
         if ($show_results || $show_only_score) {
             $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
             //Shows exercise header
@@ -3501,6 +3527,7 @@ HOTSPOT;
                 $exercise_stat_info['user_ip']
             );
         }
+
 
         // Display text when test is finished #4074 and for LP #4227
         $end_of_message = $objExercise->selectTextWhenFinished();

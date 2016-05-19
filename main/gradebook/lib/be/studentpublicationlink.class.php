@@ -299,7 +299,8 @@ class StudentPublicationLink extends AbstractLink
 	public function get_link()
 	{
 		$session_id = api_get_session_id();
-		$url = api_get_path(WEB_PATH).'main/work/work.php?session_id='.$session_id.'&cidReq='.$this->get_course_code().'&id='.$this->exercise_data['id'].'&gradebook=view';
+		$url = api_get_path(WEB_PATH).'main/work/work.php?'.api_get_cidreq_params($this->get_course_code(), $session_id).'&id='.$this->exercise_data['id'].'&gradebook=view';
+
 		return $url;
 	}
 

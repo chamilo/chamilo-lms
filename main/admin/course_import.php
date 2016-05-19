@@ -65,9 +65,7 @@ function validate_data($courses)
         if (isset($course['CourseCategory']) && strlen($course['CourseCategory']) != 0) {
             $categoryInfo = CourseCategory::getCategory($course['CourseCategory']);
             if (empty($categoryInfo)) {
-                //@todo this is so bad even all lang variables are wrong ...
-                $course['error'] = get_lang('UnkownCategoryCourseCode').' ('.$course['CourseCategory'].')';
-                $errors[] = $course;
+                CourseCategory::addNode($course['CourseCategory'], $course['CourseCategory'], 'TRUE', null);
             }
         }
     }

@@ -660,6 +660,7 @@ class Database
             $path.'src/Chamilo/CoreBundle/Entity',
             $path.'src/Chamilo/UserBundle/Entity',
             $path.'src/Chamilo/CourseBundle/Entity',
+            $path.'src/Chamilo/ContactBundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',
@@ -676,5 +677,24 @@ class Database
         );
 
         return $config;
+    }
+
+    /**
+     * @param string $table
+     *
+     * @return bool
+     */
+    public static function tableExists($table)
+    {
+        return self::getManager()->getConnection()->getSchemaManager()->tablesExist($table);
+    }
+
+    /**
+     * @param $table
+     * @return \Doctrine\DBAL\Schema\Column[]
+     */
+    public static function listTableColumns($table) 
+    {
+        return self::getManager()->getConnection()->getSchemaManager()->listTableColumns($table);
     }
 }

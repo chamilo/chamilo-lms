@@ -109,7 +109,7 @@ if ($verified) {
                 $studentArray['picture'] = $studentArray['avatar'];
 
                 // Get superior data if exist
-                $superiorId = UserManager::getStudentBoss($data['studentUserId']);
+                $superiorId = UserManager::getFirstStudentBoss($data['studentUserId']);
                 if (!empty($superiorId)) {
                     $superiorArray = api_get_user_info($superiorId);
                 } else {
@@ -265,7 +265,7 @@ if ($verified) {
                     $studentArray = api_get_user_info($data['studentUserId']);
                     $studentArray['picture'] = $studentArray['avatar'];
                     // Prepare superior data
-                    $superiorId = UserManager::getStudentBoss($data['studentUserId']);
+                    $superiorId = UserManager::getFirstStudentBoss($data['studentUserId']);
                     if (!empty($superiorId)) {
                         $superiorArray = api_get_user_info($superiorId);
                     } else {

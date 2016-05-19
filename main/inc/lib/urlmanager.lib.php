@@ -345,7 +345,7 @@ class UrlManager
         }
         $where .= " AND (parent_id IS NULL) ";
 
-        $sql = "SELECT id, name, access_url_id
+        $sql = "SELECT u.id, name, access_url_id
                 FROM $table u
                 INNER JOIN $table_url_rel
                 ON $table_url_rel.course_category_id = u.id

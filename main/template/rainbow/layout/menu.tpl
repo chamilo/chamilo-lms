@@ -15,7 +15,7 @@
             <ul class="nav navbar-nav">
                 {% if _u.logged == 1 %}
                     {% for items in menu.possible_tabs %}     
-                        {% if items.key != 'profile' and items.key != 'dashboard' and items.key != 'my-space' and items.key != 'admin' %}
+                        {% if items.key != 'profile' and items.key != 'dashboard' %}
                         {% set counter = counter + 1 %}
                             <li class="item-menu menu-{{ counter }} {{ items.key }} {{ items.current }}"><a href="{{ items.url }}">{{ items.title }}</a></li>
                         {% endif %}
@@ -25,21 +25,6 @@
                     <li class="item-menu menu-1"><a href="{{ _p.web }}">{{ "CampusHomepage"|get_lang }}</a></li>
                 {% endif %}
                     <li class="item-menu menu-2"><a href="{{ _p.web }}web/app_dev.php/faq">{{ "FAQ"|get_lang }}</a></li>
-                <!-- <li class="item-menu menu-2 dropdown">
-                    <a href="{{ _p.web }}web/app_dev.php/faq" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                        {{ "FAQ"|get_lang }}
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu menu_level_1" role="menu">
-                     {% for category in faq_categories %}
-                         <li divider_append="divider_append" class="first last">
-                            <a href="{{ _p.web }}web/app_dev.php/faq/{{ category.slug }}">
-                                {{ category.headline }}
-                            </a>
-                         </li>
-                    {% endfor %}
-                    </ul> 
-                </li> -->
                 {% if _u.logged == 0 %}
                     <li class="item-menu menu-3"><a href="{{ _p.web }}main/auth/inscription.php">{{ "Subscription"|get_lang }}</a></li>
                     <li class="item-menu menu-4"><a href="#">{{ "Demo"|get_lang }}</a></li>

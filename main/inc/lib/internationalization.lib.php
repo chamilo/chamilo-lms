@@ -3,7 +3,7 @@
 
 /**
  * File: internationalization.lib.php
- * Internationalization library for Chamilo 1.8.7 LMS
+ * Internationalization library for Chamilo 1.x LMS
  * A library implementing internationalization related functions.
  * License: GNU General Public License Version 3 (Free Software Foundation)ww
  * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
@@ -57,15 +57,7 @@ define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);
 // For backward compatibility this format has been set to Eastern order.
 define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 
-// The following constants are used for tuning language detection functionality.
-// We reduce the text for language detection to the given number of characters
-// for increasing speed and to decrease memory consumption.
-define('LANGUAGE_DETECT_MAX_LENGTH', 2000);
-// Maximum allowed difference in so called delta-points for aborting certain language detection.
-// The value 80000 is good enough for speed and detection accuracy.
-// If you set the value of $max_delta too low, no language will be recognized.
-// $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
-define('LANGUAGE_DETECT_MAX_DELTA', 140000);
+
 
 /**
  * Returns a translated (localized) string, called by its identificator.
@@ -155,14 +147,6 @@ function get_lang($variable, $reserved = null, $language = null) {
         } else {
             $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
         }
-    } else {
-        /*if (isset($$variable)) {
-            $langvar = $$variable;
-        } elseif (isset(${"lang$variable"})) {
-            $langvar = ${"lang$variable"};
-        } else {
-            $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
-        }*/
     }
     if (empty($langvar) || !is_string($langvar)) {
         $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
@@ -275,7 +259,7 @@ function api_get_language_isocode($language = null, $default_code = 'en')
 }
 
 /**
- * Gets language isocode column from the language table
+ * Gets language iso code column from the language table
  *
  * @return array    An array with the current isocodes
  *
@@ -283,7 +267,9 @@ function api_get_language_isocode($language = null, $default_code = 'en')
 function api_get_platform_isocodes()
 {
     $iso_code = array();
-    $sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." ORDER BY isocode ");
+    $sql = "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+            ORDER BY isocode ";
+    $sql_result = Database::query($sql);
     if (Database::num_rows($sql_result)) {
         while ($row = Database::fetch_array($sql_result)) {;
             $iso_code[] = trim($row['isocode']);
@@ -348,6 +334,7 @@ function api_get_timezones()
     }
     $null_option = array('' => '');
     $result = array_merge($null_option, $out);
+
     return $result;
 }
 
@@ -439,8 +426,12 @@ function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_local_time($time = null, $to_timezone = null, $from_timezone = null, $return_null_if_invalid_date = false)
-{
+function api_get_local_time(
+    $time = null,
+    $to_timezone = null,
+    $from_timezone = null,
+    $return_null_if_invalid_date = false
+) {
     // Determining the timezone to be converted from
     if (is_null($from_timezone)) {
         $from_timezone = 'UTC';
@@ -471,8 +462,10 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
     try {
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
+
         return $date->format('Y-m-d H:i:s');
     } catch (Exception $e) {
+
         return null;
     }
 }
@@ -480,8 +473,8 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
 /**
  * Converts a string into a timestamp safely (handling timezones), using strtotime
  *
- * @param string String to be converted
- * @param string Timezone (if null, the timezone will be determined based
+ * @param string $time to be converted
+ * @param string $timezone (if null, the timezone will be determined based
  * on user preference, or timezone chosen by the admin for the platform)
  * @return int Timestamp
  *
@@ -494,6 +487,7 @@ function api_strtotime($time, $timezone = null) {
     }
     $timestamp = strtotime($time);
     date_default_timezone_set($system_timezone);
+
     return $timestamp;
 }
 
@@ -663,7 +657,7 @@ function date_to_str_ago($date, $timeZone = 'UTC')
     if ($date == '0000-00-00 00:00:00')  {
         return '';
     }
-    
+
     $timeAgo = new TimeAgo($timeZone, api_get_language_isocode());
 
     return $timeAgo->inWords($date);
@@ -975,9 +969,6 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8
     }
 
     return mb_convert_encoding($string, 'HTML-ENTITIES', 'UTF-8');
-/*
-    return html_entity_decode($string, $quote_style, $encoding);
-    return mb_convert_encoding($string, 'HTML-ENTITIES', 'UTF-8');*/
 }
 
 /**

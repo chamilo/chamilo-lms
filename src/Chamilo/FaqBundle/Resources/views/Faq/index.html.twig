@@ -1,60 +1,77 @@
 {% extends '@ChamiloCore/layout_cms.html.twig' %}
 
 {% block sonata_page_container %}
-<h1>FAQ</h1>
-
-    <br />
-<div class="well">
-<ul>
-{% for category in categories %}
-    <li class="active">
-        <h3>{{ category.getHeadline|e }}</h3>
-    </li>
-    <ul>
-    {% set list = [false] %}
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        {% set list = [false, true] %}
-    {% endif %}
-
-    {% for question in category.questions if question.onlyAuthUsers in list %}
-        {% if question.isActive %}
-            <li>
-                <a href="#{{ question.id }}">
-                    {{ question.getHeadline|e }}
-                </a>
+ <script type="text/javascript">
+        function backToTopGo () {
+          window.scroll(0, 0);
+          backToTopScroll();
+        }
+        $(document).on('ready', function(){
+            var positionCurrent, positionNew = 0;
+            $(window).scroll(function(){
+            positionNew = $(this).scrollTop();
+            if(positionNew>positionCurrent){
+                $('#barra').show('slow');
+            } else if(positionNew<positionCurrent){
+                $('#barra').hide('slow');
+            }
+            positionCurrent=positionNew;
+            });
+        });
+    </script>
+    <a id="barra" class="btn btn-primary back_to_top_wrap" onclick="backToTopGo()">
+        <div class="back_to_top">
+            <i class="fa fa-arrow-up" aria-hidden="true"></i> Go up
+        </div>
+    </a>
+<div class="page-faq">
+    <h1 class="title">FAQ</h1>
+    <div class="list-faq">
+        <ul>
+        {% for category in categories %}
+            <li class="active">
+                <h3 class="list-title">{{ category.getHeadline|e }}</h3>
             </li>
+            <ul class="list-items-faq">
+            {% set list = [false] %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% set list = [false, true] %}
+            {% endif %}
+
+            {% for question in category.questions if question.onlyAuthUsers in list %}
+                {% if question.isActive %}
+                    <li>
+                        <a href="#{{ question.id }}"><i class="fa fa-file-text-o" aria-hidden="true"></i> 
+                            {{ question.getHeadline|e }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% endfor %}
+        </ul>
+    </div>
+    <div class="block-faq">
+    {% for category in categories %}
+        {% set list = [false] %}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% set list = [false, true] %}
+             <h2 class="title"><i class="fa fa-question-circle" aria-hidden="true"></i> {{ category.getHeadline|e }}</h2>
         {% endif %}
+       
+        {% for question in category.questions if question.onlyAuthUsers in list %}
+            {% if question.isActive %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{ question.getHeadline|e }} <a name="{{ question.id }}" id="{{ question.id }}"></a>
+                    </div>
+                    <div class="panel-body">
+                        <p>{{ question.getBody }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
     {% endfor %}
-    </ul>
-{% endfor %}
-</ul>
+    </div>
 </div>
-<br />
-
-<ul>
-{% for category in categories %}
-    <li class="active">
-        <h2>{{ category.getHeadline|e }}</h2>
-    </li>
-    <ul>
-    {% set list = [false] %}
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        {% set list = [false, true] %}
-    {% endif %}
-
-    {% for question in category.questions if question.onlyAuthUsers in list %}
-        {% if question.isActive %}
-            <li>
-               <h3>
-                   {{ question.getHeadline|e }}
-                </h3>
-                <a name="{{ question.id }}" id="{{ question.id }}"></a>
-                <p>{{ question.getBody }}</p>
-            </li>
-        {% endif %}
-    {% endfor %}
-    </ul>
-{% endfor %}
-</ul>
-
 {% endblock %}

@@ -816,7 +816,7 @@ if (api_is_allowed_to_edit(null, true)) {
 }
 
 if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
-    echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
+    echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?'.api_get_cidreq().'" />';
 } else {
     $cats = Category::load(null, null, $course_code, null, null, $session_id, false);
 

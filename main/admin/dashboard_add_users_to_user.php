@@ -5,6 +5,7 @@
 *	Interface for assigning users to Human Resources Manager
 *	@package chamilo.admin
 */
+
 // resetting the course id
 $cidReset = true;
 
@@ -293,7 +294,7 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
             $affected_rows = UserManager::suscribe_users_to_hr_manager($user_id, $user_list);
             break;
         case STUDENT_BOSS:
-            $affected_rows = UserManager::subscribeUsersToBoss($user_id, $user_list);
+            $affected_rows = UserManager::subscribeBossToUsers($user_id, $user_list);
             break;
         default:
             $affected_rows = 0;
@@ -308,20 +309,26 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 Display::display_header($tool_name);
 
 // actions
-
+$actionsLeft = '';
 if ($userStatus != STUDENT_BOSS) {
     $actionsLeft = Display::url(
-        Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM ), "dashboard_add_courses_to_user.php?user=$user_id"
+        Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM ),
+        "dashboard_add_courses_to_user.php?user=$user_id"
     );
 
     $actionsLeft .= Display::url(
-        Display::return_icon('session-add.png', get_lang('AssignSessions'), null, ICON_SIZE_MEDIUM ) , "dashboard_add_sessions_to_user.php?user=$user_id"
+        Display::return_icon('session-add.png', get_lang('AssignSessions'), null, ICON_SIZE_MEDIUM ) ,
+        "dashboard_add_sessions_to_user.php?user=$user_id"
     );
 }
 
-$actionsRight = Display::url('<em class="fa fa-search"></em> ' . get_lang('AdvancedSearch'), '#', array('class' => 'btn btn-default advanced_options', 'id' => 'advanced_search'));
+$actionsRight = Display::url(
+    '<em class="fa fa-search"></em> ' . get_lang('AdvancedSearch'),
+    '#',
+    array('class' => 'btn btn-default advanced_options', 'id' => 'advanced_search')
+);
 
-$toolbar = Display::toolbarAction('toolbar-dashboard', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
+$toolbar = Display::toolbarAction('toolbar-dashboard', [$actionsLeft, $actionsRight]);
 echo $toolbar;
 
 echo '<div id="advanced_search_options" style="display:none">';
@@ -329,8 +336,12 @@ $searchForm->display();
 echo '</div>';
 
 echo Display::page_header(
-    sprintf(get_lang('AssignUsersToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
-        null, $size = 'h3'
+    sprintf(
+        get_lang('AssignUsersToX'),
+        api_get_person_name($user_info['firstname'], $user_info['lastname'])
+    ),
+    null,
+    'h3'
 );
 
 $assigned_users_to_hrm = array();
@@ -492,11 +503,8 @@ if(!empty($msg)) {
                 </select>
             </div>
         </div>
-
     </div>
 </div>
-
 </form>
-
 <?php
 Display::display_footer();

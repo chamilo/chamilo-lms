@@ -126,7 +126,7 @@ echo Display::page_header(get_lang('GradebookListOfStudentsReports'));
 
 echo '<div class="btn-group">';
 if (count($userList) > 0) {
-    $url = api_get_self().'?action=export_all&'.api_get_cidReq().'&selectcat='.$cat_id;
+    $url = api_get_self().'?action=export_all&'.api_get_cidreq().'&selectcat='.$cat_id;
     echo Display::url(get_lang('ExportAllToPDF'), $url, array('class' => 'btn btn-default'));
 }
 echo '</div>';

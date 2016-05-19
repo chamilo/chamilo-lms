@@ -34,8 +34,7 @@ define('ANONYMOUS', 6);
 /** global status of a user: low security, necessary for inserting data from
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
-
-//Soft user status
+// Soft user status
 define('PLATFORM_ADMIN', 11);
 define('SESSION_COURSE_COACH', 12);
 define('SESSION_GENERAL_COACH', 13);
@@ -273,7 +272,6 @@ define('REPEATED_SLASHES_PURIFIER', '/\/{2,}/');                    // $path = p
 define('VALID_WEB_PATH', '/https?:\/\/[^\/]*(\/.*)?/i');            // $is_valid_path = preg_match(VALID_WEB_PATH, $path);
 define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');            // $new_path = preg_replace(VALID_WEB_SERVER_BASE, $new_base, $path);
 
-
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 // basic (leaf elements)
 define('REL_CODE_PATH', 'REL_CODE_PATH');
@@ -446,6 +444,7 @@ define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS', 0); //show score and ex
 define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score nor answers
 define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
 define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final score only with categories
+define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4); //Show final score only with categories
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -734,7 +733,6 @@ function api_get_path($path = '', $configuration = [])
         $course_folder = api_add_trailing_slash($course_folder);
 
         // Initialization of a table that contains common-purpose paths.
-
         $paths[$root_web][REL_PATH] = $root_rel;
         $paths[$root_web][REL_COURSE_PATH] = $root_rel.$course_folder;
         $paths[$root_web][REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][REL_PATH].'main/default_course_document/';
@@ -777,11 +775,11 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][LIBRARY_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][LIBRARY_PATH];
         $paths[$root_web][CONFIGURATION_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][CONFIGURATION_PATH];
 
-        global $VCHAMILO;
-        if (!empty($VCHAMILO)) {
-            $paths[$root_web][SYS_ARCHIVE_PATH] = $VCHAMILO[SYS_ARCHIVE_PATH];
-            $paths[$root_web][SYS_HOME_PATH] = $VCHAMILO[SYS_HOME_PATH];
-            $paths[$root_web][SYS_COURSE_PATH] = $VCHAMILO[SYS_COURSE_PATH];
+        global $virtualChamilo;
+        if (!empty($virtualChamilo)) {
+            $paths[$root_web][SYS_ARCHIVE_PATH] = $virtualChamilo[SYS_ARCHIVE_PATH].'/';
+            $paths[$root_web][SYS_HOME_PATH] = $virtualChamilo[SYS_HOME_PATH].'/';
+            $paths[$root_web][SYS_COURSE_PATH] = $virtualChamilo[SYS_COURSE_PATH].'/';
         }
 
         $isInitialized[$root_web] = true;
@@ -970,25 +968,13 @@ function api_valid_url($url, $absolute = false) {
 
 /**
  * Checks whether a given string looks roughly like an email address.
- * Tries to use PHP built-in validator in the filter extension (from PHP 5.2), falls back to a reasonably competent regex validator.
- * Conforms approximately to RFC2822
- * @link http://www.hexillion.com/samples/#Regex Original pattern found here
- * This function is an adaptation from the method PHPMailer::ValidateAddress(), PHPMailer module.
- * @link http://phpmailer.worxware.com
+ *
  * @param string $address   The e-mail address to be checked.
  * @return mixed            Returns the e-mail if it is valid, FALSE otherwise.
  */
 function api_valid_email($address)
 {
     return filter_var($address, FILTER_VALIDATE_EMAIL);
-    /*
-    // disable for now because the results are incoherent - YW 20110926
-
-    if (function_exists('filter_var')) { // Introduced in PHP 5.2.
-        return filter_var($address, FILTER_VALIDATE_EMAIL);
-    } else {
-        return preg_match('/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/', $address) ? $address : false;
-    }*/
 }
 
 
@@ -1070,7 +1056,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
     }
 
-    //Check session visibility
+    // Check session visibility
     $session_id = api_get_session_id();
 
     if (!empty($session_id)) {
@@ -1477,16 +1463,7 @@ function api_get_user_info_from_email($email = '')
  */
 function api_get_course_id()
 {
-    return isset($GLOBALS['_cid']) ? $GLOBALS['_cid'] : null;
-}
-
-/**
- * Returns the current course id
- * @return int
- */
-function api_get_real_course_id()
-{
-    return api_get_course_int_id();
+    return Session::read('_cid', null);
 }
 
 /**
@@ -1575,8 +1552,26 @@ function api_get_anonymous_id()
 }
 
 /**
- * Returns the cidreq parameter name + current course id taken from
- * $GLOBALS['_cid'] and returns a string like 'cidReq=ABC&id_session=123
+ * @param string $courseCode
+ * @param int $sessionId
+ * @param int $groupId
+ * @return string
+ */
+function api_get_cidreq_params($courseCode, $sessionId = 0, $groupId = 0)
+{
+    $courseCode = !empty($courseCode) ? htmlspecialchars($courseCode) : '';
+    $sessionId = !empty($sessionId) ? (int) $sessionId : 0;
+    $groupId = !empty($groupId) ? (int) $groupId : 0;
+
+    $url = 'cidReq='.$courseCode;
+    $url .= '&id_session='.$sessionId;
+    $url .= '&gidReq='.$groupId;
+
+    return $url;
+}
+
+/**
+ * Returns the current course url part including session, group, and gradebook params
  *
  * @param bool $addSessionId
  * @param bool $addGroupId
@@ -1585,7 +1580,8 @@ function api_get_anonymous_id()
  */
 function api_get_cidreq($addSessionId = true, $addGroupId = true)
 {
-    $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
+    $courseCode = api_get_course_id();
+    $url = empty($courseCode) ? '' : 'cidReq='.htmlspecialchars($courseCode);
     $origin = api_get_origin();
 
     if ($addSessionId) {
@@ -1600,8 +1596,10 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true)
         }
     }
 
-    $url .= '&gradebook='.intval(api_is_in_gradebook());
-    $url .= '&origin='.$origin;
+    if (!empty($url)) {
+        $url .= '&gradebook='.intval(api_is_in_gradebook());
+        $url .= '&origin='.$origin;
+    }
 
     return $url;
 }
@@ -2296,56 +2294,6 @@ function api_get_session_condition(
         }
     }
     return $condition_session;
-}
-
-/**
- * This function returns information about coaches from a course in session
- * @param int       optional, session id
- * @param int $courseId
- * @return array     array containing user_id, lastname, firstname, username
- * @deprecated use CourseManager::get_coaches_from_course
- */
-function api_get_coachs_from_course($session_id = 0, $courseId = '')
-{
-    if (!empty($session_id)) {
-        $session_id = intval($session_id);
-    } else {
-        $session_id = api_get_session_id();
-    }
-
-    if (!empty($courseId)) {
-        $courseId = intval($courseId);
-    } else {
-        $courseId = api_get_course_int_id();
-    }
-
-    $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
-    $tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $coaches = array();
-
-    $sql = "SELECT
-                u.user_id,
-                u.lastname,
-                u.firstname,
-                u.username
-            FROM $tbl_user u, $tbl_session_course_user scu
-            WHERE
-              u.user_id = scu.user_id AND
-              scu.session_id = '$session_id' AND
-              scu.c_id = '$courseId' AND
-              scu.status = 2";
-    $rs = Database::query($sql);
-
-    if (Database::num_rows($rs) > 0) {
-        while ($row = Database::fetch_array($rs)) {
-            $coaches[] = $row;
-        }
-
-        return $coaches;
-    } else {
-
-        return false;
-    }
 }
 
 /**
@@ -3941,7 +3889,7 @@ function api_get_item_property_id($course_code, $tool, $ref, $sessionId = 0)
 function api_track_item_property_update($tool, $ref, $title, $content, $progress)
 {
     $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
-    $course_id = api_get_real_course_id(); //numeric
+    $course_id = api_get_course_int_id(); //numeric
     $course_code = api_get_course_id(); //alphanumeric
     $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
     if (!empty($item_property_id)) {
@@ -3971,7 +3919,7 @@ function api_track_item_property_update($tool, $ref, $title, $content, $progress
 function api_get_track_item_property_history($tool, $ref)
 {
     $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
-    $course_id = api_get_real_course_id(); //numeric
+    $course_id = api_get_course_int_id(); //numeric
     $course_code = api_get_course_id(); //alphanumeric
     $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
     $sql = "SELECT * FROM $tbl_stats_item_property
@@ -3979,6 +3927,7 @@ function api_get_track_item_property_history($tool, $ref)
             ORDER BY lastedit_date DESC";
     $result = Database::query($sql);
     $result = Database::store_result($result,'ASSOC');
+
     return $result;
 }
 
@@ -4411,21 +4360,6 @@ function api_string_2_boolean($string) {
 function api_number_of_plugins($location) {
     global $_plugins;
     return isset($_plugins[$location]) && is_array($_plugins[$location]) ? count($_plugins[$location]) : 0;
-}
-
-/**
- * Checks to see wether a certain plugin is installed.
- * @return boolean true if the plugin is installed, false otherwise.
- */
-function api_is_plugin_installed($plugin_list, $plugin_name) {
-    if (is_array($plugin_list)) {
-        foreach ($plugin_list as $plugin_location) {
-            if (array_search($plugin_name, $plugin_location) !== false) {
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 /**

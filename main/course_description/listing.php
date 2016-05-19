@@ -57,12 +57,12 @@ if (isset($descriptions) && count($descriptions) > 0) {
                     $description['title'] = $description['title'].' '.api_get_session_image(api_get_session_id(), $user_info['status']);
 
                     // delete
-                    $actions .= '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,api_get_system_encoding())).'\')) return false;">';
+                    $actions .= '<a href="'.api_get_self().'?id='.$description['id'].'&'.api_get_cidreq_params(api_get_course_id(), $description['session_id']).'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,api_get_system_encoding())).'\')) return false;">';
                     $actions .= Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),ICON_SIZE_SMALL);
                     $actions .= '</a> ';
 
                     // edit
-                    $actions .= '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=edit&description_type='.$description['description_type'].'">';
+                    $actions .= '<a href="'.api_get_self().'?id='.$description['id'].'&'.api_get_cidreq_params(api_get_course_id(), $description['session_id']).'&action=edit&description_type='.$description['description_type'].'">';
                     $actions .= Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),ICON_SIZE_SMALL);
                     $actions .= '</a> ';
                 } else {

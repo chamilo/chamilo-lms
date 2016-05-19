@@ -403,21 +403,28 @@ $message = null;
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'unsubscribe':
-            if (CourseManager::get_user_in_course_status($_GET['user_id'], $_GET['course_code']) == STUDENT) {
-                CourseManager::unsubscribe_user($_GET['user_id'], $_GET['course_code'], $_GET['id_session']);
+            $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
+            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
+            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
+            if (CourseManager::get_user_in_course_status($userId, $courseCode) == STUDENT) {
+                CourseManager::unsubscribe_user($userId, $courseCode, $sessionId);
                 $message = Display::return_message(get_lang('UserUnsubscribed'));
             } else {
                 $message = Display::return_message(
                     get_lang('CannotUnsubscribeUserFromCourse'),
-                    'error'
+                    'error',
+                    false
                 );
             }
             break;
         case 'unsubscribeSessionCourse':
+            $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
+            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
+            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
             SessionManager::removeUsersFromCourseSession(
-                array($_GET['user_id']),
-                $_GET['id_session'],
-                api_get_course_info($_GET['course_code'])
+                array($userId),
+                $sessionId,
+                api_get_course_info($courseCode)
             );
             $message = Display::return_message(get_lang('UserUnsubscribed'));
             break;

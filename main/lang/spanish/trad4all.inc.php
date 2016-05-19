@@ -1,7 +1,5 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
+/* for more information: see languages.txt in the lang folder. */
 $OpenBadgesBannerText = "Puede generar insignias para reconocer las habilidades aprendidas de sus usuarios, dar un reconocimiento por su logro, con lo cual ellos podrán mostrar sus capacidades y competencias adquiridas a través de emblemas, que serán visualizadas en su perfil de usuario. Para más información sobre los Open Badges en <a href=\"http://openbadges.org\">http://openbadges.org/</a>.";
 $OpenBadgesIntroduction = "Ahora puede establecer reconocimiento de habilidades por aprender en cualquier curso de este campus virtual.";
 $DesignANewBadgeComment = "Diseña una nueva insignia, descárgala y súbela en la plataforma.";
@@ -6743,7 +6741,7 @@ $XQuestionsWithTotalScoreY = "%d preguntas, con un resultado máximo (todas preg
 $ThisIsAutomaticEmailNoReply = "Este es un mensaje automático. Por favor no le de respuesta (será ignorada).";
 $UploadedDocuments = "Documentos enviados";
 $QuestionLowerCase = "Pregunta minúsculas";
-$QuestionsLowerCase = "Preguntas minúsculas";
+$QuestionsLowerCase = "preguntas";
 $BackToTestList = "Regreso a lista de ejercicios";
 $CategoryDescription = "Descripción de categoría";
 $BackToCategoryList = "Regreso a la lista de categorías";
@@ -7582,7 +7580,7 @@ $IssuedBadgeInformation = "Información de la insignia emitida";
 $RecipientDetails = "Datos del beneficiario";
 $SkillAcquiredAt = "Competencia adquirida el";
 $BasicSkills = "Competencias simples";
-$TimeXThroughCourseY = "%s en el curso %s";
+$TimeXThroughCourseY = "%s en el curso <b>%s</b>";
 $ExportBadge = "Exportar la insignia";
 $SelectToSearch = "Seleccionar para buscar";
 $PlaceOnTheWheel = "Ubicar en la rueda";
@@ -7669,8 +7667,14 @@ $Quote = "Citar";
 $ValueTooSmall = "Valor demasiado bajo.";
 $ValueTooBig = "Valor demasiado alto.";
 $YouAreATeacherOfThisCourse = "Usted es profesor en este curso";
-$CouldNotResetPasswordBecauseLDAP = "No se pudo reiniciar la contraseña LDAP, por favor contacte su equipo de soporte.";
-$ValueTooSmall = "Valor demasiado bajo.";
-$ValueTooBig = "Valor demasiado alto.";
-$YouAreATeacherOfThisCourse = "Usted es profesor en este curso";
+$StudentBossList = "Lista de superiores";
+$ShowScoreEveryAttemptShowAnswersLastAttempt = "Mostrar la nota a cada intento, mostrar las respuestas correctas solo en el último intento (solo funciona si hay un límite de intentos)";
+$MissingChartLibraryPleaseCheckLog = "Falta una librería para generar el gráfico. Consulte el registro de errores para mayor información.";
+$UserXIndicated = "El usuario %s ha indicado:";
+$AcquiredLevel = "Nivel adquirido";
+$ManageSkillsLevels = "Administrar niveles de competencias";
+$AddProfile = "Añadir perfil";
+$AddLevel = "Añadir nivel";
+$ChangeAcquiredLevel = "Cambiar nivel adquirido";
+$NoLevelAcquiredYet = "Ningún nivel adquirido todavía";
 ?>

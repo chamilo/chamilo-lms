@@ -21,7 +21,7 @@ $ctok = Security::get_existing_token();
 $limit = CourseCategory::getLimitArray();
 
 // Section for the tabs.
-$this_section = SECTION_COURSES;
+$this_section = SECTION_CATALOG;
 
 if (api_get_setting('course_catalog_published') !== 'true') {
     // Access rights: anonymous users can't do anything useful here.

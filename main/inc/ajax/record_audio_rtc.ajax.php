@@ -66,6 +66,10 @@ if (!empty($result) && is_array($result)) {
 
     $data = DocumentManager::get_document_data_by_id($newDocId, $courseInfo['code']);
 
+    Display::addFlash(
+        Display::return_message(get_lang('DocumentCreated'), 'success')
+    );
+
     echo $data['document_url'];
     exit;
 }

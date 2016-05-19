@@ -1,6 +1,6 @@
 <div class="social-profile text-center">
     {% if show_group %}
-        <img src="{{ user_group_image.file }}" class="img-profile img-responsive img-circle">
+        <img src="{{ user_group_image.file }}" class="img-responsive">
         <div class="caption">
             <h4 class="group-title">
                 <a href="{{ _p.web_main ~ 'social/group_view.php?id=' ~ group_id }}">{{ user_group.name }}</a>

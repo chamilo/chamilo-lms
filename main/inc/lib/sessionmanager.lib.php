@@ -1441,6 +1441,8 @@ class SessionManager
 
                 if (!empty($sessionCategoryId)) {
                     $values['session_category_id'] = $sessionCategoryId;
+                } else {
+                    $values['session_category_id'] = null;
                 }
 
                 Database::update($tbl_session, $values, array(

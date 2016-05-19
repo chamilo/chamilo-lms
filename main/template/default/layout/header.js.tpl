@@ -1,5 +1,5 @@
 <script>
-    {% if _u.logged %}
+    {% if constant('CHAMILO_LOAD_WYSIWYG') %}
         // External plugins not part of the default Ckeditor package.
         var plugins = [
             'asciimath',

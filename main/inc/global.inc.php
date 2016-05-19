@@ -24,6 +24,13 @@
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
+// Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
+// To remove CKeditor libs from HTML, set this constant to true before loading
+// global.inc.php
+if (!defined('CHAMILO_LOAD_WYSIWYG')) {
+    define('CHAMILO_LOAD_WYSIWYG', true);
+}
+
 require_once __DIR__.'/../../app/AppKernel.php';
 
 $kernel = new AppKernel();

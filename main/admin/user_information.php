@@ -460,12 +460,13 @@ $fullUrl = UserManager::getUserPicture(
 );
 
 echo '<div class="row">';
+
+echo $message;
+
 echo '<div class="col-md-2">';
 echo '<a class="expand-image" href="'.$fullUrlBig.'">'
     .'<img src="'.$fullUrl.'" /></a><br />';
 echo '</div>';
-
-echo $message;
 
 echo '<div class="col-md-5">';
 echo $userInformation;

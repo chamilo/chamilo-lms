@@ -304,12 +304,15 @@ class CourseManager
      * @param   int $user_id
      * @param   string $course_code
      *
-     * @return int the status of the user in that course
+     * @return int|bool the status of the user in that course (or false if the user is not in that course)
      */
     public static function get_user_in_course_status($user_id, $course_code)
     {
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
+        if (empty($courseId)) {
+            return false;
+        }
         $result = Database::fetch_array(
             Database::query(
                 "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "

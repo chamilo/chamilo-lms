@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *    This file allows creating audio files from a text.
+ * This file allows creating audio files from a text.
  *
  * @package chamilo.document
  *
@@ -122,7 +122,6 @@ if (isset ($group)) {
     $display_dir = implode('/', $display_dir);
 }
 
-// Interbreadcrumb for the current directory root path
 // Copied from document.php
 $dir_array = explode('/', $dir);
 $array_len = count($dir_array);
@@ -136,18 +135,21 @@ for ($i = 0; $i < $array_len; $i++) {
     $dir_acum .= $dir_array[$i] . '/';
 }
 
+$service = isset($_GET['service']) ? $_GET['service'] : 'pediaphon';
+
 Display:: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
 echo '<a href="document.php?id=' . $document_id . '">' .
     Display::return_icon('back.png', get_lang('BackTo') . ' ' . get_lang('DocumentsOverview'), '',
         ICON_SIZE_MEDIUM) . '</a>';
-echo '<a href="create_audio.php?' . api_get_cidreq() . '&amp;id=' . $document_id . '&amp;dt2a=google">' .
-    Display::return_icon('google.png', get_lang('GoogleAudio'), '', ICON_SIZE_MEDIUM) . '</a>';
-echo '<a href="create_audio.php?' . api_get_cidreq() . '&amp;id=' . $document_id . '&amp;dt2a=pediaphon">' .
-    Display::return_icon('pediaphon.png', get_lang('Pediaphon'), '', ICON_SIZE_MEDIUM) . '</a>';
-echo '</div>';
 
+echo '<a href="create_audio.php?' . api_get_cidreq() . '&id=' . $document_id . '&service=pediaphon">' .
+    Display::return_icon('pediaphon.png', get_lang('Pediaphon'), '', ICON_SIZE_MEDIUM) . '</a>';
+
+echo '<a href="create_audio.php?' . api_get_cidreq() . '&id=' . $document_id . '&service=google">' .
+    Display::return_icon('google.png', get_lang('GoogleAudio'), '', ICON_SIZE_MEDIUM) . '</a>';
+echo '</div>';
 ?>
     <!-- javascript and styles for textareaCounter-->
     <script>
@@ -217,10 +219,10 @@ while ($row = Database::fetch_array($result_select)) {
     }
 }
 
-if (Security::remove_XSS($_GET['dt2a']) == 'google') {
+if ($service == 'google') {
     $selected_language = api_get_language_isocode();//lang default is the course language
 
-    $form = new FormValidator('form1', 'post', null, '', array('id' => 'form1'));
+    $form = new FormValidator('form1', 'post', api_get_self().'?'.api_get_cidreq(), '', array('id' => 'form1'));
     $form->addHeader(get_lang('HelpText2Audio'));
     $form->addElement('hidden', 'text2voice_mode', 'google');
     $form->addElement('hidden', 'id', $document_id);
@@ -232,16 +234,15 @@ if (Security::remove_XSS($_GET['dt2a']) == 'google') {
     $defaults['lang'] = $selected_language;
     $form->setDefaults($defaults);
     $form->display();
-
 }
 
-if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
+if ($service == 'pediaphon') {
     //lang default is a default message
     $selected_language = "defaultmessage";
     $options_pedia['defaultmessage'] = get_lang('FirstSelectALanguage');
     $options['defaultmessage'] = get_lang('FirstSelectALanguage');
 
-    $form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
+    $form = new FormValidator('form2', 'post', api_get_self().'?'.api_get_cidreq(), '', array('id' => 'form2'));
     $form->addHeader(get_lang('HelpText2Audio'));
     $form->addElement('hidden', 'text2voice_mode', 'pediaphon');
     $form->addElement('hidden', 'id', $document_id);
@@ -264,7 +265,6 @@ if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
     $form->setDefaults($defaults);
     $form->display();
     ?>
-
     <!-- javascript form name form2 update voices -->
     <script>
         var langslist = document.form2.lang
@@ -290,7 +290,6 @@ if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
                 for (i = 0; i < voices[selectedvoicegroup].length; i++) {
                     var value = voices[selectedvoicegroup][i].split("|")[1];
                     var text = voices[selectedvoicegroup][i].split("|")[0];
-
                     var newOption = $('<option value="' + value + '">' + text + '</option>');
                     $('#voices').append(newOption);
                     $('#voices').selectpicker('refresh');
@@ -313,7 +312,7 @@ Display:: display_footer();
  */
 function downloadMP3_google($filepath, $dir)
 {
-    $location = 'create_audio.php?' . api_get_cidreq() . '&id=' . intval($_POST['id']) . '&dt2a=google';
+    $location = 'create_audio.php?' . api_get_cidreq() . '&id=' . intval($_POST['id']) . '&service=google';
 
     //security
     if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
@@ -328,6 +327,7 @@ function downloadMP3_google($filepath, $dir)
     $clean_text = trim($_POST['text']);
     if (empty($clean_title) || empty($clean_text)) {
         echo '<script>window.location.href="' . $location . '"</script>';
+        
         return;
     }
     $clean_title = Security::remove_XSS($clean_title);
@@ -413,7 +413,7 @@ function downloadMP3_google($filepath, $dir)
  */
 function downloadMP3_pediaphon($filepath, $dir)
 {
-    $location = 'create_audio.php?' . api_get_cidreq() . '&id=' . intval($_POST['id']) . '&dt2a=pediaphon';
+    $location = 'create_audio.php?' . api_get_cidreq() . '&id=' . intval($_POST['id']) . '&service=pediaphon';
     //security
     if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
         echo '<script>window.location.href="' . $location . '"</script>';
@@ -494,9 +494,25 @@ function downloadMP3_pediaphon($filepath, $dir)
     $current_session_id = api_get_session_id();
     $groupId = api_get_group_id();
     $relativeUrlPath = $dir;
-    $doc_id = add_document($_course, $relativeUrlPath . $audio_filename, 'file', filesize($documentPath), $audio_title);
-    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null,
-        null, $current_session_id);
+    $doc_id = add_document(
+        $_course,
+        $relativeUrlPath.$audio_filename,
+        'file',
+        filesize($documentPath),
+        $audio_title
+    );
+    api_item_property_update(
+        $_course,
+        TOOL_DOCUMENT,
+        $doc_id,
+        'DocumentAdded',
+        $_user['user_id'],
+        $groupId,
+        null,
+        null,
+        null,
+        $current_session_id
+    );
     Display::display_confirmation_message(get_lang('DocumentCreated'));
     //return to location
     echo '<script>window.location.href="' . $location . '"</script>';

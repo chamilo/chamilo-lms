@@ -135,7 +135,7 @@ class NavBuilder extends ContainerAware
                     'route' => 'faq_index',
                 ]
             )->setAttribute('class', 'item-menu menu-2');
-            
+
             /** @var Category $category */
             foreach ($categories as $category) {
                  $faq->addChild(
@@ -150,6 +150,9 @@ class NavBuilder extends ContainerAware
                 )->setAttribute('divider_append', true);
             }
         }
+
+        return $menu;
+
 
         // Getting site information
 
@@ -168,14 +171,8 @@ class NavBuilder extends ContainerAware
             // Parents only of homepage
             $criteria = ['site' => $site, 'enabled' => true, 'parent' => 1];
             $pages = $pageManager->findBy($criteria);
-
-            //$pages = $pageManager->loadPages($site);
             /** @var Page $page */
             foreach ($pages as $page) {
-                /*if ($page->getRouteName() !== 'page_slug') {
-                    continue;
-                }*/
-
                 // Avoid home
                 if ($page->getUrl() === '/') {
                     continue;

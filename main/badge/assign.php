@@ -46,11 +46,11 @@ $url = api_get_path(WEB_CODE_PATH)."badge/assign.php?user=".$_REQUEST['user']."&
 
 $htmlHeadXtra[] = ''
     . '<script>'
-    . '$( document ).ready(function() {'
-    . '$("#skill").on("change", function() {'
-    . '$(location).attr("href", "'. $url .'"+$(this).val());'
-    . '});'
-    . '});'
+        . '$( document ).ready(function() {'
+            . '$("#skill").on("change", function() {'
+                . '$(location).attr("href", "'. $url .'"+$(this).val());'
+            . '});'
+        . '});'
     . '</script>';
 
 $skillsOptions = [];

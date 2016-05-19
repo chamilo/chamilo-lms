@@ -437,7 +437,8 @@ class SkillRelUser
     {
         $source = '';
 
-        if ($this->session) {
+        if ($this->session && $this->session->getId() != 0) {
+
             $source .= "[{$this->session->getName()}] ";
         }
 
@@ -454,7 +455,16 @@ class SkillRelUser
      */
     public function getIssueUrl()
     {
-        return api_get_path(WEB_PATH) . "badge/issue/{$this->id}/user/{$this->user->getId()}/";
+        return api_get_path(WEB_PATH) . "badge/{$this->id}";
+    }
+
+    /**
+     * Get the URL for the All issues page
+     * @return string
+     */
+    public function getIssueUrlAll()
+    {
+        return api_get_path(WEB_PATH) . "skill/{$this->skill->getId()}/user/{$this->user->getId()}";
     }
 
     /**

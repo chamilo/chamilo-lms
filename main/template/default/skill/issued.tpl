@@ -39,10 +39,10 @@
             </p>
             <div class='col-md-12 text-center'>
                 <h5><b> {{ 'ShareWithYourFriends' | get_lang }} </b></h5>
-                <a href='http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ skill_info.id }}/user/{{ user_info.id }}' target='_new'>
+                <a href='http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ issue_info.id }}' target='_new'>
                     <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                 </a>
-                <a href='https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY' | get_lang |format(skill_info.name, _s.site_name)}} - {{ _p.web }}badge/{{ skill_info.id }}/user/{{ user_info.id }}' target='_new'>
+                <a href='https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY' | get_lang |format(skill_info.name, _s.site_name)}} - {{ _p.web }}badge/{{ issue_info.id }}' target='_new'>
                     <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                 </a>
             </div>

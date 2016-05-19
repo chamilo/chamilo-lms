@@ -71,7 +71,11 @@ $currentUser = $entityManager->find('ChamiloUserBundle:User', $currentUserId);
 $allowDownloadExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
 $allowComment = $currentUser ? Skill::userCanAddFeedbackToUser($currentUser, $user) : false;
 $skillIssueDate = api_get_local_time($skillIssue->getAcquiredSkillAt());
-$currentSkillLevel = $skillLevelRepo->find(['id' => $skillIssue->getAcquiredLevel()])->getName();
+$currentSkillLevel = get_lang('NoLevelAcquiredYet');
+if ($skillIssue->getAcquiredLevel()) {
+    $currentSkillLevel = $skillLevelRepo->find(['id' => $skillIssue->getAcquiredLevel()])->getName();
+}
+
 $argumentationAuthor = api_get_user_info($skillIssue->getArgumentationAuthorId());
 
 $skillIssueInfo = [

@@ -39,7 +39,7 @@
                     <ul class="list-unstyled list-badges">
                         {% for skill in skills %}
                             <li class="thumbnail">
-                                <a href="{{ _p.web }}badge/{{ skill.id }}/user/{{ user_id }}" target="_blank">
+                                <a href="{{ _p.web }}badge/{{ skill.issue }}" target="_blank">
                                     <img title="{{ skill.name }}" class="img-responsive" src="{{ skill.icon ? skill.web_icon_thumb_path : 'badges-default.png'|icon(64) }}" width="64" height="64" alt="{{ skill.name }}">
                                     <div class="caption">
                                         <p class="text-center">{{ skill.name }}</p>

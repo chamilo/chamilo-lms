@@ -471,6 +471,66 @@ function api_get_local_time(
 }
 
 /**
+ * Returns a DATETIME string converted to the right timezone
+ * @param mixed The time to be converted
+ * @param string The timezone to be converted to.
+ * If null, the timezone will be determined based on user preference,
+ * or timezone chosen by the admin for the platform.
+ * @param string The timezone to be converted from. If null, UTC will be assumed.
+ * @param boolen view time in formatted
+ * @return string The converted time formatted as Y-m-d H:i:s
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function apiGetTimeForHumans(
+    $time = null,
+    $to_timezone = null,
+    $from_timezone = null,
+    $return_null_if_invalid_date = false,
+    $showTime = true
+) {
+    // Determining the timezone to be converted from
+    if (is_null($from_timezone)) {
+        $from_timezone = 'UTC';
+    }
+
+    // Determining the timezone to be converted to
+    if (is_null($to_timezone)) {
+        $to_timezone = _api_get_timezone();
+    }
+
+    // If time is a timestamp, convert it to a string
+    if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
+        if ($return_null_if_invalid_date) {
+            return null;
+        }
+        $from_timezone = 'UTC';
+        $time = gmdate('Y-m-d H:i:s');
+    }
+    if (is_numeric($time)) {
+        $time = intval($time);
+        $from_timezone = 'UTC';
+        $time = gmdate('Y-m-d H:i:s', $time);
+    }
+    if ($time instanceof DateTime) {
+        $time = $time->format('Y-m-d H:i:s');
+        $from_timezone = 'UTC';
+    }
+    try {
+        $date = new DateTime($time, new DateTimezone($from_timezone));
+        $date->setTimezone(new DateTimeZone($to_timezone));
+        if($showTime){
+            return $date->format('j M Y, g:i a'); 
+        }else{
+            return $date->format('j M Y'); 
+        }
+    } catch (Exception $e) {
+
+        return null;
+    }
+}
+
+/**
  * Converts a string into a timestamp safely (handling timezones), using strtotime
  *
  * @param string $time to be converted

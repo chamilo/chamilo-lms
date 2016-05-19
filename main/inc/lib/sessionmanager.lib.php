@@ -6591,10 +6591,10 @@ class SessionManager
         $endDateToLocal = '';
         // This will clean the variables if 0000-00-00 00:00:00 the variable will be empty
         if (isset($startDateToLocal)) {
-            $startDateToLocal = api_get_local_time($startDate, null, null, true);
+            $startDateToLocal = apiGetTimeForHumans($startDate, null, null, true, false);
         }
         if (isset($endDateToLocal)) {
-            $endDateToLocal = api_get_local_time($endDate, null, null, true);
+            $endDateToLocal = apiGetTimeForHumans($endDate, null, null, true, false);
         }
 
         $result = '';
@@ -6615,7 +6615,6 @@ class SessionManager
 
         return $result;
     }
-
     /**
      * Returns a human readable string
      * @params array $sessionInfo An array with all the session dates
@@ -6627,7 +6626,6 @@ class SessionManager
             $sessionInfo['display_start_date'],
             $sessionInfo['display_end_date']
         );
-
         $accessDates = self::convertSessionDateToString(
             $sessionInfo['access_start_date'],
             $sessionInfo['access_end_date']

@@ -514,14 +514,15 @@ class CoursesController
             ]);
 
             return Display::toolbarButton(
-                get_lang('CheckRequirements'),
+                null,
                 $url,
-                'check-circle',
-                'primary',
+                'shield',
+                'default',
                 [
-                    'class' => 'btn-lg btn-block ajax',
+                    'class' => 'btn-sm ajax',
                     'data-title' => get_lang('CheckRequirements'),
-                    'data-size' => 'md'
+                    'data-size' => 'md',
+                    'title' => get_lang('CheckRequirements')
                 ]
             );
         }
@@ -544,14 +545,15 @@ class CoursesController
             ]);
 
             $result = Display::toolbarButton(
-                get_lang('Subscribe'),
+                null,
                 $url,
-                'check-circle',
-                'primary',
+                'sign-in',
+                'success',
                 [
-                    'class' => 'btn-lg btn-block ajax',
+                    'class' => 'btn-sm ajax',
                     'data-title' => get_lang('AreYouSureToSubscribe'),
-                    'data-size' => 'md'
+                    'data-size' => 'md',
+                    'title' => get_lang('Subscribe')
                 ]
             );
         } else {
@@ -595,7 +597,7 @@ class CoursesController
 
         return Display::div(
             $icon,
-            array('class' => 'btn btn-default btn-sm', 'title' => get_lang("AlreadyRegisteredToSession"))
+            array('class' => 'btn btn-default btn-sm registered', 'title' => get_lang("AlreadyRegisteredToSession"))
         );
     }
 
@@ -747,7 +749,7 @@ class CoursesController
                 'coach_access_start_date' => $session->getCoachAccessStartDate(),
                 'coach_access_end_date' => $session->getCoachAccessEndDate(),
             ]);
-
+            
             $imageField = $extraFieldValue->get_values_by_handler_and_field_variable($session->getId(), 'image');
 
             $sessionCourseTags = [];
@@ -814,6 +816,7 @@ class CoursesController
                     $hasRequirements
                 ),
                 'show_description' => $session->getShowDescription(),
+                'description' => $session->getDescription(),
                 'category' => $session->getCategory()->getName(),
                 'tags' => $sessionCourseTags,
                 'edit_actions' => $actions

@@ -1,0 +1,20 @@
+msgid "Category"
+msgstr "Catégorie"
+
+msgid "Firstname"
+msgstr "Prénom"
+
+msgid "Lastname"
+msgstr "Nom"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Subject"
+msgstr "Sujet"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "Send"
+msgstr "Envoyer"

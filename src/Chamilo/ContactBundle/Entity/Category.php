@@ -9,9 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Category
  *
  * @ORM\Entity
- * @ORM\Table(
- *     name="contact_category"
- * )
+ * @ORM\Table(name="contact_category")
  *
  * @package Chamilo\FaqBundle\Entity
  */
@@ -81,4 +79,25 @@ class Category
         $this->email = $email;
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Category
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    
 }

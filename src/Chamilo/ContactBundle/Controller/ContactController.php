@@ -38,8 +38,7 @@ class ContactController extends Controller
             $data = [
                 'firstname' => $user->getFirstname(),
                 'lastname' =>  $user->getFirstname(),
-                'email' =>  $user->getEmail(),
-
+                'email' =>  $user->getEmail()
             ];
         }
 
@@ -75,7 +74,7 @@ class ContactController extends Controller
 
                 $this->get('mailer')->send($message);
                 $this->addFlash(
-                    'success', 
+                    'success',
                     'Your email has been sent! Thanks!'
                 );
 

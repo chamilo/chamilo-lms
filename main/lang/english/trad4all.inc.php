@@ -7659,4 +7659,5 @@ $ManageSkillsLevels = "Manage skills levels";
 $AddProfile = "Add profile";
 $AddLevel = "Add level";
 $ChangeAcquiredLevel = "Change acquired level";
+$NoLevelAcquiredYet = "No level acquired yet";
 ?>

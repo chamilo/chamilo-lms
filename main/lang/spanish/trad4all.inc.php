@@ -7580,7 +7580,7 @@ $IssuedBadgeInformation = "Información de la insignia emitida";
 $RecipientDetails = "Datos del beneficiario";
 $SkillAcquiredAt = "Competencia adquirida el";
 $BasicSkills = "Competencias simples";
-$TimeXThroughCourseY = "%s en el curso %s";
+$TimeXThroughCourseY = "%s en el curso <b>%s</b>";
 $ExportBadge = "Exportar la insignia";
 $SelectToSearch = "Seleccionar para buscar";
 $PlaceOnTheWheel = "Ubicar en la rueda";
@@ -7676,4 +7676,5 @@ $ManageSkillsLevels = "Administrar niveles de competencias";
 $AddProfile = "Añadir perfil";
 $AddLevel = "Añadir nivel";
 $ChangeAcquiredLevel = "Cambiar nivel adquirido";
-
+$NoLevelAcquiredYet = "Ningún nivel adquirido todavía";
+?>

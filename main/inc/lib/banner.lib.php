@@ -26,6 +26,11 @@ function get_tabs($courseId = null)
     $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
     $navigation[SECTION_CAMPUS]['key'] = 'homepage';
 
+    $navigation[SECTION_CATALOG]['url'] = api_get_path(WEB_PATH).'main/auth/courses.php';
+    $navigation[SECTION_CATALOG]['title'] = get_lang('Courses');
+    $navigation[SECTION_CATALOG]['key'] = 'catalog';
+
+
     // My Courses
 
     if (api_is_allowed_to_create_course()) {
@@ -285,6 +290,10 @@ function return_navigation_array()
         $navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
     } else {
         $menu_navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
+    }
+
+    if (api_get_setting('course_catalog_published') == 'true' && api_is_anonymous()) {
+        $navigation[SECTION_CATALOG] = $possible_tabs[SECTION_CATALOG];
     }
 
     if (api_get_user_id() && !api_is_anonymous()) {

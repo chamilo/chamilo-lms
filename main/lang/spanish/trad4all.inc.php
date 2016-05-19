@@ -7671,4 +7671,11 @@ $ValueTooBig = "Valor demasiado alto.";
 $YouAreATeacherOfThisCourse = "Usted es profesor en este curso";
 $StudentBossList = "Lista de superiores";
 $ShowScoreEveryAttemptShowAnswersLastAttempt = "Mostrar la nota a cada intento, mostrar las respuestas correctas solo en el último intento (solo funciona si hay un límite de intentos)";
+$MissingChartLibraryPleaseCheckLog = "Falta una librería para generar el gráfico. Consulte el registro de errores para mayor información.";
+$UserXIndicated = "El usuario %s ha indicado:";
+$AcquiredLevel = "Nivel adquirido";
+$ManageSkillsLevels = "Administrar niveles de competencias";
+$AddProfile = "Añadir perfil";
+$AddLevel = "Añadir nivel";
+$ChangeAcquiredLevel = "Cambiar nivel adquirido";
 ?>

@@ -725,7 +725,7 @@ class FillBlanks extends Question
 
         return $listAnswerResults;
     }
-    
+
     /**
     * Return an array of student state answers for fill the blank questions
     * for each students that answered the question
@@ -1037,13 +1037,22 @@ class FillBlanks extends Question
      * return the HTML display of the answer
      * @param string $answer
      * @param bool   $resultsDisabled
+     * @param bool $showTotalScoreAndUserChoices
      *
      * @return string
      */
-    public static function getHtmlDisplayForAnswer($answer, $resultsDisabled = false)
+    public static function getHtmlDisplayForAnswer($answer, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
     {
-        $result = "";
+        $result = '';
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
+
+        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            if ($showTotalScoreAndUserChoices) {
+                $resultsDisabled = true;
+            } else {
+                $resultsDisabled = false;
+            }
+        }
 
         // rebuild the answer with good HTML style
         // this is the student answer, right or wrong
@@ -1094,7 +1103,7 @@ class FillBlanks extends Question
         $type = FillBlanks::getFillTheBlankAnswerType($correct);
         switch ($type) {
             case self::FILL_THE_BLANK_MENU:
-                $correctAnswerHtml = "";
+                $correctAnswerHtml = '';
                 $listPossibleAnswers = FillBlanks::getFillTheBlankMenuAnswers($correct, false);
                 $correctAnswerHtml .= "<span style='color: green'>".$listPossibleAnswers[0]."</span>";
                 $correctAnswerHtml .= " <span style='font-weight:normal'>(";

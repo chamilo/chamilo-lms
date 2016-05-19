@@ -3500,8 +3500,11 @@ HOTSPOT;
             $show_only_score = false;
         }
 
+        $show_total_score_and_user_choices = false;
+
         if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             $show_only_score = true;
+            $show_results = true;
             if ($objExercise->attempts > 0) {
                 $attempts = Event::getExerciseResultsByUser(
                     api_get_user_id(),
@@ -3521,7 +3524,10 @@ HOTSPOT;
                     if ($numberAttempts >= $objExercise->attempts) {
                         $show_results = true;
                         $show_only_score = false;
-                    };
+                        $show_total_score_and_user_choices = false;
+                    } else {
+                        $show_total_score_and_user_choices = true;
+                    }
                 }
             }
         }
@@ -3540,7 +3546,6 @@ HOTSPOT;
             );
         }
 
-
         // Display text when test is finished #4074 and for LP #4227
         $end_of_message = $objExercise->selectTextWhenFinished();
         if (!empty($end_of_message)) {
@@ -3558,7 +3563,7 @@ HOTSPOT;
 
                 // creates a temporary Question object
                 $objQuestionTmp = Question::read($questionId);
-                
+
                 // This variable came from exercise_submit_modal.php
                 ob_start();
 
@@ -3568,22 +3573,18 @@ HOTSPOT;
                     $questionId,
                     null,
                     'exercise_result',
-                    array(),
+                    [],
                     $save_user_result,
                     true,
                     $show_results,
                     $objExercise->selectPropagateNeg(),
-                    array()
+                    [],
+                    $show_total_score_and_user_choices
                 );
 
                 if (empty($result)) {
                     continue;
                 }
-
-                // In case of global score, make sure the calculated total score is integer
-                /*if (!is_int($result['score'])) {
-                $result['score'] = round($result['score']);
-            }*/
 
                 $total_score += $result['score'];
                 $total_weight += $result['weight'];
@@ -3670,13 +3671,7 @@ HOTSPOT;
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
-
-                    $show_media = false;
-                    /*if ($objQuestionTmp->parent_id != 0 && !in_array($objQuestionTmp->parent_id, $media_list)) {
-                    $show_media = true;
-                    $media_list[] = $objQuestionTmp->parent_id;
-                }*/
-                    //Shows question title an description
+                    // Shows question title an description
                     $question_content .= $objQuestionTmp->return_header(
                         null,
                         $counter,

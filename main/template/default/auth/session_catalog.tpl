@@ -8,66 +8,46 @@
             });
         });
     </script>
-
-    <div class="col-md-12">
+<div class="col-md-12">
+<h3>{{ 'Sessions'|get_lang }}</h3>
+    <div class="search-session">
         <div class="row">
-            {% if show_courses %}
-                <div class="col-md-4">
-                    <div class="section-title-catalog>{{ 'Courses'|get_lang }}</div>
-                    {% if not hidden_links %}
-                        <form class="form-horizontal" method="post" action="{{ course_url }}">
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <input type="hidden" name="sec_token" value="{{ search_token }}">
-                                    <input type="hidden" name="search_course" value="1" />
-                                    <div class="input-group">
-                                        <input type="text" name="search_term" class="form-control" />
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    {% endif %}
+            <div class="col-md-{{ show_courses ? '4' : '6' }}">
+                <form class="form-inline" method="post" action="{{ _p.web_self }}?action=display_sessions">
+                <div class="form-group">
+                    <label>{{ "ByDate"|get_lang }}</label>
+                <div class="input-group">
+                    <input type="date" name="date" id="date" class="form-control" value="{{ search_date }}" readonly>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
+                    </span>
                 </div>
-            {% endif %}
-
-            <div class="col-md-{{ show_sessions ? '12' : '8' }}">
-                {% if show_sessions %}
-                    <h3>{{ 'Sessions'|get_lang }}</h3>
-                    <div class="search-session">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <form class="form-inline" method="post" action="{{ _p.web_self }}?action=display_sessions">
-                            <div class="form-group">
-                                <label>{{ "ByDate"|get_lang }}</label>
-                                <div class="input-group">
-                                    <input type="date" name="date" id="date" class="form-control" value="{{ search_date }}" readonly>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
-                                    </span>
-                                </div>
-                            </div>
-                            </form>
-                        </div>
-                        <div class="col-md-6">
-                            <form class="form-inline" method="post" action="{{ _p.web_self }}?action=search_tag">
-                            <label>{{ "ByTag"|get_lang }}</label>
-                             <div class="input-group">
-                                <input type="text" name="search_tag" class="form-control" value="{{ search_tag }}" />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
-                                </span>
-                            </div>     
-                            </form>    
-                        </div>
-                    </div>
-                    </div>
-                {% endif %}
+                </div>
+                </form>
             </div>
+            <div class="col-md-{{ show_courses ? '4' : '6' }}">
+                <form class="form-inline" method="post" action="{{ _p.web_self }}?action=search_tag">
+                <label>{{ "ByTag"|get_lang }}</label>
+                <div class="input-group">
+                    <input type="text" name="search_tag" class="form-control" value="{{ search_tag }}" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
+                        </span>
+                </div>     
+                </form>    
+            </div>
+            
+            {% if show_courses %}
+            <div class="col-md-4">
+                <a class="btn btn-default btn-block btn-catalog" href="{{ _p.web_self }}">
+                    {{ "CourseManagement"|get_lang }}
+                </a>
+            </div>
+            {% endif %}
+                        
         </div>
     </div>
+</div>
 <!-- new view session grib -->
 <div class="grid-courses col-md-12">
     <div class="row">

@@ -5004,6 +5004,9 @@ div#chat-remote-video video {
     padding-right: 10px;
     margin-right: 5px;
 }
+.search-session .btn-catalog{
+    margin-top: 25px;
+}
 #session-list .col-md-4:nth-child(3n+1) {
   clear: left;
 }

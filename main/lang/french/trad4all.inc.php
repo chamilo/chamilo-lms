@@ -7550,7 +7550,7 @@ $IssuedBadgeInformation = "Information du badge délivré";
 $RecipientDetails = "Données du bénéficiaire";
 $SkillAcquiredAt = "Compétence acquise le";
 $BasicSkills = "Compétences simples";
-$TimeXThroughCourseY = "%s par le cours %s";
+$TimeXThroughCourseY = "%s par le cours <b>%s</b>";
 $ExportBadge = "Exporter ce badge";
 $SelectToSearch = "Inclure dans la recherche";
 $PlaceOnTheWheel = "Localiser sur la roue";
@@ -7646,4 +7646,5 @@ $ManageSkillsLevels = "Gérer les niveaux de compétences";
 $AddProfile = "Ajouter profil";
 $AddLevel = "Ajouter niveau";
 $ChangeAcquiredLevel = "Modifier le niveau acquis";
+$NoLevelAcquiredYet = "Aucun niveau acquis à ce jour";
 ?>

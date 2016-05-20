@@ -1,7 +1,7 @@
 msgid "My courses"
 msgstr "Mes cours"
 
-msgid "Home"
+msgid "Homepage"
 msgstr "Page d'accueil"
 
 msgid "Inbox"

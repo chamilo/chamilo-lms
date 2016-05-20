@@ -62,7 +62,7 @@ class NavBuilder extends ContainerAware
         $menu->setChildrenAttribute('class', 'nav navbar-nav');
 
         $menu->addChild(
-            $translator->trans('Home'),
+            $translator->trans('Homepage'),
             array('route' => 'home')
         )->setAttribute('class', 'item-menu menu-1 homepage');
 
@@ -105,7 +105,7 @@ class NavBuilder extends ContainerAware
 
             if ($checker->isGranted('ROLE_ADMIN')) {
 
-                $menu->addChild(
+                /*$menu->addChild(
                     $translator->trans('Dashboard'),
                     array(
                         'route' => 'main',
@@ -113,7 +113,7 @@ class NavBuilder extends ContainerAware
                             'name' => 'dashboard/index.php',
                         ),
                     )
-                )->setAttribute('class', 'item-menu menu-6 dashboard');
+                )->setAttribute('class', 'item-menu menu-6 dashboard');*/
 
                 $menu->addChild(
                     $translator->trans('Administration'),
@@ -150,6 +150,34 @@ class NavBuilder extends ContainerAware
                 )->setAttribute('divider_append', true);
             }
         }
+
+        $menu->addChild(
+            $translator->trans('Subscription'),
+            array(
+                'route' => 'main',
+                'routeParameters' => array(
+                    'name' => 'auth/inscription.php',
+                )
+            )
+        )->setAttribute('class', 'item-menu menu-3');
+
+        $menu->addChild(
+            $translator->trans('Demo'),
+            array(
+                'route' => 'main',
+                'routeParameters' => array(
+                    'name' => 'social/home.php',
+                )
+            )
+        )->setAttribute('class', 'item-menu menu-4');
+
+        $menu->addChild(
+            $translator->trans('Contact'),
+            array(
+                'route' => 'contact'
+            )
+        )->setAttribute('class', 'item-menu menu-5');
+
 
         return $menu;
 

@@ -9,12 +9,12 @@
                 <span class="icon-bar"></span>
             </button>
         </div>
-        
+
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
                 {% if _u.logged == 1 %}
-                    {% for items in menu.possible_tabs %}     
+                    {% for items in menu.possible_tabs %}
                         {% if items.key != 'profile' and items.key != 'dashboard' %}
                         {% set counter = counter + 1 %}
                             <li class="item-menu menu-{{ counter }} {{ items.key }} {{ items.current }}"><a href="{{ items.url }}">{{ items.title }}</a></li>
@@ -28,7 +28,7 @@
                 {% if _u.logged == 0 %}
                     <li class="item-menu menu-3"><a href="{{ _p.web }}main/auth/inscription.php">{{ "Subscription"|get_lang }}</a></li>
                     <li class="item-menu menu-4"><a href="#">{{ "Demo"|get_lang }}</a></li>
-                    <li class="item-menu menu-5"><a href="#">{{ "Contact"|get_lang }}</a></li>
+                    <li class="item-menu menu-5"><a href="{{ _p.web }}web/app_dev.php/contact">{{ "Contact"|get_lang }}</a></li>
                 {% endif %}
             </ul>
            {% if _u.logged == 1 %}

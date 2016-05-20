@@ -10,7 +10,6 @@ require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/editinstance_form.php';
 
-// security
 api_protect_admin_script();
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/js/host_form.js" type="text/javascript" language="javascript"></script>';

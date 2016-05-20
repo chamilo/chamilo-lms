@@ -13,7 +13,7 @@ At the moment, the setup of virtual clones still is a technical operation and ha
 middle-office GUI. Development is in progress to offer a sufficient medium-level
 administrability of the process.
 
-How to setup :
+How to setup
 ===================
 
 You need :
@@ -22,26 +22,19 @@ You need :
 2. Install the plugin in chamilo administration
 3. Insert the virtualisation hook into the chamilo master configuration :
 
+```
 file : <chamiloroot>/app/config/configuration.php
+```
 
 Insert the hook:
 
+```
 include_once $_configuration['root_sys'].'plugin/vchamilo/lib.php';
 vchamilo_hook_configuration($_configuration);
+```
 
-This should be inserted just after the definition of db_admin_path and
-just before the login module section :
-
-<here>
-
-/**
- *
- * Login modules settings
- */
-
-Setup of virtual nodes:
-
-what you need for a virtual node is :
+What you need for a virtual node is :
+-------------
 
 - a blank database copy of chamilo
 - a dedicated course directory, that needs being accessible from chamilo installation root (directly, or using symlinks). the name
@@ -55,7 +48,8 @@ the effective "configuration.php" information.
 Prerequisites for VChamilo working nice
 -------------
 
-Multiple URL access must be enabled :
+Multiple URL access must be enabled:
+
 ```
 # in <chamiloroot>/main/inc/config/configuration.php
 $_configuration['multiple_access_urls'] = true;

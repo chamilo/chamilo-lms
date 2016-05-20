@@ -61,7 +61,7 @@ if (api_is_allowed_to_edit()) {
     }
     
     
-    $actions .= Display::toolbarAction('actions-class', array(0=>$actionsLeft, 1=> $actionsRight));
+    $actions = Display::toolbarAction('actions-class', array(0=>$actionsLeft, 1=> $actionsRight));
 }
 
 if (api_is_allowed_to_edit()) {

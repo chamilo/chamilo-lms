@@ -1,5 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+/**
+ * User Entity
+ *
+ * @package chamilo.User
+ */
 
 namespace Chamilo\UserBundle\Entity;
 
@@ -441,6 +448,16 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     protected $sessionCourseSubscriptions;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="user", cascade={"persist"})
+     */
+    protected $achievedSkills;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUserComment", mappedBy="feedbackGiver")
+     */
+    protected $commentedUserSkills;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -748,6 +765,16 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
             function($entry) use ($idsToFilter) {
                 return $entry->getId() == 1;
         });*/
+    }
+
+    /**
+     * Return Complete Name with the Username
+     *
+     * @return string
+     */
+    public function getCompleteNameWithUsername()
+    {
+        return api_get_person_name($this->firstname, $this->lastname).' ('.$this->username.')';
     }
 
     /**
@@ -2452,5 +2479,31 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
             $this->enabled,
             $this->id
             ) = $data;
+    }
+
+    /**
+     * Get achievedSkills
+     * @return ArrayCollection
+     */
+    public function getAchievedSkills()
+    {
+        return $this->achievedSkills;
+    }
+
+    /**
+     * Check if the user has the skill
+     * @param \Chamilo\CoreBundle\Entity\Skill $skill The skill
+     * @return boolean
+     */
+    public function hasSkill(\Chamilo\CoreBundle\Entity\Skill $skill)
+    {
+        $achievedSkills = $this->getAchievedSkills();
+
+        foreach ($achievedSkills as $userSkill) {
+            if ($userSkill->getSkill()->getId() !== $skill->getId()) {
+                continue;
+            }
+            return true;
+        }
     }
 }

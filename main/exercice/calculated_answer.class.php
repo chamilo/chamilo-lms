@@ -21,8 +21,8 @@ class CalculatedAnswer extends Question
     public function __construct()
     {
         parent::__construct();
-        $this -> type = CALCULATED_ANSWER;
-        $this -> isContent = $this-> getIsContent();
+        $this->type = CALCULATED_ANSWER;
+        $this->isContent = $this->getIsContent();
     }
 
     /**
@@ -37,12 +37,9 @@ class CalculatedAnswer extends Question
             $objAnswer = new Answer($this->id);
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
             $defaults['formula'] = array_pop($preArray);
-
             $defaults['answer'] = array_shift($preArray);
             $defaults['answer'] = preg_replace("/\[.*\]/", "", $defaults['answer']);
-
             $defaults['weighting'] = $this->weighting;
-
         } else {
             $defaults['answer'] = get_lang('DefaultTextInBlanks');
         }
@@ -126,7 +123,7 @@ class CalculatedAnswer extends Question
         $form->addElement(
             'html_editor',
             'answer',
-            Display::returnIconPath('fill_field.png'),
+            Display::return_icon('fill_field.png'),
             array(
                 'id' => 'answer',
                 'onkeyup' => 'javascript: updateBlanks(this);'
@@ -149,11 +146,12 @@ class CalculatedAnswer extends Question
             )
         );
         $form->addElement(
-            'label', null,
-            $notationListButton);
+            'label',
+            null,
+            $notationListButton
+        );
 
         $form->addElement('label', null, get_lang('FormulaExample'));
-
         $form->addElement('text', 'formula', get_lang('Formula'), array('id' => 'formula'));
         $form->addRule('formula', get_lang('GiveFormula'), 'required');
 
@@ -181,7 +179,7 @@ class CalculatedAnswer extends Question
      * abstract function which creates the form to create / edit the answers of the question
      * @param FormValidator $form
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form)
     {
         if (!self::isAnswered()) {
             $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -200,6 +198,7 @@ class CalculatedAnswer extends Question
             $highestValues = $form->getSubmitValue('highestValue');
             $answerVariations = $form->getSubmitValue('answerVariations');
             $this->weighting = $form->getSubmitValue('weighting');
+
             // Create as many answers as $answerVariations
             for ($j=0 ; $j < $answerVariations; $j++) {
                 $auxAnswer = $answer;
@@ -247,7 +246,7 @@ class CalculatedAnswer extends Question
      * @param null $score
      * @return null|string
      */
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($feedback_type = null, $counter = null, $score = null)
     {
         $header = parent::return_header($feedback_type, $counter, $score);
         $header .= '<table class="'.$this->question_table_class .'">

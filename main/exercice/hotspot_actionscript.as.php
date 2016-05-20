@@ -116,13 +116,15 @@ while ($hotspot = Database::fetch_assoc($result))
 $attemptList = Event::getAllExerciseEventByExeId($exerciseId);
 
 if (!empty($attemptList)) {
-    $questionAttempt = $attemptList[$questionId][0];
+    if (isset($attemptList[$questionId])) {
+        $questionAttempt = $attemptList[$questionId][0];
 
-    if (!empty($questionAttempt['answer'])) {
-        $coordinates = explode('|', $questionAttempt['answer']);
+        if (!empty($questionAttempt['answer'])) {
+            $coordinates = explode('|', $questionAttempt['answer']);
 
-        foreach ($coordinates as $coordinate) {
-            $data['answers'][] = Geometry::decodePoint($coordinate);
+            foreach ($coordinates as $coordinate) {
+                $data['answers'][] = Geometry::decodePoint($coordinate);
+            }
         }
     }
 }

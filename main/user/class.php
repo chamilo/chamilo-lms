@@ -37,15 +37,16 @@ $(document).ready( function() {
 });
 </script>';
 
-$actions = '';
+$actionsLeft = '';
+$actionsRight = '';
 $usergroup = new UserGroup();
 if (api_is_allowed_to_edit()) {
-    $actions .= '<div class="actions">';
+    
     if ($type == 'registered') {
-        $actions .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
+        $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
             Display::return_icon('add-class.png', get_lang("AddClassesToACourse"), array(), ICON_SIZE_MEDIUM).'</a>';
     } else {
-        $actions .= '<a href="class.php?'.api_get_cidreq().'&type=registered">'.
+        $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=registered">'.
             Display::return_icon('back.png', get_lang("Classes"), array(), ICON_SIZE_MEDIUM).'</a>';
 
         $form = new FormValidator('groups', 'post', api_get_self(), '', '', FormValidator::LAYOUT_INLINE);
@@ -56,9 +57,11 @@ if (api_is_allowed_to_edit()) {
         ];
         $form->addSelect('group_filter', get_lang('Groups'), $options, ['id' => 'group_filter']);
         $form->setDefaults(['group_filter' => $groupFilter]);
-        $actions .= $form->returnForm();
+        $actionsRight = $form->returnForm();
     }
-    $actions .= '</div>';
+    
+    
+    $actions = Display::toolbarAction('actions-class', array(0=>$actionsLeft, 1=> $actionsRight));
 }
 
 if (api_is_allowed_to_edit()) {

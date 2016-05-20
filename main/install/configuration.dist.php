@@ -104,6 +104,7 @@ $_configuration[1]['hosting_limit_active_courses'] = 0;
 // Email to warn if limit was reached.
 //$_configuration[1]['hosting_contact_mail'] = 'example@example.org';
 // Portal size limit in MB (set to 1024 for 1GB, 5120 for 5GB, etc).
+// Check main/cron/hosting_total_size_limit.php for how to use this limit.
 $_configuration['hosting_total_size_limit'] = 0;
 
 /**

@@ -236,7 +236,7 @@ foreach ($question_list as $questionId) {
     $table            .= Display::div($question_title, array('class'=>'exercise_reminder_item'));
 } // end foreach() block that loops over all questions
 
-echo Display::div($table, array('class'=>'span10'));
+echo Display::div($table, array('class'=>'question-check-test'));
 
 $exercise_actions = Display::url(get_lang('EndTest'), 'javascript://', array('onclick'=>'final_submit();', 'class'=>'btn btn-warning'));
 $exercise_actions .=  '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick'=>'review_questions();','class'=>'btn btn-success'));

@@ -277,6 +277,11 @@ class Course
     protected $currentSession;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="course", cascade={"persist"})
+     */
+    protected $issuedSkills;
+
+    /**
      * Constructor
      */
     public function __construct()

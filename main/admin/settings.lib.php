@@ -99,6 +99,7 @@ function handle_extensions()
     echo '<a class="btn btn-success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Ppt2lp').'</a>';
 
 }
+
 /**
  * This function allows easy activating and inactivating of plugins
  * @todo: a similar function needs to be written to activate or inactivate additional tools.
@@ -189,6 +190,21 @@ function handle_plugins()
                     ]
                 );
             }
+
+            $readmeFile = api_get_path(SYS_PLUGIN_PATH).$plugin.'/README.md';
+            if (file_exists($readmeFile)) {
+                echo Display::url(
+                    "<em class='fa fa-file-text-o'></em> README.md",
+                    api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$plugin,
+                    [
+                        'class' => 'btn btn-default ajax',
+                        'data-title' => $plugin_info['title'],
+                        'data-size' => 'lg',
+                        '_target' => '_blank'
+                    ]
+                );
+            }
+
             echo '</div>';
             echo '</td></tr>';
         }
@@ -231,12 +247,28 @@ function handle_stylesheets()
         'post',
         'settings.php?category=Stylesheets#tabs-3'
     );
-    $form->addElement('text', 'name_stylesheet', get_lang('NameStylesheet'), array('size' => '40', 'maxlength' => '40'));
+    $form->addElement('text', 'name_stylesheet', get_lang('NameStylesheet'),
+        array('size' => '40', 'maxlength' => '40'));
     $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
-    $allowed_file_types = array('css', 'zip', 'jpeg', 'jpg', 'png', 'gif', 'ico', 'psd', 'xcf', 'svg', 'webp', 'woff', 'woff2');
+    $allowed_file_types = array(
+        'css',
+        'zip',
+        'jpeg',
+        'jpg',
+        'png',
+        'gif',
+        'ico',
+        'psd',
+        'xcf',
+        'svg',
+        'webp',
+        'woff',
+        'woff2'
+    );
 
-    $form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
+    $form->addRule('new_stylesheet', get_lang('InvalidExtension') . ' (' . implode(',', $allowed_file_types) . ')',
+        'filetype', $allowed_file_types);
     $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addButtonUpload(get_lang('Upload'), 'stylesheet_upload');
 
@@ -362,29 +394,29 @@ function handle_stylesheets()
             }
         }
     }
-    
+
     $logoForm = new FormValidator(
         'logo_upload',
         'post',
         'settings.php?category=Stylesheets#tabs-2'
     );
-    
+
     $logoForm->addHtml(Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info'));
-    
+
     $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
     $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
     $logoFileName = 'header-logo.png';
     $newLogoFileName = 'header-logo-custom.png';
-    
+
     if (is_file($dir.$newLogoFileName)) {
-        $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $newLogoFileName .'?'. time() . '">'); 
+        $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $newLogoFileName .'?'. time() . '">');
     } else {
         $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $logoFileName .'?'. time() . '">');
     }
-    
+
     $logoForm->addFile('new_logo', get_lang('UpdateLogo'));
     $allowedFileTypes = ['png'];
-    
+
     if (isset($_POST['logo_reset'])) {
         if (is_file($dir.$newLogoFileName)) {
             unlink($dir.$newLogoFileName);
@@ -394,12 +426,12 @@ function handle_stylesheets()
             . '</script>';
         }
     } elseif (isset($_POST['logo_upload'])) {
-        
+
         $logoForm->addRule('new_logo', get_lang('InvalidExtension').' ('.implode(',', $allowedFileTypes).')', 'filetype', $allowedFileTypes);
         $logoForm->addRule('new_logo', get_lang('ThisFieldIsRequired'), 'required');
-        
+
         if ($logoForm->validate()) {
-            
+
             $imageInfo = getimagesize($_FILES['new_logo']['tmp_name']);
             $width = $imageInfo[0];
             $height = $imageInfo[1];
@@ -407,7 +439,7 @@ function handle_stylesheets()
                 if (is_file($dir.$newLogoFileName)) {
                     unlink($dir.$newLogoFileName);
                 }
-                
+
                 $status = move_uploaded_file($_FILES['new_logo']['tmp_name'], $dir.$newLogoFileName);
 
                 if ($status) {
@@ -432,12 +464,12 @@ function handle_stylesheets()
         ];
 
         $form_change->addGroup($group);
-        
+
         $logoGroup = [
             $logoForm->addButtonUpload(get_lang('Upload'), 'logo_upload', true),
             $logoForm->addButtonCancel(get_lang('Reset'), 'logo_reset', true)
         ];
-        
+
         $logoForm->addGroup($logoGroup);
 
         if ($show_upload_form) {
@@ -453,7 +485,7 @@ function handle_stylesheets()
         } else {
             $form_change->display();
         }
-        
+
         //Little hack to update the logo image in update form when submiting
         if (isset($_POST['logo_reset'])) {
             echo '<script>'
@@ -553,8 +585,9 @@ function upload_stylesheet($values, $picture)
                     $extraction_path = $cssToUpload.$style_name.'/';
                     for ($i = 0; $i < $num_files; $i++) {
                         $entry = $zip->getNameIndex($i);
-                        if (substr($entry, -1) == '/')
+                        if (substr($entry, -1) == '/') {
                             continue;
+                        }
 
                         $pos_slash = strpos($entry, '/');
                         $entry_without_first_dir = substr($entry, $pos_slash + 1);
@@ -875,7 +908,8 @@ function handle_search()
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function handle_templates() {
+function handle_templates()
+{
     /* Drive-by fix to avoid undefined var warnings, without repeating
      * isset() combos all over the place. */
     $action = isset($_GET['action']) ? $_GET['action'] : "invalid";
@@ -947,7 +981,8 @@ function display_templates()
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function get_number_of_templates() {
+function get_number_of_templates()
+{
     // Database table definition.
     $table_system_template = Database :: get_main_table('system_template');
 
@@ -973,7 +1008,8 @@ function get_number_of_templates() {
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function get_template_data($from, $number_of_items, $column, $direction) {
+function get_template_data($from, $number_of_items, $column, $direction)
+{
     // Database table definition.
     $table_system_template = Database :: get_main_table('system_template');
 
@@ -995,7 +1031,7 @@ function get_template_data($from, $number_of_items, $column, $direction) {
  * display the edit and delete icons in the sortable table
  *
  * @param integer $id the id of the template
- * @return html code for the link to edit and delete the template
+ * @return string code for the link to edit and delete the template
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
@@ -1011,13 +1047,14 @@ function actions_filter($id) {
  * Display the image of the template in the sortable table
  *
  * @param string $image the image
- * @return html code for the image
+ * @return string code for the image
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function image_filter($image) {
+function image_filter($image)
+{
     if (!empty($image)) {
         return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
     } else {
@@ -1033,7 +1070,8 @@ function image_filter($image) {
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function add_edit_template() {
+function add_edit_template()
+{
     // Initialize the object.
     $id = isset($_GET['id']) ? '&id='.Security::remove_XSS($_GET['id']) : '';
     $form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).$id);
@@ -1076,9 +1114,11 @@ function add_edit_template() {
 
         // Adding an extra field: a preview of the image that is currently used.
         if (!empty($row['image'])) {
-            $form->addElement('static', 'template_image_preview', '', '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
+            $form->addElement('static', 'template_image_preview', '',
+                '<img src="' . api_get_path(WEB_APP_PATH) . 'home/default_platform_document/template_thumb/' . $row['image'] . '" alt="' . get_lang('TemplatePreview') . '"/>');
         } else {
-            $form->addElement('static', 'template_image_preview', '', '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
+            $form->addElement('static', 'template_image_preview', '',
+                '<img src="' . api_get_path(WEB_APP_PATH) . 'home/default_platform_document/template_thumb/noimage.gif" alt="' . get_lang('NoTemplatePreview') . '"/>');
         }
 
         // Setting the information of the template that we are editing.
@@ -1175,7 +1215,8 @@ function add_edit_template() {
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function delete_template($id) {
+function delete_template($id)
+{
     // First we remove the image.
     $table_system_template = Database :: get_main_table('system_template');
     $sql = "SELECT * FROM $table_system_template WHERE id = ".intval($id)."";
@@ -1201,7 +1242,8 @@ function delete_template($id) {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * @since Chamilo 1.8.7
  */
-function select_timezone_value() {
+function select_timezone_value()
+{
     return api_get_timezones();
 }
 
@@ -1216,7 +1258,8 @@ function select_gradebook_number_decimals() {
     return array('0', '1', '2');
 }
 
-function select_gradebook_default_grade_model_id() {
+function select_gradebook_default_grade_model_id()
+{
     $grade_model = new GradeModel();
     $models = $grade_model->get_all();
     $options = array();
@@ -1237,7 +1280,8 @@ function select_gradebook_default_grade_model_id() {
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function update_gradebook_score_display_custom_values($values) {
+function update_gradebook_score_display_custom_values($values)
+{
     $scoredisplay = ScoreDisplay::instance();
     $scores = $values['gradebook_score_display_custom_values_endscore'];
     $displays = $values['gradebook_score_display_custom_values_displaytext'];
@@ -1260,7 +1304,8 @@ function generate_settings_form($settings, $settings_by_access_list)
 
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
 
-    $form->addElement('hidden', 'search_field', (!empty($_GET['search_field'])?Security::remove_XSS($_GET['search_field']):null));
+    $form->addElement('hidden', 'search_field',
+        (!empty($_GET['search_field']) ? Security::remove_XSS($_GET['search_field']) : null));
 
     $url_id = api_get_current_access_url_id();
 
@@ -1320,17 +1365,21 @@ function generate_settings_form($settings, $settings_by_access_list)
                 $hideme = array('disabled');
             } elseif ($url_info['active'] == 1) {
                 // We show the elements.
-                if (empty($row['variable']))
+                if (empty($row['variable'])) {
                     $row['variable'] = 0;
-                if (empty($row['subkey']))
+                }
+                if (empty($row['subkey'])) {
                     $row['subkey'] = 0;
-                if (empty($row['category']))
+                }
+                if (empty($row['category'])) {
                     $row['category'] = 0;
+                }
 
                 if (is_array($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ])) {
                     // We are sure that the other site have a selected value.
-                    if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]['selected_value'] != '')
+                    if ($settings_by_access_list[$row['variable']] [$row['subkey']] [$row['category']]['selected_value'] != '') {
                         $row['selected_value'] = $settings_by_access_list[$row['variable']] [$row['subkey']] [$row['category']]['selected_value'];
+                    }
                 }
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
             }
@@ -1493,7 +1542,8 @@ function generate_settings_form($settings, $settings_by_access_list)
                 );
                 break;
             case 'link':
-                $form->addElement('static', null, array(get_lang($row['title']), get_lang($row['comment'])), get_lang('CurrentValue').' : '.$row['selected_value'], $hideme);
+                $form->addElement('static', null, array(get_lang($row['title']), get_lang($row['comment'])),
+                    get_lang('CurrentValue') . ' : ' . $row['selected_value'], $hideme);
                 break;
             case 'select':
                 /*

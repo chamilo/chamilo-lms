@@ -128,7 +128,7 @@ function complete_missing_data($user)
 /**
  * Update users from the imported data
  * @param   array   $users List of users
- * @return  void
+ * @return  false|null
  * @uses global variable $inserted_in_course, which returns the list of courses the user was inserted in
  */
 

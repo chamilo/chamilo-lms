@@ -7652,4 +7652,16 @@ $ValueTooBig = "Value is too big.";
 $YouAreATeacherOfThisCourse = "You are a teacher of this course";
 $StudentBossList = "Student bosses list";
 $ShowScoreEveryAttemptShowAnswersLastAttempt = "Show score on every attempt, show correct answers only on last attempt (only works with an attempts limit)";
+$MissingChartLibraryPleaseCheckLog = "Missing chart library. Please check the error log for details.";
+$UserXIndicated = "User %s indicated:";
+$AcquiredLevel = "Level acquired";
+$ManageSkillsLevels = "Manage skills levels";
+$AddProfile = "Add profile";
+$AddLevel = "Add level";
+$ChangeAcquiredLevel = "Change acquired level";
+$NoLevelAcquiredYet = "No level acquired yet";
+$RecordAudio = "Record audio";
+$StartRecordingAudio = "Start recording";
+$StopRecordingAudio = "Stop recording";
+$SaveRecordedAudio = "Save recorded audio";
 ?>

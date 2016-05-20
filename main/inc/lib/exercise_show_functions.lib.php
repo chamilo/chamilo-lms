@@ -19,16 +19,25 @@ class ExerciseShowFunctions
 {
 	/**
 	 * Shows the answer to a fill-in-the-blanks question, as HTML
-	 * @param string    Answer text
-	 * @param int       Exercise ID
-	 * @param int       Question ID
+     * @param int $feedbackType
+	 * @param string    $answer
+	 * @param int $id       Exercise ID
+	 * @param int $questionId      Question ID
      * @param int $resultsDisabled
      * @param string $originalStudentAnswer
+     *
 	 * @return void
 	 */
-	public static function display_fill_in_blanks_answer($feedbackType, $answer, $id, $questionId, $resultsDisabled, $originalStudentAnswer = '')
-    {
-        $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $resultsDisabled);
+	public static function display_fill_in_blanks_answer(
+	    $feedbackType,
+	    $answer,
+	    $id,
+	    $questionId,
+	    $resultsDisabled,
+	    $originalStudentAnswer = '',
+	    $showTotalScoreAndUserChoices
+    ) {
+        $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $resultsDisabled, $showTotalScoreAndUserChoices);
         if (strpos($originalStudentAnswer, 'font color') !== false) {
             $answerHTML = $originalStudentAnswer;
         }
@@ -64,8 +73,14 @@ class ExerciseShowFunctions
      * @param int       Question ID
      * @return void
      */
-    public static function display_calculated_answer($feedback_type, $answer, $id, $questionId)
-    {
+    public static function display_calculated_answer(
+        $feedback_type,
+        $answer,
+        $id,
+        $questionId,
+        $results_disabled,
+        $showTotalScoreAndUserChoices
+    ) {
         if (empty($id)) {
             echo '<tr><td>'. Security::remove_XSS($answer).'</td></tr>';
         } else {
@@ -97,8 +112,14 @@ class ExerciseShowFunctions
 	 * @param int       Question ID
 	 * @return void
 	 */
-	public static function display_free_answer($feedback_type, $answer, $exe_id, $questionId, $questionScore = null)
-    {
+	public static function display_free_answer(
+	    $feedback_type,
+	    $answer,
+	    $exe_id,
+	    $questionId,
+	    $questionScore = null,
+	    $results_disabled = 0
+    ) {
         $comments = Event::get_comments($exe_id, $questionId);
 
         if (!empty($answer)) {
@@ -117,7 +138,15 @@ class ExerciseShowFunctions
         }
 	}
 
-	public static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $fileUrl = null)
+    /**
+    * @param $feedback_type
+    * @param $answer
+    * @param $id
+    * @param $questionId
+    * @param null $nano
+    * @param int $results_disabled
+     */
+	public static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $fileUrl = null, $results_disabled = 0)
     {
         if (isset($fileUrl)) {
             echo '
@@ -162,7 +191,7 @@ class ExerciseShowFunctions
      * @param string $answer
      * @param string $studentChoice
      * @param string $answerComment
-     * @param string $in_results_disabled
+     * @param int $resultsDisabled
      * @param int $orderColor
      */
 	public static function display_hotspot_answer(
@@ -171,13 +200,21 @@ class ExerciseShowFunctions
         $answer,
         $studentChoice,
         $answerComment,
-        $in_results_disabled,
-        $orderColor
-    )
-    {
+        $resultsDisabled,
+        $orderColor,
+        $showTotalScoreAndUserChoices
+    ) {
         $hide_expected_answer = false;
-        if ($feedback_type == 0 && $in_results_disabled == 2) {
+        if ($feedback_type == 0 && $resultsDisabled == 2) {
             $hide_expected_answer = true;
+        }
+
+        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            if ($showTotalScoreAndUserChoices) {
+                $hide_expected_answer = true;
+            } else {
+                $hide_expected_answer = false;
+            }
         }
 
 		$hotspot_colors = array(
@@ -194,7 +231,9 @@ class ExerciseShowFunctions
             "#F4EB24",
             "#ED2024",
             "#3B3B3B",
-            "#F7BDE2");
+            "#F7BDE2"
+        );
+
 		?>
 		<table class="data_table">
 		<tr>
@@ -207,7 +246,7 @@ class ExerciseShowFunctions
 			<td class="text-left" width="10%">
 				<?php
                 if (!$hide_expected_answer) {
-    				$my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault');
+    				$my_choice = $studentChoice ? get_lang('Correct') : get_lang('Fault');
     				echo $my_choice;
                 }
 				?>
@@ -250,13 +289,23 @@ class ExerciseShowFunctions
         $id,
         $questionId,
         $ans,
-        $in_results_disabled
+        $resultsDisabled,
+        $showTotalScoreAndUserChoices
     ) {
 
         $hide_expected_answer = false;
-        if ($feedback_type == 0 && $in_results_disabled == 2) {
+        if ($feedback_type == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
             $hide_expected_answer = true;
         }
+
+        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            if ($showTotalScoreAndUserChoices) {
+                $hide_expected_answer = true;
+            } else {
+                $hide_expected_answer = false;
+            }
+        }
+
         $icon = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio':'checkbox';
 		$icon .= $studentChoice?'_on':'_off';
 		$icon .= '.gif';
@@ -294,14 +343,10 @@ class ExerciseShowFunctions
                     $color = 'black';
                     //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br($answerComment).'</span>';
 				}
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
-
-			} else {
-				if ($answerCorrect) {
-					//echo '<span style="font-weight: bold; color: #000;">'.nl2br($answerComment).'</span>';
-				} else {
-                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br($answerComment).'</span>';
+				if ($hide_expected_answer) {
+				    $color = '';
 				}
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
 			}
 			?>
 		</td>
@@ -340,18 +385,27 @@ class ExerciseShowFunctions
         $id,
         $questionId,
         $ans,
-        $in_results_disabled
+        $resultsDisabled,
+        $showTotalScoreAndUserChoices
     ) {
         $hide_expected_answer = false;
-        if ($feedback_type == 0 && $in_results_disabled == 2) {
+
+        if ($feedback_type == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
             $hide_expected_answer = true;
         }
+
+        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            if ($showTotalScoreAndUserChoices) {
+                $hide_expected_answer = true;
+            } else {
+                $hide_expected_answer = false;
+            }
+        }
+
         ?>
         <tr>
         <td width="5%">
         <?php
-
-        $question 	 = new MultipleAnswerTrueFalse();
         $course_id   = api_get_course_int_id();
         $new_options = Question::readQuestionOption($questionId, $course_id);
 
@@ -391,6 +445,11 @@ class ExerciseShowFunctions
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
                 }
+
+                if ($hide_expected_answer) {
+				    $color = '';
+				}
+
                 echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
             }
             ?>
@@ -420,7 +479,7 @@ class ExerciseShowFunctions
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    static function display_multiple_answer_combination_true_false(
+    public static function display_multiple_answer_combination_true_false(
         $feedback_type,
         $answerType,
         $studentChoice,
@@ -430,12 +489,22 @@ class ExerciseShowFunctions
         $id,
         $questionId,
         $ans,
-        $in_results_disabled
+        $resultsDisabled,
+        $showTotalScoreAndUserChoices
     ) {
         $hide_expected_answer = false;
-        if ($feedback_type == 0 && $in_results_disabled == 2) {
+        if ($feedback_type == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
             $hide_expected_answer = true;
         }
+
+        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            if ($showTotalScoreAndUserChoices) {
+                $hide_expected_answer = true;
+            } else {
+                $hide_expected_answer = false;
+            }
+        }
+
         ?>
         <tr>
         <td width="5%">
@@ -480,16 +549,11 @@ class ExerciseShowFunctions
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
-            }
-            if ($studentChoice == 2 || $studentChoice == '') {
             	//echo '<span style="font-weight: bold; color: #000;">'.nl2br($answerComment).'</span>';
-            } else {
-				if ($studentChoice == $answerCorrect) {
-	            	//echo '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
-				} else {
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br($answerComment).'</span>';
+                if ($hide_expected_answer) {
+                    $color = '';
 				}
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
             }
             ?>
         </td>

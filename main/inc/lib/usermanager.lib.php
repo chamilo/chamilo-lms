@@ -211,6 +211,7 @@ class UserManager
      * @param  string Encrypt method used if password is given encrypted. Set to an empty string by default
      * @param  bool $send_mail
      * @param  bool $isAdmin
+     * @param  string $address
      *
      * @return mixed   new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -237,7 +238,8 @@ class UserManager
         $extra = null,
         $encrypt_method = '',
         $send_mail = false,
-        $isAdmin = false
+        $isAdmin = false,
+        $address = ''
     ) {
         $currentUserId = api_get_user_id();
         $hook = HookCreateUser::create();
@@ -346,6 +348,7 @@ class UserManager
             ->setCreatorId($creator_id)
             ->setAuthSource($auth_source)
             ->setPhone($phone)
+            ->setAddress($address)
             ->setLanguage($language)
             ->setRegistrationDate($now)
             ->setHrDeptId($hr_dept_id)

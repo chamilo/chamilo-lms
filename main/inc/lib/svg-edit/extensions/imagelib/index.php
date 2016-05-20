@@ -3,8 +3,7 @@
  * @author Juan Carlos Raña Trabado
  * @since 25/september/2010
 */
-//Chamilo load libraries
-require_once '../../../../../inc/global.inc.php';
+require_once '../../../../../../inc/global.inc.php';
 
 //Add security from Chamilo
 api_protect_course_script();

@@ -56,6 +56,9 @@ class UserStore extends _UserStore
         return $this->get(array('shibb_unique_id' => $id));
     }
     
+    /**
+     * @param string $id
+     */
     public function shibboleth_id_exists($id)
     {
         return $this->exist(array('shibb_unique_id' => $id));

@@ -62,7 +62,7 @@ class PGTStorageDB extends PGTStorage
   /**
    * This method returns the PEAR DB URL to use to connect to the database.
    *
-   * @return a PEAR DB URL
+   * @return string PEAR DB URL
    *
    * @private
    */
@@ -105,7 +105,7 @@ class PGTStorageDB extends PGTStorage
   /**
    * This method returns the name of the table where PGT's are stored.
    *
-   * @return the name of a table.
+   * @return string name of a table.
    *
    * @private
    */
@@ -122,7 +122,7 @@ class PGTStorageDB extends PGTStorage
    * This method returns an informational string giving the type of storage
    * used by the object (used for debugging purposes).
    *
-   * @return an informational string.
+   * @return string informational string.
    * @public
    */
   function getStorageType()
@@ -148,7 +148,7 @@ class PGTStorageDB extends PGTStorage
   /**
    * The class constructor, called by CASClient::SetPGTStorageDB().
    *
-   * @param $cas_parent the CASClient instance that creates the object.
+   * @param CASClient $cas_parent the CASClient instance that creates the object.
    * @param $user the user to access the data with
    * @param $password the user's password
    * @param $database_type the type of the database hosting the data

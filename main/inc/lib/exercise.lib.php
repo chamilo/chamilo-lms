@@ -89,13 +89,6 @@ class ExerciseLib
             $objAnswerTmp = new Answer($questionId);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
-            if ($answerType == FREE_ANSWER ||
-                $answerType == ORAL_EXPRESSION ||
-                $answerType == CALCULATED_ANSWER
-            ) {
-                $nbrAnswers = 1;
-            }
-
             $quiz_question_options = Question::readQuestionOption(
                 $questionId,
                 $course_id

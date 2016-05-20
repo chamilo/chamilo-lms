@@ -337,6 +337,7 @@ function openid_verify_assertion($op_endpoint, $response) {
 
 /**
  * Make a HTTP request - This function has been copied straight over from Drupal 6 code (drupal_http_request)
+ * @param string $data
  */
 function openid_http_request($url, $headers = array(), $method = 'GET', $data = NULL, $retry = 3) {
     $result = new stdClass();

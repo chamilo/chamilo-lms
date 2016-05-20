@@ -126,7 +126,7 @@ class PGTStorage
   /**
    * This method returns an error message set by PGTStorage::setErrorMessage().
    *
-   * @return an error message when set by PGTStorage::setErrorMessage(), FALSE
+   * @return boolean error message when set by PGTStorage::setErrorMessage(), FALSE
    * otherwise.
    *
    * @public
@@ -153,7 +153,7 @@ class PGTStorage
   /**
    * This method tells if the storage has already been intialized.
    *
-   * @return a boolean
+   * @return boolean boolean
    *
    * @protected
    */

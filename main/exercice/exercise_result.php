@@ -174,7 +174,7 @@ if (!empty($exercise_stat_info)) {
 
 $max_score = $objExercise->get_max_score();
 
-Display :: display_normal_message(get_lang('Saved').'<br />',false);
+Display::display_normal_message(get_lang('Saved').'<br />',false);
 
 // Display and save questions
 ExerciseLib::display_question_list_by_attempt($objExercise, $exe_id, true);
@@ -199,8 +199,9 @@ if ($origin != 'learnpath') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
+        Session::erase('calculatedAnswerInfo');
     }
-
 	Display::display_footer();
 } else {
 	$lp_mode = isset($_SESSION['lp_mode']) ? $_SESSION['lp_mode'] : null;
@@ -210,6 +211,8 @@ if ($origin != 'learnpath') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
+        Session::erase('calculatedAnswerInfo');
     }
 
 	// Record the results in the learning path, using the SCORM interface (API)

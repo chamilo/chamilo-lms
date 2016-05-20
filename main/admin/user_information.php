@@ -58,7 +58,7 @@ if (api_is_platform_admin()) {
         ),
         api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.$userId
     );
-    
+
 }
 
 // Show info about who created this user and when
@@ -381,7 +381,6 @@ if (api_is_multiple_url_enabled()) {
     }
 }
 
-
 $studentBossList = UserManager::getStudentBossList($userId);
 $studentBossListToString = '';
 if ($studentBossList) {
@@ -391,7 +390,7 @@ if ($studentBossList) {
 
     $row = 1;
     foreach ($studentBossList as $studentBossId) {
-        $studentBoss = api_get_user_info($studentBossId);
+        $studentBoss = api_get_user_info($studentBossId['boss_id']);
         $table->setCellContents($row, 0, $studentBoss['complete_name_with_username']);
         $csvContent[] = array($studentBoss['complete_name_with_username']);
         $row++;
@@ -404,21 +403,28 @@ $message = null;
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'unsubscribe':
-            if (CourseManager::get_user_in_course_status($_GET['user_id'], $_GET['course_code']) == STUDENT) {
-                CourseManager::unsubscribe_user($_GET['user_id'], $_GET['course_code'], $_GET['id_session']);
+            $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
+            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
+            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
+            if (CourseManager::get_user_in_course_status($userId, $courseCode) == STUDENT) {
+                CourseManager::unsubscribe_user($userId, $courseCode, $sessionId);
                 $message = Display::return_message(get_lang('UserUnsubscribed'));
             } else {
                 $message = Display::return_message(
                     get_lang('CannotUnsubscribeUserFromCourse'),
-                    'error'
+                    'error',
+                    false
                 );
             }
             break;
         case 'unsubscribeSessionCourse':
+            $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
+            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
+            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
             SessionManager::removeUsersFromCourseSession(
-                array($_GET['user_id']),
-                $_GET['id_session'],
-                api_get_course_info($_GET['course_code'])
+                array($userId),
+                $sessionId,
+                api_get_course_info($courseCode)
             );
             $message = Display::return_message(get_lang('UserUnsubscribed'));
             break;
@@ -454,12 +460,13 @@ $fullUrl = UserManager::getUserPicture(
 );
 
 echo '<div class="row">';
+
+echo $message;
+
 echo '<div class="col-md-2">';
 echo '<a class="expand-image" href="'.$fullUrlBig.'">'
     .'<img src="'.$fullUrl.'" /></a><br />';
 echo '</div>';
-
-echo $message;
 
 echo '<div class="col-md-5">';
 echo $userInformation;

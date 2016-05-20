@@ -773,7 +773,7 @@ class Display
         // it checks if there is an SVG version. If so, it uses it.
         // When moving this to production, the return_icon() calls should
         // ask for the SVG version directly
-        /*$testServer = api_get_setting('server_type');
+        $testServer = api_get_setting('server_type');
         if ($testServer == 'test' && $return_only_path == false) {
             $svgImage = substr($image, 0, -3) . 'svg';
             if (is_file($code_path . $theme . 'svg/' . $svgImage)) {
@@ -788,7 +788,7 @@ class Display
             if (empty($additional_attributes['width'])) {
                 $additional_attributes['width'] = $size;
             }
-        }*/
+        }
 
         $icon = api_get_cdn_path($icon);
 

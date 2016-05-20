@@ -6065,16 +6065,18 @@ class Exercise
                 $questionList = array();
                 $tabCategoryQuestions = TestCategory::getQuestionsByCat($this->id);
                 $isRandomByCategory = $this->selectRandomByCat();
-                // on tri les categories en fonction du terme entre [] en tete de la description de la categorie
+                // We sort categories based on the term between [] in the head
+                // of the category's description
                 /*
-                 * ex de catégories :
+                 * examples of categories :
                  * [biologie] Maitriser les mecanismes de base de la genetique
                  * [biologie] Relier les moyens de depenses et les agents infectieux
                  * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
                  * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur
                  * [chimie] Connaître la denition de la theoie acide/base selon Brönsted
                  * [chimie] Connaître les charges des particules
-                 * On veut dans l'ordre des groupes definis par le terme entre crochet au debut du titre de la categorie
+                 * We want that in the order of the groups defined by the term
+                 * between brackets at the beginning of the category title
                 */
                 // If test option is Grouped By Categories
                 if ($isRandomByCategory == 2) {

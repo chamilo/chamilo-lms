@@ -20,8 +20,6 @@ class Version20160519201900 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $em = $this->getEntityManager();
-
         $this->addSql("UPDATE settings_current SET subkeytext = 'Name' WHERE variable = 'profile' AND subkey = 'name'");
         $this->addSql("UPDATE settings_current SET subkeytext = 'OfficialCode' WHERE variable = 'profile' AND subkey = 'officialcode'");
         $this->addSql("UPDATE settings_current SET subkeytext = 'Phone' WHERE variable = 'profile' AND subkey = 'phone'");

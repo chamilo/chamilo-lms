@@ -102,7 +102,6 @@ class NavBuilder extends ContainerAware
                     ),
                 )
             )->setAttribute('class', 'item-menu menu-5 social-network ');
-
             if ($checker->isGranted('ROLE_ADMIN')) {
 
                 /*$menu->addChild(
@@ -120,10 +119,10 @@ class NavBuilder extends ContainerAware
                     array(
                         'route' => 'main',
                         'routeParameters' => array(
-                            'name' => 'social/home.php',
+                            'name' => 'admin/',
                         )
                     )
-                )->setAttribute('class', 'item-menu menu-7 admin');
+                )->setAttribute('class', 'item-menu menu-6 admin');
             }
         }
 
@@ -151,33 +150,35 @@ class NavBuilder extends ContainerAware
             }
         }
 
-        $menu->addChild(
-            $translator->trans('Subscription'),
-            array(
-                'route' => 'main',
-                'routeParameters' => array(
-                    'name' => 'auth/inscription.php',
+        if (!$checker->isGranted('IS_AUTHENTICATED_FULLY')) {
+
+            $menu->addChild(
+                $translator->trans('Subscription'),
+                array(
+                    'route' => 'main',
+                    'routeParameters' => array(
+                        'name' => 'auth/inscription.php',
+                    )
                 )
-            )
-        )->setAttribute('class', 'item-menu menu-3');
+            )->setAttribute('class', 'item-menu menu-3');
 
-        $menu->addChild(
-            $translator->trans('Demo'),
-            array(
-                'route' => 'main',
-                'routeParameters' => array(
-                    'name' => 'social/home.php',
+            $menu->addChild(
+                $translator->trans('Demo'),
+                array(
+                    'route' => 'main',
+                    'routeParameters' => array(
+                        'name' => 'social/home.php',
+                    )
                 )
-            )
-        )->setAttribute('class', 'item-menu menu-4');
+            )->setAttribute('class', 'item-menu menu-4');
 
-        $menu->addChild(
-            $translator->trans('Contact'),
-            array(
-                'route' => 'contact'
-            )
-        )->setAttribute('class', 'item-menu menu-5');
-
+            $menu->addChild(
+                $translator->trans('Contact'),
+                array(
+                    'route' => 'contact'
+                )
+            )->setAttribute('class', 'item-menu menu-5');
+        }
 
         return $menu;
 

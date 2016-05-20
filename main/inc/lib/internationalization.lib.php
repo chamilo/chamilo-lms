@@ -430,18 +430,18 @@ function api_get_local_time(
     $time = null,
     $to_timezone = null,
     $from_timezone = null,
-    $return_null_if_invalid_date = false
+    $return_null_if_invalid_date = false,
+    $showTime = true,
+    $dateHuman = false
 ) {
     // Determining the timezone to be converted from
     if (is_null($from_timezone)) {
         $from_timezone = 'UTC';
     }
-
     // Determining the timezone to be converted to
     if (is_null($to_timezone)) {
         $to_timezone = _api_get_timezone();
     }
-
     // If time is a timestamp, convert it to a string
     if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
@@ -462,10 +462,20 @@ function api_get_local_time(
     try {
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
-
-        return $date->format('Y-m-d H:i:s');
+        if ($showTime) {
+            if ($dateHuman) {
+               return $date->format('j M Y H:i:s');    
+            } else {
+               return $date->format('Y-m-d H:i:s');     
+            }
+        } else {
+            if ($dateHuman) {
+               return $date->format('j M Y');    
+            } else {
+               return $date->format('Y-m-d');     
+            }
+        }
     } catch (Exception $e) {
-
         return null;
     }
 }

@@ -91,7 +91,9 @@ a.thumbnail:hover{
     -ms-flex-negative:1 ;
     display: block;
     position: relative;
-    
+}
+.popover.bottom{
+    width: 320px;
 }
 .page-course{
     padding: 2% 3%;
@@ -4729,6 +4731,11 @@ div#chat-remote-video video {
 .grid-courses .items .toolbar{
     text-align: right;
 }
+.grid-courses .session-date{
+    color: #fff;
+    font-size: 12px;
+    padding: 10px;
+}
 .grid-courses .items .image{
     position: relative;
 }
@@ -4777,6 +4784,10 @@ div#chat-remote-video video {
     border-radius: 0;
     border: none;
 }
+.grid-courses .items .admin-actions .registered{
+    background-color: #17AA1C;
+    color: #FFF;
+}
 .grid-courses .items .category{
     position: absolute;
     bottom: 0px;
@@ -4799,6 +4810,9 @@ div#chat-remote-video video {
 }
 .grid-courses .items .description{
     padding: 5px 10px;
+}
+.grid-courses .items .description .text{
+    font-size: 12px;
 }
 .grid-courses .items .author-card{
     display: flex;
@@ -4824,14 +4838,20 @@ div#chat-remote-video video {
     color: #fff;
 }
 /* Catalog session */
+.search-session{
+    margin-bottom: 30px;
+    margin-top: 25px;
+}
+.search-session .form-inline label{
+    font-weight: normal;
+    padding-right: 10px;
+    margin-right: 5px;
+}
+.search-session .btn-catalog{
+    margin-top: 25px;
+}
 #session-list .col-md-4:nth-child(3n+1) {
   clear: left;
-}
-.section-title-catalog{
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
-  text-transform: uppercase;
 }
 #session-list .title-session{
   font-size: 14px;

@@ -3958,7 +3958,7 @@ class CourseManager
 
                 if ($user_in_course_status == COURSEMANAGER || $sessionCourseAvailable) {
                     $session_url = $course_info['course_public_url'] . '?id_session=' . $course_info['id_session'];
-                    $session_title = '<h4><a href="' . $session_url. '">'. $course_info['name'] . '</a>'.$notifications.'</h4>';
+                    $session_title = '<a href="' . $session_url. '">'. $course_info['name'] . '</a>'.$notifications;
                 } else {
                     $session_title = $course_info['name'];
                 }
@@ -3970,15 +3970,11 @@ class CourseManager
         } else {
             $session_title = $course_info['name'];
         }
-
+        
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
         $iconName = basename($course_info['course_image']);
         if ($showCustomIcon === 'true' && $iconName != 'course.png') {
-            $params['icon'] = Display::img(
-                $course_info['course_image'],
-                api_htmlentities($course_info['name']),
-                array()
-            );
+            $params['icon'] = $course_info['course_image_large'];
         }
 
         $params['link'] = $session_url;

@@ -3785,7 +3785,7 @@ class Exercise
                             $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                           WHERE
                                             exe_id = '".$exeId."' AND
-                                            question_id= ".intval($questionId)."";
+                                            question_id= ".intval($questionId);
                             $resfill = Database::query($queryfill);
                             $str = Database::result($resfill, 0, 'answer');
                             api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
@@ -3793,7 +3793,14 @@ class Exercise
                             $choice = $arr[1];
                             if (isset($choice[$j])) {
                                 $tmp = api_strrpos($choice[$j], ' / ');
-                                $choice[$j] = api_substr($choice[$j], 0, $tmp);
+
+                                if ($tmp) {
+                                    $choice[$j] = api_substr($choice[$j], 0, $tmp);
+                                } else {
+                                    $tmp = ltrim($tmp, '[');
+                                    $tmp = rtrim($tmp, ']');
+                                }
+
                                 $choice[$j] = trim($choice[$j]);
                                 // Needed to let characters ' and " to work as part of an answer
                                 $choice[$j] = stripslashes($choice[$j]);
@@ -3833,8 +3840,16 @@ class Exercise
                             // adds a tabulation if no word has been typed by the student
                             $answer .= ''; // remove &nbsp; that causes issue
                         }
+
                         // adds the correct word, followed by ] to close the blank
-                        $answer .= ' / <font color="green"><b>' . $realCorrectTags[$i] . '</b></font>]';
+                        if (
+                            $this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM
+                        ) {
+                            $answer .= ' / <font color="green"><b>' . $realCorrectTags[$i] . '</b></font>';
+                        }
+
+                        $answer .= ']';
+
                         if (isset($realText[$i +1])) {
                             $answer .= $realText[$i +1];
                         }

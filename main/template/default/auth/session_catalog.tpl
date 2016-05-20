@@ -58,8 +58,8 @@
                     <img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : _p.web_img ~ 'session_default.png' }}">
                     {% if item.category != '' %}
                     <span class="category">{{ item.category }}</span>
-                    {% endif %}
                     <div class="cribbon"></div>
+                    {% endif %}
                     <div class="black-shadow">
                         {% if show_tutor %}
                         <div class="author-card">
@@ -79,7 +79,6 @@
                             <i class="fa fa-calendar-o" aria-hidden="true"></i> {{ item.date }}
                         </div>
                     </div>
-                    
                     <div class="admin-actions">
                         <div class="btn-group" role="group">
                             {% if item.edit_actions != '' %}
@@ -92,7 +91,6 @@
                             {% endif %}
                         </div> 
                     </div>
-                    
                 </div>
                 <div class="description">
                     <h4 class="title">
@@ -163,7 +161,6 @@
                                             {% else %}
                                                 content = "{{ 'NoDependencies'|get_lang }}";
                                             {% endif %}
-
                                             return content;
                                         }
                                     });
@@ -181,7 +178,5 @@
     </div>
 </div>
 <!-- end view session grib -->
-
-    {{ catalog_pagination }}
-
+{{ catalog_pagination }}
 {% endblock %}

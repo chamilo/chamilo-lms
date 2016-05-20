@@ -792,6 +792,14 @@ class CoursesController
                 $hasRequirements = true;
                 break;
             }
+            $cat = $session->getCategory();
+            if (empty($cat)) {
+                $cat = null;
+                $catName = '';
+            } else {
+                $catName = $cat->getName();
+            }
+            
             $coachId = $session->getGeneralCoach()->getId();
             $coachName = $session->getGeneralCoach()->getCompleteName();
             $actions = null;
@@ -818,7 +826,7 @@ class CoursesController
                 ),
                 'show_description' => $session->getShowDescription(),
                 'description' => $session->getDescription(),
-                'category' => $session->getCategory()->getName(),
+                'category' => $catName,
                 'tags' => $sessionCourseTags,
                 'edit_actions' => $actions
             );

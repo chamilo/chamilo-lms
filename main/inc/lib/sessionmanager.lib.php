@@ -6587,18 +6587,17 @@ class SessionManager
      *
      * @return string
      */
-    private static function convertSessionDateToString($startDate, $endDate)
+    private static function convertSessionDateToString($startDate, $endDate, $showTime, $dateHuman)
     {
         $startDateToLocal = '';
         $endDateToLocal = '';
         // This will clean the variables if 0000-00-00 00:00:00 the variable will be empty
         if (isset($startDateToLocal)) {
-            $startDateToLocal = apiGetTimeForHumans($startDate, null, null, true, false);
+            $startDateToLocal = api_get_local_time($startDate, null, null, true, $showTime, $dateHuman);
         }
         if (isset($endDateToLocal)) {
-            $endDateToLocal = apiGetTimeForHumans($endDate, null, null, true, false);
+            $endDateToLocal = api_get_local_time($endDate, null, null, true, $showTime, $dateHuman);
         }
-
         $result = '';
         if (!empty($startDateToLocal) && !empty($endDateToLocal)) {
             $result =  sprintf(get_lang('FromDateXToDateY'), $startDateToLocal, $endDateToLocal);
@@ -6610,11 +6609,9 @@ class SessionManager
                 $result = get_lang('Until').' '.$endDateToLocal;
             }
         }
-
         if (empty($result)) {
             $result = get_lang('NoTimeLimits');
         }
-
         return $result;
     }
     /**
@@ -6626,16 +6623,22 @@ class SessionManager
     {
         $displayDates = self::convertSessionDateToString(
             $sessionInfo['display_start_date'],
-            $sessionInfo['display_end_date']
+            $sessionInfo['display_end_date'],
+            false,
+            true
         );
         $accessDates = self::convertSessionDateToString(
             $sessionInfo['access_start_date'],
-            $sessionInfo['access_end_date']
+            $sessionInfo['access_end_date'],
+            false,
+            true
         );
 
         $coachDates = self::convertSessionDateToString(
             $sessionInfo['coach_access_start_date'],
-            $sessionInfo['coach_access_end_date']
+            $sessionInfo['coach_access_end_date'],
+            false,
+            true
         );
 
         $result = [

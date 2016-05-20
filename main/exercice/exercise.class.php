@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * Class Exercise
  *
@@ -164,7 +162,9 @@ class Exercise
             $this->display_category_name = $object->display_category_name;
             $this->pass_percentage = $object->pass_percentage;
             $this->sessionId = $object->session_id;
+
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
+
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
@@ -190,10 +190,10 @@ class Exercise
             }
 
             if ($object->end_time != '0000-00-00 00:00:00') {
-                $this->end_time = $object->end_time;
+                $this->end_time 	= $object->end_time;
             }
             if ($object->start_time != '0000-00-00 00:00:00') {
-                $this->start_time = $object->start_time;
+                $this->start_time 	= $object->start_time;
             }
 
             //control time
@@ -3123,7 +3123,7 @@ class Exercise
      * @param bool      $show_result show results or not
      * @param int       $propagate_neg
      * @param array     $hotspot_delineation_result
-     *
+     * @param boolean $showTotalScoreAndUserChoices
      * @todo    reduce parameters of this function
      * @return  string  html code
      */
@@ -3746,16 +3746,7 @@ class Exercise
                     }
                     break;
                 case CALCULATED_ANSWER:
-                    $calculatedAnswerId = Session::read('calculatedAnswerId');
-                    $answer = '';
-                    if ($calculatedAnswerId) {
-                        $calculatedAnswerInfo = Session::read('calculatedAnswerInfo');
-                        if (isset($calculatedAnswerInfo[$questionId])) {
-                            $answer = $calculatedAnswerInfo[$questionId];
-                        } else {
-                            $answer = $objAnswerTmp->selectAnswer($calculatedAnswerId[$questionId]);
-                        }
-                    }
+                    $answer = $objAnswerTmp->selectAnswer($_SESSION['calculatedAnswerId'][$questionId]);
                     $preArray = explode('@@', $answer);
                     $last = count($preArray) - 1;
                     $answer = '';
@@ -3794,7 +3785,7 @@ class Exercise
                             $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                           WHERE
                                             exe_id = '".$exeId."' AND
-                                            question_id= ".intval($questionId)."";
+                                            question_id= ".intval($questionId);
                             $resfill = Database::query($queryfill);
                             $str = Database::result($resfill, 0, 'answer');
                             api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
@@ -3802,7 +3793,14 @@ class Exercise
                             $choice = $arr[1];
                             if (isset($choice[$j])) {
                                 $tmp = api_strrpos($choice[$j], ' / ');
-                                $choice[$j] = api_substr($choice[$j], 0, $tmp);
+
+                                if ($tmp) {
+                                    $choice[$j] = api_substr($choice[$j], 0, $tmp);
+                                } else {
+                                    $tmp = ltrim($tmp, '[');
+                                    $tmp = rtrim($tmp, ']');
+                                }
+
                                 $choice[$j] = trim($choice[$j]);
                                 // Needed to let characters ' and " to work as part of an answer
                                 $choice[$j] = stripslashes($choice[$j]);
@@ -3821,18 +3819,6 @@ class Exercise
                     }
                     $answer = '';
                     $realCorrectTags = $correctTags;
-
-                    if ($from_database && empty($calculatedAnswerId)) {
-                        $queryfill = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
-                                      WHERE
-                                        exe_id = '".$exeId."' AND
-                                        question_id= ".intval($questionId)  ;
-                        $resfill = Database::query($queryfill);
-                        $rowFill = Database::fetch_assoc($resfill);
-                        $answer = $rowFill['answer'];
-                        $questionScore = $rowFill['marks'];
-                    }
-
                     for ($i = 0; $i < count($realCorrectTags); $i++) {
                         if ($i == 0) {
                             $answer .= $realText[0];
@@ -3855,17 +3841,10 @@ class Exercise
                             $answer .= ''; // remove &nbsp; that causes issue
                         }
 
-                        $addCorrecWord = true;
-
+                        // adds the correct word, followed by ] to close the blank
                         if (
-                            Session::has('objExercise') &&
-                            Session::read('objExercise')->selectResultsDisabled() == EXERCISE_FEEDBACK_TYPE_EXAM
+                            $this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM
                         ) {
-                            $addCorrecWord = false;
-                        }
-
-                        if ($addCorrecWord) {
-                            // adds the correct word, followed by ] to close the blank
                             $answer .= ' / <font color="green"><b>' . $realCorrectTags[$i] . '</b></font>';
                         }
 
@@ -4621,7 +4600,8 @@ class Exercise
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled,
-                                $answerId
+                                $answerId,
+                                $showTotalScoreAndUserChoices
                             );
                             break;
                         case HOT_SPOT_DELINEATION:

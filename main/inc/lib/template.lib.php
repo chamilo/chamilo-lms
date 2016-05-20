@@ -950,9 +950,10 @@ class Template
         $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
 
         $this->assign('portal_name', $portal_name);
-
+        
+        
         //Menu
-        $menu = return_menu();
+        $menu =  menuArray();
         $this->assign('menu', $menu);
 
         // Setting notifications

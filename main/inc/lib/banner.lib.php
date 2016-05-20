@@ -384,6 +384,8 @@ function return_navigation_array()
 
         // Custom tabs
         $customTabs = getCustomTabs();
+        
+        
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
@@ -400,7 +402,8 @@ function return_navigation_array()
             }
         }
     }
-
+    
+    
     return array(
         'menu_navigation' => $menu_navigation,
         'navigation' => $navigation,
@@ -408,11 +411,163 @@ function return_navigation_array()
     );
 }
 
-function return_menu()
+function menuArray()
+{
+    $mainNavigation = return_navigation_array();
+    unset($mainNavigation['possible_tabs']);
+    unset($mainNavigation['menu_navigation']);
+    //$navigation = $navigation['navigation'];
+    // Get active language
+    $lang = api_get_setting('platformLanguage');
+    if (!empty($_SESSION['user_language_choice'])) {
+        $lang = $_SESSION['user_language_choice'];
+        
+    } elseif (!empty($_SESSION['_user']['language'])) {
+        $lang = $_SESSION['_user']['language'];
+    }
+    
+    
+    // Preparing home folder for multiple urls
+    if (api_get_multiple_access_url()) {
+        $access_url_id = api_get_current_access_url_id();
+        if ($access_url_id != -1) {
+            // If not a dead URL
+            $urlInfo = api_get_access_url($access_url_id);
+           
+            $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
+            $cleanUrl = api_replace_dangerous_char($url);
+            $cleanUrl = str_replace('/', '-', $cleanUrl);
+            $cleanUrl .= '/';
+            $homepath  = api_get_path(SYS_APP_PATH).'home/'.$cleanUrl; //homep for Home Path
+            
+            //we create the new dir for the new sites
+            if (!is_dir($homepath)) {
+                mkdir($homepath, api_get_permissions_for_new_directories());
+            }
+        }
+    } else {
+        $homepath = api_get_path(SYS_APP_PATH).'home/';
+    }
+    $ext = '.html';
+    $menuTabs = 'home_tabs';
+    $menuTabsLoggedIn = 'home_tabs_logged_in';
+    $pageContent = '';
+    // Get the extra page content, containing the links to add to the tabs
+    if (is_file($homepath.$menuTabs.'_'.$lang.$ext) && is_readable($homepath.$menuTabs.'_'.$lang.$ext)) {
+        $pageContent = @(string) file_get_contents($homepath . $menuTabs . '_' . $lang . $ext);
+    } elseif (is_file($homepath.$menuTabs.$lang.$ext) && is_readable($homepath.$menuTabs.$lang.$ext)) {
+        $pageContent = @(string) file_get_contents($homepath . $menuTabs . $lang . $ext);
+    } else {
+        //$errorMsg = get_lang('HomePageFilesNotReadable');
+    }
+    // Sanitize page content
+    $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
+    $open = str_replace('{rel_path}',api_get_path(REL_PATH), $pageContent);
+    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+    // Get the extra page content, containing the links to add to the tabs
+    //  that are only for users already logged in
+    $openMenuTabsLoggedIn = '';
+    if (api_get_user_id() && !api_is_anonymous()) {
+        if (is_file($homepath . $menuTabsLoggedIn . '_' . $lang . $ext) && is_readable($homepath . $menuTabsLoggedIn . '_' . $lang . $ext)) {
+            $pageContent = @(string) file_get_contents($homepath . $menuTabsLoggedIn . '_' . $lang . $ext);
+            $pageContent = str_replace('::private', '', $pageContent);
+        } elseif (is_file($homepath . $menuTabsLoggedIn . $lang . $ext) && is_readable($homepath . $menuTabsLoggedIn . $lang . $ext)) {
+            $pageContent = @(string) file_get_contents($homepath . $menuTabsLoggedIn . $lang . $ext);
+            $pageContent = str_replace('::private', '', $pageContent);
+        } else {
+            //$errorMsg = get_lang('HomePageFilesNotReadable');
+        }
+        
+        $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
+        $openMenuTabsLoggedIn = str_replace('{rel_path}',api_get_path(REL_PATH), $pageContent);
+        $openMenuTabsLoggedIn = api_to_system_encoding($openMenuTabsLoggedIn, api_detect_encoding(strip_tags($openMenuTabsLoggedIn)));
+    }
+    if (!empty($open) OR !empty($openMenuTabsLoggedIn)) {
+        if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') === false) {
+            if (api_is_anonymous()) {
+                $mainNavigation['navigation'][SECTION_CAMPUS]  = null;
+            }
+        } else {
+            if (api_get_user_id() && !api_is_anonymous()) {
+                $list = split("\n", $openMenuTabsLoggedIn);
+                foreach ($list as $link) {
+                    $matches = array();
+                    $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
+                    if ($match) {
+                        $mainNavigation['navigation'][$matches[3]] = array(
+                            'url' => $matches[1],
+                            'target' => $matches[2],
+                            'title' => $matches[3],
+                            'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
+                        );
+                    }
+                }
+               
+            } else {
+                
+                $list = split("\n", $open);
+                foreach ($list as $link) {               
+                    $matches = array();
+                    $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
+                    if ($match) {
+                        $mainNavigation['navigation'][$matches[3]] = array(
+                            'url' => $matches[1],
+                            'target' => $matches[2],
+                            'title' => $matches[3],
+                            'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
+                        );
+                    }
+                }
+            }
+        }
+    }
+    
+    if (count($mainNavigation['navigation']) > 0) {
+        //$pre_lis = '';
+        $activeSection = '';
+        foreach ($mainNavigation['navigation'] as $section => $navigation_info) {
+            
+            $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
+            
+            if (isset($GLOBALS['this_section'])) {
+                $tempSection = $section;
+                if ($section == 'social') {
+                    $tempSection = 'social-network';
+                }
+                if ($tempSection == $GLOBALS['this_section']) {
+                    $activeSection = $section;
+                }
+                // If we're on the index page and a specific extra link has been
+                // loaded
+                if ($GLOBALS['this_section'] == SECTION_CAMPUS) {
+                    if (!empty($_GET['include'])) {
+                        $name = str_replace(' ', '-', strtolower($navigation_info['title'])) . '_' . $lang . $ext;
+                        if ($_GET['include'] == $name) {
+                            $activeSection = $section;
+                        }
+                    }
+                }
+            } else {
+                $current = '';
+            }
+            $mainNavigation['navigation'][$section]['current'] = '';
+        }
+        if (!empty($activeSection)) {
+            $mainNavigation['navigation'][$activeSection]['current'] = 'active';
+        }
+        
+    }
+    unset($mainNavigation['navigation']['myprofile']);
+    
+    return $mainNavigation['navigation'];
+}
+
+
+/* function return_menu()
 {
     $navigation = return_navigation_array();
     $navigation = $navigation['navigation'];
-
+    
     // Displaying the tabs
 
     $lang = api_get_setting('platformLanguage');
@@ -493,9 +648,11 @@ function return_menu()
             }
         }
     }
-
+    
+    
     if (count($navigation) > 0 || !empty($lis)) {
         $pre_lis = '';
+        
         foreach ($navigation as $section => $navigation_info) {
             $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
             if (isset($GLOBALS['this_section'])) {
@@ -507,6 +664,7 @@ function return_menu()
                 $pre_lis .= '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a></li>';
             }
         }
+        
         $lis = $pre_lis.$lis;
     }
 
@@ -514,8 +672,10 @@ function return_menu()
     if (!empty($lis)) {
          $menu .= $lis;
     }
+    
     return $menu;
 }
+*/
 
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 {

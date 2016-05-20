@@ -3001,7 +3001,7 @@ class UserManager
             self::delete_api_key($id_key['id']);
             $num = self::add_api_key($user_id, $api_service);
         } elseif ($num == 0) {
-            $num = self::add_api_key($user_id);
+            $num = self::add_api_key($user_id, $api_service);
         }
         return $num;
     }

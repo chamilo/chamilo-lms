@@ -2111,17 +2111,29 @@ div.admin_section h4 {
 .ribbon .success {
     color: green;
 }
-
 .exercise_save_now_button img {
     position: relative;
     top: 4px;
 }
-
 .exercise_save_now_button {
-    margin-top:10px;
+    padding-left: 25px;
 }
-.exercise_save_now_button, .exercise_button{
-    /* padding:5px; */
+.exercise_save_now_button .checkbox input[type="checkbox"]{
+    margin-left: -25px;
+}
+.question-check-test{
+    padding-left: 35px;
+    margin-bottom: 35px;
+}
+.question-check-test label{
+    font-weight: normal;
+}
+.question-check-test .checkbox input[type="checkbox"]{
+    margin-left: -25px;
+}
+.form-actions{
+  margin-top: 20px;
+  margin-bottom: 25px;
 }
 /* Exercise clock*/
 .count_down{

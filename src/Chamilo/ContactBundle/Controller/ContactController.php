@@ -75,7 +75,7 @@ class ContactController extends Controller
                 $this->get('mailer')->send($message);
                 $this->addFlash(
                     'success',
-                    'Your email has been sent! Thanks!'
+                    $this->get('translator')->trans('Your email has been sent! Thanks!')
                 );
 
                 return $this->redirect($this->generateUrl('contact'));

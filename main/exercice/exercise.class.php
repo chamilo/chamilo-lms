@@ -3123,7 +3123,7 @@ class Exercise
      * @param bool      $show_result show results or not
      * @param int       $propagate_neg
      * @param array     $hotspot_delineation_result
-     *
+     * @param boolean $showTotalScoreAndUserChoices
      * @todo    reduce parameters of this function
      * @return  string  html code
      */
@@ -4585,7 +4585,8 @@ class Exercise
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled,
-                                $answerId
+                                $answerId,
+                                $showTotalScoreAndUserChoices
                             );
                             break;
                         case HOT_SPOT_DELINEATION:

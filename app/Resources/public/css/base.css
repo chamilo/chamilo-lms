@@ -4156,6 +4156,9 @@ i.size-32.icon-new-work{
     display:block;
     width: 100%;
 }
+.actions #groups .bootstrap-select{
+    width: 300px;
+}
 ul.holder{
   list-style: none;
   margin: 0;

@@ -3823,7 +3823,7 @@ class Exercise
                     $realCorrectTags = $correctTags;
 
                     if ($from_database && empty($calculatedAnswerId)) {
-                        $queryfill = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
+                        $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                       WHERE
                                         exe_id = '".$exeId."' AND
                                         question_id= ".intval($questionId)  ;
@@ -3854,23 +3854,8 @@ class Exercise
                             // adds a tabulation if no word has been typed by the student
                             $answer .= ''; // remove &nbsp; that causes issue
                         }
-
-                        $addCorrecWord = true;
-
-                        if (
-                            Session::has('objExercise') &&
-                            Session::read('objExercise')->selectResultsDisabled() == EXERCISE_FEEDBACK_TYPE_EXAM
-                        ) {
-                            $addCorrecWord = false;
-                        }
-
-                        if ($addCorrecWord) {
-                            // adds the correct word, followed by ] to close the blank
-                            $answer .= ' / <font color="green"><b>' . $realCorrectTags[$i] . '</b></font>';
-                        }
-
-                        $answer .= ']';
-
+                        // adds the correct word, followed by ] to close the blank
+                        $answer .= ' / <font color="green"><b>' . $realCorrectTags[$i] . '</b></font>]';
                         if (isset($realText[$i +1])) {
                             $answer .= $realText[$i +1];
                         }

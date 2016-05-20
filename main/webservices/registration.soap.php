@@ -1853,7 +1853,7 @@ function WSEditUser($params)
 
     if ($user_id == 0) {
         return 0;
-    } else if (empty($enable) || !$enable) {
+    } else if (empty($enable)) {
         $sql = "SELECT user_id FROM $table_user
                 WHERE user_id ='$user_id' AND active= '0'";
         $resu = Database::query($sql);

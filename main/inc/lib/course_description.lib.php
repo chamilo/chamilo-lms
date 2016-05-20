@@ -263,7 +263,7 @@ class CourseDescription
 
         $result = Database::insert($tbl_stats_item_property, $params);
 
-        return $result?1:0;
+        return $result ? 1 : 0;
     }
 
     /**
@@ -288,7 +288,7 @@ class CourseDescription
                 'id = ? AND session_id = ? AND c_id = ?' => [
                     $this->id,
                     $this->session_id,
-                    $this->course_id?$this->course_id:api_get_course_int_id(),
+                    $this->course_id ? $this->course_id : api_get_course_int_id(),
                 ],
             ]
         );

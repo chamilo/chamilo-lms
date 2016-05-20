@@ -5,9 +5,8 @@ require_once '../../../main/inc/global.inc.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
 
-// security
+// Security
 api_protect_admin_script();
-
 vchamilo_check_settings();
 
 $action = isset($_GET['what']) ? $_GET['what'] : '';
@@ -30,6 +29,15 @@ while ($instance = Database::fetch_object($result)) {
 }
 
 $templates = vchamilo_get_available_templates(false);
+
+/*
+$sql = "SELECT * FROM vchamilo
+    WHERE root_web = '".Database::escape_string('http://my.chamilo222.net/')."'";
+$result = Database::query($sql);
+$result = Database::store_result($result, 'ASSOC');
+
+vchamilo_load_files_from_template((object)$result[0], 'localhost');
+exit;*/
 
 if (empty($templates)) {
     $url = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php?what=snapshotinstance';
@@ -60,8 +68,6 @@ $table->addRow($headers, $attrs, 'th');
 $i = 0;
 foreach ($instances as $instance) {
     $checkbox = '<input type="checkbox" class="vnodessel" name="vids[]" value="'.$instance->id.'" />';
-
-    //$sitelink = '<a href="'.$instance->root_web.'" target="_blank">'.$instance->sitename.'</a>';
     $sitelink = $instance->sitename;
 
     if ($instance->visible) {
@@ -85,7 +91,7 @@ foreach ($instances as $instance) {
         <img src="'.$plugininstance->pix_url('delete').'" /></a>';
     }
 
-    $crondate = ($instance->lastcron) ? date('r', $instance->lastcron) : '';
+    $crondate = $instance->lastcron ? date('r', $instance->lastcron) : '';
     $data = array(
         $checkbox,
         $sitelink.' ('.Display::url($instance->root_web, $instance->root_web).')',
@@ -106,10 +112,10 @@ $items = [
         'url' => $thisurl.'?what=newinstance',
         'content' => $plugininstance->get_lang('newinstance')
     ],
-    [
+    /*[
         'url' => $thisurl.'?what=instance&registeronly=1',
         'content' => $plugininstance->get_lang('registerinstance')
-    ],
+    ],*/
     [
         'url' => $thisurl.'?what=snapshotinstance&vid=0',
         'content' => $plugininstance->get_lang('snapshotmaster')

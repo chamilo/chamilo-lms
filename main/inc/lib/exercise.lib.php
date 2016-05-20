@@ -89,6 +89,13 @@ class ExerciseLib
             $objAnswerTmp = new Answer($questionId);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
+            if ($answerType == FREE_ANSWER ||
+                $answerType == ORAL_EXPRESSION ||
+                $answerType == CALCULATED_ANSWER
+            ) {
+                $nbrAnswers = 1;
+            }
+
             $quiz_question_options = Question::readQuestionOption(
                 $questionId,
                 $course_id
@@ -615,6 +622,7 @@ class ExerciseLib
                     $s .= $answer;
 
                 } elseif ($answerType == CALCULATED_ANSWER) {
+
                     /*
                      * In the CALCULATED_ANSWER test
                      * you mustn't have [ and ] in the textarea
@@ -623,17 +631,20 @@ class ExerciseLib
                      * the text to find mustn't contains HTML tags
                      * the text to find mustn't contains char "
                      */
-                    if ($origin !== null) {
-                        global $exe_id;
-                        $trackAttempts = Database::get_main_table(
-                            TABLE_STATISTIC_TRACK_E_ATTEMPT
-                        );
-                        $sql = 'SELECT answer FROM ' . $trackAttempts . '
-                                WHERE exe_id=' . $exe_id . ' AND question_id=' . $questionId;
-                        $rsLastAttempt = Database::query($sql);
-                        $rowLastAttempt = Database::fetch_array($rsLastAttempt);
-                        $answer = $rowLastAttempt['answer'];
-                        if (empty($answer)) {
+                    global $exerciseId;
+                    $trackAttempts = Database::get_main_table(
+                        TABLE_STATISTIC_TRACK_E_ATTEMPT
+                    );
+                    $sql = 'SELECT answer FROM ' . $trackAttempts . '
+                            WHERE exe_id=' . $exerciseId . ' AND question_id=' . $questionId;
+                    $rsLastAttempt = Database::query($sql);
+                    $rowLastAttempt = Database::fetch_array($rsLastAttempt);
+                    $answer = $rowLastAttempt['answer'];
+
+                    $calculatedAnswerId = Session::read('calculatedAnswerId');
+                    $calculatedAnswerInfo = Session::read('calculatedAnswerInfo');
+                    if (empty($answer)) {
+                        if (empty($calculatedAnswerId)) {
                             $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
                                 1,
                                 $nbrAnswers
@@ -641,8 +652,17 @@ class ExerciseLib
                             $answer = $objAnswerTmp->selectAnswer(
                                 $_SESSION['calculatedAnswerId'][$questionId]
                             );
+
+                            Session::write('calculatedAnswerInfo', [$questionId => $answer]);
+
+                        } else {
+                            $calculatedAnswerInfo = Session::read('calculatedAnswerInfo');
+                            if (isset($calculatedAnswerInfo[$questionId])) {
+                                $answer = $calculatedAnswerInfo[$questionId];
+                            }
                         }
                     }
+
                     list($answer) = explode('@@', $answer);
                     // $correctAnswerList array of array with correct anwsers 0=> [0=>[\p] 1=>[plop]]
                     api_preg_match_all(
@@ -650,6 +670,8 @@ class ExerciseLib
                         $answer,
                         $correctAnswerList
                     );
+
+
                     // get student answer to display it if student go back to previous calculated answer question in a test
                     if (isset($user_choice[0]['answer'])) {
                         api_preg_match_all(
@@ -688,11 +710,13 @@ class ExerciseLib
                             $studentAnswerList[] = $answerCorrected;
                         }
                     }
+
                     // If display preview of answer in test view for exemple, set the student answer to the correct answers
                     if ($debug_mark_answer) {
                         // contain the rights answers surronded with brackets
                         $studentAnswerList = $correctAnswerList[0];
                     }
+
                     /*
                     Split the response by bracket
                     tabComments is an array with text surrounding the text to find
@@ -3488,8 +3512,11 @@ HOTSPOT;
             $show_only_score = false;
         }
 
+        $show_total_score_and_user_choices = false;
+
         if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             $show_only_score = true;
+            $show_results = true;
             if ($objExercise->attempts > 0) {
                 $attempts = Event::getExerciseResultsByUser(
                     api_get_user_id(),
@@ -3509,7 +3536,10 @@ HOTSPOT;
                     if ($numberAttempts >= $objExercise->attempts) {
                         $show_results = true;
                         $show_only_score = false;
-                    };
+                        $show_total_score_and_user_choices = false;
+                    } else {
+                        $show_total_score_and_user_choices = true;
+                    }
                 }
             }
         }
@@ -3527,7 +3557,6 @@ HOTSPOT;
                 $exercise_stat_info['user_ip']
             );
         }
-
 
         // Display text when test is finished #4074 and for LP #4227
         $end_of_message = $objExercise->selectTextWhenFinished();
@@ -3556,22 +3585,18 @@ HOTSPOT;
                     $questionId,
                     null,
                     'exercise_result',
-                    array(),
+                    [],
                     $save_user_result,
                     true,
                     $show_results,
                     $objExercise->selectPropagateNeg(),
-                    array()
+                    [],
+                    $show_total_score_and_user_choices
                 );
 
                 if (empty($result)) {
                     continue;
                 }
-
-                // In case of global score, make sure the calculated total score is integer
-                /*if (!is_int($result['score'])) {
-                $result['score'] = round($result['score']);
-            }*/
 
                 $total_score += $result['score'];
                 $total_weight += $result['weight'];
@@ -3658,13 +3683,7 @@ HOTSPOT;
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
-
-                    $show_media = false;
-                    /*if ($objQuestionTmp->parent_id != 0 && !in_array($objQuestionTmp->parent_id, $media_list)) {
-                    $show_media = true;
-                    $media_list[] = $objQuestionTmp->parent_id;
-                }*/
-                    //Shows question title an description
+                    // Shows question title an description
                     $question_content .= $objQuestionTmp->return_header(
                         null,
                         $counter,

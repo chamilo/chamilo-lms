@@ -33,7 +33,7 @@ if ($action == 'deleteinstances' || $action == 'disableinstances') {
 if ($action == 'enableinstances') {
     if (!empty($vidlist)) {
         Display::addFlash(Display::return_message("Enabling instance"));
-        $sql = " UPDATE $table SET visible = 1 WHERE id IN ('$vidlist') ";
+        $sql = "UPDATE $table SET visible = 1 WHERE id IN ('$vidlist') ";
         Database::query($sql);
     }
     vchamilo_redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
@@ -48,21 +48,23 @@ if ($action == 'fulldeleteinstances') {
             $todelete = Database::select('*', 'vchamilo', array('where' => array("id IN ('$vidlist')" => array())));
         }
     } else {
-        $todelete = Database::select('*', 'vchamilo', array('where' => array("root_web = '{$n->root_web}' " => array())));
+        $todelete = Database::select(
+            '*',
+            'vchamilo',
+            array('where' => array("root_web = '{$n->root_web}' " => array()))
+        );
     }
     if ($todelete) {
         foreach ($todelete as $fooid => $instance) {
             $slug = $instance['slug'];
-
-            Display::addFlash(Display::return_message("Removing instance: ".$instance['root_web']));
-
-            vchamilo_drop_databases($instance);
 
             // Remove all files and eventual symlinks
             $absalternatecourse = vchamilo_get_config('vchamilo', 'course_real_root');
             $coursedir = $absalternatecourse.$slug;
 
             Display::addFlash(Display::return_message("Deleting $coursedir"));
+
+            removeDir($coursedir);
 
             if ($absalternatehome = vchamilo_get_config('vchamilo', 'home_real_root')) {
                 $homedir = $absalternatehome.'/'.$slug;
@@ -78,9 +80,13 @@ if ($action == 'fulldeleteinstances') {
                 Display::addFlash(Display::return_message("Deleting $archivedir"));
                 removeDir($archivedir);
             }
-
-            $sql = "DELETE FROM {$table} WHERE id = {$instance->id}";
+                                    
+            $sql = "DELETE FROM {$table} WHERE id = ".$instance['id'];
             Database::query($sql);
+
+            Display::addFlash(Display::return_message("Removing instance: ".$instance['root_web']));
+
+            vchamilo_drop_databases($instance);
         }
     }
 }

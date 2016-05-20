@@ -1273,6 +1273,7 @@ function _api_format_user($user, $add_password = false)
 
     $attributes = array(
         'phone',
+        'address',
         'picture_uri',
         'official_code',
         'status',
@@ -5710,23 +5711,29 @@ function api_is_in_course($course_code = null) {
  * @return boolean
  * @author Ivan Tcholakov
  */
-function api_is_in_group($group_id = null, $course_code = null) {
-
-    if (!empty($course_code)) {
-        if (isset($_SESSION['_course']['sysCode'])) {
-            if ($course_code != $_SESSION['_course']['sysCode']) return false;
+function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
+{
+    if (!empty($courseCodeParam)) {
+        $courseCode = api_get_course_id();
+        if (!empty($courseCode)) {
+            if ($courseCodeParam != $courseCode) {
+                return false;
+            }
         } else {
             return false;
         }
     }
 
-    if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
-        if (!empty($group_id)) {
-            return $group_id == $_SESSION['_gid'];
+    $groupId = api_get_group_id();
+
+    if (isset($groupId) && $groupId != '') {
+        if (!empty($groupIdParam)) {
+            return $groupIdParam == $groupId;
         } else {
             return true;
         }
     }
+
     return false;
 }
 

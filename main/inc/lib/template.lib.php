@@ -694,7 +694,6 @@ class Template
             'bootstrap/dist/js/bootstrap.min.js',
             'jquery-ui/jquery-ui.min.js',
             'moment/min/moment-with-locales.min.js',
-            api_is_anonymous() ? '' : 'ckeditor/ckeditor.js',
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
             'mediaelement/build/mediaelement-and-player.min.js',
@@ -702,6 +701,9 @@ class Template
             'image-map-resizer/js/imageMapResizer.min.js',
             'jquery.scrollbar/jquery.scrollbar.min.js'
         ];
+        if (CHAMILO_LOAD_WYSIWYG == true) {
+            $bowerJsFiles[] = 'ckeditor/ckeditor.js';
+        }
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
             $bowerJsFiles[] = 'MathJax/MathJax.js?config=AM_HTMLorMML';
@@ -713,9 +715,7 @@ class Template
         }
 
         foreach ($bowerJsFiles as $file) {
-            if (!empty($file)) {
-                $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
-            }
+            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
         }
 
         foreach ($js_files as $file) {

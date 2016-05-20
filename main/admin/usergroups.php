@@ -85,11 +85,21 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
 $(function() {
 <?php
     // grid definition see the $usergroup>display() function
-    echo Display::grid_js('usergroups', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+    echo Display::grid_js(
+        'usergroups',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
 ?>
 });
 </script>
 <?php
+
 // Tool introduction
 Display::display_introduction_section(get_lang('Classes'));
 

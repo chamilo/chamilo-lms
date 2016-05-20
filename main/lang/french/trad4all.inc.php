@@ -7647,4 +7647,8 @@ $AddProfile = "Ajouter profil";
 $AddLevel = "Ajouter niveau";
 $ChangeAcquiredLevel = "Modifier le niveau acquis";
 $NoLevelAcquiredYet = "Aucun niveau acquis à ce jour";
+$RecordAudio = "Enregistrement audio";
+$StartRecordingAudio = "Lancer l'enregistrement";
+$StopRecordingAudio = "Arrêter l'enregistrement";
+$SaveRecordedAudio = "Sauvegarder l'audio enregistré";
 ?>

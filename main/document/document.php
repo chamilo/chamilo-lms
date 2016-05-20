@@ -1596,11 +1596,9 @@ if ($is_allowed_to_edit ||
 
         // Create new audio from text
         if (api_get_setting('enabled_text2audio') == 'true') {
-            $dt2a = 'google';
-            $req_dt2a = '&amp;dt2a='.$dt2a;
             $actionsLeft .= Display::url(
                 Display::return_icon('new_sound.png', get_lang('CreateAudio'), '', ICON_SIZE_MEDIUM),
-                api_get_path(WEB_CODE_PATH).'document/create_audio.php?'.api_get_cidreq().'&id='.$document_id.$req_dt2a
+                api_get_path(WEB_CODE_PATH).'document/create_audio.php?'.api_get_cidreq().'&id='.$document_id
             );
         }
     }

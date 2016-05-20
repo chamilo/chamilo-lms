@@ -62,6 +62,7 @@ class AccessToken
    * @param string $accessToken
    * @param int $expiresAt
    * @param string|null machineId
+   * @param string $machineId
    */
   public function __construct($accessToken, $expiresAt = 0, $machineId = null)
   {
@@ -97,7 +98,7 @@ class AccessToken
   /**
    * Getter for machineId.
    *
-   * @return string|null
+   * @return string
    */
   public function getMachineId()
   {
@@ -191,11 +192,11 @@ class AccessToken
   /**
    * Get a valid code from an access token.
    *
-   * @param AccessToken|string $accessToken
+   * @param AccessToken $accessToken
    * @param string|null $appId
    * @param string|null $appSecret
    *
-   * @return AccessToken
+   * @return string
    */
   public static function getCodeFromAccessToken($accessToken, $appId = null, $appSecret = null)
   {

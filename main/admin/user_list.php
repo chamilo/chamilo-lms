@@ -288,7 +288,7 @@ function prepare_user_sql_query($is_count)
  * This function defines globals.
  * @param  int $userId
  *
- * @return bool    False on failure, redirection on success
+ * @return false|null    False on failure, redirection on success
  * @author Evie Embrechts
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
 */
@@ -529,6 +529,15 @@ function modify_filter($user_id, $url_params, $row) {
             $result .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		}
 	}
+
+    $allowAssignSkill = api_is_platform_admin(false, true);
+
+    if ($allowAssignSkill) {
+        $result .= Display::url(
+            Display::return_icon('skill-badges.png', get_lang('AssignSkill'), null, ICON_SIZE_SMALL),
+            api_get_path(WEB_CODE_PATH) . 'badge/assign.php?' . http_build_query(['user' => $user_id])
+        );
+    }
 
 	if ($is_admin) {
 		$result .= Display::return_icon('admin_star.png', get_lang('IsAdministrator'),array('width'=> ICON_SIZE_SMALL, 'heigth'=> ICON_SIZE_SMALL));

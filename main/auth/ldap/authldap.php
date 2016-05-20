@@ -67,7 +67,7 @@ require_once api_get_path(SYS_CODE_PATH).'auth/external_login/ldap.inc.php';
 require 'ldap_var.inc.php';
 /**
  *    Check login and password with LDAP
- *    @return true when login & password both OK, false otherwise
+ *    @return boolean when login & password both OK, false otherwise
  *    @author Roan Embrechts (based on code from Universit� Jean Monet)
  */
 
@@ -305,7 +305,7 @@ function ldap_authentication_check ($uname, $passwd) {
 } // end of check
 /**
  * Set the protocol version with version from config file (enables LDAP version 3)
- * @param    resource    The LDAP connexion resource, passed by reference.
+ * @param    resource    resource LDAP connexion resource, passed by reference.
  * @return    void
  */
 function ldap_set_version(&$resource) {
@@ -323,6 +323,7 @@ function ldap_set_version(&$resource) {
  * Handle bind (whether authenticated or not)
  * @param    resource    The LDAP handler to which we are connecting (by reference)
  * @param    resource    The LDAP bind handler we will be modifying
+ * @param boolean $ldap_bind
  * @return    boolean        Status of the bind assignment. True for success, false for failure.
  */
 function ldap_handle_bind(&$ldap_handler,&$ldap_bind) {

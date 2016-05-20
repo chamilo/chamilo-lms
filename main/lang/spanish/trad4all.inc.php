@@ -1619,7 +1619,7 @@ $ExtendedProfileTitle = "Perfil extendido";
 $ExtendedProfileComment = "Si se configura como 'Verdadero', un usuario puede rellenar los siguientes campos (opcionales): 'Mis competencias', 'Mis títulos', '¿Qué puedo enseñar?' y 'Mi área personal pública'";
 $Classes = "Clases";
 $UserUnsubscribed = "La inscripción del usuario ha sido anulada.";
-$CannotUnsubscribeUserFromCourse = "El usuario no puede anular su inscripci�n en el curso. Este usuario es un administrador del curso.";
+$CannotUnsubscribeUserFromCourse = "El usuario no puede anular su inscripción en el curso. Este usuario es un administrador del curso.";
 $InvalidStartDate = "Fecha de inicio no válida.";
 $InvalidEndDate = "Fecha de finalización no válida.";
 $DateFormatLabel = "(d/m/a h:m)";
@@ -7677,4 +7677,8 @@ $AddProfile = "Añadir perfil";
 $AddLevel = "Añadir nivel";
 $ChangeAcquiredLevel = "Cambiar nivel adquirido";
 $NoLevelAcquiredYet = "Ningún nivel adquirido todavía";
+$RecordAudio = "Grabar audio";
+$StartRecordingAudio = "Lanzar la grabación";
+$StopRecordingAudio = "Finalizar la grabación";
+$SaveRecordedAudio = "Guardar el audio grabado";
 ?>

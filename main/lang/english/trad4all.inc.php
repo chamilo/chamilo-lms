@@ -7660,4 +7660,8 @@ $AddProfile = "Add profile";
 $AddLevel = "Add level";
 $ChangeAcquiredLevel = "Change acquired level";
 $NoLevelAcquiredYet = "No level acquired yet";
+$RecordAudio = "Record audio";
+$StartRecordingAudio = "Start recording";
+$StopRecordingAudio = "Stop recording";
+$SaveRecordedAudio = "Save recorded audio";
 ?>

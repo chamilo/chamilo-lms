@@ -148,7 +148,7 @@ function external_add_user($u) {
  *      - language
  *      - courses : string of all courses code separated by '|'
  *      - admin : boolean
- * @return boolean
+ * @return boolean|null
  * @author ndiechburg <noel@cblue.be>
  * */
 function external_update_user($new_user) {

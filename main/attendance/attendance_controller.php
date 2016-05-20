@@ -206,7 +206,7 @@ class AttendanceController
 
     /**
      * Restores an attendance entry and fallback to attendances rendering
-     * @param int	$attendanceId
+     * @param int	$attendance_id
      */
     public function attendance_restore($attendance_id)
     {

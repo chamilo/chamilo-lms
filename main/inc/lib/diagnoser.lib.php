@@ -27,8 +27,7 @@ class Diagnoser
 
     public function show_html()
     {
-        $sections = array('chamilo', 'php', 'database', 'webserver', 'paths');
-        $currentSection = isset($_GET['section']) ? $_GET['section'] : 'chamilo';
+        $sections = array('chamilo', 'php', 'database', 'webserver');
 
         if (!in_array(trim($currentSection), $sections)) {
             $currentSection = 'chamilo';
@@ -142,6 +141,35 @@ class Diagnoser
 
         $app_version = api_get_setting('chamilo_database_version');
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[DB]', 'chamilo_database_version', '#', $app_version, 0, null,  'Chamilo DB version');
+
+        $access_url_id = api_get_current_access_url_id();
+
+        if ($access_url_id === 1) {
+            global $_configuration;
+            $message2 = '';
+            if ($access_url_id === 1) {
+                if (api_is_windows_os()) {
+                    $message2 .= get_lang('SpaceUsedOnSystemCannotBeMeasuredOnWindows');
+                } else {
+                    $dir = api_get_path(SYS_PATH);
+                    $du = exec('du -sh ' . $dir, $err);
+                    list($size, $none) = explode("\t", $du);
+                    $limit = $_configuration[$access_url_id]['hosting_limit_disk_space'];
+                    $message2 .= sprintf(get_lang('TotalSpaceUsedByPortalXLimitIsYMB'), $size, $limit);
+                }
+            }
+
+            $array[] = $this->build_setting(
+                self :: STATUS_OK,
+                '[FILES]',
+                'hosting_limit_disk_space',
+                '#',
+                $size,
+                0,
+                null,
+                $message2
+            );
+        }
 
         return $array;
     }

@@ -63,7 +63,7 @@ class SignedRequest
   /**
    * Returns the raw signed request data.
    *
-   * @return string|null
+   * @return string
    */
   public function getRawSignedRequest()
   {
@@ -84,7 +84,7 @@ class SignedRequest
    * Returns a property from the signed request data if available.
    *
    * @param string $key
-   * @param mixed|null $default
+   * @param integer $default
    *
    * @return mixed|null
    */

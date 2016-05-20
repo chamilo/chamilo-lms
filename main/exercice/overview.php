@@ -171,7 +171,7 @@ if ($current_browser == 'Internet Explorer') {
 
 $blockShowAnswers = false;
 if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-    if (count($attempts) < $objExercise->attempts ) {
+    if (count($attempts) < $objExercise->attempts) {
         $blockShowAnswers = true;
     }
 }

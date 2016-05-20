@@ -1273,6 +1273,7 @@ function _api_format_user($user, $add_password = false)
 
     $attributes = array(
         'phone',
+        'address',
         'picture_uri',
         'official_code',
         'status',

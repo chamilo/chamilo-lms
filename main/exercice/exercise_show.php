@@ -364,134 +364,33 @@ foreach ($questionList as $questionId) {
     // Start buffer
     ob_start();
 
+    if ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
+        $choice = array();
+    }
+
     switch ($answerType) {
-        case MULTIPLE_ANSWER:
-            //no break
-        case MULTIPLE_ANSWER_TRUE_FALSE:
-            $question_result = $objExercise->manage_answer(
-                $id,
-                $questionId,
-                $choice,
-                'exercise_show',
-                array(),
-                false,
-                true,
-                $show_results,
-                $objExercise->selectPropagateNeg(),
-                [],
-                $showTotalScoreAndUserChoices
-            );
-            $questionScore = $question_result['score'];
-            $totalScore += $question_result['score'];
-            break;
         case MULTIPLE_ANSWER_COMBINATION:
             //no break
         case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
-            $choice = array();
-            $question_result = $objExercise->manage_answer(
-                $id,
-                $questionId,
-                $choice,
-                'exercise_show',
-                array(),
-                false,
-                true,
-                $show_results,
-                $objExercise->selectPropagateNeg(),
-                [],
-                $showTotalScoreAndUserChoices
-            );
-            $questionScore = $question_result['score'];
-            $totalScore += $question_result['score'];
-            break;
+            //no break
         case UNIQUE_ANSWER:
             //no break;
         case UNIQUE_ANSWER_NO_OPTION:
-            $question_result = $objExercise->manage_answer(
-                $id,
-                $questionId,
-                $choice,
-                'exercise_show',
-                array(),
-                false,
-                true,
-                $show_results,
-                $objExercise->selectPropagateNeg(),
-                [],
-                $showTotalScoreAndUserChoices
-            );
-            $questionScore = $question_result['score'];
-            $totalScore += $question_result['score'];
-            echo '</table>';
-            break;
+            //no break
+        case MULTIPLE_ANSWER:
+            //no break
+        case MULTIPLE_ANSWER_TRUE_FALSE:
+            //no break
         case FILL_IN_BLANKS:
-            $question_result = $objExercise->manage_answer(
-                $id,
-                $questionId,
-                $choice,
-                'exercise_show',
-                array(),
-                false,
-                true,
-                $show_results,
-                $objExercise->selectPropagateNeg(),
-                [],
-                $showTotalScoreAndUserChoices
-            );
-            $questionScore = $question_result['score'];
-            $totalScore += $question_result['score'];
-            break;
+            //no break
+        case CALCULATED_ANSWER:
+            //no break
         case GLOBAL_MULTIPLE_ANSWER:
-            $question_result = $objExercise->manage_answer(
-                $id,
-                $questionId,
-                $choice,
-                'exercise_show',
-                array(),
-                false,
-                true,
-                $show_results,
-                $objExercise->selectPropagateNeg(),
-                [],
-                $showTotalScoreAndUserChoices
-            );
-            $questionScore = $question_result['score'];
-            $totalScore += $question_result['score'];
-            break;
+            //no break
         case FREE_ANSWER:
-            $question_result = $objExercise->manage_answer(
-                $id,
-                $questionId,
-                $choice,
-                'exercise_show',
-                array(),
-                false,
-                true,
-                $show_results,
-                $objExercise->selectPropagateNeg(),
-                [],
-                $showTotalScoreAndUserChoices
-            );
-            $questionScore = $question_result['score'];
-            $totalScore += $question_result['score'];
-            break;
+            //no break
         case ORAL_EXPRESSION:
-            $question_result = $objExercise->manage_answer(
-                $id,
-                $questionId,
-                $choice,
-                'exercise_show',
-                array(),
-                false,
-                true,
-                $show_results,
-                $objExercise->selectPropagateNeg(),
-                [],
-                $showTotalScoreAndUserChoices
-            );
-            $questionScore = $question_result['score'];
-            $totalScore += $question_result['score'];
-            break;
+            //no break
         case MATCHING:
             //no break
         case DRAGGABLE:
@@ -716,6 +615,10 @@ foreach ($questionList as $questionId) {
                 ";
             }
             break;
+    }
+
+    if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+        echo '</table>';
     }
 
     if ($show_results && $answerType != HOT_SPOT) {

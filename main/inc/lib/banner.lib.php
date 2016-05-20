@@ -152,6 +152,11 @@ function getCustomTabs()
     return $customTabs;
 }
 
+/**
+ * Return the active logo of the portal, based on a series of settings
+ * @param string $theme The name of the theme folder from web/css/themes/
+ * @return string HTML string with logo as an HTML element
+ */
 function return_logo($theme)
 {
     $_course = api_get_course_info();
@@ -218,6 +223,10 @@ function return_logo($theme)
     return $html;
 }
 
+/**
+ * Return HTML string of a list as <li> items
+ * @return string
+ */
 function return_notification_menu()
 {
     $_course = api_get_course_info();
@@ -279,6 +288,10 @@ function return_notification_menu()
     return $html;
 }
 
+/**
+ * Return an array with different navigation mennu elements
+ * @return array [menu_navigation[], navigation[], possible_tabs[]]
+ */
 function return_navigation_array()
 {
     $navigation = array();
@@ -385,7 +398,6 @@ function return_navigation_array()
         // Custom tabs
         $customTabs = getCustomTabs();
         
-        
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
@@ -403,7 +415,6 @@ function return_navigation_array()
         }
     }
     
-    
     return array(
         'menu_navigation' => $menu_navigation,
         'navigation' => $navigation,
@@ -411,6 +422,10 @@ function return_navigation_array()
     );
 }
 
+/**
+ * Return the navigation menu elements as a flat array
+ * @return array
+ */
 function menuArray()
 {
     $mainNavigation = return_navigation_array();
@@ -457,8 +472,6 @@ function menuArray()
         $pageContent = @(string) file_get_contents($homepath . $menuTabs . '_' . $lang . $ext);
     } elseif (is_file($homepath.$menuTabs.$lang.$ext) && is_readable($homepath.$menuTabs.$lang.$ext)) {
         $pageContent = @(string) file_get_contents($homepath . $menuTabs . $lang . $ext);
-    } else {
-        //$errorMsg = get_lang('HomePageFilesNotReadable');
     }
     // Sanitize page content
     $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
@@ -474,8 +487,6 @@ function menuArray()
         } elseif (is_file($homepath . $menuTabsLoggedIn . $lang . $ext) && is_readable($homepath . $menuTabsLoggedIn . $lang . $ext)) {
             $pageContent = @(string) file_get_contents($homepath . $menuTabsLoggedIn . $lang . $ext);
             $pageContent = str_replace('::private', '', $pageContent);
-        } else {
-            //$errorMsg = get_lang('HomePageFilesNotReadable');
         }
         
         $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
@@ -562,121 +573,13 @@ function menuArray()
     return $mainNavigation['navigation'];
 }
 
-
-/* function return_menu()
-{
-    $navigation = return_navigation_array();
-    $navigation = $navigation['navigation'];
-    
-    // Displaying the tabs
-
-    $lang = api_get_setting('platformLanguage');
-
-    if (!empty($_SESSION['user_language_choice'])) {
-        $lang = $_SESSION['user_language_choice'];
-    } elseif (!empty($_SESSION['_user']['language'])) {
-        $lang = $_SESSION['_user']['language'];
-    }
-
-    // Preparing home folder for multiple urls
-
-    if (api_get_multiple_access_url()) {
-        $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1) {
-            $url_info = api_get_access_url($access_url_id);
-            $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-            $clean_url = api_replace_dangerous_char($url);
-            $clean_url = str_replace('/', '-', $clean_url);
-            $clean_url .= '/';
-            $homep     = api_get_path(SYS_APP_PATH).'home/'.$clean_url; //homep for Home Path
-            //we create the new dir for the new sites
-            if (!is_dir($homep)) {
-                mkdir($homep, api_get_permissions_for_new_directories());
-            }
-        }
-    } else {
-        $homep = api_get_path(SYS_APP_PATH).'home/';
-    }
-
-    $ext = '.html';
-    $menutabs = 'home_tabs';
-    $mtloggedin = 'home_tabs_logged_in';
-    $home_top = '';
-
-    if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
-        $home_top = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);
-    } elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
-        $home_top = @(string)file_get_contents($homep.$menutabs.$lang.$ext);
-    } else {
-        //$errorMsg = get_lang('HomePageFilesNotReadable');
-    }
-
-    $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
-
-    $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
-    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-
-    $open_mtloggedin = '';
-    if (api_get_user_id() && !api_is_anonymous()) {
-        if (is_file($homep.$mtloggedin.'_'.$lang.$ext) && is_readable($homep.$mtloggedin.'_'.$lang.$ext)) {
-            $home_top = @(string)file_get_contents($homep.$mtloggedin.'_'.$lang.$ext);
-            $home_top = str_replace('::private', '', $home_top);
-        } elseif (is_file($homep.$mtloggedin.$lang.$ext) && is_readable($homep.$mtloggedin.$lang.$ext)) {
-            $home_top = @(string)file_get_contents($homep.$mtloggedin.$lang.$ext);
-            $home_top = str_replace('::private', '', $home_top);
-        } else {
-            //$errorMsg = get_lang('HomePageFilesNotReadable');
-        }
-
-        $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
-        $open_mtloggedin = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
-        $open_mtloggedin = api_to_system_encoding($open_mtloggedin, api_detect_encoding(strip_tags($open_mtloggedin)));
-    }
-
-    $lis = '';
-
-    if (!empty($open) OR !empty($open_mtloggedin)) {
-        if (strpos($open.$open_mtloggedin, 'show_menu') === false) {
-            if (api_is_anonymous()) {
-                $navigation[SECTION_CAMPUS]  = null;
-            }
-        } else {
-            if (api_get_user_id() && !api_is_anonymous()) {
-                $lis .= $open_mtloggedin;
-            } else {
-                $lis .= $open;
-            }
-        }
-    }
-    
-    
-    if (count($navigation) > 0 || !empty($lis)) {
-        $pre_lis = '';
-        
-        foreach ($navigation as $section => $navigation_info) {
-            $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
-            if (isset($GLOBALS['this_section'])) {
-                $current = $section == $GLOBALS['this_section'] ? ' id="current" class="active '.$key.'" ' : ' class="'.$key.'"';
-            } else {
-                $current = '';
-            }
-            if (!empty($navigation_info['title'])) {
-                $pre_lis .= '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a></li>';
-            }
-        }
-        
-        $lis = $pre_lis.$lis;
-    }
-
-    $menu = null;
-    if (!empty($lis)) {
-         $menu .= $lis;
-    }
-    
-    return $menu;
-}
-*/
-
+/**
+ * Return the breadcrumb menu elements as an array of <li> items
+ * @param array $interbreadcrumb The elements to add to the breadcrumb
+ * @param string $language_file Deprecated
+ * @param string $nameTools The name of the current tool (not linked)
+ * @return string HTML string of <li> items
+ */
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 {
     $session_id = api_get_session_id();

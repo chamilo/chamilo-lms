@@ -951,9 +951,8 @@ class Template
 
         $this->assign('portal_name', $portal_name);
         
-        
         //Menu
-        $menu =  menuArray();
+        $menu = menuArray();
         $this->assign('menu', $menu);
 
         // Setting notifications

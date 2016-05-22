@@ -23,7 +23,7 @@ class Accessurledituserstourl
      * search string
      * @param string Search string
      * @param int Deprecated param
-     * @return string Xajax response block
+     * @return xajaxResponse Xajax response block
      * @assert () === false
      */
     function search_users($needle, $id)

@@ -84,7 +84,7 @@ class CourseRestorer
 
     /**
      * CourseRestorer constructor.
-     * @param array $course
+     * @param Course $course
      */
     public function __construct($course)
     {
@@ -133,7 +133,7 @@ class CourseRestorer
 	 * @param int	    $session_id
 	 * @param bool	    $update_course_settings Course settings are going to be restore?
      * @param bool      $respect_base_content
-     * @return bool
+     * @return false|null
 	 */
     public function restore(
         $destination_course_code = '',
@@ -1154,6 +1154,7 @@ class CourseRestorer
 
 	/**
 	 * Restore a forum-topic
+	 * @param false|string $forum_id
 	 */
     public function restore_topic($thread_id, $forum_id, $sessionId = 0)
     {
@@ -1210,6 +1211,7 @@ class CourseRestorer
 	/**
 	 * Restore a forum-post
 	 * @TODO Restore tree-structure of posts. For example: attachments to posts.
+	 * @param false|string $topic_id
 	 */
     public function restore_post($id, $topic_id, $forum_id, $sessionId = 0)
     {
@@ -2306,6 +2308,7 @@ class CourseRestorer
 
 	/**
 	 * Check availability of a survey code
+	 * @param string $survey_code
 	 */
     public function is_survey_code_available($survey_code)
     {
@@ -2320,6 +2323,7 @@ class CourseRestorer
 
 	/**
 	 * Restore survey-questions
+	 * @param string $survey_id
 	 */
     public function restore_survey_question($id, $survey_id)
     {
@@ -2776,6 +2780,8 @@ class CourseRestorer
     * @param string The path origin
     * @param string The path destination
     * @param boolean Option Overwrite
+    * @param string $source
+    * @param string $dest
     * @return void()
     * @deprecated
     */

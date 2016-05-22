@@ -565,7 +565,7 @@ class Agenda
      * @param string $color
      * @param bool $addAnnouncement
      *
-     * @return bool
+     * @return null|false
      */
     public function editEvent(
         $id,
@@ -1308,6 +1308,7 @@ class Agenda
      *
      * @param int $eventId
      * @param int $courseId
+     * @param integer $sessionId
      * @paraù int $sessionId
      *
      * @return array
@@ -2469,6 +2470,7 @@ class Agenda
      * Adds x weeks to a UNIX timestamp
      * @param   int     The timestamp
      * @param   int     The number of weeks to add
+     * @param integer $timestamp
      * @return  int     The new timestamp
      */
     function addWeek($timestamp, $num = 1)
@@ -2480,6 +2482,7 @@ class Agenda
      * Adds x months to a UNIX timestamp
      * @param   int     The timestamp
      * @param   int     The number of years to add
+     * @param integer $timestamp
      * @return  int     The new timestamp
      */
     function addMonth($timestamp, $num = 1)
@@ -2498,6 +2501,7 @@ class Agenda
      * Adds x years to a UNIX timestamp
      * @param   int     The timestamp
      * @param   int     The number of years to add
+     * @param integer $timestamp
      * @return  int     The new timestamp
      */
     function addYear($timestamp, $num = 1)
@@ -2697,7 +2701,7 @@ class Agenda
     /**
      * @param array $courseInfo
      * @param $file
-     * @return array|bool|string
+     * @return false|string
      */
     public function importEventFile($courseInfo, $file)
     {
@@ -2810,7 +2814,7 @@ class Agenda
 
     /**
      * Parse filter turns USER:12 to ['users' => [12])] or G:1 ['groups' => [1]]
-     * @param $filter
+     * @param integer $filter
      * @return array
      */
     public function parseAgendaFilter($filter)
@@ -3324,6 +3328,7 @@ class Agenda
      * @param	int		user ID of the user
      * @param	string	Optional start date in datetime format (if no start date is given, uses today)
      * @param	string	Optional end date in datetime format (if no date is given, uses one year from now)
+     * @param integer $user_id
      * @return	array	Array of events ordered by start date, in
      * [0]('datestart','dateend','title'),[1]('datestart','dateend','title','link','coursetitle') format,
      * where datestart and dateend are in yyyyMMddhhmmss format.

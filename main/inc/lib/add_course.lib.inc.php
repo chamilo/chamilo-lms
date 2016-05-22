@@ -189,7 +189,7 @@ class AddCourse
 
     /**
      * Gets an array with all the course tables (deprecated?)
-     * @return array
+     * @return string[]
      * @assert (null) !== null
      */
     public static function get_course_tables()
@@ -310,6 +310,8 @@ class AddCourse
      * @param string Complete path to directory we want to list
      * @param array A list of files to which we want to add the files found
      * @param string Type of base directory from which we want to recover the files
+     * @param string $path
+     * @param string $media
      * @return array
      * @assert (null,null,null) === false
      * @assert ('abc',array(),'') === array()
@@ -371,6 +373,7 @@ class AddCourse
      * Sorts pictures by type (used?)
      * @param array List of files (sthg like array(0=>array('png'=>1)))
      * @param string File type
+     * @param string $type
      * @return array The received array without files not matching type
      * @assert (array(),null) === array()
      */

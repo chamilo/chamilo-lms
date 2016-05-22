@@ -90,7 +90,7 @@ class ssoDrupal
 
     /**
      * Validates the received active connection data with the database
-     * @return	bool	Return the loginFailed variable value to local.inc.php
+     * @return	null|false	Return the loginFailed variable value to local.inc.php
      */
     public function check_user()
     {

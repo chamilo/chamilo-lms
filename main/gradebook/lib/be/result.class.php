@@ -59,6 +59,9 @@ class Result
         $this->evaluation = $evaluation_id;
     }
 
+    /**
+     * @param string $creation_date
+     */
     public function set_date($creation_date)
     {
         $this->created_at = $creation_date;

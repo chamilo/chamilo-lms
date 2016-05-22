@@ -19,6 +19,7 @@ class GradebookUtils
      * @param   int     Visibility (0 hidden, 1 shown)
      * @param   int     Session ID (optional or 0 if not defined)
      * @param   int
+     * @param integer $resource_type
      * @return  boolean True on success, false on failure
      */
     public static function add_resource_to_course_gradebook(
@@ -117,7 +118,6 @@ class GradebookUtils
 
     /**
      * Builds an img tag for a gradebook item
-     * @param string $type value returned by a gradebookitem's get_icon_name()
      */
     public static function build_type_icon_tag($kind, $attributes = array())
     {
@@ -572,6 +572,9 @@ class GradebookUtils
      * @param int The user id
      * @param float The score obtained for certified
      * @param Datetime The date when you obtained the certificate
+     * @param integer $cat_id
+     * @param integer $user_id
+     * @param string $date_certificate
      * @return void()
      */
     public static function register_user_info_about_certificate($cat_id, $user_id, $score_certificate, $date_certificate)
@@ -951,7 +954,7 @@ class GradebookUtils
     }
 
     /**
-     * @param array $list_values
+     * @param string[] $list_values
      * @return string
      */
     public static function score_badges($list_values)
@@ -1011,7 +1014,7 @@ class GradebookUtils
     }
 
     /**
-     * @param $result
+     * @param Doctrine\DBAL\Driver\Statement|null $result
      * @return array
      */
     public static function get_user_array_from_sql_result($result)

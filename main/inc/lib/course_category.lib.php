@@ -111,7 +111,7 @@ function getCategories($category)
  * @param string $canHaveCourses
  * @param int $parent_id
  *
- * @return bool
+ * @return false|string
  */
 function addNode($code, $name, $canHaveCourses, $parent_id)
 {
@@ -306,8 +306,7 @@ function moveNodeUp($code, $tree_pos, $parent_id)
 /**
  * Counts the number of children categories a category has
  * @param int   $categoryId The ID of the category of which we want to count the children
- * @param int   $count  The number of subcategories we counted this far
- * @return mixed The number of subcategories this category has
+ * @return integer The number of subcategories this category has
  */
 function courseCategoryChildrenCount($categoryId)
 {
@@ -474,7 +473,7 @@ function getCategoriesToDisplayInHomePage()
 /**
  * @param int $id
  *
- * @return bool
+ * @return false|null
  */
 function addToUrl($id)
 {
@@ -970,7 +969,7 @@ function getLimitFilterFromArray($limit)
  * Get Pagination HTML div
  * @param $pageCurrent
  * @param $pageLength
- * @param $pageTotal
+ * @param integer $pageTotal
  * @return string
  */
 function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)

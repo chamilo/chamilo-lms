@@ -592,7 +592,6 @@ require_once __DIR__.'/internationalization.lib.php';
  * Also, this function provides conversion between path types, in this case the input path points inside the Chamilo area too.
  *
  * See $_configuration['course_folder'] in the configuration.php to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
- * @param string $type              The requested path type (a defined constant), see the examples.
  * @param string $path (optional)   A path which type is to be converted. Also, it may be a defined constant for a path.
  * This parameter has meaning when $type parameter has one of the following values: TO_WEB, TO_SYS, TO_REL. Otherwise it is ignored.
  * @return string                   The requested path or the converted path.
@@ -1087,7 +1086,7 @@ function api_remove_trailing_slash($path) {
  * Checks the RFC 3986 syntax of a given URL.
  * @param string $url       The URL to be checked.
  * @param bool $absolute    Whether the URL is absolute (beginning with a scheme such as "http:").
- * @return bool             Returns the URL if it is valid, FALSE otherwise.
+ * @return string|false             Returns the URL if it is valid, FALSE otherwise.
  * This function is an adaptation from the function valid_url(), Drupal CMS.
  * @link http://drupal.org
  * Note: The built-in function filter_var($urs, FILTER_VALIDATE_URL) has a bug for some versions of PHP.
@@ -1666,6 +1665,7 @@ function api_get_course_path($course_code = null)
  * Gets a course setting from the current course_setting table. Try always using integer values.
  * @param string    The name of the setting we want from the table
  * @param string    Optional: course code
+ * @param string $setting_name
  * @return mixed    The value of that setting in that table. Return -1 if not found.
  */
 function api_get_course_setting($setting_name, $course_code = null)
@@ -1973,7 +1973,7 @@ function api_generate_password($length = 8) {
 /**
  * Checks a password to see wether it is OK to use.
  * @param string $password
- * @return true if the password is acceptable, false otherwise
+ * @return boolean if the password is acceptable, false otherwise
  * Notes about what a password "OK to use" is:
  * 1. The password should be at least 5 characters long.
  * 2. Only English letters (uppercase or lowercase, it doesn't matter) and digits are allowed.
@@ -2145,7 +2145,7 @@ class api_failure {
      * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
      * @param  string $failure_type - the type of failure
      * @global array  $api_failureList
-     * @return bolean false to stay consistent with the main script
+     * @return boolean false to stay consistent with the main script
      */
     static function set_failure($failure_type) {
         global $api_failureList;
@@ -3212,8 +3212,8 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
 
 /**
 * Checks whether the user is allowed in a specific tool for a specific action
-* @param $tool the tool we are checking if the user has a certain permission
-* @param $action the action we are checking (add, edit, delete, move, visibility)
+* @param string $tool the tool we are checking if the user has a certain permission
+* @param string $action the action we are checking (add, edit, delete, move, visibility)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @author Julio Montoya
 * @version 1.0
@@ -3512,7 +3512,7 @@ function api_not_allowed($print_headers = false, $message = null)
 /**
  * Gets a UNIX timestamp from a database (MySQL) datetime format string
  * @param $last_post_datetime standard output date in a sql query
- * @return unix timestamp
+ * @return integer timestamp
  * @author Toon Van Hoecke <Toon.VanHoecke@UGent.be>
  * @version October 2003
  * @desc convert sql date to unix timestamp
@@ -3545,6 +3545,9 @@ function api_get_datetime($time = null) {
  * @param string    Tool (learnpath, document, etc)
  * @param int       The item ID in the given tool
  * @param int       The session ID (optional)
+ * @param string $tool
+ * @param integer $user_id
+ * @param string $type
  * @return int      -1 on error, 0 if invisible, 1 if visible
  */
 function api_get_item_visibility(
@@ -3613,7 +3616,7 @@ function api_get_item_visibility(
  * @param int $userId
  * @param int $groupId
  * @param int $sessionId
- * @return void
+ * @return false|null
  */
 function api_item_property_delete(
     $courseInfo,
@@ -3668,7 +3671,7 @@ function api_item_property_delete(
  * @param array $_course array with course properties
  * @param string $tool tool id, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int $item_id id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
- * @param string $lastedit_type add or update action
+ * @param string $last_edit_type add or update action
  * (1) message to be translated (in trad4all) : e.g. DocumentAdded, DocumentUpdated;
  * (2) "delete"
  * (3) "visible"
@@ -3951,6 +3954,8 @@ function api_item_property_update(
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  * @param int $session_id
+ * @param string $tool
+ * @param string $course_code
  * @return array All fields from c_item_property (all rows found) or empty array
  */
 function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
@@ -4213,7 +4218,7 @@ function api_get_languages_combo($name = 'language')
  * Displays a form (drop down menu) so the user can select his/her preferred language.
  * The form works with or without javascript
  * @param  boolean Hide form if only one language available (defaults to false = show the box anyway)
- * @return void Display the box directly
+ * @return null|string Display the box directly
  */
 function api_display_language_form($hide_if_no_choice = false)
 {
@@ -4493,6 +4498,7 @@ function api_get_themes() {
  * and also when a user subscribes to courses (the new course is added at the end of the main category
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param int $user_course_category: the id of the user_course_category
+ * @param integer $user_id
  * @return int the value of the highest sort of the user_course_category
  */
 function api_max_sort_value($user_course_category, $user_id)
@@ -4686,6 +4692,8 @@ function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = fals
  * @param the dest folder
  * @param an array of excluded file_name (without extension)
  * @param copied_files the returned array of copied files
+ * @param string $source
+ * @param string $dest
  */
 function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
     if (empty($dest)) { return false; }
@@ -4725,6 +4733,11 @@ function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
 }
 
 // TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
+/**
+ * @param string $pathname
+ * @param string $base_path_document
+ * @param integer $session_id
+ */
 function copy_folder_course_session(
     $pathname,
     $base_path_document,
@@ -4810,6 +4823,9 @@ function copy_folder_course_session(
 }
 
 // TODO: chmodr() is a better name. Some corrections are needed. Documentation header to be added here.
+/**
+ * @param string $path
+ */
 function api_chmod_R($path, $filemode) {
     if (!is_dir($path)) {
         return chmod($path, $filemode);
@@ -4892,7 +4908,7 @@ function api_chmod_R($path, $filemode) {
  *   version = VERSION
  * @endverbatim
  * </code>
- * @param $filename
+ * @param string $filename
  *   The file we are parsing. Accepts file with relative or absolute path.
  * @return
  *   The info array.
@@ -4984,7 +5000,7 @@ function api_get_software_name() {
 /**
  * Checks whether status given in parameter exists in the platform
  * @param mixed the status (can be either int either string)
- * @return true if the status exists, else returns false
+ * @return boolean if the status exists, else returns false
  */
 function api_status_exists($status_asked) {
     global $_status_list;
@@ -5006,7 +5022,7 @@ function api_status_key($status) {
 
 /**
  * Gets the status langvars list
- * @return array the list of status with their translations
+ * @return string[] the list of status with their translations
  */
 function api_get_status_langvars() {
     return array(
@@ -5082,6 +5098,7 @@ function api_delete_setting_option($id) {
  * @param string    The sub-variable if any (in most cases, this will remain null)
  * @param string    The category if any (in most cases, this will remain null)
  * @param int       The access_url for which this parameter is valid
+ * @param string $cat
  */
 function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url = 1)
 {
@@ -5179,6 +5196,8 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
  * @param string    Value
  * @param int       Access URL. Optional. Defaults to 1
  * @param array     Optional array of filters on field type
+ * @param string $category
+ * @param string $value
  */
 function api_set_settings_category($category, $value = null, $access_url = 1, $fieldtype = array())
 {
@@ -5422,6 +5441,10 @@ function api_delete_category_settings_by_subkey($subkey, $access_url_id = 1) {
  * @param string    The subkey text
  * @param int       The access_url for which this parameter is valid
  * @param int       The changeability of this setting for non-master urls
+ * @param string $val
+ * @param string $var
+ * @param string $sk
+ * @param string $c
  * @return boolean  true on success, false on failure
  */
 function api_add_setting($val, $var, $sk = null, $type = 'textfield', $c = null, $title = '', $com = '', $sc = null, $skt = null, $a = 1, $v = 0) {
@@ -5687,6 +5710,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
  * @param String the tool of the element
  * @param int the element id in database
  * @param int the session_id to compare with element session id
+ * @param string $tool
  * @return boolean true if the element is in the session, false else
  */
 function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
@@ -5732,8 +5756,6 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
  * Replaces "forbidden" characters in a filename string.
  *
  * @param string $filename
- * @param int $length
- * @param bool $file_name
  *
  * @return string
  */
@@ -5975,6 +5997,7 @@ function api_is_xml_http_request() {
  * @link http://php.net/manual/en/function.getimagesize.php
  * @link http://www.dokeos.com/forum/viewtopic.php?t=12345
  * @link http://www.dokeos.com/forum/viewtopic.php?t=16355
+ * @return integer
  */
 function api_getimagesize($path) {
     $image = new Image($path);
@@ -6135,6 +6158,7 @@ function shorten($input, $length = 15, $encoding = null) {
  * with his user id and the access_url_id=1
  *
  * @author Julio Montoya
+ * @param integer $user_id
  */
 function api_is_global_platform_admin($user_id = null)
 {
@@ -6196,7 +6220,7 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
  * @param int $admin_id_to_check
  * @param int  $my_user_id
  * @param bool $allow_session_admin
- * @return bool
+ * @return boolean|null
  */
 function api_protect_super_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false)
 {
@@ -6438,6 +6462,7 @@ function api_get_asset($file) {
 
 /**
  * Returns the <link> HTML tag
+ * @param string $file
  */
 function api_get_css($file, $media = 'screen') {
     return '<link href="'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
@@ -6575,7 +6600,8 @@ function api_get_jquery_libraries_js($libraries) {
  * This function relies on api_get_course_info()
  * @param   string  The course code - optional (takes it from session if not given)
  * @param   int     The session id  - optional (takes it from session if not given)
- * @return  mixed   The URL of the course or null if something does not work
+ * @param integer $session_id
+ * @return  string|null   The URL of the course or null if something does not work
  * @author  Julio Montoya <gugli100@gmail.com>
  */
 function api_get_course_url($course_code = null, $session_id = null)
@@ -6689,7 +6715,7 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
  * @param int       LINK_EXERCISE, LINK_STUDENTPUBLICATION, LINK_LEARNPATH LINK_FORUM_THREAD, LINK_ATTENDANCE
  * see gradebook/lib/be/linkfactory
  * @param string    course code
- * @return boolean
+ * @return false|null
  */
 function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course_code = null) {
     if (api_is_platform_admin()) {
@@ -6773,7 +6799,7 @@ function api_get_locked_settings() {
  * false if he isn't. If the user ID is given and is an integer, then the same
  * ID is simply returned
  * @param  integer User ID
- * @return mixed Integer User ID is logged in, or false otherwise
+ * @return boolean Integer User ID is logged in, or false otherwise
  */
 function api_user_is_login($user_id = null) {
     $user_id = empty($user_id) ? api_get_user_id() : intval($user_id);
@@ -6808,6 +6834,7 @@ function api_get_real_ip(){
  * Checks whether an IP is included inside an IP range
  * @param string IP address
  * @param string IP range
+ * @param string $ip
  * @return bool True if IP is in the range, false otherwise
  * @author claudiu at cnixs dot com  on http://www.php.net/manual/fr/ref.network.php#55230
  * @author Yannick Warnier for improvements and managment of multiple ranges
@@ -7192,6 +7219,7 @@ function api_set_setting_last_update()
 /**
  * Tries to set memory limit, if authorized and new limit is higher than current
  * @param string New memory limit
+ * @param string $mem
  * @return bool True on success, false on failure or current is higher than suggested
  * @assert (null) === false
  * @assert (-1) === false
@@ -7248,7 +7276,6 @@ function api_get_bytes_memory_limit($mem){
 
 /**
  * Finds all the information about a user from username instead of user id
- * @param string $username
  *
  * @return array $user_info user_id, lastname, firstname, username, email, ...
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
@@ -7270,7 +7297,6 @@ function api_get_user_info_from_official_code($official_code = '')
 
 /**
  *
- * @param string $inputId the jquery id example: #password
  *
  * @return string
  */
@@ -7395,6 +7421,7 @@ function api_get_user_blocked_by_captcha($username)
 /**
  * Remove tags from HTML anf return the $in_number_char first non-HTML char
  * Postfix the text with "..." if it has been truncated.
+ * @param integer $in_number_char
  * @return string
  * @author hubert borderiou
  */
@@ -7439,7 +7466,7 @@ function api_drh_can_access_all_session_content()
 /**
  * @param string $tool
  * @param string $setting
- * @param mixed $defaultValue
+ * @param integer $defaultValue
  * @return string
  */
 function api_get_default_tool_setting($tool, $setting, $defaultValue)
@@ -7564,7 +7591,7 @@ function api_delete_firstpage_parameter()
 }
 
 /**
- * @return true if course_code for direct course access after login is set
+ * @return boolean if course_code for direct course access after login is set
  */
 function exist_firstpage_parameter()
 {
@@ -7856,7 +7883,7 @@ function api_create_protected_dir($name, $parentDirectory)
  * @param array     data file (path and filename)
  * @param bool      True for attaching a embedded file inside content html (optional)
  * @param array     Additional parameters
- * @return          returns true if mail was sent
+ * @return          integer true if mail was sent
  * @see             class.phpmailer.php
  */
 function api_mail_html(

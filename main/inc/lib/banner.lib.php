@@ -147,6 +147,9 @@ function getCustomTabs()
     return $customTabs;
 }
 
+/**
+ * @param string $theme
+ */
 function return_logo($theme)
 {
     $_course = api_get_course_info();
@@ -508,6 +511,9 @@ function return_menu()
     return $menu;
 }
 
+/**
+ * @param string $nameTools
+ */
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 {
     $session_id = api_get_session_id();

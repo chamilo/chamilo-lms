@@ -81,6 +81,9 @@ class Evaluation implements GradebookItem
 		return $this->name;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_description()
 	{
 		return $this->description;
@@ -208,7 +211,7 @@ class Evaluation implements GradebookItem
 	 * @param int $user_id user id (evaluation owner)
 	 * @param string $course_code course code
 	 * @param int $category_id parent category
-	 * @param $visible visible
+	 * @param integer $visible visible
 	 */
 	public static function load(
 		$id = null,
@@ -658,6 +661,7 @@ class Evaluation implements GradebookItem
 
 	/**
 	 * Internal function used by get_target_categories()
+	 * @param integer $level
 	 */
 	private function add_target_subcategories($targets, $level, $catid)
 	{

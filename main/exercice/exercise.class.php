@@ -355,7 +355,7 @@ class Exercise
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function selectPassPercentage()
     {
@@ -474,7 +474,7 @@ class Exercise
      * tells if questions are selected randomly, and if so returns the draws
      *
      * @author Olivier Brouckaert
-     * @return integer - 0 if not random, otherwise the draws
+     * @return boolean - 0 if not random, otherwise the draws
      */
     public function isRandom()
     {
@@ -2863,7 +2863,7 @@ class Exercise
      * @param int  int lp id
      * @param int  int lp item id
      * @param int  int lp item_view id
-     * @param float $weight
+     * @param integer $weight
      * @param array question list
      */
     public function save_stat_track_exercise_info(
@@ -5167,6 +5167,7 @@ class Exercise
     /**
      * Sends a notification when a user ends an examn
      *
+     * @param integer $exe_id
      */
     public function send_mail_notification_for_exam($question_list_answers, $origin, $exe_id)
     {
@@ -5247,6 +5248,7 @@ class Exercise
     /**
      * Sends a notification when a user ends an examn
      *
+     * @param integer $exe_id
      */
     function send_notification_for_open_questions($question_list_answers, $origin, $exe_id)
     {
@@ -5344,6 +5346,9 @@ class Exercise
         }
     }
 
+    /**
+     * @param integer $exe_id
+     */
     function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id)
     {
         if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
@@ -5437,7 +5442,7 @@ class Exercise
 
     /**
      * @param array $user_data result of api_get_user_info()
-     * @param null $start_date
+     * @param string $start_date
      * @param null $duration
      * @param string $ip Optional. The user IP
      * @return string
@@ -5495,7 +5500,7 @@ class Exercise
      * @param int     Maximum number of attempts (0 if no limit)
      * @param int     Feedback type
      * @todo this was function was added due the import exercise via CSV
-     * @return    int New exercise ID
+     * @return    string New exercise ID
      */
     public function createExercise(
         $title,
@@ -6845,7 +6850,7 @@ class Exercise
      * @param bool $show_comment
      * @param null $exercise_feedback
      * @param bool $show_answers
-     * @param null $modelType
+     * @param integer $modelType
      * @param bool $categoryMinusOne
      * @return bool|null|string
      */
@@ -8010,8 +8015,8 @@ class Exercise
     /**
      * Returns an HTML ribbon to show on top of the exercise result, with
      * colouring depending on the success or failure of the student
-     * @param $score
-     * @param $weight
+     * @param integer $score
+     * @param integer $weight
      * @param bool $check_pass_percentage
      * @return string
      */

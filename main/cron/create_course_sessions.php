@@ -50,6 +50,7 @@ function getQuarterFirstAndLastDates($initialDate = null)
 /**
  * Returns a quarter from a month
  * @param   string  The month (digit), with or without leading 0
+ * @param string $month
  * @return  int The yearly quarter (1, 2, 3 or 4) in which this month lies
  */
 function getQuarter($month)
@@ -96,6 +97,7 @@ function getQuarter($month)
 /**
  * Returns the first month of the quarter
  * @param   int Quarter
+ * @param integer $quarter
  * @return  string Number of the month, with leading 0
  */
 function getQuarterFirstMonth($quarter)
@@ -116,6 +118,7 @@ function getQuarterFirstMonth($quarter)
 /**
  * Get the quarter in Roman letters
  * @param   int Quarter
+ * @param integer $quarter
  * @return  string  Roman letters
  */
 function getQuarterRoman($quarter)

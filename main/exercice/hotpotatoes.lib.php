@@ -94,7 +94,7 @@ function GetComment($path, $course_code = '')
  * Sets the comment in the database for a particular path.
  * @param    string    File path
  * @param    string    Comment to set
- * @return   string    Result of the database operation (Database::query will output some message directly on error anyway)
+ * @return   Doctrine\DBAL\Driver\Statement|null    Result of the database operation (Database::query will output some message directly on error anyway)
  */
 function SetComment($path, $comment)
 {
@@ -112,6 +112,7 @@ function SetComment($path, $comment)
 /**
  * Reads the file contents into a string.
  * @param    string    Urlencoded path
+ * @param string $full_file_path
  * @return   string    The file contents or false on security error
  */
 function ReadFileCont($full_file_path)
@@ -257,6 +258,7 @@ function GenerateHiddenList($imgparams)
  * Searches for a node in the given array.
  * @param    reference    Reference to the array to search
  * @param    string       Node we are looking for in the array
+ * @param string $node
  * @return   mixed        Node name or false if not found
  */
 function myarraysearch(&$array, $node)
@@ -316,6 +318,8 @@ function ReplaceImgTag($content)
  * Fills the folder name up to a certain length with "0".
  * @param    string    Original folder name
  * @param    integer   Length to reach
+ * @param integer $name
+ * @param integer $nsize
  * @return   string    Modified folder name
  */
 function FillFolderName($name, $nsize)

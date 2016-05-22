@@ -1048,7 +1048,7 @@ function return_lock_unlock_icon($content, $id, $current_lock_status, $additiona
  * an up and down icon except for the first (no up icon) and the last (no down icon)
  *          The key of this $list array is the id of the item.
  *
- * @return void HTML
+ * @return string HTML
  **/
 function return_up_down_icon($content, $id, $list)
 {
@@ -2008,7 +2008,7 @@ function get_thread_information($thread_id)
  * This function retrieves forum thread users details
  * @param   int Thread ID
  * @param   string  Course DB name (optional)
- * @return  resource array Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
+ * @return  Doctrine\DBAL\Driver\Statement|null array Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
  * @author Christian Fasanando <christian.fasanando@dokeos.com>,
  * @todo     this function need to be improved
  * @version octubre 2008, dokeos 1.8
@@ -2063,7 +2063,7 @@ function get_thread_users_details($thread_id)
  * This function retrieves forum thread users qualify
  * @param   int Thread ID
  * @param   string  Course DB name (optional)
- * @return  array Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
+ * @return  Doctrine\DBAL\Driver\Statement|null Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
  * @author Jhon Hinojosa
  * @todo     this function need to be improved
  */
@@ -2130,7 +2130,7 @@ function get_thread_users_qualify($thread_id)
  * This function retrieves forum thread users not qualify
  * @param   int Thread ID
  * @param   string  Course DB name (optional)
- * @return  array Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
+ * @return  Doctrine\DBAL\Driver\Statement|null Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
  * @author   Jhon Hinojosa<jhon.hinojosa@dokeos.com>,
  * @version oct 2008, dokeos 1.8
  */
@@ -3155,6 +3155,10 @@ function getThreadScoreHistory($user_id, $thread_id, $opt)
  * @param integer contains the information the current user id
  * @param integer contains the information the current thread id
  * @param integer contains the information the current qualify
+ * @param string $option
+ * @param integer $course_id
+ * @param integer $user_id
+ * @param integer $thread_id
  * @return void
  * <code>$option=1 obtained the qualification of the current thread</code>
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
@@ -3712,6 +3716,8 @@ function increase_thread_view($thread_id)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
+ * @param string $last_post_id
+ * @param string $post_date
  */
 function updateThreadInfo($thread_id, $last_post_id, $post_date)
 {
@@ -4015,6 +4021,8 @@ function send_notification_mails($thread_id, $reply_info)
  *
  * @param string  Content type (post, thread, forum, forum_category)
  * @param int     Item DB ID
+ * @param string $content
+ * @param integer $id
  * @return string language variable
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
@@ -4492,6 +4500,7 @@ function forum_search()
 /**
  * Display the search results
  * @param string
+ * @param string $search_term
  * @return void display the results
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version march 2008, dokeos 1.8.5
@@ -4621,7 +4630,7 @@ function search_link()
  * This function adds an attachment file into a forum
  * @param string $file_comment  a comment about file
  * @param int $last_id from forum_post table
- * @return int|bool
+ * @return false|null
  */
 function add_forum_attachment_file($file_comment, $last_id)
 {
@@ -4832,7 +4841,7 @@ function getAllAttachment($postId)
  * @param post id
  * @param int $id_attach
  * @param bool $display to show or not result message
- * @return void
+ * @return integer
  * @author Julio Montoya Dokeos
  * @version october 2014, chamilo 1.9.8
  */
@@ -5114,7 +5123,7 @@ function get_notifications($content, $id)
  * @param integer $forum_id the id of the forum
  * @param integer $thread_id the id of the thread
  * @param integer $post_id the id of the post
- * @return bool
+ * @return false|null
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version May 2008, dokeos 1.8.5

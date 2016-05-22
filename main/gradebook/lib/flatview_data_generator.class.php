@@ -30,7 +30,7 @@ class FlatViewDataGenerator
      * @param array $evals
      * @param array $links
      * @param array $params
-     * @param null $mainCourseCategory
+     * @param Category|null $mainCourseCategory
      */
     public function FlatViewDataGenerator(
         $users = array(),
@@ -276,6 +276,8 @@ class FlatViewDataGenerator
 
     /**
      * Get actual array data
+     * @param integer $users_count
+     * @param integer $items_count
      * @return array 2-dimensional array - each array contains the elements:
      * 0: user id
      * 1: user lastname

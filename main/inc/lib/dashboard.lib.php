@@ -493,6 +493,7 @@ class DashboardManager
 	 * This function update extra user blocks data after closing a dashboard block
 	 * @param int 		User id
 	 * @param string	plugin path
+	 * @param integer $user_id
 	 * @return bool
 	 */
 	public static function close_user_block($user_id, $path)

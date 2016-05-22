@@ -50,9 +50,6 @@ class CalendarEvent extends Coursecopy\Resource
      * @param int $id
      * @param string $title
      * @param string $content
-     * @param string $date
-     * @param string $hour
-     * @param int $duration
      */
     public function __construct(
         $id,

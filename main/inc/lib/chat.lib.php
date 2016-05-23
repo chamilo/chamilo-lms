@@ -41,6 +41,7 @@ class Chat extends Model
     /**
     * Set user chat status
     * @param int 0 if disconnected, 1 if connected
+    * @param integer $status
      *
     * @return void
     */
@@ -164,6 +165,7 @@ class Chat extends Model
     /**
      * Saves into session the fact that a chat window exists with the given user
      * @param int The ID of the user with whom the current user is chatting
+     * @param integer $user_id
      * @return void
      */
     public function save_window($user_id)

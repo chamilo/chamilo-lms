@@ -327,6 +327,7 @@ class Course
 
     /**
     * Serialize the course with the best serializer available
+    * @return string
     */
     public static function serialize($course)
     {
@@ -339,6 +340,7 @@ class Course
 
     /**
     * Unserialize the course with the best serializer available
+    * @param string $course
     */
     public static function unserialize($course)
     {

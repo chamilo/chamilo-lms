@@ -193,6 +193,9 @@ abstract class AbstractLink implements GradebookItem
         $this->visible = $visible;
     }
 
+    /**
+     * @param integer $id
+     */
     public function set_session_id($id)
     {
         $this->session_id = $id;
@@ -217,6 +220,12 @@ abstract class AbstractLink implements GradebookItem
     /**
      * Retrieve links and return them as an array of extensions of AbstractLink.
      * To keep consistency, do not call this method but LinkFactory::load instead.
+     * @param integer $id
+     * @param integer $type
+     * @param integer $user_id
+     * @param string $course_code
+     * @param integer $category_id
+     * @param integer $visible
      */
     public static function load(
         $id = null,
@@ -288,7 +297,7 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * @param $result
+     * @param Doctrine\DBAL\Driver\Statement|null $result
      * @return array
      */
     private static function create_objects_from_sql_result($result)
@@ -463,6 +472,7 @@ abstract class AbstractLink implements GradebookItem
 
     /**
      * Internal function used by get_target_categories()
+     * @param integer $level
      */
     private function add_target_subcategories($targets, $level, $catid)
     {
@@ -492,6 +502,7 @@ abstract class AbstractLink implements GradebookItem
      * Find links by name
      * To keep consistency, do not call this method but LinkFactory::find_links instead.
      * @todo can be written more efficiently using a new (but very complex) sql query
+     * @param string $name_mask
      */
     public function find_links ($name_mask,$selectcat)
     {
@@ -559,21 +570,21 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * @param $name
+     * @param string $name
      */
     public function set_name($name)
     {
     }
 
     /**
-     * @param $description
+     * @param string $description
      */
     public function set_description($description)
     {
     }
 
     /**
-     * @param $max
+     * @param integer $max
      */
     public function set_max($max)
     {

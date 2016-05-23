@@ -13,7 +13,7 @@ class CourseSelectForm
 {
 	/**
 	 * Display the form
-	 * @param array $hidden_fiels Hidden fields to add to the form.
+	 * @param array $hidden_fields Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
 	static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
@@ -570,7 +570,7 @@ class CourseSelectForm
 
 	/**
 	 * Display the form session export
-	 * @param array $hidden_fiels Hidden fields to add to the form.
+	 * @param array $hidden_fields Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
 	 public static function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize = false)

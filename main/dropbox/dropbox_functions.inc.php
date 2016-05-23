@@ -22,7 +22,7 @@ $(document).ready(function () {
 
 /**
 * This function is a wrapper function for the multiple actions feature.
-* @return   Mixed   If there is a problem, return a string message, otherwise nothing
+* @return   string|null   If there is a problem, return a string message, otherwise nothing
 * @author   Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version  march 2006
 */
@@ -209,9 +209,9 @@ function display_move_form($part, $id, $target = array(), $extra_params = array(
 *
 * @param $id the id of the file we are moving
 * @param $target the id of the folder we are moving to
-* @param $part are we moving a received file or a sent file?
+* @param string $part are we moving a received file or a sent file?
 *
-* @return language string
+* @return string string
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
@@ -290,7 +290,7 @@ function display_action_options($part, $categories, $current_category = 0)
 * @param $id the unique id of the file
 * @param $part are we dealing with a sent or with a received file?
 *
-* @return html code
+* @return string code
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
@@ -771,6 +771,7 @@ function getLoginFromId($id)
 }
 
 /**
+* @param string $user_id
 * @return boolean indicating if user with user_id=$user_id is a course member
 * @todo check if this function is still necessary. There might be a library function for this.
 */
@@ -1132,7 +1133,7 @@ function feedback($array) {
 /**
 * This function returns the html code to display the feedback messages on a given dropbox file
 * @param $feedback_array an array that contains all the feedback messages about the given document.
-* @return html code
+* @return string code
 * @todo add the form for adding new comment (if the other party has not deleted it yet).
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1149,7 +1150,7 @@ function format_feedback($feedback)
 
 /**
 * this function returns the code for the form for adding a new feedback message to a dropbox file.
-* @return html code
+* @return string code
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
@@ -1210,7 +1211,7 @@ function check_if_file_exist($id)
 }
 
 /**
-* @return a language string (depending on the success or failure.
+* @return string language string (depending on the success or failure.
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006

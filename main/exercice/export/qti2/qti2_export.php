@@ -32,7 +32,7 @@ class ImsAssessmentItem
     /**
      * Constructor.
      *
-     * @param $question Ims2Question object we want to export.
+     * @param Ims2Question $question Ims2Question object we want to export.
      */
      function ImsAssessmentItem($question)
      {
@@ -101,7 +101,7 @@ class ImsAssessmentItem
       * This is a default behaviour, some classes may want to override this.
       *
       * @param $standalone: Boolean stating if it should be exported as a stand-alone question
-      * @return A string, the XML flow for an Item.
+      * @return string string, the XML flow for an Item.
       */
      function export($standalone = false)
      {
@@ -154,7 +154,7 @@ class ImsSection
 
     /**
      * Constructor.
-     * @param $exe The Exercise instance to export
+     * @param Exercise $exe The Exercise instance to export
      * @author Amand Tihon <amand@alrj.org>
      */
     function ImsSection($exe)
@@ -239,7 +239,7 @@ class ImsSection
      * Export the exercise in IMS/QTI.
      *
      * @param bool $standalone Wether it should include XML tag and DTD line.
-     * @return a string containing the XML flow
+     * @return string string containing the XML flow
      * @author Amand Tihon <amand@alrj.org>
      */
     function export($standalone)
@@ -383,7 +383,7 @@ class ImsItem
       * This is a default behaviour, some classes may want to override this.
       *
       * @param $standalone: Boolean stating if it should be exported as a stand-alone question
-      * @return A string, the XML flow for an Item.
+      * @return string string, the XML flow for an Item.
       * @author Amand Tihon <amand@alrj.org>
       */
      function export($standalone = False)
@@ -417,7 +417,7 @@ class ImsItem
  *
  * @param int $exerciseId The exercise to export
  * @param boolean $standalone Wether it should include XML tag and DTD line.
- * @return The XML as a string, or an empty string if there's no exercise with given ID.
+ * @return string XML as a string, or an empty string if there's no exercise with given ID.
  */
 function export_exercise_to_qti($exerciseId, $standalone = true)
 {
@@ -474,6 +474,9 @@ function formatExerciseQtiTitle($text)
     return htmlspecialchars($text);
 }
 
+/**
+ * @param string $text
+ */
 function cleanAttribute($text)
 {
     return $text;

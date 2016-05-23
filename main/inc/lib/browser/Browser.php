@@ -158,7 +158,7 @@ class Browser
 
     /**
      * Set the name of the browser
-     * @param $browser string The name of the Browser
+     * @param string $browser string The name of the Browser
      */
     public function setBrowser($browser)
     {
@@ -266,7 +266,7 @@ class Browser
 
     /**
      * Set the browser to be from AOL
-     * @param $isAol
+     * @param boolean $isAol
      */
     public function setAol($isAol)
     {

@@ -231,7 +231,7 @@ class ScoreDisplay
 
     /**
      * @param int $category_id
-     * @return bool
+     * @return false|null
      */
     public function insert_defaults($category_id)
     {
@@ -262,7 +262,7 @@ class ScoreDisplay
     }
 
     /**
-     * @return int|null|string
+     * @return integer
      */
     public function get_number_decimals()
     {
@@ -336,8 +336,8 @@ class ScoreDisplay
 
     /**
      * @param $score
-     * @param $type
-     * @return float|string
+     * @param integer $type
+     * @return string
      */
     private function display_default($score, $type)
     {

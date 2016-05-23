@@ -185,6 +185,7 @@ ExerciseLib::exercise_time_control_delete(
     $learnpath_id,
     $learnpath_item_id
 );
+
 ExerciseLib::delete_chat_exercise_session($exe_id);
 
 if ($origin != 'learnpath') {
@@ -199,8 +200,6 @@ if ($origin != 'learnpath') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
-        Session::erase('calculatedAnswerId');
-        Session::erase('calculatedAnswerInfo');
     }
 	Display::display_footer();
 } else {
@@ -211,8 +210,6 @@ if ($origin != 'learnpath') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
-        Session::erase('calculatedAnswerId');
-        Session::erase('calculatedAnswerInfo');
     }
 
 	// Record the results in the learning path, using the SCORM interface (API)

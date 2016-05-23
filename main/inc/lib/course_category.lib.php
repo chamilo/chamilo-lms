@@ -94,8 +94,25 @@ class CourseCategory
             $category['nbr_courses'] = 1;
         }
 
+<<<<<<< HEAD
         return $categories;
     }
+=======
+/**
+ * @param string $code
+ * @param string $name
+ * @param string $canHaveCourses
+ * @param int $parent_id
+ *
+ * @return false|string
+ */
+function addNode($code, $name, $canHaveCourses, $parent_id)
+{
+    $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $code = trim($code);
+    $name = trim($name);
+    $parent_id = trim($parent_id);
+>>>>>>> origin/1.10.x
 
     /**
      * @param string $code
@@ -291,7 +308,27 @@ class CourseCategory
             WHERE code= '".$row['code']."'";
         Database::query($sql);
 
+<<<<<<< HEAD
         return true;
+=======
+/**
+ * Counts the number of children categories a category has
+ * @param int   $categoryId The ID of the category of which we want to count the children
+ * @return integer The number of subcategories this category has
+ */
+function courseCategoryChildrenCount($categoryId)
+{
+    $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $categoryId = intval($categoryId);
+    $count = 0;
+    if (empty($categoryId)) {
+        return 0;
+    }
+    $sql = "SELECT id, code FROM $tbl_category WHERE parent_id = $categoryId";
+    $result = Database::query($sql);
+    while ($row = Database::fetch_array($result)) {
+        $count += courseCategoryChildrenCount($row['id']);
+>>>>>>> origin/1.10.x
     }
 
     /**
@@ -473,6 +510,7 @@ class CourseCategory
         return Database::store_result(Database::query($sql));
     }
 
+<<<<<<< HEAD
     /**
      * @param int $id
      *
@@ -481,6 +519,17 @@ class CourseCategory
     public static function addToUrl($id)
     {
         UrlManager::addCourseCategoryListToUrl(array($id), array(api_get_current_access_url_id()));
+=======
+/**
+ * @param int $id
+ *
+ * @return false|null
+ */
+function addToUrl($id)
+{
+    if (!isMultipleUrlSupport()) {
+        return false;
+>>>>>>> origin/1.10.x
     }
 
     /**
@@ -918,6 +967,7 @@ class CourseCategory
         return Database::store_result($result, 'ASSOC');
     }
 
+<<<<<<< HEAD
     /**
      * @return array
      */
@@ -935,6 +985,33 @@ class CourseCategory
             'current' => $pageCurrent,
             'length' => $pageLength,
         );
+=======
+    return $limitFilter;
+}
+
+/**
+ * Get Pagination HTML div
+ * @param $pageCurrent
+ * @param $pageLength
+ * @param integer $pageTotal
+ * @return string
+ */
+function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
+{
+    // Start empty html
+    $pageDiv = '';
+    $html='';
+    $pageBottom = max(1, $pageCurrent - 3);
+    $pageTop = min($pageTotal, $pageCurrent + 3);
+
+    if ($pageBottom > 1) {
+        $pageDiv .= getPageNumberItem(1, $pageLength);
+        if ($pageBottom > 2) {
+            $pageDiv .= getPageNumberItem($pageBottom - 1, $pageLength, null, '...');
+        }
+    } else {
+        // Nothing to do
+>>>>>>> origin/1.10.x
     }
 
     /**

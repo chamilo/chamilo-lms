@@ -153,9 +153,13 @@ function getCustomTabs()
 }
 
 /**
+<<<<<<< HEAD
  * Return the active logo of the portal, based on a series of settings
  * @param string $theme The name of the theme folder from web/css/themes/
  * @return string HTML string with logo as an HTML element
+=======
+ * @param string $theme
+>>>>>>> origin/1.10.x
  */
 function return_logo($theme)
 {
@@ -574,11 +578,15 @@ function menuArray()
 }
 
 /**
+<<<<<<< HEAD
  * Return the breadcrumb menu elements as an array of <li> items
  * @param array $interbreadcrumb The elements to add to the breadcrumb
  * @param string $language_file Deprecated
  * @param string $nameTools The name of the current tool (not linked)
  * @return string HTML string of <li> items
+=======
+ * @param string $nameTools
+>>>>>>> origin/1.10.x
  */
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 {

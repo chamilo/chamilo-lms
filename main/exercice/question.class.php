@@ -264,7 +264,7 @@ abstract class Question
     }
 
     /**
-     * @return bool|string
+     * @return string|false
      */
     public function selectPicturePath()
     {
@@ -589,7 +589,7 @@ abstract class Question
      * @param string $Dimension - Resizing happens proportional according to given dimension: height|width|any
      * @param integer $Max - Maximum size
      *
-     * @return boolean - true if success, false if failed
+     * @return boolean|null - true if success, false if failed
      *
      * @author Toon Keppens
      */
@@ -750,6 +750,7 @@ abstract class Question
 
     /**
      * Sets extra info
+     * @param string $extra
      */
     public function setExtra($extra)
     {
@@ -1273,7 +1274,7 @@ abstract class Question
      *
      * @author Olivier Brouckaert
      * @param  array   $course_info Course info of the destination course
-     * @return int     ID of the new question
+     * @return false|string     ID of the new question
      */
     public function duplicate($course_info = [])
     {
@@ -1649,7 +1650,7 @@ abstract class Question
      * @param string $name
      * @param int $course_id
      * @param int $position
-     * @return bool|int
+     * @return false|string
      */
     static function saveQuestionOption($question_id, $name, $course_id, $position = 0)
     {
@@ -1788,6 +1789,7 @@ abstract class Question
      * @param   int     Maximum result for the question
      * @param   int     Type of question (see constants at beginning of question.class.php)
      * @param   int     Question level/category
+     * @param string $quiz_id
      */
     public function create_question(
         $quiz_id,
@@ -1870,6 +1872,7 @@ abstract class Question
     /**
      * Get course medias
      * @param int course id
+     * @param integer $course_id
      */
     static function get_course_medias(
         $course_id,
@@ -1935,7 +1938,7 @@ abstract class Question
     }
 
     /**
-     * @return array
+     * @return integer[]
      */
     public static function get_default_levels()
     {

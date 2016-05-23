@@ -13,7 +13,11 @@
 /**
  * Variables used from the main/install/index.php
  */
+<<<<<<< HEAD
 $new_version = '1.11.0';
+=======
+$new_version = '1.10.6';
+>>>>>>> origin/1.10.x
 $new_version_status = 'stable';
 $new_version_last_id = 0;
 $new_version_stable = true;

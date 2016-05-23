@@ -1,7 +1,8 @@
 {% for row in session %}
-<div id="session-{{ item.id }}" class="panel panel-default">
+<div id="session-{{ item.id }}" class="session panel panel-default">
     <div class="panel-heading">
         <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32" alt="{{ row.title }}" title="{{ row.title }}" /> {{ row.title }}
+        
         {% if row.edit_actions != '' %}
         <div class="pull-right">
             <a class="btn btn-default btn-sm" href="{{ row.edit_actions }}">
@@ -11,6 +12,17 @@
         {% endif %}
     </div>
     <div class="panel-body">
+        {% if row.description != '' %}
+            {{ row.description }}
+        {% endif %}
+        <div class="info-session">
+            <span><i class="fa fa-user" aria-hidden="true"></i>
+            {{ row.coach_name }}
+            </span>
+            <span><i class="fa fa-calendar" aria-hidden="true"></i>
+            {{ row.date }}
+            </span>
+        </div>
         <div class="grid-courses">
             <div class="row">
             {% for item in row.courses %}
@@ -41,6 +53,22 @@
                             {% endfor %}
                             </div>
                         </div>
+                        {% if item.edit_actions != '' %}
+                            <div class="admin-actions">
+                                {% if item.document == '' %}
+                                    <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    </a>
+                                {% else %}
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </a>
+                                        {{ item.document }}
+                                    </div> 
+                                {% endif %}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="description">
                         <h4 class="title">

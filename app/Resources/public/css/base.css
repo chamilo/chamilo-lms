@@ -4705,7 +4705,21 @@ div#chat-remote-video video {
     display: inline-block;
 }
 /* list my course user*/
-
+.session .info-session{
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+.session .info-session span{
+    margin-right: 10px;
+}
+.session .teachers{
+    font-size: 12px;
+}
+.session .sessions-items .courses{
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-bottom: 1px solid #ECF0F1;
+}
 .grid-courses .items{
     /* position: relative; */
     vertical-align: top;
@@ -4842,40 +4856,7 @@ div#chat-remote-video video {
     color: #fff;
 }
 /* Catalog session */
-.column-session{
-    column-count: 3;
-    -moz-column-count: 3;
-    -webkit-column-count: 3;
-}
-.column-session .items{
-    width: 100%;
-    display: inline-block;
-    margin-bottom: 1em;
-    border-radius: 5px;
-    border: 1px solid #dddddc;
-    overflow: hidden;
-}
-.column-session .items .items-header{
-    background-color: #ECF0F1;
-}
-.column-session .items .items-header .title{
-    font-size: 15px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-.column-session .items .items-header .info,
-.column-session .items .items-header .date{
-    font-size: 12px;
-}
-.column-session .items .items-header .info span{
-    margin-right: 5px;
-}
-.column-session .items .card-course .list-group .list-group-item{
-    border: none;
-}
-.column-session .items .card-course .list-group .list-group-item:first-child{
-    border-radius: 0;
-}
+
 .search-session{
     margin-bottom: 30px;
     margin-top: 25px;

@@ -57,7 +57,7 @@ function msort($array, $id = 'id', $order = 'desc')
                     $lowest_id = $index;
                 }
             } else {
-                if ($item[$id] > $array[$lowest_id][$id]) {
+                if (isset($item[$id]) && $item[$id] > $array[$lowest_id][$id]) {
                     $lowest_id = $index;
                 }
             }

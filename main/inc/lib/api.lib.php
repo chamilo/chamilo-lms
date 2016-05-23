@@ -581,14 +581,9 @@ require_once __DIR__.'/internationalization.lib.php';
  * Also, this function provides conversion between path types, in this case the input path points inside the Chamilo area too.
  *
  * See $_configuration['course_folder'] in the configuration.php to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
-<<<<<<< HEAD
- * @param string $path              The requested path type (a defined constant), see the examples.
- * @param array $configuration
 
-=======
  * @param string $path (optional)   A path which type is to be converted. Also, it may be a defined constant for a path.
  * This parameter has meaning when $type parameter has one of the following values: TO_WEB, TO_SYS, TO_REL. Otherwise it is ignored.
->>>>>>> origin/1.10.x
  * @return string                   The requested path or the converted path.
  *
  *

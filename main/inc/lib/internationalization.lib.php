@@ -430,18 +430,18 @@ function api_get_local_time(
     $time = null,
     $to_timezone = null,
     $from_timezone = null,
-    $return_null_if_invalid_date = false
+    $return_null_if_invalid_date = false,
+    $showTime = true,
+    $humanForm = false
 ) {
     // Determining the timezone to be converted from
     if (is_null($from_timezone)) {
         $from_timezone = 'UTC';
     }
-
     // Determining the timezone to be converted to
     if (is_null($to_timezone)) {
         $to_timezone = _api_get_timezone();
     }
-
     // If time is a timestamp, convert it to a string
     if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
@@ -462,10 +462,8 @@ function api_get_local_time(
     try {
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
-
-        return $date->format('Y-m-d H:i:s');
+        return apiGetHumanDateTime($date, $showTime, $humanForm);
     } catch (Exception $e) {
-
         return null;
     }
 }
@@ -1955,4 +1953,27 @@ function _api_convert_encoding_supports($encoding) {
         $supports[$encoding] = _api_get_character_map_name(api_refine_encoding_id($encoding)) != '';
     }
     return $supports[$encoding];
+}
+
+/**
+ * Given a date object, return a human or ISO format, with or without h:m:s
+ * @param object $date The Date object
+ * @param bool $showTime Whether to show the time and date (true) or only the date (false)
+ * @param bool $humanForm Whether to show day-month-year (true) or year-month-day (false)
+ * @return string Formatted date
+ */
+function apiGetHumanDateTime($date, $showTime = true, $humanForm = false) {
+    if ($showTime) {
+        if ($dateHuman) {
+           return $date->format('j M Y H:i:s');    
+        } else {
+           return $date->format('Y-m-d H:i:s');     
+        }
+    } else {
+        if ($dateHuman) {
+           return $date->format('j M Y');    
+        } else {
+           return $date->format('Y-m-d');     
+        }
+    }
 }

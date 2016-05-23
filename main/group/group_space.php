@@ -491,7 +491,7 @@ function email_filter($email)
  * Display a user icon that links to the user page
  *
  * @param integer $user_id the id of the user
- * @return html code
+ * @return string code
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version April 2008

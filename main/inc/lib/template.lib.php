@@ -279,7 +279,7 @@ class Template
                     api_get_path(WEB_CODE_PATH) . 'help/help.php?open=' . $help,
                     [
                         'class' => 'ajax',
-                        'data-title' => get_lang('Help'),
+                        'data-title' => get_lang('Help')
                     ]
                 );
                 $content .= '</li>';
@@ -511,7 +511,7 @@ class Template
             'institution' => api_get_setting('Institution'),
             'date' => api_format_date('now', DATE_FORMAT_LONG),
             'timezone' => _api_get_timezone(),
-            'gamification_mode' => api_get_setting('gamification_mode'),
+            'gamification_mode' => api_get_setting('gamification_mode')
         );
         $this->assign('_s', $_s);
     }
@@ -664,7 +664,7 @@ class Template
         $js_files = array(
             'chosen/chosen.jquery.min.js',
             'bootstrap-select/js/bootstrap-select.min.js',
-            $selectLink,
+            $selectLink
         );
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
@@ -699,7 +699,7 @@ class Template
             'mediaelement/build/mediaelement-and-player.min.js',
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
             'image-map-resizer/js/imageMapResizer.min.js',
-            'jquery.scrollbar/jquery.scrollbar.min.js',
+            'jquery.scrollbar/jquery.scrollbar.min.js'
         ];
         if (CHAMILO_LOAD_WYSIWYG == true) {
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';
@@ -968,7 +968,7 @@ class Template
         $this->assign('portal_name', $portal_name);
 
         //Menu
-        $menu = returnMenuArray();
+        $menu = menuArray();
         $this->assign('menu', $menu);
 
         // Setting notifications

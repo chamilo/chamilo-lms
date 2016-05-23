@@ -71,10 +71,14 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         mkdir($coursedir, 0777, true);
         // initiate default index
         $indexFile = fopen($coursedir.'/index.html', 'w');
-        file_put_contents($indexFile, vchamilo_get_default_course_index_fragment());
+        if ($indexFile) {
+            file_put_contents($indexFile, vchamilo_get_default_course_index_fragment());
+        }
 
         $htaccessFile = fopen($coursedir.'/.htaccess', 'w');
-        file_put_contents($htaccessFile, vchamilo_get_htaccess_fragment($slug));
+        if ($htaccessFile) {
+            file_put_contents($htaccessFile, vchamilo_get_htaccess_fragment($slug));
+        }
     }
 
     $absalternatehome = vchamilo_get_config('vchamilo', 'home_real_root');
@@ -128,15 +132,15 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
 
     if (!$template) {
         // Create empty database for install
-        ctrace("Creating databases (empty)");
+        ctrace("Creating database");
         vchamilo_create_databases($data);
     } else {
         // Deploy template database
-        ctrace("Creating databases from template $template ");
+        ctrace("Creating databases from template '$template'");
         vchamilo_create_databases($data);
-        ctrace("Loading data template $template ");
+        ctrace("Loading data template '$template'");
         vchamilo_load_db_template($data, $template);
-        ctrace("Coying files from template $template ");
+        ctrace("Coying files from template '$template'");
         vchamilo_load_files_from_template($data, $template);
     }
 

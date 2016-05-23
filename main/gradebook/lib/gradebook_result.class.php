@@ -76,7 +76,7 @@ class GradeBookResult
 
     /**
      * Exports the complete report as an XLS file
-     * @return	boolean		False on error
+     * @return	boolean|null		False on error
      */
     public function exportCompleteReportXLS($data)
     {

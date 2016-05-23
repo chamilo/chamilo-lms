@@ -413,7 +413,7 @@ class FillBlanks extends Question
      * @param null $feedback_type
      * @param null $counter
      * @param null $score
-     * @return null|string
+     * @return string
      */
     public function return_header($feedback_type = null, $counter = null, $score = null)
     {
@@ -427,15 +427,16 @@ class FillBlanks extends Question
     }
 
     /**
-     * @param $separatorStartRegexp
-     * @param $separatorEndRegexp
-     * @param $correctItemRegexp
-     * @param $questionId
+     * @param string $separatorStartRegexp
+     * @param string $separatorEndRegexp
+     * @param string $correctItemRegexp
+     * @param integer $questionId
      * @param $correctItem
      * @param $attributes
-     * @param $answer
+     * @param string $answer
      * @param $listAnswersInfo
-     * @param $displayForStudent
+     * @param boolean $displayForStudent
+     * @param integer $inBlankNumber
      * @return string
      */
     public static function getFillTheBlankHtml(
@@ -734,11 +735,11 @@ class FillBlanks extends Question
     *  0  : student answer is correct
     * >0  : for fill the blank question with choice menu, is the index of the student answer (right answer indice is 0)
     *
-    * @param $testId
-    * @param $questionId
+    * @param integer $testId
+    * @param integer $questionId
     * @param $studentsIdList
-    * @param $startDate
-    * @param $endDate
+    * @param string $startDate
+    * @param string $endDate
     * @param bool $useLastAnswerredAttempt
     * @return array
     * (
@@ -915,7 +916,7 @@ class FillBlanks extends Question
      * return $text protected for use in regexp
      * @param string $text
      *
-     * @return mixed
+     * @return string
      */
     public static function getRegexpProtected($text)
     {
@@ -973,7 +974,7 @@ class FillBlanks extends Question
      * return the start separator for answer
      * @param string $number
      *
-     * @return mixed
+     * @return string
      */
     public static function getStartSeparator($number)
     {
@@ -986,7 +987,7 @@ class FillBlanks extends Question
      * return the end separator for answer
      * @param string $number
      *
-     * @return mixed
+     * @return string
      */
     public static function getEndSeparator($number)
     {

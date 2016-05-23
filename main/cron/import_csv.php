@@ -48,7 +48,7 @@ class ImportCsv
     public $conditions;
 
     /**
-     * @param Logger $logger
+     * @param Monolog\Logger $logger
      * @param array
      */
     public function __construct($logger, $conditions)
@@ -66,7 +66,7 @@ class ImportCsv
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getDumpValues()
     {

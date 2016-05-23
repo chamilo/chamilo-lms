@@ -27,6 +27,7 @@ class ScormQuestion extends Question
      * @param int  The JavaScript ID for this question.
      * Due to the nature of interactions, we must have a natural sequence for
      * questions in the generated JavaScript.
+     * @param integer $js_id
      */
     public static function export_question($questionId, $standalone = true, $js_id)
     {
@@ -687,7 +688,7 @@ class ScormAssessmentItem
     /**
      * Constructor.
      *
-     * @param $question The Question object we want to export.
+     * @param ScormQuestion $question The Question object we want to export.
      */
     public function ScormAssessmentItem($question, $standalone = false)
     {
@@ -915,7 +916,7 @@ class ScormSection
      *
      * @param int $exerciseId The exercise to exporte
      * @param boolean $standalone Wether it should include XML tag and DTD line.
-     * @return The XML as a string, or an empty string if there's no exercise with given ID.
+     * @return string XML as a string, or an empty string if there's no exercise with given ID.
      */
     public static function export_exercise_to_scorm($exerciseId, $standalone=true) {
         $exercise = new Exercise();
@@ -930,7 +931,7 @@ class ScormSection
 
     /**
      * Constructor.
-     * @param $exe The Exercise instance to export
+     * @param Exercise $exe The Exercise instance to export
      * @author Amand Tihon <amand@alrj.org>
      */
     function ScormSection($exe) {
@@ -1091,7 +1092,7 @@ class ScormSection
      * This is a default behaviour, some classes may want to override this.
      *
      * @param $standalone: Boolean stating if it should be exported as a stand-alone question
-     * @return A string, the XML flow for an Item.
+     * @return string string, the XML flow for an Item.
      */
     function export()
     {

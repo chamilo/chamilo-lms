@@ -123,7 +123,7 @@ class CourseBuilder
      * @param string   $courseCode
      * @param bool     true if you want to get the elements that exists in the course and
      *                 in the session, (session_id = 0 or session_id = X)
-     * @return object The course object structure
+     * @return Course The course object structure
      */
     public function build(
         $session_id = 0,

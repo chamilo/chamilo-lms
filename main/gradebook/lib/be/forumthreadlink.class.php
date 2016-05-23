@@ -121,7 +121,7 @@ class ForumThreadLink extends AbstractLink
 
     /**
     * Has anyone done this exercise yet ?
-    * @return int
+    * @return boolean
     */
     public function has_results()
     {

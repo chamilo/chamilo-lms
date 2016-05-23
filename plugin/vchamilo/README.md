@@ -1,5 +1,5 @@
 Virtual Chamilo
-##############################
+===================
 
 Author : Valery Fremaux (valery.fremaux@gmail.com), Julio Montoya
 
@@ -7,14 +7,14 @@ Virtual chamilo is a feature that allows running several chamilo instances shari
 code base.
 
 Version features
-##############################
+===================
 This is a yet prototypal version that is not full featured in back-office tools.
 At the moment, the setup of virtual clones still is a technical operation and has no
 middle-office GUI. Development is in progress to offer a sufficient medium-level
 administrability of the process.
 
-How to setup :
-##############################
+How to setup
+===================
 
 You need :
 
@@ -22,26 +22,19 @@ You need :
 2. Install the plugin in chamilo administration
 3. Insert the virtualisation hook into the chamilo master configuration :
 
+```
 file : <chamiloroot>/app/config/configuration.php
+```
 
 Insert the hook:
 
+```
 include_once $_configuration['root_sys'].'plugin/vchamilo/lib.php';
 vchamilo_hook_configuration($_configuration);
+```
 
-This should be inserted just after the definition of db_admin_path and
-just before the login module section :
-
-<here>
-
-/**
- *
- * Login modules settings
- */
-
-Setup of virtual nodes:
-
-what you need for a virtual node is :
+What you need for a virtual node is :
+-------------
 
 - a blank database copy of chamilo
 - a dedicated course directory, that needs being accessible from chamilo installation root (directly, or using symlinks). the name
@@ -52,12 +45,15 @@ as the chamilo instance domain name.
 the effective "configuration.php" information.
 - an appropriate multiroot home root setup in the local chamilo instance
 
-# Prerequisites for VChamilo working nice
+Prerequisites for VChamilo working nice
+-------------
 
-Multiple URL access must be enabled :
+Multiple URL access must be enabled:
 
+```
 # in <chamiloroot>/main/inc/config/configuration.php
 $_configuration['multiple_access_urls'] = true;
+```
 
 In the administration, you will need configure an adequate home root definition for the instance finding
 the dedicated home directory. You just need editing the http://localhost default host, and give the real domain
@@ -65,7 +61,8 @@ name you are using.
 
 Check you have the <chamilo>/home/<instancedomain> clone of the standard home directory.
 
-# Important note about file system permissions
+Important note about file system permissions
+-------------
 
 Vchamilos will use several side-directories apart from the standard installation (dedicated courses,
 dedicated home page). Check you set the adequate filesystem permissions (usually let the server write

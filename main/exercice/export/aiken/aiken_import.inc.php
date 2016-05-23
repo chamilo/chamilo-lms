@@ -55,6 +55,8 @@ function aiken_display_form($msg = '') {
  * Gets the uploaded file (from $_FILES) and unzip it to the given directory
  * @param string The directory where to do the work
  * @param string The path of the temporary directory where the exercise was uploaded and unzipped
+ * @param string $baseWorkDir
+ * @param string $uploadPath
  * @return bool True on success, false on failure
  */
 function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
@@ -229,7 +231,10 @@ function aiken_import_exercise($file)
  * @param string Path to the directory with the file to be parsed (without final /)
  * @param string Name of the last directory part for the file (without /)
  * @param string Name of the file to be parsed (including extension)
- * @return mixed True on success, error message on error
+ * @param string $exercisePath
+ * @param string $file
+ * @param string $questionFile
+ * @return string|boolean True on success, error message on error
  * @assert ('','','') === false
  */
 function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) {

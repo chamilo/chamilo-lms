@@ -77,6 +77,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 //Block Menu
 $social_menu_block = SocialManager::show_social_menu('home');
+
 $social_search_block = Display::panel(
     UserManager::get_search_form(''),
     get_lang("SearchUsers")
@@ -208,6 +209,7 @@ if (count($sessionList) > 0) {
 $social_group_block = Display::panelCollapse(get_lang('Group'), $social_group_block, 'sm-groups', null, 'grups-acordion', 'groups-collapse');
 
 $tpl = new Template(get_lang('SocialNetwork'));
+
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
 
 $tpl->assign('social_menu_block', $social_menu_block);

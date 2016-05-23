@@ -152,6 +152,12 @@ function getCustomTabs()
     return $customTabs;
 }
 
+/**
+ * Return the active logo of the portal, based on a series of settings
+ * @param string $theme The name of the theme folder from web/css/themes/
+ * @return string HTML string with logo as an HTML element
+ * @param string $theme
+ */
 function return_logo($theme)
 {
     $_course = api_get_course_info();
@@ -218,6 +224,10 @@ function return_logo($theme)
     return $html;
 }
 
+/**
+ * Return HTML string of a list as <li> items
+ * @return string
+ */
 function return_notification_menu()
 {
     $_course = api_get_course_info();
@@ -279,6 +289,10 @@ function return_notification_menu()
     return $html;
 }
 
+/**
+ * Return an array with different navigation mennu elements
+ * @return array [menu_navigation[], navigation[], possible_tabs[]]
+ */
 function return_navigation_array()
 {
     $navigation = array();
@@ -384,6 +398,7 @@ function return_navigation_array()
 
         // Custom tabs
         $customTabs = getCustomTabs();
+        
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
@@ -518,13 +533,14 @@ function return_menu()
 }
 
 /**
- * Returns an array of elements to print as the main menu
- * @return array Array of arrays with ['possible_tabs'] as the main element
+ * Return the navigation menu elements as a flat array
+ * @return array
  */
-function returnMenuArray()
+function menuArray()
 {
     $mainNavigation = return_navigation_array();
-    unset($mainNavigation['navigation']);
+    unset($mainNavigation['possible_tabs']);
+    unset($mainNavigation['menu_navigation']);
     //$navigation = $navigation['navigation'];
     // Get active language
     $lang = api_get_setting('platformLanguage');
@@ -539,6 +555,7 @@ function returnMenuArray()
         if ($access_url_id != -1) {
             // If not a dead URL
             $urlInfo = api_get_access_url($access_url_id);
+           
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
             $cleanUrl = api_replace_dangerous_char($url);
             $cleanUrl = str_replace('/', '-', $cleanUrl);
@@ -561,8 +578,6 @@ function returnMenuArray()
         $pageContent = @(string) file_get_contents($homepath . $menuTabs . '_' . $lang . $ext);
     } elseif (is_file($homepath.$menuTabs.$lang.$ext) && is_readable($homepath.$menuTabs.$lang.$ext)) {
         $pageContent = @(string) file_get_contents($homepath . $menuTabs . $lang . $ext);
-    } else {
-        //$errorMsg = get_lang('HomePageFilesNotReadable');
     }
     // Sanitize page content
     $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
@@ -578,8 +593,6 @@ function returnMenuArray()
         } elseif (is_file($homepath . $menuTabsLoggedIn . $lang . $ext) && is_readable($homepath . $menuTabsLoggedIn . $lang . $ext)) {
             $pageContent = @(string) file_get_contents($homepath . $menuTabsLoggedIn . $lang . $ext);
             $pageContent = str_replace('::private', '', $pageContent);
-        } else {
-            //$errorMsg = get_lang('HomePageFilesNotReadable');
         }
         
         $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
@@ -589,7 +602,7 @@ function returnMenuArray()
     if (!empty($open) OR !empty($openMenuTabsLoggedIn)) {
         if (strpos($open.$openMenuTabsLoggedIn, 'show_menu') === false) {
             if (api_is_anonymous()) {
-                $mainNavigation['possible_tabs'][SECTION_CAMPUS]  = null;
+                $mainNavigation['navigation'][SECTION_CAMPUS]  = null;
             }
         } else {
             if (api_get_user_id() && !api_is_anonymous()) {
@@ -598,11 +611,11 @@ function returnMenuArray()
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
                     if ($match) {
-                        $mainNavigation['possible_tabs'][$matches[3]] = array(
+                        $mainNavigation['navigation'][$matches[3]] = array(
                             'url' => $matches[1],
                             'target' => $matches[2],
                             'title' => $matches[3],
-                            'key' => 'extra-page-' . str_replace(' ', '-', strtolower($matches[3]))
+                            'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
                         );
                     }
                 }
@@ -614,11 +627,11 @@ function returnMenuArray()
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
                     if ($match) {
-                        $mainNavigation['possible_tabs'][$matches[3]] = array(
+                        $mainNavigation['navigation'][$matches[3]] = array(
                             'url' => $matches[1],
                             'target' => $matches[2],
                             'title' => $matches[3],
-                            'key' => 'extra-page-' . str_replace(' ', '-', strtolower($matches[3]))
+                            'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
                         );
                     }
                 }
@@ -626,11 +639,13 @@ function returnMenuArray()
         }
     }
 
-    if (count($mainNavigation['possible_tabs']) > 0) {
+    if (count($mainNavigation['navigation']) > 0) {
         //$pre_lis = '';
         $activeSection = '';
-        foreach ($mainNavigation['possible_tabs'] as $section => $navigation_info) {
+        foreach ($mainNavigation['navigation'] as $section => $navigation_info) {
+            
             $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
+            
             if (isset($GLOBALS['this_section'])) {
                 $tempSection = $section;
                 if ($section == 'social') {
@@ -652,14 +667,25 @@ function returnMenuArray()
             } else {
                 $current = '';
             }
-            $mainNavigation['possible_tabs'][$section]['current'] = '';
+            $mainNavigation['navigation'][$section]['current'] = '';
         }
-        $mainNavigation['possible_tabs'][$activeSection]['current'] = 'active';
+        if (!empty($activeSection)) {
+            $mainNavigation['navigation'][$activeSection]['current'] = 'active';
+        }
 
     }
-    return $mainNavigation;
+    unset($mainNavigation['navigation']['myprofile']);
+    
+    return $mainNavigation['navigation'];
 }
 
+/**
+ * Return the breadcrumb menu elements as an array of <li> items
+ * @param array $interbreadcrumb The elements to add to the breadcrumb
+ * @param string $language_file Deprecated
+ * @param string $nameTools The name of the current tool (not linked)
+ * @return string HTML string of <li> items
+ */
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 {
     $session_id = api_get_session_id();

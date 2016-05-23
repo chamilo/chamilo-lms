@@ -115,6 +115,9 @@ class QuizQuestion extends Coursecopy\Resource
         $this->answers[] = $answer;
     }
 
+    /**
+     * @param QuizQuestionOption $option_obj
+     */
     public function add_option($option_obj)
     {
         $this->question_options[$option_obj->obj->id] = $option_obj;

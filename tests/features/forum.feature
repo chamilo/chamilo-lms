@@ -32,7 +32,7 @@ Feature: Forum tool
 
   Scenario: Reply to forum message
     Given I am on "/main/forum/viewthread.php?forum=1&thread=1"
-    When I follow "reply-to-1"
+    When I follow "reply-to-post-1"
     And I fill in the following:
       | post_text | This is a reply to the first message for test |
     And I press "SubmitPost"

@@ -190,6 +190,21 @@ function handle_plugins()
                     ]
                 );
             }
+
+            $readmeFile = api_get_path(SYS_PLUGIN_PATH).$plugin.'/README.md';
+            if (file_exists($readmeFile)) {
+                echo Display::url(
+                    "<em class='fa fa-file-text-o'></em> README.md",
+                    api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$plugin,
+                    [
+                        'class' => 'btn btn-default ajax',
+                        'data-title' => $plugin_info['title'],
+                        'data-size' => 'lg',
+                        '_target' => '_blank'
+                    ]
+                );
+            }
+
             echo '</div>';
             echo '</td></tr>';
         }
@@ -379,29 +394,29 @@ function handle_stylesheets()
             }
         }
     }
-    
+
     $logoForm = new FormValidator(
         'logo_upload',
         'post',
         'settings.php?category=Stylesheets#tabs-2'
     );
-    
+
     $logoForm->addHtml(Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info'));
-    
+
     $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
     $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
     $logoFileName = 'header-logo.png';
     $newLogoFileName = 'header-logo-custom.png';
-    
+
     if (is_file($dir.$newLogoFileName)) {
-        $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $newLogoFileName .'?'. time() . '">'); 
+        $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $newLogoFileName .'?'. time() . '">');
     } else {
         $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $logoFileName .'?'. time() . '">');
     }
-    
+
     $logoForm->addFile('new_logo', get_lang('UpdateLogo'));
     $allowedFileTypes = ['png'];
-    
+
     if (isset($_POST['logo_reset'])) {
         if (is_file($dir.$newLogoFileName)) {
             unlink($dir.$newLogoFileName);
@@ -411,12 +426,12 @@ function handle_stylesheets()
             . '</script>';
         }
     } elseif (isset($_POST['logo_upload'])) {
-        
+
         $logoForm->addRule('new_logo', get_lang('InvalidExtension').' ('.implode(',', $allowedFileTypes).')', 'filetype', $allowedFileTypes);
         $logoForm->addRule('new_logo', get_lang('ThisFieldIsRequired'), 'required');
-        
+
         if ($logoForm->validate()) {
-            
+
             $imageInfo = getimagesize($_FILES['new_logo']['tmp_name']);
             $width = $imageInfo[0];
             $height = $imageInfo[1];
@@ -424,7 +439,7 @@ function handle_stylesheets()
                 if (is_file($dir.$newLogoFileName)) {
                     unlink($dir.$newLogoFileName);
                 }
-                
+
                 $status = move_uploaded_file($_FILES['new_logo']['tmp_name'], $dir.$newLogoFileName);
 
                 if ($status) {
@@ -449,12 +464,12 @@ function handle_stylesheets()
         ];
 
         $form_change->addGroup($group);
-        
+
         $logoGroup = [
             $logoForm->addButtonUpload(get_lang('Upload'), 'logo_upload', true),
             $logoForm->addButtonCancel(get_lang('Reset'), 'logo_reset', true)
         ];
-        
+
         $logoForm->addGroup($logoGroup);
 
         if ($show_upload_form) {
@@ -470,7 +485,7 @@ function handle_stylesheets()
         } else {
             $form_change->display();
         }
-        
+
         //Little hack to update the logo image in update form when submiting
         if (isset($_POST['logo_reset'])) {
             echo '<script>'

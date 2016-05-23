@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class Exercise
  *
@@ -160,9 +162,7 @@ class Exercise
             $this->display_category_name = $object->display_category_name;
             $this->pass_percentage = $object->pass_percentage;
             $this->sessionId = $object->session_id;
-
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
-
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
@@ -187,19 +187,11 @@ class Exercise
                 $this->edit_exercise_in_lp = true;
             }
 
-<<<<<<< HEAD
             if (!empty($object->end_time)) {
                 $this->end_time = $object->end_time;
             }
             if (!empty($object->start_time)) {
                 $this->start_time = $object->start_time;
-=======
-            if ($object->end_time != '0000-00-00 00:00:00') {
-                $this->end_time 	= $object->end_time;
-            }
-            if ($object->start_time != '0000-00-00 00:00:00') {
-                $this->start_time 	= $object->start_time;
->>>>>>> origin/1.10.x
             }
 
             //control time
@@ -361,7 +353,7 @@ class Exercise
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function selectPassPercentage()
     {
@@ -470,7 +462,7 @@ class Exercise
      * tells if questions are selected randomly, and if so returns the draws
      *
      * @author Olivier Brouckaert
-     * @return boolean - 0 if not random, otherwise the draws
+     * @return integer - 0 if not random, otherwise the draws
      */
     public function isRandom()
     {
@@ -2838,7 +2830,7 @@ class Exercise
      * @param int  int lp id
      * @param int  int lp item id
      * @param int  int lp item_view id
-     * @param integer $weight
+     * @param float $weight
      * @param array question list
      */
     public function save_stat_track_exercise_info(
@@ -3819,14 +3811,8 @@ class Exercise
                             // adds a tabulation if no word has been typed by the student
                             $answer .= ''; // remove &nbsp; that causes issue
                         }
-<<<<<<< HEAD
                         // adds the correct word, followed by ] to close the blank
-                        $addCorrecWord = true;
 
-=======
-
-                        // adds the correct word, followed by ] to close the blank
->>>>>>> origin/1.10.x
                         if (
                             $this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM
                         ) {
@@ -4197,7 +4183,6 @@ class Exercise
                                 $results_disabled,
                                 $showTotalScoreAndUserChoices
                             );
-                            //}
                         } elseif ($answerType == FILL_IN_BLANKS) {
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
                                 $feedback_type,
@@ -4227,6 +4212,7 @@ class Exercise
                                 $results_disabled
                             );
                         } elseif ($answerType == ORAL_EXPRESSION) {
+                            // to store the details of open questions in an array to be used in mail
                             ExerciseShowFunctions::display_oral_expression_answer(
                                 $feedback_type,
                                 $choice,
@@ -5341,9 +5327,6 @@ class Exercise
         }
     }
 
-    /**
-     * @param integer $exe_id
-     */
     function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id)
     {
         if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
@@ -5495,7 +5478,7 @@ class Exercise
      * @param int     Maximum number of attempts (0 if no limit)
      * @param int     Feedback type
      * @todo this was function was added due the import exercise via CSV
-     * @return    string New exercise ID
+     * @return    int New exercise ID
      */
     public function createExercise(
         $title,
@@ -6830,7 +6813,7 @@ class Exercise
      * @param bool $show_comment
      * @param null $exercise_feedback
      * @param bool $show_answers
-     * @param integer $modelType
+     * @param null $modelType
      * @param bool $categoryMinusOne
      * @return bool|null|string
      */

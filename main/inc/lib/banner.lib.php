@@ -313,9 +313,9 @@ function return_navigation_array()
     if (api_get_user_id() && !api_is_anonymous()) {
         // My Courses
         if (api_get_setting('show_tabs', 'my_courses') == 'true') {
-            $navigation['mycourses'] = $possible_tabs['mycourses'];
+         //   $navigation['mycourses'] = $possible_tabs['mycourses'];
         } else {
-            $menu_navigation['mycourses'] = $possible_tabs['mycourses'];
+           // $menu_navigation['mycourses'] = $possible_tabs['mycourses'];
         }
 
         // My Profile
@@ -615,7 +615,7 @@ function menuArray()
                             'url' => $matches[1],
                             'target' => $matches[2],
                             'title' => $matches[3],
-                            'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
+                            'key' => 'extra-page-' . str_replace(' ', '-', strtolower($matches[3]))
                         );
                     }
                 }
@@ -631,7 +631,7 @@ function menuArray()
                             'url' => $matches[1],
                             'target' => $matches[2],
                             'title' => $matches[3],
-                            'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
+                            'key' => 'extra-page-' . str_replace(' ', '-', strtolower($matches[3]))
                         );
                     }
                 }

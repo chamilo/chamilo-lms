@@ -140,7 +140,7 @@ class Database
                 'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'ChamiloFaqBundle' => 'Chamilo\FaqBundle\Entity'
+                'ChamiloFaqBundle' => 'Chamilo\FaqBundle\Entity',
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity'
             )
         );

@@ -70,12 +70,12 @@ if ($data->what == 'addinstance' || $data->what == 'registerinstance') {
         ctrace("Creating physical course dir in $coursedir");
         mkdir($coursedir, 0777, true);
         // initiate default index
-        $indexFile = fopen($coursedir.'/index.html', 'w');
+        $indexFile = $coursedir.'/index.html';
         if ($indexFile) {
             file_put_contents($indexFile, vchamilo_get_default_course_index_fragment());
         }
 
-        $htaccessFile = fopen($coursedir.'/.htaccess', 'w');
+        $htaccessFile = $coursedir.'/.htaccess';
         if ($htaccessFile) {
             file_put_contents($htaccessFile, vchamilo_get_htaccess_fragment($slug));
         }

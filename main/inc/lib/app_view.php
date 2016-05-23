@@ -18,6 +18,7 @@ class View
     /**
      * Constructor, init tool path for rendering
      * @param string  tool name (optional)
+     * @param string $template_path
      */
     public function __construct($toolname = '', $template_path=null)
     {
@@ -50,6 +51,7 @@ class View
     /**
      * Set layout view sent from a controller
      * @param string layout view
+     * @param string $layout
      */
     public function set_layout( $layout )
     {
@@ -59,6 +61,7 @@ class View
     /**
      * Set template view sent from a controller
      * @param string template view
+     * @param string $template
      */
     public function set_template($template)
     {

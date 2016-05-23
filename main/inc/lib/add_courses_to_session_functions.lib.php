@@ -10,7 +10,7 @@ class AddCourseToSession
 	 * Searches a course, given a search string and a type of search box
 	 * @param string $needle Search string
 	 * @param string $type Type of search box ('single' or anything else)
-	 * @return string XajaxResponse
+	 * @return xajaxResponse XajaxResponse
 	 * @assert ('abc', 'single') !== null
 	 * @assert ('abc', 'multiple') !== null
 	 */

@@ -283,9 +283,7 @@ switch ($action) {
             $attempt_list = array();
 
             // First time here we create an attempt (getting the exe_id).
-            if (empty($exercise_stat_info)) {
-
-            } else {
+            if (!empty($exercise_stat_info)) {
                 // We know the user we get the exe_id.
                 $exe_id = $exercise_stat_info['exe_id'];
                 $total_score = $exercise_stat_info['exe_result'];
@@ -325,9 +323,9 @@ switch ($action) {
                     error_log("exe_id is empty");
                 }
                 exit;
-            } else {
-                $_SESSION['exe_id'] = $exe_id;
             }
+
+            $_SESSION['exe_id'] = $exe_id;
 
             // Getting the total weight if the request is simple
             $total_weight = 0;
@@ -351,7 +349,8 @@ switch ($action) {
                     continue;
                 }
 
-                $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
+                $my_choice = isset($choice[$my_question_id]) ?
+                    $choice[$my_question_id] : null;
 
                 if ($debug) {
                     error_log("my_choice = ".print_r($my_choice, 1)."");
@@ -361,7 +360,7 @@ switch ($action) {
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
 
                 // Getting free choice data.
-                if ($objQuestionTmp->type == FREE_ANSWER && $type == 'all') {
+                if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {
                     $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id]) ? $_REQUEST['free_choice'][$my_question_id]: null;
                 }
 

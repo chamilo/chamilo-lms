@@ -72,7 +72,8 @@ class Answer
         $objExercise = new Exercise($this->course_id);
         $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
         $objExercise->read($exerciseId);
-        if ($objExercise->random_answers == '1') {
+
+        if ($objExercise->random_answers == '1' && $this->getQuestionType() != CALCULATED_ANSWER) {
             $this->readOrderedBy('rand()', '');// randomize answers
         } else {
             $this->read(); // natural order
@@ -187,6 +188,7 @@ class Answer
      * Reads answer information from the data base ordered by parameter
      * @param	string	Field we want to order by
      * @param	string	DESC or ASC
+     * @param string $field
      * @author 	Frederic Vauthier
      */
     public function readOrderedBy($field, $order='ASC')
@@ -308,6 +310,7 @@ class Answer
 	 * returns the question ID of the destination question
 	 *
 	 * @author Julio Montoya
+	 * @param integer $id
 	 * @return integer - the question ID
 	 */
 	public function selectDestination($id)
@@ -329,6 +332,7 @@ class Answer
 
 	/**
 	 * return array answer by id else return a bool
+	 * @param integer $auto_id
 	 */
 	public function selectAnswerByAutoId($auto_id)
 	{
@@ -467,6 +471,7 @@ class Answer
 	 *
 	 * @author Olivier Brouckaert
 	 * @param - integer $id - answer ID
+	 * @param integer $id
 	 * @return integer - answer weighting
 	 */
     public function selectWeighting($id)
@@ -491,6 +496,7 @@ class Answer
 	 *
 	 * @author	Olivier Brouckaert
 	 * @param	integer	Answer ID
+	 * @param integer $id
 	 * @return	integer	Answer position
 	 */
     public function selectHotspotCoordinates($id)
@@ -503,6 +509,7 @@ class Answer
 	 *
 	 * @author	Toon Keppens
 	 * @param	integer		Answer ID
+	 * @param integer $id
 	 * @return	integer		Answer position
 	 */
     public function selectHotspotType($id)
@@ -729,6 +736,7 @@ class Answer
 	 * @author Olivier Brouckaert
 	 * @param  int question id
      * @param  array destination course info (result of the function api_get_course_info() )
+     * @param string $newQuestionId
 	 */
     public function duplicate($newQuestionId, $course_info = null)
     {

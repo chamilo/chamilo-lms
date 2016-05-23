@@ -372,7 +372,7 @@ class ExerciseLink extends AbstractLink
     }
 
     /**
-     * @return array|string
+     * @return string
      */
     public function get_type_name()
     {

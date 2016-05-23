@@ -367,7 +367,7 @@ class TestCategory
 	 * Return the list of differents categories NAME for a test
 	 * @param int exercise id
 	 * @param bool
-	 * @return array of string
+	 * @return integer of string
 	 *
      * @author function rewrote by jmontoya
 	 */
@@ -990,7 +990,6 @@ class TestCategory
     /**
      * Return the id of the test category with title = $in_title
      * @param $in_title
-     * @param int $in_c_id
      *
      * @return int is id of test category
      */
@@ -1018,7 +1017,7 @@ class TestCategory
      * @param int $questionId
      * @param int $courseId
 	 *
-	 * @return int
+	 * @return string|false
      */
     public static function add_category_for_question_id($categoryId, $questionId, $courseId)
     {

@@ -417,8 +417,8 @@ class UniqueAnswer extends Question
      * @param int $question_id  The question ID (to which the answer is attached)
      * @param string $title The text of the answer
      * @param string $comment The feedback for the answer
-     * @param float|null $score  The score you get when picking this answer
-     * @param int|null $correct  Whether this answer is considered *the* correct one (this is the unique answer type)
+     * @param double $score  The score you get when picking this answer
+     * @param integer $correct  Whether this answer is considered *the* correct one (this is the unique answer type)
      */
     public function addAnswer(
         $id,

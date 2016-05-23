@@ -18,6 +18,7 @@ class HotpotatoesExerciseResult
 	 * Gets the results of all students (or just one student if access is limited)
 	 * @param	string		The document path (for HotPotatoes retrieval)
 	 * @param	integer		User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
+	 * @param string $document_path
 	 */
 	public function getExercisesReporting($document_path, $hotpotato_name)
     {

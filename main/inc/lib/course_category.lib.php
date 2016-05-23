@@ -919,25 +919,6 @@ class CourseCategory
     }
 
     /**
-     * @return array
-     */
-    public static function getLimitArray()
-    {
-        $pageCurrent = isset($_REQUEST['pageCurrent']) ?
-            intval($_GET['pageCurrent']) :
-            1;
-        $pageLength = isset($_REQUEST['pageLength']) ?
-            intval($_GET['pageLength']) :
-            10;
-
-        return array(
-            'start' => ($pageCurrent - 1) * $pageLength,
-            'current' => $pageCurrent,
-            'length' => $pageLength,
-        );
-    }
-
-    /**
      * Return LIMIT to filter SQL query
      * @param array $limit
      * @return string

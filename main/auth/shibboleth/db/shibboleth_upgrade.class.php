@@ -35,7 +35,7 @@ class ShibbolethUpgrade
      * Creates the 'shibb_unique_id' field in the table 'user' of the main Chamilo database if it doesn't exist yet
      *
      * @author Nicolas Rod
-     * @return void
+     * @return false|null
      */
     public static function create_shibb_unique_id_field_if_missing()
     {

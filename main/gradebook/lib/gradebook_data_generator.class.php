@@ -71,6 +71,7 @@ class GradebookDataGenerator
 
     /**
      * Get actual array data
+     * @param integer $count
      * @return array 2-dimensional array - each array contains the elements:
      * 0: cat/eval/link object
      * 1: item name
@@ -304,7 +305,7 @@ class GradebookDataGenerator
     /**
      * @param int $userId
      * @param GradebookItem $item
-     * @param $ignore_score_color
+     * @param boolean $ignore_score_color
      * @return null|string
      */
     private function build_result_column(

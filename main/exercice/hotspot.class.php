@@ -52,7 +52,7 @@ class HotSpot extends Question
 	/**
 	 * @param FormValidator $form
 	 * @param null $objExercise
-	 * @return bool
+	 * @return null|false
 	 */
 	public function processCreation($form, $objExercise = null)
 	{

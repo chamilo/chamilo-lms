@@ -17,7 +17,7 @@ class AddManySessionToCategoryFunctions
      * Search for a session based on a given search string
      * @param string A search string
      * @param string A search box type (single or anything else)
-     * @return string XajaxResponse
+     * @return xajaxResponse XajaxResponse
      * @assert () !== ''
      * @assert ('abc','single') !== ''
      */

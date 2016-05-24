@@ -11,17 +11,6 @@ $objPlugin = TicketPlugin::create();
 $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
 
 if (!Database::tableExists($table)) {
-    $table = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
-    $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
-            id int UNSIGNED NOT NULL AUTO_INCREMENT,
-            ticket_id int UNSIGNED DEFAULT NULL,
-            user_id int UNSIGNED DEFAULT NULL,
-            assigned_date datetime DEFAULT NULL,
-            sys_insert_user_id int UNSIGNED DEFAULT NULL,
-            PRIMARY KEY PK_ticket_assigned_log (id),
-            KEY FK_ticket_assigned_log (ticket_id))";
-    Database::query($sql);
-
     $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int UNSIGNED NOT NULL AUTO_INCREMENT,
             category_id char(3) NOT NULL,
@@ -36,6 +25,17 @@ if (!Database::tableExists($table)) {
             sys_lastedit_datetime datetime DEFAULT NULL,
             PRIMARY KEY (id))";
     $result = Database::query($sql);
+
+    $tableLog = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
+    $sql = "CREATE TABLE IF NOT EXISTS ".$tableLog." (
+            id int UNSIGNED NOT NULL AUTO_INCREMENT,
+            ticket_id int UNSIGNED DEFAULT NULL,
+            user_id int UNSIGNED DEFAULT NULL,
+            assigned_date datetime DEFAULT NULL,
+            sys_insert_user_id int UNSIGNED DEFAULT NULL,
+            PRIMARY KEY PK_ticket_assigned_log (id),
+            KEY FK_ticket_assigned_log (ticket_id))";
+    Database::query($sql);
 
     // Default Categories
     $categories = array(
@@ -65,7 +65,8 @@ if (!Database::tableExists($table)) {
                 'category_id' => $i,
                 'project_id' => 1,
                 'description' => $description,
-                'name' => $category
+                'name' => $category,
+                'course_required' => 0
             );
         }
 
@@ -236,8 +237,9 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         category_id INT NOT NULL,
         user_id INT NOT NULL
 )";
+Database::query($sql);
 
-//Menu main tabs
+// Menu main tabs
 $rsTab = $objPlugin->addTab('Ticket', 'plugin/ticket/src/myticket.php');
 
 if ($rsTab) {

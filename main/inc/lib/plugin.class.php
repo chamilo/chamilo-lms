@@ -611,11 +611,11 @@ class Plugin
 
         $tabNum = $customTabsNum + 1;
 
-        //Avoid Tab Name Spaces
+        // Avoid Tab Name Spaces
         $tabNameNoSpaces = preg_replace('/\s+/', '', $tabName);
         $subkeytext = "Tabs" . $tabNameNoSpaces;
 
-        //Check if it is already added
+        // Check if it is already added
         $checkCondition = array(
             'where' =>
                 array(
@@ -624,11 +624,13 @@ class Plugin
                     )
                 )
         );
+
         $checkDuplicate = Database::select('*', 'settings_current', $checkCondition);
         if (!empty($checkDuplicate)) {
             return false;
         }
-        //End Check
+
+        // End Check
         $subkey = 'custom_tab_' . $tabNum;
         $attributes = array(
             'variable' => 'show_tabs',
@@ -645,7 +647,7 @@ class Plugin
         );
         $resp = Database::insert('settings_current', $attributes);
 
-        //Save the id
+        // Save the id
         $settings = $this->get_settings();
         $setData = array (
             'comment' => $subkey

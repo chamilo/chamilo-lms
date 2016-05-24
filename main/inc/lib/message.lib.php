@@ -281,7 +281,6 @@ class MessageManager
         if (!empty($receiver_user_id) || !empty($group_id)) {
 
             // message for user friend
-            $clean_subject = Database::escape_string($subject);
             $clean_content = Database::escape_string($content);
 
             //message in inbox for user friend
@@ -347,9 +346,10 @@ class MessageManager
                     $o = 0;
                     foreach ($file_attachments as $file_attach) {
                         if ($file_attach['error'] == 0) {
+                            $comment = isset($file_comments[$o]) ? $file_comments[$o] : '';
                             self::save_message_attachment_file(
                                 $file_attach,
-                                $file_comments[$o],
+                                $comment,
                                 $outbox_last_id,
                                 $user_sender_id
                             );
@@ -1292,10 +1292,10 @@ class MessageManager
         $name = $user_sender_info['complete_name'];
 
         $topic_page_nr = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : null;
-        
+
         $links.= '<div class="pull-right">';
         $links.= '<div class="btn-group">';
-        
+
         if (($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
             $my_group_role == GROUP_USER_PERMISSION_MODERATOR) ||
             $main_message['user_sender_id'] == $current_user_id
@@ -1320,7 +1320,7 @@ class MessageManager
                             'class' => 'btn btn-default'
                         ]
                         );
-            }            
+            }
             $links .= Display::url(
                         Display::returnFontAwesomeIcon('pencil'),
                         $urlEdit,
@@ -1357,9 +1357,9 @@ class MessageManager
         );
         $links.= '</div>';
         $links.= '</div>';
-        
+
         $title = '<h4>'.Security::remove_XSS($main_message['title'].$delete_button, STUDENT, true).$links.'</h4>';
-        
+
         $userPicture = $user_sender_info['avatar'];
         $main_content .= '<div class="avatar-author">';
         $main_content .= '<img src="'.$userPicture.'" alt="'.$name.'" class="img-responsive img-circle" width="64" height="64" title="'.$name.'" />';
@@ -1410,7 +1410,7 @@ class MessageManager
                 $userPicture = $user_sender_info['avatar'];
                 $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp</a>';
                 $html_items.= '<div class="avatar-author"><img src="'.$userPicture.'" alt="'.$name.'" class="img-responsive img-circle"  width="64" height="64" title="'.$name.'" />'.$user_link.'</div>';
-                
+
 
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {

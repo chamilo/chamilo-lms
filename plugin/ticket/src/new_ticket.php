@@ -325,7 +325,7 @@ function show_form_send_ticket()
             'Height' => '250'
         )
     );
-    
+
     //if (api_is_platform_admin()) {
         $form->addElement(
             'SelectAjax',
@@ -336,7 +336,7 @@ function show_form_send_ticket()
         );
     //}
 
-    
+
 
     $form->addElement(
         'text',
@@ -444,7 +444,7 @@ function save_ticket()
     $status = $_POST['status_id'];
     $file_attachments = $_FILES;
     $responsible = (api_is_platform_admin() ? api_get_user_id() : 0);
-  
+
     if (TicketManager::insert_new_ticket(
         $category_id,
         $course_id,
@@ -576,48 +576,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
     return $users;
 }
 
+
+$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
+
 if (!isset($_POST['compose'])) {
     if (api_is_platform_admin()) {
         Display::display_header(get_lang('ComposeMessage'));
-
-        /*
-        $message = $plugin->get_lang('PleaseBeforeRegisterATicketSelectOneUser');
-        Display::display_warning_message($message);
-        echo '
-            <div class="actions">
-              <span style="float: right;">&nbsp;</span>
-              <form id="search_simple" name="search_simple" method="get" action="' . api_get_self() . '" class="form-search">
-                <fieldset>
-                <span><label for="keyword">' . get_lang('SearchAUser') . ': &nbsp;</label><input type="text" name="keyword" size="25"></span>
-                <span><button type="submit" name="submit" class="btn btn">' . get_lang('Search') . '</button></span>
-                <div class="clear"></div>
-                </fieldset>
-              </form>
-            </div>';
-        echo '<div class="users-list">';
-        $order = (api_is_western_name_order() || api_sort_by_first_name()) ? 3 : 2;
-        $table = new SortableTable(
-            'users',
-            'get_number_of_users',
-            'get_user_data',
-            $order,
-            10
-        );
-        $table->set_header(0, '', false, 'width="18px"');
-        $table->set_header(0, get_lang('Photo'), false);
-        $table->set_header(1, get_lang('OfficialCode'));
-        if (api_is_western_name_order()) {
-            $table->set_header(2, get_lang('FirstName'));
-            $table->set_header(3, get_lang('LastName'));
-        } else {
-            $table->set_header(2, get_lang('LastName'));
-            $table->set_header(3, get_lang('FirstName'));
-        }
-        $table->set_header(4, get_lang('LoginName'));
-        $table->set_header(5, get_lang('Email'));
-        $table->set_header(6, get_lang('Action'));
-        $table->display();
-        echo '</div>';*/
     } else {
         $userInfo = api_get_user_info();
         $htmlHeadXtra[] = "

@@ -167,7 +167,6 @@ function handle_plugins()
                 echo '<input type="checkbox" name="plugin_'.$plugin.'[]">';
             }
             echo '</td><td>';
-
             echo '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
             echo '<p>'.$plugin_info['comment'].'</p>';
             echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';

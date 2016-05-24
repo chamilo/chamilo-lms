@@ -15,8 +15,7 @@ $plugin = TicketPlugin::create();
 
 api_protect_admin_script(true);
 
-$tool_name = $plugin->get_lang('LastEdit');
-
+$toolName = $plugin->get_lang('Categories');
 
 $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
@@ -38,6 +37,8 @@ if ($table->per_page == 0) {
 $formToString = '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
+$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
+
 if (isset($_GET['action'])) {
     global $table;
     $action = $_GET['action'];
@@ -49,6 +50,8 @@ if (isset($_GET['action'])) {
             header("Location: ".api_get_self());
             break;
         case 'add':
+            $toolName = get_lang('Add');
+            $interbreadcrumb[] = array('url' => 'categories.php', 'name' => $plugin->get_lang('Categories'));
             $url = api_get_self().'?action=add';
             $form = TicketManager::getCategoryForm($url);
             $formToString = $form->returnForm();
@@ -71,6 +74,8 @@ if (isset($_GET['action'])) {
             }
             break;
         case 'edit':
+            $toolName = get_lang('Edit');
+            $interbreadcrumb[] = array('url' => 'categories.php', 'name' => $plugin->get_lang('Categories'));
             $url = api_get_self().'?action=edit&id='.$id;
             $form = TicketManager::getCategoryForm($url);
 
@@ -134,9 +139,7 @@ $table->set_header(3, $plugin->get_lang('TotalTickets'), false);
 $table->set_header(4, get_lang('Actions'), true);
 $table->set_column_filter(4, 'modify_filter');
 
-$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
-
-Display::display_header($plugin->get_lang('Categories'));
+Display::display_header($toolName);
 
 $items = [
     [

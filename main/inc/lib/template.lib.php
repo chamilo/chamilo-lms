@@ -185,8 +185,8 @@ class Template
                 $this->plugin = new AppPlugin();
 
                 //1. Showing installed plugins in regions
-                $plugin_regions = $this->plugin->get_plugin_regions();
-                foreach ($plugin_regions as $region) {
+                $pluginRegions = $this->plugin->get_plugin_regions();
+                foreach ($pluginRegions as $region) {
                     $this->set_plugin_region($region);
                 }
 
@@ -950,7 +950,7 @@ class Template
         $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
 
         $this->assign('portal_name', $portal_name);
-        
+
         //Menu
         $menu = menuArray();
         $this->assign('menu', $menu);
@@ -1150,17 +1150,39 @@ class Template
 
     /**
      * Sets the plugin content in a template variable
-     * @param string $plugin_region
+     * @param string $pluginRegion
      * @return null
      */
-    public function set_plugin_region($plugin_region)
+    public function set_plugin_region($pluginRegion)
     {
-        if (!empty($plugin_region)) {
-            $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);
-            if (!empty($region_content)) {
-                $this->assign('plugin_'.$plugin_region, $region_content);
+        if (!empty($pluginRegion)) {
+            $regionContent = $this->plugin->load_region($pluginRegion, $this, $this->force_plugin_load);
+
+            $pluginList = $this->plugin->get_installed_plugins();
+            foreach ($pluginList as $plugin_name) {
+
+                // The plugin_info variable is available inside the plugin index
+                $pluginInfo = $this->plugin->getPluginInfo($plugin_name);
+
+                if (isset($pluginInfo['is_course_plugin']) && $pluginInfo['is_course_plugin']) {
+                    $courseInfo = api_get_course_info();
+
+                    if (!empty($courseInfo)) {
+                        if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof Plugin) {
+                            /** @var Plugin $plugin */
+                            $plugin = $pluginInfo['obj'];
+                            $regionContent .= $plugin->renderRegion($pluginRegion);
+                        }
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+            if (!empty($regionContent)) {
+                $this->assign('plugin_'.$pluginRegion, $regionContent);
             } else {
-                $this->assign('plugin_'.$plugin_region, null);
+                $this->assign('plugin_'.$pluginRegion, null);
             }
         }
         return null;

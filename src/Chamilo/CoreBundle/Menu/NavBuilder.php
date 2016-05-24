@@ -67,12 +67,12 @@ class NavBuilder extends ContainerAware
         )->setAttribute('class', 'item-menu menu-1 homepage');
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
-/*
+
             $menu->addChild(
                 $translator->trans('My courses'),
                 array('route' => 'userportal')
             )->setAttribute('class', 'item-menu menu-2 my-course');
-*/
+
             $menu->addChild(
                 $translator->trans('Personal agenda'),
                 array(

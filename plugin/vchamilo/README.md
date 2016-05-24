@@ -1,7 +1,7 @@
 Virtual Chamilo
 ===================
 
-Author : Valery Fremaux (valery.fremaux@gmail.com), Julio Montoya
+Authors : Valery Fremaux (valery.fremaux@gmail.com), Julio Montoya
 
 Virtual chamilo is a feature that allows running several chamilo instances sharing the same
 code base.
@@ -20,20 +20,20 @@ You need :
 
 1. Install the vchamilo package into the <chamiloroot>/plugin directory
 2. Install the plugin in chamilo administration
-3. Insert the virtualisation hook into the chamilo master configuration :
+3. Insert the virtualisation hook into the chamilo master configuration file:
 
 ```
-file : <chamiloroot>/app/config/configuration.php
+<chamiloroot>/app/config/configuration.php
 ```
 
-Insert the hook:
+Insert the hook at the end of the file.
 
 ```
 include_once $_configuration['root_sys'].'plugin/vchamilo/lib.php';
 vchamilo_hook_configuration($_configuration);
 ```
 
-What you need for a virtual node is :
+What you need for a virtual node is:
 -------------
 
 - a blank database copy of chamilo

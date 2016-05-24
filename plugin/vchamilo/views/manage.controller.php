@@ -80,7 +80,7 @@ if ($action == 'fulldeleteinstances') {
                 Display::addFlash(Display::return_message("Deleting $archivedir"));
                 removeDir($archivedir);
             }
-                                    
+
             $sql = "DELETE FROM {$table} WHERE id = ".$instance['id'];
             Database::query($sql);
 
@@ -111,23 +111,28 @@ if ($action == 'snapshotinstance') {
     // Make template directory (files and SQL).
     $separator = DIRECTORY_SEPARATOR;
 
-    $backupDir = $_configuration['root_sys'].'plugin'.$separator.'vchamilo'.$separator.'templates'.$separator.$vhost->slug.$separator;
+    $backupDir = api_get_path(SYS_PATH).'plugin'.$separator.'vchamilo'.$separator.'templates'.$separator.$vhost->slug.$separator;
 
     $absolute_datadir = $backupDir.'data';
     $absolute_sqldir = $backupDir.'dump.sql';
 
     if (!is_dir($backupDir)) {
-        Display::addFlash(
-            Display::return_message('Directory created: '.$backupDir)
-        );
-        mkdir($backupDir, 0777, true);
+        $result = mkdir($backupDir, 0777, true);
+        if ($result) {
+            Display::addFlash(
+                Display::return_message('Directory created: '.$backupDir)
+            );
+        } else {
+            Display::addFlash(
+                Display::return_message("Cannot create directory: $backupDir check the folder permissions", 'error')
+            );
+        }
     }
 
     if ($vchamilostep == 0) {
         // Create directories, if necessary.
         if (!is_dir($absolute_datadir)) {
             mkdir($absolute_datadir, 0777, true);
-            //mkdir($absolute_datadir.'/archive', 0777, true);
             mkdir($absolute_datadir.'/home', 0777, true);
         }
 
@@ -147,7 +152,7 @@ if ($action == 'snapshotinstance') {
             $tpl->assign('content', $content);
             $tpl->display_one_col_template();
 
-            die;
+            exit;
         } else {
             // continue next step
             $vchamilostep = 1;
@@ -218,26 +223,28 @@ if ($action == 'snapshotinstance') {
 
         Display::addFlash(Display::return_message("Copying from '$coursePath' to '$absolute_datadir/courses' "));
         copyDirTo($coursePath, $absolute_datadir.'/courses/', false);
-        /*Display::addFlash(Display::return_message("Copying from $archivePath to {$absolute_datadir}/archive "));
-        copyDirTo($varchivepath, $absolute_datadir.'/archive', false);*/
 
         // Store original hostname and some config info for further database or filestore replacements.
         $FILE = fopen($backupDir.$separator.'manifest.php', 'w');
         fwrite($FILE, '<'.'?php ');
         fwrite($FILE, "\$templatewwwroot = '".$wwwroot."';\n");
-        //fwrite($FILE, "\$templatevdbprefix = '".$vhost->table_prefix."';\n ");
-        //fwrite($FILE, "\$coursefolder = '".$vhost->course_folder."';\n ");
         fwrite($FILE, '?'.'>');
         fclose($FILE);
 
         // Every step was SUCCESS.
         if (empty($fullautomation)) {
-            Display::addFlash(Display::return_message($plugininstance->get_lang('successfinishedcapture'), 'success'));
+            Display::addFlash(
+                Display::return_message($plugininstance->get_lang('successfinishedcapture'),
+                    'success'
+                )
+            );
 
             if (empty($vid)) {
                 $template = vchamilo_get_config('vchamilo', 'default_template');
                 if (empty($template)) {
-                    Display::addFlash(Display::return_message('Set default template as <b>'.$vhost->slug.'</b>', 'success', false));
+                    Display::addFlash(
+                        Display::return_message('Set default template as <b>'.$vhost->slug.'</b>', 'success', false)
+                    );
                     $params = [
                         'subkey' => 'vchamilo',
                         'title' => 'default_template',
@@ -249,7 +256,9 @@ if ($action == 'snapshotinstance') {
                     ];
                     api_set_setting_simple($params);
                 } else {
-                    Display::addFlash(Display::return_message('Default template is: <b>'.$vhost->slug.'</b>', 'success', false));
+                    Display::addFlash(
+                        Display::return_message('Default template is: <b>'.$vhost->slug.'</b>', 'success', false)
+                    );
                 }
             }
 
@@ -264,7 +273,7 @@ if ($action == 'snapshotinstance') {
             $tpl->assign('content', $content);
             $tpl->display_one_col_template();
 
-            die;
+            exit;
         }
     }
 }

@@ -51,5 +51,5 @@ if ($form->validate()) {
 
 $interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
 $interbreadcrumb[] = array('url' => 'categories.php', 'name' => get_lang('Categories'));
-Display::display_header();
+Display::display_header(get_lang('Users'));
 $form->display();

@@ -1,0 +1,37 @@
+{
+    "name":        "winzou/state-machine",
+    "description": "A very lightweight yet powerful PHP state machine",
+    "keywords":    ["statemachine", "state", "event", "callback"],
+    "homepage":    "https://github.com/winzou/StateMachine",
+    "type":        "library",
+    "license":     "MIT",
+    "authors": [
+        {
+            "name":     "Alexandre Bacco",
+            "email":    "alexandre.bacco@gmail.com",
+            "homepage": "http://alex.bacco.fr"
+        }
+    ],
+    "require": {
+        "php":                         ">=5.3.0",
+        "symfony/event-dispatcher":    "~2.1|~3.0",
+        "symfony/property-access":     "~2.1|~3.0",
+        "symfony/expression-language": "~2.4|~3.0"
+    },
+    "suggest": {
+        "twig/twig": "Access the state machine in your twig templates (~1.0)"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "~2.0",
+        "twig/twig": "~1.0"
+    },
+    "autoload": {
+        "psr-0": { "SM": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "spec\\": "spec/" }
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}

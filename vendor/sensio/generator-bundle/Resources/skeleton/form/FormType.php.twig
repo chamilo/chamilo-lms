@@ -1,0 +1,81 @@
+<?php
+
+namespace {{ namespace }}\Form{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+
+{% block use_statements %}
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+{% if not configure_options_available %}
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+{% endif %}
+use Symfony\Component\OptionsResolver\OptionsResolver;
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ form_class }} extends AbstractType
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {%- if fields|length > 0 %}
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+
+        {%- for field in fields -%}
+            {%- if fields_mapping[field] is defined and fields_mapping[field]['type'] in ['date', 'time', 'datetime'] %}
+
+            ->add('{{ field }}', '{{ fields_mapping[field]['type'] }}')
+
+            {%- else %}
+
+            ->add('{{ field }}')
+
+            {%- endif -%}
+        {%- endfor %}
+
+        ;
+    }
+    {% endif %}
+
+    {%- if not configure_options_available %}
+
+    /**
+     * Sets the default options for this type.
+     *
+     * This method should be removed when upgrading to Symfony 2.7.
+     *
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+    {% endif %}
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => '{{ namespace }}\Entity{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}'
+        ));
+    }
+
+    {%- if get_name_required %}
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return '{{ form_type_name }}';
+    }
+    {% endif %}
+
+{% endblock class_body %}
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+
+        <parameter key="behat.mink.driver.selenium.class">Behat\Mink\Driver\SeleniumDriver</parameter>
+        <parameter key="behat.mink.selenium.class">Selenium\Client</parameter>
+
+        <parameter key="behat.mink.selenium.host">127.0.0.1</parameter>
+        <parameter key="behat.mink.selenium.port">4444</parameter>
+        <parameter key="behat.mink.selenium.browser">*%behat.mink.browser_name%</parameter>
+
+    </parameters>
+    <services>
+
+        <service id="behat.mink.session.selenium" class="%behat.mink.session.class%">
+            <argument type="service">
+                <service class="%behat.mink.driver.selenium.class%">
+                    <argument>%behat.mink.selenium.browser%</argument>
+                    <argument>%behat.mink.base_url%</argument>
+                    <argument type="service" id="behat.mink.selenium" />
+                </service>
+            </argument>
+            <argument type="service" id="behat.mink.selector.handler" />
+            <tag name="behat.mink.session" alias="selenium" />
+        </service>
+
+        <service id="behat.mink.selenium" class="%behat.mink.selenium.class%">
+            <argument>%behat.mink.selenium.host%</argument>
+            <argument>%behat.mink.selenium.port%</argument>
+        </service>
+
+    </services>
+</container>

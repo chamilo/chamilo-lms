@@ -1,0 +1,77 @@
+framework:
+    secret:        test
+    csrf_protection:
+        enabled: true
+    router:        { resource: "%kernel.root_dir%/config/routing.yml" }
+    validation:    { enabled: true, enable_annotations: true }
+    form: ~
+    test: ~
+    default_locale: en
+    session:
+        storage_id:     session.storage.mock_file
+    profiler:      { only_exceptions: false }
+    templating:    { engines: ['twig'] }
+
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+
+services:
+    nelmio.test.controller:
+        class: Nelmio\ApiDocBundle\Tests\Fixtures\Controller\TestServiceController
+    nelmio.test.type:
+        class: Nelmio\ApiDocBundle\Tests\Fixtures\Form\DependencyType
+        arguments:
+            - [foo, bar]
+        tags:
+            - { name: form.type, alias: dependency_type, extended_type: Nelmio\ApiDocBundle\Tests\Fixtures\Form\DependencyType }
+
+parameters:
+    domain_prod: test.com
+    domain_dev: test.dev
+
+#JMS Serializer config for testing JmsMetadataParser
+jms_serializer:
+    handlers:
+        datetime:
+            default_format: "Y-m-dTH:i:s" # ISO8601
+            default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
+
+    property_naming:
+        separator:  _
+        lower_case: true
+
+    metadata:
+        cache: file
+        debug: "%kernel.debug%"
+        file_cache:
+            dir: "%kernel.cache_dir%/serializer"
+
+        # Using auto-detection, the mapping files for each bundle will be
+        # expected in the Resources/config/serializer directory.
+        #
+        # Example:
+        # class: My\FooBundle\Entity\User
+        # expected path: @MyFooBundle/Resources/config/serializer/Entity.User.(yml|xml|php)
+        auto_detection: true
+
+nelmio_api_doc:
+    sandbox:
+        authentication:
+            delivery: header
+            name: access_token
+    cache:
+        enabled: true
+    exclude_sections: ["private", "exclusive"]
+    swagger:
+        api_base_path: /api
+        swagger_version: 1.2
+        api_version: 3.14
+        info:
+            title: Nelmio Swagger
+            description: Testing Swagger integration.
+            TermsOfServiceUrl: https://github.com
+            contact: user@domain.tld
+            license: MIT
+            licenseUrl: http://opensource.org/licenses/MIT

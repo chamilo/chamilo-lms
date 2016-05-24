@@ -1,0 +1,65 @@
+{
+    "name": "sonata-project/admin-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony SonataAdminBundle",
+    "keywords": ["Admin Generator", "admin", "sonata", "bootstrap"],
+    "homepage": "https://sonata-project.org/bundles/admin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@sonata-project.org",
+            "homepage": "https://sonata-project.org"
+        },
+        {
+            "name": "Sonata Community",
+            "homepage": "https://github.com/sonata-project/SonataAdminBundle/contributors"
+        }
+    ],
+    "require": {
+        "symfony/http-foundation": "~2.3",
+        "symfony/form": "~2.3",
+        "symfony/validator": "~2.3",
+        "symfony/security-bundle": "~2.3",
+        "symfony/security-acl": "~2.4",
+        "symfony/routing": "~2.3",
+        "symfony/config": "~2.3",
+        "symfony/console": "~2.3",
+        "symfony/twig-bridge": "~2.3",
+        "symfony/twig-bundle": "~2.3",
+        "symfony/class-loader":"~2.3",
+        "symfony/expression-language": "~2.4",
+        "symfony/property-access": "~2.3",
+        "sensio/generator-bundle": "~2.3|^3.0",
+        "twig/twig": "~1.15",
+        "twig/extensions": "~1.0",
+        "sonata-project/exporter": "~1.0",
+        "sonata-project/block-bundle": "~2.2,>=2.2.7,<2.3",
+        "sonata-project/core-bundle": "^2.2.1",
+        "doctrine/common": "~2.2",
+        "doctrine/inflector": "~1.0",
+        "knplabs/knp-menu-bundle": ">=1.1.0,<3.0.0",
+        "knplabs/knp-menu": ">=1.1.0,<3.0.0"
+    },
+    "conflict": {
+        "symfony/security": ">2.8.999"
+    },
+    "require-dev": {
+        "jms/translation-bundle": "~1.1",
+        "symfony/yaml": "~2.3",
+        "sonata-project/intl-bundle": "~2.1",
+        "symfony/phpunit-bridge": "~2.7|~3.0"
+    },
+    "suggest": {
+        "jms/translation-bundle": "Extract message keys from Admins",
+        "sonata-project/intl-bundle": "Add localized date and number into the list"
+    },
+    "autoload": {
+        "psr-4": { "Sonata\\AdminBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.3.x-dev"
+        }
+    }
+}

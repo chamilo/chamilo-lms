@@ -7651,4 +7651,5 @@ $RecordAudio = "Enregistrement audio";
 $StartRecordingAudio = "Lancer l'enregistrement";
 $StopRecordingAudio = "Arrêter l'enregistrement";
 $SaveRecordedAudio = "Sauvegarder l'audio enregistré";
+$GradeFromX = "Bulletin pour le cours: %s";
 ?>

@@ -1387,7 +1387,7 @@ class GradebookUtils
         $sessionName = !empty($sessionName) ? " - $sessionName" : '';
 
         $params = array(
-            'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['department_name']),
+            'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
             'session_info' => '',
             'course_info' => '',
             'pdf_date' => '',

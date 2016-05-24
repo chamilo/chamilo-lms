@@ -94,7 +94,7 @@ foreach ($instances as $instance) {
     $crondate = $instance->lastcron ? date('r', $instance->lastcron) : '';
     $data = array(
         $checkbox,
-        $sitelink.' ('.Display::url($instance->root_web, $instance->root_web).')',
+        $sitelink.' ('.Display::url($instance->root_web, $instance->root_web, array('target' => '_blank')).')',
         $instance->institution,
         $instance->db_host.' - '.$instance->main_database,
         $instance->slug,

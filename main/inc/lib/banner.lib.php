@@ -313,9 +313,9 @@ function return_navigation_array()
     if (api_get_user_id() && !api_is_anonymous()) {
         // My Courses
         if (api_get_setting('show_tabs', 'my_courses') == 'true') {
-         //   $navigation['mycourses'] = $possible_tabs['mycourses'];
+            //$navigation['mycourses'] = $possible_tabs['mycourses'];
         } else {
-           // $menu_navigation['mycourses'] = $possible_tabs['mycourses'];
+            //$menu_navigation['mycourses'] = $possible_tabs['mycourses'];
         }
 
         // My Profile
@@ -398,7 +398,7 @@ function return_navigation_array()
 
         // Custom tabs
         $customTabs = getCustomTabs();
-        
+
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
@@ -423,115 +423,6 @@ function return_navigation_array()
     );
 }
 
-function return_menu()
-{
-    $navigation = return_navigation_array();
-    $navigation = $navigation['navigation'];
-
-    // Displaying the tabs
-
-    $lang = api_get_setting('platformLanguage');
-
-    if (!empty($_SESSION['user_language_choice'])) {
-        $lang = $_SESSION['user_language_choice'];
-    } elseif (!empty($_SESSION['_user']['language'])) {
-        $lang = $_SESSION['_user']['language'];
-    }
-
-    // Preparing home folder for multiple urls
-
-    if (api_get_multiple_access_url()) {
-        $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1) {
-            $url_info = api_get_access_url($access_url_id);
-            $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-            $clean_url = api_replace_dangerous_char($url);
-            $clean_url = str_replace('/', '-', $clean_url);
-            $clean_url .= '/';
-            $homep     = api_get_path(SYS_APP_PATH).'home/'.$clean_url; //homep for Home Path
-            //we create the new dir for the new sites
-            if (!is_dir($homep)) {
-                mkdir($homep, api_get_permissions_for_new_directories());
-            }
-        }
-    } else {
-        $homep = api_get_path(SYS_APP_PATH).'home/';
-    }
-
-    $ext = '.html';
-    $menutabs = 'home_tabs';
-    $mtloggedin = 'home_tabs_logged_in';
-    $home_top = '';
-
-    if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
-        $home_top = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);
-    } elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
-        $home_top = @(string)file_get_contents($homep.$menutabs.$lang.$ext);
-    } else {
-        //$errorMsg = get_lang('HomePageFilesNotReadable');
-    }
-
-    $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
-
-    $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
-    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-
-    $open_mtloggedin = '';
-    if (api_get_user_id() && !api_is_anonymous()) {
-        if (is_file($homep.$mtloggedin.'_'.$lang.$ext) && is_readable($homep.$mtloggedin.'_'.$lang.$ext)) {
-            $home_top = @(string)file_get_contents($homep.$mtloggedin.'_'.$lang.$ext);
-            $home_top = str_replace('::private', '', $home_top);
-        } elseif (is_file($homep.$mtloggedin.$lang.$ext) && is_readable($homep.$mtloggedin.$lang.$ext)) {
-            $home_top = @(string)file_get_contents($homep.$mtloggedin.$lang.$ext);
-            $home_top = str_replace('::private', '', $home_top);
-        } else {
-            //$errorMsg = get_lang('HomePageFilesNotReadable');
-        }
-
-        $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
-        $open_mtloggedin = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
-        $open_mtloggedin = api_to_system_encoding($open_mtloggedin, api_detect_encoding(strip_tags($open_mtloggedin)));
-    }
-
-    $lis = '';
-
-    if (!empty($open) OR !empty($open_mtloggedin)) {
-        if (strpos($open.$open_mtloggedin, 'show_menu') === false) {
-            if (api_is_anonymous()) {
-                $navigation[SECTION_CAMPUS]  = null;
-            }
-        } else {
-            if (api_get_user_id() && !api_is_anonymous()) {
-                $lis .= $open_mtloggedin;
-            } else {
-                $lis .= $open;
-            }
-        }
-    }
-
-    if (count($navigation) > 0 || !empty($lis)) {
-        $pre_lis = '';
-        foreach ($navigation as $section => $navigation_info) {
-            $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
-            if (isset($GLOBALS['this_section'])) {
-                $current = $section == $GLOBALS['this_section'] ? ' id="current" class="active '.$key.'" ' : ' class="'.$key.'"';
-            } else {
-                $current = '';
-            }
-            if (!empty($navigation_info['title'])) {
-                $pre_lis .= '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a></li>';
-            }
-        }
-        $lis = $pre_lis.$lis;
-    }
-
-    $menu = null;
-    if (!empty($lis)) {
-         $menu .= $lis;
-    }
-    return $menu;
-}
-
 /**
  * Return the navigation menu elements as a flat array
  * @return array
@@ -539,6 +430,7 @@ function return_menu()
 function menuArray()
 {
     $mainNavigation = return_navigation_array();
+
     unset($mainNavigation['possible_tabs']);
     unset($mainNavigation['menu_navigation']);
     //$navigation = $navigation['navigation'];
@@ -546,21 +438,25 @@ function menuArray()
     $lang = api_get_setting('platformLanguage');
     if (!empty($_SESSION['user_language_choice'])) {
         $lang = $_SESSION['user_language_choice'];
+
     } elseif (!empty($_SESSION['_user']['language'])) {
         $lang = $_SESSION['_user']['language'];
     }
+
+
     // Preparing home folder for multiple urls
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
             // If not a dead URL
             $urlInfo = api_get_access_url($access_url_id);
-           
+
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
             $cleanUrl = api_replace_dangerous_char($url);
             $cleanUrl = str_replace('/', '-', $cleanUrl);
             $cleanUrl .= '/';
             $homepath  = api_get_path(SYS_APP_PATH).'home/'.$cleanUrl; //homep for Home Path
+
             //we create the new dir for the new sites
             if (!is_dir($homepath)) {
                 mkdir($homepath, api_get_permissions_for_new_directories());
@@ -594,7 +490,7 @@ function menuArray()
             $pageContent = @(string) file_get_contents($homepath . $menuTabsLoggedIn . $lang . $ext);
             $pageContent = str_replace('::private', '', $pageContent);
         }
-        
+
         $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
         $openMenuTabsLoggedIn = str_replace('{rel_path}',api_get_path(REL_PATH), $pageContent);
         $openMenuTabsLoggedIn = api_to_system_encoding($openMenuTabsLoggedIn, api_detect_encoding(strip_tags($openMenuTabsLoggedIn)));
@@ -615,15 +511,15 @@ function menuArray()
                             'url' => $matches[1],
                             'target' => $matches[2],
                             'title' => $matches[3],
-                            'key' => 'extra-page-' . str_replace(' ', '-', strtolower($matches[3]))
+                            'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
                         );
                     }
                 }
-               
+
             } else {
-                
+
                 $list = split("\n", $open);
-                foreach ($list as $link) {               
+                foreach ($list as $link) {
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
                     if ($match) {
@@ -631,7 +527,7 @@ function menuArray()
                             'url' => $matches[1],
                             'target' => $matches[2],
                             'title' => $matches[3],
-                            'key' => 'extra-page-' . str_replace(' ', '-', strtolower($matches[3]))
+                            'key' => 'page-' . str_replace(' ', '-', strtolower($matches[3]))
                         );
                     }
                 }
@@ -643,9 +539,9 @@ function menuArray()
         //$pre_lis = '';
         $activeSection = '';
         foreach ($mainNavigation['navigation'] as $section => $navigation_info) {
-            
+
             $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
-            
+
             if (isset($GLOBALS['this_section'])) {
                 $tempSection = $section;
                 if ($section == 'social') {
@@ -675,7 +571,7 @@ function menuArray()
 
     }
     unset($mainNavigation['navigation']['myprofile']);
-    
+
     return $mainNavigation['navigation'];
 }
 

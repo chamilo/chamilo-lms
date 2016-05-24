@@ -14,7 +14,7 @@
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
                 {% if _u.logged == 1 %}
-                    {% for items in menu.possible_tabs %}
+                    {% for items in menu %}
                         {% if items.key != 'profile' and items.key != 'dashboard' %}
                         {% set counter = counter + 1 %}
                             <li class="item-menu menu-{{ counter }} {{ items.key }} {{ items.current }}"><a href="{{ items.url }}">{{ items.title }}</a></li>

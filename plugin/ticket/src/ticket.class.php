@@ -127,7 +127,6 @@ class TicketManager
     }
 
     /**
-     * @param int $id
      * @param array $params
      */
     public static function addCategory($params)
@@ -185,7 +184,8 @@ class TicketManager
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
         $userId = intval($userId);
         $categoryId = intval($categoryId);
-        $sql = "SELECT * FROM $table WHERE category_id = $categoryId AND user_id = $userId";
+        $sql = "SELECT * FROM $table 
+                WHERE category_id = $categoryId AND user_id = $userId";
         $result = Database::query($sql);
 
         return Database::num_rows($result) > 0;
@@ -516,6 +516,7 @@ class TicketManager
                     $ticket_id, get_lang('MessageResent'), $studentMessage, null, 1
                 );
             }
+
             return true;
         } else {
 
@@ -525,6 +526,7 @@ class TicketManager
 
     /**
      * Assign ticket to admin
+     *
      * @param int $ticket_id
      * @param int $user_id
      */
@@ -559,7 +561,7 @@ class TicketManager
                 $userInfo = api_get_user_info($user_id);
                 $userCompleteName = $userInfo['complete_name'];
             }
-            
+
             $sql = "UPDATE $table_support_tickets
                     SET assigned_last_user = $user_id
                     WHERE ticket_id = $ticket_id";
@@ -635,75 +637,62 @@ class TicketManager
     ) {
         global $data_files, $plugin;
         $ticket_id = intval($ticket_id);
-        $subject = Database::escape_string($subject);
-        $content = Database::escape_string($content);
         $user_id = intval($user_id);
-        $status = Database::escape_string($status);
-
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
         if ($sendConfirmation) {
             $form = '<form action="ticket_details.php?ticket_id=' . $ticket_id . '" id="confirmticket" method="POST" >
                          <p>' . $plugin->get_lang('TicketWasThisAnswerSatisfying') . '</p>
-                         <button name="response" id="responseyes" value="1">' . get_lang('Yes') . '</button>
-                         <button name="response" id="responseno" value="0">' . get_lang('No') . '</button>
+                         <button class="btn btn-primary responseyes" name="response" id="responseyes" value="1">' . get_lang('Yes') . '</button>
+                         <button class="btn btn-danger responseno" name="response" id="responseno" value="0">' . get_lang('No') . '</button>
                      </form>';
             $content .= $form;
+
             Database::query(
                 "UPDATE $table_support_tickets 
-                SET status_id='".self::STATUS_UNCONFIRMED."'
+                SET status_id = '".self::STATUS_UNCONFIRMED."'
                 WHERE ticket_id = '$ticket_id'"
             );
         }
         $sql = "SELECT COUNT(*) as total_messages
                FROM $table_support_messages
-               WHERE ticket_id ='$ticket_id'";
+               WHERE ticket_id = $ticket_id";
         $result = Database::query($sql);
         $obj = Database::fetch_object($result);
         $message_id = $obj->total_messages + 1;
         $now = api_get_utc_datetime();
-        // insert msg
-        $sql = "INSERT INTO $table_support_messages (
-            ticket_id,
-            message_id,
-            subject,
-            message,
-            ip_address,
-            sys_insert_user_id,
-            sys_insert_datetime,
-            sys_lastedit_user_id,
-            sys_lastedit_datetime,
-            status
-        ) VALUES (
-            '$ticket_id',
-            '$message_id',
-            '$subject',
-            '$content',
-            '" . Database::escape_string($_SERVER['REMOTE_ADDR']) . "',
-            '$user_id',
-            '" . $now . "',
-            '$user_id',
-            '" . $now . "',
-            '$status'
-        )";
-        Database::query($sql);
+
+        $params = [
+            'ticket_id' => $ticket_id,
+            'message_id' => $message_id,
+            'subject' => $subject,
+            'message' => $content,
+            'ip_address' => $_SERVER['REMOTE_ADDR'],
+            'sys_insert_user_id' => $user_id,
+            'sys_insert_datetime' => $now,
+            'sys_lastedit_user_id' => $user_id,
+            'sys_lastedit_datetime' => $now,
+            'status' => $status
+        ];
+        Database::insert($table_support_messages, $params);
 
         // update_total_message
         $sql = "UPDATE $table_support_tickets
-                SET sys_lastedit_user_id ='$user_id',
+                SET 
+                    sys_lastedit_user_id ='$user_id',
                     sys_lastedit_datetime ='$now',
                     total_messages = (
                         SELECT COUNT(*) as total_messages
                         FROM $table_support_messages
                         WHERE ticket_id ='$ticket_id'
                     )
-                WHERE ticket_id ='$ticket_id' ";
+                WHERE ticket_id = $ticket_id ";
         Database::query($sql);
 
         $sql = "SELECT COUNT(*) as total_attach
                 FROM $table_support_message_attachments
-                WHERE ticket_id ='$ticket_id' AND message_id = '$message_id'";
+                WHERE ticket_id = $ticket_id AND message_id = $message_id";
         $result = Database::query($sql);
         $obj = Database::fetch_object($result);
 

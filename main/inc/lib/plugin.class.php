@@ -81,8 +81,10 @@ class Plugin
 
         if ($form = $this->get_settings_form()) {
             $result['settings_form'] = $form;
+
             foreach ($this->fields as $name => $type) {
                 $value = $this->get($name);
+
                 if (is_array($type)) {
                     $value = $type['options'];
                 }
@@ -183,13 +185,12 @@ class Plugin
 
         foreach ($this->fields as $name => $type) {
             $options = null;
-            if (is_array($type) && isset($type['type']) && $type['type'] === "select") {
+            if (is_array($type) && isset($type['type']) && $type['type'] === 'select') {
                 $options = $type['options'];
                 $type = $type['type'];
             }
 
             $value = $this->get($name);
-
             $defaults[$name] = $value;
             $type = isset($type) ? $type : 'text';
 
@@ -267,7 +268,8 @@ class Plugin
     {
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
-            if ($setting['variable'] == ($this->get_name() . '_' . $name)) {
+            if ($setting['variable'] == $this->get_name() . '_' . $name) {
+
                 return $setting['selected_value'];
             }
         }
@@ -281,7 +283,7 @@ class Plugin
      */
     public function get_settings()
     {
-        if (is_null($this->settings)) {
+        if (empty($this->settings)) {
             $settings = api_get_settings_params(
                 array(
                     "subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')

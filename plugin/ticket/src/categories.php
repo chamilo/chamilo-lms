@@ -63,7 +63,10 @@ if (isset($_GET['action'])) {
                     'description' => $values['description'],
                     'total_tickets' => 0,
                     'sys_insert_user_id' => api_get_user_id(),
-                    'sys_insert_datetime' => api_get_utc_datetime()
+                    'sys_insert_datetime' => api_get_utc_datetime(),
+                    'category_id' => 0,
+                    'project_id' => 0,
+                    'course_required' => ''
                 ];
                 TicketManager::addCategory($params);
 

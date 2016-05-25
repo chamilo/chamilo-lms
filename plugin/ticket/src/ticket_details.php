@@ -17,10 +17,10 @@ $interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang(
 $interbreadcrumb[] = array('url' => '#', 'name' => $plugin->get_lang('TicketDetail'));
 
 $disableReponseButtons = '';
-if ($isAdmin) {
+/*if ($isAdmin) {
     $disableReponseButtons = "$('#responseyes').attr('disabled', 'disabled');
                               $('#responseno').attr('disabled', 'disabled');";
-}
+}*/
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
@@ -43,7 +43,7 @@ $(document).ready(function() {
             $( "#dialog-form" ).dialog( "open" );
         });
 
-        $("input#responseyes").click(function () {
+        $(".responseyes").click(function () {
             if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . $plugin->get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
                 return false;
             }

@@ -227,6 +227,11 @@ if ($isAdmin) {
             );
         }
 
+        echo Display::url(
+            Display::return_icon('settings.png'),
+            api_get_path(WEB_CODE_PATH) . 'admin/configure_plugin.php?name=ticket'
+        );
+
         echo '</span>';
 
     }

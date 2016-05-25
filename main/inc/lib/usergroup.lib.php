@@ -2060,10 +2060,10 @@ class UserGroup extends Model
                 break;
         }
         if (!empty($links)) {
-            $list .= '<ul class="nav nav-pills">';
+            $list = '<ul class="nav nav-pills">';
             $list .= $links;
             $list .= '</ul>';
-            $html .= Display::panelCollapse(get_lang('SocialGroups'), $list, 'sm-groups', array(), 'groups-acordeon', 'groups-collapse');    
+            $html .= Display::panelCollapse(get_lang('SocialGroups'), $list, 'sm-groups', array(), 'groups-acordeon', 'groups-collapse');
         }
         return $html;
     }

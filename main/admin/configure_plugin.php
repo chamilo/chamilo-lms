@@ -25,17 +25,23 @@ if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {
 
 global $_configuration;
 
-$message = null;
-$content = null;
+$message = '';
+$content = '';
 
 $currentUrl = api_get_self() . "?name=$pluginName";
 
 if (isset($pluginInfo['settings_form'])) {
+    /** @var FormValidator $form */
     $form = $pluginInfo['settings_form'];
     if (isset($form)) {
-        //We override the form attributes
+
+        // We override the form attributes
         $attributes = array('action' => $currentUrl, 'method' => 'POST');
         $form->updateAttributes($attributes);
+
+        if (isset($pluginInfo['settings'])) {
+            $form->setDefaults($pluginInfo['settings']);
+        }
         $content = Display::page_header($pluginInfo['title']);
         $content .= $form->toHtml();
     }
@@ -46,8 +52,6 @@ if (isset($pluginInfo['settings_form'])) {
 if (isset($form)) {
     if ($form->validate()) {
         $values = $form->exportValues();
-
-        //api_delete_category_settings_by_subkey($pluginName);
         $accessUrlId = api_get_current_access_url_id();
 
         api_delete_settings_params(
@@ -64,7 +68,8 @@ if (isset($form)) {
 
         foreach ($values as $key => $value) {
             api_add_setting(
-                $value, Database::escape_string($pluginName . '_' . $key),
+                $value,
+                Database::escape_string($pluginName . '_' . $key),
                 $pluginName,
                 'setting',
                 'Plugins',
@@ -76,26 +81,21 @@ if (isset($form)) {
                 1
             );
         }
+
         if (isset($values['show_main_menu_tab'])) {
             $objPlugin = $pluginInfo['plugin_class']::create();
             $objPlugin->manageTab($values['show_main_menu_tab']);
         }
 
-        $message = Display::return_message(get_lang('Updated'), 'success');
-
-        Session::write('message', $message);
+        Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
 
         header("Location: $currentUrl");
         exit;
     } else {
         foreach ($form->_errors as $error) {
-            $message .= Display::return_message($error, 'error');
+            Display::addFlash(Display::return_message($error, 'error'));
         }
     }
-}
-
-if (Session::has('message')) {
-    $message = Session::read('message');
 }
 
 $interbreadcrumb[] = array(
@@ -108,7 +108,7 @@ $interbreadcrumb[] = array(
 );
 
 $tpl = new Template($pluginName, true, true, false, true, false);
-$tpl->assign('message', $message);
+$tpl->assign('message', '');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
 

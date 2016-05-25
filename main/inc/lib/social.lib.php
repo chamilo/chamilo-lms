@@ -1697,7 +1697,7 @@ class SocialManager extends UserManager
             $groupId,
             $userId
         );
-        
+
         $profileEditionLink = null;
 
         if ($currentUserId === $userId) {
@@ -1815,7 +1815,7 @@ class SocialManager extends UserManager
      * @param $show_full_profile
      * @return string
      */
-    public static function listMyFriendsBlock($user_id, $link_shared, $show_full_profile)
+    public static function listMyFriendsBlock($user_id, $link_shared = '', $show_full_profile = '')
     {
         //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
         $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
@@ -1828,8 +1828,9 @@ class SocialManager extends UserManager
             $friendHtml.= '<div class="list-group">';
             $j = 1;
             for ($k=0; $k < $number_friends; $k++) {
-                if ($j > $number_of_images) break;
-
+                if ($j > $number_of_images) {
+                    break;
+                }
                 if (isset($friends[$k])) {
                     $friend = $friends[$k];
                     $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
@@ -1854,7 +1855,7 @@ class SocialManager extends UserManager
                         $friendHtml .=  $friend_avatar.' <span class="username">' . $name_user . '</span>';
                         $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
                     } else {
-                        $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
+                        $link_shared = empty($link_shared) ? '' : '&'.$link_shared;
                         $friendHtml .= '<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '" class="list-group-item">';
                         $friendHtml .=  $friend_avatar.' <span class="username-all">' . $name_user . '</span>';
                     }

@@ -6,17 +6,20 @@
  * @package chamilo.plugin.ticket
  */
 $cidReset = true;
-require_once '../config.php';
+require_once __DIR__.'/../config.php';
 $plugin = TicketPlugin::create();
 
 api_protect_admin_script(true);
 
 $categoryId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
-if (empty($categoryId)) {
+$categoryInfo = TicketManager::getCategory($categoryId);
+
+if (empty($categoryInfo)) {
     api_not_allowed(true);
 }
 
 $form = new FormValidator('edit', 'post', api_get_self().'?id='.$categoryId);
+$form->addHeader($categoryInfo['name']);
 $users = UserManager::get_user_list([], ['firstname']);
 $users = array_column($users, 'complete_name', 'user_id');
 
@@ -48,5 +51,5 @@ if ($form->validate()) {
 
 $interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
 $interbreadcrumb[] = array('url' => 'categories.php', 'name' => get_lang('Categories'));
-Display::display_header();
+Display::display_header(get_lang('Users'));
 $form->display();

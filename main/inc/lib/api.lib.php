@@ -5274,7 +5274,19 @@ function api_delete_category_settings_by_subkey($subkey, $access_url_id = 1) {
  * @param string $c
  * @return boolean  true on success, false on failure
  */
-function api_add_setting($val, $var, $sk = null, $type = 'textfield', $c = null, $title = '', $com = '', $sc = null, $skt = null, $a = 1, $v = 0) {
+function api_add_setting(
+    $val,
+    $var,
+    $sk = null,
+    $type = 'textfield',
+    $c = null,
+    $title = '',
+    $com = '',
+    $sc = null,
+    $skt = null,
+    $a = 1,
+    $v = 0
+) {
     if (empty($var) || !isset($val)) { return false; }
     $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $var = Database::escape_string($var);

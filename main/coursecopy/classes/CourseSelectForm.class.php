@@ -48,7 +48,7 @@ class CourseSelectForm
 				}
 				else{
 					el.style.display='none';
-					document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('O.gif'); ?>';
+					document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('0.gif'); ?>';
 				}
 			}
 

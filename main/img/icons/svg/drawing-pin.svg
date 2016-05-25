@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="drawing-pin.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4309">
+      <stop
+         style="stop-color:#4d4d4d;stop-opacity:1;"
+         offset="0"
+         id="stop4311" />
+      <stop
+         style="stop-color:#4d4d4d;stop-opacity:0;"
+         offset="1"
+         id="stop4313" />
+    </linearGradient>
+    <filter
+       id="filter4036">
+      <feGaussianBlur
+         id="feGaussianBlur4158"
+         stdDeviation=".52662" />
+    </filter>
+    <filter
+       y="-0.21328001"
+       x="-0.1644"
+       width="1.3287899"
+       id="filter3372"
+       height="1.42656">
+      <feGaussianBlur
+         id="feGaussianBlur4161"
+         stdDeviation="1.24131" />
+    </filter>
+    <linearGradient
+       id="linearGradient3228">
+      <stop
+         id="stop4164"
+         stop-color="#fff"
+         offset="0" />
+      <stop
+         id="stop4166"
+         stop-opacity="0"
+         stop-color="#fff"
+         offset="1" />
+    </linearGradient>
+    <radialGradient
+       r="7.3867898"
+       id="radialGradient4051"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.66684,0.25023,-0.43535,1.44245,-180.07171,-76.25791)"
+       cy="12.79813"
+       cx="278.53354">
+      <stop
+         id="stop4169"
+         stop-opacity=".99107"
+         offset="0" />
+      <stop
+         id="stop4171"
+         stop-opacity=".61607"
+         offset=".51389" />
+      <stop
+         id="stop4173"
+         stop-opacity="0"
+         stop-color="#8d8d8d"
+         offset="1" />
+    </radialGradient>
+    <radialGradient
+       r="8.9205999"
+       id="radialGradient4053"
+       gradientUnits="userSpaceOnUse"
+       cy="4.6950598"
+       cx="305.97662">
+      <stop
+         id="stop4176"
+         stop-color="#f60000"
+         offset="0" />
+      <stop
+         id="stop4178"
+         stop-color="#b30000"
+         offset="1" />
+    </radialGradient>
+    <radialGradient
+       r="8.9205999"
+       id="radialGradient4057"
+       gradientUnits="userSpaceOnUse"
+       cy="4.6950598"
+       cx="302.83102">
+      <stop
+         id="stop4181"
+         stop-color="#7f0000"
+         offset="0" />
+      <stop
+         id="stop4183"
+         stop-opacity=".49804"
+         stop-color="#840000"
+         offset=".66667" />
+      <stop
+         id="stop4185"
+         stop-opacity="0"
+         offset="1" />
+    </radialGradient>
+    <radialGradient
+       r="8.9205999"
+       id="radialGradient4061"
+       gradientUnits="userSpaceOnUse"
+       cy="4.6950598"
+       cx="302.83102">
+      <stop
+         id="stop4188"
+         stop-color="#d43500"
+         offset="0" />
+      <stop
+         id="stop4190"
+         stop-color="#d42400"
+         offset=".48052" />
+      <stop
+         id="stop4192"
+         stop-color="#d40000"
+         offset=".73611" />
+      <stop
+         id="stop4194"
+         stop-color="#b20000"
+         offset="1" />
+    </radialGradient>
+    <radialGradient
+       xlink:href="#linearGradient3228"
+       r="0.74646002"
+       id="radialGradient4059"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.78797,0.51073,-2.04519,-3.15542,1235.7385,709.11104)"
+       cy="228.65007"
+       cx="537.7536" />
+    <radialGradient
+       xlink:href="#linearGradient3228"
+       r="0.74646002"
+       id="radialGradient4063"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6289,-1.24734,4.99492,6.52288,-1652.775,-572.89743)"
+       cy="228.65007"
+       cx="537.7536" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4305"
+       x="-0.083999999"
+       width="1.168"
+       y="-0.083999999"
+       height="1.168">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.90508747"
+         id="feGaussianBlur4307" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4309"
+       id="linearGradient4315"
+       x1="258.66284"
+       y1="123.92178"
+       x2="235.82256"
+       y2="138.06694"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.5387056"
+     inkscape:cx="75.613549"
+     inkscape:cy="72.320353"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1873"
+     inkscape:window-height="1056"
+     inkscape:window-x="1413"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-924.36219)">
+    <g
+       id="g4326"
+       transform="matrix(2.6666667,0,0,2.6666667,-638.27483,680.85161)"
+       inkscape:export-filename="/var/www/chamilo11/main/img/icons/22/drawing-pin.png"
+       inkscape:export-xdpi="15.46875"
+       inkscape:export-ydpi="15.46875">
+      <rect
+         y="91.316467"
+         x="239.35306"
+         height="48"
+         width="48"
+         id="rect4324"
+         style="opacity:1;fill:#ffccaa;fill-opacity:0;stroke:none;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <g
+         transform="matrix(1.2119436,0,0,1.2119436,-35.373348,-39.484458)"
+         id="g4317">
+        <circle
+           cy="128.24391"
+           cx="247.83208"
+           id="circle4271"
+           style="opacity:1;fill:url(#linearGradient4315);fill-opacity:1;stroke:none;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter4305)"
+           transform="matrix(1.0815771,0,0,1.0433462,-24.103035,-4.7111206)"
+           r="12.929821" />
+        <circle
+           style="opacity:1;fill:#c70000;fill-opacity:1;stroke:none;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="path4147"
+           cx="249.66891"
+           cy="125.70061"
+           r="12.082053" />
+        <circle
+           r="9.4878988"
+           cy="122.89603"
+           cx="252.67332"
+           id="circle4149"
+           style="opacity:1;fill:#840000;fill-opacity:1;stroke:none;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <circle
+           style="opacity:1;fill:#bb0000;fill-opacity:1;stroke:none;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="circle4151"
+           cx="255.87045"
+           cy="120.09853"
+           r="9.4878988" />
+        <circle
+           r="7.4878988"
+           cy="119.49907"
+           cx="256.66974"
+           id="circle4269"
+           style="opacity:1;fill:#d40b00;fill-opacity:1;stroke:none;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      </g>
+    </g>
+  </g>
+</svg>

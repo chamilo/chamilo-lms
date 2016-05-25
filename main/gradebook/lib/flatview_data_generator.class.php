@@ -30,7 +30,7 @@ class FlatViewDataGenerator
      * @param array $evals
      * @param array $links
      * @param array $params
-     * @param null $mainCourseCategory
+     * @param Category|null $mainCourseCategory
      */
     public function __construct(
         $users = array(),
@@ -276,6 +276,8 @@ class FlatViewDataGenerator
 
     /**
      * Get actual array data
+     * @param integer $users_count
+     * @param integer $items_count
      * @return array 2-dimensional array - each array contains the elements:
      * 0: user id
      * 1: user lastname
@@ -355,7 +357,10 @@ class FlatViewDataGenerator
 
         $parent_id = $this->category->get_parent_id();
 
-        if ($parent_id == 0 or $this->params['only_subcat'] == $this->category->get_id()) {
+        if (
+            $parent_id == 0 ||
+            (isset($this->params['only_subcat']) && $this->params['only_subcat'] == $this->category->get_id())
+        ) {
             $main_weight  = $this->category->get_weight();
             $grade_model_id = $this->category->get_grade_model_id();
         } else {

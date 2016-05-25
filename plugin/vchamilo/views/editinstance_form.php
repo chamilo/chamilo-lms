@@ -310,6 +310,7 @@ abstract class ChamiloForm
  */
 class InstanceForm extends ChamiloForm
 {
+    /** @var  Plugin */
     public $_plugin;
     public $instance;
 
@@ -323,13 +324,13 @@ class InstanceForm extends ChamiloForm
         global $_configuration;
 
         $this->_plugin = $plugin;
-        $returnurl = $_configuration['root_web'].'plugin/vchamilo/views/editinstance.php';
+        $returnUrl = $_configuration['root_web'].'plugin/vchamilo/views/editinstance.php';
         if ($mode == 'update') {
-            $returnurl = $_configuration['root_web'].'plugin/vchamilo/views/editinstance.php?vid='.intval($_GET['vid']);
+            $returnUrl = $_configuration['root_web'].'plugin/vchamilo/views/editinstance.php?vid='.intval($_GET['vid']);
         }
 
         $cancelurl = $_configuration['root_web'].'plugin/vchamilo/views/manage.php';
-        parent::__construct($mode, $returnurl, $cancelurl);
+        parent::__construct($mode, $returnUrl, $cancelurl);
         $this->instance = $instance;
         $this->definition();
     }
@@ -341,38 +342,28 @@ class InstanceForm extends ChamiloForm
     {
         global $_configuration;
 
-        $cform = $this->_form;
+        $form = $this->_form;
+        $plugin = $this->_plugin;
 
-        /*
-         * Host's id.
-         */
-        $cform->addElement('hidden', 'vid');
-        $cform->addElement('hidden', 'what', $this->_mode.'instance');
-        $cform->addElement('hidden', 'registeronly');
+        $form->addElement('hidden', 'vid');
+        $form->addElement('hidden', 'what', $this->_mode.'instance');
+        $form->addElement('hidden', 'registeronly');
 
-        /*
-         * Features fieldset.
-         */
-        $cform->addElement('header', $this->_plugin->get_lang('hostdefinition'));
-        // Name.
-        $cform->addElement('text', 'sitename', $this->_plugin->get_lang('sitename'));
-        $cform->applyFilter('sitename', 'trim');
+        $form->addHeader($plugin->get_lang('hostdefinition'));
+        $form->addText('sitename', [$plugin->get_lang('sitename'), $plugin->get_lang('SiteNameExample')]);
+        $form->applyFilter('sitename', 'trim');
 
-        $cform->addElement(
-            'text',
-            'institution',
-            $this->_plugin->get_lang('institution')
-        );
+        $form->addText('institution', [$plugin->get_lang('institution'), $plugin->get_lang('InstitutionExample')]);
 
-        $cform->applyFilter('institution', 'trim');
+        $form->applyFilter('institution', 'trim');
 
         // Host's name.
-        $elementWeb = $cform->addElement(
+        $elementWeb = $form->addElement(
             'text',
             'root_web',
-            $this->_plugin->get_lang('rootweb')
+            [$this->_plugin->get_lang('rootweb'), $plugin->get_lang('RootWebExample')]
         );
-        $cform->applyFilter('root_web', 'trim');
+        $form->applyFilter('root_web', 'trim');
 
         if ($this->_mode == 'update') {
             $elementWeb->freeze();
@@ -381,18 +372,18 @@ class InstanceForm extends ChamiloForm
         /*
          * Database fieldset.
          */
-        $cform->addElement('header', $this->_plugin->get_lang('dbgroup'));
+        $form->addElement('header', $plugin->get_lang('dbgroup'));
 
         // Database host.
-        $cform->addElement('text', 'db_host', $this->_plugin->get_lang('dbhost'), array('id' => 'id_vdbhost'));
-        $cform->applyFilter('db_host', 'trim');
+        $form->addElement('text', 'db_host', $this->_plugin->get_lang('dbhost'), array('id' => 'id_vdbhost'));
+        $form->applyFilter('db_host', 'trim');
 
         // Database login.
-        $cform->addElement('text', 'db_user', $this->_plugin->get_lang('dbuser'), array('id' => 'id_vdbuser'));
-        $cform->applyFilter('db_user', 'trim');
+        $form->addElement('text', 'db_user', $this->_plugin->get_lang('dbuser'), array('id' => 'id_vdbuser'));
+        $form->applyFilter('db_user', 'trim');
 
         // Database password.
-        $cform->addElement(
+        $form->addElement(
             'password',
             'db_password',
             $this->_plugin->get_lang('dbpassword'),
@@ -400,10 +391,10 @@ class InstanceForm extends ChamiloForm
         );
 
         // Database name.
-        $cform->addElement('text', 'main_database', $this->_plugin->get_lang('maindatabase'));
+        $form->addText('main_database', [$plugin->get_lang('maindatabase'), $plugin->get_lang('DatabaseDescription')]);
 
         // Button for testing database connection.
-        $cform->addElement(
+        $form->addElement(
             'button',
             'testconnection',
             $this->_plugin->get_lang('testconnection'),
@@ -414,35 +405,43 @@ class InstanceForm extends ChamiloForm
             'onclick="opencnxpopup(\''.$_configuration['root_web'].'\'); return false;"'
         );
 
-        /*
+        /**
          * Template selection.
          */
         if ($this->is_in_add_mode()) {
-            $cform->addElement('header', $this->_plugin->get_lang('templating'));
+            $form->addElement('header', $this->_plugin->get_lang('templating'));
 
             $templateoptions = vchamilo_get_available_templates();
 
             // Template choice
-            $cform->addElement('select', 'template', $this->_plugin->get_lang('template'), $templateoptions);
+            $form->addSelect(
+                'template',
+                $this->_plugin->get_lang('template'),
+                $templateoptions
+            );
         } else {
             if ($this->instance) {
-                $cform->addLabel($this->_plugin->get_lang('template'), $this->instance->template);
+                $form->addLabel(
+                    $this->_plugin->get_lang('template'),
+                    $this->instance['template']
+                );
             }
         }
 
-        $cform->addButtonSave($this->_plugin->get_lang('savechanges'), 'submitbutton');
+        $form->addButtonSave($this->_plugin->get_lang('savechanges'), 'submitbutton');
 
         // Rules
-        $cform->addRule('sitename', $this->_plugin->get_lang('sitenameinputerror'), 'required', null, 'client');
-        $cform->addRule(
+        $form->addRule('sitename', $this->_plugin->get_lang('sitenameinputerror'), 'required', null, 'client');
+        $form->addRule(
             'institution',
             $this->_plugin->get_lang('institutioninputerror'),
             'required',
             null,
             'client'
         );
-        $cform->addRule('root_web', $this->_plugin->get_lang('rootwebinputerror'), 'required', null, 'client');
-        $cform->addRule(
+
+        $form->addRule('root_web', $this->_plugin->get_lang('rootwebinputerror'), 'required', null, 'client');
+        $form->addRule(
             'main_database',
             $this->_plugin->get_lang('databaseinputerror'),
             'required',
@@ -471,7 +470,7 @@ class InstanceForm extends ChamiloForm
         );
 
         if ($vchamilo && isset($data['vid']) && $data['vid'] != $vchamilo['id']) {
-            $errors['root_web'] = $plugininstance->get_lang('errorrootwebexists');
+            $errors['root_web'] = $plugininstance->get_lang('RootWebExists');
         }
 
         if (!empty($errors)) {

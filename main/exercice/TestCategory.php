@@ -367,7 +367,7 @@ class TestCategory
 	 * Return the list of differents categories NAME for a test
 	 * @param int exercise id
 	 * @param bool
-	 * @return array of string
+	 * @return integer of string
 	 *
      * @author function rewrote by jmontoya
 	 */
@@ -455,17 +455,20 @@ class TestCategory
     {
 		$nbquestionresult = 0;
 		$tabcatid = TestCategory::getListOfCategoriesIDForTest($exerciseId);
-		for ($i=0; $i < count($tabcatid); $i++) {
-			if ($tabcatid[$i] > 0 && $tabcatid[$i] > 0) {	// 0 = no category for this questio
-				$nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $tabcatid[$i]);
-				if ($nbQuestionInThisCat > $in_nbrandom) {
-					$nbquestionresult += $in_nbrandom;
-				}
-				else {
-					$nbquestionresult += $nbQuestionInThisCat;
-				}
-			}
-		}
+
+        foreach ($tabcatid as $category) {
+            if (empty($category['id'])) {
+                continue;
+            }
+
+            $nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $category['id']);
+
+            if ($nbQuestionInThisCat > $in_nbrandom) {
+                $nbquestionresult += $in_nbrandom;
+            } else {
+                $nbquestionresult += $nbQuestionInThisCat;
+            }
+        }
 
 		return $nbquestionresult;
 	}
@@ -701,14 +704,18 @@ class TestCategory
         $res_num_max = 0;
         // foreach question
 		$tabcatid = TestCategory::getListOfCategoriesIDForTest($exerciseId);
-		for ($i=0; $i < count($tabcatid); $i++) {
-			if ($tabcatid[$i] > 0) {	// 0 = no category for this question
-				$nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $tabcatid[$i]);
-                if ($nbQuestionInThisCat > $res_num_max) {
-                    $res_num_max = $nbQuestionInThisCat;
-                }
-			}
-		}
+
+        foreach ($tabcatid as $category) {
+            if (empty($category['id'])) {
+                continue;
+            }
+
+            $nbQuestionInThisCat = TestCategory::getNumberOfQuestionsInCategoryForTest($exerciseId, $category['id']);
+
+            if ($nbQuestionInThisCat > $res_num_max) {
+                $res_num_max = $nbQuestionInThisCat;
+            }
+        }
         return $res_num_max;
     }
 
@@ -983,7 +990,6 @@ class TestCategory
     /**
      * Return the id of the test category with title = $in_title
      * @param $in_title
-     * @param int $in_c_id
      *
      * @return int is id of test category
      */
@@ -1011,7 +1017,7 @@ class TestCategory
      * @param int $questionId
      * @param int $courseId
 	 *
-	 * @return int
+	 * @return string|false
      */
     public static function add_category_for_question_id($categoryId, $questionId, $courseId)
     {

@@ -268,7 +268,7 @@ class SurveyLink extends AbstractLink
 				$result = Database::query($sql);
 				$row = Database::fetch_array($result, 'ASSOC');
 				$survey_id = $row['survey_id'];
-				return api_get_path(WEB_PATH).'main/survey/reporting.php?cidReq='.$this->get_course_code().'&survey_id='.$survey_id;
+				return api_get_path(WEB_PATH).'main/survey/reporting.php?'.api_get_cidreq_params($this->get_course_code(), $session_id).'&survey_id='.$survey_id;
 			}
 		}
 		return null;

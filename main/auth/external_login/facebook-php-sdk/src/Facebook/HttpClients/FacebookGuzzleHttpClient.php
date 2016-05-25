@@ -24,7 +24,6 @@
 namespace Facebook\HttpClients;
 
 use Facebook\FacebookSDKException;
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\AdapterException;
 use GuzzleHttp\Exception\RequestException;

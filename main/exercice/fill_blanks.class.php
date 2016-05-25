@@ -118,7 +118,8 @@ class FillBlanks extends Question
                         // get input size
                         var lainputsize = 200;
                         if ($("#samplesize\\\["+i+"\\\]").width()) {
-                            lainputsize = $("#samplesize\\\["+i+"\\\]").width();
+                        // this is a weird patch to avoid to reduce the size of input blank when you are writing in the ckeditor.
+                            lainputsize = $("#samplesize\\\["+i+"\\\]").width() + 9;
                         }
 
                         if (document.getElementById("weighting["+i+"]")) {
@@ -149,15 +150,11 @@ class FillBlanks extends Question
         if (isset($listAnswersInfo) && count($listAnswersInfo["tabweighting"]) > 0) {
 
             foreach ($listAnswersInfo["tabweighting"] as $i => $weighting) {
-                if (!empty($i)) {
-                    echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
-                }
+                echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
             }
             foreach ($listAnswersInfo["tabinputsize"] as $i => $sizeOfInput) {
-                if (!empty($i)) {
-                    echo 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
-                    echo '$("#samplesize\\\['.$i.'\\\]").width('.$sizeOfInput.');';
-                }
+                echo 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
+                echo '$("#samplesize\\\['.$i.'\\\]").width('.$sizeOfInput.');';
             }
         }
 
@@ -257,7 +254,7 @@ class FillBlanks extends Question
         $form->addElement(
             'html_editor',
             'answer',
-            Display::returnIconPath('fill_field.png'),
+            Display::return_icon('fill_field.png'),
             ['id' => 'answer', 'onkeyup' => "javascript: updateBlanks(this);"],
             array('ToolbarSet' => 'TestQuestionDescription')
         );
@@ -416,7 +413,7 @@ class FillBlanks extends Question
      * @param null $feedback_type
      * @param null $counter
      * @param null $score
-     * @return null|string
+     * @return string
      */
     public function return_header($feedback_type = null, $counter = null, $score = null)
     {
@@ -430,15 +427,16 @@ class FillBlanks extends Question
     }
 
     /**
-     * @param $separatorStartRegexp
-     * @param $separatorEndRegexp
-     * @param $correctItemRegexp
-     * @param $questionId
+     * @param string $separatorStartRegexp
+     * @param string $separatorEndRegexp
+     * @param string $correctItemRegexp
+     * @param integer $questionId
      * @param $correctItem
      * @param $attributes
-     * @param $answer
+     * @param string $answer
      * @param $listAnswersInfo
-     * @param $displayForStudent
+     * @param boolean $displayForStudent
+     * @param integer $inBlankNumber
      * @return string
      */
     public static function getFillTheBlankHtml(
@@ -728,7 +726,7 @@ class FillBlanks extends Question
 
         return $listAnswerResults;
     }
-    
+
     /**
     * Return an array of student state answers for fill the blank questions
     * for each students that answered the question
@@ -737,11 +735,11 @@ class FillBlanks extends Question
     *  0  : student answer is correct
     * >0  : for fill the blank question with choice menu, is the index of the student answer (right answer indice is 0)
     *
-    * @param $testId
-    * @param $questionId
+    * @param integer $testId
+    * @param integer $questionId
     * @param $studentsIdList
-    * @param $startDate
-    * @param $endDate
+    * @param string $startDate
+    * @param string $endDate
     * @param bool $useLastAnswerredAttempt
     * @return array
     * (
@@ -918,7 +916,7 @@ class FillBlanks extends Question
      * return $text protected for use in regexp
      * @param string $text
      *
-     * @return mixed
+     * @return string
      */
     public static function getRegexpProtected($text)
     {
@@ -976,7 +974,7 @@ class FillBlanks extends Question
      * return the start separator for answer
      * @param string $number
      *
-     * @return mixed
+     * @return string
      */
     public static function getStartSeparator($number)
     {
@@ -989,7 +987,7 @@ class FillBlanks extends Question
      * return the end separator for answer
      * @param string $number
      *
-     * @return mixed
+     * @return string
      */
     public static function getEndSeparator($number)
     {
@@ -1040,13 +1038,22 @@ class FillBlanks extends Question
      * return the HTML display of the answer
      * @param string $answer
      * @param bool   $resultsDisabled
+     * @param bool $showTotalScoreAndUserChoices
      *
      * @return string
      */
-    public static function getHtmlDisplayForAnswer($answer, $resultsDisabled = false)
+    public static function getHtmlDisplayForAnswer($answer, $resultsDisabled = false, $showTotalScoreAndUserChoices = false)
     {
-        $result = "";
+        $result = '';
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
+
+        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+            if ($showTotalScoreAndUserChoices) {
+                $resultsDisabled = true;
+            } else {
+                $resultsDisabled = false;
+            }
+        }
 
         // rebuild the answer with good HTML style
         // this is the student answer, right or wrong
@@ -1097,7 +1104,7 @@ class FillBlanks extends Question
         $type = FillBlanks::getFillTheBlankAnswerType($correct);
         switch ($type) {
             case self::FILL_THE_BLANK_MENU:
-                $correctAnswerHtml = "";
+                $correctAnswerHtml = '';
                 $listPossibleAnswers = FillBlanks::getFillTheBlankMenuAnswers($correct, false);
                 $correctAnswerHtml .= "<span style='color: green'>".$listPossibleAnswers[0]."</span>";
                 $correctAnswerHtml .= " <span style='font-weight:normal'>(";

@@ -261,8 +261,9 @@ class AppPlugin
     public function load_region($region, $template, $forced = false)
     {
         if ($region == 'course_tool_plugin') {
-            return null;
+            return '';
         }
+
         ob_start();
         $this->get_all_plugin_contents_by_region($region, $template, $forced);
         $content = ob_get_contents();
@@ -331,9 +332,9 @@ class AppPlugin
     }
 
     /**
-     * @param string    $region
-     * @param Template  $template
-     * @param bool      $forced
+     * @param string $region
+     * @param Template $template
+     * @param bool $forced
      *
      * @return bool
      *
@@ -343,14 +344,13 @@ class AppPlugin
     {
         global $_plugins;
         if (isset($_plugins[$region]) && is_array($_plugins[$region])) {
-        //if (1) {
-            //Load the plugin information
+            // Load the plugin information
             foreach ($_plugins[$region] as $plugin_name) {
 
-                //The plugin_info variable is available inside the plugin index
+                // The plugin_info variable is available inside the plugin index
                 $plugin_info = $this->getPluginInfo($plugin_name, $forced);
 
-                //We also know where the plugin is
+                // We also know where the plugin is
                 $plugin_info['current_region'] = $region;
 
                 // Loading the plugin/XXX/index.php file
@@ -361,10 +361,10 @@ class AppPlugin
                     //Loading the lang variables of the plugin if exists
                     self::load_plugin_lang_variables($plugin_name);
 
-                    //Printing the plugin index.php file
+                    // Printing the plugin index.php file
                     require $plugin_file;
 
-                    //If the variable $_template is set we assign those values to be accesible in Twig
+                    // If the variable $_template is set we assign those values to be accessible in Twig
                     if (isset($_template)) {
                         $_template['plugin_info'] = $plugin_info;
                     } else {
@@ -372,8 +372,7 @@ class AppPlugin
                         $_template['plugin_info'] = $plugin_info;
                     }
 
-                    // Setting the plugin info available in the template if exists
-
+                    // Setting the plugin info available in the template if exists.
                     $template->assign($plugin_name, $_template);
 
                     // Loading the Twig template plugin files if exists
@@ -385,7 +384,6 @@ class AppPlugin
                     if (!empty($template_list)) {
                         foreach ($template_list as $plugin_tpl) {
                             if (!empty($plugin_tpl)) {
-                                //$template_plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/$plugin_tpl"; //for smarty
                                 $template_plugin_file = "$plugin_name/$plugin_tpl"; // for twig
                                 $template->display($template_plugin_file, false);
                             }
@@ -419,15 +417,17 @@ class AppPlugin
 
             $plugin_info = array();
             if (file_exists($plugin_file)) {
+
                 require $plugin_file;
             }
 
-            //extra options
+            // Extra options
             $plugin_settings = api_get_settings_params(
                 array(
                     "subkey = ? AND category = ? AND type = ? " => array($plugin_name, 'Plugins','setting')
                 )
             );
+            
             $settings_filtered = array();
             foreach ($plugin_settings as $item) {
                 $settings_filtered[$item['variable']] = $item['selected_value'];
@@ -548,6 +548,9 @@ class AppPlugin
 
                 $groups = array();
                 foreach ($obj->course_settings as $setting) {
+                    if ($obj->validateCourseSetting($setting['name']) === false) {
+                        continue;
+                    }
                     if ($setting['type'] != 'checkbox') {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
                     } else {

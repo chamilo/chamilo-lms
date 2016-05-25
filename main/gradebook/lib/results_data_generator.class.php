@@ -45,6 +45,7 @@ class ResultsDataGenerator
 
     /**
      * Get actual array data
+     * @param integer $count
      * @return array 2-dimensional array - each array contains the elements:
      * 0 ['id']        : user id
      * 1 ['result_id'] : result id
@@ -130,6 +131,7 @@ class ResultsDataGenerator
      * @param float Current absolute score (max score is taken from $this->evaluation->get_max()
      * @param bool  Whether we want the real score (2/4 (50 %)) or the transformation (A, B, C, etc)
      * @param bool  Whether we want to ignore the score color
+     * @param boolean $realscore
      * @result string The score as we want to show it
      */
     private function get_score_display ($score, $realscore, $ignore_score_color = false)

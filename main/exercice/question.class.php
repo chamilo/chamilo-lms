@@ -264,7 +264,7 @@ abstract class Question
     }
 
     /**
-     * @return bool|string
+     * @return string|false
      */
     public function selectPicturePath()
     {
@@ -589,7 +589,7 @@ abstract class Question
      * @param string $Dimension - Resizing happens proportional according to given dimension: height|width|any
      * @param integer $Max - Maximum size
      *
-     * @return boolean - true if success, false if failed
+     * @return boolean|null - true if success, false if failed
      *
      * @author Toon Keppens
      */
@@ -750,6 +750,7 @@ abstract class Question
 
     /**
      * Sets extra info
+     * @param string $extra
      */
     public function setExtra($extra)
     {
@@ -1190,7 +1191,7 @@ abstract class Question
      * @author Olivier Brouckaert
      * @param integer $deleteFromEx - exercise ID if the question is only removed from one exercise
      */
-    function delete($deleteFromEx = 0)
+    public function delete($deleteFromEx = 0)
     {
         $course_id = api_get_course_int_id();
 
@@ -1199,7 +1200,7 @@ abstract class Question
         $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $TBL_QUIZ_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
-        $id = $this->id;
+        $id = intval($this->id);
 
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
@@ -1223,27 +1224,33 @@ abstract class Question
             }
 
             $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $course_id AND question_id = " . intval($id) . "";
+                    WHERE c_id = $course_id AND question_id = " . $id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_QUESTIONS
-                    WHERE c_id = $course_id AND id = " . intval($id) . "";
+                    WHERE c_id = $course_id AND id = " . $id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES
-                    WHERE c_id = $course_id AND question_id = " . intval($id) . "";
+                    WHERE c_id = $course_id AND question_id = " . $id;
             Database::query($sql);
 
             // remove the category of this question in the question_rel_category table
             $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
-                    WHERE c_id = $course_id AND question_id = " . intval($id) . " AND c_id=" . api_get_course_int_id();
+                    WHERE 
+                        c_id = $course_id AND 
+                        question_id = " . $id;
             Database::query($sql);
 
-            api_item_property_update($this->course, TOOL_QUIZ, $id, 'QuizQuestionDeleted', api_get_user_id());
+            api_item_property_update(
+                $this->course,
+                TOOL_QUIZ,
+                $id,
+                'QuizQuestionDeleted',
+                api_get_user_id()
+            );
             $this->removePicture();
 
-            // resets the object
-            $this->Question();
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx);
@@ -1251,7 +1258,14 @@ abstract class Question
                 // disassociate question with this exercise
                 $this->search_engine_edit($deleteFromEx, FALSE, TRUE);
             }
-            api_item_property_update($this->course, TOOL_QUIZ, $id, 'QuizQuestionDeleted', api_get_user_id());
+
+            api_item_property_update(
+                $this->course,
+                TOOL_QUIZ,
+                $id,
+                'QuizQuestionDeleted',
+                api_get_user_id()
+            );
         }
     }
 
@@ -1259,10 +1273,10 @@ abstract class Question
      * Duplicates the question
      *
      * @author Olivier Brouckaert
-     * @param  array   Course info of the destination course
-     * @return int     ID of the new question
+     * @param  array   $course_info Course info of the destination course
+     * @return false|string     ID of the new question
      */
-    public function duplicate($course_info = null)
+    public function duplicate($course_info = [])
     {
         if (empty($course_info)) {
             $course_info = $this->course;
@@ -1348,6 +1362,7 @@ abstract class Question
     public function get_question_type_name()
     {
         $key = self::$questionTypes[$this->type];
+        
         return get_lang($key[1]);
     }
 
@@ -1635,7 +1650,7 @@ abstract class Question
      * @param string $name
      * @param int $course_id
      * @param int $position
-     * @return bool|int
+     * @return false|string
      */
     static function saveQuestionOption($question_id, $name, $course_id, $position = 0)
     {
@@ -1774,6 +1789,7 @@ abstract class Question
      * @param   int     Maximum result for the question
      * @param   int     Type of question (see constants at beginning of question.class.php)
      * @param   int     Question level/category
+     * @param string $quiz_id
      */
     public function create_question(
         $quiz_id,
@@ -1856,6 +1872,7 @@ abstract class Question
     /**
      * Get course medias
      * @param int course id
+     * @param integer $course_id
      */
     static function get_course_medias(
         $course_id,
@@ -1921,7 +1938,7 @@ abstract class Question
     }
 
     /**
-     * @return array
+     * @return integer[]
      */
     public static function get_default_levels()
     {

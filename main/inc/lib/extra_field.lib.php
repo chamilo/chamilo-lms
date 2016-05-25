@@ -1368,9 +1368,9 @@ EOF;
                     case ExtraField::FIELD_TYPE_FILE_IMAGE:
                         $fieldVariable = "extra_{$field_details['variable']}";
 
-                        $fieldTexts = array(
+                        $fieldTexts = [
                             $field_details['display_text']
-                        );
+                        ];
 
                         if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
 
@@ -1378,22 +1378,26 @@ EOF;
                                 $fieldTexts[] = Display::img(
                                     api_get_path(WEB_UPLOAD_PATH) . $extraData[$fieldVariable],
                                     $field_details['display_text'],
-                                    array('width' => '300')
+                                    ['width' => '300']
                                 );
                             }
+                        }
+
+                        if ($fieldTexts[0] === 'Image') {
+                            $fieldTexts[0] = get_lang($fieldTexts[0]);
                         }
 
                         $form->addElement(
                             'file',
                             $fieldVariable,
                             $fieldTexts,
-                            array('accept' => 'image/*')
+                            ['accept' => 'image/*', 'id' => 'extra_image']
                         );
 
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
 
-                        $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+                        $allowed_picture_types = ['jpg', 'jpeg', 'png', 'gif'];
                         $form->addRule(
                             'extra_'.$field_details['variable'],
                             get_lang('OnlyImagesAllowed') . ' ('.implode(',', $allowed_picture_types).')',

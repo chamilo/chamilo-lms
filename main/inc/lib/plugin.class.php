@@ -19,8 +19,8 @@ class Plugin
 {
     protected $version = '';
     protected $author = '';
-    protected $fields = array();
-    private $settings = null;
+    protected $fields = [];
+    private $settings = [];
     // Translation strings.
     private $strings = null;
     public $isCoursePlugin = false;
@@ -70,6 +70,7 @@ class Plugin
     public function get_info()
     {
         $result = array();
+        $result['obj'] = $this;
         $result['title'] = $this->get_title();
         $result['comment'] = $this->get_comment();
         $result['version'] = $this->get_version();
@@ -80,8 +81,10 @@ class Plugin
 
         if ($form = $this->get_settings_form()) {
             $result['settings_form'] = $form;
+
             foreach ($this->fields as $name => $type) {
                 $value = $this->get($name);
+
                 if (is_array($type)) {
                     $value = $type['options'];
                 }
@@ -182,13 +185,12 @@ class Plugin
 
         foreach ($this->fields as $name => $type) {
             $options = null;
-            if (is_array($type) && isset($type['type']) && $type['type'] === "select") {
+            if (is_array($type) && isset($type['type']) && $type['type'] === 'select') {
                 $options = $type['options'];
                 $type = $type['type'];
             }
 
             $value = $this->get($name);
-
             $defaults[$name] = $value;
             $type = isset($type) ? $type : 'text';
 
@@ -266,7 +268,8 @@ class Plugin
     {
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
-            if ($setting['variable'] == ($this->get_name() . '_' . $name)) {
+            if ($setting['variable'] == $this->get_name() . '_' . $name) {
+
                 return $setting['selected_value'];
             }
         }
@@ -280,7 +283,7 @@ class Plugin
      */
     public function get_settings()
     {
-        if (is_null($this->settings)) {
+        if (empty($this->settings)) {
             $settings = api_get_settings_params(
                 array(
                     "subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')
@@ -321,7 +324,7 @@ class Plugin
 
             $interfaceLanguageId = api_get_language_id($language_interface);
             $interfaceLanguageInfo = api_get_language_info($interfaceLanguageId);
-            $languageParentId = (!empty($interfaceLanguageInfo['parent_id'])?intval($interfaceLanguageInfo['parent_id']):0);
+            $languageParentId = !empty($interfaceLanguageInfo['parent_id']) ? (int) $interfaceLanguageInfo['parent_id'] : 0;
 
             //1. Loading english if exists
             $english_path = $root.$plugin_name."/lang/english.php";
@@ -333,8 +336,7 @@ class Plugin
             }
 
             $path = $root.$plugin_name."/lang/$language_interface.php";
-
-            //2. Loading the system language
+            // 2. Loading the system language
             if (is_readable($path)) {
                 include $path;
                 if (!empty($strings)) {
@@ -391,9 +393,10 @@ class Plugin
     {
         $plugin_name = $this->get_name();
         $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
 
         if (empty($courseId)) {
+
             return false;
         }
 
@@ -428,7 +431,8 @@ class Plugin
                             'subkey' => $variable,
                             'value' => $value,
                             'category' => 'plugins',
-                            'type' => $type
+                            'type' => $type,
+                            'title' => ''
                         ];
                         Database::insert($t_course, $params);
                     }
@@ -444,7 +448,8 @@ class Plugin
                             'subkey' => $plugin_name,
                             'value' => $value,
                             'category' => 'plugins',
-                            'type' => $type
+                            'type' => $type,
+                            'title' => ''
                         ];
                         Database::insert($t_course, $params);
                     }
@@ -464,8 +469,6 @@ class Plugin
         $result = Database::query($sql);
         if (!Database::num_rows($result)) {
             $tool_link = "$plugin_name/start.php";
-            //$visibility = AddCourse::string2binary(api_get_setting('course_create_active_tools', $plugin_name));
-
             $cToolId = AddCourse::generateToolId($courseId);
 
             Database::insert(
@@ -479,7 +482,7 @@ class Plugin
                     'visibility' => 1,
                     'admin' => 0,
                     'address' => 'squaregrey.gif',
-                    'added_tool' => 'NO',
+                    'added_tool' => 0,
                     'target' => '_self',
                     'category' => 'plugin',
                     'session_id' => 0
@@ -498,7 +501,9 @@ class Plugin
     public function uninstall_course_fields($courseId)
     {
         $courseId = intval($courseId);
+
         if (empty($courseId)) {
+
             return false;
         }
         $plugin_name = $this->get_name();
@@ -611,11 +616,11 @@ class Plugin
 
         $tabNum = $customTabsNum + 1;
 
-        //Avoid Tab Name Spaces
+        // Avoid Tab Name Spaces
         $tabNameNoSpaces = preg_replace('/\s+/', '', $tabName);
         $subkeytext = "Tabs" . $tabNameNoSpaces;
 
-        //Check if it is already added
+        // Check if it is already added
         $checkCondition = array(
             'where' =>
                 array(
@@ -624,11 +629,14 @@ class Plugin
                     )
                 )
         );
+
         $checkDuplicate = Database::select('*', 'settings_current', $checkCondition);
         if (!empty($checkDuplicate)) {
+
             return false;
         }
-        //End Check
+
+        // End Check
         $subkey = 'custom_tab_' . $tabNum;
         $attributes = array(
             'variable' => 'show_tabs',
@@ -645,7 +653,7 @@ class Plugin
         );
         $resp = Database::insert('settings_current', $attributes);
 
-        //Save the id
+        // Save the id
         $settings = $this->get_settings();
         $setData = array (
             'comment' => $subkey
@@ -747,5 +755,23 @@ class Plugin
                 $this->deleteTab($result[0]['subkey']);
             }
         }
+    }
+
+    /**
+     * @param string $variable
+     * @return bool
+     */
+    public function validateCourseSetting($variable)
+    {
+        return true;
+    }
+
+    /**
+     * @param string $region
+     * @return string
+     */
+    public function renderRegion($region)
+    {
+        return '';
     }
 }

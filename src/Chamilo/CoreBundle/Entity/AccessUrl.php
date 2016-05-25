@@ -25,42 +25,42 @@ class AccessUrl
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="url", type="string", length=255, nullable=false, unique=false)
      */
     private $url;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="description", type="text", unique=false)
      */
     private $description;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="active", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="active", type="integer", nullable=false, unique=false)
      */
     private $active;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="created_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="created_by", type="integer", nullable=false, unique=false)
      */
     private $createdBy;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="tms", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="tms", type="datetime", nullable=true)
      */
     private $tms;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="url_type", type="boolean", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="url_type", type="boolean", nullable=true)
      */
     private $urlType;
 

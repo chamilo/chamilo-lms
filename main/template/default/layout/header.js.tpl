@@ -1,74 +1,75 @@
 <script>
-// External plugins not part of the default Ckeditor package.
-var plugins = [
-    'asciimath',
-    'asciisvg',
-    'audio',
-    'ckeditor_wiris',
-    'dialogui',
-    'glossary',
-    'leaflet',
-    'mapping',
-    'maximize',
-    'mathjax',
-    'oembed',
-    'toolbar',
-    'toolbarswitch',
-    'video',
-    'wikilink',
-    'wordcount',
-    'youtube'
-];
+    {% if constant('CHAMILO_LOAD_WYSIWYG') %}
+        // External plugins not part of the default Ckeditor package.
+        var plugins = [
+            'asciimath',
+            'asciisvg',
+            'audio',
+            'ckeditor_wiris',
+            'dialogui',
+            'glossary',
+            'leaflet',
+            'mapping',
+            'maximize',
+            'mathjax',
+            'oembed',
+            'toolbar',
+            'toolbarswitch',
+            'video',
+            'wikilink',
+            'wordcount',
+            'youtube'
+        ];
 
-plugins.forEach(function(plugin) {
-    CKEDITOR.plugins.addExternal(plugin, '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/plugins/' }}' + plugin + '/');
-});
-
-/**
- * Function use to load templates in a div
- **/
-var showTemplates = function (ckeditorName) {
-    var editorName = 'content';
-    if (ckeditorName && ckeditorName.length > 0) {
-        editorName = ckeditorName;
-    }
-    CKEDITOR.editorConfig(CKEDITOR.config);
-    CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a){
-        var templatesConfig = CKEDITOR.getTemplates("default");
-
-        var $templatesUL = $("<ul>");
-
-        $.each(templatesConfig.templates, function () {
-            var template = this;
-            var $templateLi = $("<li>");
-
-            var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
-            templateHTML += "<b>" + template.title + "</b>";
-
-            if (template.description) {
-                templateHTML += "<div class=description>" + template.description + "</div>";
-            }
-
-            templateHTML += "</div>";
-
-            $("<a>", {
-                href: "#",
-                html: templateHTML,
-                click: function (e) {
-                    e.preventDefault();
-                    if (CKEDITOR.instances[editorName]) {
-                        CKEDITOR.instances[editorName].setData(template.html, function () {
-                            this.checkDirty();
-                        });
-                    }
-                }
-            }).appendTo($templateLi);
-            $templatesUL.append($templateLi);
+        plugins.forEach(function(plugin) {
+            CKEDITOR.plugins.addExternal(plugin, '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/plugins/' }}' + plugin + '/');
         });
-        $templatesUL.appendTo("#frmModel");
-    });
-};
 
+        /**
+         * Function use to load templates in a div
+         **/
+        var showTemplates = function (ckeditorName) {
+            var editorName = 'content';
+            if (ckeditorName && ckeditorName.length > 0) {
+                editorName = ckeditorName;
+            }
+            CKEDITOR.editorConfig(CKEDITOR.config);
+            CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a){
+                var templatesConfig = CKEDITOR.getTemplates("default");
+
+                var $templatesUL = $("<ul>");
+
+                $.each(templatesConfig.templates, function () {
+                    var template = this;
+                    var $templateLi = $("<li>");
+
+                    var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
+                    templateHTML += "<b>" + template.title + "</b>";
+
+                    if (template.description) {
+                        templateHTML += "<div class=description>" + template.description + "</div>";
+                    }
+
+                    templateHTML += "</div>";
+
+                    $("<a>", {
+                        href: "#",
+                        html: templateHTML,
+                        click: function (e) {
+                            e.preventDefault();
+                            if (CKEDITOR.instances[editorName]) {
+                                CKEDITOR.instances[editorName].setData(template.html, function () {
+                                    this.checkDirty();
+                                });
+                            }
+                        }
+                    }).appendTo($templateLi);
+                    $templatesUL.append($templateLi);
+                });
+                $templatesUL.appendTo("#frmModel");
+            });
+        };
+    {% endif %}
 $(document).ready(function(){
     $("#open-view-list").click(function(){
         $("#student-list-work").fadeIn(300);
@@ -211,6 +212,11 @@ $(document).ready(function(){
             });
         });
     };
+    $(".black-shadow").mouseenter(function() {
+        $(this).addClass('hovered-course');
+    }).mouseleave(function() {
+         $(this).removeClass('hovered-course');
+    });
 });
 
 $(window).resize(function() {
@@ -255,8 +261,10 @@ $(document).scroll(function() {
                 }
                 $('.new_actions').attr('data-top', offset.top + more_top);
             }
-
-            if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop()) {
+            // Check if the height is enough before fixing the icons menu (or otherwise removing it)
+            // Added a 30px offset otherwise sometimes the menu plays ping-pong when scrolling to
+            // the bottom of the page on short pages.
+            if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop() + 30) {
                 $('.new_actions').addClass('new_actions-fixed');
             } else {
                 $('.new_actions').removeClass('new_actions-fixed');

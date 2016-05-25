@@ -213,7 +213,7 @@ class BigBlueButtonBN {
 		'meetingID='.urlencode($this->_meetingId).
 		'&fullName='.urlencode($this->_username).
 		'&password='.urlencode($this->_password).
-		'&userID='.urlencode($joinParams['userId']).
+		'&userID='.urlencode($joinParams['userID']).
 		'&webVoiceConf='.urlencode($joinParams['webVoiceConf']);
 		// Only use createTime if we really want to use it. If it's '', then don't pass it:
 		if (((isset($joinParams['createTime'])) && ($joinParams['createTime'] != ''))) {

@@ -151,7 +151,7 @@ if ($objExercise->selectAttempts() > 0) {
         if ($remainingAttempts) {
             $attemptButton = Display::toolbarButton(
                 get_lang('AnotherAttempt'),
-                api_get_patth(WEB_CODE_PATH) . 'exercice/overview.php?' . api_get_cidreq() . '&' . http_build_query([
+                api_get_path(WEB_CODE_PATH) . 'exercice/overview.php?' . api_get_cidreq() . '&' . http_build_query([
                     'exerciseId' => $objExercise->id
                 ]),
                 'pencil-square-o',
@@ -174,7 +174,7 @@ if (!empty($exercise_stat_info)) {
 
 $max_score = $objExercise->get_max_score();
 
-Display :: display_normal_message(get_lang('Saved').'<br />',false);
+Display::display_normal_message(get_lang('Saved').'<br />',false);
 
 // Display and save questions
 ExerciseLib::display_question_list_by_attempt($objExercise, $exe_id, true);
@@ -185,6 +185,7 @@ ExerciseLib::exercise_time_control_delete(
     $learnpath_id,
     $learnpath_item_id
 );
+
 ExerciseLib::delete_chat_exercise_session($exe_id);
 
 if ($origin != 'learnpath') {
@@ -200,11 +201,10 @@ if ($origin != 'learnpath') {
         Session::erase('objExercise');
         Session::erase('exe_id');
     }
-
 	Display::display_footer();
 } else {
 	$lp_mode = isset($_SESSION['lp_mode']) ? $_SESSION['lp_mode'] : null;
-	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
+	$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
 	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {

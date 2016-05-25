@@ -21,8 +21,8 @@ VALUES
 ('showonline','world','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineWorld', 0),
 ('showonline','users','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineUsers', 0),
 ('showonline','course','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineCourse', 0),
-('profile','name','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'name', 0),
-('profile','officialcode','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'officialcode', 0),
+('profile','name','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'Name', 0),
+('profile','officialcode','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'OfficialCode', 0),
 ('profile','email','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'Email', 0),
 ('profile','picture','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'UserPicture', 0),
 ('profile','login','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'Login', 0),
@@ -76,7 +76,7 @@ VALUES
 ('registered', NULL, 'textfield', NULL, 'false', 'registered', NULL, NULL, NULL, 0),
 ('donotlistcampus', NULL, 'textfield', NULL, 'false', 'donotlistcampus', NULL, NULL, NULL,0 ),
 ('show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL, 1),
-('profile','phone','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'phone', 0),
+('profile','phone','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'Phone', 0),
 ('service_visio', 'active', 'radio',NULL,'false', 'VisioEnable','', NULL, NULL, 0),
 ('service_visio', 'visio_host', 'textfield',NULL,'', 'VisioHost','', NULL, NULL, 0),
 ('service_visio', 'visio_port', 'textfield',NULL,'1935', 'VisioPort','', NULL, NULL, 0),
@@ -1827,4 +1827,13 @@ INSERT INTO settings_current
 VALUES
 ('enable_record_audio',NULL,'radio','Tools','true','EnableRecordAudioTitle','EnableRecordAudioComment',NULL,NULL, 0);
 
+INSERT INTO settings_options (variable, value, display_text)
+VALUES
+('enable_record_audio', 'true', 'Yes'),
+('enable_record_audio', 'false', 'No');
+
 UPDATE settings_current SET selected_value = '1.11.0.3' WHERE variable = 'chamilo_database_version';
+
+INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 1);
+INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 2);
+INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 3);

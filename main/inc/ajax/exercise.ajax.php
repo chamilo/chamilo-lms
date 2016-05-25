@@ -283,9 +283,7 @@ switch ($action) {
             $attempt_list = array();
 
             // First time here we create an attempt (getting the exe_id).
-            if (empty($exercise_stat_info)) {
-
-            } else {
+            if (!empty($exercise_stat_info)) {
                 // We know the user we get the exe_id.
                 $exe_id = $exercise_stat_info['exe_id'];
                 $total_score = $exercise_stat_info['exe_result'];
@@ -325,9 +323,9 @@ switch ($action) {
                     error_log("exe_id is empty");
                 }
                 exit;
-            } else {
-                $_SESSION['exe_id'] = $exe_id;
             }
+
+            $_SESSION['exe_id'] = $exe_id;
 
             // Getting the total weight if the request is simple
             $total_weight = 0;

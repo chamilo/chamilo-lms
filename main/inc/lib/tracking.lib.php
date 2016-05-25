@@ -1605,7 +1605,7 @@ class Tracking
     	$rs = Database::query($sql);
     	if (Database::num_rows($rs) > 0) {
     		if ($last_login_date = Database::result($rs, 0, 0)) {
-                if (empty($last_login_date) || $last_login_date == '0000-00-00 00:00:00') {
+                if (empty($last_login_date)) {
                     return false;
                 }
                 //see #5736
@@ -2266,16 +2266,12 @@ class Tracking
                 $groupBy";*/
 
         $sql = "
-            SELECT
-                    lp_id,
-                    view_count,
-                    progress
-            FROM $lpViewTable lp_view
+            SELECT lp_id, view_count, progress FROM $lpViewTable lp_view
             WHERE
-              $conditionToString
-            $groupBy
+                $conditionToString
+                $groupBy
             ORDER BY view_count DESC
-            ";
+        ";
 
         $result = Database::query($sql);
 
@@ -2787,8 +2783,8 @@ class Tracking
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-
-            $res_row_lp = Database::query("SELECT DISTINCT(id) FROM $lp_table WHERE c_id = $course_id $condition_lp");
+            $sql = "SELECT DISTINCT(id) FROM $lp_table WHERE c_id = $course_id $condition_lp";
+            $res_row_lp = Database::query($sql);
             $count_row_lp = Database::num_rows($res_row_lp);
 
             // calculates time
@@ -2796,15 +2792,18 @@ class Tracking
                 while ($row_lp = Database::fetch_array($res_row_lp)) {
                     $lp_id = intval($row_lp['id']);
                     $sql = 'SELECT SUM(total_time)
-                        FROM '.$t_lpiv.' AS item_view
-                        INNER JOIN '.$t_lpv.' AS view
-                            ON item_view.lp_view_id = view.id
+                            FROM '.$t_lpiv.' AS item_view
+                            INNER JOIN '.$t_lpv.' AS view
+                            ON (
+                                item_view.lp_view_id = view.id AND 
+                                item_view.c_id = view.c_id
+                            )
                             WHERE
-                            item_view.c_id 		= '.$course_id.' AND
-                            view.c_id 			= '.$course_id.' AND
-                            view.lp_id 			= '.$lp_id.'
-                            AND view.user_id 	= '.$student_id.' AND
-                            session_id 			= '.$session_id;
+                                item_view.c_id = '.$course_id.' AND
+                                view.c_id = '.$course_id.' AND
+                                view.lp_id = '.$lp_id.' AND 
+                                view.user_id = '.$student_id.' AND
+                                session_id = '.$session_id;
 
                     $rs = Database::query($sql);
                     if (Database :: num_rows($rs) > 0) {

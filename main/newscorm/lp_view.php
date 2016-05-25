@@ -272,7 +272,7 @@ if (
         $time_start_date = api_strtotime($row_dates['start_date'], 'UTC');
         $time_exe_date = api_strtotime($row_dates['exe_date'], 'UTC');
 
-        $mytime = ((int) $time_exe_date - (int) $time_start_date);
+        $mytime = (int) $time_exe_date - (int) $time_start_date;
         $score = (float) $row_dates['exe_result'];
         $max_score = (float) $row_dates['exe_weighting'];
 

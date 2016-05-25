@@ -110,7 +110,7 @@ function external_add_user($u) {
     if (!isset($u['auth_source']))
         $u['auth_source'] = PLATFORM_AUTH_SOURCE;
     if (!isset($u['expiration_date']))
-        $u['expiration_date'] = '0000-00-00 00:00:00';
+        $u['expiration_date'] = '';
     if (!isset($u['active']))
         $u['active'] = 1;
     if (!isset($u['hr_dept_id']))
@@ -148,7 +148,7 @@ function external_add_user($u) {
  *      - language
  *      - courses : string of all courses code separated by '|'
  *      - admin : boolean
- * @return boolean
+ * @return boolean|null
  * @author ndiechburg <noel@cblue.be>
  * */
 function external_update_user($new_user) {

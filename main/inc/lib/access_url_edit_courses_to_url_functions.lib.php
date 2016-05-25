@@ -22,7 +22,7 @@ class Accessurleditcoursestourl
      * a given string
      * @param string String to search for
      * @param int Deprecated param
-     * @return string A formatted, xajax answer block
+     * @return xajaxResponse A formatted, xajax answer block
      * @assert () === false
      */
     function search_courses($needle, $id)

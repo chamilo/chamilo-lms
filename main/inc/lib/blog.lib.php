@@ -96,9 +96,7 @@ class Blog
 	/**
 	 * Creates a new blog in the given course
 	 * @author Toon Keppens
-	 * @param int $course_id Id
 	 * @param string $title
-	 * @param Text $description
 	 */
 	public static function create_blog($title, $subtitle)
 	{
@@ -185,9 +183,7 @@ class Blog
 	/**
 	 * Update title and subtitle of a blog in the given course
 	 * @author Toon Keppens
-	 * @param int $course_id Id
 	 * @param string $title
-	 * @param string $description
 	 */
 	public static function edit_blog($blog_id, $title, $subtitle)
 	{
@@ -711,7 +707,6 @@ class Blog
 	/**
 	 * Deletes an assigned task from a blog
 	 * @param Integer $blog_id
-	 * @param Integer $assignment_id
 	 */
 	public static function delete_assigned_task($blog_id, $task_id, $user_id)
 	{
@@ -1129,9 +1124,7 @@ class Blog
 	 *
 	 * @param String $type
 	 * @param Integer $blog_id
-	 * @param Integer $item_id
-	 *
-	 *@return String
+	 * @param integer $post_id
 	 */
 	public static function display_rating_form ($type, $blog_id, $post_id, $comment_id = NULL)
 	{
@@ -2136,7 +2129,7 @@ class Blog
 	 *
 	 * @param Integer $blog_id
 	 *
-	 * @return Html Form with sortable table with users to unsubcribe from a blog.
+	 * @return false|null Form with sortable table with users to unsubcribe from a blog.
 	 */
 	public static function display_form_user_unsubscribe ($blog_id)
 	{
@@ -2257,6 +2250,7 @@ class Blog
 	 * @author Toon Keppens
 	 *
 	 * @param Integer $blog_id
+	 * @param integer $post_id
 	 */
 	public static function display_new_comment_form($blog_id, $post_id, $title)
 	{
@@ -2305,10 +2299,8 @@ class Blog
 	 * @author Patrick Cool
 	 * @author Toon Keppens
 	 *
-	 * @param Array $blogitems an array containing all the blog items for the given month
 	 * @param Integer $month: the integer value of the month we are viewing
 	 * @param Integer $year: the 4-digit year indication e.g. 2005
-	 * @param String $monthName: the language variable for the mont name
 	 *
 	 * @return html code
 	*/
@@ -2597,6 +2589,7 @@ class Blog
  * @param the blog's id
  * @param the post's id
  * @param the comment's id
+ * @param integer $blog_id
  * @return array with the post info according the parameters
  * @author Julio Montoya Dokeos
  * @version avril 2008, dokeos 1.8.5
@@ -2638,6 +2631,9 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
  * @param the blog's id
  * @param the post's id
  * @param the comment's id
+ * @param integer $blog_id
+ * @param integer $post_id
+ * @param integer $comment_id
  * @author Julio Montoya Dokeos
  * @version avril 2008, dokeos 1.8.5
  */

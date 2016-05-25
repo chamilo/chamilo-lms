@@ -201,22 +201,20 @@ foreach ($categories as $item) {
                 $time_limits = false;
 
                 //This is an old LP (from a migration 1.8.7) so we do nothing
-                if ((empty($details['created_on']) || $details['created_on'] == '0000-00-00 00:00:00') &&
-                    (empty($details['modified_on']) || $details['modified_on'] == '0000-00-00 00:00:00')
+                if ((empty($details['created_on'])) &&
+                    (empty($details['modified_on']))
                 ) {
                     $time_limits = false;
                 }
 
                 //Checking if expired_on is ON
-                if ($details['expired_on'] != '' && $details['expired_on'] != '0000-00-00 00:00:00') {
+                if ($details['expired_on'] != '') {
                     $time_limits = true;
                 }
 
                 if ($time_limits) {
                     // Check if start time
-                    if (!empty($details['publicated_on']) && $details['publicated_on'] != '0000-00-00 00:00:00' &&
-                        !empty($details['expired_on']) && $details['expired_on'] != '0000-00-00 00:00:00'
-                    ) {
+                    if (!empty($details['publicated_on']) && !empty($details['expired_on'])) {
                         $start_time = api_strtotime(
                             $details['publicated_on'],
                             'UTC'

@@ -18,7 +18,7 @@ class CourseRequestManager
     /**
      * Checks whether a given course code has been already occupied.
      * @param string $wanted_course_code    The code to be checked.
-     * @return string
+     * @return boolean
      * Returns TRUE if there is created:
      * - a course with the same code OR visual_code (visualcode).
      * - a course request with the same code as the given one, or
@@ -368,7 +368,7 @@ class CourseRequestManager
     }
 
     /**
-     * @param null $status
+     * @param integer $status
      * @return bool
      */
     public static function count_course_requests($status = null)
@@ -390,7 +390,7 @@ class CourseRequestManager
 
     /**
      * Gets all the information about a course request using its database id as an access key.
-     * @param int/string $id              The id (an integer number) of the corresponding database record.
+     * @param integer $id              The id (an integer number) of the corresponding database record.
      * @return array/bool                 Returns the requested data as an array or FALSE on failure.
      */
     public static function get_course_request_info($id)

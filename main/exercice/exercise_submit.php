@@ -111,10 +111,10 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['preview']) && $_GET['prev
 
 /** @var \Exercise $exerciseInSession */
 $exerciseInSession = Session::read('objExercise');
-
 if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
     // Construction of Exercise
     $objExercise = new Exercise();
+
     Session::write('firstTime', true);
     if ($debug) {error_log('1. Setting the $objExercise variable'); };
     Session::erase('questionList');
@@ -134,7 +134,6 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
 } else {
     Session::write('firstTime', false);
 }
-
 //2. Checking if $objExercise is set
 if (!isset($objExercise) && isset($exerciseInSession)) {
 	if ($debug) { error_log('2. Loading $objExercise from session'); };
@@ -245,12 +244,14 @@ if ($objExercise->selectAttempts() > 0) {
 		if ($origin == 'learnpath') {
 			Display :: display_reduced_header();
 		} else {
-			Display :: display_header($nameTools,'Exercises');
+			Display :: display_header(get_lang('Exercises'));
 		}
 
 		echo $attempt_html;
-		if ($origin != 'learnpath')
-			Display :: display_footer();
+
+        if ($origin != 'learnpath') {
+            Display:: display_footer();
+        }
 		exit;
 	}
 }
@@ -266,33 +267,6 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
     $learnpath_item_id,
     $learnpath_item_view_id
 );
-
-//if (1) {
-$questionListInSession = Session::read('questionList');
-if (!isset($questionListInSession)) {
-    // Selects the list of question ID
-    $questionList = $objExercise->getQuestionList();
-
-    // Media questions.
-    $media_is_activated = $objExercise->mediaIsActivated();
-
-    //Getting order from random
-    if ($media_is_activated == false &&
-        $objExercise->isRandom() &&
-        isset($exercise_stat_info) &&
-        !empty($exercise_stat_info['data_tracking'])
-    ) {
-        $questionList = explode(',', $exercise_stat_info['data_tracking']);
-    }
-    Session::write('questionList', $questionList);
-    if ($debug > 0) {
-        error_log('$_SESSION[questionList] was set');
-    }
-} else {
-    if (isset($objExercise) && isset($exerciseInSession)) {
-        $questionList = Session::read('questionList');
-    }
-}
 
 // Fix in order to get the correct question list.
 $questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed();
@@ -361,6 +335,35 @@ if (empty($exercise_stat_info)) {
     }
 
     if ($debug)  error_log("5  exercise_stat_info[] exists getting exe_id $exe_id ");
+}
+
+$questionListInSession = Session::read('questionList');
+
+if (!isset($questionListInSession)) {
+    // Selects the list of question ID
+    $questionList = $objExercise->getQuestionList();
+
+    // Media questions.
+    $media_is_activated = $objExercise->mediaIsActivated();
+
+    //Getting order from random
+    if ($media_is_activated == false &&
+        $objExercise->isRandom() &&
+        isset($exercise_stat_info) &&
+        !empty($exercise_stat_info['data_tracking'])
+    ) {
+        $questionList = explode(',', $exercise_stat_info['data_tracking']);
+    }
+
+    Session::write('questionList', $questionList);
+
+    if ($debug > 0) {
+        error_log('$_SESSION[questionList] was set');
+    }
+} else {
+    if (isset($objExercise) && isset($exerciseInSession)) {
+        $questionList = Session::read('questionList');
+    }
 }
 
 // Array to check in order to block the chat
@@ -458,9 +461,8 @@ if ($time_control) { //Sends the exercise form when the expired time is finished
 }
 
 // if the user has submitted the form
-
-$exercise_title			= $objExercise->selectTitle();
-$exercise_sound 		= $objExercise->selectSound();
+$exercise_title = $objExercise->selectTitle();
+$exercise_sound = $objExercise->selectSound();
 
 //in LP's is enabled the "remember question" feature?
 

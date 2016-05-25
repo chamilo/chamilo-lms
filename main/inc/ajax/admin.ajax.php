@@ -189,6 +189,8 @@ function check_system_version()
  * @param float  Timeout
  * @param bool   Include HTTP Request headers?
  * @param bool   Include HTTP Response headers?
+ * @param string $ip
+ * @return string
  */
 function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout = 5, $req_hdr = false, $res_hdr = false)
 {

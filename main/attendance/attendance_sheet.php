@@ -305,7 +305,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 echo '<tr class="tableFloatingHeader row_odd" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px">';
                 echo $result;
                 echo '</tr>';
-                echo '<tr class="tableWithFloatingHeader row_odd">';
+                echo '<tr class="tableWithFloatingHeader row_odd tableFloatingHeaderOriginal">';
                 echo $result;
                 echo '</tr>';
                 echo '</thead>';

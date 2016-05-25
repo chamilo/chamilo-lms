@@ -149,11 +149,11 @@ class learnpath
                 $this->ref = $row['ref'];
                 $this->categoryId = $row['category_id'];
 
-                if ($row['publicated_on'] != '0000-00-00 00:00:00') {
+                if (!empty($row['publicated_on'])) {
                     $this->publicated_on = $row['publicated_on'];
                 }
 
-                if ($row['expired_on'] != '0000-00-00 00:00:00') {
+                if (!empty($row['expired_on'])) {
                     $this->expired_on  = $row['expired_on'];
                 }
                 if ($this->type == 2) {
@@ -774,7 +774,7 @@ class learnpath
 
         $res_name = Database::query($check_name);
 
-        if ($publicated_on == '0000-00-00 00:00:00' || empty($publicated_on)) {
+        if (empty($publicated_on)) {
             //by default the publication date is the same that the creation date
             //The behaviour above was changed due BT#2800
             global $_custom;
@@ -787,7 +787,7 @@ class learnpath
             $publicated_on = Database::escape_string(api_get_utc_datetime($publicated_on));
         }
 
-        if ($expired_on == '0000-00-00 00:00:00' || empty($expired_on)) {
+        if (empty($expired_on)) {
             $expired_on = null;
         } else {
             $expired_on = Database::escape_string(api_get_utc_datetime($expired_on));
@@ -1545,18 +1545,7 @@ class learnpath
         // TODO: Update the item object (can be ignored for now because refreshed).
         return true;
     }
-
-    /**
-     * Escapes a string with the available database escape function
-     * @param	string	String to escape
-     * @return	string	String escaped
-     * @deprecated use  Database::escape_string
-     */
-    public function escape_string($string)
-    {
-        return Database::escape_string($string);
-    }
-
+    
     /**
      * Static admin function exporting a learnpath into a zip file
      * @param	string	Export type (scorm, zip, cd)
@@ -1595,7 +1584,8 @@ class learnpath
             error_log('New LP - In learnpath::get_brother_chapters()', 0);
         }
 
-        if (empty($id)|| $id != strval(intval($id))) {
+        if (empty($id) || $id != strval(intval($id))) {
+
             return array ();
         }
 
@@ -1606,21 +1596,24 @@ class learnpath
         if (Database :: num_rows($res_parent) > 0) {
             $row_parent = Database :: fetch_array($res_parent);
             $parent = $row_parent['parent_item_id'];
-            $sql_bros = "SELECT * FROM $lp_item
-                        WHERE
-                            c_id = ".$course_id." AND
-                            parent_item_id = $parent AND
-                            id = $id AND
-                            item_type='dokeos_chapter'
-                        ORDER BY display_order";
-            $res_bros = Database::query($sql_bros);
-            $list = array ();
+            $sql = "SELECT * FROM $lp_item
+                    WHERE
+                        c_id = ".$course_id." AND
+                        parent_item_id = $parent AND
+                        id = $id AND
+                        item_type='dokeos_chapter'
+                    ORDER BY display_order";
+            $res_bros = Database::query($sql);
+
+            $list = array();
             while ($row_bro = Database :: fetch_array($res_bros)) {
                 $list[] = $row_bro;
             }
+
             return $list;
         }
-        return array ();
+
+        return array();
     }
 
     /**
@@ -1959,7 +1952,7 @@ class learnpath
      * Gets the navigation bar for the learnpath display screen
      * @return	string	The HTML string to use as a navigation bar
      */
-    public function get_navigation_bar($idBar = null, $display=null) {
+    public function get_navigation_bar($idBar = null, $display = null) {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_navigation_bar()', 0);
         }
@@ -2350,9 +2343,7 @@ class learnpath
             // Also check the time availability of the LP
             if ($is_visible) {
                 // Adding visibility restrictions
-                if (!empty($row['publicated_on']) &&
-                    $row['publicated_on'] != '0000-00-00 00:00:00'
-                ) {
+                if (!empty($row['publicated_on'])) {
                     if ($now < api_strtotime($row['publicated_on'], 'UTC')) {
                         //api_not_allowed();
                         $is_visible = false;
@@ -2364,13 +2355,13 @@ class learnpath
                 if (isset($_custom['lps_hidden_when_no_start_date']) &&
                     $_custom['lps_hidden_when_no_start_date']
                 ) {
-                    if (empty($row['publicated_on']) || $row['publicated_on'] == '0000-00-00 00:00:00') {
+                    if (empty($row['publicated_on'])) {
                         //api_not_allowed();
                         $is_visible = false;
                     }
                 }
 
-                if (!empty($row['expired_on']) && $row['expired_on'] != '0000-00-00 00:00:00') {
+                if (!empty($row['expired_on'])) {
                     if ($now > api_strtotime($row['expired_on'], 'UTC')) {
                         //api_not_allowed();
                         $is_visible = false;
@@ -3297,6 +3288,7 @@ class learnpath
                 $html .= '</div>';
             }
         }
+
         return $html;
 
     }
@@ -5543,7 +5535,7 @@ class learnpath
         if ($update_audio == 'true' && count($this->arrMenu) != 0) {
             $return .= '</form>';
         }
-        
+
         return $return;
     }
 
@@ -6357,18 +6349,18 @@ class learnpath
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
             switch ($row['item_type']) {
-                case 'dokeos_chapter' :
-                case 'dir' :
-                case 'asset' :
-                case 'sco' :
-                    if (isset ($_GET['view']) && $_GET['view'] == 'build') {
+                case 'dokeos_chapter':
+                case 'dir':
+                case 'asset':
+                case 'sco':
+                    if (isset($_GET['view']) && $_GET['view'] == 'build') {
                         $return .= $this->display_manipulate($item_id, $row['item_type']);
                         $return .= $this->display_item_form($row['item_type'], get_lang('EditCurrentChapter') . ' :', 'edit', $item_id, $row);
                     } else {
                         $return .= $this->display_item_small_form($row['item_type'], get_lang('EditCurrentChapter') . ' :', $row);
                     }
                     break;
-                case TOOL_DOCUMENT :
+                case TOOL_DOCUMENT:
                     $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                     $sql = "SELECT lp.*, doc.path as dir
                             FROM " . $tbl_lp_item . " as lp
@@ -6383,7 +6375,7 @@ class learnpath
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_document_form('edit', $item_id, $row_step);
                     break;
-                case TOOL_LINK :
+                case TOOL_LINK:
                     $link_id = (string) $row['path'];
                     if (ctype_digit($link_id)) {
                         $tbl_link = Database :: get_course_table(TABLE_LINK);
@@ -6398,7 +6390,7 @@ class learnpath
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_link_form('edit', $item_id, $row);
                     break;
-                case TOOL_LP_FINAL_ITEM :
+                case TOOL_LP_FINAL_ITEM:
                     $_SESSION['finalItem'] = true;
                     $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                     $sql = "SELECT lp.*, doc.path as dir
@@ -6414,7 +6406,7 @@ class learnpath
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_document_form('edit', $item_id, $row_step);
                     break;
-                case 'dokeos_module' :
+                case 'dokeos_module':
                     if (isset ($_GET['view']) && $_GET['view'] == 'build') {
                         $return .= $this->display_manipulate($item_id, $row['item_type']);
                         $return .= $this->display_item_form($row['item_type'], get_lang('EditCurrentModule') . ' :', 'edit', $item_id, $row);
@@ -6422,23 +6414,23 @@ class learnpath
                         $return .= $this->display_item_small_form($row['item_type'], get_lang('EditCurrentModule') . ' :', $row);
                     }
                     break;
-                case TOOL_QUIZ :
+                case TOOL_QUIZ:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_quiz_form('edit', $item_id, $row);
                     break;
-                case TOOL_HOTPOTATOES :
+                case TOOL_HOTPOTATOES:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_hotpotatoes_form('edit', $item_id, $row);
                     break;
-                case TOOL_STUDENTPUBLICATION :
+                case TOOL_STUDENTPUBLICATION:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_student_publication_form('edit', $item_id, $row);
                     break;
-                case TOOL_FORUM :
+                case TOOL_FORUM:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_forum_form('edit', $item_id, $row);
                     break;
-                case TOOL_THREAD :
+                case TOOL_THREAD:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_thread_form('edit', $item_id, $row);
                     break;
@@ -8427,7 +8419,7 @@ class learnpath
             </script>';
         }
 
-        $url = api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
+        $url = api_get_self().'?cidReq='.api_get_cidreq().'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
 
         $return .= Display::url(
             Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
@@ -11111,6 +11103,50 @@ EOD;
 
         return $form->returnForm();
     }
+
+    /**
+     * Check if the current lp item is first, both, last or none from lp list
+     *
+     * @param int $currentItemId
+     * @return string
+     */
+    public function isFirstOrLastItem($currentItemId)
+    {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::isFirstOrLastItem('.$currentItemId.')', 0);
+        }
+
+        $lpItemId = [];
+
+        $typeListNotToVerify = self::getChapterTypes();
+        foreach ($this->items as $item) {
+            if (!in_array($item->get_type(), $typeListNotToVerify)) {
+                $lpItemId[] = $item->get_id();
+            }
+        }
+
+        $lastLpItemIndex = count($lpItemId) - 1;
+        $position = array_search($currentItemId, $lpItemId);
+
+        switch ($position) {
+            case 0:
+                if (!$lastLpItemIndex) {
+                    $answer = 'both';
+                    break;
+                }
+
+                $answer = 'first';
+                break;
+            case $lastLpItemIndex:
+                $answer = 'last';
+                break;
+            default:
+                $answer = 'none';
+        }
+
+        return $answer;
+    }
+
 }
 
 if (!function_exists('trim_value')) {

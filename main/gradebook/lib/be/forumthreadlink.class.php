@@ -121,7 +121,7 @@ class ForumThreadLink extends AbstractLink
 
     /**
     * Has anyone done this exercise yet ?
-    * @return int
+    * @return boolean
     */
     public function has_results()
     {
@@ -306,14 +306,15 @@ class ForumThreadLink extends AbstractLink
 
 	public function get_link()
 	{
+		$sessionId = api_get_session_id();
 		//it was extracts the forum id
 		$sql = 'SELECT * FROM '.$this->get_forum_thread_table()."
-    			WHERE c_id = '.$this->course_id.' AND thread_id = '".$this->get_ref_id()."' AND session_id = ".api_get_session_id()."";
+    			WHERE c_id = '.$this->course_id.' AND thread_id = '".$this->get_ref_id()."' AND session_id = ".$sessionId."";
 		$result = Database::query($sql);
 		$row    = Database::fetch_array($result,'ASSOC');
 		$forum_id=$row['forum_id'];
 
-		$url = api_get_path(WEB_PATH).'main/forum/viewthread.php?cidReq='.$this->get_course_code().'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
+		$url = api_get_path(WEB_PATH).'main/forum/viewthread.php?'.api_get_cidreq_params($this->get_course_code(), $sessionId).'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
 		return $url;
 	}
 

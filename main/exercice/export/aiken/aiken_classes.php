@@ -10,6 +10,10 @@
 if ( count( get_included_files() ) == 1 ) die( '---' );
 
 if (!function_exists('mime_content_type')) {
+
+	/**
+	 * @param string $filename
+	 */
 	function mime_content_type($filename) {
 		return DocumentManager::file_get_mime_type((string)$filename);
 	}

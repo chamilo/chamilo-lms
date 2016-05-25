@@ -211,6 +211,7 @@ class UserManager
      * @param  string Encrypt method used if password is given encrypted. Set to an empty string by default
      * @param  bool $send_mail
      * @param  bool $isAdmin
+     * @param  string $address
      *
      * @return mixed   new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -237,7 +238,8 @@ class UserManager
         $extra = null,
         $encrypt_method = '',
         $send_mail = false,
-        $isAdmin = false
+        $isAdmin = false,
+        $address = ''
     ) {
         $currentUserId = api_get_user_id();
         $hook = HookCreateUser::create();
@@ -346,6 +348,7 @@ class UserManager
             ->setCreatorId($creator_id)
             ->setAuthSource($auth_source)
             ->setPhone($phone)
+            ->setAddress($address)
             ->setLanguage($language)
             ->setRegistrationDate($now)
             ->setHrDeptId($hr_dept_id)
@@ -2282,22 +2285,20 @@ class UserManager
      * @param string the internal value of the field
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-    public static function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true)
+    public static function get_extra_user_data_by_value($field_variable, $field_value)
     {
         $extraField = new ExtraFieldValue('user');
 
-        $data = $extraField->get_values_by_handler_and_field_variable(
+        $data = $extraField->get_item_id_from_field_variable_and_field_value(
             $field_variable,
             $field_value,
-            null,
-            true,
-            intval($all_visibility)
+            true
         );
 
         $result = [];
         if (!empty($data)) {
             foreach ($data as $data) {
-                $result[] = $data['item_id'];
+                $result[] = $data;
             }
         }
 
@@ -3012,7 +3013,7 @@ class UserManager
             self::delete_api_key($id_key['id']);
             $num = self::add_api_key($user_id, $api_service);
         } elseif ($num == 0) {
-            $num = self::add_api_key($user_id);
+            $num = self::add_api_key($user_id, $api_service);
         }
         return $num;
     }
@@ -4137,7 +4138,7 @@ class UserManager
      * @param array $subscribedUsersId The id of suscribed users
      * @param action $relationType The relation type
      */
-    public static function subscribeUsersToUser($userId, $subscribedUsersId, $relationType)
+    public static function subscribeUsersToUser($userId, $subscribedUsersId, $relationType, $deleteUsersBeforeInsert = false)
     {
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -4147,28 +4148,37 @@ class UserManager
         $affectedRows = 0;
 
         if (api_get_multiple_access_url()) {
-            //Deleting assigned users to hrm_id
-            $sql = "SELECT s.user_id FROM $userRelUserTable s "
-                . "INNER JOIN $userRelAccessUrlTable a ON (a.user_id = s.user_id) "
-                . "WHERE friend_user_id = $userId "
-                . "AND relation_type = $relationType "
-                . "AND access_url_id = " . api_get_current_access_url_id() . "";
+            // Deleting assigned users to hrm_id
+            $sql = "SELECT s.user_id FROM $userRelUserTable s 
+                    INNER JOIN $userRelAccessUrlTable a ON (a.user_id = s.user_id) 
+                    WHERE 
+                        friend_user_id = $userId AND 
+                        relation_type = $relationType AND 
+                        access_url_id = " . api_get_current_access_url_id();
         } else {
-            $sql = "SELECT user_id FROM $userRelUserTable "
-                . "WHERE friend_user_id = $userId "
-                . "AND relation_type = $relationType";
+            $sql = "SELECT user_id FROM $userRelUserTable 
+                    WHERE friend_user_id = $userId 
+                    AND relation_type = $relationType";
         }
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
-                $sql = "DELETE FROM $userRelUserTable "
-                    . "WHERE user_id = {$row['user_id']} "
-                    . "AND friend_user_id = $userId "
-                    . "AND relation_type = $relationType";
-
+                $sql = "DELETE FROM $userRelUserTable 
+                        WHERE 
+                          user_id = {$row['user_id']} AND 
+                          friend_user_id = $userId AND 
+                          relation_type = $relationType";
                 Database::query($sql);
             }
+        }
+
+        if ($deleteUsersBeforeInsert) {
+            $sql = "DELETE FROM $userRelUserTable 
+                    WHERE 
+                        user_id = $userId AND
+                        relation_type = $relationType";
+            Database::query($sql);
         }
 
         // Inserting new user list
@@ -4176,11 +4186,10 @@ class UserManager
             foreach ($subscribedUsersId as $subscribedUserId) {
                 $subscribedUserId = intval($subscribedUserId);
 
-                $sql = "INSERT IGNORE INTO $userRelUserTable(user_id, friend_user_id, relation_type) "
-                    . "VALUES ($subscribedUserId, $userId, $relationType)";
+                $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
+                        VALUES ($subscribedUserId, $userId, $relationType)";
 
                 $result = Database::query($sql);
-
                 $affectedRows = Database::affected_rows($result);
             }
         }
@@ -4822,14 +4831,42 @@ EOF;
     }
 
     /**
-     * Subscribe users to student boss
+     * Subscribe boss to students
+     * 
      * @param int $bossId The boss id
      * @param array $usersId The users array
      * @return int Affected rows
      */
-    public static function subscribeUsersToBoss($bossId, $usersId)
+    public static function subscribeBossToUsers($bossId, $usersId)
     {
         return self::subscribeUsersToUser($bossId, $usersId, USER_RELATION_TYPE_BOSS);
+    }
+
+    /**
+     * Subscribe boss to students
+     *
+     * @param int $studentId
+     * @param array $bossList
+     * @return int Affected rows
+     */
+    public static function subscribeUserToBossList($studentId, $bossList)
+    {
+        $count = 1;
+        if ($bossList) {
+            $studentId = (int) $studentId;
+            $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+            $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $sql = "DELETE FROM $userRelUserTable 
+                    WHERE user_id = $studentId AND relation_type = ".USER_RELATION_TYPE_BOSS;
+            Database::query($sql);
+
+            foreach ($bossList as $bossId) {
+                $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
+                        VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
+
+                Database::query($sql);
+            }
+        }
     }
 
     /**
@@ -4861,8 +4898,18 @@ EOF;
         $lastConnectionDate = null
     ){
         return self::getUsersFollowedByUser(
-                $userId, $userStatus, $getOnlyUserId, $getSql, $getCount, $from, $numberItems, $column, $direction,
-                $active, $lastConnectionDate, STUDENT_BOSS
+            $userId,
+            $userStatus,
+            $getOnlyUserId,
+            $getSql,
+            $getCount,
+            $from,
+            $numberItems,
+            $column,
+            $direction,
+            $active,
+            $lastConnectionDate,
+            STUDENT_BOSS
         );
     }
 
@@ -4976,7 +5023,7 @@ EOF;
      * @param $userId
      * @return bool
      */
-    public static function getStudentBoss($userId)
+    public static function getFirstStudentBoss($userId)
     {
         $userId = intval($userId);
         if ($userId > 0) {
@@ -4997,6 +5044,36 @@ EOF;
 
                 return $row[0]['boss_id'];
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get the boss user ID from a followed user id
+     * @param $userId
+     * @return bool
+     */
+    public static function getStudentBossList($userId)
+    {
+        $userId = intval($userId);
+        if ($userId > 0) {
+            $userRelTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+            $result = Database::select(
+                'DISTINCT friend_user_id AS boss_id',
+                $userRelTable,
+                array(
+                    'where' => array(
+                        'user_id = ? AND relation_type = ? ' => array(
+                            $userId,
+                            USER_RELATION_TYPE_BOSS,
+                        )
+                    )
+                ),
+                'all'
+            );
+
+            return $result;
         }
 
         return false;

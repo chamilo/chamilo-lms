@@ -104,6 +104,7 @@ $_configuration[1]['hosting_limit_active_courses'] = 0;
 // Email to warn if limit was reached.
 //$_configuration[1]['hosting_contact_mail'] = 'example@example.org';
 // Portal size limit in MB (set to 1024 for 1GB, 5120 for 5GB, etc).
+// Check main/cron/hosting_total_size_limit.php for how to use this limit.
 $_configuration['hosting_total_size_limit'] = 0;
 
 /**
@@ -223,6 +224,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // 1 = Default. Works as it is now (default is to link to the special session page)
 // 0 = No link (not clickable)
 // 2 = Link to the course if there is only one course
+// 3 = Session link will make course list foldable
 //$_configuration['courses_list_session_title_link'] = 1;
 // Fix embedded videos inside lps, adding an optional popup
 //$_configuration['lp_fix_embed_content'] = false;
@@ -238,5 +240,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['messaging_gdc_project_number'] = '';
 //Api Key in the Google Developer Console
 //$_configuration['messaging_gdc_api_key'] = '';
-// Userportal template located in main/template/default/user_portal
-//$_configuration['user_portal_tpl'] = 'index_grid.tpl';
+// New grid view the list of courses
+//$_configuration['view_grid_courses'] = true;

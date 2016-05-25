@@ -49,7 +49,10 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
         exit;
     }
 }
-
+// My friends
+$friend_html = SocialManager::listMyFriendsBlock(
+    $user_id
+);
 $content = null;
 $social_right_content = '';
 
@@ -134,7 +137,7 @@ function add_image_form() {
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.Display::returnIconPath('delete.gif').'\"></a>";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.Display::returnIconPath('delete.png').'\"></a>";
 
 	if (filepaths.childNodes.length == 3) {
 		var link_attach = document.getElementById("link-more-attach");
@@ -203,7 +206,7 @@ $show_message = null;
 if (!empty($show_message)) {
     $social_right_content .= Display::return_message($show_message, 'confirmation');
 }
-$social_right_content .= MessageManager::display_message_for_group(
+$group_message = MessageManager::display_message_for_group(
     $group_id,
     $topic_id,
     $is_member,
@@ -217,7 +220,9 @@ $tpl->setHelp('Groups');
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, $user_id, 'groups', $group_id);
 $tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_friend_block', $friend_html);
+$tpl->assign('group_message', $group_message);
 $tpl->assign('social_right_content', $social_right_content);
 $tpl->assign('content', $content);
-$social_layout = $tpl->get_template('social/home.tpl');
+$social_layout = $tpl->get_template('social/groups_topics.tpl');
 $tpl->display($social_layout);

@@ -346,6 +346,9 @@ class Store
         return $result;
     }
 
+    /**
+     * @param string $sql
+     */
     protected function execute($sql)
     {
         return Database::query($sql, null, __FILE__);

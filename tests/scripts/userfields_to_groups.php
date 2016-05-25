@@ -16,8 +16,6 @@ $tUserField = Database::get_main_table(TABLE_EXTRA_FIELD);
 $tUserFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
 $tUser = Database::get_main_table(TABLE_MAIN_USER);
-$tGroup = Database::get_main_table(TABLE_MAIN_GROUP);
-$tGroupUser = Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 
 // First get the IDs of the selected fields
 $sql = "SELECT id, field_type, variable FROM $tUserField";
@@ -57,7 +55,7 @@ foreach ($usersData as $userId => $value) {
 
 // Third, we create groups based on the combined strings by user and insert
 // users in them (as reader)
-foreach ($distinctGroups as $name => $usersList) {
+/*foreach ($distinctGroups as $name => $usersList) {
     $now = api_get_utc_datetime();
     $sql = "INSERT INTO $tGroup (name, visibility, updated_on, created_on) VALUES ('$name', 1, '$now', '$now')";
     echo $sql . PHP_EOL;
@@ -69,4 +67,4 @@ foreach ($distinctGroups as $name => $usersList) {
         echo $sql . PHP_EOL;
         $result = Database::query($sql);
     }
-}
+}*/

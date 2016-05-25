@@ -303,20 +303,6 @@ class TestForumFunction extends UnitTestCase {
 		//var_dump($res);
 	 }
 
-	/**
-	* This function retrieves all the information of a given forum_id
-	* @param $forum_id integer that indicates the forum
-	* @return array returns
-	* @deprecated this functionality is now moved to get_forums($forum_id)
-	*/
-	/*
-	function testget_forum_information() {
-		$forum_id = 1;
-		$res = get_forum_information($forum_id);
-		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	 }*/
-
 	 /**
 	* This function retrieves all the information of a given forumcategory id
 	* @param $forum_id integer that indicates the forum
@@ -514,28 +500,7 @@ class TestForumFunction extends UnitTestCase {
 		}
 		//var_dump($res);
 	 }
-
-	 /**
-	* With this function we find the number of posts and topics in a given forum.
-	* @param int
-	* @return array
-	* @todo consider to call this function only once and let it return an array where the key is the forum id and the value is an array with number_of_topics and number of post
-	* as key of this array and the value as a value. This could reduce the number of queries needed (especially when there are more forums)
-	* @todo consider merging both in one query.
-	* @deprecated the counting mechanism is now inside the function get_forums
-	*/
-	/*
-	function testget_post_topics_of_forum() {
-		$forum_id = 1;
-		$res = get_post_topics_of_forum($forum_id);
-		if(!is_null($res)){
-			$this->assertTrue(is_array($res));
-		} else {
-			$this->assertTrue(is_null($res));
-		}
-		//var_dump($res);
-	 }*/
-
+	
 	 /**
 	* Retrieve all posts of a given thread
 	* @param int $thread_id integer that indicates the forum

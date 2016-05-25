@@ -16,19 +16,19 @@ $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
 
 if ($report) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
-    $htmlHeadXtra[] = ''
-    . '<script type="text/javascript">'
-        . '$(document).ready(function() {'
-            . '$.ajax({'
-                . 'url: "'. api_get_path(WEB_CODE_PATH) .'inc/ajax/statistics.ajax.php?a=recentlogins",'
-                . 'type: "POST",'
-                . 'success: function(data) {'
-                    . 'Chart.defaults.global.responsive = true;'
-                    . 'var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);'
-                . '}'
-            . '});'
-        . '});' 
-    . '</script>'; 
+    $htmlHeadXtra[] = '
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: "'. api_get_path(WEB_CODE_PATH) .'inc/ajax/statistics.ajax.php?a=recentlogins",
+                    type: "POST",
+                    success: function(data) {
+                        Chart.defaults.global.responsive = true;
+                        var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
+                    }
+            });
+        });
+        </script>';
 }
         
 $tool_name = get_lang('Statistics');

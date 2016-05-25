@@ -95,7 +95,7 @@ class CourseDescription
      * Get all data by description and session id,
      * first you must set session_id property with the object CourseDescription
      * @param    int  $description_type Description type
-     * @param   string $course_code Course code (optional)
+     * @param   string $courseId Course code (optional)
      * @param    int $session_id Session id (optional)
      * @return array    List of fields from the descriptions found of the given type
      */
@@ -241,7 +241,7 @@ class CourseDescription
     {
         $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
         $description_id = $this->get_id_by_description_type($description_type);
-        $course_id = api_get_real_course_id();
+        $course_id = api_get_course_int_id();
         $course_code = api_get_course_id();
         $item_property_id = api_get_item_property_id(
             $course_code,

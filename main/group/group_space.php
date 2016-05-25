@@ -20,7 +20,6 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 
 /*	MAIN CODE */
-
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
 $current_group = GroupManager::get_group_properties($group_id);
@@ -30,7 +29,7 @@ if (empty($current_group)) {
 
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('GroupSpace');
-$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidReq(), 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
 
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
 
@@ -205,6 +204,17 @@ if (api_is_allowed_to_edit(false, true) ||
         }
     }
 
+    $enabled = api_get_plugin_setting('bbb', 'tool_enable');
+    if ($enabled === 'true') {
+        $bbb = new bbb();
+        if ($bbb->hasGroupSupport()) {
+            $actions_array[] = array(
+                'url' => api_get_path(WEB_PLUGIN_PATH)."bbb/start.php?".api_get_cidreq(),
+                'content' => Display::return_icon('bbb.png', get_lang('VideoConference'), array(), 32)
+            );
+        }
+    }
+    
     if (!empty($actions_array)) {
         echo Display::actions($actions_array);
     }
@@ -481,7 +491,7 @@ function email_filter($email)
  * Display a user icon that links to the user page
  *
  * @param integer $user_id the id of the user
- * @return html code
+ * @return string code
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version April 2008

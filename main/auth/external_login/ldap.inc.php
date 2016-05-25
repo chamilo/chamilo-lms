@@ -28,7 +28,7 @@ function extldap_purify_string($string)
 /**
  * Establishes a connection to the LDAP server and sets the protocol version
  *
- * @return resource ldap link identifier or false
+ * @return boolean ldap link identifier or false
  * @author ndiechburg <noel@cblue.be>
  * */
 function extldap_connect()
@@ -77,6 +77,7 @@ function extldap_connect()
 /**
  * Authenticate user on external ldap server and return user ldap entry if that succeeds
  *
+ * @param string $password
  * @return mixed false if user cannot authenticate on ldap, user ldap entry if tha succeeds
  * @author ndiechburg <noel@cblue.be>
  * Modified by hubert.borderiou@grenet.fr
@@ -237,7 +238,7 @@ function extldap_get_user_search_string($username)
 
 /**
  * Imports all LDAP users into Chamilo
- * @return bool false on error, true otherwise
+ * @return false|null false on error, true otherwise
  */
 function extldap_import_all_users()
 {
@@ -311,7 +312,7 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
     $auth_source   = 'ldap';
 
     // No expiration date for students (recover from LDAP's shadow expiry)
-    $expiration_date = '0000-00-00 00:00:00';
+    $expiration_date = '';
     $active          = 1;
     if (empty($status)) {
         $status = 5;

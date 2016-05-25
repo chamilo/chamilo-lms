@@ -264,7 +264,7 @@ EOT;
 	/*
 	 * Show form to generate groups from classes subscribed to the course
 	 */
-    $options['where'] = array(" usergroup.course_id = ? " =>  api_get_real_course_id());
+    $options['where'] = array(" usergroup.course_id = ? " =>  api_get_course_int_id());
     $obj = new UserGroup();
     $classes = $obj->getUserGroupInCourse($options);
 	if (count($classes) > 0) {

@@ -185,8 +185,8 @@ class Template
                 $this->plugin = new AppPlugin();
 
                 //1. Showing installed plugins in regions
-                $plugin_regions = $this->plugin->get_plugin_regions();
-                foreach ($plugin_regions as $region) {
+                $pluginRegions = $this->plugin->get_plugin_regions();
+                foreach ($pluginRegions as $region) {
                     $this->set_plugin_region($region);
                 }
 
@@ -694,7 +694,6 @@ class Template
             'bootstrap/dist/js/bootstrap.min.js',
             'jquery-ui/jquery-ui.min.js',
             'moment/min/moment-with-locales.min.js',
-            'ckeditor/ckeditor.js',
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
             'mediaelement/build/mediaelement-and-player.min.js',
@@ -702,6 +701,9 @@ class Template
             'image-map-resizer/js/imageMapResizer.min.js',
             'jquery.scrollbar/jquery.scrollbar.min.js'
         ];
+        if (CHAMILO_LOAD_WYSIWYG == true) {
+            $bowerJsFiles[] = 'ckeditor/ckeditor.js';
+        }
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
             $bowerJsFiles[] = 'MathJax/MathJax.js?config=AM_HTMLorMML';
@@ -950,7 +952,7 @@ class Template
         $this->assign('portal_name', $portal_name);
 
         //Menu
-        $menu = return_menu();
+        $menu = menuArray();
         $this->assign('menu', $menu);
 
         // Setting notifications
@@ -1148,17 +1150,39 @@ class Template
 
     /**
      * Sets the plugin content in a template variable
-     * @param string $plugin_region
+     * @param string $pluginRegion
      * @return null
      */
-    public function set_plugin_region($plugin_region)
+    public function set_plugin_region($pluginRegion)
     {
-        if (!empty($plugin_region)) {
-            $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);
-            if (!empty($region_content)) {
-                $this->assign('plugin_'.$plugin_region, $region_content);
+        if (!empty($pluginRegion)) {
+            $regionContent = $this->plugin->load_region($pluginRegion, $this, $this->force_plugin_load);
+
+            $pluginList = $this->plugin->get_installed_plugins();
+            foreach ($pluginList as $plugin_name) {
+
+                // The plugin_info variable is available inside the plugin index
+                $pluginInfo = $this->plugin->getPluginInfo($plugin_name);
+
+                if (isset($pluginInfo['is_course_plugin']) && $pluginInfo['is_course_plugin']) {
+                    $courseInfo = api_get_course_info();
+
+                    if (!empty($courseInfo)) {
+                        if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof Plugin) {
+                            /** @var Plugin $plugin */
+                            $plugin = $pluginInfo['obj'];
+                            $regionContent .= $plugin->renderRegion($pluginRegion);
+                        }
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+            if (!empty($regionContent)) {
+                $this->assign('plugin_'.$pluginRegion, $regionContent);
             } else {
-                $this->assign('plugin_'.$plugin_region, null);
+                $this->assign('plugin_'.$pluginRegion, null);
             }
         }
         return null;

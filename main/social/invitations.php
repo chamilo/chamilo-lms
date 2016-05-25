@@ -23,7 +23,7 @@ if (is_array($_GET) && count($_GET) > 0) {
     foreach ($_GET as $key => $value) {
         switch ($key) {
             case 'accept':
-                $useRole = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);
+                $useRole = UserGroup::get_user_group_role(api_get_user_id(), $value);
 
                 if (in_array(
                     $useRole,
@@ -32,13 +32,13 @@ if (is_array($_GET) && count($_GET) > 0) {
                         GROUP_USER_PERMISSION_PENDING_INVITATION
                     )
                 )) {
-                    GroupPortalManager::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
+                    UserGroup::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
 
                     Display::addFlash(
                         Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'success')
                     );
 
-                    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
+                    header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
                     exit;
                 }
 
@@ -54,7 +54,7 @@ if (is_array($_GET) && count($_GET) > 0) {
                         Display::return_message(get_lang('UserIsAlreadySubscribedToThisGroup'), 'warning')
                     );
 
-                    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
+                    header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
                     exit;
                 }
 
@@ -66,7 +66,7 @@ if (is_array($_GET) && count($_GET) > 0) {
                 exit;
                 break;
             case 'deny':
-                GroupPortalManager::delete_user_rel_group(api_get_user_id(), $value);
+                UserGroup::delete_user_rel_group(api_get_user_id(), $value);
 
                 Display::addFlash(
                     Display::return_message(get_lang('GroupInvitationWasDeny'))

@@ -565,7 +565,7 @@ class Agenda
      * @param string $color
      * @param bool $addAnnouncement
      *
-     * @return bool
+     * @return null|false
      */
     public function editEvent(
         $id,
@@ -1281,12 +1281,12 @@ class Agenda
                 $event['sent_to'] = get_lang('Me');
                 $event['type'] = 'personal';
 
-                if (!empty($row['date']) && $row['date'] != '0000-00-00 00:00:00') {
+                if (!empty($row['date'])) {
                     $event['start'] = $this->formatEventDate($row['date']);
                     $event['start_date_localtime'] = api_get_local_time($row['date']);
                 }
 
-                if (!empty($row['enddate']) && $row['enddate'] != '0000-00-00 00:00:00') {
+                if (!empty($row['enddate'])) {
                     $event['end'] = $this->formatEventDate($row['enddate']);
                     $event['end_date_localtime'] = api_get_local_time($row['enddate']);
                 }
@@ -1308,6 +1308,7 @@ class Agenda
      *
      * @param int $eventId
      * @param int $courseId
+     * @param integer $sessionId
      * @paraù int $sessionId
      *
      * @return array
@@ -1667,11 +1668,11 @@ class Agenda
                     }
                 }
 
-                if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00') {
+                if (!empty($row['start_date'])) {
                     $event['start'] = $this->formatEventDate($row['start_date']);
                     $event['start_date_localtime'] = api_get_local_time($row['start_date']);
                 }
-                if (!empty($row['end_date']) && $row['end_date'] != '0000-00-00 00:00:00') {
+                if (!empty($row['end_date'])) {
                     $event['end'] = $this->formatEventDate($row['end_date']);
                     $event['end_date_localtime'] = api_get_local_time($row['end_date']);
                 }
@@ -1779,11 +1780,11 @@ class Agenda
                     $event['editable'] = true;
                 }
 
-                if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00') {
+                if (!empty($row['start_date'])) {
                     $event['start'] = $this->formatEventDate($row['start_date']);
                     $event['start_date_localtime'] = api_get_local_time($row['start_date']);
                 }
-                if (!empty($row['end_date']) && $row['end_date'] != '0000-00-00 00:00:00') {
+                if (!empty($row['end_date'])) {
                     $event['end'] = $this->formatEventDate($row['end_date']);
                     $event['end_date_localtime'] = api_get_local_time($row['end_date']);
                 }
@@ -2469,6 +2470,7 @@ class Agenda
      * Adds x weeks to a UNIX timestamp
      * @param   int     The timestamp
      * @param   int     The number of weeks to add
+     * @param integer $timestamp
      * @return  int     The new timestamp
      */
     function addWeek($timestamp, $num = 1)
@@ -2480,6 +2482,7 @@ class Agenda
      * Adds x months to a UNIX timestamp
      * @param   int     The timestamp
      * @param   int     The number of years to add
+     * @param integer $timestamp
      * @return  int     The new timestamp
      */
     function addMonth($timestamp, $num = 1)
@@ -2498,6 +2501,7 @@ class Agenda
      * Adds x years to a UNIX timestamp
      * @param   int     The timestamp
      * @param   int     The number of years to add
+     * @param integer $timestamp
      * @return  int     The new timestamp
      */
     function addYear($timestamp, $num = 1)
@@ -2697,7 +2701,7 @@ class Agenda
     /**
      * @param array $courseInfo
      * @param $file
-     * @return array|bool|string
+     * @return false|string
      */
     public function importEventFile($courseInfo, $file)
     {
@@ -2810,7 +2814,7 @@ class Agenda
 
     /**
      * Parse filter turns USER:12 to ['users' => [12])] or G:1 ['groups' => [1]]
-     * @param $filter
+     * @param integer $filter
      * @return array
      */
     public function parseAgendaFilter($filter)
@@ -2900,12 +2904,12 @@ class Agenda
 
             while ($item = Database::fetch_array($result, 'ASSOC')) {
                 $agendaday = -1;
-                if ($item['start_date'] != '0000-00-00 00:00:00') {
+                if (!empty($item['start_date'])) {
                     $item['start_date'] = api_get_local_time($item['start_date']);
                     $item['start_date_tms']  = api_strtotime($item['start_date']);
                     $agendaday = date("j", $item['start_date_tms']);
                 }
-                if ($item['end_date'] != '0000-00-00 00:00:00') {
+                if (!empty($item['end_date'])) {
                     $item['end_date'] = api_get_local_time($item['end_date']);
                 }
 
@@ -2993,11 +2997,11 @@ class Agenda
 
         while ($item = Database::fetch_array($result)) {
 
-            if ($item['start_date'] != '0000-00-00 00:00:00') {
+            if (!empty($item['start_date'])) {
                 $item['start_date'] = api_get_local_time($item['start_date']);
                 $item['start_date_tms'] = api_strtotime($item['start_date']);
             }
-            if ($item['end_date'] != '0000-00-00 00:00:00') {
+            if (!empty($item['end_date'])) {
                 $item['end_date'] = api_get_local_time($item['end_date']);
             }
 
@@ -3027,11 +3031,11 @@ class Agenda
                 TIME_NO_SEC_FORMAT
             );
             $end_time = '';
-            if ($item['end_date'] != '0000-00-00 00:00:00') {
+            if (!empty($item['end_date'])) {
                 $end_time = ' - '.api_format_date(
-                        $item['end_date'],
-                        DATE_TIME_FORMAT_LONG
-                    );
+                    $item['end_date'],
+                    DATE_TIME_FORMAT_LONG
+                );
             }
 
             // if the student has specified a course we a add a link to that course
@@ -3250,7 +3254,7 @@ class Agenda
                             $start_time = api_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
                             $end_time = '';
 
-                            if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
+                            if (!empty($value['end_date'])) {
                                 $end_time    = '-&nbsp;<i>'.api_format_date($value['end_date'], DATE_TIME_FORMAT_LONG).'</i>';
                             }
                             $complete_time = '<i>'.api_format_date($value['start_date'], DATE_TIME_FORMAT_LONG).'</i>&nbsp;'.$end_time;
@@ -3324,6 +3328,7 @@ class Agenda
      * @param	int		user ID of the user
      * @param	string	Optional start date in datetime format (if no start date is given, uses today)
      * @param	string	Optional end date in datetime format (if no date is given, uses one year from now)
+     * @param integer $user_id
      * @return	array	Array of events ordered by start date, in
      * [0]('datestart','dateend','title'),[1]('datestart','dateend','title','link','coursetitle') format,
      * where datestart and dateend are in yyyyMMddhhmmss format.

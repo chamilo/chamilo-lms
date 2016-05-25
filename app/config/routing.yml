@@ -80,6 +80,9 @@ elfinder:
 core_bundle:
     resource: "@ChamiloCoreBundle/Resources/config/routing.yml"
 
+page_bundle:
+    resource: "@ChamiloPageBundle/Resources/config/routing.yml"
+
 #liip_theme:
 #    resource: "@LiipThemeBundle/Resources/config/routing.xml"
 #    prefix: /theme

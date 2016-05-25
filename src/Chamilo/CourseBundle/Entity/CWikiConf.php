@@ -117,14 +117,14 @@ class CWikiConf
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="startdate_assig", type="datetime", nullable=false)
+     * @ORM\Column(name="startdate_assig", type="datetime", nullable=true)
      */
     private $startdateAssig;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="enddate_assig", type="datetime", nullable=false)
+     * @ORM\Column(name="enddate_assig", type="datetime", nullable=true)
      */
     private $enddateAssig;
 

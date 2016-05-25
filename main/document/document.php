@@ -378,9 +378,8 @@ switch ($action) {
             }
             $file_link = Display::url(
                 get_lang('SeeFile'),
-                api_get_path(WEB_CODE_PATH).'social/myfiles.php?'.
-                    'cidReq='.$cidReq.'&amp;id_session='.$id_session.'&amp;'.
-                    'gidReq='.$gidReq.'&amp;parent_id='.$parent_id
+                api_get_path(WEB_CODE_PATH).'social/myfiles.php?'.api_get_cidreq_params($cidReq, $id_session, $gidReq).
+                '&parent_id='.$parent_id
             );
 
             if (api_get_setting('allow_my_files') === 'false') {
@@ -499,9 +498,7 @@ switch ($action) {
                     $file_link = Display::url(
                         get_lang('SeeFile'),
                         api_get_path(WEB_CODE_PATH) .
-                        'document/showinframes.php?' . 'cidReq=' . $cidReq .
-                        '&id_session=' . $id_session . '&' .
-                        'gidReq=' . $gidReq . '&id=' . current($result)
+                        'document/showinframes.php?'.api_get_cidreq_params($cidReq, $id_session, $gidReq).'&id=' . current($result)
                     );
                     Display::addFlash(Display::return_message(
                         get_lang('CopyMade') . ' ' . $file_link,
@@ -1599,11 +1596,9 @@ if ($is_allowed_to_edit ||
 
         // Create new audio from text
         if (api_get_setting('enabled_text2audio') == 'true') {
-            $dt2a = 'google';
-            $req_dt2a = '&amp;dt2a='.$dt2a;
             $actionsLeft .= Display::url(
                 Display::return_icon('new_sound.png', get_lang('CreateAudio'), '', ICON_SIZE_MEDIUM),
-                api_get_path(WEB_CODE_PATH).'document/create_audio.php?'.api_get_cidreq().'&id='.$document_id.$req_dt2a
+                api_get_path(WEB_CODE_PATH).'document/create_audio.php?'.api_get_cidreq().'&id='.$document_id
             );
         }
     }

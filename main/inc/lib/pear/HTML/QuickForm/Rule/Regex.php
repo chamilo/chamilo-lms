@@ -41,13 +41,13 @@ class HTML_QuickForm_Rule_Regex extends HTML_QuickForm_Rule
      * @var     array
      * @access  private
      */
-    var $_data = array(
-                    'lettersonly'   => '/^[a-zA-Z]+$/',
-                    'alphanumeric'  => '/^[a-zA-Z0-9]+$/',
-                    'numeric'       => '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/',
-                    'nopunctuation' => '/^[^().\/\*\^\?#!@$%+=,\"\'><~\[\]{}]+$/',
-                    'nonzero'       => '/^-?[1-9][0-9]*/'
-                    );
+    public $_data = array(
+        'lettersonly' => '/^[a-zA-Z]+$/',
+        'alphanumeric' => '/^[a-zA-Z0-9]+$/',
+        'numeric' => '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/',
+        'nopunctuation' => '/^[^().\/\*\^\?#!@$%+=,\"\'><~\[\]{}]+$/',
+        'nonzero' => '/^-?[1-9][0-9]*/',
+    );
 
     /**
      * Validates a value using a regular expression
@@ -57,7 +57,7 @@ class HTML_QuickForm_Rule_Regex extends HTML_QuickForm_Rule
      * @access    public
      * @return    boolean   true if value is valid
      */
-    function validate($value, $regex = null)
+    public function validate($value, $regex = null)
     {
         // Fix for bug #10799: add 'D' modifier to regex
         if (isset($this->_data[$this->name])) {
@@ -98,5 +98,4 @@ class HTML_QuickForm_Rule_Regex extends HTML_QuickForm_Rule
         return array("  var regex = " . $regex . ";\n", "{jsVar} != '' && !regex.test({jsVar})");
     } // end func getValidationScript
 
-} // end class HTML_QuickForm_Rule_Regex
-?>
+}

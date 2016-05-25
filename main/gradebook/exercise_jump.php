@@ -12,16 +12,14 @@
 
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 $gradebook = Security::remove_XSS($_GET['gradebook']);
-
 $session_id = api_get_session_id();
-
 $cidReq = Security::remove_XSS($_GET['cidReq']);
 $type = Security::remove_XSS($_GET['type']);
 
-$doExerciseUrl = null;
+$doExerciseUrl = '';
 
 if (isset($_GET['doexercise'])) {
     $doExerciseUrl = api_get_path(WEB_CODE_PATH) . 'exercise/overview.php?' . http_build_query([

@@ -65,6 +65,9 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 /* FUNCTIONS */
 
+/**
+ * @param string $name
+ */
 function make_select_session_list($name, $sessions, $attr = array())
 {
 

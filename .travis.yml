@@ -4,6 +4,7 @@ php:
   #- 5.4 // Removed because of Chash dependencies on PHP 5.5
   - 5.5
   - 5.6
+  - 7.0
 
 before_install:
   #- sudo apt-get install python-software-properties
@@ -28,8 +29,12 @@ before_script:
   #- composer global require "fxp/composer-asset-plugin:1.0.3"
   # You can either use the composer install method and face the Github limit
   #- composer install -n
-  - composer -v update
-  # ...OR use the proxy repository to download the necessary dependencies
+  - composer update
+  # ...OR you can try the option --prefer-dist, that will reuse composer packages cache
+  #- composer update --prefer-dist
+  # ...OR you can try the --prefer-source option to download from source whenever it's possible (but it's much slower)
+  #- composer update --prefer-source
+  # ...OR use the proxy repository to download the necessary dependencies, but this repo is not always updated
   #- git clone -b 1.10.x --depth=1 https://github.com/ywarnier/chamilo-vendors.git
   #- sudo mv chamilo-vendors/vendor .
   #- sudo mv chamilo-vendors/web .
@@ -67,6 +72,8 @@ before_script:
   #- cd ../..
   # install Chamilo with Chash - see reference https://github.com/sonnym/travis-ci-drupal-module-example/blob/master/.travis.yml
   - cd /home/travis/build/chamilo/chamilo-lms
+  # There's an issue with Chash, starting in version 1.10, whereby PHP CLI on Travis-ci is PHP5.3, whatever the version you ask for.
+  # This effectively breaks the installer and renders these tests useless. We are looking for a solution (for example using containers)
   - sudo chash chash:chamilo_install --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="mysqlnd" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.x
 
 script:

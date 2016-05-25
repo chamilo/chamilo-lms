@@ -30,6 +30,8 @@ function tempdir($dir, $prefix = 'tmp', $mode = 0777)
  * Unzip the exercise in the temp folder
  * @param string The path of the temporary directory where the exercise was uploaded and unzipped
  * @param string
+ * @param string $baseWorkDir
+ * @param string $uploadPath
  * @return bool
  */
 function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
@@ -217,9 +219,9 @@ function formatText($text)
 
 /**
  * Parses a given XML file and fills global arrays with the elements
- * @param $exercisePath
- * @param $file
- * @param $questionFile
+ * @param string $exercisePath
+ * @param string $file
+ * @param string $questionFile
  * @return bool
  */
 function parse_file($exercisePath, $file, $questionFile)

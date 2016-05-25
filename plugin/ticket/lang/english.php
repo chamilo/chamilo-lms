@@ -46,6 +46,7 @@ $strings['Priority'] = "Priority";
 $strings['PriorityHigh'] = "High";
 $strings['PriorityNormal'] = "Normal";
 $strings['PriorityLow'] = "Low";
+$strings['SrcPlatform'] = "Platforme";
 $strings['SrcEmail'] = "E-mail";
 $strings['SrcPhone'] = "Phone";
 $strings['SrcPresential'] = "In-person";
@@ -87,14 +88,15 @@ $strings['RequestConfirmation'] = "Request confirmation";
 $strings['TicketUpdated'] = "Ticket updated";
 $strings['TicketClosed'] = "Ticket closed";
 
-$strings['TicketXCreated'] = "Ticket <b>%s</b>created";
+$strings['TicketXCreated'] = "Ticket <b>%s</b> created";
 $strings['allow_category_edition'] = "Allow category edition";
 $strings['warn_admin_no_user_in_category'] = "Warn admin if category doesn't have users related";
 $strings['send_warning_to_all_admins'] = "Send warning to all admins, if category doesn't have users related";
 $strings['WarningCategoryXDoesntHaveUsers'] = "Warning: The category '%s' doesn't have users assigned";
 $strings['TicketInformation'] = 'Ticket information';
-$strings['CategoryWithNoUserNotificationSentToAdmins'] = 'Category <b>%s</b> with no user sent to all administrators.';
+$strings['CategoryWithNoUserNotificationSentToAdmins'] = 'Category <b>%s</b> has users, Ticket sent to all administrators.';
 $strings['TicketXAssignedToUserX'] = 'Ticket <b>#%s</b> assigned to user <b>%s</b>';
 $strings['TicketXCreatedWithNoCategory'] = 'Ticket <b>#%s</b> created with no category';
 
-
+$strings['UpdatedByX'] = 'Updated by %s';
+$strings['AssignedChangeFromXToY'] = 'Assignee changed from %s to %s';

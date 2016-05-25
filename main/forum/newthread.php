@@ -168,13 +168,18 @@ echo '</div>';
 // Set forum attachment data into $_SESSION
 getAttachedFiles($current_forum['forum_id'], 0, 0);
 
-show_add_post_form(
+$values = show_add_post_form(
     $current_forum,
     $forum_setting,
     'newthread',
     '',
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null
 );
+
+if (!empty($values) && isset($values['SubmitPost'])) {
+    // Add new thread in table forum_thread.
+    store_thread($current_forum, $values);
+}
 
 if (isset($origin) && $origin == 'learnpath') {
     Display::display_reduced_footer();

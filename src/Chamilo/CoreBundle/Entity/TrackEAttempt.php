@@ -87,7 +87,7 @@ class TrackEAttempt
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="tms", type="datetime", nullable=false)
+     * @ORM\Column(name="tms", type="datetime", nullable=true)
      */
     private $tms;
 

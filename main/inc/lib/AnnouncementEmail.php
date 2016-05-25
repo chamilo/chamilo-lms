@@ -16,7 +16,7 @@ class AnnouncementEmail
     /**
      *
      * @param int|array $course
-     * @param int|array $annoucement
+     * @param integer $announcement
      *
      * @return AnnouncementEmail
      */
@@ -50,7 +50,7 @@ class AnnouncementEmail
      *
      * @param string $key
      *
-     * @return array
+     * @return string|null
      */
     public function course($key = '')
     {

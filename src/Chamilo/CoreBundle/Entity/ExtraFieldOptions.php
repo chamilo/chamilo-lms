@@ -16,7 +16,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class ExtraFieldOptions
 {
-
     /**
      * @var integer
      *
@@ -194,5 +193,4 @@ class ExtraFieldOptions
 
         return $this;
     }
-
 }

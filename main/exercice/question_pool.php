@@ -219,7 +219,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
     $titleAdd = get_lang('AddQuestionToTest');
 } else {
-    echo '<a href="exercise.php?'.api_get_cidReq().'">'.
+    echo '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     echo "<a href='admin.php?exerciseId=0'>".Display::return_icon('add_question.gif', get_lang('NewQu'), '', ICON_SIZE_MEDIUM)."</a>";
     $titleAdd = get_lang('ManageAllQuestions');

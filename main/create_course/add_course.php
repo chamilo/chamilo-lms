@@ -183,8 +183,7 @@ if ($course_validation_feature) {
     // if it is activated.
     if (empty($terms_and_conditions_url)) {
         if (api_get_setting('allow_terms_conditions') == 'true') {
-            $terms_and_conditions_url = api_get_path(WEB_CODE_PATH);
-            $terms_and_conditions_url .= 'auth/inscription.php?legal';
+            $terms_and_conditions_url = api_get_path(WEB_CODE_PATH).'auth/inscription.php?legal';
         }
     }
 
@@ -309,8 +308,7 @@ if ($form->validate()) {
                 $message = $tpl->fetch($add_course_tpl);*/
 
                 $url = api_get_path(WEB_CODE_PATH);
-                $url .= 'course_info/start.php?cidReq=';
-                $url .= $course_info['code'];
+                $url .= 'course_info/start.php?'.api_get_cidreq_params($course_info['code']);
                 $url .= '&first=1';
                 header('Location: ' . $url);
                 exit;

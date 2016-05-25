@@ -80,7 +80,7 @@ if ($load_dirs) {
 }
 if ($displayMyCourseViewBySessionLink) {
     $htmlHeadXtra[] = '
-    <script type="text/javascript">
+    <script>
         userId = ' . $userId . '
         $(document).ready(function() {
             changeMyCoursesView($.cookie("defaultMyCourseView"+userId));
@@ -101,8 +101,7 @@ if ($displayMyCourseViewBySessionLink) {
                 $("#viewBySession").removeClass("btn-primary");
             }
         }
-	</script>
-';
+	</script>';
 }
 
 $controller = new IndexManager(get_lang('MyCourses'));
@@ -190,15 +189,7 @@ if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
 	$controller->tpl->assign('welcome_to_course_block', $controller->return_welcome_to_course_block());
 }
 
-$template = api_get_configuration_value('user_portal_tpl');
-if (empty($template)) {
-    $controller->tpl->assign('content', $courseAndSessions['html']);
-} else {
-    $controller->tpl->assign('items', $courseAndSessions['items']);
-    $userPortalTemplate = $controller->tpl->get_template('user_portal/'.$template);
-    $content = $controller->tpl->fetch($userPortalTemplate);
-    $controller->tpl->assign('content', $content);
-}
+$controller->tpl->assign('content', $courseAndSessions['html']);
 
 if (api_get_setting('allow_browser_sniffer') == 'true') {
     if (isset($_SESSION['sniff_navigator']) && $_SESSION['sniff_navigator'] != "checked") {

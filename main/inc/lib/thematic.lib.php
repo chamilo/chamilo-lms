@@ -1410,7 +1410,7 @@ class Thematic
         $thematic_id = 0,
         $attendance_id = 0,
         $content = '',
-        $start_date = '0000-00-00 00:00:00',
+        $start_date = null,
         $duration = 0
     ) {
         $this->thematic_advance_id = $id;

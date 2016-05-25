@@ -1,19 +1,20 @@
 <?php
+exit;
 
 /**
 * Opens and parses/checks a VChamilo instance definition file
-* @param string $location 
+* @param string $location
 *
 */
 function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null){
     global $_configuration;
-    
+
     $vnodes = array();
-    
+
     if (empty($nodelistlocation)){
         $nodelistlocation = $_configuratioh['root_sys'].'/plugin/vchamilo/nodelist.csv';
     }
-    
+
     // decode file
     $csv_delimiter = "\;";
     $csv_delimiter2 = ";";
@@ -77,7 +78,7 @@ function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null){
 
     // Check for valid field names
     foreach ($headers as $h) {
-        $header[] = trim($h); 
+        $header[] = trim($h);
         $patternized = implode('|', $patterns) . "\\d+";
         $metapattern = implode('|', $metas);
         if (!(isset($required[$h]) ||
@@ -93,7 +94,7 @@ function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null){
             $required[trim($h)] = 0;
         }
     }
-    
+
     $expectedcols = count($headers);
     $i++;
 
@@ -155,7 +156,7 @@ function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null){
         }
         $vnodes[] = $vnode;
     }
-    
+
     return $vnodes;
 }
 
@@ -181,7 +182,7 @@ function vchamilo_is_empty_line_or_format(&$text, $resetfirst = false) {
     if ('ASCII' == mb_detect_encoding($text)) {
         $text = utf8_encode($text);
     }
-    
+
     // Check the text is empty or comment line and answer true if it is.
     return preg_match('/^$/', $text) || preg_match('/^(\(|\[|-|#|\/| )/', $text);
 }

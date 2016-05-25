@@ -99,7 +99,7 @@ foreach($Sessions as $session){
 					$official_code=$etape."-".$annee;
 					$auth_source="ldap";
 					// Pas de date d'expiration d'etudiant (a recuperer par rapport au shadow expire LDAP)
-					$expiration_date='0000-00-00 00:00:00';
+					$expiration_date='';
 					$active=1;
 					// Ajout de l'utilisateur
 					if (UserManager::is_username_available($username)) {

@@ -56,6 +56,7 @@
   <li><a href="#10.igbinary">IGBinary for faster courses backups and better sessions</a></li>
   <li><a href="#11.permissions-check">Removing files download permissions check</a></li>
   <li><a href="#12.MySQL-compression">MySQL/MariaDB compression</a></li>
+  <li><a href="#13.increasing-php-limits">Increasing PHP limits</a></li>
 </ol>
 
 <h2><a name="1.Using-XCache"></a>1. Using opcaches</h2>
@@ -406,9 +407,9 @@ Header append Vary User-Agent env=!dont-vary
 </pre>
 <hr />
 Don't have time or resources to optimize your Chamilo installation yourself? Hire an <a href="http://www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.
-    <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
+    <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
 	<a href="http://jigsaw.w3.org/css-validator/">
-		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
+		<img src="//jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
 	</a>
 <hr />
 
@@ -598,16 +599,45 @@ In 1.10.0, we have added the possibility to enable this compression very
 This should have an immediate effect on the load average on your server.
 </p>
 <hr />
+<h2><a name="13.increasing-php-limits"></a>Increasing PHP limits</h2>
+<p>
+    As your use of Chamilo increases and you get above the thousands of users,
+    you're likely to hit a few milestones set by PHP to avoid hacks.
+    One of them is PHP5.4's Suhosin extension limit post_max_vars, which was
+    extended into PHP5.5 and above through the max_input_vars limit. This limit
+    is usually set to 1000. What does it mean?<br />
+    It means that, when you manipulate any list greater than 1000 items, PHP will
+    automatically remove anything sent above the first 1000 registers (usually
+    a little bit less because it needs to add the other input fields of the page).
+    For example, if subscribing 5 new users to a course where you already have
+    1000 users subscribed, you will remain at 1000, although the 1000 will not
+    necessarily be the 1000 that were there in the first place (they are sent
+    in order of the elements inside the form, so probably alphabetically,
+    depending on the page).<br /><br />
+    Increasing this limit to a higher level (say 10,000 instead of 1000) should
+    be relatively safe, considering your application is normally not open to
+    the public (and so also open to the evil kind of users). So, in your
+    php.ini, this limit should now look like this:<br />
+    <pre>
+    max_input_vars = 10000
+    </pre><br /><br />
+    A number of other limits might also become an issue in the long run, like
+    memory_limit, post_max_size, etc. We have given reasonnable recommendations
+    in the installation process for these values, but remember that if you
+    have a larger portal than anyone else, you probably need to give it more
+    care than anyone else.
+</p>
+<hr />
 <h2>Authors</h2>
 <ul>
 <li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:ywarnier@beeznest.net">ywarnier@beeznest.net</a></li>
 </ul>
 <hr />
 Don't have time or resources to optimize your Chamilo installation
-    yourself? Hire an <a href="http://www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.
-    <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
+    yourself? Hire an <a href="//www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.<br />
+    <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
 	<a href="http://jigsaw.w3.org/css-validator/">
-		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
+		<img src="//jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
 	</a>
 </div>
 </body>

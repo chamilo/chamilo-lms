@@ -120,6 +120,7 @@ $usergroup = new UserGroup();
 if ($group_id != 0) {
     $group_info = $usergroup->get($group_id);
 
+
     $interbreadcrumb[]= array ('url' =>'#','name' => $group_info['name']);
 
     if (isset($_GET['action']) && $_GET['action']=='leave') {
@@ -160,6 +161,7 @@ if ($group_id != 0) {
 }
 $create_thread_link = '';
 $social_right_content = null;
+$socialForum = '';
 
 $group_info = $usergroup->get($group_id);
 
@@ -188,7 +190,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
             $social_right_content .=  '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
                 get_lang('YouHaveBeenInvitedJoinNow').'</a>';
         }
-        $social_right_content .=  '<br /><br />';
+        $social_right_content .=  '<br />';
     }
     $content = MessageManager::display_messages_for_group($group_id);
     if ($is_group_member) {
@@ -235,8 +237,14 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     $members = $usergroup->get_users_by_group($group_id, true);
     $member_content = '';
 
-    // Members
+    // My friends
+    $friend_html = SocialManager::listMyFriendsBlock(
+        $user_id,
+        '',
+        ''
+    );
 
+    // Members
     if (count($members) > 0) {
         if ($role == GROUP_USER_PERMISSION_ADMIN) {
             $member_content .= Display::url(
@@ -244,6 +252,8 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                 'group_members.php?id='.$group_id
             );
         }
+        $member_content .= '<div class="user-list">';
+        $member_content .= '<div class="row">';
         foreach ($members as $member) {
             // if is a member
             if (in_array($member['relation_type'],
@@ -260,19 +270,25 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
 
                 $userPicture = UserManager::getUserPicture($member['id']);
 
-                $member_content .= '<div class="">';
+                $member_content .= '<div class="col-md-2">';
+                $member_content .= '<div class="items-user">';
                 $member_name = Display::url(api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon, $member['user_info']['profile_url']);
-                $member_content .= Display::div('<img class="social-groups-image img-circle" src="'.$userPicture.'"/>&nbsp'.$member_name);
+                $member_content .= Display::div('<img class="img-circle" src="'.$userPicture.'"/>', array('class' => 'avatar'));
+                $member_content .= Display::div($member_name, array('class' => 'name'));
+                $member_content .= '</div>';
                 $member_content .= '</div>';
             }
         }
+        $member_content .= '</div>';
+        $member_content .= '</div>';
     }
 
     if (!empty($create_thread_link)) {
         $create_thread_link =  Display::div($create_thread_link, array('class'=>'pull-right'));
     }
     $headers = array(get_lang('Discussions'), get_lang('Members'));
-    $social_right_content .= Display::tabs($headers, array($content, $member_content),'tabs');
+    $socialForum = Display::tabs($headers, array($content, $member_content),'tabs');
+
 } else {
     // if I already sent an invitation message
     if (!in_array(
@@ -299,7 +315,9 @@ $tpl->setHelp('Groups');
 $tpl->assign('create_link', $create_thread_link);
 $tpl->assign('is_group_member', $is_group_member);
 $tpl->assign('group_info', $group_info);
+$tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_forum', $socialForum);
 $tpl->assign('social_right_content', $social_right_content);
 $social_layout = $tpl->get_template('social/group_view.tpl');
 $tpl->display($social_layout);

@@ -121,6 +121,7 @@ function _openid_create_message($data) {
 
 /**
  * Encode a message from _openid_create_message for HTTP Post
+ * @param null|string $message
  */
 function _openid_encode_message($message) {
     $encoded_message = '';
@@ -173,6 +174,7 @@ function _openid_nonce() {
 
 /**
  * Pull the href attribute out of an html link element.
+ * @param string $rel
  */
 function _openid_link_href($rel, $html) {
     $rel = preg_quote($rel);
@@ -186,6 +188,7 @@ function _openid_link_href($rel, $html) {
 
 /**
  * Pull the http-equiv attribute out of an html meta element
+ * @param string $equiv
  */
 function _openid_meta_httpequiv($equiv, $html) {
     preg_match('|<meta\s+http-equiv=["\']' . $equiv . '["\'](.*)/?>|iU', $html, $matches);
@@ -221,6 +224,10 @@ function _openid_signature($association, $message_array, $keys_to_sign) {
     return base64_encode($signature);
 }
 
+/**
+ * @param string $key
+ * @param null|string $text
+ */
 function _openid_hmac($key, $text) {
     if (strlen($key) > OPENID_SHA1_BLOCKSIZE) {
         $key = _openid_sha1($key, true);
@@ -256,6 +263,9 @@ function _openid_dh_long_to_base64($str) {
     return base64_encode(_openid_dh_long_to_binary($str));
 }
 
+/**
+ * @param string $str
+ */
 function _openid_dh_binary_to_long($str) {
     $bytes = array_merge(unpack('C*', $str));
 
@@ -297,6 +307,9 @@ function _openid_dh_long_to_binary($long) {
     return $string;
 }
 
+/**
+ * @param string $secret
+ */
 function _openid_dh_xorsecret($shared, $secret) {
     $dh_shared_str = _openid_dh_long_to_binary($shared);
     $sha1_dh_shared = _openid_sha1($dh_shared_str);
@@ -308,6 +321,9 @@ function _openid_dh_xorsecret($shared, $secret) {
     return $xsecret;
 }
 
+/**
+ * @param string $stop
+ */
 function _openid_dh_rand($stop) {
     static $duplicate_cache = array();
 

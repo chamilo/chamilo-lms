@@ -1,5 +1,13 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
+/**
+ * Skill Entity
+ *
+ * @package chamilo.skill
+ */
+
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +20,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Skill
 {
+    const STATUS_DISABLED = 0;
+    const STATUS_ENABLED = 1;
+
     /**
      * @var string
      *
@@ -77,7 +88,24 @@ class Skill
      */
     private $id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="skills")
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
+     **/
+    protected $profile;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
+     */
+    protected $issuedSkills;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getName();
+    }
 
     /**
      * Set name
@@ -195,16 +223,25 @@ class Skill
     }
 
     /**
-     * Get the icon URL
+     * Get the icon (badge image) URL
+     * @param boolean $getSmall Optional. Allow get the small image
      * @return string
      */
-    public function getWebIconPath()
+    public function getWebIconPath($getSmall = false)
     {
-        if ($this->getIcon()) {
-            return api_get_path(WEB_UPLOAD_PATH) . "badges/{$this->getIcon()}";
+        if ($getSmall) {
+            if (empty($this->icon)) {
+                return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_BIG, null, true);
+            }
+
+            return api_get_path(WEB_UPLOAD_PATH) . 'badges/' . sha1($this->name) . '-small.png';
         }
 
-        return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
+        if (empty($this->icon)) {
+            return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
+        }
+
+        return api_get_path(WEB_UPLOAD_PATH) . "badges/{$this->icon}";
     }
 
     /**
@@ -281,4 +318,34 @@ class Skill
     {
         return $this->id;
     }
+
+    /**
+     * @return Profile
+     */
+    public function getProfile()
+    {
+        return $this->profile;
+    }
+
+    /**
+     * @param Profile $profile
+     *
+     * @return Skill
+     */
+    public function setProfile($profile)
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+
+    /**
+     * Get issuedSkills
+     * @return ArrayCollection
+     */
+    public function getIssuedSkills()
+    {
+        return $this->issuedSkills;
+    }
+
 }

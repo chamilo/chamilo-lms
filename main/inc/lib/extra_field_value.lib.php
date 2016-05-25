@@ -222,7 +222,13 @@ class ExtraFieldValue extends Model
                     }
 
                     if ($value['error'] == 0) {
+
+                        //Crop the image to adjust 16:9 ratio
+                        $crop = new Image($value['tmp_name']);
+                        $crop->crop($value['crop_parameters']);
+
                         $imageExtraField = new Image($value['tmp_name']);
+                        $imageExtraField->resize(400);
                         $imageExtraField->send_image($fileDir . $fileName, -1, 'png');
                         $newParams = array(
                             'item_id' => $params['item_id'],

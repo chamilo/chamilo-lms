@@ -587,6 +587,7 @@ class Dropbox_Person
 
 	/**
 	 * Deletes all the received categories and work of this person
+	 * @param integer $id
 	 */
 	function deleteReceivedWorkFolder($id)
     {

@@ -126,6 +126,29 @@ class NavBuilder extends ContainerAware
             }
         }
 
+        $categories = $this->container->get('faq.entity.category_repository')->retrieveActive();
+        if ($categories) {
+            $faq = $menu->addChild(
+                'FAQ',
+                [
+                    'route' => 'faq_index',
+                ]
+            );
+            /** @var Category $category */
+            foreach ($categories as $category) {
+                 $faq->addChild(
+                    $category->getHeadline(),
+                    array(
+                        'route' => 'faq',
+                        'routeParameters' => array(
+                            'categorySlug' => $category->getSlug(),
+                            'questionSlug' => '',
+                        ),
+                    )
+                )->setAttribute('divider_append', true);
+            }
+        }
+
         // Getting site information
 
         $site = $this->container->get('sonata.page.site.selector');

@@ -33,6 +33,7 @@ class CoursesController
      * render to courses_list view
      * @param string   	action
      * @param string    confirmation message(optional)
+     * @param string $action
      */
     public function courses_list($action, $message = '')
     {
@@ -79,7 +80,7 @@ class CoursesController
     /**
      * It's used for listing courses with categories,
      * render to courses_categories view
-     * @param $action
+     * @param string $action
      * @param string $category_code
      * @param string $message
      * @param string $error
@@ -142,6 +143,7 @@ class CoursesController
         }
 
         // render to the view
+        
         $this->view->set_data($data);
         $this->view->set_layout('catalog_layout');
         $this->view->set_template('courses_categories');
@@ -513,14 +515,15 @@ class CoursesController
             ]);
 
             return Display::toolbarButton(
-                get_lang('CheckRequirements'),
+                null,
                 $url,
-                'check-circle',
-                'primary',
+                'shield',
+                'default',
                 [
-                    'class' => 'btn-lg btn-block ajax',
+                    'class' => 'btn-sm ajax',
                     'data-title' => get_lang('CheckRequirements'),
-                    'data-size' => 'md'
+                    'data-size' => 'md',
+                    'title' => get_lang('CheckRequirements')
                 ]
             );
         }
@@ -543,14 +546,15 @@ class CoursesController
             ]);
 
             $result = Display::toolbarButton(
-                get_lang('Subscribe'),
+                null,
                 $url,
-                'check-circle',
-                'primary',
+                'sign-in',
+                'success',
                 [
-                    'class' => 'btn-lg btn-block ajax',
+                    'class' => 'btn-sm ajax',
                     'data-title' => get_lang('AreYouSureToSubscribe'),
-                    'data-size' => 'md'
+                    'data-size' => 'md',
+                    'title' => get_lang('Subscribe')
                 ]
             );
         } else {
@@ -561,11 +565,11 @@ class CoursesController
             ]);
 
             $result = Display::toolbarButton(
-                get_lang('Subscribe'),
+                null,
                 $url,
-                'check-circle',
-                'primary',
-                ['class' => 'btn-lg btn-block']
+                'sign-in',
+                'success',
+                ['class' => 'btn-sm']
             );
         }
 
@@ -590,11 +594,11 @@ class CoursesController
      */
     public function getAlreadyRegisteredInSessionLabel()
     {
-        $icon = '<em class="fa fa-smile-o"></em>';
+        $icon = '<em class="fa fa-graduation-cap"></em>';
 
         return Display::div(
-            $icon . ' ' . get_lang("AlreadyRegisteredToSession"),
-            array('class' => 'info-catalog')
+            $icon,
+            array('class' => 'btn btn-default btn-sm registered', 'title' => get_lang("AlreadyRegisteredToSession"))
         );
     }
 
@@ -746,7 +750,7 @@ class CoursesController
                 'coach_access_start_date' => $session->getCoachAccessStartDate(),
                 'coach_access_end_date' => $session->getCoachAccessEndDate(),
             ]);
-
+            
             $imageField = $extraFieldValue->get_values_by_handler_and_field_variable($session->getId(), 'image');
 
             $sessionCourseTags = [];
@@ -788,14 +792,30 @@ class CoursesController
                 $hasRequirements = true;
                 break;
             }
-
+            $cat = $session->getCategory();
+            if (empty($cat)) {
+                $cat = null;
+                $catName = '';
+            } else {
+                $catName = $cat->getName();
+            }
+            
+            $coachId = $session->getGeneralCoach()->getId();
+            $coachName = $session->getGeneralCoach()->getCompleteName();
+            $actions = null;
+            if (api_is_platform_admin()) {
+                $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session->getId();
+            }
             $sessionsBlock = array(
                 'id' => $session->getId(),
                 'name' => $session->getName(),
                 'image' => isset($imageField['value']) ? $imageField['value'] : null,
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),
-                'coach_name' => $session->getGeneralCoach()->getCompleteName(),
+                'coach_id' => $coachId,
+                'coach_url' => api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $coachId,
+                'coach_name' => $coachName,
+                'coach_avatar' => UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL),
                 'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
@@ -805,9 +825,12 @@ class CoursesController
                     $hasRequirements
                 ),
                 'show_description' => $session->getShowDescription(),
+                'description' => $session->getDescription(),
+                'category' => $catName,
                 'tags' => $sessionCourseTags,
+                'edit_actions' => $actions
             );
-
+              
             $sessionsBlock = array_merge($sessionsBlock, $sequences);
             $sessionsBlocks[] = $sessionsBlock;
         }

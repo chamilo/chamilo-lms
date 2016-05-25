@@ -18,7 +18,11 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 api_block_anonymous_users();
 
-$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
+$document_data = DocumentManager::get_document_data_by_id(
+    $_GET['id'],
+    api_get_course_id(),
+    true
+);
 
 if (empty($document_data)) {
     api_not_allowed();
@@ -27,7 +31,7 @@ if (empty($document_data)) {
     $file_path = $document_data['path'];
     $dir = dirname($document_data['path']);
     $parent_id = DocumentManager::get_document_id(api_get_course_info(), $dir);
-    $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
+    $my_cur_dir_path = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : '';
 }
 //and urlencode each url $curdirpath (hack clean $curdirpath under Windows - Bug #3261)
 $dir = str_replace('\\', '/', $dir);
@@ -131,12 +135,10 @@ if (api_browser_support('svg')) {
 	$svgedit_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
 	$langsvgedit  = api_get_language_isocode();
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
-	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'svg-edit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
-    //$svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&amp;lang='.$langsvgedit;
-    $svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../..'.api_get_path(REL_COURSE_PATH).$courseDir.$dir.$file.'&lang='.$langsvgedit;
-
+	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'javascript/svgedit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
+	$svg_url = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/svg-editor.php?url=../../../../../courses/'.$courseDir.$dir.$file.'&lang='.$langsvgedit;
 	?>
-	<script type="text/javascript">
+	<script>
 	document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
 	function resizeIframe() {
     	var height = window.innerHeight -50;
@@ -148,7 +150,9 @@ if (api_browser_support('svg')) {
 	};
 	document.getElementById('frame').onload = resizeIframe;
 	window.onresize = resizeIframe;
+
 	</script>
+
     <?php
     echo '<noscript>';
 	echo '<iframe style="height: 550px; width: 100%;" scrolling="no" frameborder="0\' src="'.$svg_url.'"<noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';

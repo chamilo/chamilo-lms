@@ -63,6 +63,7 @@ class Auth
                     course.unsubscribe unsubscr,
                     course.title i,
                     course.tutor_name t,
+                    course.category_code cat,
                     course.directory dir,
                     course_rel_user.status status,
                     course_rel_user.sort sort,
@@ -85,12 +86,13 @@ class Auth
                 'status' => $row['status'],
                 'tutor' => $row['t'],
                 'subscribe' => $row['subscr'],
+                'category' => $row['cat'],
                 'unsubscribe' => $row['unsubscr'],
                 'sort' => $row['sort'],
                 'user_course_category' => $row['user_course_cat']
             );
         }
-
+        
         return $courses;
     }
 
@@ -718,7 +720,7 @@ SQL;
 
         return $count;
     }
-
+    
     /**
      * Search sessions by the tags in their courses
      * @param string $termTag Term for search in tags

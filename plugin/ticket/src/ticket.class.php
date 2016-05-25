@@ -33,14 +33,16 @@ class TicketManager
      * Get categories of tickets
      * @return array
      */
-    public static function get_all_tickets_categories()
+    public static function get_all_tickets_categories($order = '')
     {
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $table_support_project = Database::get_main_table(TABLE_TICKET_PROJECT);
+        
+        $order = empty($order) ? 'category.total_tickets DESC' : $order;
         $sql = "SELECT category.*, project.other_area , project.email
                 FROM $table_support_category category, $table_support_project project
                 WHERE project.project_id = category.project_id
-                ORDER BY category.total_tickets DESC;";
+                ORDER BY $order";
         $result = Database::query($sql);
         $types = array();
         while ($row = Database::fetch_assoc($result)) {

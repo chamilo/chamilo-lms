@@ -151,7 +151,7 @@ div.divTicket {
     padding-top: 100px;
 }
 </style>';
-$types = TicketManager::get_all_tickets_categories();
+$types = TicketManager::get_all_tickets_categories('category.name ASC');
 $htmlHeadXtra[] = '<script language="javascript">
     var projects = ' . js_array($types, 'projects', 'project_id') . '
     var course_required = ' . js_array($types, 'course_required', 'course_required') . '
@@ -205,7 +205,7 @@ function show_form_send_ticket()
         'id' => 'status_id',
         'for' => 'status_id'
     );
-    
+
     $statusList[TicketManager::STATUS_NEW] = $plugin->get_lang('StatusNew');
     if (api_is_platform_admin()) {
         $statusAttributes = array(

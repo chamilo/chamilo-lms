@@ -54,26 +54,25 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * @access    private
      */
     protected $_values = null;
-
     private $columnsSize;
 
     /**
      * Class constructor
      *
-     * @param     string    Select name attribute
-     * @param     mixed     Label(s) for the select
-     * @param     mixed     Data to be used to populate options
-     * @param     mixed     Either a typical HTML attribute string or an associative array
+     * @param     string    $elementName Select name attribute
+     * @param     mixed     $elementLabel Label(s) for the select
+     * @param     mixed     $options Data to be used to populate options
+     * @param     mixed     $attributes Either a typical HTML attribute string or an associative array
      * @since     1.0
      * @access    public
-     * @return    void
      */
     public function __construct(
-        $elementName = null,
-        $elementLabel = null,
+        $elementName,
+        $elementLabel = '',
         $options = null,
         $attributes = null
     ) {
+        $addBlank = '';
         if (is_array($attributes) || empty($attributes)) {
             $oldClass = '';
             if (!empty($attributes['class'])) {
@@ -81,15 +80,88 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             }
             $attributes['class'] = $oldClass . ' selectpicker show-tick form-control';
             $attributes['data-live-search'] = 'true';
+
+            if (isset($attributes['placeholder'])) {
+                $addBlank =  $attributes['placeholder'];
+            }
+
+
         }
         $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
         $this->setColumnsSize($columnsSize);
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'select';
+
+        if ($addBlank !== '') {
+            if (isset($options)) {
+                $options = ['' => $addBlank] + $options;
+            } else {
+                $options = ['' => $addBlank];
+            }
+        }
         if (isset($options)) {
             $this->load($options);
         }
+    }
+
+     /**
+     * Loads options from different types of data sources
+     *
+     * This method is a simulated overloaded method.  The arguments, other than the
+     * first are optional and only mean something depending on the type of the first argument.
+     * If the first argument is an array then all arguments are passed in order to loadArray.
+     * If the first argument is a db_result then all arguments are passed in order to loadDbResult.
+     * If the first argument is a string or a DB connection then all arguments are
+     * passed in order to loadQuery.
+     * @param     mixed     $options     Options source currently supports assoc array or DB_result
+     * @param     mixed     $param1     (optional) See function detail
+     * @param     mixed     $param2     (optional) See function detail
+     * @param     mixed     $param3     (optional) See function detail
+     * @param     mixed     $param4     (optional) See function detail
+     * @since     1.1
+     * @access    public
+     * @return    PEAR_Error on error or true
+     * @throws    PEAR_Error
+     */
+    private function load(&$options, $param1=null, $param2=null, $param3=null, $param4=null)
+    {
+        switch (true) {
+            case is_array($options):
+                return $this->loadArray($options, $param1);
+                break;
+        }
+    }
+
+    /**
+     * Loads the options from an associative array
+     *
+     * @param     array    $arr     Associative array of options
+     * @param     mixed    $values  (optional) Array or comma delimited string of selected values
+     * @since     1.0
+     * @access    public
+     * @return    PEAR_Error on error or true
+     * @throws    PEAR_Error
+     */
+    private function loadArray($arr, $values = null)
+    {
+        if (!is_array($arr)) {
+            return false;
+        }
+        if (isset($values)) {
+            $this->setSelected($values);
+        }
+        foreach ($arr as $key => $val) {
+            // Fix in order to use list of entities.
+            if (is_object($val)) {
+                $key = $val->getId();
+                $val = $val->__toString();
+            }
+
+            // Warning: new API since release 2.3
+            $this->addOption($val, $key);
+        }
+        return true;
     }
 
     /**
@@ -364,163 +436,13 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     }
 
     /**
-     * Loads the options from an associative array
-     *
-     * @param     array    $arr     Associative array of options
-     * @param     mixed    $values  (optional) Array or comma delimited string of selected values
-     * @since     1.0
-     * @access    public
-     * @return    PEAR_Error on error or true
-     * @throws    PEAR_Error
-     */
-    function loadArray($arr, $values=null)
-    {
-        if (!is_array($arr)) {
-            return PEAR::raiseError('Argument 1 of HTML_Select::loadArray is not a valid array');
-        }
-        if (isset($values)) {
-            $this->setSelected($values);
-        }
-        foreach ($arr as $key => $val) {
-            // Fix in order to use list of entities.
-            if (is_object($val)) {
-                $key = $val->getId();
-                $val = $val->__toString();
-            }
-            // Warning: new API since release 2.3
-            $this->addOption($val, $key);
-        }
-        return true;
-    } // end func loadArray
-
-    // }}}
-    // {{{ loadDbResult()
-
-    /**
-     * Loads the options from DB_result object
-     *
-     * If no column names are specified the first two columns of the result are
-     * used as the text and value columns respectively
-     * @param     object    $result     DB_result object
-     * @param     string    $textCol    (optional) Name of column to display as the OPTION text
-     * @param     string    $valueCol   (optional) Name of column to use as the OPTION value
-     * @param     mixed     $values     (optional) Array or comma delimited string of selected values
-     * @since     1.0
-     * @access    public
-     * @return    PEAR_Error on error or true
-     * @throws    PEAR_Error
-     */
-    function loadDbResult(&$result, $textCol=null, $valueCol=null, $values=null)
-    {
-        if (!is_object($result) || !is_a($result, 'db_result')) {
-            return PEAR::raiseError('Argument 1 of HTML_Select::loadDbResult is not a valid DB_result');
-        }
-        if (isset($values)) {
-            $this->setValue($values);
-        }
-        $fetchMode = ($textCol && $valueCol) ? DB_FETCHMODE_ASSOC : DB_FETCHMODE_ORDERED;
-        while (is_array($row = $result->fetchRow($fetchMode)) ) {
-            if ($fetchMode == DB_FETCHMODE_ASSOC) {
-                $this->addOption($row[$textCol], $row[$valueCol]);
-            } else {
-                $this->addOption($row[0], $row[1]);
-            }
-        }
-        return true;
-    } // end func loadDbResult
-
-    // }}}
-    // {{{ loadQuery()
-
-    /**
-     * Queries a database and loads the options from the results
-     *
-     * @param     mixed     $conn       Either an existing DB connection or a valid dsn
-     * @param     string    $sql        SQL query string
-     * @param     string    $textCol    (optional) Name of column to display as the OPTION text
-     * @param     string    $valueCol   (optional) Name of column to use as the OPTION value
-     * @param     mixed     $values     (optional) Array or comma delimited string of selected values
-     * @since     1.1
-     * @access    public
-     * @return    void
-     * @throws    PEAR_Error
-     */
-    function loadQuery(&$conn, $sql, $textCol=null, $valueCol=null, $values=null)
-    {
-        if (is_string($conn)) {
-            require_once('DB.php');
-            $dbConn = &DB::connect($conn, true);
-            if (DB::isError($dbConn)) {
-                return $dbConn;
-            }
-        } elseif (is_subclass_of($conn, "db_common")) {
-            $dbConn = &$conn;
-        } else {
-            return PEAR::raiseError('Argument 1 of HTML_Select::loadQuery is not a valid type');
-        }
-        $result = $dbConn->query($sql);
-        if (DB::isError($result)) {
-            return $result;
-        }
-        $this->loadDbResult($result, $textCol, $valueCol, $values);
-        $result->free();
-        if (is_string($conn)) {
-            $dbConn->disconnect();
-        }
-        return true;
-    } // end func loadQuery
-
-    // }}}
-    // {{{ load()
-
-    /**
-     * Loads options from different types of data sources
-     *
-     * This method is a simulated overloaded method.  The arguments, other than the
-     * first are optional and only mean something depending on the type of the first argument.
-     * If the first argument is an array then all arguments are passed in order to loadArray.
-     * If the first argument is a db_result then all arguments are passed in order to loadDbResult.
-     * If the first argument is a string or a DB connection then all arguments are
-     * passed in order to loadQuery.
-     * @param     mixed     $options     Options source currently supports assoc array or DB_result
-     * @param     mixed     $param1     (optional) See function detail
-     * @param     mixed     $param2     (optional) See function detail
-     * @param     mixed     $param3     (optional) See function detail
-     * @param     mixed     $param4     (optional) See function detail
-     * @since     1.1
-     * @access    public
-     * @return    PEAR_Error on error or true
-     * @throws    PEAR_Error
-     */
-    function load(&$options, $param1=null, $param2=null, $param3=null, $param4=null)
-    {
-        switch (true) {
-            case is_array($options):
-                return $this->loadArray($options, $param1);
-                break;
-            case (is_a($options, 'db_result')):
-                return $this->loadDbResult($options, $param1, $param2, $param3);
-                break;
-            // Disabled by Chamilo team, 16-MAR-2010.
-            // TODO: To be verified (why it has been disabled).
-            //case (is_string($options) && !empty($options) || is_subclass_of($options, "db_common")):
-            //    return $this->loadQuery($options, $param1, $param2, $param3, $param4);
-            //    break;
-            //
-        }
-    } // end func load
-
-    // }}}
-    // {{{ toHtml()
-
-    /**
      * Returns the SELECT in HTML
      *
      * @since     1.0
      * @access    public
      * @return    string
      */
-    function toHtml()
+    public function toHtml()
     {
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();

@@ -9,7 +9,7 @@
 $cidReset = true;
 // needed in order to load the plugin lang variables
 $course_plugin = 'ticket';
-require_once '../config.php';
+require_once __DIR__.'/../config.php';
 
 $plugin = TicketPlugin::create();
 

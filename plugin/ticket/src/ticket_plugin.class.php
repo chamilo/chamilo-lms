@@ -34,7 +34,7 @@ class TicketPlugin extends Plugin
         );
 
         parent::__construct(
-            '2.0',
+            '3.0',
             'Kenny Rodas Chavez, Genesis Lopez, Francis Gonzales, Yannick Warnier, Julio Montoya',
             $settings
         );
@@ -55,8 +55,6 @@ class TicketPlugin extends Plugin
     public function uninstall()
     {
         $tblSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
-        $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
         $tblTicketTicket = Database::get_main_table(TABLE_TICKET_TICKET);
         $tblTicketStatus = Database::get_main_table(TABLE_TICKET_STATUS);
         $tblTicketProject = Database::get_main_table(TABLE_TICKET_PROJECT);
@@ -97,6 +95,4 @@ class TicketPlugin extends Plugin
             echo "<script>location.href = '" . $_SERVER['REQUEST_URI'] . "';</script>";
         }
     }
-
-
 }

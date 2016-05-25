@@ -421,12 +421,13 @@ class AppPlugin
                 require $plugin_file;
             }
 
-            //extra options
+            // Extra options
             $plugin_settings = api_get_settings_params(
                 array(
                     "subkey = ? AND category = ? AND type = ? " => array($plugin_name, 'Plugins','setting')
                 )
             );
+            
             $settings_filtered = array();
             foreach ($plugin_settings as $item) {
                 $settings_filtered[$item['variable']] = $item['selected_value'];

@@ -6,7 +6,7 @@
  * @package chamilo.plugin.ticket
  */
 $cidReset = true;
-require_once '../config.php';
+require_once __DIR__.'/../config.php';
 $plugin = TicketPlugin::create();
 
 api_protect_admin_script(true);

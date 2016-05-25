@@ -19,8 +19,8 @@ SessionManager::protectSession(null, false);
 
 api_protect_limit_for_session_admin();
 
-$formSent=0;
-$errorMsg='';
+$formSent = 0;
+$errorMsg = '';
 
 // Crop picture plugin for session images
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';

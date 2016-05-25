@@ -85,3 +85,5 @@ $strings['PleaseBeforeRegisterATicketSelectOneUser'] = "Veuillez sélectionner u
 $strings['RequestConfirmation'] = "Demander confirmation";
 $strings['TicketUpdated'] = "Ticket modifié";
 $strings['TicketClosed'] = "Ticket fermé";
+$strings['SrcPlatform'] = "Platforme";
+$strings['UpdatedByX'] = 'Updated by %s';

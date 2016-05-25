@@ -51,9 +51,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
 }
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock(
-    $user_id,
-    $link_shared,
-    $show_full_profile
+    $user_id
 );
 $content = null;
 $social_right_content = '';

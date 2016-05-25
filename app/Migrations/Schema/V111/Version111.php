@@ -137,9 +137,15 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('DROP TABLE group_rel_tag');
         $this->addSql('DROP TABLE group_rel_group');
         $this->addSql('DROP TABLE groups');
-    }
 
-    /**
+        if ($schema->hasTable('plugin_ticket_ticket')) {
+            $this->addSql('ALTER TABLE plugin_ticket_ticket ADD COLUMN subject varchar(255) DEFAULT NULL;');
+            $this->addSql('ALTER TABLE plugin_ticket_ticket ADD COLUMN message text NOT NULL;');
+            $this->addSql('UPDATE plugin_ticket_ticket t INNER JOIN plugin_ticket_message as m  ON(t.ticket_id = m.ticket_id and message_id =1)  SET t.subject = m.subject');
+            $this->addSql('UPDATE plugin_ticket_ticket t INNER JOIN plugin_ticket_message as m  ON(t.ticket_id = m.ticket_id and message_id =1)  SET t.message = m.message');
+            $this->addSql('DELETE FROM plugin_ticket_message WHERE message_id = 1');
+        }
+}    /**
      * @param Schema $schema
      */
     public function postUp(Schema $schema)

@@ -6,6 +6,6 @@
  * @package chamilo.plugin.ticket
  */
 
-require_once '../config.php';
-header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php?message=success');
+require_once __DIR__.'/../config.php';
+header('Location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php');
 exit;

@@ -18,15 +18,7 @@ $_template['show_message'] = true;
 $_template['title'] = $plugininstance->get_lang('hostlist');
 
 $tablename = Database::get_main_table('vchamilo');
-$sql = "
-    SELECT 
-        sitename,
-        root_web
-    FROM
-        $tablename
-    WHERE
-        visible = 1
-";
+$sql = "SELECT sitename, root_web FROM $tablename WHERE visible = 1";
 
 if ($virtualChamilo == '%'){
     $result = Database::query($sql);
@@ -36,5 +28,4 @@ if ($virtualChamilo == '%'){
             $_template['hosts'][] = $vchamilo;
         }
     }
-} else {
 }

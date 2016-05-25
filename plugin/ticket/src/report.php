@@ -5,9 +5,8 @@
  * @package chamilo.plugin.ticket
  */
 
-$language_file = array('trad4all');
 $cidReset = true;
-require_once '../config.php';
+require_once __DIR__.'/../config.php';
 $plugin = TicketPlugin::create();
 
 api_block_anonymous_users();

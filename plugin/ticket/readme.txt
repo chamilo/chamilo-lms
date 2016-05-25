@@ -1,1 +1,0 @@
-This plugin provides the support ticket management system features

@@ -20,7 +20,6 @@ function vchamilo_hook_configuration(&$_configuration)
     $virtualChamiloWebRoot = $_configuration['vchamilo_web_root'].'/';
 
     $virtualChamilo = [];
-
     if ($_configuration['root_web'] == $virtualChamiloWebRoot) {
 
         return;
@@ -35,39 +34,41 @@ function vchamilo_hook_configuration(&$_configuration)
     $query = "SELECT * FROM $table WHERE root_web = '$virtualChamiloWebRoot'";
     $result = $connection->executeQuery($query);
 
-    $excludes = array('id', 'name');
-
-    $query = "SELECT * FROM settings_current WHERE subkey = 'vchamilo'";
-    $virtualSettings = $connection->executeQuery($query);
-    $virtualSettings = $virtualSettings->fetchAll();
-
-    $homePath = '';
-    $coursePath = '';
-    $archivePath = '';
-
-    foreach ($virtualSettings as $setting) {
-        switch ($setting['variable']) {
-            case 'vchamilo_home_real_root':
-                $homePath = $setting['selected_value'];
-                break;
-            case 'vchamilo_course_real_root':
-                $coursePath = $setting['selected_value'];
-                break;
-            case 'vchamilo_archive_real_root':
-                $archivePath = $setting['selected_value'];
-                break;
-        }
-    }
-
-    if (empty($homePath) || empty($coursePath) || empty($archivePath)) {
-        echo 'Configure correctly the vchamilo plugin';
-        exit;
-    }
-
     if ($result->rowCount()) {
         $data = $result->fetch();
+
+        $excludes = array('id', 'name');
+
+        $query = "SELECT * FROM settings_current WHERE subkey = 'vchamilo'";
+        $virtualSettings = $connection->executeQuery($query);
+        $virtualSettings = $virtualSettings->fetchAll();
+
+        $homePath = '';
+        $coursePath = '';
+        $archivePath = '';
+
+        foreach ($virtualSettings as $setting) {
+            switch ($setting['variable']) {
+                case 'vchamilo_home_real_root':
+                    $homePath = $setting['selected_value'];
+                    break;
+                case 'vchamilo_course_real_root':
+                    $coursePath = $setting['selected_value'];
+                    break;
+                case 'vchamilo_archive_real_root':
+                    $archivePath = $setting['selected_value'];
+                    break;
+            }
+        }
+
+        if (empty($homePath) || empty($coursePath) || empty($archivePath)) {
+            echo 'Configure correctly the vchamilo plugin';
+            exit;
+        }
+
         // Only load if is visible
-        if ($data['visible']) {
+        if ($data && $data['visible'] === '1') {
+
             foreach ($data as $key => $value) {
                 if (!in_array($key, $excludes)) {
                     $_configuration[$key] = $value;
@@ -80,6 +81,8 @@ function vchamilo_hook_configuration(&$_configuration)
             $data['SYS_COURSE_PATH'] = $coursePath.'/'.$data['slug'];
 
             $virtualChamilo = $data;
+        } else {
+            exit("This portal is disabled. Please contact your administrator");
         }
     } else {
         // Platform was not configured yet
@@ -1132,6 +1135,23 @@ function vchamilo_check_settings()
 
     if (empty($coursePath) || empty($homePath) || empty($archivePath) || empty($cmdSql)|| empty($cmdMySql)) {
         api_not_allowed(true, 'You have to complete all plugin settings.');
+    }
+    $separator = DIRECTORY_SEPARATOR;
+    $templatePath = api_get_path(SYS_PATH).'plugin'.$separator.'vchamilo'.$separator.'templates';
+
+    $paths = [
+        $coursePath,
+        $homePath,
+        $archivePath,
+        $templatePath
+    ];
+
+    foreach ($paths as $path) {
+        if (!is_writable($path)) {
+            Display::addFlash(
+                Display::return_message('Directory must have writable permissions: '.$path, 'warning')
+            );
+        }
     }
 }
 

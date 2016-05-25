@@ -405,7 +405,7 @@ class InstanceForm extends ChamiloForm
             'onclick="opencnxpopup(\''.$_configuration['root_web'].'\'); return false;"'
         );
 
-        /*
+        /**
          * Template selection.
          */
         if ($this->is_in_add_mode()) {
@@ -414,10 +414,17 @@ class InstanceForm extends ChamiloForm
             $templateoptions = vchamilo_get_available_templates();
 
             // Template choice
-            $form->addElement('select', 'template', $this->_plugin->get_lang('template'), $templateoptions);
+            $form->addSelect(
+                'template',
+                $this->_plugin->get_lang('template'),
+                $templateoptions
+            );
         } else {
             if ($this->instance) {
-                $form->addLabel($this->_plugin->get_lang('template'), $this->instance->template);
+                $form->addLabel(
+                    $this->_plugin->get_lang('template'),
+                    $this->instance['template']
+                );
             }
         }
 
@@ -432,6 +439,7 @@ class InstanceForm extends ChamiloForm
             null,
             'client'
         );
+
         $form->addRule('root_web', $this->_plugin->get_lang('rootwebinputerror'), 'required', null, 'client');
         $form->addRule(
             'main_database',

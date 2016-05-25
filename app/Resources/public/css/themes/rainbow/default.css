@@ -283,12 +283,12 @@ a:focus {
    background-color: transparent;
 }
 .btn-primary{
-    background-color: #E53140;
-    border-color: #E53140;
+    background-color: #009EE0;
+    border-color: #009EE0;
 }
 .btn-primary:hover{
-    background-color: #CE2D30;
-    border-color: #CE2D30;
+    background-color: #000080;
+    border-color: #000080;
 }
 .navbar-inverse li a{
   line-height: 30px;
@@ -360,7 +360,7 @@ a:focus {
 }
 /* End Jquery UI */
 footer{
-  background-color:#E53140;
+  background-color:#009EE0;
 }
 footer{
   color: #ffffff;
@@ -368,7 +368,9 @@ footer{
 footer a{
   color: #ffffff;
 }
-
+footer a:hover{
+    color: #FFD42A;
+}
 .navbar-default .navbar-brand {
   color:white;
 }

@@ -6,7 +6,7 @@
  */
 
 $cidReset = true;
-require_once '../config.php';
+require_once __DIR__.'/../config.php';
 $plugin = TicketPlugin::create();
 
 if (!api_is_platform_admin() &&
@@ -151,7 +151,7 @@ div.divTicket {
     padding-top: 100px;
 }
 </style>';
-$types = TicketManager::get_all_tickets_categories();
+$types = TicketManager::get_all_tickets_categories('category.name ASC');
 $htmlHeadXtra[] = '<script language="javascript">
     var projects = ' . js_array($types, 'projects', 'project_id') . '
     var course_required = ' . js_array($types, 'course_required', 'course_required') . '
@@ -195,7 +195,7 @@ function show_form_send_ticket()
     // Category List
     $categoryList = array();
     foreach ($types as $type) {
-        $categoryList[$type['category_id']] = $type['name'] . ": " . $type['description'];
+        $categoryList[$type['category_id']] = $type['name'].': '.$type['description'];
     }
 
     // Status List
@@ -205,52 +205,51 @@ function show_form_send_ticket()
         'id' => 'status_id',
         'for' => 'status_id'
     );
-    $statusList[NEWTCK] = $plugin->get_lang('StatusNew');
+
+    $statusList[TicketManager::STATUS_NEW] = $plugin->get_lang('StatusNew');
     if (api_is_platform_admin()) {
         $statusAttributes = array(
             'id' => 'status_id',
             'for' => 'status_id',
             'style' => 'width: 562px;'
         );
-        $statusList[PENDING] = $plugin->get_lang('StatusPending');
-        $statusList[UNCONFIRMED] = $plugin->get_lang('StatusUnconfirmed');
-        $statusList[CLOSE] = $plugin->get_lang('StatusClose');
-        $statusList[REENVIADO] = $plugin->get_lang('StatusForwarded');
+        $statusList[TicketManager::STATUS_PENDING] = $plugin->get_lang('StatusPending');
+        $statusList[TicketManager::STATUS_UNCONFIRMED] = $plugin->get_lang('StatusUnconfirmed');
+        $statusList[TicketManager::STATUS_CLOSE] = $plugin->get_lang('StatusClose');
+        $statusList[TicketManager::STATUS_FORWARDED] = $plugin->get_lang('StatusForwarded');
     }
     //End Status List
 
-    //Source List
+    // Source List
     $sourceList = array();
     $sourceAttributes = array(
         'style' => 'display: none;',
         'id' => 'source_id',
         'for' => 'source_id'
     );
-    $sourceList[SRC_PLATFORM] = $plugin->get_lang('SrcPlatform');
+    $sourceList[TicketManager::SOURCE_PLATFORM] = $plugin->get_lang('SrcPlatform');
     if (api_is_platform_admin()) {
         $sourceAttributes = array(
             'id' => 'source_id',
             'for' => 'source_id',
             'style' => 'width: 562px;'
         );
-        $sourceList[SRC_EMAIL] = $plugin->get_lang('SrcEmail');
-        $sourceList[SRC_PHONE] = $plugin->get_lang('SrcPhone');
-        $sourceList[SRC_PRESC] = $plugin->get_lang('SrcPresential');
+        $sourceList[TicketManager::SOURCE_EMAIL] = $plugin->get_lang('SrcEmail');
+        $sourceList[TicketManager::SOURCE_PHONE] = $plugin->get_lang('SrcPhone');
+        $sourceList[TicketManager::SOURCE_PRESENTIAL] = $plugin->get_lang('SrcPresential');
     }
-    //End Source List
 
-    //Priority List
+    // Priority List
     $priorityList = array();
-    $priorityList[NORMAL] = $plugin->get_lang('PriorityNormal');
-    $priorityList[HIGH] = $plugin->get_lang('PriorityHigh');
-    $priorityList[LOW] = $plugin->get_lang('PriorityLow');
-    //End Priority List
+    $priorityList[TicketManager::PRIORITY_NORMAL] = $plugin->get_lang('PriorityNormal');
+    $priorityList[TicketManager::PRIORITY_HIGH] = $plugin->get_lang('PriorityHigh');
+    $priorityList[TicketManager::PRIORITY_LOW] = $plugin->get_lang('PriorityLow');
 
     $form = new FormValidator(
         'send_ticket',
         'POST',
         api_get_self(),
-        "",
+        '',
         array(
             'enctype' => 'multipart/form-data',
             'onsubmit' => 'return validate()'
@@ -325,7 +324,7 @@ function show_form_send_ticket()
             'Height' => '250'
         )
     );
-    
+
     //if (api_is_platform_admin()) {
         $form->addElement(
             'SelectAjax',
@@ -336,8 +335,6 @@ function show_form_send_ticket()
         );
     //}
 
-    
-
     $form->addElement(
         'text',
         'personal_email',
@@ -346,7 +343,6 @@ function show_form_send_ticket()
             'id' => 'personal_email'
         )
     );
-
 
     $form->addLabel('',
         Display::div(
@@ -393,7 +389,6 @@ function show_form_send_ticket()
         )
     );
 
-
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
     $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 
@@ -429,7 +424,7 @@ function save_ticket()
     global $plugin;
     $category_id = $_POST['category_id'];
     $content = $_POST['content'];
-    if ($_POST['phone'] != "") {
+    if ($_POST['phone'] != '') {
         $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . Security::remove_XSS($_POST['phone']). '</p>';
     }
     $course_id = isset($_POST['course_id']) ? $_POST['course_id'] : 0;
@@ -443,8 +438,7 @@ function save_ticket()
     $priority = $_POST['priority_id'];
     $status = $_POST['status_id'];
     $file_attachments = $_FILES;
-    $responsible = (api_is_platform_admin() ? api_get_user_id() : 0);
-  
+
     if (TicketManager::insert_new_ticket(
         $category_id,
         $course_id,
@@ -458,11 +452,12 @@ function save_ticket()
         $source,
         $priority,
         $status,
-        $user_id,
-        $responsible
-    )
-    ) {
-        header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php?message=success');
+        $user_id
+    )) {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('TckSuccessSave'), 'success')
+        );
+        header('Location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php');
         exit;
     } else {
         Display::display_header(get_lang('ComposeMessage'));
@@ -576,48 +571,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
     return $users;
 }
 
+
+$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
+
 if (!isset($_POST['compose'])) {
     if (api_is_platform_admin()) {
         Display::display_header(get_lang('ComposeMessage'));
-
-        /*
-        $message = $plugin->get_lang('PleaseBeforeRegisterATicketSelectOneUser');
-        Display::display_warning_message($message);
-        echo '
-            <div class="actions">
-              <span style="float: right;">&nbsp;</span>
-              <form id="search_simple" name="search_simple" method="get" action="' . api_get_self() . '" class="form-search">
-                <fieldset>
-                <span><label for="keyword">' . get_lang('SearchAUser') . ': &nbsp;</label><input type="text" name="keyword" size="25"></span>
-                <span><button type="submit" name="submit" class="btn btn">' . get_lang('Search') . '</button></span>
-                <div class="clear"></div>
-                </fieldset>
-              </form>
-            </div>';
-        echo '<div class="users-list">';
-        $order = (api_is_western_name_order() || api_sort_by_first_name()) ? 3 : 2;
-        $table = new SortableTable(
-            'users',
-            'get_number_of_users',
-            'get_user_data',
-            $order,
-            10
-        );
-        $table->set_header(0, '', false, 'width="18px"');
-        $table->set_header(0, get_lang('Photo'), false);
-        $table->set_header(1, get_lang('OfficialCode'));
-        if (api_is_western_name_order()) {
-            $table->set_header(2, get_lang('FirstName'));
-            $table->set_header(3, get_lang('LastName'));
-        } else {
-            $table->set_header(2, get_lang('LastName'));
-            $table->set_header(3, get_lang('FirstName'));
-        }
-        $table->set_header(4, get_lang('LoginName'));
-        $table->set_header(5, get_lang('Email'));
-        $table->set_header(6, get_lang('Action'));
-        $table->display();
-        echo '</div>';*/
     } else {
         $userInfo = api_get_user_info();
         $htmlHeadXtra[] = "

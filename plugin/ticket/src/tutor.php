@@ -5,10 +5,10 @@
  * @package chamilo.plugin.ticket
  */
 
-require_once '../config.php';
+require_once __DIR__.'/../config.php';
 $plugin = TicketPlugin::create();
 
-require_once 'tutor_report.lib.php';
+require_once __DIR__.'/tutor_report.lib.php';
 
 $htmlHeadXtra[] = '
 	<script type="text/javascript">

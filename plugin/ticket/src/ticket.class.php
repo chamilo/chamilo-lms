@@ -37,7 +37,7 @@ class TicketManager
     {
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $table_support_project = Database::get_main_table(TABLE_TICKET_PROJECT);
-        
+
         $order = empty($order) ? 'category.total_tickets DESC' : $order;
         $sql = "SELECT category.*, project.other_area , project.email
                 FROM $table_support_category category, $table_support_project project
@@ -1142,9 +1142,10 @@ class TicketManager
             $keyword_category = Database::escape_string(
                 trim($_GET['keyword_category'])
             );
-            $keyword_request_user = Database::escape_string(
+            $keyword_request_user = '';
+            /*$keyword_request_user = Database::escape_string(
                 trim($_GET['keyword_request_user'])
-            );
+            );*/
             $keyword_admin = Database::escape_string(
                 trim($_GET['keyword_admin'])
             );

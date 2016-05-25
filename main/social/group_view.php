@@ -119,7 +119,7 @@ $usergroup = new UserGroup();
 
 if ($group_id != 0) {
     $group_info = $usergroup->get($group_id);
-    
+
 
     $interbreadcrumb[]= array ('url' =>'#','name' => $group_info['name']);
 
@@ -236,14 +236,14 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     }
     $members = $usergroup->get_users_by_group($group_id, true);
     $member_content = '';
-    
+
     // My friends
     $friend_html = SocialManager::listMyFriendsBlock(
         $user_id,
-        $link_shared,
-        $show_full_profile
+        '',
+        ''
     );
-    
+
     // Members
     if (count($members) > 0) {
         if ($role == GROUP_USER_PERMISSION_ADMIN) {
@@ -288,7 +288,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     }
     $headers = array(get_lang('Discussions'), get_lang('Members'));
     $socialForum = Display::tabs($headers, array($content, $member_content),'tabs');
-    
+
 } else {
     // if I already sent an invitation message
     if (!in_array(

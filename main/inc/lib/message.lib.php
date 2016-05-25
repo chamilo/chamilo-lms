@@ -1314,23 +1314,23 @@ class MessageManager
             ]);
             if (api_is_platform_admin()) {
                 $links .= Display::url(
-                        Display::returnFontAwesomeIcon('trash'),
-                        'group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic_id,
-                        [
-                            'class' => 'btn btn-default'
-                        ]
-                        );
+                    Display::returnFontAwesomeIcon('trash'),
+                    'group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic_id,
+                    [
+                        'class' => 'btn btn-default'
+                    ]
+                );
             }
             $links .= Display::url(
-                        Display::returnFontAwesomeIcon('pencil'),
-                        $urlEdit,
-                        [
-                            'class' => 'btn btn-default ajax',
-                            'title' => get_lang('Edit'),
-                            'data-title' => get_lang('Edit'),
-                            'data-size' => 'lg'
-                        ]
-                    );
+                Display::returnFontAwesomeIcon('pencil'),
+                $urlEdit,
+                [
+                    'class' => 'btn btn-default ajax',
+                    'title' => get_lang('Edit'),
+                    'data-title' => get_lang('Edit'),
+                    'data-size' => 'lg'
+                ]
+            );
         }
 
         $urlReply = api_get_path(WEB_CODE_PATH);
@@ -1358,7 +1358,7 @@ class MessageManager
         $links.= '</div>';
         $links.= '</div>';
 
-        $title = '<h4>'.Security::remove_XSS($main_message['title'].$delete_button, STUDENT, true).$links.'</h4>';
+        $title = '<h4>'.Security::remove_XSS($main_message['title'], STUDENT, true).$links.'</h4>';
 
         $userPicture = $user_sender_info['avatar'];
         $main_content .= '<div class="avatar-author">';

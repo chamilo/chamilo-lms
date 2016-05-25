@@ -1686,9 +1686,10 @@ class learnpath
 
     /**
      * Gets the number of items currently completed
+     * @param bool $failedStatusException flag to determine the failed status is not considered progressed
      * @return integer The number of items currently completed
      */
-    public function get_complete_items_count()
+    public function get_complete_items_count($failedStatusException = false)
     {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_complete_items_count()', 0);
@@ -1698,9 +1699,12 @@ class learnpath
             'completed',
             'passed',
             'succeeded',
-            'browsed',
-            'failed'
+            'browsed'
         );
+
+        if (!$failedStatusException) {
+            $completedStatusList[] = 'failed';
+        }
 
         foreach ($this->items as $id => $dummy) {
             // Trying failed and browsed considered "progressed" as well.

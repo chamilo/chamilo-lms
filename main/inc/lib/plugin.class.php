@@ -480,7 +480,7 @@ class Plugin
                     'visibility' => 1,
                     'admin' => 0,
                     'address' => 'squaregrey.gif',
-                    'added_tool' => 'NO',
+                    'added_tool' => 0,
                     'target' => '_self',
                     'category' => 'plugin',
                     'session_id' => 0

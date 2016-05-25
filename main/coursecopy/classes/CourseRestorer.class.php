@@ -465,6 +465,7 @@ class CourseRestorer
                                             'filetype' => self::DBUTF8($document->file_type),
                                             'size' => self::DBUTF8($document->size),
                                             'session_id' => $my_session_id,
+                                            'readonly' => 0
                                         ];
 
     									$document_id = Database::insert($table, $params);
@@ -889,6 +890,7 @@ class CourseRestorer
                                 'filetype' => self::DBUTF8($document->file_type),
                                 'size' => self::DBUTF8($document->size),
                                 'session_id' => $my_session_id,
+                                'readonly' => 0
                             ];
 
                             $document_id = Database::insert($table, $params);
@@ -1051,7 +1053,9 @@ class CourseRestorer
                 $params['forum_category'] = $cat_id;
                 $params['session_id'] = $sessionId;
 
-                unset($params['forum_id']);
+                $params['start_time'] = isset($params['start_time']) && $params['start_time'] === '0000-00-00 00:00:00' ? null : $params['start_time'];
+                $params['end_time'] = isset($params['end_time']) && $params['end_time'] === '0000-00-00 00:00:00' ? null : $params['end_time'];
+                $params['forum_id'] = 0;
                 unset($params['iid']);
 
                 $params['forum_comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
@@ -1131,8 +1135,7 @@ class CourseRestorer
                         $this->course->info['path']
                     );
                     $params['session_id'] = intval($sessionId);
-
-                    unset($params['cat_id']);
+                    $params['cat_id'] = 0;
                     unset($params['iid']);
 
                     $params = self::DBUTF8_array($params);
@@ -1172,7 +1175,8 @@ class CourseRestorer
         $params['thread_replies'] = 0;
         $params['thread_views'] = 0;
         $params['session_id'] = intval($sessionId);
-        unset($params['thread_id']);
+        $params['thread_id'] = 0;
+
         unset($params['iid']);
 
         $new_id = Database::insert($table, $params);
@@ -1223,7 +1227,7 @@ class CourseRestorer
         $params['thread_id'] = $topic_id;
         $params['poster_id'] = $this->first_teacher_id;
         $params['post_date'] = api_get_utc_datetime();
-        unset($params['post_id']);
+        $params['post_id'] = 0;
         unset($params['iid']);
         $params['post_text'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
             $params['post_text'],
@@ -1545,6 +1549,7 @@ class CourseRestorer
                 $params['description_type'] = self::DBUTF8($descriptionType);
                 $params['title'] = self::DBUTF8($title);
                 $params['content'] = self::DBUTF8($description_content);
+                $params['progress'] = 0;
 
                 $id = Database::insert($table, $params);
                 if ($id) {
@@ -1769,6 +1774,8 @@ class CourseRestorer
                         'expired_time' => (int)$quiz->expired_time,
                         'start_time' => $quiz->start_time,
                         'end_time' => $quiz->end_time,
+                        'save_correct_answers' => 0,
+                        'display_category_name' => 0
                     );
 
                     if ($respect_base_content) {
@@ -1906,6 +1913,8 @@ class CourseRestorer
                         'position' => $answer['position'],
                         'hotspot_coordinates' => $answer['hotspot_coordinates'],
                         'hotspot_type' => $answer['hotspot_type'],
+                        'id_auto' => 0,
+                        'destination' => ''
                     ];
                     $answerId = Database::insert($table_ans, $params);
 
@@ -1947,6 +1956,8 @@ class CourseRestorer
                         'position' => $answer['position'],
                         'hotspot_coordinates' => $answer['hotspot_coordinates'],
                         'hotspot_type' => $answer['hotspot_type'],
+                        'id_auto' => 0,
+                        'destination' => ''
                     ];
 
                     $answerId = Database::insert($table_ans, $params);
@@ -2465,6 +2476,9 @@ class CourseRestorer
                     }
                 }
 
+                $lp->expired_on = isset($lp->expired_on) && $lp->expired_on === '0000-00-00 00:00:00' ? null : $lp->expired_on;
+                $lp->publicated_on = isset($lp->publicated_on) && $lp->publicated_on === '0000-00-00 00:00:00' ? null : $lp->publicated_on;
+
                 $params = [
                     'c_id' => $this->destination_course_id,
                     'lp_type' => $lp->lp_type,
@@ -2490,6 +2504,14 @@ class CourseRestorer
                     'publicated_on' => empty($lp->publicated_on) ? api_get_utc_datetime() : self::DBUTF8($lp->publicated_on),
                     'expired_on' => self::DBUTF8($lp->expired_on),
                     'debug' => self::DBUTF8($lp->debug),
+                    'theme' => '',
+                    'session_id' => $session_id,
+                    'prerequisite' => 0,
+                    'hide_toc_frame' => 0,
+                    'seriousgame_mode' => 0,
+                    'category_id' => 0,
+                    'max_attempts' => 0,
+                    'subscribe_users' => 0
                 ];
 
                 if (!empty($condition_session)) {
@@ -2872,7 +2894,7 @@ class CourseRestorer
                 $params['description'] = self::DBUTF8($glossary->description);
                 $params['display_order'] = $glossary->display_order;
                 $params['name'] = self::DBUTF8($glossary->name);
-
+                $params['glossary_id'] = 0;
                 $my_id = Database::insert($table_glossary, $params);
                 if ($my_id) {
 
@@ -2934,6 +2956,18 @@ class CourseRestorer
                     'progress' => self::DBUTF8($wiki->progress),
                     'version' => intval($wiki->version),
                     'session_id' => !empty($session_id) ? intval($session_id) : 0,
+                    'addlock' => 0,
+                    'editlock' => 0,
+                    'visibility' => 0,
+                    'addlock_disc' => 0,
+                    'visibility_disc' => 0,
+                    'ratinglock_disc' => 0,
+                    'assignment' => 0,
+                    'comment' => '',
+                    'is_editing' => 0,
+                    'linksto' => 0,
+                    'tag' => '',
+                    'user_ip' => ''
                 ];
 
 				$new_id = Database::insert($table_wiki, $params);
@@ -2957,11 +2991,11 @@ class CourseRestorer
                         'fprogress1' => '',
                         'fprogress2' => '',
                         'fprogress3' => '',
-                        'max_size' => '',
+                        'max_size' => 0,
                         'max_text' => 0,
                         'max_version' => 0,
-                        'startdate_assig' => '',
-                        'enddate_assig' => '',
+                        'startdate_assig' => null,
+                        'enddate_assig' => null,
                         'delayedsubmit' => 0,
                     ];
 

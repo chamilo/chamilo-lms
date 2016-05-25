@@ -725,6 +725,10 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 .social-image {
     max-height: 300px;
 }
+.social-post-answers {
+    padding-right: 0px;
+    padding-left: 0px;
+}
 .social-host p {;
     padding: 10px;
     margin-top: 5px;
@@ -3849,6 +3853,10 @@ i.size-32.icon-new-work{
 }
 .popularity-mediapost {
     margin-bottom: 30px;
+    font-size: 1.2em;
+}
+.popularity-vote-found {
+    color: #FFD700;
 }
 .top-mediapost .user-image,
 .sub-mediapost .user-image

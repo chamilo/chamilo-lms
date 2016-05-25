@@ -234,6 +234,8 @@ switch ($action) {
         }
         echo $html;
         break;
+    case 'voteMsg':
+
     default:
         echo '';
 }

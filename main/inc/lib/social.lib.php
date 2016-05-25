@@ -1359,6 +1359,7 @@ class SocialManager extends UserManager
           send_date,
           content,
           parent_id,
+          votes,
           (SELECT ma.path FROM $tblMessageAttachment ma
            WHERE  ma.message_id = tm.id ) as path,
           (SELECT ma.filename FROM $tblMessageAttachment ma
@@ -1419,23 +1420,28 @@ class SocialManager extends UserManager
             $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
             $media = '';
             $media .= '<div class="rep-post">';
+            $media .= '<div class="col-md-2 col-xs-2 social-post-answers">';
+            $media .= '<div class="user-image pull-right">';
+            $media .= '<a href="'.$url.'" ><img src="'. $users[$userIdLoop]['avatar'] .
+                       '" alt="'.$users[$userIdLoop]['complete_name'].'" class="avatar-thumb"></a>';
+            $media .= '</div>';
+            $media .= '</div>';
+            $media .= '<div class="col-md-9 col-xs-9 social-post-answers">';
+            $media .= '<div class="user-data">';
+            $media .= '<div class="username">' . '<a href="'.$url.'">'.$nameComplete.'</a> <span>'.Security::remove_XSS($message['content']).'</span></div>';
+            $media .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
+            $media .= '<br />';
+            $media .= '</div>';
+            $media .= '</div>';
+            $media .= '</div>';
             if ($isOwnWall) {
+                $media .= '<div class="col-md-1 col-xs-1 social-post-answers">';
                 $media .= '<div class="pull-right deleted-mgs">';
                 $media .= '<a title="'.get_lang("SocialMessageDelete").'" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
                     $message['id'].'">x</a>';
                 $media .= '</div>';
+                $media .= '</div>';
             }
-            $media .= '<div class="user-image">';
-            $media .= '<a href="'.$url.'" ><img src="'. $users[$userIdLoop]['avatar'] .
-                       '" alt="'.$users[$userIdLoop]['complete_name'].'" class="avatar-thumb"></a>';
-            $media .= '</div>';
-            $media .= '<div class="user-data">';
-            $media .= '<div class="username">' . '<a href="'.$url.'">'.$nameComplete.'</a></div>';
-            $media .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
-            $media .= '</div>';
-            $media .= '<div class="msg-content">';
-            $media .= '<p>'.Security::remove_XSS($message['content']).'</p>';
-            $media .= '</div></div>';
 
             $formattedList .= $media;
         }
@@ -1567,7 +1573,13 @@ class SocialManager extends UserManager
         $html .= '<p>'. Security::remove_XSS($message['content']).'</p>';
         $html .= '</div>';
         $html .= '</div>'; // end mediaPost
-        $html .= '<div class="popularity-mediapost"><em class="fa fa-star-o"></em><em class="fa fa-star-o"></em><em class="fa fa-star-o"></em><em class="fa fa-star-o"></em><em class="fa fa-star-o"></em>  0 '.get_lang('Votes').'</div>';
+
+        // Popularity post functionality
+        $classIcon = 'fa fa-star-o';
+        if (intval($message['votes'])) {
+            $classIcon = 'fa fa-star popularity-vote-found';
+        }
+        $html .= '<div class="popularity-mediapost"><em class="'.$classIcon.'"></em> '.$message['votes'].'</div>';
 
         return $html;
     }
@@ -1579,7 +1591,9 @@ class SocialManager extends UserManager
      */
     public static function readContentWithOpenGraph($link)
     {
-        if(strpos($link,"://")===false && substr($link,0,1)!="/") $link = "http://".$link;
+        if (strpos($link, "://") === false && substr($link, 0, 1) != "/") {
+            $link = "http://".$link;
+        }
         $graph = OpenGraph::fetch($link);
         $link = parse_url($link);
         $host = $link['host'] ? strtoupper($link['host']) : $link['path'];

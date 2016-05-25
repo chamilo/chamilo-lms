@@ -18,7 +18,7 @@ require_once '../inc/global.inc.php';
 $ctok = Security::get_existing_token();
 
 // Get Limit data
-$limit = CourseCategory::getLimitArray();
+$limit = CourseCategory::getLimitFilterFromArray();
 
 // Section for the tabs.
 $this_section = SECTION_CATALOG;

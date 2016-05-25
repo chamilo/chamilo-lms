@@ -3936,9 +3936,11 @@ class CourseManager
         $params = array();
         $params['icon'] = Display::return_icon(
             'blackboard_blue.png',
-            api_htmlentities($course_info['name']),
+            null,
             array(),
-            ICON_SIZE_LARGE
+            ICON_SIZE_LARGE,
+            null,
+            true  
         );
 
         // Display the "what's new" icons
@@ -3965,7 +3967,7 @@ class CourseManager
 
                 if ($user_in_course_status == COURSEMANAGER || $sessionCourseAvailable) {
                     $session_url = $course_info['course_public_url'] . '?id_session=' . $course_info['id_session'];
-                    $session_title = '<h4><a href="' . $session_url. '">'. $course_info['name'] . '</a>'.$notifications.'</h4>';
+                    $session_title = '<a href="' . $session_url. '">'. $course_info['name'] . '</a>'.$notifications;
                 } else {
                     $session_title = $course_info['name'];
                 }
@@ -3977,36 +3979,32 @@ class CourseManager
         } else {
             $session_title = $course_info['name'];
         }
-
+        
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
         $iconName = basename($course_info['course_image']);
         if ($showCustomIcon === 'true' && $iconName != 'course.png') {
-            $params['icon'] = Display::img(
-                $course_info['course_image'],
-                api_htmlentities($course_info['name']),
-                array()
-            );
+            $params['icon'] = $course_info['course_image_large'];
         }
 
         $params['link'] = $session_url;
         $params['title'] = $session_title;
-        $params['right_actions'] = '';
-
+        $params['edit_actions'] = '';
+        $params['document'] = '';
+        
         if ($course_visibility != COURSE_VISIBILITY_CLOSED &&
             $course_visibility != COURSE_VISIBILITY_HIDDEN
         ) {
+            if (api_is_platform_admin()) {
+                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course_info['code'];
             if ($load_dirs) {
-                $params['right_actions'] .= '<a id="document_preview_' . $course_info['real_id'] . '_' . $course_info['id_session'] . '" class="document_preview" href="javascript:void(0);">' .
-                    Display::return_icon('folder.png',
-                        get_lang('Documents'),
-                        array('align' => 'absmiddle'),
-                        ICON_SIZE_SMALL
-                    ) . '</a>';
-                $params['right_actions'] .= Display::div('', array(
+                $params['document'] .= '<a id="document_preview_' . $course_info['real_id'] . '_' . $course_info['id_session'] . '" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">' .
+                    Display::returnFontAwesomeIcon('folder-open') . '</a>';
+                $params['document'] .= Display::div('', array(
                     'id' => 'document_result_' . $course_info['real_id'] . '_' . $course_info['id_session'],
                     'class' => 'document_preview_container'
                 ));
             }
+        }
         }
 
         if (api_get_setting('display_coursecode_in_courselist') == 'true') {
@@ -4015,23 +4013,24 @@ class CourseManager
 
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
 
-            $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string(
-                $course_info['code'],
-                self::USER_SEPARATOR,
-                true
+            $teacher_list = CourseManager::getTeachersFromCourseByCode(
+                $course_info['code']
             );
+            
             $course_coachs = self::get_coachs_from_course(
                 $course_info['id_session'],
                 $course_info['real_id']
             );
 
-            if ($course_info['status'] == COURSEMANAGER ||
+            /* if ($course_info['status'] == COURSEMANAGER ||
                 ($course_info['status'] == STUDENT && empty($course_info['id_session'])) ||
                 empty($course_info['status'])
             ) {
                 $params['teachers'] = $teacher_list;
             }
-
+            */
+            $params['teachers'] = $teacher_list;
+            
             if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) ||
                 ($is_coach && $course_info['status'] != COURSEMANAGER)
             ) {

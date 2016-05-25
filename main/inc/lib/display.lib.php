@@ -1523,9 +1523,11 @@ class Display
             $rs = Database::query($sql);
             $session_info = Database::store_result($rs, 'ASSOC');
             $session_info = $session_info[0];
-
+            
             $session = array();
+            $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
+            $session['id_coach'] = $session_info['id_coach'];
             $session['coach'] = '';
             $session['dates'] =  '';
 
@@ -1578,14 +1580,11 @@ class Display
                     $session_info['access_end_date'] = $session_info['access_end_date'];
                 }
                 if ($start && $stop) {
-                    $session['dates'] = Display::tag(
-                        'em',
-                        sprintf(
+                    $session['dates'] = sprintf(
                             get_lang('FromDateXToDateY'),
                             api_format_date($start_buffer),
                             api_format_date($stop_buffer)
-                        )
-                    );
+                        );
                 } else {
                     $start_buffer = $stop_buffer = null;
 
@@ -1603,14 +1602,12 @@ class Display
                         );
                     }
 
-                    $session['dates'] = Display::tag(
-                        'em',
-                        "$start_buffer $stop_buffer"
-                    );
+                    $session['dates'] = $start_buffer . " " . $stop_buffer;
+                   
                 }
 
                 if ( api_get_setting('show_session_coach') === 'true' ) {
-                    $session['coach'] = get_lang('GeneralCoach') . ': ' . api_get_person_name(
+                    $session['coach'] = api_get_person_name(
                         $session_info['firstname'],
                         $session_info['lastname']
                     );
@@ -1619,7 +1616,9 @@ class Display
             }
             $session['active'] = $active;
             $session['session_category_id'] = $session_info['session_category_id'];
-
+            $session['visibility'] = $session_info['visibility'];
+            $session['num_users'] = $session_info['nbr_users'];
+            $session['num_courses'] = $session_info['nbr_courses'];
             $session['description'] = $session_info['description'];
             $session['show_description'] = $session_info['show_description'];
 

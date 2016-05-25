@@ -99,6 +99,10 @@
                         </a>
                     </h4>
                     <div class="toolbar">
+                        <div class="info">
+                            <span><i class="fa fa-book" aria-hidden="true"></i> {{ item.nbr_courses }} {{ 'Courses'|get_lang }}</span>
+                            <span><i class="fa fa-user" aria-hidden="true"></i> {{ item.nbr_users }} {{ 'NbUsers'|get_lang }} </span>
+                        </div>
                         {% if not _u.logged %}
                             &nbsp;
                         {% else %}

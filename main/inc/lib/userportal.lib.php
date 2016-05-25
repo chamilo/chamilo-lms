@@ -1205,29 +1205,35 @@ class IndexManager
                             );
                             $session_box = Display::get_session_title_box($session_id);
 
-                            $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
-                            $extra_info .= !empty($session_box['coach'])
-                                ? ' - ' . $session_box['dates']
-                                : $session_box['dates'];
-                            $extra_info .= isset($session_box['duration'])
-                                ? ' ' . $session_box['duration']
-                                : null;
-
-                            $params['extra_fields'] = $session_box['extra_fields'];
-                            $params['course_list_session_style'] = $coursesListSessionStyle;
-
-                            $params['title'] = $session_box['title'];
-                            $params['subtitle'] = $extra_info;
-                            $params['show_actions'] = api_is_platform_admin() ? true : false;
-
-                            if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                // $params['extra'] .=  $html_courses_session;
+                            $actions = null;
+                            if (api_is_platform_admin()) {
+                                $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session_id;
                             }
-
-                            $params['description'] = $session_box['description'];
+                            
+                            $coachId = $session_box['id_coach'];
+                            $extraFieldValue = new ExtraFieldValue('session');
+                            $imageField = $extraFieldValue->get_values_by_handler_and_field_variable($session_id, 'image');
+                            
+                            $params['category_id'] = $session_box['category_id'];
+                            $params['title'] = $session_box['title'];
+                            //$params['subtitle'] = $extra_info;
+                            $params['id_coach'] = $coachId;
+                            $params['coach_url'] = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $coachId;
+                            $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
+                            $params['coach_avatar'] =UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL);
+                            $params['date'] =  $session_box['dates'];
+                            $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
+                            $params['duration'] = isset($session_box['duration']) ? ' ' . $session_box['duration'] : null;
+                            $params['edit_actions'] = $actions;
                             $params['show_description'] = $session_box['show_description'];
-                            $params['courses'] = $html_courses_session;
+                            $params['description'] = $session_box['description'];   
+                            $params['visibility'] = $session_box['visibility'];
                             $params['show_simple_session_info'] = false;
+                            $params['course_list_session_style'] = $coursesListSessionStyle;                          
+                            $params['num_users'] = $session_box['num_users'];
+                            $params['num_courses'] = $session_box['num_courses'];
+                            $params['courses'] = $html_courses_session;
+                            //$params['extra_fields'] = $session_box['extra_fields'];
 
                             if (
                                 isset($_configuration['show_simple_session_info']) &&
@@ -1241,14 +1247,20 @@ class IndexManager
                                 $params['progress'] = GamificationUtils::getSessionProgress($params['id'], $this->user_id);
                                 $params['points'] = GamificationUtils::getSessionPoints($params['id'], $this->user_id);
                             }
-
-                            $this->tpl->assign('session', $params);
+                            $listSession[] = $params;
+                            $this->tpl->assign('session', $listSession);
+                            $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
                             $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
 
-                            $sessions_with_no_category .= $this->tpl->fetch(
-                                $this->tpl->get_template('/user_portal/session.tpl')
-                            );
-
+                            if (api_get_configuration_value('view_grid_courses')){
+                                $sessions_with_no_category = $this->tpl->fetch(
+                                    $this->tpl->get_template('/user_portal/grid_session.tpl')
+                                );
+                            } else {
+                                $sessions_with_no_category = $this->tpl->fetch(
+                                    $this->tpl->get_template('/user_portal/session.tpl')
+                                );
+                            }
                             $sessionCount++;
                         }
                     }

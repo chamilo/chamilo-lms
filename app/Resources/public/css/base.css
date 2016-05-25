@@ -4705,7 +4705,21 @@ div#chat-remote-video video {
     display: inline-block;
 }
 /* list my course user*/
-
+.session .info-session{
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+.session .info-session span{
+    margin-right: 10px;
+}
+.session .teachers{
+    font-size: 12px;
+}
+.session .sessions-items .courses{
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-bottom: 1px solid #ECF0F1;
+}
 .grid-courses .items{
     /* position: relative; */
     vertical-align: top;
@@ -4723,18 +4737,22 @@ div#chat-remote-video video {
 }
 .grid-courses .items .title{
     line-height: 1.4;
-    font-size: 13px;
-    min-height: 40px;
+    font-size: 14px;
     padding: 0px;
     margin: 5px;
 }
 .grid-courses .items .toolbar{
     text-align: right;
 }
-.grid-courses .session-date{
+.grid-courses .items .toolbar .info{
+    float: left;
+    font-size: 12px;
+}
+.grid-courses .session-date,
+.grid-courses .session-info{
     color: #fff;
     font-size: 12px;
-    padding: 10px;
+    padding: 5px 10px;
 }
 .grid-courses .items .image{
     position: relative;
@@ -4838,6 +4856,7 @@ div#chat-remote-video video {
     color: #fff;
 }
 /* Catalog session */
+
 .search-session{
     margin-bottom: 30px;
     margin-top: 25px;

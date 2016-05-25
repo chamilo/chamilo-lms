@@ -1964,13 +1964,13 @@ function _api_convert_encoding_supports($encoding) {
  */
 function apiGetHumanDateTime($date, $showTime = true, $humanForm = false) {
     if ($showTime) {
-        if ($dateHuman) {
+        if ($humanForm) {
            return $date->format('j M Y H:i:s');    
         } else {
            return $date->format('Y-m-d H:i:s');     
         }
     } else {
-        if ($dateHuman) {
+        if ($humanForm) {
            return $date->format('j M Y');    
         } else {
            return $date->format('Y-m-d');     

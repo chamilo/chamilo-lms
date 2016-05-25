@@ -1736,6 +1736,9 @@ class CourseRestorer
                         $this->course->info['path']
                     );
 
+                    $quiz->start_time = $quiz->start_time == '0000-00-00 00:00:00' ? null : $quiz->start_time;
+                    $quiz->end_time = $quiz->end_time == '0000-00-00 00:00:00' ? null : $quiz->end_time;
+
 					global $_custom;
 					if (isset($_custom['exercises_clean_dates_when_restoring']) &&
                         $_custom['exercises_clean_dates_when_restoring']
@@ -1743,6 +1746,7 @@ class CourseRestorer
 						$quiz->start_time = null;
 						$quiz->end_time   = null;
 					}
+
 
                     $params = array(
                         'c_id' => $this->destination_course_id,
@@ -1755,9 +1759,7 @@ class CourseRestorer
                         'max_attempt' => (int)$quiz->max_attempt,
                         'results_disabled' => (int)$quiz->results_disabled,
                         'access_condition' => $quiz->access_condition,
-                        'start_time' => $quiz->start_time,
                         'pass_percentage' => $quiz->pass_percentage,
-                        'end_time' => $quiz->end_time,
                         'feedback_type' => (int)$quiz->feedback_type,
                         'random_answers' => (int)$quiz->random_answers,
                         'random_by_category' => $quiz->random_by_category,
@@ -1765,6 +1767,8 @@ class CourseRestorer
                         'propagate_neg' => $quiz->propagate_neg,
                         'text_when_finished' => $quiz->text_when_finished,
                         'expired_time' => (int)$quiz->expired_time,
+                        'start_time' => $quiz->start_time,
+                        'end_time' => $quiz->end_time,
                     );
 
                     if ($respect_base_content) {

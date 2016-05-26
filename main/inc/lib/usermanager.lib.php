@@ -1664,7 +1664,7 @@ class UserManager
         // Storing the new photos in 4 versions with various sizes.
 
         $small = new Image($source_file);
-        $small->resize(22);
+        $small->resize(32);
         $small->send_image($path.'small_'.$filename);
         $medium = new Image($source_file);
         $medium->resize(85);

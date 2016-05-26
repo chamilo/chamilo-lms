@@ -261,6 +261,17 @@ a.thumbnail:hover{
     z-index: 100;
     width: 100%;
 }
+.avatar-user .dropdown-toggle{
+    padding-top: 8px;
+    padding-bottom: 5px;
+}
+.avatar-user .img-circle{
+    border: 2px solid #FFFFFF;
+}
+.dropdown-menu .username{
+    color: #fff;
+    padding-left: 9px;
+}
 /* notifications help and bug */
 #touch-button.btn-touch{
   background-color: #C2C2C2;

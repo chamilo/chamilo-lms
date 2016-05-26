@@ -1,8 +1,7 @@
 <!-- Topbar -->
 {% if show_toolbar == 1 %}
-    <nav id="toolbar-admin" class="navbar navbar-inverse navbar-fixed-top">
+    <nav id="toolbar-admin" class="navbar navbar-inverse">
         <div class="container-fluid">
-
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#toolbar">
                     <span class="sr-only">Toggle navigation</span>
@@ -11,23 +10,13 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{{ _p.web }}">
-                    {{ "siteName" | get_setting }}
+                    <img src="{{ "icon-chamilo.png"|icon(22) }}" title="{{ "siteName" | get_setting }}">
                 </a>
             </div>
-
             {% if _u.logged %}
                 <div class="collapse navbar-collapse" id="toolbar">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="{{ _p.web }}user_portal.php"> {{ "MyCourses"|get_lang }}</a></li>
-                        {#
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'Teaching'|get_lang }}<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ _p.web_main }}create_course/add_course.php">{{ "AddCourse"|get_lang }}</a></li>
-                                <li><a href="{{ _p.web_main }}auth/courses.php">{{ "Catalog"|get_lang }}</a></li>
-                            </ul>
-                        </li>
-                        #}
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'Tracking'|get_lang }}<b class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -80,8 +69,6 @@
                                 <li><a href="{{ _p.web_main }}calendar/agenda_js.php?type=personal">{{ "MyAgenda"|get_lang }}</a></li>
                                 <li><a href="{{ _p.web_main }}messages/inbox.php">{{ "Inbox"|get_lang }}</a></li>
                                 <li><a href="{{ _p.web_main }}auth/my_progress.php">{{ "MyReporting"|get_lang }}</a></li>
-                                <!--<li class="divider"></li>
-                                <li><a href="{{ _p.web_main }}social/invitations.php">{{ "PendingInvitations"|get_lang }}</a></li> -->
                             </ul>
                         </li>
                         <li><a href="{{  _p.web }}index.php?logout=logout&uid={{_u.user_id}}">{{ "Logout"|get_lang }}</a></li>

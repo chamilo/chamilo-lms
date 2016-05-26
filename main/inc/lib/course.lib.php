@@ -286,7 +286,15 @@ class CourseManager
             $sql .= ' OFFSET 0';
         }
 
-        return Database::store_result(Database::query($sql));
+        $data = [];
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            while ($row = Database::fetch_array($res, 'ASSOC')) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
     }
 
     /**

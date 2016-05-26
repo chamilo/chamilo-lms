@@ -1,16 +1,15 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
-/**
- * SkillRelUser Entity
- *
- * @package chamilo.skill
- */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\SkillBundle\Entity\Level;
 use Doctrine\ORM\Mapping as ORM;
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * SkillRelUser
@@ -27,6 +26,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SkillRelUser
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
     /**
      * @var integer
      *
@@ -87,19 +95,12 @@ class SkillRelUser
     private $course;
 
     /**
+     * @var Session
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
     private $session;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
 
     /**
      * @var Level
@@ -128,9 +129,12 @@ class SkillRelUser
      */
     protected $comments;
 
+    /**
+     * SkillRelUser constructor.
+     */
     public function __construct()
     {
-        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -181,10 +185,10 @@ class SkillRelUser
 
     /**
      * Set user
-     * @param \Chamilo\UserBundle\Entity\User $user
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUser
+     * @param User $user
+     * @return SkillRelUser
      */
-    public function setUser(\Chamilo\UserBundle\Entity\User $user)
+    public function setUser(User $user)
     {
         $this->user = $user;
 
@@ -193,7 +197,7 @@ class SkillRelUser
 
     /**
      * Get user
-     * @return \Chamilo\UserBundle\Entity\User
+     * @return \User
      */
     public function getUser()
     {
@@ -202,8 +206,8 @@ class SkillRelUser
 
     /**
      * Set skill
-     * @param \Chamilo\CoreBundle\Entity\Skill $skill
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUser
+     * @param Skill $skill
+     * @return SkillRelUser
      */
     public function setSkill(Skill $skill)
     {
@@ -214,7 +218,7 @@ class SkillRelUser
 
     /**
      * Get skill
-     * @return \Chamilo\CoreBundle\Entity\Skill
+     * @return Skill
      */
     public function getSkill()
     {
@@ -223,8 +227,8 @@ class SkillRelUser
 
     /**
      * Set course
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUser
+     * @param Course $course
+     * @return SkillRelUser
      */
     public function setCourse(Course $course)
     {
@@ -235,7 +239,7 @@ class SkillRelUser
 
     /**
      * Get course
-     * @return \Chamilo\CoreBundle\Entity\Course
+     * @return Course
      */
     public function getCourse()
     {
@@ -244,8 +248,8 @@ class SkillRelUser
 
     /**
      * Set session
-     * @param \Chamilo\CoreBundle\Entity\Session $session
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUser
+     * @param Session $session
+     * @return SkillRelUser
      */
     public function setSession(Session $session)
     {
@@ -256,7 +260,7 @@ class SkillRelUser
 
     /**
      * Get session
-     * @return \Chamilo\CoreBundle\Entity\Session
+     * @return Session
      */
     public function getSession()
     {
@@ -368,8 +372,9 @@ class SkillRelUser
 
     /**
      * Set acquiredLevel
-     * @param \Chamilo\SkillBundle\Entity\Level $acquiredLevel
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUser
+     * @param Level $acquiredLevel
+     *
+     * @return SkillRelUser
      */
     public function setAcquiredLevel($acquiredLevel)
     {
@@ -380,7 +385,7 @@ class SkillRelUser
 
     /**
      * Get acquiredLevel
-     * @return \Chamilo\SkillBundle\Entity\Level
+     * @return Level
      */
     public function getAcquiredLevel()
     {
@@ -389,8 +394,8 @@ class SkillRelUser
 
     /**
      * Set argumentationAuthorId
-     * @param integer $argumentationAuthorId
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUser
+     * @param int $argumentationAuthorId
+     * @return SkillRelUser
      */
     public function setArgumentationAuthorId($argumentationAuthorId)
     {
@@ -411,7 +416,8 @@ class SkillRelUser
     /**
      * Set argumentation
      * @param string $argumentation
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUser
+     *
+     * @return SkillRelUser
      */
     public function setArgumentation($argumentation)
     {
@@ -506,7 +512,7 @@ class SkillRelUser
 
     /**
      * Calculate the average value from the feedback comments
-     * @return type
+     * @return int
      */
     public function getAverage()
     {

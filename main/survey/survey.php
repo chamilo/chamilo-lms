@@ -30,10 +30,8 @@ if ($isDrhOfCourse) {
 }
 if (!api_is_allowed_to_edit(false, true) ||
     (api_is_course_coach() && $extend_rights_for_coachs == 'false')
-) {
-	Display :: display_header(get_lang('ToolSurvey'));
-	Display :: display_error_message(get_lang('NotAllowed'), false);
-	Display :: display_footer();
+) {    
+    api_not_allowed(true);
 	exit;
 }
 

@@ -227,7 +227,7 @@ class CourseDescription
             );
         }
 
-        return 1;
+        return ($last_id > 0)?1:0;
     }
 
     /**
@@ -261,9 +261,9 @@ class CourseDescription
             'session_id' => $this->session_id,
         ];
 
-        Database::insert($tbl_stats_item_property, $params);
+        $result = Database::insert($tbl_stats_item_property, $params);
 
-        return 1;
+        return $result ? 1 : 0;
     }
 
     /**
@@ -288,7 +288,7 @@ class CourseDescription
                 'id = ? AND session_id = ? AND c_id = ?' => [
                     $this->id,
                     $this->session_id,
-                    api_get_course_int_id(),
+                    $this->course_id ? $this->course_id : api_get_course_int_id(),
                 ],
             ]
         );

@@ -65,7 +65,7 @@ class SessionManager
      * @param   int     $showDescription Optional. Whether show the session description
      * @param   array   $extraFields
      * @param   int     $sessionAdminId Optional. If this sessions was created by a session admin, assign it to him
-     * @param boolean $sendSubscritionNotification Optional.
+     * @param boolean $sendSubscriptionNotification Optional.
      *          Whether send a mail notification to users being subscribed
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
@@ -87,7 +87,7 @@ class SessionManager
         $showDescription = 0,
         $extraFields = array(),
         $sessionAdminId = 0,
-        $sendSubscritionNotification = false
+        $sendSubscriptionNotification = false
     ) {
         global $_configuration;
 
@@ -160,7 +160,7 @@ class SessionManager
                     'visibility' => $visibility,
                     'description' => $description,
                     'show_description' => intval($showDescription),
-                    'send_subscription_notification' => $sendSubscritionNotification
+                    'send_subscription_notification' => (int) $sendSubscriptionNotification
                 );
 
                 if (!empty($startDate)) {
@@ -1375,11 +1375,11 @@ class SessionManager
             Display::return_message(get_lang('CoachIsRequired'), 'warning');
 
             return false;
-        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i')) {
+        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') && !api_is_valid_date($startDate, 'Y-m-d H:i:s')) {
             Display::return_message(get_lang('InvalidStartDate'), 'warning');
 
             return false;
-        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i')) {
+        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i') && !api_is_valid_date($endDate, 'Y-m-d H:i:s')) {
             Display::return_message(get_lang('InvalidEndDate'), 'warning');
 
             return false;
@@ -2223,8 +2223,8 @@ class SessionManager
                 }
 
                 // If the course isn't subscribed yet
-                $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id)
-                        VALUES ($sessionId, $courseId)";
+                $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id, nbr_users, position)
+                        VALUES ($sessionId, $courseId, 0, 0)";
                 Database::query($sql);
 
                 Event::addEvent(
@@ -2366,7 +2366,7 @@ class SessionManager
             'variable' => $variable,
             'value' => $value,
         ];
-        $extraFieldValue->save($params);
+        return $extraFieldValue->save($params);
     }
 
     /**

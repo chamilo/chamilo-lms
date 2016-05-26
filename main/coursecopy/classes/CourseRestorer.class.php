@@ -2561,7 +2561,7 @@ class CourseRestorer
                         $this->destination_course_info,
                         TOOL_LEARNPATH,
                         $new_lp_id,
-                        'invisible',
+                        'visible',
                         api_get_user_id(),
                         0,
                         0,

@@ -29,18 +29,10 @@
   font-weight: 700;
   src: local('Open Sans Bold'), local('OpenSans-Bold'), url(fonts/OpenSans-Bold.woff2) format('woff2'), url(fonts/OpenSans-Bold.woff) format('woff');
 }
-
-
-html {
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-}
 body {
   margin: 0;
   font-family: 'Open Sans', sans-serif;
-  line-height: 1.72222;
 }
-
 a {
   color: #00829C;
   text-decoration: none;
@@ -58,34 +50,13 @@ a:focus {
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
 }
-.navbar {
+.navbar-collapse{
+  overflow: hidden !important;
+}
+.navbar-default {
   background: #2E75A3;
   -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-}
-.navbar-inverse{
-  background-image: -webkit-linear-gradient(#484e55, #3a3f44 60%, #313539);
-  background-image: -o-linear-gradient(#484e55, #3a3f44 60%, #313539);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#484e55), color-stop(60%, #3a3f44), to(#313539));
-  background-image: linear-gradient(#484e55, #3a3f44 60%, #313539);
-  background-repeat: no-repeat;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff484e55', endColorstr='#ff313539', GradientType=0);
-  -webkit-filter: none;
-  filter: none;
-  border: 1px solid rgba(0, 0, 0, 0.6);
-  text-shadow: none;
-}
-.nav li a{
-   padding: 10px 15px;
-}
-.navbar-nav li a{
-  font-weight: normal;
-  line-height: 22px;
-  padding-top: 12.5px;
-  padding-bottom: 12.5px;
-}
-.navbar-collapse{
-  overflow: hidden !important;
 }
 .navbar-default .navbar-nav > li > a:focus,
 .navbar-default .navbar-nav > li > a:hover {
@@ -131,55 +102,25 @@ a:focus {
 .nav > li > a:hover, .nav > li > a:focus{
    background-color: transparent;
 }
-
-.navbar-inverse li a{
-  line-height: 30px;
-  background: none !important;
-  font-size: 12px;
-  font-weight: normal;
-  padding-top: 5px;
-  padding-right: 10px;
-  padding-left: 10px;
-  padding-bottom: 5px;
-}
-.navbar-fixed-top .navbar-collapse{
-  min-height:auto;
-}
-.navbar-inverse .navbar-brand{
-  padding: 10px;
-  font-size: 14px;
-  height: auto;
-}
 .navbar-form .form-control{
   height: 25px;
   padding: 6px;
 }
-.navbar-fixed-top{
-  min-height: 40px;
+.navbar-default .navbar-brand {
+  color:white;
 }
-.navbar-fixed-top .dropdown-menu li a{
-  line-height: 20px;
+.navbar-default .navbar-collapse, .navbar-default .navbar-form{
+  border-color: #00677C;
 }
-.navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus{
-  color: #ffffff;
+.navbar-default .navbar-toggle{
+  border-color: #00677C;
 }
-.navbar-inverse li a:hover {
-  background-image: -webkit-linear-gradient(#020202, #101112 40%, #191b1d) !important;
-  background-image: -o-linear-gradient(#020202, #101112 40%, #191b1d) !important;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#020202), color-stop(40%, #101112), to(#191b1d)) !important;
-  background-image: linear-gradient(#020202, #101112 40%, #191b1d) !important;
-  background-repeat: no-repeat !important;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff020202', endColorstr='#ff191b1d', GradientType=0) !important;
-  -webkit-filter: none !important;
-  filter: none !important;
-  border-left-color: transparent !important;
+.navbar-default .navbar-toggle .icon-bar{
+  background-color: #ffffff;
 }
-.navbar-inverse .dropdown-menu li a:hover,
-.navbar-inverse .dropdown-menu li a:focus{
-  background:#3C4147 !important;
-  color: #fff;
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover{
+  background-color: #00677C;
 }
-
 .badge-warning{
   background-color: #FD6600;
 }
@@ -219,22 +160,6 @@ footer{
 }
 footer a{
   color: #ffffff;
-}
-
-.navbar-default .navbar-brand {
-  color:white;
-}
-.navbar-default .navbar-collapse, .navbar-default .navbar-form{
-  border-color: #00677C;
-}
-.navbar-default .navbar-toggle{
-  border-color: #00677C;
-}
-.navbar-default .navbar-toggle .icon-bar{
-  background-color: #ffffff;
-}
-.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover{
-  background-color: #00677C;
 }
 .page-header{
   margin: 10px 0 10px;

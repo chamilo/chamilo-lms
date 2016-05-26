@@ -17,9 +17,6 @@ html,body {
   padding: 0;
   height: 100%;
 }
-header{
-  padding-top: 20px;
-}
 #page-wrap{
   min-height: 100%;
   margin-bottom: 0;
@@ -221,26 +218,50 @@ a.thumbnail:hover{
   padding-top: 10px;
   margin-bottom: 20px;
 }
-ul#navigation {
+/* notifications help and bug */
+.notification-panel {
   position: fixed;
-  margin: 0px;
-  padding: 0px;
   top: 280px;
   right: -10px;
-  list-style: none;
   z-index:9999;
-}
-ul#navigation li {
   width: 73px;
 }
-ul#navigation li a {
+.notification-panel div a{
   display: block;
   margin-left: 1px;
   width: 65px;
-  opacity: 0.6;
-  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
-  -webkit-box-shadow: 0px 4px 3px #000;
+  opacity: 0.8;
+  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=80);
 }
+.notification-panel .help a {
+  background-color:#879DAA;
+  border:1px solid #FFFFFF;
+  display:block;
+  margin-left:50px;
+  opacity:0.6;
+  width:65px;
+  padding: 6px 0 8px 6px;
+}
+.notification-panel .report a {
+  background-color:#8fd400;
+  border:1px solid #FFFFFF;
+  display:block;
+  margin-left:50px;
+  opacity:0.6;
+  width:65px;
+  padding: 6px 0 8px 6px;
+}
+.cookieUsageValidation {
+    padding: 5px;
+    text-align:center;
+}
+.toolbar-cookie{
+    bottom: 0;
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+}
+/* notifications help and bug */
 #touch-button.btn-touch{
   background-color: #C2C2C2;
 }
@@ -257,24 +278,6 @@ ul#navigation li a {
   border-bottom-right-radius: 5px;
 }
 
-ul#navigation .help a {
-  background-color:#879DAA;
-  border:1px solid #FFFFFF;
-  display:block;
-  margin-left:50px;
-  opacity:0.6;
-  width:65px;
-  padding: 6px 0 8px 6px;
-}
-ul#navigation .report a {
-  background-color:#8fd400;
-  border:1px solid #FFFFFF;
-  display:block;
-  margin-left:50px;
-  opacity:0.6;
-  width:65px;
-  padding: 6px 0 8px 6px;
-}
 #gradebook_list .centered {
     text-align:center;
     vertical-align:middle;
@@ -3431,27 +3434,12 @@ i.size-32.icon-new-work{
 }
 
 /* display the cookie usage warning validation */
-.cookieUsageValidation {
-    padding: 5px;
-    background-color: #333333;
-    color:#E0E0E0;
-    text-align:center;
-}
-
-.displayUnderToolbar
-{
-    height: 52px;
-}
 
 #settings .panel .admin-edit-block {
     display: none;
 }
 #settings .panel:hover .admin-edit-block {
     display: block;
-}
-
-#settings .span6:nth-child(2n+1) {
-    clear:left
 }
 
 /***** Survey *****/

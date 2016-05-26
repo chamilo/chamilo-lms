@@ -883,17 +883,17 @@ class Template
         $this->setHelp();
 
         //@todo move this in the template
-        $bug_notification_link = '';
+        $bugLink = '';
         $iconBug = Display::return_icon('bug.png', get_lang('ReportABug'), null, ICON_SIZE_LARGE);
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
-            $bug_notification_link = '<li class="report">
+            $bugLink = '<div class="report">
 		<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
                     '. $iconBug . '
                 </a>
-		</li>';
+		</div>';
         }
 
-        $this->assign('bug_notification_link', $bug_notification_link);
+        $this->assign('bug_notification', $bugLink);
 
         $notification = return_notification_menu();
         $this->assign('notification_menu', $notification);

@@ -949,7 +949,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                     $sessionName = api_get_session_name(api_get_session_id());
                     $sessionName = !empty($sessionName) ? " - $sessionName" : '';
                     $params = array(
-                        'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['department_name']),
+                        'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
                         'course_code' => api_get_course_id(),
                         'session_info' => '',
                         'course_info' => '',

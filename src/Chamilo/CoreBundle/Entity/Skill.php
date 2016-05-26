@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -10,6 +9,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\SkillBundle\Entity\Profile;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,6 +23,15 @@ class Skill
 {
     const STATUS_DISABLED = 0;
     const STATUS_ENABLED = 1;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
 
     /**
      * @var string
@@ -78,15 +88,6 @@ class Skill
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
     private $updatedAt;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="skills")
@@ -341,11 +342,11 @@ class Skill
 
     /**
      * Get issuedSkills
+     *
      * @return ArrayCollection
      */
     public function getIssuedSkills()
     {
         return $this->issuedSkills;
     }
-
 }

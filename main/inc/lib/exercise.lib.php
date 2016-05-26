@@ -3466,8 +3466,7 @@ HOTSPOT;
         $objExercise,
         $exe_id,
         $save_user_result = false
-    )
-    {
+    ) {
         global $origin;
 
         // Getting attempt info
@@ -3537,16 +3536,19 @@ HOTSPOT;
 
                 if ($attempts) {
                     $numberAttempts = count($attempts);
-                    if ($save_user_result) {
-                        $numberAttempts++;
-                    }
-                    if ($numberAttempts >= $objExercise->attempts) {
-                        $show_results = true;
-                        $show_only_score = false;
-                        $show_total_score_and_user_choices = false;
-                    } else {
-                        $show_total_score_and_user_choices = true;
-                    }
+                } else {
+                    $numberAttempts = 0;
+                }
+
+                if ($save_user_result) {
+                    $numberAttempts++;
+                }
+                if ($numberAttempts >= $objExercise->attempts) {
+                    $show_results = true;
+                    $show_only_score = false;
+                    $show_total_score_and_user_choices = false;
+                } else {
+                    $show_total_score_and_user_choices = true;
                 }
             }
         }

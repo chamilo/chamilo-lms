@@ -2852,7 +2852,7 @@ class CourseManager
             'variable' => $variable,
             'value' => $value
         ];
-        $extraFieldValues->save($params);
+        return $extraFieldValues->save($params);
     }
 
     /**

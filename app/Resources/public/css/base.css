@@ -4728,7 +4728,7 @@ div#chat-remote-video video {
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
     text-align: left;
     background-color: #fff;
-    min-height: 290px;
+    min-height: 250px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
 }

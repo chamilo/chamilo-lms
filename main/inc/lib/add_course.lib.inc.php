@@ -693,7 +693,7 @@ class AddCourse
                 'category' =>'certificates'
             ],
             'documents_default_visibility' => ['default' =>'visible', 'category' =>'document'],
-            'show_course_in_user_language' => ['default' => 2],
+            'show_course_in_user_language' => ['default' => 2, 'category' => null],
         ];
 
         $counter = 1;

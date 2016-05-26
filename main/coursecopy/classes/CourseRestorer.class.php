@@ -77,7 +77,6 @@ class CourseRestorer
 
     /**
      * If true adds the text "copy" in the title of an item (only for LPs right now)
-     *
      **/
     public $add_text_in_items = false;
     public $destination_course_id;
@@ -2433,8 +2432,7 @@ class CourseRestorer
 			$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
 
 			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
-
-				$condition_session = "";
+				$condition_session = '';
 				if (!empty($session_id)) {
                     if ($respect_base_content) {
                         $my_session_id = $lp->session_id;
@@ -2453,7 +2451,6 @@ class CourseRestorer
 					$new_filename = uniqid('').substr($lp->preview_image,strlen($lp->preview_image)-7, strlen($lp->preview_image));
 					if (file_exists($origin_path.$lp->preview_image) && !is_dir($origin_path.$lp->preview_image)) {
 						$copy_result = copy($origin_path.$lp->preview_image, $destination_path.$new_filename);
-						//$copy_result = true;
 						if ($copy_result) {
 							$lp->preview_image = $new_filename;
 						} else {
@@ -2738,20 +2735,20 @@ class CourseRestorer
 			$new_id = Database::insert($work_table, $folder);
 
             if ($new_id) {
-                //query in item property
+                // query in item property
                 $sql = 'SELECT
-                        tool,
-                        insert_user_id,
-                        insert_date,
-                        lastedit_date,
-                        ref,
-                        lastedit_type,
-                        lastedit_user_id,
-                        to_group_id,
-                        to_user_id,
-                        visibility,
-                        start_visible,
-                        end_visible
+                            tool,
+                            insert_user_id,
+                            insert_date,
+                            lastedit_date,
+                            ref,
+                            lastedit_type,
+                            lastedit_user_id,
+                            to_group_id,
+                            to_user_id,
+                            visibility,
+                            start_visible,
+                            end_visible
                         FROM '.$item_property_table.' ip
                         INNER JOIN '.$work_table.' sp
                         ON ip.ref=sp.id
@@ -2828,7 +2825,7 @@ class CourseRestorer
                     } elseif(is_dir($path)) {
                         if (!is_dir($dest . '/' . $file))
                         mkdir($dest . '/' . $file);
-                       self:: allow_create_all_directory($path, $dest . '/' . $file, $overwrite);
+                        self:: allow_create_all_directory($path, $dest . '/' . $file, $overwrite);
                     }
                 }
             }
@@ -2845,7 +2842,6 @@ class CourseRestorer
     public function get_new_id($tool, $ref)
     {
         // Check if the value exist in the current array.
-
         if ($tool == 'hotpotatoes') {
             $tool = 'document';
         }
@@ -2859,6 +2855,7 @@ class CourseRestorer
 
         // Check if the course is the same (last hope).
         if ($this->course_origin_id == $this->destination_course_id) {
+
             return $ref;
         }
 
@@ -2905,7 +2902,7 @@ class CourseRestorer
                         $this->destination_course_info,
                         TOOL_GLOSSARY,
                         $my_id,
-                        "GlossaryAdded",
+                        'GlossaryAdded',
                         api_get_user_id()
                     );
 
@@ -2973,7 +2970,6 @@ class CourseRestorer
 				$new_id = Database::insert($table_wiki, $params);
 
                 if ($new_id) {
-
                     $sql = "UPDATE $table_wiki SET page_id = '$new_id', id = iid
                             WHERE c_id = ".$this->destination_course_id." AND iid = '$new_id'";
                     Database::query($sql);
@@ -2996,7 +2992,7 @@ class CourseRestorer
                         'max_version' => 0,
                         'startdate_assig' => null,
                         'enddate_assig' => null,
-                        'delayedsubmit' => 0,
+                        'delayedsubmit' => 0
                     ];
 
                     Database::insert($table_wiki_conf, $params);
@@ -3052,6 +3048,7 @@ class CourseRestorer
 						$thematic_advance['attendance_id'] = 0;
 						$thematic_advance['thematic_id'] = $last_id;
 						$thematic_advance['c_id']  = $this->destination_course_id;
+
                         $my_id = Database::insert(
                             $table_thematic_advance,
                             $thematic_advance,
@@ -3067,7 +3064,7 @@ class CourseRestorer
                                 $this->destination_course_info,
                                 'thematic_advance',
                                 $my_id,
-                                "ThematicAdvanceAdded",
+                                'ThematicAdvanceAdded',
                                 api_get_user_id()
                             );
 						}
@@ -3089,7 +3086,7 @@ class CourseRestorer
                                 $this->destination_course_info,
                                 'thematic_plan',
                                 $my_id,
-                                "ThematicPlanAdded",
+                                'ThematicPlanAdded',
                                 api_get_user_id()
                             );
 						}
@@ -3222,7 +3219,6 @@ class CourseRestorer
                                 $row = Database::fetch_assoc($result);
                             }
 
-                            //$obj->params['qualification'] = empty($row['enable_qualification']) ? true : false;
                             $obj->params['enableExpiryDate'] = empty($row['expires_on']) ? false : true;
                             $obj->params['enableEndDate'] = empty($row['ends_on']) ? false : true;
                             $obj->params['expires_on'] = $row['expires_on'];

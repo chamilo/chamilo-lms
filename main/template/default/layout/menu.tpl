@@ -22,11 +22,13 @@
                <li><a href="{{ message_url }}">{{ user_notifications }}</a></li>
                {% endif %}
                {% if _u.status != 6 %}
-                <li class="dropdown">
+                <li class="dropdown avatar-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                        {{ _u.complete_name }} <span class="caret"></span>
+                        <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}" />  <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
+                        <li class="username">{{ _u.complete_name }}</li>
+                        <li role="separator" class="divider"></li>
                         <li>
                             {{ profile_link }}
                             {{ message_link }}

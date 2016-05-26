@@ -1375,11 +1375,11 @@ class SessionManager
             Display::return_message(get_lang('CoachIsRequired'), 'warning');
 
             return false;
-        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i')) {
+        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') && !api_is_valid_date($startDate, 'Y-m-d H:i:s')) {
             Display::return_message(get_lang('InvalidStartDate'), 'warning');
 
             return false;
-        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i')) {
+        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i') && !api_is_valid_date($endDate, 'Y-m-d H:i:s')) {
             Display::return_message(get_lang('InvalidEndDate'), 'warning');
 
             return false;
@@ -2366,7 +2366,7 @@ class SessionManager
             'variable' => $variable,
             'value' => $value,
         ];
-        $extraFieldValue->save($params);
+        return $extraFieldValue->save($params);
     }
 
     /**

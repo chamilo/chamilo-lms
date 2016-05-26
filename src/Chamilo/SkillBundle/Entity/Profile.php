@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Profile
  *
  * @ORM\Table(
- *  name="skill_level_profile",
+ *  name="skill_level_profile"
  * )
  * @ORM\Entity
  */

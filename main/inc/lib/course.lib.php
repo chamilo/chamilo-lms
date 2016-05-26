@@ -3988,12 +3988,19 @@ class CourseManager
             $session_title = $course_info['name'];
         }
         
+        $thumbnails = null;
+        $image = null;
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
         $iconName = basename($course_info['course_image']);
+        
         if ($showCustomIcon === 'true' && $iconName != 'course.png') {
-            $params['icon'] = $course_info['course_image_large'];
+            $thumbnails = $course_info['course_image'];
+            $image = $course_info['course_image_large'];
+        }else{
+            $image = Display::return_icon('session_default.png', null, null, null,null, true);
         }
-
+        $params['thumbnails'] = $thumbnails;
+        $params['image'] = $image;
         $params['link'] = $session_url;
         $params['title'] = $session_title;
         $params['edit_actions'] = '';

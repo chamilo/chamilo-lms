@@ -40,9 +40,11 @@
                     {{ row.description }}
                 {% endif %}
                 <div class="info-session">
-                    <span><i class="fa fa-user" aria-hidden="true"></i>
-                    {{ row.coach_name }}
-                    </span>
+                    {% if row.coach_name  != '' %}
+                        <span><i class="fa fa-user" aria-hidden="true"></i>
+                        {{ row.coach_name }}
+                        </span>
+                    {% endif %}
                     <span><i class="fa fa-calendar" aria-hidden="true"></i>
                     {{ row.date }}
                     </span>
@@ -68,9 +70,11 @@
                     {{ row.description }}
                 {% endif %}
                 <div class="info-session">
-                    <span><i class="fa fa-user" aria-hidden="true"></i>
-                    {{ row.coach_name }}
-                    </span>
+                    {% if row.coach_name  != '' %}
+                        <span><i class="fa fa-user" aria-hidden="true"></i>
+                        {{ row.coach_name }}
+                        </span>
+                    {% endif %}
                     <span><i class="fa fa-calendar" aria-hidden="true"></i>
                     {{ row.date }}
                     </span>

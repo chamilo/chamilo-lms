@@ -7652,4 +7652,6 @@ $StartRecordingAudio = "Lancer l'enregistrement";
 $StopRecordingAudio = "Arrêter l'enregistrement";
 $SaveRecordedAudio = "Sauvegarder l'audio enregistré";
 $GradeFromX = "Bulletin pour l'îlot: %s";
+$TitleMandatory = "Le titre est obligatoire";
+$NoCourseCategorySupplied = "Aucune catégorie de cours n'a été indiquée";
 ?>

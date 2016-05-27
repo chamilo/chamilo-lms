@@ -201,14 +201,14 @@ class MessageManager
     /**
      * Sends a message to a user/group
      *
-     * @param int 	   $receiver_user_id
+     * @param int 	  $receiver_user_id
      * @param string  $subject
      * @param string  $content
      * @param array   $file_attachments files array($_FILES) (optional)
      * @param array   $file_comments about attachment files (optional)
      * @param int     $group_id (optional)
      * @param int     $parent_id (optional)
-     * @param int 	   $edit_message_id id for updating the message (optional)
+     * @param int 	  $edit_message_id id for updating the message (optional)
      * @param int     $topic_id (optional) the default value is the current user_id
      * @param int     $sender_id
      * @param bool $directMessage
@@ -253,7 +253,7 @@ class MessageManager
         $total_filesize = 0;
         if (is_array($file_attachments)) {
             foreach ($file_attachments as $file_attach) {
-                $total_filesize += $file_attach['size'];
+                $total_filesize += isset($file_attach['size']) && is_int($file_attach['size']) ? $file_attach['size'] : 0;
             }
         }
 

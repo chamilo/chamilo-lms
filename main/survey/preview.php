@@ -42,10 +42,8 @@ if (Database::num_rows($result) > 0) {
 }
 
 // We exit here if there is no valid $_GET parameter
-if (!isset($_GET['survey_id']) || !is_numeric($_GET['survey_id'])){
-	Display::display_header(get_lang('SurveyPreview'));
-	Display::display_error_message(get_lang('InvallidSurvey'), false);
-	Display::display_footer();
+if (!isset($_GET['survey_id']) || !is_numeric($_GET['survey_id'])) {
+    api_not_allowed(true, Display::return_message(get_lang('InvallidSurvey'), 'error', false));
 	exit;
 }
 
@@ -54,17 +52,21 @@ $survey_id = intval($_GET['survey_id']);
 $survey_data = SurveyManager::get_survey($survey_id);
 
 if (empty($survey_data)) {
-	Display::display_header(get_lang('SurveyPreview'));
-	Display::display_error_message(get_lang('InvallidSurvey'), false);
-	Display::display_footer();
+    api_not_allowed(true, Display::return_message(get_lang('InvallidSurvey'), 'error', false));
 	exit;
 }
 
 $urlname = strip_tags($survey_data['title']);
 if (api_is_allowed_to_edit()) {
 	// Breadcrumbs
-	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
-	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => $urlname);
+	$interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
+        'name' => get_lang('SurveyList')
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+        'name' => $urlname,
+    );
 }
 $courseCode = isset($_GET['cidReq']) ? $_GET['cidReq'] : null;
 $surveyAnonymous = SurveyManager::get_survey($survey_id, 0, $courseCode);
@@ -81,14 +83,6 @@ Display :: display_header(get_lang('SurveyPreview'));
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
 SurveyUtil::check_first_last_question($survey_id, false);
-
-// Only a course admin is allowed to preview a survey: you are NOT a course admin => error message
-
-/*
-if (!api_is_allowed_to_edit(false, true)) {
-	Display :: display_error_message(get_lang('NotAllowed'), false);
-}*/
-
 $counter_question = 0;
 // Only a course admin is allowed to preview a survey: you are a course admin
 if (api_is_course_admin() ||
@@ -235,5 +229,4 @@ if (api_is_course_admin() ||
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 }
 
-// Footer
 Display :: display_footer();

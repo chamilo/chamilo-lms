@@ -7664,5 +7664,7 @@ $RecordAudio = "Record audio";
 $StartRecordingAudio = "Start recording";
 $StopRecordingAudio = "Stop recording";
 $SaveRecordedAudio = "Save recorded audio";
-$GradeFromX = "Grade for course: %s";
+$GradeFromX = "Grades from course: %s";
+$TitleMandatory = "A title is required";
+$NoCourseCategorySupplied = "No course category was provided";
 ?>

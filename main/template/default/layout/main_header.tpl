@@ -13,10 +13,7 @@
 
 <!-- Display the Chamilo Uses Cookies Warning Validation if needed -->
 {% if displayCookieUsageWarning == true %}
-    <!-- If toolbar is displayed, we have to display this block bellow it -->
-    {% if toolBarDisplayed == true %}
-        <div class="displayUnderToolbar" >&nbsp;</div>
-    {% endif %}
+<div class="toolbar-cookie alert-warning">
     <form onSubmit="$(this).toggle('slow')" action="" method="post">
         <input value=1 type="hidden" name="acceptCookies"/>
         <div class="cookieUsageValidation">
@@ -32,29 +29,19 @@
             </span>
         </div>
     </form>
+</div>
 {% endif %}
-
-
 {% if show_header == true %}
-
 <div id="page-wrap"><!-- page section -->
-    {# Bug and help notifications #}
-    {% block help_notifications %}
-    <ul id="navigation" class="notification-panel">
+    <div id="navigation" class="notification-panel">
         {{ help_content }}
-        {{ bug_notification_link }}
-    </ul>
-    {% endblock %}
-
-    {# topbar #}
+        {{ bug_notification }}
+    </div>
     {% block topbar %}
         {% include template ~ "/layout/topbar.tpl" %}
-        {% if show_toolbar == 1 %}
-            <div class="clear-header"></div>
-        {% endif %}
     {% endblock %}
+    <div class="extra-header">{{ header_extra_content }}</div>
         <header>
-            <div class="extra-header">{{ header_extra_content }}</div>
             <section id="main" class="container">
                 {% if plugin_header_main %}
                 <div class="row">
@@ -100,23 +87,22 @@
                     </div>
                 </div>
             </section>
-            <section id="menu-bar">
-                {# menu #}
-                {% block menu %}
-                {% include template ~ "/layout/menu.tpl" %}
-                {% endblock %}
-            </section>
-            <section id="breadcrumb-bar">
-                <div class="container">
-                    {# breadcrumb #}
-                    {% block breadcrumb %}
-                    {{ breadcrumb }}
-                    {% endblock %}
-                </div>
-            </section>
         </header>
+<section id="menu-bar">
+    {# menu #}
+    {% block menu %}
+        {% include template ~ "/layout/menu.tpl" %}
+    {% endblock %}
+</section>
+<section id="breadcrumb-bar">
+    <div class="container">
+        {# breadcrumb #}
+        {% block breadcrumb %}
+            {{ breadcrumb }}
+        {% endblock %}
+    </div>
+</section>
     <div id="top_main_content" class="container">
     <div class="row">
-    {# course navigation links/shortcuts need to be activated by the admin #}
     {% include template ~ "/layout/course_navigation.tpl" %}
 {% endif %}

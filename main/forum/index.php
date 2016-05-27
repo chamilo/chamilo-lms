@@ -469,7 +469,7 @@ if (is_array($forumCategories)) {
                         }
                         $forum['forum_of_group'] == 0 ? $groupid = '' : $groupid = $forum['forum_of_group'];
 
-                        $number_threads = isset($forum['number_of_threads']) ? $forum['number_of_threads'] : 0;
+                        $number_threads = isset($forum['number_of_threads']) ? (int) $forum['number_of_threads'] : 0;
                         $number_posts = isset($forum['number_of_posts']) ? $forum['number_of_posts'] : 0;
 
                         $html .= '<div class="row">';

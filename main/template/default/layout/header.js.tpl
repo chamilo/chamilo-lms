@@ -77,15 +77,12 @@ $(document).ready(function(){
     $("#closed-view-list").click(function(){
         $("#student-list-work").fadeOut(300);
     });
-
     check_brand();
-    //if exists the toolbar admin
-
-    if($('#toolbar-admin').length){
+    /* if($('#toolbar-admin').length){
         var heigthToolBar= $('#toolbar-admin').height();
         $('header').css('margin-top', heigthToolBar+'px');
         $('#page-back').css('padding-top', heigthToolBar+20+'px');
-    }
+    } */
 
     // Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
@@ -171,7 +168,7 @@ $(document).ready(function(){
         'marginLeft':'50px'
     },1000);
 
-    $('#navigation > li').hover(
+    $('#navigation div').hover(
         function () {
             $('a',$(this)).stop().animate({
                 'marginLeft':'1px'

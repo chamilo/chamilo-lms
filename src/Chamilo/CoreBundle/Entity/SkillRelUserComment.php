@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="idx_select_su_giver", columns={"skill_rel_user_id", "feedback_giver_id"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SkillRelUserCommentRepository")
+ * @ORM\Entity
  */
 class SkillRelUserComment
 {

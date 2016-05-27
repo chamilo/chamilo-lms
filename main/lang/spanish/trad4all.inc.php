@@ -6250,7 +6250,7 @@ $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "La configurac
 $UniqueAnswerNoOption = "Respuesta única con no-se";
 $MultipleAnswerTrueFalse = "Respuestas múltiples v/f/no-se";
 $MultipleAnswerCombinationTrueFalse = "Combinación v/f/no-se";
-$DontKnow = "No se";
+$DontKnow = "No sé";
 $ExamNotAvailableAtThisTime = "Examen no disponible en este momento";
 $LoginOrEmailAddress = "Nombre de usuario o dirección e-mail";
 $EnableMathJaxTitle = "Activar MathJax";
@@ -7683,5 +7683,7 @@ $RecordAudio = "Grabar audio";
 $StartRecordingAudio = "Lanzar la grabación";
 $StopRecordingAudio = "Finalizar la grabación";
 $SaveRecordedAudio = "Guardar el audio grabado";
-$GradeFromX = "Notas para el curso: %s";
+$GradeFromX = "Libreta de notas del curso: %s";
+$TitleMandatory = "Título obligatorio";
+$NoCourseCategorySupplied = "No se ha proporcionado una categoría de curso";
 ?>

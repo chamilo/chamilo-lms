@@ -147,7 +147,7 @@ Display::display_header($toolName);
 $items = [
     [
         'url' => 'categories.php?action=add',
-        'content' => Display::return_icon('new_folder.png', null, null, ICON_SIZE_MEDIUM),
+        'content' => Display::return_icon('new_folder.png', null, null, ICON_SIZE_MEDIUM)
     ]
 ];
 

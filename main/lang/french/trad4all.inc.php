@@ -7654,4 +7654,9 @@ $SaveRecordedAudio = "Sauvegarder l'audio enregistré";
 $GradeFromX = "Bulletin du cours: %s";
 $TitleMandatory = "Le titre est obligatoire";
 $NoCourseCategorySupplied = "Aucune catégorie de cours n'a été indiquée";
+$ForumStartDate = "Date de publication";
+$ForumEndDate = "Date de fermeture";
+$ForumStartDateComment = "Le forum sera publié à cette date";
+$ForumEndDateComment = "Après cette date, le forum sera automatiquement fermé";
+$ModeratedForum = "Forum modéré";
 ?>

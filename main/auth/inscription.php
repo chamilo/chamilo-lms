@@ -50,17 +50,27 @@ $(document).ready(function() {
 
 function myLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        var geoPosition = function(position) {
             var lat = position.coords.latitude;
             var lng = position.coords.longitude;
             var latLng = new google.maps.LatLng(lat, lng);
             initializeGeo(false, latLng)
-        });
+        };
+
+        var geoError = function(error) {
+            alert("Geocode '.get_lang('Error').': " + error);
+        };
+
+        var geoOptions = {
+            enableHighAccuracy: true
+        };
+
+        navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
     }
 }
 
 function initializeGeo(address, latLng) {
-    geocoder = new google.maps.Geocoder();
+    var geocoder = new google.maps.Geocoder();
     var latlng = new google.maps.LatLng(-75.503, 22.921);
     var myOptions = {
         zoom: 15,
@@ -82,8 +92,9 @@ function initializeGeo(address, latLng) {
             if (status == google.maps.GeocoderStatus.OK) {
                 if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
                     map.setCenter(results[0].geometry.location);
-                    console.log(results[0]);
-                    $("#address").val(results[0].formatted_address);
+                    if (!address) {
+                        $("#address").val(results[0].formatted_address);
+                    }
                     var infowindow = new google.maps.InfoWindow({
                         content: "<b>" + $("#address").val() + "</b>",
                         size: new google.maps.Size(150, 50)
@@ -249,8 +260,15 @@ if ($user_already_registered_show_terms == false) {
     // Geolocation
     if (in_array('address', $allowedFields)) {
         $form->addElement('text', 'address', get_lang('AddressField'), ['id' => 'address']);
-        $form->addButton('geolocalization', get_lang('geolocalization'), 'globe', 'default', 'default', 'null', ['id' => 'geolocalization']);
-        $form->addButton('myLocation', get_lang('MyLocation'), 'map-marker', 'default', 'default', 'null', ['id' => 'myLocation']);
+        $form->addHtml('
+            <div class="form-group">
+                <label for="geolocalization" class="col-sm-2 control-label"></label>
+                <div class="col-sm-8">
+                    <button class="null btn btn-default " id="geolocalization" name="geolocalization" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
+                    <button class="null btn btn-default " id="myLocation" name="myLocation" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
+                </div>
+            </div>
+        ');
 
         $form->addHtml('
             <div class="form-group">

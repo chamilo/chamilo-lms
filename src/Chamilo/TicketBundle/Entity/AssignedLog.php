@@ -3,6 +3,7 @@
 
 namespace Chamilo\TicketBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,7 +35,7 @@ class AssignedLog
     protected $ticket;
 
     /**
-     * @var Ticket
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
@@ -44,14 +45,14 @@ class AssignedLog
     /**
      * @var integer
      *
-     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false)
      */
     protected $insertUserId;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="assigned_date", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="assigned_date", type="datetime", nullable=false)
      */
     protected $assignedDate;
 }

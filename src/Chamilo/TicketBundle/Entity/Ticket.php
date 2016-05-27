@@ -30,7 +30,7 @@ class Ticket
     /**
      * @var string
      *
-     * @ORM\Column(name="ticket_code", type="string", length=255, nullable=false)
+     * @ORM\Column(name="code", type="string", length=255, nullable=false)
      */
     protected $code;
 
@@ -55,6 +55,14 @@ class Ticket
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      **/
     protected $project;
+
+    /**
+     * @var Project
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     **/
+    protected $category;
 
     /**
      * @var Priority
@@ -143,6 +151,7 @@ class Ticket
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
      */
     protected $insertUserId;
+
     /**
      * @var \DateTime
      *
@@ -153,7 +162,7 @@ class Ticket
     /**
      * @var integer
      *
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
     protected $lastEditUserId;
 

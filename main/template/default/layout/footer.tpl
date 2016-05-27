@@ -1,6 +1,6 @@
-{#  Plugins for footer section #}
+{#  Plugins for pref footer section #}
 {% if plugin_pre_footer is not null %}
-    <div id="plugin_footer_left">
+    <div id="plugin_pre_footer">
         {{ plugin_pre_footer }}
     </div>
 {% endif %}

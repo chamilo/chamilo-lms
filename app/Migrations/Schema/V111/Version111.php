@@ -144,8 +144,20 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('UPDATE plugin_ticket_ticket t INNER JOIN plugin_ticket_message as m  ON(t.ticket_id = m.ticket_id and message_id =1)  SET t.subject = m.subject');
             $this->addSql('UPDATE plugin_ticket_ticket t INNER JOIN plugin_ticket_message as m  ON(t.ticket_id = m.ticket_id and message_id =1)  SET t.message = m.message');
             $this->addSql('DELETE FROM plugin_ticket_message WHERE message_id = 1');
+
+            $this->addSql('RENAME TABLE plugin_ticket_assigned_log TO ticket_assigned_log');
+            $this->addSql('RENAME TABLE plugin_ticket_category TO ticket_category');
+            $this->addSql('RENAME TABLE plugin_ticket_category_rel_user TO ticket_category_rel_user');
+            $this->addSql('RENAME TABLE plugin_ticket_message TO ticket_message');
+            $this->addSql('RENAME TABLE plugin_ticket_message_attachments TO ticket_message_attachments');
+            $this->addSql('RENAME TABLE plugin_ticket_priority TO ticket_priority');
+            $this->addSql('RENAME TABLE plugin_ticket_project TO ticket_project');
+            $this->addSql('RENAME TABLE plugin_ticket_status TO ticket_status');
+            $this->addSql('RENAME TABLE plugin_ticket_ticket TO ticket_ticket');
         }
-}    /**
+    }
+
+    /**
      * @param Schema $schema
      */
     public function postUp(Schema $schema)

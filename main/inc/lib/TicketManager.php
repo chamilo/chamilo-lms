@@ -39,9 +39,15 @@ class TicketManager
         $table_support_project = Database::get_main_table(TABLE_TICKET_PROJECT);
 
         $order = empty($order) ? 'category.total_tickets DESC' : $order;
-        $sql = "SELECT category.*, project.other_area , project.email
-                FROM $table_support_category category, $table_support_project project
-                WHERE project.project_id = category.project_id
+        $sql = "SELECT 
+                    category.*, 
+                    category.id category_id,
+                    project.other_area, 
+                    project.email
+                FROM 
+                $table_support_category category, 
+                $table_support_project project
+                WHERE project.id = category.project_id
                 ORDER BY $order";
         $result = Database::query($sql);
         $types = array();
@@ -370,7 +376,7 @@ class TicketManager
 
             // Update code
             $sql = "UPDATE $table_support_tickets
-                    SET ticket_code = '$ticket_code'
+                    SET code = '$ticket_code'
                     WHERE ticket_id = '$ticket_id'";
             Database::query($sql);
 
@@ -821,12 +827,12 @@ class TicketManager
 
         $sql = "SELECT DISTINCT 
                 ticket.*,
-                ticket.ticket_id AS col0,
+                ticket.id AS col0,
                 ticket.start_date AS col1,
                 ticket.sys_lastedit_datetime AS col2,
                 cat.name AS col3,
-                priority.priority AS col5,
-                priority.priority  AS col6,
+                priority.name AS col5,
+                priority.name AS col6,
                 status.name AS col7,
                 ticket.total_messages AS col8,
                 ticket.message AS col9,
@@ -837,9 +843,9 @@ class TicketManager
                 $table_support_priority priority,
                 $table_support_status status
             WHERE
-                cat.category_id = ticket.category_id AND
-                ticket.priority_id = priority.priority_id AND
-                ticket.status_id = status.status_id                
+                cat.id = ticket.category_id AND
+                ticket.priority_id = priority.id AND
+                ticket.status_id = status.id                
         ";
         if (!$isAdmin) {
             $sql .= " AND (ticket.assigned_last_user = $user_id)";
@@ -857,7 +863,7 @@ class TicketManager
             if ($_GET['keyword'] != '') {
                 $keyword = Database::escape_string(trim($_GET['keyword']));
                 $sql .= " AND (
-                            ticket.ticket_code = '$keyword' OR 
+                            ticket.code = '$keyword' OR 
                             ticket.ticket_id = '$keyword'                            
                         )";
             }
@@ -1030,7 +1036,7 @@ class TicketManager
                 }
                 $row['col0'] = Display::return_icon(
                                 $img_source, get_lang('Info')
-                        ) . '<a href="ticket_details.php?ticket_id=' . $row['col0'] . '">' . $row['ticket_code'] . '</a>';
+                        ) . '<a href="ticket_details.php?ticket_id=' . $row['col0'] . '">' . $row['code'] . '</a>';
                 // @todo fix
                 /*if ($row['col7'] == 'PENDIENTE') {
                     $row['col7'] = '<span style="color: #f00; font-weight:bold;">' . $row['col7'] . '</span>';
@@ -1051,7 +1057,7 @@ class TicketManager
                 $row['col0'] = Display::return_icon(
                         $img_source,
                         get_lang('Info')
-                    ) . '<a href="ticket_details.php?ticket_id=' . $row['col0'] . '">' . $row['ticket_code'] . '</a>';
+                    ) . '<a href="ticket_details.php?ticket_id=' . $row['col0'] . '">' . $row['code'] . '</a>';
                 $now = api_strtotime(api_get_utc_datetime());
                 $last_edit_date = api_strtotime($row['sys_lastedit_datetime']);
                 $dif = $now - $last_edit_date;
@@ -1108,21 +1114,21 @@ class TicketManager
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
 
-        $sql = "SELECT COUNT(ticket.ticket_id) AS total
+        $sql = "SELECT COUNT(ticket.id) AS total
                 FROM $table_support_tickets ticket ,
                 $table_support_category cat ,
                 $table_support_priority priority,
                 $table_support_status status                
 	        WHERE 
-	            cat.category_id = ticket.category_id AND 
-	            ticket.priority_id = priority.priority_id AND 
-	            ticket.status_id = status.status_id";
+	            cat.id = ticket.category_id AND 
+	            ticket.priority_id = priority.id AND 
+	            ticket.status_id = status.id";
 
         // Search simple
         if (isset($_GET['submit_simple'])) {
             if ($_GET['keyword'] != '') {
                 $keyword = Database::escape_string(trim($_GET['keyword']));
-                $sql .= " AND (ticket.ticket_code = '$keyword'
+                $sql .= " AND (ticket.code = '$keyword'
                           OR user.firstname LIKE '%$keyword%'
                           OR user.lastname LIKE '%$keyword%'
                           OR concat(user.firstname,' ',user.lastname) LIKE '%$keyword%'
@@ -1214,31 +1220,31 @@ class TicketManager
         }
 
         if ($keyword_unread == 'yes') {
-            $sql .= " AND ticket.ticket_id IN ( ";
-            $sql .= "SELECT ticket.ticket_id
+            $sql .= " AND ticket.id IN ( ";
+            $sql .= "SELECT ticket.id
                      FROM  $table_support_tickets ticket,
                      $table_support_messages message,
                      $table_main_user user
-                     WHERE ticket.ticket_id = message.ticket_id
+                     WHERE ticket.id = message.ticket_id
                      AND message.status = 'NOL'
                      AND message.sys_insert_user_id = user.user_id
                      AND user.user_id NOT IN (
                         SELECT user_id FROM $table_main_admin
                      ) AND ticket.status_id != '".self::STATUS_FORWARDED."'
-                     GROUP BY ticket.ticket_id)";
+                     GROUP BY ticket.id)";
         } else {
             if ($keyword_unread == 'no') {
-                $sql .= " AND ticket.ticket_id NOT IN ( ";
-                $sql .= " SELECT ticket.ticket_id
+                $sql .= " AND ticket.id NOT IN ( ";
+                $sql .= " SELECT ticket.id 
                           FROM  $table_support_tickets ticket,
                           $table_support_messages message,
                           $table_main_user user
-                          WHERE ticket.ticket_id = message.ticket_id
+                          WHERE ticket.id = message.ticket_id
                           AND message.status = 'NOL'
                           AND message.sys_insert_user_id = user.user_id
                           AND user.user_id NOT IN (SELECT user_id FROM $table_main_admin)
                           AND ticket.status_id != '".self::STATUS_FORWARDED."'
-                          GROUP BY ticket.ticket_id)";
+                          GROUP BY ticket.id)";
             }
         }
         $res = Database::query($sql);
@@ -1283,10 +1289,10 @@ class TicketManager
                     $table_support_priority priority,
                     $table_support_status status
 		        WHERE
-                    ticket.ticket_id = $ticket_id
-                    AND cat.category_id = ticket.category_id
-                    AND priority.priority_id = ticket.priority_id
-                    AND status.status_id = ticket.status_id ";
+                    ticket.id = $ticket_id
+                    AND cat.id = ticket.category_id
+                    AND priority.id = ticket.priority_id
+                    AND status.id = ticket.status_id ";
         $result = Database::query($sql);
         $ticket = array();
         if (Database::num_rows($result) > 0) {
@@ -1346,7 +1352,7 @@ class TicketManager
                         FROM $table_support_message_attachments
                         WHERE
                             message_id = " . $row['message_id'] . " AND
-                            ticket_id= '$ticket_id'  ";
+                            ticket_id = '$ticket_id'  ";
                 $result_attach = Database::query($sql);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
                     $archiveURL = $archiveURL = $webPath . "plugin/" . PLUGIN_NAME . '/src/download.php?ticket_id=' . $ticket_id . '&file=';
@@ -1411,7 +1417,7 @@ class TicketManager
         $userInfo = api_get_user_info($userId);
         $ticketInfo = self::get_ticket_detail_by_id($ticketId, $userId);
         $requestUserInfo = $ticketInfo['usuario'];
-        $ticketCode = $ticketInfo['ticket']['ticket_code'];
+        $ticketCode = $ticketInfo['ticket']['code'];
         $status = $ticketInfo['ticket']['status'];
         $priority = $ticketInfo['ticket']['priority'];
 
@@ -1531,11 +1537,11 @@ class TicketManager
         $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
         $user_info = api_get_user_info();
         $user_id = $user_info['user_id'];
-        $sql = "SELECT COUNT( DISTINCT ticket.ticket_id) AS unread
+        $sql = "SELECT COUNT( DISTINCT ticket.id) AS unread
                 FROM $table_support_tickets ticket,
                 $table_support_messages message ,
                 $table_main_user user
-                WHERE ticket.ticket_id = message.ticket_id
+                WHERE ticket.id = message.ticket_id
                 AND message.status = 'NOL'
                 AND user.user_id = message.sys_insert_user_id ";
         if (!api_is_platform_admin()) {
@@ -1692,7 +1698,7 @@ class TicketManager
             $user_id = api_get_user_id();
         }
 
-        $sql = "SELECT ticket.ticket_code, ticket.sys_insert_datetime ,
+        $sql = "SELECT ticket.code, ticket.sys_insert_datetime ,
                 ticket.sys_lastedit_datetime , cat.name as category ,
                 CONCAT(user.lastname,' ', user.firstname) AS fullname ,
                 status.name as status , ticket.total_messages as messages ,
@@ -1703,15 +1709,15 @@ class TicketManager
                 $table_support_status status ,
                 $table_main_user user
                 WHERE
-                    cat.category_id = ticket.category_id
-                    AND ticket.priority_id = priority.priority_id
-                    AND ticket.status_id = status.status_id
+                    cat.id = ticket.category_id
+                    AND ticket.priority_id = priority.id
+                    AND ticket.status_id = status.id
                     AND user.user_id = ticket.request_user ";
-        //Search simple
+        // Search simple
         if (isset($_GET['submit_simple'])) {
             if ($_GET['keyword'] != '') {
                 $keyword = Database::escape_string(trim($_GET['keyword']));
-                $sql .= " AND (ticket.ticket_code = '$keyword'
+                $sql .= " AND (ticket.code = '$keyword'
                           OR user.firstname LIKE '%$keyword%'
                           OR user.lastname LIKE '%$keyword%'
                           OR concat(user.firstname,' ',user.lastname) LIKE '%$keyword%'

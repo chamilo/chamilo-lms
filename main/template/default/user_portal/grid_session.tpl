@@ -29,7 +29,7 @@
         <div class="grid-courses">
             <div class="row">
             {% for item in row.courses %}
-            <div class="col-md-4 col-sm-4 col-xs-6">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="items">
                     <div class="image">
                         <img src="{{ item.image }}" class="img-responsive">

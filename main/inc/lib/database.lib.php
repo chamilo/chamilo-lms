@@ -141,7 +141,7 @@ class Database
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
-                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity'
+                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
                 'ChamiloFaqBundle' => 'Chamilo\FaqBundle\Entity'                
             )
         );

@@ -127,6 +127,10 @@ function check_system_version()
 
         // The number of sessions
         $number_of_sessions = Statistics::countSessions();
+        $packager = api_get_configuration_value('packager');
+        if (empty($packager)) {
+            $packager = 'chamilo';
+        }
 
         $data = array(
             'url' => api_get_path(WEB_PATH),
@@ -144,6 +148,11 @@ function check_system_version()
             'language' => api_get_setting('platformLanguage'), //helps us know the spread of language usage for campuses, by main language
             'adminname' => api_get_setting('administratorName').' '.api_get_setting('administratorSurname'), //not sure this is necessary...
             'ip' => $_SERVER['REMOTE_ADDR'], //the admin's IP address, with the only purpose of trying to geolocate portals around the globe to draw a map
+            // Reference to the packager system or provider through which
+            // Chamilo is installed/downloaded. Packagers can change this in
+            // the default config file (main/install/configuration.dist.php)
+            // or in the installed config file. The default value is 'chamilo'
+            'packager' => $packager,
         );
         $version = null;
         // version.php has been updated to include the version in an HTTP header

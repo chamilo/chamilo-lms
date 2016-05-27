@@ -242,3 +242,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['messaging_gdc_api_key'] = '';
 // Text to speech google app id
 //$_configuration['translate_app_google_key'] = '';
+// Reference to the packager system or provider through which
+// Chamilo is installed/downloaded. Packagers can change this
+// to reflect their packaging method. The default value is 'chamilo'. This will
+// be reflected on the https://version.chamilo.org/stats page in the future.
+//$_configuration['packager'] = 'chamilo';

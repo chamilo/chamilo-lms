@@ -274,7 +274,6 @@ class TicketManager
         $status = '',
         $assigned_user = 0
     ) {
-        global $plugin;
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_category = Database::get_main_table(
             TABLE_TICKET_CATEGORY
@@ -333,7 +332,6 @@ class TicketManager
             'category_id' => $category_id,
             'priority_id' => $priority,
             'course_id' => $course_id,
-            'request_user' => 0,
             'personal_email' => $personalEmail,
             'status_id' => $status,
             'start_date' => $now,
@@ -353,7 +351,7 @@ class TicketManager
 
             Display::addFlash(Display::return_message(
                 sprintf(
-                    $plugin->get_lang('TicketXCreated'),
+                    get_lang('TicketXCreated'),
                     $ticket_code
                 ),
                 'normal',
@@ -365,7 +363,7 @@ class TicketManager
 
                 Display::addFlash(Display::return_message(
                     sprintf(
-                        $plugin->get_lang('TicketXAssignedToUserX'),
+                        get_lang('TicketXAssignedToUserX'),
                         $ticket_code,
                         $assignedUserInfo['complete_name']
                     ),
@@ -422,7 +420,7 @@ class TicketManager
             if (empty($category_id)) {
                 if ($plugin->get('send_warning_to_all_admins')) {
                     $warningSubject = sprintf(
-                        $plugin->get_lang('TicketXCreatedWithNoCategory'),
+                        get_lang('TicketXCreatedWithNoCategory'),
                         $ticket_code
                     );
                     Display::addFlash(Display::return_message($warningSubject));
@@ -442,20 +440,20 @@ class TicketManager
                 $categoryInfo = TicketManager::getCategory($category_id);
                 $usersInCategory = TicketManager::getUsersInCategory($category_id);
 
-                $message = '<h2>'.$plugin->get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
+                $message = '<h2>'.get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
 
                 if ($plugin->get('warn_admin_no_user_in_category')) {
                     $usersInCategory = TicketManager::getUsersInCategory($category_id);
                     if (empty($usersInCategory)) {
                         $subject = sprintf(
-                            $plugin->get_lang('WarningCategoryXDoesntHaveUsers'),
+                            get_lang('WarningCategoryXDoesntHaveUsers'),
                             $categoryInfo['name']
                         );
 
                         if ($plugin->get('send_warning_to_all_admins')) {
                             Display::addFlash(Display::return_message(
                                 sprintf(
-                                    $plugin->get_lang('CategoryWithNoUserNotificationSentToAdmins'),
+                                    get_lang('CategoryWithNoUserNotificationSentToAdmins'),
                                     $categoryInfo['name']
                                 ),
                                 null,
@@ -496,9 +494,9 @@ class TicketManager
             if ($other_area) {
                 // Send email to "other area" email
                 api_mail_html(
-                    $plugin->get_lang('VirtualSupport'),
+                    get_lang('VirtualSupport'),
                     $email,
-                    $plugin->get_lang('IncidentResentToVirtualSupport'),
+                    get_lang('IncidentResentToVirtualSupport'),
                     $helpDeskMessage,
                     $user['firstname'].' '.$user['lastname'],
                     $personalEmail,
@@ -508,9 +506,9 @@ class TicketManager
 
                 // Send email to user
                 api_mail_html(
-                    $plugin->get_lang('VirtualSupport'),
+                    get_lang('VirtualSupport'),
                     $user['email'],
-                    $plugin->get_lang('IncidentResentToVirtualSupport'),
+                    get_lang('IncidentResentToVirtualSupport'),
                     $helpDeskMessage,
                     $user['firstname'].' '.$user['lastname'],
                     $personalEmail,
@@ -518,8 +516,8 @@ class TicketManager
                     $data_files
                 );
 
-                $studentMessage = sprintf($plugin->get_lang('YourQuestionWasSentToTheResponableAreaX'), $email, $email);
-                $studentMessage .= sprintf($plugin->get_lang('YourAnswerToTheQuestionWillBeSentToX'), $personalEmail);
+                $studentMessage = sprintf(get_lang('YourQuestionWasSentToTheResponableAreaX'), $email, $email);
+                $studentMessage .= sprintf(get_lang('YourAnswerToTheQuestionWillBeSentToX'), $personalEmail);
                 self::insert_message(
                     $ticket_id, get_lang('MessageResent'), $studentMessage, null, 1
                 );
@@ -540,7 +538,6 @@ class TicketManager
      */
     public static function assign_ticket_user($ticket_id, $user_id)
     {
-        global $plugin;
         $ticket_id = intval($ticket_id);
         $user_id = intval($user_id);
 
@@ -572,7 +569,7 @@ class TicketManager
 
             $sql = "UPDATE $table_support_tickets
                     SET assigned_last_user = $user_id
-                    WHERE ticket_id = $ticket_id";
+                    WHERE id = $ticket_id";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
                 $insert_id = api_get_user_id();
@@ -580,12 +577,12 @@ class TicketManager
                     'ticket_id' => $ticket_id,
                     'user_id' => $user_id,
                     'assigned_date' => $now,
-                    'sys_insert_user_id' => $insert_id,
+                    'sys_insert_user_id' => $insert_id
                 ];
                 Database::insert($table_support_assigned_log, $params);
 
                 $subject = '';
-                $content = sprintf($plugin->get_lang('AssignedChangeFromXToY'), $oldUserName, $userCompleteName);
+                $content = sprintf(get_lang('AssignedChangeFromXToY'), $oldUserName, $userCompleteName);
 
                 self::insert_message(
                     $ticket_id,
@@ -599,14 +596,14 @@ class TicketManager
                 if ($insert_id !== $user_id) {
                     $info = api_get_user_info($user_id);
                     $sender = api_get_user_info($insert_id);
-                    $href = api_get_path(WEB_PLUGIN_PATH).PLUGIN_NAME.'/src/ticket_details.php?ticket_id='.$ticket_id;
+                    $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticket_id;
                     $message = sprintf(
-                        $plugin->get_lang('TicketAssignedMsg'),
+                        get_lang('TicketAssignedMsg'),
                         $info['complete_name'],
                         $href,
                         $ticket_id
                     );
-                    $mailTitle = sprintf($plugin->get_lang('TicketAssignX'), $ticket_id);
+                    $mailTitle = sprintf(get_lang('TicketAssignX'), $ticket_id);
                     api_mail_html(
                         $info['complete_name'],
                         $info['mail'],
@@ -651,7 +648,7 @@ class TicketManager
         $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
         if ($sendConfirmation) {
             $form = '<form action="ticket_details.php?ticket_id=' . $ticket_id . '" id="confirmticket" method="POST" >
-                         <p>' . $plugin->get_lang('TicketWasThisAnswerSatisfying') . '</p>
+                         <p>' . get_lang('TicketWasThisAnswerSatisfying') . '</p>
                          <button class="btn btn-primary responseyes" name="response" id="responseyes" value="1">' . get_lang('Yes') . '</button>
                          <button class="btn btn-danger responseno" name="response" id="responseno" value="0">' . get_lang('No') . '</button>
                      </form>';
@@ -673,7 +670,6 @@ class TicketManager
 
         $params = [
             'ticket_id' => $ticket_id,
-            'message_id' => $message_id,
             'subject' => $subject,
             'message' => $content,
             'ip_address' => $_SERVER['REMOTE_ADDR'],
@@ -695,7 +691,7 @@ class TicketManager
                         FROM $table_support_messages
                         WHERE ticket_id ='$ticket_id'
                     )
-                WHERE ticket_id = $ticket_id ";
+                WHERE id = $ticket_id ";
         Database::query($sql);
 
         $sql = "SELECT COUNT(*) as total_attach
@@ -813,7 +809,6 @@ class TicketManager
         $direction,
         $user_id = 0
     ) {
-        global $plugin;
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
@@ -827,6 +822,7 @@ class TicketManager
 
         $sql = "SELECT DISTINCT 
                 ticket.*,
+                ticket.id ticket_id,
                 ticket.id AS col0,
                 ticket.start_date AS col1,
                 ticket.sys_lastedit_datetime AS col2,
@@ -1008,7 +1004,7 @@ class TicketManager
                 }
             } else {
                 if ($row['status_id'] !== self::STATUS_FORWARDED) {
-                    $row['assigned_last_user'] = '<span style="color:#ff0000;">' . $plugin->get_lang('ToBeAssigned') . '</span>';
+                    $row['assigned_last_user'] = '<span style="color:#ff0000;">' . get_lang('ToBeAssigned') . '</span>';
                 } else {
                     $row['assigned_last_user'] = '<span style="color:#00ff00;">' . get_lang('MessageResent') . '</span>';
                 }
@@ -1283,7 +1279,7 @@ class TicketManager
                     ticket.*, 
                     cat.name,
                     status.name as status, 
-                    priority.priority
+                    priority.name priority
                     FROM $table_support_tickets ticket,
                     $table_support_category cat ,
                     $table_support_priority priority,
@@ -1317,9 +1313,10 @@ class TicketManager
                         $row['course_url'] = '<a href="'.$course['course_public_url'].'">'.$course['name'].'</a>';
                     }
                 }
-                $userInfo = api_get_user_info($row['request_user']);
-                $row['user_url'] = '<a href="' . api_get_path(WEB_PATH) . 'main/admin/user_information.php?user_id=' . $row['request_user'] . '">
-                ' . api_get_person_name($userInfo['firstname'], $userInfo['lastname']) . '</a>';
+
+                $userInfo = api_get_user_info($row['sys_insert_user_id']);
+                $row['user_url'] = '<a href="' . api_get_path(WEB_PATH) . 'main/admin/user_information.php?user_id=' . $userInfo['user_id'] . '">
+                ' . $userInfo['complete_name']. '</a>';
                 $ticket['usuario'] = $userInfo;
                 $ticket['ticket'] = $row;
             }
@@ -1351,7 +1348,7 @@ class TicketManager
                 $sql = "SELECT *
                         FROM $table_support_message_attachments
                         WHERE
-                            message_id = " . $row['message_id'] . " AND
+                            message_id = " . $row['id'] . " AND
                             ticket_id = '$ticket_id'  ";
                 $result_attach = Database::query($sql);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
@@ -1413,7 +1410,6 @@ class TicketManager
      */
     public static function sendNotification($ticketId, $userId, $title, $message)
     {
-        global $plugin;
         $userInfo = api_get_user_info($userId);
         $ticketInfo = self::get_ticket_detail_by_id($ticketId, $userId);
         $requestUserInfo = $ticketInfo['usuario'];
@@ -1422,9 +1418,9 @@ class TicketManager
         $priority = $ticketInfo['ticket']['priority'];
 
         $titleEmail = "[$ticketCode] $title";
-        $messageEmail = $plugin->get_lang('TicketNum').": $ticketCode <br />";
-        $messageEmail .= $plugin->get_lang('Status').": $status <br />";
-        $messageEmail .= $plugin->get_lang('Priority').": $priority <br />";
+        $messageEmail = get_lang('TicketNum').": $ticketCode <br />";
+        $messageEmail .= get_lang('Status').": $status <br />";
+        $messageEmail .= get_lang('Priority').": $priority <br />";
         $messageEmail .= '<hr /><br />';
         $messageEmail .= $message;
 
@@ -1459,12 +1455,11 @@ class TicketManager
      *
      * @return bool
      */
-    public function updateTicket(
+    public static function updateTicket(
         $params,
         $ticketId,
         $userId
     ) {
-        global $plugin;
         $now = api_get_utc_datetime();
 
         $table = Database::get_main_table(TABLE_TICKET_TICKET);
@@ -1474,14 +1469,15 @@ class TicketManager
             'sys_lastedit_user_id' => $userId,
             'sys_lastedit_datetime' => $now
         ];
-        Database::update($table, $newParams, ['ticket_id = ? ' => $ticketId]);
+        Database::update($table, $newParams, ['id = ? ' => $ticketId]);
 
          self::sendNotification(
             $ticketId,
             $userId,
-            $plugin->get_lang('TicketUpdated'),
-            $plugin->get_lang('TicketUpdated')
+            get_lang('TicketUpdated'),
+            get_lang('TicketUpdated')
         );
+
         return true;
     }
 
@@ -1496,7 +1492,6 @@ class TicketManager
         $ticket_id,
         $user_id
     ) {
-        global $plugin;
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
 
         $ticket_id = intval($ticket_id);
@@ -1515,8 +1510,8 @@ class TicketManager
             self::sendNotification(
                 $ticket_id,
                 $user_id,
-                $plugin->get_lang('TicketUpdated'),
-                $plugin->get_lang('TicketUpdated')
+                get_lang('TicketUpdated'),
+                get_lang('TicketUpdated')
             );
             return true;
         } else {
@@ -1584,7 +1579,6 @@ class TicketManager
      */
     public static function close_ticket($ticket_id, $user_id)
     {
-        global $plugin;
         $ticket_id = intval($ticket_id);
         $user_id = intval($user_id);
 
@@ -1595,14 +1589,14 @@ class TicketManager
                     sys_lastedit_user_id ='$user_id',
                     sys_lastedit_datetime ='" . $now . "',
                     end_date ='$now'
-                WHERE ticket_id ='$ticket_id'";
+                WHERE id ='$ticket_id'";
         Database::query($sql);
 
         self::sendNotification(
             $ticket_id,
             $user_id,
-            $plugin->get_lang('TicketClosed'),
-            $plugin->get_lang('TicketClosed')
+            get_lang('TicketClosed'),
+            get_lang('TicketClosed')
         );
     }
 
@@ -1715,7 +1709,7 @@ class TicketManager
                     AND user.user_id = ticket.request_user ";
         // Search simple
         if (isset($_GET['submit_simple'])) {
-            if ($_GET['keyword'] != '') {
+            if ($_GET['keyword'] !== '') {
                 $keyword = Database::escape_string(trim($_GET['keyword']));
                 $sql .= " AND (ticket.code = '$keyword'
                           OR user.firstname LIKE '%$keyword%'

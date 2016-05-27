@@ -332,3 +332,13 @@ define('TABLE_GRADE_MODEL_COMPONENTS', 'grade_components');
 define('TABLE_HOOK_OBSERVER', 'hook_observer');
 define('TABLE_HOOK_CALL', 'hook_call');
 define('TABLE_HOOK_EVENT', 'hook_event');
+
+define('TABLE_TICKET_ASSIGNED_LOG', 'ticket_assigned_log');
+define('TABLE_TICKET_CATEGORY', 'ticket_category');
+define('TABLE_TICKET_MESSAGE', 'ticket_message');
+define('TABLE_TICKET_PRIORITY', 'ticket_priority');
+define('TABLE_TICKET_PROJECT', 'ticket_project');
+define('TABLE_TICKET_STATUS', 'ticket_status');
+define('TABLE_TICKET_TICKET', 'ticket_ticket');
+define('TABLE_TICKET_CATEGORY_REL_USER', 'ticket_category_rel_user');
+define('TABLE_TICKET_MESSAGE_ATTACHMENTS', 'ticket_message_attachments');

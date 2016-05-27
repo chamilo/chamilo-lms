@@ -46,7 +46,6 @@ class Project
      */
     protected $email;
 
-
     /**
      * @var string
      *
@@ -60,6 +59,7 @@ class Project
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
      */
     protected $insertUserId;
+    
     /**
      * @var \DateTime
      *
@@ -70,7 +70,7 @@ class Project
     /**
      * @var integer
      *
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
     protected $lastEditUserId;
 

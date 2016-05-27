@@ -41,7 +41,6 @@ class MessageAttachment
      **/
     protected $message;
 
-
     /**
      * @var string
      *
@@ -69,6 +68,7 @@ class MessageAttachment
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
      */
     protected $insertUserId;
+
     /**
      * @var \DateTime
      *
@@ -79,7 +79,7 @@ class MessageAttachment
     /**
      * @var integer
      *
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
     protected $lastEditUserId;
 

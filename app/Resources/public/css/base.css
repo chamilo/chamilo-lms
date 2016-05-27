@@ -100,7 +100,8 @@ a.thumbnail:hover{
     cursor: pointer;
 }
 .invisible {
-  visibility: visible;
+  visibility: hidden;
+  display: none;
 }
 .logo{
   margin-bottom: 20px;
@@ -3904,7 +3905,7 @@ i.size-32.icon-new-work{
   font-size: 12px;
 }
 .menu-column .nav li a img{
-  vertical-align: bottom;
+  vertical-align: text-bottom;
   margin-right: 5px;
 }
 .social-network-menu .nav li a, #groups-acordeon .nav li a{
@@ -4736,9 +4737,10 @@ div#chat-remote-video video {
 }
 .grid-courses .items .title{
     line-height: 1.4;
-    font-size: 14px;
     padding: 0px;
     margin: 5px;
+    font-size: 14px;
+    font-weight: bold;
 }
 .grid-courses .items .toolbar{
     text-align: right;

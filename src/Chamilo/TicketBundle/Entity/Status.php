@@ -28,6 +28,13 @@ class Status
     /**
      * @var string
      *
+     * @ORM\Column(name="code", type="string", length=255, nullable=false)
+     */
+    protected $code;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     protected $name;

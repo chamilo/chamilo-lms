@@ -1,4 +1,5 @@
 <script>
+{% if constant('CHAMILO_LOAD_WYSIWYG') %}
 // External plugins not part of the default Ckeditor package.
 var plugins = [
     'asciimath',
@@ -68,7 +69,7 @@ var showTemplates = function (ckeditorName) {
         $templatesUL.appendTo("#frmModel");
     });
 };
-
+{% endif %}
 $(document).ready(function(){
     $("#open-view-list").click(function(){
         $("#student-list-work").fadeIn(300);

@@ -5,7 +5,7 @@
  * @package chamilo.plugin.ticket
  */
 
-require_once __DIR__.'/../config.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $plugin = TicketPlugin::create();
 
 $work_id = intval($_POST['work_id']);
@@ -14,7 +14,7 @@ $rs_id = intval($_POST['rs_id']);
 api_protect_course_script();
 
 if (!api_is_allowed_to_edit()) {
-    Display::display_error_message($plugin->get_lang("DeniedAccess"));
+    Display::display_error_message(get_lang("DeniedAccess"));
 } else {
     $sql = "UPDATE " . Database::get_main_table('rp_reporte_semanas') . "
             SET work_id = '$work_id', forum_id = '$forum_id'

@@ -9,12 +9,11 @@
 $cidReset = true;
 // needed in order to load the plugin lang variables
 $course_plugin = 'ticket';
-require_once __DIR__.'/../config.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-$plugin = TicketPlugin::create();
-$tool_name = $plugin->get_lang('LastEdit');
+$tool_name = get_lang('LastEdit');
 
 $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
@@ -91,15 +90,15 @@ switch ($action) {
     case 'export':
         $data = array(
             array(
-                $plugin->get_lang('TicketNum'),
-                $plugin->get_lang('Date'),
-                $plugin->get_lang('DateLastEdition'),
-                $plugin->get_lang('Category'),
-                $plugin->get_lang('User'),
-                $plugin->get_lang('Program'),
-                $plugin->get_lang('Responsible'),
-                $plugin->get_lang('Status'),
-                $plugin->get_lang('Description')
+                get_lang('TicketNum'),
+                get_lang('Date'),
+                get_lang('DateLastEdition'),
+                get_lang('Category'),
+                get_lang('User'),
+                get_lang('Program'),
+                get_lang('Responsible'),
+                get_lang('Status'),
+                get_lang('Description')
             )
         );
         $datos = $table->get_clean_html();
@@ -118,7 +117,7 @@ switch ($action) {
             );
             $data[] = $ticket_rem;
         }
-        Export::arrayToXls($data, $plugin->get_lang('Tickets'));
+        Export::arrayToXls($data, get_lang('Tickets'));
         exit;
         break;
     case 'close_tickets':
@@ -131,7 +130,7 @@ switch ($action) {
 $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 
-Display::display_header($plugin->get_lang('MyTickets'));
+Display::display_header(get_lang('MyTickets'));
 
 if ($isAdmin) {
     $getParameters = [
@@ -179,7 +178,7 @@ if ($isAdmin) {
 
     $admins = UserManager::get_user_list_like(array("status" => "1"), array("username"), true);
     $selectAdmins = [
-        0 => $plugin->get_lang('Unassigned')
+        0 => get_lang('Unassigned')
     ];
     foreach ($admins as $admin) {
         $selectAdmins[$admin['user_id']] = $admin['complete_name'];
@@ -187,20 +186,20 @@ if ($isAdmin) {
     $status = TicketManager::get_all_tickets_status();
     $selectStatus = [];
     foreach ($status as $stat) {
-        $selectStatus[$stat['status_id']] = $stat['name'];
+        $selectStatus[$stat['id']] = $stat['name'];
     }
 
     $selectPriority = [
         '' => get_lang('All'),
-        TicketManager::PRIORITY_NORMAL => $plugin->get_lang('PriorityNormal'),
-        TicketManager::PRIORITY_HIGH => $plugin->get_lang('PriorityHigh'),
-        TicketManager::PRIORITY_LOW => $plugin->get_lang('PriorityLow')
+        TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
+        TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
+        TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
     ];
 
     $selectStatusUnread = [
         '' => get_lang('All'),
-        'yes' => $plugin->get_lang('Unread'),
-        'no' => $plugin->get_lang('Read')
+        'yes' => get_lang('Unread'),
+        'no' => get_lang('Read')
     ];
 
     // Create a search-box
@@ -216,16 +215,17 @@ if ($isAdmin) {
     echo '<div class="actions" >';
     if (api_is_platform_admin()) {
         echo '<span class="left">' .
-                '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .
-                    Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', ICON_SIZE_MEDIUM) . '</a>' .
+                '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php">' .
+                    Display::return_icon('add.png', get_lang('TckNew'), '', ICON_SIZE_MEDIUM) . '</a>' .
                 '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' .
                     Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_MEDIUM) . '</a>';
-        if ($plugin->get('allow_category_edition')) {
+
+        /*if ($plugin->get('allow_category_edition')) {
             echo Display::url(
                 Display::return_icon('folder_document.gif'),
-                api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/categories.php'
+                api_get_path(WEB_CODE_PATH) . 'ticket/categories.php'
             );
-        }
+        }*/
 
         echo Display::url(
             Display::return_icon('settings.png'),
@@ -248,11 +248,11 @@ if ($isAdmin) {
     $advancedSearchForm->addHeader(get_lang('AdvancedSearch'));
     $advancedSearchForm->addSelect('keyword_category', get_lang('Category'), $selectTypes, ['placeholder' => get_lang('Select')]);
     //$advancedSearchForm->addText('keyword_request_user', get_lang('User'), false);
-    $advancedSearchForm->addDateTimePicker('keyword_start_date_start', $plugin->get_lang('RegisterDate'));
-    $advancedSearchForm->addDateTimePicker('keyword_start_date_end', $plugin->get_lang('Untill'));
-    $advancedSearchForm->addSelect('keyword_admin', $plugin->get_lang('AssignedTo') , $selectAdmins, ['placeholder' => get_lang('All')]);
+    $advancedSearchForm->addDateTimePicker('keyword_start_date_start', get_lang('RegisterDate'));
+    $advancedSearchForm->addDateTimePicker('keyword_start_date_end', get_lang('Untill'));
+    $advancedSearchForm->addSelect('keyword_admin', get_lang('AssignedTo') , $selectAdmins, ['placeholder' => get_lang('All')]);
     $advancedSearchForm->addSelect('keyword_status', get_lang('Status'), $selectStatus, ['placeholder' => get_lang('Select')]);
-    $advancedSearchForm->addSelect('keyword_priority', $plugin->get_lang('Priority'), $selectPriority, ['placeholder' => get_lang('All')]);
+    $advancedSearchForm->addSelect('keyword_priority', get_lang('Priority'), $selectPriority, ['placeholder' => get_lang('All')]);
     $advancedSearchForm->addSelect('keyword_unread', get_lang('Status'), $selectStatusUnread, ['placeholder' => get_lang('All')]);
     $advancedSearchForm->addText('keyword_course', get_lang('Course'), false);
     $advancedSearchForm->addButtonSearch(get_lang('AdvancedSearch'), 'submit_advanced');
@@ -261,8 +261,8 @@ if ($isAdmin) {
     if ($plugin->get('allow_student_add') == 'true') {
         echo '<div class="actions" >';
         echo '<span style="float:right;">' .
-                '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .
-                    Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', '32') .
+                '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php">' .
+                    Display::return_icon('add.png', get_lang('TckNew'), '', '32') .
                 '</a>' .
               '</span>';
         echo '</div>';
@@ -270,25 +270,25 @@ if ($isAdmin) {
 }
 
 if ($isAdmin) {
-    $table->set_header(0, $plugin->get_lang('TicketNum'), true);
-    $table->set_header(1, $plugin->get_lang('Date'), true);
-    $table->set_header(2, $plugin->get_lang('DateLastEdition'), true);
-    $table->set_header(3, $plugin->get_lang('Category'), true);
-    $table->set_header(4, $plugin->get_lang('CreatedBy'), true);
-    $table->set_header(5, $plugin->get_lang('AssignedTo'), true);
-    $table->set_header(6, $plugin->get_lang('Status'), true);
-    $table->set_header(7, $plugin->get_lang('Message'), true);
+    $table->set_header(0, get_lang('TicketNum'), true);
+    $table->set_header(1, get_lang('Date'), true);
+    $table->set_header(2, get_lang('DateLastEdition'), true);
+    $table->set_header(3, get_lang('Category'), true);
+    $table->set_header(4, get_lang('CreatedBy'), true);
+    $table->set_header(5, get_lang('AssignedTo'), true);
+    $table->set_header(6, get_lang('Status'), true);
+    $table->set_header(7, get_lang('Message'), true);
 } else {
-    echo '<center><h1>' . $plugin->get_lang('MyTickets') . '</h1></center>';
-    echo '<center><p>' . $plugin->get_lang('MsgWelcome') . '</p></center>';
+    echo '<center><h1>' . get_lang('MyTickets') . '</h1></center>';
+    echo '<center><p>' . get_lang('MsgWelcome') . '</p></center>';
     if (isset($_GET['message'])) {
-        Display::display_confirmation_message($plugin->get_lang('TckSuccessSave'));
+        Display::display_confirmation_message(get_lang('TckSuccessSave'));
     }
-    $table->set_header(0, $plugin->get_lang('TicketNum'), true);
-    $table->set_header(1, $plugin->get_lang('Date'), true);
-    $table->set_header(2, $plugin->get_lang('DateLastEdition'), true);
-    $table->set_header(3, $plugin->get_lang('Category'));
-    $table->set_header(4, $plugin->get_lang('Status'), false);
+    $table->set_header(0, get_lang('TicketNum'), true);
+    $table->set_header(1, get_lang('Date'), true);
+    $table->set_header(2, get_lang('DateLastEdition'), true);
+    $table->set_header(3, get_lang('Category'));
+    $table->set_header(4, get_lang('Status'), false);
 }
 
 $table->display();

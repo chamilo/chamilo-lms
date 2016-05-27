@@ -78,7 +78,7 @@ class Category
     /**
      * @var integer
      *
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
     protected $lastEditUserId;
 

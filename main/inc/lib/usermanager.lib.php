@@ -1509,7 +1509,7 @@ class UserManager
 
         switch ($size) {
             case USER_IMAGE_SIZE_SMALL:
-                $pictureAnonymousSize = '22';
+                $pictureAnonymousSize = '32';
                 $realSizeName = 'small_';
                 $gravatarSize = 22;
                 break;

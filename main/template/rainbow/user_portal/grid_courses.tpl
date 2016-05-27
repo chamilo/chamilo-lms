@@ -2,7 +2,7 @@
 <div class="grid-courses">
 <div class="row">
     {% for item in special_courses %}
-    <div class="col-md-4 col-sm-4 col-xs-6">
+    <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="items">
             <div class="image">
                 <div class="pin">{{ item.icon }}</div>
@@ -76,7 +76,7 @@
         <div class="panel-body">
             <div class="row">
                 {% for item in category.courses %}
-                    <div class="col-md-4 col-sm-4 col-xs-6">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                         <div class="items">
                             <div class="image">
                                 <img src="{{ item.image }}" class="img-responsive">
@@ -141,7 +141,7 @@
 <!-- end courses in category -->
     <div class="row">
         {% for item in courses.not_category %}
-            <div class="col-md-4 col-sm-4 col-xs-6">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="items">
                     <div class="image">
                         <img src="{{ item.image }}" class="img-responsive">

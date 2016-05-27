@@ -6,7 +6,7 @@
  * @package chamilo.plugin.ticket
  */
 $cidReset = true;
-require_once __DIR__.'/../config.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $plugin = TicketPlugin::create();
 
 api_protect_admin_script(true);
@@ -49,7 +49,7 @@ if ($form->validate()) {
     exit;
 }
 
-$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
+$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => get_lang('MyTickets'));
 $interbreadcrumb[] = array('url' => 'categories.php', 'name' => get_lang('Categories'));
 Display::display_header(get_lang('Users'));
 $form->display();

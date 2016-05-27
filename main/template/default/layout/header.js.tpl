@@ -70,6 +70,10 @@
             });
         };
     {% endif %}
+
+
+
+
 $(document).ready(function(){
     $("#open-view-list").click(function(){
         $("#student-list-work").fadeIn(300);
@@ -78,6 +82,32 @@ $(document).ready(function(){
         $("#student-list-work").fadeOut(300);
     });
     check_brand();
+    
+    
+    
+    
+var id;
+$(window).resize(function() {
+    clearTimeout(id);
+    id = setTimeout(doneResizing, 200);
+});
+
+function doneResizing(){
+  var widhtWindow = $(window).width();
+  if ((widhtWindow>=1024) && (widhtWindow>=768)) {
+        $("#profileCollapse").addClass("in");
+        $("#courseCollapse").addClass("in");
+        $("#skillsCollapse").addClass("in");
+        $("#sn-sidebar-collapse").addClass("in");
+        $("#user_image_block").removeClass("invisible");
+    } else {
+        $("#profileCollapse").removeClass("in");
+        $("#courseCollapse").removeClass("in");
+        $("#skillsCollapse").removeClass("in");
+        $("#sn-avatar-one").removeClass("in");
+        $("#user_image_block").addClass("invisible");
+    }
+};
     /* if($('#toolbar-admin').length){
         var heigthToolBar= $('#toolbar-admin').height();
         $('header').css('margin-top', heigthToolBar+'px');

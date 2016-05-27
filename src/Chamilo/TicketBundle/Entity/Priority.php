@@ -35,6 +35,13 @@ class Priority
     /**
      * @var string
      *
+     * @ORM\Column(name="code", type="string", length=255, nullable=false)
+     */
+    protected $code;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description;
@@ -59,6 +66,7 @@ class Priority
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
      */
     protected $insertUserId;
+
     /**
      * @var \DateTime
      *
@@ -69,7 +77,7 @@ class Priority
     /**
      * @var integer
      *
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
     protected $lastEditUserId;
 

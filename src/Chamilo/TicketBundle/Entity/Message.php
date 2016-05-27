@@ -28,7 +28,7 @@ class Message
     /**
      * @var string
      *
-     * @ORM\Column(name="subject", type="string", length=255, nullable=false)
+     * @ORM\Column(name="subject", type="string", length=255, nullable=true)
      */
     protected $subject;
 
@@ -53,12 +53,21 @@ class Message
      */
     protected $ipAddress;
 
+     /**
+     * @var Ticket
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Ticket")
+     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
+     **/
+    protected $ticket;
+
     /**
      * @var integer
      *
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
      */
     protected $insertUserId;
+
     /**
      * @var \DateTime
      *
@@ -69,7 +78,7 @@ class Message
     /**
      * @var integer
      *
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
     protected $lastEditUserId;
 

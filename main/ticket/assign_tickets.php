@@ -6,7 +6,7 @@
  * @package chamilo.plugin.ticket
  */
 
-require_once __DIR__.'/../config.php';
+require_once __DIR__.'/../inc/global.inc.php';
 $plugin = TicketPlugin::create();
 
 api_protect_course_script();

@@ -27,10 +27,11 @@
                         <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}" />  <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="username">{{ _u.complete_name }}</li>
+                        <li>
+                            <a href="{{ profile_url }}">{{ _u.complete_name }}</a>
+                        </li>
                         <li role="separator" class="divider"></li>
                         <li>
-                            {{ profile_link }}
                             {{ message_link }}
                             {{ certificate_link }}
                         </li>

@@ -191,14 +191,13 @@ function check_system_version()
 /**
  * Function to make an HTTP request through fsockopen (specialised for GET)
  * Derived from Jeremy Saintot: http://www.php.net/manual/en/function.fsockopen.php#101872
- * @param string IP or hostname
- * @param int    Target port
- * @param string URI (defaults to '/')
- * @param array  GET data
- * @param float  Timeout
- * @param bool   Include HTTP Request headers?
- * @param bool   Include HTTP Response headers?
- * @param string $ip
+ * @param string $ip IP or hostname
+ * @param int    $port Target port
+ * @param string $uri URI (defaults to '/')
+ * @param array  $getdata GET data
+ * @param int    $timeout Timeout
+ * @param bool   $req_hdr Include HTTP Request headers?
+ * @param bool   $res_hdr Include HTTP Response headers?
  * @return string
  */
 function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout = 5, $req_hdr = false, $res_hdr = false)

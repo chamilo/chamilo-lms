@@ -438,6 +438,30 @@ if (api_is_platform_admin()) {
             $blocks = $data['blocks'];
         }
     }
+
+    //Hack for fix migration on session_rel_user
+    $tableColumns = Database::getManager()
+        ->getConnection()
+        ->getSchemaManager()
+        ->listTableColumns(
+            Database::get_main_table(TABLE_MAIN_SESSION_USER)
+        );
+
+    if (!array_key_exists('duration', $tableColumns)) {
+        try {
+            $dbSchema = Database::getManager()->getConnection()->getSchemaManager();
+            $durationColumn = new \Doctrine\DBAL\Schema\Column(
+                'duration',
+                Doctrine\DBAL\Types\Type::getType(\Doctrine\DBAL\Types\Type::INTEGER),
+                ['notnull' => false]
+            );
+            $tableDiff = new \Doctrine\DBAL\Schema\TableDiff('session_rel_user', [$durationColumn]);
+            $dbSchema->alterTable($tableDiff);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+    }
+    //end hack
 }
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH) . 'admin.ajax.php';
 

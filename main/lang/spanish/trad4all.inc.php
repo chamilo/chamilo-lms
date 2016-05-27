@@ -1,5 +1,7 @@
 <?php
-/* for more information: see languages.txt in the lang folder. */
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $OpenBadgesBannerText = "Puede generar insignias para reconocer las habilidades aprendidas de sus usuarios, dar un reconocimiento por su logro, con lo cual ellos podrán mostrar sus capacidades y competencias adquiridas a través de emblemas, que serán visualizadas en su perfil de usuario. Para más información sobre los Open Badges en <a href=\"http://openbadges.org\">http://openbadges.org/</a>.";
 $OpenBadgesIntroduction = "Ahora puede establecer reconocimiento de habilidades por aprender en cualquier curso de este campus virtual.";
 $DesignANewBadgeComment = "Diseña una nueva insignia, descárgala y súbela en la plataforma.";
@@ -6248,7 +6250,7 @@ $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "La configurac
 $UniqueAnswerNoOption = "Respuesta única con no-se";
 $MultipleAnswerTrueFalse = "Respuestas múltiples v/f/no-se";
 $MultipleAnswerCombinationTrueFalse = "Combinación v/f/no-se";
-$DontKnow = "No se";
+$DontKnow = "No sé";
 $ExamNotAvailableAtThisTime = "Examen no disponible en este momento";
 $LoginOrEmailAddress = "Nombre de usuario o dirección e-mail";
 $EnableMathJaxTitle = "Activar MathJax";
@@ -7681,5 +7683,7 @@ $RecordAudio = "Grabar audio";
 $StartRecordingAudio = "Lanzar la grabación";
 $StopRecordingAudio = "Finalizar la grabación";
 $SaveRecordedAudio = "Guardar el audio grabado";
-$GradeFromX = "Notas para el curso: %s";
+$GradeFromX = "Libreta de notas del curso: %s";
+$TitleMandatory = "Título obligatorio";
+$NoCourseCategorySupplied = "No se ha proporcionado una categoría de curso";
 ?>

@@ -16,6 +16,7 @@ class Import
 {
     /**
      * @param string $path
+     * @param bool $setFirstRowAsHeader
      * @return CsvReader
      */
     public static function csv_reader($path, $setFirstRowAsHeader = true)

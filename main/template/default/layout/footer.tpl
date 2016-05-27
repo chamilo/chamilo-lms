@@ -1,3 +1,10 @@
+{#  Plugins for pref footer section #}
+{% if plugin_pre_footer is not null %}
+    <div id="plugin_pre_footer">
+        {{ plugin_pre_footer }}
+    </div>
+{% endif %}
+
 <footer> <!-- start of #footer section -->
     <div class="container">
         <div class="row">

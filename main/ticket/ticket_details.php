@@ -6,15 +6,14 @@
  * @package chamilo.plugin.ticket
  */
 $cidReset = true;
-require_once __DIR__.'/../config.php';
-$plugin = TicketPlugin::create();
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
 $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
-$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
-$interbreadcrumb[] = array('url' => '#', 'name' => $plugin->get_lang('TicketDetail'));
+$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => get_lang('MyTickets'));
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('TicketDetail'));
 
 $disableReponseButtons = '';
 /*if ($isAdmin) {
@@ -44,25 +43,25 @@ $(document).ready(function() {
         });
 
         $(".responseyes").click(function () {
-            if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . $plugin->get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
+            if(!confirm("' . get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
                 return false;
             }
         });
 
         $("input#responseno").click(function () {
-            if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('No')) . '")){
+            if(!confirm("' . get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('No')) . '")){
                 return false;
             }
         });
 
         $("#unassign").click(function () {
-            if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToUnassignTheTicket') . '")) {
+            if (!confirm("' . get_lang('AreYouSureYouWantToUnassignTheTicket') . '")) {
                 return false;
             }
         });
 
         $("#close").click(function () {
-            if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToCloseTheTicket') . '")) {
+            if (!confirm("' . get_lang('AreYouSureYouWantToCloseTheTicket') . '")) {
                 return false;
             }
         });
@@ -73,7 +72,7 @@ function validate() {
     fckEditor1val = CKEDITOR.instances["content"].getData();
     document.getElementById("content").value= fckEditor1val;
     if(fckEditor1val == ""){
-        alert("' . $plugin->get_lang('YouMustWriteAMessage') . '");
+        alert("' . get_lang('YouMustWriteAMessage') . '");
         return false;
     }
 }
@@ -195,11 +194,11 @@ if (isset($_POST['response'])) {
         if ($response && $ticket['ticket']['status_id'] == TicketManager::STATUS_UNCONFIRMED) {
             TicketManager::close_ticket($_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = TicketManager::STATUS_CLOSE;
-            $ticket['ticket']['status'] = $plugin->get_lang('Closed');
+            $ticket['ticket']['status'] = get_lang('Closed');
         } else if (!is_null($response) && $ticket['ticket']['status_id'] == TicketManager::STATUS_UNCONFIRMED) {
             TicketManager::update_ticket_status(TicketManager::STATUS_PENDING, $_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = TicketManager::STATUS_PENDING;
-            $ticket['ticket']['status'] = $plugin->get_lang('StatusPending');
+            $ticket['ticket']['status'] = get_lang('StatusPending');
         }
     }
 }
@@ -227,13 +226,13 @@ if (isset($_REQUEST['action'])) {
     }
 }
 
-$title = 'Ticket #' . $ticket['ticket']['ticket_code'];
+$title = 'Ticket #' . $ticket['ticket']['code'];
 
 if (!isset($_POST['compose'])) {
     if (isset($_REQUEST['close'])) {
         TicketManager::close_ticket($_REQUEST['ticket_id'], $user_id);
         $ticket['ticket']['status_id'] = TicketManager::STATUS_CLOSE;
-        $ticket['ticket']['status'] = $plugin->get_lang('Closed');
+        $ticket['ticket']['status'] = get_lang('Closed');
     }
     /*$ticket['ticket']['request_user'] = intval($ticket['ticket']['request_user']);
     if ($ticket['ticket']['request_user'] == $user_id || intval($ticket['ticket']['assigned_last_user']) == $user_id) {
@@ -247,7 +246,7 @@ if (!isset($_POST['compose'])) {
         ) {
         if (intval($ticket['ticket']['assigned_last_user']) == $user_id) {
             if ($ticket['ticket']['status_id'] != TicketManager::STATUS_CLOSE) {
-                $form_close_ticket.= '<a href="' . api_get_self() . '?close=1&ticket_id=' . $ticket['ticket']['ticket_id'] . '" id="close" class="btn btn-danger" >';
+                $form_close_ticket.= '<a href="' . api_get_self() . '?close=1&ticket_id=' . $ticket['ticket']['id'] . '" id="close" class="btn btn-danger" >';
                 $form_close_ticket.= get_lang('Close') . '</a>';
             }
         }
@@ -293,7 +292,7 @@ if (!isset($_POST['compose'])) {
                         '#',
                         ['title' => $ticket['ticket']['start_date'], 'class' => 'boot-tooltip']
                     ).'. '.
-                    $plugin->get_lang('TicketUpdated').' '.
+                    get_lang('TicketUpdated').' '.
                     Display::url(
                         date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
                         '#',
@@ -309,17 +308,17 @@ if (!isset($_POST['compose'])) {
 	               <td><p ' . $bold . '><b>' . get_lang('Status') . ':</b> ' . $ticket['ticket']['status'] . '</p></td>
 	            </tr>
 	            <tr>
-	                <td><p><b>' . $plugin->get_lang('Priority') . ': </b>' . $ticket['ticket']['priority'] . '<p></td>
+	                <td><p><b>' . get_lang('Priority') . ': </b>' . $ticket['ticket']['priority'] . '<p></td>
 	            </tr>';
 
     if (!empty($ticket['ticket']['assigned_last_user'])) {
         $assignedUser = api_get_user_info($ticket['ticket']['assigned_last_user']);
         echo '<tr>
-                <td><p><b>' . $plugin->get_lang('AssignedTo') . ': </b>' . $assignedUser['complete_name'] . '<p></td>
+                <td><p><b>' . get_lang('AssignedTo') . ': </b>' . $assignedUser['complete_name'] . '<p></td>
             </tr>';
     } else {
         echo '<tr>
-                <td><p><b>' . $plugin->get_lang('AssignedTo') . ': </b>-<p></td>
+                <td><p><b>' . get_lang('AssignedTo') . ': </b>-<p></td>
             </tr>';
     }
     if ($ticket['ticket']['course_url'] != null) {
@@ -355,8 +354,8 @@ if (!isset($_POST['compose'])) {
            $admin['complete_name'] . "</option>";
     }
     $select_admins .= "</select>";
-    echo '<div id="dialog-form" title="' . $plugin->get_lang('AssignTicket') . '" >';
-    echo '<form id="frmResponsable" method="POST" action="ticket_details.php?ticket_id=' . $ticket['ticket']['ticket_id'] . '">
+    echo '<div id="dialog-form" title="' . get_lang('AssignTicket') . '" >';
+    echo '<form id="frmResponsable" method="POST" action="ticket_details.php?ticket_id=' . $ticket['ticket']['id'] . '">
 			<input type="hidden" name ="action" id="action" value="assign"/>
 			<div>
 				<div class="label">' . get_lang('Responsable') . ':</div>
@@ -394,7 +393,7 @@ if (!isset($_POST['compose'])) {
 
         $entireMessage = $receivedMessage . $attachmentLinks;
         $counterLink = Display::url('#'.$counter, api_get_self().'?ticket_id='.$ticket_id.'#note-'.$counter);
-        echo '<a id="note-'.$counter.'"> </a><h4>' . sprintf($plugin->get_lang('UpdatedByX'), $message['user_created']).' '.$date.
+        echo '<a id="note-'.$counter.'"> </a><h4>' . sprintf(get_lang('UpdatedByX'), $message['user_created']).' '.$date.
             ' <span class="pull-right">'.$counterLink.'</span></h4>';
         echo Display::div(
             $entireMessage, ['class' => 'well']
@@ -466,7 +465,7 @@ function show_form_send_message($ticket)
     $form = new FormValidator(
         'send_ticket',
         'POST',
-        api_get_self() . '?ticket_id=' . $ticket['ticket_id'],
+        api_get_self() . '?ticket_id=' . $ticket['id'],
         '',
         array(
             'enctype' => 'multipart/form-data',
@@ -476,16 +475,16 @@ function show_form_send_message($ticket)
     );
 
     if ($isAdmin) {
-        $statusList[TicketManager::STATUS_NEW] = $plugin->get_lang('StatusNew');
+        $statusList[TicketManager::STATUS_NEW] = get_lang('StatusNew');
         $statusAttributes = array(
             'id' => 'status_id',
             'for' => 'status_id',
             'style' => 'width: 562px;'
         );
-        $statusList[TicketManager::STATUS_PENDING] = $plugin->get_lang('StatusPending');
-        $statusList[TicketManager::STATUS_UNCONFIRMED] = $plugin->get_lang('StatusUnconfirmed');
-        $statusList[TicketManager::STATUS_CLOSE] = $plugin->get_lang('StatusClose');
-        $statusList[TicketManager::STATUS_FORWARDED] = $plugin->get_lang('StatusForwarded');
+        $statusList[TicketManager::STATUS_PENDING] = get_lang('StatusPending');
+        $statusList[TicketManager::STATUS_UNCONFIRMED] = get_lang('StatusUnconfirmed');
+        $statusList[TicketManager::STATUS_CLOSE] = get_lang('StatusClose');
+        $statusList[TicketManager::STATUS_FORWARDED] = get_lang('StatusForwarded');
 
         $form->addElement(
             'select',
@@ -496,14 +495,14 @@ function show_form_send_message($ticket)
         );
 
         $priorityList = array();
-        $priorityList[TicketManager::PRIORITY_NORMAL] = $plugin->get_lang('PriorityNormal');
-        $priorityList[TicketManager::PRIORITY_HIGH] = $plugin->get_lang('PriorityHigh');
-        $priorityList[TicketManager::PRIORITY_LOW] = $plugin->get_lang('PriorityLow');
+        $priorityList[TicketManager::PRIORITY_NORMAL] = get_lang('PriorityNormal');
+        $priorityList[TicketManager::PRIORITY_HIGH] = get_lang('PriorityHigh');
+        $priorityList[TicketManager::PRIORITY_LOW] = get_lang('PriorityLow');
 
         $form->addElement(
             'select',
             'priority_id',
-            $plugin->get_lang('Priority'),
+            get_lang('Priority'),
             $priorityList,
             array(
                 'id' => 'priority_id',
@@ -530,7 +529,7 @@ function show_form_send_message($ticket)
         )
     );
 
-    $form->addElement('hidden', 'ticket_id', $ticket['ticket_id']);
+    $form->addElement('hidden', 'ticket_id', $ticket['id']);
 
     $form->addHtmlEditor(
         'content',
@@ -549,7 +548,7 @@ function show_form_send_message($ticket)
             'checkbox',
             'confirmation',
              null,
-            $plugin->get_lang('RequestConfirmation')
+            get_lang('RequestConfirmation')
         );
     }
 

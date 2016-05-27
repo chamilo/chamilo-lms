@@ -6,13 +6,12 @@
  */
 
 $cidReset = true;
-require_once __DIR__.'/../config.php';
-$plugin = TicketPlugin::create();
+require_once __DIR__.'/../inc/global.inc.php';
 
-if (!api_is_platform_admin() &&
-    $plugin->get('allow_student_add') != 'true'
+if (!api_is_platform_admin()
+//    $plugin->get('allow_student_add') != 'true'
 ) {
-    header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php');
+    header('location:' . api_get_path(WEB_CODE_PATH).'ticket/myticket.php');
     exit;
 }
 
@@ -66,21 +65,21 @@ function validate() {
     var selected = document.getElementById("category_id").selectedIndex;
     var id = document.getElementById("category_id").options[selected].value;
     if (id == 0) {
-        alert("' . $plugin->get_lang("ValidType") . '");
+        alert("' . get_lang("ValidType") . '");
         return false;
     } else if(document.getElementById("subject").value == "") {
-        alert("' . $plugin->get_lang("ValidSubject") . '");
+        alert("' . get_lang("ValidSubject") . '");
         return false;
     } else if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0) {
-        alert("' . $plugin->get_lang("ValidCourse") . '");
+        alert("' . get_lang("ValidCourse") . '");
         return false;
     } else if(id != "CUR" && parseInt(course_required[id]) != 1  && !re.test(document.getElementById("personal_email").value)) {
         if (document.getElementById("personal_email").value != "") {
-            alert("' . $plugin->get_lang("ValidEmail") . '");
+            alert("' . get_lang("ValidEmail") . '");
             return false;
         }
     } else if(fckEditor1val == "") {
-        alert("' . $plugin->get_lang("ValidMessage") . '");
+        alert("' . get_lang("ValidMessage") . '");
         return false;
     }
 }
@@ -206,17 +205,17 @@ function show_form_send_ticket()
         'for' => 'status_id'
     );
 
-    $statusList[TicketManager::STATUS_NEW] = $plugin->get_lang('StatusNew');
+    $statusList[TicketManager::STATUS_NEW] = get_lang('StatusNew');
     if (api_is_platform_admin()) {
         $statusAttributes = array(
             'id' => 'status_id',
             'for' => 'status_id',
             'style' => 'width: 562px;'
         );
-        $statusList[TicketManager::STATUS_PENDING] = $plugin->get_lang('StatusPending');
-        $statusList[TicketManager::STATUS_UNCONFIRMED] = $plugin->get_lang('StatusUnconfirmed');
-        $statusList[TicketManager::STATUS_CLOSE] = $plugin->get_lang('StatusClose');
-        $statusList[TicketManager::STATUS_FORWARDED] = $plugin->get_lang('StatusForwarded');
+        $statusList[TicketManager::STATUS_PENDING] = get_lang('StatusPending');
+        $statusList[TicketManager::STATUS_UNCONFIRMED] = get_lang('StatusUnconfirmed');
+        $statusList[TicketManager::STATUS_CLOSE] = get_lang('StatusClose');
+        $statusList[TicketManager::STATUS_FORWARDED] = get_lang('StatusForwarded');
     }
     //End Status List
 
@@ -227,23 +226,23 @@ function show_form_send_ticket()
         'id' => 'source_id',
         'for' => 'source_id'
     );
-    $sourceList[TicketManager::SOURCE_PLATFORM] = $plugin->get_lang('SrcPlatform');
+    $sourceList[TicketManager::SOURCE_PLATFORM] = get_lang('SrcPlatform');
     if (api_is_platform_admin()) {
         $sourceAttributes = array(
             'id' => 'source_id',
             'for' => 'source_id',
             'style' => 'width: 562px;'
         );
-        $sourceList[TicketManager::SOURCE_EMAIL] = $plugin->get_lang('SrcEmail');
-        $sourceList[TicketManager::SOURCE_PHONE] = $plugin->get_lang('SrcPhone');
-        $sourceList[TicketManager::SOURCE_PRESENTIAL] = $plugin->get_lang('SrcPresential');
+        $sourceList[TicketManager::SOURCE_EMAIL] = get_lang('SrcEmail');
+        $sourceList[TicketManager::SOURCE_PHONE] = get_lang('SrcPhone');
+        $sourceList[TicketManager::SOURCE_PRESENTIAL] = get_lang('SrcPresential');
     }
 
     // Priority List
     $priorityList = array();
-    $priorityList[TicketManager::PRIORITY_NORMAL] = $plugin->get_lang('PriorityNormal');
-    $priorityList[TicketManager::PRIORITY_HIGH] = $plugin->get_lang('PriorityHigh');
-    $priorityList[TicketManager::PRIORITY_LOW] = $plugin->get_lang('PriorityLow');
+    $priorityList[TicketManager::PRIORITY_NORMAL] = get_lang('PriorityNormal');
+    $priorityList[TicketManager::PRIORITY_HIGH] = get_lang('PriorityHigh');
+    $priorityList[TicketManager::PRIORITY_LOW] = get_lang('PriorityLow');
 
     $form = new FormValidator(
         'send_ticket',
@@ -338,7 +337,7 @@ function show_form_send_ticket()
     $form->addElement(
         'text',
         'personal_email',
-        $plugin->get_lang('PersonalEmail'),
+        get_lang('PersonalEmail'),
         array(
             'id' => 'personal_email'
         )
@@ -364,7 +363,7 @@ function show_form_send_ticket()
     $form->addElement(
         'select',
         'priority_id',
-        $plugin->get_lang('Priority'),
+        get_lang('Priority'),
         $priorityList,
         array(
             'id' => 'priority_id',
@@ -375,7 +374,7 @@ function show_form_send_ticket()
     $form->addElement(
         'select',
         'source_id',
-        $plugin->get_lang('Source'),
+        get_lang('Source'),
         $sourceList,
         $sourceAttributes
     );
@@ -383,7 +382,7 @@ function show_form_send_ticket()
     $form->addElement(
         'text',
         'phone',
-        get_lang('Phone') . ' (' . $plugin->get_lang('Optional') . ')',
+        get_lang('Phone') . ' (' . get_lang('Optional') . ')',
         array(
             'id' => 'phone'
         )
@@ -455,13 +454,13 @@ function save_ticket()
         $user_id
     )) {
         Display::addFlash(
-            Display::return_message($plugin->get_lang('TckSuccessSave'), 'success')
+            Display::return_message(get_lang('TckSuccessSave'), 'success')
         );
-        header('Location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php');
+        header('Location:' . api_get_path(WEB_CODE_PATH).'/ticket/myticket.php');
         exit;
     } else {
         Display::display_header(get_lang('ComposeMessage'));
-        Display::display_error_message($plugin->get_lang('ErrorRegisterMessage'));
+        Display::display_error_message(get_lang('ErrorRegisterMessage'));
     }
 }
 
@@ -572,7 +571,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 }
 
 
-$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
+$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => get_lang('MyTickets'));
 
 if (!isset($_POST['compose'])) {
     if (api_is_platform_admin()) {

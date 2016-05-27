@@ -37,6 +37,8 @@ class Export
      * Export tabular data to CSV-file
      * @param array $data
      * @param string $filename
+     *
+     * @return mixed csv file | false if no data to export
      */
     public static function arrayToCsv($data, $filename = 'export')
     {

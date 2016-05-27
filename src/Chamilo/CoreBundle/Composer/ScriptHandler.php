@@ -57,6 +57,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/pchart/',
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',
             __DIR__.'/../../../../main/announcements/resources',
+            __DIR__.'/../../../../main/plugin/ticket',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelGroup.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelUser.php',

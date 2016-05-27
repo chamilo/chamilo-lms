@@ -4727,12 +4727,12 @@ div#chat-remote-video video {
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
     text-align: left;
     background-color: #fff;
-    min-height: 235px;
+    min-height: 250px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
 }
 .hot-courses .grid-courses .items{
-   min-height: 275px;
+   min-height: 300px;
 }
 .grid-courses .items .title{
     line-height: 1.4;

@@ -9,13 +9,13 @@
 $cidReset = true;
 // needed in order to load the plugin lang variables
 $course_plugin = 'ticket';
-require_once __DIR__.'/../config.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $plugin = TicketPlugin::create();
 
 api_protect_admin_script(true);
 
-$toolName = $plugin->get_lang('Categories');
+$toolName = get_lang('Categories');
 
 $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
@@ -37,7 +37,7 @@ if ($table->per_page == 0) {
 $formToString = '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
+$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => get_lang('MyTickets'));
 
 if (isset($_GET['action'])) {
     global $table;
@@ -51,7 +51,7 @@ if (isset($_GET['action'])) {
             break;
         case 'add':
             $toolName = get_lang('Add');
-            $interbreadcrumb[] = array('url' => 'categories.php', 'name' => $plugin->get_lang('Categories'));
+            $interbreadcrumb[] = array('url' => 'categories.php', 'name' => get_lang('Categories'));
             $url = api_get_self().'?action=add';
             $form = TicketManager::getCategoryForm($url);
             $formToString = $form->returnForm();
@@ -78,7 +78,7 @@ if (isset($_GET['action'])) {
             break;
         case 'edit':
             $toolName = get_lang('Edit');
-            $interbreadcrumb[] = array('url' => 'categories.php', 'name' => $plugin->get_lang('Categories'));
+            $interbreadcrumb[] = array('url' => 'categories.php', 'name' => get_lang('Categories'));
             $url = api_get_self().'?action=edit&id='.$id;
             $form = TicketManager::getCategoryForm($url);
 
@@ -136,9 +136,9 @@ function modify_filter($id, $params, $row)
 }
 
 $table->set_header(0, '', false);
-$table->set_header(1, $plugin->get_lang('Title'), false);
+$table->set_header(1, get_lang('Title'), false);
 $table->set_header(2, get_lang('Description'), true, array("style" => "width:200px"));
-$table->set_header(3, $plugin->get_lang('TotalTickets'), false);
+$table->set_header(3, get_lang('TotalTickets'), false);
 $table->set_header(4, get_lang('Actions'), true);
 $table->set_column_filter(4, 'modify_filter');
 

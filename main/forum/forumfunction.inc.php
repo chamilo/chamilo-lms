@@ -282,6 +282,25 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $form->addButtonAdvancedSettings('advanced_params');
     $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
+    $form->addDateTimePicker(
+        'start_time',
+        array(get_lang('ForumStartDate'), get_lang('ForumStartDateComment')),
+        array('id' => 'start_time')
+    );
+
+    $form->addDateTimePicker(
+        'end_time',
+        array(get_lang('ForumEndDate'), get_lang('ForumEndDateComment')),
+        array('id' => 'end_time')
+    );
+
+    $form->addRule(
+        array('start_time', 'end_time'),
+        get_lang('StartDateMustBeBeforeTheEndDate'),
+        'compare_datetime_text',
+        '< allow_empty'
+    );
+
     $group = array();
     $group[] = $form->createElement('radio', 'moderated', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'moderated', null, get_lang('No'), 0);
@@ -378,6 +397,8 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $defaults['forum_id'] = isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
         $defaults['forum_title'] = prepare4display(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : null);
         $defaults['forum_comment'] = prepare4display(isset($inputvalues['forum_comment']) ? $inputvalues['forum_comment'] : null);
+        $defaults['start_time'] = isset($inputvalues['start_time']) ? api_get_local_time($inputvalues['start_time']) : null;
+        $defaults['end_time'] = isset($inputvalues['end_time']) ? api_get_local_time($inputvalues['end_time']) : null;
         $defaults['moderated']['moderated'] = isset($inputvalues['moderated']) ? $inputvalues['moderated'] : 0;
         $defaults['forum_category'] = isset($inputvalues['forum_category']) ? $inputvalues['forum_category'] : null;
         $defaults['allow_anonymous_group']['allow_anonymous'] = isset($inputvalues['allow_anonymous']) ? $inputvalues['allow_anonymous'] : null;
@@ -697,6 +718,8 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
             'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
+            'start_time' => isset($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
+            'end_time' => isset($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
@@ -738,6 +761,8 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
             'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
+            'start_time' => isset($values['start_time']) ? $values['start_time'] : null,
+            'end_time' => isset($values['end_time']) ? $values['end_time'] : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0,

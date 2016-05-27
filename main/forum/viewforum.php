@@ -60,6 +60,15 @@ $isTutor = GroupManager::is_tutor_of_group($userId, $groupId, $courseId);
 $my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
 // Note: This has to be validated that it is an existing forum.
 $current_forum = get_forum_information($my_forum);
+$isForumOpenByDateAccess = apiIsDateInDateRange($current_forum['start_time'], $current_forum['end_time']);
+
+if (!$isForumOpenByDateAccess) {
+    if ($origin) {
+        api_not_allowed();
+    } else {
+        api_not_allowed(true);
+    }
+}
 
 if (empty($current_forum)) {
     api_not_allowed();

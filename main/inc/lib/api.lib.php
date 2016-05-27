@@ -7957,15 +7957,38 @@ function api_protect_course_group($tool, $showHeader = true)
 }
 
 /**
+ * Check if a date is in a date range
+ *
+ * @param datetime $startDate
+ * @param datetime $endDate
+ * @param datetime $currentDate
+ * @return bool true if date is in rage, false otherwise
+ */
+function apiIsDateInDateRange ($startDate, $endDate, $currentDate = null)
+{
+    $startDate = strtotime(api_get_local_time($startDate));
+    $endDate = strtotime(api_get_local_time($endDate));
+    $currentDate = strtotime(api_get_local_time($currentDate));
+
+    if (($currentDate >= $startDate) && ($currentDate <= $endDate)) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * Eliminate the duplicates of a multidimensional array by sending the key
+ *
  * @param array $array multidimensional array
  * @param int $key key to find to compare
+ * @return array
  *
  */
 function api_unique_multidim_array($array, $key){
-    $temp_array = array();
+    $temp_array = [];
     $i = 0;
-    $key_array = array();
+    $key_array = [];
 
     foreach($array as $val){
         if(!in_array($val[$key],$key_array)){

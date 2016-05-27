@@ -33,18 +33,20 @@ body {
   margin: 0;
   font-family: 'Open Sans', sans-serif;
 }
+ 
 a {
-  color: #00829C;
+  color: #07578A;
   text-decoration: none;
 }
 a:hover,
 a:focus {
-  color: #1abc9c;
+  color: #2E75A3;
   text-decoration: none;
 }
 a:focus {
   outline: none;
 }
+
 .navbar{
   border-radius: 0;
   -moz-border-radius: 0;

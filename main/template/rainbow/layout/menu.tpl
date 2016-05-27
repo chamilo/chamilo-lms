@@ -9,13 +9,13 @@
                 <span class="icon-bar"></span>
             </button>
         </div>
-
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
+                
                 {% if _u.logged == 1 %}
                     {% for items in menu %}
-                        {% if items.key != 'profile' and items.key != 'dashboard' %}
+                        {% if items.key != 'profile' and items.key != 'dashboard' and items.key != 'admin' and items.key != 'agenda' %}
                         {% set counter = counter + 1 %}
                             <li class="item-menu menu-{{ counter }} {{ items.key }} {{ items.current }}"><a href="{{ items.url }}">{{ items.title }}</a></li>
                         {% endif %}
@@ -24,7 +24,7 @@
                 {% if _u.logged == 0 %}
                     <li class="item-menu menu-1"><a href="{{ _p.web }}">{{ "CampusHomepage"|get_lang }}</a></li>
                 {% endif %}
-                    <li class="item-menu menu-2"><a href="{{ _p.web }}web/app_dev.php/faq">{{ "FAQ"|get_lang }}</a></li>
+                    <li class="item-menu menu-5"><a href="{{ _p.web }}web/app_dev.php/faq">{{ "FAQ"|get_lang }}</a></li>
                 {% if _u.logged == 0 %}
                     <li class="item-menu menu-3"><a href="{{ _p.web }}main/auth/inscription.php">{{ "Subscription"|get_lang }}</a></li>
                     <li class="item-menu menu-4"><a href="#">{{ "Demo"|get_lang }}</a></li>
@@ -39,9 +39,14 @@
                {% if _u.status != 6 %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                        {{ _u.complete_name }} <span class="caret"></span>
+                        <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}" />  <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
+                        {% if _u.is_admin == 1 %}
+                            <li class=""><a href="{{ _p.web }}main/admin">{{ "NomPageAdmin"|get_lang }}</a></li>
+                            {% endif %}
+                            <li class=""><a href="{{ _p.web }}main/calendar/agenda_js.php?type=personal">{{ "AllowPersonalAgendaTitle"|get_lang }}</a></li>
+                            <li role="separator" class="divider"></li>
                         <li>
                             {{ profile_link }}
                             {{ message_link }}

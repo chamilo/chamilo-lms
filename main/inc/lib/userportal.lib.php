@@ -1110,6 +1110,7 @@ class IndexManager
         }
 
         if (is_array($session_categories)) {
+            $allSessions = [];
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
 
@@ -1248,19 +1249,7 @@ class IndexManager
                                 $params['points'] = GamificationUtils::getSessionPoints($params['id'], $this->user_id);
                             }
                             $listSession[] = $params;
-                            $this->tpl->assign('session', $listSession);
-                            $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
-                            $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
 
-                            if (api_get_configuration_value('view_grid_courses')){
-                                $sessions_with_no_category = $this->tpl->fetch(
-                                    $this->tpl->get_template('/user_portal/grid_session.tpl')
-                                );
-                            } else {
-                                $sessions_with_no_category = $this->tpl->fetch(
-                                    $this->tpl->get_template('/user_portal/classic_session.tpl')
-                                );
-                            }
                             $sessionCount++;
                         }
                     }
@@ -1410,6 +1399,32 @@ class IndexManager
                         );
                     }
                 }
+            }
+
+            $allCoursesInSessions = [];
+
+            foreach ($listSession as $currentSession) {
+                $coursesInSessions = $currentSession['courses'];
+                unset($currentSession['courses']);
+                foreach ($coursesInSessions as $coursesInSession) {
+                    $coursesInSession['session'] = $currentSession;
+                    $allCoursesInSessions[] = $coursesInSession;
+                }
+            }
+
+            $this->tpl->assign('all_courses', $allCoursesInSessions);
+            $this->tpl->assign('session', $listSession);
+            $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
+            $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
+
+            if (api_get_configuration_value('view_grid_courses')){
+                $sessions_with_no_category = $this->tpl->fetch(
+                    $this->tpl->get_template('/user_portal/grid_session.tpl')
+                );
+            } else {
+                $sessions_with_no_category = $this->tpl->fetch(
+                    $this->tpl->get_template('/user_portal/classic_session.tpl')
+                );
             }
         }
 

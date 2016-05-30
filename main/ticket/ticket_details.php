@@ -12,15 +12,13 @@ api_block_anonymous_users();
 
 $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
-$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => get_lang('MyTickets'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/myticket.php',
+    'name' => get_lang('MyTickets')
+);
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('TicketDetail'));
 
 $disableReponseButtons = '';
-/*if ($isAdmin) {
-    $disableReponseButtons = "$('#responseyes').attr('disabled', 'disabled');
-                              $('#responseno').attr('disabled', 'disabled');";
-}*/
-
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
 	$("#dialog-form").dialog({
@@ -185,7 +183,7 @@ if (!isset($ticket['ticket'])) {
     api_not_allowed();
 }
 if (!isset($_GET['ticket_id'])) {
-    header('location:myticket.php');
+    header('Location: '.api_get_path(WEB_CODE_PATH).'ticket/myticket.php');
     exit;
 }
 if (isset($_POST['response'])) {

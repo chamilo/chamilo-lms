@@ -13,7 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
 
-$toolName = get_lang('Categories');
+$toolName = get_lang('Project');
 
 $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
@@ -22,9 +22,9 @@ $this_section = 'tickets';
 unset($_SESSION['this_section']);
 
 $table = new SortableTable(
-    'TicketCategories',
-    array('TicketManager', 'getCategoriesCount'),
-    array('TicketManager', 'getCategories'),
+    'TicketProject',
+    array('TicketManager', 'getProjectsCount'),
+    array('TicketManager', 'getProjects'),
     1
 );
 
@@ -45,7 +45,7 @@ if (isset($_GET['action'])) {
     $action = $_GET['action'];
     switch ($action) {
         case 'delete':
-            TicketManager::deleteCategory($id);
+            TicketManager::deleteProject($id);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             header("Location: ".api_get_self());
             break;
@@ -56,7 +56,7 @@ if (isset($_GET['action'])) {
                 'name' => get_lang('Categories')
             );
             $url = api_get_self().'?action=add';
-            $form = TicketManager::getCategoryForm($url);
+            $form = TicketManager::getProjectForm($url);
             $formToString = $form->returnForm();
             if ($form->validate()) {
                 $values =$form->getSubmitValues();
@@ -69,7 +69,7 @@ if (isset($_GET['action'])) {
                     'sys_insert_datetime' => api_get_utc_datetime(),
                     'course_required' => ''
                 ];
-                TicketManager::addCategory($params);
+                TicketManager::addProject($params);
 
                 Display::addFlash(Display::return_message(get_lang('Added')));
 
@@ -84,9 +84,9 @@ if (isset($_GET['action'])) {
                 'name' => get_lang('Categories')
             );
             $url = api_get_self().'?action=edit&id='.$id;
-            $form = TicketManager::getCategoryForm($url);
+            $form = TicketManager::getProjectForm($url);
 
-            $cat = TicketManager::getCategory($_GET['id']);
+            $cat = TicketManager::getProject($_GET['id']);
             $form->setDefaults($cat);
             $formToString = $form->returnForm();
             if ($form->validate()) {
@@ -98,7 +98,7 @@ if (isset($_GET['action'])) {
                     'sys_lastedit_datetime' => api_get_utc_datetime(),
                     'sys_lastedit_user_id' => api_get_user_id()
                 ];
-                $cat = TicketManager::updateCategory($_GET['id'], $params);
+                $cat = TicketManager::updateProject($_GET['id'], $params);
                 Display::addFlash(Display::return_message(get_lang('Updated')));
                 header("Location: ".api_get_self());
                 exit;
@@ -123,17 +123,12 @@ function modify_filter($id, $params, $row)
 {
     $result = Display::url(
         Display::return_icon('edit.png', get_lang('Edit')),
-        "categories.php?action=edit&id={$row['id']}"
-    );
-
-    $result .= Display::url(
-        Display::return_icon('user.png', get_lang('AssignUser')),
-        "categories_add_user.php?id={$row['id']}"
+        "projects.php?action=edit&id={$row['id']}"
     );
 
     $result .= Display::url(
         Display::return_icon('delete.png', get_lang('Delete')),
-        "categories.php?action=delete&id={$row['id']}"
+        "projects.php?action=delete&id={$row['id']}"
     );
 
 	return $result;
@@ -142,15 +137,14 @@ function modify_filter($id, $params, $row)
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Title'), false);
 $table->set_header(2, get_lang('Description'), true, array("style" => "width:200px"));
-$table->set_header(3, get_lang('TotalTickets'), false);
-$table->set_header(4, get_lang('Actions'), true);
-$table->set_column_filter(4, 'modify_filter');
+$table->set_header(3, get_lang('Actions'), true);
+$table->set_column_filter(3, 'modify_filter');
 
 Display::display_header($toolName);
 
 $items = [
     [
-        'url' => 'categories.php?action=add',
+        'url' => 'projects.php?action=add',
         'content' => Display::return_icon('new_folder.png', null, null, ICON_SIZE_MEDIUM)
     ]
 ];

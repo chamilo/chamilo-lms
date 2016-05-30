@@ -220,12 +220,12 @@ if ($isAdmin) {
                 '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' .
                     Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_MEDIUM) . '</a>';
 
-        /*if ($plugin->get('allow_category_edition')) {
+        if (api_get_setting('ticket_allow_category_edition')) {
             echo Display::url(
                 Display::return_icon('folder_document.gif'),
                 api_get_path(WEB_CODE_PATH) . 'ticket/categories.php'
             );
-        }*/
+        }
 
         echo Display::url(
             Display::return_icon('settings.png'),
@@ -258,7 +258,7 @@ if ($isAdmin) {
     $advancedSearchForm->addButtonSearch(get_lang('AdvancedSearch'), 'submit_advanced');
     $advancedSearchForm->display();
 } else {
-    if ($plugin->get('allow_student_add') == 'true') {
+    if (api_get_setting('ticket_allow_student_add') == 'true') {
         echo '<div class="actions" >';
         echo '<span style="float:right;">' .
                 '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php">' .

@@ -1875,4 +1875,19 @@ class TicketManager
 
         return $form;
     }
+
+    public static function getProjects()
+    {
+        $em = Database::getManager()->getRepository('ChamiloTicketBundle')->findAll();
+
+        return $em;
+    }
+
+
+    public static function getProjectsCount()
+    {
+        $em = Database::getManager()->getRepository('ChamiloTicketBundle')->findAll();
+
+        return $em;
+    }
 }

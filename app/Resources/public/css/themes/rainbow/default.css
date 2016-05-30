@@ -161,6 +161,13 @@ a:focus {
     padding-top: 5px;
     padding-bottom: 10px;
 }
+.grid-courses .session .session-name{
+    color: #E53140;
+}
+.grid-courses .items.session{
+    min-height: 230px;
+    border: 3px solid #19BF69;
+}
 .section-title{
     font-size: 32px;
     color: #E53140;

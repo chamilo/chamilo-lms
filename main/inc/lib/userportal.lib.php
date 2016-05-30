@@ -1109,8 +1109,10 @@ class IndexManager
             $coursesListSessionStyle = 1;
         }
 
+        // Declared listSession variable
+        $listSession = [];
+
         if (is_array($session_categories)) {
-            $allSessions = [];
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
 

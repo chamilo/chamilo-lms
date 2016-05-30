@@ -127,7 +127,7 @@ if ($form->validate()) {
             foreach ($drhList as $drhId) {
                 $subject = sprint_f(get_lang('UserXHasFilledTheDiagnosis'), $userInfo['complete_name']);
                 $content = sprint_f(get_lang('UserXHasFilledTheDiagnosisDescription'), $userInfo['complete_name']);
-                MessageManager::send_message_simple($drhId, $subject, $content)
+                MessageManager::send_message_simple($drhId, $subject, $content);
             }
         }
 

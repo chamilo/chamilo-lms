@@ -5051,7 +5051,7 @@ EOF;
     }
 
     /**
-     * Get the boss user ID from a followed user id
+     * Get the boss user list from a followed user id
      * @param $userId
      * @return bool
      */

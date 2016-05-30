@@ -107,7 +107,14 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
     $message_id = isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;
     $param_f = isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
 
-    $form = new FormValidator('compose_message', null, api_get_self().'?f='.$param_f, null, array('enctype'=>'multipart/form-data'));
+    $form = new FormValidator(
+        'compose_message',
+        null,
+        api_get_self().'?f='.$param_f,
+        null,
+        array('enctype' => 'multipart/form-data')
+    );
+
     if (empty($group_id)) {
         if (isset($select_from_user_list)) {
             $form->addText(
@@ -200,6 +207,16 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
         $message_info = MessageManager::get_message_by_id($message_id);
         $default['title'] = get_lang('MailSubjectReplyShort')." ".$message_info['title'];
     }
+
+    if (isset($_GET['prefill'])) {
+        switch ($_GET['prefill']) {
+            case 'ofaj':
+                $default['title'] = get_lang('OfajEndLPSubject');
+                $default['content'] = get_lang('OfajEndLpDescription');
+                break;
+        }
+    }
+
     $form->setDefaults($default);
     $html = '';
     if ($form->validate()) {
@@ -305,7 +322,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 
 // MAIN CONTENT
 if (!isset($_POST['compose'])) {
-    if(isset($_GET['re_id'])) {
+    if (isset($_GET['re_id'])) {
         $social_right_content .= show_compose_reply_to_message(
             $_GET['re_id'],
             api_get_user_id()

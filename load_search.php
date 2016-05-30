@@ -325,13 +325,14 @@ foreach ($headers as $header => $value) {
 $button = '';
 if ($userToLoad) {
     $button = Display::url(
-        get_lang('EndOfLearnPath'),
-        api_get_path(WEB_CODE_PATH).'messages/new_message.php?prefill=ofaj&user_id='.$userToLoad,
+        get_lang('OfajEndOfLearnPath'),
+        api_get_path(WEB_CODE_PATH).'messages/new_message.php?prefill=ofaj&send_to_user='.$userToLoad,
         ['class' => 'btn btn-default']
     );
+    $button .= '<br /><br />';
 }
 
-$tpl->assign('grid', $grid.$table->toHtml().$button);
+$tpl->assign('grid', $grid.$button.$table->toHtml());
 $tpl->assign('grid_js', $griJs);
 
 $content = $tpl->fetch('default/user_portal/search_extra_field.tpl');

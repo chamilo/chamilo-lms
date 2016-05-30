@@ -264,6 +264,8 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_allow_category_edition', 'true', 'Yes'), ('ticket_allow_category_edition', 'false', 'No')");
 
             $this->addSql("ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_qqrc_qid (question_id)");
+            $this->addSql("ALTER TABLE c_quiz_answer ADD INDEX idx_cqa_q (question_id)");
+            $this->addSql("ALTER TABLE c_student_publication ADD INDEX idx_csp_u (user_id)");
         }
     }
 

@@ -161,6 +161,13 @@ a:focus {
     padding-top: 5px;
     padding-bottom: 10px;
 }
+.grid-courses .session .session-name{
+    color: #E53140;
+}
+.grid-courses .items.session{
+    min-height: 230px;
+    border: 3px solid #19BF69;
+}
 .section-title{
     font-size: 32px;
     color: #E53140;
@@ -389,7 +396,8 @@ footer a:hover{
   border-color: #00677C;
 }
 .navbar-default .navbar-toggle{
-  border-color: #00677C;
+  border: none;
+  background-color: #000080;
 }
 .navbar-default .navbar-toggle .icon-bar{
   background-color: #ffffff;
@@ -402,7 +410,7 @@ footer a:hover{
 }
 @media (max-width: 480px) {
     .item-menu{
-    width: 100%;
-    text-align: center;
+        width: 100%;
+        text-align: center;
     }
 }

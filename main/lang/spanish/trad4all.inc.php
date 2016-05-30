@@ -7686,4 +7686,9 @@ $SaveRecordedAudio = "Guardar el audio grabado";
 $GradeFromX = "Libreta de notas del curso: %s";
 $TitleMandatory = "Título obligatorio";
 $NoCourseCategorySupplied = "No se ha proporcionado una categoría de curso";
+$ForumStartDate = "Fecha de publicación";
+$ForumEndDate = "Fecha de cierre";
+$ForumStartDateComment = "El foro será visible a partir de esta fecha";
+$ForumEndDateComment = "Pasada esta fecha, el foro será automáticamente cerrado";
+$ModeratedForum = "Foro moderado";
 ?>

@@ -49,7 +49,13 @@ if ($form->validate()) {
     exit;
 }
 
-$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => get_lang('MyTickets'));
-$interbreadcrumb[] = array('url' => 'categories.php', 'name' => get_lang('Categories'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/myticket.php',
+    'name' => get_lang('MyTickets')
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
+    'name' => get_lang('Categories')
+);
 Display::display_header(get_lang('Users'));
 $form->display();

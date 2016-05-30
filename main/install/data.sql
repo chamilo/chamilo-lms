@@ -308,7 +308,9 @@ VALUES
 ('cron_remind_course_expiration_frequency', NULL, 'textfield', 'Crons', '2', 'CronRemindCourseExpirationFrequencyTitle', 'CronRemindCourseExpirationFrequencyComment', NULL, NULL, 1),
 ('cron_remind_course_expiration_activate', NULL, 'radio', 'Crons', 'false', 'CronRemindCourseExpirationActivateTitle', 'CronRemindCourseExpirationActivateComment', NULL, NULL, 1),
 ('allow_coach_feedback_exercises',NULL,'radio','Session','true','AllowCoachFeedbackExercisesTitle','AllowCoachFeedbackExercisesComment',NULL,NULL, 0),
-('allow_my_files',NULL,'radio','Platform','true','AllowMyFilesTitle','AllowMyFilesComment','',NULL, 1);
+('allow_my_files',NULL,'radio','Platform','true','AllowMyFilesTitle','AllowMyFilesComment','',NULL, 1),
+('ticket_allow_student_add', NULL, 'radio','Ticket', 'false','TicketAllowStudentAddTitle','TicketAllowStudentAddComment',NULL,NULL, 0),
+('ticket_allow_category_edition', NULL, 'radio','Ticket', 'false','TicketAllowCategoryEditionTitle','TicketAllowCategoryEditionComment',NULL,NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -628,7 +630,11 @@ VALUES
 ('allow_coach_feedback_exercises','true','Yes'),
 ('allow_coach_feedback_exercises','false','No'),
 ('allow_my_files','true','Yes'),
-('allow_my_files','false','No');
+('allow_my_files','false','No')
+('ticket_allow_student_add','true','Yes'),
+('ticket_allow_student_add','false','No'),
+('ticket_allow_category_edition','true','Yes'),
+('ticket_allow_category_edition','false','No');
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),

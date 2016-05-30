@@ -3938,8 +3938,9 @@ class CourseManager
 
         // Display course entry.
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
-        $session_url = '';
-        $session_title = '';
+        $session_url = null;
+        $session_title = null;
+        $visualCode = null;
 
         $params = array();
         $params['icon'] = Display::return_icon(
@@ -3956,7 +3957,9 @@ class CourseManager
         if ($course_visibility != COURSE_VISIBILITY_CLOSED && $course_visibility != COURSE_VISIBILITY_HIDDEN) {
             $notifications .= Display:: show_notification($course_info);
         }
-
+        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+            $visualCode = ' (' . $course_info['visual_code'] . ') ';
+        }
         if ($session_accessible) {
             if ($course_visibility != COURSE_VISIBILITY_CLOSED ||
                 $user_in_course_status == COURSEMANAGER
@@ -3975,7 +3978,7 @@ class CourseManager
 
                 if ($user_in_course_status == COURSEMANAGER || $sessionCourseAvailable) {
                     $session_url = $course_info['course_public_url'] . '?id_session=' . $course_info['id_session'];
-                    $session_title = '<a href="' . $session_url. '">'. $course_info['name'] . '</a>'.$notifications;
+                    $session_title = '<a href="' . $session_url. '">'. $course_info['name'] . $visualCode . '</a>';
                 } else {
                     $session_title = $course_info['name'];
                 }
@@ -3999,10 +4002,10 @@ class CourseManager
         }else{
             $image = Display::return_icon('session_default.png', null, null, null,null, true);
         }
+        $params['notifications'] = $notifications;
         $params['thumbnails'] = $thumbnails;
         $params['image'] = $image;
         $params['link'] = $session_url;
-        $params['title'] = $session_title;
         $params['edit_actions'] = '';
         $params['document'] = '';
         
@@ -4020,10 +4023,6 @@ class CourseManager
                 ));
             }
         }
-        }
-
-        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-            $session_title .= ' (' . $course_info['visual_code'] . ') ';
         }
 
         if (api_get_setting('display_teacher_in_courselist') === 'true') {

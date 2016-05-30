@@ -4728,7 +4728,7 @@ div#chat-remote-video video {
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
     text-align: left;
     background-color: #fff;
-    min-height: 250px;
+    min-height: 300px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
 }
@@ -4754,6 +4754,12 @@ div#chat-remote-video video {
     color: #fff;
     font-size: 12px;
     padding: 5px 10px;
+}
+.grid-courses .session .session-name{
+    font-size: 12px;
+    padding-left: 10px;
+    color: #00b294;
+    font-weight: bold;
 }
 .grid-courses .items .image{
     position: relative;

@@ -486,24 +486,32 @@ if (is_array($forumCategories)) {
                             null,
                             ICON_SIZE_MEDIUM
                         );
+
                         $linkForum = Display::tag(
                             'a',
                             $forum['forum_title'],
-                            array (
+                            [
                                 'href' => 'viewforum.php?' . api_get_cidreq()
                                     . '&gidReq=' . intval($groupid)
                                     . '&forum=' . intval($forum['forum_id']),
                                 'class' => return_visible_invisible(strval(intval($forum['visibility'])))
-                            )
+                            ]
                         );
+
+                        if (!empty($forum['start_time']) && !empty($forum['end_time'])) {
+                            $res = apiIsDateInDateRange($forum['start_time'], $forum['end_time']);
+                            if (!$res) {
+                                $linkForum = $forum['forum_title'];
+                            }
+                        }
 
                         $html .= '<h3 class="title">' . $iconForum . $linkForum . '</h3>';
                         $html .= Display::tag(
                             'p',
                             Security::remove_XSS($forum['forum_comment']),
-                            array(
+                            [
                                 'class'=>'description'
-                            )
+                            ]
                         );
                         $html .= '</div>';
                         $html .= '</div>';

@@ -351,10 +351,13 @@ alter table c_quiz_rel_question ADD INDEX idx_cqrq_qid (question_id);
 alter table c_quiz_rel_question ADD INDEX idx_cqrq_cid (c_id);
 alter table c_quiz_answer add index idx_qa_cidqid (c_id, question_id);
 </pre>
+In Chamilo 1.10.6, an additional query was confirmed to still have effect a considerable effect:
+<pre>
+alter table c_quiz_question_rel_category add index idx_qqrc_qid (question_id);
+</pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>
 One good reference: <a href="http://dev.mysql.com/doc/refman/5.1/en/multiple-key-caches.html">MySQL documentation on multiple key caches</a><br />
-
 <hr />
 
 <h2><a name="4.Sessions-directories"></a>4. Sessions directories</h2>

@@ -389,7 +389,8 @@ footer a:hover{
   border-color: #00677C;
 }
 .navbar-default .navbar-toggle{
-  border-color: #00677C;
+  border: none;
+  background-color: #000080;
 }
 .navbar-default .navbar-toggle .icon-bar{
   background-color: #ffffff;
@@ -402,7 +403,7 @@ footer a:hover{
 }
 @media (max-width: 480px) {
     .item-menu{
-    width: 100%;
-    text-align: center;
+        width: 100%;
+        text-align: center;
     }
 }

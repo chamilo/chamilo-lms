@@ -70,6 +70,28 @@ var showTemplates = function (ckeditorName) {
     });
 };
 {% endif %}
+var id;
+$(window).resize(function() {
+    clearTimeout(id);
+    id = setTimeout(doneResizing, 200);
+});
+
+function doneResizing(){
+  var widhtWindow = $(window).width();
+  if ((widhtWindow>=1024) && (widhtWindow>=768)) {
+        $("#profileCollapse").addClass("in");
+        $("#courseCollapse").addClass("in");
+        $("#skillsCollapse").addClass("in");
+        $("#sn-sidebar-collapse").addClass("in");
+        $("#user_image_block").removeClass("invisible");
+    } else {
+        $("#profileCollapse").removeClass("in");
+        $("#courseCollapse").removeClass("in");
+        $("#skillsCollapse").removeClass("in");
+        $("#sn-avatar-one").removeClass("in");
+        $("#user_image_block").addClass("invisible");
+    }
+};
 $(document).ready(function(){
     $("#open-view-list").click(function(){
         $("#student-list-work").fadeIn(300);

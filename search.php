@@ -53,6 +53,9 @@ $filterToSend = '';
 
 if ($form->validate()) {
     $params = $form->getSubmitValues();
+    /** @var \Chamilo\UserBundle\Entity\User $user */
+    $user = $em->getRepository('ChamiloUserBundle:User')->find($userId);
+
     if (isset($params['save'])) {
         // save
         foreach ($params as $key => $value) {
@@ -83,7 +86,6 @@ if ($form->validate()) {
                 continue;
             }
 
-            $user = $em->getRepository('ChamiloUserBundle:User')->find($userId);
             $extraFieldObj = $em->getRepository('ChamiloCoreBundle:ExtraField')->find($extraFieldInfo['id']);
 
             $search = [
@@ -112,6 +114,21 @@ if ($form->validate()) {
                 $em->persist($saved);
             }
             $em->flush();
+        }
+
+        MessageManager::send_message_simple(
+            $userId,
+            get_lang('DiagnosisFilledSubject'),
+            get_lang('DiagnosisFilledDescription')
+        );
+
+        $drhList = UserManager::getDrhListFromUser($userId);
+        if ($drhList) {
+            foreach ($drhList as $drhId) {
+                $subject = sprint_f(get_lang('UserXHasFilledTheDiagnosis'), $userInfo['complete_name']);
+                $content = sprint_f(get_lang('UserXHasFilledTheDiagnosisDescription'), $userInfo['complete_name']);
+                MessageManager::send_message_simple($drhId, $subject, $content)
+            }
         }
 
         Display::addFlash(Display::return_message(get_lang('Saved')));

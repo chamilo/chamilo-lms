@@ -256,6 +256,13 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_EDE2C76812469DE2 ON ticket_ticket (category_id);');
 
             $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26537A1329 FOREIGN KEY (message_id) REFERENCES ticket_message (id);');
+            $this->addSql('DELETE FROM settings_current WHERE title = "Ticket"');
+
+            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('ticket_allow_student_add', NULL, 'radio','Ticket', 'false','TicketAllowStudentAddTitle','TicketAllowStudentAddComment',NULL,NULL, 0)");
+            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('ticket_allow_category_edition', NULL, 'radio','Ticket', 'false','TicketAllowCategoryEditionTitle','TicketAllowCategoryEditionComment',NULL,NULL, 0)");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_allow_student_add', 'true', 'Yes'), ('ticket_allow_student_add', 'false', 'No')");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_allow_category_edition', 'true', 'Yes'), ('ticket_allow_category_edition', 'false', 'No')");
+
         }
     }
 

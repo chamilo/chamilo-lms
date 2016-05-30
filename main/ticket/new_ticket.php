@@ -8,8 +8,7 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (!api_is_platform_admin()
-//    $plugin->get('allow_student_add') != 'true'
+if (!api_is_platform_admin() || api_get_setting('ticket_allow_student_add') != 'true'
 ) {
     header('location:' . api_get_path(WEB_CODE_PATH).'ticket/myticket.php');
     exit;
@@ -570,8 +569,10 @@ function get_user_data($from, $number_of_items, $column, $direction)
     return $users;
 }
 
-
-$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => get_lang('MyTickets'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/myticket.php', 
+    'name' => get_lang('MyTickets')
+);
 
 if (!isset($_POST['compose'])) {
     if (api_is_platform_admin()) {

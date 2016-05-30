@@ -779,8 +779,8 @@ class Template
         global $httpHeadXtra, $interbreadcrumb, $language_file, $_configuration, $this_section;
         $_course = api_get_course_info();
         $help = $this->help;
-        $nameTools             = $this->title;
-        $navigation            = return_navigation_array();
+        $nameTools = $this->title;
+        $navigation = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
 
         $this->assign('system_charset', api_get_system_encoding());

@@ -37,7 +37,10 @@ if ($table->per_page == 0) {
 $formToString = '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => get_lang('MyTickets'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/myticket.php',
+    'name' => get_lang('MyTickets')
+);
 
 if (isset($_GET['action'])) {
     global $table;
@@ -45,13 +48,15 @@ if (isset($_GET['action'])) {
     switch ($action) {
         case 'delete':
             TicketManager::deleteCategory($id);
-
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             header("Location: ".api_get_self());
             break;
         case 'add':
             $toolName = get_lang('Add');
-            $interbreadcrumb[] = array('url' => 'categories.php', 'name' => get_lang('Categories'));
+            $interbreadcrumb[] = array(
+                'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
+                'name' => get_lang('Categories')
+            );
             $url = api_get_self().'?action=add';
             $form = TicketManager::getCategoryForm($url);
             $formToString = $form->returnForm();
@@ -78,7 +83,10 @@ if (isset($_GET['action'])) {
             break;
         case 'edit':
             $toolName = get_lang('Edit');
-            $interbreadcrumb[] = array('url' => 'categories.php', 'name' => get_lang('Categories'));
+            $interbreadcrumb[] = array(
+                'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
+                'name' => get_lang('Categories')
+            );
             $url = api_get_self().'?action=edit&id='.$id;
             $form = TicketManager::getCategoryForm($url);
 

@@ -1059,7 +1059,7 @@ class TicketManager
                 $dif = $now - $last_edit_date;
 
                 if ($dif > 172800 && $row['priority_id'] === self::PRIORITY_NORMAL && $row['status_id'] != self::STATUS_CLOSE) {
-                    $actions .= '<a href="myticket.php?ticket_id=' . $row['ticket_id'] . '&amp;action=alert">
+                    $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'ticket/myticket.php?ticket_id=' . $row['ticket_id'] . '&amp;action=alert">
                                  <img src="' . Display::returnIconPath('exclamation.png') . '" border="0" /></a>';
                 }
                 if ($row['priority_id'] === self::PRIORITY_HIGH) {

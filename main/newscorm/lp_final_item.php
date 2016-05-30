@@ -143,32 +143,32 @@ function generateLPFinalItemTemplate($lpItemId, $courseCode, $sessionId=0, $down
  */
 function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId=0)
 {
+    $em = Database::getManager();
     $skillRelUser = new SkillRelUser();
     $userSkills = $skillRelUser->get_user_skills($userId, $courseId, $sessionId);
     $skillList = '';
     $badgeLink = '';
 
     if ($userSkills) {
-        $skill = new Skill();
         foreach ($userSkills as $userSkill) {
-            $oneSkill = $skill->get($userSkill['skill_id']);
+            $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill['skill_id']);
             $skillList .= "
                                     <div class='row'>
-                                        <div class='col-md-2 col-xs-6'>
+                                        <div class='col-md-2 col-xs-4'>
                                             <div class='thumbnail'>
-                                              <img class='skill-badge-img' src='" . $oneSkill['web_icon_path'] . "' >
+                                              <img class='skill-badge-img' src='" . $skill->getWebIconPath() . "' >
                                             </div>
                                         </div>
-                                        <div class='col-md-8 col-xs-6'>
-                                            <h5><b>" . $oneSkill['name'] . "</b></h5>
-                                            " . $oneSkill['description'] . "
+                                        <div class='col-md-8 col-xs-8'>
+                                            <h5><b>" . $skill->getName() . "</b></h5>
+                                            " . $skill->getDescription() . "
                                         </div>
                                         <div class='col-md-2 col-xs-12'>
                                             <h5><b>" . get_lang('ShareWithYourFriends') . "</b></h5>
-                                            <a href='http://www.facebook.com/sharer.php?u=" . api_get_path(WEB_PATH) . "badge/" . $oneSkill['id'] . "/user/" . $userId . "' target='_new'>
+                                            <a href='http://www.facebook.com/sharer.php?u=" . api_get_path(WEB_PATH) . "badge/" . $skill->getId() . "/user/" . $userId . "' target='_new'>
                                                 <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                                             </a>
-                                            <a href='https://twitter.com/home?status=" . api_get_path(WEB_PATH) . "badge/" . $oneSkill['id'] . "/user/" . $userId . "' target='_new'>
+                                            <a href='https://twitter.com/home?status=" . sprintf(get_lang('IHaveObtainedSkillXOnY'), '"' . $skill->getName() . '"', api_get_setting('siteName')) . ' - '. api_get_path(WEB_PATH) . 'badge/' . $skill->getId() . '/user/' . $userId . "' target='_new'>
                                                 <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                                             </a>
                                         </div>

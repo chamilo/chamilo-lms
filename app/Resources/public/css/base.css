@@ -4728,9 +4728,12 @@ div#chat-remote-video video {
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
     text-align: left;
     background-color: #fff;
-    min-height: 250px;
+    min-height: 260px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
+}
+.courses-grid-catalog{
+    min-height: 340px !important;
 }
 .hot-courses .grid-courses .items{
    min-height: 300px;
@@ -4741,6 +4744,7 @@ div#chat-remote-video video {
     margin: 5px;
     font-size: 14px;
     font-weight: bold;
+    min-height: 50px;
 }
 .grid-courses .items .toolbar{
     text-align: right;

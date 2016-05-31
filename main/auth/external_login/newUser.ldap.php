@@ -44,23 +44,29 @@ require_once dirname(__FILE__) . '/functions.inc.php';
 
 $ldap_user = extldap_authenticate($login, $password);
 if ($ldap_user !== false) {
+    $em = Database::getManager();
     $chamilo_user = extldap_get_chamilo_user($ldap_user);
     //username is not on the ldap, we have to use $login variable
     $chamilo_user['username'] = $login;
     $chamilo_uid = external_add_user($chamilo_user);
-    if ($chamilo_uid !== false) {
+
+    $chamiloUser = $em->find('ChamiloUserBundle:User', $chamilo_uid);
+
+    if ($chamiloUser) {
         $loginFailed = false;
-        $_user['user_id'] = $chamilo_uid;
-        $_user['status'] = (isset($chamilo_user['status']) ? $chamilo_user['status'] : 5);
+        $_user['user_id'] = $chamiloUser->getId();
+        $_user['status'] = $chamiloUser->getStatus();
         $_user['uidReset'] = true;
         Session::write('_user', $_user);
         $uidReset = true;
         // Is user admin?
         if ($chamilo_user['admin'] === true) {
             $is_platformAdmin = true;
-            Database::query("INSERT INTO admin values ('$chamilo_uid')");
+            Database::query("INSERT INTO admin values ('{$chamiloUser->getId()}')");
         }
-        Event::event_login($chamilo_uid);
+        Event::event_login($chamiloUser->getId());
+
+        MessageManager::sendNotificationByRegisteredUser($chamiloUser);
     }
 } else {
     $loginFailed = true;

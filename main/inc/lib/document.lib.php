@@ -364,8 +364,10 @@ class DocumentManager
             $content_type = self::file_get_mime_type($filename);
             $lpFixedEncoding = api_get_configuration_value('lp_fixed_encoding');
 
-            header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-            header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+            // Comented to let courses content to be cached in order to improve performance:
+            //header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
+            //header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+
             // Commented to avoid double caching declaration when playing with IE and HTTPS
             //header('Cache-Control: no-cache, must-revalidate');
             //header('Pragma: no-cache');

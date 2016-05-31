@@ -294,8 +294,11 @@ class UserManager
         //Checking the user language
         $languages = api_get_languages();
         $language = strtolower($language);
-        if (!in_array($language, $languages['folder'])) {
-            $language = api_get_setting('platformLanguage');
+        
+        if (isset($languages['folder'])) {
+            if (!in_array($language, $languages['folder'])) {
+                $language = api_get_setting('platformLanguage');
+            }
         }
 
         if (!empty($currentUserId)) {
@@ -1365,7 +1368,7 @@ class UserManager
 
             $result['complete_name'] = api_get_person_name(
                 $result['firstname'],
-                $result['lastname']               
+                $result['lastname']
             );
             $return_array[] = $result;
         }
@@ -4832,7 +4835,7 @@ EOF;
 
     /**
      * Subscribe boss to students
-     * 
+     *
      * @param int $bossId The boss id
      * @param array $usersId The users array
      * @return int Affected rows

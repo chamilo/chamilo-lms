@@ -217,7 +217,7 @@ if ($showCourses && $action != 'display_sessions') {
 
             $html = null;
             // display the course bloc
-            $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items">';
+            $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items items-courses">';
 
             // display thumbnail
             $html .= returnThumbnail($course);
@@ -243,10 +243,14 @@ if ($showCourses && $action != 'display_sessions') {
             // display course title and button bloc
             $html .= '<div class="description">';
             $html .= return_title($course);
-            $html .= $separator;
+            
 
             // display button line
             $html .= '<div class="toolbar">';
+            $html .= '<div class="left">';
+            $html .= $separator;
+            $html .= '</div>';
+            $html .= '<div class="right">';
             $html .= '<div class="btn-group">';
             // if user registered as student
             if ($user_registerd_in_course_as_student) {
@@ -275,6 +279,7 @@ if ($showCourses && $action != 'display_sessions') {
                 }
 
             }
+            $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';

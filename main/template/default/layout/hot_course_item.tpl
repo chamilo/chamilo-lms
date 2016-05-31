@@ -1,7 +1,7 @@
 {% for item in hot_courses %}
     {% if item.title %}
         <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="items">
+            <div class="items items-hotcourse">
                 <div class="image">
                     <img src="{{ item.course_image_large }}" class="img-responsive">
                     {% if item.categoryName != '' %}

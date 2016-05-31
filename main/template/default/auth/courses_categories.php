@@ -217,7 +217,7 @@ if ($showCourses && $action != 'display_sessions') {
 
             $html = null;
             // display the course bloc
-            $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items">';
+            $html .= '<div class="col-xs-6 col-sm-6 col-md-3"><div class="items courses-grid-catalog">';
 
             // display thumbnail
             $html .= returnThumbnail($course);

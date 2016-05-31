@@ -242,3 +242,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['messaging_gdc_api_key'] = '';
 // New grid view the list of courses
 //$_configuration['view_grid_courses'] = true;
+// Chamilo is installed/downloaded. Packagers can change this
+// to reflect their packaging method. The default value is 'chamilo'. This will
+// be reflected on the https://version.chamilo.org/stats page in the future.
+//$_configuration['packager'] = 'chamilo';

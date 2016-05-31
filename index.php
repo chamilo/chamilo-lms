@@ -7,6 +7,7 @@
 
 use \ChamiloSession as Session;
 define('CHAMILO_HOMEPAGE', true);
+define('CHAMILO_LOAD_WYSIWYG', false);
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */
 // Maybe we should change this into an api function? an example: CourseManager::unset();

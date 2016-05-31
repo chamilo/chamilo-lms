@@ -219,23 +219,27 @@ class CourseSelectForm
                             }
 						}
 
-						echo '<blockquote>';
+						echo '<div class="well">';
+
                         echo '<div class="btn-group">';
 						echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
                         echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
 						echo '</div><br />';
-
+                        echo '<ul class="list-unstyled">';
 						foreach ($resources as $id => $resource) {
                             if ($resource) {
+                                echo '<li>';
 								// Event obj in 1.9.x in 1.10.x the class is CalendarEvent
                                 Coursecopy\Resource::setClassType($resource);
                                 echo '<label class="checkbox">';
                                 echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
                                 $resource->show();
                                 echo '</label>';
+                                echo '</li>';
                             }
 						}
-						echo '</blockquote>';
+                        echo '</ul>';
+						echo '</div>';
 						echo '</div>';
 						echo '<script language="javascript">exp('."'$type'".')</script>';
 						$element_count++;

@@ -65,5 +65,4 @@ if ($ldap_user !== false) {
 } else {
     $loginFailed = true;
     $uidReset = false;
-    unset($_user['user_id']);
 }

@@ -555,11 +555,11 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
             if (isset($extAuthSource) && is_array($extAuthSource)) {
                 foreach ($extAuthSource as $thisAuthSource) {
-                    if (!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
+                    if (isset($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
                         include_once($thisAuthSource['newUser']);
                     } else {
                         error_log(
-                            'Chamilo Authentication file '. $thisAuthSource['newUser'].
+                            'Chamilo Authentication external file' .
                             ' could not be found - this might prevent your system from using'.
                             ' the authentication process in the user creation process',
                             0

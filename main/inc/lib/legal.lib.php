@@ -44,7 +44,7 @@ class LegalManager
             Database::insert($legal_table, $params);
 
             return true;
-        } elseif($last['type'] != $type && $language==$last['language_id']) {
+        } elseif($last['type'] != $type && $language == $last['language_id']) {
             //update
             $id = $last['legal_id'];
             $params = [
@@ -56,10 +56,14 @@ class LegalManager
 
             return true;
         } else {
+
             return false;
         }
     }
 
+    /**
+     * @param int $id
+     */
 	public static function delete($id)
     {
 		/*
@@ -137,7 +141,7 @@ class LegalManager
 
 	/**
 	 * Show the last condition
-	 * @param array with type and content i.e array('type'=>'1', 'content'=>'hola');
+	 * @param array $term_preview with type and content i.e array('type'=>'1', 'content'=>'hola');
      *
 	 * @return string html preview
 	 */
@@ -172,9 +176,9 @@ class LegalManager
 
 	/**
 	 * Get the terms and condition table (only for maintenance)
-	 * @param int offset
-	 * @param int number of items
-	 * @param int column
+	 * @param int $from
+	 * @param int $number_of_items
+	 * @param int $column
 	 * @return array
 	 */
 	public static function get_legal_data($from, $number_of_items, $column)
@@ -191,19 +195,21 @@ class LegalManager
 		$sql .= "LIMIT $from, $number_of_items ";
 
 		$result = Database::query($sql);
-		$legals = array ();
-		$versions = array ();
+		$legals = array();
+		$versions = array();
 		while ($legal = Database::fetch_array($result)) {
 			// max 2000 chars
 			//echo strlen($legal[1]); echo '<br>';
-			$versions[]=$legal[0];
-			$languages[]=$legal[1];
-			if (strlen($legal[2])>2000)
-				$legal[2]= substr($legal[2],0,2000).' ... ';
-			if ($legal[4]==0)
-				$legal[4]= get_lang('HTMLText');
-			elseif($legal[4]==1)
-				$legal[4]=get_lang('PageLink');
+			$versions[] = $legal[0];
+			$languages[] = $legal[1];
+            if (strlen($legal[2]) > 2000) {
+                $legal[2] = substr($legal[2], 0, 2000).' ... ';
+            }
+            if ($legal[4] == 0) {
+                $legal[4] = get_lang('HTMLText');
+            } elseif ($legal[4] == 1) {
+                $legal[4] = get_lang('PageLink');
+            }
 			$legals[] = $legal;
 		}
 		return $legals;
@@ -228,8 +234,8 @@ class LegalManager
 
 	/**
 	 * Get type of terms and conditions
-	 * @param int The legal id
-	 * @param int The language id
+	 * @param int $legal_id
+	 * @param int $language_id
 	 * @return int The current type of terms and conditions
 	 */
 	public static function get_type_of_terms_and_conditions($legal_id, $language_id)

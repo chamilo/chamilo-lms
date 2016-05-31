@@ -100,8 +100,7 @@ a.thumbnail:hover{
     cursor: pointer;
 }
 .invisible {
-  visibility: hidden;
-  display: none;
+  visibility: visible;
 }
 .logo{
   margin-bottom: 20px;
@@ -4728,15 +4727,14 @@ div#chat-remote-video video {
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
     text-align: left;
     background-color: #fff;
-    min-height: 260px;
+    min-height: 250px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
+    margin-bottom: 20px;
 }
-.courses-grid-catalog{
-    min-height: 340px !important;
-}
-.hot-courses .grid-courses .items{
-   min-height: 300px;
+.grid-courses .items.items-courses,
+.grid-courses .items.items-hotcourse{
+    min-height: 300px;
 }
 .grid-courses .items .title{
     line-height: 1.4;
@@ -4744,7 +4742,6 @@ div#chat-remote-video video {
     margin: 5px;
     font-size: 14px;
     font-weight: bold;
-    min-height: 50px;
 }
 .grid-courses .items .toolbar{
     text-align: right;
@@ -4790,13 +4787,6 @@ div#chat-remote-video video {
 .grid-courses .items .notifications{
     padding-top: 5px;
     text-align: center;
-}
-.grid-courses .items .buycourses-price{
-    margin-top: 5px;
-    text-align: left;
-}
-.grid-courses .items .separator{
-    margin-top: 5px;
 }
 .grid-courses .items .admin-actions, .grid-courses .items .user-actions{
     position: absolute;
@@ -5299,13 +5289,9 @@ div#chat-remote-video video {
     margin-bottom: 5px;
 }
 .hot-course-head{
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.hot-course-head .hot-course-title{
-  padding-bottom: 10px;
-  border-bottom: 1px solid #E5E5E5;
-  font-size: 21px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 .create-groups .separate td{
   padding-left: 15px;

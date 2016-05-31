@@ -1680,9 +1680,9 @@ class Display
 
 		$labels[]= $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
 		$labels[]= $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
-		if (!empty($number_of_users_who_voted)) {
+		/* if (!empty($number_of_users_who_voted)) {
 			$labels[]= get_lang('Average').' '.$point_info['point_average_star'].'/5';
-		}
+		} */
 
 		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote'). ' [?] ';
 

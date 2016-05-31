@@ -243,7 +243,6 @@ if ($showCourses && $action != 'display_sessions') {
             // display course title and button bloc
             $html .= '<div class="description">';
             $html .= return_title($course);
-            
 
             // display button line
             $html .= '<div class="toolbar">';

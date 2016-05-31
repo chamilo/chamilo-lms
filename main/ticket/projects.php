@@ -36,7 +36,7 @@ $formToString = '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'ticket/myticket.php',
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
 );
 
@@ -63,11 +63,7 @@ if (isset($_GET['action'])) {
 
                 $params = [
                     'name' => $values['name'],
-                    'description' => $values['description'],
-                    'total_tickets' => 0,
-                    'sys_insert_user_id' => api_get_user_id(),
-                    'sys_insert_datetime' => api_get_utc_datetime(),
-                    'course_required' => ''
+                    'description' => $values['description']
                 ];
                 TicketManager::addProject($params);
 
@@ -86,8 +82,11 @@ if (isset($_GET['action'])) {
             $url = api_get_self().'?action=edit&id='.$id;
             $form = TicketManager::getProjectForm($url);
 
-            $cat = TicketManager::getProject($_GET['id']);
-            $form->setDefaults($cat);
+            $item = TicketManager::getProject($_GET['id']);
+            $form->setDefaults([
+                'name' => $item->getName(),
+                'description' => $item->getDescription()]
+            );
             $formToString = $form->returnForm();
             if ($form->validate()) {
                 $values =$form->getSubmitValues();
@@ -138,7 +137,7 @@ $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Title'), false);
 $table->set_header(2, get_lang('Description'), true, array("style" => "width:200px"));
 $table->set_header(3, get_lang('Actions'), true);
-$table->set_column_filter(3, 'modify_filter');
+$table->set_column_filter('3', 'modify_filter');
 
 Display::display_header($toolName);
 

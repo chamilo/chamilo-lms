@@ -99,7 +99,12 @@ class Login
 
         $email_body = get_lang('YourAccountParam') . " " . $portal_url . "\n\n$user_account_list";
         // SEND MESSAGE
-        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $sender_name = api_get_person_name(
+            api_get_setting('administratorName'),
+            api_get_setting('administratorSurname'),
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
         $email_admin = api_get_setting('emailAdministrator');
 
         if (api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
@@ -175,7 +180,10 @@ class Login
                     api_get_setting('administratorSurname')
                 )
             );
-            $message = sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);
+            $message = sprintf(
+                get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'),
+                $admin_email
+            );
 
             return $message;
         }
@@ -196,16 +204,12 @@ class Login
 
             $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
 
-            $mailTemplate = new Template(null, false, false, false, false, false);
-            $mailLayout = $mailTemplate->get_template('mail/reset_password.tpl');
-            $mailTemplate->assign('complete_user_name', $user->getCompleteName());
-            $mailTemplate->assign('link', $url);
-
-
-
+            //$mailTemplate = new Template(null, false, false, false, false, false);
+            //$mailLayout = $mailTemplate->get_template('mail/reset_password.tpl');
+            //$mailTemplate->assign('complete_user_name', $user->getCompleteName());
+            //$mailTemplate->assign('link', $url);
             $mailSubject = get_lang('ResetPasswordInstructions');
-            $mailBody = $mailTemplate->fetch($mailLayout);
-            $mailBody = nl2br($mailBody);
+            //$mailBody = $mailTemplate->fetch($mailLayout);
 
             $mailBody = sprintf(
                 get_lang('ResetPasswordCommentWithUrl'),
@@ -256,7 +260,7 @@ class Login
             $user = Database::fetch_array($result);
 
             if ($user['auth_source'] == 'extldap') {
-                
+
                 return get_lang('CouldNotResetPassword');
             }
         } else {
@@ -879,7 +883,7 @@ class Login
         if ($result && $num_rows > 0) {
             return Database::fetch_assoc($result);
         }
-        
+
         return false;
     }
 }

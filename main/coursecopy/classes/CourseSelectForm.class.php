@@ -44,11 +44,13 @@ class CourseSelectForm
 				el = document.getElementById('div_'+item);
 				if (el.style.display=='none'){
 					el.style.display='';
-					document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('1.gif'); ?>';
+					//document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('1.gif'); ?>';
+					document.getElementById('img_'+item).className='fa fa-minus-square-o fa-lg';
 				}
 				else{
 					el.style.display='none';
-					document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('0.gif'); ?>';
+					//document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('0.gif'); ?>';
+					document.getElementById('img_'+item).className ='fa fa-plus-square-o fa-lg';
 				}
 			}
 
@@ -203,7 +205,8 @@ class CourseSelectForm
 					case RESOURCE_SCORM:
 						break;
                     default :
-						echo '<img id="img_'.$type.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$type'".');" />&nbsp;';
+						//echo '<img id="img_'.$type.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$type'".');" />&nbsp;';
+						echo '<span id="img_'.$type.'" class="fa fa-minus-square-o fa-lg" onclick="javascript:exp('."'$type'".');" >&nbsp;</span>&nbsp;';
 						echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
 						echo '<div id="div_'.$type.'">';
 						if ($type == RESOURCE_LEARNPATH) {
@@ -216,23 +219,27 @@ class CourseSelectForm
                             }
 						}
 
-						echo '<blockquote>';
+						echo '<div class="well">';
+
                         echo '<div class="btn-group">';
 						echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
                         echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
 						echo '</div><br />';
-
+                        echo '<ul class="list-unstyled">';
 						foreach ($resources as $id => $resource) {
                             if ($resource) {
+                                echo '<li>';
 								// Event obj in 1.9.x in 1.10.x the class is CalendarEvent
                                 Coursecopy\Resource::setClassType($resource);
                                 echo '<label class="checkbox">';
                                 echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
                                 $resource->show();
                                 echo '</label>';
+                                echo '</li>';
                             }
 						}
-						echo '</blockquote>';
+                        echo '</ul>';
+						echo '</div>';
 						echo '</div>';
 						echo '<script language="javascript">exp('."'$type'".')</script>';
 						$element_count++;
@@ -244,7 +251,8 @@ class CourseSelectForm
         if (!empty($forum_categories)) {
             $type = RESOURCE_FORUMCATEGORY;
 
-            echo '<img id="img_'.$type.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$type'".');" />&nbsp;';
+            //echo '<img id="img_'.$type.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$type'".');" />&nbsp;';
+            echo '<span id="img_'.$type.'" class="fa fa-minus-square-o fa-lg" onclick="javascript:exp('."'$type'".');" >&nbsp;</span>&nbsp;';
             echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[RESOURCE_FORUM].'</b><br />';
             echo '<div id="div_'.$type.'">';
 
@@ -581,11 +589,13 @@ class CourseSelectForm
 				el = document.getElementById('div_'+item);
 				if (el.style.display=='none'){
 					el.style.display='';
-					document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('1.gif'); ?>';
+					//document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('1.gif'); ?>';
+					document.getElementById('img_'+item).className('fa fa-minus-square-o fa-lg');
 				}
 				else{
 					el.style.display='none';
-					document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('0.gif'); ?>';
+					//document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('0.gif'); ?>';
+					document.getElementById('img_'+item).className('fa fa-plus-square-o fa-lg');
 				}
 			}
 			function setCheckbox(type,value) {
@@ -638,7 +648,8 @@ class CourseSelectForm
 		foreach ($list_course as $course){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
-					echo '<img id="img_'.$course->code.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$course->code'".');" />';
+					//echo '<img id="img_'.$course->code.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$course->code'".');" />';
+					echo '<span id="img_'.$course->code.'" class="fa fa-minus-square-o fa-lg" onclick="javascript:exp('."'$course->code'".');" >&nbsp;</span>';
 					echo '<b  onclick="javascript:exp('."'$course->code'".');" > '.$course->code.'</b><br />';
 					echo '<div id="div_'.$course->code.'">';
 					echo '<blockquote>';

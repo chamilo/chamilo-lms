@@ -571,6 +571,12 @@ define('SHORTCUTS_VERTICAL', 1);
 // Image class
 define('IMAGE_PROCESSOR', 'gd'); // 'imagick' or 'gd' strings
 
+// Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
+// To remove CKeditor libs from HTML, set this constant to true before loading
+if (!defined('CHAMILO_LOAD_WYSIWYG')) {
+    define('CHAMILO_LOAD_WYSIWYG', true);
+}
+
 /**
  * Inclusion of internationalization libraries
  */

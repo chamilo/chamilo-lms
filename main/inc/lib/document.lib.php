@@ -364,8 +364,10 @@ class DocumentManager
             $content_type = self::file_get_mime_type($filename);
             $lpFixedEncoding = api_get_configuration_value('lp_fixed_encoding');
 
-            header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-            header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+            // Comented to let courses content to be cached in order to improve performance:
+            //header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
+            //header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+
             // Commented to avoid double caching declaration when playing with IE and HTTPS
             //header('Cache-Control: no-cache, must-revalidate');
             //header('Pragma: no-cache');
@@ -1901,6 +1903,13 @@ class DocumentManager
 
         $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $info_grade_certificate['id'];
 
+        $externalStyleFile = api_get_path(SYS_CSS_PATH) . 'themes/' . api_get_visual_theme() . '/certificate.css';
+        $externalStyle = '';
+
+        if (is_file($externalStyleFile)) {
+            $externalStyle = file_get_contents($externalStyleFile);
+        }
+
         //replace content
         $info_to_replace_in_content_html = array(
             $first_name,
@@ -1918,6 +1927,7 @@ class DocumentManager
             $url,
             '<a href="' . $url . '" target="_blank">' . get_lang('CertificateOnlineLink') . '</a>',
             '((certificate_barcode))',
+            $externalStyle
         );
 
         $info_to_be_replaced_in_content_html = array('((user_firstname))',
@@ -1935,6 +1945,7 @@ class DocumentManager
             '((certificate_link))',
             '((certificate_link_html))',
             '((certificate_barcode))',
+            '((external_style))'
         );
 
         if (!empty($extraFields)) {

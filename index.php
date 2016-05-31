@@ -7,7 +7,6 @@
 
 use \ChamiloSession as Session;
 define('CHAMILO_HOMEPAGE', true);
-// Avoid loading CKeditor lib on homepage (very heavy lib)
 define('CHAMILO_LOAD_WYSIWYG', false);
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */

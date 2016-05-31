@@ -7,8 +7,10 @@
  */
 // Initialize context
 $_in_course = true;
-require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_GRADEBOOK;
+
+require_once __DIR__ . '/../inc/global.inc.php';
+
+$current_course_tool = TOOL_GRADEBOOK;
 
 // Make sure no anonymous user gets here without permission
 api_protect_course_script(true);
@@ -40,7 +42,11 @@ $currentItemId = $lp->get_current_item_id();
 $currentItem = $lp->items[$currentItemId];
 $currentItemStatus = $currentItem->get_status();
 $accessGranted = false;
-if (($count - $completed == 0) or (($count - $completed == 1 && ($currentItemStatus == 'incomplete') or ($currentItemStatus == 'not attempted') ))) {
+
+if (
+    ($count - $completed == 0) or
+    ($count - $completed == 1 && ($currentItemStatus == 'incomplete') or ($currentItemStatus == 'not attempted'))
+) {
     if ($lp->prerequisites_match($currentItemId)) {
         $accessGranted = true;
     }
@@ -62,10 +68,14 @@ if ($accessGranted == false) {
     // If not gradebook has been defined
     if (empty($catLoad)) {
 
-        $finalItemTemplate = generateLPFinalItemTemplate($id, $courseCode, $sessionId, $downloadCertificateLink,
-            $badgeLink);
+        $finalItemTemplate = generateLPFinalItemTemplate(
+            $id,
+            $courseCode,
+            $sessionId,
+            $downloadCertificateLink,
+            $badgeLink
+        );
         // TODO: Missing validation of learning path completion
-
     } else {
         // A gradebook was found, proceed...
         $categoryId = $catLoad[0]->get_id();
@@ -78,10 +88,8 @@ if ($accessGranted == false) {
 
             if ($show_message == '') {
                 if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-                    $certificate = Category::register_user_certificate(
-                        $categoryId,
-                        $userId
-                    );
+                    $certificate = Category::register_user_certificate($categoryId, $userId);
+
                     if (!empty($certificate['pdf_url']) || !empty($certificate['badge_link'])) {
                         if (is_array($certificate) && isset($certificate['pdf_url'])) {
                             $downloadCertificateLink = generateLPFinalItemTemplateCertificateLinks($certificate);
@@ -92,13 +100,18 @@ if ($accessGranted == false) {
                             $badgeLink = generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId);
                         }
                     }
+
                     $currentScore = Category::getCurrentScore($userId, $categoryId, $courseCode, $sessionId, true);
                     Category::registerCurrentScore($currentScore, $userId, $categoryId);
                 }
             }
         }
-        $finalItemTemplate = generateLPFinalItemTemplate($id, $courseCode, $sessionId, $downloadCertificateLink,
-            $badgeLink);
+
+        $finalItemTemplate = generateLPFinalItemTemplate($id, $courseCode, $downloadCertificateLink, $badgeLink);
+
+        if (!$finalItemTemplate) {
+            Display::display_warning_message(get_lang('FileNotFound'));
+        }
     }
 }
 
@@ -118,7 +131,7 @@ $tpl->display_one_col_template();
  * @param string $badgeLink
  * @return mixed|string
  */
-function generateLPFinalItemTemplate($lpItemId, $courseCode, $sessionId=0, $downloadCertificateLink='', $badgeLink='')
+function generateLPFinalItemTemplate($lpItemId, $courseCode, $sessionId = 0, $downloadCertificateLink = '', $badgeLink = '')
 {
     $documentInfo = DocumentManager::get_document_data_by_id(
         $lpItemId,
@@ -131,6 +144,7 @@ function generateLPFinalItemTemplate($lpItemId, $courseCode, $sessionId=0, $down
 
     $finalItemTemplate = str_replace('((certificate))', $downloadCertificateLink, $finalItemTemplate);
     $finalItemTemplate = str_replace('((skill))', $badgeLink, $finalItemTemplate);
+
     return $finalItemTemplate;
 }
 
@@ -141,48 +155,48 @@ function generateLPFinalItemTemplate($lpItemId, $courseCode, $sessionId=0, $down
  * @param int $sessionId
  * @return string HTML string for badges
  */
-function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId=0)
+function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 0)
 {
+    $em = Database::getManager();
     $skillRelUser = new SkillRelUser();
     $userSkills = $skillRelUser->get_user_skills($userId, $courseId, $sessionId);
     $skillList = '';
     $badgeLink = '';
 
     if ($userSkills) {
-        $skill = new Skill();
         foreach ($userSkills as $userSkill) {
-            $oneSkill = $skill->get($userSkill['skill_id']);
+            $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill['skill_id']);
             $skillList .= "
-                                    <div class='row'>
-                                        <div class='col-md-2 col-xs-6'>
-                                            <div class='thumbnail'>
-                                              <img class='skill-badge-img' src='" . $oneSkill['web_icon_path'] . "' >
-                                            </div>
-                                        </div>
-                                        <div class='col-md-8 col-xs-6'>
-                                            <h5><b>" . $oneSkill['name'] . "</b></h5>
-                                            " . $oneSkill['description'] . "
-                                        </div>
-                                        <div class='col-md-2 col-xs-12'>
-                                            <h5><b>" . get_lang('ShareWithYourFriends') . "</b></h5>
-                                            <a href='http://www.facebook.com/sharer.php?u=" . api_get_path(WEB_PATH) . "badge/" . $oneSkill['id'] . "/user/" . $userId . "' target='_new'>
-                                                <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
-                                            </a>
-                                            <a href='https://twitter.com/home?status=" . api_get_path(WEB_PATH) . "badge/" . $oneSkill['id'] . "/user/" . $userId . "' target='_new'>
-                                                <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
-                                            </a>
-                                        </div>
-                                    </div>
-                                ";
+                <div class='row'>
+                    <div class='col-md-2 col-xs-4'>
+                        <div class='thumbnail'>
+                          <img class='skill-badge-img' src='" . $skill->getWebIconPath() . "' >
+                        </div>
+                    </div>
+                    <div class='col-md-8 col-xs-8'>
+                        <h5><b>" . $skill->getName() . "</b></h5>
+                        " . $skill->getDescription() . "
+                    </div>
+                    <div class='col-md-2 col-xs-12'>
+                        <h5><b>" . get_lang('ShareWithYourFriends') . "</b></h5>
+                        <a href='http://www.facebook.com/sharer.php?u=" . api_get_path(WEB_PATH) . "badge/" . $skill->getId() . "/user/" . $userId . "' target='_new'>
+                            <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
+                        </a>
+                        <a href='https://twitter.com/home?status=" . sprintf(get_lang('IHaveObtainedSkillXOnY'), '"' . $skill->getName() . '"', api_get_setting('siteName')) . ' - ' . api_get_path(WEB_PATH) . 'badge/' . $skill->getId() . '/user/' . $userId . "' target='_new'>
+                            <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
+                        </a>
+                    </div>
+                </div>
+            ";
         }
         $badgeLink .= "
-                                <div class='panel panel-default'>
-                                    <div class='panel-body'>
-                                        <h3 class='text-center'>" . get_lang('AdditionallyYouHaveObtainedTheFollowingSkills') . "</h3>
-                                        $skillList
-                                    </div>
-                                </div>
-                            ";
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <h3 class='text-center'>" . get_lang('AdditionallyYouHaveObtainedTheFollowingSkills') . "</h3>
+                    $skillList
+                </div>
+            </div>
+        ";
     }
     return $badgeLink;
 }
@@ -194,19 +208,19 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId=0)
  */
 function generateLPFinalItemTemplateCertificateLinks($certificate)
 {
-    $downloadCertificateLink = Display::url(Display::returnFontAwesomeIcon('file-pdf-o') .
-        get_lang('DownloadCertificatePdf'),
+    $downloadCertificateLink = Display::url(
+        Display::returnFontAwesomeIcon('file-pdf-o') . get_lang('DownloadCertificatePdf'),
         $certificate['pdf_url'],
         ['class' => 'btn btn-default']
     );
     $viewCertificateLink = $certificate['certificate_link'];
     $downloadCertificateLink = "
-                            <div class='panel panel-default'>
-                                <div class='panel-body'>
-                                    <h3 class='text-center'>" . get_lang('NowDownloadYourCertificateClickHere') . "</h3>
-                                    <div class='text-center'>$downloadCertificateLink $viewCertificateLink</div>
-                                </div>
-                            </div>
-                        ";
+        <div class='panel panel-default'>
+            <div class='panel-body'>
+                <h3 class='text-center'>" . get_lang('NowDownloadYourCertificateClickHere') . "</h3>
+                <div class='text-center'>$downloadCertificateLink $viewCertificateLink</div>
+            </div>
+        </div>
+    ";
     return $downloadCertificateLink;
 }

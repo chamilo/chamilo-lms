@@ -225,6 +225,11 @@ if ($isAdmin) {
                 Display::return_icon('folder_document.gif'),
                 api_get_path(WEB_CODE_PATH) . 'ticket/categories.php'
             );
+
+            echo Display::url(
+                Display::return_icon('folder_document.gif'),
+                api_get_path(WEB_CODE_PATH) . 'ticket/projects.php'
+            );
         }
 
         echo Display::url(

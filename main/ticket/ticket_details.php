@@ -13,7 +13,7 @@ api_block_anonymous_users();
 $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'ticket/myticket.php',
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
 );
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('TicketDetail'));
@@ -183,16 +183,16 @@ if (!isset($ticket['ticket'])) {
     api_not_allowed();
 }
 if (!isset($_GET['ticket_id'])) {
-    header('Location: '.api_get_path(WEB_CODE_PATH).'ticket/myticket.php');
+    header('Location: '.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
     exit;
 }
 if (isset($_POST['response'])) {
-    if ($user_id == $ticket['ticket']['request_user']) {
-        $response = ($_POST['response'] == "1") ? true : ($_POST['response'] == "0" ? false : null);
+    if ($user_id == $ticket['ticket']['assigned_last_user']) {
+        $response = $_POST['response'] == '1' ? true : $_POST['response'] == "0" ? false : null;
         if ($response && $ticket['ticket']['status_id'] == TicketManager::STATUS_UNCONFIRMED) {
-            TicketManager::close_ticket($_GET['ticket_id'], $user_id);
+            /*TicketManager::close_ticket($_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = TicketManager::STATUS_CLOSE;
-            $ticket['ticket']['status'] = get_lang('Closed');
+            $ticket['ticket']['status'] = get_lang('Closed');*/
         } else if (!is_null($response) && $ticket['ticket']['status_id'] == TicketManager::STATUS_UNCONFIRMED) {
             TicketManager::update_ticket_status(TicketManager::STATUS_PENDING, $_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = TicketManager::STATUS_PENDING;
@@ -242,12 +242,12 @@ if (!isset($_POST['compose'])) {
             $ticket['ticket']['status_id'] != TicketManager::STATUS_CLOSE &&
             $isAdmin
         ) {
-        if (intval($ticket['ticket']['assigned_last_user']) == $user_id) {
+        /*if (intval($ticket['ticket']['assigned_last_user']) == $user_id) {
             if ($ticket['ticket']['status_id'] != TicketManager::STATUS_CLOSE) {
                 $form_close_ticket.= '<a href="' . api_get_self() . '?close=1&ticket_id=' . $ticket['ticket']['id'] . '" id="close" class="btn btn-danger" >';
                 $form_close_ticket.= get_lang('Close') . '</a>';
             }
-        }
+        }*/
     }
 
     $img_assing = '';
@@ -473,7 +473,8 @@ function show_form_send_message($ticket)
     );
 
     if ($isAdmin) {
-        $statusList[TicketManager::STATUS_NEW] = get_lang('StatusNew');
+
+        /*$statusList[TicketManager::STATUS_NEW] = get_lang('StatusNew');
         $statusAttributes = array(
             'id' => 'status_id',
             'for' => 'status_id',
@@ -482,21 +483,21 @@ function show_form_send_message($ticket)
         $statusList[TicketManager::STATUS_PENDING] = get_lang('StatusPending');
         $statusList[TicketManager::STATUS_UNCONFIRMED] = get_lang('StatusUnconfirmed');
         $statusList[TicketManager::STATUS_CLOSE] = get_lang('StatusClose');
-        $statusList[TicketManager::STATUS_FORWARDED] = get_lang('StatusForwarded');
-
+        $statusList[TicketManager::STATUS_FORWARDED] = get_lang('StatusForwarded');*/
+        $statusList = TicketManager::getStatusList();
         $form->addElement(
             'select',
             'status_id',
             get_lang('Status'),
-            $statusList,
-            $statusAttributes
+            $statusList
         );
 
-        $priorityList = array();
+        /*$priorityList = array();
         $priorityList[TicketManager::PRIORITY_NORMAL] = get_lang('PriorityNormal');
         $priorityList[TicketManager::PRIORITY_HIGH] = get_lang('PriorityHigh');
-        $priorityList[TicketManager::PRIORITY_LOW] = get_lang('PriorityLow');
+        $priorityList[TicketManager::PRIORITY_LOW] = get_lang('PriorityLow');*/
 
+        $priorityList = TicketManager::getPriorityList();
         $form->addElement(
             'select',
             'priority_id',

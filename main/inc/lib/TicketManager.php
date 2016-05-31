@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\TicketBundle\Entity\Project;
+use Chamilo\TicketBundle\Entity\Status;
+use Chamilo\TicketBundle\Entity\Priority;
+
 /**
  * Class TicketManager
  * @package chamilo.plugin.ticket
@@ -174,7 +178,7 @@ class TicketManager
             if (self::userIsAssignedToCategory($userId, $categoryId) == false) {
                 $params = [
                     'category_id' => $categoryId,
-                    'user_id' => $userId
+                    'user_id' => $userId,
                 ];
                 Database::insert($table, $params);
             }
@@ -331,7 +335,6 @@ class TicketManager
             'project_id' => $project_id,
             'category_id' => $category_id,
             'priority_id' => $priority,
-            'course_id' => $course_id,
             'personal_email' => $personalEmail,
             'status_id' => $status,
             'start_date' => $now,
@@ -344,6 +347,11 @@ class TicketManager
             'subject' => $subject,
             'message' => $content
         ];
+
+        if (!empty($course_id)) {
+            $params['course_id'] = $course_id;
+        }
+
         $ticket_id = Database::insert($table_support_tickets, $params);
 
         if ($ticket_id) {
@@ -375,13 +383,13 @@ class TicketManager
             // Update code
             $sql = "UPDATE $table_support_tickets
                     SET code = '$ticket_code'
-                    WHERE ticket_id = '$ticket_id'";
+                    WHERE id = '$ticket_id'";
             Database::query($sql);
 
             // Update total
             $sql = "UPDATE $table_support_category
                     SET total_tickets = total_tickets + 1
-                    WHERE category_id = '$category_id'";
+                    WHERE id = $category_id";
             Database::query($sql);
 
             $user = api_get_user_info($assigned_user);
@@ -418,7 +426,8 @@ class TicketManager
                     </table>';
 
             if (empty($category_id)) {
-                if ($plugin->get('send_warning_to_all_admins')) {
+
+                if (api_get_setting('ticket_send_warning_to_all_admins') == 'true') {
                     $warningSubject = sprintf(
                         get_lang('TicketXCreatedWithNoCategory'),
                         $ticket_code
@@ -442,7 +451,7 @@ class TicketManager
 
                 $message = '<h2>'.get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
 
-                if ($plugin->get('warn_admin_no_user_in_category')) {
+                if (api_get_setting('ticket_warn_admin_no_user_in_category') == 'true') {
                     $usersInCategory = TicketManager::getUsersInCategory($category_id);
                     if (empty($usersInCategory)) {
                         $subject = sprintf(
@@ -450,7 +459,7 @@ class TicketManager
                             $categoryInfo['name']
                         );
 
-                        if ($plugin->get('send_warning_to_all_admins')) {
+                        if (api_get_setting('ticket_send_warning_to_all_admins') == 'true') {
                             Display::addFlash(Display::return_message(
                                 sprintf(
                                     get_lang('CategoryWithNoUserNotificationSentToAdmins'),
@@ -577,7 +586,7 @@ class TicketManager
                     'ticket_id' => $ticket_id,
                     'user_id' => $user_id,
                     'assigned_date' => $now,
-                    'sys_insert_user_id' => $insert_id
+                    'sys_insert_user_id' => $insert_id,
                 ];
                 Database::insert($table_support_assigned_log, $params);
 
@@ -612,7 +621,7 @@ class TicketManager
                         null, // sender name
                         null, // sender e-mail
                         array(
-                            'cc' => $sender['email']
+                            'cc' => $sender['email'],
                         ) // should be support e-mail (platform admin) here
                     );
                 }
@@ -677,7 +686,7 @@ class TicketManager
             'sys_insert_datetime' => $now,
             'sys_lastedit_user_id' => $user_id,
             'sys_lastedit_datetime' => $now,
-            'status' => $status
+            'status' => $status,
         ];
         Database::insert($table_support_messages, $params);
 
@@ -788,7 +797,7 @@ class TicketManager
 
             return array(
                 'path' => $path_message_attach . $safe_new_file_name,
-                'filename' => $safe_file_name
+                'filename' => $safe_file_name,
             );
         }
     }
@@ -1046,7 +1055,7 @@ class TicketManager
                     $name,
                     $row['assigned_last_user'],
                     $row['col7'],
-                    $row['col8']
+                    $row['col8'],
                 );
             } else {
                 $actions = '';
@@ -1059,7 +1068,7 @@ class TicketManager
                 $dif = $now - $last_edit_date;
 
                 if ($dif > 172800 && $row['priority_id'] === self::PRIORITY_NORMAL && $row['status_id'] != self::STATUS_CLOSE) {
-                    $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'ticket/myticket.php?ticket_id=' . $row['ticket_id'] . '&amp;action=alert">
+                    $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php?ticket_id=' . $row['ticket_id'] . '&amp;action=alert">
                                  <img src="' . Display::returnIconPath('exclamation.png') . '" border="0" /></a>';
                 }
                 if ($row['priority_id'] === self::PRIORITY_HIGH) {
@@ -1070,7 +1079,7 @@ class TicketManager
                     api_format_date($row['col1'], '%d/%m/%y - %I:%M:%S %p'),
                     api_format_date($row['col2'], '%d/%m/%y - %I:%M:%S %p'),
                     $row['col3'],
-                    $row['col7']
+                    $row['col7'],
                 );
             }
             /*if ($unread > 0) {
@@ -1467,7 +1476,7 @@ class TicketManager
             'priority_id' => isset($params['priority_id']) ? $params['priority_id'] : '',
             'status_id' => isset($params['status_id']) ? $params['status_id'] : '',
             'sys_lastedit_user_id' => $userId,
-            'sys_lastedit_datetime' => $now
+            'sys_lastedit_datetime' => $now,
         ];
         Database::update($table, $newParams, ['id = ? ' => $ticketId]);
 
@@ -1574,8 +1583,8 @@ class TicketManager
     }
 
     /**
-     * @param $ticket_id
-     * @param $user_id
+     * @param int $ticket_id
+     * @param int $user_id
      */
     public static function close_ticket($ticket_id, $user_id)
     {
@@ -1838,7 +1847,7 @@ class TicketManager
             utf8_decode('Estado'),
             utf8_decode('Mensajes'),
             utf8_decode('Responsable'),
-            utf8_decode('Programa')
+            utf8_decode('Programa'),
         );
 
         while ($row = Database::fetch_assoc($result)) {
@@ -1876,18 +1885,135 @@ class TicketManager
         return $form;
     }
 
-    public static function getProjects()
+    /**
+     * @return array
+     */
+    public static function getStatusList()
     {
-        $em = Database::getManager()->getRepository('ChamiloTicketBundle')->findAll();
+        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Status')->findAll();
 
-        return $em;
+        $list = [];
+        /** @var \Chamilo\TicketBundle\Entity\Status $row */
+        foreach ($projects as $row) {
+            $list[$row->getId()] = $row->getName();
+        }
+
+        return $list;
+    }
+
+     /**
+     * @return array
+     */
+    public static function getPriorityList()
+    {
+        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->findAll();
+
+        $list = [];
+        /** @var \Chamilo\TicketBundle\Entity\Priority $row */
+        foreach ($projects as $row) {
+            $list[$row->getId()] = $row->getName();
+        }
+
+        return $list;
     }
 
 
+    /**
+     * @return array
+     */
+    public static function getProjects()
+    {
+        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Project')->findAll();
+
+        $list = [];
+        /** @var Project $row */
+        foreach ($projects as $row) {
+            $list[] = [
+                'id' => $row->getId(),
+                '0' => $row->getId(),
+                '1' => $row->getName(),
+                '2' => $row->getDescription(),
+                '3' => $row->getId()
+            ];
+        }
+
+        return $list;
+    }
+
+    /**
+     * @return int
+     */
     public static function getProjectsCount()
     {
-        $em = Database::getManager()->getRepository('ChamiloTicketBundle')->findAll();
+        $count = Database::getManager()->getRepository('ChamiloTicketBundle:Project')->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return $em;
+        return $count;
+    }
+
+    /**
+     * @param array $params
+     */
+    public static function addProject($params)
+    {
+        $project = new Project();
+        $project->setName($params['name']);
+        $project->setDescription($params['description']);
+        $project->setInsertUserId(api_get_user_id());
+        //$project->setEmail($params['email']);
+
+        Database::getManager()->persist($project);
+        Database::getManager()->flush();
+    }
+
+    /**
+     * @param $id
+     * @return Project
+     */
+    public static function getProject($id)
+    {
+        return Database::getManager()->getRepository('ChamiloTicketBundle:Project')->find($id);
+    }
+
+    /**
+     * @param int $id
+     * @param array $params
+     */
+    public static function updateProject($id, $params)
+    {
+        $project = self::getProject($id);
+        $project->setName($params['name']);
+        $project->setDescription($params['description']);
+        $project->setLastEditDateTime(new DateTime($params['sys_lastedit_datetime']));
+        $project->setLastEditUserId($params['sys_lastedit_user_id']);
+
+        Database::getManager()->merge($project);
+        Database::getManager()->flush();
+    }
+
+    /**
+     * @param int $id
+     */
+    public static function deleteProject($id)
+    {
+        $project = self::getProject($id);
+        Database::getManager()->remove($project);
+        Database::getManager()->flush();
+    }
+
+    /**
+     * @param string $url
+     * @return FormValidator
+     */
+    public static function getProjectForm($url)
+    {
+        $form = new FormValidator('project', 'post', $url);
+        $form->addText('name', get_lang('Name'));
+        $form->addHtmlEditor('description', get_lang('Description'));
+        $form->addButtonUpdate(get_lang('Save'));
+
+        return $form;
     }
 }

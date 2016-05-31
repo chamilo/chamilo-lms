@@ -814,7 +814,6 @@ if (@$_POST['step2']) {
 
         $connection = $manager->getConnection();
 
-
         $connection->executeQuery(
             'CREATE TABLE page__site (id INT AUTO_INCREMENT NOT NULL, enabled TINYINT(1) NOT NULL, name VARCHAR(255) NOT NULL, relative_path VARCHAR(255) DEFAULT NULL, host VARCHAR(255) NOT NULL, enabled_from DATETIME DEFAULT NULL, enabled_to DATETIME DEFAULT NULL, is_default TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, locale VARCHAR(6) DEFAULT NULL, title VARCHAR(64) DEFAULT NULL, meta_keywords VARCHAR(255) DEFAULT NULL, meta_description VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB'
         );
@@ -917,6 +916,93 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;");
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
 
+        // Tickets
+
+        $table = Database::get_main_table(TABLE_TICKET_PROJECT);
+
+        // Default Project Table Ticket
+        $attributes = array(
+            'id' => 1,
+            'name' => 'Ticket System'
+        );
+        Database::insert($table, $attributes);
+
+        $categories = array(
+            get_lang('Enrollment') => get_lang('TicketsAboutEnrollment'),
+            get_lang('GeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
+            get_lang('RequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
+            get_lang('AcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
+            get_lang('VirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
+            get_lang('OnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation')
+        );
+
+        $i = 1;
+        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
+
+        foreach ($categories as $category => $description) {
+            // Online evaluation requires a course
+            if ($i == 6) {
+                $attributes = array(
+                    'id' => $i,
+                    'name' => $category,
+                    'description' => $description,
+                    'project_id' => 1,
+                    'course_required' => 1
+                );
+            } else {
+                $attributes = array(
+                    'id' => $i,
+                    'project_id' => 1,
+                    'description' => $description,
+                    'name' => $category,
+                    'course_required' => 0
+                );
+            }
+
+            Database::insert($table, $attributes);
+            $i++;
+        }
+
+        // Default Priorities
+        $defaultPriorities = array(
+            TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
+            TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
+            TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
+        );
+
+        $table = Database::get_main_table(TABLE_TICKET_PRIORITY);
+        $i = 1;
+        foreach ($defaultPriorities as $code => $priority) {
+            $attributes = array(
+                'id' => $i,
+                'name' => $priority,
+                'code' => $code
+            );
+            Database::insert($table, $attributes);
+            $i++;
+        }
+
+        $table = Database::get_main_table(TABLE_TICKET_STATUS);
+
+        // Default status
+        $defaultStatus = array(
+            TicketManager::STATUS_NEW => get_lang('StatusNew'),
+            TicketManager::STATUS_PENDING => get_lang('StatusPending'),
+            TicketManager::STATUS_UNCONFIRMED => get_lang('StatusUnconfirmed'),
+            TicketManager::STATUS_CLOSE => get_lang('StatusClose'),
+            TicketManager::STATUS_FORWARDED => get_lang('StatusForwarded')
+        );
+
+        $i = 1;
+        foreach ($defaultStatus as $code => $status) {
+            $attributes = array(
+                'id' => $i,
+                'code' => $code,
+                'name' => $status
+            );
+            Database::insert($table, $attributes);
+            $i++;
+        }
 
         $sysPath = api_get_path(SYS_PATH);
 

@@ -36,7 +36,7 @@ $formToString = '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'ticket/myticket.php',
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
 );
 

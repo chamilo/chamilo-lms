@@ -36,16 +36,18 @@
                     <div class="ranking">
                         {{ item.rating_html }}
                     </div>
-                    {% if item.price %}
-                        {{ item.price }}
-                    {% else %}
-                        <div class="separator">&nbsp;</div>
-                    {% endif %}
                     <div class="toolbar">
-                        <div class="btn-group" role="group">
-                            {{ item.register_button }}
-                            {{ item.unsubscribe_button }}
-                            {{ item.already_register_as }}
+                        <div class="left">
+                            {% if item.price %}
+                                {{ item.price }}
+                            {% endif %}
+                        </div>
+                        <div class="right">
+                            <div class="btn-group" role="group">
+                                {{ item.register_button }}
+                                {{ item.unsubscribe_button }}
+                                {{ item.already_register_as }}
+                            </div>
                         </div>
                     </div>
                 </div>

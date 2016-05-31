@@ -100,8 +100,7 @@ a.thumbnail:hover{
     cursor: pointer;
 }
 .invisible {
-  visibility: hidden;
-  display: none;
+  visibility: visible;
 }
 .logo{
   margin-bottom: 20px;
@@ -4728,12 +4727,9 @@ div#chat-remote-video video {
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
     text-align: left;
     background-color: #fff;
-    min-height: 250px;
+    min-height: 285px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
-}
-.hot-courses .grid-courses .items{
-   min-height: 300px;
 }
 .grid-courses .items .title{
     line-height: 1.4;
@@ -5295,13 +5291,9 @@ div#chat-remote-video video {
     margin-bottom: 5px;
 }
 .hot-course-head{
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.hot-course-head .hot-course-title{
-  padding-bottom: 10px;
-  border-bottom: 1px solid #E5E5E5;
-  font-size: 21px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 .create-groups .separate td{
   padding-left: 15px;

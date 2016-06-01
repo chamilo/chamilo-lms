@@ -7009,7 +7009,46 @@ $ResourceLockedByGradebook = "This option is not available because this activity
 $GradebookLockedAlert = "This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).";
 $GradebookEnableLockingTitle = "Enable locking of assessments by teachers";
 $GradebookEnableLockingComment = "Once enabled, this option will enable locking of any assessment by the teachers of the corresponding course. This, in turn, will prevent any modification of results by the teacher inside the resources used in the assessment: exams, learning paths, tasks, etc. The only role authorized to unlock a locked assessment is the administrator. The teacher will be informed of this possibility. The locking and unlocking of gradebooks will be registered in the system's report of important activities";
-$LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>LDAP authentication : <br />See I. below to configure LDAP <br />See II. below to activate LDAP authentication </li><br /><br /><li> Update user attributes, with LDAP data, after CAS authentication(see <a href='settings.php?category=CAS'>CAS configuration </a>) : <br />See I. below to configure LDAP <br />CAS manage user authentication, LDAP activation isn't required. </li><br /></ul></div><br /><h4>I. LDAP configuration</h4><h5>Edit file main/inc/conf/auth.conf.php </h5>-&gt; Edit values of array <code>&#36;extldap_config</code> <br /><br />Parameters are <br /><ul><li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>admin password (ex : 'admin_password' =&gt; '123456') </li><li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filter (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>protocol version (2 or 3) (ex : 'protocol_version' =&gt; 3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>encoding (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; To update correspondences between user and LDAP attributes, edit array <code>&#36;extldap_user_correspondance</code> <br />Array values are &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br />Array structure is explained in file main/auth/external_login/ldap.conf.php<br /><br /><br /><h4>II. Activate LDAP authentication </h4><h5>Edit file main/inc/conf/configuration.php </h5>-&gt; Uncomment lines <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/newUser.ldap.php&quot;;<br /><br />N.B. : LDAP users use same fields than platform users to login. <br />N.B. : LDAP activation adds a menu External authentication [LDAP] in &quot;add or modify&quot; user pages.";
+$LdapDescriptionComment = "    <div class=\"alert alert-info\">
+        <ul>
+            <li>LDAP authentication : <br>
+                See I. below to configure LDAP <br>
+                See II. below to activate LDAP authentication
+            </li>
+            <li>Update user attributes, with LDAP data, after CAS authentication(see <a href=\"settings.php?category=CAS\">CAS configuration </a>) : <br>
+                See I. below to configure LDAP <br>
+                CAS manage user authentication, LDAP activation isn't required.
+            </li>
+        </ul>
+    </div>
+    <h4>I. LDAP configuration</h4>
+    <h5>Edit file app/config/auth.conf.php </h5>
+    <p>-&gt; Edit values of array <code>\$extldap_config</code></p>
+    <ul>
+        <li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be')</li>
+        <li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be')</li>
+        <li>admin password (ex : 'admin_password' =&gt; '123456') </li>
+        <li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6'))</li>
+        <li>filter (ex : 'filter' =&gt; '') </li>
+        <li>port (ex : 'port' =&gt; 389) </li>
+        <li>protocol version (2 or 3) (ex : 'protocol_version' =&gt; 3)</li>
+        <li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li>
+        <li>encoding (ex : 'encoding' =&gt; 'UTF-8')</li>
+        <li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li>
+    </ul>
+    <p>-&gt; To update correspondences between user and LDAP attributes, edit array <code>\$extldap_user_correspondance</code></p>
+    <p>Array values are &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt;</p><p>
+    </p>
+    <h4>II. Activate LDAP authentication </h4>
+    <h5>Edit file main/inc/conf/configuration.php </h5>
+    <p>-&gt; Uncomment lines:</p>
+    <ul>
+        <li>
+    \$extAuthSource[\"extldap\"][\"login\"] = \$_configuration['root_sys'].\"main/auth/external_login/login.ldap.php\";</li>
+        <li>\$extAuthSource[\"extldap\"][\"newUser\"] = \$_configuration['root_sys'].\"main/auth/external_login/newUser.ldap.php\";</li>
+    </ul>
+    <p>N.B.: LDAP users use same fields than platform users to login. <br>
+    N.B.: LDAP activation adds a menu External authentication [LDAP] in \"add or modify\" user pages.</p>";
 $ShibbolethMainActivateTitle = "<h3>Shibboleth authentication</h3>";
 $ShibbolethMainActivateComment = "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus.";
 $LdapDescriptionTitle = "<h3>LDAP autentication</h3>";
@@ -7664,5 +7703,12 @@ $RecordAudio = "Record audio";
 $StartRecordingAudio = "Start recording";
 $StopRecordingAudio = "Stop recording";
 $SaveRecordedAudio = "Save recorded audio";
-$GradeFromX = "Grade for course: %s";
+$GradeFromX = "Grades from course: %s";
+$TitleMandatory = "A title is required";
+$NoCourseCategorySupplied = "No course category was provided";
+$ForumStartDate = "Publication date";
+$ForumEndDate = "Closing date";
+$ForumStartDateComment = "The forum will be visible starting from this date";
+$ForumEndDateComment = "Once this date has passed, the forum will be closed";
+$ModeratedForum = "Moderated forum";
 ?>

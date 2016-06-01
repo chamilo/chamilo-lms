@@ -641,7 +641,7 @@ VALUES
 ('ticket_send_warning_to_all_admins', 'true', 'Yes'),
 ('ticket_send_warning_to_all_admins', 'false', 'No'),
 ('ticket_warn_admin_no_user_in_category', 'true', 'Yes'),
-('ticket_warn_admin_no_user_in_category', 'false', 'No')
+('ticket_warn_admin_no_user_in_category', 'false', 'No'),
 ('load_term_conditions_section', 'login', 'Login'),
 ('load_term_conditions_section', 'course', 'Course');
 

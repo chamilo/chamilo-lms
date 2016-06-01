@@ -173,7 +173,7 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 }
 
 $form = new FormValidator('registration');
-if (api_get_setting('allow_terms_conditions') == 'true') {
+if (api_get_setting('allow_terms_conditions') === 'true') {
     $display_all_form = !isset($_SESSION['update_term_and_condition']['user_id']);
 } else {
     $display_all_form = true;
@@ -300,13 +300,19 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
             $term_preview = LegalManager::get_last_condition($language);
         }
     }
+
     // Version and language //password
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
-
+    
     if ($term_preview['type'] == 1) {
-        $form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
-        $form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
+        $form->addElement(
+            'checkbox',
+            'legal_accept',
+            null,
+            get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>'
+        );
+        $form->addRule('extra_legal_accept', get_lang('ThisFieldIsRequired'), 'required');
     } else {
         if (!empty($term_preview['content'])) {
             $preview = LegalManager::show_last_condition($term_preview);

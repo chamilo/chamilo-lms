@@ -358,6 +358,7 @@ class Login
 
     /**
      *
+     * @deprecated
      * @global bool $is_platformAdmin
      * @global bool $is_allowedCreateCourse
      * @global object $_user
@@ -583,7 +584,7 @@ class Login
                 $sql = "SELECT * FROM $course_user_table
                        WHERE
                         user_id  = '" . $user_id . "' AND
-                        relation_type <> " . COURSE_RELATION_TYPE_RRHH . " AND
+                        relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                         course_code = '$course_id'";
                 $result = Database::query($sql);
 
@@ -602,6 +603,7 @@ class Login
                             $_course['id'],
                             $session_id
                         );
+
                         if (!$user_is_subscribed) {
                             $url = api_get_path(WEB_CODE_PATH) . 'course_info/legal.php?course_code=' . $_course['code'] . '&session_id=' . $session_id;
                             header('Location: ' . $url);

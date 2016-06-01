@@ -1869,7 +1869,7 @@ class CourseManager
         return $teachers;
     }
 
-    
+
     /**
      * Return user info array of all teacher-users registered in a course
      * This only returns the users that are registered in this actual course, not linked courses.
@@ -1900,7 +1900,7 @@ class CourseManager
                     cu.status = 1 ";
         $rs = Database::query($sql);
         $listTeachers = array();
-        $teachers = array();    
+        $teachers = array();
         while ($teacher = Database::fetch_array($rs)) {
             $userPicture = UserManager::getUserPicture($teacher['user_id'], USER_IMAGE_SIZE_SMALL);
             $teachers['id'] = $teacher['user_id'];
@@ -1915,7 +1915,7 @@ class CourseManager
         }
         return $listTeachers;
     }
-    
+
     /**
      * Returns a string list of teachers assigned to the given course
      * @param string $course_code
@@ -2952,7 +2952,7 @@ class CourseManager
         $sql = "SELECT * FROM $table_categories WHERE code = '$code';";
         return Database::fetch_array(Database::query($sql));
     }
-    
+
     /**
      * Returns the details of a course category
      *
@@ -3374,7 +3374,7 @@ class CourseManager
         if (!empty($special_course_list)) {
             $with_special_courses = ' course.code IN ("' . implode('","', $special_course_list) . '")';
         }
-        
+
         $courseList = [];
         if (!empty($with_special_courses)) {
             $sql = "SELECT
@@ -3428,12 +3428,12 @@ class CourseManager
                             $params['document'] .= Display::div('', ['id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container']);
                         }
                     }
-                    
+
                     $params['visibility'] = $course_info['visibility'];
                     $params['status'] = $course_info['status'];
                     $params['category'] = $course_info['categoryName'];
                     $params['icon'] = Display::return_icon('drawing-pin.png',null, null, ICON_SIZE_LARGE, null);
-                    
+
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                         $params['code_course']  = '(' . $course_info['visual_code'] . ')';
                     }
@@ -3452,16 +3452,16 @@ class CourseManager
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                         $params['notifications'] = $show_notification;
                     }
-                    
+
                     $courseList[] = $params;
-                    
+
                 }
             }
         }
-   
+
     return $courseList;
 }
-   
+
     /**
      * Display courses (without special courses) as several HTML divs
      * of course categories, as class userportal-catalog-item.
@@ -3509,7 +3509,7 @@ class CourseManager
 
         return $listItems;
     }
-    
+
     /**
      *  Display courses inside a category (without special courses) as HTML dics of
      *  class userportal-course-item.
@@ -3576,7 +3576,7 @@ class CourseManager
             }
             $course_info['id_session'] = null;
             $course_info['status'] = $course['status'];
-            
+
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
             $showNotification = Display::show_notification($course_info);
@@ -3588,18 +3588,18 @@ class CourseManager
             }
 
             $params = array();
-            
+
             $thumbnails = null;
             $image = null;
-            
-            
+
+
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $thumbnails = $course_info['course_image'];
                 $image = $course_info['course_image_large'];
             }else{
                 $image = Display::return_icon('session_default.png', null, null, null,null, true);
             }
-            
+
             $params['course_id'] = $course['id'];
             $params['edit_actions'] = '';
             $params['document'] = '';
@@ -3623,13 +3623,13 @@ class CourseManager
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
                 $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
             }
-            
+
             $params['status'] = $course['status'];
-            
+
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                 $params['code_course'] = '(' . $course_info['visual_code'] . ') ';
             }
-            
+
             $params['visibility'] = $course_info['visibility'];
             $params['link'] = $courseUrl;
             $params['thumbnails'] = $thumbnails;
@@ -3637,7 +3637,7 @@ class CourseManager
             $params['title'] = $course_info['title'];
             $params['category'] = $course_info['categoryName'];
             $params['teachers'] = $teachers;
-            
+
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;
@@ -3647,14 +3647,14 @@ class CourseManager
             if (empty($user_category_id)) {
                 $isSubContent = false;
             }
-            
+
             $courseList[] = $params;
-            
+
         }
-        
+
         return $courseList;
-        
-        
+
+
     }
 
     /**
@@ -3729,7 +3729,7 @@ class CourseManager
 
             $thumbnails = null;
             $image = null;
-            
+
             $iconName = basename($course_info['course_image']);
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $thumbnails = $course_info['course_image'];
@@ -3754,8 +3754,8 @@ class CourseManager
                     . Display::returnFontAwesomeIcon('folder-open') . '</a>';
                 $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
             }
-            
-            
+
+
             $course_title_url = '';
             $course_title_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
 
@@ -3763,11 +3763,11 @@ class CourseManager
                 $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
             }
             $params['status'] = $course['status'];
-            
+
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                 $params['code_course'] = '(' . $course_info['visual_code'] . ') ';
             }
-            
+
             $params['visibility'] = $course_info['visibility'];
             $params['link'] = $course_title_url;
             $params['thumbnails'] = $thumbnails;
@@ -3779,19 +3779,19 @@ class CourseManager
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;
             }
-            
+
             $isSubContent = true;
             if (empty($user_category_id)) {
                 $isSubContent = false;
             }
-            
+
             $courseList[] = $params;
-            
+
         }
 
         return $courseList;
     }
-    
+
     /**
      * Retrieves the user defined course categories
      * @param string $userId
@@ -3948,7 +3948,7 @@ class CourseManager
             array(),
             ICON_SIZE_LARGE,
             null,
-            true  
+            true
         );
 
         // Display the "what's new" icons
@@ -3987,12 +3987,12 @@ class CourseManager
         } else {
             $session_title = $course_info['name'];
         }
-        
+
         $thumbnails = null;
         $image = null;
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
         $iconName = basename($course_info['course_image']);
-        
+
         if ($showCustomIcon === 'true' && $iconName != 'course.png') {
             $thumbnails = $course_info['course_image'];
             $image = $course_info['course_image_large'];
@@ -4005,7 +4005,7 @@ class CourseManager
         $params['title'] = $session_title;
         $params['edit_actions'] = '';
         $params['document'] = '';
-        
+
         if ($course_visibility != COURSE_VISIBILITY_CLOSED &&
             $course_visibility != COURSE_VISIBILITY_HIDDEN
         ) {
@@ -4031,7 +4031,7 @@ class CourseManager
             $teacher_list = CourseManager::getTeachersFromCourseByCode(
                 $course_info['code']
             );
-            
+
             $course_coachs = self::get_coachs_from_course(
                 $course_info['id_session'],
                 $course_info['real_id']
@@ -4045,7 +4045,7 @@ class CourseManager
             }
             */
             $params['teachers'] = $teacher_list;
-            
+
             if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) ||
                 ($is_coach && $course_info['status'] != COURSEMANAGER)
             ) {
@@ -4663,7 +4663,7 @@ class CourseManager
             $courses = Database::store_result($result, 'ASSOC');
             $courses = self::process_hot_course_item($courses, $my_course_code_list);
         }
-        
+
         return $courses;
     }
 
@@ -5725,7 +5725,6 @@ class CourseManager
                 if (in_array($course_info['visibility'],
                     array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))
                 ) {
-
                     if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
 
                         $form_data['action'] = $course_info['course_public_url'];

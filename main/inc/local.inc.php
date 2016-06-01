@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *
  *                             SCRIPT PURPOSE
@@ -111,8 +113,6 @@
 
 // Verified if exists the username and password in session current
 
-use ChamiloSession as Session;
-
 // Facebook connexion, if activated
 if (api_is_facebook_auth_activated() && !api_get_user_id()) {
     require_once api_get_path(SYS_PATH).'main/auth/external_login/facebook.inc.php';
@@ -127,10 +127,10 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
     ConditionalLogin::check_conditions($uData);
 
     $_user['user_id'] = $_SESSION['conditional_login']['uid'];
-    $_user['status']  = $uData['status'];
+    $_user['status'] = $uData['status'];
     Session::write('_user', $_user);
     Session::erase('conditional_login');
-    $uidReset=true;
+    $uidReset = true;
     Event::event_login($_user['user_id']);
 }
 
@@ -192,13 +192,17 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         unset($_user['user_id']);
     }
 
+    $termsAndCondition = Session::read('term_and_condition');
+
     // Platform legal terms and conditions
-    if (api_get_setting('allow_terms_conditions') == 'true') {
+    if (api_get_setting('allow_terms_conditions') === 'true' &&
+        api_get_setting('load_term_conditions_section') === 'login'
+    ) {
         if (isset($_POST['login']) && isset($_POST['password']) &&
-            isset($_SESSION['term_and_condition']['user_id'])
+            isset($termsAndCondition['user_id'])
         ) {
             // user id
-            $user_id = $_SESSION['term_and_condition']['user_id'];
+            $user_id = $termsAndCondition['user_id'];
             // Update the terms & conditions
             $legal_type = null;
             //verify type of terms and conditions
@@ -210,7 +214,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 );
             }
 
-            //is necessary verify check
+            // is necessary verify check
             if ($legal_type == 1) {
                 if ((isset($_POST['legal_accept']) && $_POST['legal_accept']=='1')) {
                     $legal_option = true;
@@ -219,9 +223,9 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 }
             }
 
-            //no is check option
+            // no is check option
             if ($legal_type == 0) {
-                $legal_option=true;
+                $legal_option = true;
             }
 
             if (isset($_POST['legal_accept_type']) && $legal_option === true) {
@@ -239,7 +243,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         }
     }
 
-    //IF cas is activated and user isn't logged in
+    // IF cas is activated and user isn't logged in
     if (api_get_setting('cas_activate') == 'true') {
         $cas_activated = true;
     } else {
@@ -728,7 +732,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             }
                         }
                     } else {
-                        //Redirect to the subscription form
+                        // Redirect to the subscription form
                         header(
                             'Location: '.api_get_path(WEB_CODE_PATH)
                             .'auth/inscription.php?username='.$res['openid.sreg.nickname']
@@ -930,9 +934,7 @@ if (isset($cidReset) && $cidReset) {
                         WHERE id="'.intval($_GET['id_session']) . '"';
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs)) {
-                    list($_SESSION['session_name']) = Database::fetch_array(
-                        $rs
-                    );
+                    list($_SESSION['session_name']) = Database::fetch_array($rs);
                     $_SESSION['id_session'] = intval($_GET['id_session']);
                 } else {
                     api_not_allowed(true);
@@ -1072,15 +1074,83 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             $user_pass_open_course = true;
         }
 
-        //Checking if the user filled the course legal agreement
+        // Checking if the user filled the course legal agreement
         if ($_course['activate_legal'] == 1 && !api_is_platform_admin() && !api_is_anonymous()) {
-            $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course['id'], $session_id) || $user_pass_open_course;
+            $user_is_subscribed = CourseManager::is_user_accepted_legal(
+                $user_id,
+                $_course['id'],
+                $session_id
+            ) || $user_pass_open_course;
             if (!$user_is_subscribed) {
                 $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
                 header('Location: '.$url);
                 exit;
             }
         }
+
+        // Platform legal terms and conditions
+        if (api_get_setting('allow_terms_conditions') === 'true' &&
+            api_get_setting('load_term_conditions_section') === 'course'
+        ) {
+            $termAndConditionStatus = api_check_term_condition($user_id);
+            // @todo not sure why we need the login password and update_term_status
+            if ($termAndConditionStatus === false) {
+                Session::write('term_and_condition', array('user_id' => $user_id));
+
+            } else {
+                Session::erase('term_and_condition');
+            }
+
+            $termsAndCondition = Session::read('term_and_condition');
+
+            if (isset($termsAndCondition['user_id'])) {
+                // user id
+                $user_id = $termsAndCondition['user_id'];
+                // Update the terms & conditions
+                $legal_type = null;
+                // Verify type of terms and conditions
+                if (isset($_POST['legal_info'])) {
+                    $info_legal = explode(':', $_POST['legal_info']);
+                    $legal_type = LegalManager::get_type_of_terms_and_conditions(
+                        $info_legal[0],
+                        $info_legal[1]
+                    );
+                }
+
+                // is necessary verify check
+                if ($legal_type === 1) {
+                    if (isset($_POST['legal_accept']) && $_POST['legal_accept'] == '1') {
+                        $legal_option = true;
+                    } else {
+                        $legal_option = false;
+                    }
+                }
+
+                // no is check option
+                if ($legal_type == 0) {
+                    $legal_option = true;
+                }
+
+                if (isset($_POST['legal_accept_type']) && $legal_option === true) {
+                    $cond_array = explode(':', $_POST['legal_accept_type']);
+                    if (!empty($cond_array[0]) && !empty($cond_array[1])) {
+                        $time = time();
+                        $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
+                        UserManager::update_extra_field_value(
+                            $user_id,
+                            'legal_accept',
+                            $condition_to_save
+                        );
+                    }
+                }
+                $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
+                header("Location:". $url);
+                exit;
+            }
+        }
+
+
+
     }
 
     if (isset($user_id) && $user_id && isset($_real_cid) && $_real_cid) {

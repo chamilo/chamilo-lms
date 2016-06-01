@@ -182,7 +182,7 @@ if ($course_validation_feature) {
     // then we may get the URL from Chamilo's module "Terms and conditions",
     // if it is activated.
     if (empty($terms_and_conditions_url)) {
-        if (api_get_setting('allow_terms_conditions') == 'true') {
+        if (api_get_setting('allow_terms_conditions') === 'true') {
             $terms_and_conditions_url = api_get_path(WEB_CODE_PATH).'auth/inscription.php?legal';
         }
     }
@@ -196,8 +196,10 @@ if ($course_validation_feature) {
             get_lang('IAcceptTermsAndConditions'),
             1
         );
+
         $form->addRule(
-            'legal', get_lang('YouHaveToAcceptTermsAndConditions'),
+            'legal',
+            get_lang('YouHaveToAcceptTermsAndConditions'),
             'required'
         );
         // Link to terms and conditions.

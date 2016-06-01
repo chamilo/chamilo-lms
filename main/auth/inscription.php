@@ -283,7 +283,6 @@ if ($user_already_registered_show_terms == false) {
         ');
     }
 
-
     // LANGUAGE
     if (in_array('language', $allowedFields)) {
         if (api_get_setting('registration', 'language') == 'true') {
@@ -294,6 +293,7 @@ if ($user_already_registered_show_terms == false) {
             );
         }
     }
+
     // STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
         if (in_array('status', $allowedFields)) {
@@ -411,8 +411,8 @@ if (!empty($_GET['phone'])) {
 if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid'])) {
     $defaults['openid'] = Security::remove_XSS($_GET['openid']);
 }
-$defaults['status'] = STUDENT;
 
+$defaults['status'] = STUDENT;
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
@@ -437,14 +437,14 @@ if (!CustomPages::enabled()) {
                     $term_preview = LegalManager::get_last_condition($language);
                 }
                 $tool_name = get_lang('TermsAndConditions');
-                Display :: display_header($tool_name);
+                Display::display_header($tool_name);
 
                 if (!empty($term_preview['content'])) {
                     echo $term_preview['content'];
                 } else {
                     echo get_lang('ComingSoon');
                 }
-                Display :: display_footer();
+                Display::display_footer();
                 exit;
             }
         }
@@ -452,7 +452,7 @@ if (!CustomPages::enabled()) {
 
     $tool_name = get_lang('Registration', null, (!empty($_POST['language'])?$_POST['language']: $_user['language']));
 
-    if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registered_show_terms) {
+    if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
         $tool_name = get_lang('TermsAndConditions');
     }
 
@@ -475,7 +475,7 @@ if (!CustomPages::enabled()) {
         $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         if (!empty($open)) {
-            $content =  '<div class="well_border">'.$open.'</div>';
+            $content = '<div class="well_border">'.$open.'</div>';
         }
     }
 
@@ -484,7 +484,7 @@ if (!CustomPages::enabled()) {
         api_not_allowed(true, get_lang('RegistrationDisabled'));
     }
 
-    if (api_get_setting('allow_registration') == 'approval') {
+    if (api_get_setting('allow_registration') === 'approval') {
         $content .= Display::return_message(get_lang('YourAccountHasToBeApproved'));
     }
 
@@ -516,6 +516,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     // Version and language
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
+    $form->addElement('hidden', 'legal_course_id', api_get_course_int_id());
 
     if ($term_preview['type'] == 1) {
         $form->addElement(
@@ -524,7 +525,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
             null,
             get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>'
         );
-        $form->addRule('legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('legal_accept', get_lang('ThisFieldIsRequired'), 'required');
     } else {
         $preview = LegalManager::show_last_condition($term_preview);
         $form->addElement('label', null, $preview);
@@ -692,7 +693,7 @@ if ($form->validate()) {
             /* If the account has to be approved then we set the account to inactive,
             sent a mail to the platform admin and exit the page.*/
 
-            if (api_get_setting('allow_registration') == 'approval') {
+            if (api_get_setting('allow_registration') === 'approval') {
                 $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
                 // 1. set account inactive
                 $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".$user_id;
@@ -770,7 +771,7 @@ if ($form->validate()) {
     $_user['language'] = $values['language'];
     $_user['user_id'] = $user_id;
     $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;
-    $usersCanCreateCourse = api_get_setting('allow_users_to_create_courses') == 'true';
+    $usersCanCreateCourse = api_get_setting('allow_users_to_create_courses') === 'true';
 
     Session::write('_user', $_user);
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
@@ -794,10 +795,17 @@ if ($form->validate()) {
         'action' => api_get_path(WEB_PATH).'user_portal.php'
     );
 
-    if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registered_show_terms) {
-        $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
+    if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
+        if (api_get_setting('load_term_conditions_section') === 'login') {
+            $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
+        } else {
+            $courseInfo = api_get_course_info();
+            $form_data['action'] = $courseInfo['course_public_url'].'?id_session='.api_get_session_id();
+            $cidReset = true;
+            Session::erase('_course');
+            Session::erase('_cid');
+        }
     } else {
-
         if (!empty($values['email'])) {
             $text_after_registration.= '<p>'.get_lang('MailHasBeenSent', null, $_user['language']).'.</p>';
         }
@@ -806,9 +814,9 @@ if ($form->validate()) {
             if ($usersCanCreateCourse) {
                 $form_data['message'] = '<p>'. get_lang('NowGoCreateYourCourse', null, $_user['language']). "</p>";
             }
-            $form_data['action']  = '../create_course/add_course.php';
+            $form_data['action']  = api_get_path(WEB_CODE_PATH).'create_course/add_course.php';
 
-            if (api_get_setting('course_validation') == 'true') {
+            if (api_get_setting('course_validation') === 'true') {
                 $form_data['button'] = Display::button(
                     'next',
                     get_lang('CreateCourseRequest', null, $_user['language']),
@@ -821,7 +829,10 @@ if ($form->validate()) {
                     array('class' => 'btn btn-primary btn-large')
                 );
                 $form_data['go_button'] = '&nbsp;&nbsp;<a href="'.api_get_path(WEB_PATH).'index.php'.'">'.
-                    Display::span(get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')).'</a>';
+                    Display::span(
+                        get_lang('Next', null, $_user['language']),
+                        array('class' => 'btn btn-primary btn-large')
+                    ).'</a>';
             }
         } else {
             if (api_get_setting('allow_students_to_browse_courses') == 'true') {
@@ -863,9 +874,7 @@ if ($form->validate()) {
             array('info' => $text_after_registration)
         );
     } else {
-
         $tpl = new Template($tool_name);
-
         $tpl->assign('inscription_content', $content);
         $tpl->assign('text_after_registration', $text_after_registration);
         $tpl->assign('hide_header', $hideHeaders);

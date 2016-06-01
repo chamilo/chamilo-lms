@@ -151,7 +151,7 @@ if (api_is_invitee()) {
     }
 }
 
-//Deleting group session
+// Deleting group session
 Session::erase('toolgroup');
 Session::erase('_gid');
 
@@ -167,6 +167,7 @@ if ($isSpecialCourse) {
         }
     }
 }
+
 if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();

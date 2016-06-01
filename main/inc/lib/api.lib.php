@@ -1021,6 +1021,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (api_is_platform_admin($allow_session_admins)) {
         return true;
     }
+
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
             default:
@@ -5932,6 +5933,7 @@ function api_check_term_condition($user_id)
     if (api_get_setting('allow_terms_conditions') == 'true') {
         //check if exists terms and conditions
         if (LegalManager::count() == 0) {
+
             return true;
         }
 

@@ -34,7 +34,7 @@ class MultipleAnswerTrueFalse extends Question
     {
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
         // The previous default value was 2. See task #1759.
-        $nb_answers += isset($_POST['lessAnswers']) ? -1 : isset($_POST['moreAnswers']) ? 1 : 0;
+        $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         $course_id = api_get_course_int_id();
         $obj_ex = $_SESSION['objExercise'];

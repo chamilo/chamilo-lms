@@ -4742,6 +4742,7 @@ div#chat-remote-video video {
     margin: 5px;
     font-size: 14px;
     font-weight: bold;
+    min-height: 40px;
 }
 .grid-courses .items .toolbar{
     text-align: right;

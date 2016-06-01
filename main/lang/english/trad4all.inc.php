@@ -7711,4 +7711,9 @@ $ForumEndDate = "Closing date";
 $ForumStartDateComment = "The forum will be visible starting from this date";
 $ForumEndDateComment = "Once this date has passed, the forum will be closed";
 $ModeratedForum = "Moderated forum";
+$SendLegal = "Send legal agreement";
+$DeleteLegal = "Delete legal agreement";
+$LegalAccepted = "Legal accepted";
+$LoadTermConditionsSectionTitle = "Load term conditions section";
+$LoadTermConditionsSectionDescription = "The legal agreement will appear during the login or when enter to a course.";
 ?>

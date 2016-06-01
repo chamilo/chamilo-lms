@@ -256,7 +256,7 @@ if (!isset($_GET['running'])) {
     $userMailCanBeEmpty = 1;
     $allowSelfReg = 1;
     $allowSelfRegProf = 1;
-    $encryptPassForm = 'sha1';
+    $encryptPassForm = 'bcrypt';
     if (!empty($_GET['profile'])) {
         $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
     }
@@ -303,7 +303,7 @@ if (!$_POST) {
 
 // Managing the $encryptPassForm
 if ($encryptPassForm == '1') {
-    $encryptPassForm = 'sha1';
+    $encryptPassForm = 'bcrypt';
 } elseif ($encryptPassForm == '0') {
     $encryptPassForm = 'none';
 }

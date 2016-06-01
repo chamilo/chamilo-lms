@@ -280,10 +280,7 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('UPDATE legal SET id = 1 WHERE id = 0');
             $this->addSql('ALTER TABLE legal MODIFY COLUMN language_id INT NOT NULL');
             $this->addSql('ALTER TABLE legal DROP legal_id');
-            $this->addSql('ALTER TABLE legal CHANGE id id INT NOT NULL;');
-            $this->addSql('ALTER TABLE legal ADD PRIMARY KEY (id);');
-
-
+            $this->addSql('ALTER TABLE legal CHANGE id id INT AUTO_INCREMENT NOT NULL PRIMARY KEY;');
         }
     }
 

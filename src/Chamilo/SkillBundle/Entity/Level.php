@@ -1,12 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Profile Level
- *
- * @package chamilo.skill
- */
-
 namespace Chamilo\SkillBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -15,9 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Level
  *
- * @ORM\Table(
- *  name="skill_level"
- * )
+ * @ORM\Table(name="skill_level")
  * @ORM\Entity
  */
 class Level
@@ -161,6 +153,4 @@ class Level
 
         return $this;
     }
-
-
 }

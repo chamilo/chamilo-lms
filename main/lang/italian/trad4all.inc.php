@@ -5996,7 +5996,6 @@ $Off = "Off";
 $webserver = "Web Server";
 $mysql = "MySQL";
 $NotInserted = "Non inserito";
-$Multipleresponse = "Risposta multipla";
 $EnableMathJaxComment = "Attiva l'editor matematico MathJax";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Ora puoi accedere a %s usando il nome utente e la password da te indicata";
 $HaveFun = "Buon lavoro,";

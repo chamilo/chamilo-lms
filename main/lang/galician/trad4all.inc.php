@@ -5997,7 +5997,6 @@ $Off = "Desactivado";
 $webserver = "servidor web";
 $mysql = "MySQL";
 $NotInserted = "Non insertado";
-$Multipleresponse = "Resposta múltiple";
 $EnableMathJaxComment = "Activar editor matemático MathJax";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Non pode loguearse en %s usando o nome de usuario e contrasinal que introduceu.";
 $HaveFun = "Disfrute,";

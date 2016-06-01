@@ -5962,7 +5962,6 @@ $Off = "Off";
 $webserver = "Web server";
 $mysql = "MySQL";
 $NotInserted = "Not inserted";
-$Multipleresponse = "Πολλαπλής Απάντησης";
 $EnableMathJaxComment = "Ενεργοποιήστε το μαθηματικό συντακτικό του MathJax.";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Μπορείτε να εισέλθετε στην πλατφόρμα %s χρησιμοποιώντας το όνομα χρήστη και το συνθηματικό που επιλέξατε.";
 $HaveFun = "Have fun,";

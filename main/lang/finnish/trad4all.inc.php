@@ -2825,7 +2825,6 @@ $SendInformation = "Lähetä tiedot";
 $SelectOne = "Valitse yksi";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Näytä viimein tehty askel ja seuraava ei tehty askel";
 $EndDateMustBeMoreThanStartDate = "Päättymispäivän pitää olla myöhemmin kun alkamispäivän.";
-$Multipleresponse = "Monivalinta";
 $MemoryUsage = "Muistin käyttö";
 $CopyToMyFiles = "Kopioi henkilökohtaisele alueelle";
 $Export2PDF = "Vie PDF tiedostoksi";

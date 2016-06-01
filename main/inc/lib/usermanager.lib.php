@@ -3586,7 +3586,7 @@ class UserManager
         if (is_array($extraFields) && count($extraFields)>0 ) {
             foreach ($extraFields as $extraField) {
                 $varName = 'field_'.$extraField['variable'];
-                if (UserManager::is_extra_field_available($extraField['variable'])) {
+                //if (UserManager::is_extra_field_available($extraField['variable'])) {
                     if (isset($_GET[$varName]) && $_GET[$varName]!='0') {
                         $useExtraFields = true;
                         $extraFieldResult[]= UserManager::get_extra_user_data_by_value(
@@ -3594,7 +3594,7 @@ class UserManager
                             $_GET[$varName]
                         );
                     }
-                }
+                //}
             }
         }
 
@@ -3602,7 +3602,7 @@ class UserManager
             $finalResult = array();
             if (count($extraFieldResult)>1) {
                 for ($i=0; $i < count($extraFieldResult) -1; $i++) {
-                    if (is_array($extraFieldResult[$i+1])) {
+                if (is_array($extraFieldResult[$i]) && is_array($extraFieldResult[$i+1])) {
                         $finalResult  = array_intersect($extraFieldResult[$i], $extraFieldResult[$i+1]);
                     }
                 }
@@ -3626,7 +3626,7 @@ class UserManager
      * @param string $query the value of the search box
      * @return string HTML form
      */
-    public static function get_search_form($query)
+    public static function get_search_form($query, $defaultParams = [])
     {
         $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
         $form = new FormValidator(
@@ -3678,6 +3678,10 @@ class UserManager
 
         $defaults['search_type'] = intval($searchType);
         $defaults['q'] = api_htmlentities(Security::remove_XSS($query));
+
+        if (!empty($defaultParams)) {
+            $defaults = array_merge($defaults, $defaultParams);
+        }
         $form->setDefaults($defaults);
 
         $form->addButtonSearch(get_lang('Search'));
@@ -4815,7 +4819,7 @@ EOF;
 
     /**
      * Subscribe boss to students
-     * 
+     *
      * @param int $bossId The boss id
      * @param array $usersId The users array
      * @return int Affected rows

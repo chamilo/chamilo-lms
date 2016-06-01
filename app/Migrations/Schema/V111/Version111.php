@@ -273,6 +273,17 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql("ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_qqrc_qid (question_id)");
             $this->addSql("ALTER TABLE c_quiz_answer ADD INDEX idx_cqa_q (question_id)");
             $this->addSql("ALTER TABLE c_student_publication ADD INDEX idx_csp_u (user_id)");
+
+            $this->addSql('ALTER TABLE legal DROP PRIMARY KEY;');
+            $this->addSql('ALTER TABLE legal ADD id INT');
+            $this->addSql('UPDATE legal SET id = legal_id');
+            $this->addSql('UPDATE legal SET id = 1 WHERE id = 0');
+            $this->addSql('ALTER TABLE legal MODIFY COLUMN language_id INT NOT NULL');
+            $this->addSql('ALTER TABLE legal DROP legal_id');
+            $this->addSql('ALTER TABLE legal CHANGE id id INT NOT NULL;');
+            $this->addSql('ALTER TABLE legal ADD PRIMARY KEY (id);');
+
+
         }
     }
 

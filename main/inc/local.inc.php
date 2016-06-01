@@ -1148,9 +1148,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 exit;
             }
         }
-
-
-
     }
 
     if (isset($user_id) && $user_id && isset($_real_cid) && $_real_cid) {

@@ -45,14 +45,14 @@ class LegalManager
 
             return true;
         } elseif($last['type'] != $type && $language == $last['language_id']) {
-            //update
-            $id = $last['legal_id'];
+            // Update
+            $id = $last['id'];
             $params = [
                 'changes' => $changes,
                 'type' => $type,
                 'date' => $time
             ];
-            Database::update($legal_table, $params, ['legal_id => ?' => $id]);
+            Database::update($legal_table, $params, ['id => ?' => $id]);
 
             return true;
         } else {
@@ -69,7 +69,7 @@ class LegalManager
 		/*
 		$legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$id = intval($id);
-		$sql = "DELETE FROM $legal_table WHERE legal_id = '".$id."'";
+		$sql = "DELETE FROM $legal_table WHERE id = '".$id."'";
 		*/
 	}
 
@@ -84,7 +84,7 @@ class LegalManager
 		$language= Database::escape_string($language);
 		$sql = "SELECT version FROM $legal_conditions_table
 		        WHERE language_id = '".$language."'
-		        ORDER BY legal_id DESC LIMIT 1 ";
+		        ORDER BY id DESC LIMIT 1 ";
 		$result = Database::query($sql);
 		$row = Database::fetch_array($result);
         if (Database::num_rows($result) > 0) {
@@ -224,7 +224,7 @@ class LegalManager
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$sql = "SELECT count(*) as count_result
 		        FROM $legal_conditions_table
-		        ORDER BY legal_id DESC ";
+		        ORDER BY id DESC ";
 		$result = Database::query($sql);
 		$url = Database::fetch_array($result,'ASSOC');
 		$result = $url['count_result'];
@@ -244,7 +244,7 @@ class LegalManager
 		$legal_id = intval($legal_id);
 		$language_id = intval($language_id);
 		$sql = 'SELECT type FROM '.$legal_conditions_table.'
-		        WHERE legal_id="'.$legal_id.'" AND language_id="'.$language_id.'"';
+		        WHERE id =  "'.$legal_id.'" AND language_id="'.$language_id.'"';
 		$rs = Database::query($sql);
 
 		return Database::result($rs,0,'type');

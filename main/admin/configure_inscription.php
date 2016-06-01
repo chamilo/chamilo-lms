@@ -303,8 +303,8 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 
     // Version and language //password
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
-    $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
-    
+    $form->addElement('hidden', 'legal_info', $term_preview['id'].':'.$term_preview['language_id']);
+
     if ($term_preview['type'] == 1) {
         $form->addElement(
             'checkbox',

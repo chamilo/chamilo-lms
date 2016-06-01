@@ -515,7 +515,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 
     // Version and language
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
-    $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
+    $form->addElement('hidden', 'legal_info', $term_preview['id'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_course_id', api_get_course_int_id());
 
     if ($term_preview['type'] == 1) {
@@ -800,10 +800,14 @@ if ($form->validate()) {
             $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
         } else {
             $courseInfo = api_get_course_info();
-            $form_data['action'] = $courseInfo['course_public_url'].'?id_session='.api_get_session_id();
-            $cidReset = true;
-            Session::erase('_course');
-            Session::erase('_cid');
+            if (!empty($courseInfo)) {
+                $form_data['action'] = $courseInfo['course_public_url'].'?id_session='.api_get_session_id();
+                $cidReset = true;
+                Session::erase('_course');
+                Session::erase('_cid');
+            } else {
+                $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
+            }
         }
     } else {
         if (!empty($values['email'])) {

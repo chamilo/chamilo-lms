@@ -17,6 +17,7 @@ api_protect_admin_script();
 
 $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserList'));
+
 if (!isset($_GET['user_id'])) {
     api_not_allowed();
 }
@@ -58,8 +59,78 @@ if (api_is_platform_admin()) {
         ),
         api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.$userId
     );
-
 }
+
+
+$studentBossList = UserManager::getStudentBossList($userId);
+$studentBossListToString = '';
+if ($studentBossList) {
+    $table = new HTML_Table(array('class' => 'data_table'));
+    $table->setHeaderContents(0, 0, get_lang('User'));
+    $csvContent[] = [get_lang('StudentBoss')];
+
+    $row = 1;
+    foreach ($studentBossList as $studentBossId) {
+        $studentBoss = api_get_user_info($studentBossId['boss_id']);
+        $table->setCellContents($row, 0, $studentBoss['complete_name_with_username']);
+        $csvContent[] = array($studentBoss['complete_name_with_username']);
+        $row++;
+    }
+    $studentBossListToString = $table->toHtml();
+}
+
+if (isset($_GET['action'])) {
+    switch ($_GET['action']) {
+        case 'send_legal':
+            $subject = get_lang('SendLegalSubject');
+            $content = sprintf(
+                get_lang('SendLegalDescriptionToUrlX'),
+                api_get_path(WEB_CODE_PATH).'auth/inscription.php'
+            );
+            MessageManager::send_message_simple($userId, $subject, $content);
+            Display::addFlash(Display::return_message(get_lang('Sent')));
+            break;
+        case 'delete_legal':
+            $extraFieldValue = new ExtraFieldValue('user');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+
+            $result = $extraFieldValue->delete($value['id']);
+            if ($result) {
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
+            }
+            break;
+        case 'unsubscribe':
+            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
+            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
+            if (CourseManager::get_user_in_course_status($userId, $courseCode) == STUDENT) {
+                CourseManager::unsubscribe_user($userId, $courseCode, $sessionId);
+                Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
+            } else {
+                Display::addFlash(Display::return_message(
+                    get_lang('CannotUnsubscribeUserFromCourse'),
+                    'error',
+                    false
+                ));
+            }
+            break;
+        case 'unsubscribeSessionCourse':
+            $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
+            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
+            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
+            SessionManager::removeUsersFromCourseSession(
+                array($userId),
+                $sessionId,
+                api_get_course_info($courseCode)
+            );
+            Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
+            break;
+        case 'export':
+            Export :: arrayToCsv($csvContent, 'user_information_'.$user);
+            exit;
+            break;
+    }
+}
+
 
 // Show info about who created this user and when
 $creatorId = $user['creator_id'];
@@ -88,7 +159,7 @@ $data = array(
         .$creatorId,
         $creatorInfo['username'],
         api_get_utc_datetime($registrationDate)
-    ),
+    )
 );
 
 $row = 1;
@@ -109,6 +180,29 @@ $data = array(
     get_lang('FirstLogin') => Tracking :: get_first_connection_date($userId),
     get_lang('LatestLogin') => Tracking :: get_last_connection_date($userId, true)
 );
+
+if (api_get_setting('allow_terms_conditions') === 'true') {
+    $extraFieldValue = new ExtraFieldValue('user');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+    $icon = Display::return_icon('accept_na.png');
+    if (isset($value['value'])) {
+        list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
+        $icon = Display::return_icon('accept.png').' '.api_get_local_time($legalTime);
+        $icon .= ' '.Display::url(
+            get_lang('DeleteLegal'),
+            api_get_self().'?action=delete_legal&user_id='.$userId,
+            ['class' => 'btn btn-danger btn-xs']
+        );
+    } else {
+        $icon .= ' '.Display::url(
+            get_lang('SendLegal'),
+            api_get_self().'?action=send_legal&user_id='.$userId,
+            ['class' => 'btn btn-primary btn-xs']
+        );
+    }
+    
+    $data[get_lang('LegalAccepted')] = $icon;
+}
 $row = 1;
 foreach ($data as $label => $item) {
     if (!empty($label)) {
@@ -381,59 +475,15 @@ if (api_is_multiple_url_enabled()) {
     }
 }
 
-$studentBossList = UserManager::getStudentBossList($userId);
-$studentBossListToString = '';
-if ($studentBossList) {
-    $table = new HTML_Table(array('class' => 'data_table'));
-    $table->setHeaderContents(0, 0, get_lang('User'));
-    $csvContent[] = [get_lang('StudentBoss')];
-
-    $row = 1;
-    foreach ($studentBossList as $studentBossId) {
-        $studentBoss = api_get_user_info($studentBossId['boss_id']);
-        $table->setCellContents($row, 0, $studentBoss['complete_name_with_username']);
-        $csvContent[] = array($studentBoss['complete_name_with_username']);
-        $row++;
-    }
-    $studentBossListToString = $table->toHtml();
-}
-
-$message = null;
-
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
-        case 'unsubscribe':
-            $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
-            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
-            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
-            if (CourseManager::get_user_in_course_status($userId, $courseCode) == STUDENT) {
-                CourseManager::unsubscribe_user($userId, $courseCode, $sessionId);
-                $message = Display::return_message(get_lang('UserUnsubscribed'));
-            } else {
-                $message = Display::return_message(
-                    get_lang('CannotUnsubscribeUserFromCourse'),
-                    'error',
-                    false
-                );
-            }
-            break;
-        case 'unsubscribeSessionCourse':
-            $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
-            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
-            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
-            SessionManager::removeUsersFromCourseSession(
-                array($userId),
-                $sessionId,
-                api_get_course_info($courseCode)
-            );
-            $message = Display::return_message(get_lang('UserUnsubscribed'));
-            break;
         case 'export':
             Export :: arrayToCsv($csvContent, 'user_information_'.$user);
             exit;
             break;
     }
 }
+
 
 Display::display_header($tool_name);
 
@@ -460,8 +510,6 @@ $fullUrl = UserManager::getUserPicture(
 );
 
 echo '<div class="row">';
-
-echo $message;
 
 echo '<div class="col-md-2">';
 echo '<a class="expand-image" href="'.$fullUrlBig.'">'

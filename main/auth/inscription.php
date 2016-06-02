@@ -123,8 +123,7 @@ function initializeGeo(address, latLng) {
 
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
-$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' &&
-    api_get_setting('allow_registration') === 'false';
+$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' && api_get_setting('allow_registration') === 'false';
 
 if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('RegistrationDisabled'));
@@ -140,10 +139,9 @@ if (!empty($_SESSION['user_language_choice'])) {
 
 $form = new FormValidator('registration');
 
+$user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
-} else {
-    $user_already_registered_show_terms = false;
 }
 
 // Direct Link Subscription feature #5299
@@ -155,7 +153,7 @@ if (!empty($course_code_redirect)) {
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
-if ($user_already_registered_show_terms == false) {
+if ($user_already_registered_show_terms === false) {
     if (api_is_western_name_order()) {
         // FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
@@ -171,11 +169,11 @@ if ($user_already_registered_show_terms == false) {
 
     // EMAIL
     $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
-    if (api_get_setting('registration', 'email') == 'true') {
+    if (api_get_setting('registration', 'email') === 'true') {
         $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
     }
 
-    if (api_get_setting('login_is_email') == 'true') {
+    if (api_get_setting('login_is_email') === 'true') {
         $form->applyFilter('email', 'trim');
         if (api_get_setting('registration', 'email') != 'true') {
             $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
@@ -185,7 +183,7 @@ if ($user_already_registered_show_terms == false) {
     }
 
     $form->addRule('email', get_lang('EmailWrong'), 'email');
-    if (api_get_setting('openid_authentication') == 'true') {
+    if (api_get_setting('openid_authentication') === 'true') {
         $form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
     }
 
@@ -219,14 +217,24 @@ if ($user_already_registered_show_terms == false) {
     }
 
     // PASSWORD
-    $form->addElement('password', 'pass1', get_lang('Pass'), array('id' => 'pass1', 'size' => 20, 'autocomplete' => 'off'));
+    $form->addElement(
+        'password',
+        'pass1',
+        get_lang('Pass'),
+        array('id' => 'pass1', 'size' => 20, 'autocomplete' => 'off')
+    );
 
     $checkPass = api_get_setting('allow_strength_pass_checker');
     if ($checkPass == 'true') {
         $form->addElement('label', null, '<div id="password_progress"></div>');
     }
 
-    $form->addElement('password', 'pass2', get_lang('Confirmation'), array('id' => 'pass2', 'size' => 20, 'autocomplete' => 'off'));
+    $form->addElement(
+        'password',
+        'pass2',
+        get_lang('Confirmation'),
+        array('id' => 'pass2', 'size' => 20, 'autocomplete' => 'off')
+    );
     $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
@@ -257,7 +265,7 @@ if ($user_already_registered_show_terms == false) {
         }
     }
 
-    // Geolocation
+    // Geo location
     if (in_array('address', $allowedFields)) {
         $form->addElement('text', 'address', get_lang('AddressField'), ['id' => 'address']);
         $form->addHtml('
@@ -283,7 +291,7 @@ if ($user_already_registered_show_terms == false) {
         ');
     }
 
-    // LANGUAGE
+    // Language
     if (in_array('language', $allowedFields)) {
         if (api_get_setting('registration', 'language') == 'true') {
             $form->addElement(
@@ -315,20 +323,20 @@ if ($user_already_registered_show_terms == false) {
     }
 
     $captcha = api_get_setting('allow_captcha');
-    $allowCaptcha = $captcha == 'true';
+    $allowCaptcha = $captcha === 'true';
 
     if ($allowCaptcha) {
         $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
         $options = array(
-            'width'        => 220,
-            'height'       => 90,
-            'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
-            'sessionVar'   => basename(__FILE__, '.php'),
+            'width' => 220,
+            'height' => 90,
+            'callback' => $ajax.'&var='.basename(__FILE__, '.php'),
+            'sessionVar' => basename(__FILE__, '.php'),
             'imageOptions' => array(
                 'font_size' => 20,
-                'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
+                'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
                 'font_file' => 'OpenSans-Regular.ttf',
-                    //'output' => 'gif'
+                //'output' => 'gif'
             )
         );
 
@@ -345,41 +353,65 @@ if ($user_already_registered_show_terms == false) {
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
     ) {
-        $form->addHtmlEditor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor(
+            'competences',
+            get_lang('MyCompetences'),
+            false,
+            false,
+            array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130')
+        );
     }
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
     ) {
-        $form->addHtmlEditor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor(
+            'diplomas',
+            get_lang('MyDiplomas'),
+            false,
+            false,
+            array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130')
+        );
     }
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'myteach') == 'true'
     ) {
-        $form->addHtmlEditor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor(
+            'teach',
+            get_lang('MyTeach'),
+            false,
+            false,
+            array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130')
+        );
     }
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
     ) {
-        $form->addHtmlEditor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor(
+            'openarea',
+            get_lang('MyPersonalOpenArea'),
+            false,
+            false,
+            array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130')
+        );
     }
-    if (api_get_setting('extended_profile') == 'true') {
-        if (api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true' &&
-            api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') == 'true'
+    if (api_get_setting('extended_profile') === 'true') {
+        if (api_get_setting('extendedprofile_registration', 'mycomptetences') === 'true' &&
+            api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') === 'true'
         ) {
             $form->addRule('competences', get_lang('ThisFieldIsRequired'), 'required');
         }
-        if (api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true' &&
-            api_get_setting('extendedprofile_registrationrequired', 'mydiplomas') == 'true'
+        if (api_get_setting('extendedprofile_registration', 'mydiplomas') === 'true' &&
+            api_get_setting('extendedprofile_registrationrequired', 'mydiplomas') === 'true'
         ) {
             $form->addRule('diplomas', get_lang('ThisFieldIsRequired'), 'required');
         }
-        if (api_get_setting('extendedprofile_registration', 'myteach') == 'true' &&
-            api_get_setting('extendedprofile_registrationrequired', 'myteach') == 'true'
+        if (api_get_setting('extendedprofile_registration', 'myteach') === 'true' &&
+            api_get_setting('extendedprofile_registrationrequired', 'myteach') === 'true'
         ) {
             $form->addRule('teach', get_lang('ThisFieldIsRequired'), 'required');
         }
-        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true' &&
-            api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') == 'true'
+        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') === 'true' &&
+            api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') === 'true'
         ) {
             $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
@@ -391,7 +423,6 @@ if ($user_already_registered_show_terms == false) {
         $returnParams = $extraField->addElements($form);
     }
 }
-
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
     $defaults['language'] = $_SESSION['user_language_choice'];
 } else {
@@ -408,7 +439,7 @@ if (!empty($_GET['phone'])) {
     $defaults['phone'] = Security::remove_XSS($_GET['phone']);
 }
 
-if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid'])) {
+if (api_get_setting('openid_authentication') === 'true' && !empty($_GET['openid'])) {
     $defaults['openid'] = Security::remove_XSS($_GET['openid']);
 }
 
@@ -423,7 +454,7 @@ $content = null;
 
 if (!CustomPages::enabled()) {
     // Load terms & conditions from the current lang
-    if (api_get_setting('allow_terms_conditions') == 'true') {
+    if (api_get_setting('allow_terms_conditions') === 'true') {
         $get = array_keys($_GET);
         if (isset($get)) {
             if (isset($get[0]) && $get[0] == 'legal') {
@@ -496,6 +527,18 @@ if (!CustomPages::enabled()) {
 
 // Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
+
+    if (!api_is_platform_admin()) {
+        if (api_get_setting('show_terms_if_profile_completed') === 'true') {
+            $userInfo = api_get_user_info();
+            if ($userInfo) {
+                if ((int)$userInfo['profile_completed'] !== 1) {
+                    api_not_allowed(true);
+                }
+            }
+        }
+    }
+
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
@@ -516,9 +559,8 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     // Version and language
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_info', $term_preview['id'].':'.$term_preview['language_id']);
-    $form->addElement('hidden', 'legal_course_id', api_get_course_int_id());
 
-    if ($term_preview['type'] == 1) {
+    if ($term_preview['type'] === 1) {
         $form->addElement(
             'checkbox',
             'legal_accept',
@@ -750,7 +792,7 @@ if ($form->validate()) {
     }
 
     // Terms & Conditions
-    if (api_get_setting('allow_terms_conditions') == 'true') {
+    if (api_get_setting('allow_terms_conditions') === 'true') {
         // Update the terms & conditions.
         if (isset($values['legal_accept_type'])) {
             $cond_array = explode(':', $values['legal_accept_type']);
@@ -758,6 +800,22 @@ if ($form->validate()) {
                 $time = time();
                 $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
                 UserManager::update_extra_field_value($user_id, 'legal_accept', $condition_to_save);
+
+                $bossList = UserManager::getStudentBossList($user_id);
+                if ($bossList) {
+                    $bossList = array_column($bossList, 'boss_id');
+                    $currentUserInfo = api_get_user_info($user_id);
+                    foreach ($bossList as $bossId) {
+                        $subjectEmail = sprintf(get_lang('UserXSignedTheAgreement'), $currentUserInfo['complete_name']);
+                        $contentEmail = sprintf(
+                            get_lang('UserXSignedTheAgreementTheY'),
+                            $currentUserInfo['complete_name'],
+                            api_get_local_time($time)
+                        );
+
+                        MessageManager::send_message_simple($bossId, $subjectEmail, $contentEmail);
+                    }
+                }
             }
         }
         $values = api_get_user_info($user_id);
@@ -892,7 +950,6 @@ if ($form->validate()) {
             CustomPages::REGISTRATION, array('form' => $form)
         );
     } else {
-
         if (!api_is_anonymous()) {
             // Saving user to course if it was set.
             if (!empty($course_code_redirect)) {

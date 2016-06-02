@@ -1331,6 +1331,8 @@ function _api_format_user($user, $add_password = false)
         $result['password'] = $user['password'];
     }
 
+    $result['profile_completed'] = $user['profile_completed'];
+
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
     if (isset($user['extra'])) {
@@ -1360,7 +1362,6 @@ function api_get_user_info(
     $loadExtraData = false,
     $loadOnlyVisibleExtraData = false
 ) {
-
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
         if (isset($userFromSession)) {
@@ -1369,7 +1370,6 @@ function api_get_user_info(
 
         return false;
     }
-
 
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
             WHERE id='".intval($user_id)."'";

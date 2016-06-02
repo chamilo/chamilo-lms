@@ -313,7 +313,8 @@ VALUES
 ('ticket_send_warning_to_all_admins', NULL, 'radio','Ticket', 'false','TicketSendWarningToAllAdminsTitle','TicketSendWarningToAllAdminsComment',NULL,NULL, 0),
 ('ticket_warn_admin_no_user_in_category', NULL, 'radio','Ticket', 'false','TicketWarnAdminNoUserInCategoryTitle','TicketWarnAdminNoUserInCategoryComment',NULL,NULL, 0),
 ('ticket_allow_category_edition', NULL, 'radio','Ticket', 'false','TicketAllowCategoryEditionTitle','TicketAllowCategoryEditionComment',NULL,NULL, 0),
-('load_term_conditions_section', NULL, 'radio','Platform', 'login','LoadTermConditionsSectionTitle','LoadTermConditionsSectionDescription',NULL,NULL, 0);
+('load_term_conditions_section', NULL, 'radio','Platform', 'login','LoadTermConditionsSectionTitle','LoadTermConditionsSectionDescription',NULL,NULL, 0),
+('show_terms_if_profile_completed', NULL, 'radio','Ticket', 'false','ShowTermsIfProfileCompletedTitle','ShowTermsIfProfileCompletedComment',NULL,NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -643,7 +644,9 @@ VALUES
 ('ticket_warn_admin_no_user_in_category', 'true', 'Yes'),
 ('ticket_warn_admin_no_user_in_category', 'false', 'No'),
 ('load_term_conditions_section', 'login', 'Login'),
-('load_term_conditions_section', 'course', 'Course');
+('load_term_conditions_section', 'course', 'Course'),
+('show_terms_if_profile_completed', 'true', 'Yes'),
+('show_terms_if_profile_completed', 'false', 'No');
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),

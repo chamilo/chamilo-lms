@@ -1,12 +1,5 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
-/**
- * User Entity
- *
- * @package chamilo.User
- */
 
 namespace Chamilo\UserBundle\Entity;
 
@@ -193,7 +186,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      *
      * @ORM\Column(name="address", type="string", length=250, nullable=true, unique=false)
      */
-    private $address;
+    protected $address;
 
     /**
      * Vich\UploadableField(mapping="user_image", fileNameProperty="picture_uri")
@@ -396,6 +389,13 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      * @ORM\Column(type="array")
      */
     protected $roles;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="profile_completed", type="boolean", nullable=true)
+     */
+    protected $profileCompleted;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user")
@@ -2506,5 +2506,24 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
             }
             return true;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProfileCompleted()
+    {
+        return $this->profileCompleted;
+    }
+
+    /**
+     * @param mixed $profileCompleted
+     * @return User
+     */
+    public function setProfileCompleted($profileCompleted)
+    {
+        $this->profileCompleted = $profileCompleted;
+
+        return $this;
     }
 }

@@ -68,7 +68,7 @@ if ($form->validate()) {
                 exit();
             } elseif ($submit=='preview') {
                 $defaults['type'] = $type;
-                $defaults['content'] = LegalManager::replaceTags($content);
+                $defaults['content'] = $content;
                 $defaults['changes'] = $changes;
                 $term_preview = $defaults;
                 $term_preview['type'] = intval($_POST['type']);
@@ -122,6 +122,7 @@ if (isset($_POST['language'])) {
     $preview = LegalManager::show_last_condition($term_preview);
 
     if ($term_preview['type'] != -1) {
+        $preview = LegalManager::replaceTags($preview);
         $form->addElement('label', get_lang('Preview'), $preview);
     }
 

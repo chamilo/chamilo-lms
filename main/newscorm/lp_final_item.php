@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Print a learning path finish page with details
  * @author Jose Loguercio <jose.loguercio@beeznest.com>
  * @package chamilo.learnpath
  */
-// Initialize context
 $_in_course = true;
 
 require_once __DIR__ . '/../inc/global.inc.php';
@@ -44,8 +44,8 @@ $currentItemStatus = $currentItem->get_status();
 $accessGranted = false;
 
 if (
-    ($count - $completed == 0) or
-    ($count - $completed == 1 && ($currentItemStatus == 'incomplete') or ($currentItemStatus == 'not attempted'))
+    ($count - $completed == 0) ||
+    ($count - $completed == 1 && ($currentItemStatus == 'incomplete') || ($currentItemStatus == 'not attempted'))
 ) {
     if ($lp->prerequisites_match($currentItemId)) {
         $accessGranted = true;

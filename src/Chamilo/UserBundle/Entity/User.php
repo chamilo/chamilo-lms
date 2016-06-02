@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\GroupInterface;
+use Chamilo\CoreBundle\Entity\Skill;
 
 //use Chamilo\CoreBundle\Component\Auth;
 //use FOS\MessageBundle\Model\ParticipantInterface;
@@ -366,8 +367,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      */
     protected $passwordRequestedAt;
 
-
-
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
      **/
@@ -411,7 +410,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      * )
      */
     protected $groups;
-
 
     //private $isActive;
 
@@ -698,7 +696,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $this->getIsActive();
     }
 
-
     /**
      * @inheritDoc
      */
@@ -827,7 +824,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
         return $this;
     }
-
 
     /**
      * Set firstname
@@ -1960,7 +1956,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $this->gplusUid;
     }
 
-
     /**
      * @return string
      */
@@ -2145,18 +2140,25 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         $this->plainPassword = null;
     }
 
-
+    /**
+     * @return string
+     */
     public function getUsernameCanonical()
     {
         return $this->usernameCanonical;
     }
 
-
+    /**
+     * @return string
+     */
     public function getEmailCanonical()
     {
         return $this->emailCanonical;
     }
 
+    /**
+     * @return mixed
+     */
     public function getPlainPassword()
     {
         if (isset($this->plainPassword)) {
@@ -2279,7 +2281,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
         return $this;
     }
-
 
     /**
      * @param boolean $boolean
@@ -2492,10 +2493,10 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * Check if the user has the skill
-     * @param \Chamilo\CoreBundle\Entity\Skill $skill The skill
+     * @param Skill $skill The skill
      * @return boolean
      */
-    public function hasSkill(\Chamilo\CoreBundle\Entity\Skill $skill)
+    public function hasSkill(Skill $skill)
     {
         $achievedSkills = $this->getAchievedSkills();
 

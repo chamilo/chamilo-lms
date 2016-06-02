@@ -3,7 +3,7 @@
 namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use \Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use \Doctrine\ORM\Query\Expr\Join;
 
 /**

@@ -271,7 +271,7 @@ class Skill
     /**
      * Set status
      * @param integer $status
-     * @return \Chamilo\CoreBundle\Entity\Skill
+     * @return Skill
      */
     public function setStatus($status)
     {
@@ -292,7 +292,7 @@ class Skill
     /**
      * Set updatedAt
      * @param \DateTime $updatedAt The update datetime
-     * @return \Chamilo\CoreBundle\Entity\Skill
+     * @return Skill
      */
     public function setUpdatedAt(\DateTime $updatedAt)
     {

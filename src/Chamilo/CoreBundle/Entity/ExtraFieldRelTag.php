@@ -53,7 +53,7 @@ class ExtraFieldRelTag
     /**
      * Set fieldId
      * @param integer $fieldId
-     * @return \Chamilo\CoreBundle\Entity\ExtraFieldRelTag
+     * @return ExtraFieldRelTag
      */
     public function setFieldId($fieldId)
     {
@@ -65,7 +65,7 @@ class ExtraFieldRelTag
     /**
      * Set tagId
      * @param integer $tagId
-     * @return \Chamilo\CoreBundle\Entity\ExtraFieldRelTag
+     * @return ExtraFieldRelTag
      */
     public function setTagId($tagId)
     {
@@ -77,7 +77,7 @@ class ExtraFieldRelTag
     /**
      * Set itemId
      * @param integer $itemId
-     * @return \Chamilo\CoreBundle\Entity\ExtraFieldRelTag
+     * @return ExtraFieldRelTag
      */
     public function setItemId($itemId)
     {

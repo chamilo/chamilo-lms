@@ -3,8 +3,9 @@
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
+use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Doctrine\ORM\EntityRepository;
-use \Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * TrackECourseAccessRepository
@@ -16,8 +17,8 @@ class TrackECourseAccessRepository extends EntityRepository {
 
     /**
      * Get the last registered access by an user
-     * @param \Chamilo\UserBundle\Entity\User $user The user
-     * @return \ChamiloCoreBundle\TrackECourseAcess The access if exists.
+     * @param User $user The user
+     * @return TrackECourseAccess The access if exists.
      *          Otherwise return null
      */
     public function getLastAccessByUser(User $user)
@@ -38,5 +39,4 @@ class TrackECourseAccessRepository extends EntityRepository {
 
         return null;
     }
-
 }

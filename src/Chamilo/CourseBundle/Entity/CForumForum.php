@@ -704,7 +704,7 @@ class CForumForum
     /**
      * Set lpId
      * @param integer $lpId
-     * @return \Chamilo\CourseBundle\Entity\CForumForum
+     * @return CForumForum
      */
     public function setLpId($lpId)
     {

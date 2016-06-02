@@ -102,7 +102,7 @@ class SessionAdmin extends Admin
 
     /**
      * Very important in order to save the related entities!
-     * @param \Chamilo\CoreBundle\Entity\Session $session
+     * @param Session $session
      * @return mixed|void
      */
     public function preUpdate($session)

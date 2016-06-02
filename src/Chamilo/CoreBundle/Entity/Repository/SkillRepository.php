@@ -4,11 +4,11 @@
 namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Skill;
-use \Doctrine\ORM\EntityRepository;
-use \Chamilo\UserBundle\Entity\User;
-use \Chamilo\CoreBundle\Entity\Course;
-use \Chamilo\CoreBundle\Entity\Session;
-use \Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\EntityRepository;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * SkillRepository class

@@ -2269,24 +2269,28 @@ class UserManager
     }
 
     /** Get extra user data by value
-     * @param string the internal variable name of the field
-     * @param string the internal value of the field
+     * @param string $field_variable the internal variable name of the field
+     * @param string $field_value the internal value of the field
+     * @param bool $all_visibility
+     *
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-    public static function get_extra_user_data_by_value($field_variable, $field_value)
+     public static function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true)
     {
         $extraField = new ExtraFieldValue('user');
 
-        $data = $extraField->get_item_id_from_field_variable_and_field_value(
+        $data = $extraField->get_values_by_handler_and_field_variable(
             $field_variable,
             $field_value,
-            true
+            null,
+            true,
+            intval($all_visibility)
         );
 
         $result = [];
         if (!empty($data)) {
             foreach ($data as $data) {
-                $result[] = $data;
+                $result[] = $data['item_id'];
             }
         }
 
@@ -3586,7 +3590,7 @@ class UserManager
         if (is_array($extraFields) && count($extraFields)>0 ) {
             foreach ($extraFields as $extraField) {
                 $varName = 'field_'.$extraField['variable'];
-                //if (UserManager::is_extra_field_available($extraField['variable'])) {
+                if (UserManager::is_extra_field_available($extraField['variable'])) {
                     if (isset($_GET[$varName]) && $_GET[$varName]!='0') {
                         $useExtraFields = true;
                         $extraFieldResult[]= UserManager::get_extra_user_data_by_value(
@@ -3594,7 +3598,7 @@ class UserManager
                             $_GET[$varName]
                         );
                     }
-                //}
+                }
             }
         }
 

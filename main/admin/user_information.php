@@ -13,30 +13,57 @@ $this_section = SECTION_PLATFORM_ADMIN;
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
-api_protect_admin_script();
+if (!isset($_GET['user_id'])) {
+    api_not_allowed(true);
+}
+$user = api_get_user_info($_GET['user_id'], true);
+
+if (empty($user)) {
+    api_not_allowed(true);
+}
+
+$myUserId = api_get_user_id();
+
+if (!api_is_student_boss()) {
+    api_protect_admin_script();
+} else {
+    $bossList = UserManager::getStudentBossList($user['user_id']);
+    if ($bossList) {
+        $bossList = array_column($bossList, 'boss_id');
+        if (!in_array($myUserId, $bossList)) {
+            api_not_allowed(true);
+        }
+    } else {
+        api_not_allowed(true);
+    }
+}
 
 $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserList'));
 
-if (!isset($_GET['user_id'])) {
-    api_not_allowed();
-}
-$user = api_get_user_info($_GET['user_id'], true);
 $userId = $user['user_id'];
 $tool_name = $user['complete_name'].(empty($user['official_code'])?'':' ('.$user['official_code'].')');
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 // only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
-$login_as_icon = null;
-$editUser = null;
+$login_as_icon = '';
+$editUser = '';
+$exportLink = '';
+$vCardExportLink = '';
+
 if (api_is_platform_admin()) {
     $login_as_icon =
         '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php'
         .'?action=login_as&user_id='.$userId.'&'
         .'sec_token='.$_SESSION['sec_token'].'">'
-        .Display::return_icon('login_as.png', get_lang('LoginAs'),
-            array(), ICON_SIZE_MEDIUM).'</a>';
+        .Display::return_icon(
+            'login_as.png',
+            get_lang('LoginAs'),
+            array(),
+            ICON_SIZE_MEDIUM
+        ).'</a>';
+
     $editUser = Display::url(
         Display::return_icon(
             'edit.png',
@@ -49,13 +76,19 @@ if (api_is_platform_admin()) {
 
     $exportLink = Display::url(
         Display::return_icon(
-            'export_csv.png', get_lang('ExportAsCSV'),'', ICON_SIZE_MEDIUM
+            'export_csv.png',
+            get_lang('ExportAsCSV'),
+            '',
+            ICON_SIZE_MEDIUM
         ),
         api_get_self().'?user_id='.$userId.'&action=export'
     );
     $vCardExportLink = Display::url(
         Display::return_icon(
-            'vcard.png', get_lang('UserInfo'),'', ICON_SIZE_MEDIUM
+            'vcard.png',
+            get_lang('UserInfo'),
+            '',
+            ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.$userId
     );
@@ -85,7 +118,7 @@ if (isset($_GET['action'])) {
             $subject = get_lang('SendLegalSubject');
             $content = sprintf(
                 get_lang('SendLegalDescriptionToUrlX'),
-                api_get_path(WEB_CODE_PATH).'auth/inscription.php'
+                api_get_path(WEB_PATH)
             );
             MessageManager::send_message_simple($userId, $subject, $content);
             Display::addFlash(Display::return_message(get_lang('Sent')));
@@ -200,7 +233,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
             ['class' => 'btn btn-primary btn-xs']
         );
     }
-    
+
     $data[get_lang('LegalAccepted')] = $icon;
 }
 $row = 1;
@@ -483,7 +516,6 @@ if (isset($_GET['action'])) {
             break;
     }
 }
-
 
 Display::display_header($tool_name);
 

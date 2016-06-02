@@ -68,7 +68,7 @@ if ($form->validate()) {
                 exit();
             } elseif ($submit=='preview') {
                 $defaults['type'] = $type;
-                $defaults['content'] = $content;
+                $defaults['content'] = LegalManager::replaceTags($content);
                 $defaults['changes'] = $changes;
                 $term_preview = $defaults;
                 $term_preview['type'] = intval($_POST['type']);

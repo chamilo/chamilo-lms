@@ -101,7 +101,7 @@ class LegalManager
 	 * @param int $language language id
 	 * @return array all the info of a Term and condition
 	 */
-	public static function get_last_condition ($language)
+	public static function get_last_condition($language)
     {
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$language= Database::escape_string($language);
@@ -110,9 +110,36 @@ class LegalManager
                 ORDER BY version DESC
                 LIMIT 1 ";
 		$result = Database::query($sql);
+		$result = Database::fetch_array($result, 'ASSOC');
 
-		return Database::fetch_array($result);
+        if (isset($result['content'])) {
+            $result['content'] = self::replaceTags($result['content']);
+        }
+        return $result;
 	}
+
+    /**
+     * @param string $content
+     * @return string
+     */
+    public static function replaceTags($content)
+    {
+        if (strpos($content, '{{sessions}}')) {
+            $sessionListToString = '';
+
+            $sessionList = SessionManager::get_sessions_by_user(api_get_user_id());
+            if ($sessionList) {
+                $sessionListToString = get_lang('SessionList').'<ul>';
+                foreach ($sessionList as $session) {
+                    $sessionListToString .= '<li>'.$session['session_name'].'</li>';
+                }
+                $sessionListToString .= '<ul>';
+            }
+            $content = str_replace('{{sessions}}', $sessionListToString, $content);
+        }
+
+        return $content;
+    }
 
 	/**
 	 * Gets the last version of a Term and condition by language

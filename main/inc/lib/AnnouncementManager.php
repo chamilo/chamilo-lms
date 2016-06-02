@@ -1279,7 +1279,7 @@ class AnnouncementManager
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir . '/' . $new_file_name;
-                move_uploaded_file($file['tmp_name'], $new_path);
+                copy($file['tmp_name'], $new_path);
 
                 $params = [
                     'c_id' => $course_id,

@@ -15,7 +15,7 @@ class Work extends Coursecopy\Resource
     /**
      * Create a new Work
      *
-     * @param array parameters
+     * @param array $params
      */
     public function __construct($params)
     {

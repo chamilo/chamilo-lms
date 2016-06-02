@@ -13,18 +13,18 @@ class ScormDocument extends Coursecopy\Resource
     public $path;
     public $title;
 
-	/**
-	 * Create a new Scorm Document
-	 * @param int $id
-	 * @param string $path
-	 * @param string $title
-	 */
+    /**
+     * Create a new Scorm Document
+     * @param int $id
+     * @param string $path
+     * @param string $title
+     */
     public function __construct($id, $path, $title)
-	{
-		parent::__construct($id,RESOURCE_SCORM);
-		$this->path = 'scorm'.$path;
-		$this->title = $title;
-	}
+    {
+        parent::__construct($id,RESOURCE_SCORM);
+        $this->path = 'scorm'.$path;
+        $this->title = $title;
+    }
 
     /**
      * Show this document

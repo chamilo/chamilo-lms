@@ -16,6 +16,15 @@ class UserApiKey
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
@@ -68,17 +77,6 @@ class UserApiKey
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set userId

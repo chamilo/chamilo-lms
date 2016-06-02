@@ -80,7 +80,7 @@ class CalendarEvent extends Coursecopy\Resource
     /**
      * Show this Event
      */
-    function show()
+    public function show()
     {
         parent::show();
         echo $this->title.' ('.$this->start_date.' -> '.$this->end_date.')';

@@ -16,6 +16,15 @@ class UserRelUser
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
@@ -40,17 +49,6 @@ class UserRelUser
      * @ORM\Column(name="last_edit", type="datetime", nullable=true)
      */
     private $lastEdit;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set userId

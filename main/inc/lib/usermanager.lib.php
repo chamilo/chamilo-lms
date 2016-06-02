@@ -2284,24 +2284,28 @@ class UserManager
     }
 
     /** Get extra user data by value
-     * @param string the internal variable name of the field
-     * @param string the internal value of the field
+     * @param string $field_variable the internal variable name of the field
+     * @param string $field_value the internal value of the field
+     * @param bool $all_visibility
+     *
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-    public static function get_extra_user_data_by_value($field_variable, $field_value)
+     public static function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true)
     {
         $extraField = new ExtraFieldValue('user');
 
-        $data = $extraField->get_item_id_from_field_variable_and_field_value(
+        $data = $extraField->get_values_by_handler_and_field_variable(
             $field_variable,
             $field_value,
-            true
+            null,
+            true,
+            intval($all_visibility)
         );
 
         $result = [];
         if (!empty($data)) {
             foreach ($data as $data) {
-                $result[] = $data;
+                $result[] = $data['item_id'];
             }
         }
 
@@ -3617,7 +3621,7 @@ class UserManager
             $finalResult = array();
             if (count($extraFieldResult)>1) {
                 for ($i=0; $i < count($extraFieldResult) -1; $i++) {
-                    if (is_array($extraFieldResult[$i+1])) {
+                if (is_array($extraFieldResult[$i]) && is_array($extraFieldResult[$i+1])) {
                         $finalResult  = array_intersect($extraFieldResult[$i], $extraFieldResult[$i+1]);
                     }
                 }
@@ -3641,7 +3645,7 @@ class UserManager
      * @param string $query the value of the search box
      * @return string HTML form
      */
-    public static function get_search_form($query)
+    public static function get_search_form($query, $defaultParams = [])
     {
         $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
         $form = new FormValidator(
@@ -3693,6 +3697,10 @@ class UserManager
 
         $defaults['search_type'] = intval($searchType);
         $defaults['q'] = api_htmlentities(Security::remove_XSS($query));
+
+        if (!empty($defaultParams)) {
+            $defaults = array_merge($defaults, $defaultParams);
+        }
         $form->setDefaults($defaults);
 
         $form->addButtonSearch(get_lang('Search'));

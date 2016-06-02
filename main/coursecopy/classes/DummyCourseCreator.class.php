@@ -60,10 +60,11 @@ class DummyCourseCreator
 		$cr->restore($course_code);
 		rmdirr($tmp_path);
 	}
+    
 	/**
 	 * Create dummy documents
 	 */
-	function create_dummy_documents()
+    public function create_dummy_documents()
 	{
 		$course = api_get_course_info();
 		$course_doc_path = $this->course->backup_path.'/document/';

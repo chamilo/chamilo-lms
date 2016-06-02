@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
+
 /**
  * A course-object to use in Export/Import/Backup/Copy
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -37,7 +39,7 @@ class Course
         foreach ($this->resources as $type => $resources) {
             if (is_array($resources)) {
                 foreach ($resources as $resource) {
-                    Coursecopy\Resource::setClassType($resource);
+                    Resource::setClassType($resource);
                     if ($resource->links_to($resource_to_check) ) {
                         return true;
                     }
@@ -175,12 +177,12 @@ class Course
                             $description = $resource->content;
                             break;
                         case RESOURCE_THEMATIC:
-                            $title 			= $resource->title;
-                            $description 	= $resource->content;
+                            $title = $resource->title;
+                            $description = $resource->content;
                             break;
                         case RESOURCE_ATTENDANCE:
-                            $title 			= $resource->params['name'];
-                            $description 	= $resource->params['description'];
+                            $title = $resource->params['name'];
+                            $description = $resource->params['description'];
                             break;
                         case RESOURCE_WORK:
                             $title = $resource->title;

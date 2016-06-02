@@ -3,6 +3,9 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Database;
+use TestCategory;
+
 /**
  * Class to delete items from a Chamilo-course
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -44,12 +47,11 @@ class CourseRecycler
             return false;
         }
 
-        $this->type = $type;
-
         $table_tool_intro = Database::get_course_table(TABLE_TOOL_INTRO);
         $table_linked_resources = Database::get_course_table(TABLE_LINKED_RESOURCES);
         $table_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
+        $this->type = $type;
         $this->recycle_links();
         $this->recycle_link_categories();
         $this->recycle_events();
@@ -70,7 +72,7 @@ class CourseRecycler
 
         foreach ($this->course->resources as $type => $resources) {
             foreach ($resources as $id => $resource) {
-                $sql = "DELETE FROM ".$table_linked_resources."
+                $sql = "DELETE FROM $table_linked_resources
                         WHERE
                             c_id = ".$this->course_id." AND
                             (source_type = '".$type."' AND source_id = '".$id."') OR
@@ -201,7 +203,7 @@ class CourseRecycler
         $table_thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
         $table_thread_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
 
-        if ($this->type == 'full_backup') {
+        if ($this->type === 'full_backup') {
             $sql = "DELETE FROM ".$table_category." WHERE c_id = ".$this->course_id;
             Database::query($sql);
             $sql = "DELETE FROM ".$table_forum." WHERE c_id = ".$this->course_id;

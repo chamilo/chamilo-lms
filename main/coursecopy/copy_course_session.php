@@ -3,6 +3,7 @@
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
  * Copy resources from one course in a session to another one.
@@ -14,7 +15,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
-$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+$current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_global_admin_script();
 api_protect_limit_for_session_admin();
@@ -91,7 +92,6 @@ function display_form()
         Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).
         '</a>';
 
-
     $html .= Display::toolbarAction('toolbar-copysession', array(0 => $actionsLeft));
 
     $html .= Display::return_message(get_lang('CopyCourseFromSessionToSessionExplanation'), 'warning');
@@ -132,7 +132,6 @@ function display_form()
     // Add Security token
     $html .= '<input type="hidden" value="' . Security::get_token() . '" name="sec_token">';
     $html .= '</div></div>';
-
     $html .= '</form>';
 
     echo $html;
@@ -158,8 +157,8 @@ function search_courses($id_session, $type)
             }
 
             $return .= '</select>';
-            $_SESSION['course_list']     = $temp_course_list;
-            $_SESSION['session_origin']  = $id_session;
+            $_SESSION['course_list'] = $temp_course_list;
+            $_SESSION['session_origin'] = $id_session;
 
             // Build select for destination sessions where is not included current session from select origin
             if (!empty($id_session)) {

@@ -3,11 +3,38 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
 use Database;
 use TestCategory;
 use Category;
+use CourseManager;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestcategory;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\DummyCourseCreator;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Link;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestionOption;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ScormDocument;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Survey;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyInvitation;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyQuestion;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Work;
 
 /**
  * Class CourseBuilder
@@ -784,7 +811,7 @@ class CourseBuilder
                 'title' => get_lang('OrphanQuestions', ''),
                 'type' => 2
             );
-            $newQuiz = new Quiz((object)$obj);
+            $newQuiz = new Quiz((object) $obj);
             if (!empty($orphanQuestionIds)) {
                 foreach ($orphanQuestionIds as $index => $orphanId) {
                     $order = $index + 1;
@@ -944,7 +971,8 @@ class CourseBuilder
      * Build the Survey Questions
      * @param int $courseId Internal course ID
      */
-    public function build_survey_questions($courseId) {
+    public function build_survey_questions($courseId)
+    {
         $table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION);
         $table_opt = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
@@ -1129,7 +1157,7 @@ class CourseBuilder
 
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
-            $cd = new \Coursecopy\CourseDescription(
+            $cd = new CourseDescription(
                 $obj->id,
                 $obj->title,
                 $obj->content,

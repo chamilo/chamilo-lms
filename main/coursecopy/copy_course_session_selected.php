@@ -3,6 +3,7 @@
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
  * Copy resources from one course in a session to another one.
@@ -46,9 +47,7 @@ if (function_exists('ini_set')) {
 
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('CopyCourse');
-$returnLink = api_get_path(
-        WEB_CODE_PATH
-    ) . 'course_info/maintenance_coach.php?' . api_get_cidreq();
+$returnLink = api_get_path(WEB_CODE_PATH) . 'course_info/maintenance_coach.php?' . api_get_cidreq();
 $interbreadcrumb[] = array(
     'url' => $returnLink,
     'name' => get_lang('Maintenance')
@@ -383,10 +382,12 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
         echo '<div style="float:right"><a href="javascript:window.history.go(-1);">' .
             Display::return_icon(
-                'back.png', get_lang('Back') . ' ' . get_lang('To') . ' ' . get_lang(
+                'back.png',
+                get_lang('Back').' '.get_lang('To').' '.get_lang(
                     'PlatformAdmin'
-                ), array('style' => 'vertical-align:middle')
-            ) .
+                ),
+                array('style' => 'vertical-align:middle')
+            ).
             get_lang('Back') . '</a></div>';
     } else {
         Display::display_error_message(

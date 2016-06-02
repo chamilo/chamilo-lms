@@ -3,6 +3,12 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
+use Database;
+use \CourseManager;
+use Display;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
+
 /**
  * Class to show a form to select resources
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -230,7 +236,7 @@ class CourseSelectForm
                             if ($resource) {
                                 echo '<li>';
 								// Event obj in 1.9.x in 1.10.x the class is CalendarEvent
-                                Coursecopy\Resource::setClassType($resource);
+                                Resource::setClassType($resource);
                                 echo '<label class="checkbox">';
                                 echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
                                 $resource->show();
@@ -336,8 +342,8 @@ class CourseSelectForm
     		}
 		}
 
-		CourseSelectForm :: display_hidden_quiz_questions($course);
-		CourseSelectForm :: display_hidden_scorm_directories($course);
+		CourseSelectForm::display_hidden_quiz_questions($course);
+		CourseSelectForm::display_hidden_scorm_directories($course);
 		echo '</form>';
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
 	}
@@ -412,7 +418,7 @@ class CourseSelectForm
 
 		/* Searching the documents resource that have been set to null because
         $avoid_serialize is true in the display_form() function*/
-		if ($from == 'copy_course') {
+		if ($from === 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);
 
@@ -528,9 +534,9 @@ class CourseSelectForm
                                 }
                             }
                         }
-					case RESOURCE_LINKCATEGORY :
-					case RESOURCE_FORUMCATEGORY :
-					case RESOURCE_QUIZQUESTION :
+					case RESOURCE_LINKCATEGORY:
+					case RESOURCE_FORUMCATEGORY:
+					case RESOURCE_QUIZQUESTION:
 					case RESOURCE_DOCUMENT:
 						// Mark folders to import which are not selected by the user to import,
 						// but in which a document was selected.

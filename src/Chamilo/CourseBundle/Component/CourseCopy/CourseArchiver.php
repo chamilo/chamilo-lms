@@ -3,8 +3,6 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
-use Chamilo\CourseBundle\Component\CourseCopy\Course;
-
 /**
  * Some functions to write a course-object to a zip-file and to read a course-
  * object from such a zip-file.

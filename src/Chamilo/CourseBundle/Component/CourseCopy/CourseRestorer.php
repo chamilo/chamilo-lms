@@ -3,6 +3,13 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use DocumentManager;
+use Database;
+use CourseManager;
+use stdClass;
+use TestCategory;
+use SurveyManager;
+
 /**
  * Class CourseRestorer
  *
@@ -492,7 +499,7 @@ class CourseRestorer
                                                 'c_id = ? AND path = ?' => [
                                                     $this->destination_course_id,
                                                     "/".self::DBUTF8escapestring(substr($document->path, 9)),
-                                                ],
+                                                ]
                                             ]
                                         );
 
@@ -770,7 +777,7 @@ class CourseRestorer
                                     if (file_exists($path.$new_file_name)) {
                                         $file_info = pathinfo($path.$new_file_name);
                                         if (in_array($file_info['extension'], array('html','htm'))) {
-                                            $content    = file_get_contents($path.$new_file_name);
+                                            $content = file_get_contents($path.$new_file_name);
                                             if (UTF8_CONVERT) {
                                                 $content = utf8_encode($content);
                                             }
@@ -936,7 +943,6 @@ class CourseRestorer
 
 			foreach ($resources[RESOURCE_SCORM] as $document) {
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
-
 				@mkdir(dirname($path.$document->path), $perm, true);
 
 				if (file_exists($path.$document->path)) {
@@ -1176,7 +1182,6 @@ class CourseRestorer
         );
 
 		$this->course->resources[RESOURCE_FORUMTOPIC][$thread_id]->destination_id = $new_id;
-
 		$topic_replies = -1;
 
 		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post) {
@@ -1727,7 +1732,6 @@ class CourseRestorer
 						$quiz->start_time = null;
 						$quiz->end_time   = null;
 					}
-
 
                     $params = array(
                         'c_id' => $this->destination_course_id,
@@ -2309,7 +2313,11 @@ class CourseRestorer
 		            c_id = ".$this->destination_course_id." AND
 		            code='".self::DBUTF8escapestring($survey_code)."'";
 		$result = Database::query($sql);
-		if (Database::num_rows($result) > 0) return false; else return true;
+        if (Database::num_rows($result) > 0) {
+            return false;
+        } else {
+            return true;
+        }
 	}
 
 	/**
@@ -2625,7 +2633,7 @@ class CourseRestorer
 
 				// Updating prerequisites
 				foreach ($old_prerequisite  as $key=>$my_old_prerequisite) {
-					if($my_old_prerequisite != ''){
+					if ($my_old_prerequisite != ''){
 						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."'
 						        WHERE c_id = ".$this->destination_course_id." AND id = '".$key."'  ";
 						Database::query($sql);
@@ -2652,7 +2660,7 @@ class CourseRestorer
 				}
 				foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
 					$previous_new_id = 0;
-					if($previous_item_old_id != 0){
+					if ($previous_item_old_id != 0){
 						$previous_new_id = $new_item_ids[$previous_item_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."'
@@ -2662,7 +2670,7 @@ class CourseRestorer
 
 				foreach ($next_item_ids as $new_item_id => $next_item_old_id) {
 					$next_new_id = 0;
-					if($next_item_old_id != 0){
+					if ($next_item_old_id != 0){
 						$next_new_id = $new_item_ids[$next_item_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."'
@@ -2672,7 +2680,7 @@ class CourseRestorer
 
 				foreach ($prerequisite_ids as $new_item_id => $prerequisite_old_id) {
 					$prerequisite_new_id = 0;
-					if($prerequisite_old_id != 0){
+					if ($prerequisite_old_id != 0){
 						$prerequisite_new_id = $new_item_ids[$prerequisite_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET prerequisite = '".$prerequisite_new_id."'
@@ -2692,9 +2700,9 @@ class CourseRestorer
 	public function restore_student_publication($sessionId = 0)
     {
         $sessionId = intval($sessionId);
-		$work_assignment_table  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-		$work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-		$item_property_table  	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        $work_assignment_table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+        $work_table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+        $item_property_table = Database:: get_course_table(TABLE_ITEM_PROPERTY);
 
 		// Query in student publication
 		$sql = 'SELECT * FROM '.$work_table.'
@@ -2985,9 +2993,9 @@ class CourseRestorer
     public function restore_thematic($session_id = 0)
     {
 		if ($this->course->has_resources(RESOURCE_THEMATIC)) {
-            $table_thematic = Database:: get_course_table(TABLE_THEMATIC);
-            $table_thematic_advance = Database:: get_course_table(TABLE_THEMATIC_ADVANCE);
-            $table_thematic_plan = Database:: get_course_table(TABLE_THEMATIC_PLAN);
+            $table_thematic = Database::get_course_table(TABLE_THEMATIC);
+            $table_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
+            $table_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
 
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_THEMATIC] as $id => $thematic) {

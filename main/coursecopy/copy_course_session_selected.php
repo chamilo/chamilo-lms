@@ -1,5 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+
 /**
  * Copy resources from one course in a session to another one.
  *
@@ -13,10 +17,6 @@ require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_course_script(true, true);
-
-require_once 'classes/CourseBuilder.class.php';
-require_once 'classes/CourseRestorer.class.php';
-require_once 'classes/CourseSelectForm.class.php';
 
 $xajax = new xajax();
 $xajax->registerFunction('searchCourses');

@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+
 /**
  * @package chamilo.backup
  */
@@ -10,12 +14,6 @@ require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
-// Including additional libraries
-require_once 'classes/CourseBuilder.class.php';
-require_once 'classes/CourseRestorer.class.php';
-require_once 'classes/CourseSelectForm.class.php';
-
-// Notice for unauthorized people.
 if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
@@ -30,7 +28,7 @@ if (function_exists('ini_set')) {
 // Breadcrumbs
 $interbreadcrumb[] = array(
     'url' => '../course_info/maintenance.php?'.api_get_cidreq(),
-    'name' => get_lang('Maintenance'),
+    'name' => get_lang('Maintenance')
 );
 
 // The section (for the tabs)
@@ -44,8 +42,8 @@ echo Display::page_header(get_lang('CopyCourse'));
 
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
 if (Security::check_token('post') && (
-        (isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
-        (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')
+    (isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
+    (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')
     )
 ) {
     // Clear token

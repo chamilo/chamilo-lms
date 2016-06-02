@@ -1,5 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
+
 /**
  * Import a backup.
  *
@@ -8,6 +12,7 @@
  */
 
 require_once '../inc/global.inc.php';
+
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
@@ -34,12 +39,6 @@ $interbreadcrumb[] = array(
 // Displaying the header
 $nameTools = get_lang('ImportBackup');
 Display::display_header($nameTools);
-
-// Include additional libraries
-require_once 'classes/CourseBuilder.class.php';
-require_once 'classes/CourseArchiver.class.php';
-require_once 'classes/CourseRestorer.class.php';
-require_once 'classes/CourseSelectForm.class.php';
 
 // Display the tool title
 echo Display::page_header($nameTools);

@@ -1368,7 +1368,9 @@ function _api_format_user($user, $add_password = false)
         $result['password'] = $user['password'];
     }
 
-    $result['profile_completed'] = $user['profile_completed'];
+    if (isset($result['profile_completed'])) {
+        $result['profile_completed'] = $user['profile_completed'];
+    }
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 

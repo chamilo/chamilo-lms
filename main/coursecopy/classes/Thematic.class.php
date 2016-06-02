@@ -16,7 +16,7 @@ class Thematic extends Coursecopy\Resource
     /**
     * Create a new Thematic
     *
-    * @param array parameters
+    * @param array $params
     */
     public function __construct($params)
     {

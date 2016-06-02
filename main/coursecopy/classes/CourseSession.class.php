@@ -11,24 +11,25 @@ require_once 'Resource.class.php';
 class CourseSession extends Coursecopy\Resource
 {
     // The title session
-	public $title;
+    public $title;
 
-	/**
-	 * Create a new Session
-	 * @param int $id
-	 * @param string $title
-	 */
-	public function __construct($id,$title)
-	{
-		parent::__construct($id, RESOURCE_SESSION_COURSE);
-		$this->title = $title;
-	}
+    /**
+     * Create a new Session
+     * @param int $id
+     * @param string $title
+     */
+    public function __construct($id,$title)
+    {
+        parent::__construct($id, RESOURCE_SESSION_COURSE);
+        $this->title = $title;
+    }
 
-	/**
-	 * Show this Event
-	 */
-	function show() {
-		parent::show();
-		echo $this->title;
-	}
+    /**
+     * Show this Event
+     */
+    public function show()
+    {
+        parent::show();
+        echo $this->title;
+    }
 }

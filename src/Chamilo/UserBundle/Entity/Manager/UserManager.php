@@ -12,7 +12,6 @@ use Sonata\UserBundle\Entity\UserManager as BaseUserManager;
  */
 class UserManager extends BaseUserManager
 {
-
     /**
      * Finds a user either by confirmation token
      *

@@ -1,12 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Skill Entity
- *
- * @package chamilo.skill
- */
-
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\SkillBundle\Entity\Profile;

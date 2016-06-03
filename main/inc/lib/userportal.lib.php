@@ -229,7 +229,7 @@ class IndexManager
         $html = '';
 
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
-            $open = @(string)file_get_contents(api_get_path(SYS_PATH).$this->home.$_GET['include']);
+            $open = @(string)file_get_contents($this->home.$_GET['include']);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             // Hiding home top when user not connected.
@@ -278,14 +278,13 @@ class IndexManager
 
     function return_notice()
     {
-        $sys_path = api_get_path(SYS_PATH);
         $user_selected_language = api_get_interface_language();
 
         $html = '';
         // Notice
-        $home_notice = @(string)file_get_contents($sys_path.$this->home.'home_notice_'.$user_selected_language.'.html');
+        $home_notice = @(string)file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
         if (empty($home_notice)) {
-            $home_notice = @(string)file_get_contents($sys_path.$this->home.'home_notice.html');
+            $home_notice = @(string)file_get_contents($this->home.'home_notice.html');
         }
 
         if (!empty($home_notice)) {
@@ -306,7 +305,6 @@ class IndexManager
     function return_help()
     {
         $user_selected_language = api_get_interface_language();
-        $sys_path               = api_get_path(SYS_PATH);
         $platformLanguage       = api_get_setting('platformLanguage');
 
         // Help section.
@@ -317,7 +315,7 @@ class IndexManager
         }
 
         $html = null;
-        $home_menu = @(string)file_get_contents($sys_path.$this->home.'home_menu_'.$user_selected_language.'.html');
+        $home_menu = @(string)file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
             $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
             $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));

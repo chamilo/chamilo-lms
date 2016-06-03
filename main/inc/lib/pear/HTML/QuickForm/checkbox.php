@@ -1,6 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * HTML class for a checkbox type field
  *
@@ -37,8 +35,6 @@
  */
 class HTML_QuickForm_checkbox extends HTML_QuickForm_input
 {
-    // {{{ properties
-
     /**
      * Checkbox display text
      * @var       string

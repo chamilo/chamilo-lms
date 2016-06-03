@@ -14,13 +14,13 @@ api_protect_admin_script();
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
 	$(".save").click(function() {
-		button_name=$(this).attr("name");
-		button_array=button_name.split("|");
-		button_name=button_array[1];
-		file_id=button_array[2];
-		is_variable_language="$"+button_name;
+		var button_name=$(this).attr("name");
+		var button_array=button_name.split("|");
+		var button_name=button_array[1];
+		var file_id=button_array[2];
+		var is_variable_language="$"+button_name;
 
-		is_new_language = $("#txtid_"+file_id+"_"+button_name).val();
+		var is_new_language = $("#txtid_"+file_id+"_"+button_name).val();
 		if (is_new_language == undefined) {
 			is_new_language="_";
     	}
@@ -28,21 +28,28 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
-					$("#div_message_information_id").html("<div class=\"normal-message\"><img src=\'../inc/lib/javascript/indicator.gif\' /></div>");
+					$("#div_message_information_id").html("<div class=\"alert alert-info\"><img src=\'../inc/lib/javascript/indicator.gif\' /></div>");
 				},
 				type: "POST",
 				url: "../admin/sub_language_ajax.inc.php",
-				data: "new_language="+is_new_language+"&variable_language="+is_variable_language+"&file_id="+file_id+"&id="+'.intval($_REQUEST['id']).'+"&sub="+'.intval($_REQUEST['sub_language_id']).',
+				data: {
+				    \'new_language\': is_new_language,
+				    \'variable_language\': is_variable_language,
+				    \'file_id\': file_id,
+				    \'id\': ' . intval($_REQUEST['id']) . ',
+                    \'sub\': ' . intval($_REQUEST['sub_language_id']) . ',
+                    \'sub_language_id\': ' . intval($_REQUEST['sub_language_id']) . '
+				},
 				success: function(datos) {
 					if (datos == "1") {
-						$("#div_message_information_id").html("<div class=\"confirmation-message\">'.get_lang('TheNewWordHasBeenAdded').'</div>");
+						$("#div_message_information_id").html(\'' . Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success') . '\');
 					} else {
-						$("#div_message_information_id").html("<div class=\"warning-message\">" + datos +"</div>");
+						$("#div_message_information_id").html("<div class=\"alert alert-warning\">" + datos +"</div>");
 					}
 				}
 			});
 		} else {
-			$("#div_message_information_id").html("<div class=\"error-message\">'.get_lang('FormHasErrorsPleaseComplete').'</div>");
+			$("#div_message_information_id").html(\'' . Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error') . '\');
 		}
 	});
 });
@@ -300,6 +307,32 @@ if (isset($_REQUEST['txt_search_word'])) {
 			true
 		);
 	}
+}
+
+if (isset($_GET['extra_field']) && !empty($_GET['extra_field'])) {
+    $extraFieldInfo = ExtraField::getExtraFieldInfoById($_GET['extra_field'], false);
+    $platformLanguage = api_get_setting('platformLanguage');
+    $languageId = api_get_language_id($platformLanguage);
+    $languageInfo = api_get_language_info($languageId);
+    $translateUrl = api_get_path(WEB_CODE_PATH) . 'admin/sub_language_ajax.inc.php';
+
+    $form = new FormValidator('new_lang_variable', 'POST', $translateUrl);
+    $form->addHeader(get_lang('AddWordForTheSubLanguage'));
+    $form->addText('variable_language', get_lang('LanguageVariable'), false);
+    $form->addText('original_name', get_lang('OriginalName'), false);
+    $form->addText('new_language', get_lang('SubLanguage'));
+    $form->addHidden('file_id', 0);
+    $form->addHidden('id', $languageInfo['parent_id']);
+    $form->addHidden('sub', $languageInfo['id']);
+    $form->addHidden('sub_language_id', $languageInfo['id']);
+    $form->addHidden('redirect', true);
+    $form->addButtonSave(get_lang('Save'));
+    $form->setDefaults([
+        'variable_language' => '$' . api_underscore_to_camel_case($extraFieldInfo['variable']),
+        'original_name' => $extraFieldInfo['display_text']
+    ]);
+    $form->freeze(['variable_language', 'original_name']);
+    $form->display();
 }
 
 $parameters = array(

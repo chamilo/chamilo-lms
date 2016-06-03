@@ -223,6 +223,10 @@ class ExtraField extends Model
         $option = new ExtraFieldOption($this->type);
         if (!empty($extraFields)) {
             foreach ($extraFields as &$extraField) {
+                $extraField['display_text'] = self::translateDisplayName(
+                    $extraField['variable'],
+                    $extraField['display_text']
+                );
                 $extraField['options'] = $option->get_field_options_by_field(
                     $extraField['id'],
                     false,
@@ -249,6 +253,7 @@ class ExtraField extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
+            $row['display_text'] = ExtraField::translateDisplayName($row['variable'], $row['display_text']);
 
             // All the options of the field
             $sql = "SELECT * FROM $this->table_field_options
@@ -1702,11 +1707,30 @@ EOF;
         if ($action == 'edit') {
             $header = get_lang('Modify');
             // Setting the defaults
-            $defaults = $this->get($id);
+            $defaults = $this->get($id, false);
         }
 
         $form->addElement('header', $header);
-        $form->addElement('text', 'display_text', get_lang('Name'), array('class' => 'span5'));
+
+        if ($action === 'edit') {
+            $platformLanguage = api_get_setting('platformLanguage');
+            $languageId = api_get_language_id($platformLanguage);
+            $languageInfo = api_get_language_info($languageId);
+
+            $translateUrl = api_get_path(WEB_CODE_PATH) . 'admin/sub_language.php?' . http_build_query([
+                'id' => $languageInfo['parent_id'],
+                'action' => 'registersublanguage',
+                'sub_language_id' => $languageInfo['id'],
+                'extra_field' => $id
+            ]);
+            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+            $form->addText(
+                'display_text',
+                [get_lang('Name'), $translateButton]
+            );
+        } else {
+            $form->addText('display_text', get_lang('Name'));
+        }
 
         // Field type
         $types = self::get_field_types();
@@ -1808,36 +1832,43 @@ EOF;
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('display_text', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('field_type', get_lang('ThisFieldIsRequired'), 'required');
 
         return $form;
     }
 
     /**
-     * @param $token
+     * With this function we can add actions to the jgrid (edit, delete, etc)
+     * @param string $token
      * @return string
      */
     public function getJqgridActionLinks($token)
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
-        return 'function action_formatter(cellvalue, options, rowObject) {
-         return \'<a href="?action=edit&type='.$this->type.'&id=\'+options.rowId+\'">'.Display::return_icon(
-            'edit.png',
-            get_lang('Edit'),
-            '',
-            ICON_SIZE_SMALL
-        ).'</a>'.
-        '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(
+        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
+        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+        $confirmMessage = addslashes(
             api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
-        )."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon(
-            'delete.png',
-            get_lang('Delete'),
-            '',
-            ICON_SIZE_SMALL
-        ).'</a>'.
-        '\';
-        }';
+        );
+
+        $editButton = <<<JAVASCRIPT
+            <a href="?action=edit&type={$this->type}&id=' + options.rowId + '" class="btn btn-link btn-xs">\
+                $editIcon\
+            </a>
+JAVASCRIPT;
+        $deleteButton = <<<JAVASCRIPT
+            <a \
+                onclick="if (!confirm(\'$confirmMessage\')) {return false;}" \
+                href="?sec_token=$token&type={$this->type}&id=' + options.rowId + '&action=delete" \
+                class="btn btn-link btn-xs">\
+                $deleteIcon\
+            </a>
+JAVASCRIPT;
+
+        return "function action_formatter(cellvalue, options, rowObject) {
+        console.log(options);
+            return '$editButton $deleteButton';
+        }";
     }
 
     /**
@@ -2278,4 +2309,68 @@ EOF;
         return $valuesData;
     }
 
+    /**
+     * Gets an element
+     * @param int $id
+     * @param bool $translateDisplayText Optional
+     * @return array
+     */
+    public function get($id, $translateDisplayText = true)
+    {
+        $info = parent::get($id);
+
+        if ($translateDisplayText) {
+            $info['display_text'] = self::translateDisplayName($info['variable'], $info['display_text']);
+        }
+
+        return $info;
+    }
+
+    /**
+     * Translate the display text for a extra field
+     * @param string $variable
+     * @param string $defaultDisplayText
+     * @return string
+     */
+    public static function translateDisplayName($variable, $defaultDisplayText)
+    {
+        $camelCase = api_underscore_to_camel_case($variable);
+
+        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+    }
+
+    /**
+     * Get the info from an extra field by its id
+     * @param int $id
+     * @param bool $translateDisplayText
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function getExtraFieldInfoById($id, $translateDisplayText = true)
+    {
+        $extraField = Database::getManager()
+            ->find('ChamiloCoreBundle:ExtraField', $id);
+
+        $objExtraField = null;
+
+        switch ($extraField->getExtraFieldType()) {
+            case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
+                $objExtraField = new self('user');
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
+                $objExtraField = new self('course');
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
+                $objExtraField = new self('session');
+                break;
+        }
+
+        if (!$objExtraField) {
+            return [];
+        }
+
+        return $objExtraField->get($extraField->getId(), $translateDisplayText);
+    }
 }

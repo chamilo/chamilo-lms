@@ -31,12 +31,10 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $tbl_lp      = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-$isStudentView  = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
-$learnpath_id   = (int) $_REQUEST['lp_id'];
-$submit			= isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
+$isStudentView = isset($_REQUEST['isStudentView']) ? (int)$_REQUEST['isStudentView'] : null;
+$learnpath_id = (int)$_REQUEST['lp_id'];
+$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 $_course = api_get_course_info();
-
-/* MAIN CODE */
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' and $type == 'learnpathitem') {
@@ -62,9 +60,9 @@ if (isset($_SESSION['gradebook'])) {
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
@@ -87,9 +85,6 @@ if (isset($_REQUEST['updateaudio'])) {
 $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
-/* DISPLAY SECTION */
-
-
 // POST action handling (uploading mp3, deleting mp3)
 if (isset($_POST['save_audio'])) {
 
@@ -106,13 +101,14 @@ if (isset($_POST['save_audio'])) {
         }
     }
     if (count($lp_items_to_remove_audio)>0) {
-        $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$in.")";
+        $sql = "UPDATE $tbl_lp_item SET audio = '' 
+                WHERE c_id = $course_id AND id IN (".$in.")";
         $result = Database::query($sql);
     }
 
     // Uploading the audio files.
     foreach ($_FILES as $key => $value) {
-        if (substr($key, 0, 7) == 'mp3file' AND !empty($_FILES[$key]['tmp_name'])) {
+        if (substr($key, 0, 7) == 'mp3file' && !empty($_FILES[$key]['tmp_name'])) {
             // The id of the learning path item.
             $lp_item_id = str_ireplace('mp3file', '', $key);
 

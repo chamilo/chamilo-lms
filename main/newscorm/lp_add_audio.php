@@ -16,9 +16,9 @@ require_once 'resourcelinker.inc.php';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$isStudentView  = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
-$learnpath_id   = (int) $_REQUEST['lp_id'];
-$submit			= isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
+$isStudentView = isset($_REQUEST['isStudentView']) ? (int)$_REQUEST['isStudentView'] : null;
+$learnpath_id = (int)$_REQUEST['lp_id'];
+$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -165,7 +165,7 @@ $documentTree = DocumentManager::get_document_preview(
 );
 
 $page .= $recordVoiceForm;
-$page .= $form->return_form();
+$page .= $form->returnForm();
 $page .= '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
 $page .= $documentTree;
 $page .= '</div>';

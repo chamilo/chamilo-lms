@@ -68,10 +68,10 @@ class learnpath
     public $prerequisite = 0;
     public $use_max_score = 1; // 1 or 0
     public $subscribeUsers = 0; // Subscribe users or not
-    public $created_on      = '';
-    public $modified_on     = '';
-    public $publicated_on   = '';
-    public $expired_on      = '';
+    public $created_on = '';
+    public $modified_on = '';
+    public $publicated_on = '';
+    public $expired_on = '';
     public $ref = null;
     public $course_int_id;
     public $course_info = array();
@@ -1545,7 +1545,7 @@ class learnpath
         // TODO: Update the item object (can be ignored for now because refreshed).
         return true;
     }
-    
+
     /**
      * Static admin function exporting a learnpath into a zip file
      * @param	string	Export type (scorm, zip, cd)
@@ -10545,13 +10545,18 @@ EOD;
     }
 
     /**
-     * @return \learnpath
+     * @param string $courseCode
+     * @param int $lp_id
+     * @param int $user_id
+     *
+     * @return learnpath
      */
     public static function getLpFromSession($courseCode, $lp_id, $user_id)
     {
-        $lpObject = Session::read('lpobject');
         $learnPath = null;
-        if (isset($lpObject)) {
+
+        $lpObject = Session::read('lpobject');
+        if ($lpObject !== null) {
             $learnPath = unserialize($lpObject);
         }
 

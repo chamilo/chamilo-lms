@@ -11,8 +11,10 @@
  * var asset_timer
  * @return string JavaScript time intializer
  */
-function start_timer() {
+function start_timer()
+{
     $time = time();
     return $time; //"olms.asset_timer='$time'; olms.asset_timer_total = 0;";
 }
+
 echo start_timer();

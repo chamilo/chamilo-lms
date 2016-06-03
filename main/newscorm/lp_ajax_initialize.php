@@ -22,7 +22,8 @@ require_once '../inc/global.inc.php';
  * @param   integer Current item ID
  * @param   integer New item ID
  */
-function initialize_item($lp_id, $user_id, $view_id, $next_item) {
+function initialize_item($lp_id, $user_id, $view_id, $next_item)
+{
     global $debug;
     $return = '';
     if ($debug > 0) { error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')', 0); }
@@ -61,7 +62,9 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
      */
     $myscore = $mylpi->get_score();
     $mymax = $mylpi->get_max();
-    if ($mymax === '') { $mymax = "''"; }
+    if ($mymax === '') {
+        $mymax = "''";
+    }
     $mymin = $mylpi->get_min();
 
     $mylesson_status = $mylpi->get_status();
@@ -80,8 +83,8 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
     if (!empty($myistring)) {
         $myistring = substr($myistring, 1);
     }
-	// Obtention des donnees d'objectifs
 
+	// Obtention des donnees d'objectifs
 	$mycoursedb = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
     $course_id = api_get_course_int_id();
 	$mylp_iv_id = $mylpi->db_item_view_id;
@@ -166,6 +169,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
     if ($debug > 1) { error_log('Prereq_match() returned '.htmlentities($mylp->error), 0); }
     if ($debug > 1) { error_log("return = $return "); }
+    
     return $return;
 }
 echo initialize_item($_POST['lid'], $_POST['uid'], $_POST['vid'], $_POST['iid']);

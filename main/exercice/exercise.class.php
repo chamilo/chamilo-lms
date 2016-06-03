@@ -3519,7 +3519,7 @@ class Exercise
                         // the loop will stop at the end of the text
                         while (1) {
                             // quits the loop if there are no more blanks (detect '[')
-                            if (($pos = api_strpos($temp, '[')) === false) {
+                            if ($temp == false || ($pos = api_strpos($temp, '[')) === false) {
                                 // adds the end of the text
                                 $answer = $temp;
                                 $real_text[] = $answer;
@@ -3734,7 +3734,7 @@ class Exercise
                     // the loop will stop at the end of the text
                     while (1) {
                         // quits the loop if there are no more blanks (detect '[')
-                        if (($pos = api_strpos($temp, '[')) === false) {
+                        if ($temp == false || ($pos = api_strpos($temp, '[')) === false) {
                             // adds the end of the text
                             $answer = $temp;
                             $realText[] = $answer;

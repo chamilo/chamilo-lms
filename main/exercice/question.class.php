@@ -272,7 +272,7 @@ abstract class Question
             return api_get_path(WEB_COURSE_PATH) . $this->course['path'] . '/document/images/' . $this->picture;
         }
 
-        return false;
+        return '';
     }
 
     /**

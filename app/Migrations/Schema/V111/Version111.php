@@ -257,35 +257,37 @@ class Version111 extends AbstractMigrationChamilo
 
             $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26537A1329 FOREIGN KEY (message_id) REFERENCES ticket_message (id);');
             $this->addSql('DELETE FROM settings_current WHERE title = "Ticket"');
-
-            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('ticket_allow_student_add', NULL, 'radio','Ticket', 'false','TicketAllowStudentAddTitle','TicketAllowStudentAddComment',NULL,NULL, 0)");
-            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('ticket_allow_category_edition', NULL, 'radio','Ticket', 'false','TicketAllowCategoryEditionTitle','TicketAllowCategoryEditionComment',NULL,NULL, 0)");
-            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('ticket_send_warning_to_all_admins', NULL, 'radio','Ticket', 'false','TicketSendWarningToAllAdminsTitle','TicketSendWarningToAllAdminsComment',NULL,NULL, 0)");
-            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('ticket_warn_admin_no_user_in_category', NULL, 'radio','Ticket', 'false','TicketWarnAdminNoUserInCategoryTitle','TicketWarnAdminNoUserInCategoryComment',NULL,NULL, 0)");
-            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('load_term_conditions_section', NULL, 'radio','Platform', 'login','LoadTermConditionsSectionTitle','LoadTermConditionsSectionDescription',NULL,NULL, 0)");
-            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_terms_if_profile_completed', NULL, 'radio','Ticket', 'false','ShowTermsIfProfileCompletedTitle','ShowTermsIfProfileCompletedComment',NULL,NULL, 0)");
-
-            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_allow_student_add', 'true', 'Yes'), ('ticket_allow_student_add', 'false', 'No')");
-            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_allow_category_edition', 'true', 'Yes'), ('ticket_allow_category_edition', 'false', 'No')");
-            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_send_warning_to_all_admins', 'true', 'Yes'), ('ticket_send_warning_to_all_admins', 'false', 'No')");
-            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_warn_admin_no_user_in_category', 'true', 'Yes'), ('ticket_warn_admin_no_user_in_category', 'false', 'No')");
-            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('load_term_conditions_section', 'login', 'Login'), ('load_term_conditions_section', 'course', 'Course')");
-            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_terms_if_profile_completed', 'true', 'Yes'), ('show_terms_if_profile_completed', 'false', 'No')");
-
-            $this->addSql("ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_qqrc_qid (question_id)");
-            $this->addSql("ALTER TABLE c_quiz_answer ADD INDEX idx_cqa_q (question_id)");
-            $this->addSql("ALTER TABLE c_student_publication ADD INDEX idx_csp_u (user_id)");
-
-            $this->addSql('ALTER TABLE legal DROP PRIMARY KEY;');
-            $this->addSql('ALTER TABLE legal ADD id INT');
-            $this->addSql('UPDATE legal SET id = legal_id');
-            $this->addSql('UPDATE legal SET id = 1 WHERE id = 0');
-            $this->addSql('ALTER TABLE legal MODIFY COLUMN language_id INT NOT NULL');
-            $this->addSql('ALTER TABLE legal DROP legal_id');
-            $this->addSql('ALTER TABLE legal CHANGE id id INT AUTO_INCREMENT NOT NULL PRIMARY KEY;');
-
-            $this->addSql('ALTER TABLE user ADD profile_completed TINYINT(1) DEFAULT NULL;');
         }
+
+        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('ticket_allow_student_add', NULL, 'radio','Ticket', 'false','TicketAllowStudentAddTitle','TicketAllowStudentAddComment',NULL,NULL, 0)");
+        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('ticket_allow_category_edition', NULL, 'radio','Ticket', 'false','TicketAllowCategoryEditionTitle','TicketAllowCategoryEditionComment',NULL,NULL, 0)");
+        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('ticket_send_warning_to_all_admins', NULL, 'radio','Ticket', 'false','TicketSendWarningToAllAdminsTitle','TicketSendWarningToAllAdminsComment',NULL,NULL, 0)");
+        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('ticket_warn_admin_no_user_in_category', NULL, 'radio','Ticket', 'false','TicketWarnAdminNoUserInCategoryTitle','TicketWarnAdminNoUserInCategoryComment',NULL,NULL, 0)");
+        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('load_term_conditions_section', NULL, 'radio','Platform', 'login','LoadTermConditionsSectionTitle','LoadTermConditionsSectionDescription',NULL,NULL, 0)");
+        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_terms_if_profile_completed', NULL, 'radio','Ticket', 'false','ShowTermsIfProfileCompletedTitle','ShowTermsIfProfileCompletedComment',NULL,NULL, 0)");
+
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_allow_student_add', 'true', 'Yes'), ('ticket_allow_student_add', 'false', 'No')");
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_allow_category_edition', 'true', 'Yes'), ('ticket_allow_category_edition', 'false', 'No')");
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_send_warning_to_all_admins', 'true', 'Yes'), ('ticket_send_warning_to_all_admins', 'false', 'No')");
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('ticket_warn_admin_no_user_in_category', 'true', 'Yes'), ('ticket_warn_admin_no_user_in_category', 'false', 'No')");
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('load_term_conditions_section', 'login', 'Login'), ('load_term_conditions_section', 'course', 'Course')");
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_terms_if_profile_completed', 'true', 'Yes'), ('show_terms_if_profile_completed', 'false', 'No')");
+
+        $this->addSql("ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_qqrc_qid (question_id)");
+        $this->addSql("ALTER TABLE c_quiz_answer ADD INDEX idx_cqa_q (question_id)");
+        $this->addSql("ALTER TABLE c_student_publication ADD INDEX idx_csp_u (user_id)");
+
+        $this->addSql('ALTER TABLE legal DROP PRIMARY KEY;');
+        $this->addSql('ALTER TABLE legal ADD id INT');
+        $this->addSql('UPDATE legal SET id = legal_id');
+        $this->addSql('UPDATE legal SET id = 1 WHERE id = 0');
+        $this->addSql('ALTER TABLE legal MODIFY COLUMN language_id INT NOT NULL');
+        $this->addSql('ALTER TABLE legal DROP legal_id');
+        $this->addSql('ALTER TABLE legal CHANGE id id INT AUTO_INCREMENT NOT NULL PRIMARY KEY;');
+
+        $this->addSql('ALTER TABLE user ADD profile_completed TINYINT(1) DEFAULT NULL;');
+        $this->addSql('ALTER TABLE extra_field_options CHANGE display_text display_text VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE extra_field CHANGE variable variable VARCHAR(255) NOT NULL');
     }
 
     /**

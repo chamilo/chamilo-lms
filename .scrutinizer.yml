@@ -30,7 +30,6 @@ filter:
         - main/inc/lib/kses-0.2.2
         - main/inc/lib/mimetex
         - main/inc/lib/nanogong
-        - main/inc/lib/
         - main/inc/lib/pclzip
         - main/inc/lib/pear
         - main/inc/lib/phpmailer
@@ -39,6 +38,7 @@ filter:
         - main/inc/lib/swfobject
         - main/inc/lib/wami-recorder
         - main/inc/lib/xajax
+        - main/auth/cas/lib/CAS
 checks:
     php:
         code_rating: true

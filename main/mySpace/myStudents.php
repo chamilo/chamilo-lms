@@ -36,6 +36,7 @@ $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
 $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : null;
+$student_id = intval($_GET['student']);
 
 // time spent on the course
 $courseInfo = api_get_course_info($course_code);
@@ -61,7 +62,7 @@ $nameTools = get_lang('StudentDetails');
 $em = Database::getManager();
 
 if (isset($_GET['details'])) {
-    if ($origin == 'user_course') {
+    if ($origin === 'user_course') {
         if (empty ($cidReq)) {
             $interbreadcrumb[] = array (
                 "url" => api_get_path(WEB_COURSE_PATH) . $courseInfo['directory'],
@@ -73,13 +74,13 @@ if (isset($_GET['details'])) {
             "name" => get_lang("Users")
         );
     } else
-        if ($origin == 'tracking_course') {
+        if ($origin === 'tracking_course') {
             $interbreadcrumb[] = array (
                 "url" => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session=' . api_get_session_id(),
                 "name" => get_lang("Tracking")
             );
         } else
-            if ($origin == 'resume_session') {
+            if ($origin === 'resume_session') {
                 $interbreadcrumb[] = array (
                     'url' => "../session/session_list.php",
                     "name" => get_lang('SessionList')
@@ -99,7 +100,7 @@ if (isset($_GET['details'])) {
                         "name" => get_lang("CoachStudents")
                     );
                     $interbreadcrumb[] = array (
-                        "url" => "myStudents.php?student=" . Security :: remove_XSS($_GET['student']) . '&id_coach=' . Security :: remove_XSS($_GET['id_coach']),
+                        "url" => "myStudents.php?student=" . $student_id. '&id_coach=' . Security :: remove_XSS($_GET['id_coach']),
                         "name" => get_lang("StudentDetails")
                     );
                 } else {
@@ -108,7 +109,7 @@ if (isset($_GET['details'])) {
                         "name" => get_lang("MyStudents")
                     );
                     $interbreadcrumb[] = array (
-                        "url" => "myStudents.php?student=" . Security :: remove_XSS($_GET['student']),
+                        "url" => "myStudents.php?student=" . $student_id,
                         "name" => get_lang("StudentDetails")
                     );
                 }
@@ -162,15 +163,13 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
     $user_id = api_get_user_id();
 }
 
-$student_id = intval($_GET['student']);
-
 // Action behaviour
 $check = Security::check_token('get');
 
 if ($check) {
     switch ($_GET['action']) {
         case 'reset_lp':
-            $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : "";
+            $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : '';
 
             if (api_is_allowed_to_edit() &&
                 !empty($lp_id) &&
@@ -274,7 +273,6 @@ while ($row = Database :: fetch_array($rs, 'ASSOC')) {
     }
 }
 
-
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
     api_get_course_info()
@@ -333,9 +331,9 @@ if (!empty($student_id)) {
         $send_mail = Display :: return_icon('mail_send_na.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM);
     }
     echo $send_mail;
-    if (!empty($student_id) && !empty($_GET['course'])) {
+    if (!empty($student_id) && !empty($course_code)) {
         // Only show link to connection details if course and student were defined in the URL
-        echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&origin=' . $origin. '&cidReq='.Security::remove_XSS($_GET['course']).'&id_session='.$sessionId.'">'.
+        echo '<a href="access_details.php?student=' . $student_id . '&course=' . $course_code . '&origin=' . $origin. '&cidReq='.$course_code.'&id_session='.$sessionId.'">'.
             Display :: return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     if (api_can_login_as($student_id)) {
@@ -346,7 +344,7 @@ if (!empty($student_id)) {
     echo '</div>';
 
     // is the user online ?
-    if (user_is_online($_GET['student'])) {
+    if (user_is_online($student_id)) {
         $online = get_lang('Yes');
     } else {
         $online = get_lang('No');
@@ -537,7 +535,12 @@ if (!empty($student_id)) {
                     <td align="right">
                         <?php
                         echo get_lang('Progress').' ';
-                        Display :: display_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));?>
+                        Display:: display_icon(
+                            'info3.gif',
+                            get_lang('ScormAndLPProgressTotalAverage'),
+                            array('align' => 'absmiddle', 'hspace' => '3px')
+                        );
+                        ?>
                     </td>
                     <td align="left"><?php echo $avg_student_progress.'%' ?></td>
                 </tr>
@@ -545,7 +548,12 @@ if (!empty($student_id)) {
                     <td align="right">
                         <?php
                         echo get_lang('Score').' ';
-                        Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
+                        Display:: display_icon(
+                            'info3.gif',
+                            get_lang('ScormAndLPTestTotalAverage'),
+                            array('align' => 'absmiddle', 'hspace' => '3px')
+                        );
+                        ?>
                     </td>
                     <td align="left"><?php
                         if (is_numeric($avg_student_score)) {
@@ -557,11 +565,6 @@ if (!empty($student_id)) {
                     </td>
                 </tr>
                 <?php
-                /*if (!empty($nb_login)) {
-                    echo '<tr><td align="right">'.get_lang('CountToolAccess').'</td>';
-                    echo '<td align="left"> '.$nb_login.'</td>';
-                    echo '</tr>';
-                }*/
             } ?>
             </tbody>
         </table>
@@ -584,17 +587,6 @@ if (!empty($student_id)) {
         </div>
     </div>
     <?php
-
-    /*$table_title = '';
-    if (!empty($sessionId)) {
-        $session_name = api_get_session_name($sessionId);
-        $table_title = $session_name ? Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.' ':'';
-    }
-    if (!empty($courseInfo['title'])) {
-        $table_title .= $courseInfo ? Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$courseInfo['title'].'  ':'';
-    }
-
-    echo Display::page_subheader($table_title);*/
 
     if (empty($_GET['details'])) {
         $csv_content[] = array();
@@ -862,7 +854,7 @@ if (!empty($student_id)) {
 
                     if ($progress === null) {
                         $progress = '0%';
-                    }  else {
+                    } else {
                         $any_result = true;
                     }
 
@@ -892,7 +884,9 @@ if (!empty($student_id)) {
                         $start_time =  '-';
                     }
 
-                    if (!empty($total_time)) $any_result = true;
+                    if (!empty($total_time)) {
+                        $any_result = true;
+                    }
 
                     // Quiz in lp
                     $score = Tracking::get_avg_student_score(
@@ -921,7 +915,7 @@ if (!empty($student_id)) {
                     $i++;
 
                     // csv export content
-                    $csv_content[] = array (
+                    $csv_content[] = array(
                         api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
                         api_time_to_hms($total_time),
                         $score . '%',
@@ -968,7 +962,7 @@ if (!empty($student_id)) {
                         }
                         $link = Display::url(
                             Display::return_icon('2rightarrow.png', get_lang('Details')),
-                            'lp_tracking.php?cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).$from.'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
+                            'lp_tracking.php?cidReq='.$course_code.'&course='.$course_code.$from.'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
                         );
                         echo Display::tag('td', $link);
                     }
@@ -976,7 +970,7 @@ if (!empty($student_id)) {
                     if (api_is_allowed_to_edit()) {
                         echo '<td>';
                         if ($any_result === true) {
-                            echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
+                            echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='.$course_code.'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
                             echo Display::return_icon('clean.png', get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
                             echo '</a>';
                         }
@@ -1020,7 +1014,7 @@ if (!empty($student_id)) {
         $t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
                 WHERE
-                    quiz.c_id =  ".$courseInfo['real_id']." AND
+                    quiz.c_id = ".$courseInfo['real_id']." AND
                     (quiz.session_id = $sessionId OR quiz.session_id = 0) AND
                     active IN (0, 1)
                 ORDER BY quiz.title ASC ";

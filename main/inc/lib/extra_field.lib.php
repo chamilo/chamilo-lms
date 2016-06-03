@@ -912,7 +912,7 @@ class ExtraField extends Model
                             foreach ($field_details['options'] as $option_details) {
                                 $optionList[$option_details['id']] = $option_details;
                                 if ($get_lang_variables) {
-                                    $options[$option_details['option_value']] = get_lang($option_details['display_text']);
+                                    $options[$option_details['option_value']] = $option_details['display_text'];
                                 } else {
                                     if ($optionsExists) {
                                         // Adding always the default value
@@ -963,10 +963,6 @@ class ExtraField extends Model
                                     );
                                 }
                             }
-                        }
-
-                        if ($get_lang_variables) {
-                            $field_details['display_text'] = get_lang($field_details['display_text']);
                         }
 
                         // chzn-select doesn't work for sessions??
@@ -1173,16 +1169,6 @@ class ExtraField extends Model
                     case ExtraField::FIELD_TYPE_TAG:
                         $variable = $field_details['variable'];
                         $field_id = $field_details['id'];
-
-                        //Added for correctly translate the extra_field
-                        $get_lang_variables = false;
-                        if (in_array($variable, ['tags'])) {
-                            $get_lang_variables = true;
-                        }
-
-                        if ($get_lang_variables) {
-                            $field_details['display_text'] = get_lang($field_details['display_text']);
-                        }
 
                         $tagsSelect = $form->addSelect(
                             "extra_{$field_details['variable']}",
@@ -1478,16 +1464,6 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_VIDEO_URL:
-                        //Added for correctly translate the extra_field
-                        $get_lang_variables = false;
-                        if (in_array($field_details['variable'], ['video_url'])) {
-                            $get_lang_variables = true;
-                        }
-
-                        if ($get_lang_variables) {
-                            $field_details['display_text'] = get_lang($field_details['display_text']);
-                        }
-
                         $form->addUrl(
                             "extra_{$field_details['variable']}",
                             $field_details['display_text'],

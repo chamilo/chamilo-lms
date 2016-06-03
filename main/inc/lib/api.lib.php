@@ -4255,15 +4255,24 @@ function api_get_language_from_type($lang_type)
     return $return;
 }
 
-function api_get_language_info($language_id) {
-    $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = 'SELECT * FROM '.$tbl_admin_languages.' WHERE id = "'.intval($language_id).'"';
-    $rs = Database::query($sql);
-    $language_info = array();
-    if (Database::num_rows($rs)) {
-        $language_info = Database::fetch_array($rs,'ASSOC');
-    }
-    return $language_info;
+/**
+ * Get the language information by its id
+ * @param int $languageId
+ * @return array
+ */
+function api_get_language_info($languageId) {
+    $language = Database::getManager()
+        ->find('ChamiloCoreBundle:Language', intval($languageId));
+
+    return [
+        'id' => $language->getId(),
+        'original_name' => $language->getOriginalName(),
+        'english_name' => $language->getEnglishName(),
+        'isocode' => $language->getIsocode(),
+        'dokeos_folder' => $language->getDokeosFolder(),
+        'available' => $language->getAvailable(),
+        'parent_id' => $language->getParent() ? $language->getParent()->getId() : null
+    ];
 }
 
 /**

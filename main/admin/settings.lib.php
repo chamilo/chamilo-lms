@@ -752,7 +752,7 @@ function handle_search()
     $group = array ();
     if (is_array($values)) {
         foreach ($values as $key => $value) {
-            $element = & $form->createElement('radio', 'search_enabled', '', get_lang($value['display_text']), $value['value']);
+            $element = & $form->createElement('radio', 'search_enabled', '', $value['display_text'], $value['value']);
             $group[] = $element;
         }
     }
@@ -777,7 +777,7 @@ function handle_search()
         $values = api_get_settings_options('search_show_unlinked_results');
         $group = array ();
         foreach ($values as $key => $value) {
-            $element = & $form->createElement('radio', 'search_show_unlinked_results', '', get_lang($value['display_text']), $value['value']);
+            $element = & $form->createElement('radio', 'search_show_unlinked_results', '', $value['display_text'], $value['value']);
             $group[] = $element;
         }
         $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), '', false);
@@ -1461,7 +1461,7 @@ function generate_settings_form($settings, $settings_by_access_list)
                             'radio',
                             $row['variable'],
                             '',
-                            get_lang($value['display_text']),
+                            $value['display_text'],
                             $value['value']
                         );
                         if ($hide_element) {

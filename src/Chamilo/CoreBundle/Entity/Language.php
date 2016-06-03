@@ -2,7 +2,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\ChamiloCoreBundle;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Language
@@ -57,12 +59,25 @@ class Language
     private $available;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="parent_id", type="integer", nullable=true)
+     * @var \Chamilo\CoreBundle\Entity\Language
+     * @ORM\ManyToOne(targetEntity="Language", inversedBy="subLanguages")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
-    private $parentId;
+    private $parent;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Language", mappedBy="parent")
+     */
+    private $subLanguages;
+
+    /**
+     * Language constructor
+     */
+    public function __construct()
+    {
+        $this->children = new ArrayCollection();
+    }
 
     /**
      * Set originalName
@@ -180,26 +195,36 @@ class Language
     }
 
     /**
-     * Set parentId
+     * Set parent
      *
-     * @param boolean $parentId
+     * @param Language $parent
      * @return Language
      */
-    public function setParentId($parentId)
+    public function setParent(Language $parent)
     {
-        $this->parentId = $parentId;
+        $this->parent = $parent;
 
         return $this;
     }
 
     /**
-     * Get parentId
+     * Get parent
      *
-     * @return boolean
+     * @return Language
      */
-    public function getParentId()
+    public function getParent()
     {
-        return $this->parentId;
+        return $this->parent;
+    }
+
+    /**
+     * Get subLanguages
+     *
+     * @return ArrayCollection
+     */
+    public function getSubLanguages()
+    {
+        return $this->subLanguages;
     }
 
     /**

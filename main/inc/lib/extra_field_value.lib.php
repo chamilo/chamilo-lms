@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Entity\Tag;
 
 /**
  * Class ExtraFieldValue
@@ -156,15 +157,14 @@ class ExtraFieldValue extends Model
                     $tags = [];
 
                     foreach ($tagValues as $tagValue) {
-                        $tagsResult = $em
-                            ->getRepository('ChamiloCoreBundle:Tag')
+                        $tagsResult = $em->getRepository('ChamiloCoreBundle:Tag')
                             ->findBy([
                                 'tag' => $tagValue,
                                 'fieldId' => $extraFieldInfo['id']
                             ]);
 
                         if (empty($tagsResult)) {
-                            $tag = new \Chamilo\CoreBundle\Entity\Tag();
+                            $tag = new Tag();
                             $tag->setFieldId($extraFieldInfo['id']);
                             $tag->setTag($tagValue);
 
@@ -173,7 +173,7 @@ class ExtraFieldValue extends Model
                             $tags = array_merge($tags, $tagsResult);
                         }
                     }
-
+                    
                     foreach ($tags as $tag) {
                         $tagUses = $em
                             ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')

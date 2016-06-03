@@ -3416,9 +3416,10 @@ class UserManager
 
     /**
      * Process the tag list comes from the UserManager::update_extra_field_value() function
-     * @param array the tag list that will be added
-     * @param int user id
-     * @param int field id
+     * @param array $tags the tag list that will be added
+     * @param int $user_id
+     * @param int $field_id
+     *
      * @return bool
      */
     public static function process_tags($tags, $user_id, $field_id)
@@ -5247,5 +5248,5 @@ SQL;
             return Display::tabsOnlyLink($headers, $optionSelected);
         }
     }
-    
+
 }

@@ -40,7 +40,7 @@ switch ($action) {
         $skills = $skill->find('all', array('where' => array('name LIKE %?% '=>$_REQUEST['tag'])));
         $return_skills = array();
         foreach ($skills as $skill) {
-            $skill['caption'] = $skill['name'];
+            $skill['key'] = $skill['name'];
             $skill['value'] =  $skill['id'];
             $return_skills[] = $skill;
         }
@@ -68,7 +68,7 @@ switch ($action) {
         $gradebooks = $gradebook->find('all', array('where' => array('name LIKE %?% ' => $_REQUEST['tag'])));
         $return = array();
         foreach ($gradebooks as $item) {
-            $item['caption'] = $item['name'];
+            $item['key'] = $item['name'];
             $item['value'] =  $item['id'];
             $return[] = $item;
         }

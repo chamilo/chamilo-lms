@@ -1275,7 +1275,7 @@ EOF;
                         filter_hide: true,
                         complete_text:"$complete_text",
                         firstselected: false,
-                        filter_selected: true,
+                        filter_selected: true,                        
                         newel: true
                     });
 EOF;

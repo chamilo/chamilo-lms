@@ -1,4 +1,6 @@
 # .scrutinizer.yml - see https://scrutinizer-ci.com/docs/guides/php/continuous-integration-deployment for doc
+# Excludes go for things do not contain code, are not managed well by Scrutinizer or are external libraries that
+# Chamilo includes but that we cannot update without patching upstream.
 build:
     environment:
         php:
@@ -22,6 +24,21 @@ filter:
         - vendor/*
         - main/admin/db.php
         - app/Migrations/*
+        - main/inc/lib/browser/*
+        - main/inc/lib/elfinder/*
+        - main/inc/lib/freemindflashbrowser/*
+        - main/inc/lib/kses-0.2.2
+        - main/inc/lib/mimetex
+        - main/inc/lib/nanogong
+        - main/inc/lib/
+        - main/inc/lib/pclzip
+        - main/inc/lib/pear
+        - main/inc/lib/phpmailer
+        - main/inc/lib/phpseclib
+        - main/inc/lib/svg-edit
+        - main/inc/lib/swfobject
+        - main/inc/lib/wami-recorder
+        - main/inc/lib/xajax
 checks:
     php:
         code_rating: true

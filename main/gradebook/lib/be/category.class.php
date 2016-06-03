@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookCategory;
+
 /**
  * Class Category
  * Defines a gradebook Category object
@@ -518,13 +520,10 @@ class Category implements GradebookItem
 
     /**
      * Create a category object from a GradebookCategory entity
-     * @param Chamilo\CoreBundle\Entity\GradebookCategory $gradebookCategory
-     *         The entity
+     * @param GradebookCategory $gradebookCategory  The entity
      * @return \Category
      */
-    public static function createCategoryObjectFromEntity(
-        Chamilo\CoreBundle\Entity\GradebookCategory $gradebookCategory
-    )
+    public static function createCategoryObjectFromEntity(GradebookCategory $gradebookCategory)
     {
         $category = new Category();
         $category->set_id($gradebookCategory->getId());
@@ -561,7 +560,7 @@ class Category implements GradebookItem
         if (isset($this->name) && isset($this->user_id)) {
             $em = Database::getManager();
 
-            $category = new \Chamilo\CoreBundle\Entity\GradebookCategory();
+            $category = new GradebookCategory();
             $category->setName($this->name);
             $category->setDescription($this->description);
             $category->setUserId($this->user_id);
@@ -580,7 +579,6 @@ class Category implements GradebookItem
             $em->flush();
 
             $id = $category->getId();
-
             $this->set_id($id);
 
             if (!empty($id)) {

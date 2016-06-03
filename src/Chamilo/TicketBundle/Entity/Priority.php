@@ -87,4 +87,204 @@ class Priority
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
     protected $lastEditDateTime;
+
+    /**
+     * Priority constructor.
+     */
+    public function __construct()
+    {
+        $this->insertDateTime = new \DateTime();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Priority
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return Priority
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     * @return Priority
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return Priority
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     * @return Priority
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrgency()
+    {
+        return $this->urgency;
+    }
+
+    /**
+     * @param string $urgency
+     * @return Priority
+     */
+    public function setUrgency($urgency)
+    {
+        $this->urgency = $urgency;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInsertUserId()
+    {
+        return $this->insertUserId;
+    }
+
+    /**
+     * @param int $insertUserId
+     * @return Priority
+     */
+    public function setInsertUserId($insertUserId)
+    {
+        $this->insertUserId = $insertUserId;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getInsertDateTime()
+    {
+        return $this->insertDateTime;
+    }
+
+    /**
+     * @param \DateTime $insertDateTime
+     * @return Priority
+     */
+    public function setInsertDateTime($insertDateTime)
+    {
+        $this->insertDateTime = $insertDateTime;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastEditUserId()
+    {
+        return $this->lastEditUserId;
+    }
+
+    /**
+     * @param int $lastEditUserId
+     * @return Priority
+     */
+    public function setLastEditUserId($lastEditUserId)
+    {
+        $this->lastEditUserId = $lastEditUserId;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastEditDateTime()
+    {
+        return $this->lastEditDateTime;
+    }
+
+    /**
+     * @param \DateTime $lastEditDateTime
+     * @return Priority
+     */
+    public function setLastEditDateTime($lastEditDateTime)
+    {
+        $this->lastEditDateTime = $lastEditDateTime;
+
+        return $this;
+    }
+
+
 }

@@ -1,12 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * SkillRelUserComment Entity
- *
- * @package chamilo.skill
- */
-
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;

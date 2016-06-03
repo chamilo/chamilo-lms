@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -20,7 +21,7 @@ class TrackEDownloads
      * @ORM\GeneratedValue
      */
     private $downId;
-    
+
     /**
      * @var integer
      *

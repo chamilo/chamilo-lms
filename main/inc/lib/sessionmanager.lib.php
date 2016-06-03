@@ -6708,7 +6708,7 @@ class SessionManager
         $userInfo = api_get_user_info();
 
         $categoriesOptions = array(
-            '0' => get_lang('None'),
+            '0' => get_lang('None')
         );
 
         if ($categoriesList != false) {
@@ -6848,12 +6848,12 @@ class SessionManager
 
         $options = [
             0 => get_lang('ByDuration'),
-            1 => get_lang('ByDates'),
+            1 => get_lang('ByDates')
         ];
 
         $form->addSelect('access', get_lang('Access'), $options, array(
             'onchange' => 'accessSwitcher()',
-            'id' => 'access',
+            'id' => 'access'
         ));
 
         $form->addElement('html', '<div id="duration" style="display:none">');
@@ -6871,11 +6871,9 @@ class SessionManager
         );
 
         $form->addElement('html', '</div>');
-
         $form->addElement('html', '<div id="date_fields" style="display:none">');
 
         // Dates
-
         $form->addDateTimePicker(
             'access_start_date',
             array(get_lang('SessionStartDate'), get_lang('SessionStartDateComment')),

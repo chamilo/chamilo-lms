@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Tag;
+
 require_once '../global.inc.php';
 
 $action = isset($_GET['a']) ? $_GET['a'] : '';
@@ -37,9 +39,10 @@ switch ($action) {
             ->getQuery()
             ->getResult();
 
+        /** @var Tag $tag */
         foreach ($tags as $tag) {
             $result[] = [
-                'caption' => $tag->getTag(),
+                'key' => $tag->getTag(),
                 'value' => $tag->getTag()
             ];
         }

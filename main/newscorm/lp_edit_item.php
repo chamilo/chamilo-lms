@@ -19,7 +19,6 @@ api_protect_course_script();
 /* Libraries */
 
 include 'learnpath_functions.inc.php';
-//include '../resourcelinker/resourcelinker.inc.php';
 include 'resourcelinker.inc.php';
 
 /* Header and action code */
@@ -159,9 +158,6 @@ $(document).ready(function() {
 });
 </script>
 <?php
-
-
-/* DISPLAY SECTION */
 
 echo $_SESSION['oLP']->build_action_menu();
 

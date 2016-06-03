@@ -32,7 +32,10 @@ if (!$category) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
+    'name' => get_lang('LearningPaths')
+);
 $interbreadcrumb[] = array('url' => '#', 'name' => $category->getName());
 
 // Find course.

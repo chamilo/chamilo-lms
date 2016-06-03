@@ -1,12 +1,5 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
-/**
- * Profile Entity
- *
- * @package chamilo.skill
- */
 
 namespace Chamilo\SkillBundle\Entity;
 
@@ -49,6 +42,9 @@ class Profile
      **/
     protected $levels;
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return (string) $this->getName();

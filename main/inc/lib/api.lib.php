@@ -571,6 +571,49 @@ define('SHORTCUTS_VERTICAL', 1);
 // Image class
 define('IMAGE_PROCESSOR', 'gd'); // 'imagick' or 'gd' strings
 
+// Course copy
+define('FILE_SKIP', 1);
+define('FILE_RENAME', 2);
+define('FILE_OVERWRITE', 3);
+define('UTF8_CONVERT', false); //false by default
+
+define('DOCUMENT','file');
+define('FOLDER','folder');
+
+define('RESOURCE_DOCUMENT', 'document');
+define('RESOURCE_GLOSSARY', 'glossary');
+define('RESOURCE_EVENT', 'calendar_event');
+define('RESOURCE_LINK', 'link');
+define('RESOURCE_COURSEDESCRIPTION', 'course_description');
+define('RESOURCE_LEARNPATH', 'learnpath');
+define('RESOURCE_ANNOUNCEMENT', 'announcement');
+define('RESOURCE_FORUM', 'forum');
+define('RESOURCE_FORUMTOPIC', 'thread');
+define('RESOURCE_FORUMPOST', 'post');
+define('RESOURCE_QUIZ', 'quiz');
+define('RESOURCE_TEST_CATEGORY', 'test_category');
+define('RESOURCE_QUIZQUESTION', 'Exercise_Question');
+define('RESOURCE_TOOL_INTRO', 'Tool introduction');
+define('RESOURCE_LINKCATEGORY', 'Link_Category');
+define('RESOURCE_FORUMCATEGORY', 'Forum_Category');
+define('RESOURCE_SCORM', 'Scorm');
+define('RESOURCE_SURVEY', 'survey');
+define('RESOURCE_SURVEYQUESTION', 'survey_question');
+define('RESOURCE_SURVEYINVITATION', 'survey_invitation');
+define('RESOURCE_WIKI', 'wiki');
+define('RESOURCE_THEMATIC', 'thematic');
+define('RESOURCE_ATTENDANCE', 'attendance');
+define('RESOURCE_WORK', 'work');
+define('RESOURCE_SESSION_COURSE', 'session_course');
+define('RESOURCE_GRADEBOOK', 'gradebook');
+
+
+// Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
+// To remove CKeditor libs from HTML, set this constant to true before loading
+if (!defined('CHAMILO_LOAD_WYSIWYG')) {
+    define('CHAMILO_LOAD_WYSIWYG', true);
+}
+
 /**
  * Inclusion of internationalization libraries
  */
@@ -1015,6 +1058,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (api_is_platform_admin($allow_session_admins)) {
         return true;
     }
+
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
             default:
@@ -1324,6 +1368,10 @@ function _api_format_user($user, $add_password = false)
         $result['password'] = $user['password'];
     }
 
+    if (isset($result['profile_completed'])) {
+        $result['profile_completed'] = $user['profile_completed'];
+    }
+
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
     if (isset($user['extra'])) {
@@ -1353,7 +1401,6 @@ function api_get_user_info(
     $loadExtraData = false,
     $loadOnlyVisibleExtraData = false
 ) {
-
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
         if (isset($userFromSession)) {
@@ -1362,7 +1409,6 @@ function api_get_user_info(
 
         return false;
     }
-
 
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
             WHERE id='".intval($user_id)."'";
@@ -5926,6 +5972,7 @@ function api_check_term_condition($user_id)
     if (api_get_setting('allow_terms_conditions') == 'true') {
         //check if exists terms and conditions
         if (LegalManager::count() == 0) {
+
             return true;
         }
 

@@ -24,6 +24,15 @@ class TrackECourseAccess
     /**
      * @var integer
      *
+     * @ORM\Column(name="course_access_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $courseAccessId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
     private $cId;
@@ -69,16 +78,6 @@ class TrackECourseAccess
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
     private $userIp;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="course_access_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $courseAccessId;
-
 
     /**
      * Set cId

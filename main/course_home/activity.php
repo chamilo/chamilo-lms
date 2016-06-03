@@ -48,7 +48,7 @@ if ($enabled == 'true') {
 //	COURSE ADMIN ONLY VIEW
 
 // Start of tools for CourseAdmins (teachers/tutors)
-if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
+if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
     $content .=  '<div class="alert alert-success" style="border:0px; margin-top: 0px;padding:0px;">
 		<div class="normal-message" id="id_normal_message" style="display:none">';
     $content .=  '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';

@@ -18,7 +18,7 @@ class Tag
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue()
+     * @ORM\GeneratedValue
      */
     private $id;
 

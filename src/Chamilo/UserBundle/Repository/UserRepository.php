@@ -5,12 +5,12 @@ namespace Chamilo\UserBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Doctrine\ORM\EntityRepository;
-use \Doctrine\Common\Collections\Criteria;
-use \Chamilo\CoreBundle\Entity\Session;
-use \Chamilo\CoreBundle\Entity\Course;
-use \Doctrine\ORM\Query\Expr\Join;
-use \Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use \Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Course;
+use Doctrine\ORM\Query\Expr\Join;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\UserBundle\Entity\User;
 
 //use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 //use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -257,7 +257,7 @@ class UserRepository extends EntityRepository
 
     /**
      * Get the sessions admins for a user
-     * @param \Chamilo\UserBundle\Entity\User $user The user
+     * @param User $user The user
      * @return array
      */
     public function getSessionAdmins(User $user)

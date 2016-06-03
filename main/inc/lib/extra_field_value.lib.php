@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
+use Chamilo\CoreBundle\Entity\Tag;
 
 /**
  * Class ExtraFieldValue
@@ -165,7 +166,7 @@ class ExtraFieldValue extends Model
                             ]);
 
                         if (empty($tagsResult)) {
-                            $tag = new \Chamilo\CoreBundle\Entity\Tag();
+                            $tag = new Tag();
                             $tag->setFieldId($extraFieldInfo['id']);
                             $tag->setTag($tagValue);
 

@@ -1,6 +1,8 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
 
 /**
  * Page for assign skills to a user
@@ -8,9 +10,6 @@
  * @autor: Jose Loguercio <jose.loguercio@beeznest.com>
  * @package chamilo.badge
  */
-
-use \Chamilo\CoreBundle\Entity\Skill;
-use \Chamilo\CoreBundle\Entity\SkillRelUser;
 
 require_once '../inc/global.inc.php';
 

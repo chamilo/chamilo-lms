@@ -5021,7 +5021,6 @@ $Off = "Off";
 $webserver = "Уеб-сървър";
 $mysql = "MySQL";
 $NotInserted = "Не е вмъкнат.";
-$Multipleresponse = "Повече от един отговора";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Можете да влезете в %s използвайки Вашите потребителско име и парола.";
 $HaveFun = "Приятна работа.";
 $AreYouSureToEditTheUserStatus = "Сигурни ли сте, че искате да промените статуса на потребителя?";

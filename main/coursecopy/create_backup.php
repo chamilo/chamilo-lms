@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
+
+
 /**
  * Create a backup.
  *
@@ -38,12 +43,6 @@ $interbreadcrumb[] = array(
 // Displaying the header
 $nameTools = get_lang('CreateBackup');
 Display::display_header($nameTools);
-
-// Include additional libraries
-require_once 'classes/CourseBuilder.class.php';
-require_once 'classes/CourseArchiver.class.php';
-require_once 'classes/CourseRestorer.class.php';
-require_once 'classes/CourseSelectForm.class.php';
 
 // Display the tool title
 echo Display::page_header($nameTools);
@@ -118,7 +117,6 @@ if (Security::check_token('post') && (
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-
         $form->display();
     }
 }

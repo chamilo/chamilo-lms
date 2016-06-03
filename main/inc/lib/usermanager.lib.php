@@ -294,8 +294,11 @@ class UserManager
         //Checking the user language
         $languages = api_get_languages();
         $language = strtolower($language);
-        if (!in_array($language, $languages['folder'])) {
-            $language = api_get_setting('platformLanguage');
+
+        if (isset($languages['folder'])) {
+            if (!in_array($language, $languages['folder'])) {
+                $language = api_get_setting('platformLanguage');
+            }
         }
 
         if (!empty($currentUserId)) {
@@ -1365,7 +1368,7 @@ class UserManager
 
             $result['complete_name'] = api_get_person_name(
                 $result['firstname'],
-                $result['lastname']               
+                $result['lastname']
             );
             $return_array[] = $result;
         }
@@ -2281,24 +2284,28 @@ class UserManager
     }
 
     /** Get extra user data by value
-     * @param string the internal variable name of the field
-     * @param string the internal value of the field
+     * @param string $field_variable the internal variable name of the field
+     * @param string $field_value the internal value of the field
+     * @param bool $all_visibility
+     *
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-    public static function get_extra_user_data_by_value($field_variable, $field_value)
+     public static function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true)
     {
         $extraField = new ExtraFieldValue('user');
 
-        $data = $extraField->get_item_id_from_field_variable_and_field_value(
+        $data = $extraField->get_values_by_handler_and_field_variable(
             $field_variable,
             $field_value,
-            true
+            null,
+            true,
+            intval($all_visibility)
         );
 
         $result = [];
         if (!empty($data)) {
             foreach ($data as $data) {
-                $result[] = $data;
+                $result[] = $data['item_id'];
             }
         }
 
@@ -3410,9 +3417,10 @@ class UserManager
 
     /**
      * Process the tag list comes from the UserManager::update_extra_field_value() function
-     * @param array the tag list that will be added
-     * @param int user id
-     * @param int field id
+     * @param array $tags the tag list that will be added
+     * @param int $user_id
+     * @param int $field_id
+     *
      * @return bool
      */
     public static function process_tags($tags, $user_id, $field_id)
@@ -3615,7 +3623,7 @@ class UserManager
             $finalResult = array();
             if (count($extraFieldResult)>1) {
                 for ($i=0; $i < count($extraFieldResult) -1; $i++) {
-                    if (is_array($extraFieldResult[$i+1])) {
+                if (is_array($extraFieldResult[$i]) && is_array($extraFieldResult[$i+1])) {
                         $finalResult  = array_intersect($extraFieldResult[$i], $extraFieldResult[$i+1]);
                     }
                 }
@@ -3639,7 +3647,7 @@ class UserManager
      * @param string $query the value of the search box
      * @return string HTML form
      */
-    public static function get_search_form($query)
+    public static function get_search_form($query, $defaultParams = [])
     {
         $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
         $form = new FormValidator(
@@ -3691,6 +3699,10 @@ class UserManager
 
         $defaults['search_type'] = intval($searchType);
         $defaults['q'] = api_htmlentities(Security::remove_XSS($query));
+
+        if (!empty($defaultParams)) {
+            $defaults = array_merge($defaults, $defaultParams);
+        }
         $form->setDefaults($defaults);
 
         $form->addButtonSearch(get_lang('Search'));
@@ -4833,7 +4845,7 @@ EOF;
 
     /**
      * Subscribe boss to students
-     * 
+     *
      * @param int $bossId The boss id
      * @param array $usersId The users array
      * @return int Affected rows
@@ -5081,6 +5093,26 @@ EOF;
     }
 
     /**
+     * @param int $bossId
+     * @param int $studentId
+     *
+     * @return bool
+     */
+    public static function userIsBossOfStudent($bossId, $studentId)
+    {
+        $result = false;
+        $bossList = UserManager::getStudentBossList($studentId);
+        if ($bossList) {
+            $bossList = array_column($bossList, 'boss_id');
+            if (in_array($bossId, $bossList)) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get either a Gravatar URL or complete image tag for a specified email address.
      *
      * @param string $email The email address
@@ -5211,7 +5243,7 @@ SQL;
                 [
                     'url' => $userPath.'class.php?'.api_get_cidreq(),
                     'content' => get_lang('Classes'),
-                ],
+                ]
             ];
 
             return Display::tabsOnlyLink($headers, $optionSelected);

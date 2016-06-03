@@ -8,9 +8,8 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') != 'true'
-) {
-    header('location:' . api_get_path(WEB_CODE_PATH).'ticket/myticket.php');
+if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') != 'true') {
+    header('location:' . api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
     exit;
 }
 
@@ -204,7 +203,8 @@ function show_form_send_ticket()
         'for' => 'status_id'
     );
 
-    $statusList[TicketManager::STATUS_NEW] = get_lang('StatusNew');
+    $statusList = TicketManager::getStatusList();
+    /*$statusList[TicketManager::STATUS_NEW] = get_lang('StatusNew');
     if (api_is_platform_admin()) {
         $statusAttributes = array(
             'id' => 'status_id',
@@ -215,7 +215,7 @@ function show_form_send_ticket()
         $statusList[TicketManager::STATUS_UNCONFIRMED] = get_lang('StatusUnconfirmed');
         $statusList[TicketManager::STATUS_CLOSE] = get_lang('StatusClose');
         $statusList[TicketManager::STATUS_FORWARDED] = get_lang('StatusForwarded');
-    }
+    }*/
     //End Status List
 
     // Source List
@@ -238,10 +238,11 @@ function show_form_send_ticket()
     }
 
     // Priority List
-    $priorityList = array();
+    /*$priorityList = array();
     $priorityList[TicketManager::PRIORITY_NORMAL] = get_lang('PriorityNormal');
     $priorityList[TicketManager::PRIORITY_HIGH] = get_lang('PriorityHigh');
-    $priorityList[TicketManager::PRIORITY_LOW] = get_lang('PriorityLow');
+    $priorityList[TicketManager::PRIORITY_LOW] = get_lang('PriorityLow');*/
+    $priorityList = TicketManager::getPriorityList();
 
     $form = new FormValidator(
         'send_ticket',
@@ -419,14 +420,14 @@ function show_form_send_ticket()
  */
 function save_ticket()
 {
-    global $plugin;
     $category_id = $_POST['category_id'];
     $content = $_POST['content'];
     if ($_POST['phone'] != '') {
         $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . Security::remove_XSS($_POST['phone']). '</p>';
     }
-    $course_id = isset($_POST['course_id']) ? $_POST['course_id'] : 0;
+    $course_id = isset($_POST['course_id']) ? $_POST['course_id'] : '';
     $project_id = $_POST['project_id'];
+    $project_id = 1;
     $subject = $_POST['subject'];
     $other_area = (int) $_POST['other_area'];
     $email = $_POST['email'];
@@ -455,7 +456,7 @@ function save_ticket()
         Display::addFlash(
             Display::return_message(get_lang('TckSuccessSave'), 'success')
         );
-        header('Location:' . api_get_path(WEB_CODE_PATH).'/ticket/myticket.php');
+        header('Location:' . api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
         exit;
     } else {
         Display::display_header(get_lang('ComposeMessage'));
@@ -570,7 +571,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 }
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'ticket/myticket.php', 
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
 );
 

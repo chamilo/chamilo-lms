@@ -4,9 +4,9 @@
 namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use \Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
-use \Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * TemplatesRepository class

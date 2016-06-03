@@ -5533,7 +5533,6 @@ $Off = "Wyłączony";
 $webserver = "Serwer sieci Web";
 $mysql = "MySQL";
 $NotInserted = "Nie zawarte";
-$Multipleresponse = "Wielokrotny wybór odpowiedzi";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Teraz możesz zalogować się na %s przy użyciu loginu i hasła, które podałeś.";
 $HaveFun = "Powodzenia";
 $AreYouSureToEditTheUserStatus = "Na pewno chcesz zmienić status użytkownika?";

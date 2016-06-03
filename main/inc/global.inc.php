@@ -24,13 +24,6 @@
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
-// Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
-// To remove CKeditor libs from HTML, set this constant to true before loading
-// global.inc.php
-if (!defined('CHAMILO_LOAD_WYSIWYG')) {
-    define('CHAMILO_LOAD_WYSIWYG', true);
-}
-
 // Include the libraries that are necessary everywhere
 require_once __DIR__.'/../../vendor/autoload.php';
 require_once __DIR__.'/../../app/AppKernel.php';
@@ -442,7 +435,7 @@ if (!empty($valid_languages)) {
         $language_interface = api_get_language_from_type($language_priority4);
     } else {
         $language_interface = api_get_setting('platformLanguage');
-    }    
+    }
 
     if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false) {
         $language_interface = api_get_language_from_type($language_priority3);

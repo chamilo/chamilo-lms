@@ -51,7 +51,7 @@ class ExtraField extends BaseAttribute
     /**
      * @var string
      *
-     * @ORM\Column(name="variable", type="string", length=64, nullable=false, unique=false)
+     * @ORM\Column(name="variable", type="string", length=255, nullable=false, unique=false)
      */
     protected $variable;
 

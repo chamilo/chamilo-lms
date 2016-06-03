@@ -5341,7 +5341,6 @@ $Off = "uit";
 $webserver = "Webserver";
 $mysql = "MySQL";
 $NotInserted = "Niet ingevoegd";
-$Multipleresponse = "Meerdere antwoorden";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "U kan zich nu aanmelden bij %s door gebruik te maken van de login en het wachtwoord dat u hebt ingegeven.";
 $HaveFun = "Veel plezier,";
 $AreYouSureToEditTheUserStatus = "Bent u zeker dat u de gebruikersstatus wenst te wijzigen?";

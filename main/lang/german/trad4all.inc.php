@@ -5610,7 +5610,6 @@ $Off = "Aus";
 $webserver = "Webserver";
 $mysql = "MySQL";
 $NotInserted = "Nicht eingefügt";
-$Multipleresponse = "Mehrere Antworten";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Sie können Sich jetzt mit den von Ihnen festgelegten Benutzernamen und Ihrem Passwort bei %s einloggen.";
 $HaveFun = "Viel Spaß,";
 $AreYouSureToEditTheUserStatus = "Sind Sie sicher, dass Sie den Benutzer-Status ändern wollen?";

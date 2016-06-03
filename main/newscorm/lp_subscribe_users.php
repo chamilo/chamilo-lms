@@ -23,16 +23,21 @@ if (empty($lpId)) {
 
 $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=".$oLP->get_id(), 'name' => $oLP->get_name());
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
+    'name' => get_lang('LearningPaths')
+);
+
+$interbreadcrumb[] = array(
+    'url' => api_get_self()."?action=build&lp_id=".$oLP->get_id().'&'.api_get_cidreq(),
+    'name' => $oLP->get_name()
+);
 
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
 
 $url = api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId;
-
 $lp = new \learnpath($courseCode, $lpId, api_get_user_id());
-
 $em = Database::getManager();
 
 $session = null;

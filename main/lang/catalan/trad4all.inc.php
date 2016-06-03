@@ -6249,7 +6249,6 @@ $Off = "Desactivat";
 $webserver = "Servidor web";
 $mysql = "MySQL";
 $NotInserted = "No inserit";
-$Multipleresponse = "Resposta múltiple";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Ara podeu autenticar-se a % utilitzant el nom d'usuari i contrasenya que li han estat facilitats";
 $HaveFun = "Divertiu-vos,";
 $AreYouSureToEditTheUserStatus = "Esteu segur de voler editar l'estat d'usuari?";

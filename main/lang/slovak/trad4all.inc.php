@@ -6110,7 +6110,6 @@ $Off = "Vypnúť";
 $webserver = "Webový server";
 $mysql = "MySQL";
 $NotInserted = "Nie je vložená";
-$Multipleresponse = "Viac odpovedí";
 $EnableMathJaxComment = "Povoliť matematický editor MathJax";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Teraz sa môžete prihlásiť na %s pomocou prihlasovacieho mena a hesla, ktoré ste uviedli.";
 $HaveFun = "Bavte sa,";

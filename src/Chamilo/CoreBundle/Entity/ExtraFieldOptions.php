@@ -41,7 +41,7 @@ class ExtraFieldOptions
     /**
      * @var string
      *
-     * @ORM\Column(name="display_text", type="string", length=64, nullable=true)
+     * @ORM\Column(name="display_text", type="string", length=255, nullable=true)
      */
     protected $displayText;
 

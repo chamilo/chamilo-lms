@@ -957,9 +957,8 @@ switch ($action) {
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
 
-            if (isset($_REQUEST['subscribe_users'])) {
-                $_SESSION['oLP']->setSubscribeUsers($_REQUEST['subscribe_users']);
-            }
+            $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
+            $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
 
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
             	$publicated_on  = $_REQUEST['publicated_on'];

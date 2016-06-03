@@ -44,28 +44,32 @@ class LegalManager
             Database::insert($legal_table, $params);
 
             return true;
-        } elseif($last['type'] != $type && $language==$last['language_id']) {
-            //update
-            $id = $last['legal_id'];
+        } elseif($last['type'] != $type && $language == $last['language_id']) {
+            // Update
+            $id = $last['id'];
             $params = [
                 'changes' => $changes,
                 'type' => $type,
                 'date' => $time
             ];
-            Database::update($legal_table, $params, ['legal_id => ?' => $id]);
+            Database::update($legal_table, $params, ['id => ?' => $id]);
 
             return true;
         } else {
+
             return false;
         }
     }
 
+    /**
+     * @param int $id
+     */
 	public static function delete($id)
     {
 		/*
 		$legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$id = intval($id);
-		$sql = "DELETE FROM $legal_table WHERE legal_id = '".$id."'";
+		$sql = "DELETE FROM $legal_table WHERE id = '".$id."'";
 		*/
 	}
 
@@ -80,7 +84,7 @@ class LegalManager
 		$language= Database::escape_string($language);
 		$sql = "SELECT version FROM $legal_conditions_table
 		        WHERE language_id = '".$language."'
-		        ORDER BY legal_id DESC LIMIT 1 ";
+		        ORDER BY id DESC LIMIT 1 ";
 		$result = Database::query($sql);
 		$row = Database::fetch_array($result);
         if (Database::num_rows($result) > 0) {
@@ -97,7 +101,7 @@ class LegalManager
 	 * @param int $language language id
 	 * @return array all the info of a Term and condition
 	 */
-	public static function get_last_condition ($language)
+	public static function get_last_condition($language)
     {
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$language= Database::escape_string($language);
@@ -106,9 +110,36 @@ class LegalManager
                 ORDER BY version DESC
                 LIMIT 1 ";
 		$result = Database::query($sql);
+		$result = Database::fetch_array($result, 'ASSOC');
 
-		return Database::fetch_array($result);
+        if (isset($result['content'])) {
+            $result['content'] = self::replaceTags($result['content']);
+        }
+        return $result;
 	}
+
+    /**
+     * @param string $content
+     * @return string
+     */
+    public static function replaceTags($content)
+    {
+        if (strpos($content, '{{sessions}}')) {
+            $sessionListToString = '';
+
+            $sessionList = SessionManager::get_sessions_by_user(api_get_user_id());
+            if ($sessionList) {
+                $sessionListToString = get_lang('SessionList').'<ul>';
+                foreach ($sessionList as $session) {
+                    $sessionListToString .= '<li>'.$session['session_name'].'</li>';
+                }
+                $sessionListToString .= '<ul>';
+            }
+            $content = str_replace('{{sessions}}', $sessionListToString, $content);
+        }
+
+        return $content;
+    }
 
 	/**
 	 * Gets the last version of a Term and condition by language
@@ -137,7 +168,7 @@ class LegalManager
 
 	/**
 	 * Show the last condition
-	 * @param array with type and content i.e array('type'=>'1', 'content'=>'hola');
+	 * @param array $term_preview with type and content i.e array('type'=>'1', 'content'=>'hola');
      *
 	 * @return string html preview
 	 */
@@ -172,9 +203,9 @@ class LegalManager
 
 	/**
 	 * Get the terms and condition table (only for maintenance)
-	 * @param int offset
-	 * @param int number of items
-	 * @param int column
+	 * @param int $from
+	 * @param int $number_of_items
+	 * @param int $column
 	 * @return array
 	 */
 	public static function get_legal_data($from, $number_of_items, $column)
@@ -191,19 +222,21 @@ class LegalManager
 		$sql .= "LIMIT $from, $number_of_items ";
 
 		$result = Database::query($sql);
-		$legals = array ();
-		$versions = array ();
+		$legals = array();
+		$versions = array();
 		while ($legal = Database::fetch_array($result)) {
 			// max 2000 chars
 			//echo strlen($legal[1]); echo '<br>';
-			$versions[]=$legal[0];
-			$languages[]=$legal[1];
-			if (strlen($legal[2])>2000)
-				$legal[2]= substr($legal[2],0,2000).' ... ';
-			if ($legal[4]==0)
-				$legal[4]= get_lang('HTMLText');
-			elseif($legal[4]==1)
-				$legal[4]=get_lang('PageLink');
+			$versions[] = $legal[0];
+			$languages[] = $legal[1];
+            if (strlen($legal[2]) > 2000) {
+                $legal[2] = substr($legal[2], 0, 2000).' ... ';
+            }
+            if ($legal[4] == 0) {
+                $legal[4] = get_lang('HTMLText');
+            } elseif ($legal[4] == 1) {
+                $legal[4] = get_lang('PageLink');
+            }
 			$legals[] = $legal;
 		}
 		return $legals;
@@ -218,7 +251,7 @@ class LegalManager
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$sql = "SELECT count(*) as count_result
 		        FROM $legal_conditions_table
-		        ORDER BY legal_id DESC ";
+		        ORDER BY id DESC ";
 		$result = Database::query($sql);
 		$url = Database::fetch_array($result,'ASSOC');
 		$result = $url['count_result'];
@@ -228,8 +261,8 @@ class LegalManager
 
 	/**
 	 * Get type of terms and conditions
-	 * @param int The legal id
-	 * @param int The language id
+	 * @param int $legal_id
+	 * @param int $language_id
 	 * @return int The current type of terms and conditions
 	 */
 	public static function get_type_of_terms_and_conditions($legal_id, $language_id)
@@ -238,7 +271,7 @@ class LegalManager
 		$legal_id = intval($legal_id);
 		$language_id = intval($language_id);
 		$sql = 'SELECT type FROM '.$legal_conditions_table.'
-		        WHERE legal_id="'.$legal_id.'" AND language_id="'.$language_id.'"';
+		        WHERE id =  "'.$legal_id.'" AND language_id="'.$language_id.'"';
 		$rs = Database::query($sql);
 
 		return Database::result($rs,0,'type');

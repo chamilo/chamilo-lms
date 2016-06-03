@@ -457,7 +457,7 @@ class GradebookCategory
     /**
      * Set isRequirement
      * @param boolean $isRequirement
-     * @return \Chamilo\CoreBundle\Entity\GradebookCategory
+     * @return GradebookCategory
      */
     public function setIsRequirement($isRequirement)
     {

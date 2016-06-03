@@ -31,7 +31,7 @@ $dbParams = array(
     'host' => $_configuration['db_host'],
     'user' => $_configuration['db_user'],
     'password' => $_configuration['db_password'],
-    'dbname' => $_configuration['main_database'],
+    'dbname' => $_configuration['main_database']
 );
 
 $database->connect($dbParams, realpath(__DIR__).'/', realpath(__DIR__).'/');

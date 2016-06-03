@@ -15,6 +15,15 @@ class Legal
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="date", type="integer", nullable=false)
      */
     private $date;
@@ -50,22 +59,29 @@ class Legal
     /**
      * @var integer
      *
-     * @ORM\Column(name="legal_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $legalId;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="language_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $languageId;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * @param int $id
+     * @return Legal
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }   
+    
 
     /**
      * Set date
@@ -180,29 +196,6 @@ class Legal
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set legalId
-     *
-     * @param integer $legalId
-     * @return Legal
-     */
-    public function setLegalId($legalId)
-    {
-        $this->legalId = $legalId;
-
-        return $this;
-    }
-
-    /**
-     * Get legalId
-     *
-     * @return integer
-     */
-    public function getLegalId()
-    {
-        return $this->legalId;
     }
 
     /**

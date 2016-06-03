@@ -4,11 +4,11 @@
 namespace Chamilo\UserBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use \Doctrine\Common\Collections\Criteria;
-use \Chamilo\CoreBundle\Entity\Session;
-use \Chamilo\CoreBundle\Entity\Course;
-use \Doctrine\ORM\Query\Expr\Join;
-use \Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Course;
+use Doctrine\ORM\Query\Expr\Join;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 //use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 //use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -23,7 +23,6 @@ use \Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
  */
 class UserRepository extends EntityRepository
 {
-
     /**
     * @param string $keyword
      *

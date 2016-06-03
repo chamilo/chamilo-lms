@@ -6151,7 +6151,6 @@ $Off = "Desaktibaturik";
 $webserver = "Web zerbitzaria";
 $mysql = "MySQL";
 $NotInserted = "Ez da sartu";
-$Multipleresponse = "Erantzun anitz";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Orain, %s -n identifikatu ahalko duzu, zuri emandako erabiltzaile izena eta pasahitza erabiliz.";
 $HaveFun = "Ongi pasa";
 $AreYouSureToEditTheUserStatus = "Ziur al zaude erabiltzailearen estatusa editatu nahi duzula?";

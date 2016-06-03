@@ -211,20 +211,28 @@ class CourseArchiver
         if ($delete) {
             @unlink(api_get_path(SYS_ARCHIVE_PATH) . '' . $filename);
         }
+
         // read the course
         if (!is_file('course_info.dat')) {
             return new Course();
         }
+
         $fp = @fopen('course_info.dat', "r");
         $contents = @fread($fp, filesize('course_info.dat'));
         @fclose($fp);
-        // CourseCopyLearnpath class appeared in Chamilo 1.8.7, it is the former Learnpath class in the "Copy course" tool.
-        // For backward comaptibility with archives created on Chamilo 1.8.6.2 or older systems, we have to do the following:
-        // Before unserialization, if class name "Learnpath" was found, it should be renamed as "CourseCopyLearnpath".
-        $course = unserialize(str_replace('O:9:"Learnpath":', 'O:19:"CourseCopyLearnpath":', base64_decode($contents)));
-        if (get_class($course) != 'Course') {
+
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Course', 'Course');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Document', 'Document');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion', 'QuizQuestion');
+
+        $course = unserialize(base64_decode($contents));
+
+        if (!in_array(
+            get_class($course), ['Course', 'Chamilo\CourseBundle\Component\CourseCopy\Course'])
+        ) {
             return new Course();
         }
+        
         $course->backup_path = $unzip_dir;
 
         return $course;

@@ -3,6 +3,8 @@
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+
 
 /**
  * Import a backup.

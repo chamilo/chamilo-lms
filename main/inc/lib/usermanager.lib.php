@@ -294,7 +294,7 @@ class UserManager
         //Checking the user language
         $languages = api_get_languages();
         $language = strtolower($language);
-        
+
         if (isset($languages['folder'])) {
             if (!in_array($language, $languages['folder'])) {
                 $language = api_get_setting('platformLanguage');
@@ -5091,6 +5091,26 @@ EOF;
     }
 
     /**
+     * @param int $bossId
+     * @param int $studentId
+     *
+     * @return bool
+     */
+    public static function userIsBossOfStudent($bossId, $studentId)
+    {
+        $result = false;
+        $bossList = UserManager::getStudentBossList($studentId);
+        if ($bossList) {
+            $bossList = array_column($bossList, 'boss_id');
+            if (in_array($bossId, $bossList)) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get either a Gravatar URL or complete image tag for a specified email address.
      *
      * @param string $email The email address
@@ -5221,11 +5241,11 @@ SQL;
                 [
                     'url' => $userPath.'class.php?'.api_get_cidreq(),
                     'content' => get_lang('Classes'),
-                ],
+                ]
             ];
 
             return Display::tabsOnlyLink($headers, $optionSelected);
         }
     }
-
+    
 }

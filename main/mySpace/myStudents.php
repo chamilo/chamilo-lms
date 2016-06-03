@@ -164,36 +164,50 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 }
 
 // Action behaviour
-$check = Security::check_token('get');
 
-if ($check) {
-    switch ($_GET['action']) {
-        case 'reset_lp':
-            $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : '';
 
-            if (api_is_allowed_to_edit() &&
-                !empty($lp_id) &&
-                !empty($student_id)
-            ) {
-                Event::delete_student_lp_events(
-                    $student_id,
-                    $lp_id,
-                    $courseInfo,
-                    $sessionId
-                );
+switch ($_GET['action']) {
+    case 'send_legal':
+        $subject = get_lang('SendLegalSubject');
+        $content = sprintf(
+            get_lang('SendLegalDescriptionToUrlX'),
+            api_get_path(WEB_PATH)
+        );
+        MessageManager::send_message_simple($student_id, $subject, $content);
+        Display::addFlash(Display::return_message(get_lang('Sent')));
+        break;
+    case 'delete_legal':
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($student_id, 'legal_accept');
+        $result = $extraFieldValue->delete($value['id']);
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        }
+        break;
+    case 'reset_lp':
+        $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : '';
 
-                // @todo delete the stats.track_e_exercises records.
-                // First implement this http://support.chamilo.org/issues/1334
-                $message = Display::return_message(
-                    get_lang('LPWasReset'),
-                    'success'
-                );
-            }
-            break;
-        default:
-            break;
-    }
-    Security::clear_token();
+        if (api_is_allowed_to_edit() &&
+            !empty($lp_id) &&
+            !empty($student_id)
+        ) {
+            Event::delete_student_lp_events(
+                $student_id,
+                $lp_id,
+                $courseInfo,
+                $sessionId
+            );
+
+            // @todo delete the stats.track_e_exercises records.
+            // First implement this http://support.chamilo.org/issues/1334
+            $message = Display::return_message(
+                get_lang('LPWasReset'),
+                'success'
+            );
+        }
+        break;
+    default:
+        break;
 }
 
 // user info
@@ -354,7 +368,6 @@ if (!empty($student_id)) {
     $avg_student_progress = $avg_student_score = 0;
 
     if (CourseManager :: is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
-
         $avg_student_progress = Tracking::get_avg_student_progress(
             $user_info['user_id'],
             $course_code,
@@ -362,7 +375,7 @@ if (!empty($student_id)) {
             $sessionId
         );
 
-        //the score inside the Reporting table
+        // the score inside the Reporting table
         $avg_student_score = Tracking::get_avg_student_score(
             $user_info['user_id'],
             $course_code,
@@ -495,7 +508,7 @@ if (!empty($student_id)) {
 
             // Display timezone if the user selected one and if the admin allows the use of user's timezone
             $timezone = null;
-            $timezone_user = UserManager::get_extra_user_data_by_field($user_info['user_id'],'timezone');
+            $timezone_user = UserManager::get_extra_user_data_by_field($user_info['user_id'], 'timezone');
             $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
             if ($timezone_user['timezone'] != null && $use_users_timezone == 'true') {
                 $timezone = $timezone_user['timezone'];
@@ -543,7 +556,7 @@ if (!empty($student_id)) {
                         ?>
                     </td>
                     <td align="left"><?php echo $avg_student_progress.'%' ?></td>
-                </tr>
+                 </tr>
                 <tr>
                     <td align="right">
                         <?php
@@ -564,8 +577,39 @@ if (!empty($student_id)) {
                         ?>
                     </td>
                 </tr>
-                <?php
-            } ?>
+            <?php
+            }
+
+            if (api_get_setting('allow_terms_conditions') === 'true') {
+                $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
+
+                if ($isBoss || api_is_platform_admin()) {
+                    $extraFieldValue = new ExtraFieldValue('user');
+                    $value = $extraFieldValue->get_values_by_handler_and_field_variable($student_id, 'legal_accept');
+                    $icon = Display::return_icon('accept_na.png');
+                    if (isset($value['value'])) {
+                        list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
+                        $icon = Display::return_icon('accept.png').' '.api_get_local_time($legalTime);
+                        $icon .= ' '.Display::url(
+                            get_lang('DeleteLegal'),
+                            api_get_self().'?action=delete_legal&student='.$student_id.'&course='.$course_code,
+                            ['class' => 'btn btn-danger btn-xs']
+                        );
+                    } else {
+                        $icon .= ' '.Display::url(
+                            get_lang('SendLegal'),
+                            api_get_self().'?action=send_legal&student='.$student_id.'&course='.$course_code,
+                            ['class' => 'btn btn-primary btn-xs']
+                        );
+                    }
+
+                    echo '<tr>
+                        <td align="right">';
+                    echo get_lang('LegalAccepted').' </td>  <td align="left">'.$icon;
+                    echo '</td></tr>';
+                }
+            }
+            ?>
             </tbody>
         </table>
         <?php if (!empty($userGroups)) { ?>

@@ -27,13 +27,8 @@ $myUserId = api_get_user_id();
 if (!api_is_student_boss()) {
     api_protect_admin_script();
 } else {
-    $bossList = UserManager::getStudentBossList($user['user_id']);
-    if ($bossList) {
-        $bossList = array_column($bossList, 'boss_id');
-        if (!in_array($myUserId, $bossList)) {
-            api_not_allowed(true);
-        }
-    } else {
+    $isBoss = UserManager::userIsBossOfStudent($myUserId, $user['user_id']);
+    if (!$isBoss) {
         api_not_allowed(true);
     }
 }
@@ -126,7 +121,6 @@ if (isset($_GET['action'])) {
         case 'delete_legal':
             $extraFieldValue = new ExtraFieldValue('user');
             $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
-
             $result = $extraFieldValue->delete($value['id']);
             if ($result) {
                 Display::addFlash(Display::return_message(get_lang('Deleted')));

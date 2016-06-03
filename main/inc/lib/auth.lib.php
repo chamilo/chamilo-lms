@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraField;
+
 /**
  * Class Auth
  * Auth can be used to instantiate objects or as a library to manage courses
@@ -31,7 +33,7 @@ class Auth
         $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
-        $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE;
+        $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
         // get course list auto-register
         $sql = "SELECT item_id FROM $TABLE_COURSE_FIELD_VALUE tcfv
                 INNER JOIN $TABLE_COURSE_FIELD tcf
@@ -92,7 +94,7 @@ class Auth
                 'user_course_category' => $row['user_course_cat']
             );
         }
-        
+
         return $courses;
     }
 
@@ -130,7 +132,7 @@ class Auth
         $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
-        $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE;
+        $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
 
         // get course list auto-register
         $sql = "SELECT item_id
@@ -417,7 +419,7 @@ class Auth
                 WHERE
                     tcf.variable = 'special_course' AND
                     tcfv.value = 1 ";
-                                                                 
+
         $special_course_result = Database::query($sql);
         if (Database::num_rows($special_course_result) > 0) {
             $special_course_list = array();
@@ -720,7 +722,7 @@ SQL;
 
         return $count;
     }
-    
+
     /**
      * Search sessions by the tags in their courses
      * @param string $termTag Term for search in tags
@@ -763,7 +765,7 @@ SQL;
                 $qb->expr()->like('t.tag', ":tag")
             )
             ->andWhere(
-                $qb->expr()->eq('f.extraFieldType', Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE)
+                $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
             )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length'])

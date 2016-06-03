@@ -1,5 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Course;
+
 /**
  * Plugin class for the BuyCourses plugin
  * @package chamilo.plugin.buycourses
@@ -391,10 +395,10 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the user status for the session
      * @param int $userId The user ID
-     * @param \Chamilo\CoreBundle\Entity\Session $session The session
+     * @param Session $session The session
      * @return string
      */
-    private function getUserStatusForSession($userId, \Chamilo\CoreBundle\Entity\Session $session)
+    private function getUserStatusForSession($userId, Session $session)
     {
         if (empty($userId)) {
             return 'NO';
@@ -500,12 +504,14 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the user status for the course
      * @param int $userId The user Id
-     * @param \Chamilo\CoreBundle\Entity\Course $course The course
+     * @param Course $course The course
+     *
      * @return string
      */
-    private function getUserStatusForCourse($userId, \Chamilo\CoreBundle\Entity\Course $course)
+    private function getUserStatusForCourse($userId, Course $course)
     {
         if (empty($userId)) {
+            
             return 'NO';
         }
 
@@ -821,7 +827,7 @@ class BuyCoursesPlugin extends Plugin
             'first'
         );
     }
-    
+
     /**
      * Get a list of sales by the payment type
      * @param int $paymentType The payment type to filter (default : Paypal)
@@ -981,7 +987,7 @@ class BuyCoursesPlugin extends Plugin
             self::SALE_STATUS_COMPLETED => $this->get_lang('SaleStatusCompleted')
         ];
     }
-    
+
     /**
      * Get the statuses for Payouts
      * @return array
@@ -1203,7 +1209,7 @@ class BuyCoursesPlugin extends Plugin
             ]
         );
     }
-    
+
     /**
      * Get a list of sales by the user id
      * @param int $id The user id
@@ -1239,11 +1245,11 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Convert the course info to array with necessary course data for save item
-     * @param \Chamilo\CoreBundle\Entity\Course $course
+     * @param Course $course
      * @param array $defaultCurrency Optional. Currency data
      * @return array
      */
-    public function getCourseForConfiguration(\Chamilo\CoreBundle\Entity\Course $course, $defaultCurrency = null)
+    public function getCourseForConfiguration(Course $course, $defaultCurrency = null)
     {
         $courseItem = [
             'item_id' => null,
@@ -1271,11 +1277,11 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Convert the session info to array with necessary session data for save item
-     * @param Chamilo\CoreBundle\Entity\Session $session The session data
+     * @param Session $session The session data
      * @param array $defaultCurrency Optional. Currency data
      * @return array
      */
-    public function getSessionForConfiguration(Chamilo\CoreBundle\Entity\Session $session, $defaultCurrency = null)
+    public function getSessionForConfiguration(Session $session, $defaultCurrency = null)
     {
         $buyItemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
         $buyCurrencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
@@ -1448,10 +1454,10 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Check if a course is valid for sale
-     * @param Chamilo\CoreBundle\Entity\Course $course The course
+     * @param Course $course The course
      * @return boolean
      */
-    public function isValidCourse(Chamilo\CoreBundle\Entity\Course $course)
+    public function isValidCourse(Course $course)
     {
         $courses = $this->getCourses();
 
@@ -1463,7 +1469,7 @@ class BuyCoursesPlugin extends Plugin
 
         return false;
     }
-    
+
     /**
      * Gets the beneficiaries with commissions and current paypal accounts by sale
      * @param int $saleId The sale ID
@@ -1471,17 +1477,17 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getBeneficiariesBySale($saleId)
     {
-        
+
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        
+
         $beneficiaries = [];
         $sale = $this->getSale($saleId);
         $item = $this->getItemByProduct($sale['product_id'], $sale['product_type']);
         $itemBeneficiaries = $this->getItemBeneficiaries($item['id']);
         return $itemBeneficiaries;
-        
+
     }
-    
+
     /**
      * gets all payouts
      * @param int $status - default 0 - pending
@@ -1499,7 +1505,7 @@ class BuyCoursesPlugin extends Plugin
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
         $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        
+
         $paypalExtraField = Database::select(
             "*",
             $extraFieldTable,
@@ -1508,11 +1514,11 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
-        
+
         if (!$paypalExtraField) {
             return false;
         }
-        
+
         $innerJoins = "
             INNER JOIN $userTable u ON p.user_id = u.id
             INNER JOIN $saleTable s ON s.id = p.sale_id
@@ -1520,7 +1526,7 @@ class BuyCoursesPlugin extends Plugin
             LEFT JOIN  $extraFieldValues efv ON p.user_id = efv.item_id 
             AND field_id = " . intval($paypalExtraField['id']) . "
         ";
-        
+
         $payouts = Database::select(
             "p.* , u.firstname, u.lastname, efv.value as paypal_account, s.reference as sale_reference, s.price as item_price, c.iso_code",
             "$payoutsTable p $innerJoins",
@@ -1529,10 +1535,10 @@ class BuyCoursesPlugin extends Plugin
             ],
             $typeResult
         );
-        
+
         return $payouts;
     }
-    
+
     /**
      * Verify if the beneficiary have a paypal account
      * @param int $userId
@@ -1542,7 +1548,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
         $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        
+
         $paypalExtraField = Database::select(
             "*",
             $extraFieldTable,
@@ -1551,13 +1557,13 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
-        
+
         if (!$paypalExtraField) {
             return false;
         }
-        
+
         $paypalFieldId = $paypalExtraField['id'];
-        
+
         $paypalAccount = Database::select(
             "value",
             $extraFieldValues,
@@ -1566,18 +1572,18 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
-        
+
         if (!$paypalAccount) {
             return false;
         }
-        
+
         if ($paypalAccount['value'] === '') {
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      * Register the users payouts
      * @param int $saleId The sale ID
@@ -1590,8 +1596,8 @@ class BuyCoursesPlugin extends Plugin
 
         $sale = $this->getSale($saleId);
         $teachersCommission = number_format((floatval($sale['price']) * intval($platformCommission['commission']))/100, 2);
-        
-        
+
+
         $beneficiaries = $this->getBeneficiariesBySale($saleId);
         foreach ($beneficiaries as $beneficiary) {
             Database::insert(
@@ -1607,7 +1613,7 @@ class BuyCoursesPlugin extends Plugin
             );
         }
     }
-    
+
     /**
      * Register the users payouts
      * @param int $payoutId The payout ID
@@ -1617,15 +1623,15 @@ class BuyCoursesPlugin extends Plugin
     public function setStatusPayouts($payoutId, $status)
     {
         $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
-        
+
         Database::update(
             $payoutsTable,
             ['status' => intval($status)],
             ['id = ?' => intval($payoutId)]
         );
-          
+
     }
-    
+
     /**
      * Gets the stored platform commission params
      * @return array
@@ -1639,7 +1645,7 @@ class BuyCoursesPlugin extends Plugin
             'first'
         );
     }
-    
+
     /**
      * Update the platform commission
      * @param int $params platform commission

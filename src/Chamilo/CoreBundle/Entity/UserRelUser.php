@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -12,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserRelUser
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
     /**
      * @var integer
      *
@@ -39,17 +49,6 @@ class UserRelUser
      * @ORM\Column(name="last_edit", type="datetime", nullable=true)
      */
     private $lastEdit;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set userId

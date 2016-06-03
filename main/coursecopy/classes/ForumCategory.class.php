@@ -22,7 +22,7 @@ class ForumCategory extends Coursecopy\Resource
     /**
      * Show this resource
      */
-    function show()
+    public function show()
     {
         parent::show();
         echo $this->obj->cat_title;

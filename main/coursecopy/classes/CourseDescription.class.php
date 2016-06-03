@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 namespace Coursecopy;
+
 require_once 'Resource.class.php';
 
 /**
@@ -10,39 +11,41 @@ require_once 'Resource.class.php';
  */
 class CourseDescription extends Resource
 {
-	/**
-	 * The title
-	 */
-	public $title;
-	/**
-	 * The content
-	 */
-	public $content;
-	/**
-	 * The description type
-	 */
-	public $description_type;
+    /**
+     * The title
+     */
+    public $title;
+    
+    /**
+     * The content
+     */
+    public $content;
 
-	/**
-	 * Create a new course description
-	 * @param int $id
-	 * @param string $title
-	 * @param string $content
-	 */
-	public function __construct($id,$title,$content,$description_type)
-	{
-		parent::__construct($id,RESOURCE_COURSEDESCRIPTION);
-		$this->title = $title;
-		$this->content = $content;
-		$this->description_type = $description_type;
-	}
+    /**
+     * The description type
+     */
+    public $description_type;
 
-	/**
-	 * Show this Event
-	 */
-	function show()
-	{
-		parent::show();
-		echo $this->title;
-	}
+    /**
+     * Create a new course description
+     * @param int $id
+     * @param string $title
+     * @param string $content
+     */
+    public function __construct($id, $title, $content, $description_type)
+    {
+        parent::__construct($id, RESOURCE_COURSEDESCRIPTION);
+        $this->title = $title;
+        $this->content = $content;
+        $this->description_type = $description_type;
+    }
+
+    /**
+     * Show this Event
+     */
+    public function show()
+    {
+        parent::show();
+        echo $this->title;
+    }
 }

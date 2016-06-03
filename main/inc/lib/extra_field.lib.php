@@ -2348,7 +2348,7 @@ JAVASCRIPT;
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public static function getExtraFieldInfoById($id, $translateDisplayText = true)
+    public static function getInfoById($id, $translateDisplayText = true)
     {
         $extraField = Database::getManager()
             ->find('ChamiloCoreBundle:ExtraField', $id);

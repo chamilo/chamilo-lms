@@ -127,14 +127,13 @@ if (!empty($sublanguage_folder_error)) {
 echo '<div id="div_message_information_id">&nbsp;</div>';
 
 /**
- * Search a term in the language
- * @param string $term the term to search
- * @param bool $search_in_variable the search will include the variable definition of the term
- * @param bool $search_in_english the search will include the english language variables
- * @param bool $search_in_parent the search will include the parent language variables of the sub language
- * @param bool $search_in_sub_language the search will include the sub language variables
+ * @param $term The term to search
+ * @param bool $search_in_variable The search will include the variable definition of the term
+ * @param bool $search_in_english The search will include the english language variables
+ * @param bool $search_in_parent The search will include the parent language variables of the sub language
+ * @param bool $search_in_sub_language The search will include the sub language variables
  * @author Julio Montoya
- *
+ * @return array
  */
 function search_language_term(
 	$term,
@@ -309,8 +308,20 @@ if (isset($_REQUEST['txt_search_word'])) {
 	}
 }
 
-if (isset($_GET['extra_field']) && !empty($_GET['extra_field'])) {
-    $extraFieldInfo = ExtraField::getExtraFieldInfoById($_GET['extra_field'], false);
+if (
+    (isset($_GET['extra_field']) && !empty($_GET['extra_field'])) ||
+    (isset($_GET['extra_field_option']) && !empty($_GET['extra_field_option']))
+) {
+    if (isset($_GET['extra_field'])) {
+        $extraFieldInfo = ExtraField::getInfoById($_GET['extra_field'], false);
+        $variable_language = '$' . api_underscore_to_camel_case($extraFieldInfo['variable']);
+        $original_name = $extraFieldInfo['display_text'];
+    } elseif (isset($_GET['extra_field_option'])) {
+        $extraFieldOptionInfo = ExtraFieldOption::getInfoById($_GET['extra_field_option'], false);
+        $variable_language = '$' . api_underscore_to_camel_case($extraFieldOptionInfo['display_text']);
+        $original_name = $extraFieldOptionInfo['display_text'];
+    }
+
     $platformLanguage = api_get_setting('platformLanguage');
     $languageId = api_get_language_id($platformLanguage);
     $languageInfo = api_get_language_info($languageId);
@@ -328,8 +339,8 @@ if (isset($_GET['extra_field']) && !empty($_GET['extra_field'])) {
     $form->addHidden('redirect', true);
     $form->addButtonSave(get_lang('Save'));
     $form->setDefaults([
-        'variable_language' => '$' . api_underscore_to_camel_case($extraFieldInfo['variable']),
-        'original_name' => $extraFieldInfo['display_text']
+        'variable_language' => $variable_language,
+        'original_name' => $original_name
     ]);
     $form->freeze(['variable_language', 'original_name']);
     $form->display();

@@ -615,7 +615,23 @@ class ExtraFieldOption extends Model
         $form->addElement('hidden', 'type', $this->type);
         $form->addElement('hidden', 'field_id', $this->field_id);
 
-        $form->addElement('text', 'display_text', get_lang('Name'));
+        if ($action == 'edit') {
+            $platformLanguage = api_get_setting('platformLanguage');
+            $languageId = api_get_language_id($platformLanguage);
+            $languageInfo = api_get_language_info($languageId);
+            $translateUrl = api_get_path(WEB_CODE_PATH) . 'admin/sub_language.php?' . http_build_query([
+                'id' => $languageInfo['parent_id'],
+                'action' => 'registersublanguage',
+                'sub_language_id' => $languageInfo['id'],
+                'extra_field_option' => $id
+            ]);
+            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+
+            $form->addElement('text', 'display_text', [get_lang('Name'), $translateButton]);
+        } else {
+            $form->addElement('text', 'display_text', get_lang('Name'));
+        }
+
         $form->addElement('text', 'option_value', get_lang('Value'));
         $form->addElement('text', 'option_order', get_lang('Order'));
         $form->addElement('select', 'priority', get_lang('Priority'), $this->getPriorityOptions());
@@ -625,7 +641,7 @@ class ExtraFieldOption extends Model
 
         if ($action == 'edit') {
             // Setting the defaults
-            $defaults = $this->get($id);
+            $defaults = $this->get($id, false);
             $form->freeze('option_value');
             $form->addButtonUpdate(get_lang('Modify'));
         } else {
@@ -692,5 +708,71 @@ class ExtraFieldOption extends Model
         }
 
         return $json;
+    }
+
+    /**
+     * Gets an element
+     * @param int $id
+     * @param bool $translateDisplayText Optional
+     * @return array
+     */
+    public function get($id, $translateDisplayText = true)
+    {
+        $info = parent::get($id);
+
+        if ($translateDisplayText) {
+            $info['display_text'] = self::translateDisplayName($info['display_text']);
+        }
+
+        return $info;
+    }
+
+    /**
+     * Translate the display text for a extra field option
+     * @param string $defaultDisplayText
+     * @return string
+     */
+    public static function translateDisplayName($defaultDisplayText)
+    {
+        $camelCase = api_underscore_to_camel_case($defaultDisplayText);
+        $camelCase = ucwords($camelCase);
+        $camelCase = str_replace(' ', '', $camelCase);
+
+        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+    }
+
+    /**
+     * Get the info from an extra field option by its id
+     * @param int $id
+     * @param bool $translateDisplayText
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function getInfoById($id, $translateDisplayText = true)
+    {
+        $extraField = Database::getManager()
+            ->find('ChamiloCoreBundle:ExtraFieldOptions', $id);
+
+        $objExtraField = null;
+
+        switch ($extraField->getField()->getExtraFieldType()) {
+            case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
+                $objExtraField = new self('user');
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
+                $objExtraField = new self('course');
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
+                $objExtraField = new self('session');
+                break;
+        }
+
+        if (!$objExtraField) {
+            return [];
+        }
+
+        return $objExtraField->get($extraField->getId(), $translateDisplayText);
     }
 }

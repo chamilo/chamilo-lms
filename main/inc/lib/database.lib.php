@@ -662,6 +662,7 @@ class Database
             $path.'src/Chamilo/UserBundle/Entity',
             $path.'src/Chamilo/CourseBundle/Entity',
             $path.'src/Chamilo/TicketBundle/Entity',
+            $path.'src/Chamilo/SkillBundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',

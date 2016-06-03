@@ -21,22 +21,18 @@ $navigation_bar = '';
 $display_mode = '';
 $autostart = 'true';
 
-if (isset($_SESSION['lpobject'])) {
-    $oLP = unserialize($_SESSION['lpobject']);
-    if (is_object($oLP)) {
-        $_SESSION['oLP'] = $oLP;
-    } else {
-        die('Could not instanciate lp object');
-    }
-    $display_mode = $_SESSION['oLP']->mode;
+$myLP = learnpath::getLpFromSession(api_get_course_id(), '', '');
+
+if ($myLP) {
+    $display_mode = $myLP->mode;
     $scorm_css_header = true;
-    $lp_theme_css = $_SESSION['oLP']->get_theme();
+    $lp_theme_css = $myLP->get_theme();
 
     $my_style = api_get_visual_theme();
 
     // Setting up the CSS theme if exists
     $mycourselptheme = null;
-    if (api_get_setting('allow_course_theme') == 'true') {
+    if (api_get_setting('allow_course_theme') === 'true') {
         $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     }
 
@@ -46,13 +42,13 @@ if (isset($_SESSION['lpobject'])) {
         $lp_theme_css = $my_style;
     }
 
-    $progress_bar 	= $_SESSION['oLP']->getProgressBar();
-    $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-    $mediaplayer 	= $_SESSION['oLP']->get_mediaplayer($autostart);
+    $progress_bar = $myLP->getProgressBar();
+    $navigation_bar = $myLP->get_navigation_bar();
+    $mediaplayer = $myLP->get_mediaplayer($autostart);
 }
 session_write_close();
 ?>
-<script type="text/javascript">
+<script>
     $(document).ready(function() {
         jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer({
             success: function(player, node) {
@@ -61,5 +57,5 @@ session_write_close();
     });
 </script>
 <span>
-    <?php echo (!empty($mediaplayer)) ? $mediaplayer : '&nbsp;' ?>
+    <?php echo !empty($mediaplayer) ? $mediaplayer : '&nbsp;' ?>
 </span>

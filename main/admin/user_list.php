@@ -216,11 +216,14 @@ function prepare_user_sql_query($is_count)
         $keywordListValues = array();
     }
 
+    /*
+    // This block is never executed because $keyword_extra_data never exists
     if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
         $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
         $field_id = $extra_info['id'];
         $sql.= " INNER JOIN user_field_values ufv ON u.id=ufv.user_id AND ufv.field_id=$field_id ";
     }
+    */
 
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $keywordFiltered = Database::escape_string("%". $_GET['keyword'] ."%");
@@ -247,10 +250,14 @@ function prepare_user_sql_query($is_count)
         }
 
         $keyword_extra_value = '';
+
+        // This block is never executed because $keyword_extra_data never exists
+        /*
         if (isset($keyword_extra_data) && !empty($keyword_extra_data) &&
             !empty($keyword_extra_data_text)) {
             $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
         }
+        */
 
         $sql .= " $query_admin_table
                 WHERE (
@@ -264,12 +271,14 @@ function prepare_user_sql_query($is_count)
                     $keyword_extra_value
                 ";
 
-        if (isset($keyword_active) && !isset($keyword_inactive)) {
-            $sql .= " AND u.active='1'";
-        } elseif (isset($keyword_inactive) && !isset($keyword_active)) {
-            $sql .= " AND u.active='0'";
+        if (isset($keywordListValues['keyword_active'])) {
+            if (!empty($keywordListValues['keyword_active'])) {
+                $sql .= " AND u.active = 1";
+            } else {
+                $sql .= " AND u.active = 0";
+            }
         }
-        $sql .= " ) ";
+        $sql .= ')';
     }
 
     // adding the filter to see the user's only of the current access_url

@@ -27,6 +27,14 @@ $extraField = new ExtraField('session');
 $extraFieldValue = new ExtraFieldValue('session');
 $extra = $extraField->addElements($form, '', [], true, true);
 
+$extra = $extraField->addElements($form, '', [], true, true, array('heures-disponibilite-par-semaine'));
+$elements = $form->getElements();
+
+$variables = ['theme', 'domaine', 'competenceniveau', 'filiere'];
+foreach ($elements as $element) {
+    $element->setAttribute('extra_label_class', 'red_underline');
+}
+
 $htmlHeadXtra[] ='<script>
 $(document).ready(function(){
 	'.$extra['jquery_ready_content'].'

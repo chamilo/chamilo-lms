@@ -385,8 +385,14 @@ class ExtraField extends Model
      *
      * @return array|bool
      */
-    public function addElements($form, $itemId = 0, $exclude = [], $filter = false, $useTagAsSelect = false, $showOnlyThisFields = array())
-    {
+    public function addElements(
+        $form,
+        $itemId = 0,
+        $exclude = [],
+        $filter = false,
+        $useTagAsSelect = false,
+        $showOnlyThisFields = array()
+    ) {
         if (empty($form)) {
             return false;
         }
@@ -1162,7 +1168,7 @@ class ExtraField extends Model
                                 }
                             }
                         }
-                        $group   = array();
+                        $group = array();
                         $group[] = $form->createElement(
                             'select',
                             'extra_'.$field_details['variable'],
@@ -1590,6 +1596,7 @@ EOF;
                 }
             }
         }
+
         $return = array();
         $return['jquery_ready_content'] = $jquery_ready_content;
 

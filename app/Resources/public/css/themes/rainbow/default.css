@@ -414,3 +414,7 @@ footer a:hover{
         text-align: center;
     }
 }
+
+.red_underline {
+   color: red;
+}

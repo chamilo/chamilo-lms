@@ -4747,13 +4747,13 @@ class CourseManager
             // start buycourse validation
             // display the course price and buy button if the buycourses plugin is enabled and this course is configured
             $plugin = BuyCoursesPlugin::create();
-            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course_info);
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course_info['real_id'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
             if ($isThisCourseInSale) {
                 // set the price label
                 $my_course['price'] = $isThisCourseInSale['html'];
                 // set the Buy button instead register.
                 if ($isThisCourseInSale['verificator'] && !empty($my_course['register_button'])) {
-                    $my_course['register_button'] = $plugin->returnBuyCourseButton($course_info);
+                    $my_course['register_button'] = $plugin->returnBuyCourseButton($course_info['real_id'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
                 }
             }
             // end buycourse validation

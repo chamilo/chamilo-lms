@@ -69,7 +69,15 @@ class LegacyLoginListener implements EventSubscriberInterface
                                 $user->setSuperAdmin(true);
                             }
 
-                            $languages = ['german' => 'de', 'english' => 'en', 'spanish' => 'es', 'french' => 'fr'];
+                            $languages = [
+                                'german' => 'de',
+                                'english' => 'en',
+                                'spanish' => 'es',
+                                'french' => 'fr',
+                                'french2' => 'fr',
+                                'german2' => 'de',
+                            ];
+
                             $locale = isset($languages[$user->getLanguage()]) ? $languages[$user->getLanguage()] : '';
                             if ($user && !empty($locale)) {
 

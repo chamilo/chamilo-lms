@@ -27,6 +27,12 @@ $extraField = new ExtraField('session');
 $extraFieldValue = new ExtraFieldValue('session');
 $extra = $extraField->addElements($form, '', [], true, true);
 
+$htmlHeadXtra[] ='<script>
+$(document).ready(function(){
+	'.$extra['jquery_ready_content'].'
+});
+</script>';
+
 $form->addButtonSave(get_lang('Save'), 'save');
 
 $result = SessionManager::getGridColumns('simple');
@@ -174,6 +180,13 @@ $extraField = new ExtraField('user');
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 $userForm->addHeader(get_lang('User'));
 $extra = $extraField->addElements($userForm, api_get_user_id(), [], true, true, array('heures-disponibilite-par-semaine'));
+
+$htmlHeadXtra[] ='<script>
+$(document).ready(function(){
+	'.$extra['jquery_ready_content'].'
+});
+</script>';
+
 $userForm->addButtonSave(get_lang('Save'));
 $userFormToString = $userForm->returnForm();
 
@@ -183,7 +196,6 @@ if ($userForm->validate()) {
 
     $extraFieldValue->saveFieldValues($user_data);
 }
-
 
 $tpl = new Template(get_lang('Diagnosis'));
 $tpl->assign('form', $view.$userFormToString);

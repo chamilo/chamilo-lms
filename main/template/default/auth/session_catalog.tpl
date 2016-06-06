@@ -99,6 +99,12 @@
                         </a>
                     </h4>
                     <div class="toolbar">
+                        <div class="left">
+                            {% if item.price %}
+                                {{ item.price }}
+                            {% endif %}
+                        </div>
+                        <br />
                         <div class="info">
                             <span><i class="fa fa-book" aria-hidden="true"></i> {{ item.nbr_courses }} {{ 'Courses'|get_lang }}</span>
                             <span><i class="fa fa-user" aria-hidden="true"></i> {{ item.nbr_users }} {{ 'NbUsers'|get_lang }} </span>

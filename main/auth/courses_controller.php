@@ -823,7 +823,7 @@ class CoursesController
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
                 'price' => $isThisSessionOnSale['html'],
-                'subscribe_button' => $isThisSessionOnSale['buy_button'] ? $isThisSessionOnSale['buy_button'] : $this->getRegisteredInSessionButton(
+                'subscribe_button' => isset($isThisSessionOnSale['buy_button']) ? $isThisSessionOnSale['buy_button'] : $this->getRegisteredInSessionButton(
                     $session->getId(),
                     $session->getName(),
                     $hasRequirements

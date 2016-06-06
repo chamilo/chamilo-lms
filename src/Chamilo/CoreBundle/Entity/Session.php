@@ -1010,7 +1010,7 @@ class Session
     {
         // start buycourse validation
         // display the course price and buy button if the buycourses plugin is enabled and this course is configured
-        $plugin = BuyCoursesPlugin::create();
+        $plugin = \BuyCoursesPlugin::create();
         $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($this->id, \BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
         $return = [];
 

@@ -673,6 +673,13 @@ class HTML_QuickForm extends HTML_Common
         return $elementObject;
     } // end func addElement
 
+
+    public function getElements()
+    {
+        return $this->_elements;
+    }
+
+
     // }}}
     // {{{ insertElementBefore()
 
@@ -1065,7 +1072,7 @@ class HTML_QuickForm extends HTML_Common
                 }
             }
         }
-        
+
         return $el;
     }
 

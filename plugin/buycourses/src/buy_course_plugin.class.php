@@ -119,19 +119,20 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * This function verify if the plugin is enable and return the price info for a course in the new grid catalog
-     * for 1.11.x , the main purpose is to show if a course is in sale it shows in the main platform course catalog
+     * This function verify if the plugin is enable and return the price info for a course or session in the new grid catalog
+     * for 1.11.x , the main purpose is to show if a course or session is in sale it shows in the main platform course catalog
      * so the old buycourses plugin catalog can be deprecated.
-     * @param Array $course course info
+     * @param int $productId course or session id
+     * @param int $productType course or session type
      * @return mixed bool|string html
      */
-    public function buyCoursesForGridCatalogVerificator($course) {
+    public function buyCoursesForGridCatalogVerificator($productId, $productType) {
         $return = [];
         $paypal = $this->get('paypal_enable') === 'true';
         $transfer = $this->get('transfer_enable') === 'true';
 
         if ($paypal || $transfer) {
-            $item = $this->getItemByProduct(intval($course['real_id']), self::PRODUCT_TYPE_COURSE);
+            $item = $this->getItemByProduct(intval($productId), $productType);
             $return['html'] = '<div class="buycourses-price">';
             if ($item) {
                 $return['html'] .= '<span class="label label-primary"><b>'. $item['iso_code'] .' ' . $item['price'] . '</b></span>';
@@ -150,15 +151,16 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Return the buyCourses plugin button to buy the course
-     * @param array $course course info
+     * @param int $productId
+     * @param int $productType
      * @return string $html
      */
-    public function returnBuyCourseButton($course) {
+    public function returnBuyCourseButton($productId, $productType) {
         $url = api_get_path(WEB_PLUGIN_PATH) .
             'buycourses/src/process.php?i=' .
-            intval($course['real_id']) .
+            intval($productId) .
             '&t=' .
-            self::PRODUCT_TYPE_COURSE
+            $productType
         ;
 
         $html = ' <a class="btn btn-success btn-sm" title="' . $this->get_lang('Buy') . '" href="' . $url . '">' .

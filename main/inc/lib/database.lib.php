@@ -142,7 +142,7 @@ class Database
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
                 'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
-                'ChamiloFaqBundle' => 'Chamilo\FaqBundle\Entity'                
+                'ChamiloFaqBundle' => 'Chamilo\FaqBundle\Entity'
             )
         );
 
@@ -180,6 +180,7 @@ class Database
         $listener = new \Gedmo\Sortable\SortableListener();
         $entityManager->getEventManager()->addEventSubscriber($listener);
         $connection = $entityManager->getConnection();
+        $connection->executeQuery('SET sql_mode = "";');
 
         if ($returnConnection) {
             return $connection;
@@ -697,7 +698,7 @@ class Database
      * @param string $table
      * @return \Doctrine\DBAL\Schema\Column[]
      */
-    public static function listTableColumns($table) 
+    public static function listTableColumns($table)
     {
         return self::getManager()->getConnection()->getSchemaManager()->listTableColumns($table);
     }

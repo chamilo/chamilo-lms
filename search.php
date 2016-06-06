@@ -23,17 +23,16 @@ $search = [
 
 $items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($search);
 
-$extraField = new ExtraField('session');
-$extraFieldValue = new ExtraFieldValue('session');
-$extra = $extraField->addElements($form, '', [], true, true);
+$extraFieldSession = new ExtraField('session');
+$extraFieldValueSession = new ExtraFieldValue('session');
+//$extra = $extraField->addElements($form, '', [], true, true);
 
-$extra = $extraField->addElements($form, '', [], true, true, array('heures-disponibilite-par-semaine'));
+/*$extra = $extraField->addElements($form, '', [], true, true, array('heures-disponibilite-par-semaine'));
 $elements = $form->getElements();
-
 $variables = ['theme', 'domaine', 'competenceniveau', 'filiere'];
 foreach ($elements as $element) {
     $element->setAttribute('extra_label_class', 'red_underline');
-}
+}*/
 
 $htmlHeadXtra[] ='<script>
 $(document).ready(function(){
@@ -72,63 +71,7 @@ if ($form->validate()) {
 
     if (isset($params['save'])) {
         // save
-        foreach ($params as $key => $value) {
-            $found = strpos($key, '__persist__');
 
-            if ($found === false) {
-                continue;
-            }
-
-            $tempKey = str_replace('__persist__', '', $key);
-            if (!isset($params[$tempKey])) {
-                $params[$tempKey] = array();
-            }
-        }
-
-        // Parse params.
-        foreach ($params as $key => $value) {
-            if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
-                continue;
-            }
-
-            $field_variable = substr($key, 6);
-            $extraFieldInfo = $extraFieldValue
-                ->getExtraField()
-                ->get_handler_field_info_by_field_variable($field_variable);
-
-            if (!$extraFieldInfo) {
-                continue;
-            }
-
-            $extraFieldObj = $em->getRepository('ChamiloCoreBundle:ExtraField')->find($extraFieldInfo['id']);
-
-            $search = [
-                'field' => $extraFieldObj,
-                'user' => $user
-            ];
-
-            /** @var ExtraFieldSavedSearch  $saved */
-            $saved = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
-
-            if ($saved) {
-                $saved
-                    ->setField($extraFieldObj)
-                    ->setUser($user)
-                    ->setValue($value)
-                ;
-                $em->merge($saved);
-
-            } else {
-                $saved = new ExtraFieldSavedSearch();
-                $saved
-                    ->setField($extraFieldObj)
-                    ->setUser($user)
-                    ->setValue($value)
-                ;
-                $em->persist($saved);
-            }
-            $em->flush();
-        }
 
         MessageManager::send_message_simple(
             $userId,
@@ -182,27 +125,264 @@ if ($form->validate()) {
     }
 }
 
-
 $extraField = new ExtraField('user');
 
 $userForm = new FormValidator('user_form', 'post', api_get_self());
-$userForm->addHeader(get_lang('User'));
-$extra = $extraField->addElements($userForm, api_get_user_id(), [], true, true, array('heures-disponibilite-par-semaine'));
+$jqueryExtra = '';
+
+/*$fieldsToShow = [
+    'statusocial',
+    'filiereprecision',
+    'filiere',
+    'heures-disponibilite-par-semaine',
+    'datedebutstage',
+    'datefinstage',
+    'heures-disponibilite-par-semaine-stage',
+    'poursuiteapprentissagestage',
+    'objectif-apprentissage',
+    'methode-de-travaille',
+    'accompagnement'
+];*/
+
+$userForm->addHeader(get_lang('Filière'));
+$fieldsToShow = [
+    'statusocial',
+    'filiere',
+    'filiereprecision'
+];
+
+$extra = $extraField->addElements(
+    $userForm,
+    api_get_user_id(),
+    [],
+    true,
+    true,
+    $fieldsToShow,
+    $fieldsToShow
+);
+
+$jqueryExtra .= $extra['jquery_ready_content'];
+
+$userForm->addHeader(get_lang('Disponibilité avant mon stage'));
+
+$extra = $extraFieldSession->addElements(
+    $userForm,
+    '',
+    [],
+    true,
+    true,
+    array('access_start_date', 'access_end_date')
+);
+
+$elements = $userForm->getElements();
+$variables = ['access_start_date', 'access_end_date'];
+foreach ($elements as $element) {
+    $element->setAttribute('extra_label_class', 'red_underline');
+}
+
+$fieldsToShow = [
+    'heures-disponibilite-par-semaine',
+];
+
+$extra = $extraField->addElements(
+    $userForm,
+    api_get_user_id(),
+    [],
+    true,
+    true,
+    $fieldsToShow,
+    $fieldsToShow
+);
+
+$jqueryExtra .= $extra['jquery_ready_content'];
+
+
+$userForm->addHeader(get_lang('Disponibilité pendant mon stage'));
+
+$fieldsToShow = [
+    'datedebutstage',
+    'datefinstage',
+    'poursuiteapprentissagestage',
+    'heures-disponibilite-par-semaine-stage'
+];
+
+$extra = $extraField->addElements(
+    $userForm,
+    api_get_user_id(),
+    [],
+    true,
+    true,
+    $fieldsToShow,
+    $fieldsToShow
+);
+
+$jqueryExtra .= $extra['jquery_ready_content'];
+
+$userForm->addHeader(get_lang('Les thèmes qui m’intéressent / Mes objectifs d’apprentissage'));
+
+$fieldsToShow = [
+    'domaine',
+    'theme'
+];
+
+$extra = $extraFieldSession->addElements(
+    $userForm,
+    api_get_user_id(),
+    [],
+    true,
+    true,
+    $fieldsToShow,
+    $fieldsToShow
+);
+
+$jqueryExtra .= $extra['jquery_ready_content'];
+
+$userForm->addHeader(get_lang('Mon niveau de langue'));
+
+$fieldsToShow = [
+    'competenceniveau'
+];
+
+$extra = $extraFieldSession->addElements(
+    $userForm,
+    api_get_user_id(),
+    [],
+    true,
+    true,
+    $fieldsToShow,
+    $fieldsToShow
+);
+
+$jqueryExtra .= $extra['jquery_ready_content'];
+
+$userForm->addHeader(get_lang('Mes objectifs d’apprentissage'));
+
+$fieldsToShow = [
+    'objectif-apprentissage'
+];
+
+$extra = $extraField->addElements(
+    $userForm,
+    api_get_user_id(),
+    [],
+    true,
+    true,
+    $fieldsToShow,
+    $fieldsToShow
+);
+
+$userForm->addHeader(get_lang('Ma méthode de travail'));
+
+$fieldsToShow = [
+    'methode-de-travaille'
+];
+
+$extra = $extraField->addElements(
+    $userForm,
+    api_get_user_id(),
+    [],
+    true,
+    true,
+    $fieldsToShow,
+    $fieldsToShow
+);
 
 $htmlHeadXtra[] ='<script>
 $(document).ready(function(){
-	'.$extra['jquery_ready_content'].'
+	'.$jqueryExtra.'
 });
 </script>';
 
 $userForm->addButtonSave(get_lang('Save'));
+
+$userForm->setDefaults($defaults);
 $userFormToString = $userForm->returnForm();
 
 if ($userForm->validate()) {
+    // Saving to user profile
     $extraFieldValue = new ExtraFieldValue('user');
-    $user_data = $userForm->getSubmitValues();
+    $userData = $userForm->getSubmitValues();
+    $extraFieldValue->saveFieldValues($userData);
 
-    $extraFieldValue->saveFieldValues($user_data);
+    // Saving to extra_field_saved_search
+
+    /** @var \Chamilo\UserBundle\Entity\User $user */
+    $user = $em->getRepository('ChamiloUserBundle:User')->find($userId);
+
+    $sessionFields = [
+        'extra_access_start_date',
+        'extra_access_end_date',
+        'extra_filiere',
+        'extra_domaine',
+        'extra_temps-de-travail',
+        'extra_competenceniveau',
+        'extra_theme'
+    ];
+
+    foreach ($userData as $key => $value) {
+        $found = strpos($key, '__persist__');
+
+        if ($found === false) {
+            continue;
+        }
+
+        $tempKey = str_replace('__persist__', '', $key);
+        if (!isset($params[$tempKey])) {
+            $params[$tempKey] = array();
+        }
+    }
+
+    // Parse params.
+    foreach ($userData as $key => $value) {
+        if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
+            continue;
+        }
+
+        if (!in_array($key, $sessionFields)) {
+            continue;
+        }
+
+        $field_variable = substr($key, 6);
+        $extraFieldInfo = $extraFieldValueSession
+            ->getExtraField()
+            ->get_handler_field_info_by_field_variable($field_variable);
+
+        if (!$extraFieldInfo) {
+            continue;
+        }
+
+        $extraFieldObj = $em->getRepository('ChamiloCoreBundle:ExtraField')->find($extraFieldInfo['id']);
+
+        $search = [
+            'field' => $extraFieldObj,
+            'user' => $user
+        ];
+
+        /** @var ExtraFieldSavedSearch  $saved */
+        $saved = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
+
+        if ($saved) {
+            $saved
+                ->setField($extraFieldObj)
+                ->setUser($user)
+                ->setValue($value)
+            ;
+            $em->merge($saved);
+
+        } else {
+            $saved = new ExtraFieldSavedSearch();
+            $saved
+                ->setField($extraFieldObj)
+                ->setUser($user)
+                ->setValue($value)
+            ;
+            $em->persist($saved);
+        }
+        $em->flush();
+    }
+    Display::addFlash(Display::return_message(get_lang('Saved')));
+    header('Location:'.api_get_self());
+    exit;
 }
 
 $tpl = new Template(get_lang('Diagnosis'));

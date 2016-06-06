@@ -36,7 +36,7 @@ class DateTimePicker extends HTML_QuickForm_text
         if (!empty($value)) {
             $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
         }
-        
+
         return $this->getElementJS() . '
             <div class="input-group">
                 <span class="input-group-addon">
@@ -144,7 +144,7 @@ class DateTimePicker extends HTML_QuickForm_text
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '
                 <div class="form-group {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
+                    <label {label-for} class="col-sm-'.$size[0].' control-label {extra_label_class}" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
                     </label>

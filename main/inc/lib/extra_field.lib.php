@@ -391,7 +391,8 @@ class ExtraField extends Model
         $exclude = [],
         $filter = false,
         $useTagAsSelect = false,
-        $showOnlyThisFields = array()
+        $showOnlyThisFields = [],
+        $orderFields = []
     ) {
         if (empty($form)) {
             return false;
@@ -413,6 +414,7 @@ class ExtraField extends Model
             $conditions = ['filter = ?' => 1];
         }
         $extraFields = $this->get_all($conditions, 'option_order');
+
         $extra = $this->set_extra_fields_in_form(
             $form,
             $extraData,
@@ -421,7 +423,8 @@ class ExtraField extends Model
             $itemId,
             $exclude,
             $useTagAsSelect,
-            $showOnlyThisFields
+            $showOnlyThisFields,
+            $orderFields
         );
 
         return $extra;
@@ -732,6 +735,7 @@ class ExtraField extends Model
      * @param array $extra
      * @param int $itemId
      * @param array $exclude variables of extra field to exclude
+     * @param array
      * @return array
      */
     public function set_extra_fields_in_form(
@@ -742,13 +746,25 @@ class ExtraField extends Model
         $itemId = null,
         $exclude = [],
         $useTagAsSelect = false,
-        $showOnlyThisFields = array()
+        $showOnlyThisFields = [],
+        $orderFields = []
     ) {
         $type = $this->type;
-
         $jquery_ready_content = null;
-
         if (!empty($extra)) {
+
+            $newOrder = [];
+            if (!empty($orderFields)) {
+                foreach ($orderFields as $order) {
+                    foreach ($extra as $field_details) {
+                        if ($order == $field_details['variable']) {
+                           $newOrder[] = $field_details;
+                        }
+                    }
+                }
+                $extra = $newOrder;
+            }
+
             foreach ($extra as $field_details) {
                 if (!empty($showOnlyThisFields)) {
 

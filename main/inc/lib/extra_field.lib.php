@@ -71,15 +71,27 @@ class ExtraField extends Model
     public $pageUrl;
     public $extraFieldType = 0;
 
+    public $table_field_options;
+    public $table_field_values;
+    public $table_field_tag;
+    public $table_field_rel_tag;
+
+    public $handler_id;
+    public $primaryKey;
+
     /**
      * @param string $type
      */
     public function __construct($type)
     {
         $this->type = $type;
+
         $this->table = Database::get_main_table(TABLE_EXTRA_FIELD);
         $this->table_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         $this->table_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $this->table_field_tag = Database::get_main_table(TABLE_MAIN_TAG);
+        $this->table_field_rel_tag = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
+
         $this->handler_id = 'item_id';
 
         switch ($this->type) {
@@ -95,7 +107,7 @@ class ExtraField extends Model
                 $this->primaryKey = 'id';
                 break;
             case 'session':
-                $this->extraFieldType = EntityExtraField::SESSION_FIELD_TYPE;
+                $this->extraFieldType = EntityExtraField::SESSION_FIELD_TYPE;                
                 $this->primaryKey = 'id';
                 break;
             case 'question':
@@ -223,6 +235,10 @@ class ExtraField extends Model
         $option = new ExtraFieldOption($this->type);
         if (!empty($extraFields)) {
             foreach ($extraFields as &$extraField) {
+                $extraField['display_text'] = self::translateDisplayName(
+                    $extraField['variable'],
+                    $extraField['display_text']
+                );
                 $extraField['options'] = $option->get_field_options_by_field(
                     $extraField['id'],
                     false,
@@ -249,6 +265,7 @@ class ExtraField extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
+            $row['display_text'] = ExtraField::translateDisplayName($row['variable'], $row['display_text']);
 
             // All the options of the field
             $sql = "SELECT * FROM $this->table_field_options
@@ -368,10 +385,19 @@ class ExtraField extends Model
      * @param FormValidator $form
      * @param int $itemId
      * @param array $exclude variables of extra field to exclude
+     * @param bool $filter
+     *
      * @return array|bool
      */
-    public function addElements($form, $itemId = 0, $exclude = [])
-    {
+    public function addElements(
+        $form,
+        $itemId = 0,
+        $exclude = [],
+        $filter = false,
+        $useTagAsSelect = false,
+        $showOnlyThisFields = [],
+        $orderFields = []
+    ) {
         if (empty($form)) {
             return false;
         }
@@ -387,14 +413,21 @@ class ExtraField extends Model
             }
         }
 
-        $extraFields = $this->get_all(null, 'option_order');
+        $conditions = [];
+        if ($filter) {
+            $conditions = ['filter = ?' => 1];
+        }
+        $extraFields = $this->get_all($conditions, 'option_order');
         $extra = $this->set_extra_fields_in_form(
             $form,
             $extraData,
             false,
             $extraFields,
             $itemId,
-            $exclude
+            $exclude,
+            $useTagAsSelect,
+            $showOnlyThisFields,
+            $orderFields
         );
 
         return $extra;
@@ -520,11 +553,11 @@ class ExtraField extends Model
 
     /**
      * Converts a string like this:
-     * France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
+     * France:Paris;Bretagne;Marseille;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
      * into
      * array(
  *      'France' =>
-     *      array('Paris', 'Bregtane', 'Marseilles'),
+     *      array('Paris', 'Bregtane', 'Marseille'),
      *  'Belgique' =>
      *      array('Namur', 'Liège')
      * ), etc
@@ -680,6 +713,14 @@ class ExtraField extends Model
      */
     public function delete($id)
     {
+        $em = Database::getManager();
+        $items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy(['field' => $id]);
+        if ($items) {
+            foreach ($items as $item) {
+                $em->remove($item);
+            }
+            $em->flush();
+        }
         $field_option = new ExtraFieldOption($this->type);
         $field_option->delete_all_options_by_field_id($id);
 
@@ -697,6 +738,7 @@ class ExtraField extends Model
      * @param array $extra
      * @param int $itemId
      * @param array $exclude variables of extra field to exclude
+     * @param array
      * @return array
      */
     public function set_extra_fields_in_form(
@@ -705,14 +747,34 @@ class ExtraField extends Model
         $admin_permissions = false,
         $extra = array(),
         $itemId = null,
-        $exclude = []
+        $exclude = [],
+        $useTagAsSelect = false,
+        $showOnlyThisFields = [],
+        $orderFields = []
     ) {
         $type = $this->type;
-
         $jquery_ready_content = null;
-
         if (!empty($extra)) {
+
+            $newOrder = [];
+            if (!empty($orderFields)) {
+                foreach ($orderFields as $order) {
+                    foreach ($extra as $field_details) {
+                        if ($order == $field_details['variable']) {
+                           $newOrder[] = $field_details;
+                        }
+                    }
+                }
+                $extra = $newOrder;
+            }
+
             foreach ($extra as $field_details) {
+                if (!empty($showOnlyThisFields)) {
+
+                    if (!in_array($field_details['variable'], $showOnlyThisFields)) {
+                        continue;
+                    }
+                }
 
                 // Getting default value id if is set
                 $defaultValueId = null;
@@ -784,7 +846,7 @@ class ExtraField extends Model
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
                                 $options[$option_details['option_value']] = $option_details['display_text'];
-                                $group[]                                  = $form->createElement(
+                                $group[] = $form->createElement(
                                     'radio',
                                     'extra_'.$field_details['variable'],
                                     $option_details['option_value'],
@@ -822,9 +884,7 @@ class ExtraField extends Model
                             }
                         } else {
                             $fieldVariable = "extra_{$field_details['variable']}";
-
                             $checkboxAttributes = array();
-
                             if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
                                 if (!empty($extraData[$fieldVariable])) {
                                     $checkboxAttributes['checked'] = 1;
@@ -868,9 +928,7 @@ class ExtraField extends Model
 
                         // Get extra field workflow
                         $userInfo = api_get_user_info();
-
                         $addOptions = array();
-
                         $optionsExists = false;
                         global $app;
                         // Check if exist $app['orm.em'] object
@@ -960,10 +1018,6 @@ class ExtraField extends Model
                             }
                         }
 
-                        if ($get_lang_variables) {
-                            $field_details['display_text'] = get_lang($field_details['display_text']);
-                        }
-
                         // chzn-select doesn't work for sessions??
                         $form->addElement(
                             'select',
@@ -1040,7 +1094,7 @@ class ExtraField extends Model
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
                             $options,
-                            array('multiple' => 'multiple')
+                            array('multiple' => 'multiple', 'id' => 'extra_'.$field_details['variable'])
                         );
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {
@@ -1104,17 +1158,16 @@ class ExtraField extends Model
                         });';
 
                         $first_id  = null;
-                        $second_id = null;
-
                         if (!empty($extraData)) {
-                            $first_id  = $extraData['extra_'.$field_details['variable']]['extra_'.$field_details['variable']];
-                            $second_id = $extraData['extra_'.$field_details['variable']]['extra_'.$field_details['variable'].'_second'];
+                            if (isset($extraData['extra_'.$field_details['variable']])) {
+                                $first_id = $extraData['extra_'.$field_details['variable']]['extra_'.$field_details['variable']];
+                            }
                         }
 
                         $options = ExtraField::extra_field_double_select_convert_array_to_ordered_array(
                             $field_details['options']
                         );
-                        $values  = array('' => get_lang('Select'));
+                        $values = array('' => get_lang('Select'));
 
                         $second_values = array();
                         if (!empty($options)) {
@@ -1130,7 +1183,7 @@ class ExtraField extends Model
                                 }
                             }
                         }
-                        $group   = array();
+                        $group = array();
                         $group[] = $form->createElement(
                             'select',
                             'extra_'.$field_details['variable'],
@@ -1183,46 +1236,15 @@ class ExtraField extends Model
                             "extra_{$field_details['variable']}",
                             $field_details['display_text']
                         );
-                        $tagsSelect->setAttribute('class', null);
+
+                        if ($useTagAsSelect == false) {
+                            $tagsSelect->setAttribute('class', null);
+                        }
+
                         $tagsSelect->setAttribute('id', "extra_{$field_details['variable']}");
                         $tagsSelect->setMultiple(true);
 
                         if ($this->type == 'user') {
-
-                           /* //the magic should be here
-                            $user_tags = UserManager::get_user_tags($user_id, $field_details[0]);
-
-                            $tag_list = '';
-                            if (is_array($user_tags) && count($user_tags) > 0) {
-                                foreach ($user_tags as $tag) {
-                                    $tag_list .= '<option value="'.$tag['tag'].'" class="selected">'.$tag['tag'].'</option>';
-                                }
-                            }
-
-                            $multi_select = '<select id="extra_'.$field_details[1].'" name="extra_'.$field_details[1].'">
-                                    '.$tag_list.'
-                                    </select>';
-
-                            $form->addElement('label', $field_details[3], $multi_select);
-                            $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
-                            $complete_text = get_lang('StartToType');
-                            //if cache is set to true the jquery will be called 1 time
-                            $jquery_ready_content = <<<EOF
-                    $("#extra_$field_details[1]").fcbkcomplete({
-                        json_url: "$url?a=search_tags&field_id=$field_details[0]",
-                        cache: false,
-                        filter_case: true,
-                        filter_hide: true,
-                        complete_text:"$complete_text",
-                        firstselected: true,
-                        //onremove: "testme",
-                        //onselect: "testme",
-                        filter_selected: true,
-                        newel: true
-                    });
-EOF;
-                            break;*/
-
                             // The magic should be here
                             $user_tags = UserManager::get_user_tags($itemId, $field_details['id']);
 
@@ -1245,14 +1267,12 @@ EOF;
                                     'fieldId' => $field_id,
                                     'itemId' => $itemId
                                 ]);
-
                             foreach ($fieldTags as $fieldTag) {
                                 $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
                                 if (empty($tag)) {
                                     continue;
                                 }
-
                                 $tagsSelect->addOption(
                                     $tag->getTag(),
                                     $tag->getTag(),
@@ -1260,9 +1280,42 @@ EOF;
                                 );
                             }
 
+                            if ($useTagAsSelect) {
+
+                                $fieldTags = $em
+                                    ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                                    ->findBy([
+                                        'fieldId' => $field_id
+                                    ]);
+                                $tagsAdded = [];
+                                foreach ($fieldTags as $fieldTag) {
+                                    $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+
+                                    if (empty($tag)) {
+                                        continue;
+                                    }
+
+                                    $tagText = $tag->getTag();
+
+                                    if (in_array($tagText, $tagsAdded)) {
+                                        continue;
+                                    }
+
+                                    $tagsSelect->addOption(
+                                        $tag->getTag(),
+                                        $tag->getTag(),
+                                        []
+                                    );
+
+                                    $tagsAdded[] = $tagText;
+                                }
+
+                            }
+
                             $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                         }
 
+                        if ($useTagAsSelect == false) {
                         $complete_text = get_lang('StartToType');
 
                         //if cache is set to true the jquery will be called 1 time
@@ -1279,6 +1332,7 @@ EOF;
                         newel: true
                     });
 EOF;
+                        }
                         break;
                     case ExtraField::FIELD_TYPE_TIMEZONE:
                         $form->addElement(
@@ -1557,6 +1611,7 @@ EOF;
                 }
             }
         }
+
         $return = array();
         $return['jquery_ready_content'] = $jquery_ready_content;
 
@@ -1702,11 +1757,30 @@ EOF;
         if ($action == 'edit') {
             $header = get_lang('Modify');
             // Setting the defaults
-            $defaults = $this->get($id);
+            $defaults = $this->get($id, false);
         }
 
         $form->addElement('header', $header);
-        $form->addElement('text', 'display_text', get_lang('Name'), array('class' => 'span5'));
+
+        if ($action === 'edit') {
+            $platformLanguage = api_get_setting('platformLanguage');
+            $languageId = api_get_language_id($platformLanguage);
+            $languageInfo = api_get_language_info($languageId);
+
+            $translateUrl = api_get_path(WEB_CODE_PATH) . 'admin/sub_language.php?' . http_build_query([
+                'id' => $languageInfo['parent_id'],
+                'action' => 'registersublanguage',
+                'sub_language_id' => $languageInfo['id'],
+                'extra_field' => $id
+            ]);
+            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+            $form->addText(
+                'display_text',
+                [get_lang('Name'), $translateButton]
+            );
+        } else {
+            $form->addText('display_text', get_lang('Name'));
+        }
 
         // Field type
         $types = self::get_field_types();
@@ -1821,23 +1895,30 @@ EOF;
     public function getJqgridActionLinks($token)
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
-        return 'function action_formatter(cellvalue, options, rowObject) {
-         return \'<a href="?action=edit&type='.$this->type.'&id=\'+options.rowId+\'">'.Display::return_icon(
-            'edit.png',
-            get_lang('Edit'),
-            '',
-            ICON_SIZE_SMALL
-        ).'</a>'.
-        '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(
+        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
+        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+        $confirmMessage = addslashes(
             api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
-        )."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon(
-            'delete.png',
-            get_lang('Delete'),
-            '',
-            ICON_SIZE_SMALL
-        ).'</a>'.
-        '\';
-        }';
+        );
+
+        $editButton = <<<JAVASCRIPT
+            <a href="?action=edit&type={$this->type}&id=' + options.rowId + '" class="btn btn-link btn-xs">\
+                $editIcon\
+            </a>
+JAVASCRIPT;
+        $deleteButton = <<<JAVASCRIPT
+            <a \
+                onclick="if (!confirm(\'$confirmMessage\')) {return false;}" \
+                href="?sec_token=$token&type={$this->type}&id=' + options.rowId + '&action=delete" \
+                class="btn btn-link btn-xs">\
+                $deleteIcon\
+            </a>
+JAVASCRIPT;
+
+        return "function action_formatter(cellvalue, options, rowObject) {
+        console.log(options);
+            return '$editButton $deleteButton';
+        }";
     }
 
     /**
@@ -1993,6 +2074,7 @@ EOF;
                 }
             }
         }
+
         $options_by_double = array();
         foreach ($double_fields as $double) {
             $my_options = $extraFieldOption->get_field_options_by_field(
@@ -2018,8 +2100,7 @@ EOF;
                 foreach ($extra_fields as $extra_info) {
                     $extra_field_info = $extra_info['extra_field_info'];
                     $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
-                                       ON (s.".$this->primaryKey." = fv$counter.".$this->handler_id.") ";
-
+                                       ON (s." . $this->primaryKey . " = fv$counter." . $this->handler_id . ") ";
                     // Add options
                     if (isset($extra_field_info['field_type']) && in_array(
                             $extra_field_info['field_type'],
@@ -2032,11 +2113,31 @@ EOF;
                     ) {
                         $options['where'] = str_replace(
                             $extra_info['field'],
-                            'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fvo'.$counter.'.option_value',
+                            'fv' . $counter . '.field_id = ' . $extra_info['id'] . ' AND fvo' . $counter . '.option_value',
                             $options['where']
                         );
-                        $inject_joins .= " INNER JOIN $this->table_field_options fvo$counter ".
-                            " ON (fv$counter.field_id = fvo$counter.field_id AND fv$counter.value = fvo$counter.option_value) ";
+                        $inject_joins .= "
+                             INNER JOIN $this->table_field_options fvo$counter
+                             ON (
+                                fv$counter.field_id = fvo$counter.field_id AND
+                                fv$counter.value = fvo$counter.option_value
+                             )
+                            ";
+                    } else if (isset($extra_field_info['field_type']) &&
+                        $extra_field_info['field_type'] == ExtraField::FIELD_TYPE_TAG
+                    ) {
+                        $options['where'] = str_replace(
+                            $extra_info['field'],
+                            'tag' . $counter . '.tag ',
+                            $options['where']
+                        );
+
+                        $inject_joins .= "
+                            INNER JOIN $this->table_field_rel_tag tag_rel$counter
+                            ON (tag_rel$counter.field_id = ".$extra_info['id']." AND tag_rel$counter.item_id = s." . $this->primaryKey.")
+                            INNER JOIN $this->table_field_tag tag$counter
+                            ON (tag$counter.id =  tag_rel$counter.tag_id)
+                        ";
                     } else {
                         //text, textarea, etc
                         $options['where'] = str_replace(
@@ -2066,11 +2167,11 @@ EOF;
         }
 
         return array(
-            'order'               => $order,
-            'limit'               => $limit,
-            'where'               => $where,
-            'inject_where'        => $inject_where,
-            'inject_joins'        => $inject_joins,
+            'order' => $order,
+            'limit' => $limit,
+            'where' => $where,
+            'inject_where' => $inject_where,
+            'inject_joins' => $inject_joins,
             'field_value_to_join' => $field_value_to_join,
             'inject_extra_fields' => $inject_extra_fields,
         );
@@ -2095,7 +2196,17 @@ EOF;
             $val = '%'.$val;
         }
         if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
-            $val = '%'.$val.'%';
+            if (is_array($val)) {
+                $result = '"%'.implode(';', $val).'%"';
+                foreach ($val as $item) {
+                    $result .= ' OR '.$col.' LIKE "%'.$item.'%"';
+                }
+                $val = $result;
+
+                return " $col {$this->ops[$oper]} $val ";
+            } else {
+                $val = '%'.$val.'%';
+            }
         }
         $val = \Database::escape_string($val);
 
@@ -2125,31 +2236,29 @@ EOF;
         $condition_array = array();
 
         foreach ($filters->rules as $rule) {
-
             if (strpos($rule->field, $stringToSearch) === false) {
-                //normal fields
+                // normal fields
                 $field = $rule->field;
-
-                if (isset($rule->data) && $rule->data != -1) {
+                if (isset($rule->data) && is_string($rule->data) && $rule->data != -1) {
                     $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
                 }
             } else {
                 // Extra fields
-
                 if (strpos($rule->field, '_second') === false) {
                     //No _second
                     $original_field = str_replace($stringToSearch, '', $rule->field);
                     $field_option = $this->get_handler_field_info_by_field_variable($original_field);
 
                     if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
-
                         if (isset($double_select[$rule->field])) {
                             $data = explode('#', $rule->data);
                             $rule->data = $data[1].'::'.$double_select[$rule->field];
                         } else {
                             // only was sent 1 select
-                            $data = explode('#', $rule->data);
-                            $rule->data = $data[1];
+                            if (is_string($rule->data)) {
+                                $data = explode('#', $rule->data);
+                                $rule->data = $data[1];
+                            }
                         }
 
                         if (!isset($rule->data)) {
@@ -2278,4 +2387,68 @@ EOF;
         return $valuesData;
     }
 
+    /**
+     * Gets an element
+     * @param int $id
+     * @param bool $translateDisplayText Optional
+     * @return array
+     */
+    public function get($id, $translateDisplayText = true)
+    {
+        $info = parent::get($id);
+
+        if ($translateDisplayText) {
+            $info['display_text'] = self::translateDisplayName($info['variable'], $info['display_text']);
+        }
+
+        return $info;
+    }
+
+    /**
+     * Translate the display text for a extra field
+     * @param string $variable
+     * @param string $defaultDisplayText
+     * @return string
+     */
+    public static function translateDisplayName($variable, $defaultDisplayText)
+    {
+        $camelCase = api_underscore_to_camel_case($variable);
+
+        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+    }
+
+    /**
+     * Get the info from an extra field by its id
+     * @param int $id
+     * @param bool $translateDisplayText
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function getInfoById($id, $translateDisplayText = true)
+    {
+        $extraField = Database::getManager()
+            ->find('ChamiloCoreBundle:ExtraField', $id);
+
+        $objExtraField = null;
+
+        switch ($extraField->getExtraFieldType()) {
+            case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
+                $objExtraField = new self('user');
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
+                $objExtraField = new self('course');
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
+                $objExtraField = new self('session');
+                break;
+        }
+
+        if (!$objExtraField) {
+            return [];
+        }
+
+        return $objExtraField->get($extraField->getId(), $translateDisplayText);
+    }
 }

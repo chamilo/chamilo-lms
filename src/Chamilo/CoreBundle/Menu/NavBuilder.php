@@ -264,7 +264,7 @@ class NavBuilder extends ContainerAware
                             'name' => 'admin/',
                         )
                     )
-                )->setAttribute('class', 'item-menu');
+                );
             }
 
             $dropdown->addChild(
@@ -275,8 +275,7 @@ class NavBuilder extends ContainerAware
                         'name' => 'calendar/agenda_js.php',
                     ),
                 )
-            )->setAttribute('class', 'item-menu');
-
+            );
 
             $dropdown->addChild(
                 $translator->trans('Profile'),

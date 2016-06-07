@@ -30,3 +30,7 @@ msgstr "Dernières publications"
 
 msgid "Subscription"
 msgstr "Inscription"
+
+msgid "My certificates"
+msgstr "Mes certificats"
+

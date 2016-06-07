@@ -278,10 +278,11 @@ class NavBuilder extends ContainerAware
             )->setAttribute('class', 'item-menu');
 
 
-            /*$dropdown->addChild(
+            $dropdown->addChild(
                 $translator->trans('Profile'),
                 array('route' => 'fos_user_profile_show')
-            )->setAttribute('divider_append', true);*/
+            )->setAttribute('divider_append', true);
+
             $dropdown->addChild(
                 $translator->trans('Inbox'),
                 array(
@@ -291,6 +292,17 @@ class NavBuilder extends ContainerAware
                     ),
                 )
             )->setAttribute('divider_append', true);
+
+           $dropdown->addChild(
+                $translator->trans('My certificates'),
+                array(
+                    'route' => 'main',
+                    'routeParameters' => array(
+                        'name' => 'gradebook/my_certificates.php',
+                    ),
+                )
+            )->setAttribute('divider_append', true);
+
 
 
             // legacy logout
@@ -304,14 +316,14 @@ class NavBuilder extends ContainerAware
                         'uid' => $user->getId(),
                     ),
                     'query' => '1',
-                    'icon' => 'fa fa-sign-out'
+                    'icon' => ' fa fa-sign-out'
                 )
             );
 
             $logoutLink
                 ->setLinkAttributes(array(
                     'id' => 'logout_button',
-                    'class' => 'fa fa-power-off',
+                    //'class' => 'fa fa-power-off',
                 ))
                 ->setAttributes(array(
                     /*'id' => 'signin',

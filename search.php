@@ -250,7 +250,8 @@ $extra = $extraFieldSession->addElements(
     true,
     true,
     $fieldsToShow,
-    $fieldsToShow
+    $fieldsToShow,
+    $defaults
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];

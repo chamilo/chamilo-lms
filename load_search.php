@@ -7,6 +7,9 @@ $cidReset = true;
 
 require_once 'main/inc/global.inc.php';
 
+$htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
+$htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
+
 api_block_anonymous_users();
 
 //if (!api_is_platform_admin()) {
@@ -72,9 +75,32 @@ if (empty($items)) {
     Display::addFlash(Display::return_message('NoData'));
 }
 
+$defaults = [];
+$tagsData = [];
+if (!empty($items)) {
+    /** @var ExtraFieldSavedSearch $item */
+    foreach ($items as $item) {
+        $variable = 'extra_'.$item->getField()->getVariable();
+        if ($item->getField()->getFieldType() == ExtraField::FIELD_TYPE_TAG) {
+            $tagsData[$variable] = $item->getValue();
+        }
+        $defaults[$variable] = $item->getValue();
+    }
+}
+
 $extraField = new ExtraField('session');
 $extraFieldValue = new ExtraFieldValue('session');
-$extra = $extraField->addElements($form, '', [], true);
+
+$extra = $extraField->addElements(
+    $form,
+    '',
+    [],
+    true,
+    true,
+    [],
+    [],
+    $defaults
+);
 
 $form->addButtonSearch(get_lang('Search'), 'save');
 
@@ -90,18 +116,7 @@ $extraFieldListToString = implode(',', $extraFieldToSearch);
 $result = SessionManager::getGridColumns('simple', $extraFieldsToFilter);
 $columns = $result['columns'];
 $column_model = $result['column_model'];
-$defaults = [];
-$tagsData = [];
-if (!empty($items)) {
-    /** @var ExtraFieldSavedSearch $item */
-    foreach ($items as $item) {
-        $variable = 'extra_'.$item->getField()->getVariable();
-        if ($item->getField()->getFieldType() == Extrafield::FIELD_TYPE_TAG) {
-            $tagsData[$variable] = $item->getValue();
-        }
-        $defaults[$variable] = $item->getValue();
-    }
-}
+
 
 $form->setDefaults($defaults);
 
@@ -119,7 +134,6 @@ if ($formSearch->validate()) {
         }
     }
 
-    //$defaults
     $filterToSend = [];
     if (!empty($filters)) {
         $filterToSend = ['groupOp' => 'AND'];
@@ -184,7 +198,8 @@ $jsTag = '';
 if (!empty($tagsData)) {
     foreach ($tagsData as $extraField => $tags) {
         foreach ($tags as $tag) {
-            $jsTag .= "$('#$extraField')[0].addItem('$tag', '$tag');";
+            $tag = api_htmlentities($tag);
+           // $jsTag .= "$('#$extraField')[0].addItem('$tag', '$tag');";
         }
     }
 }

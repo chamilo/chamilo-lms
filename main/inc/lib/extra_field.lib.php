@@ -392,7 +392,8 @@ class ExtraField extends Model
         $filter = false,
         $useTagAsSelect = false,
         $showOnlyThisFields = [],
-        $orderFields = []
+        $orderFields = [],
+        $extraData = []
     ) {
         if (empty($form)) {
             return false;
@@ -400,12 +401,14 @@ class ExtraField extends Model
 
         $itemId = intval($itemId);
         $form->addHidden('item_id', $itemId);
-        $extraData = false;
-        if (!empty($itemId)) {
-            $extraData = self::get_handler_extra_data($itemId);
-
-            if ($form) {
-                $form->setDefaults($extraData);
+        
+        if (empty($extraData)) {
+            if (!empty($itemId)) {
+                $extraData = self::get_handler_extra_data($itemId);
+    
+                if ($form) {
+                    $form->setDefaults($extraData);
+                }
             }
         }
 

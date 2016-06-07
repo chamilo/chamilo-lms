@@ -1,5 +1,5 @@
 msgid "My courses"
-msgstr "Mes cours"
+msgstr "Mes îlots"
 
 msgid "Homepage"
 msgstr "Page d'accueil"

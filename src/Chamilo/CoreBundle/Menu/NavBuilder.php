@@ -73,7 +73,7 @@ class NavBuilder extends ContainerAware
                 array('route' => 'userportal')
             )->setAttribute('class', 'item-menu menu-2 my-course');
 
-            $menu->addChild(
+            /*$menu->addChild(
                 $translator->trans('Personal agenda'),
                 array(
                     'route' => 'main',
@@ -81,7 +81,7 @@ class NavBuilder extends ContainerAware
                         'name' => 'calendar/agenda_js.php',
                     ),
                 )
-            )->setAttribute('class', 'item-menu menu-3 agenda');
+            )->setAttribute('class', 'item-menu menu-3 agenda');*/
 
             $menu->addChild(
                 $translator->trans('Reporting'),
@@ -91,7 +91,7 @@ class NavBuilder extends ContainerAware
                         'name' => 'mySpace/index.php',
                     ),
                 )
-            )->setAttribute('class', 'item-menu menu-4 my-space');
+            )->setAttribute('class', 'item-menu menu-3 my-space');
 
             $menu->addChild(
                 $translator->trans('Social network'),
@@ -101,7 +101,7 @@ class NavBuilder extends ContainerAware
                         'name' => 'social/home.php',
                     ),
                 )
-            )->setAttribute('class', 'item-menu menu-5 social-network ');
+            )->setAttribute('class', 'item-menu menu-4 social-network ');
             if ($checker->isGranted('ROLE_ADMIN')) {
 
                 /*$menu->addChild(
@@ -114,15 +114,7 @@ class NavBuilder extends ContainerAware
                     )
                 )->setAttribute('class', 'item-menu menu-6 dashboard');*/
 
-                $menu->addChild(
-                    $translator->trans('Administration'),
-                    array(
-                        'route' => 'main',
-                        'routeParameters' => array(
-                            'name' => 'admin/',
-                        )
-                    )
-                )->setAttribute('class', 'item-menu menu-6 admin');
+
             }
         }
 
@@ -133,7 +125,7 @@ class NavBuilder extends ContainerAware
                 [
                     'route' => 'faq_index',
                 ]
-            )->setAttribute('class', 'item-menu menu-2');
+            )->setAttribute('class', 'item-menu menu-5');
 
             /** @var Category $category */
             foreach ($categories as $category) {
@@ -262,6 +254,30 @@ class NavBuilder extends ContainerAware
             $menu->setChildrenAttribute('class', 'nav navbar-nav navbar-right');
             $dropdown = $menu->addChild($user->getUsername())->setAttribute('dropdown', true);
 
+            if ($checker->isGranted('ROLE_ADMIN')) {
+
+                $dropdown->addChild(
+                    $translator->trans('Administration'),
+                    array(
+                        'route' => 'main',
+                        'routeParameters' => array(
+                            'name' => 'admin/',
+                        )
+                    )
+                )->setAttribute('class', 'item-menu');
+            }
+
+            $dropdown->addChild(
+                $translator->trans('Personal agenda'),
+                array(
+                    'route' => 'main',
+                    'routeParameters' => array(
+                        'name' => 'calendar/agenda_js.php',
+                    ),
+                )
+            )->setAttribute('class', 'item-menu');
+
+
             /*$dropdown->addChild(
                 $translator->trans('Profile'),
                 array('route' => 'fos_user_profile_show')
@@ -275,6 +291,7 @@ class NavBuilder extends ContainerAware
                     ),
                 )
             )->setAttribute('divider_append', true);
+
 
             // legacy logout
             $logoutLink = $menu->addChild(

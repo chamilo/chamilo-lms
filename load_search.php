@@ -189,14 +189,10 @@ if (!empty($tagsData)) {
     }
 }
 
-$htmlHeadXtra[] ='
-<script>
-
+$htmlHeadXtra[] ='<script>
 $(function() {
     '.$extra['jquery_ready_content'].'
-
-        '.$jsTag.'
-
+    '.$jsTag.'
 });
 </script>';
 
@@ -206,7 +202,6 @@ if (!empty($filterToSend)) {
 } else {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc';
 }
-
 
 // Autowidth
 $extra_params['autowidth'] = 'true';

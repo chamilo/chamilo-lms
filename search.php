@@ -61,7 +61,7 @@ if (!empty($items)) {
 
 $form->setDefaults($defaults);
 
-$view = $form->returnForm();
+//$view = $form->returnForm();
 $filterToSend = '';
 
 if ($form->validate()) {
@@ -173,6 +173,7 @@ $extra = $extraFieldSession->addElements(
     true,
     array('access_start_date', 'access_end_date')
 );
+$jqueryExtra .= $extra['jquery_ready_content'];
 
 $elements = $userForm->getElements();
 $variables = ['access_start_date', 'access_end_date'];
@@ -195,7 +196,6 @@ $extra = $extraField->addElements(
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
-
 
 $userForm->addHeader(get_lang('Disponibilité pendant mon stage'));
 
@@ -286,6 +286,10 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     $fieldsToShow
 );
+
+/*echo '<pre>';
+echo $jqueryExtra;
+echo '</pre>';*/
 
 $htmlHeadXtra[] ='<script>
 $(document).ready(function(){

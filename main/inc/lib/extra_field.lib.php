@@ -750,15 +750,15 @@ class ExtraField extends Model
         $orderFields = []
     ) {
         $type = $this->type;
-        $jquery_ready_content = null;
-        if (!empty($extra)) {
+        $jquery_ready_content = '';
 
+        if (!empty($extra)) {
             $newOrder = [];
             if (!empty($orderFields)) {
                 foreach ($orderFields as $order) {
                     foreach ($extra as $field_details) {
-                        if ($order == $field_details['variable']) {
-                           $newOrder[] = $field_details;
+                        if ($order === $field_details['variable']) {
+                            $newOrder[] = $field_details;
                         }
                     }
                 }
@@ -800,6 +800,11 @@ class ExtraField extends Model
                     if (in_array($field_details['variable'], $exclude)) {
                         continue;
                     }
+                }
+
+                $dump = $field_details['variable'] === 'theme';
+                if ($dump) {
+                 //   var_dump($field_details);
                 }
 
                 switch ($field_details['field_type']) {
@@ -1223,7 +1228,7 @@ class ExtraField extends Model
                         $variable = $field_details['variable'];
                         $field_id = $field_details['id'];
 
-                        //Added for correctly translate the extra_field
+                        // Added for correctly translate the extra_field
                         $get_lang_variables = false;
                         if (in_array($variable, ['tags'])) {
                             $get_lang_variables = true;
@@ -1238,7 +1243,7 @@ class ExtraField extends Model
                             $field_details['display_text']
                         );
 
-                        if ($useTagAsSelect == false) {
+                        if ($useTagAsSelect === false) {
                             $tagsSelect->setAttribute('class', null);
                         }
 
@@ -1262,8 +1267,7 @@ class ExtraField extends Model
                         } else {
                             $em = Database::getManager();
 
-                            $fieldTags = $em
-                                ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                            $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                                 ->findBy([
                                     'fieldId' => $field_id,
                                     'itemId' => $itemId
@@ -1301,7 +1305,6 @@ class ExtraField extends Model
                                     if (in_array($tagText, $tagsAdded)) {
                                         continue;
                                     }
-
                                     $tagsSelect->addOption(
                                         $tag->getTag(),
                                         $tag->getTag(),

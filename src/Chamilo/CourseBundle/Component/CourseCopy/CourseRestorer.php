@@ -1374,8 +1374,8 @@ class CourseRestorer
 
                 $id = Database::insert($tool_intro_table, $params);
                 if ($id) {
-                    $sql = "UPDATE $tool_intro_table SET id = iid WHERE iid = $id";
-                    Database::query($sql);
+                    //$sql = "UPDATE $tool_intro_table SET id = iid WHERE iid = $id";
+                    //Database::query($sql);
 
                     if (!isset($this->course->resources[RESOURCE_TOOL_INTRO][$id])) {
                         $this->course->resources[RESOURCE_TOOL_INTRO][$id] = new stdClass();

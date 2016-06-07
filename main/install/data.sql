@@ -1852,6 +1852,10 @@ VALUES
 
 UPDATE settings_current SET selected_value = '1.11.0.3' WHERE variable = 'chamilo_database_version';
 
+INSERT INTO settings_current (variable, type, category, selected_value, title, comment) VALUES ('enable_profile_user_address_geolocalization', 'radio', 'User', 'false', 'EnableProfileUsersAddressGeolocalizationTitle', 'EnableProfileUsersAddressGeolocalizationComment');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_profile_user_address_geolocalization', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_profile_user_address_geolocalization', 'false', 'No');
+
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 1);
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 2);
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 3);

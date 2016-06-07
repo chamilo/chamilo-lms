@@ -228,14 +228,14 @@ if ($showCourses && $action != 'display_sessions') {
             // start buycourse validation
             // display the course price and buy button if the buycourses plugin is enabled and this course is configured
             $plugin = BuyCoursesPlugin::create();
-            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course);
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course['real_id'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 
             if ($isThisCourseInSale) {
                 // set the Price label
                 $separator = $isThisCourseInSale['html'];
                 // set the Buy button instead register.
                 if ($isThisCourseInSale['verificator']) {
-                    $subscribeButton = $plugin->returnBuyCourseButton($course);
+                    $subscribeButton = $plugin->returnBuyCourseButton($course['real_id'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
                 }
             }
             // end buycourse validation

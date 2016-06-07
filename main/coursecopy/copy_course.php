@@ -27,7 +27,7 @@ if (function_exists('ini_set')) {
 
 // Breadcrumbs
 $interbreadcrumb[] = array(
-    'url' => '../course_info/maintenance.php?'.api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq(),
     'name' => get_lang('Maintenance')
 );
 
@@ -103,7 +103,11 @@ if (Security::check_token('post') && (
             $options[$courseInfo['code']] = $obj->title.' ('.$obj->code.')';
         }
 
-        $form = new FormValidator('copy_course', 'post', 'copy_course.php?'.api_get_cidreq());
+        $form = new FormValidator(
+            'copy_course',
+            'post',
+            api_get_path(WEB_CODE_PATH).'coursecopy/copy_course.php?'.api_get_cidreq()
+        );
         $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $options);
 
         $group = array();

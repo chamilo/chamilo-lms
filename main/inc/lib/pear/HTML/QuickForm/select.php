@@ -84,8 +84,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             if (isset($attributes['placeholder'])) {
                 $addBlank =  $attributes['placeholder'];
             }
-
-
         }
         $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
         $this->setColumnsSize($columnsSize);
@@ -448,6 +446,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             return $this->getFrozenHtml();
         } else {
             $tabs    = $this->_getTabs();
+
             $strHtml = '';
 
             if ($this->getComment() != '') {
@@ -462,6 +461,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $attrString = $this->_getAttrString($this->_attributes);
                 $this->setName($myName);
             }
+
 
             $strHtml .= $tabs . '<select ' . $attrString . ">\n";
 
@@ -629,7 +629,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '
                 <div class="form-group {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
+                    <label {label-for}  class="col-sm-'.$size[0].' control-label  {extra_label_class}" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
                     </label>

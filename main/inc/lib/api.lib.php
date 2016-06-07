@@ -1330,7 +1330,8 @@ function _api_format_user($user, $add_password = false)
         'registration_date',
         'hr_dept_id',
         'expiration_date',
-        'last_login'
+        'last_login',
+        'profile_completed'
     );
 
     foreach ($attributes as $attribute) {

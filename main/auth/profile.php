@@ -913,6 +913,29 @@ if (api_get_setting('allow_social_tool') != 'true') {
 
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') == 'true' ? true : false;
 
+if (api_get_setting('show_terms_if_profile_completed') === 'true') {
+    if (empty($user_data['profile_completed'])) {
+        Display::addFlash(Display::return_message(get_lang('ProfileIsNotCompleted'), 'warning'));
+    }
+    
+    $profileCompleteResults = Session::read('profile_completed_result');
+    if (!empty($profileCompleteResults)) {
+        foreach ($profileCompleteResults as $profileVariable => $value) {
+            if ($value === false) {
+                $data = $extraField->get_handler_field_info_by_field_variable($profileVariable);
+                 Display::addFlash(
+                     Display::return_message('"'.$data['display_text'].'" '.get_lang('ThisFieldIsRequired'),
+                         'warning',
+                         false
+                     )
+                 );
+            }
+        }
+    }
+    Session::erase('profile_completed_result');
+}
+
+
 $tpl = new Template(get_lang('ModifyProfile'));
 $tpl->assign('actions', $actions);
 

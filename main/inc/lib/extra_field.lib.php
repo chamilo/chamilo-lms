@@ -259,6 +259,7 @@ class ExtraField extends Model
                 WHERE
                     variable = '$variable' AND
                     extra_field_type = $this->extraFieldType";
+
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');

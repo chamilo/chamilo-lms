@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Tag;
+use ChamiloSession as Session;
 
 /**
  * Class ExtraFieldValue
@@ -100,9 +101,8 @@ class ExtraFieldValue extends Model
 
         $extraField = new ExtraField($this->type);
         $extraFields = $extraField->get_all(null, 'option_order');
-
-        // Parse params.
-        //foreach ($params as $key => $value) {
+        $resultsExist = [];
+        // Parse params
         foreach ($extraFields as $fieldDetails) {
             if ($fieldDetails['visible'] != 1) {
                 continue;
@@ -114,6 +114,9 @@ class ExtraFieldValue extends Model
             } else {
                 $value = '';
             }
+
+            $resultsExist[$field_variable] = isset($value) && $value !== '' ? true : false;
+
             $extraFieldInfo = $this->getExtraField()->get_handler_field_info_by_field_variable($field_variable);
 
             if (!$extraFieldInfo) {
@@ -309,6 +312,26 @@ class ExtraFieldValue extends Model
                     );
 
                     self::save($newParams);
+            }
+        }
+
+        // Set user.profile_completed = 1
+        if ($this->type === 'user') {
+            if (api_get_setting('show_terms_if_profile_completed') === 'true') {
+                $justTermResults = [];
+                foreach ($resultsExist as $term => $value) {
+                    if (strpos($term, 'terms_') !== false) {
+                        $justTermResults[$term] = $value;
+                    }
+                }
+
+                if (!in_array(false, $justTermResults)) {
+                    $userId = $params['item_id'];
+                    $table = Database::get_main_table(TABLE_MAIN_USER);
+                    $sql = "UPDATE $table SET profile_completed = 1 WHERE user_id = $userId";
+                    Database::query($sql);
+                }
+                Session::write('profile_completed_result', $justTermResults);
             }
         }
     }

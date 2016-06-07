@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -70,12 +71,23 @@ class LegacyLoginListener implements EventSubscriberInterface
                                 $user->setSuperAdmin(true);
                             }
 
+                            $locale = 'fr';
+
+                            $userLanguage = $user->getLanguage();
+
+                            if (empty($userLanguage)) {
+                                /** @var SettingsCurrent $languageFromDb */
+                                $languageFromDb = $em->getRepository('ChamiloCoreBundle:SettingsCurrent')->findOneBy(
+                                    ['variable' => 'platformLanguage']
+                                );
+                                $userLanguage = $languageFromDb->getSelectedValue();
+                            }
+
                             /** @var Language $language */
                             $language = $em->getRepository('ChamiloCoreBundle:Language')->findOneBy(
-                                ['englishName' => $user->getLanguage()]
+                                ['englishName' => $userLanguage]
                             );
 
-                            $locale = '';
                             if ($language) {
                                 $locale = $language->getIsocode();
                             }

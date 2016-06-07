@@ -107,10 +107,10 @@ function clear_session_list(div_session) {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-down') . ' '. get_lang('AdvancedSearch').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'\');
     }
 }
 
@@ -729,26 +729,24 @@ if (!empty($action)) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
-$form->addElement('text', 'keyword');
+$form = new FormValidator('search_simple', 'get', null, null, null, 'inline');
+$form->addText('keyword', get_lang('Search'), false);
 $form->addButtonSearch(get_lang('Search'));
-$form->addElement(
-    'static',
-    'search_advanced_link',
-    null,
-    '<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();">
-        <span id="img_plus_and_minus">&nbsp;'.
-        Display::return_icon('div_show.gif', get_lang('Show'), array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'
+
+$searchAdvanced = '<a id="advanced_params" href="javascript://" class = "btn btn-default advanced_options" onclick="display_advanced_search_form();">
+        <span id="img_plus_and_minus">&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'
         </span>
-    </a>'
-);
+    </a>'; 
 $actionsLeft = '';
+$actionsCenter = '';
 $actionsRight  = '';
 if (api_is_platform_admin()) {
-	$actionsRight .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+	$actionsRight .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
          Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>';
 }
+
 $actionsLeft .= $form->return_form();
+$actionsCenter .= $searchAdvanced;
 
 if (isset ($_GET['keyword'])) {
 	$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
@@ -912,7 +910,7 @@ if ($table->get_total_number_of_items() == 0) {
         }
     }
 }
-$toolbarActions = Display::toolbarAction('toolbarUser', array(0 => $actionsLeft, 1 => $actionsRight));
+$toolbarActions = Display::toolbarAction('toolbarUser', array(0 => $actionsLeft, 1 => $actionsCenter, 2 => $actionsRight), 3);
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);

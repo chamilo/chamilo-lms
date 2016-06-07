@@ -1351,11 +1351,13 @@ function _api_format_user($user, $add_password = false)
     // Getting user avatar.
     $originalFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL, $result);
     $smallFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL, $result);
+    $mediumFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_MEDIUM, $result);
 
     $result['avatar'] = $originalFile;
     $avatarString = explode('?', $originalFile);
     $result['avatar_no_query'] = reset($avatarString);
     $result['avatar_small'] = $smallFile;
+    $result['avatar_medium'] = $mediumFile;
 
     if (isset($user['user_is_online'])) {
         $result['user_is_online'] = $user['user_is_online'] == true ? 1 : 0;

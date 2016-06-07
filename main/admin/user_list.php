@@ -739,15 +739,13 @@ $form->addElement(
         </span>
     </a>'
 );
-
-$actions  = '';
+$actionsLeft = '';
+$actionsRight  = '';
 if (api_is_platform_admin()) {
-	$actions .= '<div style="float:right;">'.
-		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
-         Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
-		 '</div>';
+	$actionsRight .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+         Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>';
 }
-$actions .= $form->return_form();
+$actionsLeft .= $form->return_form();
 
 if (isset ($_GET['keyword'])) {
 	$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
@@ -756,7 +754,7 @@ if (isset ($_GET['keyword'])) {
 	$parameters['keyword_lastname']	 	= Security::remove_XSS($_GET['keyword_lastname']);
 	$parameters['keyword_username']	 	= Security::remove_XSS($_GET['keyword_username']);
 	$parameters['keyword_email'] 	 	= Security::remove_XSS($_GET['keyword_email']);
-	$parameters['keyword_officialcode'] = Security::remove_XSS($_GET['keyword_officialcode']);
+	$parameters['keyword_officialcode']     = Security::remove_XSS($_GET['keyword_officialcode']);
 	$parameters['keyword_status'] 		= Security::remove_XSS($_GET['keyword_status']);
 	$parameters['keyword_active'] 		= Security::remove_XSS($_GET['keyword_active']);
 	$parameters['keyword_inactive'] 	= Security::remove_XSS($_GET['keyword_inactive']);
@@ -911,9 +909,10 @@ if ($table->get_total_number_of_items() == 0) {
         }
     }
 }
+$toolbarActions = Display::toolbarAction('toolbarUser', array(0 => $actionsLeft, 1 => $actionsRight));
 
 $tpl = new Template($tool_name);
-$tpl->assign('actions', $actions);
+$tpl->assign('actions', $toolbarActions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $form.$table_result.$extra_search_options);
 $tpl->display_one_col_template();

@@ -1,6 +1,6 @@
 {#  Actions  #}
 {% if actions != '' %}
-    <div class="actions">
+    <div class="actions-line">
         {{ actions }}
     </div>
 {% endif %}

@@ -1,9 +1,10 @@
-{% extends '@ChamiloCore/layout_one_col.html.twig' %}
+{% extends "@ChamiloTheme/Layout/base-layout.html.twig" %}
 
-{% block content %}
+{% block chamilo_content %}
 
 <section id="main_content">
-    <div class="page-header"><h2>{{ 'Contact' | trans  }}</h2>
+    <div class="page-header">
+        <h2>{{ 'Contact' | trans  }}</h2>
     </div>
     {{ form_start(form) }}
     {{ form_widget(form, {'attr': {'class': ''}}) }}

@@ -217,8 +217,8 @@ class Resource
         $class = get_class($resource);
         switch ($class) {
             case 'Event':
-                /** @var $resource \CalendarEvent */
-                $newResource = new \CalendarEvent(
+                /** @var $resource CalendarEvent */
+                $newResource = new CalendarEvent(
                     $resource->source_id,
                     $resource->title,
                     $resource->content,

@@ -36,7 +36,10 @@ if (function_exists('ini_set')) {
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $nameTools = get_lang('CopyCourse');
-$interbreadcrumb[] = array('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+    'name' => get_lang('PlatformAdmin')
+);
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);

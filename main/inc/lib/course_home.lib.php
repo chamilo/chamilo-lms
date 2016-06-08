@@ -1053,10 +1053,16 @@ class CourseHome
             'external_na.gif'
         );
 
+        $toolName = Security::remove_XSS(stripslashes($tool['name']));
+
         if (in_array($tool['image'], $already_translated_icons)) {
-            $toolName = Security::remove_XSS(stripslashes($tool['name']));
-        } else {
-            $toolName = get_lang('Tool'.api_underscore_to_camel_case($tool['name']));
+            return $toolName;
+        }
+
+        $toolName = api_underscore_to_camel_case($toolName);
+
+        if (isset($GLOBALS['Tool' . $toolName])) {
+            return get_lang('Tool' . $toolName);
         }
 
         return $toolName;

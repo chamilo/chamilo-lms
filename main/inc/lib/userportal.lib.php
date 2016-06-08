@@ -923,13 +923,13 @@ class IndexManager
 
         if (api_is_drh()) {
             $diagnosis = Display::url(get_lang('DiagnosisManagement'), api_get_path(WEB_PATH).'load_search.php').'<br />';
-            $diagnosis .= Display::url(get_lang('Diagnosis'), api_get_path(WEB_PATH).'search.php');
+            $diagnosis .= Display::url(get_lang('Diagnostic'), api_get_path(WEB_PATH).'search.php');
         } else {
-            $diagnosis = Display::url(get_lang('Diagnosis'), api_get_path(WEB_PATH).'search.php');
+            $diagnosis = Display::url(get_lang('Diagnostic'), api_get_path(WEB_PATH).'search.php');
         }
 
         $html .= self::show_right_block(
-            get_lang('Diagnosis'),
+            get_lang('Diagnostic'),
             $diagnosis,
             'profile_block',
             null,

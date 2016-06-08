@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
  * Class CourseManager
@@ -141,9 +143,6 @@ class CourseManager
 
                     if ($useTemplate) {
                         // Include the necessary libraries to generate a course copy
-                        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseBuilder.class.php';
-                        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseRestorer.class.php';
-                        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseSelectForm.class.php';
                         // Call the course copy object
                         $originCourse['official_code'] = $originCourse['code'];
                         $cb = new CourseBuilder(null, $originCourse);
@@ -4150,10 +4149,6 @@ class CourseManager
         $destination_session_id,
         $params = array()
     ) {
-        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseBuilder.class.php';
-        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseRestorer.class.php';
-        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseSelectForm.class.php';
-
         $course_info = api_get_course_info($source_course_code);
 
         if (!empty($course_info)) {

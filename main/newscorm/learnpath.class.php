@@ -3,6 +3,8 @@
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
  * Class learnpath
@@ -10237,10 +10239,6 @@ EOD;
     public function copy()
     {
         $main_path = api_get_path(SYS_CODE_PATH);
-        require_once $main_path.'coursecopy/classes/CourseBuilder.class.php';
-        require_once $main_path.'coursecopy/classes/CourseArchiver.class.php';
-        require_once $main_path.'coursecopy/classes/CourseRestorer.class.php';
-        require_once $main_path.'coursecopy/classes/CourseSelectForm.class.php';
 
         //Course builder
         $cb = new CourseBuilder();

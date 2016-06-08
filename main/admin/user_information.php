@@ -110,21 +110,10 @@ if ($studentBossList) {
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'send_legal':
-            $subject = get_lang('SendLegalSubject');
-            $content = sprintf(
-                get_lang('SendLegalDescriptionToUrlX'),
-                api_get_path(WEB_PATH)
-            );
-            MessageManager::send_message_simple($userId, $subject, $content);
-            Display::addFlash(Display::return_message(get_lang('Sent')));
+            LegalManager::sendLegal($userId);
             break;
         case 'delete_legal':
-            $extraFieldValue = new ExtraFieldValue('user');
-            $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
-            $result = $extraFieldValue->delete($value['id']);
-            if ($result) {
-                Display::addFlash(Display::return_message(get_lang('Deleted')));
-            }
+            LegalManager::deleteLegal($userId);
             break;
         case 'unsubscribe':
             $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);

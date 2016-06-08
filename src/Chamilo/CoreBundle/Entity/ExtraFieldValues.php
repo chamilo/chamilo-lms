@@ -79,7 +79,7 @@ class ExtraFieldValues extends BaseAttributeValue
     }
 
     /**
-     * @return mixed
+     * @return ExtraField
      */
     public function getField()
     {

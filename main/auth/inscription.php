@@ -1,14 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+
 /**
  *  This script displays a form for registering new users.
  *  @package    chamilo.auth
  */
 
-use ChamiloSession as Session;
-
-//quick hack to adapt the registration form result to the selected registration language
+// quick hack to adapt the registration form result to the selected registration language
 if (!empty($_POST['language'])) {
     $_GET['language'] = $_POST['language'];
 }
@@ -525,15 +526,30 @@ if (!CustomPages::enabled()) {
     }
 }
 
+$blockButton = false;
+
 // Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
-
     if (!api_is_platform_admin()) {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
-            $userInfo = api_get_user_info();
+            $userInfo = api_get_user_info(api_get_user_id(), false, false, true);
             if ($userInfo) {
                 if ((int)$userInfo['profile_completed'] !== 1) {
                     api_not_allowed(true);
+                }
+                $termActivated = false;
+                $values = $userInfo['extra'];
+                foreach ($values as $value) {
+                    /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
+                    $value = $value['value'];
+                    if ($value->getField()->getVariable() === 'termactivated') {
+                        $termValue = $value->getValue();
+                        $termActivated = !empty($termValue) && $termValue == 1;
+                    }
+                }
+                if ($termActivated === false) {
+                    $blockButton = true;
+                    Display::addFlash(Display::return_message(get_lang('TermActivatedIsNeededDescription'), 'warning'));
                 }
             }
         }
@@ -574,7 +590,11 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$form->addButtonCreate(get_lang('RegisterUser'));
+if ($blockButton) {
+    $form->addButtonCreate(get_lang('RegisterUser'), 'submit', false, ['disabled' => 'disabled']);
+} else {
+    $form->addButtonCreate(get_lang('RegisterUser'));
+}
 
 $course_code_redirect = Session::read('course_redirect');
 

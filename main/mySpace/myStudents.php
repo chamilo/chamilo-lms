@@ -170,21 +170,10 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 
 switch ($_GET['action']) {
     case 'send_legal':
-        $subject = get_lang('SendLegalSubject');
-        $content = sprintf(
-            get_lang('SendLegalDescriptionToUrlX'),
-            api_get_path(WEB_PATH)
-        );
-        MessageManager::send_message_simple($student_id, $subject, $content);
-        Display::addFlash(Display::return_message(get_lang('Sent')));
+        LegalManager::sendLegal($student_id);
         break;
     case 'delete_legal':
-        $extraFieldValue = new ExtraFieldValue('user');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($student_id, 'legal_accept');
-        $result = $extraFieldValue->delete($value['id']);
-        if ($result) {
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
-        }
+        LegalManager::deleteLegal($student_id);
         break;
     case 'reset_lp':
         $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : '';

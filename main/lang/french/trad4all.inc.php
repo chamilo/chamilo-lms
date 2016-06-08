@@ -7659,4 +7659,5 @@ $ForumEndDate = "Date de fermeture";
 $ForumStartDateComment = "Le forum sera publié à cette date";
 $ForumEndDateComment = "Après cette date, le forum sera automatiquement fermé";
 $ModeratedForum = "Forum modéré";
+$TermActivatedIsNeededDescription = "Le contrat d'apprentissage n'a pas encore été validé par votre tuteur.";
 ?>

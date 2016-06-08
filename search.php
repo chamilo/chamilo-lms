@@ -291,7 +291,12 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addHeader(get_lang('Mon niveau de langue'));
 
 $fieldsToShow = [
-    'competenceniveau'
+    //'competenceniveau'
+    'ecouter',
+    'lire',
+    'participer_a_une_conversation',
+    's_exprimer_oralement_en_continu',
+    'ecrire'
 ];
 
 $extra = $extraFieldSession->addElements(
@@ -371,8 +376,13 @@ if ($userForm->validate()) {
         'extra_filiere',
         'extra_domaine',
         'extra_temps-de-travail',
-        'extra_competenceniveau',
-        'extra_theme'
+        //'extra_competenceniveau',
+        'extra_theme',
+        'extra_ecouter',
+        'extra_lire',
+        'extra_participer_a_une_conversation',
+        'extra_s_exprimer_oralement_en_continu',
+        'extra_ecrire'
     ];
 
     foreach ($userData as $key => $value) {

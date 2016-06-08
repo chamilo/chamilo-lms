@@ -7716,4 +7716,8 @@ $DeleteLegal = "Delete legal agreement";
 $LegalAccepted = "Legal accepted";
 $LoadTermConditionsSectionTitle = "Load term conditions section";
 $LoadTermConditionsSectionDescription = "The legal agreement will appear during the login or when enter to a course.";
+$UserXSignedTheAgreement = "User %s signed the agreement.";
+$UserXSignedTheAgreementTheY = "User %s signed the agreement the %s.";
+$EnableProfileUsersAddressGeolocalizationTitle = "Enable user's geolocalization";
+$EnableProfileUsersAddressGeolocalizationComment = "Enable user's address field and show it on a map using geolocalization features";
 ?>

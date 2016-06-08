@@ -32,13 +32,46 @@ $elements = $form->getElements();
 $variables = ['theme', 'domaine', 'competenceniveau', 'filiere'];
 foreach ($elements as $element) {
     $element->setAttribute('extra_label_class', 'red_underline');
-}*/
+}
 
 $htmlHeadXtra[] ='<script>
 $(document).ready(function(){
 	'.$extra['jquery_ready_content'].'
 });
+</script>';*/
+
+
+$extraFieldValue = new ExtraFieldValue('user');
+$wantStage = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'filiere_want_stage');
+$hide = true;
+if ($wantStage !== false) {
+    $hide = $wantStage['value'] === 'yes';
+}
+
+$defaultValueStatus = 'extraFiliere.hide()';
+if ($hide === false) {
+    $defaultValueStatus = '';
+}
+
+$htmlHeadXtra[] ='<script>
+$(document).ready(function() {
+
+    var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent().parent().parent();
+    
+    '.$defaultValueStatus.'
+    
+    $("input[name=\'extra_filiere_want_stage[extra_filiere_want_stage]\']").change(function() {
+        if ($(this).val() == "no") {
+            extraFiliere.show();
+        } else {
+            extraFiliere.hide();
+        }
+    });
+    //
+
+});
 </script>';
+
 
 $form->addButtonSave(get_lang('Save'), 'save');
 
@@ -147,8 +180,9 @@ $jqueryExtra = '';
 $userForm->addHeader(get_lang('Filière'));
 $fieldsToShow = [
     'statusocial',
-    'filiere',
-    'filiereprecision'
+    'filiere_user',
+    'filiereprecision',
+    'filiere_want_stage',
 ];
 
 $extra = $extraField->addElements(
@@ -160,6 +194,23 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     $fieldsToShow
 );
+
+$jqueryExtra .= $extra['jquery_ready_content'];
+
+$fieldsToShow = [
+    'filiere'
+];
+
+$extra = $extraFieldSession->addElements(
+    $userForm,
+    api_get_user_id(),
+    [],
+    true,
+    true,
+    $fieldsToShow,
+    $fieldsToShow
+);
+
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
@@ -337,6 +388,19 @@ if ($userForm->validate()) {
         }
     }
 
+    if (isset($userData['extra_filiere_want_stage']) &&
+        isset($userData['extra_filiere_want_stage']['extra_filiere_want_stage'])
+    ) {
+        $wantStage = $userData['extra_filiere_want_stage']['extra_filiere_want_stage'];
+
+        if ($wantStage === 'yes') {
+            if (isset($userData['extra_filiere_user'])) {
+                $userData['extra_filiere'] = [];
+                $userData['extra_filiere']['extra_filiere'] = $userData['extra_filiere_user']['extra_filiere_user'];
+            }
+        }
+    }
+
     // Parse params.
     foreach ($userData as $key => $value) {
         if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
@@ -391,7 +455,7 @@ if ($userForm->validate()) {
 }
 
 $tpl = new Template(get_lang('Diagnosis'));
-$tpl->assign('form', $view.$userFormToString);
+$tpl->assign('form', $userFormToString);
 $content = $tpl->fetch('default/user_portal/search_extra_field.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

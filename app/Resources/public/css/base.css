@@ -272,6 +272,16 @@ a.thumbnail:hover{
     color: #fff;
     padding-left: 9px;
 }
+.navbar-nav .open .dropdown-menu .user-header{
+    width: 260px;
+}
+.navbar-nav .open .dropdown-menu .user-header .text-center .name{
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+.navbar-nav .open .dropdown-menu .user-body a{
+    color: #666;
+}
 /* notifications help and bug */
 #touch-button.btn-touch{
   background-color: #C2C2C2;
@@ -5887,6 +5897,15 @@ a.sessionView {
   .question-result .page-header h2{
     font-size: 20px;
   }
+  .navbar-nav .open .dropdown-menu .user-header{
+    width: 100%;
+  }
+  .navbar-nav .open .dropdown-menu{
+    background-color: #FFF;
+  }
+  .navbar-nav{
+    margin: -2.5px -15px;
+  }
 }
 @media (min-width:320px) and (max-width: 479px){
     footer {
@@ -5906,6 +5925,15 @@ a.sessionView {
     .grid-courses .items{
         margin-left: 5%;
         margin-right: 5%;
+    }
+    .navbar-nav .open .dropdown-menu .user-header{
+        width: 100%;
+    }
+    .navbar-nav .open .dropdown-menu{
+        background-color: #FFF;
+    }
+    .navbar-nav{
+        margin: -2.5px -15px;
     }
 }
 

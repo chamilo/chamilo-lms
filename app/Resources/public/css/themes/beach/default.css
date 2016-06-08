@@ -111,29 +111,6 @@ a:focus {
   background: #00677C;
   color: #ffffff;
 }
-.navbar-nav > li > .dropdown-menu{
-  min-width: 100%;
-  margin-top: 2px;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-}
-.navbar-default .navbar-nav > .open > .dropdown-menu{
-  padding: 3px 4px;
-  background-color: #00677C;
-}
-.navbar-default .navbar-nav > .open > .dropdown-menu > li > a{
-  padding: 6px 9px;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  color: #ffffff !important;
-}
-.navbar-default .navbar-nav > .open > .dropdown-menu > li > a:hover,
-.navbar-default .navbar-nav > .open > .dropdown-menu > li > a:focus{
-
-  background-color:#00829C;
-}
 .nav > li > a:hover, .nav > li > a:focus{
    background-color: transparent;
 }

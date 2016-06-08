@@ -921,6 +921,22 @@ class IndexManager
             'profileCollapse'
         );
 
+        if (api_is_drh()) {
+            $diagnosis = Display::url(get_lang('Search'), api_get_path(WEB_PATH).'load_search.php').'<br />';
+            $diagnosis .= Display::url(get_lang('Preferences'), api_get_path(WEB_PATH).'search.php');
+        } else {
+            $diagnosis = Display::url(get_lang('Preferences'), api_get_path(WEB_PATH).'search.php');
+        }
+
+        $html .= self::show_right_block(
+            get_lang('Diagnosis'),
+            $diagnosis,
+            'profile_block',
+            null,
+            'profile',
+            'profileCollapse'
+        );
+
         return $html;
     }
 

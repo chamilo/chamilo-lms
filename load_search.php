@@ -11,12 +11,11 @@ $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/d
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
 
 api_block_anonymous_users();
+$allowToSee = api_is_drh() || api_is_student_boss() || api_is_platform_admin();
 
-//if (!api_is_platform_admin()) {
-    if (!api_is_drh()) {
-        api_not_allowed(true);
-    }
-//}
+if ($allowToSee === false) {
+    api_not_allowed(true);
+}
 $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 

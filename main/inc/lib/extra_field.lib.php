@@ -1763,25 +1763,14 @@ EOF;
 
         $form->addElement('header', $header);
 
-        $platformLanguage = api_get_setting('platformLanguage');
-        $languageId = api_get_language_id($platformLanguage);
-        $languageInfo = api_get_language_info($languageId);
-
-        if ($action === 'edit' && $languageInfo['parent_id']) {
-            $translateUrl = api_get_path(WEB_CODE_PATH) . 'admin/sub_language.php?' . http_build_query([
-                'id' => $languageInfo['parent_id'],
-                'action' => 'registersublanguage',
-                'sub_language_id' => $languageInfo['id'],
-                'extra_field' => $id
-            ]);
-            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
-            $form->addText(
-                'display_text',
-                [get_lang('Name'), $translateButton]
-            );
-        } else {
-            $form->addText('display_text', get_lang('Name'));
-        }
+        $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
+            'extra_field' => $id
+        ]);
+        $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+        $form->addText(
+            'display_text',
+            [get_lang('Name'), $translateButton]
+        );
 
         // Field type
         $types = self::get_field_types();

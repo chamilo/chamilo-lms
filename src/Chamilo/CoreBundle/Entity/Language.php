@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Language
  *
  * @ORM\Table(name="language", indexes={@ORM\Index(name="idx_language_dokeos_folder", columns={"dokeos_folder"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\LanguageRepository")
  */
 class Language
 {

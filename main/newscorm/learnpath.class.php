@@ -2777,7 +2777,8 @@ class learnpath
                 }
             }
             $subchildren = $item_temp->childNodes;
-            if ($subchildren->length > 0) {
+
+            if ($subchildren && $subchildren->length > 0) {
                 $val = $this->get_scorm_xml_node($subchildren, $id);
                 if (is_object($val)) {
 
@@ -9322,7 +9323,7 @@ class learnpath
                 // Attach this item to the organization element or hits parent if there is one.
                 if (!empty($item->parent) && $item->parent != 0) {
                     $children = $organization->childNodes;
-                    $possible_parent = &$this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
+                    $possible_parent = $this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
                     if (is_object($possible_parent)) {
                         $possible_parent->appendChild($my_item);
                     } else {
@@ -9372,6 +9373,7 @@ class learnpath
 
                 // Dependency to other files - not yet supported.
                 $i = 1;
+                if ($inc_docs)
                 foreach ($inc_docs as $doc_info) {
                     if (count($doc_info) < 1 || empty($doc_info[0])) { continue; }
                     $my_dep = $xmldoc->createElement('resource');

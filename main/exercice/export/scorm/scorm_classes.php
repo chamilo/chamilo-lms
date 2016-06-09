@@ -1,10 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @author Claro Team <cvs@claroline.net>
- * @author Yannick Warnier <yannick.warnier@beeznest.com>
- * @package chamilo.exercise.scorm
- */
 
 /**
  * The ScormQuestion class is a gateway to getting the answers exported
@@ -14,11 +9,15 @@
  * part (the process).
  * The two bits are separate to allow for a one-big-javascript and a one-big-html
  * files to be built. Each export function thus returns an array of HTML+JS
+ *
+ *
+ * @author Claro Team <cvs@claroline.net>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ *
  * @package chamilo.exercise.scorm
  */
 class ScormQuestion extends Question
 {
-
     /**
      * Returns the HTML + JS flow corresponding to one question
      *
@@ -33,9 +32,9 @@ class ScormQuestion extends Question
     {
         $question = new ScormQuestion();
         $qst = $question->read($questionId);
-        if( !$qst ) {
-            return '';
-        }
+		if (!$qst) {
+			return '';
+		}
         $question->id = $qst->id;
         $question->js_id = $js_id;
         $question->type = $qst->type;
@@ -98,8 +97,12 @@ class ScormQuestion extends Question
 				$this->answer = new ScormAnswerHotspot($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
-			default :
-				$this->answer = null;
+            case HOT_SPOT_DELINEATION:
+                $this->answer = new ScormAnswerHotspot($this->id);
+                $this->answer->questionJSId = $this->js_id;
+                break;
+			default:
+				$this->answer = new stdClass();
                 $this->answer->questionJSId = $this->js_id;
 				break;
 		}
@@ -110,11 +113,10 @@ class ScormQuestion extends Question
 	function export()
 	{
 		$html = $this->getQuestionHTML();
-		$js   = $this->getQuestionJS();
+		$js = $this->getQuestionJS();
 
-		if( is_object($this->answer) )
-		{
-			list($js2,$html2) = $this->answer->export();
+		if (is_object($this->answer)) {
+			list($js2, $html2) = $this->answer->export();
 			$js .= $js2;
 			$html .= $html2;
 		}
@@ -279,6 +281,7 @@ class ScormAnswerMultipleChoice extends Answer
 			$js .= $jstmpw;
         }
 		$html .= '</table></td></tr>' . "\n";
+
         return array($js,$html);
     }
 }
@@ -325,13 +328,10 @@ class ScormAnswerTrueFalse extends Answer
 		$html .= '</table></td></tr>' . "\n";
 		$js .= 'questions_answers['.$this->questionJSId.'] = new Array(\'true\',\'false\');'."\n";
     	$js .= 'questions_types['.$this->questionJSId.'] = \'tf\';'."\n";
-		if($this->response == 'TRUE')
-		{
-	    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array(\'true\');'."\n";
-		}
-		else
-		{
-	    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array(\'false\');'."\n";
+		if ($this->response == 'TRUE') {
+			$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array(\'true\');'."\n";
+		} else {
+			$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array(\'false\');'."\n";
 		}
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
@@ -363,7 +363,7 @@ class ScormAnswerFillInBlanks extends Answer
 		$blankList = array();
 		// build replacement
 		$replacementList = array();
-		foreach( $this->answer as $i => $answer) {
+		foreach ($this->answer as $i => $answer) {
 			$blankList[] = '['.$answer.']';
 		}
 		$answerCount = count($blankList);
@@ -381,7 +381,7 @@ class ScormAnswerFillInBlanks extends Answer
 		$startlocations=api_strpos($answer,'[');
 		$endlocations=api_strpos($answer,']');
 		while($startlocations !== false && $endlocations !== false) {
-			$texstring=api_substr($answer,$startlocations,($endlocations-$startlocations)+1);
+			$texstring = api_substr($answer,$startlocations,($endlocations-$startlocations)+1);
 			$answer = api_substr_replace($answer,'<input type="text" name="question_'.$this->questionJSId.'_fib_'.$i.'" id="question_'.$this->questionJSId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
 			$jstmp .= $i.',';
 			$jstmpc .= "'".api_htmlentities(api_substr($texstring,1,-1),ENT_QUOTES,$charset)."',";
@@ -393,8 +393,8 @@ class ScormAnswerFillInBlanks extends Answer
 				}
 	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$weight_db.";\n";
 			$i++;
-			$startlocations=api_strpos($answer,'[');
-			$endlocations=api_strpos($answer,']');
+            $startlocations = api_strpos($answer, '[');
+            $endlocations = api_strpos($answer, ']');
 		}
 
 		$html .= 	'<tr>' . "\n"
@@ -407,6 +407,7 @@ class ScormAnswerFillInBlanks extends Answer
     	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.api_substr($jstmpc,0,-1).');'."\n";
     	$js .= 'questions_types['.$this->questionJSId.'] = \'fib\';'."\n";
     	$js .= $jstmpw;
+
         return array($js,$html);
     }
 }
@@ -429,16 +430,13 @@ class ScormAnswerMatching extends Answer
 		// - easiest display
 		// - easiest randomisation if needed one day
 		// (here I use array_values to change array keys from $code1 $code2 ... to 0 1 ...)
-		if (is_array($this->rightList)) {
-			$displayedRightList = array_values($this->rightList);
-		}
-		// get max length of displayed array
-		$arrayLength = max( count($this->leftList), count($this->rightList) );
 
-		$nbrAnswers=$this->selectNbrAnswers();
+		// get max length of displayed array
+
+		$nbrAnswers = $this->selectNbrAnswers();
 		$cpt1='A';
 		$cpt2=1;
-		$Select=array();
+		$Select = array();
 		$qId = $this->questionJSId;
 		$s = '';
 		$jstmp = '';
@@ -446,7 +444,7 @@ class ScormAnswerMatching extends Answer
         $jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
         $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
 
-		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$identifier = 'question_'.$qId.'_matching_';
 			$answer=$this->selectAnswer($answerId);
 			$answerCorrect=$this->isCorrect($answerId);
@@ -487,12 +485,10 @@ class ScormAnswerMatching extends Answer
 		    	$jstmpw .= 'questions_answers_ponderation['.$qId.']['.$cpt2.'] = '.$weight.";\n";
 				$cpt2++;
 
-				// if the left side of the "matching" has been completely shown
-				if($answerId == $nbrAnswers)
-				{
-					// if there remain answers to be shown on the right side
-					while(isset($Select[$cpt2]))
-					{
+                // if the left side of the "matching" has been completely shown
+                if ($answerId == $nbrAnswers) {
+                    // if there remain answers to be shown on the right side
+                    while (isset($Select[$cpt2])) {
 						//$s.='<tr>'."\n";
 						//$s.='<td colspan="2">'."\n";
 						//$s.='<table border="0" cellpadding="0" cellspacing="0" width="100%">'."\n";
@@ -550,6 +546,7 @@ class ScormAnswerFree extends Answer
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
     	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'.";\n";
     	$js .= $jstmpw;
+
         return array($js,$html);
     }
 }
@@ -578,9 +575,7 @@ class ScormAnswerHotspot extends Answer
 			$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
 	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'.";\n";
 	    	$header .= $jstmpw;
-		}
-		else
-		{
+        } else {
 			$header = '';
 			$header .= 'questions_answers['.$this->questionJSId.'] = new Array();'."\n";
     		$header .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();'."\n";
@@ -590,6 +585,7 @@ class ScormAnswerHotspot extends Answer
 	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'."\n";
 	    	$header .= $jstmpw;
 		}
+
 		return $header;
 	}
 	/**
@@ -615,30 +611,8 @@ class ScormAnswerHotspot extends Answer
 			$answer_list .= '<li>'.$this->selectAnswer($answerId).'</li>';
 		}
 		$answer_list .= '</ol></div>';
-
-		/*
-		if(!$onlyAnswers)
-		{
-			$s="<tr>
-			  <td valign='top' colspan='2'>&nbsp;";
-			$s.=$questionName;
-			$s.="</td>
-			</tr>
-			<tr>
-			  <td valign='top' colspan='2'>
-				<i>";
-			$s.=$questionDescription;
-			$s.="</i>
-			  </td>
-			</tr>";
-		}
-		*/
-
-		//$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 		$canClick = true;
-		//$tes = isset($_GET['modifyAnswers']) ? '0' : '1';
-		//echo $tes;
-		$relPath = api_get_path(REL_PATH);
+    	$relPath = api_get_path(REL_PATH);
         $html .= <<<HTML
             <tr>
                 <td>
@@ -690,7 +664,7 @@ class ScormAssessmentItem
      *
      * @param ScormQuestion $question The Question object we want to export.
      */
-    public function ScormAssessmentItem($question, $standalone = false)
+    public function __construct($question, $standalone = false)
     {
         $this->question = $question;
         $this->question->setAnswer();
@@ -721,22 +695,30 @@ class ScormAssessmentItem
      *
      */
     function end_page() {
-        if($this->standalone){return '</html>';}
+        if ($this->standalone) {
+            return '</html>';
+        }
+
         return '';
     }
 
     /**
      * Start document header
      */
-    function start_header() {
-        if($this->standalone){return '<head>'. "\n";}
+    function start_header()
+    {
+        if ($this->standalone) {
+            return '<head>'."\n";
+        }
+
         return '';
     }
 
     /**
      * Print CSS inclusion
      */
-    function css() {
+    function css()
+    {
         $css = '';
         if ($this->standalone) {
             $css = '<style type="text/css" media="screen, projection">'."\n";
@@ -756,7 +738,10 @@ class ScormAssessmentItem
      */
     function end_header()
     {
-        if($this->standalone){return '</head>'. "\n";}
+        if ($this->standalone) {
+            return '</head>'."\n";
+        }
+
         return '';
     }
     /**
@@ -840,7 +825,10 @@ class ScormAssessmentItem
      */
     function start_body()
     {
-        if($this->standalone){return '<body>'. "\n".'<form id="dokeos_scorm_form" method="post" action="">'."\n";}
+        if ($this->standalone) {
+            return '<body>'."\n".'<form id="dokeos_scorm_form" method="post" action="">'."\n";
+        }
+
         return '';
     }
 
@@ -850,7 +838,10 @@ class ScormAssessmentItem
      */
     function end_body()
     {
-        if($this->standalone){return '<br /><input type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form>'."\n".'</body>'. "\n";}
+        if ($this->standalone) {
+            return '<br /><input type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form>'."\n".'</body>'."\n";
+        }
+
         return '';
     }
 
@@ -867,8 +858,7 @@ class ScormAssessmentItem
         $js = $html = '';
         list($js,$html) = $this->question->export();
         //list($js,$html) = $this->question->answer->export();
-        if($this->standalone)
-        {
+        if ($this->standalone) {
             $res = $this->start_page()
                 . $this->start_header()
                 . $this->css()
@@ -886,9 +876,7 @@ class ScormAssessmentItem
                 . $this->end_body()
                 . $this->end_page();
             return $res;
-        }
-        else
-        {
+        } else {
             return array($js,$html);
         }
     }
@@ -918,13 +906,15 @@ class ScormSection
      * @param boolean $standalone Wether it should include XML tag and DTD line.
      * @return string XML as a string, or an empty string if there's no exercise with given ID.
      */
-    public static function export_exercise_to_scorm($exerciseId, $standalone=true) {
+    public static function export_exercise_to_scorm($exerciseId, $standalone = true)
+    {
         $exercise = new Exercise();
-        if (! $exercise->read($exerciseId)) {
+        if (!$exercise->read($exerciseId)) {
             return '';
         }
         $ims = new ScormSection($exercise);
         $xml = $ims->export($standalone);
+
         return $xml;
     }
 
@@ -934,7 +924,8 @@ class ScormSection
      * @param Exercise $exe The Exercise instance to export
      * @author Amand Tihon <amand@alrj.org>
      */
-    function ScormSection($exe) {
+    function ScormSection($exe)
+    {
         $this->exercise = $exe;
     }
 
@@ -944,7 +935,8 @@ class ScormSection
      * This opens the <item> block, with correct attributes.
      *
      */
-    function start_page() {
+    function start_page()
+    {
         global $charset;
         $head = $foot = "";
         $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>' . "\n".'<html>'."\n";
@@ -955,21 +947,24 @@ class ScormSection
      * End the XML flow, closing the </item> tag.
      *
      */
-    function end_page() {
+    function end_page()
+    {
         return '</html>';
     }
 
     /**
      * Start document header
      */
-    function start_header() {
+    function start_header()
+    {
         return '<head>'. "\n";
     }
 
     /**
      * Print CSS inclusion
      */
-    function css() {
+    function css()
+    {
         $css = '<style type="text/css" media="screen, projection">'."\n";
         $css .= '/*<![CDATA[*/'."\n";
         $css .= '/*]]>*/'."\n";
@@ -978,13 +973,15 @@ class ScormSection
         $css .= '/*<![CDATA[*/'."\n";
         $css .= '/*]]>*/'."\n";
         $css .= '</style>'."\n";
+
         return $css;
     }
 
     /**
      * End document header
      */
-    function end_header() {
+    function end_header()
+    {
         return '</head>'. "\n";
     }
 
@@ -992,14 +989,16 @@ class ScormSection
      * Start the itemBody
      *
      */
-    function start_js() {
+    function start_js()
+    {
         return '<script type="text/javascript" language="javascript">'. "\n";
     }
 
     /**
      * Common JS functions
      */
-    function common_js() {
+    function common_js()
+    {
         $js = "\n";
         $js .= file_get_contents('../inc/lib/javascript/hotspot/js/hotspot.js');
         $js .= file_get_contents('../newscorm/js/api_wrapper.js');
@@ -1098,7 +1097,7 @@ class ScormSection
     {
         global $charset;
 
-        $head = "";
+        $head = '';
         if ($this->standalone) {
             $head = '<?xml version = "1.0" encoding = "' . $charset . '" standalone = "no"?>' . "\n"
                 . '<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">' . "\n";

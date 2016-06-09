@@ -9,6 +9,7 @@ use CourseManager;
 use stdClass;
 use TestCategory;
 use SurveyManager;
+use Question;
 
 /**
  * Class CourseRestorer

@@ -10,10 +10,6 @@
  * good way of avoiding password theft)
  * @package chamilo.auth.openid
  */
-/**
- * Initialisation
- */
-require_once api_get_path(CONFIGURATION_PATH) . 'auth.conf.php';
 
 require_once 'openid.lib.php';
 require_once 'xrds.lib.php';

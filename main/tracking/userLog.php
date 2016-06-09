@@ -28,15 +28,11 @@ $is_allowed = true;
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
-/* Header */
-
-/*
-$interbreadcrumb[]= array ("url"=>"../group/group.php", "name"=> get_lang('BredCrumpGroups'));
-$interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=$_gid", "name"=> get_lang('BredCrumpGroupSpace'));
-*/
-
-if(isset($uInfo)) {
-    $interbreadcrumb[]= array ('url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), "name"=> api_ucfirst(get_lang('Users')));
+if (isset($uInfo)) {
+    $interbreadcrumb[]= array(
+        'url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), 
+        "name"=> api_ucfirst(get_lang('Users'))
+    );
 }
 
 $nameTools = get_lang('ToolName');

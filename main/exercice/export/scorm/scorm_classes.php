@@ -98,10 +98,6 @@ class ScormQuestion extends Question
 				$this->answer = new ScormAnswerHotspot($this->id);
 				$this->answer->questionJSId = $this->js_id;
 				break;
-			case HOT_SPOT_DELINEATION:
-				$this->answer = new ScormAnswerHotspot($this->id);
-				$this->answer->questionJSId = $this->js_id;
-				break;
 			default:
 				$this->answer = new stdClass();
 				$this->answer->questionJSId = $this->js_id;
@@ -1143,8 +1139,3 @@ class ScormSection
 		return array($js,$html);
 	}
 }
-
-
-
-
-

@@ -265,6 +265,10 @@ function search_language_term(
 					continue;
 				}
 
+				if (is_array($variable_value)) {
+					continue;
+				}
+
 				$founded = false;
 				// searching the item in the parent tool
 				if (preg_match($term,$variable_value)!==0) {

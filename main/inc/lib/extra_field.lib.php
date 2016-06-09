@@ -394,7 +394,8 @@ class ExtraField extends Model
         $useTagAsSelect = false,
         $showOnlyThisFields = [],
         $orderFields = [],
-        $extraData = []
+        $extraData = [],
+        $specialUrlList = []
     ) {
         if (empty($form)) {
             return false;
@@ -405,7 +406,7 @@ class ExtraField extends Model
         
         if (empty($extraData)) {
             if (!empty($itemId)) {
-                $extraData = self::get_handler_extra_data($itemId);
+                $extraData = self::get_handler_extra_data($itemId);                
     
                 if ($form) {
                     $form->setDefaults($extraData);
@@ -428,7 +429,8 @@ class ExtraField extends Model
             $exclude,
             $useTagAsSelect,
             $showOnlyThisFields,
-            $orderFields
+            $orderFields,
+            $specialUrlList
         );
 
         return $extra;
@@ -735,11 +737,12 @@ class ExtraField extends Model
      * @param FormValidator $form
      * @param array $extraData
      * @param bool $admin_permissions
-     * @param int $user_id
+     * @param int  $user_id
      * @param array $extra
      * @param int $itemId
      * @param array $exclude variables of extra field to exclude
      * @param array
+     *
      * @return array
      */
     public function set_extra_fields_in_form(
@@ -751,7 +754,8 @@ class ExtraField extends Model
         $exclude = [],
         $useTagAsSelect = false,
         $showOnlyThisFields = [],
-        $orderFields = []
+        $orderFields = [],
+        $specialUrlList = []
     ) {
         $type = $this->type;
         $jquery_ready_content = '';
@@ -1265,12 +1269,14 @@ class ExtraField extends Model
                             $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
                         } else {
                             $em = Database::getManager();
-
                             $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
-                                ->findBy([
-                                    'fieldId' => $field_id,
-                                    'itemId' => $itemId
-                                ]);
+                                ->findBy(
+                                    [
+                                        'fieldId' => $field_id,
+                                        'itemId' => $itemId,
+                                    ]
+                                );
+                            
                             foreach ($fieldTags as $fieldTag) {
                                 $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
@@ -1282,6 +1288,17 @@ class ExtraField extends Model
                                     $tag->getTag(),
                                     ['selected' => 'selected', 'class' => 'selected']
                                 );
+                            }
+
+                            if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
+                                $data = $extraData['extra_'.$field_details['variable']];
+                                foreach ($data as $option) {
+                                    $tagsSelect->addOption(
+                                        $option,
+                                        $option,
+                                        ['selected' => 'selected', 'class' => 'selected']
+                                    );
+                                }
                             }
 
                             if ($useTagAsSelect) {
@@ -1312,10 +1329,15 @@ class ExtraField extends Model
 
                                     $tagsAdded[] = $tagText;
                                 }
-
                             }
 
                             $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
+                        }
+
+                        $url = $url."?a=search_tags&field_id=$field_id&type={$this->type}";
+
+                        if (isset($specialUrlList[$field_details['variable']])) {
+                            //$url = $specialUrlList[$field_details['variable']]."&field_id=$field_id&type={$this->type}";
                         }
 
                         if ($useTagAsSelect == false) {
@@ -1325,7 +1347,7 @@ class ExtraField extends Model
 
                             $jquery_ready_content .= <<<EOF
                         $("#extra_$variable").fcbkcomplete({
-                            json_url: "$url?a=search_tags&field_id=$field_id&type={$this->type}",
+                            json_url: "$url",
                             cache: false,
                             filter_case: true,
                             filter_hide: true,

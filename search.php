@@ -103,8 +103,6 @@ if ($form->validate()) {
     $user = $em->getRepository('ChamiloUserBundle:User')->find($userId);
 
     if (isset($params['save'])) {
-        // save
-
         MessageManager::send_message_simple(
             $userId,
             get_lang('DiagnosisFilledSubject'),
@@ -161,20 +159,6 @@ $extraField = new ExtraField('user');
 
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 $jqueryExtra = '';
-
-/*$fieldsToShow = [
-    'statusocial',
-    'filiereprecision',
-    'filiere',
-    'heures-disponibilite-par-semaine',
-    'datedebutstage',
-    'datefinstage',
-    'heures-disponibilite-par-semaine-stage',
-    'poursuiteapprentissagestage',
-    'objectif-apprentissage',
-    'methode-de-travaille',
-    'accompagnement'
-];*/
 
 $userForm->addHeader(get_lang('Filière'));
 $fieldsToShow = [
@@ -275,14 +259,20 @@ $fieldsToShow = [
     'theme'
 ];
 
+$specialUrlList = [
+    'theme' => api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_tags_from_diagnosis'
+];
+
 $extra = $extraFieldSession->addElements(
     $userForm,
     api_get_user_id(),
     [],
     true,
-    true,
+    false,
     $fieldsToShow,
-    $fieldsToShow
+    $fieldsToShow,
+    $defaults,
+    $specialUrlList
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -364,7 +354,7 @@ $userForm->setDefaults($defaults);
 $userFormToString = $userForm->returnForm();
 
 if ($userForm->validate()) {
-    // Saving to user profile
+    // Saving to user extra fields
     $extraFieldValue = new ExtraFieldValue('user');
     $userData = $userForm->getSubmitValues();
     $extraFieldValue->saveFieldValues($userData);
@@ -415,7 +405,7 @@ if ($userForm->validate()) {
         }
     }
 
-    // Parse params.
+    // save in ExtraFieldSavedSearch.
     foreach ($userData as $key => $value) {
         if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
             continue;
@@ -451,7 +441,6 @@ if ($userForm->validate()) {
                 ->setValue($value)
             ;
             $em->merge($saved);
-
         } else {
             $saved = new ExtraFieldSavedSearch();
             $saved

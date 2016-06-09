@@ -12,7 +12,7 @@ build:
             my.chamilodev.net: '127.0.0.1'
     dependencies:
         before:
-            - composer -v update
+            - php -d memory_limit=-1 composer.phar -v update
 filter:
     excluded_paths:
         - tests/*

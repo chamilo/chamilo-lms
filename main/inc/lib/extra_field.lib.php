@@ -806,11 +806,6 @@ class ExtraField extends Model
                     }
                 }
 
-                $dump = $field_details['variable'] === 'theme';
-                if ($dump) {
-                 //   var_dump($field_details);
-                }
-
                 switch ($field_details['field_type']) {
                     case ExtraField::FIELD_TYPE_TEXT:
                         $form->addElement(
@@ -1324,21 +1319,21 @@ class ExtraField extends Model
                         }
 
                         if ($useTagAsSelect == false) {
-                        $complete_text = get_lang('StartToType');
+                            $complete_text = get_lang('StartToType');
 
-                        //if cache is set to true the jquery will be called 1 time
+                            //if cache is set to true the jquery will be called 1 time
 
-                        $jquery_ready_content .= <<<EOF
-                    $("#extra_$variable").fcbkcomplete({
-                        json_url: "$url?a=search_tags&field_id=$field_id&type={$this->type}",
-                        cache: false,
-                        filter_case: true,
-                        filter_hide: true,
-                        complete_text:"$complete_text",
-                        firstselected: false,
-                        filter_selected: true,                        
-                        newel: true
-                    });
+                            $jquery_ready_content .= <<<EOF
+                        $("#extra_$variable").fcbkcomplete({
+                            json_url: "$url?a=search_tags&field_id=$field_id&type={$this->type}",
+                            cache: false,
+                            filter_case: true,
+                            filter_hide: true,
+                            complete_text:"$complete_text",
+                            firstselected: false,
+                            filter_selected: true,                        
+                            newel: true
+                        });
 EOF;
                         }
                         break;

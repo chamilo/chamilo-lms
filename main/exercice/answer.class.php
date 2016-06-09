@@ -12,8 +12,6 @@
 class Answer
 {
     public $questionId;
-
-    // these are arrays
     public $answer;
     public $correct;
     public $comment;
@@ -35,9 +33,9 @@ class Answer
     public $nbrAnswers;
     public $new_nbrAnswers;
     public $new_destination; // id of the next question if feedback option is set to Directfeedback
-    public $course; //Course information
+    public $course;
     public $iid;
-	public $standalone;
+    public $standalone;
 
     /**
      * constructor of the class

@@ -89,7 +89,7 @@ class SMTP {
     $this->error = null;
     $this->helo_rply = null;
 
-    $this->do_debug = 0;
+    $this->do_debug = false;
   }
 
   /////////////////////////////////////////////////

@@ -24,7 +24,7 @@ class ExtraFieldValue extends Model
         'created_at',
         'updated_at',
     );
-    /** @var string session_id, course_code, user_id, question id */
+    /** @var ExtraField */
     public $extraField;
 
     /**

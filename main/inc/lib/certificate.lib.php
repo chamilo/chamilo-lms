@@ -49,8 +49,11 @@ class Certificate extends Model
         unset($this->certificate_data);
 
         if (isset($certificate_id)) {
-            $this->certificate_data = $this->get($certificate_id);
-            $this->user_id = $this->certificate_data['user_id'];
+            $certificate = $this->get($certificate_id);
+            if (!empty($certificate) && is_array($certificate)) {
+                $this->certificate_data = $certificate;
+                $this->user_id = $this->certificate_data['user_id'];
+            }
         } else {
             //Try with the current user
             $this->user_id = api_get_user_id();

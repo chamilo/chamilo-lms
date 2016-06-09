@@ -766,7 +766,7 @@ class PDF
     }
 
     /**
-     * @param string $header html content
+     * @param array $header html content
      */
     public function set_custom_header($header)
     {
@@ -774,7 +774,7 @@ class PDF
     }
 
     /**
-     * @param string $footer html content
+     * @param array $footer html content
      */
     public function set_custom_footer($footer)
     {

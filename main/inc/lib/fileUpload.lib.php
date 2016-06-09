@@ -765,11 +765,11 @@ function dir_total_space($dir_path)
  * Note : some browsers don't send the MIME Type (e.g. Netscape 4).
  *        We don't have solution for this kind of situation
  *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @author - Bert Vanderkimpen
- * @param  - file_name (string) - Name of the file
- * @param  - file_type (string) - Type of the file
- * @return - file_name (string)
+ * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @author Bert Vanderkimpen
+ * @param  string $file_name Name of the file
+ * @param  string $file_type Type of the file
+ * @return string File name
  */
 function add_ext_on_mime($file_name, $file_type)
 {

@@ -2332,10 +2332,10 @@ class MySpace
 
     /**
      * Checks whether a username has been already subscribed in a session.
-     * @param string a given username
-     * @param array  the array with the course list id
-     * @param the session id
-     * @return 0 if the user is not subscribed  otherwise it returns the user_id of the given username
+     * @param string $username a given username
+     * @param array $course_list the array with the course list id
+     * @param int $id_session the session id
+     * @return int 0 if the user is not subscribed otherwise it returns the user_id of the given username
      * @author Julio Montoya
      */
     public static function user_available_in_session($username, $course_list, $id_session)
@@ -2361,6 +2361,7 @@ class MySpace
                 return 0;
             }
         }
+        return 0;
     }
 
     /**

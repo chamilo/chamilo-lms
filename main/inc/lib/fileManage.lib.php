@@ -49,10 +49,9 @@ function update_db_info($action, $old_path, $new_path = '')
 /**
  * Cheks a file or a directory actually exist at this location
  *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - file_path (string) - path of the presume existing file or dir
- * @return - boolean TRUE if the file or the directory exists
- *           boolean FALSE otherwise.
+ * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @param string $file_path Path of the presume existing file or dir
+ * @return boolean TRUE if the file or the directory exists or FALSE otherwise.
  */
 function check_name_exist($file_path) {
     clearstatcache();
@@ -136,9 +135,9 @@ function removeDir($dir)
 
 /**
  * Return true if folder is empty
- * @author : hubert.borderiou@grenet.fr
- * @param string $in_folder : folder path on disk
- * @return 1 if folder is empty, 0 otherwise
+ * @author hubert.borderiou@grenet.fr
+ * @param string $in_folder folder path on disk
+ * @return int 1 if folder is empty, 0 otherwise
 */
 function folder_is_empty($in_folder)
 {
@@ -161,12 +160,11 @@ function folder_is_empty($in_folder)
 /**
  * Renames a file or a directory
  *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - $file_path (string) - complete path of the file or the directory
- * @param  - $new_file_name (string) - new name for the file or the directory
- * @return - boolean - true if succeed
- *         - boolean - false otherwise
- * @see    - rename() uses the check_name_exist() and php2phps() functions
+ * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @param  string $file_path complete path of the file or the directory
+ * @param  string $new_file_name new name for the file or the directory
+ * @return boolean true if succeed, false otherwise
+ * @see rename() uses the check_name_exist() and php2phps() functions
  */
 function my_rename($file_path, $new_file_name) {
 
@@ -206,14 +204,13 @@ function my_rename($file_path, $new_file_name) {
 /**
  * Moves a file or a directory to an other area
  *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - $source (String) - the path of file or directory to move
- * @param  - $target (String) - the path of the new area
+ * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @param  string $source the path of file or directory to move
+ * @param  string $target the path of the new area
  * @param  bool $forceMove Whether to force a move or to make a copy (safer but slower) and then delete the original
  * @param	bool $moveContent In some cases (including migrations), we need to move the *content* and not the folder itself
- * @return - bolean - true if the move succeed
- *           bolean - false otherwise.
- * @see    - move() uses check_name_exist() and copyDirTo() functions
+ * @return bool true if the move succeed, false otherwise.
+ * @see move() uses check_name_exist() and copyDirTo() functions
  */
 function move($source, $target, $forceMove = false, $moveContent = false)
 {
@@ -254,10 +251,10 @@ function move($source, $target, $forceMove = false, $moveContent = false)
 /**
  * Moves a directory and its content to an other area
  *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - $orig_dir_path (string) - the path of the directory to move
- * @param  - $destination (string) - the path of the new area
- * @return - no return
+ * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @param string $orig_dir_path the path of the directory to move
+ * @param string $destination the path of the new area
+ * @return void
  */
 function copyDirTo($orig_dir_path, $destination, $move = true)
 {
@@ -287,8 +284,8 @@ function getextension($filename) {
  * Calculation size of a directory
  *
  * @returns integer size
- * @param 	string	$path path to size
- * @param 	boolean $recursive if true , include subdir in total
+ * @param 	string	$root path of dir to measure
+ * @param 	boolean $recursive if true , include subdirectory in total
  */
 function dirsize($root, $recursive = true) {
 	$dir = @opendir($root);

@@ -25,7 +25,7 @@ class ExtraFieldValue extends Model
         'updated_at',
     );
     /** @var string session_id, course_code, user_id, question id */
-    public $extraField = null;
+    public $extraField;
 
     /**
      * Formats the necessary elements for the given datatype

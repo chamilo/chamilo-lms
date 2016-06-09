@@ -13,8 +13,8 @@
  * This needs an existing image repository to work.
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - $file_name (string) - Name of a file
- * @return - The gif image to chose
+ * @param  string $file_name (string) - Name of a file
+ * @return string The gif image to chose
  */
 function choose_image($file_name)
 {
@@ -176,8 +176,8 @@ function choose_image($file_name)
  * Transform a UNIX time stamp in human readable format date.
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - $date - UNIX time stamp
- * @return - A human readable representation of the UNIX date
+ * @param int $date - UNIX time stamp
+ * @return string A human readable representation of the UNIX date
  */
 function format_date($date)
 {
@@ -187,8 +187,8 @@ function format_date($date)
 /**
  * Transform the file path to a URL.
  *
- * @param  - $file_path (string) - Relative local path of the file on the hard disk
- * @return - Relative url
+ * @param string $file_path (string) - Relative local path of the file on the hard disk
+ * @return string Relative url
  */
 function format_url($file_path)
 {
@@ -201,9 +201,9 @@ function format_url($file_path)
 /**
  * Get the most recent time the content of a folder was changed.
  *
- * @param  - $dir_name (string)   - Path of the dir on the hard disk
- * @param  - $do_recursive (bool) - Traverse all folders in the folder?
- * @return - Time the content of the folder was changed
+ * @param string $dir_name (string)   - Path of the dir on the hard disk
+ * @param bool $do_recursive (bool) - Traverse all folders in the folder?
+ * @return string Time the content of the folder was changed
  */
 function recent_modified_file_time($dir_name, $do_recursive = true)
 {
@@ -236,8 +236,8 @@ function recent_modified_file_time($dir_name, $do_recursive = true)
 /**
  * Get the total size of a directory.
  *
- * @param  - $dir_name (string) - Path of the dir on the hard disk
- * @return - Total size in bytes
+ * @param string $dir_name (string) - Path of the dir on the hard disk
+ * @return int Total size in bytes
  */
 function folder_size($dir_name)
 {

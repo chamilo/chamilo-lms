@@ -53,7 +53,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * @since     1.0
      * @access    private
      */
-    protected $_values = null;
+    protected $_values;
     private $columnsSize;
 
     /**

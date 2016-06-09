@@ -479,7 +479,7 @@ class Dropbox_Person
 	 *
 	 * @param unknown_type $a
 	 * @param unknown_type $b
-	 * @return -1, 0 or 1 dependent of the result of the comparison.
+	 * @return int -1, 0 or 1 dependent of the result of the comparison.
 	 */
 	function _cmpWork($a, $b)
     {

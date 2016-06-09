@@ -73,6 +73,7 @@ class ScormQuestion extends Question
 				break;
 			case MATCHING:
             case MATCHING_DRAGGABLE:
+            case DRAGGABLE:
 				$this->answer = new ScormAnswerMatching($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;

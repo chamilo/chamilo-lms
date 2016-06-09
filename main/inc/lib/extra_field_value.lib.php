@@ -324,13 +324,16 @@ class ExtraFieldValue extends Model
                         $justTermResults[$term] = $value;
                     }
                 }
-
+                $profileCompleted = 0;
                 if (!in_array(false, $justTermResults)) {
-                    $userId = $params['item_id'];
-                    $table = Database::get_main_table(TABLE_MAIN_USER);
-                    $sql = "UPDATE $table SET profile_completed = 1 WHERE user_id = $userId";
-                    Database::query($sql);
+                    $profileCompleted = 1;
                 }
+
+                $userId = $params['item_id'];
+                $table = Database::get_main_table(TABLE_MAIN_USER);
+                $sql = "UPDATE $table SET profile_completed = $profileCompleted WHERE user_id = $userId";
+                Database::query($sql);
+
                 Session::write('profile_completed_result', $justTermResults);
             }
         }

@@ -534,9 +534,6 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info(api_get_user_id(), false, false, true);
             if ($userInfo) {
-                if ((int)$userInfo['profile_completed'] !== 1) {
-                    api_not_allowed(true);
-                }
                 $termActivated = false;
                 $values = $userInfo['extra'];
                 foreach ($values as $value) {
@@ -547,10 +544,19 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
                         $termActivated = !empty($termValue) && $termValue == 1;
                     }
                 }
+                
                 if ($termActivated === false) {
                     $blockButton = true;
                     Display::addFlash(Display::return_message(get_lang('TermActivatedIsNeededDescription'), 'warning'));
                 }
+                if ($blockButton === false) {
+                    if ((int)$userInfo['profile_completed'] !== 1) {
+                        $blockButton = true;
+                        Display::addFlash(
+                            Display::return_message(get_lang('TermYourProfileIsNotCompleted'), 'warning')
+                        );
+                    }
+                }                
             }
         }
     }

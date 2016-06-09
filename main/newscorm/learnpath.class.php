@@ -2779,7 +2779,7 @@ class learnpath
                 }
             }
             $subchildren = $item_temp->childNodes;
-            if ($subchildren->length > 0) {
+            if ($subchildren && $subchildren->length > 0) {
                 $val = $this->get_scorm_xml_node($subchildren, $id);
                 if (is_object($val)) {
 

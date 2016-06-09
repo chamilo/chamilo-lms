@@ -105,7 +105,6 @@ if ($form->validate()) {
     if (isset($params['save'])) {
         // save
 
-
         MessageManager::send_message_simple(
             $userId,
             get_lang('DiagnosisFilledSubject'),
@@ -323,10 +322,12 @@ $extra = $extraField->addElements(
     api_get_user_id(),
     [],
     true,
-    true,
+    false,
     $fieldsToShow,
     $fieldsToShow
 );
+
+$jqueryExtra .= $extra['jquery_ready_content'];
 
 $userForm->addHeader(get_lang('Ma méthode de travail'));
 
@@ -343,6 +344,9 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     $fieldsToShow
 );
+
+
+$jqueryExtra .= $extra['jquery_ready_content'];
 
 /*echo '<pre>';
 echo $jqueryExtra;

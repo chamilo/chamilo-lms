@@ -558,11 +558,7 @@ function modify_filter($user_id, $url_params, $row) {
 	}
 
 	// actions for assigning sessions, courses or users
-	if (api_is_session_admin()) {
-		/*if ($row[0] == api_get_user_id()) {
-			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
-		}*/
-	} else {
+	if (!api_is_session_admin()) {
         if ($current_user_status_label == $statusname[SESSIONADMIN]) {
             $result .= Display::url(
                 Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')),

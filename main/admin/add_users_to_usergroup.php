@@ -318,9 +318,7 @@ if (!empty($user_list)) {
             ).' ('.$item['username'].') ';
         }
 
-        if (in_array($item['user_id'], $list_in)) {
-            //$elements_in[$item['user_id']] = $person_name;
-        } else {
+        if (!in_array($item['user_id'], $list_in)) {
             $elements_not_in[$item['user_id']] = $person_name;
         }
     }

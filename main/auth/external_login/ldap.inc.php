@@ -278,11 +278,6 @@ function extldap_import_all_users()
             for ($key = 0; $key < $users['count']; $key++) {
                 $user_id = extldap_add_user_by_array($users[$key], true);
                 $count++;
-                if ($user_id) {
-                    // echo "User #$user_id created or updated\n";
-                } else {
-                    // echo "User was not created\n";
-                }
             }
         }
     }

@@ -420,12 +420,9 @@ class AddCourse
         $course_repository,
         $language,
         $fill_with_exemplary_content = null
-
     ) {
         if (is_null($fill_with_exemplary_content)) {
-            $fill_with_exemplary_content = api_get_setting(
-                    'example_material_course_creation'
-                ) != 'false';
+            $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
         }
         $course_id = intval($course_id);
 
@@ -434,7 +431,7 @@ class AddCourse
         }
 
         $courseInfo = api_get_course_info_by_id($course_id);
-        $now = api_get_utc_datetime(time());
+        $now = api_get_utc_datetime();
 
         $tbl_course_homepage = Database::get_course_table(TABLE_TOOL_LIST);
         $TABLEINTROS = Database::get_course_table(TABLE_TOOL_INTRO);
@@ -721,7 +718,6 @@ class AddCourse
             'platformLanguage'
         );
 
-
         // Example material should be in the same language as the course is.
         $language_interface_original = $language_interface;
         $language_interface = $language;
@@ -793,9 +789,7 @@ class AddCourse
                 $default_document_array[$folder] = $sorted_array;
             }
 
-            //echo '<pre>'; print_r($default_document_array);exit;
-
-            //Light protection (adding index.html in every document folder)
+            // Light protection (adding index.html in every document folder)
             $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n <head>\n <meta charset=\"utf-8\">\n <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
 
             $example_cert_id = 0;
@@ -1020,7 +1014,6 @@ class AddCourse
             $manager = Database::getManager();
 
             /* Introduction text */
-
             $intro_text = '<p style="text-align: center;">
                             <img src="' . api_get_path(REL_CODE_PATH) . 'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
                             <h2>' . self::lang2db(get_lang('IntroductionText')) . '</h2>

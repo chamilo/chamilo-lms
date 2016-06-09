@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
+use Chamilo\CourseBundle\Component\CourseCopy\Course;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
  * Dummy course creator

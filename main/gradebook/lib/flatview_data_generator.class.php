@@ -22,7 +22,7 @@ class FlatViewDataGenerator
     private $links;
     private $evals_links;
     public $params;
-    public $category = array();
+    public $category;
     private $mainCourseCategory;
 
     /**

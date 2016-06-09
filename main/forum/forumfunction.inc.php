@@ -1163,10 +1163,10 @@ function change_visibility($content, $id, $target_visibility)
 /**
  * This function changes the lock status in the database
  *
- * @param $content what is it that we want to (un)lock: forum category, forum, thread, post
- * @param $id the id of the content we want to (un)lock
- * @param $action do we lock (=>locked value in db = 1) or unlock (=> locked value in db = 0)
- * @return string, language variable
+ * @param string $content what is it that we want to (un)lock: forum category, forum, thread, post
+ * @param int $id the id of the content we want to (un)lock
+ * @param string $action do we lock (=>locked value in db = 1) or unlock (=> locked value in db = 0)
+ * @return string language variable
  *
  * @todo move to item manager
  *
@@ -3063,7 +3063,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
  * @param integer $thread_qualify
  * @param integer $qualify_time
  * @param integer $session_id
- * @return Array() optional
+ * @return array optional
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  * @version October 2008, dokeos  1.8.6
  */
@@ -3209,7 +3209,7 @@ function showQualify($option, $user_id, $thread_id)
  * @param integer $user_id contains the information the current user id
  * @param integer $thread_id contains the information the current thread id
  * @param boolean $opt contains the information of option to run
- * @return array()
+ * @return array
  * @author Christian Fasanando <christian.fasanando@dokeos.com>,
  * @author Isaac Flores <isaac.flores@dokeos.com>,
  * @version October 2008, dokeos  1.8.6

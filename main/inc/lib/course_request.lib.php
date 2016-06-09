@@ -50,8 +50,8 @@ class CourseRequestManager
      * @param string $course_language
      * @param string $objetives
      * @param string $target_audience
-     * @param int/string $user_id
-     * @return int/bool The database id of the newly created course request or FALSE on failure.
+     * @param int $user_id
+     * @return mixed The database id of the newly created course request or FALSE on failure.
      */
     public static function create_course_request(
         $wanted_code,
@@ -231,7 +231,7 @@ class CourseRequestManager
 
     /**
      * Updates a given course request in the database.
-     * @param int/string $id            The id (an integer number) of the corresponding database record.
+     * @param int $id            The id (an integer number) of the corresponding database record.
      * @param string $wanted_code       The code for the created in the future course.
      * @param string $title
      * @param string $description
@@ -239,7 +239,7 @@ class CourseRequestManager
      * @param string $course_language
      * @param string $objetives
      * @param string $target_audience
-     * @param int/string $user_id
+     * @param int $user_id
      * @return bool Returns TRUE on success or FALSE on failure.
      */
     public static function update_course_request(
@@ -355,7 +355,7 @@ class CourseRequestManager
 
     /**
      * Deletes a given course request.
-     * @param int/string $id            The id (an integer number) of the corresponding database record.
+     * @param int $id            The id (an integer number) of the corresponding database record.
      * @return bool                     Returns TRUE on success or FALSE on failure.
      */
     public static function delete_course_request($id)
@@ -368,6 +368,7 @@ class CourseRequestManager
     }
 
     /**
+     * Returns the number of course requests in the course_request table (optionally matching a status)
      * @param integer $status
      * @return bool
      */
@@ -385,13 +386,14 @@ class CourseRequestManager
         if (is_array($result)) {
             return $result['number'];
         }
+
         return false;
     }
 
     /**
      * Gets all the information about a course request using its database id as an access key.
-     * @param integer $id              The id (an integer number) of the corresponding database record.
-     * @return array/bool                 Returns the requested data as an array or FALSE on failure.
+     * @param int $id              The id (an integer number) of the corresponding database record.
+     * @return string|bool              Returns the requested data as an array or FALSE on failure.
      */
     public static function get_course_request_info($id)
     {
@@ -408,8 +410,8 @@ class CourseRequestManager
 
     /**
      * Gets the code of a given course request using its database id as an access key.
-     * @param int/string $id              The id (an integer number) of the corresponding database record.
-     * @return string/bool                Returns the requested requested code or FALSE on failure.
+     * @param int $id              The id (an integer number) of the corresponding database record.
+     * @return string|bool                Returns the requested requested code or FALSE on failure.
      */
     public static function get_course_request_code($id)
     {
@@ -429,8 +431,8 @@ class CourseRequestManager
 
     /**
      * Accepts a given by its id course request. The requested course gets created immediately after the request acceptance.
-     * @param int/string $id              The id (an integer number) of the corresponding database record.
-     * @return string/bool                Returns the code of the newly created course or FALSE on failure.
+     * @param int $id              The id (an integer number) of the corresponding database record.
+     * @return string|bool                Returns the code of the newly created course or FALSE on failure.
      */
     public static function accept_course_request($id)
     {
@@ -526,7 +528,7 @@ class CourseRequestManager
 
     /**
      * Rejects a given course request.
-     * @param int/string $id            The id (an integer number) of the corresponding database record.
+     * @param int $id            The id (an integer number) of the corresponding database record.
      * @return bool                     Returns TRUE on success or FALSE on failure.
      */
     public static function reject_course_request($id)
@@ -604,7 +606,7 @@ class CourseRequestManager
 
     /**
      * Asks the author (through e-mail) for additional information about the given course request.
-     * @param int/string $id            The database primary id of the given request.
+     * @param int $id            The database primary id of the given request.
      * @return bool                     Returns TRUE on success or FALSE on failure.
      */
     public static function ask_for_additional_info($id)
@@ -695,7 +697,7 @@ class CourseRequestManager
 
     /**
      * Checks whether additional information about the given course request has been asked.
-     * @param int/string $id            The database primary id of the given request.
+     * @param int $id            The database primary id of the given request.
      * @return bool                     Returns TRUE if additional information has been asked or FALSE otherwise.
      */
     public static function additional_info_asked($id)

@@ -69,7 +69,7 @@ class Exercise
     public $onSuccessMessage = null;
     public $onFailedMessage = null;
     public $emailAlert;
-    public $notifyUserByEmail = 0;
+    public $notifyUserByEmail = '';
     public $sessionId = 0;
 
     /**

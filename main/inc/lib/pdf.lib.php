@@ -9,8 +9,8 @@
 class PDF
 {
     public $pdf;
-    public $custom_header = '';
-    public $custom_footer = '';
+    public $custom_header = array();
+    public $custom_footer = array();
     public $params = array();
     public $template;
 
@@ -229,7 +229,7 @@ class PDF
         }
 
         // Clean styles and javascript document
-        $clean_search = array (
+        $clean_search = array(
             '@<script[^>]*?>.*?</script>@si',
             '@<style[^>]*?>.*?</style>@si'
         );
@@ -417,7 +417,7 @@ class PDF
         }
 
         //clean styles and javascript document
-        $clean_search = array (
+        $clean_search = array(
             '@<script[^>]*?>.*?</script>@si',
             '@<style[^>]*?>.*?</style>@siU'
         );
@@ -545,6 +545,7 @@ class PDF
      * Deletes the watermark from the Platform or Course
      * @param   string  $course_code course code (optional)
      * @param   mixed   web path of the watermark image, false if there is nothing to return
+     * @return bool
      */
     public function delete_watermark($course_code = null)
     {
@@ -609,12 +610,12 @@ class PDF
     }
 
     /**
-     *
+     * Sets the PDF footer
      */
     public function set_footer()
     {
         $this->pdf->defaultfooterfontsize = 12;   // in pts
-        $this->pdf->defaultfooterfontstyle = B;   // blank, B, I, or BI
+        $this->pdf->defaultfooterfontstyle = 'B';   // blank, B, I, or BI
         $this->pdf->defaultfooterline = 1;        // 1 to include line below header/above footer
         $platform_name   = api_get_setting('Institution');
         $left_content    = $platform_name;
@@ -677,6 +678,7 @@ class PDF
     }
 
     /**
+     * Sets the PDF header
      * @param array $course_data
      */
     public function set_header($course_data)

@@ -28,7 +28,7 @@ if (isset($_GET['loginFailed'])) {
             case 'access_url_inactive':
                 $error_message = custompages_get_lang('AccountURLInactive');
                 break;
-            default :
+            default:
                 $error_message = custompages_get_lang('InvalidId');
         }
     } else {

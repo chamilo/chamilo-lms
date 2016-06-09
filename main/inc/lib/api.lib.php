@@ -2951,7 +2951,7 @@ function api_display_tool_view_option() {
  * @author Patrick Cool
  * @author Julio Montoya
  * @version 1.1, February 2004
- * @return boolean, true: the user has the rights to edit, false: he does not
+ * @return boolean true: the user has the rights to edit, false: he does not
  */
 
 function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true)
@@ -3036,7 +3036,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 * on the session visibility
 * @param bool $tutor  Whether to check if the user has the tutor role
 * @param bool  $coach Whether to check if the user has the coach role
-* @return boolean, true: the user has the rights to edit, false: he does not
+* @return boolean true: the user has the rights to edit, false: he does not
 */
 function api_is_allowed_to_session_edit($tutor = false, $coach = false)
 {
@@ -6173,7 +6173,7 @@ function api_get_template($path_type = 'rel') {
  * return the current browser and major ver when $format=check_browser
  * @param string $format
  *
- * @return bool, or return text array if $format=check_browser
+ * @return bool or return text array if $format=check_browser
  * @author Juan Carlos Raña Trabado
  */
 
@@ -7809,7 +7809,7 @@ function api_mail_html(
     $mail->WordWrap = 200;
 
     if ($platform_email['SMTP_AUTH']) {
-        $mail->SMTPAuth = 1;
+        $mail->SMTPAuth = true;
         $mail->Username = $platform_email['SMTP_USER'];
         $mail->Password = $platform_email['SMTP_PASS'];
         if (isset($platform_email['SMTP_SECURE'])) {

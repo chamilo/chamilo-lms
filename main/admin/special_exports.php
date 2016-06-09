@@ -12,6 +12,10 @@
 // including the global file
 $cidReset = true;
 require_once  '../inc/global.inc.php';
+
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 // setting breadcrumbs
@@ -22,10 +26,6 @@ $nameTools = get_lang('SpecialExports');
 $export = '';
 
 // include additional libraries
-require_once '../coursecopy/classes/CourseBuilder.class.php';
-require_once '../coursecopy/classes/CourseArchiver.class.php';
-require_once '../coursecopy/classes/CourseRestorer.class.php';
-require_once '../coursecopy/classes/CourseSelectForm.class.php';
 
 if (function_exists('ini_set')) {
 	api_set_memory_limit('256M');

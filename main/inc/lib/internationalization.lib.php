@@ -732,7 +732,7 @@ function api_get_months_long($language = null) {
  * @param string $first_name			The first name of the person.
  * @param string $last_name				The last name of the person.
  * @param string $title					The title of the person.
- * @param int/string $format (optional)	The person name format. It may be a pattern-string (for example '%t %l, %f' or '%T %F %L', ...) or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
+ * @param int|string $format (optional)	The person name format. It may be a pattern-string (for example '%t %l, %f' or '%T %F %L', ...) or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
  * @param string $language (optional)	The language id. If it is omitted, the current interface language is assumed. This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return bool							The result is sort of full name of the person.
@@ -829,7 +829,7 @@ function api_get_person_name(
 
 /**
  * Checks whether a given format represents person name in Western order (for which first name is first).
- * @param int/string $format (optional)	The person name format. It may be a pattern-string (for example '%t. %l, %f') or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
+ * @param int|string $format (optional)	The person name format. It may be a pattern-string (for example '%t. %l, %f') or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
  * @param string $language (optional)	The language id. If it is omitted, the current interface language is assumed. This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
  * @return bool							The result TRUE means that the order is first_name last_name, FALSE means last_name first_name.
  * Note: You may use this function for determing the order of the fields or columns "First name" and "Last name" in forms, tables and reports.
@@ -1562,7 +1562,7 @@ function api_natrsort(&$array, $language = null, $encoding = null)
 
 /**
  * This function unifies the encoding identificators, so they could be compared.
- * @param string/array $encoding	The specified encoding.
+ * @param string|array $encoding	The specified encoding.
  * @return string					Returns the encoding identificator modified in suitable for comparison way.
  */
 function api_refine_encoding_id($encoding) {
@@ -1574,8 +1574,8 @@ function api_refine_encoding_id($encoding) {
 
 /**
  * This function checks whether two $encoding are equal (same, equvalent).
- * @param string/array $encoding1		The first encoding
- * @param string/array $encoding2		The second encoding
+ * @param string|array $encoding1		The first encoding
+ * @param string|array $encoding2		The second encoding
  * @param bool $strict					When this parameter is TRUE the comparison ignores aliases of encodings.
  * When the parameter is FALSE, aliases are taken into account.
  * @return bool							Returns TRUE if the encodings are equal, FALSE otherwise.

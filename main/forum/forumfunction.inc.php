@@ -603,7 +603,7 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
     }
 
     if ($showMessage) {
-        Display:: display_confirmation_message($return_message);
+        Display:: addFlash(Display::return_message($return_message));
     }
 
     return $last_id;
@@ -2636,12 +2636,21 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         Session::erase('breadcrumbs');
         Session::erase('addedresource');
         Session::erase('addedresourceid');
-
-        Display::addFlash(Display::return_message($message, 'success', false));
+        
+        if ($showMessage) {
+            Display::addFlash(Display::return_message($message, 'success', false));
+        }
         return $last_thread_id;
 
     } else {
-        Display::addFlash(Display::return_message(get_lang('UplNoFileUploaded'), 'error', false));
+        if ($showMessage) {
+            Display::addFlash(
+                Display::return_message(get_lang('UplNoFileUploaded'),
+                    'error',
+                    false
+                )
+            );
+        }
     }
 }
 

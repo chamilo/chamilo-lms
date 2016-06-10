@@ -139,7 +139,7 @@ class ExtraFieldOptions
      */
     public function getDisplayText()
     {
-        return $this->displayText;
+        return \ExtraFieldOption::translateDisplayName($this->displayText);
     }
 
     /**

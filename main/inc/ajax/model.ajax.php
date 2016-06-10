@@ -1526,15 +1526,11 @@ switch ($action) {
     case 'get_extra_field_options':
         $obj = new ExtraFieldOption($type);
         $columns = array('display_text', 'option_value', 'option_order');
-        $result = Database::select(
-            '*',
-            $obj->table,
-            array(
-                'where' => array("field_id = ? " => $field_id),
-                'order' => "$sidx $sord",
-                'LIMIT' => "$start , $limit",
-            )
-        );
+        $result = $obj->get_all([
+            'where' => array("field_id = ? " => $field_id),
+            'order' => "$sidx $sord",
+            'LIMIT' => "$start , $limit"
+        ]);
         break;
     case 'get_usergroups_teacher':
         $columns = array('name', 'users', 'status', 'group_type', 'actions');

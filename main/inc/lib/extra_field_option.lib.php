@@ -411,36 +411,70 @@ class ExtraFieldOption extends Model
      * Gets an array of options for a specific field
      * @param int $field_id The field ID
      * @param bool $add_id_in_array Whether to add the row ID in the result
-     * @param string $ordered_by Extra ordering query bit
-     * @result mixed Row on success, false on failure
-     * @assert (0, '') === false
+     * @param null $ordered_by Extra ordering query bit
+     * @return array The options if they exists. Otherwise return false
      */
     public function get_field_options_by_field($field_id, $add_id_in_array = false, $ordered_by = null)
     {
         $field_id = intval($field_id);
 
-        $sql = "SELECT * FROM {$this->table}
-                WHERE field_id = $field_id ";
+        $orderBy = null;
 
-        if (!empty($ordered_by)) {
-            $sql .= " ORDER BY $ordered_by ";
+        switch ($ordered_by) {
+            case 'id':
+                $orderBy = ['id' => 'ASC'];
+                break;
+            case 'field_id':
+                $orderBy = ['fieldId' => 'ASC'];
+                break;
+            case 'option_value':
+                $orderBy = ['optionValue' => 'ASC'];
+                break;
+            case 'display_text':
+                $orderBy = ['displayText' => 'ASC'];
+                break;
+            case 'priority':
+                $orderBy = ['priority' => 'ASC'];
+                break;
+            case 'priority_message':
+                $orderBy = ['priorityMessage' => 'ASC'];
+                break;
+            case 'option_order':
+                $orderBy = ['optionOrder' => 'ASC'];
+                break;
         }
 
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
+        $result = Database::getManager()
+            ->getRepository('ChamiloCoreBundle:ExtraFieldOptions')
+            ->findBy(['field' => $field_id], $orderBy);
+
+        if (!$result) {
+            return false;
+        }
+
+        $options = [];
+
+        foreach ($result as $row) {
+            $option = [
+                'id' => $row->getId(),
+                'field_id' => $row->getField()->getId(),
+                'option_value' => $row->getValue(),
+                'display_text' => $row->getDisplayText(),
+                'priority' => $row->getPriority(),
+                'priority_message' => $row->getPriorityMessage(),
+                'option_order' => $row->getOptionOrder()
+            ];
+
             if ($add_id_in_array) {
-                $options = array();
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    $options[$row['id']] = $row;
-                }
+                $options[$row->getId()] = $option;
 
-                return $options;
-            } else {
-                return Database::store_result($result, 'ASSOC');
+                continue;
             }
+
+            $options[] = $option;
         }
 
-        return false;
+        return $options;
     }
 
     /**
@@ -771,5 +805,20 @@ class ExtraFieldOption extends Model
         }
 
         return $objExtraField->get($extraField->getId(), $translateDisplayText);
+    }
+
+    /**
+     * @param null $options
+     * @return array
+     */
+    public function get_all($options = null)
+    {
+        $result = parent::get_all($options);
+
+        foreach ($result as &$row) {
+            $row['display_text'] = self::translateDisplayName($row['display_text']);
+        }
+
+        return $result;
     }
 }

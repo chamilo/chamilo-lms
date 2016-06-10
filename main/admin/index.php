@@ -410,7 +410,7 @@ if (api_is_platform_admin()) {
 
         $plugin_obj = new AppPlugin();
         $items = array();
-        foreach ( $_plugins['menu_administrator'] as $plugin_name){
+        foreach ( $_plugins['menu_administrator'] as $plugin_name) {
             $plugin_info = $plugin_obj->getPluginInfo($plugin_name);
             $items[] = array(
                 'url' => api_get_path(WEB_CODE_PATH) . '../plugin/'.$plugin_name.'/start.php',

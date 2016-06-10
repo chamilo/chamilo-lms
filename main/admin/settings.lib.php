@@ -749,13 +749,8 @@ function handle_search()
     $values = api_get_settings_options('search_enabled');
     $form->addElement('header', null, get_lang('SearchEnabledTitle'));
 
-    $group = array ();
-    if (is_array($values)) {
-        foreach ($values as $key => $value) {
-            $element = & $form->createElement('radio', 'search_enabled', '', $value['display_text'], $value['value']);
-            $group[] = $element;
-        }
-    }
+    $group = formGenerateElementsGroup($form, $values, 'search_enabled');
+
     //SearchEnabledComment
     $form->addGroup($group, 'search_enabled', array(get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')), '<br />', false);
 
@@ -775,11 +770,8 @@ function handle_search()
 
     if ($search_enabled == 'true') {
         $values = api_get_settings_options('search_show_unlinked_results');
-        $group = array ();
-        foreach ($values as $key => $value) {
-            $element = & $form->createElement('radio', 'search_show_unlinked_results', '', $value['display_text'], $value['value']);
-            $group[] = $element;
-        }
+
+        $group = formGenerateElementsGroup($form, $values, 'search_show_unlinked_results');
         $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), '', false);
         $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
 
@@ -787,7 +779,6 @@ function handle_search()
         foreach ($specific_fields as $sf) {
             $sf_values[$sf['code']] = $sf['name'];
         }
-        $group = array();
         $url =  Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
         if (empty($sf_values)) {
             $form->addElement('label', [get_lang('SearchPrefilterPrefix'), $url]);
@@ -1654,4 +1645,20 @@ function search_setting($search)
         }
     }
     return $settings;
+}
+/**
+ * Helper function to generates a form elements group
+ * @param object $form The form where the elements group has to be added
+ * @param array $values Values to browse through
+ * @return array
+ */
+function formGenerateElementsGroup($form, $values = array(), $elementName) {
+    $group = array();
+    if (is_array($values)) {
+        foreach ($values as $key => $value) {
+            $element = &$form->createElement('radio', $elementName, '', $value['display_text'], $value['value']);
+            $group[] = $element;
+        }
+    }
+    return $group;
 }

@@ -110,7 +110,7 @@ class LearnpathList
             // it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
             // is done using domesticate()
             $myname = domesticate($row['name']);
-            $mylink = 'newscorm/lp_controller.php?action=view&lp_id='.$row['id'].'&id_session='.$session_id;
+            $mylink = 'lp/lp_controller.php?action=view&lp_id='.$row['id'].'&id_session='.$session_id;
 
             $sql2 = "SELECT * FROM $tbl_tool
                      WHERE

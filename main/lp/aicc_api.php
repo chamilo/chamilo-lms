@@ -427,7 +427,7 @@ function load_item(item_id,url){
  */
 function chamilo_save_asset(){
     //var linkparams = 'id='+lms_item_id+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
-    //var url = "<?php echo api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php'; ?>?action=save&" + linkparams + "";
+    //var url = "<?php echo api_get_path(WEB_CODE_PATH).'lp/lp_controller.php'; ?>?action=save&" + linkparams + "";
     logit_lms('chamilo_save_asset: '+url,0);
     //frames["message_name"].src = url;
     xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location);

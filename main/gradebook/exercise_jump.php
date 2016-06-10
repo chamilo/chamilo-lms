@@ -58,11 +58,11 @@ if (isset($_GET['doexercise'])) {
                         // If the exercise was added once redirect to the LP
                         $firstLp = current($exercise->lpList);
                         if (isset($firstLp['lp_id'])) {
-                            $url = api_get_path(WEB_CODE_PATH) . 'newscorm/lp_controller.php?' . api_get_cidreq() . '&lp_id=' . $firstLp['lp_id'] . '&action=view&isStudentView=true';
+                            $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq() . '&lp_id=' . $firstLp['lp_id'] . '&action=view&isStudentView=true';
                         }
                     } else {
                         // If the exercise was added multiple times show the LP list
-                        $url = api_get_path(WEB_CODE_PATH) . 'newscorm/lp_controller.php?' . api_get_cidreq().'&action=list';
+                        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq().'&action=list';
                     }
                 }
             }

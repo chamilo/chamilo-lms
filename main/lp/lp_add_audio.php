@@ -141,7 +141,7 @@ if (!empty($file)) {
         Display::getMediaPlayer($file, array('url' => $urlFile)).
         "</div>";
     $form->addElement('label', get_lang('Listen'), $audioPlayer);
-    $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?lp_id='.$_SESSION['oLP']->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
+    $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?lp_id='.$_SESSION['oLP']->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
     $form->addElement('label', null, Display::url(get_lang('RemoveAudio'), $url, array('class' => 'btn btn-danger')));
 } else {
     $form->addElement('file', 'file');

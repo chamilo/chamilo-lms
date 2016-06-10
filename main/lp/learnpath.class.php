@@ -1111,7 +1111,7 @@ class learnpath
         }
 
         $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
-        $link = 'newscorm/lp_controller.php?action=view&lp_id='.$this->lp_id;
+        $link = 'lp/lp_controller.php?action=view&lp_id='.$this->lp_id;
         // Delete tools
         $sql = "DELETE FROM $tbl_tool
                 WHERE c_id = ".$course_id." AND (link LIKE '$link%' AND image='scormbuilder.gif')";
@@ -3432,10 +3432,10 @@ class learnpath
                         case 'link':
                             if (Link::is_youtube_link($file)) {
                                 $src = Link::get_youtube_video_id($file);
-                                $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=youtube&source='.$src;
+                                $file = api_get_path(WEB_CODE_PATH) . 'lp/embed.php?type=youtube&source='.$src;
                             } elseif (Link::isVimeoLink($file)) {
                                 $src = Link::getVimeoLinkId($file);
-                                $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=vimeo&source='.$src;
+                                $file = api_get_path(WEB_CODE_PATH) . 'lp/embed.php?type=vimeo&source='.$src;
                             } else {
                                 // If the current site is HTTPS and the link is
                                 // HTTP, browsers will refuse opening the link
@@ -3448,7 +3448,7 @@ class learnpath
                                         //this is the special intervention case
                                         $file = api_get_path(
                                                 WEB_CODE_PATH
-                                            ).'newscorm/embed.php?type=nonhttps&source='.urlencode($file);
+                                            ) . 'lp/embed.php?type=nonhttps&source='.urlencode($file);
                                     }
                                 }
                             }
@@ -3589,7 +3589,7 @@ class learnpath
                         error_log('New LP - In learnpath::get_link() ' . __LINE__ . ' - Item type: ' . $lp_item_type, 0);
                     }
                     // Formatting AICC HACP append URL.
-                    $aicc_append = '?aicc_sid=' . urlencode(session_id()) . '&aicc_url=' . urlencode(api_get_path(WEB_CODE_PATH) . 'newscorm/aicc_hacp.php') . '&';
+                    $aicc_append = '?aicc_sid=' . urlencode(session_id()) . '&aicc_url=' . urlencode(api_get_path(WEB_CODE_PATH) . 'lp/aicc_hacp.php') . '&';
                     if (!empty($lp_item_params)) {
                         $aicc_append .= $lp_item_params . '&';
                     }
@@ -4219,7 +4219,7 @@ class learnpath
         $session_condition = api_get_session_condition($session_id);
 
         $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
-        $link = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
+        $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
         $sql = "SELECT * FROM $tbl_tool
                 WHERE
                     c_id = ".$course_id." AND
@@ -4590,7 +4590,7 @@ class learnpath
             $session_id = api_get_session_id();
             $session_condition = api_get_session_condition($session_id);
             $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
-            $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
+            $link = 'lp/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
             $sql = "UPDATE $tbl_tool SET name = '$this->name'
             	    WHERE
             	        c_id = $course_id AND
@@ -9995,7 +9995,7 @@ EOD;
         file_put_contents($archive_path.$temp_dir_short.'/document/non_exportable.html', $file_content);
 
         // Add the extra files that go along with a SCORM package.
-        $main_code_path = api_get_path(SYS_CODE_PATH).'newscorm/packaging/';
+        $main_code_path = api_get_path(SYS_CODE_PATH) . 'lp/packaging/';
         $extra_files = scandir($main_code_path);
         foreach ($extra_files as $extra_file) {
             if (strpos($extra_file, '.') === 0)
@@ -11019,7 +11019,7 @@ EOD;
      */
     private function getFinalItemTemplate()
     {
-        return file_get_contents(api_get_path(SYS_CODE_PATH) . 'newscorm/final_item_template/template.html');
+        return file_get_contents(api_get_path(SYS_CODE_PATH) . 'lp/final_item_template/template.html');
     }
 
     /**

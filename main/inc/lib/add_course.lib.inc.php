@@ -507,7 +507,7 @@ class AddCourse
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, 4, '" . TOOL_LEARNPATH . "','newscorm/lp_controller.php','scorms.gif','" . self::string2binary(
+            VALUES ($course_id, 4, '" . TOOL_LEARNPATH . "','lp/lp_controller.php','scorms.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'learning_path')
             ) . "','0','squaregrey.gif',0,'_self','authoring','0')"
         );

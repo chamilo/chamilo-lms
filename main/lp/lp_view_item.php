@@ -86,7 +86,7 @@ if (api_is_in_gradebook()) {
 }
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?action=list&'.api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths')
 );
 $interbreadcrumb[] = array(

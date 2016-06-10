@@ -1638,7 +1638,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
     $link = '';
     switch ($type) {
         case 'dokeos_chapter':
-            $link .= $main_dir_path.'newscorm/blank.php';
+            $link .= $main_dir_path . 'lp/blank.php';
         case TOOL_CALENDAR_EVENT:
             $link .= $main_dir_path.'calendar/agenda.php?origin='.$origin.'&agenda_id='.$id;
             break;
@@ -1732,7 +1732,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             Session::write('officedoc',$officedoc);
             break;
         case TOOL_LP_FINAL_ITEM:
-            $link .= api_get_path(WEB_CODE_PATH).'newscorm/lp_final_item.php?'.api_get_cidreq().'&id='.$id.'&lp_id='.$learnpath_id;
+            $link .= api_get_path(WEB_CODE_PATH) . 'lp/lp_final_item.php?'.api_get_cidreq().'&id='.$id.'&lp_id='.$learnpath_id;
             break;
         case 'assignments':
             $link .= $main_dir_path.'work/work.php?origin='.$origin;

@@ -646,7 +646,7 @@ foreach ($categories as $item) {
                 if ($details['subscribe_users'] == 1) {
                     $subscribeUsers = Display::url(
                         Display::return_icon('user.png', get_lang('SubscribeUsersToLp')),
-                        api_get_path(WEB_CODE_PATH)."newscorm/lp_subscribe_users.php?lp_id=$id&".api_get_cidreq()
+                        api_get_path(WEB_CODE_PATH) . "lp/lp_subscribe_users.php?lp_id=$id&".api_get_cidreq()
                     );
                 }
 

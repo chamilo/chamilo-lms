@@ -410,8 +410,8 @@ if ($from_learnpath != 'yes') {
 
     $from_learnpath = 'yes';
     session_register('from_learnpath');
-    $interbreadcrumb[] = array ('url' => "../newscorm/lp_controller.php?action=list", 'name' => get_lang('LearningPath'));
-    $interbreadcrumb[] = array ('url' => "../newscorm/lp_controller.php?action=admin_view&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
+    $interbreadcrumb[] = array ('url' => "../lp/lp_controller.php?action=list", 'name' => get_lang('LearningPath'));
+    $interbreadcrumb[] = array ('url' => "../lp/lp_controller.php?action=admin_view&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
     $interbreadcrumb[] = array ('url' => api_get_self()."?action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no", 'name' => "{$therow2['title']}");
 }
 

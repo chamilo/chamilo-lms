@@ -15,7 +15,7 @@ require api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
 require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'. api_get_path(WEB_PATH) .'main/newscorm/lp_list_search.css" />';
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'. api_get_path(WEB_CODE_PATH) .'lp/lp_list_search.css" />';
 Event::event_access_tool(TOOL_SEARCH);
 
 if (isset($_SESSION['gradebook'])){

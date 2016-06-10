@@ -48,3 +48,5 @@ RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued_all.php?skill=$1&use
 
 # Support old URLs using the exercice (with a c) folder rather than exercise
 RewriteRule ^main/exercice/(.*)$ main/exercise/$1 [QSA,L]
+# Support old URLs using the newscorm folder rather than lp
+RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]

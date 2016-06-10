@@ -118,7 +118,7 @@ if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_fra
 //Impress js
 if ($_SESSION['oLP']->mode == 'impress') {
     $lp_id = $_SESSION['oLP']->get_id();
-    $url = api_get_path(WEB_CODE_PATH) . "newscorm/lp_impress.php?lp_id=$lp_id&" . api_get_cidreq();
+    $url = api_get_path(WEB_CODE_PATH) . "lp/lp_impress.php?lp_id=$lp_id&" . api_get_cidreq();
     header("Location: $url");
     exit;
 }
@@ -191,7 +191,7 @@ if (!isset($src)) {
                     isset($file_info['extension']) &&
                     api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')
                 ) {
-                    $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
+                    $src = api_get_path(WEB_CODE_PATH).'lp/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }
 
                 $src = $_SESSION['oLP']->fixBlockedLinks($src);

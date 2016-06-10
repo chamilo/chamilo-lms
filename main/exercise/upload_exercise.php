@@ -618,7 +618,7 @@ function lp_upload_quiz_action_handling() {
             // Add a Quiz as Lp Item
             $_SESSION['oLP']->add_item($parent, $previous, TOOL_QUIZ, $quiz_id, $quiz_title, '');
             // Redirect to home page for add more content
-            header('location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.Security::remove_XSS($_GET['lp_id']));
+            header('location: ../lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.Security::remove_XSS($_GET['lp_id']));
             exit;
         } else {
             //  header('location: exercise.php?' . api_get_cidreq());

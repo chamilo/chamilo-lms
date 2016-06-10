@@ -180,7 +180,7 @@ echo '<div class="actions">';
 
 //if is called from learning path
 if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
-    echo "<a href=\"../newscorm/lp_controller.php?"
+    echo "<a href=\"../lp/lp_controller.php?"
         . api_get_cidreq()
         . "&gradebook=&action=add_item&type=step&lp_id=$lp_id#resource_tab-5\">"
         . Display::return_icon(

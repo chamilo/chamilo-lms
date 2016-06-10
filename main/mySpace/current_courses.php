@@ -76,7 +76,7 @@ if (!empty($my_courses)) {
 				$lp_id = $learnpath['id'];
 
 				$lp_items =
-				$array[$i]['lp'] = '<a href="'.api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$course_code.'&amp;action=view&amp;lp_id='.$lp_id.'" target="_blank">'.$learnpath['name'].'</a>';
+				$array[$i]['lp'] = '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?cidReq='.$course_code.'&amp;action=view&amp;lp_id='.$lp_id.'" target="_blank">'.$learnpath['name'].'</a>';
 
 				$array[$i]['teachers'] = '';
 				if (!empty($teacher_list)) {

@@ -919,7 +919,7 @@ if ($origin != 'learnpath') {
 } else {
     if (!isset($_GET['fb_type'])) {
         $lp_mode = $_SESSION['lp_mode'];
-        $url = '../newscorm/lp_controller.php?' . api_get_cidreq() . '&';
+        $url = '../lp/lp_controller.php?' . api_get_cidreq() . '&';
         $url .= http_build_url([
             'action' => 'view',
             'lp_id' => $learnpath_id,

@@ -1855,7 +1855,7 @@ HOTSPOT;
                     if ($lp_obj) {
                         $url = api_get_path(
                                 WEB_CODE_PATH
-                            ) . 'newscorm/lp_controller.php?' . api_get_cidreq() . '&action=view&lp_id=' . $results[$i]['orig_lp_id'];
+                            ) . 'lp/lp_controller.php?' . api_get_cidreq() . '&action=view&lp_id=' . $results[$i]['orig_lp_id'];
                         $lp_name = Display::url(
                             $lp_obj['lp_name'],
                             $url,

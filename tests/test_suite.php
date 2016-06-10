@@ -119,7 +119,7 @@ class TestsSuite extends TestSuite {
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/chat/chat_functions.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/conference/get_translation.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercise/hotpotatoes.lib.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/newscorm/scorm.lib.test.php');
+        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/lp/scorm.lib.test.php');
         //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/survey/survey.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/user/userInfoLib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/webservices/user_import/import.lib.test.php');
@@ -175,17 +175,17 @@ class TestsSuite extends TestSuite {
         $this->addFile(api_get_path(SYS_TEST_PATH).'main/course_info/download.lib.test.php');
 */
         // NEW SCORM
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/learnpath.class.test.php');
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/learnpathItem.class.test.php');
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/openoffice_document.class.test.php');
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/openoffice_presentation.class.test.php');
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/openoffice_text_document.class.test.php');
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/openoffice_text.class.test.php');
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/scorm.class.test.php');
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/scorm.lib.test.php');
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/scormItem.class.test.php');
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/scormOrganization.class.test.php');
-        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/scormResource.class.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/learnpath.class.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/learnpathItem.class.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/openoffice_document.class.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/openoffice_presentation.class.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/openoffice_text_document.class.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/openoffice_text.class.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/scorm.class.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/scorm.lib.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/scormItem.class.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/scormOrganization.class.test.php');
+        //$this->addFile(api_get_path(SYS_TEST_PATH).'main/lp/scormResource.class.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/main_api.lib.test.php');//this file delete the course
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests
     }

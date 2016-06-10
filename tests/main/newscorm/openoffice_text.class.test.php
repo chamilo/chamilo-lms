@@ -1,7 +1,7 @@
 <?php
-require_once(api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'newscorm/openoffice_text.class.php');
-require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpath.class.php';
+require_once api_get_path(SYS_CODE_PATH) . 'lp/openoffice_text.class.php';
+require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 
 class TestOpenOfficeTextClass extends UnitTestCase {
 

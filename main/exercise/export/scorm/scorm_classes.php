@@ -757,7 +757,7 @@ class ScormAssessmentItem
 	 */
 	function common_js()
 	{
-		$js = file_get_contents('../newscorm/js/api_wrapper.js');
+		$js = file_get_contents('../lp/js/api_wrapper.js');
 		$js .= 'var questions = new Array();' . "\n";
 		$js .= 'var questions_answers = new Array();' . "\n";
 		$js .= 'var questions_answers_correct = new Array();' . "\n";
@@ -998,7 +998,7 @@ class ScormSection
 	{
 		$js = "\n";
 		$js .= file_get_contents('../inc/lib/javascript/hotspot/js/hotspot.js');
-		$js .= file_get_contents('../newscorm/js/api_wrapper.js');
+		$js .= file_get_contents('../lp/js/api_wrapper.js');
 		$js .= 'var questions = new Array();' . "\n";
 		$js .= 'var questions_answers = new Array();' . "\n";
 		$js .= 'var questions_answers_correct = new Array();' . "\n";

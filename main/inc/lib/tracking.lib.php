@@ -4951,7 +4951,7 @@ class Tracking
                     $time_spent_in_lp = api_time_to_hms($time_spent_in_lp);
 
                     $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."newscorm/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
+                    $url = api_get_path(WEB_CODE_PATH) . "lp/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
 
                     if ($learnpath['lp_visibility'] == 0) {
                         $html .= Display::tag('td', $learnpath['lp_name']);
@@ -6087,7 +6087,7 @@ class TrackingCourseLog
     			break;
     		case 'learnpath':
     			$table_name = TABLE_LP_MAIN;
-    			$link_tool = 'newscorm/lp_controller.php';
+    			$link_tool = 'lp/lp_controller.php';
     			$id_tool = 'id';
     			break;
     		case 'quiz':

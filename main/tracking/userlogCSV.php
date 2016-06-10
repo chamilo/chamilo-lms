@@ -282,7 +282,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
                                 $title_line=get_lang('ScormTitleColumn').";".get_lang('ScormStatusColumn').";".get_lang('ScormScoreColumn').";".get_lang('ScormTimeColumn')."\n";
 
                                    while ($ar3['status'] != '') {
-                                    require_once('../newscorm/learnpathItem.class.php');
+                                    require_once('../lp/learnpathItem.class.php');
                                     $time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
                                        $line .= $title.';'.$ar3['status'].';'.$ar3['score'].';'.$time."\n";
                                        $ar3=Database::fetch_array($result3);

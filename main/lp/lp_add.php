@@ -97,7 +97,7 @@ if ($_POST AND empty($_REQUEST['lp_name'])) {
 $form = new FormValidator(
     'lp_add',
     'post',
-    api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq()
+    api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq()
 );
 
 // Form title

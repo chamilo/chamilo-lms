@@ -256,13 +256,10 @@ function WSUpdateTCCUserIdAndGetUser($params)
             if ($debug) error_log(print_r($result, 1));
 
             return $result;
-
         }
-    } else {
-        return false;
     }
 
-    return $return;
+    return [];
 }
 
 

@@ -608,7 +608,7 @@ $filtered_extension = false;
 if ($form->validate()) {
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
-
+    /** @var User $user */
     $user = UserManager::getRepository()->find(api_get_user_id());
 
     // set password if a new one was provided
@@ -617,7 +617,7 @@ if ($form->validate()) {
     if ($user &&
         (!empty($user_data['password0']) &&
         !empty($user_data['password1'])) ||
-        (!empty($user_data['password0']) && 
+        (!empty($user_data['password0']) &&
         api_get_setting('profile', 'email') == 'true')
     ) {
         $passwordWasChecked = true;
@@ -855,6 +855,78 @@ if ($form->validate()) {
     $sql .= " WHERE user_id  = '".api_get_user_id()."'";
     Database::query($sql);
 
+    $webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
+    $hash = api_get_plugin_setting('logintcc', 'hash');
+
+    $extraField = new ExtraFieldValue('user');
+    $extraField->saveFieldValues($user_data);
+
+    if (!empty($webserviceUrl) && !empty($hash)) {
+        $tccUserIdData = $extraField->get_values_by_handler_and_field_variable(api_get_user_id(), 'tcc_user_id');
+        $tccUserId = $tccUserIdData['value'];
+
+        $tccHashData = $extraField->get_values_by_handler_and_field_variable(api_get_user_id(), 'tcc_hash_key');
+        $tccHash = $tccHashData['value'];
+
+        $genreData = $extraField->get_values_by_handler_and_field_variable(api_get_user_id(), 'terms_genre');
+        $genre = $genreData['value'] == 'homme' ? 'Masculin' : 'Féminin';
+
+        $codeData = $extraField->get_values_by_handler_and_field_variable(api_get_user_id(), 'terms_codepostal');
+        $cp = $codeData['value'];
+
+        $citizenshipData = $extraField->get_values_by_handler_and_field_variable(
+            api_get_user_id(),
+            'terms_nationalite'
+        );
+        $citizenship = $citizenshipData['value'];
+
+        $birthData = $extraField->get_values_by_handler_and_field_variable(api_get_user_id(), 'terms_datedenaissance');
+        $birthDate = $birthData['value'];
+
+        $countryData = $extraField->get_values_by_handler_and_field_variable(api_get_user_id(), 'terms_paysresidence');
+        $country = $countryData['value'];
+
+        $cityData = $extraField->get_values_by_handler_and_field_variable(api_get_user_id(), 'terms_ville');
+        $city = $cityData['value'];
+
+        switch ($user_data['language']) {
+            case 'french':
+            case 'french2':
+                $language = 'fr-FR';
+                break;
+            case 'german':
+            case 'german2':
+                $language = 'de-DE';
+                break;
+            default:
+                $language = 'fr-FR';
+                break;
+        }
+
+        $params = [
+            'UserID' => $tccUserId,
+            'Genre' => $genre,
+            'Nom' => $user_data['lastname'],
+            'Prenom' => $user_data['firstname'],
+            'DateNaissance' => $birthDate,
+            'Langue' => $language,
+            'Nationalite' => $citizenship,
+            'Adresse' => $user_data['address'],
+            'CP' => $cp,
+            'PaysResidence' => $country,
+            'Ville' => $city,
+            'Email' => $user->getEmail(),
+            'HashKey' => $hash
+        ];
+
+        try {
+            $client = new GuzzleHttp\Client();
+            $response = $client->request('POST', $webserviceUrl.'/UpdateUser', ['json' => $params]);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     if ($passwordWasChecked == false) {
         Display::addFlash(
             Display:: return_message(get_lang('ProfileReg'), 'normal', false)
@@ -867,8 +939,7 @@ if ($form->validate()) {
         }
     }
 
-    $extraField = new ExtraFieldValue('user');
-    $extraField->saveFieldValues($user_data);
+
 
     $userInfo = api_get_user_info();
     Session::write('_user', $userInfo);
@@ -917,7 +988,7 @@ if (api_get_setting('show_terms_if_profile_completed') === 'true') {
     if (empty($user_data['profile_completed'])) {
         Display::addFlash(Display::return_message(get_lang('ProfileIsNotCompleted'), 'warning'));
     }
-    
+
     $profileCompleteResults = Session::read('profile_completed_result');
     if (!empty($profileCompleteResults)) {
         foreach ($profileCompleteResults as $profileVariable => $value) {

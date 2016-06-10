@@ -268,7 +268,7 @@ $extra = $extraFieldSession->addElements(
     api_get_user_id(),
     [],
     true,
-    false,
+    true,
     $fieldsToShow,
     $fieldsToShow,
     $defaults,

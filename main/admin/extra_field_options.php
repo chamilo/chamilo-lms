@@ -172,7 +172,7 @@ switch ($action) {
             if ($check) {
                 $values = $form->exportValues();
                 $res = $obj->update($values);
-                Display::display_confirmation_message(sprintf(get_lang('ItemUpdated'), $values['name']), false);
+                Display::display_confirmation_message(sprintf(get_lang('ItemUpdated'), $values['display_text']), false);
             }
             $obj->display();
         } else {

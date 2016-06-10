@@ -1735,6 +1735,7 @@ class SocialManager extends UserManager
         $template->assign('chat_enabled', $chatEnabled);
         $template->assign('user_relation', $userRelationType);
         $template->assign('user_relation_type_friend', USER_RELATION_TYPE_FRIEND);
+        $template->assign('show_full_profile', $show_full_profile);
         $templateName = $template->get_template('social/user_block.tpl');
 
         if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {

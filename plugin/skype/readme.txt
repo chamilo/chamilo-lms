@@ -28,8 +28,8 @@ VALUES
 
 <pre><code>INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, access_url_changeable)
 VALUES
-('allow_show_skype_account', NULL, 'radio', 'Course', 'true', 'AllowShowSkypeAccountTitle', 'AllowShowSkypeAccountComment', 1),
-('allow_show_linkedin_url', NULL, 'radio', 'Course', 'true', 'AllowShowLinkedInUrlTitle', 'AllowShowLinkedInUrlComment', 1);
+('allow_show_skype_account', NULL, 'radio', 'Platform', 'true', 'AllowShowSkypeAccountTitle', 'AllowShowSkypeAccountComment', 1),
+('allow_show_linkedin_url', NULL, 'radio', 'Platform', 'true', 'AllowShowLinkedInUrlTitle', 'AllowShowLinkedInUrlComment', 1);
 </code></pre>
 
 <pre><code>INSERT INTO settings_options (variable, value, display_text)

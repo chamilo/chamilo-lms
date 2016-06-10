@@ -85,7 +85,7 @@ function lp_upload_quiz_main() {
     $form->addElement('header', get_lang('ImportExcelQuiz'));
     $form->addElement('file', 'user_upload_quiz', get_lang('FileUpload'));
 
-    $link = '<a href="../exercice/quiz_template.xls">'.
+    $link = '<a href="../exercise/quiz_template.xls">'.
         Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate')).get_lang('DownloadExcelTemplate').'</a>';
     $form->addElement('label', '', $link);
 
@@ -621,8 +621,8 @@ function lp_upload_quiz_action_handling() {
             header('location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.Security::remove_XSS($_GET['lp_id']));
             exit;
         } else {
-            //  header('location: exercice.php?' . api_get_cidreq());
-            echo '<script>window.location.href = "'.api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&exerciseId='.$quiz_id.'&session_id='.api_get_session_id().'"</script>';
+            //  header('location: exercise.php?' . api_get_cidreq());
+            echo '<script>window.location.href = "'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$quiz_id.'&session_id='.api_get_session_id().'"</script>';
         }
     }
 }

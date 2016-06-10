@@ -151,7 +151,7 @@ if ($objExercise->selectAttempts() > 0) {
         if ($remainingAttempts) {
             $attemptButton = Display::toolbarButton(
                 get_lang('AnotherAttempt'),
-                api_get_path(WEB_CODE_PATH) . 'exercice/overview.php?' . api_get_cidreq() . '&' . http_build_query([
+                api_get_path(WEB_CODE_PATH) . 'exercise/overview.php?' . api_get_cidreq() . '&' . http_build_query([
                     'exerciseId' => $objExercise->id
                 ]),
                 'pencil-square-o',

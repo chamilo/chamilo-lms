@@ -1,5 +1,5 @@
 <?php
-require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercise/question.class.php';
 
 class TestExerciseLib extends UnitTestCase {
 	/*public $eQuestion;

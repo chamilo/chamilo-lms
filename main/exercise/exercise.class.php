@@ -5165,7 +5165,7 @@ class Exercise
         }
 
         $url_email = api_get_path(WEB_CODE_PATH)
-            . 'exercice/exercise_show.php?'
+            . 'exercise/exercise_show.php?'
             . api_get_cidreq()
             . '&id_session='
             . $sessionId
@@ -5241,7 +5241,7 @@ class Exercise
         $course_info    = api_get_course_info($courseCode);
 
         $url_email = api_get_path(WEB_CODE_PATH)
-            . 'exercice/exercise_show.php?'
+            . 'exercise/exercise_show.php?'
             . api_get_cidreq()
             . '&id_session='
             . api_get_session_id()
@@ -5337,7 +5337,7 @@ class Exercise
         $course_info    = api_get_course_info($courseCode);
 
         $url_email = api_get_path(WEB_CODE_PATH)
-            . 'exercice/exercise_show.php?'
+            . 'exercise/exercise_show.php?'
             . api_get_cidreq()
             . '&id_session='
             . api_get_session_id()

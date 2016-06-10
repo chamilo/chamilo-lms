@@ -151,7 +151,7 @@ if (isset($_REQUEST['comments']) &&
         null,
         PERSON_NAME_EMAIL_ADDRESS
     );
-    $url = api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
+    $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
 
     $my_post_info = array();
     $post_content_id = array();
@@ -261,7 +261,7 @@ if (isset($_REQUEST['comments']) &&
         Database::query($sql);
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
-            header('location: '.api_get_path(WEB_CODE_PATH).'exercice/exercise.php?course='.Security :: remove_XSS($_GET['course']));
+            header('location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security :: remove_XSS($_GET['course']));
             exit;
         } else {
             // Redirect to the reporting

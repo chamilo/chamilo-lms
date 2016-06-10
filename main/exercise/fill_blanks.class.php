@@ -757,7 +757,7 @@ class FillBlanks extends Question
        $tblTrackEExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
        $courseId = api_get_course_int_id();
 
-       require_once api_get_path(SYS_PATH).'main/exercice/fill_blanks.class.php';
+       require_once api_get_path(SYS_PATH).'main/exercise/fill_blanks.class.php';
 
        // request to have all the answers of student for this question
        // student may have doing it several time

@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  indexes={
  *      @ORM\Index(name="course", columns={"c_id"}),
  *      @ORM\Index(name="question", columns={"question_id"}),
- *      @ORM\Index(name="exercice", columns={"exercice_id"})
+ *      @ORM\Index(name="exercise", columns={"exercice_id"})
  *  }
  * )
  * @ORM\Entity

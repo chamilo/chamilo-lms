@@ -313,7 +313,7 @@ if ($_GET["source_id"])
 			unset ($from_learnpath);
 			break;
 		case "4" : // coming from exercises: edit topic
-			$url = "../exercice/admin.php?modifyAnswers=$modifyAnswers";
+			$url = "../exercise/admin.php?modifyAnswers=$modifyAnswers";
 			$originaltoolname = get_lang("ExerciseAnswers");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
 			session_unregister('from_learnpath');

@@ -959,7 +959,7 @@ class Tracking
                                                             </td>';
                                                 } else {
                                                     $output .= '<td>
-                                                            <a href="../exercice/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
+                                                            <a href="../exercise/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
                                                             <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
                                                             </a></td>';
                                                 }
@@ -969,7 +969,7 @@ class Tracking
                                                                 <img src="' . Display::returnIconPath('quiz_na.gif').'" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
                                                 } else {
                                                     $output .= '<td>
-                                                                    <a href="../exercice/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
+                                                                    <a href="../exercise/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
                                                                     <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
                                                 }
                                             }
@@ -4799,7 +4799,7 @@ class Tracking
                     );
 
                     $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
+                    $url = api_get_path(WEB_CODE_PATH) . "exercise/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
 
                     if ($visible_return['value'] == true) {
                         $exercices['title'] = Display::url(
@@ -4858,7 +4858,7 @@ class Tracking
                                 $weighting      = $exercise_stat['exe_weighting'];
                                 $exe_id         = $exercise_stat['exe_id'];
 
-                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
+                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH) . 'exercise/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
                                 $percentage_score_result = Display::url(ExerciseLib::show_score($score, $weighting), $latest_attempt_url);
                                 $my_score = 0;
                                 if (!empty($weighting) && intval($weighting) != 0) {
@@ -6092,7 +6092,7 @@ class TrackingCourseLog
     			break;
     		case 'quiz':
     			$table_name = TABLE_QUIZ_TEST;
-    			$link_tool = 'exercice/exercice.php';
+    			$link_tool = 'exercise/exercise.php';
     			$id_tool = 'id';
     			break;
     		case 'glossary':

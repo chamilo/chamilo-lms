@@ -15,8 +15,8 @@ $lib_path = api_get_path(LIBRARY_PATH);
 $main_path = api_get_path(SYS_CODE_PATH);
 
 // including additional libraries
-require_once $main_path.'exercice/export/aiken/aiken_import.inc.php';
-require_once $main_path.'exercice/export/aiken/aiken_classes.php';
+require_once $main_path.'exercise/export/aiken/aiken_import.inc.php';
+require_once $main_path.'exercise/export/aiken/aiken_classes.php';
 
 // section (for the tabs)
 $this_section = SECTION_COURSES;

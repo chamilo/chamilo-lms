@@ -316,7 +316,7 @@ class Event
      *
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
-     * @desc Record result of user when an exercice was done
+     * @desc Record result of user when an exercise was done
      */
     public static function update_event_exercice(
         $exeid,

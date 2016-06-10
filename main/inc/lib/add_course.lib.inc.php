@@ -519,7 +519,7 @@ class AddCourse
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage  (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES  ($course_id, 6, '" . TOOL_QUIZ . "','exercice/exercice.php','quiz.gif','" . self::string2binary(
+            VALUES  ($course_id, 6, '" . TOOL_QUIZ . "','exercise/exercise.php','quiz.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'quiz')
             ) . "','0','squaregrey.gif',0,'_self','authoring','0')"
         );

@@ -22,7 +22,7 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $is_tutor = api_is_allowed_to_edit(true);
 
 if (!$is_allowedToEdit){
-    header('Location: /main/exercice/exercise.php?'.api_get_cidreq());
+    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'exercise/exercise.php?' . api_get_cidreq());
     exit;
 }
 

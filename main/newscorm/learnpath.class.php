@@ -6304,7 +6304,7 @@ class learnpath
                             $return .= $exercise->description.'<br />';
                             $return .= Display::url(
                                 get_lang('GoToExercise'),
-                                api_get_path(WEB_CODE_PATH).'exercice/overview.php?'.api_get_cidreq().'&exerciseId='.$exercise->id,
+                                api_get_path(WEB_CODE_PATH) . 'exercise/overview.php?' . api_get_cidreq() . '&exerciseId=' . $exercise->id,
                                 ['class' => 'btn btn-primary']
                             );
                         }
@@ -8895,7 +8895,7 @@ class learnpath
 
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('new_test_small.gif');
-        $return .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'exercice/exercise_admin.php?'.api_get_cidreq().'&lp_id=' . $this->lp_id . '">' .
+        $return .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id=' . $this->lp_id . '">' .
             get_lang('NewExercise') . '</a>';
         $return .= '</li>';
 

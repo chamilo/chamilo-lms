@@ -64,7 +64,7 @@ if ($modifyIn) {
     unset($buttonBack);
 }
 
-$hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_get_cidreq() . '&exerciseId=' . $exerciseId;
+$hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercise/admin.php?' . api_get_cidreq() . '&exerciseId=' . $exerciseId;
 
 // the answer form has been submitted
 $submitAnswers = isset($_POST['submitAnswers']) ? true : false;
@@ -572,7 +572,7 @@ if ($modifyAnswers) {
         Display::display_normal_message($msgErr); //main API
     }
 
-    $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_get_cidreq() . '&hotspotadmin=' . $modifyAnswers . '&exerciseId=' . $exerciseId . '&' . api_get_cidreq();
+    $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercise/admin.php?' . api_get_cidreq() . '&hotspotadmin=' . $modifyAnswers . '&exerciseId=' . $exerciseId . '&' . api_get_cidreq();
     ?>
     <form method="post" action="<?php echo $hotspot_admin_url; ?>" class="form-horizontal" id="frm_exercise" name="frm_exercise">
         <div class="form-group">

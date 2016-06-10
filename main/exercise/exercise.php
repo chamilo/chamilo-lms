@@ -116,7 +116,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 $nameTools = get_lang('Exercises');
 $errorXmlExport = null;
 if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
-    require_once api_get_path(SYS_CODE_PATH).'exercice/export/qti2/qti2_export.php';
+    require_once api_get_path(SYS_CODE_PATH).'exercise/export/qti2/qti2_export.php';
 
     $export = export_exercise_to_qti($exerciseId, true);
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
@@ -443,25 +443,25 @@ $total = $total_exercises + $hp_count;
 
 $token = Security::get_token();
 if ($is_allowedToEdit && $origin != 'learnpath') {
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/exercise_admin.php?'.api_get_cidreq().'">'.
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'">'.
         Display :: return_icon('new_exercice.png', get_lang('NewEx'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/question_create.php?'.api_get_cidreq().'">'.
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_create.php?'.api_get_cidreq().'">'.
         Display :: return_icon('new_question.png', get_lang('AddQ'), '', ICON_SIZE_MEDIUM).'</a>';
     // Question category
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/tests_category.php?'.api_get_cidreq().'">';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/tests_category.php?'.api_get_cidreq().'">';
     echo Display::return_icon('green_open.png', get_lang('QuestionCategory'), '', ICON_SIZE_MEDIUM);
     echo '</a>';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/question_pool.php?'.api_get_cidreq().'">';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_pool.php?'.api_get_cidreq().'">';
     echo Display::return_icon('database.png', get_lang('QuestionPool'), '', ICON_SIZE_MEDIUM);
     echo '</a>';
 
     //echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());
     // end question category
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/hotpotatoes.php?'.api_get_cidreq().'">'.Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/hotpotatoes.php?'.api_get_cidreq().'">'.Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     // link to import qti2 ...
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/qti2.php?'.api_get_cidreq().'">'.Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/aiken.php?'.api_get_cidreq().'">'.Display :: return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/upload_exercise.php?'.api_get_cidreq().'">'.Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/qti2.php?'.api_get_cidreq().'">'.Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/aiken.php?'.api_get_cidreq().'">'.Display :: return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo Display::url(
         Display::return_icon(
             'clean_all.png',
@@ -472,7 +472,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         '',
         array(
             'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))."')) return false;",
-            'href' => api_get_path(WEB_CODE_PATH).'exercice/exercise.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token
+            'href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token
         )
     );
 }

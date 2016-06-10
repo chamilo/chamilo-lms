@@ -5737,7 +5737,7 @@ class CourseManager
                         $result = $objExercise->read($exercise_redirect);
 
                         if (!empty($exercise_redirect) && !empty($result)) {
-                            $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
+                            $form_data['action'] = api_get_path(WEB_CODE_PATH) . 'exercise/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
                             $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
                             $form_data['button'] = Display::button(
                                 'next',

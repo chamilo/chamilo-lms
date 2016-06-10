@@ -556,7 +556,7 @@ class ExerciseLib
                         break;
                     case FILL_IN_BLANKS:
                         // display the question, with field empty, for student to fill it,
-                        // or filled to display the answer in the Question preview of the exercice/admin.php page
+                        // or filled to display the answer in the Question preview of the exercise/admin.php page
                         $displayForStudent = true;
                         $listAnswerInformations = FillBlanks::getAnswerInfo($answer);
                         $separatorStartRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorstart']);
@@ -574,7 +574,7 @@ class ExerciseLib
                             $studentAnswerList = $arrayStudentAnswer['studentanswer'];
                         }
 
-                        // If the question must be shown with the answer (in page exercice/admin.php) for teacher preview
+                        // If the question must be shown with the answer (in page exercise/admin.php) for teacher preview
                         // set the student-answer to the correct answer
                         if ($debug_mark_answer) {
                             $studentAnswerList = $correctAnswerList;
@@ -1461,7 +1461,7 @@ HOTSPOT;
         $result = array();
         $apiIsAllowedToEdit = api_is_allowed_to_edit();
         $urlBase = api_get_path(WEB_CODE_PATH) .
-            'exercice/hotpotatoes_exercise_report.php?action=delete&' .
+            'exercise/hotpotatoes_exercise_report.php?action=delete&' .
             api_get_cidreq() . '&id=';
         while ($data = Database::fetch_array($res)) {
             $actions = null;
@@ -1987,7 +1987,7 @@ HOTSPOT;
                         } else {
                             $attempt_url = api_get_path(
                                     WEB_CODE_PATH
-                                ) . 'exercice/result.php?' . api_get_cidreq() . '&id=' . $results[$i]['exe_id'] . '&id_session=' . $sessionId;
+                                ) . 'exercise/result.php?' . api_get_cidreq() . '&id=' . $results[$i]['exe_id'] . '&id_session=' . $sessionId;
                             $attempt_link = Display::url(
                                 get_lang('Show'),
                                 $attempt_url,

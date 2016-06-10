@@ -22,7 +22,7 @@
             "main/cron/lang",
             "main/course_description",
             "main/dropbox",
-            "main/exercice",
+            "main/exercise",
             "main/gradebook/lib",
             "main/newscorm",
             "main/inc/lib",

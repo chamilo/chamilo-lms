@@ -855,7 +855,7 @@ if ($isFeedbackAllowed) {
 
 if ($isFeedbackAllowed) {
     if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))) {
-        $formUrl = api_get_path(WEB_CODE_PATH) . 'exercice/exercise_report.php?' . api_get_cidreq() . '&';
+        $formUrl = api_get_path(WEB_CODE_PATH) . 'exercise/exercise_report.php?' . api_get_cidreq() . '&';
         $formUrl .= http_build_query([
             'exerciseId' => $exercise_id,
             'filter' => 2,
@@ -874,7 +874,7 @@ if ($isFeedbackAllowed) {
         echo '<input type = "hidden" name="total_score"      value="' . $totalScore . '"> ';
         echo '<input type = "hidden" name="my_exe_exo_id"    value="' . $exercise_id . '"> ';
     } else {
-        $formUrl = api_get_path(WEB_CODE_PATH) . 'exercice/exercise_report.php?' . api_get_cidreq() . '&';
+        $formUrl = api_get_path(WEB_CODE_PATH) . 'exercise/exercise_report.php?' . api_get_cidreq() . '&';
         $formUrl .= http_build_query([
             'exerciseId' => $exercise_id,
             'filter' => 1,

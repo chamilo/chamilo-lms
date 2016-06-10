@@ -332,7 +332,7 @@ foreach ($final_array as $session_data) {
 
                                 $exercise_info->exercise = Display::url(
                                     $exercise_info->exercise,
-                                    api_get_path(WEB_CODE_PATH)."exercice/result.php?cidReq=$my_course_code&id={$exercise_result['exe_id']}&id_session=$session_id&show_headers=1",
+                                    api_get_path(WEB_CODE_PATH) . "exercise/result.php?cidReq=$my_course_code&id={$exercise_result['exe_id']}&id_session=$session_id&show_headers=1",
                                     array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link')
                                 );
 
@@ -358,7 +358,7 @@ foreach ($final_array as $session_data) {
                             }
                             $exercise_info->exercise = Display::url(
                                 $exercise_info->exercise,
-                                api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id",
+                                api_get_path(WEB_CODE_PATH) . "exercise/overview.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id",
                                 array('target'=>SESSION_LINK_TARGET)
                             );
 

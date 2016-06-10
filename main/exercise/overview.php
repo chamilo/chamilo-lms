@@ -78,7 +78,7 @@ $edit_link = '';
 if ($is_allowed_to_edit && $objExercise->sessionId == $sessionId) {
     $edit_link = Display::url(
         Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
-        api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id
+        api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id
     );
 }
 $iconExercise = Display::return_icon('test-quiz.png', null, array(), ICON_SIZE_MEDIUM);
@@ -118,7 +118,7 @@ if (!empty($attempt_list)) {
 
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
-$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
+$exercise_url = api_get_path(WEB_CODE_PATH) . 'exercise/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,
@@ -184,7 +184,7 @@ if (!empty($attempts)) {
             $attempt_result['exe_result'],
             $attempt_result['exe_weighting']
         );
-        $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?';
+        $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercise/result.php?';
         $attempt_url .= api_get_cidreq() . '&show_headers=1&';
         $attempt_url .= http_build_query([
             'id' => $attempt_result['exe_id']

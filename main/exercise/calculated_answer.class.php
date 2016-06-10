@@ -138,7 +138,7 @@ class CalculatedAnswer extends Question
 
         $notationListButton = Display::url(
             get_lang('NotationList'),
-            api_get_path(WEB_PATH).'main/exercice/evalmathnotation.php',
+            api_get_path(WEB_CODE_PATH).'exercise/evalmathnotation.php',
             array(
                 'class' => 'btn btn-info ajax',
                 'data-title' => get_lang('NotationList'),

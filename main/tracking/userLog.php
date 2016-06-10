@@ -26,7 +26,7 @@ $is_allowed = true;
 
 /* Libraries */
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
 
 /* Header */
 

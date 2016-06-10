@@ -8,7 +8,7 @@
  */
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
 $_course = api_get_course_info();
 
 $time = time();
@@ -38,9 +38,9 @@ if ($content == '') {
         if (SaveScoreVariable==0) {
             SaveScoreVariable = 1;
             if (C.ie) {
-                document.location.href = '".api_get_path(WEB_PATH)."main/exercice/savescores.php?lp_view_id=$lpViewId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
+                document.location.href = '" . api_get_path(WEB_CODE_PATH) . "exercise/savescores.php?lp_view_id=$lpViewId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
             } else {
-                window.location.href = '".api_get_path(WEB_PATH)."main/exercice/savescores.php?lp_view_id=$lpViewId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
+                window.location.href = '" . api_get_path(WEB_CODE_PATH) . "exercise/savescores.php?lp_view_id=$lpViewId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
             }
         }
     }

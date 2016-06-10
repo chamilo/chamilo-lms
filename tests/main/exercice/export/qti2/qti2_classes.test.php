@@ -1,14 +1,14 @@
 <?php
 
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/question.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/exercise.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotspot.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/unique_answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/multiple_answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/matching.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/freeanswer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/fill_blanks.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercise/answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercise/question.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercise/exercise.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercise/hotspot.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercise/unique_answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercise/multiple_answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercise/matching.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercise/freeanswer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercise/fill_blanks.class.php');
 
 class TestQti2 extends UnitTestCase {
 
@@ -20,7 +20,7 @@ class TestQti2 extends UnitTestCase {
 	public $qImsAnswerMultipleChoice;
 
 	public function __construct() {
-        $this->UnitTestCase('QTI2 library - main/exercice/export/qti2/qti2_classes.test.php');
+        $this->UnitTestCase('QTI2 library - main/exercise/export/qti2/qti2_classes.test.php');
 	}
 
 	public function setUp() {

@@ -23,7 +23,7 @@ if (!empty($_course['language'])){
         require_once $resource_linker_file;
     }
 }
-require_once '../exercice/hotpotatoes.lib.php';
+require_once '../exercise/hotpotatoes.lib.php';
 
 /* FUNCTIONS */
 
@@ -244,13 +244,13 @@ function display_addedresource_link($type, $id, $style = '')
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
             $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
+            echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercise/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
             break;
         case 'Forum':
             $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
             $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
             $myrow = Database::fetch_array($result);
-            echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow['forum_name']."</a><br />\n";
+            echo '<img src="../img/forum.gif" align="middle" /> <a href="../forum/viewforum.php?forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow['forum_name']."</a><br />\n";
             break;
         case 'Thread':  //=topics
             //@deprecated bb_posts, bb_posts_text, bb_forums
@@ -532,7 +532,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                     }
                 }
             } else {
-                echo "<a href=\"../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow['id']."\" class='$completed' target='_blank'>".shorten($myrow['title'], ($length-3*$level))."</a>";
+                echo "<a href=\"../exercise/exercise_submit.php?origin=$origin&exerciseId=".$myrow['id']."\" class='$completed' target='_blank'>".shorten($myrow['title'], ($length-3*$level))."</a>";
             }
             break;
 
@@ -583,7 +583,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                     }
                 }
             } else {
-                echo "&nbsp;<a href=\"../exercice/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id']."\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
+                echo "&nbsp;<a href=\"../exercise/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id']."\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
             }
             break;
 
@@ -1115,7 +1115,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
             if ($builder != 'builder') {
                 $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path";
             } else {
-                $link .= "../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"];
+                $link .= "../exercise/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"];
             }
             break;
         case 'HotPotatoes':
@@ -1132,7 +1132,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
             if ($builder != 'builder') {
                 $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path";
             } else {
-                $link .= "../exercice/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id'];
+                $link .= "../exercise/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id'];
             }
             break;
         case 'Forum':
@@ -1548,13 +1548,13 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
             $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            $output = '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
+            $output = '<img src="../img/quiz.gif" align="middle" /> <a href="../exercise/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
             break;
         case TOOL_FORUM:
             $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
             $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
             $myrow = Database::fetch_array($result);
-            $output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&md5='.$myrow['md5'].'"'.$styling.' '.$target.'>'.$myrow['forum_name']."</a><br />\n";
+            $output = '<img src="../img/forum.gif" align="middle" /> <a href="../forum/viewforum.php?forum='.$myrow['forum_id'].'&md5='.$myrow['md5'].'"'.$styling.' '.$target.'>'.$myrow['forum_name']."</a><br />\n";
             break;
         case TOOL_THREAD:  //=topics
             //$tbl_forum 		= Database::get_course_table(TABLE_FORUM);
@@ -1564,7 +1564,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
             $sql_title = "SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=".$id;
             $result_title = Database::query($sql_title);
             $myrow_title = Database::fetch_array($result_title);
-            $output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$myrow_title['thread_id'].'&forum='.$myrow_title['forum_id'].'" '.$styling.' '.$target.'>'.$myrow_title['post_title']."</a><br />\n";
+            $output = '<img src="../img/forum.gif" align="middle" /> <a href="../forum/viewtopic.php?topic='.$myrow_title['thread_id'].'&forum='.$myrow_title['forum_id'].'" '.$styling.' '.$target.'>'.$myrow_title['post_title']."</a><br />\n";
             break;
         case TOOL_POST:
             $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
@@ -1572,7 +1572,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
             $sql = "SELECT * FROM $tbl_post p WHERE c_id = $course_id AND p.post_id = $id";
             $result = Database::query($sql);
             $post = Database::fetch_array($result);
-            $output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$post['thread_id'].'&forum='.$post['forum_id'].'"'.$styling.' '.$target.'>'.$post['post_title']."</a><br />\n";
+            $output = '<img src="../img/forum.gif" align="middle" /> <a href="../forum/viewtopic.php?topic='.$post['thread_id'].'&forum='.$post['forum_id'].'"'.$styling.' '.$target.'>'.$post['post_title']."</a><br />\n";
             break;
         case TOOL_DOCUMENT:
             $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
@@ -1661,7 +1661,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
                 if ($row_item['title'] != '') {
                     $myrow['title'] = $row_item['title'];
                 }
-                $link .= $main_dir_path.'exercice/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+                $link .= $main_dir_path . 'exercise/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
             }
             break;
         case 'hotpotatoes': //lowercase because of strtolower above
@@ -1669,7 +1669,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $path = $myrow['path'];
-            $link .= $main_dir_path.'exercice/showinframes.php?file='.$path.'' .
+            $link .= $main_dir_path . 'exercise/showinframes.php?file='.$path.'' .
                     '&origin='.$origin.'&cid='.$course_code.'&uid='.api_get_user_id().'' .
                     '&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&lp_view_id='.$lpViewId;
             break;

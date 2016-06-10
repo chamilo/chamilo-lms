@@ -69,6 +69,8 @@ $(document).ready(function() {
             
                 if (data.d.Exist) {
                     var monU = data.d.User;
+                    console.log(monU);
+                        
                     $("input[name=\'extra_tcc_user_id\']").val(monU.UserID);
                     $("input[name=\'extra_tcc_hash_key\']").val(monU.HashKey);                                                                             
                     var $radios = $("input:radio[name=\'extra_terms_genre[extra_terms_genre]\']");
@@ -79,8 +81,13 @@ $(document).ready(function() {
                     }
                     $("input[name=\'lastname\']").val(monU.Nom);
                     $("input[name=\'firstname\']").val(monU.Prenom);
-                    //$("#U_Birthday").val(monU.DateNaissance);
-                    console.log(monU);
+                    
+                    var date = monU.DateNaissance; // 30/06/1986                    
+                    if (date != "") {        
+                        var parts = date.split(\'/\');
+                        $("#extra_terms_datedenaissance").datepicker("setDate", new Date(parts[2], parts[1], parts[0]));
+                    }
+                
                     if (monU.Langue == "fr-FR") {                              
                         $("#language").selectpicker("val", "french");
                         $("#language").selectpicker(\'render\');                        
@@ -92,10 +99,10 @@ $(document).ready(function() {
                     }
                     
                     $("input[name=\'extra_terms_nationalite\']").val(monU.Nationalite);
-                    //$("#U_Pays").val(monU.PaysResidence);
+                    $("input[name=\'extra_terms_paysresidence\']").val(monU.PaysResidence);
                     $("input[name=\'address\']").val(monU.Adresse);
                     $("input[name=\'extra_terms_codepostal\']").val(monU.CP);
-                    //$("#U_Ville").val(monU.Ville);													
+                    $("input[name=\'extra_terms_ville\']").val(monU.Ville);													
                 } else {
                     alert(\'User inconnu.\');
                 }

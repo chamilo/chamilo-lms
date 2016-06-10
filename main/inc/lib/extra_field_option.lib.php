@@ -616,18 +616,15 @@ class ExtraFieldOption extends Model
         $form->addElement('hidden', 'field_id', $this->field_id);
 
         if ($action == 'edit') {
-            $platformLanguage = api_get_setting('platformLanguage');
-            $languageId = api_get_language_id($platformLanguage);
-            $languageInfo = api_get_language_info($languageId);
-            $translateUrl = api_get_path(WEB_CODE_PATH) . 'admin/sub_language.php?' . http_build_query([
-                'id' => $languageInfo['parent_id'],
-                'action' => 'registersublanguage',
-                'sub_language_id' => $languageInfo['id'],
+            $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
                 'extra_field_option' => $id
             ]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
 
-            $form->addElement('text', 'display_text', [get_lang('Name'), $translateButton]);
+            $form->addText(
+                'display_text',
+                [get_lang('Name'), $translateButton]
+            );
         } else {
             $form->addElement('text', 'display_text', get_lang('Name'));
         }

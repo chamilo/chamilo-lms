@@ -10,6 +10,7 @@ api_protect_admin_script();
 $em = Database::getManager();
 
 $extraFieldInfo = null;
+$extraFieldOptionInfo = null;
 $variableLanguage = null;
 $originalName = null;
 
@@ -23,7 +24,7 @@ if (isset($_GET['extra_field'])) {
     $originalName = $extraFieldOptionInfo['display_text'];
 }
 
-if (empty($extraFieldInfo) || empty($variableLanguage) || empty($originalName)) {
+if ((empty($extraFieldInfo) && empty($extraFieldOptionInfo)) || empty($variableLanguage) || empty($originalName)) {
     api_not_allowed(true);
 }
 

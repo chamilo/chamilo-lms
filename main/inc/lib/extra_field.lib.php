@@ -1763,14 +1763,19 @@ EOF;
 
         $form->addElement('header', $header);
 
-        $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
-            'extra_field' => $id
-        ]);
-        $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
-        $form->addText(
-            'display_text',
-            [get_lang('Name'), $translateButton]
-        );
+        if ($action == 'edit') {
+            $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
+                'extra_field' => $id
+            ]);
+            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+
+            $form->addText(
+                'display_text',
+                [get_lang('Name'), $translateButton]
+            );
+        } else {
+            $form->addElement('text', 'display_text', get_lang('Name'));
+        }
 
         // Field type
         $types = self::get_field_types();

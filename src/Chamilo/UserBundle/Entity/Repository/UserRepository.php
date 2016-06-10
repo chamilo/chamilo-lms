@@ -50,6 +50,29 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @param string $email
+     *
+     * @return mixed
+     */
+    public function getUsersByEmail($email)
+    {
+        $qb = $this->createQueryBuilder('a');
+
+        // Selecting user info
+        $qb->select('DISTINCT b');
+
+        $qb->from('Chamilo\UserBundle\Entity\User', 'b');
+
+        //@todo check app settings
+        $qb->add('orderBy', 'b.firstname ASC');
+        $qb->where('b.email = :email');
+        $qb->setParameter('email', $email);
+        $query = $qb->getQuery();
+
+        return $query->execute();
+    }
+
+    /**
      * Get course user relationship based in the course_rel_user table.
      * @return array
      */

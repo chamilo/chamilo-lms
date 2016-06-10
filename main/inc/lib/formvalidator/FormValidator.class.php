@@ -471,13 +471,13 @@ EOT;
      *
      * @return HTML_QuickForm_button
      */
-    public function addButtonSearch($label = null, $name = 'submit')
+    public function addButtonSearch($label = null, $name = 'submit', $attributes = array())
     {
         if (empty($label)) {
             $label = get_lang('Search');
         }
 
-        return $this->addButton($name, $label, 'search', 'default');
+        return $this->addButton($name, $label, 'search', 'default', null, null, $attributes);
     }
 
     /**

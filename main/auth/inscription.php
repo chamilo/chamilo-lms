@@ -31,6 +31,9 @@ if ($allowedFieldsConfiguration !== false) {
     $allowedFields = $allowedFieldsConfiguration;
 }
 
+$webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
+$hash = api_get_plugin_setting('logintcc', 'hash');
+
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 $htmlHeadXtra[] = '<script>
@@ -45,6 +48,64 @@ $(document).ready(function() {
 
     $("#myLocation").on("click", function() {
         myLocation();
+        return false;
+    });
+    
+    
+    $("#search_user").click(function() {
+        
+        var data = new Object();
+        data.Mail = $("input[name=\'email\']").val();
+        data.HashKey = "'.$hash.'";
+        
+        $.ajax({
+            url: "'.$webserviceUrl.'/IsExistEmail",
+            data: JSON.stringify(data),
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data, status) {
+                //console.log(data);			
+            
+                if (data.d.Exist) {
+                    var monU = data.d.User;
+                    $("input[name=\'extra_tcc_user_id\']").val(monU.UserID);
+                    $("input[name=\'extra_tcc_hash_key\']").val(monU.HashKey);                                                                             
+                    var $radios = $("input:radio[name=\'extra_terms_genre[extra_terms_genre]\']");
+                    if (monU.Genre == "Masculin") {
+                        $radios.filter(\'[value=homme]\').prop(\'checked\', true);
+                    } else {                        
+                        $radios.filter(\'[value=femme]\').prop(\'checked\', true);
+                    }
+                    $("input[name=\'lastname\']").val(monU.Nom);
+                    $("input[name=\'firstname\']").val(monU.Prenom);
+                    //$("#U_Birthday").val(monU.DateNaissance);
+                    console.log(monU);
+                    if (monU.Langue == "fr-FR") {                              
+                        $("#language").selectpicker("val", "french");
+                        $("#language").selectpicker(\'render\');                        
+                    }
+                    
+                    if (monU.Langue == "de-DE") {                                  
+                        $("#language").selectpicker("val", "german");
+                        $("#language").selectpicker(\'render\');   
+                    }
+                    
+                    $("input[name=\'extra_terms_nationalite\']").val(monU.Nationalite);
+                    //$("#U_Pays").val(monU.PaysResidence);
+                    $("input[name=\'address\']").val(monU.Adresse);
+                    $("input[name=\'extra_terms_codepostal\']").val(monU.CP);
+                    //$("#U_Ville").val(monU.Ville);													
+                } else {
+                    alert(\'User inconnu.\');
+                }
+                
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
+        
         return false;
     });
 });
@@ -155,6 +216,16 @@ if (!empty($course_code_redirect)) {
 }
 
 if ($user_already_registered_show_terms === false) {
+
+
+    // EMAIL
+    $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
+    if (api_get_setting('registration', 'email') === 'true') {
+        $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
+    }
+
+    $form->addButtonSearch(get_lang('Search'), 'search', ['id' => 'search_user']);
+
     if (api_is_western_name_order()) {
         // FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
@@ -168,11 +239,6 @@ if ($user_already_registered_show_terms === false) {
     $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
-    // EMAIL
-    $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
-    if (api_get_setting('registration', 'email') === 'true') {
-        $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
-    }
 
     if (api_get_setting('login_is_email') === 'true') {
         $form->applyFilter('email', 'trim');
@@ -298,7 +364,9 @@ if ($user_already_registered_show_terms === false) {
             $form->addElement(
                 'select_language',
                 'language',
-                get_lang('Language')
+                get_lang('Language'),
+                [],
+                ['id' => 'language']
             );
         }
     }
@@ -417,6 +485,17 @@ if ($user_already_registered_show_terms === false) {
             $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
+
+    $form->addElement(
+        'hidden',
+        'extra_tcc_user_id'
+    );
+
+    $form->addElement(
+        'hidden',
+        'extra_tcc_hash_key'
+    );
+
 
     // EXTRA FIELDS
     if (in_array('extra_fields', $allowedFields)) {
@@ -544,7 +623,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
                         $termActivated = !empty($termValue) && $termValue == 1;
                     }
                 }
-                
+
                 if ($termActivated === false) {
                     $blockButton = true;
                     Display::addFlash(Display::return_message(get_lang('TermActivatedIsNeededDescription'), 'warning'));
@@ -556,7 +635,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
                             Display::return_message(get_lang('TermYourProfileIsNotCompleted'), 'warning')
                         );
                     }
-                }                
+                }
             }
         }
     }

@@ -68,11 +68,11 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
     Course admin section
     - all the functions not available for students - always available in this case (page only shown to admin)
 */
-if (isset($_SESSION['gradebook'])){
+if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {
+if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[]= array (
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
@@ -85,7 +85,7 @@ Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
 
 echo '<div class="actions">';
 echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('ReturnToLearningPaths'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 Display::display_normal_message(get_lang('AddLpIntro'), false);

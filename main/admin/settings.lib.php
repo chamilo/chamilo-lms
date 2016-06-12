@@ -19,10 +19,10 @@ use Symfony\Component\Filesystem\Filesystem;
  * This function allows easy activating and inactivating of regions
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_regions()
+function handleRegions()
 {
     if (isset($_POST['submit_plugins'])) {
-        store_regions();
+        storeRegions();
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
@@ -93,7 +93,7 @@ function handle_regions()
     echo '<button class="btn btn-success" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
 }
 
-function handle_extensions()
+function handleExtensions()
 {
     echo Display::page_subheader(get_lang('ConfigureExtensions'));
     echo '<a class="btn btn-success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Ppt2lp').'</a>';
@@ -106,12 +106,12 @@ function handle_extensions()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_plugins()
+function handlePlugins()
 {
     $plugin_obj = new AppPlugin();
     $token = Security::get_token();
     if (isset($_POST['submit_plugins'])) {
-        store_plugins();
+        storePlugins();
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
@@ -222,7 +222,7 @@ function handle_plugins()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com>, Chamilo
  */
-function handle_stylesheets()
+function handleStylesheets()
 {
     global $_configuration;
 
@@ -250,21 +250,7 @@ function handle_stylesheets()
         array('size' => '40', 'maxlength' => '40'));
     $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
-    $allowed_file_types = array(
-        'css',
-        'zip',
-        'jpeg',
-        'jpg',
-        'png',
-        'gif',
-        'ico',
-        'psd',
-        'xcf',
-        'svg',
-        'webp',
-        'woff',
-        'woff2'
-    );
+    $allowed_file_types = getAllowedFileTypes();
 
     $form->addRule('new_stylesheet', get_lang('InvalidExtension') . ' (' . implode(',', $allowed_file_types) . ')',
         'filetype', $allowed_file_types);
@@ -293,7 +279,7 @@ function handle_stylesheets()
             $values = $form->exportValues();
             $picture_element = $form->getElement('new_stylesheet');
             $picture = $picture_element->getValue();
-            $result = upload_stylesheet($values, $picture);
+            $result = uploadStylesheet($values, $picture);
 
             // Add event to the system log.
             $user_id = api_get_user_id();
@@ -375,7 +361,7 @@ function handle_stylesheets()
     if ($form_change->validate()) {
         // Submit stylesheets.
         if (isset($_POST['save'])) {
-            store_stylesheets();
+            storeStylesheets();
             Display::display_normal_message(get_lang('Saved'));
         }
         if (isset($_POST['download'])) {
@@ -502,15 +488,14 @@ function handle_stylesheets()
 
 /**
  * Creates the folder (if needed) and uploads the stylesheet in it
- *
  * @param array $values the values of the form
  * @param array $picture the values of the uploaded file
- *
+ * @return bool
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version May 2008
  * @since Dokeos 1.8.5
  */
-function upload_stylesheet($values, $picture)
+function uploadStylesheet($values, $picture)
 {
     $result = false;
     // Valid name for the stylesheet folder.
@@ -535,20 +520,7 @@ function upload_stylesheet($values, $picture)
             $single_directory = true;
             $invalid_files = array();
 
-            $allowedFiles = array(
-                'jpg',
-                'jpeg',
-                'png',
-                'gif',
-                'css',
-                'ico',
-                'psd',
-                'woff',
-                'woff2',
-                'xcf',
-                'svg',
-                'webp'
-            );
+            $allowedFiles = getAllowedFileTypes();
 
             for ($i = 0; $i < $num_files; $i++) {
                 $file = $zip->statIndex($i);
@@ -632,7 +604,7 @@ function upload_stylesheet($values, $picture)
 /**
  * Store plugin regions.
  */
-function store_regions()
+function storeRegions()
 {
     $plugin_obj = new AppPlugin();
 
@@ -670,7 +642,7 @@ function store_regions()
  * This function allows easy activating and inactivating of plugins
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function store_plugins()
+function storePlugins()
 {
     $appPlugin = new AppPlugin();
 
@@ -701,10 +673,10 @@ function store_plugins()
  * This function allows the platform admin to choose which should be the default stylesheet
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function store_stylesheets()
+function storeStylesheets()
 {
     // Insert the stylesheet.
-    if (is_style($_POST['style'])) {
+    if (isStyle($_POST['style'])) {
         api_set_setting(
             'stylesheets',
             $_POST['style'],
@@ -722,7 +694,7 @@ function store_stylesheets()
  * @param string    Style
  * @return bool     True if this style is recognized, false otherwise
  */
-function is_style($style)
+function isStyle($style)
 {
     $dir = CSS_UPLOAD_PATH;
     $dirs = scandir($dir);
@@ -738,7 +710,7 @@ function is_style($style)
  * TODO: support for multiple site. aka $_configuration['access_url'] == 1
  * @author Marco Villegas <marvil07@gmail.com>
  */
-function handle_search()
+function handleSearch()
 {
     global $SettingsStored, $_configuration;
 
@@ -898,7 +870,7 @@ function handle_search()
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function handle_templates()
+function handleTemplates()
 {
     /* Drive-by fix to avoid undefined var warnings, without repeating
      * isset() combos all over the place. */
@@ -912,7 +884,7 @@ function handle_templates()
     }
 
     if ($action == 'add' || ($action == 'edit' && is_numeric($_GET['id']))) {
-        add_edit_template();
+        addEditTemplate();
 
         // Add event to the system log.
         $user_id = api_get_user_id();
@@ -926,7 +898,7 @@ function handle_templates()
         );
     } else {
         if ($action == 'delete' && is_numeric($_GET['id'])) {
-            delete_template($_GET['id']);
+            deleteTemplate($_GET['id']);
 
             // Add event to the system log
             $user_id = api_get_user_id();
@@ -939,7 +911,7 @@ function handle_templates()
                 $user_id
             );
         }
-        display_templates();
+        displayTemplates();
     }
 }
 
@@ -950,15 +922,15 @@ function handle_templates()
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function display_templates()
+function displayTemplates()
 {
-    $table = new SortableTable('templates', 'get_number_of_templates', 'get_template_data', 1);
+    $table = new SortableTable('templates', 'getNumberOfTemplates', 'getTemplateData', 1);
     $table->set_additional_parameters(array('category' => Security::remove_XSS($_GET['category'])));
     $table->set_header(0, get_lang('Image'), true, array('style' => 'width: 101px;'));
     $table->set_header(1, get_lang('Title'));
     $table->set_header(2, get_lang('Actions'), false, array('style' => 'width:50px;'));
-    $table->set_column_filter(2, 'actions_filter');
-    $table->set_column_filter(0, 'image_filter');
+    $table->set_column_filter(2, 'actionsFilter');
+    $table->set_column_filter(0, 'imageFilter');
     $table->display();
 }
 
@@ -971,7 +943,7 @@ function display_templates()
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function get_number_of_templates()
+function getNumberOfTemplates()
 {
     // Database table definition.
     $table_system_template = Database :: get_main_table('system_template');
@@ -998,7 +970,7 @@ function get_number_of_templates()
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function get_template_data($from, $number_of_items, $column, $direction)
+function getTemplateData($from, $number_of_items, $column, $direction)
 {
     // Database table definition.
     $table_system_template = Database :: get_main_table('system_template');
@@ -1027,7 +999,7 @@ function get_template_data($from, $number_of_items, $column, $direction)
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function actions_filter($id) {
+function actionsFilter($id) {
     $return = '<a href="settings.php?category=Templates&action=edit&id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
     $return .= '<a href="settings.php?category=Templates&action=delete&id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
     return $return;
@@ -1043,7 +1015,7 @@ function actions_filter($id) {
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function image_filter($image)
+function imageFilter($image)
 {
     if (!empty($image)) {
         return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
@@ -1060,7 +1032,7 @@ function image_filter($image)
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function add_edit_template()
+function addEditTemplate()
 {
     // Initialize the object.
     $id = isset($_GET['id']) ? '&id='.Security::remove_XSS($_GET['id']) : '';
@@ -1186,7 +1158,7 @@ function add_edit_template()
             }
         }
         Security::clear_token();
-        display_templates();
+        displayTemplates();
     } else {
         $token = Security::get_token();
         $form->addElement('hidden','sec_token');
@@ -1205,7 +1177,7 @@ function add_edit_template()
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function delete_template($id)
+function deleteTemplate($id)
 {
     // First we remove the image.
     $table_system_template = Database :: get_main_table('system_template');
@@ -1224,69 +1196,7 @@ function delete_template($id)
     Display::display_confirmation_message(get_lang('TemplateDeleted'));
 }
 
-/**
- * Returns the list of timezone identifiers used to populate the select
- * This function is called through a call_user_func() in the generate_settings_form function.
- * @return array List of timezone identifiers
- *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- * @since Chamilo 1.8.7
- */
-function select_timezone_value()
-{
-    return api_get_timezones();
-}
-
-/**
- * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
- * This function is called through a call_user_func() in the generate_settings_form function.
- * @return array List of gradebook_number_decimals options
- *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- */
-function select_gradebook_number_decimals() {
-    return array('0', '1', '2');
-}
-
-function select_gradebook_default_grade_model_id()
-{
-    $grade_model = new GradeModel();
-    $models = $grade_model->get_all();
-    $options = array();
-    $options[-1] = get_lang('None');
-    if (!empty($models)) {
-        foreach ($models as $model) {
-            $options[$model['id']] = $model['name'];
-        }
-    }
-    return $options;
-}
-
-/**
- * Updates the gradebook score custom values using the scoredisplay class of the
- * gradebook module
- *
- * @param array List of gradebook score custom values
- *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- */
-function update_gradebook_score_display_custom_values($values)
-{
-    $scoredisplay = ScoreDisplay::instance();
-    $scores = $values['gradebook_score_display_custom_values_endscore'];
-    $displays = $values['gradebook_score_display_custom_values_displaytext'];
-    $nr_displays = count($displays);
-    $final = array();
-    for ($i = 1; $i < $nr_displays; $i++) {
-        if (!empty($scores[$i]) && !empty($displays[$i])) {
-            $final[$i]['score'] = $scores[$i];
-            $final[$i]['display'] = $displays[$i];
-        }
-    }
-    $scoredisplay->update_custom_score_display_settings($final);
-}
-
-function generate_settings_form($settings, $settings_by_access_list)
+function generateSettingsForm($settings, $settings_by_access_list)
 {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
     $em = Database::getManager();
@@ -1603,7 +1513,7 @@ function generate_settings_form($settings, $settings_by_access_list)
  * @param string $search
  * @return array
  */
-function search_setting($search)
+function searchSetting($search)
 {
     if (empty($search)) {
         return array();
@@ -1661,4 +1571,26 @@ function formGenerateElementsGroup($form, $values = array(), $elementName) {
         }
     }
     return $group;
+}
+/**
+ * Helper function with allowed file types for CSS
+ * @return  array Array of file types (no indexes)
+ */
+function getAllowedFileTypes() {
+    $allowedFiles = array(
+        'css',
+        'zip',
+        'jpeg',
+        'jpg',
+        'png',
+        'gif',
+        'ico',
+        'psd',
+        'xcf',
+        'svg',
+        'webp',
+        'woff',
+        'woff2'
+    );
+    return $allowedFiles;
 }

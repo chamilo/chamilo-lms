@@ -1256,7 +1256,7 @@ class ImportCsv
                     continue;
                 }
 
-                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
+                $userId = UserManager::get_user_id_from_username($chamiloUserName);
 
                 if (empty($userId)) {
                     $this->logger->addError('User does not exists: '.$chamiloUserName);

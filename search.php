@@ -67,8 +67,41 @@ $(document).ready(function() {
             extraFiliere.hide();
         }
     });
-    //
-
+        
+    $("#extra_domaine").on("change", function() {
+        var domainList = [];
+        $( "#extra_domaine option:selected" ).each(function() {       
+            domainList.push($(this).val());
+        });
+        
+        var domainListToString = JSON.stringify(domainList);        
+        $.ajax({
+            contentType: "application/x-www-form-urlencoded",
+            type: "GET",
+            url: "'.api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_options_from_tags&type=session&from=extra_domaine&search=extra_theme&options="+domainListToString,
+            success: function(data) {            
+                $("#extra_theme")
+                    .find("option")
+                    .remove()
+                    .end();                    
+               $("#extra_theme").empty();
+                var selectToString = "";
+                jQuery.each(JSON.parse(data), function(i, item) {
+                   selectToString += "<optgroup label=\'"+item.text+"\'>";                   
+                   jQuery.each(item.children, function(j, data) {
+                        if (data.text != "") {                                    
+                            selectToString += "<option value=\'"+data.text+"\'> " +data.text+"</option>"
+                        }
+                    });                         
+                    selectToString += "</optgroup>";
+                });        
+                
+                $("#extra_theme").html(selectToString);                 
+                $("#extra_theme").selectpicker("refresh");
+            }           
+            
+         });        
+    });
 });
 </script>';
 

@@ -229,17 +229,7 @@ function handleStylesheets()
     // Current style.
     $currentstyle = api_get_setting('stylesheets');
 
-    $is_style_changeable = false;
-
-    if ($_configuration['access_url'] != 1) {
-        $style_info = api_get_settings('stylesheets', '', 1, 0);
-        $url_info = api_get_access_url($_configuration['access_url']);
-        if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
-            $is_style_changeable = true;
-        }
-    } else {
-        $is_style_changeable = true;
-    }
+    $is_style_changeable = isStyleChangeable();
 
     $form = new FormValidator(
         'stylesheet_upload',
@@ -365,18 +355,7 @@ function handleStylesheets()
             Display::display_normal_message(get_lang('Saved'));
         }
         if (isset($_POST['download'])) {
-            $arch = api_get_path(SYS_ARCHIVE_PATH).$safe_style_dir.'.zip';
-            $dir = api_get_path(SYS_CSS_PATH).'themes/'.$safe_style_dir;
-            if (is_dir($dir)) {
-                $zip = new PclZip($arch);
-                // Remove path prefix except the style name and put file on disk
-                $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($safe_style_dir)));
-                //@TODO: use more generic script to download.
-                $str = '<a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
-                Display::display_normal_message($str, false);
-            } else {
-                Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
-            }
+            generateCSSDownloadLink($safe_style_dir);
         }
     }
 
@@ -1623,4 +1602,42 @@ function showSearchToolsStatusTable()
             get_lang('YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool')
         );
     }
+}
+/**
+ * Helper function to generate and show CSS Zip download message
+ * @param   string $style Style path
+ * @return void
+ */
+function generateCSSDownloadLink($style)
+{
+    $arch = api_get_path(SYS_ARCHIVE_PATH).$style.'.zip';
+    $dir = api_get_path(SYS_CSS_PATH).'themes/'.$style;
+    if (is_dir($dir)) {
+        $zip = new PclZip($arch);
+        // Remove path prefix except the style name and put file on disk
+        $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($style)));
+        //@TODO: use more generic script to download.
+        $str = '<a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+        Display::display_normal_message($str, false);
+    } else {
+        Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
+    }
+}
+/**
+ * Helper function to tell if the style is changeable in the current URL
+ * @return bool $changeable Whether the style can be changed in this URL or not
+ */
+function isStyleChangeable() {
+    global $_configuration;
+    $changeable = false;
+    if ($_configuration['access_url'] != 1) {
+        $style_info = api_get_settings('stylesheets', '', 1, 0);
+        $url_info = api_get_access_url($_configuration['access_url']);
+        if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
+            $changeable = true;
+        }
+    } else {
+        $changeable = true;
+    }
+    return $changeable;
 }

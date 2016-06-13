@@ -223,8 +223,6 @@ if (!empty($course_code_redirect)) {
 }
 
 if ($user_already_registered_show_terms === false) {
-
-
     // EMAIL
     $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
     if (api_get_setting('registration', 'email') === 'true') {
@@ -245,7 +243,6 @@ if ($user_already_registered_show_terms === false) {
     $form->applyFilter(array('lastname', 'firstname'), 'trim');
     $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
-
 
     if (api_get_setting('login_is_email') === 'true') {
         $form->applyFilter('email', 'trim');

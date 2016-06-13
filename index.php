@@ -74,6 +74,7 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
 if (api_get_setting('allow_terms_conditions') == 'true') {
     Session::erase('term_and_condition');
 }
+
 //If we are not logged in and customapages activated
 if (!api_get_user_id() && CustomPages::enabled()) {
     if (Request::get('loggedout')) {

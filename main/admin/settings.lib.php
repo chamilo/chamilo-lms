@@ -493,7 +493,7 @@ function handleStylesheets()
  * @return bool
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version May 2008
- * @since Dokeos 1.8.5
+ * @since v1.8.5
  */
 function uploadStylesheet($values, $picture)
 {
@@ -729,13 +729,9 @@ function handleSearch()
     $search_enabled = api_get_setting('search_enabled');
 
     if ($form->validate()) {
-        $formvalues = $form->exportValues();
-        $r = api_set_settings_category('Search', 'false', $_configuration['access_url']);
-        // Save the settings.
-        foreach ($formvalues as $key => $value) {
-            $result = api_set_setting($key, $value, null, null);
-        }
-        $search_enabled = $formvalues['search_enabled'];
+        $formValues = $form->exportValues();
+        setConfigurationSettingsInDatabase($formValues, $_configuration['access_url']);
+        $search_enabled = $formValues['search_enabled'];
         Display::display_confirmation_message($SettingsStored);
     }
     $specific_fields = get_specific_field_list();
@@ -770,33 +766,33 @@ function handleSearch()
     echo '</div>';
 
     if ($search_enabled == 'true') {
-        $xapian_path = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb';
+        $xapianPath = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb';
 
         /*
         @todo Test the Xapian connection
         if (extension_loaded('xapian')) {
             require_once 'xapian.php';
             try {
-                $db = new XapianDatabase($xapian_path.'/');
+                $db = new XapianDatabase($xapianPath.'/');
             } catch (Exception $e) {
                 var_dump($e->getMessage());
             }
 
-            require_once api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php';
+            require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
             require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
             require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
             $indexable = new IndexableChunk();
             $indexable->addValue("content", 'Test');
 
-            $di = new DokeosIndexer();
+            $di = new ChamiloIndexer();
             $di->connectDb(NULL, NULL, 'english');
             $di->addChunk($indexable);
             $did = $di->index();
         }
         */
 
-        $xapian_loaded = Display::return_icon('bullet_green.png', get_lang('Ok'));
+        $xapianLoaded = Display::return_icon('bullet_green.png', get_lang('Ok'));
         $dir_exists = Display::return_icon('bullet_green.png', get_lang('Ok'));
         $dir_is_writable = Display::return_icon('bullet_green.png', get_lang('Ok'));
         $specific_fields_exists = Display::return_icon('bullet_green.png', get_lang('Ok'));
@@ -807,58 +803,25 @@ function handleSearch()
         }
         //Testing xapian extension
         if (!extension_loaded('xapian')) {
-            $xapian_loaded = Display::return_icon('bullet_red.png', get_lang('Error'));
+            $xapianLoaded = Display::return_icon('bullet_red.png', get_lang('Error'));
         }
         //Testing xapian searchdb path
-        if (!is_dir($xapian_path)) {
+        if (!is_dir($xapianPath)) {
             $dir_exists = Display::return_icon('bullet_red.png', get_lang('Error'));
         }
         //Testing xapian searchdb path is writable
-        if (!is_writable($xapian_path)) {
+        if (!is_writable($xapianPath)) {
             $dir_is_writable = Display::return_icon('bullet_red.png', get_lang('Error'));
         }
 
-        $data[] = array(get_lang('XapianModuleInstalled'),$xapian_loaded);
-        $data[] = array(get_lang('DirectoryExists').' - '.$xapian_path,$dir_exists);
-        $data[] = array(get_lang('IsWritable').' - '.$xapian_path,$dir_is_writable);
-        $data[] = array(get_lang('SpecificSearchFieldsAvailable') ,$specific_fields_exists);
+        $data = array();
+        $data[] = array(get_lang('XapianModuleInstalled'), $xapianLoaded);
+        $data[] = array(get_lang('DirectoryExists').' - '.$xapianPath, $dir_exists);
+        $data[] = array(get_lang('IsWritable').' - '.$xapianPath, $dir_is_writable);
+        $data[] = array(get_lang('SpecificSearchFieldsAvailable'), $specific_fields_exists);
 
-        echo Display::tag('h3', get_lang('Settings'));
-        $table = new SortableTableFromArray($data);
-        $table->set_header(0, get_lang('Setting'), false);
-        $table->set_header(1, get_lang('Status'), false);
-        echo  $table->display();
-
-        //@todo windows support
-        if (api_is_windows_os() == false) {
-            $list_of_programs = array('pdftotext','ps2pdf', 'catdoc','html2text','unrtf', 'catppt', 'xls2csv');
-
-            foreach($list_of_programs as $program) {
-                $output = [];
-                $ret_val = null;
-                exec("which $program", $output, $ret_val);
-
-                if (!$output) {
-                    $output[] = '';
-                }
-
-                $icon = Display::return_icon('bullet_red.png', get_lang('NotInstalled'));
-                if (!empty($output[0])) {
-                    $icon = Display::return_icon('bullet_green.png', get_lang('Installed'));
-                }
-                $data2[]= array($program, $output[0], $icon);
-            }
-            echo Display::tag('h3', get_lang('ProgramsNeededToConvertFiles'));
-            $table = new SortableTableFromArray($data2);
-            $table->set_header(0, get_lang('Program'), false);
-            $table->set_header(1, get_lang('Path'), false);
-            $table->set_header(2, get_lang('Status'), false);
-            echo  $table->display();
-        } else {
-            Display::display_warning_message(
-                get_lang('YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool')
-            );
-        }
+        showSearchSettingsTable($data);
+        showSearchToolsStatusTable();
     }
 }
 
@@ -868,7 +831,7 @@ function handleSearch()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @author Julio Montoya.
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
 function handleTemplates()
 {
@@ -920,7 +883,7 @@ function handleTemplates()
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
 function displayTemplates()
 {
@@ -930,7 +893,7 @@ function displayTemplates()
     $table->set_header(1, get_lang('Title'));
     $table->set_header(2, get_lang('Actions'), false, array('style' => 'width:50px;'));
     $table->set_column_filter(2, 'actionsFilter');
-    $table->set_column_filter(0, 'imageFilter');
+    $table->set_column_filter(0, 'searchImageFilter');
     $table->display();
 }
 
@@ -941,7 +904,7 @@ function displayTemplates()
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
 function getNumberOfTemplates()
 {
@@ -968,7 +931,7 @@ function getNumberOfTemplates()
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
 function getTemplateData($from, $number_of_items, $column, $direction)
 {
@@ -997,7 +960,7 @@ function getTemplateData($from, $number_of_items, $column, $direction)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
 function actionsFilter($id) {
     $return = '<a href="settings.php?category=Templates&action=edit&id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
@@ -1013,9 +976,9 @@ function actionsFilter($id) {
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
-function imageFilter($image)
+function searchImageFilter($image)
 {
     if (!empty($image)) {
         return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
@@ -1030,7 +993,7 @@ function imageFilter($image)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
 function addEditTemplate()
 {
@@ -1175,7 +1138,7 @@ function addEditTemplate()
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
 function deleteTemplate($id)
 {
@@ -1562,7 +1525,8 @@ function searchSetting($search)
  * @param array $values Values to browse through
  * @return array
  */
-function formGenerateElementsGroup($form, $values = array(), $elementName) {
+function formGenerateElementsGroup($form, $values = array(), $elementName)
+{
     $group = array();
     if (is_array($values)) {
         foreach ($values as $key => $value) {
@@ -1576,7 +1540,8 @@ function formGenerateElementsGroup($form, $values = array(), $elementName) {
  * Helper function with allowed file types for CSS
  * @return  array Array of file types (no indexes)
  */
-function getAllowedFileTypes() {
+function getAllowedFileTypes()
+{
     $allowedFiles = array(
         'css',
         'zip',
@@ -1593,4 +1558,69 @@ function getAllowedFileTypes() {
         'woff2'
     );
     return $allowedFiles;
+}
+/**
+ * Helper function to set settings in the database
+ * @param   array   $parameters     List of values
+ * @param   int     $accessUrl      The current access URL
+ * @return  void
+ */
+function setConfigurationSettingsInDatabase($parameters, $accessUrl)
+{
+    $r = api_set_settings_category('Search', 'false', $accessUrl);
+    // Save the settings.
+    foreach ($parameters as $key => $value) {
+        $result = api_set_setting($key, $value, null, null);
+    }
+}
+
+/**
+ * Helper function to show the status of the search settings table
+ * @param   array   $data   Data to show
+ * @return void
+ */
+function showSearchSettingsTable($data)
+{
+    echo Display::tag('h3', get_lang('Settings'));
+    $table = new SortableTableFromArray($data);
+    $table->set_header(0, get_lang('Setting'), false);
+    $table->set_header(1, get_lang('Status'), false);
+    echo $table->display();
+}
+/**
+ * Helper function to show status table for each command line tool installed
+ * @return void
+ */
+function showSearchToolsStatusTable()
+{
+    //@todo windows support
+    if (api_is_windows_os() == false) {
+        $list_of_programs = array('pdftotext', 'ps2pdf', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv');
+
+        foreach($list_of_programs as $program) {
+            $output = [];
+            $ret_val = null;
+            exec("which $program", $output, $ret_val);
+
+            if (!$output) {
+                $output[] = '';
+            }
+
+            $icon = Display::return_icon('bullet_red.png', get_lang('NotInstalled'));
+            if (!empty($output[0])) {
+                $icon = Display::return_icon('bullet_green.png', get_lang('Installed'));
+            }
+            $data2[]= array($program, $output[0], $icon);
+        }
+        echo Display::tag('h3', get_lang('ProgramsNeededToConvertFiles'));
+        $table = new SortableTableFromArray($data2);
+        $table->set_header(0, get_lang('Program'), false);
+        $table->set_header(1, get_lang('Path'), false);
+        $table->set_header(2, get_lang('Status'), false);
+        echo $table->display();
+    } else {
+        Display::display_warning_message(
+            get_lang('YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool')
+        );
+    }
 }

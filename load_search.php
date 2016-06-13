@@ -43,15 +43,22 @@ $em = Database::getManager();
 $formSearch = new FormValidator('load', 'get', api_get_self());
 $formSearch->addHeader(get_lang('LoadDiagnosis'));
 if (!empty($userInfo)) {
-    if ($userInfo['status'] == DRH) {
-        $users = UserManager::get_users_followed_by_drh($userId);
-        if (!empty($users)) {
-            $userList = [];
-            foreach ($users as $user) {
-                $userList[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
-            }
-            $formSearch->addSelect('user_id', get_lang('User'), $userList);
+    $users = [];
+    switch ($userInfo['status']) {
+        case DRH:
+            $users = UserManager::get_users_followed_by_drh($userId);
+            break;
+        case STUDENT_BOSS:
+            $users = UserManager::getUsersFollowedByStudentBoss($userId);
+            break;
+    }
+
+    if (!empty($users)) {
+        $userList = [];
+        foreach ($users as $user) {
+            $userList[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
         }
+        $formSearch->addSelect('user_id', get_lang('User'), $userList);
     }
 }
 if ($userToLoad) {

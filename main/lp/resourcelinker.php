@@ -255,7 +255,7 @@ if ($add) {
                         //get title from tool-type table
                         $tooltable = Database::get_course_table(TABLE_DOCUMENT);
                         $result = Database::query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i]);
-                        $myrow=Database::fetch_array($result);
+                        $myrow = Database::fetch_array($result);
                         $title = $myrow['title'];
                         break;
                     case 'Exercise':
@@ -263,7 +263,7 @@ if ($add) {
                         //get title from tool-type table
                         $tooltable = Database::get_course_table(TABLE_QUIZ_TEST);
                         $result = Database::query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i]);
-                        $myrow=Database::fetch_array($result);
+                        $myrow = Database::fetch_array($result);
                         $title = $myrow['title'];
                         break;
                     case 'Forum':
@@ -275,7 +275,7 @@ if ($add) {
                         //get title from tool-type table
                         $tooltable = Database::get_course_table(TABLE_AGENDA);
                         $result = Database::query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i]);
-                        $myrow=Database::fetch_array($result);
+                        $myrow = Database::fetch_array($result);
                         $title = $myrow['title'];
                         break;
                     case 'Ad_Valvas':
@@ -283,7 +283,7 @@ if ($add) {
                         //get title from tool-type table
                         $tooltable = Database::get_course_table(TABLE_ANNOUNCEMENT);
                         $result = Database::query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i]);
-                        $myrow=Database::fetch_array($result);
+                        $myrow = Database::fetch_array($result);
                         $title = $myrow['title'];
                         break;
 
@@ -349,28 +349,28 @@ if ($_GET['source_id']) {
             }
             $originaltoolname = get_lang('Agenda');
             $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
-            session_unregister('from_learnpath');
+            unset($_SESSION['from_learnpath']);
             unset ($from_learnpath);
             break;
         case '2': // coming from forum: new topic
             $url = "../phpbb/newtopic.php?forum=$source_forum&md5=$md5";
             $originaltoolname = get_lang('ForumAddNewTopic');
             $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
-            session_unregister('from_learnpath');
+            unset($_SESSION['from_learnpath']);
             unset ($from_learnpath);
             break;
         case '3': // coming from forum: edit topic
             $url = "../phpbb/editpost.php?post_id=$post_id&topic=$topic&forum=$forum&md5=$md5&originalresource=no";
             $originaltoolname = get_lang('ForumEditTopic');
             $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
-            session_unregister('from_learnpath');
+            unset($_SESSION['from_learnpath']);
             unset ($from_learnpath);
             break;
         case '4': // coming from exercises: edit topic
             $url = "../exercise/admin.php?modifyAnswers=$modifyAnswers";
             $originaltoolname = get_lang('ExerciseAnswers');
             $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
-            session_unregister('from_learnpath');
+            unset($_SESSION['from_learnpath']);
             unset ($from_learnpath);
             break;
         case '5': // coming from learning path
@@ -409,7 +409,7 @@ if ($from_learnpath != 'yes') {
     $therow2 = Database::fetch_array($sql_result);
 
     $from_learnpath = 'yes';
-    session_register('from_learnpath');
+    $_SESSION['from_learnpath'] = $from_learnpath;
     $interbreadcrumb[] = array ('url' => "../lp/lp_controller.php?action=list", 'name' => get_lang('LearningPath'));
     $interbreadcrumb[] = array ('url' => "../lp/lp_controller.php?action=admin_view&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
     $interbreadcrumb[] = array ('url' => api_get_self()."?action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no", 'name' => "{$therow2['title']}");
@@ -439,7 +439,7 @@ $active_modules = array();
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 $sql_select_active = "SELECT * FROM $tool_table WHERE visibility='1'";
 $result_select_active = Database::query($sql_select_active);
-while ($row=Database::fetch_array($result_select_active)) {
+while ($row = Database::fetch_array($result_select_active)) {
     $active_modules[] = $row['name'];
 }
 ?>
@@ -800,7 +800,7 @@ if ($content == 'Link') {
     // Showing the categories and the links in it.
     $sqlcategories = "SELECT * FROM ".$tbl_categories." ORDER by display_order DESC";
     $resultcategories = Database::query($sqlcategories) or die;
-    while ($myrow = @ Database::fetch_array($resultcategories)) {
+    while ($myrow = @Database::fetch_array($resultcategories)) {
         $sql_links = "SELECT * FROM ".$link_table." l, ".$item_property_table." ip WHERE l.category_id='".$myrow['id']."' AND ip.tool = '".TOOL_LINK."' AND l.id=ip.ref AND ip.visibility='1' ORDER BY l.display_order DESC";
         echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\"><i>".$myrow['category_title']."</i></td></tr></table>";
         $result_links = Database::query($sql_links);

@@ -1088,6 +1088,7 @@ class CourseHome
     {
         $navigation_items = array();
         $course_id = api_get_course_int_id();
+        $courseInfo = api_get_course_info();
 
         if (!empty($course_id)) {
 
@@ -1096,7 +1097,7 @@ class CourseHome
             /* 	Link to the Course homepage */
 
             $navigation_items['home']['image'] = 'home.gif';
-            $navigation_items['home']['link'] = api_get_path(WEB_CODE_PATH).Security::remove_XSS($_SESSION['_course']['path']).'/index.php';
+            $navigation_items['home']['link'] = $courseInfo['course_public_url'];
             $navigation_items['home']['name'] = get_lang('CourseHomepageLink');
 
             $sql_menu_query = "SELECT * FROM $course_tools_table
@@ -1194,6 +1195,7 @@ class CourseHome
             $html .= '</dl></div></div>';
         }
         $html .= '</div><!-- end "#toolnav" -->';
+
         return $html;
     }
 

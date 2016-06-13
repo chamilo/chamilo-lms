@@ -21,6 +21,10 @@ class Quiz extends Coursecopy\Resource
      */
     public $obj; //question
 
+    /**
+     * Quiz constructor.
+     * @param int $obj
+     */
     public function __construct($obj)
     {
         $this->obj = $obj;

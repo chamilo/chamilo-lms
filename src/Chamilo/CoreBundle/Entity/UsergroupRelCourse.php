@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -15,6 +16,15 @@ class UsergroupRelCourse
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
      */
     private $usergroupId;
@@ -25,17 +35,6 @@ class UsergroupRelCourse
      * @ORM\Column(name="course_id", type="integer", nullable=false)
      */
     private $courseId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set usergroupId

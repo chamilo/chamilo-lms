@@ -55,16 +55,26 @@ class bbb
         $this->groupSupport = isset($columns['group_id']) ? true : false;
 
         if ($this->groupSupport) {
+            // Plugin check
             $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
             if ($this->groupSupport) {
-                $courseInfo = api_get_course_info();
-                if ($courseInfo) {
-                    $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+
+                // Platform check
+                $bbbSetting = api_get_setting('bbb_enable_conference_in_course_groups');
+                $bbbSetting = isset($bbbSetting['bbb']) ? $bbbSetting['bbb'] === 'true' : false;
+
+                if ($bbbSetting) {
+                    // Course check
+                    $courseInfo = api_get_course_info();
+
+                    if ($courseInfo) {
+                        $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+                    }
                 }
             }
         }
 
-        if ($bbbPlugin === true) {
+        if ($bbbPlugin == true) {
             $userInfo = api_get_user_info();
             $this->userCompleteName = $userInfo['complete_name'];
             $this->salt = $bbb_salt;
@@ -152,7 +162,7 @@ class bbb
         # a user joins. If after this period, a user hasn't joined, the meeting is
         # removed from memory.
         defaultMeetingCreateJoinDuration=5
-     * 
+     *
      * @return mixed
      */
     public function createMeeting($params)

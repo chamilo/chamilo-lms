@@ -57,7 +57,7 @@ switch ($action) {
 
         $courseInfo = api_get_course_info();
         $params = array(
-            'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['department_name']),
+            'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
             'session_info' => '',
             'course_info' => '',
             'pdf_date' => '',

@@ -21,6 +21,7 @@ filter:
         - web/*
         - vendor/*
         - main/admin/db.php
+        - app/Migrations/*
 checks:
     php:
         code_rating: true

@@ -17,7 +17,7 @@
                             <li class="item">
                                 {{ user.complete_name }}
                             </li>
-                            {% if vcard_user_link  %}
+                            {% if show_full_profile  %}
                                 <li class="item">
                                     <a href="{{ _p.web }}main/messages/new_message.php">
                                     <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
@@ -30,6 +30,34 @@
                                     {{ "BusinessCard" | get_lang }}
                                     </a>
                                 </li>
+
+                                {% set skype_account = '' %}
+                                {% set linkedin_url = '' %}
+                                {% for extra in user.extra %}
+                                    {% if extra.value.getField().getVariable() == 'skype' %}
+                                        {% set skype_account = extra.value.getValue() %}
+                                    {% endif %}
+
+                                    {% if extra.value.getField().getVariable() == 'linkedin_url' %}
+                                        {% set linkedin_url = extra.value.getValue() %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if 'allow_show_skype_account'|get_setting == 'true' and not skype_account is empty %}
+                                    <li class="item">
+                                        <a href="skype:{{ skype_account }}?chat">
+                                            <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|get_lang }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                {% if 'allow_show_linkedin_url'|get_setting == 'true' and not linkedin_url is empty %}
+                                    <li class="item">
+                                        <a href="{{ linkedin_url }}" target="_blank">
+                                            <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|get_lang }}
+                                        </a>
+                                    </li>
+                                {% endif %}
                             {% endif %}
                         {% if chat_enabled == 1 %}
                             {% if user.user_is_online_in_chat != 0 %}
@@ -49,7 +77,7 @@
                         
                         {% if not profile_edition_link is empty %}
                         <li class="item">
-                            <a class="btn link btn-sm btn-block" href="{{ profile_edition_link }}">
+                            <a class="btn btn-link btn-sm btn-block" href="{{ profile_edition_link }}">
                             <em class="fa fa-edit"></em>{{ "EditProfile" | get_lang }}
                             </a>
                         </li>

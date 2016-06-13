@@ -71,16 +71,16 @@ switch ($action) {
         $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
         $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
 
-        $sql = "SELECT DISTINCT t.* FROM $tagRelExtraTable te INNER JOIN $tagTable t
+        /*$sql = "SELECT DISTINCT t.* FROM $tagRelExtraTable te INNER JOIN $tagTable t
                 ON (t.id = te.tag_id)
                 WHERE te.field_id = $tagId AND te.item_id IN (
-                    SELECT DISTINCT item_id 
-                    FROM $table 
-                    WHERE 
-                        field_id = $id AND 
+                    SELECT DISTINCT item_id
+                    FROM $table
+                    WHERE
+                        field_id = $id AND
                         value IN ('".implode("','", $options)."')
                )
-               ";
+               ";*/
 
         $sql = "SELECT DISTINCT t.*, v.value, o.display_text
                 FROM $tagRelExtraTable te 
@@ -90,16 +90,16 @@ switch ($action) {
                 ON (te.item_id = v.item_id AND v.field_id = $id)
                 INNER JOIN $optionsTable o
                 ON (o.option_value = v.value)
-                WHERE v.value IN ('".implode("','", $options)."')     
-                           
-                ORDER BY v.value
+                WHERE v.value IN ('".implode("','", $options)."')                           
+                ORDER BY o.option_order, t.tag
                ";
+
         $result = Database::query($sql);
         $result = Database::store_result($result);
         $options = [];
         $groups = [];
         foreach ($result as $data) {
-            $groups[$data['display_text']][$data['id']] = [
+            $groups[$data['display_text']][] = [
                 'id' => $data['id'],
                 'text' => $data['tag']
             ];

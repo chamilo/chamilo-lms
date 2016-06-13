@@ -529,14 +529,14 @@ if (!empty($_GET['category'])) {
             break;
         case 'search_setting':
             if (isset($_REQUEST['search_field'])) {
-
                 searchSetting($_REQUEST['search_field']);
                 $form->display();
             }
             break;
         default:
-            if (isset($form))
+            if (isset($form)) {
                 $form->display();
+            }
     }
 }
 

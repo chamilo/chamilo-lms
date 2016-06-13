@@ -1138,6 +1138,16 @@ function deleteTemplate($id)
     Display::display_confirmation_message(get_lang('TemplateDeleted'));
 }
 
+/**
+ * @param array $settings
+ * @param array $settings_by_access_list
+ *
+ * @return FormValidator
+ *
+ * @throws \Doctrine\ORM\ORMException
+ * @throws \Doctrine\ORM\OptimisticLockException
+ * @throws \Doctrine\ORM\TransactionRequiredException
+ */
 function generateSettingsForm($settings, $settings_by_access_list)
 {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
@@ -1146,8 +1156,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
 
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
 
-    $form->addElement('hidden', 'search_field',
-        (!empty($_GET['search_field']) ? Security::remove_XSS($_GET['search_field']) : null));
+    $form->addElement(
+        'hidden',
+        'search_field',
+        (!empty($_GET['search_field']) ? Security::remove_XSS($_GET['search_field']) : null)
+    );
 
     $url_id = api_get_current_access_url_id();
 
@@ -1178,19 +1191,31 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 if ($row['access_url_locked'] == 0) {
                     if ($url_id == 1) {
                         if ($row['access_url_changeable'] == '1') {
-                            $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                            $form->addElement(
+                                'html',
+                                '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>'
+                            );
                         } else {
-                            $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                            $form->addElement(
+                                'html',
+                                '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>'
+                            );
                         }
                     } else {
                         if ($row['access_url_changeable'] == '1') {
-                            $form->addElement('html', '<div style="float: right;">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</div>');
+                            $form->addElement(
+                                'html',
+                                '<div style="float: right;">'.
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</div>'
+                            );
                         } else {
-                            $form->addElement('html', '<div style="float: right;">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</div>');
+                            $form->addElement(
+                                'html',
+                                '<div style="float: right;">'.
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</div>'
+                            );
                         }
                     }
                 }
@@ -1236,7 +1261,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         array(
                             get_lang($row['title']),
                             get_lang($row['comment']),
-                            get_lang('MB'),
+                            get_lang('MB')
                         ),
                         array('maxlength' => '8')
                     );
@@ -1265,7 +1290,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         $row['variable'],
                         array(
                             get_lang($row['title']),
-                            get_lang($row['comment']),
+                            get_lang($row['comment'])
                         ),
                         $hideme
                     );
@@ -1332,13 +1357,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 while ($rowkeys = Database::fetch_array($result)) {
                     // Profile tab option should be hidden when the social tool is enabled.
                     if (api_get_setting('allow_social_tool') == 'true') {
-                        if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_profile') {
+                        if ($rowkeys['variable'] === 'show_tabs' && $rowkeys['subkey'] === 'my_profile') {
                             continue;
                         }
                     }
 
                     // Hiding the gradebook option.
-                    if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_gradebook') {
+                    if ($rowkeys['variable'] === 'show_tabs' && $rowkeys['subkey'] === 'my_gradebook') {
                         continue;
                     }
 
@@ -1363,11 +1388,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
                                     access_url =  $access_url";
                         $result_access = Database::query($sql);
                         $row_access = Database::fetch_array($result_access);
-                        if ($row_access['selected_value'] == 'true' && !$form->isSubmitted()) {
+                        if ($row_access['selected_value'] === 'true' && !$form->isSubmitted()) {
                             $element->setChecked(true);
                         }
                     } else {
-                        if ($rowkeys['selected_value'] == 'true' && !$form->isSubmitted()) {
+                        if ($rowkeys['selected_value'] === 'true' && !$form->isSubmitted()) {
                             $element->setChecked(true);
                         }
                     }

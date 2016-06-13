@@ -1090,7 +1090,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
         // Platform legal terms and conditions
         if (api_get_setting('allow_terms_conditions') === 'true' &&
-            api_get_setting('load_term_conditions_section') === 'course'
+            api_get_setting('load_term_conditions_section') === 'course' &&
+            api_is_student()
         ) {
             $termAndConditionStatus = api_check_term_condition($user_id);
             // @todo not sure why we need the login password and update_term_status
@@ -1144,7 +1145,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     }
                 }
                 $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
-                header("Location:". $url);
+                header('Location: '. $url);
                 exit;
             }
         }

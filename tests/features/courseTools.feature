@@ -32,7 +32,7 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the learning path tool is available
     Given I am on course "TEMP" homepage
-    And I am on "/main/newscorm/lp_controller.php"
+    And I am on "/main/lp/lp_controller.php"
     Then I should not see an ".alert-danger" element
 
   Scenario: Make sure the links tool is available

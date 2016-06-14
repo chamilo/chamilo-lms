@@ -105,7 +105,9 @@ $extra = $extraField->addElements(
     true,
     [],
     [],
-    $defaults
+    $defaults,
+    [],
+    true
 );
 
 $form->addButtonSearch(get_lang('Search'), 'save');
@@ -122,7 +124,6 @@ $extraFieldListToString = implode(',', $extraFieldToSearch);
 $result = SessionManager::getGridColumns('simple', $extraFieldsToFilter);
 $columns = $result['columns'];
 $column_model = $result['column_model'];
-
 
 $form->setDefaults($defaults);
 

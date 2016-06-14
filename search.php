@@ -53,6 +53,8 @@ if ($hide === false) {
     $defaultValueStatus = '';
 }
 
+$url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$userId;
+
 $htmlHeadXtra[] ='<script>
 $(document).ready(function() {
 
@@ -68,6 +70,22 @@ $(document).ready(function() {
         }
     });
         
+    $("#extra_domaine").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn-default",
+            "href": "'.$url.'&field_variable=extra_domaine",
+            "text": "'.get_lang('Order').'"             
+        })
+    );    
+    
+    $("#extra_theme").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn-default",
+            "href": "'.$url.'&field_variable=extra_theme",
+            "text": "'.get_lang('Order').'"             
+        })
+    );
+    
     $("#extra_domaine").on("change", function() {
         var domainList = [];
         $( "#extra_domaine option:selected" ).each(function() {       
@@ -303,7 +321,8 @@ $extra = $extraFieldSession->addElements(
     $fieldsToShow,
     $fieldsToShow,
     $defaults,
-    $specialUrlList
+    $specialUrlList,
+    true
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -368,10 +387,6 @@ $extra = $extraField->addElements(
 
 
 $jqueryExtra .= $extra['jquery_ready_content'];
-
-/*echo '<pre>';
-echo $jqueryExtra;
-echo '</pre>';*/
 
 $htmlHeadXtra[] ='<script>
 $(document).ready(function(){

@@ -398,7 +398,8 @@ class ExtraField extends Model
         $showOnlyThisFields = [],
         $orderFields = [],
         $extraData = [],
-        $specialUrlList = []
+        $specialUrlList = [],
+        $orderDependingDefaults = false
     ) {
         if (empty($form)) {
             return false;
@@ -406,11 +407,11 @@ class ExtraField extends Model
 
         $itemId = intval($itemId);
         $form->addHidden('item_id', $itemId);
-        
+
         if (empty($extraData)) {
             if (!empty($itemId)) {
-                $extraData = self::get_handler_extra_data($itemId);                
-    
+                $extraData = self::get_handler_extra_data($itemId);
+
                 if ($form) {
                     $form->setDefaults($extraData);
                 }
@@ -433,7 +434,8 @@ class ExtraField extends Model
             $useTagAsSelect,
             $showOnlyThisFields,
             $orderFields,
-            $specialUrlList
+            $specialUrlList,
+            $orderDependingDefaults
         );
 
         return $extra;
@@ -758,7 +760,8 @@ class ExtraField extends Model
         $useTagAsSelect = false,
         $showOnlyThisFields = [],
         $orderFields = [],
-        $specialUrlList = []
+        $specialUrlList = [],
+        $orderDependingDefaults = false
     ) {
         $type = $this->type;
         $jquery_ready_content = '';
@@ -1101,6 +1104,22 @@ class ExtraField extends Model
                         foreach ($field_details['options'] as $option_id => $option_details) {
                             $options[$option_details['option_value']] = $option_details['display_text'];
                         }
+
+                        if ($orderDependingDefaults) {
+                            $defaultOptions = $extraData['extra_'.$field_details['variable']];
+                            if (!empty($defaultOptions)) {
+                                $firstList = [];
+                                foreach ($defaultOptions as $key) {
+                                    if (isset($options[$key])) {
+                                        $firstList[$key] = $options[$key];
+                                    }
+                                }
+                                if (!empty($firstList)) {
+                                    $options = array_merge($firstList, $options);
+                                }
+                            }
+                        }
+
                         $form->addElement(
                             'select',
                             'extra_'.$field_details['variable'],
@@ -1149,21 +1168,7 @@ class ExtraField extends Model
                         $("#'.$first_select_id.'").on("change", function() {
                             var id = $(this).val();
                             if (id) {
-                                $.ajax({
-                                    url: "'.$url.'&a=get_second_select_options",
-                                    dataType: "json",
-                                    data: "type='.$type.'&field_id='.$field_details['id'].'&option_value_id="+id,
-                                    success: function(data) {
-                                        $("#second_extra_'.$field_details['variable'].'").empty();
-                                        $.each(data, function(index, value) {
-                                            $("#second_extra_'.$field_details['variable'].'").append($("<option/>", {
-                                                value: index,
-                                                text: value
-                                            }));
-                                        });
-                                        $("#second_extra_'.$field_details['variable'].'").selectpicker("refresh");
-                                    },
-                                });
+                                ExtraFieldSavedSearch
                             } else {
                                 $("#second_extra_'.$field_details['variable'].'").empty();
                             }
@@ -1279,7 +1284,7 @@ class ExtraField extends Model
                                         'itemId' => $itemId,
                                     ]
                                 );
-                            
+
                             foreach ($fieldTags as $fieldTag) {
                                 $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 

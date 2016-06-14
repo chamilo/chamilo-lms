@@ -113,6 +113,81 @@ switch ($action) {
         }
         echo json_encode($options);
         break;
+    case 'order':
+        $variable = isset($_REQUEST['field_variable']) ? $_REQUEST['field_variable'] : '';
+        $save = isset($_REQUEST['save']) ? $_REQUEST['save'] : '';
+        $values = isset($_REQUEST['values']) ? json_decode($_REQUEST['values']) : '';
+        $extraField = new ExtraField('session');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(str_replace('extra_', '', $variable));
+
+        $em = Database::getManager();
+
+        $search = [
+            'user' => api_get_user_id(),
+            'field' => $extraFieldInfo['id']
+        ];
+
+        $extraFieldSavedSearch = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
+
+        if ($save) {
+            $extraField = new \Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch('session');
+            if ($extraFieldSavedSearch) {
+                $extraFieldSavedSearch->setValue($values);
+                $em->merge($extraFieldSavedSearch);
+                $em->flush();
+            }
+        }
+
+        if ($extraFieldInfo) {
+
+            /** @var \Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch $options */
+            $extraFieldSavedSearch = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
+            $values = $extraFieldSavedSearch->getValue();
+            $url = api_get_self().'?a=order&save=1&field_variable='.$variable;
+
+            $html = '
+            <script>
+                $(function() {
+                    $( "#sortable" ).sortable();
+                    $( "#sortable" ).disableSelection();
+                    
+                    $( "#link_'.$variable.'" ).on("click", function() {
+                        var newList = [];
+                        $("#sortable").find("li").each(function(){
+                            newList.push($(this).text());
+                        });
+                                                
+                        var save = JSON.stringify(newList);                      
+                        $.ajax({
+                            url: "'.$url.'",
+                            dataType: "json",
+                            data: "values="+save,
+                            success: function(data) {
+                                console.log(data);
+                            }
+                        });
+                        
+                        alert("'.get_lang('Saved').'");
+                        
+                        location.reload();
+                        
+                        return false;
+                        
+                    });
+                });
+            </script>';
+
+            $html .= '<ul id="sortable">';
+            foreach ($values as $value) {
+                $html .= '<li class="ui-state-default">';
+                $html .= $value;
+                $html .= '</li>';
+            }
+            $html .= '</ul>';
+            $html .= Display::url(get_lang('Save'), '#', ['id' => 'link_'.$variable, 'class' => 'btn btn-primary']);
+            echo $html;
+        }
+        break;
     default:
         exit;
         break;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class BBBPlugin
+ * Class LoginTCC
  */
 class LoginTCC extends Plugin
 {

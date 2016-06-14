@@ -11,8 +11,10 @@ build:
         hosts:
             my.chamilodev.net: '127.0.0.1'
     dependencies:
+        override:
+            - true
         before:
-            - php -d memory_limit=2G $(which composer) -v update
+            - php -d memory_limit=2G /usr/bin/composer.phar -v update
 filter:
     excluded_paths:
         - tests/*

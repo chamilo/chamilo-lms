@@ -185,7 +185,8 @@ class ExtraField extends BaseAttribute
      */
     public function getDisplayText()
     {
-        return \ExtraField::translateDisplayName($this->variable, $this->displayText);
+        return $this->displayText;
+        //return \ExtraField::translateDisplayName($this->variable, $this->displayText);
     }
 
     /**

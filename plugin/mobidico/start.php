@@ -17,37 +17,45 @@ $key = $plugin->get('api_key');
 
 $tool_name = get_lang('Videoconference');
 
+$params = [
+    'chamiloid' => api_get_user_id(),
+    'API_KEY' => $key,
+    'verify' => false
+];
+
+$redirect = '';
+try {
+    $client = new GuzzleHttp\Client();
+    $response = $client->request(
+        'POST',
+        $url.'/app/desktop/php/authenticate.php',
+        $params
+    );
+
+    $status = $response->getStatusCode();
+    if ($status === 200) {
+        $result = json_decode($response->getBody());
+        if ($result && isset($result->status)) {
+            if ($result->status == 'OK') {
+                $redirect = $url.'/app/index.html?session='.intval($result->session);
+            } else {
+                api_not_allowed(true);
+            }
+        }
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
-    var params = {
-        "chamiloid" : "2",
-        //"chamiloid" : "'.api_get_user_id().'",
-        "API_KEY" : "'.$key.'"
-    };
-    
-    $.ajax({
-        url: "'.$url.'/app/desktop/php/authenticate.php",
-        type: "POST",
-        data: params,
-        success: function(data) {
-            var parsed = jQuery.parseJSON(data);
-            if (parsed.STATUS == "OK") {
-                if (parsed.SESSION != "") {
-                    var url = "'.$url.'/app/index.html?session="+parsed.SESSION;
-                    var win = window.open(url, "_blank");
-                    win.focus();
-                }
-            } else {
-                console.log(parsed.ERROR);
-            }            
-        }
-    });
+    var url = "'.$redirect.'";
+    var win = window.open(url, "_blank");
+    win.focus();
 });
 </script>';
 
-
 $tpl = new Template('Mobidico');
-
 $content = '';
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

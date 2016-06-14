@@ -1352,11 +1352,13 @@ function _api_format_user($user, $add_password = false)
     // Getting user avatar.
     $originalFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL, $result);
     $smallFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL, $result);
+    $mediumFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_MEDIUM, $result);
 
     $result['avatar'] = $originalFile;
     $avatarString = explode('?', $originalFile);
     $result['avatar_no_query'] = reset($avatarString);
     $result['avatar_small'] = $smallFile;
+    $result['avatar_medium'] = $mediumFile;
 
     if (isset($user['user_is_online'])) {
         $result['user_is_online'] = $user['user_is_online'] == true ? 1 : 0;
@@ -2894,12 +2896,12 @@ function api_display_tool_view_option() {
     }
 
     // Uncomment to remove student view link from document view page
-    if (strpos($_SERVER['REQUEST_URI'], 'newscorm/lp_header.php') !== false) {
+    if (strpos($_SERVER['REQUEST_URI'], 'lp/lp_header.php') !== false) {
         if (empty($_GET['lp_id'])) {
             return '';
         }
         $sourceurl = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
-        $sourceurl = str_replace('newscorm/lp_header.php', 'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.intval($_GET['lp_id']).'&isStudentView='.($_SESSION['studentview']=='studentview' ? 'false' : 'true'), $sourceurl);
+        $sourceurl = str_replace('lp/lp_header.php', 'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.intval($_GET['lp_id']).'&isStudentView='.($_SESSION['studentview']=='studentview' ? 'false' : 'true'), $sourceurl);
         //showinframes doesn't handle student view anyway...
         //return '';
         $is_framed = true;
@@ -2950,7 +2952,7 @@ function api_display_tool_view_option() {
  * @author Patrick Cool
  * @author Julio Montoya
  * @version 1.1, February 2004
- * @return boolean, true: the user has the rights to edit, false: he does not
+ * @return boolean true: the user has the rights to edit, false: he does not
  */
 
 function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true)
@@ -3035,7 +3037,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 * on the session visibility
 * @param bool $tutor  Whether to check if the user has the tutor role
 * @param bool  $coach Whether to check if the user has the coach role
-* @return boolean, true: the user has the rights to edit, false: he does not
+* @return boolean true: the user has the rights to edit, false: he does not
 */
 function api_is_allowed_to_session_edit($tutor = false, $coach = false)
 {
@@ -4256,15 +4258,24 @@ function api_get_language_from_type($lang_type)
     return $return;
 }
 
-function api_get_language_info($language_id) {
-    $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = 'SELECT * FROM '.$tbl_admin_languages.' WHERE id = "'.intval($language_id).'"';
-    $rs = Database::query($sql);
-    $language_info = array();
-    if (Database::num_rows($rs)) {
-        $language_info = Database::fetch_array($rs,'ASSOC');
-    }
-    return $language_info;
+/**
+ * Get the language information by its id
+ * @param int $languageId
+ * @return array
+ */
+function api_get_language_info($languageId) {
+    $language = Database::getManager()
+        ->find('ChamiloCoreBundle:Language', intval($languageId));
+
+    return [
+        'id' => $language->getId(),
+        'original_name' => $language->getOriginalName(),
+        'english_name' => $language->getEnglishName(),
+        'isocode' => $language->getIsocode(),
+        'dokeos_folder' => $language->getDokeosFolder(),
+        'available' => $language->getAvailable(),
+        'parent_id' => $language->getParent() ? $language->getParent()->getId() : null
+    ];
 }
 
 /**
@@ -6163,7 +6174,7 @@ function api_get_template($path_type = 'rel') {
  * return the current browser and major ver when $format=check_browser
  * @param string $format
  *
- * @return bool, or return text array if $format=check_browser
+ * @return bool or return text array if $format=check_browser
  * @author Juan Carlos Raña Trabado
  */
 
@@ -7799,7 +7810,7 @@ function api_mail_html(
     $mail->WordWrap = 200;
 
     if ($platform_email['SMTP_AUTH']) {
-        $mail->SMTPAuth = 1;
+        $mail->SMTPAuth = true;
         $mail->Username = $platform_email['SMTP_USER'];
         $mail->Password = $platform_email['SMTP_PASS'];
         if (isset($platform_email['SMTP_SECURE'])) {

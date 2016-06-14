@@ -1,11 +1,11 @@
 <?php
-require_once(api_get_path(SYS_CODE_PATH).'newscorm/scormOrganization.class.php');
+require_once api_get_path(SYS_CODE_PATH) . 'lp/scormOrganization.class.php';
 
 class TestScormOrganization extends UnitTestCase {
 
 	public function testget_flat_items_list() {
 		//ob_start();
-		$obj = new scormOrganization($type='manifest',&$element,$scorm_charset='UTF-8'); 
+		$obj = new scormOrganization($type='manifest', $element, $scorm_charset='UTF-8'); 
 		$res = $obj->get_flat_items_list();
 		$this->assertTrue(is_array($res)); 
 		//ob_end_clean();

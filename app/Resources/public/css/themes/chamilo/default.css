@@ -56,7 +56,7 @@ a:focus {
   overflow: hidden !important;
 }
 .navbar-default {
-  background: #2E75A3;
+  background: #3C8DBC;
   -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 }
@@ -68,7 +68,7 @@ a:focus {
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus{
   color: #fff;
-  background-color:#07578a;
+  background-color:#367FA9;
 }
 .navbar-default .navbar-nav > li > a{
   color: #ffffff;
@@ -76,7 +76,7 @@ a:focus {
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus{
-  background: #07578a;
+  background: #367FA9;
   color: #ffffff;
 }
 .navbar-nav > li > .dropdown-menu{
@@ -88,18 +88,9 @@ a:focus {
 }
 .navbar-default .navbar-nav > .open > .dropdown-menu{
   padding: 3px 4px;
-  background-color: #07578a;
 }
 .navbar-default .navbar-nav > .open > .dropdown-menu > li > a{
   padding: 6px 9px;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  color: #ffffff !important;
-}
-.navbar-default .navbar-nav > .open > .dropdown-menu > li > a:hover,
-.navbar-default .navbar-nav > .open > .dropdown-menu > li > a:focus{
-  background-color:#2E75A3;
 }
 .nav > li > a:hover, .nav > li > a:focus{
    background-color: transparent;

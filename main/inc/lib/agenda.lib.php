@@ -31,7 +31,7 @@ class Agenda
         $this->table_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
 
         //Setting the course object if we are in a course
-        $this->course = null;
+        unset($this->course);
         $courseInfo = api_get_course_info();
         if (!empty($courseInfo)) {
             $this->course = $courseInfo;

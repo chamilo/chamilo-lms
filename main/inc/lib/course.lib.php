@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
  * Class CourseManager
@@ -141,9 +143,6 @@ class CourseManager
 
                     if ($useTemplate) {
                         // Include the necessary libraries to generate a course copy
-                        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseBuilder.class.php';
-                        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseRestorer.class.php';
-                        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseSelectForm.class.php';
                         // Call the course copy object
                         $originCourse['official_code'] = $originCourse['code'];
                         $cb = new CourseBuilder(null, $originCourse);
@@ -4149,10 +4148,6 @@ class CourseManager
         $destination_session_id,
         $params = array()
     ) {
-        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseBuilder.class.php';
-        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseRestorer.class.php';
-        require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseSelectForm.class.php';
-
         $course_info = api_get_course_info($source_course_code);
 
         if (!empty($course_info)) {
@@ -4746,13 +4741,13 @@ class CourseManager
             // start buycourse validation
             // display the course price and buy button if the buycourses plugin is enabled and this course is configured
             $plugin = BuyCoursesPlugin::create();
-            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course_info);
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($course_info['real_id'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
             if ($isThisCourseInSale) {
                 // set the price label
                 $my_course['price'] = $isThisCourseInSale['html'];
                 // set the Buy button instead register.
                 if ($isThisCourseInSale['verificator'] && !empty($my_course['register_button'])) {
-                    $my_course['register_button'] = $plugin->returnBuyCourseButton($course_info);
+                    $my_course['register_button'] = $plugin->returnBuyCourseButton($course_info['real_id'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
                 }
             }
             // end buycourse validation
@@ -5741,7 +5736,7 @@ class CourseManager
                         $result = $objExercise->read($exercise_redirect);
 
                         if (!empty($exercise_redirect) && !empty($result)) {
-                            $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
+                            $form_data['action'] = api_get_path(WEB_CODE_PATH) . 'exercise/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
                             $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
                             $form_data['button'] = Display::button(
                                 'next',

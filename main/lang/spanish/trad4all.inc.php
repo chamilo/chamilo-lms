@@ -7730,4 +7730,6 @@ $ForumEndDate = "Fecha de cierre";
 $ForumStartDateComment = "El foro será visible a partir de esta fecha";
 $ForumEndDateComment = "Pasada esta fecha, el foro será automáticamente cerrado";
 $ModeratedForum = "Foro moderado";
+$EnableProfileUsersAddressGeolocalizationTitle = "Activar geolocalización";
+$EnableProfileUsersAddressGeolocalizationComment = "Activar un campo de dirección en el perfil del usuario y ubicar su dirección en un mapa usando la geolocalización";
 ?>

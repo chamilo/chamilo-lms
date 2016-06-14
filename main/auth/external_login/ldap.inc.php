@@ -278,11 +278,6 @@ function extldap_import_all_users()
             for ($key = 0; $key < $users['count']; $key++) {
                 $user_id = extldap_add_user_by_array($users[$key], true);
                 $count++;
-                if ($user_id) {
-                    // echo "User #$user_id created or updated\n";
-                } else {
-                    // echo "User was not created\n";
-                }
             }
         }
     }
@@ -314,15 +309,9 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
     // No expiration date for students (recover from LDAP's shadow expiry)
     $expiration_date = '';
     $active          = 1;
-    if (empty($status)) {
-        $status = 5;
-    }
-    if (empty($phone)) {
-        $phone = '';
-    }
-    if (empty($picture_uri)) {
-        $picture_uri = '';
-    }
+    $status = 5;
+    $phone = '';
+    $picture_uri = '';
     // Adding user
     $user_id = 0;
     if (UserManager::is_username_available($username)) {

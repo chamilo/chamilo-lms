@@ -2046,10 +2046,10 @@ function get_work_user_list(
                 $count = getWorkCommentCount($item_id, $course_info);
                 if (!is_null($count) && !empty($count)) {
                     if ($qualification_exists) {
-                        $feedback .= "<br />";
+                        $feedback .= ' ';
                     }
                     $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::label($count.' '.get_lang('Feedback'), 'info').'</a> ';
+                            $count . ' ' . Display::returnFontAwesomeIcon('comments-o') . '</a> ';
                 }
 
                 $work['qualification'] = $qualification_string.$feedback;
@@ -2057,9 +2057,10 @@ function get_work_user_list(
 
                 // Date.
                 $work_date = api_convert_and_format_date($work['sent_date']);
+                $date = date_to_str_ago($work['sent_date']). ' ' . $add_string . ' ' . $work_date;
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="date-time">' . date_to_str_ago($work['sent_date']). ' ' . $add_string . ' ' . $work_date . '</div>';
+                $work['sent_date'] = '<div class="text-center" title="'.$date.'">' . $work['sent_date'] . '</div>';
 
                 // Actions.
                 $correction = '';

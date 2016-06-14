@@ -2270,7 +2270,7 @@ class UserManager
     /**
      * Get all the extra field information of a certain field (also the options)
      *
-     * @param int $field_name the name of the field we want to know everything of
+     * @param int $fieldId the ID of the field we want to know everything of
      * @return array $return containing all th information about the extra profile field
      * @author Julio Montoya
      * @deprecated

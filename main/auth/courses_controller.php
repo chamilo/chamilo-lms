@@ -806,6 +806,9 @@ class CoursesController
             if (api_is_platform_admin()) {
                 $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session->getId();
             }
+
+            $isThisSessionOnSale = $session->getBuyCoursePluginPrice();
+
             $sessionsBlock = array(
                 'id' => $session->getId(),
                 'name' => $session->getName(),
@@ -819,7 +822,8 @@ class CoursesController
                 'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
-                'subscribe_button' => $this->getRegisteredInSessionButton(
+                'price' => $isThisSessionOnSale['html'],
+                'subscribe_button' => isset($isThisSessionOnSale['buy_button']) ? $isThisSessionOnSale['buy_button'] : $this->getRegisteredInSessionButton(
                     $session->getId(),
                     $session->getName(),
                     $hasRequirements

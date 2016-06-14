@@ -5,37 +5,12 @@
  * logged in yet
  * @package chamilo.custompages
  */
-/**
- * Get the preferred language base on the browser headers
- */
-function get_preferred_language($available_langs) {
-	$langs = array();
-	foreach (explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']) as $httplang) {
-		$rawlang = explode(';q=', $httplang);
-		if (strpos($rawlang[0], '-') !== FALSE) {
-			$rawlang[0] = substr($rawlang[0], 0, strpos($rawlang[0], '-'));
-		}
-		if (count($rawlang) == 1) {
-			$rawlang[1] = 1.0;
-		}
-		$langs[$rawlang[1]] = $rawlang[0];
-	}
-	krsort($langs, SORT_NUMERIC);
-	foreach($langs as $weight => $code) {
-		if (in_array($code, $available_langs)) {
-			return $code;
-		}
-	}
-	return null;
-}
-/**
- * Get a language variable in a specific language
- */
-function custompages_get_lang($variable) {
-	return get_lang($variable, null, $_SESSION['user_language_choice']);
-}
+// Get helper functions
+require_once __DIR__ . '/language.inc.php';
 
+// Define the languages you want to make available for auto-detection here
 $available_langs = array('en', 'fr', 'es', 'gl', 'eu');
+// Define the translation of these language codes to Chamilo languages
 $chamilo_langs = array(
     null => 'english',
     'en' => 'english',

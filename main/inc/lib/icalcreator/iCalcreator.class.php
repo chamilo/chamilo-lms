@@ -344,8 +344,8 @@ class vcalendar {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.4.5 - 2008-11-14
      * @param mixed $propName, bool FALSE => X-property
-     * @param int @propix, optional, if specific property is wanted in case of multiply occurences
-     * @return bool, if successfull delete
+     * @param mixed @propix optional, if specific property is wanted in case of multiple instances
+     * @return bool if successful delete
      */
     function deleteProperty( $propName, $propix=FALSE ) {
         $propName = ( $propName ) ? strtoupper( $propName ) : 'X-PROP';
@@ -1608,30 +1608,30 @@ class vcalendar {
      * @param string $filename optional
      * @param string $delimiter optional
      * @param int timeout optional, default 3600 sec
-     * @return redirect/FALSE
+     * @return mixed
      */
-    function useCachedCalendar( $directory=FALSE, $filename=FALSE, $delimiter=FALSE, $timeout=3600) {
+    function useCachedCalendar($directory=FALSE, $filename=FALSE, $delimiter=FALSE, $timeout=3600) {
         if ( $directory && ctype_digit( (string) $directory ) && !$filename ) {
             $timeout   = (int) $directory;
             $directory = FALSE;
         }
-        if( $directory )
+        if ( $directory )
             $this->setConfig( 'directory', $directory );
-        if( $filename )
+        if ( $filename )
             $this->setConfig( 'filename',  $filename );
-        if( $delimiter && ( $delimiter != DIRECTORY_SEPARATOR ))
+        if ( $delimiter && ( $delimiter != DIRECTORY_SEPARATOR ))
             $this->setConfig( 'delimiter', $delimiter );
         $filesize    = $this->getConfig( 'filesize' );
-        if( 0 >= $filesize )
+        if ( 0 >= $filesize )
             return FALSE;
         $dirfile     = $this->getConfig( 'dirfile' );
-        if( time() - filemtime( $dirfile ) < $timeout) {
+        if ( time() - filemtime( $dirfile ) < $timeout) {
             clearstatcache();
             $dirfile   = $this->getConfig( 'dirfile' );
             $filename  = $this->getConfig( 'filename' );
 //    if( headers_sent( $filename, $linenum ))
 //      die( "Headers already sent in $filename on line $linenum\n" );
-            if( 'xcal' == $this->format )
+            if ( 'xcal' == $this->format )
                 header( 'Content-Type: application/calendar+xml; charset=utf-8' );
             else
                 header( 'Content-Type: text/calendar; charset=utf-8' );
@@ -1639,14 +1639,14 @@ class vcalendar {
             header( 'Content-Disposition: attachment; filename="'.$filename.'"' );
             header( 'Cache-Control: max-age=10' );
             $fp = @$fopen( $dirfile, 'r' );
-            if( $fp ) {
+            if ( $fp ) {
                 fpassthru( $fp );
                 fclose( $fp );
             }
             die();
-        }
-        else
+        } else {
             return FALSE;
+        }
     }
 }
 /*********************************************************************************/
@@ -4475,7 +4475,7 @@ class calendarComponent {
      * @since 2.4.8 - 2008-10-30
      * @param array $startdate, optional
      * @param array $duration, optional
-     * @return array, date format
+     * @return array date format
      */
     function duration2date( $startdate=FALSE, $duration=FALSE ) {
         if( $startdate && $duration ) {
@@ -5720,7 +5720,7 @@ class calendarComponent {
      * @since 2.5.1 - 2008-11-14
      * @param string $propName
      * @param int @propix, optional, if specific property is wanted in case of multiply occurences
-     * @return bool, if successfull delete TRUE
+     * @return bool if successfull delete TRUE
      */
     function deleteProperty( $propName, $propix=FALSE ) {
         if( $this->_notExistProp( $propName )) return FALSE;

@@ -211,20 +211,54 @@ class CourseArchiver
         if ($delete) {
             @unlink(api_get_path(SYS_ARCHIVE_PATH) . '' . $filename);
         }
+
         // read the course
         if (!is_file('course_info.dat')) {
             return new Course();
         }
+
         $fp = @fopen('course_info.dat', "r");
         $contents = @fread($fp, filesize('course_info.dat'));
         @fclose($fp);
-        // CourseCopyLearnpath class appeared in Chamilo 1.8.7, it is the former Learnpath class in the "Copy course" tool.
-        // For backward comaptibility with archives created on Chamilo 1.8.6.2 or older systems, we have to do the following:
-        // Before unserialization, if class name "Learnpath" was found, it should be renamed as "CourseCopyLearnpath".
-        $course = unserialize(str_replace('O:9:"Learnpath":', 'O:19:"CourseCopyLearnpath":', base64_decode($contents)));
-        if (get_class($course) != 'Course') {
+
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Course', 'Course');
+
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement', 'Announcement');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance', 'Attendance');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent', 'CalendarEvent');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath', 'CourseCopyLearnpath');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestcategory', 'CourseCopyTestcategory');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription', 'CourseDescription');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession', 'CourseSession');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Document', 'Document');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum', 'Forum');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory', 'ForumCategory');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost', 'ForumPost');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic', 'ForumTopic');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary', 'Glossary');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup', 'GradeBookBackup');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Link', 'Link');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory', 'LinkCategory');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz', 'Quiz');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion', 'QuizQuestion');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestionOption', 'QuizQuestionOption');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ScormDocument', 'ScormDocument');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Survey', 'Survey');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyInvitation', 'SurveyInvitation');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyQuestion', 'SurveyQuestion');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic', 'Thematic');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro', 'ToolIntro');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki', 'Wiki');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Work', 'Work');
+
+        $course = unserialize(base64_decode($contents));
+
+        if (!in_array(
+            get_class($course), ['Course', 'Chamilo\CourseBundle\Component\CourseCopy\Course'])
+        ) {
             return new Course();
         }
+
         $course->backup_path = $unzip_dir;
 
         return $course;

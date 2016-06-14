@@ -1731,8 +1731,7 @@ class DocumentManager
      * @param string $course_id
      * @param int $document_id
      * @param int $session_id
-     *
-     * @return void()
+     * @return void
      */
     public static function attach_gradebook_certificate($course_id, $document_id, $session_id = 0)
     {
@@ -1966,7 +1965,7 @@ class DocumentManager
      * Remove default certificate
      * @param string $course_id The course code
      * @param int $default_certificate_id The document id of the default certificate
-     * @return void()
+     * @return void
      */
     public static function remove_attach_certificate($course_id, $default_certificate_id)
     {
@@ -1997,7 +1996,7 @@ class DocumentManager
     /**
      * Create directory certificate
      * @param string $courseCode
-     * @return void()
+     * @return void
      */
     public static function create_directory_certificate_in_course($courseCode)
     {
@@ -3620,7 +3619,7 @@ class DocumentManager
         // Show the "image name" not the filename of the image.
         if ($lp_id) {
             // LP URL
-            $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $documentId . '&amp;lp_id=' . $lp_id;
+            $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $documentId . '&amp;lp_id=' . $lp_id;
             if (!empty($overwrite_url)) {
                 $url = $overwrite_url . '&cidReq=' . $course_info['code'] . '&id_session=' . $session_id . '&document_id=' . $documentId.'';
             }

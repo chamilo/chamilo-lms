@@ -58,7 +58,7 @@ $lp_title = Database::result($rs, 0, 0);
 
 $origin = 'tracking';
 
-$output = require_once api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';
+$output = require_once api_get_path(SYS_CODE_PATH) . 'lp/lp_stats.php';
 
 Display :: display_header($nameTools);
 echo '<div class ="actions">';

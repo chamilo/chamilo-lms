@@ -411,36 +411,70 @@ class ExtraFieldOption extends Model
      * Gets an array of options for a specific field
      * @param int $field_id The field ID
      * @param bool $add_id_in_array Whether to add the row ID in the result
-     * @param string $ordered_by Extra ordering query bit
-     * @result mixed Row on success, false on failure
-     * @assert (0, '') === false
+     * @param null $ordered_by Extra ordering query bit
+     * @return array The options if they exists. Otherwise return false
      */
     public function get_field_options_by_field($field_id, $add_id_in_array = false, $ordered_by = null)
     {
         $field_id = intval($field_id);
 
-        $sql = "SELECT * FROM {$this->table}
-                WHERE field_id = $field_id ";
+        $orderBy = null;
 
-        if (!empty($ordered_by)) {
-            $sql .= " ORDER BY $ordered_by ";
+        switch ($ordered_by) {
+            case 'id':
+                $orderBy = ['id' => 'ASC'];
+                break;
+            case 'field_id':
+                $orderBy = ['fieldId' => 'ASC'];
+                break;
+            case 'option_value':
+                $orderBy = ['optionValue' => 'ASC'];
+                break;
+            case 'display_text':
+                $orderBy = ['displayText' => 'ASC'];
+                break;
+            case 'priority':
+                $orderBy = ['priority' => 'ASC'];
+                break;
+            case 'priority_message':
+                $orderBy = ['priorityMessage' => 'ASC'];
+                break;
+            case 'option_order':
+                $orderBy = ['optionOrder' => 'ASC'];
+                break;
         }
 
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
+        $result = Database::getManager()
+            ->getRepository('ChamiloCoreBundle:ExtraFieldOptions')
+            ->findBy(['field' => $field_id], $orderBy);
+
+        if (!$result) {
+            return false;
+        }
+
+        $options = [];
+
+        foreach ($result as $row) {
+            $option = [
+                'id' => $row->getId(),
+                'field_id' => $row->getField()->getId(),
+                'option_value' => $row->getValue(),
+                'display_text' => $row->getDisplayText(),
+                'priority' => $row->getPriority(),
+                'priority_message' => $row->getPriorityMessage(),
+                'option_order' => $row->getOptionOrder()
+            ];
+
             if ($add_id_in_array) {
-                $options = array();
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    $options[$row['id']] = $row;
-                }
+                $options[$row->getId()] = $option;
 
-                return $options;
-            } else {
-                return Database::store_result($result, 'ASSOC');
+                continue;
             }
+
+            $options[] = $option;
         }
 
-        return false;
+        return $options;
     }
 
     /**
@@ -615,7 +649,20 @@ class ExtraFieldOption extends Model
         $form->addElement('hidden', 'type', $this->type);
         $form->addElement('hidden', 'field_id', $this->field_id);
 
-        $form->addElement('text', 'display_text', get_lang('Name'));
+        if ($action == 'edit') {
+            $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
+                'extra_field_option' => $id
+            ]);
+            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+
+            $form->addText(
+                'display_text',
+                [get_lang('Name'), $translateButton]
+            );
+        } else {
+            $form->addElement('text', 'display_text', get_lang('Name'));
+        }
+
         $form->addElement('text', 'option_value', get_lang('Value'));
         $form->addElement('text', 'option_order', get_lang('Order'));
         $form->addElement('select', 'priority', get_lang('Priority'), $this->getPriorityOptions());
@@ -625,7 +672,7 @@ class ExtraFieldOption extends Model
 
         if ($action == 'edit') {
             // Setting the defaults
-            $defaults = $this->get($id);
+            $defaults = $this->get($id, false);
             $form->freeze('option_value');
             $form->addButtonUpdate(get_lang('Modify'));
         } else {
@@ -692,5 +739,86 @@ class ExtraFieldOption extends Model
         }
 
         return $json;
+    }
+
+    /**
+     * Gets an element
+     * @param int $id
+     * @param bool $translateDisplayText Optional
+     * @return array
+     */
+    public function get($id, $translateDisplayText = true)
+    {
+        $info = parent::get($id);
+
+        if ($translateDisplayText) {
+            $info['display_text'] = self::translateDisplayName($info['display_text']);
+        }
+
+        return $info;
+    }
+
+    /**
+     * Translate the display text for a extra field option
+     * @param string $defaultDisplayText
+     * @return string
+     */
+    public static function translateDisplayName($defaultDisplayText)
+    {
+        $camelCase = api_underscore_to_camel_case($defaultDisplayText);
+        $camelCase = ucwords($camelCase);
+        $camelCase = str_replace(' ', '', $camelCase);
+
+        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+    }
+
+    /**
+     * Get the info from an extra field option by its id
+     * @param int $id
+     * @param bool $translateDisplayText
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function getInfoById($id, $translateDisplayText = true)
+    {
+        $extraField = Database::getManager()
+            ->find('ChamiloCoreBundle:ExtraFieldOptions', $id);
+
+        $objExtraField = null;
+
+        switch ($extraField->getField()->getExtraFieldType()) {
+            case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
+                $objExtraField = new self('user');
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
+                $objExtraField = new self('course');
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
+                $objExtraField = new self('session');
+                break;
+        }
+
+        if (!$objExtraField) {
+            return [];
+        }
+
+        return $objExtraField->get($extraField->getId(), $translateDisplayText);
+    }
+
+    /**
+     * @param null $options
+     * @return array
+     */
+    public function get_all($options = null)
+    {
+        $result = parent::get_all($options);
+
+        foreach ($result as &$row) {
+            $row['display_text'] = self::translateDisplayName($row['display_text']);
+        }
+
+        return $result;
     }
 }

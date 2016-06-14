@@ -47,8 +47,8 @@ class ShibbolethSession
     /**
      * Create a Shibboleth session for the user ID
      *
-     * @param  string $uid - The user ID
-     * @return $_user (array) - The user infos array created when the user logs in
+     * @param  string $uid The user ID
+     * @return array $_user The user infos array created when the user logs in
      */
     function login($uid)
     {

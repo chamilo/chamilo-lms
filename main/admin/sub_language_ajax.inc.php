@@ -44,10 +44,24 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
             }
         }
     }
+
+    if (isset($_REQUEST['redirect'])) {
+        Display::addFlash(
+            Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success')
+        );
+
+        header('Location: ' . api_get_path(WEB_CODE_PATH) . 'admin/sub_language.php?' . http_build_query([
+            'id' => $id_language,
+            'sub_language_id' => $sub_language_id,
+            'txt_search_word' => ltrim($language_variable, '$')
+        ]));
+        exit;
+    }
+
     if (!empty($variables_with_problems)) {
         echo $path_folder.' '.get_lang('IsNotWritable').'<br /> '.api_ucwords(get_lang('ErrorsFound')).': <br />'.$variables_with_problems;
     } else {
-        echo get_lang('Saved');
+        echo 1;
     }
 }
 

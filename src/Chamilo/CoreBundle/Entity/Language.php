@@ -2,18 +2,20 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\ChamiloCoreBundle;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Language
  *
  * @ORM\Table(name="language", indexes={@ORM\Index(name="idx_language_dokeos_folder", columns={"dokeos_folder"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\LanguageRepository")
  */
 class Language
 {
     /**
-     * @var boolean
+     * @var integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -57,12 +59,25 @@ class Language
     private $available;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="parent_id", type="boolean", nullable=true)
+     * @var \Chamilo\CoreBundle\Entity\Language
+     * @ORM\ManyToOne(targetEntity="Language", inversedBy="subLanguages")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
-    private $parentId;
+    private $parent;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Language", mappedBy="parent")
+     */
+    private $subLanguages;
+
+    /**
+     * Language constructor
+     */
+    public function __construct()
+    {
+        $this->children = new ArrayCollection();
+    }
 
     /**
      * Set originalName
@@ -180,26 +195,36 @@ class Language
     }
 
     /**
-     * Set parentId
+     * Set parent
      *
-     * @param boolean $parentId
+     * @param Language $parent
      * @return Language
      */
-    public function setParentId($parentId)
+    public function setParent(Language $parent)
     {
-        $this->parentId = $parentId;
+        $this->parent = $parent;
 
         return $this;
     }
 
     /**
-     * Get parentId
+     * Get parent
      *
-     * @return boolean
+     * @return Language
      */
-    public function getParentId()
+    public function getParent()
     {
-        return $this->parentId;
+        return $this->parent;
+    }
+
+    /**
+     * Get subLanguages
+     *
+     * @return ArrayCollection
+     */
+    public function getSubLanguages()
+    {
+        return $this->subLanguages;
     }
 
     /**

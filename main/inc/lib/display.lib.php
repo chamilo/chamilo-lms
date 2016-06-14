@@ -818,6 +818,15 @@ class Display
      */
     public static function img($image_path, $alt_text = '', $additional_attributes = array(), $filterPath = true)
     {
+        if (empty($image_path)) {
+            // For some reason, the call to img() happened without a proper
+            // image. Log the error and return an empty string to avoid
+            // breaking the HTML
+            $trace = debug_backtrace();
+            $caller = $trace[1];
+            error_log('No image provided in Display::img(). Caller info: '.print_r($caller, 1));
+            return '';
+        }
         // Sanitizing the parameter $image_path
         if ($filterPath) {
             $image_path = Security::filter_img_path($image_path);

@@ -65,6 +65,7 @@ class ExtraField extends Model
     const FIELD_TYPE_ALPHANUMERIC = 21;
     const FIELD_TYPE_LETTERS_SPACE = 22;
     const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;
+    const FIELD_TYPE_GEOLOCALIZATION = 24;
 
     public $type = 'user';
     public $pageName;
@@ -108,7 +109,6 @@ class ExtraField extends Model
                 break;
             case 'session':
                 $this->extraFieldType = EntityExtraField::SESSION_FIELD_TYPE;
-                $this->handlerEntityId = 'sessionId';
                 $this->primaryKey = 'id';
                 break;
             case 'question':
@@ -364,6 +364,9 @@ class ExtraField extends Model
         );
         $types[self::FIELD_TYPE_ALPHANUMERIC_SPACE] = get_lang(
             'FieldTypeAlphanumericSpaces'
+        );
+        $types[self::FIELD_TYPE_GEOLOCALIZATION] = get_lang(
+            'Geolocalization'
         );
 
         switch ($handler) {
@@ -1629,6 +1632,23 @@ EOF;
                             if ($field_details['visible'] == 0) {
                                 $form->freeze(
                                     'extra_' . $field_details['variable']
+                                );
+                            }
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
+                        $form->addElement(
+                            'text',
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text'],
+                            array()
+                        );
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        if (!$admin_permissions) {
+                            if ($field_details['visible'] == 0) {
+                                $form->freeze(
+                                    'extra_'.$field_details['variable']
                                 );
                             }
                         }

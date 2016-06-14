@@ -46,11 +46,14 @@ class Certificate extends Model
     public function __construct($certificate_id = null)
     {
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $this->certificate_data = null;
+        unset($this->certificate_data);
 
         if (isset($certificate_id)) {
-            $this->certificate_data = $this->get($certificate_id);
-            $this->user_id = $this->certificate_data['user_id'];
+            $certificate = $this->get($certificate_id);
+            if (!empty($certificate) && is_array($certificate)) {
+                $this->certificate_data = $certificate;
+                $this->user_id = $this->certificate_data['user_id'];
+            }
         } else {
             //Try with the current user
             $this->user_id = api_get_user_id();
@@ -265,7 +268,7 @@ class Certificate extends Model
     * @param int $cat_id category id
     * @param int $user_id user id
     * @param string $path_certificate the path name of the certificate
-    * @return void()
+    * @return void
     */
     public function update_user_info_about_certificate(
         $cat_id,

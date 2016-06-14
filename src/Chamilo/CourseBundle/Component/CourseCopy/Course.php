@@ -70,22 +70,22 @@ class Course
      */
     public function has_resources($resource_type = null)
     {
-        if( $resource_type != null) {
-            return isset($this->resources[$resource_type]) && is_array($this->resources[$resource_type]) && (count(
-                    $this->resources[$resource_type]
-                ) > 0);
+        if ($resource_type != null) {
+            return
+                isset($this->resources[$resource_type]) && is_array($this->resources[$resource_type]) && (
+                    count($this->resources[$resource_type]) > 0
+                );
         }
-        return (count($this->resources) > 0);
+
+        return count($this->resources) > 0;
     }
 
     /**
      * @inheritdoc
      */
     public function show()
-    { /*
-        echo '<pre>';
-        print_r($this);
-        echo '</pre>';*/
+    {
+        
     }
 
     /**

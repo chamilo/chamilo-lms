@@ -125,13 +125,6 @@ function search_sessions($needle,$type) {
     $return = '';
     if (!empty($needle) && !empty($type)) {
         if ($type == 'single') {
-            // search users where username or firstname or lastname begins likes $needle
-          /*  $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-                    WHERE (username LIKE "'.$needle.'%"
-                    OR firstname LIKE "'.$needle.'%"
-                OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''.
-                $order_clause.
-                ' LIMIT 11';*/
         } else if ($type == 'searchbox') {
             $session_list = SessionManager::get_sessions_list(
                 array('s.name' => array('operator' => 'LIKE', 'value' => "%$needle%"))
@@ -142,8 +135,7 @@ function search_sessions($needle,$type) {
             );
         }
         $i=0;
-        if ($type=='single') {
-        } else {
+        if ($type != 'single') {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
 
             foreach ($session_list as $row ) {

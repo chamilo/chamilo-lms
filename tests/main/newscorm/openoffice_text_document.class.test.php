@@ -1,5 +1,5 @@
 <?php
-//require_once(api_get_path(SYS_CODE_PATH).'newscorm/openoffice_text_document.class.php');
+//require_once(api_get_path(SYS_CODE_PATH).'lp/openoffice_text_document.class.php');
 
 class TestOpenOfficeTextDocument extends UnitTestCase {
 /*

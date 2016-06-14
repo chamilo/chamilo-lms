@@ -959,7 +959,7 @@ class Tracking
                                                             </td>';
                                                 } else {
                                                     $output .= '<td>
-                                                            <a href="../exercice/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
+                                                            <a href="../exercise/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
                                                             <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
                                                             </a></td>';
                                                 }
@@ -969,7 +969,7 @@ class Tracking
                                                                 <img src="' . Display::returnIconPath('quiz_na.gif').'" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
                                                 } else {
                                                     $output .= '<td>
-                                                                    <a href="../exercice/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
+                                                                    <a href="../exercise/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
                                                                     <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
                                                 }
                                             }
@@ -1121,8 +1121,10 @@ class Tracking
                 STUDENT
             );
             $students = array();
-            foreach ($studentList as $studentData) {
-                $students[] = $studentData['user_id'];
+            if (is_array($studentList)) {
+                foreach ($studentList as $studentData) {
+                    $students[] = $studentData['user_id'];
+                }
             }
 
             $studentBossesList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -1141,8 +1143,10 @@ class Tracking
                 STUDENT_BOSS
             );
             $studentBosses = array();
-            foreach ($studentBossesList as $studentBossData) {
-                $studentBosses[] = $studentBossData['user_id'];
+            if (is_array($studentBossesList)) {
+                foreach ($studentBossesList as $studentBossData) {
+                    $studentBosses[] = $studentBossData['user_id'];
+                }
             }
 
             $teacherList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -1182,8 +1186,10 @@ class Tracking
             );
 
             $humanResourcesList = array();
-            foreach ($humanResources as $item) {
-                $humanResourcesList[] = $item['user_id'];
+            if (is_array($humanResources)) {
+                foreach ($humanResources as $item) {
+                    $humanResourcesList[] = $item['user_id'];
+                }
             }
 
             $platformCourses = SessionManager::getAllCoursesFollowedByUser(
@@ -1772,7 +1778,11 @@ class Tracking
 
     		$sql = "SELECT count(id) FROM $tbl_course_quiz
     				WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz ";
-    		$count_quiz = Database::fetch_row(Database::query($sql));
+            $count_quiz = 0;
+            $countQuizResult = Database::query($sql);
+            if (!empty($countQuizResult)) {
+                $count_quiz = Database::fetch_row($countQuizResult);
+            }
 
     		if (!empty($count_quiz[0]) && !empty($student_id)) {
     			if (is_array($student_id)) {
@@ -1789,7 +1799,7 @@ class Tracking
                     $result = Database::query($sql);
                     $exercise_list = array();
     				$exercise_id = null;
-                    if (Database::num_rows($result)) {
+                    if (!empty($result) && Database::num_rows($result)) {
                         while ($row = Database::fetch_array($result)) {
                             $exercise_list[] = $row['id'];
                         }
@@ -4700,7 +4710,10 @@ class Tracking
                     }
                     //Score
                     $html .= Display::tag('td', $percentage_score, array('align'=>'center'));
-                    $html .= Display::tag('td', $last_connection,  array('align'=>'center'));
+                    if (empty($last_connection) or is_bool($last_connection)) {
+                        $last_connection = '';
+                    }
+                    $html .= Display::tag('td', $last_connection, array('align' => 'center'));
 
                     if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
                         $details = '<a href="#">';
@@ -4804,7 +4817,7 @@ class Tracking
                     );
 
                     $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
+                    $url = api_get_path(WEB_CODE_PATH) . "exercise/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
 
                     if ($visible_return['value'] == true) {
                         $exercices['title'] = Display::url(
@@ -4863,13 +4876,16 @@ class Tracking
                                 $weighting      = $exercise_stat['exe_weighting'];
                                 $exe_id         = $exercise_stat['exe_id'];
 
-                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
+                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH) . 'exercise/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
                                 $percentage_score_result = Display::url(ExerciseLib::show_score($score, $weighting), $latest_attempt_url);
                                 $my_score = 0;
                                 if (!empty($weighting) && intval($weighting) != 0) {
                                     $my_score = $score/$weighting;
                                 }
                                 //@todo this function slows the page
+                                if (is_int($user_list)) {
+                                    $user_list = array($user_list);
+                                }
                                 $position = ExerciseLib::get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
 
                                 $graph = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
@@ -4955,7 +4971,7 @@ class Tracking
                     $time_spent_in_lp = api_time_to_hms($time_spent_in_lp);
 
                     $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."newscorm/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
+                    $url = api_get_path(WEB_CODE_PATH) . "lp/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
 
                     if ($learnpath['lp_visibility'] == 0) {
                         $html .= Display::tag('td', $learnpath['lp_name']);
@@ -5549,7 +5565,8 @@ class Tracking
      * @param   int $sessionId  The session ID (session.id)
      * @param   int $courseId   The course ID (course.id)
      * @param   int $exerciseId The quiz ID (c_quiz.id)
-     * @param   int $answer     The answer status (0 = incorrect, 1 = correct, 2 = both)
+     * @param   string $date_from
+     * @param   string $date_to
      * @param   array   $options    An array of options you can pass to the query (limit, where and order)
      * @return array An array with the data of exercise(s) progress
      */
@@ -6177,12 +6194,12 @@ class TrackingCourseLog
     			break;
     		case 'learnpath':
     			$table_name = TABLE_LP_MAIN;
-    			$link_tool = 'newscorm/lp_controller.php';
+    			$link_tool = 'lp/lp_controller.php';
     			$id_tool = 'id';
     			break;
     		case 'quiz':
     			$table_name = TABLE_QUIZ_TEST;
-    			$link_tool = 'exercice/exercice.php';
+    			$link_tool = 'exercise/exercise.php';
     			$id_tool = 'id';
     			break;
     		case 'glossary':

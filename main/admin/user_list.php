@@ -107,10 +107,10 @@ function clear_session_list(div_session) {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-down') . ' '. get_lang('AdvancedSearch').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'\');
     }
 }
 
@@ -199,6 +199,7 @@ function prepare_user_sql_query($is_count)
         'keyword_officialcode',
         'keyword_status',
         'keyword_active',
+        'keyword_inactive',
         'check_easy_passwords'
     );
 
@@ -216,11 +217,14 @@ function prepare_user_sql_query($is_count)
         $keywordListValues = array();
     }
 
+    /*
+    // This block is never executed because $keyword_extra_data never exists
     if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
         $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
         $field_id = $extra_info['id'];
         $sql.= " INNER JOIN user_field_values ufv ON u.id=ufv.user_id AND ufv.field_id=$field_id ";
     }
+    */
 
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $keywordFiltered = Database::escape_string("%". $_GET['keyword'] ."%");
@@ -247,27 +251,35 @@ function prepare_user_sql_query($is_count)
         }
 
         $keyword_extra_value = '';
+
+        // This block is never executed because $keyword_extra_data never exists
+        /*
         if (isset($keyword_extra_data) && !empty($keyword_extra_data) &&
             !empty($keyword_extra_data_text)) {
             $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
         }
+        */
 
         $sql .= " $query_admin_table
-                WHERE (
-                    u.firstname LIKE '". Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
-                    u.lastname LIKE '". Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
-                    u.username LIKE '". Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
-                    u.email LIKE '". Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
-                    u.official_code LIKE '". Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' AND
-                    u.status LIKE '".Database::escape_string($keywordListValues['keyword_status'])."'
-                    $keyword_admin
-                    $keyword_extra_value
-                ";
+            WHERE (
+                u.firstname LIKE '". Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
+                u.lastname LIKE '". Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
+                u.username LIKE '". Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
+                u.email LIKE '". Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
+                u.status LIKE '".Database::escape_string($keywordListValues['keyword_status'])."'  
+         ";
+        if (!empty($keywordListValues['keyword_officialcode'])) {
+            $sql .= " AND u.official_code LIKE '" . Database::escape_string("%" . $keywordListValues['keyword_officialcode'] . "%") . "' ";
+        }
+        $sql .= "
+            $keyword_admin
+            $keyword_extra_value
+        ";
 
-        if (isset($keyword_active) && !isset($keyword_inactive)) {
-            $sql .= " AND u.active='1'";
-        } elseif (isset($keyword_inactive) && !isset($keyword_active)) {
-            $sql .= " AND u.active='0'";
+        if (isset($keywordListValues['keyword_active']) && !isset($keywordListValues['keyword_inactive'])) {
+            $sql .= " AND u.active = 1";
+        } elseif (isset($keywordListValues['keyword_inactive']) && !isset($keywordListValues['keyword_active'])) {
+            $sql .= " AND u.active = 0";
         }
         $sql .= " ) ";
     }
@@ -546,11 +558,7 @@ function modify_filter($user_id, $url_params, $row) {
 	}
 
 	// actions for assigning sessions, courses or users
-	if (api_is_session_admin()) {
-		/*if ($row[0] == api_get_user_id()) {
-			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
-		}*/
-	} else {
+	if (!api_is_session_admin()) {
         if ($current_user_status_label == $statusname[SESSIONADMIN]) {
             $result .= Display::url(
                 Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')),
@@ -717,28 +725,24 @@ if (!empty($action)) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
-$form->addElement('text', 'keyword');
+$form = new FormValidator('search_simple', 'get', null, null, null, 'inline');
+$form->addText('keyword', get_lang('Search'), false);
 $form->addButtonSearch(get_lang('Search'));
-$form->addElement(
-    'static',
-    'search_advanced_link',
-    null,
-    '<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();">
-        <span id="img_plus_and_minus">&nbsp;'.
-        Display::return_icon('div_show.gif', get_lang('Show'), array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'
-        </span>
-    </a>'
-);
 
-$actions  = '';
+$searchAdvanced = '<a id="advanced_params" href="javascript://" class = "btn btn-default advanced_options" onclick="display_advanced_search_form();">
+        <span id="img_plus_and_minus">&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'
+        </span>
+    </a>'; 
+$actionsLeft = '';
+$actionsCenter = '';
+$actionsRight  = '';
 if (api_is_platform_admin()) {
-	$actions .= '<div style="float:right;">'.
-		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
-         Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
-		 '</div>';
+	$actionsRight .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+         Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>';
 }
-$actions .= $form->return_form();
+
+$actionsLeft .= $form->return_form();
+$actionsCenter .= $searchAdvanced;
 
 if (isset ($_GET['keyword'])) {
 	$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
@@ -747,7 +751,7 @@ if (isset ($_GET['keyword'])) {
 	$parameters['keyword_lastname']	 	= Security::remove_XSS($_GET['keyword_lastname']);
 	$parameters['keyword_username']	 	= Security::remove_XSS($_GET['keyword_username']);
 	$parameters['keyword_email'] 	 	= Security::remove_XSS($_GET['keyword_email']);
-	$parameters['keyword_officialcode'] = Security::remove_XSS($_GET['keyword_officialcode']);
+	$parameters['keyword_officialcode']     = Security::remove_XSS($_GET['keyword_officialcode']);
 	$parameters['keyword_status'] 		= Security::remove_XSS($_GET['keyword_status']);
 	$parameters['keyword_active'] 		= Security::remove_XSS($_GET['keyword_active']);
 	$parameters['keyword_inactive'] 	= Security::remove_XSS($_GET['keyword_inactive']);
@@ -902,9 +906,10 @@ if ($table->get_total_number_of_items() == 0) {
         }
     }
 }
+$toolbarActions = Display::toolbarAction('toolbarUser', array(0 => $actionsLeft, 1 => $actionsCenter, 2 => $actionsRight), 3);
 
 $tpl = new Template($tool_name);
-$tpl->assign('actions', $actions);
+$tpl->assign('actions', $toolbarActions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $form.$table_result.$extra_search_options);
 $tpl->display_one_col_template();

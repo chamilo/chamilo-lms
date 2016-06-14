@@ -7659,5 +7659,7 @@ $ForumEndDate = "Date de fermeture";
 $ForumStartDateComment = "Le forum sera publié à cette date";
 $ForumEndDateComment = "Après cette date, le forum sera automatiquement fermé";
 $ModeratedForum = "Forum modéré";
+$EnableProfileUsersAddressGeolocalizationTitle = "Activer la géolocalisation";
+$EnableProfileUsersAddressGeolocalizationComment = "Activer un champ d'adresse pour l'utilisateur et situer son adresse sur une carte en utilisant la géolocalisation";
 $TermActivatedIsNeededDescription = "Le contrat d'apprentissage n'a pas encore été validé par votre tuteur.";
 ?>

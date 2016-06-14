@@ -1375,8 +1375,8 @@ class CourseRestorer
 
                 $id = Database::insert($tool_intro_table, $params);
                 if ($id) {
-                    $sql = "UPDATE $tool_intro_table SET id = iid WHERE iid = $id";
-                    Database::query($sql);
+                    //$sql = "UPDATE $tool_intro_table SET id = iid WHERE iid = $id";
+                    //Database::query($sql);
 
                     if (!isset($this->course->resources[RESOURCE_TOOL_INTRO][$id])) {
                         $this->course->resources[RESOURCE_TOOL_INTRO][$id] = new stdClass();
@@ -2512,7 +2512,7 @@ class CourseRestorer
                         $params = [
                             'c_id' => $this->destination_course_id,
                             'name' => self::DBUTF8($lp->name),
-                            'link' => 'newscorm/lp_controller.php?action=view&lp_id=$new_lp_id&id_session='.$session_id,
+                            'link' => 'lp/lp_controller.php?action=view&lp_id=$new_lp_id&id_session='.$session_id,
                             'image' => 'scormbuilder.gif',
                             'visibility' => '0',
                             'admin' => '0',

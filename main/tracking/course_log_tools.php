@@ -250,7 +250,7 @@ if ($exerciseReporting) {
             $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
             $url = api_get_path(
                     WEB_CODE_PATH
-                ).'exercice/overview.php?exerciseId='.$quiz['id'].$course_path_params;
+                ) . 'exercise/overview.php?exerciseId='.$quiz['id'].$course_path_params;
 
             echo '<tr><td>'.Display::url(
                     $quiz['title'],

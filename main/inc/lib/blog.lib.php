@@ -1094,12 +1094,10 @@ class Blog
 
 	/**
 	 * Shows the rating of user
-	 *
 	 * @param String $type
 	 * @param Integer $blog_id
 	 * @param Integer $item_id
-	 *
-	 * @return array()
+	 * @return array
 	 */
 	public static function display_rating($type, $blog_id, $item_id)
 	{

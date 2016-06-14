@@ -583,7 +583,7 @@ class GradebookUtils
      * @param integer $cat_id
      * @param integer $user_id
      * @param string $date_certificate
-     * @return void()
+     * @return void
      */
     public static function register_user_info_about_certificate($cat_id, $user_id, $score_certificate, $date_certificate)
     {

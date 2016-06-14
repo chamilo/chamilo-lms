@@ -82,11 +82,8 @@ function openid_begin($claimed_id, $return_to = '', $form_values = array()) {
 /**
  * Completes OpenID authentication by validating returned data from the OpenID
  * Provider.
- *
- * @param $response Array of returned from the OpenID provider (typically $_REQUEST).
- *
- * @return $response Response values for further processing with
- *   $response['status'] set to one of 'success', 'failed' or 'cancel'.
+ * @param array $response Array of returned from the OpenID provider (typically $_REQUEST).
+ * @return array $response Response values for further processing with $response['status'] set to one of 'success', 'failed' or 'cancel'.
  */
 function openid_complete($response) {
     // Default to failed response
@@ -182,10 +179,8 @@ function openid_discovery($claimed_id)
 
 /**
  * Attempt to create a shared secret with the OpenID Provider.
- *
  * @param $op_endpoint URL of the OpenID Provider endpoint.
- *
- * @return $assoc_handle The association handle.
+ * @return object $assoc_handle The association handle.
  */
 function openid_association($op_endpoint) {
     //@todo Remove Old Associations:

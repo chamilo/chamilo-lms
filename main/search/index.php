@@ -10,7 +10,7 @@ require_once '../inc/global.inc.php';
 $this_section =  SECTION_COURSES;
 
 if (extension_loaded('xapian')) {
-	require '../newscorm/lp_list_search.php';
+	require '../lp/lp_list_search.php';
 } else {
     Display::display_header(get_lang('Search'));
     Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));

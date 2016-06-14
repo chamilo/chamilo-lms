@@ -38,17 +38,17 @@ function get_zip_files_in_garbage() {
  */
 $nameTools = get_lang("FileUpload");
 $interbreadcrumb[] = array(
-    "url" => api_get_path(WEB_CODE_PATH)."newscorm/lp_controller.php?action=list?".api_get_cidreq(),
+    "url" => api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?action=list?".api_get_cidreq(),
     "name" => get_lang("ToolLearnpath"),
 );
 
 Display::display_header($nameTools, "Path");
 
-require_once '../newscorm/content_makers.inc.php';
+require_once '../lp/content_makers.inc.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'">'.
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('ReturnToLearningPaths'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 

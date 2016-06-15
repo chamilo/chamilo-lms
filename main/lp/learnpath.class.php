@@ -1547,7 +1547,7 @@ class learnpath
         // TODO: Update the item object (can be ignored for now because refreshed).
         return true;
     }
-    
+
     /**
      * Static admin function exporting a learnpath into a zip file
      * @param	string	Export type (scorm, zip, cd)
@@ -6484,6 +6484,7 @@ class learnpath
             Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         );
 
+
         echo Display::display_normal_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'));
         $chapter = $_SESSION['oLP']->display_item_form('chapter', get_lang('EnterDataNewChapter'), 'add_item');
         echo Display::tabs(
@@ -11046,8 +11047,6 @@ EOD;
     {
         $finalItem = $this->getFinalItem();
         $title = '';
-        $content = '';
-
         if ($finalItem) {
             $title = $finalItem->title;
             $buttonText = get_lang('Save');
@@ -11083,12 +11082,12 @@ EOD;
         $form->addHtml('<div class="alert alert-info">Variables :</br></br> <b>((certificate))</b> </br> <b>((skill))</b></div>');
         $renderer = $form->defaultRenderer();
         $renderer->setElementTemplate('<div class="editor-lp">&nbsp;{label}{element}</div>', 'content_lp');
-        $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
+        $form->addHtmlEditor('content_lp_certificate', null, null, true, $editorConfig, true);
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', isset($_SESSION['pathItem']) ? $_SESSION['pathItem'] : '');
         $form->addHidden('previous', $this->get_last());
 
-        $form->setDefaults(['title' => $title, 'content_lp' => $content]);
+        $form->setDefaults(['title' => $title, 'content_lp_certificate' => $content]);
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -11096,7 +11095,11 @@ EOD;
             $lastItemId = $this->get_last();
 
             if (!$finalItem) {
-                $documentId = $this->create_document($this->course_info, $values['content_lp'], $values['title']);
+                $documentId = $this->create_document(
+                    $this->course_info,
+                    $values['content_lp_certificate'],
+                    $values['title']
+                );
                 $this->add_item(
                     0,
                     $lastItemId,

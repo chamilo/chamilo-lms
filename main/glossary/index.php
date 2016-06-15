@@ -215,29 +215,69 @@ switch ($action) {
                 }
             }
             $data = Import::csv_reader($_FILES['file']['tmp_name']);
-            $good = 0;
-            $bad = 0;
+            $goodList = [];
+            $badList = [];
+            $doubles = [];
+            $added = [];
+            $termsPerKey = [];
+
             if ($data) {
+                $termsToAdd = [];
                 foreach ($data as $item) {
-                    $result = GlossaryManager::save_glossary(
-                        array(
-                            'glossary_title' => $item['term'],
-                            'glossary_comment' => $item['definition']
-                        )
-                    );
+                    $items = [
+                        'glossary_title' => $item['term'],
+                        'glossary_comment' => $item['definition']
+                    ];
+                    $termsToAdd[] = $items;
+                    $termsPerKey[$item['term']] = $items;
+                }
+
+                if (empty($termsToAdd)) {
+                    Display::return_message(get_lang("NothingToAdd"), 'warning');
+                    header('Location: '.$currentUrl);
+                    exit;
+                }
+
+                $repeatItems = array_count_values(array_column($termsToAdd, 'glossary_title'));
+                foreach ($repeatItems as $item => $count) {
+                    if ($count > 1) {
+                        $doubles[] = $item;
+                    }
+                }
+
+                $uniqueTerms = array_unique(array_keys($repeatItems));
+
+                foreach ($uniqueTerms as $itemTerm) {
+                    $item = $termsPerKey[$itemTerm];
+                    $result = GlossaryManager::save_glossary($item, false);
 
                     if ($result) {
-                        $good++;
+                        $goodList[] = $item['glossary_title'];
                     } else {
-                        $bad++;
+                        $badList[] = $item['glossary_title'];
                     }
                 }
             }
 
-            Display::return_message(get_lang("TermsImported") . ':' . $good);
-            if ($bad) {
-                Display::return_message(get_lang("TermsNotImported") . ':' . $bad, 'error');
+            if (count($goodList) > 0) {
+                Display::addFlash(
+                    Display::return_message(get_lang("TermsImported").': '.implode(', ', $goodList))
+                );
             }
+
+            if (count($badList) > 0) {
+                Display::addFlash(
+                    Display::return_message(get_lang("GlossaryTermAlreadyExists").': ' . implode(', ', $badList), 'error')
+                );
+            }
+
+            if (count($doubles) > 0) {
+                Display::addFlash(
+                    Display::return_message(get_lang("TermsDuplicatedInFile").': '.implode(', ', $doubles), 'warning')
+                );
+            }
+
+
             header('Location: '.$currentUrl);
             exit;
         }

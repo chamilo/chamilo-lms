@@ -7711,13 +7711,36 @@ $ForumEndDate = "Closing date";
 $ForumStartDateComment = "The forum will be visible starting from this date";
 $ForumEndDateComment = "Once this date has passed, the forum will be closed";
 $ModeratedForum = "Moderated forum";
+$DiagnosisFilledSubject = "Diagnosis filled successfully";
+$DiagnosisFilledDescription = "The diagnosis has been filled successfully";
+$UserXHasFilledTheDiagnosis = "User %s has filled the diagnosis";
+$UserXHasFilledTheDiagnosisDescription = "User %s has filled the diagnosis on the platform and it is ready for you to review.";
 $SendLegal = "Send legal agreement";
 $DeleteLegal = "Delete legal agreement";
 $LegalAccepted = "Legal accepted";
 $LoadTermConditionsSectionTitle = "Load term conditions section";
 $LoadTermConditionsSectionDescription = "The legal agreement will appear during the login or when enter to a course.";
+$SendTermsSubject = "Your terms and conditions are ready to be signed";
+$SendTermsDescriptionToUrlX = "Hello,
+
+Your tutor sent you your terms and conditions. You can sign it following this url: %s";
 $UserXSignedTheAgreement = "User %s signed the agreement.";
 $UserXSignedTheAgreementTheY = "User %s signed the agreement the %s.";
+$ShowTermsIfProfileCompletedTitle = "Terms and conditions only if profile complete";
+$ShowTermsIfProfileCompletedComment = "By enabling this option, terms and conditions will be available to the user only when the extra profile fields that start with 'terms_' and set to visible are completed.";
 $EnableProfileUsersAddressGeolocalizationTitle = "Enable user's geolocalization";
 $EnableProfileUsersAddressGeolocalizationComment = "Enable user's address field and show it on a map using geolocalization features";
+$ProfileIsNotCompleted = "You must first fill your profile to continue";
+$TermActivatedIsNeededDescription = "The terms and conditions have not yet been validated by your tutor.";
+$DiagnosisManagement = "Diagnosis management";
+$TermYourProfileIsNotCompleted = "You must first fill your profile to enable the terms and conditions validation.";
+$Diagnostic = "Diagnostic";
+$AllowShowSkypeAccountTitle = "Allow show the user Skype account";
+$AllowShowSkypeAccountComment = "Add a link on the user social block allowing start a chat by Skype";
+$AllowShowLinkedInUrlTitle = "Allow show the user LinkedIn URL";
+$AllowShowLinkedInUrlComment = "Add a link on the user social block, allowing visit the user's LinkedIn profile";
+$LaunchVideoConferenceRoom = "Launch videoconference room";
+$VideoConference = "Videoconference";
+$TermsDuplicatedInFile = "Terms duplicated in file";
+$GlossaryTermAlreadyExists = "Term already exists";
 ?>

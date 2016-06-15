@@ -95,11 +95,12 @@ class GlossaryManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    public static function save_glossary($values)
+    public static function save_glossary($values, $showMessage = true)
     {
         if (!is_array($values) || !isset($values['glossary_title'])) {
             return false;
         }
+        
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 
@@ -112,9 +113,11 @@ class GlossaryManager
         // check if the glossary term already exists
         if (GlossaryManager::glossary_exists($values['glossary_title'])) {
             // display the feedback message
-            Display::addFlash(
-                Display::return_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'), 'error')
-            );
+            if ($showMessage) {
+                Display::addFlash(
+                    Display::return_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'), 'error')
+                );
+            }
             return false;
         } else {
 
@@ -145,9 +148,11 @@ class GlossaryManager
             $_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
 
             // display the feedback message
-            Display::addFlash(
-                Display::return_message(get_lang('TermAdded'))
-            );
+            if ($showMessage) {
+                Display::addFlash(
+                    Display::return_message(get_lang('TermAdded'))
+                );
+            }
 
             return $id;
         }
@@ -434,7 +439,7 @@ class GlossaryManager
         }
 
         if ($view == 'list') {
-            $content .= GlossaryManager::display_glossary_list();
+            $content .= GlossaryManager::displayGlossaryList();
         }
 
         return $content;
@@ -446,7 +451,7 @@ class GlossaryManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    public static function display_glossary_list()
+    public static function displayGlossaryList()
     {
         $glossary_data = self::get_glossary_data(0,1000,0,'ASC');
         $content = '';

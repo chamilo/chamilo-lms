@@ -60,7 +60,7 @@ switch ($action) {
             api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq()
         );
         // Setting the form elements
-        $form->addElement('header', '', get_lang('TermAddNew'));
+        $form->addElement('header', get_lang('TermAddNew'));
         $form->addElement(
             'text',
             'glossary_title',
@@ -99,7 +99,7 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed(true);
         }
-        $tool_name =  get_lang('Edit');
+        $tool_name = get_lang('Edit');
         if (is_numeric($_GET['glossary_id'])) {
             // initiate the object
             $form = new FormValidator(
@@ -108,7 +108,7 @@ switch ($action) {
                 api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.intval($_GET['glossary_id']).'&'.api_get_cidreq()
             );
             // Setting the form elements
-            $form->addElement('header', '', get_lang('TermEdit'));
+            $form->addElement('header', get_lang('TermEdit'));
             $form->addElement('hidden', 'glossary_id');
             $form->addElement('text', 'glossary_title', get_lang('TermName'));
 
@@ -277,7 +277,6 @@ switch ($action) {
                 );
             }
 
-
             header('Location: '.$currentUrl);
             exit;
         }
@@ -306,8 +305,19 @@ switch ($action) {
         GlossaryManager::export_to_pdf();
         break;
     case 'changeview':
+        if (in_array($_GET['view'], array('list','table'))) {
+            Session::write('glossary_view', $_GET['view']);
+        } else {
+            $view = Session::read('glossary_view');
+            if (empty($view)) {
+                Session::write('glossary_view', 'table');
+            }
+        }
+        header('Location: '.$currentUrl);
+        exit;
+        break;
     default:
-        $tool_name =  get_lang('List');
+        $tool_name = get_lang('List');
         $content = GlossaryManager::display_glossary();
         break;
 }
@@ -316,14 +326,6 @@ Display::display_header($tool_name);
 
 // Tool introduction
 Display::display_introduction_section(TOOL_GLOSSARY);
-
-if ($action == 'changeview' && in_array($_GET['view'], array('list','table'))) {
-    Session::write('glossary_view', $_GET['view']);
-} else {
-    if (!isset($_SESSION['glossary_view'])) {
-        Session::write('glossary_view', 'table');
-    }
-}
 
 echo $content;
 

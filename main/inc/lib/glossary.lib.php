@@ -100,7 +100,7 @@ class GlossaryManager
         if (!is_array($values) || !isset($values['glossary_title'])) {
             return false;
         }
-        
+
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 
@@ -144,9 +144,6 @@ class GlossaryManager
                     api_get_user_id()
                 );
             }
-
-            $_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
-
             // display the feedback message
             if ($showMessage) {
                 Display::addFlash(
@@ -174,9 +171,8 @@ class GlossaryManager
         $course_id = api_get_course_int_id();
 
         // check if the glossary term already exists
-        if (GlossaryManager::glossary_exists($values['glossary_title'],$values['glossary_id'])) {
+        if (GlossaryManager::glossary_exists($values['glossary_title'], $values['glossary_id'])) {
             // display the feedback message
-
             Display::addFlash(
                 Display::return_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'), 'error')
             );
@@ -193,6 +189,7 @@ class GlossaryManager
             if ($result === false) {
                 return false;
             }
+
             //update glossary into item_property
             api_item_property_update(
                 api_get_course_info(),
@@ -241,14 +238,14 @@ class GlossaryManager
     /**
      * check if the glossary term exists or not
      *
-     * @param string   Term to look for
-     * @param integer  ID to counter-check if the term exists with this ID as well (optional)
+     * @param string  $term Term to look for
+     * @param integer  $not_id ID to counter-check if the term exists with this ID as well (optional)
      * @return bool    True if term exists
      *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    public static function glossary_exists($term, $not_id='')
+    public static function glossary_exists($term, $not_id = '')
     {
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
@@ -273,7 +270,7 @@ class GlossaryManager
     /**
      * Get one specific glossary term data
      *
-     * @param integer  ID of the flossary term
+     * @param integer $glossary_id ID of the flossary term
      * @return mixed   Array(glossary_id,glossary_title,glossary_comment,glossary_display_order) or false on error
      *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
@@ -347,7 +344,6 @@ class GlossaryManager
 
         // reorder the remaining terms
         GlossaryManager::reorder_glossary();
-        $_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
 
         Display::addFlash(
             Display::return_message(get_lang('TermDeleted'))
@@ -732,8 +728,8 @@ class GlossaryManager
             $html .= '<h4>'.$term.'</h4><p>'.$description.'<p><hr>';
         }
         $html .= '</body></html>';
-        $course_code = api_get_course_id();
+        $courseCode = api_get_course_id();
         $pdf = new PDF();
-        $pdf->content_to_pdf($html, '', get_lang('Glossary').'_'.$course_code, $course_code);
+        $pdf->content_to_pdf($html, '', get_lang('Glossary').'_'.$courseCode, $course_code);
     }
 }

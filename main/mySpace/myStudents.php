@@ -164,9 +164,9 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 }
 
 // Action behaviour
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 
-
-switch ($_GET['action']) {
+switch ($action) {
     case 'send_legal':
         $subject = get_lang('SendLegalSubject');
         $content = sprintf(

@@ -710,7 +710,7 @@ class CourseManager
     /**
      * Gets the course code from the course id. Returns null if course id was not found
      *
-     * @param int Course id
+     * @param int $id Course id
      * @return string Course code
      * @assert ('') === false
      */
@@ -1606,7 +1606,7 @@ class CourseManager
      * @param array $sessionIdList
      * @return array|int
      */
-    static function get_count_user_list_from_course_code(
+    public static function get_count_user_list_from_course_code(
         $resumed_report = false,
         $extra_field = array(),
         $courseCodeList = array(),
@@ -1929,7 +1929,6 @@ class CourseManager
         $orderList = false
     ) {
         $teacher_list = self::get_teacher_list_from_course_code($course_code);
-        $teacher_string = '';
         $html = '';
         $list = array();
         if (!empty($teacher_list)) {
@@ -1959,7 +1958,7 @@ class CourseManager
                         $html .= Display::tag('li', Display::return_icon('teacher.png', $teacher, null, ICON_SIZE_TINY) . ' ' . $teacher);
                     }
                     $html .= '</ul>';
-                }else{
+                } else {
                     $html .= array_to_string($list, $separator);
                 }
             }
@@ -2476,7 +2475,8 @@ class CourseManager
         $student = api_get_user_info($user_id);
 
         $name_course = $information['title'];
-        $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " WHERE c_id ='" . $courseId . "'";
+        $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " 
+                WHERE c_id ='" . $courseId . "'";
 
         // TODO: Ivan: This is a mistake, please, have a look at it. Intention here is diffcult to be guessed.
         //if ($send_to_tutor_also = true)
@@ -2635,9 +2635,9 @@ class CourseManager
             // get course list not auto-register. Use Distinct to avoid multiple
             // entries when a course is assigned to a HRD (DRH) as watcher
             $sql = "SELECT DISTINCT(course.code), course.id as real_id
-                FROM $tbl_course course
-                INNER JOIN $tbl_course_user cru ON course.id = cru.c_id
-                WHERE cru.user_id='$user_id' $without_special_courses";
+                    FROM $tbl_course course
+                    INNER JOIN $tbl_course_user cru ON course.id = cru.c_id
+                    WHERE cru.user_id='$user_id' $without_special_courses";
         }
         $result = Database::query($sql);
 
@@ -2810,7 +2810,8 @@ class CourseManager
         $id = (int)$id;
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "UPDATE $table SET $name = '" . Database::escape_string($value) . "'
-                WHERE id = '$id';";
+                WHERE id = '$id'";
+
         return Database::query($sql);
     }
 
@@ -2837,7 +2838,8 @@ class CourseManager
                 $i++;
             }
         }
-        $sql .= " WHERE id = '$id';";
+        $sql .= " WHERE id = '$id'";
+
         return Database::query($sql);
     }
 
@@ -2859,6 +2861,7 @@ class CourseManager
             'variable' => $variable,
             'value' => $value
         ];
+        
         return $extraFieldValues->save($params);
     }
 

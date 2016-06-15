@@ -26,6 +26,7 @@ class ExtraFieldOption extends Model
      */
     public function __construct($type)
     {
+        parent::__construct();
         $this->type = $type;
         $extraField = new ExtraField($this->type);
         $this->extraField = $extraField;

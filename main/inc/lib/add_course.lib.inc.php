@@ -18,8 +18,14 @@ class AddCourse
      * @todo Eliminate the global variables.
      * @assert (null) === false
      */
-    public static function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base_name = '', $prefix_for_path = '', $add_unique_prefix = false, $use_code_indepedent_keys = true)
-    {
+    public static function define_course_keys(
+        $wanted_code,
+        $prefix_for_all = '',
+        $prefix_for_base_name = '',
+        $prefix_for_path = '',
+        $add_unique_prefix = false,
+        $use_code_indepedent_keys = true
+    ) {
         $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $wanted_code = CourseManager::generate_course_code($wanted_code);
         $keys_course_code = $wanted_code;
@@ -86,7 +92,7 @@ class AddCourse
         $perm_file = api_get_permissions_for_new_files();
         $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
         $cp = api_get_path(SYS_COURSE_PATH) . $course_repository;
-        
+
         //Creating document folder
         mkdir($cp, $perm);
         mkdir($cp . '/document', $perm);
@@ -431,44 +437,19 @@ class AddCourse
         }
 
         $courseInfo = api_get_course_info_by_id($course_id);
-        $now = api_get_utc_datetime();
 
         $tbl_course_homepage = Database::get_course_table(TABLE_TOOL_LIST);
-        $TABLEINTROS = Database::get_course_table(TABLE_TOOL_INTRO);
         $TABLEGROUPCATEGORIES = Database::get_course_table(
             TABLE_GROUP_CATEGORY
         );
         $TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $TABLETOOLAGENDA = Database::get_course_table(TABLE_AGENDA);
-        $TABLETOOLANNOUNCEMENTS = Database::get_course_table(
-            TABLE_ANNOUNCEMENT
-        );
         $TABLETOOLDOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
-        $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
-        $TABLEQUIZQUESTION = Database::get_course_table(
-            TABLE_QUIZ_TEST_QUESTION
-        );
-        $TABLEQUIZQUESTIONLIST = Database::get_course_table(
-            TABLE_QUIZ_QUESTION
-        );
-        $TABLEQUIZANSWERSLIST = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $TABLESETTING = Database::get_course_table(TABLE_COURSE_SETTING);
-
-        $TABLEFORUMCATEGORIES = Database::get_course_table(
-            TABLE_FORUM_CATEGORY
-        );
-        $TABLEFORUMS = Database::get_course_table(TABLE_FORUM);
-        $TABLEFORUMTHREADS = Database::get_course_table(TABLE_FORUM_THREAD);
-        $TABLEFORUMPOSTS = Database::get_course_table(TABLE_FORUM_POST);
         $TABLEGRADEBOOK = Database::get_main_table(
             TABLE_MAIN_GRADEBOOK_CATEGORY
         );
         $TABLEGRADEBOOKLINK = Database::get_main_table(
             TABLE_MAIN_GRADEBOOK_LINK
-        );
-        $TABLEGRADEBOOKCERT = Database::get_main_table(
-            TABLE_MAIN_GRADEBOOK_CERTIFICATE
         );
 
         include_once api_get_path(SYS_CODE_PATH) . 'lang/english/trad4all.inc.php';
@@ -628,7 +609,7 @@ class AddCourse
             }
         }
 
-        if (api_get_setting('search_enabled') == 'true') {
+        if (api_get_setting('search_enabled') === 'true') {
             Database::query(
                 "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
                 VALUES ($course_id, 23, '" . TOOL_SEARCH . "','search/','info.gif','" . self::string2binary(
@@ -660,7 +641,6 @@ class AddCourse
             VALUES ($course_id, 27, '" . TOOL_COURSE_MAINTENANCE . "','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','',0,'_self', 'admin','0')"
         );
 
-        $defaultEmailExerciseAlert = 1;
         $alert = api_get_setting('email_alert_manager_on_new_quiz');
         if ($alert === 'true') {
             $defaultEmailExerciseAlert = 1;
@@ -1226,8 +1206,6 @@ class AddCourse
         $visual_code = $params['visual_code'];
         $directory = $params['directory'];
         $tutor_name = isset($params['tutor_name']) ? $params['tutor_name'] : null;
-        //$description        = $params['description'];
-
         $category_code = isset($params['course_category']) ? $params['course_category'] : '';
         $course_language = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting(
             'platformLanguage'

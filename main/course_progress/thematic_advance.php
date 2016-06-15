@@ -11,10 +11,10 @@
 // protect a course script
 api_protect_course_script(true);
 
-if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
+if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
 
     $header_form = get_lang('NewThematicAdvance');
-    if ($action == 'thematic_advance_edit') {
+    if ($action === 'thematic_advance_edit') {
         $header_form = get_lang('EditThematicAdvance');
     }
 
@@ -25,7 +25,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         'index.php?action=thematic_advance_list&thematic_id='.$thematic_id.'&'.api_get_cidreq(
         )
     );
-    $form->addElement('header',  $header_form);
+    $form->addElement('header', $header_form);
     //$form->addElement('hidden', 'thematic_advance_token',$token);
     $form->addElement('hidden', 'action', $action);
 
@@ -35,7 +35,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     if (!empty($thematic_id)) {
         $form->addElement('hidden', 'thematic_id', $thematic_id);
     }
-
+    
     $radios = array();
     $radios[] = $form->createElement(
         'radio',

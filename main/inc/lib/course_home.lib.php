@@ -23,7 +23,7 @@ class CourseHome
         $course_id = api_get_course_int_id();
 
         switch ($cat) {
-            case 'Basic' :
+            case 'Basic':
                 $condition_display_tools = ' WHERE a.c_id = '.$course_id.' AND  a.link=t.link AND t.position="basic" ';
                 if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
                     $condition_display_tools = ' WHERE a.c_id = '.$course_id.' AND a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';
@@ -32,7 +32,7 @@ class CourseHome
                 $sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
                         $condition_display_tools ORDER BY t.row, t.column";
                 break;
-            case 'External' :
+            case 'External':
                 if (api_is_allowed_to_edit()) {
                     $sql = "SELECT a.*, t.image img FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
                             WHERE a.c_id = $course_id AND ((a.link=t.link AND t.position='external')
@@ -45,12 +45,12 @@ class CourseHome
                             ORDER BY a.id";
                 }
                 break;
-            case 'courseAdmin' :
+            case 'courseAdmin':
                 $sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
                         WHERE a.c_id = $course_id AND admin=1 AND a.link=t.link ORDER BY t.row, t.column";
                 break;
 
-            case 'platformAdmin' :
+            case 'platformAdmin':
                 $sql = "SELECT *, image img FROM $TBL_ACCUEIL WHERE c_id = $course_id AND visibility = 2 ORDER BY id";
         }
         $result = Database::query($sql);
@@ -552,7 +552,6 @@ class CourseHome
         // Grabbing all the links that have the property on_homepage set to 1
         $course_link_table = Database::get_course_table(TABLE_LINK);
         $course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
         $condition_session = api_get_session_condition($session_id, true, true, 'tip.session_id');
 
         switch ($course_tool_category) {
@@ -661,7 +660,7 @@ class CourseHome
     {
         $_user = api_get_user_info();
         $theme = api_get_setting('homepage_view');
-        if ($theme == 'vertical_activity') {
+        if ($theme === 'vertical_activity') {
             //ordering by get_lang name
             $order_tool_list = array();
             if (is_array($all_tools_list) && count($all_tools_list) > 0) {
@@ -699,7 +698,6 @@ class CourseHome
             foreach ($all_tools_list as & $tool) {
                 $item = array();
                 $studentview = false;
-
                 $tool['original_link'] = $tool['link'];
 
                 if ($tool['image'] == 'scormbuilder.gif') {
@@ -1083,6 +1081,7 @@ class CourseHome
                 $lp_id = intval($a_param_lp_id[1]);
             }
         }
+
         return $lp_id;
     }
 
@@ -1090,7 +1089,7 @@ class CourseHome
      * @param bool $include_admin_tools
      * @return array
      */
-    static function get_navigation_items($include_admin_tools = false)
+    public static function get_navigation_items($include_admin_tools = false)
     {
         $navigation_items = array();
         $course_id = api_get_course_int_id();
@@ -1237,6 +1236,7 @@ class CourseHome
             }
             $html .= '</div>';
         }
+
         return $html;
     }
 
@@ -1416,7 +1416,7 @@ class CourseHome
             }
 
             $params = [
-                'custom_icon' => '',
+                'custom_icon' => ''
             ];
 
             Database::update(

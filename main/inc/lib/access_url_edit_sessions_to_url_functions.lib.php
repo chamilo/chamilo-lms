@@ -4,10 +4,9 @@
  * Definition of the Accessurleditsessiontourl class
  * @package chamilo.library
  */
-/**
- * Init
- */
-require_once ('xajax/xajax.inc.php');
+
+require_once 'xajax/xajax.inc.php';
+
 /**
  * Accessurleditsessiontourl class
  * Contains several functions dealing with displaying,

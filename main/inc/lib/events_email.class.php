@@ -7,7 +7,6 @@
  */
 class EventsMail
 {
-
     /**
      * Sends email according to an event
      *

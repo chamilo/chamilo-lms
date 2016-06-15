@@ -289,7 +289,7 @@ class CourseDescription
                     $this->id,
                     $this->session_id,
                     $this->course_id ? $this->course_id : api_get_course_int_id(),
-                ],
+                ]
             ]
         );
 
@@ -449,6 +449,7 @@ class CourseDescription
         $information[6] = get_lang('HumanAndTechnicalResourcesInformation');
         $information[7] = get_lang('AssessmentInformation');
         //$information[8]= get_lang('ThematicAdvanceInformation');
+        
         return $information;
     }
 

@@ -30,7 +30,7 @@ class ThematicController
 
     /**
      * This method is used for thematic control (update, insert or listing)
-     * @param 	string	Action
+     * @param 	string	$action
      * render to thematic.php
      */
     public function thematic($action)
@@ -351,7 +351,7 @@ class ThematicController
         $description_type = isset($_GET['description_type']) ? intval($_GET['description_type']) : null;
 
         if (!empty($thematic_id) && !empty($description_type)) {
-            if ($action == 'thematic_plan_delete') {
+            if ($action === 'thematic_plan_delete') {
                 if (api_is_allowed_to_edit(null, true)) {
                     $thematic->thematic_plan_destroy($thematic_id, $description_type);
                 }
@@ -362,7 +362,7 @@ class ThematicController
             }
             $data['thematic_id'] = $thematic_id;
             $data['description_type'] = $description_type;
-        } else if (!empty($thematic_id) && $action == 'thematic_plan_list') {
+        } else if (!empty($thematic_id) && $action === 'thematic_plan_list') {
             $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
             $data['thematic_id'] = $thematic_id;
         }
@@ -386,11 +386,11 @@ class ThematicController
     /**
      * This method is used for thematic advance control (update, insert or listing)
      * render to thematic_advance.php
-     * @param 	string	$action
+     * @param    string $action
      *
      */
     public function thematic_advance($action)
-     {
+    {
         $thematic = new Thematic();
         $attendance = new Attendance();
         $data = array();

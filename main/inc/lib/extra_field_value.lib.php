@@ -36,6 +36,7 @@ class ExtraFieldValue extends Model
      */
     public function __construct($type)
     {
+        parent::__construct();
         $this->type = $type;
         $extraField = new ExtraField($this->type);
         $this->extraField = $extraField;
@@ -173,7 +174,7 @@ class ExtraFieldValue extends Model
                             $tags = array_merge($tags, $tagsResult);
                         }
                     }
-                    
+
                     foreach ($tags as $tag) {
                         $tagUses = $em
                             ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')

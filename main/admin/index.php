@@ -404,7 +404,7 @@ if (api_is_platform_admin()) {
 
     /* Plugins */
     global $_plugins;
-    if(count($_plugins['menu_administrator']) > 0) {
+    if (count($_plugins['menu_administrator']) > 0) {
         $blocks['plugins']['icon'] = Display::return_icon(
             'plugins.png',
              get_lang('Plugins'),
@@ -418,7 +418,7 @@ if (api_is_platform_admin()) {
 
         $plugin_obj = new AppPlugin();
         $items = array();
-        foreach ( $_plugins['menu_administrator'] as $plugin_name) {
+        foreach ($_plugins['menu_administrator'] as $plugin_name) {
             $plugin_info = $plugin_obj->getPluginInfo($plugin_name);
             $items[] = array(
                 'url' => api_get_path(WEB_CODE_PATH) . '../plugin/'.$plugin_name.'/start.php',

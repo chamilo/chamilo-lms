@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
@@ -169,23 +167,19 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
 
     $display_output = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_missing.php?'.api_get_cidreq().'&amp;id='.$workId.'&amp;list=without">'.
     Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'), '', ICON_SIZE_MEDIUM)."</a>";
-    
+
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
     $actionsLeft .= Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
-    
+
     $count = get_count_work($workId);
     if ($count > 0) {
         $display_output .= '<a class="btn-toolbar" href="downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq().'">'.
             Display::return_icon('save_pack.png', get_lang('LowerPackageTasks'), null, ICON_SIZE_MEDIUM).' '.get_lang('LowerPackageTasks').'</a>';
     }
     $actionsLeft .= $display_output;
-
-    
-
     $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
-    $actionsLeft .= '<a class="btn-toolbar" href="'.$url.'">'.Display::return_icon('upload_package.png', get_lang('UpPackageFixes'), '', ICON_SIZE_MEDIUM) . ' ' . get_lang('UpPackageFixes') . '</a>';
-    
-    //$actionsLeft .= Display::toolbarButton(get_lang('UploadCorrections'), $url, 'upload', 'success');
+    $actionsLeft .= '<a class="btn-toolbar" href="'.$url.'">'.
+        Display::return_icon('upload_package.png', get_lang('UpPackageFixes'), '', ICON_SIZE_MEDIUM) . ' ' . get_lang('UpPackageFixes') . '</a>';
 }
 
 echo Display::toolbarAction('toolbar-worklist', array($actionsLeft), 1);

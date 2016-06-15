@@ -325,7 +325,7 @@ class Attendance
 		// add link to gradebook
 		if ($link_to_gradebook && !empty($this->category_id)) {
 			$description = '';
-            $link_info = GradebookUtils::is_resource_in_course_gradebook(
+            $link_info = GradebookUtils::isResourceInCourseGradebook(
                 $course_code,
                 7,
                 $last_id,
@@ -398,7 +398,7 @@ class Attendance
 			// add link to gradebook
 			if ($link_to_gradebook && !empty($this->category_id)) {
 				$description = '';
-				$link_info = GradebookUtils::is_resource_in_course_gradebook(
+				$link_info = GradebookUtils::isResourceInCourseGradebook(
 					$course_code,
 					7,
 					$attendance_id,

@@ -7,12 +7,11 @@
  */
 
 $cidReset = true;
-$language_file = array('userInfo');
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_social_tool') !='true') {
+if (api_get_setting('allow_social_tool') !== 'true') {
     api_not_allowed();
 }
 $join_url = '';
@@ -66,14 +65,14 @@ if (is_array($results) && count($results) > 0) {
         $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
         $my_group_list[] = $id;
         $name = cut($result['name'], GROUP_TITLE_LENGTH, true);
-        
+
         if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
             $name .= ' '.Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle'));
         } elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
             $name .= ' '.Display::return_icon('social_group_moderator.png', get_lang('Moderator'), array('style'=>'vertical-align:middle'));
         }
         $url  = '<a href="group_view.php?id='.$id.'">' . $name . '</a>';
-        
+
         $count_users_group = count($usergroup->get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000));
         if ($count_users_group == 1 ) {
             $count_users_group = $count_users_group.' '.get_lang('Member');
@@ -83,7 +82,7 @@ if (is_array($results) && count($results) > 0) {
 
         $picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
         $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
-        
+
         $members = Display::returnFontAwesomeIcon('user').$count_users_group;
         $html = '<div class="row">';
         $html .= '<div class="col-md-2">';
@@ -101,7 +100,7 @@ if (is_array($results) && count($results) > 0) {
         }
         $html .= '</div>';
         $html .= '</div>';
-        
+
         $grid_item_2 = $html;
         $grid_my_groups[]= array($grid_item_2);
     }
@@ -116,7 +115,7 @@ foreach ($results as $result) {
     $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
     $id = $result['id'];
     $name = cut($result['name'], GROUP_TITLE_LENGTH, true);
-    
+
     $count_users_group = count($usergroup->get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000));
     if ($count_users_group == 1 ) {
         $count_users_group = $count_users_group.' '.get_lang('Member');
@@ -125,11 +124,11 @@ foreach ($results as $result) {
     }
 
     $url  = '<a href="group_view.php?id='.$id.'">' . $name . '</a>';
-    
+
     $picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
     $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
     $members = Display::returnFontAwesomeIcon('user').$count_users_group;
-    
+
     $html = '<div class="row">';
     $html .= '<div class="col-md-2">';
     $html .= $result['picture'];
@@ -149,12 +148,12 @@ foreach ($results as $result) {
     if (!in_array($id,$my_group_list)) {
         $html .= '<a class="btn" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a> ';
     }
-    
+
     $html .= '<div class="group-actions" >'.$join_url.'</div>';
     $html .= '</div>';
     $html .= '</div>';
-    
-    
+
+
     $grid_item_2 = $html;
 
     $grid_newest_groups[]= array($grid_item_2);
@@ -179,7 +178,7 @@ if (is_array($results) && count($results) > 0) {
         }
 
         $url  = '<a href="group_view.php?id='.$id.'">' . $name . '</a>';
-        
+
         $picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
         $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
 

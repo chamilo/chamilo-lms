@@ -331,7 +331,7 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null)
     $group_id = api_get_group_id();
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-    $linkInfo = GradebookUtils::is_resource_in_course_gradebook(
+    $linkInfo = GradebookUtils::isResourceInCourseGradebook(
         api_get_course_id(),
         3,
         $id,
@@ -840,7 +840,7 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND publication_id = $id";
             Database::query($sql);
 
-            $link_info = GradebookUtils::is_resource_in_course_gradebook(
+            $link_info = GradebookUtils::isResourceInCourseGradebook(
                 api_get_course_id(),
                 3,
                 $id,
@@ -4013,7 +4013,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
     if (!empty($params['category_id'])) {
 
-        $link_info = GradebookUtils::is_resource_in_course_gradebook(
+        $link_info = GradebookUtils::isResourceInCourseGradebook(
             $courseInfo['code'],
             LINK_STUDENTPUBLICATION,
             $workId,

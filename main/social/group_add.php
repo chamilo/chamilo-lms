@@ -6,16 +6,15 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-$language_file= 'userInfo';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') !='true') {
+if (api_get_setting('allow_social_tool') !== 'true') {
     api_not_allowed();
 }
 
-if (api_get_setting('allow_students_to_create_groups_in_social') == 'false' && !api_is_allowed_to_edit()) {
+if (api_get_setting('allow_students_to_create_groups_in_social') === 'false' && !api_is_allowed_to_edit()) {
     api_not_allowed();
 }
 

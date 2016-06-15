@@ -107,7 +107,13 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
     $message_id = isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;
     $param_f = isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
 
-    $form = new FormValidator('compose_message', null, api_get_self().'?f='.$param_f, null, array('enctype'=>'multipart/form-data'));
+    $form = new FormValidator(
+        'compose_message',
+        null,
+        api_get_self().'?f='.$param_f,
+        null,
+        array('enctype' => 'multipart/form-data')
+    );
     if (empty($group_id)) {
         if (isset($select_from_user_list)) {
             $form->addText(
@@ -140,7 +146,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
                     ]
                 );
             } else {
-                $form->addElement('hidden','hidden_user',$default['users'][0],array('id'=>'hidden_user'));
+                $form->addElement('hidden', 'hidden_user', $default['users'][0], array('id' => 'hidden_user'));
             }
         }
     } else {
@@ -148,8 +154,8 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
         $group_info = $userGroup->get($group_id);
 
         $form->addElement('label', get_lang('ToGroup'), api_xml_http_response_encode($group_info['name']));
-        $form->addElement('hidden','group_id',$group_id);
-        $form->addElement('hidden','parent_id',$message_id);
+        $form->addElement('hidden', 'group_id', $group_id);
+        $form->addElement('hidden', 'parent_id', $message_id);
     }
 
     $form->addText('title', get_lang('Subject'), true);
@@ -272,11 +278,11 @@ if ($group_id != 0) {
 	if ($socialToolIsActive) {
 	} else {
 		$social_right_content .= '<div class=actions>';
-		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+		if (api_get_setting('allow_social_tool') === 'true' && api_get_setting('allow_message_tool') === 'true') {
 			$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
                 Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
 		}
-		if (api_get_setting('allow_message_tool') == 'true') {
+		if (api_get_setting('allow_message_tool') === 'true') {
 			$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
                 Display::return_icon('message_new.png',get_lang('ComposeMessage')).'</a>';
 			$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
@@ -348,7 +354,7 @@ if (!isset($_POST['compose'])) {
         }
     }
 }
-if (api_get_setting('allow_social_tool') == 'true') {
+if (api_get_setting('allow_social_tool') === 'true') {
     $social_right_content .=  '</div>';
     $social_right_content .=  '</div>';
 }
@@ -357,7 +363,7 @@ $tpl = new Template(get_lang('ComposeMessage'));
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, $user_id, 'messages');
 
-if (api_get_setting('allow_social_tool') == 'true') {
+if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');

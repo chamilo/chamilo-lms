@@ -311,7 +311,8 @@ class learnpath
                             error_log(
                                 'New LP - learnpath::__construct() ' . __LINE__ .
                                 ' - object with id ' . $my_item_id . ' set in items[]',
-                                0);
+                                0
+                            );
                         }
                     }
                     break;
@@ -1130,7 +1131,12 @@ class learnpath
             api_get_user_id()
         );
 
-        $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 4 , $id, api_get_session_id());
+        $link_info = GradebookUtils::isResourceInCourseGradebook(
+            api_get_course_id(), 
+            4, 
+            $id, 
+            api_get_session_id()
+        );
         if ($link_info !== false) {
             GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }

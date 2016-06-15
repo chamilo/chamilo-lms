@@ -150,8 +150,8 @@ if (api_is_allowed_to_edit(false, true) ||
             'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), array(), 32)
         );
     }
-    if ($current_group['calendar_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
 
+    if ($current_group['calendar_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
         $groupFilter = null;
         if (!empty($group_id)) {
             $groupFilter = "&type=course&user_id=GROUP:$group_id";
@@ -162,6 +162,7 @@ if (api_is_allowed_to_edit(false, true) ||
             'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), 32)
         );
     }
+
     if ($current_group['work_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
         // Link to the works area of this group
         $actions_array[] = array(
@@ -214,7 +215,7 @@ if (api_is_allowed_to_edit(false, true) ||
             );
         }
     }
-    
+
     if (!empty($actions_array)) {
         echo Display::actions($actions_array);
     }
@@ -252,7 +253,6 @@ if (api_is_allowed_to_edit(false, true) ||
             'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda.php?'.api_get_cidreq(),
             'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), ICON_SIZE_MEDIUM)
         );
-
     }
 
     if ($current_group['work_state'] == GroupManager::TOOL_PUBLIC) {
@@ -389,8 +389,10 @@ function get_number_of_group_users()
 
     // Query
     $sql = "SELECT count(iid) AS number_of_users
-            FROM ".$table."
-            WHERE c_id = $course_id AND group_id='".intval($current_group['id'])."'";
+            FROM $table
+            WHERE 
+                c_id = $course_id AND 
+                group_id='".intval($current_group['id'])."'";
     $result = Database::query($sql);
     $return = Database::fetch_array($result, 'ASSOC');
 
@@ -414,8 +416,8 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
     global $current_group;
 
     // Database table definition
-    $table_group_user 	= Database :: get_course_table(TABLE_GROUP_USER);
-    $table_user 		= Database :: get_main_table(TABLE_MAIN_USER);
+    $table_group_user = Database:: get_course_table(TABLE_GROUP_USER);
+    $table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
     $course_id = api_get_course_int_id();
 
@@ -430,11 +432,14 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 				user.firstname 	AS col2,"
             )."
 				user.email		AS col3
-				FROM ".$table_user." user, ".$table_group_user." group_rel_user
-				WHERE group_rel_user.c_id = $course_id AND group_rel_user.user_id = user.id
-				AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
-        $sql .= " ORDER BY col$column $direction ";
-        $sql .= " LIMIT $from,$number_of_items";
+				FROM $table_user user, 
+				$table_group_user group_rel_user
+				WHERE 
+				    group_rel_user.c_id = $course_id AND 
+				    group_rel_user.user_id = user.id AND 
+				    group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'
+                ORDER BY col$column $direction 
+                LIMIT $from, $number_of_items";
     } else {
         if (api_is_allowed_to_edit()) {
             $sql = "SELECT DISTINCT
@@ -447,10 +452,12 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 						u.firstname 	AS col2,"
                 )."
 						u.email		AS col3
-						FROM ".$table_user." u INNER JOIN ".$table_group_user." gu ON (gu.user_id = u.id) AND gu.c_id = $course_id
-						WHERE gu.group_id = '".Database::escape_string($current_group['id'])."'";
-            $sql .= " ORDER BY col$column $direction ";
-            $sql .= " LIMIT $from,$number_of_items";
+						FROM $table_user u 
+						INNER JOIN $table_group_user gu 
+						ON (gu.user_id = u.id) AND gu.c_id = $course_id
+						WHERE gu.group_id = '".Database::escape_string($current_group['id'])."'
+                        ORDER BY col$column $direction 
+                        LIMIT $from, $number_of_items";
         } else {
             $sql = "SELECT DISTINCT
 						user.id 	AS col0,
@@ -461,11 +468,13 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     "user.lastname 	AS col1,
 						user.firstname 	AS col2 "
                 )."
-						FROM ".$table_user." user, ".$table_group_user." group_rel_user
-						WHERE group_rel_user.c_id = $course_id AND  group_rel_user.user_id = user.id
-						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
-            $sql .= " ORDER BY col$column $direction ";
-            $sql .= " LIMIT $from,$number_of_items";
+						FROM $table_user user, $table_group_user group_rel_user
+						WHERE 
+						    group_rel_user.c_id = $course_id AND  
+						    group_rel_user.user_id = user.id AND 
+						    group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'
+                        ORDER BY col$column $direction 
+                        LIMIT $from,$number_of_items";
         }
     }
 
@@ -499,7 +508,7 @@ function email_filter($email)
 function user_icon_filter($user_id)
 {
     $userInfo = api_get_user_info($user_id);
-    $photo = '<img src="'.$userInfo['avatar'].'" alt="'.$userInfo['complete_name'].'"  width="22" height="22" title="'.$userInfo['complete_name'].'" />';
+    $photo = '<img src="'.$userInfo['avatar'].'" alt="'.$userInfo['complete_name'].'" width="22" height="22" title="'.$userInfo['complete_name'].'" />';
     return Display::url($photo, $userInfo['profile_url']);
 }
 

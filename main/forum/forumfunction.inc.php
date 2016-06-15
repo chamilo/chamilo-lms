@@ -136,7 +136,7 @@ function handle_forum_and_forumcategories($lp_id = null)
 
         for ($i = 0; $i < count($list_threads); $i++) {
             deleteForumCategoryThread('thread', $list_threads[$i]['thread_id']);
-            $link_info = GradebookUtils::is_resource_in_course_gradebook(
+            $link_info = GradebookUtils::isResourceInCourseGradebook(
                 api_get_course_id(),
                 5,
                 intval($list_threads[$i]['thread_id']),
@@ -2366,7 +2366,7 @@ function updateThread($values)
             $sessionId = api_get_session_id();
             $courseId = api_get_course_id();
 
-            $linkInfo = GradebookUtils::is_resource_in_course_gradebook(
+            $linkInfo = GradebookUtils::isResourceInCourseGradebook(
                 $courseId,
                 LINK_FORUM_THREAD,
                 $id,
@@ -2636,7 +2636,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         Session::erase('breadcrumbs');
         Session::erase('addedresource');
         Session::erase('addedresourceid');
-        
+
         if ($showMessage) {
             Display::addFlash(Display::return_message($message, 'success', false));
         }
@@ -3520,7 +3520,12 @@ function show_edit_post_form(
             $form->addElement('label', '<strong>'.get_lang('AlterQualifyThread').'</strong>');
             $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
-            $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 5, $_GET['thread'], api_get_session_id());
+            $link_info = GradebookUtils::isResourceInCourseGradebook(
+                api_get_course_id(),
+                5,
+                $_GET['thread'],
+                api_get_session_id()
+            );
             if (!empty($link_info)) {
                 $defaults['thread_qualify_gradebook'] = true;
                 $defaults['category_id'] = $link_info['category_id'];

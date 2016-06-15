@@ -11,7 +11,7 @@
  *	@todo course admin functionality to create groups based on who is in which course (or class).
  */
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
 
@@ -148,7 +148,13 @@ foreach ($group_tutor_list as $index => $user) {
     $selected_tutors[] = $user['user_id'];
 }
 
-$group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users, 'style="width: 280px;"');
+$group_tutors_element = $form->addElement(
+    'advmultiselect',
+    'group_tutors',
+    get_lang('GroupTutors'),
+    $possible_users,
+    'style="width: 280px;"'
+);
 
 // Group members
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
@@ -170,7 +176,13 @@ $group_members_element = $form->addElement('advmultiselect', 'group_members', ge
 $form->addFormRule('check_group_members');
 
 // Members per group
-$form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT);
+$form->addElement(
+    'radio',
+    'max_member_no_limit',
+    get_lang('GroupLimit'),
+    get_lang('NoLimit'),
+    GroupManager::MEMBER_PER_GROUP_NO_LIMIT
+);
 $group = array();
 $group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, array('id' => 'max_member_selected'));
 $group[] = $form->createElement('text', 'max_member', null, array('class' => 'span1', 'id' => 'max_member'));
@@ -279,7 +291,10 @@ if ($form->validate()) {
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)
     $cat = GroupManager :: get_category_from_group($current_group['id']);
-    if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member && $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+    if (isset($_POST['group_members']) &&
+        count($_POST['group_members']) > $max_member &&
+        $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT
+    ) {
         Display::addFlash(Display::return_message(get_lang('GroupTooMuchMembers'), 'warning'));
         header('Location: group.php?'.api_get_cidreq(true, false));
     } else {

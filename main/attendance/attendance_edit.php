@@ -70,11 +70,11 @@ $form->addButtonUpdate(get_lang('Save'));
 
 // set default values
 $default['title'] = Security::remove_XSS($title);
-$default['description'] = Security::remove_XSS($description,STUDENT);
+$default['description'] = Security::remove_XSS($description, STUDENT);
 $default['attendance_qualify_title'] = $attendance_qualify_title;
 $default['attendance_weight'] = $attendance_weight;
 
-$link_info = GradebookUtils::is_resource_in_course_gradebook(
+$link_info = GradebookUtils::isResourceInCourseGradebook(
     api_get_course_id(),
     7,
     $attendance_id,

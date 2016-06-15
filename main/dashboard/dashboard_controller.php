@@ -85,40 +85,40 @@ class DashboardController
         $this->view->render();
     }
 
-	/**
-	 * This method allow store user blocks from dashboard manager
-	 * render to dashboard.php view
-	 */
-	public function store_user_block()
+    /**
+     * This method allow store user blocks from dashboard manager
+     * render to dashboard.php view
+     */
+    public function store_user_block()
     {
-		$data = array();
-		$user_id = $this->user_id;
-		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
-			$enabled_blocks = $_POST['enabled_blocks'];
-			$columns = $_POST['columns'];
-			$affected_rows = DashboardManager::store_user_blocks($user_id, $enabled_blocks, $columns);
-			if ($affected_rows) {
-				$data['success'] = true;
-			}
-		}
+        $data = array();
+        $user_id = $this->user_id;
+        if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+            $enabled_blocks = $_POST['enabled_blocks'];
+            $columns = $_POST['columns'];
+            $affected_rows = DashboardManager::store_user_blocks($user_id, $enabled_blocks, $columns);
+            if ($affected_rows) {
+                $data['success'] = true;
+            }
+        }
 
-		$data['dashboard_view'] = 'list';
+        $data['dashboard_view'] = 'list';
 
-		// render to the view
-		$this->view->set_data($data);
-		$this->view->set_layout('layout');
-		$this->view->set_template('dashboard');
-		$this->view->render();
-	}
+        // render to the view
+        $this->view->set_data($data);
+        $this->view->set_layout('layout');
+        $this->view->set_template('dashboard');
+        $this->view->render();
+    }
 
-	/**
-	 * This method is used when you close a block from dashboard block interface
-	 * render to dashboard.php view
-	 */
-	public function close_user_block($path)
+    /**
+     * This method is used when you close a block from dashboard block interface
+     * render to dashboard.php view
+     */
+    public function close_user_block($path)
     {
-		$user_id = $this->user_id;
-		$result = DashboardManager::close_user_block($user_id, $path);
-		$this->display($result);
-	}
+        $user_id = $this->user_id;
+        $result = DashboardManager::close_user_block($user_id, $path);
+        $this->display($result);
+    }
 }

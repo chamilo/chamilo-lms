@@ -10,6 +10,5 @@ $tool = isset($tool) ? $tool : null;
 // Tracking
 Event::event_access_tool($tool);
 
-
 // Display
 echo $content;

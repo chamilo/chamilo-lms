@@ -20,7 +20,7 @@ if (isset($_GET['extra_field'])) {
     $originalName = $extraFieldInfo['display_text'];
 } elseif (isset($_GET['extra_field_option'])) {
     $extraFieldOptionInfo = ExtraFieldOption::getInfoById($_GET['extra_field_option'], false);
-    $variableLanguage = '$' . api_underscore_to_camel_case($extraFieldOptionInfo['display_text']);
+    $variableLanguage = '$' . ExtraFieldOption::getLanguageVariable($extraFieldOptionInfo['display_text']);
     $originalName = $extraFieldOptionInfo['display_text'];
 }
 

@@ -16,7 +16,6 @@ switch ($action) {
         if (!empty($type) && !empty($field_id) && !empty($option_value_id)) {
             $field_options = new ExtraFieldOption($type);
             echo $field_options->get_second_select_field_options_by_field(
-                $field_id,
                 $option_value_id,
                 true
             );

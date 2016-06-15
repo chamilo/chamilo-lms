@@ -480,38 +480,48 @@ class ExtraFieldOption extends Model
 
     /**
      * Get options for a specific field as array or in JSON format suited for the double-select format
-     * @param int $field_id
      * @param int $option_value_id Option value ID
      * @param bool $to_json Return format (whether it should be formatted to JSON or not)
      * @return mixed Row/JSON on success
      */
-    public function get_second_select_field_options_by_field($field_id, $option_value_id, $to_json = false)
+    public function get_second_select_field_options_by_field($option_value_id, $to_json = false)
     {
-        $field_id = intval($field_id);
-        $option_value_id = intval($option_value_id);
-        $options = array();
-        $sql = "SELECT * FROM {$this->table}
-                WHERE field_id = $field_id AND option_value = $option_value_id
-                ORDER BY display_text";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $options = Database::store_result($result, 'ASSOC');
+        $em = Database::getManager();
+        $option = $em->find('ChamiloCoreBundle:ExtraFieldOptions', intval($option_value_id));
+
+        if (!$option) {
+            return !$to_json ? [] : '{}';
         }
 
-        if ($to_json) {
-            $string = null;
-            if (!empty($options)) {
-                $array = array();
-                foreach ($options as $option) {
-                    $array[$option['id']] = $option['display_text'];
-                }
-                $string = json_encode($array);
-            }
+        $subOptions = $em
+            ->getRepository('ChamiloCoreBundle:ExtraFieldOptions')
+            ->findSecondaryOptions($option);
 
-            return $string;
+        $optionsInfo = [];
+
+        foreach ($subOptions as $subOption) {
+            $optionsInfo[] = [
+                'id' => $subOption->getId(),
+                'field_id' => $subOption->getField()->getId(),
+                'option_value' => $subOption->getValue(),
+                'display_text' => $subOption->getDisplayText(),
+                'priority' => $subOption->getPriority(),
+                'priority_message' => $subOption->getPriorityMessage(),
+                'option_order' => $subOption->getOptionOrder()
+            ];
         }
 
-        return $options;
+        if (!$to_json) {
+            return $optionsInfo;
+        }
+
+        $json = [];
+
+        foreach ($optionsInfo as $optionInfo) {
+            $json[$optionInfo['id']] = $optionInfo['display_text'];
+        }
+
+        return json_encode($json);
     }
 
     /**
@@ -766,11 +776,22 @@ class ExtraFieldOption extends Model
      */
     public static function translateDisplayName($defaultDisplayText)
     {
-        $camelCase = api_underscore_to_camel_case($defaultDisplayText);
-        $camelCase = ucwords($camelCase);
-        $camelCase = str_replace(' ', '', $camelCase);
+        $variableLanguage = self::getLanguageVariable($defaultDisplayText);
 
-        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+        return isset($GLOBALS[$variableLanguage]) ? $GLOBALS[$variableLanguage] : $defaultDisplayText;
+    }
+
+    /**
+     * @param $defaultDisplayText
+     * @return mixed|string
+     */
+    public static function getLanguageVariable($defaultDisplayText)
+    {
+        $variableLanguage = api_replace_dangerous_char($defaultDisplayText);
+        $variableLanguage = str_replace('-', '_', $variableLanguage);
+        $variableLanguage = api_underscore_to_camel_case($variableLanguage);
+
+        return $variableLanguage;
     }
 
     /**

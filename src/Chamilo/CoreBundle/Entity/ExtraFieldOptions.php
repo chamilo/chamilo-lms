@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Class ExtraField
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ExtraFieldOptionsRepository")
  * @ORM\Table(name="extra_field_options")
  *
  * @ORM\MappedSuperclass

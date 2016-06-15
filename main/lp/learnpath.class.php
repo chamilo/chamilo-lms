@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
@@ -5614,7 +5614,7 @@ class learnpath
 
             // Detect if type is FINAL_ITEM to set path_id to SESSION
             if ($arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM) {
-                $_SESSION['pathItem'] = $arrLP[$i]['path'];
+                Session::write('pathItem', $arrLP[$i]['path']);
             }
 
             if (($i % 2) == 0) {
@@ -7876,13 +7876,13 @@ class learnpath
                         }
 
                         $editor_config = array(
-                            'ToolbarSet'=> 'LearningPathDocuments',
-                            'Width' 				=> '100%',
-                            'Height' 				=> '500',
-                            'FullPage' 				=> true,
-                            'CreateDocumentDir' 	=> $relative_prefix,
-                            'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/',
-                            'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/'.$relative_path
+                            'ToolbarSet' => 'LearningPathDocuments',
+                            'Width' => '100%',
+                            'Height' => '500',
+                            'FullPage' => true,
+                            'CreateDocumentDir' => $relative_prefix,
+                            'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
+                            'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path
                         );
 
                         if ($_GET['action'] == 'add_item') {
@@ -8809,7 +8809,7 @@ class learnpath
         $headers = array(
             get_lang('Files'),
             get_lang('NewDocument'),
-            get_lang('Upload'),
+            get_lang('Upload')
         );
 
         $form = new FormValidator(
@@ -11038,13 +11038,12 @@ EOD;
     /**
      * Get the LP Final Item form
      *
-     * @return html
+     * @return string
      */
     public function getFinalItemForm()
     {
         $finalItem = $this->getFinalItem();
         $title = '';
-        $content = '';
 
         if ($finalItem) {
             $title = $finalItem->title;
@@ -11078,23 +11077,33 @@ EOD;
         $form = new FormValidator('final_item', 'POST', $url);
         $form->addText('title', get_lang('Title'));
         $form->addButtonSave($buttonText);
-        $form->addHtml('<div class="alert alert-info">Variables :</br></br> <b>((certificate))</b> </br> <b>((skill))</b></div>');
-        $renderer = $form->defaultRenderer();
-        $renderer->setElementTemplate('<div class="editor-lp">&nbsp;{label}{element}</div>', 'content_lp');
-        $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
-        $form->addHidden('action', 'add_final_item');
-        $form->addHidden('path', isset($_SESSION['pathItem']) ? $_SESSION['pathItem'] : '');
-        $form->addHidden('previous', $this->get_last());
+        $form->addHtml(
+            Display::return_message(
+                'Variables :</br></br> <b>((certificate))</b> </br> <b>((skill))</b>',
+                'normal',
+                false
+            )
+        );
 
-        $form->setDefaults(['title' => $title, 'content_lp' => $content]);
+        $renderer = $form->defaultRenderer();
+        $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp_certificate');
+
+        $form->addHtmlEditor('content_lp_certificate', null, true, false, $editorConfig, true);
+        $form->addHidden('action', 'add_final_item');
+        $form->addHidden('path', Session::read('pathItem'));
+        $form->addHidden('previous', $this->get_last());
+        $form->setDefaults(['title' => $title, 'content_lp_certificate' => $content]);
 
         if ($form->validate()) {
             $values = $form->exportValues();
-
             $lastItemId = $this->get_last();
 
             if (!$finalItem) {
-                $documentId = $this->create_document($this->course_info, $values['content_lp'], $values['title']);
+                $documentId = $this->create_document(
+                    $this->course_info,
+                    $values['content_lp_certificate'],
+                    $values['title']
+                );
                 $this->add_item(
                     0,
                     $lastItemId,

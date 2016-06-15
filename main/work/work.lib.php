@@ -117,66 +117,6 @@ function two_digits($number)
 }
 
 /**
- * Converts 2008-10-06 12:45:00 to -> array('prefix' => array(year'=>2008, 'month'=>10, etc...)
- * @param string
- * @param string
- * @param array
- */
-function convert_date_to_array($date, $group)
-{
-    $parts = explode(' ', $date);
-    $date_parts = explode('-', $parts[0]);
-    $date_parts_tmp = array();
-    foreach ($date_parts as $item) {
-        $date_parts_tmp[] = intval($item);
-    }
-
-    $time_parts = explode(':', $parts[1]);
-    $time_parts_tmp = array();
-    foreach ($time_parts as $item) {
-        $time_parts_tmp[] = intval($item);
-    }
-    list($data[$group]['year'], $data[$group]['month'], $data[$group]['day']) = $date_parts_tmp;
-    list($data[$group]['hour'], $data[$group]['minute']) = $time_parts_tmp;
-    return $data;
-}
-
-/**
- * get date from a group of date
- */
-function get_date_from_group($group)
-{
-    return
-        $_POST[$group]['year'].'-'.
-        two_digits($_POST[$group]['month']).'-'.
-        two_digits($_POST[$group]['day']).' '.
-        two_digits($_POST[$group]['hour']).':'.
-        two_digits($_POST[$group]['minute']).':00';
-}
-
-/**
- * Create a group of select from a date
- * @param FormValidator $form
- * @param string $prefix
- * @return array
- */
-function create_group_date_select($form, $prefix = '')
-{
-    $minute = range(10, 59);
-    $d_year = date('Y');
-    array_unshift($minute, '00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
-
-    $group_name = array(
-        $form->createElement('select', $prefix.'day', '', array_combine(range(1, 31), range(1, 31))),
-        $form->createElement('select', $prefix.'month', '', array_combine(range(1, 12), api_get_months_long())),
-        $form->createElement('select', $prefix.'year', '', array($d_year => $d_year, $d_year + 1 => $d_year + 1)),
-        $form->createElement('select', $prefix.'hour', '', array_combine(range(0, 23), range(0, 23))),
-        $form->createElement('select', $prefix.'minute', '', $minute)
-    );
-    return $group_name;
-}
-
-/**
  * @param string $path
  * @param int $courseId
  *
@@ -1997,7 +1937,6 @@ function get_work_user_list(
             $work['qualification_score'] = $work['qualification'];
 
             $add_string = '';
-
             $time_expires = '';
             if (!empty($work_assignment['expires_on'])) {
                 $time_expires = api_strtotime(
@@ -2316,77 +2255,6 @@ function is_work_exist_by_url($url)
     } else {
         return false;
     }
-}
-
-/**
- * @param $name
- * @param $values
- * @param string $checked
- * @return string
- */
-function make_select($name, $values, $checked = '')
-{
-    $output = '<select name="'.$name.'" id="'.$name.'">';
-    foreach ($values as $key => $value) {
-        $output .= '<option value="'.$key.'" '.(($checked==$key) ? 'selected="selected"' : '').'>'.$value.'</option>';
-    }
-    $output .= '</select>';
-    return $output;
-}
-
-/**
- * @param $name
- * @param string $checked
- * @param null $label
- * @return string
- */
-function make_checkbox($name, $checked = '', $label = null)
-{
-    $check = '<input id ="'.$name.'" type="checkbox" value="1" name="'.$name.'" '.((!empty($checked))?'checked="checked"':'').'/>';
-    if (!empty($label)) {
-        $check .="<label for ='$name'>$label</label>";
-    }
-    return $check;
-}
-
-/**
- * @param $prefix
- * @param string $default
- * @return string
- */
-function draw_date_picker($prefix, $default = '')
-{
-    if (empty($default)) {
-        $default = api_get_local_time();
-    }
-    $parts = explode(' ', $default);
-    list($d_year, $d_month, $d_day) = explode('-', $parts[0]);
-    list($d_hour, $d_minute) = explode(':', $parts[1]);
-
-    $minute = range(10, 59);
-    array_unshift($minute, '00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
-    $date_form = make_select($prefix.'_day', array_combine(range(1, 31), range(1, 31)), $d_day);
-    $date_form .= make_select($prefix.'_month', array_combine(range(1, 12), api_get_months_long()), $d_month);
-    $date_form .= make_select($prefix.'_year', array($d_year => $d_year, $d_year + 1 => $d_year + 1), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
-    $date_form .= make_select($prefix.'_hour', array_combine(range(0, 23), range(0, 23)), $d_hour).' : ';
-    $date_form .= make_select($prefix.'_minute', $minute, $d_minute);
-    return $date_form;
-}
-
-/**
- * @param string $prefix
- * @param array of values
- * @return string
- *
- */
-function get_date_from_select($prefix, $array = array())
-{
-    return
-        $array[$prefix]['year'].'-'.
-        two_digits($array[$prefix]['month']).'-'.
-        two_digits($array[$prefix]['day']).' '.
-        two_digits($array[$prefix]['hour']).':'.
-        two_digits($array[$prefix]['minute']).':00';
 }
 
 /**
@@ -3105,12 +2973,7 @@ function getLastWorkStudentFromParent(
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
         $comment = Database::fetch_array($result, 'ASSOC');
-        /*if (!empty($comment)) {
-            $comment['assignment'] = get_work_assignment_by_id(
-                $comment['id'],
-                $courseInfo['real_id']
-            );
-        }*/
+
         return $comment;
     }
 
@@ -3157,12 +3020,7 @@ function getLastWorkStudentFromParentByUser(
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
         $work = Database::fetch_array($result, 'ASSOC');
-        /*if (!empty($comment)) {
-            $comment['assignment'] = get_work_assignment_by_id(
-                $comment['id'],
-                $courseInfo['real_id']
-            );
-        }*/
+
         return $work;
     }
 
@@ -3312,9 +3170,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         $workParent = get_work_data_by_id($work['parent_id']);
         if (!empty($workParent)) {
             $uploadDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work'.$workParent['url'];
-            $newFileName = 'comment_'.$commentId.'_'.php2phps(
-                    api_replace_dangerous_char($fileData['name'])
-                );
+            $newFileName = 'comment_'.$commentId.'_'.php2phps(api_replace_dangerous_char($fileData['name']));
             $newFilePath = $uploadDir.'/'.$newFileName;
             $result = move_uploaded_file($fileData['tmp_name'], $newFilePath);
             if ($result) {
@@ -3371,8 +3227,8 @@ function getWorkDateValidationStatus($homework)
             $time_now = time();
 
             if (!empty($homework['expires_on'])) {
-                $time_expires   = api_strtotime($homework['expires_on'], 'UTC');
-                $difference     = $time_expires - $time_now;
+                $time_expires = api_strtotime($homework['expires_on'], 'UTC');
+                $difference = $time_expires - $time_now;
                 if ($difference < 0) {
                     $has_expired = true;
                 }
@@ -3490,7 +3346,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
             'error' => Display:: return_message(
                 get_lang('UplUnableToSaveFileFilteredExtension'),
                 'error'
-            ),
+            )
         );
     }
 
@@ -4586,6 +4442,7 @@ function getWorkUserListData(
             );
         }
     }
+
     return $results;
 }
 

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class GlossaryManager
  * This library provides functions for the glossary tool.
@@ -59,10 +61,11 @@ class GlossaryManager
     /**
      * Get glossary term by glossary id
      * @author Isaac Flores <florespaz_isaac@hotmail.com>
-     * @param string The glossary term name
+     * @param string $glossary_name The glossary term name
+     *
      * @return string The glossary description
      */
-    public static function get_glossary_term_by_glossary_name ($glossary_name)
+    public static function get_glossary_term_by_glossary_name($glossary_name)
     {
         $glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
@@ -92,9 +95,9 @@ class GlossaryManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    public static function save_glossary($values, $message = true)
+    public static function save_glossary($values)
     {
-        if (!is_array($values) or !isset($values['glossary_title'])) {
+        if (!is_array($values) || !isset($values['glossary_title'])) {
             return false;
         }
         // Database table definition
@@ -109,8 +112,9 @@ class GlossaryManager
         // check if the glossary term already exists
         if (GlossaryManager::glossary_exists($values['glossary_title'])) {
             // display the feedback message
-            if ($message)
-                Display::display_error_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'));
+            Display::addFlash(
+                Display::return_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'), 'error')
+            );
             return false;
         } else {
 
@@ -123,8 +127,8 @@ class GlossaryManager
                 'session_id' => $session_id,
             ];
             $id = Database::insert($t_glossary, $params);
-            if ($id) {
 
+            if ($id) {
                 $sql = "UPDATE $t_glossary SET glossary_id = $id WHERE iid = $id";
                 Database::query($sql);
 
@@ -139,10 +143,11 @@ class GlossaryManager
             }
 
             $_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
+
             // display the feedback message
-            if ($message) {
-                Display::display_confirmation_message(get_lang('TermAdded'));
-            }
+            Display::addFlash(
+                Display::return_message(get_lang('TermAdded'))
+            );
 
             return $id;
         }
@@ -157,7 +162,7 @@ class GlossaryManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    public static function update_glossary($values, $message = true)
+    public static function update_glossary($values)
     {
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
@@ -166,8 +171,11 @@ class GlossaryManager
         // check if the glossary term already exists
         if (GlossaryManager::glossary_exists($values['glossary_title'],$values['glossary_id'])) {
             // display the feedback message
-            if ($message)
-                Display::display_error_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'));
+
+            Display::addFlash(
+                Display::return_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'), 'error')
+            );
+
             return false;
         } else {
             $sql = "UPDATE $t_glossary SET
@@ -188,9 +196,12 @@ class GlossaryManager
                 'GlossaryUpdated',
                 api_get_user_id()
             );
+
             // display the feedback message
-            if ($message)
-                Display::display_confirmation_message(get_lang('TermUpdated'));
+            Display::addFlash(
+                Display::return_message(get_lang('TermUpdated'))
+            );
+
         }
 
         return true;
@@ -280,12 +291,12 @@ class GlossaryManager
                     g.session_id
                 FROM $t_glossary g, $t_item_propery ip
                 WHERE
-                    g.glossary_id 	= ip.ref AND
-                    tool 			= '".TOOL_GLOSSARY."' AND
-                    g.glossary_id 	= '".intval($glossary_id)."' AND
-                    g.c_id			= ".api_get_course_int_id()." AND
-                    ip.c_id			= ".api_get_course_int_id()."
-                ";
+                    g.glossary_id = ip.ref AND
+                    tool = '".TOOL_GLOSSARY."' AND
+                    g.glossary_id = '".intval($glossary_id)."' AND
+                    g.c_id = ".api_get_course_int_id()." AND
+                    ip.c_id = ".api_get_course_int_id();
+
         $result = Database::query($sql);
         if ($result === false || Database::num_rows($result) != 1) {
             return false;
@@ -301,18 +312,26 @@ class GlossaryManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    public static function delete_glossary($glossary_id, $message = true)
+    public static function delete_glossary($glossary_id)
     {
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
 
-        if (empty($glossary_id)) { return false; }
+        if (empty($glossary_id)) {
+            return false;
+        }
 
-        $sql = "DELETE FROM $t_glossary WHERE c_id = $course_id AND glossary_id='".intval($glossary_id)."'";
+        $sql = "DELETE FROM $t_glossary 
+                WHERE 
+                    c_id = $course_id AND 
+                    glossary_id='".intval($glossary_id)."'";
         $result = Database::query($sql);
-        if ($result === false or Database::affected_rows($result) < 1) { return false; }
-        //update item_property (delete)
+        if ($result === false || Database::affected_rows($result) < 1) {
+            return false;
+        }
+
+        // update item_property (delete)
         api_item_property_update(
             api_get_course_info(),
             TOOL_GLOSSARY,
@@ -324,8 +343,11 @@ class GlossaryManager
         // reorder the remaining terms
         GlossaryManager::reorder_glossary();
         $_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
-        if ($message)
-            Display::display_confirmation_message(get_lang('TermDeleted'));
+
+        Display::addFlash(
+            Display::return_message(get_lang('TermDeleted'))
+        );
+
         return true;
     }
 
@@ -334,7 +356,7 @@ class GlossaryManager
      * the glossary terms
      * @param  string  View ('table' or 'list'). Optional parameter.
      * Defaults to 'table' and prefers glossary_view from the session by default.
-     * @return void
+     * @return string
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
@@ -342,8 +364,9 @@ class GlossaryManager
     {
         // This function should always be called with the corresponding
         // parameter for view type. Meanwhile, use this cheap trick.
-        if (empty($_SESSION['glossary_view'])) {
-            $_SESSION['glossary_view'] = $view;
+        $view = Session::read('glossary_view');
+        if (empty($view)) {
+            Session::write('glossary_view', $view);
         }
         // action links
         //echo '<div class="actions">';
@@ -363,7 +386,7 @@ class GlossaryManager
         $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
             Display::return_icon('pdf.png',get_lang('ExportToPDF'),'', ICON_SIZE_MEDIUM).'</a>';
 
-        if ((isset($_SESSION['glossary_view']) && $_SESSION['glossary_view'] == 'table') or (!isset($_SESSION['glossary_view']))){
+        if (($view == 'table') || (!isset($view))) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
                 Display::return_icon('view_detailed.png',get_lang('ListView'),'',ICON_SIZE_MEDIUM).'</a>';
         } else {
@@ -391,9 +414,9 @@ class GlossaryManager
             array(0 => $actionsLeft, 1 => $actionsRight)
         );
 
-        echo $toolbar;
+        $content = $toolbar;
 
-        if (!$_SESSION['glossary_view'] || $_SESSION['glossary_view'] == 'table') {
+        if (!$view || $view == 'table') {
             $table = new SortableTable(
                 'glossary',
                 array('GlossaryManager', 'get_number_glossary_terms'),
@@ -403,15 +426,18 @@ class GlossaryManager
             //$table->set_header(0, '', false);
             $table->set_header(0, get_lang('TermName'), true);
             $table->set_header(1, get_lang('TermDefinition'), true);
-            if (api_is_allowed_to_edit(null,true)) {
+            if (api_is_allowed_to_edit(null, true)) {
                 $table->set_header(2, get_lang('Actions'), false, 'width=90px', array('class' => 'td_actions'));
                 $table->set_column_filter(2, array('GlossaryManager','actions_filter'));
             }
-            $table->display();
+            $content .= $table->return_table();
         }
-        if ($_SESSION['glossary_view'] == 'list') {
-            GlossaryManager::display_glossary_list();
+
+        if ($view == 'list') {
+            $content .= GlossaryManager::display_glossary_list();
         }
+
+        return $content;
     }
 
     /**
@@ -423,14 +449,15 @@ class GlossaryManager
     public static function display_glossary_list()
     {
         $glossary_data = self::get_glossary_data(0,1000,0,'ASC');
+        $content = '';
         foreach ($glossary_data as $key => $glossary_item) {
             $actions = '';
             if (api_is_allowed_to_edit(null,true)) {
                 $actions = '<div class="pull-right">'.self::actions_filter($glossary_item[2], '',$glossary_item).'</div>';
             }
-            echo Display::panel($glossary_item[1], $glossary_item[0].' '.$actions);
+            $content .= Display::panel($glossary_item[1], $glossary_item[0].' '.$actions);
         }
-        return true;
+        return $content;
     }
 
     /**
@@ -484,6 +511,8 @@ class GlossaryManager
     public static  function get_glossary_data($from, $number_of_items, $column, $direction)
     {
         $_user = api_get_user_info();
+        $view = Session::read('glossary_view');
+
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
         $t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -538,7 +567,7 @@ class GlossaryManager
             $session_img = api_get_session_image($data['session_id'], $_user['status']);
             $array[0] = $data[0] . $session_img;
 
-            if (!$_SESSION['glossary_view'] || $_SESSION['glossary_view'] == 'table') {
+            if (!$view || $view == 'table') {
                 $array[1] = str_replace(array('<p>', '</p>'), array('', '<br />'), $data[1]);
             } else {
                 $array[1] = $data[1];
@@ -567,16 +596,18 @@ class GlossaryManager
     public static function actions_filter($glossary_id, $url_params, $row)
     {
         $glossary_id = $row[2];
-        $return = '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
+        $return = '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.
+            Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
         $glossary_data = GlossaryManager::get_glossary_information($glossary_id);
 
         $glossary_term = $glossary_data['glossary_title'];
 
         if (api_is_allowed_to_edit(null, true)) {
             if ($glossary_data['session_id'] == api_get_session_id()) {
-                $return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
+                $return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.
+                    Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
             } else {
-                $return  = get_lang('EditionNotAvailableFromSession');
+                $return = get_lang('EditionNotAvailableFromSession');
             }
         }
 
@@ -593,14 +624,14 @@ class GlossaryManager
      */
     public static function javascript_glossary()
     {
-        return "<script type=\"text/javascript\">
-				function confirmation (name) {
-					if (confirm(\" ". get_lang("TermConfirmDelete") ." \"+ name + \" ?\"))
-						{return true;}
-					else
-						{return false;}
-				}
-				</script>";
+        return "<script>
+        function confirmation (name) {
+            if (confirm(\" ".get_lang("TermConfirmDelete")." \"+ name + \" ?\"))
+                {return true;}
+            else
+                {return false;}
+        }
+        </script>";
     }
 
     /**
@@ -609,7 +640,8 @@ class GlossaryManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    public static function reorder_glossary() {
+    public static function reorder_glossary()
+    {
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
@@ -630,13 +662,13 @@ class GlossaryManager
     /**
      * Move a glossary term
      *
-     * @param unknown_type $direction
-     * @param unknown_type $glossary_id
+     * @param string $direction
+     * @param string $glossary_id
      *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    public static function move_glossary($direction, $glossary_id, $message = true)
+    public static function move_glossary($direction, $glossary_id)
     {
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
@@ -655,7 +687,7 @@ class GlossaryManager
         $res = Database::query($sql);
         $found = false;
         while ($row = Database::fetch_array($res)) {
-            if ($found && empty($next_id))	{
+            if ($found && empty($next_id)) {
                 $next_id = $row['glossary_id'];
                 $next_display_order = $row['display_order'];
             }
@@ -672,16 +704,21 @@ class GlossaryManager
                  WHERE c_id = $course_id  AND glossary_id = '".Database::escape_string($next_id)."'";
         Database::query($sql1);
         Database::query($sql2);
-        if ($message)
-            Display::display_confirmation_message(get_lang('TermMoved'));
+
+        Display::addFlash(Display::return_message(get_lang('TermMoved')));
     }
 
     /**
-     *
+     * Export to pdf
      */
     public static function export_to_pdf()
     {
-        $data = GlossaryManager::get_glossary_data(0, GlossaryManager::get_number_glossary_terms(api_get_session_id()), 0, 'ASC');
+        $data = GlossaryManager::get_glossary_data(
+            0,
+            GlossaryManager::get_number_glossary_terms(api_get_session_id()),
+            0,
+            'ASC'
+        );
         $html = '<html><body>';
         $html .= '<h2>'.get_lang('Glossary').'</h2><hr><br><br>';
         foreach ($data as $item) {
@@ -692,13 +729,6 @@ class GlossaryManager
         $html .= '</body></html>';
         $course_code = api_get_course_id();
         $pdf = new PDF();
-        //$pdf->set_custom_header($title);
-        /*$css_file = api_get_path(SYS_CODE_PATH).'css/print.css';
-        if (file_exists($css_file)) {
-            $css = @file_get_contents($css_file);
-        } else {
-            $css = '';
-        }*/
         $pdf->content_to_pdf($html, '', get_lang('Glossary').'_'.$course_code, $course_code);
     }
 }

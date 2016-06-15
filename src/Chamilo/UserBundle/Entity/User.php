@@ -1024,6 +1024,13 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $this->pictureUri;
     }
 
+    public function getPictureLegacy()
+    {
+        $id = $this->id;
+
+        return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
+    }
+
     /**
      * Set creatorId
      *

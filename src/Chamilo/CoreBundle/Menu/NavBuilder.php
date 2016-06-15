@@ -113,8 +113,6 @@ class NavBuilder extends ContainerAware
                         ),
                     )
                 )->setAttribute('class', 'item-menu menu-6 dashboard');*/
-
-
             }
         }
 
@@ -252,7 +250,26 @@ class NavBuilder extends ContainerAware
             /** @var User $user */
             $user = $token->getToken()->getUser();
             $menu->setChildrenAttribute('class', 'nav navbar-nav navbar-right');
-            $dropdown = $menu->addChild($user->getUsername())->setAttribute('dropdown', true);
+            $user = $this->container->get('doctrine')->getRepository('ChamiloUserBundle:User')->find($user->getId());
+            $uri = $user->getPictureUri();
+
+            if (empty($uri)) {
+                $uri = $this->container->get('templating.helper.assets')->getUrl('main/img/icons/32/unknown.png');
+                $uri = str_replace('web/', '/', $uri);
+                $image = '<img src="'.$uri.'" class="img-circle"/>';
+            } else {
+                $uri = 'app/upload/'.$user->getPictureLegacy();
+                $uri = $this->container->get('templating.helper.assets')->getUrl($uri);
+                $uri = str_replace('web/app/', 'app/', $uri);
+                $image = '<img src="'.$uri.'" class="img-circle"/>';
+            }
+
+            $dropdown = $menu->addChild(
+                $image.'',
+                [
+                    'extras' => array('safe_label' => true)
+                ]
+            )->setAttribute('dropdown', true);
 
             if ($checker->isGranted('ROLE_ADMIN')) {
 
@@ -278,8 +295,20 @@ class NavBuilder extends ContainerAware
             );
 
             $dropdown->addChild(
+                '',
+                array(
+                    'divider' => true
+                )
+            );
+
+            $dropdown->addChild(
                 $translator->trans('Profile'),
-                array('route' => 'fos_user_profile_show')
+                array(
+                    'route' => 'main',
+                    'routeParameters' => array(
+                        'name' => 'social/home.php'
+                    )
+                )
             )->setAttribute('divider_append', true);
 
             $dropdown->addChild(
@@ -301,8 +330,6 @@ class NavBuilder extends ContainerAware
                     ),
                 )
             )->setAttribute('divider_append', true);
-
-
 
             // legacy logout
             $logoutLink = $menu->addChild(

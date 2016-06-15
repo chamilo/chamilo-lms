@@ -1022,9 +1022,10 @@ class IndexManager
         }
 
         //Sort courses
-        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        $img_order= Display::return_icon('order-course.png',get_lang('SortMyCourses'),null,ICON_SIZE_SMALL);
-        $my_account_content .= '<li class="order-course">'.Display::url($img_order.get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
+//Not needed in the case of Ofaj.
+//        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+//        $img_order= Display::return_icon('order-course.png',get_lang('SortMyCourses'),null,ICON_SIZE_SMALL);
+//        $my_account_content .= '<li class="order-course">'.Display::url($img_order.get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
 
         // Session history
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {

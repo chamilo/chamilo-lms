@@ -895,7 +895,7 @@ class Template
 
         $this->assign('bug_notification', $bugLink);
 
-        $notification = return_notification_menu();
+        $notification = returnNotificationMenu();
         $this->assign('notification_menu', $notification);
 
         $resize = '';

@@ -100,7 +100,8 @@ $(document).ready(function() {
         
         return false;
     });
-});';
+});
+</script>';
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 

@@ -148,14 +148,20 @@ if ($course_validation_feature) {
 }
 
 // Course language.
-$form->addElement(
-    'select_language',
-    'course_language',
-    get_lang('Ln'),
-    array(),
-    array('style' => 'width:150px')
-);
-$form->applyFilter('select_language', 'html_filter');
+$languages = api_get_languages();
+if (count($languages['name']) === 1) {
+    // If there's only one language available, there's no point in asking
+    $form->addElement('hidden', 'course_language', $languages['folder'][0]);
+} else {
+    $form->addElement(
+        'select_language',
+        'course_language',
+        get_lang('Ln'),
+        array(),
+        array('style' => 'width:150px')
+    );
+    $form->applyFilter('select_language', 'html_filter');
+}
 
 // Exemplary content checkbox.
 $form->addElement(

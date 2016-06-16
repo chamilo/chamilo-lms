@@ -775,6 +775,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
  */
 function getOnlineUsersCount($cacheEnabled = false)
 {
+    $number = 0;
     if ($cacheEnabled) {
         $apc = apcu_cache_info(null,true);
         $apc_end = $apc['start_time'] + $apc['ttl'];
@@ -800,6 +801,7 @@ function getOnlineUsersCount($cacheEnabled = false)
  */
 function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
 {
+    $numberOnlineInCourse = 0;
     if (!empty($_course['id'])) {
         if ($cacheEnabled) {
             $apc = apcu_cache_info(null,true);

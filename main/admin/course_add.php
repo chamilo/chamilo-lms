@@ -100,8 +100,21 @@ $form->applyFilter('department_name', 'trim');
 $form->addText('department_url', get_lang('CourseDepartmentURL'), false, array ('size' => '60'));
 $form->applyFilter('department_url', 'html_filter');
 
-$form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
-$form->applyFilter('select_language', 'html_filter');
+// Course language.
+$languages = api_get_languages();
+if (count($languages['name']) === 1) {
+    // If there's only one language available, there's no point in asking
+    $form->addElement('hidden', 'course_language', $languages['folder'][0]);
+} else {
+    $form->addElement(
+        'select_language',
+        'course_language',
+        get_lang('Ln'),
+        array(),
+        array('style' => 'width:150px')
+    );
+    $form->applyFilter('select_language', 'html_filter');
+}
 
 if (api_get_setting('teacher_can_select_course_template') === 'true') {
     $form->addElement(

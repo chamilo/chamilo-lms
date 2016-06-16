@@ -215,6 +215,7 @@ An optional additional caching mechanism you may use is the realpath_cache_size
 In PHP 5.5 and above, APC is rendered practically obsolete by the presence of ZendOPCache by default.
     However, APC does not cover the "user cache", like the caching of specific variables in memory.
     Considering this, you can <a href="http://php.net/manual/en/book.apcu.php">APCu</a> to add the same level of variable caching as described above, just changing the code a little:
+    On a local computer, this lead to an increase of RAM consumption and a decrease of 20% of CPU time (for just one user). This has been included in 1.11.x, so this section is only there for historical purposes.
 <pre>
 function return_notification_menu()
 {

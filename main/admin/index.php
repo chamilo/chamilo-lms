@@ -404,7 +404,7 @@ if (api_is_platform_admin()) {
 
     /* Plugins */
     global $_plugins;
-    if (count($_plugins['menu_administrator']) > 0) {
+    if (isset($_plugins['menu_administrator']) && count($_plugins['menu_administrator']) > 0) {
         $blocks['plugins']['icon'] = Display::return_icon(
             'plugins.png',
              get_lang('Plugins'),

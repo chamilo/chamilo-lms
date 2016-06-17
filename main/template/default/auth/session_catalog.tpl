@@ -55,7 +55,7 @@
         <div class="col-md-3 col-sm-6 col-xs-6">
             <div id="session-{{ item.id }}" class="items">
                 <div class="image">
-                    <img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : _p.web_img ~ 'session_default.png' }}">
+                    <img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : 'session_default.png'|icon() }}">
                     {% if item.category != '' %}
                     <span class="category">{{ item.category }}</span>
                     <div class="cribbon"></div>

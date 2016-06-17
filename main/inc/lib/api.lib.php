@@ -1819,7 +1819,7 @@ function api_format_course_array($course_data)
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic.png';
     } else {
-        $url_image = Display::returnIconPath('session_default.png');
+        $url_image = Display::return_icon('session_default.png', null, null, null, null, true);
     }
     $_course['course_image_large'] = $url_image;
 

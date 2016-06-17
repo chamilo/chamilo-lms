@@ -3170,7 +3170,7 @@ class SessionManager
         if (Database::num_rows($result) > 0) {
             $sysUploadPath = api_get_path(SYS_UPLOAD_PATH). 'sessions/';
             $webUploadPath = api_get_path(WEB_UPLOAD_PATH). 'sessions/';
-            $imgPath = Display::returnIconPath('session_default_small.png');
+            $imgPath = Display::return_icon('session_default_small.png', null, null, null, null, true);
 
             $tableExtraFields = Database::get_main_table(TABLE_EXTRA_FIELD);
             $sql = "SELECT id FROM " . $tableExtraFields . "

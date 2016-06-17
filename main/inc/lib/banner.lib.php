@@ -804,7 +804,7 @@ function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
     $numberOnlineInCourse = 0;
     if (!empty($_course['id'])) {
         if ($cacheEnabled) {
-            $apc = apcu_cache_info(null,true);
+            $apc = apcu_cache_info(true);
             $apc_end = $apc['start_time']+$apc['ttl'];
             if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id']) AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0) {
                 $numberOnlineInCourse = apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']);

@@ -17,7 +17,7 @@
                 <div class="form-group">
                     <label>{{ "ByDate"|get_lang }}</label>
                 <div class="input-group">
-                    <input type="date" name="date" id="date" class="form-control" value="{{ search_date }}" readonly>
+                    <input type="date" name="date" id="date" title="{{ 'Date'|get_lang }}" class="form-control" value="{{ search_date }}" readonly>
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
                     </span>
@@ -29,7 +29,7 @@
                 <form class="form-inline" method="post" action="{{ _p.web_self }}?action=search_tag">
                 <label>{{ "ByTag"|get_lang }}</label>
                 <div class="input-group">
-                    <input type="text" name="search_tag" class="form-control" value="{{ search_tag }}" />
+                    <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control" value="{{ search_tag }}" />
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
                         </span>

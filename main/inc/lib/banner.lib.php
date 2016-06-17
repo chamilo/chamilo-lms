@@ -777,7 +777,7 @@ function getOnlineUsersCount($cacheEnabled = false)
 {
     $number = 0;
     if ($cacheEnabled) {
-        $apc = apcu_cache_info(null,true);
+        $apc = apcu_cache_info(true);
         $apc_end = $apc['start_time'] + $apc['ttl'];
         if (apcu_exists('my_campus_whoisonline_count_simple') AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple') > 0 ) {
             $number = apcu_fetch('my_campus_whoisonline_count_simple');

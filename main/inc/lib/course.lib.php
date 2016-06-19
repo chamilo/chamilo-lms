@@ -81,9 +81,12 @@ class CourseManager
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $params['title'];
             // Check whether the requested course code has already been occupied.
-            $params['wanted_code'] = CourseManager::generate_course_code(
-                api_substr($params['title'], 0, self::MAX_COURSE_LENGTH_CODE)
-            );
+            $substring = api_substr($params['title'], 0, self::MAX_COURSE_LENGTH_CODE);
+            if ($substring === false or empty($substring)) {
+                return false;
+            } else {
+                $params['wanted_code'] = CourseManager::generate_course_code($substring);
+            }
         }
 
         // Create the course keys
@@ -112,45 +115,10 @@ class CourseManager
                         $params['exemplary_content']
                     );
 
-                    if (api_get_setting('gradebook_enable_grade_model') == 'true') {
-                        //Create gradebook_category for the new course and add
-                        // a gradebook model for the course
-                        if (isset($params['gradebook_model_id']) &&
-                            !empty($params['gradebook_model_id']) &&
-                            $params['gradebook_model_id'] != '-1'
-                        ) {
-                            GradebookUtils::create_default_course_gradebook(
-                                $course_info['code'],
-                                $params['gradebook_model_id']
-                            );
-                        }
-                    }
+                    CourseManager::createDefaultGradebook($params['gradebook_model_id'], $course_info['code']);
                     // If parameter defined, copy the contents from a specific
                     // template course into this new course
-                    $template = api_get_setting('course_creation_use_template');
-                    $teacherCanSelectCourseTemplate = api_get_setting('teacher_can_select_course_template') === 'true';
-                    $courseTemplate = isset($params['course_template']) ? intval($params['course_template']) : 0;
-
-                    $useTemplate = false;
-
-                    if ($teacherCanSelectCourseTemplate && $courseTemplate) {
-                        $useTemplate = true;
-                        $originCourse = api_get_course_info_by_id($courseTemplate);
-                    } elseif (!empty($template)) {
-                        $useTemplate = true;
-                        $originCourse = api_get_course_info_by_id($template);
-                    }
-
-                    if ($useTemplate) {
-                        // Include the necessary libraries to generate a course copy
-                        // Call the course copy object
-                        $originCourse['official_code'] = $originCourse['code'];
-                        $cb = new CourseBuilder(null, $originCourse);
-                        $course = $cb->build(null, $originCourse['code']);
-                        $cr = new CourseRestorer($course);
-                        $cr->set_file_option();
-                        $cr->restore($course_info['id']); //course_info[id] is the course.code value (I know...)
-                    }
+                    CourseManager::useTemplateAsBasisIfRequired($course_info['id'], $params['course_template']);
 
                     $params['course_code'] = $course_info['code'];
                     $params['item_id'] = $course_info['real_id'];
@@ -5921,5 +5889,59 @@ class CourseManager
             return $value['item_id'];
         }
         return 0;
+    }
+    /**
+     * Helper function to create a default gradebook (if necessary) upon course creation
+     * @param   int     $modelId    The gradebook model ID
+     * @param   string  $courseCode Course code
+     * @return  void
+     */
+    public static function createDefaultGradebook($modelId, $courseCode) {
+        if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+            //Create gradebook_category for the new course and add
+            // a gradebook model for the course
+            if (isset($modelId) &&
+                !empty($modelId) &&
+                $modelId != '-1'
+            ) {
+                GradebookUtils::create_default_course_gradebook(
+                    $courseCode,
+                    $modelId
+                );
+            }
+        }
+        return;
+    }
+    /**
+     * Helper function to check if there is a course template and, if so, to
+     * copy the template as basis for the new course
+     * @param   string  $courseCode   Course code
+     * @param   int     $courseTemplate 0 if no course template is defined
+     */
+    public static function useTemplateAsBasisIfRequired($courseCode, $courseTemplate) {
+        $template = api_get_setting('course_creation_use_template');
+        $teacherCanSelectCourseTemplate = api_get_setting('teacher_can_select_course_template') === 'true';
+        $courseTemplate = isset($courseTemplate) ? intval($courseTemplate) : 0;
+
+        $useTemplate = false;
+
+        if ($teacherCanSelectCourseTemplate && $courseTemplate) {
+            $useTemplate = true;
+            $originCourse = api_get_course_info_by_id($courseTemplate);
+        } elseif (!empty($template)) {
+            $useTemplate = true;
+            $originCourse = api_get_course_info_by_id($template);
+        }
+
+        if ($useTemplate) {
+            // Include the necessary libraries to generate a course copy
+            // Call the course copy object
+            $originCourse['official_code'] = $originCourse['code'];
+            $cb = new CourseBuilder(null, $originCourse);
+            $course = $cb->build(null, $originCourse['code']);
+            $cr = new CourseRestorer($course);
+            $cr->set_file_option();
+            $cr->restore($courseCode);
+        }
     }
 }

@@ -1299,9 +1299,6 @@ class CourseManager
         } else {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
-                if ($resumed_report) {
-                    //$sql = " SELECT count(field_id) ";
-                }
             } else {
                 if (empty($course_code)) {
                     $sql = 'SELECT DISTINCT
@@ -1322,11 +1319,11 @@ class CourseManager
                 }
             }
 
-            $sql .= ' FROM ' . Database::get_main_table(TABLE_MAIN_USER) . ' as user ';
-            $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_COURSE_USER) . ' as course_rel_user
+            $sql .= ' FROM ' . Database::get_main_table(TABLE_MAIN_USER) . ' as user '
+                  . ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_COURSE_USER) . ' as course_rel_user
                         ON user.user_id = course_rel_user.user_id AND
-                        course_rel_user.relation_type <> ' . COURSE_RELATION_TYPE_RRHH . '  ';
-            $sql .= " INNER JOIN $course_table course ON course_rel_user.c_id = course.id ";
+                        course_rel_user.relation_type <> ' . COURSE_RELATION_TYPE_RRHH . '  '
+                  . " INNER JOIN $course_table course ON course_rel_user.c_id = course.id ";
 
             if (!empty($course_code)) {
                 $sql .= ' AND course_rel_user.c_id="' . $courseId . '"';
@@ -1463,22 +1460,11 @@ class CourseManager
 
                         $users[$row_key]['count_users'] += $counter;
 
-                        $registered_users_with_extra_field = 0;
-
-                        if (!empty($name) && $name != '-') {
-                            $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
-                            $name = Database::escape_string($name);
-                            $sql = "SELECT count(v.item_id) as count
-                                    FROM $table_user_field_value v INNER JOIN
-                                    $tableExtraField f
-                                    ON (f.id = v.field_id)
-                                    WHERE value = '$name' AND extra_field_type = $extraFieldType";
-                            $result_count = Database::query($sql);
-                            if (Database::num_rows($result_count)) {
-                                $row_count = Database::fetch_array($result_count);
-                                $registered_users_with_extra_field = $row_count['count'];
-                            }
-                        }
+                        $registered_users_with_extra_field = CourseManager::getCountRegisteredUsersWithCourseExtraField(
+                            $name,
+                            $tableExtraField,
+                            $table_user_field_value
+                        );
 
                         $users[$row_key]['count_users_registered'] = $registered_users_with_extra_field;
                         $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
@@ -5943,5 +5929,37 @@ class CourseManager
             $cr->set_file_option();
             $cr->restore($courseCode);
         }
+    }
+    /**
+     * Helper method to get the number of users defined with a specific course extra field
+     * @param   string  $name   Field title
+     * @param   string  $tableExtraFields The extra fields table name
+     * @param   string  $tableUserFieldValues The user extra field value table name
+     * @return  int     The number of users with this extra field with a specific value
+     */
+    public static function getCountRegisteredUsersWithCourseExtraField($name, $tableExtraFields = '', $tableUserFieldValues = '') {
+        if (empty($tableExtraFields)) {
+            $tableExtraFields = Database::get_main_table(TABLE_EXTRA_FIELD);
+        }
+        if (empty($tableUserFieldValues)) {
+            $tableUserFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        }
+        $registered_users_with_extra_field = 0;
+
+        if (!empty($name) && $name != '-') {
+            $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
+            $name = Database::escape_string($name);
+            $sql = "SELECT count(v.item_id) as count
+                                    FROM $tableUserFieldValues v INNER JOIN
+                                    $tableExtraFields f
+                                    ON (f.id = v.field_id)
+                                    WHERE value = '$name' AND extra_field_type = $extraFieldType";
+            $result_count = Database::query($sql);
+            if (Database::num_rows($result_count)) {
+                $row_count = Database::fetch_array($result_count);
+                $registered_users_with_extra_field = $row_count['count'];
+            }
+        }
+        return $registered_users_with_extra_field;
     }
 }

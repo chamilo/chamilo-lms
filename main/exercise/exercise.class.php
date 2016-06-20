@@ -2191,7 +2191,7 @@ class Exercise
             $form->addCheckBox(
                 'save_correct_answers',
                 null,
-                get_lang('Save the correct answers for the next attempt')
+                get_lang('SaveTheCorrectAnswersForTheNextAttempt')
             );
             $form->addElement('html','<div class="clear">&nbsp;</div>');
             $form->addElement('checkbox', 'review_answers', null, get_lang('ReviewAnswers'));

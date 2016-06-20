@@ -6980,7 +6980,7 @@ $EventType = "Event type";
 $WamiFlashDialog = "It will display a dialog box which asks for your permission to access the microphone, answer yes and close the dialog box (if you do not want to appear again, before closing check remember)";
 $WamiStartRecorder = "Start recording by pressing the microphone and stop it by pressing again. Each time you do this will generate a file.";
 $WamiNeedFilename = "Before you activate recording it is necessary a file name.";
-$InputNameHere = "Enter name here";
+$InputNameHere = "Enter filename here";
 $Reload = "Reload";
 $SelectGradeModel = "Select a calification model";
 $AllMustWeight100 = "The sum of all values must be 100";
@@ -7743,4 +7743,6 @@ $LaunchVideoConferenceRoom = "Launch videoconference room";
 $VideoConference = "Videoconference";
 $TermsDuplicatedInFile = "Terms duplicated in file";
 $GlossaryTermAlreadyExists = "Term already exists";
+$LinkedInUrl = "LinkedIn profile URL";
+$SaveTheCorrectAnswersForTheNextAttempt = "Save the correct answer for the next attempt";
 ?>

@@ -1850,7 +1850,26 @@ VALUES
 ('enable_record_audio', 'true', 'Yes'),
 ('enable_record_audio', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.11.0.3' WHERE variable = 'chamilo_database_version';
+-- Version 1.11.0.4
+
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at)
+VALUES
+(1, 1, 'skype', 'Skype', 1, 1, now()),
+(1, 1, 'linkedin_url', 'LinkedInUrl', 1, 1, now());
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, access_url_changeable)
+VALUES
+('allow_show_skype_account', NULL, 'radio', 'Platform', 'true', 'AllowShowSkypeAccountTitle', 'AllowShowSkypeAccountComment', 1),
+('allow_show_linkedin_url', NULL, 'radio', 'Platform', 'true', 'AllowShowLinkedInUrlTitle', 'AllowShowLinkedInUrlComment', 1);
+
+INSERT INTO settings_options (variable, value, display_text)
+VALUES
+('allow_show_skype_account', 'true', 'Yes'),
+('allow_show_skype_account', 'false', 'No'),
+('allow_show_linkedin_url', 'true', 'Yes'),
+('allow_show_linkedin_url', 'false', 'No');
+
+UPDATE settings_current SET selected_value = '1.11.0.4' WHERE variable = 'chamilo_database_version';
 
 INSERT INTO settings_current (variable, type, category, selected_value, title, comment) VALUES ('enable_profile_user_address_geolocalization', 'radio', 'User', 'false', 'EnableProfileUsersAddressGeolocalizationTitle', 'EnableProfileUsersAddressGeolocalizationComment');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_profile_user_address_geolocalization', 'true', 'Yes');

@@ -361,8 +361,8 @@ $table->set_header(0, get_lang('LanguageFile'));
 $table->set_header(1, get_lang('LanguageVariable'));
 $table->set_header(2, get_lang('EnglishName'));
 $table->set_header(3, get_lang('OriginalName'));
-$table->set_header(4, get_lang('SubLanguage'),false);
-$table->set_header(5, get_lang('Edit'),false);
+$table->set_header(4, get_lang('Translation'),false);
+$table->set_header(5, get_lang('Action'),false);
 $table->display();
 
 Display :: display_footer();

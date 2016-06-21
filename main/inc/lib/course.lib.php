@@ -3439,8 +3439,11 @@ class CourseManager
                 WHERE user_id = '" . $user_id . "'
                 ORDER BY sort ASC";
         $result = Database::query($sql);
-        $courseCount = 0;
-        $listItems = [];
+        $listItems = [
+            'in_category' => [],
+            'not_category' => []
+        ];
+
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $courseInCategory = self:: returnCoursesCategories(
@@ -3453,8 +3456,7 @@ class CourseManager
                 'title_category' => $row['title'],
                 'courses' => $courseInCategory
             ];
-            $courseCount ++;
-            $listItems['in_category'][$courseCount] = $params;
+            $listItems['in_category'][] = $params;
         }
 
         // Step 2: We display the course without a user category.

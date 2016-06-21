@@ -1115,13 +1115,11 @@ class IndexManager
                 $listCourse = $this->tpl->fetch(
                 $this->tpl->get_template('/user_portal/classic_courses.tpl'));
             }
-            if (!empty($specialCourses['course_count']) && !empty($courses['course_count'])) {
-                $courseCount = intval($specialCourses['course_count']) + intval($courses['course_count']);
-            }
+
+            $courseCount = count($specialCourses) + count($courses['in_category']) + count($courses['not_category']);
         }
 
         $sessions_with_category = '';
-        $sessions_with_no_category = '';
 
         $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
         $coursesListSessionStyle = $coursesListSessionStyle === false ? 1 : $coursesListSessionStyle;

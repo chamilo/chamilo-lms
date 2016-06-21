@@ -7766,4 +7766,6 @@ $LinkedInUrl = "URL de perfil LinkedIn";
 $SaveTheCorrectAnswersForTheNextAttempt = "Guardar la respuesta correcta para el siguiente intento";
 $TranslateThisTerm = "Traducir este término";
 $OnlyActiveSubLanguagesAreListed = "Solo los sub-idiomas activos aparecen en la lista";
+$Translation = "Traducción";
+$IfThisTranslationExistsThisWillReplaceTheTerm = "Si este término ha sido traducido anteriormente, esta operación remplazará su traducción para este sub-idioma.";
 ?>

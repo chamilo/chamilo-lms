@@ -46,7 +46,7 @@ $form = new FormValidator('new_lang_variable', 'POST', $translateUrl);
 $form->addHeader(get_lang('AddWordForTheSubLanguage'));
 $form->addText('variable_language', get_lang('LanguageVariable'), false);
 $form->addText('original_name', get_lang('OriginalName'), false);
-$form->addSelect('language', get_lang('Language'), $languagesOptions);
+$form->addSelect('language', array(get_lang('SubLanguage'), get_lang('OnlyActiveSubLanguagesAreListed')), $languagesOptions);
 
 if ($languageId) {
     $languageInfo = api_get_language_info($languageId);

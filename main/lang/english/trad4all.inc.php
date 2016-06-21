@@ -7745,4 +7745,6 @@ $TermsDuplicatedInFile = "Terms duplicated in file";
 $GlossaryTermAlreadyExists = "Term already exists";
 $LinkedInUrl = "LinkedIn profile URL";
 $SaveTheCorrectAnswersForTheNextAttempt = "Save the correct answer for the next attempt";
+$TranslateThisTerm = "Translate this term";
+$OnlyActiveSubLanguagesAreListed = "Only active sub-languages appear in this list";
 ?>

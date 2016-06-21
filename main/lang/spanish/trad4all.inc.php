@@ -7764,4 +7764,6 @@ $TermsDuplicatedInFile = "Términos duplicados en el archivo";
 $GlossaryTermAlreadyExists = "El término ya existe";
 $LinkedInUrl = "URL de perfil LinkedIn";
 $SaveTheCorrectAnswersForTheNextAttempt = "Guardar la respuesta correcta para el siguiente intento";
+$TranslateThisTerm = "Traducir este término";
+$OnlyActiveSubLanguagesAreListed = "Solo los sub-idiomas activos aparecen en la lista";
 ?>

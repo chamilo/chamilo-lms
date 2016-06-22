@@ -170,7 +170,6 @@ class Auth
                     $without_special_courses
                 ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
         $result = Database::query($sql);
-        $number_of_courses = Database::num_rows($result);
         $data = array();
         while ($course = Database::fetch_array($result)) {
             $data[$course['user_course_cat']][] = $course;
@@ -380,10 +379,12 @@ class Auth
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $category_id = intval($category_id);
         $result = false;
-        $sql_delete = "DELETE FROM $tucc
-                      WHERE id='" . $category_id . "' and user_id='" . $current_user_id . "'";
-        $resultQuery = Database::query($sql_delete);
-       if (Database::affected_rows($resultQuery)) {
+        $sql = "DELETE FROM $tucc
+                WHERE 
+                    id='" . $category_id . "' AND 
+                    user_id='" . $current_user_id . "'";
+        $resultQuery = Database::query($sql);
+        if (Database::affected_rows($resultQuery)) {
             $result = true;
         }
         $sql = "UPDATE $TABLECOURSUSER
@@ -527,6 +528,7 @@ class Auth
         }
 
         CourseManager::unsubscribe_user($current_user_id, $course_code);
+
         return $result;
     }
 
@@ -545,24 +547,31 @@ class Auth
         $result = false;
 
         // step 1: we determine the max value of the user defined course categories
-        $sql = "SELECT sort FROM $tucc WHERE user_id='" . $current_user_id . "' ORDER BY sort DESC";
+        $sql = "SELECT sort FROM $tucc 
+                WHERE user_id='" . $current_user_id . "' 
+                ORDER BY sort DESC";
         $rs_sort = Database::query($sql);
         $maxsort = Database::fetch_array($rs_sort);
         $nextsort = $maxsort['sort'] + 1;
 
         // step 2: we check if there is already a category with this name, if not we store it, else we give an error.
-        $sql = "SELECT * FROM $tucc WHERE user_id='" . $current_user_id . "' AND title='" . $category_title . "'ORDER BY sort DESC";
+        $sql = "SELECT * FROM $tucc 
+                WHERE 
+                    user_id='" . $current_user_id . "' AND 
+                    title='" . $category_title . "'
+                ORDER BY sort DESC";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) == 0) {
-            $sql_insert = "INSERT INTO $tucc (user_id, title,sort)
-                           VALUES ('" . $current_user_id . "', '" . api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding()) . "', '" . $nextsort . "')";
-            $resultQuery = Database::query($sql_insert);
+            $sql = "INSERT INTO $tucc (user_id, title,sort)
+                    VALUES ('" . $current_user_id . "', '" . api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding()) . "', '" . $nextsort . "')";
+            $resultQuery = Database::query($sql);
             if (Database::affected_rows($resultQuery)) {
                 $result = true;
             }
         } else {
             $result = false;
         }
+
         return $result;
     }
 
@@ -601,7 +610,7 @@ class Auth
 
     /**
      * Subscribe the user to a given course
-     * @param string Course code
+     * @param string $course_code Course code
      * @return string  Message about results
      */
     public function subscribe_user($course_code)
@@ -700,7 +709,7 @@ class Auth
      * @param string $date in Y-m-d format
      * @return int
      */
-    function countSessions($date = null)
+    public function countSessions($date = null)
     {
         $count = 0;
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);

@@ -20,7 +20,7 @@ if (isset($_GET['extra_field'])) {
     $originalName = $extraFieldInfo['display_text'];
 } elseif (isset($_GET['extra_field_option'])) {
     $extraFieldOptionInfo = ExtraFieldOption::getInfoById($_GET['extra_field_option'], false);
-    $variableLanguage = '$' . api_underscore_to_camel_case($extraFieldOptionInfo['display_text']);
+    $variableLanguage = '$' . ExtraFieldOption::getLanguageVariable($extraFieldOptionInfo['display_text']);
     $originalName = $extraFieldOptionInfo['display_text'];
 }
 
@@ -46,12 +46,12 @@ $form = new FormValidator('new_lang_variable', 'POST', $translateUrl);
 $form->addHeader(get_lang('AddWordForTheSubLanguage'));
 $form->addText('variable_language', get_lang('LanguageVariable'), false);
 $form->addText('original_name', get_lang('OriginalName'), false);
-$form->addSelect('language', get_lang('Language'), $languagesOptions);
+$form->addSelect('language', [get_lang('SubLanguage'), get_lang('OnlyActiveSubLanguagesAreListed')], $languagesOptions);
 
 if ($languageId) {
     $languageInfo = api_get_language_info($languageId);
 
-    $form->addText('new_language', get_lang('SubLanguage'));
+    $form->addText('new_language', [get_lang('Translation'), get_lang('IfThisTranslationExistsThisWillReplaceTheTerm')]);
     $form->addHidden('file_id', 0);
     $form->addHidden('id', $languageInfo['parent_id']);
     $form->addHidden('sub', $languageInfo['id']);

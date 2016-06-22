@@ -26,6 +26,7 @@ class ExtraFieldOption extends Model
      */
     public function __construct($type)
     {
+        parent::__construct();
         $this->type = $type;
         $extraField = new ExtraField($this->type);
         $this->extraField = $extraField;
@@ -73,12 +74,12 @@ class ExtraFieldOption extends Model
         $fieldId = intval($fieldId);
 
         $sql = "SELECT count(*) as count
-                FROM $this->table o INNER JOIN $this->tableExtraField e
+                FROM $this->table o 
+                INNER JOIN $this->tableExtraField e
                 ON o.field_id = e.id
                 WHERE
                     o.field_id = $fieldId AND
-                    e.extra_field_type = ".$extraFieldType."
-                ";
+                    e.extra_field_type = $extraFieldType ";
         $result = Database::query($sql);
         $result = Database::fetch_array($result);
 
@@ -171,7 +172,6 @@ class ExtraFieldOption extends Model
             return false;
         }
 
-        $time = api_get_utc_datetime();
         if (!empty($params['field_options']) &&
             in_array(
                 $params['field_type'],
@@ -479,38 +479,48 @@ class ExtraFieldOption extends Model
 
     /**
      * Get options for a specific field as array or in JSON format suited for the double-select format
-     * @param int $field_id
      * @param int $option_value_id Option value ID
      * @param bool $to_json Return format (whether it should be formatted to JSON or not)
      * @return mixed Row/JSON on success
      */
-    public function get_second_select_field_options_by_field($field_id, $option_value_id, $to_json = false)
+    public function get_second_select_field_options_by_field($option_value_id, $to_json = false)
     {
-        $field_id = intval($field_id);
-        $option_value_id = intval($option_value_id);
-        $options = array();
-        $sql = "SELECT * FROM {$this->table}
-                WHERE field_id = $field_id AND option_value = $option_value_id
-                ORDER BY display_text";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $options = Database::store_result($result, 'ASSOC');
+        $em = Database::getManager();
+        $option = $em->find('ChamiloCoreBundle:ExtraFieldOptions', intval($option_value_id));
+
+        if (!$option) {
+            return !$to_json ? [] : '{}';
         }
 
-        if ($to_json) {
-            $string = null;
-            if (!empty($options)) {
-                $array = array();
-                foreach ($options as $option) {
-                    $array[$option['id']] = $option['display_text'];
-                }
-                $string = json_encode($array);
-            }
+        $subOptions = $em
+            ->getRepository('ChamiloCoreBundle:ExtraFieldOptions')
+            ->findSecondaryOptions($option);
 
-            return $string;
+        $optionsInfo = [];
+
+        foreach ($subOptions as $subOption) {
+            $optionsInfo[] = [
+                'id' => $subOption->getId(),
+                'field_id' => $subOption->getField()->getId(),
+                'option_value' => $subOption->getValue(),
+                'display_text' => $subOption->getDisplayText(),
+                'priority' => $subOption->getPriority(),
+                'priority_message' => $subOption->getPriorityMessage(),
+                'option_order' => $subOption->getOptionOrder()
+            ];
         }
 
-        return $options;
+        if (!$to_json) {
+            return $optionsInfo;
+        }
+
+        $json = [];
+
+        foreach ($optionsInfo as $optionInfo) {
+            $json[$optionInfo['id']] = $optionInfo['display_text'];
+        }
+
+        return json_encode($json);
     }
 
     /**
@@ -586,7 +596,7 @@ class ExtraFieldOption extends Model
         echo '<div class="actions">';
         $field_id = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : null;
         echo '<a href="'.api_get_self().'?action=add&type='.$this->type.'&field_id='.$field_id.'">'.
-                Display::return_icon('add_user_fields.png', get_lang('Add'), '', ICON_SIZE_MEDIUM ).'</a>';
+                Display::return_icon('add_user_fields.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         echo Display::grid_html('extra_field_options');
     }
@@ -712,6 +722,7 @@ class ExtraFieldOption extends Model
         if (Database::num_rows($result)) {
             $values = Database::store_result($result, 'ASSOC');
         }
+
         return $values;
     }
 
@@ -765,11 +776,22 @@ class ExtraFieldOption extends Model
      */
     public static function translateDisplayName($defaultDisplayText)
     {
-        $camelCase = api_underscore_to_camel_case($defaultDisplayText);
-        $camelCase = ucwords($camelCase);
-        $camelCase = str_replace(' ', '', $camelCase);
+        $variableLanguage = self::getLanguageVariable($defaultDisplayText);
 
-        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+        return isset($GLOBALS[$variableLanguage]) ? $GLOBALS[$variableLanguage] : $defaultDisplayText;
+    }
+
+    /**
+     * @param $defaultDisplayText
+     * @return mixed|string
+     */
+    public static function getLanguageVariable($defaultDisplayText)
+    {
+        $variableLanguage = api_replace_dangerous_char($defaultDisplayText);
+        $variableLanguage = str_replace('-', '_', $variableLanguage);
+        $variableLanguage = api_underscore_to_camel_case($variableLanguage);
+
+        return $variableLanguage;
     }
 
     /**
@@ -783,8 +805,7 @@ class ExtraFieldOption extends Model
      */
     public static function getInfoById($id, $translateDisplayText = true)
     {
-        $extraField = Database::getManager()
-            ->find('ChamiloCoreBundle:ExtraFieldOptions', $id);
+        $extraField = Database::getManager()->find('ChamiloCoreBundle:ExtraFieldOptions', $id);
 
         $objExtraField = null;
 

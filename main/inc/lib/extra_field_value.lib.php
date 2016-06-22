@@ -38,6 +38,7 @@ class ExtraFieldValue extends Model
      */
     public function __construct($type)
     {
+        parent::__construct();
         $this->type = $type;
         $extraField = new ExtraField($this->type);
         $this->extraField = $extraField;
@@ -613,8 +614,8 @@ class ExtraFieldValue extends Model
 
     /**
      * @param string $tag
-     * @param int    $field_id
-     * @param int    $limit
+     * @param int   $field_id
+     * @param int   $limit
      *
      * @return array
      */
@@ -772,6 +773,7 @@ class ExtraFieldValue extends Model
         $result = Database::query($sql);
 
         if (Database::num_rows($result)) {
+
             return Database::store_result($result, 'ASSOC');
         }
 
@@ -904,8 +906,10 @@ class ExtraFieldValue extends Model
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
+
             return Database::store_result($result, 'ASSOC');
         }
+
         return false;
     }
 
@@ -941,7 +945,7 @@ class ExtraFieldValue extends Model
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$item_id' AND
-                    field_id = '".$field_id."' AND
+                    field_id = '$field_id' AND
                     extra_field_type = $extraFieldType
                 ";
         Database::query($sql);
@@ -979,12 +983,11 @@ class ExtraFieldValue extends Model
         $itemId = intval($itemId);
         $fieldId = intval($fieldId);
         $fieldValue = Database::escape_string($fieldValue);
-        //$extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$itemId' AND
-                    field_id = '".$fieldId."' AND
+                    field_id = '$fieldId' AND
                     value = '$fieldValue'
                 ";
         Database::query($sql);

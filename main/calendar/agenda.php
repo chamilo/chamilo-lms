@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.calendar
  */
-
-use ChamiloSession as Session;
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -40,7 +40,6 @@ $eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
 
 $htmlHeadXtra[] = "<script>
-
 function plus_repeated_event() {
     if (document.getElementById('options2').style.display == 'none') {
         document.getElementById('options2').style.display = 'block';

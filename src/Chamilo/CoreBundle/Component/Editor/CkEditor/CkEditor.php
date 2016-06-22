@@ -64,7 +64,7 @@ class CkEditor extends Editor
             }
             $style = '<link href="'.$cssFile.'" rel="stylesheet" media="screen" type="text/css" />';
         }
-        
+
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
                  '.$style.$this->value.'
                  </textarea>';

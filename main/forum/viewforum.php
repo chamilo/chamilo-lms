@@ -193,7 +193,7 @@ if (
         $message = deleteForumCategoryThread($_GET['content'], $_GET['id']);
 
         // Delete link
-        $link_info = GradebookUtils::is_resource_in_course_gradebook(
+        $link_info = GradebookUtils::isResourceInCourseGradebook(
             api_get_course_id(),
             5,
             intval($_GET['id']),

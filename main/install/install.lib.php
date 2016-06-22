@@ -415,6 +415,7 @@ function & get_language_folder_list()
         closedir($handle);
         asort($result);
     }
+
     return $result;
 }
 
@@ -880,7 +881,7 @@ function display_requirements(
             if ($file_course_test_was_created == true) {
                 break;
             }
-            $r = @touch($course_dir.'/test.php',$perm);
+            $r = @touch($course_dir.'/test.php', $perm);
             if ($r === true) {
                 $fil_perm_verified = $perm;
                 if (check_course_script_interpretation($course_dir, $course_attempt_name, 'test.php')) {
@@ -1154,94 +1155,94 @@ function get_contact_registration_form()
             <div class="col-sm-9"><input id="company_name" class="form-control" type="text" name="company_name" size="30" /></div>
     </div>
     <div class="form-group">
-            <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</label>
-            <div class="col-sm-9">
-                    <select class="selectpicker show-tick" name="company_activity" id="company_activity" >
-                            <option value="">--- '.get_lang('SelectOne').' ---</option>
-                            <Option value="Advertising/Marketing/PR">Advertising/Marketing/PR</Option><Option value="Agriculture/Forestry">Agriculture/Forestry</Option>
-                            <Option value="Architecture">Architecture</Option><Option value="Banking/Finance">Banking/Finance</Option>
-                            <Option value="Biotech/Pharmaceuticals">Biotech/Pharmaceuticals</Option><Option value="Business Equipment">Business Equipment</Option>
-                            <Option value="Business Services">Business Services</Option><Option value="Construction">Construction</Option>
-                            <Option value="Consulting/Research">Consulting/Research</Option><Option value="Education">Education</Option>
-                            <Option value="Engineering">Engineering</Option><Option value="Environmental">Environmental</Option>
-                            <Option value="Government">Government</Option><Option value="Healthcare">Health Care</Option>
-                            <Option value="Hospitality/Lodging/Travel">Hospitality/Lodging/Travel</Option><Option value="Insurance">Insurance</Option>
-                            <Option value="Legal">Legal</Option><Option value="Manufacturing">Manufacturing</Option>
-                            <Option value="Media/Entertainment">Media/Entertainment</Option><Option value="Mortgage">Mortgage</Option>
-                            <Option value="Non-Profit">Non-Profit</Option><Option value="Real Estate">Real Estate</Option>
-                            <Option value="Restaurant">Restaurant</Option><Option value="Retail">Retail</Option>
-                            <Option value="Shipping/Transportation">Shipping/Transportation</Option>
-                            <Option value="Technology">Technology</Option><Option value="Telecommunications">Telecommunications</Option>
-                            <Option value="Other">Other</Option>
-                    </select>
-            </div>
+        <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</label>
+        <div class="col-sm-9">
+            <select class="selectpicker show-tick" name="company_activity" id="company_activity" >
+                <option value="">--- '.get_lang('SelectOne').' ---</option>
+                <Option value="Advertising/Marketing/PR">Advertising/Marketing/PR</Option><Option value="Agriculture/Forestry">Agriculture/Forestry</Option>
+                <Option value="Architecture">Architecture</Option><Option value="Banking/Finance">Banking/Finance</Option>
+                <Option value="Biotech/Pharmaceuticals">Biotech/Pharmaceuticals</Option><Option value="Business Equipment">Business Equipment</Option>
+                <Option value="Business Services">Business Services</Option><Option value="Construction">Construction</Option>
+                <Option value="Consulting/Research">Consulting/Research</Option><Option value="Education">Education</Option>
+                <Option value="Engineering">Engineering</Option><Option value="Environmental">Environmental</Option>
+                <Option value="Government">Government</Option><Option value="Healthcare">Health Care</Option>
+                <Option value="Hospitality/Lodging/Travel">Hospitality/Lodging/Travel</Option><Option value="Insurance">Insurance</Option>
+                <Option value="Legal">Legal</Option><Option value="Manufacturing">Manufacturing</Option>
+                <Option value="Media/Entertainment">Media/Entertainment</Option><Option value="Mortgage">Mortgage</Option>
+                <Option value="Non-Profit">Non-Profit</Option><Option value="Real Estate">Real Estate</Option>
+                <Option value="Restaurant">Restaurant</Option><Option value="Retail">Retail</Option>
+                <Option value="Shipping/Transportation">Shipping/Transportation</Option>
+                <Option value="Technology">Technology</Option><Option value="Telecommunications">Telecommunications</Option>
+                <Option value="Other">Other</Option>
+            </select>
+        </div>
     </div>
 
     <div class="form-group">
-            <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('PersonRole').'</label>
-            <div class="col-sm-9">
-                    <select class="selectpicker show-tick" name="person_role" id="person_role" >
-                            <option value="">--- '.get_lang('SelectOne').' ---</option>
-                            <Option value="Administration">Administration</Option><Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
-                            <Option value="CFO">CFO</Option><Option value="CIO/CTO">CIO/CTO</Option>
-                            <Option value="Consultant">Consultant</Option><Option value="Customer Service">Customer Service</Option>
-                            <Option value="Engineer/Programmer">Engineer/Programmer</Option><Option value="Facilities/Operations">Facilities/Operations</Option>
-                            <Option value="Finance/ Accounting Manager">Finance/ Accounting Manager</Option><Option value="Finance/ Accounting Staff">Finance/ Accounting Staff</Option>
-                            <Option value="General Manager">General Manager</Option><Option value="Human Resources">Human Resources</Option>
-                            <Option value="IS/IT Management">IS/IT Management</Option><Option value="IS/ IT Staff">IS/ IT Staff</Option>
-                            <Option value="Marketing Manager">Marketing Manager</Option><Option value="Marketing Staff">Marketing Staff</Option>
-                            <Option value="Partner/Principal">Partner/Principal</Option><Option value="Purchasing Manager">Purchasing Manager</Option>
-                            <Option value="Sales/ Business Dev. Manager">Sales/ Business Dev. Manager</Option><Option value="Sales/ Business Dev.">Sales/ Business Dev.</Option>
-                            <Option value="Vice President/Senior Manager">Vice President/Senior Manager</Option><Option value="Other">Other</Option>
-                    </select>
-            </div>
+        <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('PersonRole').'</label>
+        <div class="col-sm-9">
+            <select class="selectpicker show-tick" name="person_role" id="person_role" >
+                <option value="">--- '.get_lang('SelectOne').' ---</option>
+                <Option value="Administration">Administration</Option><Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
+                <Option value="CFO">CFO</Option><Option value="CIO/CTO">CIO/CTO</Option>
+                <Option value="Consultant">Consultant</Option><Option value="Customer Service">Customer Service</Option>
+                <Option value="Engineer/Programmer">Engineer/Programmer</Option><Option value="Facilities/Operations">Facilities/Operations</Option>
+                <Option value="Finance/ Accounting Manager">Finance/ Accounting Manager</Option><Option value="Finance/ Accounting Staff">Finance/ Accounting Staff</Option>
+                <Option value="General Manager">General Manager</Option><Option value="Human Resources">Human Resources</Option>
+                <Option value="IS/IT Management">IS/IT Management</Option><Option value="IS/ IT Staff">IS/ IT Staff</Option>
+                <Option value="Marketing Manager">Marketing Manager</Option><Option value="Marketing Staff">Marketing Staff</Option>
+                <Option value="Partner/Principal">Partner/Principal</Option><Option value="Purchasing Manager">Purchasing Manager</Option>
+                <Option value="Sales/ Business Dev. Manager">Sales/ Business Dev. Manager</Option><Option value="Sales/ Business Dev.">Sales/ Business Dev.</Option>
+                <Option value="Vice President/Senior Manager">Vice President/Senior Manager</Option><Option value="Other">Other</Option>
+            </select>
+        </div>
     </div>
 
     <div class="form-group">
-            <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</label>
-            <div class="col-sm-9">'.get_countries_list_from_array(true).'</div>
+        <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</label>
+        <div class="col-sm-9">'.get_countries_list_from_array(true).'</div>
     </div>
     <div class="form-group">
-            <label class="col-sm-3">'.get_lang('CompanyCity').'</label>
-            <div class="col-sm-9">
-                    <input type="text" class="form-control" id="company_city" name="company_city" size="30" />
-            </div>
+        <label class="col-sm-3">'.get_lang('CompanyCity').'</label>
+        <div class="col-sm-9">
+                <input type="text" class="form-control" id="company_city" name="company_city" size="30" />
+        </div>
     </div>
     <div class="form-group">
-            <label class="col-sm-3">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</label>
-            <div class="col-sm-9">
-                    <select class="selectpicker show-tick" id="language" name="language">
-                            <option value="bulgarian">Bulgarian</option>
-                            <option value="indonesian">Bahasa Indonesia</option>
-                            <option value="bosnian">Bosanski</option>
-                            <option value="german">Deutsch</option>
-                            <option selected="selected" value="english">English</option>
-                            <option value="spanish">Spanish</option>
-                            <option value="french">Français</option>
-                            <option value="italian">Italian</option>
-                            <option value="hungarian">Magyar</option>
-                            <option value="dutch">Nederlands</option>
-                            <option value="brazilian">Português do Brasil</option>
-                            <option value="portuguese">Português europeu</option>
-                            <option value="slovenian">Slovenčina</option>
-                    </select>
-            </div>
+        <label class="col-sm-3">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</label>
+        <div class="col-sm-9">
+            <select class="selectpicker show-tick" id="language" name="language">
+                <option value="bulgarian">Bulgarian</option>
+                <option value="indonesian">Bahasa Indonesia</option>
+                <option value="bosnian">Bosanski</option>
+                <option value="german">Deutsch</option>
+                <option selected="selected" value="english">English</option>
+                <option value="spanish">Spanish</option>
+                <option value="french">Français</option>
+                <option value="italian">Italian</option>
+                <option value="hungarian">Magyar</option>
+                <option value="dutch">Nederlands</option>
+                <option value="brazilian">Português do Brasil</option>
+                <option value="portuguese">Português europeu</option>
+                <option value="slovenian">Slovenčina</option>
+            </select>
+        </div>
     </div>
 
     <div class="form-group">
-            <label class="col-sm-3">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</label>
-            <div class="col-sm-9">
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked /> ' . get_lang('Yes') . '
-                    </label>
-                </div>
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="financial_decision" id="financial_decision2" value="0" /> '.get_lang('No').'
-                    </label>
-                </div>
+        <label class="col-sm-3">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</label>
+        <div class="col-sm-9">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked /> ' . get_lang('Yes') . '
+                </label>
             </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="financial_decision" id="financial_decision2" value="0" /> '.get_lang('No').'
+                </label>
+            </div>
+        </div>
     </div>
     <div class="clear"></div>
     <div class="form-group">
@@ -1252,7 +1253,7 @@ function get_contact_registration_form()
             <div class="col-sm-3">&nbsp;</div>
             <div class="col-sm-9"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
     </div></div></div>
-</form>';
+    </form>';
 
     return $html;
 }
@@ -1295,9 +1296,7 @@ function displayDatabaseParameter(
             echo '<div class="col-sm-5"><input type="' . $inputType . '" class="form-control" size="' . DATABASE_FORM_FIELD_DISPLAY_LENGTH . '" maxlength="' . $maxLength . '" name="' . $formFieldName . '" id="' . $formFieldName . '" value="' . api_htmlentities($parameterValue) . '" />' . "</div>";
             echo '<div class="col-sm-3">' . $extra_notice . '</div>';
         }
-
     }
-
 }
 
 /**
@@ -1473,6 +1472,7 @@ function display_database_settings_form(
 
     <?php
 }
+
 function panel($content = null, $title = null, $id = null, $style = null) {
     $html = '';
     if (empty($style)) {
@@ -1489,6 +1489,7 @@ function panel($content = null, $title = null, $id = null, $style = null) {
     $html .= $panelParent;
     return $html;
 }
+
 /**
  * Displays a parameter in a table row.
  * Used by the display_configuration_settings_form function.
@@ -1513,6 +1514,7 @@ function display_configuration_parameter(
         $html .= '<div class="col-sm-6"><input class="form-control" type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</div>";
     }
     $html .= "</div>";
+
     return $html;
 }
 
@@ -2176,6 +2178,16 @@ function finishInstallation(
 
     lockSettings();
     updateDirAndFilesPermissions();
+
+    // Set the latest version
+    $path = api_get_path(SYS_PATH).'app/Migrations/Schema/V111/';
+    $finder = new \Symfony\Component\Finder\Finder();
+    $files = $finder->files()->in($path);
+    foreach ($files as $version) {
+        $version = str_replace(['Version',  '.php' ], '', $version->getFilename());
+        $sql = "INSERT INTO version VALUES ('$version')";
+        Database::query($sql);
+    }
 }
 
 /**
@@ -2224,4 +2236,26 @@ function installProfileSettings($installationProfile = '')
     }
 
     return true;
+}
+
+/**
+ * Quick function to remove a directory with its subdirectories
+ * @param $dir
+ */
+function rrmdir($dir)
+{
+    if (is_dir($dir)) {
+        $objects = scandir($dir);
+        foreach ($objects as $object) {
+            if ($object != "." && $object != "..") {
+                if (filetype($dir."/".$object) == "dir") {
+                    @rrmdir($dir."/".$object);
+                } else {
+                    @unlink($dir."/".$object);
+                }
+            }
+        }
+        reset($objects);
+        rmdir($dir);
+    }
 }

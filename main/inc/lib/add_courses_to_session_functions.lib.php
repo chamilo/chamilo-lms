@@ -44,7 +44,7 @@ class AddCourseToSession
 				}
 			}
 
-			if ($type=='single') {
+            if ($type == 'single') {
 				// search users where username or firstname or lastname begins likes $needle
 				$sql = 'SELECT
 							course.code,
@@ -101,9 +101,8 @@ class AddCourseToSession
 
 			$rs = Database::query($sql);
 			$course_list = array();
-			if ($type=='single') {
-
-				while($course = Database :: fetch_array($rs)) {
+            if ($type == 'single') {
+				while ($course = Database :: fetch_array($rs)) {
 					$course_list[] = $course['code'];
 					$course_title=str_replace("'","\'",$course_title);
 					$return .= '<a href="javascript: void(0);" onclick="javascript: add_course_to_session(\''.$course['code'].'\',\''.$course_title.' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';

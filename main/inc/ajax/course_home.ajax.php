@@ -77,8 +77,6 @@ switch ($action) {
             echo get_lang('PrivateAccess');
             break;
         }
-		//echo Display::tag('h2', $course_info['name']);
-		//echo '<br />';
 
 		$sql = "SELECT * FROM $tbl_course_description
 		        WHERE c_id = ".$course_info['real_id']." AND session_id = 0
@@ -117,7 +115,6 @@ switch ($action) {
         $session_id  = intval($_REQUEST['session_id']);
         $course_id   = intval($_REQUEST['course_id']);
 
-
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
@@ -137,10 +134,10 @@ switch ($action) {
         $temp = array();
         foreach ($course_list as $item) {
             $list = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
-            $flat_list          = $list->get_flat_list();
+            $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
-            $course_url         = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
-            $item['title']      = Display::url($item['title'], $course_url, array('target' => SESSION_LINK_TARGET));
+            $course_url = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
+            $item['title'] = Display::url($item['title'], $course_url, array('target' => SESSION_LINK_TARGET));
 
             foreach ($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
@@ -199,12 +196,11 @@ switch ($action) {
                     Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET))
                 );
                 $temp[$count]['course'] = strip_tags($item['title']);
-                $temp[$count]['lp']     = $lp_item['lp_name'];
-                $temp[$count]['date']   = $lp_item['publicated_on'];
+                $temp[$count]['lp'] = $lp_item['lp_name'];
+                $temp[$count]['date'] = $lp_item['publicated_on'];
                 $count++;
             }
         }
-
         $temp = msort($temp, $sidx, $sord);
 
         $i =0;
@@ -279,7 +275,11 @@ switch ($action) {
             $list = new LearnpathList(api_get_user_id(),$item['code'], $session_id, 'publicated_on DESC');
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
-            $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>SESSION_LINK_TARGET));
+            $item['title'] = Display::url(
+                $item['title'],
+                api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,
+                array('target' => SESSION_LINK_TARGET)
+            );
 
             foreach ($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
@@ -312,8 +312,7 @@ switch ($action) {
                     $date = '-';
                 }
 
-                 //Checking LP publicated and expired_on dates
-
+                // Checking LP publicated and expired_on dates
                 if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {
                     $week_data = date('Y', api_strtotime($lp_item['publicated_on'], 'UTC')).' - '.get_week_from_day($lp_item['publicated_on']);
                     if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
@@ -329,12 +328,18 @@ switch ($action) {
                     }
                 }
 
-                $temp[$count]['cell']   = array($week_data, $date, $item['title'], Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET)));
+                $temp[$count]['cell'] = array(
+                    $week_data,
+                    $date,
+                    $item['title'],
+                    Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target' => SESSION_LINK_TARGET)),
+                );
                 $temp[$count]['course'] = strip_tags($item['title']);
-                $temp[$count]['lp']     = $lp_item['lp_name'];
+                $temp[$count]['lp'] = $lp_item['lp_name'];
                 $count++;
             }
         }
+
         if (!empty($sidx)) {
             $temp = msort($temp, $sidx, $sord);
         }
@@ -374,8 +379,8 @@ switch ($action) {
         $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
         $sidx = str_replace(array('course asc,', ' '), '', $sidx);
 
-        $sord  = $_REQUEST['sord'];    //asc or desc
-        if (!in_array($sord, array('asc','desc'))) {
+        $sord = $_REQUEST['sord'];    //asc or desc
+        if (!in_array($sord, array('asc', 'desc'))) {
             $sord = 'desc';
         }
         $session_id  = intval($_REQUEST['session_id']);
@@ -424,11 +429,11 @@ switch ($action) {
                 if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
-                    $label      = get_lang('LearnpathAdded');
+                    $label = get_lang('LearnpathAdded');
                 } else {
-                    $lp_date    = api_get_local_time($lp_item['modified_on']);
-                    $image      = 'moderator_star.png';
-                    $label      = get_lang('LearnpathUpdated');
+                    $lp_date = api_get_local_time($lp_item['modified_on']);
+                    $image = 'moderator_star.png';
+                    $label = get_lang('LearnpathUpdated');
                 }
                 $icons = '';
                 if (strtotime($last_date) < strtotime($lp_date)) {
@@ -457,8 +462,8 @@ switch ($action) {
                     Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET))
                 );
                 $temp[$count]['course'] = strip_tags($item['title']);
-                $temp[$count]['lp']     = $lp_item['lp_name'];
-                $temp[$count]['date']   = $lp_item['publicated_on'];
+                $temp[$count]['lp'] = $lp_item['lp_name'];
+                $temp[$count]['date'] = $lp_item['publicated_on'];
 
                 $count++;
             }

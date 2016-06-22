@@ -317,5 +317,4 @@ class ExtraField extends BaseAttribute
                 return 'text';
         }
     }
-
 }

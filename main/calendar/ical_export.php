@@ -51,7 +51,7 @@ if (!empty($event)) {
     $ical->setConfig('url',api_get_path(WEB_PATH));
     $vevent = new vevent();
 
-    switch($_GET['class']) {
+    switch ($_GET['class']) {
         case 'public':
             $vevent->setClass('PUBLIC');
             break;
@@ -69,18 +69,26 @@ if (!empty($event)) {
     $event['start_date'] = api_get_local_time($event['start_date']);
     $event['end_date'] = api_get_local_time($event['end_date']);
 
-    switch($type) {
+    switch ($type) {
         case 'personal':
         case 'platform':
-            $vevent->setProperty( 'summary', api_convert_encoding($event['title'],'UTF-8', $charset));
+            $vevent->setProperty('summary', api_convert_encoding($event['title'], 'UTF-8', $charset));
             if(empty($event['start_date'])){header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));}
             list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$event['start_date']);
             $vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
-            if(empty($event['end_date'])) {
-                $y2=$y;$m2=$m;$d2=$d;$h2=$h;$M2=$M+15;$s2=$s;
-                if($M2>60){$M2=$M2-60;$h2+=1;}
+            if (empty($event['end_date'])) {
+                $y2 = $y;
+                $m2 = $m;
+                $d2 = $d;
+                $h2 = $h;
+                $M2 = $M + 15;
+                $s2 = $s;
+                if ($M2 > 60) {
+                    $M2 = $M2 - 60;
+                    $h2 += 1;
+                }
             } else {
-                list($y2,$m2,$d2,$h2,$M2,$s2) = preg_split('/[\s:-]/',$event['end_date']);
+                list($y2, $m2, $d2, $h2, $M2, $s2) = preg_split('/[\s:-]/', $event['end_date']);
             }
             $vevent->setProperty('dtend',array('year'=>$y2,'month'=>$m2,'day'=>$d2,'hour'=>$h2,'min'=>$M2,'sec'=>$s2));
             //$vevent->setProperty( 'LOCATION', get_lang('Unknown') ); // property name - case independent
@@ -130,5 +138,5 @@ if (!empty($event)) {
     }
 } else {
 	header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
-	die();
+	exit;
 }

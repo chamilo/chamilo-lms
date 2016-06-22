@@ -305,15 +305,13 @@ if ($show_autolaunch_lp_warning) {
     );
 }
 
-if (api_get_setting('homepage_view') == 'activity' ||
-    api_get_setting('homepage_view') == 'activity_big'
-) {
+if (api_get_setting('homepage_view') === 'activity' || api_get_setting('homepage_view') === 'activity_big') {
 	require 'activity.php';
-} elseif (api_get_setting('homepage_view') == '2column') {
+} elseif (api_get_setting('homepage_view') === '2column') {
 	require '2column.php';
-} elseif (api_get_setting('homepage_view') == '3column') {
+} elseif (api_get_setting('homepage_view') === '3column') {
 	require '3column.php';
-} elseif (api_get_setting('homepage_view') == 'vertical_activity') {
+} elseif (api_get_setting('homepage_view') === 'vertical_activity') {
 	require 'vertical_activity.php';
 }
 

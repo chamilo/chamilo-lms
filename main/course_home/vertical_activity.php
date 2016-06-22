@@ -13,7 +13,6 @@
  *	@package chamilo.course_home
  */
 
-//	MAIN CODE
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();
@@ -99,26 +98,25 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
                 $content .= CourseHome::show_tools_category($my_list);
     $content .= '</div>';
     //	TOOLS AUTHORING
-
 } else {
     $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
     if (count($my_list) > 0) {
         $content .= '<div class="course-student-view-activity-3col">';
         //ordering by get_lang name
         $order_tool_list = array();
-        foreach($my_list as $key=>$new_tool) {
+        foreach ($my_list as $key => $new_tool) {
             $tool_name = CourseHome::translate_tool_name($new_tool);
             $order_tool_list [$key]= $tool_name;
         }
         natsort($order_tool_list);
         $my_temp_tool_array = array();
-        foreach($order_tool_list as $key=>$new_tool) {
+        foreach ($order_tool_list as $key => $new_tool) {
             $my_temp_tool_array[] = $my_list[$key];
         }
         $my_list = $my_temp_tool_array;
 
         $i = 0;
-        foreach($my_list as $new_tool) {
+        foreach ($my_list as $new_tool) {
             if ($i >= 10) {
                 $my_list2[] = $new_tool;
             } else {
@@ -126,8 +124,8 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
             }
             $i++;
         }
-        $content .=CourseHome::show_tools_category($my_list1);
-        $content .=CourseHome::show_tools_category($my_list2);
+        $content .= CourseHome::show_tools_category($my_list1);
+        $content .= CourseHome::show_tools_category($my_list2);
         $content .= '</div>';
     }
 }

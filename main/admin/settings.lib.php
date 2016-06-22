@@ -1139,6 +1139,50 @@ function deleteTemplate($id)
 }
 
 /**
+ * Returns the list of timezone identifiers used to populate the select
+ * This function is called through a call_user_func() in the generate_settings_form function.
+ * @return array List of timezone identifiers
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ * @since Chamilo 1.8.7
+ */
+function select_timezone_value()
+{
+    return api_get_timezones();
+}
+
+/**
+ * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
+ * This function is called through a call_user_func() in the generate_settings_form function.
+ * @return array List of gradebook_number_decimals options
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function select_gradebook_number_decimals() {
+    return array('0', '1', '2');
+}
+
+/**
+ * Get the options for a select element to select gradebook default grade model
+ * @return array
+ */
+function select_gradebook_default_grade_model_id()
+{
+    $grade_model = new GradeModel();
+    $models = $grade_model->get_all();
+    $options = array();
+    $options[-1] = get_lang('None');
+
+    if (!empty($models)) {
+        foreach ($models as $model) {
+            $options[$model['id']] = $model['name'];
+        }
+    }
+
+    return $options;
+}
+
+/**
  * @param array $settings
  * @param array $settings_by_access_list
  *
@@ -1329,7 +1373,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                             'radio',
                             $row['variable'],
                             '',
-                            $value['display_text'],
+                            get_lang($value['display_text']),
                             $value['value']
                         );
                         if ($hide_element) {
@@ -1347,7 +1391,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 );
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
-            case 'checkbox';
+            case 'checkbox':
                 // 1. We collect all the options of this variable.
                 $sql = "SELECT * FROM $table_settings_current
                         WHERE variable='".$row['variable']."' AND access_url =  1";
@@ -1404,7 +1448,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $form->addGroup(
                     $group,
                     $row['variable'],
-                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    array(get_lang($row['title']), get_lang($row['comment']) . 'aaaaaa'),
                     ''
                 );
                 break;
@@ -1417,7 +1461,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 * To populate the list of options, the select type dynamically calls a function that must be called select_ + the name of the variable being displayed.
                 * The functions being called must be added to the file settings.lib.php.
                 */
-                $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), call_user_func('select_'.$row['variable']), $hideme);
+                $form->addElement(
+                    'select',
+                    $row['variable'],
+                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    call_user_func('select_'.$row['variable']),
+                    $hideme
+                );
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
             case 'custom':
@@ -1534,7 +1584,7 @@ function formGenerateElementsGroup($form, $values = array(), $elementName)
     $group = array();
     if (is_array($values)) {
         foreach ($values as $key => $value) {
-            $element = &$form->createElement('radio', $elementName, '', $value['display_text'], $value['value']);
+            $element = &$form->createElement('radio', $elementName, '', get_lang($value['display_text']), $value['value']);
             $group[] = $element;
         }
     }

@@ -1820,7 +1820,7 @@ function api_format_course_array($course_data)
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic.png';
     } else {
-        $url_image = Display::returnIconPath('session_default.png');
+        $url_image = Display::return_icon('session_default.png', null, null, null, null, true);
     }
     $_course['course_image_large'] = $url_image;
 
@@ -2481,7 +2481,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
     $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
     $res = Database::query($sql);
     $is_admin = Database::num_rows($res) === 1;
-    if (!$is_admin or !isset($url)) {
+    if (!$is_admin || !isset($url)) {
         return $is_admin;
     }
     // We get here only if $url is set

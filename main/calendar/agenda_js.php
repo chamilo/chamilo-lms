@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.calendar
  */
-
-use ChamiloSession as Session;
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -174,7 +174,6 @@ if (empty($defaultView)) {
 }
 
 /* month, basicWeek, agendaWeek, agendaDay */
-
 $tpl->assign('default_view', $defaultView);
 
 if ($type == 'course' && !empty($session_id)) {
@@ -210,7 +209,6 @@ $form = new FormValidator(
     array('id' => 'add_event_form')
 );
 
-
 $form->addElement('html', '<span id="calendar_course_info"></span><div id="visible_to_input">');
 
 $sendTo = $agenda->parseAgendaFilter($userId);
@@ -241,7 +239,7 @@ $form->addHtmlEditor(
     ]
 );
 
-if ($agenda->type == 'course') {
+if ($agenda->type === 'course') {
     $form->addElement('html', '<div id="add_as_announcement_div" style="display: none">');
     $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
     $form->addElement('html', '</div>');

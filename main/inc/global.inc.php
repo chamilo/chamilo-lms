@@ -85,6 +85,9 @@ define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
+define('_MPDF_TEMP_PATH', __DIR__.'/../../app/cache/mpdf/');
+define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../app/cache/mpdf/');
+
 // Include the libraries that are necessary everywhere
 require_once __DIR__.'/../../vendor/autoload.php';
 
@@ -102,7 +105,6 @@ require_once $libraryPath.'fileUpload.lib.php';
 require_once $libraryPath.'fileDisplay.lib.php';
 require_once $libraryPath.'course_category.lib.php';
 
-define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/');
 if (!is_dir(_MPDF_TEMP_PATH)) {
     mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
 }

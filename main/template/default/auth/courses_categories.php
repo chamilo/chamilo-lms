@@ -318,7 +318,7 @@ function returnThumbnail($course)
         $course_medium_image = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png'; // redimensioned image 85x85
     } else {
         // without picture
-        $course_medium_image = Display::returnIconPath('session_default.png');
+        $course_medium_image = Display::return_icon('session_default.png', null, null, null, null, true);
     }
     
     $html .= '<div class="image">';

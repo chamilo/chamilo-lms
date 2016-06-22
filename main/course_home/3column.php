@@ -13,8 +13,8 @@
  *	@package chamilo.course_home
  */
 
-$hide = isset($_GET['hide']) && $_GET['hide'] == 'yes' ? 'yes' : null;
-$restore = isset($_GET['restore']) && $_GET['restore'] == 'yes' ? 'yes' : null;
+$hide = isset($_GET['hide']) && $_GET['hide'] === 'yes' ? 'yes' : null;
+$restore = isset($_GET['restore']) && $_GET['restore'] === 'yes' ? 'yes' : null;
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $TBL_ACCUEIL = Database::get_course_table(TABLE_TOOL_LIST);
 $course_id = api_get_course_int_id();
@@ -108,12 +108,12 @@ elseif ($restore) { // visibility 0,2 -> 1
  * Editing "apparance" of  a tools  on the course Home Page.
  */
 elseif (isset($update) && $update) {
-    $result 	= Database::query("SELECT * FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id=$id");
-    $tool		= Database::fetch_array($result);
-    $racine		= api_get_path(SYS_PATH).'/'.$currentCourseID.'/images/';
-    $chemin		= $racine;
-    $name		= $tool[1];
-    $image		= $tool[3];
+    $result = Database::query("SELECT * FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id=$id");
+    $tool = Database::fetch_array($result);
+    $racine = api_get_path(SYS_PATH).'/'.$currentCourseID.'/images/';
+    $chemin = $racine;
+    $name = $tool[1];
+    $image = $tool[3];
 
     $content .= "<tr>\n".
         "<td colspan=\"4\">\n".
@@ -159,9 +159,7 @@ elseif (isset($update) && $update) {
     }
 }
 
-
 // Work with data post askable by admin of  course
-
 if (api_is_platform_admin() && api_is_allowed_to_edit(null, true) && !api_is_coach()) {
     // Show message to confirm that a tools must be hide  from aivailable tools
     // visibility 0,1->2
@@ -191,13 +189,10 @@ if (api_is_platform_admin() && api_is_allowed_to_edit(null, true) && !api_is_coa
 $content .= "<table class=\"item\" align=\"center\" border=\"0\" width=\"95%\">\n";
 
 /*	TOOLS  FOR  EVERYBODY */
-
 $content .= "<tr>\n<td colspan=\"6\">&nbsp;</td>\n</tr>\n";
 $content .= "<tr>\n<td colspan=\"6\">";
-
 $content .= CourseHome::show_tool_3column('Basic');
 $content .= CourseHome::show_tool_3column('External');
-
 $content .= "</td>\n</tr>\n";
 
 

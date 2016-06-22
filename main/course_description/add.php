@@ -13,7 +13,7 @@ api_protect_course_script(true);
 // display categories
 $categories = array ();
 foreach ($default_description_titles as $id => $title) {
-	$categories[$id] = $title;
+    $categories[$id] = $title;
 }
 $categories[ADD_BLOCK] = get_lang('NewBloc');
 

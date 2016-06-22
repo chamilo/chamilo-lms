@@ -1663,7 +1663,7 @@ function switch_item(current_item, next_item){
     });
     olms.switch_finished = 0; //only changed back once LMSInitialize() happens
 
-    loadForumThead(olms.lms_lp_id, next_item);
+    loadForumThread(olms.lms_lp_id, next_item);
     checkCurrentItemPosition(olms.lms_item_id);
 
     return true;
@@ -1699,7 +1699,7 @@ var checkCurrentItemPosition = function(lpItemId) {
 /**
  * Get a forum info when the learning path item has a associated forum
  */
-var loadForumThead = function(lpId, lpItemId) {
+var loadForumThread = function(lpId, lpItemId) {
     var loadForum = $.getJSON('<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php', {
             a: 'get_forum_thread',
             lp: lpId,

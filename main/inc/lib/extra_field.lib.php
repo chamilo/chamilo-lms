@@ -85,6 +85,8 @@ class ExtraField extends Model
      */
     public function __construct($type)
     {
+        parent::__construct();
+        
         $this->type = $type;
 
         $this->table = Database::get_main_table(TABLE_EXTRA_FIELD);
@@ -1668,7 +1670,11 @@ EOF;
         return $return;
     }
 
-    function setupBreadcrumb(&$breadcrumb, $action)
+    /**
+     * @param $breadcrumb
+     * @param $action
+     */
+    public function setupBreadcrumb(&$breadcrumb, $action)
     {
         if ($action == 'add') {
             $breadcrumb[] = array('url' => $this->pageUrl, 'name' => $this->pageName);

@@ -543,8 +543,8 @@ class CourseCategory
             'parent_id' => null,
             'tree_pos' => 0,
             'count_courses' => $countCourses
-
         );
+
         while ($row = Database::fetch_array($result)) {
             $count_courses = self::countCoursesInCategory($row['code']);
             $row['count_courses'] = $count_courses;
@@ -734,11 +734,11 @@ class CourseCategory
                     $category_code = '';
                 }
                 $sql = "SELECT * FROM $tbl_course
-                    WHERE
-                        category_code='$category_code'
-                        $without_special_courses
-                        $visibilityCondition
-                    ORDER BY title $limitFilter ";
+                        WHERE
+                            category_code='$category_code'
+                            $without_special_courses
+                            $visibilityCondition
+                        ORDER BY title $limitFilter ";
             }
 
             //showing only the courses of the current Chamilo access_url_id
@@ -747,23 +747,23 @@ class CourseCategory
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 if ($category_code != "ALL") {
                     $sql = "SELECT * FROM $tbl_course as course
-                        INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.c_id = course.id)
-                        WHERE
-                            access_url_id = $url_access_id AND
-                            category_code='$category_code'
-                            $without_special_courses
-                            $visibilityCondition
-                        ORDER BY title $limitFilter";
+                            INNER JOIN $tbl_url_rel_course as url_rel_course
+                            ON (url_rel_course.c_id = course.id)
+                            WHERE
+                                access_url_id = $url_access_id AND
+                                category_code='$category_code'
+                                $without_special_courses
+                                $visibilityCondition
+                            ORDER BY title $limitFilter";
                 } else {
                     $sql = "SELECT * FROM $tbl_course as course
-                        INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.c_id = course.id)
-                        WHERE
-                            access_url_id = $url_access_id
-                            $without_special_courses
-                            $visibilityCondition
-                        ORDER BY title $limitFilter";
+                            INNER JOIN $tbl_url_rel_course as url_rel_course
+                            ON (url_rel_course.c_id = course.id)
+                            WHERE
+                                access_url_id = $url_access_id
+                                $without_special_courses
+                                $visibilityCondition
+                            ORDER BY title $limitFilter";
                 }
             }
         }
@@ -801,6 +801,7 @@ class CourseCategory
                 'count_connections' => $count_connections_last_month
             );
         }
+
         return $courses;
     }
 
@@ -821,11 +822,11 @@ class CourseCategory
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
 
         $sql = "SELECT code, name, auth_course_child, auth_cat_child
-            FROM ".$tbl_category." c
-            $conditions
-            WHERE parent_id ".(empty($parentCode) ? "IS NULL" : "='".Database::escape_string($parentCode)."'")."
-            $whereCondition
-            ORDER BY name,  code";
+                FROM $tbl_category c
+                $conditions
+                WHERE parent_id ".(empty($parentCode) ? "IS NULL" : "='".Database::escape_string($parentCode)."'")."
+                $whereCondition
+                ORDER BY name,  code";
         $res = Database::query($sql);
 
         while ($cat = Database::fetch_array($res, 'ASSOC')) {

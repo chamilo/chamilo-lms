@@ -137,7 +137,7 @@ class Editor
                     array('\r', '\n', '\x3c', '\x3e', '\x26'),
                     addslashes($var)
                 ).'"';
-            case 'array':
+             case 'array':
                 // Arrays in JSON can't be associative. If the array is empty or if it
                 // has sequential whole number keys starting with 0, it's not associative
                 // so we can go ahead and convert it as an array.
@@ -155,7 +155,6 @@ class Editor
                 foreach ($var as $k => $v) {
                     $output[] = $this->toJavascript(strval($k)).': '.$this->toJavascript($v);
                 }
-
                 return '{ '.implode(', ', $output).' }';
             default:
                 return 'null';

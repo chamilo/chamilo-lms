@@ -54,7 +54,8 @@ class Dropbox_Work
     public $upload_date;
     public $last_upload_date;
     public $isOldWork;
-    public $feedback_date, $feedback;
+    public $feedback_date;
+    public $feedback;
 
     /**
      * Constructor calls private functions to create a new work or retreive an existing work from DB
@@ -126,7 +127,7 @@ class Dropbox_Work
                 'description' => $this->description,
                 'author' => $this->author,
                 'last_upload_date' => $this->last_upload_date,
-                'session_id' => api_get_session_id(),
+                'session_id' => api_get_session_id()
             ];
 
             Database::update(
@@ -220,9 +221,10 @@ class Dropbox_Work
         // Getting the feedback on the work.
         if ($action == 'viewfeedback' AND $this->id == $_GET['id']) {
             $feedback2 = array();
-            $sql_feedback = "SELECT * FROM ".$dropbox_cnf['tbl_feedback']."
-                             WHERE c_id = $course_id AND file_id='".$id."' ORDER BY feedback_id ASC";
-            $result = Database::query($sql_feedback);
+            $sql = "SELECT * FROM ".$dropbox_cnf['tbl_feedback']."
+                    WHERE c_id = $course_id AND file_id='".$id."' 
+                    ORDER BY feedback_id ASC";
+            $result = Database::query($sql);
             while ($row_feedback = Database::fetch_array($result)) {
                 $row_feedback['feedback'] = Security::remove_XSS($row_feedback['feedback']);
                 $feedback2[] = $row_feedback;
@@ -381,7 +383,6 @@ class Dropbox_SentWork extends Dropbox_Work
 				WHERE c_id = $course_id AND file_id = ".intval($id)."";
         $result = Database::query($sql);
 		while ($res = Database::fetch_array($result, 'ASSOC')) {
-
 			// Check for deleted users
 			$dest_user_id = $res['dest_user_id'];
 			$user_info = api_get_user_info($dest_user_id);
@@ -571,7 +572,7 @@ class Dropbox_Person
 	/**
 	 * Deletes all the received work of this person
 	 */
-	function deleteAllReceivedWork()
+	public function deleteAllReceivedWork()
     {
 	    $course_id = api_get_course_int_id();
         $dropbox_cnf = getDropboxConf();
@@ -589,7 +590,7 @@ class Dropbox_Person
 	 * Deletes all the received categories and work of this person
 	 * @param integer $id
 	 */
-	function deleteReceivedWorkFolder($id)
+	public function deleteReceivedWorkFolder($id)
     {
         $dropbox_cnf = getDropboxConf();
         $course_id = api_get_course_int_id();
@@ -612,7 +613,7 @@ class Dropbox_Person
 	 *
 	 * @param integer $id
 	 */
-	function deleteReceivedWork($id)
+	public function deleteReceivedWork($id)
     {
 	    $course_id = api_get_course_int_id();
         $dropbox_cnf = getDropboxConf();
@@ -642,7 +643,7 @@ class Dropbox_Person
 	/**
 	 * Deletes all the sent dropbox files of this person
 	 */
-	function deleteAllSentWork()
+	public function deleteAllSentWork()
     {
 	    $course_id = api_get_course_int_id();
         $dropbox_cnf = getDropboxConf();
@@ -661,7 +662,7 @@ class Dropbox_Person
 	 *
 	 * @param unknown_type $id
 	 */
-	function deleteSentWork($id)
+	public function deleteSentWork($id)
     {
 	    $course_id = api_get_course_int_id();
         $dropbox_cnf = getDropboxConf();
@@ -696,7 +697,7 @@ class Dropbox_Person
 	 * @param string $id
 	 * @param string $text
 	 */
-	function updateFeedback($id, $text)
+	public function updateFeedback($id, $text)
     {
 	    $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
@@ -760,7 +761,7 @@ class Dropbox_Person
 	 * @param string $type
 	 * @param string $value
 	 */
-	function filter_received_work($type, $value)
+	public function filter_received_work($type, $value)
     {
         $dropbox_cnf = getDropboxConf();
     	$new_received_work = array();

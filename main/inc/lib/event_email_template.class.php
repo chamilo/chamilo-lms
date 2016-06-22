@@ -7,7 +7,7 @@
 class EventEmailTemplate extends Model
 {
     public $table;
-    public $columns = array('id', 'message','subject','event_type_name','activated');
+    public $columns = array('id', 'message', 'subject', 'event_type_name', 'activated');
 
     /**
      * Constructor
@@ -17,6 +17,10 @@ class EventEmailTemplate extends Model
         $this->table =  Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE);
 	}
 
+    /**
+     * @param array $where_conditions
+     * @return array
+     */
     public function get_all($where_conditions = array())
     {
         return Database::select(
@@ -43,11 +47,14 @@ class EventEmailTemplate extends Model
         return $content;
 	}
 
+    /**
+     * @return array
+     */
     public function get_status_list()
     {
         return array(
             EVENT_EMAIL_TEMPLATE_ACTIVE => get_lang('Enabled'),
-            EVENT_EMAIL_TEMPLATE_INACTIVE => get_lang('Disabled'),
+            EVENT_EMAIL_TEMPLATE_INACTIVE => get_lang('Disabled')
         );
     }
 

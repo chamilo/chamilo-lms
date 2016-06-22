@@ -10,11 +10,10 @@ require_once dirname(__FILE__) . '/../inc/global.inc.php';
 
 function get_suggestions_from_search_engine($q)
 {
-//    if (strlen($q)<2) { return null;}
     global $charset;
 
     $json = [];
-    $table_sfv     = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $table_sfv = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $q = Database::escape_string($q);
     $cid = api_get_course_id();
     $sql_add = '';
@@ -78,8 +77,8 @@ function get_suggestions_from_search_engine($q)
                         // will create a copy as Yannick - Car - Speed
                         // in $output[3]
                         $c = count($output);
-                        for ($i=0;$i<$c; $i++) {
-                            $output[($c+$i)] = $current_field_val;
+                        for ($i = 0; $i < $c; $i++) {
+                            $output[($c + $i)] = $current_field_val;
                         }
                     } else {
                         //no identical field id, continue as usual
@@ -87,7 +86,7 @@ function get_suggestions_from_search_engine($q)
                         if ($c == 0) {
                             $output[] = $row2['value'].' - ';
                         } else {
-                            foreach ($output as $i=>$out) {
+                            foreach ($output as $i => $out) {
                                 //use the latest combination of fields
                                 $output[$i] .= $row2['value'].' - ';
                             }
@@ -98,7 +97,7 @@ function get_suggestions_from_search_engine($q)
                 foreach ($output as $i=>$out) {
                     if (api_stristr($out,$q) === false) {continue;}
                     $s = api_convert_encoding(substr($out, 0, -3), 'UTF-8', $charset);
-                    if (!in_array($s,$more_sugg)) {
+                    if (!in_array($s, $more_sugg)) {
                         $more_sugg[] = $s;
                         $json[] = [
                             'id' => $s,
@@ -115,6 +114,8 @@ function get_suggestions_from_search_engine($q)
 }
 
 $q = strtolower($_GET["term"]);
-if (!$q) return;
+if (!$q) {
+    return;
+}
 //echo $q . "| value\n";
 get_suggestions_from_search_engine($q);

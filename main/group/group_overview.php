@@ -60,7 +60,7 @@ if (isset($_GET['action'])) {
                     break;
             }
             break;
-	}
+    }
 }
 
 /*	Header */
@@ -84,7 +84,7 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
 $actions = '<a href="group_creation.php?'.api_get_cidreq().'">'.
         Display::return_icon('add.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    if (api_get_setting('allow_group_categories') == 'true') {
+    if (api_get_setting('allow_group_categories') === 'true') {
         $actions.= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
             Display::return_icon('new_folder.png', get_lang('AddCategory'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {

@@ -840,6 +840,7 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
+
         if ($style) {
             $config['style'] = true;
         }
@@ -953,8 +954,8 @@ EOT;
     /**
      * This function has been created for avoiding changes directly within QuickForm class.
      * When we use it, the element is threated as 'required' to be dealt during validation.
-     * @param array $element					The array of elements
-     * @param string $message					The message displayed
+     * @param array $element The array of elements
+     * @param string $message The message displayed
      */
     public function add_multiple_required_rule($elements, $message)
     {

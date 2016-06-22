@@ -73,12 +73,12 @@ $form = new FormValidator(
 	'index.php?action=edit&id='.$original_id.'&description_type='.$description_type.'&'.api_get_cidreq()
 );
 
-$form->addElement('header','',$header);
+$form->addElement('header', $header);
 $form->addElement('hidden', 'id', $original_id);
-$form->addElement('hidden', 'description_type',$description_type);
-$form->addElement('hidden', 'sec_token',$token);
-$form->addText('title', get_lang('Title'), true, array('size'=>'50'));
-$form->applyFilter('title','html_filter');
+$form->addElement('hidden', 'description_type', $description_type);
+$form->addElement('hidden', 'sec_token', $token);
+$form->addText('title', get_lang('Title'), true, array('size' => '50'));
+$form->applyFilter('title', 'html_filter');
 $form->addHtmlEditor(
 	'contentDescription',
 	get_lang('Content'),
@@ -97,7 +97,7 @@ if (!empty($description_title)) {
     $default['title'] = Security::remove_XSS($description_title);
 }
 if (!empty($description_content)) {
-    $default['contentDescription'] = Security::remove_XSS($description_content,COURSEMANAGERLOWSECURITY);
+    $default['contentDescription'] = Security::remove_XSS($description_content, COURSEMANAGERLOWSECURITY);
 }
 $default['description_type'] = $description_type;
 

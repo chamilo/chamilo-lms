@@ -92,7 +92,7 @@ class TestGlossary extends UnitTestCase {
 
 	function testDisplayGlossaryList() {
 		ob_start();
-		$res = GlossaryManager::display_glossary_list();
+		$res = GlossaryManager::displayGlossaryList();
 		ob_end_clean();
         $this->assertTrue($res);
 	}

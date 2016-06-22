@@ -2815,7 +2815,7 @@ class CourseManager
             'variable' => $variable,
             'value' => $value
         ];
-        
+
         return $extraFieldValues->save($params);
     }
 
@@ -5146,6 +5146,7 @@ class CourseManager
         $sql = "SELECT variable FROM $courseSetting
                 WHERE c_id = $courseId AND variable = '$variable'";
         $result = Database::query($sql);
+        
         return Database::num_rows($result) > 0;
     }
 
@@ -5727,6 +5728,7 @@ class CourseManager
     {
         $params = self::getCourseParamsForDisplay($courseId, $loadDirs);
         $html = self::course_item_html($params, false);
+
         return $html;
     }
 
@@ -5755,11 +5757,19 @@ class CourseManager
         }
 
         //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-        $sql = "SELECT course.id, course.title, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
-                course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+        $sql = "SELECT 
+                    course.id, 
+                    course.title, 
+                    course.code, 
+                    course.subscribe subscr, 
+                    course.unsubscribe unsubscr, 
+                    course_rel_user.status status,
+                    course_rel_user.sort sort, 
+                    course_rel_user.user_course_cat user_course_cat
                 FROM
                 $TABLECOURS course,
-                $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
+                $TABLECOURSUSER course_rel_user, 
+                $TABLE_ACCESS_URL_REL_COURSE url
                 WHERE
                     course.id=".intval($courseId)." AND
                     course.id = course_rel_user.c_id AND
@@ -5835,11 +5845,11 @@ class CourseManager
             $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0';
             $course_title = Display::url($course_info['title'], $course_title_url);
         } else {
-            $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
+            $course_title = $course_info['title'].' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
         }
 
         // Start displaying the course block itself
-        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+        if (api_get_setting('display_coursecode_in_courselist') === 'true') {
             $course_title .= ' ('.$course_info['visual_code'].') ';
         }
         $teachers = '';
@@ -5878,14 +5888,16 @@ class CourseManager
         }
         return 0;
     }
+
     /**
      * Helper function to create a default gradebook (if necessary) upon course creation
      * @param   int     $modelId    The gradebook model ID
      * @param   string  $courseCode Course code
      * @return  void
      */
-    public static function createDefaultGradebook($modelId, $courseCode) {
-        if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+    public static function createDefaultGradebook($modelId, $courseCode)
+    {
+        if (api_get_setting('gradebook_enable_grade_model') === 'true') {
             //Create gradebook_category for the new course and add
             // a gradebook model for the course
             if (isset($modelId) &&
@@ -5898,15 +5910,16 @@ class CourseManager
                 );
             }
         }
-        return;
     }
+
     /**
      * Helper function to check if there is a course template and, if so, to
      * copy the template as basis for the new course
      * @param   string  $courseCode   Course code
      * @param   int     $courseTemplate 0 if no course template is defined
      */
-    public static function useTemplateAsBasisIfRequired($courseCode, $courseTemplate) {
+    public static function useTemplateAsBasisIfRequired($courseCode, $courseTemplate)
+    {
         $template = api_get_setting('course_creation_use_template');
         $teacherCanSelectCourseTemplate = api_get_setting('teacher_can_select_course_template') === 'true';
         $courseTemplate = isset($courseTemplate) ? intval($courseTemplate) : 0;
@@ -5932,6 +5945,7 @@ class CourseManager
             $cr->restore($courseCode);
         }
     }
+
     /**
      * Helper method to get the number of users defined with a specific course extra field
      * @param   string  $name   Field title
@@ -5939,29 +5953,32 @@ class CourseManager
      * @param   string  $tableUserFieldValues The user extra field value table name
      * @return  int     The number of users with this extra field with a specific value
      */
-    public static function getCountRegisteredUsersWithCourseExtraField($name, $tableExtraFields = '', $tableUserFieldValues = '') {
+    public static function getCountRegisteredUsersWithCourseExtraField($name, $tableExtraFields = '', $tableUserFieldValues = '')
+    {
         if (empty($tableExtraFields)) {
             $tableExtraFields = Database::get_main_table(TABLE_EXTRA_FIELD);
         }
         if (empty($tableUserFieldValues)) {
             $tableUserFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         }
+
         $registered_users_with_extra_field = 0;
 
         if (!empty($name) && $name != '-') {
             $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
             $name = Database::escape_string($name);
             $sql = "SELECT count(v.item_id) as count
-                                    FROM $tableUserFieldValues v INNER JOIN
-                                    $tableExtraFields f
-                                    ON (f.id = v.field_id)
-                                    WHERE value = '$name' AND extra_field_type = $extraFieldType";
+                    FROM $tableUserFieldValues v 
+                    INNER JOIN $tableExtraFields f
+                    ON (f.id = v.field_id)
+                    WHERE value = '$name' AND extra_field_type = $extraFieldType";
             $result_count = Database::query($sql);
             if (Database::num_rows($result_count)) {
                 $row_count = Database::fetch_array($result_count);
                 $registered_users_with_extra_field = $row_count['count'];
             }
         }
+
         return $registered_users_with_extra_field;
     }
 }

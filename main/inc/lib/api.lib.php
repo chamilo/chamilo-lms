@@ -2480,7 +2480,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
     $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
     $res = Database::query($sql);
     $is_admin = Database::num_rows($res) === 1;
-    if (!$is_admin or !isset($url)) {
+    if (!$is_admin || !isset($url)) {
         return $is_admin;
     }
     // We get here only if $url is set

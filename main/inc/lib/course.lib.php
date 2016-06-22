@@ -82,7 +82,7 @@ class CourseManager
             $params['wanted_code'] = $params['title'];
             // Check whether the requested course code has already been occupied.
             $substring = api_substr($params['title'], 0, self::MAX_COURSE_LENGTH_CODE);
-            if ($substring === false or empty($substring)) {
+            if ($substring === false || empty($substring)) {
                 return false;
             } else {
                 $params['wanted_code'] = CourseManager::generate_course_code($substring);
@@ -1652,7 +1652,7 @@ class CourseManager
      */
     public static function get_coach_list_from_course_code($course_code, $session_id)
     {
-        if (empty($course_code) OR empty($session_id)) {
+        if (empty($course_code) || empty($session_id)) {
             return array();
         }
 
@@ -5146,7 +5146,7 @@ class CourseManager
         $sql = "SELECT variable FROM $courseSetting
                 WHERE c_id = $courseId AND variable = '$variable'";
         $result = Database::query($sql);
-        
+
         return Database::num_rows($result) > 0;
     }
 

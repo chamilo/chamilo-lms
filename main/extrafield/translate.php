@@ -28,7 +28,7 @@ if ((empty($extraFieldInfo) && empty($extraFieldOptionInfo)) || empty($variableL
     api_not_allowed(true);
 }
 
-$languageId = isset($_GET['language']) ? intval($_GET['language']) : 0;
+$languageId = isset($_GET['sub_language']) ? intval($_GET['sub_language']) : 0;
 
 $languages = $em
     ->getRepository('ChamiloCoreBundle:Language')
@@ -46,7 +46,7 @@ $form = new FormValidator('new_lang_variable', 'POST', $translateUrl);
 $form->addHeader(get_lang('AddWordForTheSubLanguage'));
 $form->addText('variable_language', get_lang('LanguageVariable'), false);
 $form->addText('original_name', get_lang('OriginalName'), false);
-$form->addSelect('language', [get_lang('SubLanguage'), get_lang('OnlyActiveSubLanguagesAreListed')], $languagesOptions);
+$form->addSelect('sub_language', [get_lang('SubLanguage'), get_lang('OnlyActiveSubLanguagesAreListed')], $languagesOptions);
 
 if ($languageId) {
     $languageInfo = api_get_language_info($languageId);
@@ -63,9 +63,9 @@ if ($languageId) {
 $form->setDefaults([
     'variable_language' => $variableLanguage,
     'original_name' => $originalName,
-    'language' => $languageId
+    'sub_language' => $languageId
 ]);
-$form->addRule('language', get_lang('Required'), 'required');
+$form->addRule('sub_language', get_lang('Required'), 'required');
 $form->freeze(['variable_language', 'original_name']);
 
 $view = new Template(get_lang('AddWordForTheSubLanguage'));

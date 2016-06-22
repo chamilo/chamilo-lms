@@ -517,7 +517,7 @@ if ($user_already_registered_show_terms === false) {
     if (array_key_exists('extra_fields', $allowedFields) || in_array('extra_fields', $allowedFields)) {
         $extraField = new ExtraField('user');
         $extraFieldList = is_array($allowedFields['extra_fields']) ? $allowedFields['extra_fields'] : [];
-        $returnParams = $extraField->addElements($form);
+        $returnParams = $extraField->addElements($form, 0, [], false, false, $extraFieldList);
     }
 }
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {

@@ -9,22 +9,23 @@ api_protect_admin_script();
 
 $em = Database::getManager();
 
-$extraFieldInfo = null;
-$extraFieldOptionInfo = null;
+$extraField = null;
+$extraFieldOption = null;
 $variableLanguage = null;
 $originalName = null;
 
 if (isset($_GET['extra_field'])) {
-    $extraFieldInfo = ExtraField::getInfoById($_GET['extra_field'], false);
-    $variableLanguage = '$' . api_underscore_to_camel_case($extraFieldInfo['variable']);
-    $originalName = $extraFieldInfo['display_text'];
+    $extraField = $em->find('ChamiloCoreBundle:ExtraField', intval($_GET['extra_field']));
+    $variableLanguage = '$' . api_underscore_to_camel_case($extraField->getVariable());
+    $originalName = $extraField->getDisplayText(false);
 } elseif (isset($_GET['extra_field_option'])) {
-    $extraFieldOptionInfo = ExtraFieldOption::getInfoById($_GET['extra_field_option'], false);
-    $variableLanguage = '$' . ExtraFieldOption::getLanguageVariable($extraFieldOptionInfo['display_text']);
-    $originalName = $extraFieldOptionInfo['display_text'];
+    $extraFieldOption = $em->find('ChamiloCoreBundle:ExtraFieldOptions', intval($_GET['extra_field_option']));
+    $extraField = $extraFieldOption->getField();
+    $variableLanguage = '$' . ExtraFieldOption::getLanguageVariable($extraFieldOption->getDisplayText());
+    $originalName = $extraFieldOption->getDisplayText(false);
 }
 
-if ((empty($extraFieldInfo) && empty($extraFieldOptionInfo)) || empty($variableLanguage) || empty($originalName)) {
+if (!$extraField || empty($variableLanguage) || empty($originalName)) {
     api_not_allowed(true);
 }
 
@@ -57,6 +58,7 @@ if ($languageId) {
     $form->addHidden('sub', $languageInfo['id']);
     $form->addHidden('sub_language_id', $languageInfo['id']);
     $form->addHidden('redirect', true);
+    $form->addHidden('extra_field_type', $extraField->getExtraFieldType());
     $form->addButtonSave(get_lang('Save'));
 }
 
@@ -67,6 +69,29 @@ $form->setDefaults([
 ]);
 $form->addRule('sub_language', get_lang('Required'), 'required');
 $form->freeze(['variable_language', 'original_name']);
+
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH) . 'admin', 'name' => get_lang('Administration')];
+
+switch ($extraField->getExtraFieldType()) {
+    case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH) . 'admin/extra_fields.php?type=user',
+            'name' => get_lang('UserFields')
+        ];
+        break;
+    case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH) . 'admin/extra_fields.php?type=course',
+            'name' => get_lang('CourseFields')
+        ];
+        break;
+    case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH) . 'admin/extra_fields.php?type=session',
+            'name' => get_lang('SessionFields')
+        ];
+        break;
+}
 
 $view = new Template(get_lang('AddWordForTheSubLanguage'));
 $view->assign('form', $form->returnForm());

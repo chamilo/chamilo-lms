@@ -312,44 +312,6 @@ if (isset($_REQUEST['txt_search_word'])) {
 	}
 }
 
-if (
-    (isset($_GET['extra_field']) && !empty($_GET['extra_field'])) ||
-    (isset($_GET['extra_field_option']) && !empty($_GET['extra_field_option']))
-) {
-    if (isset($_GET['extra_field'])) {
-        $extraFieldInfo = ExtraField::getInfoById($_GET['extra_field'], false);
-        $variable_language = '$' . api_underscore_to_camel_case($extraFieldInfo['variable']);
-        $original_name = $extraFieldInfo['display_text'];
-    } elseif (isset($_GET['extra_field_option'])) {
-        $extraFieldOptionInfo = ExtraFieldOption::getInfoById($_GET['extra_field_option'], false);
-        $variable_language = '$' . api_underscore_to_camel_case($extraFieldOptionInfo['display_text']);
-        $original_name = $extraFieldOptionInfo['display_text'];
-    }
-
-    $platformLanguage = api_get_setting('platformLanguage');
-    $languageId = api_get_language_id($platformLanguage);
-    $languageInfo = api_get_language_info($languageId);
-    $translateUrl = api_get_path(WEB_CODE_PATH) . 'admin/sub_language_ajax.inc.php';
-
-    $form = new FormValidator('new_lang_variable', 'POST', $translateUrl);
-    $form->addHeader(get_lang('AddWordForTheSubLanguage'));
-    $form->addText('variable_language', get_lang('LanguageVariable'), false);
-    $form->addText('original_name', get_lang('OriginalName'), false);
-    $form->addText('new_language', get_lang('SubLanguage'));
-    $form->addHidden('file_id', 0);
-    $form->addHidden('id', $languageInfo['parent_id']);
-    $form->addHidden('sub', $languageInfo['id']);
-    $form->addHidden('sub_language_id', $languageInfo['id']);
-    $form->addHidden('redirect', true);
-    $form->addButtonSave(get_lang('Save'));
-    $form->setDefaults([
-        'variable_language' => $variable_language,
-        'original_name' => $original_name
-    ]);
-    $form->freeze(['variable_language', 'original_name']);
-    $form->display();
-}
-
 $parameters = array(
 	'id' => intval($_GET['id']),
 	'sub_language_id' => intval($_GET['sub_language_id']),

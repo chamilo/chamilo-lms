@@ -135,11 +135,16 @@ class ExtraFieldOptions
     }
 
     /**
+     * @param bool $translated Optional. Whether translate the display text
      * @return string
      */
-    public function getDisplayText()
+    public function getDisplayText($translated = true)
     {
-        return \ExtraFieldOption::translateDisplayName($this->displayText);
+        if ($translated) {
+            return \ExtraFieldOption::translateDisplayName($this->displayText);
+        }
+
+        return $this->displayText;
     }
 
     /**

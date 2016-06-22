@@ -181,11 +181,16 @@ class ExtraField extends BaseAttribute
     }
 
     /**
+     * @param bool $translated Optional. Whether translate the display text
      * @return string
      */
-    public function getDisplayText()
+    public function getDisplayText($translated = true)
     {
-        return \ExtraField::translateDisplayName($this->variable, $this->displayText);
+        if ($translated) {
+            return \ExtraField::translateDisplayName($this->variable, $this->displayText);
+        }
+
+        return $this->displayText;
     }
 
     /**

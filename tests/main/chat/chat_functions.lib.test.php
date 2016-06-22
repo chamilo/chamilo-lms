@@ -1,5 +1,4 @@
 <?php
-require_once(api_get_path(SYS_CODE_PATH).'chat/chat_functions.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestChatFunctions extends UnitTestCase {
@@ -14,25 +13,6 @@ class TestChatFunctions extends UnitTestCase {
 
 	public function tearDown() {
 		$this->tcourse = null;
-	}
-
-
-
-	function testuser_connected_in_chat () {
-		$course_code = 'COURSETEST';
-		$user_id = 1;
-		$res = user_connected_in_chat($user_id);
- 		$this->assertTrue(is_bool($res));
-	}
-
-
-	function testUsersListInChat () {
-		$course_code = 'COURSETEST';
-		$course_info = api_get_course_info($course_code);
-		$database_name = $course_info['dbName'];
-		$res = users_list_in_chat($database_name);
- 		$this->assertTrue(is_array($res));
- 		//var_dump($res);
 	}
 
 	function CreateChatConnection($database_name) {
@@ -50,30 +30,6 @@ class TestChatFunctions extends UnitTestCase {
 					WHERE user_id=1 AND session_id='$session_id'";
 		}
 		Database::query($query);
-	}
-
-
-	function testExitOfChat () {
-		$course_code = 'COURSETEST';
-		$course_info = api_get_course_info($course_code);
-		$database_name = $course_info['dbName'];
-		$this->CreateChatConnection($database_name);
-		$user_id = 1;
-		$res = exit_of_chat($user_id);
-		//$resu = $this->tcourse->delete_course($course_code);
- 		$this->assertTrue(is_null($res));
- 		//var_dump($res);
-	}
-
-
-		function testDisconnectUserOfChat() {
-		$_SESSION['is_courseAdmin'] = 1;
-		$course_code = 'COURSETEST';
-		$course_info = api_get_course_info($course_code);
-		$database_name = $course_info['dbName'];
-		$this->CreateChatConnection($database_name);
-		$res = disconnect_user_of_chat($database_name);
-		$this->assertTrue(is_null($res));
 	}
 }
 ?>

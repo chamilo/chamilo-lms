@@ -12,7 +12,8 @@ api_block_anonymous_users();
 if (!api_is_allowed_to_create_course() &&
     !api_is_session_admin() &&
     !api_is_drh() &&
-    !api_is_student_boss()
+    !api_is_student_boss() &&
+    !api_is_platform_admin()
 ) {
     // Check if the user is tutor of the course
     $user_course_status = CourseManager::get_tutor_in_course_status(

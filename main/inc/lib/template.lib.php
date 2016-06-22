@@ -273,7 +273,7 @@ class Template
         if (api_get_setting('enable_help_link') == 'true') {
             if (!empty($help)) {
                 $help = Security::remove_XSS($help);
-                $content = '<li class="help">';
+                $content = '<div class="help">';
                 $content .= Display::url(
                     Display::return_icon('help.large.png', get_lang('Help')),
                     api_get_path(WEB_CODE_PATH) . 'help/help.php?open=' . $help,
@@ -282,7 +282,7 @@ class Template
                         'data-title' => get_lang('Help')
                     ]
                 );
-                $content .= '</li>';
+                $content .= '</div>';
             }
         }
         $this->assign('help_content', $content);
@@ -923,12 +923,12 @@ class Template
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
             $profile_url  = api_get_path(WEB_CODE_PATH).'social/home.php';
-            $profile_link = Display::url(get_lang('Profile'), $profile_url);
+            
         } else {
             $profile_url  = api_get_path(WEB_CODE_PATH).'auth/profile.php';
-            $profile_link = Display::url(get_lang('Profile'), $profile_url);
+            
         }
-        $this->assign('profile_link', $profile_link);
+        
         $this->assign('profile_url', $profile_url);
 
         //Message link

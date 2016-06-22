@@ -514,7 +514,7 @@ if ($user_already_registered_show_terms === false) {
 
 
     // EXTRA FIELDS
-    if (in_array('extra_fields', $allowedFields)) {
+    if (array_key_exists('extra_fields', $allowedFields) || in_array('extra_fields', $allowedFields)) {
         $extraField = new ExtraField('user');
         $extraFieldList = is_array($allowedFields['extra_fields']) ? $allowedFields['extra_fields'] : [];
         $returnParams = $extraField->addElements($form);

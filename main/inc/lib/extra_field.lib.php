@@ -86,7 +86,7 @@ class ExtraField extends Model
     public function __construct($type)
     {
         parent::__construct();
-        
+
         $this->type = $type;
 
         $this->table = Database::get_main_table(TABLE_EXTRA_FIELD);
@@ -2415,6 +2415,71 @@ EOF;
         }
 
         return $valuesData;
+    }
+
+    /**
+     * Gets an element
+     * @param int $id
+     * @param bool $translateDisplayText Optional
+     * @return array
+     */
+    public function get($id, $translateDisplayText = true)
+    {
+        $info = parent::get($id);
+
+        if ($translateDisplayText) {
+            $info['display_text'] = self::translateDisplayName($info['variable'], $info['display_text']);
+        }
+
+        return $info;
+    }
+
+    /**
+     * Translate the display text for a extra field
+     * @param string $variable
+     * @param string $defaultDisplayText
+     * @return string
+     */
+    public static function translateDisplayName($variable, $defaultDisplayText)
+    {
+        $camelCase = api_underscore_to_camel_case($variable);
+
+        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+    }
+
+    /**
+     * Get the info from an extra field by its id
+     * @param int $id
+     * @param bool $translateDisplayText
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function getInfoById($id, $translateDisplayText = true)
+    {
+        $extraField = Database::getManager()
+            ->find('ChamiloCoreBundle:ExtraField', $id);
+
+        $objExtraField = null;
+
+        switch ($extraField->getExtraFieldType()) {
+            case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
+                $objExtraField = new self('user');
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
+                $objExtraField = new self('course');
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
+                $objExtraField = new self('session');
+                break;
+        }
+
+        if (!$objExtraField) {
+            return [];
+        }
+
+        return $objExtraField->get($extraField->getId(), $translateDisplayText);
     }
 
 }

@@ -2180,16 +2180,14 @@ function finishInstallation(
     updateDirAndFilesPermissions();
 
     // Set the latest version
-
     $path = api_get_path(SYS_PATH).'app/Migrations/Schema/V111/';
     $finder = new \Symfony\Component\Finder\Finder();
     $files = $finder->files()->in($path);
-    $list = array_reverse((array)$files->files()->sortByName()->getIterator());
-    /** @var SplFileInfo $lastVersion */
-    $lastVersion = current($list);
-    $version = str_replace(['Version',  '.php' ], '', $lastVersion->getFilename());
-    $sql = "INSERT INTO version VALUES ('$version')";
-    Database::query($sql);
+    foreach ($files as $version) {
+        $version = str_replace(['Version',  '.php' ], '', $version->getFilename());
+        $sql = "INSERT INTO version VALUES ('$version')";
+        Database::query($sql);
+    }
 }
 
 /**

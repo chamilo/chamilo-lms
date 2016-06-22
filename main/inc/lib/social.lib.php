@@ -999,7 +999,39 @@ class SocialManager extends UserManager
             $html .= '</li></ul>';
             $html .= '</div></div>';
         }
-        $html .= '';
+
+        $url = api_get_plugin_setting('logintcc', 'sso_url');
+
+        $value = new ExtraFieldValue('user');
+        $data = $value->get_values_by_handler_and_field_variable(api_get_user_id(), 'tcc_hash_key');
+        $hashKey = $data['value'];
+
+        $links = '<ul class="nav nav-pills nav-stacked">';
+        $links .= '
+            <li class="home-icon ">
+            
+            <form action="'.$url.'" method="post">
+            <fieldset>
+                <div>
+                    <span>Code securisé</span>
+                    <input type="text" id="HashKey" name="HashKey" value="'.$hashKey.'"/>
+                </div>
+                <input type="submit" value="Se connecter" class="btn btn-primary"/>
+            </fieldset>
+            </form>
+                
+            </li>
+            </ul>
+        ';
+
+        $html .= Display::panelCollapse(
+            get_lang('Formulaire de connexion à TCC'),
+            $links,
+            'social-network-menu',
+            null,
+            'sn-sidebar',
+            'sn-sidebar-collapse'
+        );
 
         return $html;
     }

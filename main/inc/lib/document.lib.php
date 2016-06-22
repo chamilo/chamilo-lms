@@ -6242,7 +6242,7 @@ class DocumentManager
      *
      * @return bool
      */
-    public function deleteDocumentsFromSession($courseInfo, $sessionId)
+    public static function deleteDocumentsFromSession($courseInfo, $sessionId)
     {
         if (empty($courseInfo)) {
             return false;

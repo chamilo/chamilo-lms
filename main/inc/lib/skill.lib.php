@@ -457,7 +457,7 @@ class SkillRelUser extends Model
         }
 
         $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
+        $sessionId = $sessionId ? intval($sessionId) : null;
 
         $whereConditions = array(
             'user_id = ? ' => intval($userId)
@@ -494,7 +494,7 @@ class SkillRelUser extends Model
                 intval($userId),
                 intval($skillId),
                 intval($courseId),
-                intval($sessionId)
+                $sessionId ? intval($sessionId) : null
             )
         );
 
@@ -813,7 +813,7 @@ class Skill extends Model
                         'skill_id' => $skill_gradebook['skill_id'],
                         'acquired_skill_at' => api_get_utc_datetime(),
                         'course_id' => intval($courseId),
-                        'session_id' => intval($sessionId)
+                        'session_id' => $sessionId ? intval($sessionId) : null
                     );
 
                     $skill_rel_user->save($params);
@@ -1281,7 +1281,7 @@ class Skill extends Model
 
         if ($courseId > 0) {
             $whereConditions['AND course_id = ? '] = $courseId;
-            $whereConditions['AND session_id = ? '] = $sessionId;
+            $whereConditions['AND session_id = ? '] = $sessionId ? $sessionId : null;
         }
 
         $result = Database::select(

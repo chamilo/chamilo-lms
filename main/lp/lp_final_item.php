@@ -107,7 +107,7 @@ if ($accessGranted == false) {
             }
         }
 
-        $finalItemTemplate = generateLPFinalItemTemplate($id, $courseCode, $downloadCertificateLink, $badgeLink);
+        $finalItemTemplate = generateLPFinalItemTemplate($id, $courseCode, $sessionId, $downloadCertificateLink, $badgeLink);
 
         if (!$finalItemTemplate) {
             Display::display_warning_message(get_lang('FileNotFound'));

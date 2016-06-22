@@ -5544,7 +5544,7 @@ class learnpath
         }
 
         // We need to close the form when we are updating the mp3 files.
-        if ($update_audio == 'true' && count($this->arrMenu) != 0) {
+        if ($update_audio == 'true' && isset($this->arrMenu) && count($this->arrMenu) != 0) {
             $return .= '</form>';
         }
 

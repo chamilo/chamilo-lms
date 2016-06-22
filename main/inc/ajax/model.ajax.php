@@ -1472,7 +1472,7 @@ switch ($action) {
                 $checkIcon = Display::return_icon('check-circle.png', get_lang('Yes'));
                 $timesIcon = Display::return_icon('closed-circle.png', get_lang('No'));
 
-                $item['display_text'] = ExtraField::translateDisplayName($item['variable'], $item['displayText']);
+                $item['display_text'] = $item['displayText'];
                 $item['field_type'] = $obj->get_field_type_by_id($item['fieldType']);
                 $item['changeable'] = $item['changeable'] ? $checkIcon : $timesIcon;
                 $item['visible'] = $item['visible'] ? $checkIcon : $timesIcon;

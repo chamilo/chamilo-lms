@@ -1433,7 +1433,7 @@ class DocumentManager
                 $real_dir = '';
 
                 for ($i = 1; $i < $array_len; $i++) {
-                    $real_dir .= '/' . $dir_array[$i];
+                    $real_dir .= '/' . (isset($dir_array[$i]) ? $dir_array[$i] : '');
                     $parent_id = self::get_document_id($course_info, $real_dir);
                     if ($session_id != 0 && empty($parent_id)) {
                         $parent_id = self::get_document_id($course_info, $real_dir, 0);

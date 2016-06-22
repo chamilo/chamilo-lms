@@ -74,12 +74,12 @@ class ExtraFieldOption extends Model
         $fieldId = intval($fieldId);
 
         $sql = "SELECT count(*) as count
-                FROM $this->table o INNER JOIN $this->tableExtraField e
+                FROM $this->table o 
+                INNER JOIN $this->tableExtraField e
                 ON o.field_id = e.id
                 WHERE
                     o.field_id = $fieldId AND
-                    e.extra_field_type = ".$extraFieldType."
-                ";
+                    e.extra_field_type = $extraFieldType ";
         $result = Database::query($sql);
         $result = Database::fetch_array($result);
 
@@ -172,7 +172,6 @@ class ExtraFieldOption extends Model
             return false;
         }
 
-        $time = api_get_utc_datetime();
         if (!empty($params['field_options']) &&
             in_array(
                 $params['field_type'],
@@ -597,7 +596,7 @@ class ExtraFieldOption extends Model
         echo '<div class="actions">';
         $field_id = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : null;
         echo '<a href="'.api_get_self().'?action=add&type='.$this->type.'&field_id='.$field_id.'">'.
-                Display::return_icon('add_user_fields.png', get_lang('Add'), '', ICON_SIZE_MEDIUM ).'</a>';
+                Display::return_icon('add_user_fields.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         echo Display::grid_html('extra_field_options');
     }
@@ -723,6 +722,7 @@ class ExtraFieldOption extends Model
         if (Database::num_rows($result)) {
             $values = Database::store_result($result, 'ASSOC');
         }
+
         return $values;
     }
 
@@ -805,8 +805,7 @@ class ExtraFieldOption extends Model
      */
     public static function getInfoById($id, $translateDisplayText = true)
     {
-        $extraField = Database::getManager()
-            ->find('ChamiloCoreBundle:ExtraFieldOptions', $id);
+        $extraField = Database::getManager()->find('ChamiloCoreBundle:ExtraFieldOptions', $id);
 
         $objExtraField = null;
 

@@ -165,7 +165,7 @@ class ExtraFieldOptions
     /**
      * @param string $priority
      *
-     * @return ExtraFieldOptions
+     * @return $this
      */
     public function setPriority($priority)
     {
@@ -185,7 +185,7 @@ class ExtraFieldOptions
     /**
      * @param string $priorityMessage
      *
-     * @return ExtraFieldOptions
+     * @return $this
      */
     public function setPriorityMessage($priorityMessage)
     {

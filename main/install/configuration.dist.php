@@ -246,3 +246,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // to reflect their packaging method. The default value is 'chamilo'. This will
 // be reflected on the https://version.chamilo.org/stats page in the future.
 //$_configuration['packager'] = 'chamilo';
+// If true exercises added in LP can be modified.
+//$_configuration['force_edit_exercise_in_lp'] = false;
+

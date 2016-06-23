@@ -460,10 +460,24 @@ class UserManager
                     $tplContent = new Template(null, false, false, false, false, false);
                     // variables for the default template
                     $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
+                    $lang = $user->getLanguage();
+                    if ($lang === 'french2') {
+                        $user->setLanguage('french');
+                    }
+
+                    $langData = api_get_language_info(api_get_language_id($user->getLanguage()));
+                    $user->setLanguage($langData['original_name']);
+                    
                     $tplContent->assign('user_added', $user);
+                    // ofaj
                     /** @var FormValidator $form */
                     $form->freeze();
                     $form->removeElement('submit');
+                    $form->removeElement('password');
+                    $form->removeElement('pass1');
+                    $form->removeElement('pass2');
+                    $form->removeElement('search');
+
                     $formData = $form->returnForm();
                     $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();
                     $tplContent->assign('link', Display::url($url, $url));

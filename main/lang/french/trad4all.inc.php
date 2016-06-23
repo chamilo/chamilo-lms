@@ -7697,4 +7697,7 @@ $OnlyActiveSubLanguagesAreListed = "Seules les sous-langues actives sont listée
 $Translation = "Traduction";
 $IfThisTranslationExistsThisWillReplaceTheTerm = "Si ce terme a déjà été traduit, cette opération remplacera la traduction existante pour ce sous-langage.";
 $LastConnection = "Dernière connexion";
+$HisProfileIs = 'Son profil est:';
+$UserXWithLangXRegisteredTheSite =  '%s de langue %s,  vient de s’inscrire sur le site';
+$YouCanAssignATutorInThisLinkX = 'Pour lui assigner un tuteur aller sur la fiche de l\'utilisateur %s.';
 ?>

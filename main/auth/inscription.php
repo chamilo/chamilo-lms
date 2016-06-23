@@ -661,7 +661,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
-    
+
 
     if (!$term_preview) {
         //we load from the platform
@@ -772,7 +772,7 @@ if ($form->validate()) {
             true,
             false,
             $values['address'],
-            false,
+            true,
             $form
         );
 

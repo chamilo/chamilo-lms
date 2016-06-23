@@ -180,7 +180,12 @@ class LegalManager
                 if (!empty($term_preview['content'])) {
                     $preview = '<div class="legal-terms">'.$term_preview['content'].'</div><br />';
                 }
+
                 $preview .= get_lang('ByClickingRegisterYouAgreeTermsAndConditions');
+                if (api_get_setting('load_term_conditions_section') === 'course') {
+                    $preview = '';
+                }
+
                 break;
                 // Page link
             case 1:

@@ -926,7 +926,8 @@ class Wiki
         if ($row['content']=='' && $row['title']=='' && $page=='index') {
             if (api_is_allowed_to_edit(false, true) ||
                 api_is_platform_admin() ||
-                GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
+                GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id()) ||
+                api_is_allowed_in_course()
             ) {
                 //Table structure for better export to pdf
                 $default_table_for_content_Start='<table align="center" border="0"><tr><td align="center">';
@@ -961,7 +962,8 @@ class Wiki
         if ($KeyVisibility == "1" ||
             api_is_allowed_to_edit(false, true) ||
             api_is_platform_admin() ||
-            ($row['assignment'] == 2 && $KeyVisibility=="0" && (api_get_user_id() == $row['user_id']))
+            ($row['assignment'] == 2 && $KeyVisibility=="0" && (api_get_user_id() == $row['user_id'])) ||
+            api_is_allowed_in_course()
         ) {
             $actionsLeft = '';
 
@@ -973,7 +975,7 @@ class Wiki
                 $actionsLeft .= $editLink;
             } else {
                 if ((api_is_allowed_in_course() ||
-                    GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())) && $page != 'index'
+                    GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id()))
                 ) {
                     $actionsLeft .= $editLink;
                 } else {
@@ -1277,7 +1279,7 @@ class Wiki
         $result=Database::query($sql);
         $row=Database::fetch_array($result);
         $status_editlock = $row['editlock'];
-        $id = $row['id'];
+        $id = $row['page_id'];
 
         ///change status
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
@@ -1289,7 +1291,7 @@ class Wiki
             }
 
             $sql = 'UPDATE '.$tbl_wiki.' SET editlock="'.Database::escape_string($status_editlock).'"
-                    WHERE c_id = '.$course_id.' AND id="'.$id.'"';
+                    WHERE c_id = '.$course_id.' AND page_id="'.$id.'"';
             Database::query($sql);
 
             $sql='SELECT * FROM '.$tbl_wiki.'
@@ -4230,7 +4232,8 @@ class Wiki
                 //Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false,true) ||
                     api_is_platform_admin() ||
-                    GroupManager :: is_user_in_group($userId, $this->group_id)
+                    GroupManager :: is_user_in_group($userId, $this->group_id) ||
+                    api_is_allowed_in_course()
                 ) {
                     $PassEdit = true;
                 } else {
@@ -4846,8 +4849,9 @@ class Wiki
         // Only teachers and platform admin can edit the index page.
         // Only teachers and platform admin can edit an assignment teacher.
         // And users in groups
+
         if (($row['reflink'] == 'index' || $row['reflink'] == '' || $row['assignment'] == 1) &&
-            (!api_is_allowed_to_edit(false, true) && $groupId == 0)
+            (!api_is_allowed_to_edit(false, true) && $groupId == 0) && !api_is_allowed_in_course()
         ) {
             Display::addFlash(
                 Display::return_message(get_lang('OnlyEditPagesCourseManager')),
@@ -4903,7 +4907,7 @@ class Wiki
             }
 
             if ($PassEdit) {
-                //show editor if edit is allowed
+                //show editor if edit is allowed <<<<<
                 if ($row['editlock'] == 1 &&
                     (api_is_allowed_to_edit(false, true) == false || api_is_platform_admin()==false)
                 ) {
@@ -5064,7 +5068,9 @@ class Wiki
 
                         Display::addFlash(
                             Display::return_message(
-                                $is_being_edited
+                                $is_being_edited,
+                                'normal',
+                                false
                             )
                         );
 
@@ -5477,7 +5483,8 @@ class Wiki
                 if (self::checktitle('index')) {
                     if (api_is_allowed_to_edit(false,true) ||
                         api_is_platform_admin() ||
-                        GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
+                        GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id()) ||
+                        api_is_allowed_in_course()
                     ) {
                         self::setMessage(Display::display_normal_message(get_lang('GoAndEditMainPage'), false, true));
                     } else {

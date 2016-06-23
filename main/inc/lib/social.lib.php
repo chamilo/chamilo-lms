@@ -1011,14 +1011,14 @@ class SocialManager extends UserManager
             <li class="home-icon">            
                 <form action="'.$url.'" method="post">                            
                     <input type="hidden" id="HashKey" name="HashKey" value="'.$hashKey.'"/>            
-                    <input type="submit" value="Se connecter" class="btn btn-primary"/>            
+                    <input type="submit" value="'.get_lang('TCCConnect').'" class="btn btn-primary"/>            
                 </form>                
             </li>
             </ul>
         ';
 
         $html .= Display::panelCollapse(
-            get_lang('Formulaire de connexion à TCC'),
+            get_lang('TCCConnection'),
             $links,
             'tcc-menu',
             null,

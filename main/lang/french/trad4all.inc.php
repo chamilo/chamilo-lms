@@ -7700,4 +7700,6 @@ $LastConnection = "Dernière connexion";
 $HisProfileIs = 'Son profil est:';
 $UserXWithLangXRegisteredTheSite =  '%s de langue %s,  vient de s’inscrire sur le site';
 $YouCanAssignATutorInThisLinkX = 'Pour lui assigner un tuteur aller sur la fiche de l\'utilisateur %s.';
+$TCCConnection = 'Connexion à TCC';
+$TCCConnect = 'Se connecter';
 ?>

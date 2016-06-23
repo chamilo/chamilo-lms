@@ -425,7 +425,8 @@ if ($user_already_registered_show_terms === false) {
     // EXTRA FIELDS
     if (array_key_exists('extra_fields', $allowedFields) || in_array('extra_fields', $allowedFields)) {
         $extraField = new ExtraField('user');
-        $extraFieldList = is_array($allowedFields['extra_fields']) ? $allowedFields['extra_fields'] : [];
+
+        $extraFieldList = isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields']) ? $allowedFields['extra_fields'] : [];
         $returnParams = $extraField->addElements($form, 0, [], false, false, $extraFieldList);
     }
 }
@@ -631,6 +632,8 @@ if ($form->validate()) {
         $status = isset($values['status']) ? $values['status'] : STUDENT;
         $phone = isset($values['phone']) ? $values['phone'] : null;
         $values['language'] = isset($values['language']) ? $values['language'] : api_get_interface_language();
+        $values['address'] = isset($values['address']) ? $values['address'] : '';
+
         // Creates a new user
         $user_id = UserManager::create_user(
             $values['firstname'],
@@ -651,7 +654,9 @@ if ($form->validate()) {
             null,
             true,
             false,
-            $values['address']
+            $values['address'],
+            false,
+            $form
         );
 
         //update the extra fields

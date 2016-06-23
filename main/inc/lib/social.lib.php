@@ -1008,18 +1008,11 @@ class SocialManager extends UserManager
 
         $links = '<ul class="nav nav-pills nav-stacked">';
         $links .= '
-            <li class="home-icon ">
-            
-            <form action="'.$url.'" method="post">
-            <fieldset>
-                <div>
-                    <span>Code securisé</span>
-                    <input type="text" id="HashKey" name="HashKey" value="'.$hashKey.'"/>
-                </div>
-                <input type="submit" value="Se connecter" class="btn btn-primary"/>
-            </fieldset>
-            </form>
-                
+            <li class="home-icon">            
+                <form action="'.$url.'" method="post">                            
+                    <input type="hidden" id="HashKey" name="HashKey" value="'.$hashKey.'"/>            
+                    <input type="submit" value="Se connecter" class="btn btn-primary"/>            
+                </form>                
             </li>
             </ul>
         ';
@@ -1027,10 +1020,10 @@ class SocialManager extends UserManager
         $html .= Display::panelCollapse(
             get_lang('Formulaire de connexion à TCC'),
             $links,
-            'social-network-menu',
+            'tcc-menu',
             null,
-            'sn-sidebar',
-            'sn-sidebar-collapse'
+            'sn-sidebar-tcc',
+            'sn-sidebar-collapse-tcc'
         );
 
         return $html;

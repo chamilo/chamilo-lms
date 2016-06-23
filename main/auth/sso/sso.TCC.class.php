@@ -6,9 +6,8 @@ use ChamiloSession as Session;
 /**
  * This file contains the necessary elements to implement a Single Sign On
  *
-
- *  INSERT INTO `settings_current` (`variable`, `type`, `category`, `selected_value`, `title`, `comment`, `access_url`)
- *  VALUES ('sso_authentication_subclass', 'textfield', 'Security', 'Drupal', 'SSOSubclass', 'SSOSubclassComment', 1);
+   INSERT INTO `settings_current` (`variable`, `type`, `category`, `selected_value`, `title`, `comment`, `access_url`, access_url_changeable)
+   VALUES ('sso_authentication_subclass', 'textfield', 'Security', 'TCC', 'SSOSubclass', 'SSOSubclassComment', 1, 0);
  *
  * @package chamilo.auth.sso
  */
@@ -16,7 +15,7 @@ use ChamiloSession as Session;
 /**
  * The SSO class allows for management of remote Single Sign On resources
  */
-class SooTcc
+class ssoTCC
 {
     public $protocol;   // 'http://',
     public $domain;     // 'localhost/project/drupal',
@@ -96,6 +95,18 @@ class SooTcc
         //change the way we recover the cookie depending on how it is formed
         $sso = $this->decode_cookie($_GET['sso_cookie']);
 
+        $value = explode(';;', $sso);
+        $value = $value[0];
+
+        $userExtraFieldValue = new ExtraFieldValue('user');
+        $userData = $userExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+            'tcc_user_id',
+            $value
+        );
+
+        $userId = $userData['value'];
+
+
         //get token that should have been used and delete it
         //from session since it can only be used once
         $sso_challenge = '';
@@ -108,7 +119,7 @@ class SooTcc
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT id, username, password, auth_source, active, expiration_date, status
                 FROM $user_table
-                WHERE username = '".trim(Database::escape_string($sso['username']))."'";
+                WHERE id = '".$userId."'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result);

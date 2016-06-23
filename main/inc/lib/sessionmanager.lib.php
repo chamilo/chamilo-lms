@@ -4087,7 +4087,7 @@ class SessionManager
      * @param array $groupBackup
      * @return array
      */
-    static function importCSV(
+    public static function importCSV(
         $file,
         $updateSession,
         $defaultUserId = null,

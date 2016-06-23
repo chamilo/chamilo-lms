@@ -423,7 +423,7 @@ if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
 }
 
 //    EXTENDED PROFILE  this make the page very slow!
-if (api_get_setting('extended_profile') == 'true') {
+if (api_get_setting('extended_profile') === 'true') {
     $width_extended_profile = 500;
     //    MY COMPETENCES
     $form->addHtmlEditor(

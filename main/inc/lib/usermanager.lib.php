@@ -212,6 +212,8 @@ class UserManager
      * @param  bool $send_mail
      * @param  bool $isAdmin
      * @param  string $address
+     * @param  bool $sendEmailToAllAdmins
+     * @param FormValidator $form
      *
      * @return mixed   new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -239,7 +241,9 @@ class UserManager
         $encrypt_method = '',
         $send_mail = false,
         $isAdmin = false,
-        $address = ''
+        $address = '',
+        $sendEmailToAllAdmins = false,
+        $form = null
     ) {
         $currentUserId = api_get_user_id();
         $hook = HookCreateUser::create();
@@ -448,6 +452,31 @@ class UserManager
                         null,
                         $additionalParameters
                     );
+                }
+
+                if ($sendEmailToAllAdmins) {
+                    $adminList = UserManager::get_all_administrators();
+
+                    $tplContent = new Template(null, false, false, false, false, false);
+                    // variables for the default template
+                    $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
+                    $tplContent->assign('user_added', $user);
+                    /** @var FormValidator $form */
+                    $form->freeze();
+                    $form->removeElement('submit');
+                    $formData = $form->returnForm();
+                    $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();
+                    $tplContent->assign('link', Display::url($url, $url));
+                    $tplContent->assign('form', $formData);
+
+                    $layoutContent = $tplContent->get_template('mail/content_registration_platform_to_admin.tpl');
+                    $emailBody = $tplContent->fetch($layoutContent);
+                    $subject = get_lang('UserAdded');
+
+                    foreach ($adminList as $adminId => $data) {
+                        MessageManager::send_message_simple($adminId, $subject, $emailBody);
+                    }
+
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }

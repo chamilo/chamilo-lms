@@ -238,6 +238,10 @@ class ExtraField extends Model
         $option = new ExtraFieldOption($this->type);
         if (!empty($extraFields)) {
             foreach ($extraFields as &$extraField) {
+                $extraField['display_text'] = self::translateDisplayName(
+                    $extraField['variable'],
+                    $extraField['display_text']
+                );
                 $extraField['options'] = $option->get_field_options_by_field(
                     $extraField['id'],
                     false,
@@ -261,10 +265,10 @@ class ExtraField extends Model
                 WHERE
                     variable = '$variable' AND
                     extra_field_type = $this->extraFieldType";
-
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
+            $row['display_text'] = ExtraField::translateDisplayName($row['variable'], $row['display_text']);
 
             // All the options of the field
             $sql = "SELECT * FROM $this->table_field_options
@@ -978,7 +982,7 @@ class ExtraField extends Model
                             foreach ($field_details['options'] as $option_details) {
                                 $optionList[$option_details['id']] = $option_details;
                                 if ($get_lang_variables) {
-                                    $options[$option_details['option_value']] = get_lang($option_details['display_text']);
+                                    $options[$option_details['option_value']] = $option_details['display_text'];
                                 } else {
                                     if ($optionsExists) {
                                         // Adding always the default value
@@ -1029,10 +1033,6 @@ class ExtraField extends Model
                                     );
                                 }
                             }
-                        }
-
-                        if ($get_lang_variables) {
-                            $field_details['display_text'] = get_lang($field_details['display_text']);
                         }
 
                         // chzn-select doesn't work for sessions??
@@ -1170,7 +1170,21 @@ class ExtraField extends Model
                         $("#'.$first_select_id.'").on("change", function() {
                             var id = $(this).val();
                             if (id) {
-                                ExtraFieldSavedSearch
+                                $.ajax({
+                                    url: "'.$url.'&a=get_second_select_options",
+                                    dataType: "json",
+                                    data: "type='.$type.'&field_id='.$field_details['id'].'&option_value_id="+id,
+                                    success: function(data) {
+                                        $("#second_extra_'.$field_details['variable'].'").empty();
+                                        $.each(data, function(index, value) {
+                                            $("#second_extra_'.$field_details['variable'].'").append($("<option/>", {
+                                                value: index,
+                                                text: value
+                                            }));
+                                        });
+                                        $("#second_extra_'.$field_details['variable'].'").selectpicker("refresh");
+                                    },
+                                });
                             } else {
                                 $("#second_extra_'.$field_details['variable'].'").empty();
                             }
@@ -1240,16 +1254,6 @@ class ExtraField extends Model
                     case ExtraField::FIELD_TYPE_TAG:
                         $variable = $field_details['variable'];
                         $field_id = $field_details['id'];
-
-                        // Added for correctly translate the extra_field
-                        $get_lang_variables = false;
-                        if (in_array($variable, ['tags'])) {
-                            $get_lang_variables = true;
-                        }
-
-                        if ($get_lang_variables) {
-                            $field_details['display_text'] = get_lang($field_details['display_text']);
-                        }
 
                         $tagsSelect = $form->addSelect(
                             "extra_{$field_details['variable']}",
@@ -1562,16 +1566,6 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_VIDEO_URL:
-                        //Added for correctly translate the extra_field
-                        $get_lang_variables = false;
-                        if (in_array($field_details['variable'], ['video_url'])) {
-                            $get_lang_variables = true;
-                        }
-
-                        if ($get_lang_variables) {
-                            $field_details['display_text'] = get_lang($field_details['display_text']);
-                        }
-
                         $form->addUrl(
                             "extra_{$field_details['variable']}",
                             $field_details['display_text'],
@@ -1813,11 +1807,24 @@ EOF;
         if ($action == 'edit') {
             $header = get_lang('Modify');
             // Setting the defaults
-            $defaults = $this->get($id);
+            $defaults = $this->get($id, false);
         }
 
         $form->addElement('header', $header);
-        $form->addElement('text', 'display_text', get_lang('Name'), array('class' => 'span5'));
+
+        if ($action == 'edit') {
+            $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
+                'extra_field' => $id
+            ]);
+            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+
+            $form->addText(
+                'display_text',
+                [get_lang('Name'), $translateButton]
+            );
+        } else {
+            $form->addElement('text', 'display_text', get_lang('Name'));
+        }
 
         // Field type
         $types = self::get_field_types();
@@ -1932,23 +1939,30 @@ EOF;
     public function getJqgridActionLinks($token)
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
-        return 'function action_formatter(cellvalue, options, rowObject) {
-         return \'<a href="?action=edit&type='.$this->type.'&id=\'+options.rowId+\'">'.Display::return_icon(
-            'edit.png',
-            get_lang('Edit'),
-            '',
-            ICON_SIZE_SMALL
-        ).'</a>'.
-        '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(
+        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
+        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+        $confirmMessage = addslashes(
             api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
-        )."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon(
-            'delete.png',
-            get_lang('Delete'),
-            '',
-            ICON_SIZE_SMALL
-        ).'</a>'.
-        '\';
-        }';
+        );
+
+        $editButton = <<<JAVASCRIPT
+            <a href="?action=edit&type={$this->type}&id=' + options.rowId + '" class="btn btn-link btn-xs">\
+                $editIcon\
+            </a>
+JAVASCRIPT;
+        $deleteButton = <<<JAVASCRIPT
+            <a \
+                onclick="if (!confirm(\'$confirmMessage\')) {return false;}" \
+                href="?sec_token=$token&type={$this->type}&id=' + options.rowId + '&action=delete" \
+                class="btn btn-link btn-xs">\
+                $deleteIcon\
+            </a>
+JAVASCRIPT;
+
+        return "function action_formatter(cellvalue, options, rowObject) {
+        console.log(options);
+            return '$editButton $deleteButton';
+        }";
     }
 
     /**
@@ -2446,40 +2460,4 @@ EOF;
 
         return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
     }
-
-    /**
-     * Get the info from an extra field by its id
-     * @param int $id
-     * @param bool $translateDisplayText
-     * @return array
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     */
-    public static function getInfoById($id, $translateDisplayText = true)
-    {
-        $extraField = Database::getManager()
-            ->find('ChamiloCoreBundle:ExtraField', $id);
-
-        $objExtraField = null;
-
-        switch ($extraField->getExtraFieldType()) {
-            case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
-                $objExtraField = new self('user');
-                break;
-            case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
-                $objExtraField = new self('course');
-                break;
-            case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
-                $objExtraField = new self('session');
-                break;
-        }
-
-        if (!$objExtraField) {
-            return [];
-        }
-
-        return $objExtraField->get($extraField->getId(), $translateDisplayText);
-    }
-
 }

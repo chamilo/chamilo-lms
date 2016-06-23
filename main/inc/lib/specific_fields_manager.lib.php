@@ -115,7 +115,7 @@ function get_specific_field_values_list(
 
         //Fixing course id
         if (isset($conditions['c_id'])) {
-            $course_info = api_get_course_info_by_id($conditions['c_id']);
+            $course_info = api_get_course_info_by_id(intval($conditions['c_id']));
             $conditions['course_code'] = " '".$course_info['code']."' ";
             unset($conditions['c_id']);
         }

@@ -6980,7 +6980,7 @@ $EventType = "Event type";
 $WamiFlashDialog = "It will display a dialog box which asks for your permission to access the microphone, answer yes and close the dialog box (if you do not want to appear again, before closing check remember)";
 $WamiStartRecorder = "Start recording by pressing the microphone and stop it by pressing again. Each time you do this will generate a file.";
 $WamiNeedFilename = "Before you activate recording it is necessary a file name.";
-$InputNameHere = "Enter name here";
+$InputNameHere = "Enter filename here";
 $Reload = "Reload";
 $SelectGradeModel = "Select a calification model";
 $AllMustWeight100 = "The sum of all values must be 100";
@@ -7749,4 +7749,5 @@ $TranslateThisTerm = "Translate this term";
 $OnlyActiveSubLanguagesAreListed = "Only active sub-languages appear in this list";
 $Translation = "Translation";
 $IfThisTranslationExistsThisWillReplaceTheTerm = "If this term has already been translated, this operation will replace its translation for this sub-language.";
+$LastConnection = "Last connection";
 ?>

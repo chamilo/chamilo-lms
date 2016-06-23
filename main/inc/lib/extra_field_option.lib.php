@@ -795,40 +795,6 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Get the info from an extra field option by its id
-     * @param int $id
-     * @param bool $translateDisplayText
-     * @return array
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     */
-    public static function getInfoById($id, $translateDisplayText = true)
-    {
-        $extraField = Database::getManager()->find('ChamiloCoreBundle:ExtraFieldOptions', $id);
-
-        $objExtraField = null;
-
-        switch ($extraField->getField()->getExtraFieldType()) {
-            case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
-                $objExtraField = new self('user');
-                break;
-            case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
-                $objExtraField = new self('course');
-                break;
-            case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
-                $objExtraField = new self('session');
-                break;
-        }
-
-        if (!$objExtraField) {
-            return [];
-        }
-
-        return $objExtraField->get($extraField->getId(), $translateDisplayText);
-    }
-
-    /**
      * @param null $options
      * @return array
      */

@@ -160,7 +160,9 @@ class Certificate extends Model
 
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
 
-        $my_category = Category :: load($this->certificate_data['cat_id']);
+        if (isset($this->certificate_data)) {
+            $my_category = Category :: load($this->certificate_data['cat_id']);
+        }
 
         if (isset($my_category[0]) &&
             $my_category[0]->is_certificate_available($this->user_id)

@@ -35,9 +35,7 @@ $userGeolocalization = api_get_setting('enable_profile_user_address_geolocalizat
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
-if ($userGeolocalization) {
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
-}
+$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     var $image = $("#previewImage");
@@ -153,6 +151,7 @@ $user_data['api_key_generate'] = $value_array;
 if ($userGeolocalization) {
     $htmlHeadXtra[] = '<script>
     $(document).ready(function() {
+
         var address = "' . $user_data['address'] . '";
         initializeGeo(address, false);
 
@@ -165,6 +164,13 @@ if ($userGeolocalization) {
         $("#myLocation").on("click", function() {
             myLocation();
             return false;
+        });
+
+        $("#address").keypress(function (event) {
+            if (event.which == 13) {
+                $("#geolocalization").click();
+                return false;
+            }
         });
     });
 

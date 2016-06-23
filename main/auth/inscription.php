@@ -48,11 +48,12 @@ if (!empty($_SESSION['user_language_choice'])) {
 } else {
     $user_selected_language = api_get_setting('platformLanguage');
 }
+$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 
 if ($userGeolocalization) {
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
     $htmlHeadXtra[] = '<script>
     $(document).ready(function() {
+
         initializeGeo(false, false);
 
         $("#geolocalization").on("click", function() {
@@ -64,6 +65,13 @@ if ($userGeolocalization) {
         $("#myLocation").on("click", function() {
             myLocation();
             return false;
+        });
+
+        $("#address").keypress(function (event) {
+            if (event.which == 13) {
+                $("#geolocalization").click();
+                return false;
+            }
         });
     });
 

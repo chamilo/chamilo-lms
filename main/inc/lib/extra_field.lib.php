@@ -1599,7 +1599,7 @@ EOF;
                             'text',
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
-                            array()
+                            ['id' => 'extra_'.$field_details['variable']]
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
@@ -1610,6 +1610,126 @@ EOF;
                                 );
                             }
                         }
+
+                        $form->addHtml(
+                            '<script>
+                                $(document).ready(function() {
+
+                                    var address = "' . $extraData['extra_'.$field_details['variable']] . '";
+                                    initializeGeo'.$field_details['variable'].'(address, false);
+
+                                    $("#geolocalization_extra_'.$field_details['variable'].'").on("click", function() {
+                                        var address = $("#extra_'.$field_details['variable'].'").val();
+                                        initializeGeo'.$field_details['variable'].'(address, false);
+                                        return false;
+                                    });
+
+                                    $("#myLocation_extra_'.$field_details['variable'].'").on("click", function() {
+                                        myLocation'.$field_details['variable'].'();
+                                        return false;
+                                    });
+
+                                    $("#extra_'.$field_details['variable'].'").keypress(function (event) {
+                                        if (event.which == 13) {
+                                            $("#geolocalization_extra_'.$field_details['variable'].'").click();
+                                            return false;
+                                        }
+                                    });
+                                });
+
+                                function myLocation'.$field_details['variable'].'() {
+                                    if (navigator.geolocation) {
+                                        var geoPosition = function(position) {
+                                            var lat = position.coords.latitude;
+                                            var lng = position.coords.longitude;
+                                            var latLng = new google.maps.LatLng(lat, lng);
+                                            initializeGeo'.$field_details['variable'].'(false, latLng)
+                                        };
+
+                                        var geoError = function(error) {
+                                            alert("Geocode ' . get_lang('Error') . ': " + error);
+                                        };
+
+                                        var geoOptions = {
+                                            enableHighAccuracy: true
+                                        };
+
+                                        navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
+                                    }
+                                }
+
+                                function initializeGeo'.$field_details['variable'].'(address, latLng) {
+                                    var geocoder = new google.maps.Geocoder();
+                                    var latlng = new google.maps.LatLng(-34.397, 150.644);
+                                    var myOptions = {
+                                        zoom: 15,
+                                        center: latlng,
+                                        mapTypeControl: true,
+                                        mapTypeControlOptions: {
+                                            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+                                        },
+                                        navigationControl: true,
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                                    };
+
+                                    map_'.$field_details['variable'].' = new google.maps.Map(document.getElementById("map_extra_'.$field_details['variable'].'"), myOptions);
+
+                                    var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
+
+                                    if (geocoder && parameter) {
+                                        geocoder.geocode(parameter, function(results, status) {
+                                            if (status == google.maps.GeocoderStatus.OK) {
+                                                if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                                                    map_'.$field_details['variable'].'.setCenter(results[0].geometry.location);
+                                                    if (!address) {
+                                                        $("#extra_'.$field_details['variable'].'").val(results[0].formatted_address);
+                                                    }
+                                                    var infowindow = new google.maps.InfoWindow({
+                                                        content: "<b>" + $("#extra_'.$field_details['variable'].'").val() + "</b>",
+                                                        size: new google.maps.Size(150, 50)
+                                                    });
+
+                                                    var marker = new google.maps.Marker({
+                                                        position: results[0].geometry.location,
+                                                        map: map_'.$field_details['variable'].',
+                                                        title: $("#extra_'.$field_details['variable'].'").val()
+                                                    });
+                                                    google.maps.event.addListener(marker, "click", function() {
+                                                        infowindow.open(map_'.$field_details['variable'].', marker);
+                                                    });
+                                                } else {
+                                                    alert("' . get_lang("NotFound") . '");
+                                                }
+
+                                            } else {
+                                                alert("Geocode ' . get_lang('Error') . ': " + status);
+                                            }
+                                        });
+                                    }
+                                }
+                            </script>
+                        ');
+                        $form->addHtml('
+                            <div class="form-group">
+                                <label for="geolocalization_extra_'.$field_details['variable'].'" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-8">
+                                    <button class="null btn btn-default " id="geolocalization_extra_'.$field_details['variable'].'" name="geolocalization_extra_'.$field_details['variable'].'" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
+                                    <button class="null btn btn-default " id="myLocation_extra_'.$field_details['variable'].'" name="myLocation_extra_'.$field_details['variable'].'" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
+                                </div>
+                            </div>
+                        ');
+
+                        $form->addHtml('
+                            <div class="form-group">
+                                <label for="map_extra_'.$field_details['variable'].'" class="col-sm-2 control-label">
+                                    '.$field_details['display_text'].' - '.get_lang('Map').'
+                                </label>
+                                <div class="col-sm-8">
+                                    <div name="map_extra_'.$field_details['variable'].'" id="map_extra_'.$field_details['variable'].'" style="width:100%; height:300px;">
+                                    </div>
+                                </div>
+                            </div>
+                        ');
                         break;
                 }
             }

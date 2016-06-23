@@ -1025,14 +1025,6 @@ class MessageManager
         // get file attachments by message id
         $files_attachments = self::get_links_message_attachment_files($message_id, $source);
 
-        $user_con = self::users_connected_by_id();
-        $band = 0;
-        for ($i = 0; $i < count($user_con); $i++) {
-            if ($user_sender_id == $user_con[$i]) {
-                $band = 1;
-            }
-        }
-
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
 

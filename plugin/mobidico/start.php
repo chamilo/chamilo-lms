@@ -19,8 +19,7 @@ $tool_name = get_lang('Videoconference');
 
 $params = [
     'chamiloid' => api_get_user_id(),
-    'API_KEY' => $key,
-    'verify' => false
+    'API_KEY' => $key
 ];
 
 $redirect = '';
@@ -29,7 +28,10 @@ try {
     $response = $client->request(
         'POST',
         $url.'/app/desktop/php/authenticate.php',
-        $params
+        [
+            'form_params' => $params,
+            'verify' => false
+        ]
     );
 
     $status = $response->getStatusCode();
@@ -37,7 +39,7 @@ try {
         $result = json_decode($response->getBody());
         if ($result && isset($result->status)) {
             if ($result->status == 'OK') {
-                $redirect = $url.'/app/index.html?session='.intval($result->session);
+                $redirect = $url.'/app/index.html?session='.$result->session;
             } else {
                 api_not_allowed(true);
             }

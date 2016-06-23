@@ -78,9 +78,7 @@
                             friend: ChChat.currentFriend
                         })
                         .done(function (response) {
-                            if (response.data.chatIsDenied) {
-                                alert("{{ 'ChatDenied'|get_lang }}");
-
+                            if (!response.data) {
                                 return;
                             }
 

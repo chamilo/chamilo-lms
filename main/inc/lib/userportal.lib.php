@@ -1520,7 +1520,7 @@ class IndexManager
         $listCoursesInfo = array();
         if (!isset($_GET['history'])) {
             // Display special courses
-            $specialCoursesResult = CourseManager::display_special_courses(
+            $specialCoursesResult = CourseManager::returnSpecialCourses(
                 $user_id,
                 $loadDirs
             );

@@ -491,7 +491,7 @@ class UserManager
 
                     $layoutContent = $tplContent->get_template('mail/content_registration_platform_to_admin.tpl');
                     $emailBody = $tplContent->fetch($layoutContent);
-                    $subject = '['.api_get_setting('site_name').'] '.get_lang('UserAdded');
+                    $subject = '['.api_get_setting('siteName').'] '.get_lang('UserAdded');
                     foreach ($adminList as $adminId => $data) {
                         MessageManager::send_message_simple($adminId, $subject, $emailBody);
                     }

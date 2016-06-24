@@ -123,8 +123,12 @@ if ($userGeolocalization) {
             return false;
         });
         
-        
-        
+        $("#address").keypress(function (event) {
+            if (event.which == 13) {
+                $("#geolocalization").click();
+                return false;
+            }
+        });
     });
 
     function myLocation() {

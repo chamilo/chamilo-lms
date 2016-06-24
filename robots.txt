@@ -29,6 +29,5 @@ Disallow: /tests/
 # Files
 Disallow: /license.txt
 Disallow: /README.txt
-Disallow: /webchatdeny.php
 Disallow: /whoisonline.php
 Disallow: /whoisonlinesession.php

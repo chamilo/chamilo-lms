@@ -17,16 +17,8 @@ if (api_is_anonymous()) {
 
 // Course Chat
 if ($action == 'preview') {
-    require_once api_get_path(SYS_CODE_PATH).'chat/chat_functions.lib.php';
-
-    echo saveMessage(
-        $_REQUEST['message'],
-        api_get_user_id(),
-        api_get_course_info(),
-        api_get_session_id(),
-        api_get_group_id(),
-        true
-    );
+    echo CourseChatUtils::prepareMessage($_REQUEST['message']);
+    exit;
 }
 
 if (api_get_setting('allow_global_chat') == 'false') {

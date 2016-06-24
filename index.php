@@ -14,7 +14,6 @@ define('CHAMILO_LOAD_WYSIWYG', false);
 $cidReset = true;
 
 require_once 'main/inc/global.inc.php';
-require_once 'main/chat/chat_functions.lib.php';
 //require_once 'main/auth/external_login/facebook.inc.php';
 
 // The section (for the tabs).

@@ -1094,6 +1094,7 @@ class CourseHome
         $navigation_items = array();
         $course_id = api_get_course_int_id();
         $courseInfo = api_get_course_info();
+        $sessionId = api_get_session_id();
 
         if (!empty($course_id)) {
 
@@ -1126,7 +1127,7 @@ class CourseHome
                 $sql_result = Database::query($sql);
                 $course_setting_info = Database::fetch_array($sql_result);
                 $course_setting_visual_name = CourseHome::translate_tool_name($course_setting_info);
-                if (api_get_session_id() == 0) {
+                if ($sessionId == 0) {
                     // course settings item
                     $navigation_items['course_settings']['image'] = $course_setting_info['image'];
                     $navigation_items['course_settings']['link'] = api_get_path(WEB_CODE_PATH).'course_info/infocours.php';
@@ -1144,7 +1145,7 @@ class CourseHome
                 $parameter_separator = '?';
             }
             //$navigation_items[$key]['link'] .= $parameter_separator.api_get_cidreq();
-            $navigation_items[$key]['link'] .= $parameter_separator.'cidReq='.api_get_course_id().'&gidReq=0&id_session='.api_get_session_id();
+            $navigation_items[$key]['link'] .= $parameter_separator.'cidReq='.api_get_course_id().'&gidReq=0&id_session='.$sessionId;
         }
 
         return $navigation_items;
@@ -1211,9 +1212,9 @@ class CourseHome
         $navigation_items = self::get_navigation_items(false);
         $html = '';
         if (!empty($navigation_items)) {
-            if ($orientation == SHORTCUTS_HORIZONTAL)
+            if ($orientation == SHORTCUTS_HORIZONTAL) {
                 $style_id = "toolshortcuts_horizontal";
-            else {
+            } else {
                 $style_id = "toolshortcuts_vertical";
             }
             $html .= '<div id="'.$style_id.'">';

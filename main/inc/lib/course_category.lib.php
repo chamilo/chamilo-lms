@@ -577,7 +577,7 @@ class CourseCategory
      * @param string $searchTerm
      * @return int
      */
-    public static function countCoursesInCategory($category_code = "", $searchTerm = '')
+    public static function countCoursesInCategory($category_code = '', $searchTerm = '')
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);
@@ -924,17 +924,13 @@ class CourseCategory
      */
     public static function getLimitArray()
     {
-        $pageCurrent = isset($_REQUEST['pageCurrent']) ?
-            intval($_GET['pageCurrent']) :
-            1;
-        $pageLength = isset($_REQUEST['pageLength']) ?
-            intval($_GET['pageLength']) :
-            10;
+        $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
+        $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : 12;
 
         return array(
             'start' => ($pageCurrent - 1) * $pageLength,
             'current' => $pageCurrent,
-            'length' => $pageLength,
+            'length' => $pageLength
         );
     }
 
@@ -948,7 +944,7 @@ class CourseCategory
         $limitFilter = '';
         if (!empty($limit) && is_array($limit)) {
             $limitStart = isset($limit['start']) ? $limit['start'] : 0;
-            $limitLength = isset($limit['length']) ? $limit['length'] : 10;
+            $limitLength = isset($limit['length']) ? $limit['length'] : 12;
             $limitFilter = 'LIMIT '.$limitStart.', '.$limitLength;
         }
 

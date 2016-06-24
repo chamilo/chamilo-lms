@@ -12,7 +12,6 @@ use \Chamilo\CoreBundle\Entity\SequenceResource;
 // Delete the globals['_cid'], we don't need it here.
 $cidReset = true; // Flag forcing the 'current course' reset
 
-// including files
 require_once '../inc/global.inc.php';
 
 $ctok = Security::get_existing_token();
@@ -31,7 +30,7 @@ if (api_get_setting('course_catalog_published') !== 'true') {
 $user_can_view_page = false;
 
 //For students
-if (api_get_setting('allow_students_to_browse_courses') == 'false') {
+if (api_get_setting('allow_students_to_browse_courses') === 'false') {
     $user_can_view_page = false;
 } else {
     $user_can_view_page = true;
@@ -62,7 +61,8 @@ if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
     $action = Security::remove_XSS($_GET['action']);
 }
 
-$categoryCode = isset($_GET['category_code']) ? $_GET['category_code'] : 'ALL';
+$categoryCode = isset($_GET['category_code']) && !empty($_GET['category_code']) ? $_GET['category_code'] : 'ALL';
+
 $nameTools = CourseCategory::getCourseCatalogNameTools($action);
 if (empty($nameTools)) {
     $nameTools = get_lang('CourseManagement');
@@ -73,7 +73,8 @@ if (empty($nameTools)) {
             'name' => get_lang('CourseManagement'),
         );
     }
-    if ($action == 'createcoursecategory') {
+
+    if ($action === 'createcoursecategory') {
         $interbreadcrumb[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses',
             'name' => get_lang('SortMyCourses'),
@@ -153,19 +154,19 @@ if (isset($_REQUEST['subscribe_course'])) {
         $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $categoryCode);
     }
 }
+
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_GET['unsubscribe'])) {
     $search_term = isset($_GET['search_term']) ? $_GET['search_term'] : null;
     if ($ctok == $_GET['sec_token']) {
         $courses_controller->unsubscribe_user_from_course($_GET['unsubscribe'], $search_term, $categoryCode);
-            //$message = remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
     }
 }
+
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_POST['unsubscribe'])) {
     if ($ctok == $_POST['sec_token']) {
         $courses_controller->unsubscribe_user_from_course($_POST['unsubscribe']);
-            //$message = remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
     }
 }
 
@@ -215,7 +216,7 @@ switch ($action) {
         if (!$user_can_view_page) {
             api_not_allowed(true);
         }
-
+        
         $courses_controller->courses_categories(
             $action,
             $categoryCode,

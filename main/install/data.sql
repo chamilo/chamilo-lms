@@ -1875,6 +1875,10 @@ INSERT INTO settings_current (variable, type, category, selected_value, title, c
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_profile_user_address_geolocalization', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_profile_user_address_geolocalization', 'false', 'No');
 
+INSERT INTO settings_current (variable, type, category, selected_value, title, comment) VALUES ('show_official_code_whoisonline', 'radio', 'User', 'false', 'ShowOfficialCodeInWhoIsOnlinePage', 'ShowOfficialCodeInWhoIsOnlinePageComment');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_official_code_whoisonline', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_official_code_whoisonline', 'false', 'No');
+
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 1);
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 2);
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 3);

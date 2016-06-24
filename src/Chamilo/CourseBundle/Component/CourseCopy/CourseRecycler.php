@@ -431,11 +431,13 @@ class CourseRecycler
 
             // Identifying again and deletion of the orphan questions, if it was desired.
             if ($delete_orphan_questions) {
-
+                // If this query was ever too slow, there is an alternative here:
+                // https://github.com/beeznest/chamilo-lms-icpna/commit/a38eab725402188dffff50245ee068d79bcef779
                 $sql = " (
                         SELECT q.id, ex.c_id FROM $table_qui_que q
                         INNER JOIN $table_rel r
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        
                         INNER JOIN $table_qui ex
                         ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
                         WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')

@@ -1595,6 +1595,9 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
+                        $dataValue = isset($extraData['extra_'.$field_details['variable']])
+                            ? $extraData['extra_'.$field_details['variable']]
+                            : '';
                         $form->addElement(
                             'text',
                             'extra_'.$field_details['variable'],
@@ -1615,7 +1618,7 @@ EOF;
                             '<script>
                                 $(document).ready(function() {
 
-                                    var address = "' . $extraData['extra_'.$field_details['variable']] . '";
+                                    var address = "' . $dataValue . '";
                                     initializeGeo'.$field_details['variable'].'(address, false);
 
                                     $("#geolocalization_extra_'.$field_details['variable'].'").on("click", function() {

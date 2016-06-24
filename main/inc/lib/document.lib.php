@@ -515,7 +515,7 @@ class DocumentManager
         if (!empty($sessionId)) {
             // Chat folder filter
             if ($path == '/chat_files') {
-                $condition .= " AND (id_session = '$sessionId') ";
+                $condition .= " AND (docs.session_id = '$sessionId') ";
             }
             // share_folder filter
             $condition .= " AND docs.path != '/shared_folder' ";

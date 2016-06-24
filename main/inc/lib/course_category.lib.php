@@ -582,7 +582,7 @@ function browseCourseCategories()
  * @param string $searchTerm
  * @return int
  */
-function countCoursesInCategory($category_code="", $searchTerm = '')
+function countCoursesInCategory($category_code = '', $searchTerm = '')
 {
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $categoryCode = Database::escape_string($category_code);
@@ -628,6 +628,7 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
                 $without_special_courses
                 $visibilityCondition
             ";
+
     // Showing only the courses of the current portal access_url_id.
 
     if (api_is_multiple_url_enabled()) {

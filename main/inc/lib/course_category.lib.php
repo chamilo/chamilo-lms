@@ -924,17 +924,13 @@ class CourseCategory
      */
     public static function getLimitArray()
     {
-        $pageCurrent = isset($_REQUEST['pageCurrent']) ?
-            intval($_GET['pageCurrent']) :
-            1;
-        $pageLength = isset($_REQUEST['pageLength']) ?
-            intval($_GET['pageLength']) :
-            10;
+        $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
+        $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : 12;
 
         return array(
             'start' => ($pageCurrent - 1) * $pageLength,
             'current' => $pageCurrent,
-            'length' => $pageLength,
+            'length' => $pageLength
         );
     }
 

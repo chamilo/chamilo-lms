@@ -15,17 +15,11 @@ if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 
 
 $showCourses = CoursesAndSessionsCatalog::showCourses();
 $showSessions = CoursesAndSessionsCatalog::showSessions();
-$pageCurrent = isset($pageCurrent) ? $pageCurrent :
-    isset($_GET['pageCurrent']) ? intval($_GET['pageCurrent']) :
-        1;
-$pageLength = isset($pageLength) ? $pageLength :
-    isset($_GET['pageLength']) ? intval($_GET['pageLength']) :
-        10;
+$pageCurrent = isset($pageCurrent) ? $pageCurrent : isset($_GET['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
+$pageLength = isset($pageLength) ? $pageLength : isset($_GET['pageLength']) ? intval($_GET['pageLength']) : 12;
 $pageTotal = intval(ceil(intval($countCoursesInCategory) / $pageLength));
-$cataloguePagination = $pageTotal > 1 ?
-    CourseCategory::getCatalogPagination($pageCurrent, $pageLength, $pageTotal) :
-    '';
-$search_term = isset($search_term) ? $search_term :null;
+$cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($pageCurrent, $pageLength, $pageTotal) : '';
+$search_term = isset($search_term) ? $search_term : null;
 
 if ($showSessions && isset($_POST['date'])) {
     $date = $_POST['date'];
@@ -123,51 +117,50 @@ $code = isset($code) ? $code : null;
                     </div>
                 </div>
             </form>
-            <?php } ?>
+        <?php } ?>
     </div>
     <div class="col-md-4">
         <h5><?php echo get_lang('CourseCategories'); ?></h5>
         <?php
 
-            $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-            $action = (!empty($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']):'display_courses');
-            $pageLength = (!empty($_REQUEST['pageLength'])?intval($_REQUEST['pageLength']):10);
-            $pageCurrent = (!empty($_REQUEST['pageCurrent'])?intval($_REQUEST['pageCurrent']):1);
-            $form = '<form action="'.$webAction.'" method="GET" class="form-horizontal">';
-            $form .= '<input type="hidden" name="action" value="' . $action . '">';
-            $form .= '<input type="hidden" name="pageCurrent" value="' . $pageCurrent . '">';
-            $form .= '<input type="hidden" name="pageLength" value="' . $pageLength . '">';
-            $form .= '<div class="form-group">';
-            $form .= '<div class="col-sm-12">';
-            $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
-            $codeType = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : '';
-            foreach ($browse_course_categories[0] as $category) {
-                $categoryCode = $category['code'];
-                $countCourse = $category['count_courses'];
-
-                $form .= '<option '. ($categoryCode == $codeType? 'selected="selected" ':'') .' value="' . $category['code'] . '">' . $category['name'] . ' ( '. $countCourse .' ) </option>';
-                if (!empty($browse_course_categories[$categoryCode])) {
-                    foreach ($browse_course_categories[$categoryCode] as $subCategory){
-                        $subCategoryCode = $subCategory['code'];
-                        $form .= '<option '. ($subCategoryCode == $codeType ? 'selected="selected" ':'') .' value="' . $subCategory['code'] . '"> ---' . $subCategory['name'] . ' ( '. $subCategory['count_courses'] .' ) </option>';
-                    }
+        $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
+        $action = (!empty($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : 'display_courses');
+        $pageLength = (!empty($_REQUEST['pageLength']) ? intval($_REQUEST['pageLength']) : 10);
+        $pageCurrent = (!empty($_REQUEST['pageCurrent']) ? intval($_REQUEST['pageCurrent']) : 1);
+        $form = '<form action="'.$webAction.'" method="GET" class="form-horizontal">';
+        $form .= '<input type="hidden" name="action" value="' . $action . '">';
+        $form .= '<input type="hidden" name="pageCurrent" value="' . $pageCurrent . '">';
+        $form .= '<input type="hidden" name="pageLength" value="' . $pageLength . '">';
+        $form .= '<div class="form-group">';
+        $form .= '<div class="col-sm-12">';
+        $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
+        $codeType = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : '';
+        foreach ($browse_course_categories[0] as $category) {
+            $categoryCode = $category['code'];
+            $countCourse = $category['count_courses'];
+            $form .= '<option '. ($categoryCode == $codeType? 'selected="selected" ':'') .' value="' . $category['code'] . '">' . $category['name'] . ' ( '. $countCourse .' ) </option>';
+            if (!empty($browse_course_categories[$categoryCode])) {
+                foreach ($browse_course_categories[$categoryCode] as $subCategory){
+                    $subCategoryCode = $subCategory['code'];
+                    $form .= '<option '. ($subCategoryCode == $codeType ? 'selected="selected" ':'') .' value="' . $subCategory['code'] . '"> ---' . $subCategory['name'] . ' ( '. $subCategory['count_courses'] .' ) </option>';
                 }
             }
-            $form .= '</select>';
-            $form .= '</div>';
-            $form .= '</form>';
-            echo $form;
-        ?>
+        }
+        $form .= '</select>';
+        $form .= '</div>';
+        $form .= '</form>';
+        echo $form;
+    ?>
     </div>
     </div>
 <?php
     if ($showSessions) { ?>
-        <div class="col-md-4">
-            <h5><?php echo get_lang('Sessions'); ?></h5>
-            <a class="btn btn-default btn-block" href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
-                <?php echo get_lang('SessionList'); ?>
-            </a>
-        </div>
+    <div class="col-md-4">
+        <h5><?php echo get_lang('Sessions'); ?></h5>
+        <a class="btn btn-default btn-block" href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
+            <?php echo get_lang('SessionList'); ?>
+        </a>
+    </div>
     <?php } ?>
 </div>
  <?php  } ?>
@@ -190,13 +183,13 @@ if ($showCourses && $action != 'display_sessions') {
     if (!empty($search_term)) {
         echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
     }
-    
+
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $user_id = api_get_user_id();
-    
+
     if (!empty($browse_courses_in_category)) {
         foreach ($browse_courses_in_category as $course) {
-            $course_hidden = ($course['visibility'] == COURSE_VISIBILITY_HIDDEN);
+            $course_hidden = $course['visibility'] == COURSE_VISIBILITY_HIDDEN;
 
             if ($course_hidden) {
                 continue;
@@ -213,7 +206,7 @@ if ($showCourses && $action != 'display_sessions') {
             $course_subscribe_allowed = ($course['subscribe'] == 1);
             $course_unsubscribe_allowed = ($course['unsubscribe'] == 1);
             $count_connections = $course['count_connections'];
-            $creation_date = substr($course['creation_date'],0,10);
+            $creation_date = substr($course['creation_date'], 0, 10);
 
             $html = null;
             // display the course bloc
@@ -320,7 +313,7 @@ function returnThumbnail($course)
         // without picture
         $course_medium_image = Display::return_icon('session_default.png', null, null, null, null, true);
     }
-    
+
     $html .= '<div class="image">';
     $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
     $categoryTitle = $course['category'];

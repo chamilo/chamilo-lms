@@ -944,7 +944,7 @@ class CourseCategory
         $limitFilter = '';
         if (!empty($limit) && is_array($limit)) {
             $limitStart = isset($limit['start']) ? $limit['start'] : 0;
-            $limitLength = isset($limit['length']) ? $limit['length'] : 10;
+            $limitLength = isset($limit['length']) ? $limit['length'] : 12;
             $limitFilter = 'LIMIT '.$limitStart.', '.$limitLength;
         }
 

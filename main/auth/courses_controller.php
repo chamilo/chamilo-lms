@@ -116,6 +116,7 @@ class CoursesController
         $data['browse_course_categories'] = $browse_course_categories;
         $data['code'] = Security::remove_XSS($category_code);
 
+
         // getting all the courses to which the user is subscribed to
         $curr_user_id = api_get_user_id();
         $user_courses = $this->model->get_courses_of_user($curr_user_id);

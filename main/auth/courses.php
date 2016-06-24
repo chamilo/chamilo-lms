@@ -216,7 +216,7 @@ switch ($action) {
         if (!$user_can_view_page) {
             api_not_allowed(true);
         }
-
+        
         $courses_controller->courses_categories(
             $action,
             $categoryCode,

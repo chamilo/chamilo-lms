@@ -33,6 +33,7 @@ switch ($_REQUEST['action']) {
         $json = [
             'status' => true,
             'data' => [
+                'chatIsDenied' => $courseChatUtils->isChatDenied(),
                 'oldFileSize' => file_exists($filePath) ? filesize($filePath) : 0,
                 'history' => $newFileSize !== $oldFileSize ? $courseChatUtils->readMessages(false, $friend) : null,
                 'usersOnline' => $newUsersOnline,

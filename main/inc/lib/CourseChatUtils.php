@@ -334,6 +334,43 @@ class CourseChatUtils
     }
 
     /**
+     * Check if the connection is denied for chat
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function isChatDenied()
+    {
+        if (ChamiloSession::read('origin', null) !== 'whoisonline') {
+            return false;
+        }
+
+        $talkTo = ChamiloSession::read('target', 0);
+
+        if (!$talkTo) {
+            return true;
+        }
+
+        $em = Database::getManager();
+        $user = $em->find('ChamiloUserBundle:User', $talkTo);
+
+        if ($user->getChatcallText() === 'DENIED') {
+            $user
+                ->setChatcallDate(null)
+                ->setChatcallUserId(null)
+                ->setChatcallText(null);
+
+            $em->merge($user);
+            $em->flush();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get the emoji allowed on course chat
      * @return array
      */
@@ -1674,6 +1711,21 @@ class CourseChatUtils
         }
 
         array_splice($content, 0, $remove);
+
+        if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonline') {
+            //the caller
+            $content[0] = get_lang('CallSent') . '<br />' . $content[0];
+        }
+        if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonlinejoin') {
+            //the joiner (we have to delete the chat request to him when he joins the chat)
+            Database::getManager()
+                ->createQuery('
+                    UPDATE ChamiloUserBundle:User u
+                    SET u.chatcallUserId = NULL, u.chatcallDate = NULL, u.chatcallText = NULL
+                    WHERE u.id = :user
+                ')
+                ->execute(['user' => $this->userId]);
+        }
 
         $history = '<div id="content-chat">';
 

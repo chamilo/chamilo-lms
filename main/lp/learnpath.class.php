@@ -9233,7 +9233,12 @@ class learnpath
             $dest_path_to_lp = substr($this->path, -1) == '.' ? substr($this->path, 0, -1) : $this->path;
             $dest_path_to_scorm_folder = str_replace('//','/',$temp_zip_dir.'/scorm/'.$dest_path_to_lp);
             mkdir($dest_path_to_scorm_folder, api_get_permissions_for_new_directories(), true);
-            $zip_files_dist = copyr($current_course_path.'/scorm/'.$this->path, $dest_path_to_scorm_folder, array('imsmanifest'), $zip_files);
+            copyr(
+                $current_course_path.'/scorm/'.$this->path,
+                $dest_path_to_scorm_folder,
+                array('imsmanifest'),
+                $zip_files
+            );
         }
 
         // Build a dummy imsmanifest structure.
@@ -9296,7 +9301,7 @@ class learnpath
         foreach ($this->items as $index => $item) {
             if (!in_array($item->type, array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION))) {
                 // Get included documents from this item.
-                if ($item->type == 'sco') {
+                if ($item->type === 'sco') {
                     $inc_docs = $item->get_resources_from_source(
                         null,
                         api_get_path(SYS_COURSE_PATH) . api_get_course_path() . '/' . 'scorm/' . $this->path . '/' . $item->get_path()
@@ -9366,7 +9371,7 @@ class learnpath
                 $my_resource->setAttribute('type', 'webcontent');
                 $my_resource->setAttribute('href', $my_xml_file_path);
                 // adlcp:scormtype can be either 'sco' or 'asset'.
-                if ($item->type == 'sco') {
+                if ($item->type === 'sco') {
                     $my_resource->setAttribute('adlcp:scormtype', 'sco');
                 } else {
                     $my_resource->setAttribute('adlcp:scormtype', 'asset');
@@ -9381,7 +9386,9 @@ class learnpath
                 // Dependency to other files - not yet supported.
                 $i = 1;
                 foreach ($inc_docs as $doc_info) {
-                    if (count($doc_info) < 1 || empty($doc_info[0])) { continue; }
+                    if (count($doc_info) < 1 || empty($doc_info[0])) {
+                        continue;
+                    }
                     $my_dep = $xmldoc->createElement('resource');
                     $res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
                     $my_dep->setAttribute('identifier', $res_id);
@@ -9394,7 +9401,7 @@ class learnpath
                         // Remote file. Save url as is.
                         $my_dep_file->setAttribute('href', $doc_info[0]);
                         $my_dep->setAttribute('xml:base', '');
-                    } elseif ($doc_info[1] == 'local') {
+                    } elseif ($doc_info[1] === 'local') {
                         switch ($doc_info[2]) {
                             case 'url': // Local URL - save path as url for now, don't zip file.
                                 $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
@@ -9442,7 +9449,10 @@ class learnpath
                                 if ($pos === 0) {
                                     $abs_img_path_without_subdir = '/'.substr($abs_img_path_without_subdir, strlen($relp));
                                 }
-                                $file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
+
+                                //$file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
+                                $file_path = realpath(api_get_path(SYS_APP_PATH).$abs_img_path_without_subdir);
+
                                 $file_path = str_replace('\\', '/', $file_path);
                                 $file_path = str_replace('//', '/', $file_path);
 
@@ -10004,10 +10014,10 @@ EOD;
         $main_code_path = api_get_path(SYS_CODE_PATH) . 'lp/packaging/';
         $extra_files = scandir($main_code_path);
         foreach ($extra_files as $extra_file) {
-            if (strpos($extra_file, '.') === 0)
+            if (strpos($extra_file, '.') === 0) {
                 continue;
-            else {
-                $dest_file = $archive_path . $temp_dir_short . '/' . $extra_file;
+            } else {
+                $dest_file = $archive_path.$temp_dir_short.'/'.$extra_file;
                 $this->create_path($dest_file);
                 copy($main_code_path.$extra_file, $dest_file);
             }
@@ -10018,7 +10028,11 @@ EOD;
         $manifest = @$xmldoc->saveXML();
         $manifest = api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
         file_put_contents($archive_path.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);
-        $zip_folder->add($archive_path.'/'.$temp_dir_short, PCLZIP_OPT_REMOVE_PATH, $archive_path.'/'.$temp_dir_short.'/');
+        $zip_folder->add(
+            $archive_path.'/'.$temp_dir_short,
+            PCLZIP_OPT_REMOVE_PATH,
+            $archive_path.'/'.$temp_dir_short.'/'
+        );
 
         // Clean possible temporary files.
         foreach ($files_cleanup as $file) {

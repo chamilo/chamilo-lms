@@ -446,10 +446,6 @@ class UserManager
                         'password' => $original_password
                     );
 
-
-                    MessageManager::send_message_simple($userId, $emailSubject, $emailBody);
-
-
                     api_mail_html(
                         $recipient_name,
                         $email,

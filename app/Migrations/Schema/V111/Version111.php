@@ -290,7 +290,7 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE extra_field CHANGE variable variable VARCHAR(255) NOT NULL');
 
         if (!$schema->hasTable('version')) {
-            $this->addSql('create table version (version varchar(255), PRIMARY KEY(version));');
+            $this->addSql('CREATE TABLE version (version varchar(255), PRIMARY KEY(version));');
         }
     }
 

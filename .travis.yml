@@ -31,8 +31,6 @@ before_install:
   #- sudo apt-get install -qq php5-cli php5-fpm
 
 before_script:
-  - php5 -v
-  - php5 -m
   - composer self-update
   # Previously, fxp/composer-asset-plugin was required but was causing a lot of trouble updating. Now it's disabled.
   #- composer global require "fxp/composer-asset-plugin:1.0.3"
@@ -53,13 +51,13 @@ before_script:
   - phpenv config-add tests/travis-php-config.ini
   # enable php-fpm
   # configure apache virtual hosts
-  - php5 -v
+  - php -v
   # install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash
   - cd chash
   - composer install
   - composer update
-  - php5 -d phar.readonly=0 createPhar.php
+  - php -d phar.readonly=0 createPhar.php
   - chmod +x chash.phar
   - sudo mv chash.phar /usr/local/bin/chash
   #- cd ..

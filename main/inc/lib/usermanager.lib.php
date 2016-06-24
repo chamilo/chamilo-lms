@@ -421,8 +421,14 @@ class UserManager
                 $tplContent->assign('original_password', stripslashes($original_password));
                 $tplContent->assign('mailWebPath', $url);
 
+                // ofaj
+                $urlSearch = api_get_path(WEB_PATH).'search.php';
+                $linkSearch = Display::url($urlSearch, $urlSearch);
+                $tplContent->assign('search_link', $linkSearch);
+
                 $layoutContent = $tplContent->get_template('mail/content_registration_platform.tpl');
                 $emailBody = $tplContent->fetch($layoutContent);
+
                 /* MANAGE EVENT WITH MAIL */
                 if (EventsMail::check_if_using_class('user_registration')) {
                     $values["about_user"] = $return;
@@ -439,6 +445,10 @@ class UserManager
                         'mobilePhoneNumber' => $phoneNumber,
                         'password' => $original_password
                     );
+
+
+                    MessageManager::send_message_simple($userId, $emailSubject, $emailBody);
+
 
                     api_mail_html(
                         $recipient_name,
@@ -467,7 +477,7 @@ class UserManager
 
                     $langData = api_get_language_info(api_get_language_id($user->getLanguage()));
                     $user->setLanguage($langData['original_name']);
-                    
+
                     $tplContent->assign('user_added', $user);
                     // ofaj
                     /** @var FormValidator $form */

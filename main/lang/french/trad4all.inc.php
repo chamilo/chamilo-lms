@@ -7702,4 +7702,6 @@ $UserXWithLangXRegisteredTheSite =  '%s de langue %s,  vient de s’inscrire sur
 $YouCanAssignATutorInThisLinkX = 'Pour lui assigner un tuteur aller sur la fiche de l\'utilisateur %s.';
 $TCCConnection = 'Connexion à TCC';
 $TCCConnect = 'Se connecter';
+$ForMoreDetailsVisitX = "Pour que nous puissions mieux te connaître et te proposer un parcours sur mesure, tu dois d’abord remplir ce questionnaire %s.
+Si tu ne l’as pas encore fait, n’oublie pas non plus de remplir ton profil pour pouvoir accéder aux activités de la plateforme.";
 ?>

@@ -31,7 +31,8 @@ before_install:
   #- sudo apt-get install -qq php5-cli php5-fpm
 
 before_script:
-  - php -d memory_limit=2G $(which composer) -v update
+  - which composer
+  - php -d memory_limit=2G /usr/bin/composer update
   # Previously, fxp/composer-asset-plugin was required but was causing a lot of trouble updating. Now it's disabled.
   #- composer global require "fxp/composer-asset-plugin:1.0.3"
   # You can either use the composer install method and face the Github limit

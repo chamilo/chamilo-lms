@@ -577,7 +577,7 @@ class CourseCategory
      * @param string $searchTerm
      * @return int
      */
-    public static function countCoursesInCategory($category_code = "", $searchTerm = '')
+    public static function countCoursesInCategory($category_code = '', $searchTerm = '')
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);

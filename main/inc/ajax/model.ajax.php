@@ -982,13 +982,23 @@ switch ($action) {
                 } else {
                     $session_date_string = implode(' ', $session_date);
                 }
-                $sessionUrl = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id'];
+
+                $detailButtons = [];
+                $detailButtons[] = Display::url(
+                    Display::return_icon('works.png', get_lang('Works')),
+                    api_get_path(WEB_CODE_PATH) . 'mySpace/works.php'
+                );
+                $detailButtons[] = Display::url(
+                    Display::return_icon('2rightarrow.png'),
+                    api_get_path(WEB_CODE_PATH) . 'mySpace/course.php?session_id=' . $session['id']
+                );
+
                 $result[] = array(
                     'name' => $session['name'],
                     'date' => $session_date_string,
                     'course_per_session' => $count_courses_in_session,
                     'student_per_session' => $count_users_in_session,
-                    'details' => Display::url(Display::return_icon('2rightarrow.png'), $sessionUrl)
+                    'details' => implode(' ', $detailButtons)
                 );
             }
         }

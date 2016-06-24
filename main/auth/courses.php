@@ -62,7 +62,7 @@ if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
     $action = Security::remove_XSS($_GET['action']);
 }
 
-$categoryCode = isset($_GET['category_code']) ? $_GET['category_code'] : 'ALL';
+$categoryCode = isset($_GET['category_code']) && !empty($_GET['category_code']) ? $_GET['category_code'] : 'ALL';
 
 $nameTools = getCourseCatalogNameTools($action);
 if (empty($nameTools)) {
@@ -216,7 +216,7 @@ switch ($action) {
         if (!$user_can_view_page) {
             api_not_allowed(true);
         }
-
+        
         $courses_controller->courses_categories(
             $action,
             $categoryCode,

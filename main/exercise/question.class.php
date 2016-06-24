@@ -1362,7 +1362,7 @@ abstract class Question
     public function get_question_type_name()
     {
         $key = self::$questionTypes[$this->type];
-        
+
         return get_lang($key[1]);
     }
 
@@ -1615,14 +1615,20 @@ abstract class Question
             eval('$explanation = get_lang(' . $a_type[1] . '::$explanationLangVar);');
             echo '<li>';
             echo '<div class="icon-image">';
-            if ($objExercise->exercise_was_added_in_lp == true) {
-                $img = pathinfo($img);
-                $img = $img['filename'] . '_na.' . $img['extension'];
-                echo Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
-            } else {
-                echo '<a href="admin.php?' . api_get_cidreq() . '&newQuestion=yes&answerType=' . $i . '">' .
+
+
+            $icon = '<a href="admin.php?' . api_get_cidreq() . '&newQuestion=yes&answerType=' . $i . '">' .
                 Display::return_icon($img, $explanation, null, ICON_SIZE_BIG) . '</a>';
+
+            if ($objExercise->force_edit_exercise_in_lp === false) {
+                if ($objExercise->exercise_was_added_in_lp == true) {
+                    $img = pathinfo($img);
+                    $img = $img['filename'].'_na.'.$img['extension'];
+                    $icon = Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
+                }
             }
+            
+            echo $icon;
             echo '</div>';
             echo '</li>';
         }

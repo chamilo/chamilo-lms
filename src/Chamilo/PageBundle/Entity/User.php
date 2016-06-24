@@ -213,27 +213,6 @@ class User extends BaseUser
     private $productions;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="chatcall_user_id", type="integer", nullable=true, unique=false)
-     */
-    private $chatcallUserId;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="chatcall_date", type="datetime", nullable=true, unique=false)
-     */
-    private $chatcallDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="chatcall_text", type="string", length=50, nullable=true, unique=false)
-     */
-    private $chatcallText;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="language", type="string", length=40, nullable=true, unique=false)
@@ -407,7 +386,6 @@ class User extends BaseUser
         $this->portals = new ArrayCollection();
         $this->dropBoxSentFiles = new ArrayCollection();
         $this->dropBoxReceivedFiles = new ArrayCollection();
-        $this->chatcallUserId = 0;
         //$this->extraFields = new ArrayCollection();
         //$this->userId = 0;
         //$this->createdAt = new \DateTime();
@@ -1062,75 +1040,6 @@ class User extends BaseUser
     public function getProductions()
     {
         return $this->productions;
-    }
-
-    /**
-     * Set chatcallUserId
-     *
-     * @param integer $chatcallUserId
-     * @return User
-     */
-    public function setChatcallUserId($chatcallUserId)
-    {
-        $this->chatcallUserId = $chatcallUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get chatcallUserId
-     *
-     * @return integer
-     */
-    public function getChatcallUserId()
-    {
-        return $this->chatcallUserId;
-    }
-
-    /**
-     * Set chatcallDate
-     *
-     * @param \DateTime $chatcallDate
-     * @return User
-     */
-    public function setChatcallDate($chatcallDate)
-    {
-        $this->chatcallDate = $chatcallDate;
-
-        return $this;
-    }
-
-    /**
-     * Get chatcallDate
-     *
-     * @return \DateTime
-     */
-    public function getChatcallDate()
-    {
-        return $this->chatcallDate;
-    }
-
-    /**
-     * Set chatcallText
-     *
-     * @param string $chatcallText
-     * @return User
-     */
-    public function setChatcallText($chatcallText)
-    {
-        $this->chatcallText = $chatcallText;
-
-        return $this;
-    }
-
-    /**
-     * Get chatcallText
-     *
-     * @return string
-     */
-    public function getChatcallText()
-    {
-        return $this->chatcallText;
     }
 
     /**

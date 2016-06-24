@@ -57,10 +57,7 @@ class _User
     public $diplomas = null;    
     public $openarea = null;    
     public $teach = null;    
-    public $productions = null;    
-    public $chatcall_user_id = null;    
-    public $chatcall_date = null;    
-    public $chatcall_text = null;    
+    public $productions = null;
     public $language = null;    
     public $registration_date = null;    
     public $expiration_date = null;    

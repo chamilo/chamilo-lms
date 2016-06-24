@@ -181,6 +181,9 @@ class LegalManager
                     $preview = '<div class="legal-terms">'.$term_preview['content'].'</div><br />';
                 }
                 $preview .= get_lang('ByClickingRegisterYouAgreeTermsAndConditions');
+                if (api_get_setting('load_term_conditions_section') === 'course') {
+                    $preview = '';
+                }
                 break;
                 // Page link
             case 1:
@@ -276,4 +279,51 @@ class LegalManager
 
 		return Database::result($rs,0,'type');
 	}
+
+    /**
+     * @param int $userId
+     */
+	public static function sendLegal($userId)
+    {
+        $subject = get_lang('SendTermsSubject');
+        $content = sprintf(
+            get_lang('SendTermsDescriptionToUrlX'),
+            api_get_path(WEB_PATH)
+        );
+        MessageManager::send_message_simple($userId, $subject, $content);
+        Display::addFlash(Display::return_message(get_lang('Sent')));
+
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
+        if ($value === false) {
+            $extraFieldInfo = $extraFieldValue->getExtraField()->get_handler_field_info_by_field_variable('termactivated');
+            if ($extraFieldInfo) {
+                $newParams = array(
+                    'item_id' => $userId,
+                    'field_id' => $extraFieldInfo['id'],
+                    'value' => 1,
+                    'comment' => ''
+                );
+                $extraFieldValue->save($newParams);
+            }
+        }
+    }
+
+    /**
+     * @param int $userId
+     */
+    public static function deleteLegal($userId)
+    {
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+        $result = $extraFieldValue->delete($value['id']);
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        }
+
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
+        if ($value) {
+            $extraFieldValue->delete($value['id']);
+        }
+    }
 }

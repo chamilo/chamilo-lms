@@ -48,11 +48,12 @@ if (!empty($_SESSION['user_language_choice'])) {
 } else {
     $user_selected_language = api_get_setting('platformLanguage');
 }
+$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 
 if ($userGeolocalization) {
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
     $htmlHeadXtra[] = '<script>
     $(document).ready(function() {
+
         initializeGeo(false, false);
 
         $("#geolocalization").on("click", function() {
@@ -64,6 +65,13 @@ if ($userGeolocalization) {
         $("#myLocation").on("click", function() {
             myLocation();
             return false;
+        });
+
+        $("#address").keypress(function (event) {
+            if (event.which == 13) {
+                $("#geolocalization").click();
+                return false;
+            }
         });
     });
 
@@ -425,7 +433,8 @@ if ($user_already_registered_show_terms === false) {
     // EXTRA FIELDS
     if (array_key_exists('extra_fields', $allowedFields) || in_array('extra_fields', $allowedFields)) {
         $extraField = new ExtraField('user');
-        $extraFieldList = is_array($allowedFields['extra_fields']) ? $allowedFields['extra_fields'] : [];
+
+        $extraFieldList = isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields']) ? $allowedFields['extra_fields'] : [];
         $returnParams = $extraField->addElements($form, 0, [], false, false, $extraFieldList);
     }
 }
@@ -631,6 +640,8 @@ if ($form->validate()) {
         $status = isset($values['status']) ? $values['status'] : STUDENT;
         $phone = isset($values['phone']) ? $values['phone'] : null;
         $values['language'] = isset($values['language']) ? $values['language'] : api_get_interface_language();
+        $values['address'] = isset($values['address']) ? $values['address'] : '';
+
         // Creates a new user
         $user_id = UserManager::create_user(
             $values['firstname'],
@@ -651,7 +662,9 @@ if ($form->validate()) {
             null,
             true,
             false,
-            $values['address']
+            $values['address'],
+            false,
+            $form
         );
 
         //update the extra fields

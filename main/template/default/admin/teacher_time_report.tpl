@@ -30,11 +30,14 @@
         <div class="actions">
             <div class="row">
                 <div class="col-md-12">
-                    <a href="{{ _p.web_self }}?export=pdf&from={{ selectedFrom }}&until={{ selectedUntil }}&course={{ selectedCourse }}&session={{ selectedSession }}&teacher={{ selectedTeacher }}">
+                    <a href="{{ _p.web_self ~ '?' ~ {'export':'pdf','from':selectedFrom,'until':selectedUntil,'course':selectedCourse,'session':selectedSession,'teacher':selectedTeacher}|url_encode }}">
                         {{ 'pdf.png' | img(32, 'ExportToPDF'|get_lang ) }}
                     </a>
-                    <a href="{{ _p.web_self }}?export=xls&from={{ selectedFrom }}&until={{ selectedUntil }}&course={{ selectedCourse }}&session={{ selectedSession }}&teacher={{ selectedTeacher }}">
+                    <a href="{{ _p.web_self ~ '?' ~ {'export':'xls','from':selectedFrom,'until':selectedUntil,'course':selectedCourse,'session':selectedSession,'teacher':selectedTeacher}|url_encode }}">
                          {{ 'export_excel.png' | img(32, 'ExportExcel'|get_lang ) }}
+                    </a>
+                    <a href="{{ _p.web_main }}admin/teacher_time_report_by_session.php">
+                        {{ 'session.png'|img(32, 'Sessions'|get_lang) }}
                     </a>
                 </div>
             </div>

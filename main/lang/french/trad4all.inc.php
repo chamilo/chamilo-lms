@@ -7704,4 +7704,5 @@ $TCCConnection = 'Connexion à TCC';
 $TCCConnect = 'Se connecter';
 $ForMoreDetailsVisitX = "Pour que nous puissions mieux te connaître et te proposer un parcours sur mesure, tu dois d’abord remplir ce questionnaire %s.
 Si tu ne l’as pas encore fait, n’oublie pas non plus de remplir ton profil pour pouvoir accéder aux activités de la plateforme.";
+$NewStudentRegistered = "Inscription d'un nouvel apprenant";
 ?>

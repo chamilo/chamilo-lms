@@ -5,6 +5,9 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use CpChart\Classes\pCache as pCache;
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  *  Class Tracking
@@ -5751,6 +5754,41 @@ class Tracking
             */
         }
         return $data;
+    }
+
+    /**
+     * @param User $user
+     * @param string $tool
+     * @param Course $course
+     * @param Session|null $session Optional.
+     * @return \Chamilo\CourseBundle\Entity\CStudentPublication|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public static function getLastStudentPublication(User $user, $tool, Course $course, Session $session = null)
+    {
+        return Database::getManager()
+            ->createQuery("
+                SELECT csp
+                FROM ChamiloCourseBundle:CStudentPublication csp
+                INNER JOIN ChamiloCourseBundle:CItemProperty cip
+                    WITH (
+                        csp.iid = cip.ref AND
+                        csp.sessionId = cip.session AND
+                        csp.cId = cip.course AND
+                        csp.userId = cip.lasteditUserId
+                    )
+                WHERE
+                    cip.session = :session AND cip.course = :course AND cip.lasteditUserId = :user AND cip.tool = :tool
+                ORDER BY csp.iid DESC
+            ")
+            ->setMaxResults(1)
+            ->setParameters([
+                'tool' => $tool,
+                'session' => $session,
+                'course' => $course,
+                'user' => $user
+            ])
+            ->getOneOrNullResult();
     }
 }
 

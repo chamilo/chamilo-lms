@@ -6,7 +6,6 @@
  */
 
 ob_start();
-$nameTools = 'Cours';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -57,7 +56,7 @@ if (api_get_setting('add_users_by_coach') == 'true') {
     }
 }
 
-Display :: display_header($nameTools);
+Display :: display_header(get_lang('Courses'));
 
 $a_courses = array();
 if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {

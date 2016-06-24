@@ -940,7 +940,7 @@ function getLimitArray()
         1;
     $pageLength = isset($_REQUEST['pageLength']) ?
         intval($_GET['pageLength']) :
-        10;
+        12;
     return array(
         'start' => ($pageCurrent - 1) * $pageLength,
         'current' => $pageCurrent,

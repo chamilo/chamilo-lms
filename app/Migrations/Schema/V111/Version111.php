@@ -288,6 +288,10 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE user ADD profile_completed TINYINT(1) DEFAULT NULL;');
         $this->addSql('ALTER TABLE extra_field_options CHANGE display_text display_text VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE extra_field CHANGE variable variable VARCHAR(255) NOT NULL');
+
+        if (!$schema->hasTable('version')) {
+            $this->addSql('CREATE TABLE version (version varchar(255), PRIMARY KEY(version));');
+        }
     }
 
     /**

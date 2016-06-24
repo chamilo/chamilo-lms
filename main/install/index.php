@@ -941,8 +941,10 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;");
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
 
-        // Tickets
+        // Add version table
+        $connection->executeQuery('CREATE TABLE version (version varchar(255), PRIMARY KEY(version));');
 
+        // Tickets
         $table = Database::get_main_table(TABLE_TICKET_PROJECT);
 
         // Default Project Table Ticket

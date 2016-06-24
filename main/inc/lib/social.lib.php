@@ -1047,6 +1047,10 @@ class SocialManager extends UserManager
             }
 
             $userPicture = $user_info['avatar'];
+            $officialCode = '';
+            if (api_get_setting('show_official_code_whoisonline') == 'true') {
+                $officialCode .= '<div class="items-user-official-code"><p style="min-height: 30px;" title="'.get_lang('OfficialCode').'">'.$user_info['official_code'].'</p></div>';
+            }
             $img = '<img class="img-responsive img-circle" title="'.$completeName.'" alt="'.$completeName.'" src="'.$userPicture.'">';
 
             $url =  null;
@@ -1068,6 +1072,7 @@ class SocialManager extends UserManager
                             <div class="items-user-name">
                             '.$name.'
                             </div>
+                            '.$officialCode.'
                             <div class="items-user-status">'.$status_icon_chat.' '.$user_rol.'</div>
                         </div>
                       </div>';

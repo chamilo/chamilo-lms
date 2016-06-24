@@ -12,6 +12,15 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq mysql-server
   - sudo apt-get install -qq apache2 libapache2-mod-fastcgi
+  # enable php-fpm
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  # configure apache virtual hosts
+  - sudo cp -f tests/travis-apache /etc/apache2/sites-available/default
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+  - sudo service apache2 restart
   # Install additional PHP packages (check http://docs.travis-ci.com/user/ci-environment/#CI-environment-OS
   # for pre-installed packages)
   #- sudo apt-get install -qq php5-imagick
@@ -19,7 +28,7 @@ before_install:
   # php is compiled with --enable-fpm, so no install of FPM is needed.
   # However, not installing it generates errors with service php5-fpm restart
   # further down (need to use php-fpm without 5)
-  - sudo apt-get install -qq php5-cli php5-fpm
+  #- sudo apt-get install -qq php5-cli php5-fpm
 
 before_script:
   - php5 -v
@@ -43,16 +52,7 @@ before_script:
   # Continue...
   - phpenv config-add tests/travis-php-config.ini
   # enable php-fpm
-  - sudo /etc/init.d/php5-fpm stop
-  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-  - sudo a2enmod rewrite actions fastcgi alias
-  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
   # configure apache virtual hosts
-  - sudo cp -f tests/travis-apache /etc/apache2/sites-available/default
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
-  - sudo service apache2 restart
-  - sudo service php5-fpm restart
   - php5 -v
   # install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash

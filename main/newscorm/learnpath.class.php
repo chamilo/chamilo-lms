@@ -9249,7 +9249,10 @@ class learnpath
                                 if ($pos === 0) {
                                     $abs_img_path_without_subdir = '/'.substr($abs_img_path_without_subdir, strlen($relp));
                                 }
-                                $file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
+
+                                //$file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
+                                $file_path = realpath(api_get_path(SYS_APP_PATH).$abs_img_path_without_subdir);
+
                                 $file_path = str_replace('\\', '/', $file_path);
                                 $file_path = str_replace('//', '/', $file_path);
 

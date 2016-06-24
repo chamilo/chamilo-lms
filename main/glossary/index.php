@@ -63,21 +63,21 @@ switch ($action) {
         $form->addElement('header', get_lang('TermAddNew'));
         $form->addElement(
             'text',
-            'glossary_title',
+            'name',
             get_lang('TermName'),
             array('id' => 'glossary_title')
         );
 
         $form->addElement(
             'html_editor',
-            'glossary_comment',
+            'description',
             get_lang('TermDefinition'),
             null,
             array('ToolbarSet' => 'Glossary', 'Height' => '300')
         );
         $form->addButtonCreate(get_lang('TermAddButton'), 'SubmitGlossary');
         // setting the rules
-        $form->addRule('glossary_title', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
         // The validation or display
         if ($form->validate()) {
             $check = Security::check_token('post');
@@ -110,41 +110,46 @@ switch ($action) {
             // Setting the form elements
             $form->addElement('header', get_lang('TermEdit'));
             $form->addElement('hidden', 'glossary_id');
-            $form->addElement('text', 'glossary_title', get_lang('TermName'));
+            $form->addElement('text', 'name', get_lang('TermName'));
 
             $form->addElement(
                 'html_editor',
-                'glossary_comment',
+                'description',
                 get_lang('TermDefinition'),
                 null,
                 array('ToolbarSet' => 'Glossary', 'Height' => '300')
             );
-            $element = $form->addElement('text', 'insert_date', get_lang('CreationDate'));
-            $element->freeze();
-            $element = $form->addElement('text', 'update_date', get_lang('UpdateDate'));
-            $element->freeze();
-            $form->addButtonUpdate(get_lang('TermUpdateButton'), 'SubmitGlossary');
 
             // setting the defaults
             $glossary_data = GlossaryManager::get_glossary_information($_GET['glossary_id']);
 
             // Date treatment for timezones
             if (!empty($glossary_data['insert_date'])) {
-                $glossary_data['insert_date'] = api_get_local_time($glossary_data['insert_date']);
+                $glossary_data['insert_date'] = Display::tip(
+                    date_to_str_ago($glossary_data['insert_date']),
+                    api_get_local_time($glossary_data['insert_date'])
+                );
             } else {
-                $glossary_data['insert_date']  = '';
+                $glossary_data['insert_date'] = '';
             }
 
             if (!empty($glossary_data['update_date'])) {
-                $glossary_data['update_date'] = api_get_local_time($glossary_data['update_date']);
+                $glossary_data['update_date'] = Display::tip(
+                    date_to_str_ago($glossary_data['update_date']),
+                    api_get_local_time($glossary_data['update_date'])
+                );
             } else {
-                $glossary_data['update_date']  = '';
+                 $glossary_data['update_date'] = '';
             }
 
+            $form->addLabel(get_lang('CreationDate'), $glossary_data['insert_date']);
+            $form->addLabel(get_lang('UpdateDate'), $glossary_data['update_date']);
+
+            $form->addButtonUpdate(get_lang('TermUpdateButton'), 'SubmitGlossary');
             $form->setDefaults($glossary_data);
 
             // setting the rules
-            $form->addRule('glossary_title', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
             // The validation or display
             if ($form->validate()) {
@@ -193,7 +198,10 @@ switch ($action) {
         );
         $form->addElement('header', '', get_lang('ImportGlossary'));
         $form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
+
         $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllGlossaryTerms'));
+        $form->addElement('checkbox', 'update', null, get_lang('UpdateExistingGlossaryTerms'));
+
         $form->addButtonImport(get_lang('Import'), 'SubmitImport');
         $content = $form->returnForm();
 
@@ -201,21 +209,31 @@ switch ($action) {
         $content .= '<pre>
                 <strong>term</strong>;<strong>definition</strong>;
                 "Hello";"Hola";
-                "Good";"Bueno";</pre>';
+                "Goodbye";"Adiós";
+        </pre>';
 
         if ($form->validate()) {
+            $termsDeleted = [];
+
             //this is a bad idea //jm
             if (isset($_POST['replace']) && $_POST['replace']) {
                 foreach (GlossaryManager::get_glossary_terms() as $term) {
-                    if (!GlossaryManager::delete_glossary($term['id'])) {
+                    if (!GlossaryManager::delete_glossary($term['id'], false)) {
                         Display::addFlash(
                             Display::return_message(get_lang("CannotDeleteGlossary") . ':' . $term['id'], 'error')
                         );
+                    } else {
+                        $termsDeleted[] = $term['name'];
                     }
                 }
             }
+
+            $updateTerms = isset($_POST['update']) && $_POST['update'] ? true : false;
+
             $data = Import::csv_reader($_FILES['file']['tmp_name']);
             $goodList = [];
+            $updatedList = [];
+            $addedList = [];
             $badList = [];
             $doubles = [];
             $added = [];
@@ -225,20 +243,22 @@ switch ($action) {
                 $termsToAdd = [];
                 foreach ($data as $item) {
                     $items = [
-                        'glossary_title' => $item['term'],
-                        'glossary_comment' => $item['definition']
+                        'name' => $item['term'],
+                        'description' => $item['definition']
                     ];
                     $termsToAdd[] = $items;
                     $termsPerKey[$item['term']] = $items;
                 }
 
                 if (empty($termsToAdd)) {
-                    Display::return_message(get_lang("NothingToAdd"), 'warning');
+                    Display::addFlash(
+                        Display::return_message(get_lang('NothingToAdd'), 'warning')
+                    );
                     header('Location: '.$currentUrl);
                     exit;
                 }
 
-                $repeatItems = array_count_values(array_column($termsToAdd, 'glossary_title'));
+                $repeatItems = array_count_values(array_column($termsToAdd, 'name'));
                 foreach ($repeatItems as $item => $count) {
                     if ($count > 1) {
                         $doubles[] = $item;
@@ -249,19 +269,48 @@ switch ($action) {
 
                 foreach ($uniqueTerms as $itemTerm) {
                     $item = $termsPerKey[$itemTerm];
-                    $result = GlossaryManager::save_glossary($item, false);
 
-                    if ($result) {
-                        $goodList[] = $item['glossary_title'];
+                    if ($updateTerms) {
+                        $glossaryInfo = GlossaryManager::get_glossary_term_by_glossary_name($item['name']);
+
+                        if (!empty($glossaryInfo)) {
+                            $glossaryInfo['description'] = $item['description'];
+                            GlossaryManager::update_glossary($glossaryInfo, false);
+                            $updatedList[] = $item['name'];
+                        } else {
+                            $result = GlossaryManager::save_glossary($item, false);
+                            if ($result) {
+                                $addedList[] = $item['name'];
+                            } else {
+                                $badList[] = $item['name'];
+                            }
+                        }
                     } else {
-                        $badList[] = $item['glossary_title'];
+                        $result = GlossaryManager::save_glossary($item, false);
+                        if ($result) {
+                            $addedList[] = $item['name'];
+                        } else {
+                            $badList[] = $item['name'];
+                        }
                     }
                 }
             }
 
-            if (count($goodList) > 0) {
+            if (count($termsDeleted) > 0) {
                 Display::addFlash(
-                    Display::return_message(get_lang("TermsImported").': '.implode(', ', $goodList))
+                    Display::return_message(get_lang("TermDeleted").': '.implode(', ', $termsDeleted))
+                );
+            }
+
+            if (count($updatedList) > 0) {
+                Display::addFlash(
+                    Display::return_message(get_lang("TermsUpdated").': '.implode(', ', $updatedList))
+                );
+            }
+
+            if (count($addedList) > 0) {
+                Display::addFlash(
+                    Display::return_message(get_lang("TermsAdded").': '.implode(', ', $addedList))
                 );
             }
 

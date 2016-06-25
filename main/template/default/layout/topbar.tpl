@@ -61,16 +61,6 @@
                     {% endif %}
 
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{{ _p.web_main }}social/home.php"><img src="{{ _u.avatar_small }}"/></a></li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown"  href="#">{{ _u.complete_name }}<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ _p.web_main }}social/home.php">{{ "Profile"|get_lang }}</a></li>
-                                <li><a href="{{ _p.web_main }}calendar/agenda_js.php?type=personal">{{ "MyAgenda"|get_lang }}</a></li>
-                                <li><a href="{{ _p.web_main }}messages/inbox.php">{{ "Inbox"|get_lang }}</a></li>
-                                <li><a href="{{ _p.web_main }}auth/my_progress.php">{{ "MyReporting"|get_lang }}</a></li>
-                            </ul>
-                        </li>
                         <li><a href="{{  _p.web }}index.php?logout=logout&uid={{_u.user_id}}">{{ "Logout"|get_lang }}</a></li>
                     </ul>
                 </div> <!-- /nav collapse -->

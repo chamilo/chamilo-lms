@@ -1439,7 +1439,7 @@ function getWorkListTeacher(
                     $where_condition
                 ORDER BY $column $direction
                 LIMIT $start, $limit";
-        echo "<pre>$sql</pre>";
+
         $result = Database::query($sql);
 
         if ($getCount) {
@@ -2036,35 +2036,33 @@ function get_work_user_list(
                         </form>
                     ';
 
-                    $correction .= "
-                        <script>
-                        $(document).ready(function() {
-                            $('#file_upload_".$item_id."').fileupload({
-                                uploadTable: $('.files'),
-                                downloadTable: $('.files'),
-                                buildUploadRow: function (files, index) {
-                                    $('.files').show();
-                                    return
-                                        $('<tr><td>' + files[index].name + '<\/td>' +
-                                        '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
-                                        '<td class=\"file_upload_cancel\">' +
-                                        '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' +
-                                        '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
-                                        '<\/td><\/tr>');
-                                },
-                                buildDownloadRow: function (file) {
-                                    return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
-                                }
-                            });
+                    $correction .= "<script>
+                    $(document).ready(function() {
+                        $('#file_upload_".$item_id."').fileupload({
+                            uploadTable: $('.files'),
+                            downloadTable: $('.files'),
+                            buildUploadRow: function (files, index) {
+                                $('.files').show();
+                                return
+                                    $('<tr><td>' + files[index].name + '<\/td>' +
+                                    '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
+                                    '<td class=\"file_upload_cancel\">' +
+                                    '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' +
+                                    '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
+                                    '<\/td><\/tr>');
+                            },
+                            buildDownloadRow: function (file) {
+                                return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
+                            }
                         });
-                        </script>
-                    ";
+                    });
+                    </script>";
 
                     if ($locked) {
                         if ($qualification_exists) {
                             $action .= Display::return_icon('rate_work_na.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL);
                         } else {
-                            $action .= Display::return_icon('edit_na.png', get_lang('Comment'),array(), ICON_SIZE_SMALL);
+                            $action .= Display::return_icon('edit_na.png', get_lang('Comment'), array(), ICON_SIZE_SMALL);
                         }
                     } else {
                         if ($qualification_exists) {
@@ -2101,22 +2099,22 @@ function get_work_user_list(
                     }
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
+                        Display::return_icon('default.png', get_lang('View'), array(), ICON_SIZE_SMALL).'</a>';
 
                     if (api_get_course_setting('student_delete_own_publication') == 1) {
                         if (api_is_allowed_to_session_edit(false, true)) {
                             $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
-                                Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
+                                Display::return_icon('edit.png', get_lang('Comment'), array(), ICON_SIZE_SMALL).'</a>';
                         }
                         $action .= ' <a href="'.$url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
                             Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
+                        $action .= Display::return_icon('edit_na.png', get_lang('Modify'), array(), ICON_SIZE_SMALL);
                     }
                 } else {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
-                    $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
+                        Display::return_icon('default.png', get_lang('View'), array(), ICON_SIZE_SMALL).'</a>';
+                    $action .= Display::return_icon('edit_na.png', get_lang('Modify'), array(), ICON_SIZE_SMALL);
                 }
 
                 // Status.
@@ -4627,13 +4625,11 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
                 foreach ($workPerUser as $work) {
                     $work = $work['work'];
                     foreach ($work->user_results as $userResult) {
-                        //var_dump($userResult);exit;
                         $content .= $userResult['title'];
                         // No need to use api_get_local_time()
                         $content .= $userResult['sent_date'];
                         $content .= $userResult['qualification'];
                         $content .= $userResult['description'];
-                        //$content .= getWorkComments($userResult);
                     }
                 }
 

@@ -175,8 +175,9 @@ class bbb
             $params['group_id'] = api_get_group_id();
         }
 
+        $courseCode = is_null($courseCode) ? '' : $courseCode;
         $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $courseCode;
-        $attendeePassword =  $params['attendee_pw'];
+        $attendeePassword = $params['attendee_pw'];
         $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
 

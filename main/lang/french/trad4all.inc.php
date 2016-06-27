@@ -7705,4 +7705,10 @@ $TCCConnect = 'Se connecter';
 $ForMoreDetailsVisitX = "Pour que nous puissions mieux te connaître et te proposer un parcours sur mesure, tu dois d’abord remplir ce questionnaire %s.
 Si tu ne l’as pas encore fait, n’oublie pas non plus de remplir ton profil pour pouvoir accéder aux activités de la plateforme.";
 $NewStudentRegistered = "Inscription d'un nouvel apprenant";
+$UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX = 'a participé à une préparation linguistique en ligne sur la plateforme %s de l’Office Franco-allemand pour la Jeunesse.
+Du %s au %s.
+Cette préparation correspond à un volume horaire d’environ %s heures';
+$TheContentsAreValidated = 'Les contenus suivants ont été validés';
+$SkillsValidatedOfUserX = 'Sur cette plateforme l’investissement dans le réseau social est valorisé et %s a fait preuve des compétences suivantes';
+$MyGeneralCertificate = 'Mon certificat général';
 ?>

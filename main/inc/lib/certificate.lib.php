@@ -40,23 +40,21 @@ class Certificate extends Model
     /**
      * Constructor
      * @param int $certificate_id ID of the certificate.
+     * @param int $userId
      *
      * If no ID given, take user_id and try to generate one
      */
-    public function __construct($certificate_id = null)
+     public function __construct($certificate_id = 0, $userId = 0)
     {
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        unset($this->certificate_data);
+        $this->user_id = !empty($userId) ? $userId : api_get_user_id();
 
-        if (isset($certificate_id)) {
+        if (!empty($certificate_id)) {
             $certificate = $this->get($certificate_id);
             if (!empty($certificate) && is_array($certificate)) {
                 $this->certificate_data = $certificate;
                 $this->user_id = $this->certificate_data['user_id'];
             }
-        } else {
-            //Try with the current user
-            $this->user_id = api_get_user_id();
         }
 
         if ($this->user_id) {
@@ -76,7 +74,7 @@ class Certificate extends Model
             }
         }
 
-        //Setting the qr and html variables
+        // Setting the qr and html variables
         if (isset($certificate_id) && !empty($this->certification_user_path)) {
             $pathinfo = pathinfo($this->certificate_data['path_certificate']);
             $this->html_file = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
@@ -147,8 +145,11 @@ class Certificate extends Model
     }
 
     /**
-    *  Generates an HTML Certificate and fills the path_certificate field in the DB
-    **/
+     *  Generates an HTML Certificate and fills the path_certificate field in the DB
+     *
+     * @param array $params
+     * @return bool|int
+     */
     public function generate($params = array())
     {
         // The user directory should be set
@@ -160,106 +161,137 @@ class Certificate extends Model
 
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
 
-        if (isset($this->certificate_data)) {
+        if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
             $my_category = Category :: load($this->certificate_data['cat_id']);
-        }
 
-        if (isset($my_category[0]) &&
-            $my_category[0]->is_certificate_available($this->user_id)
-        ) {
-            $user = api_get_user_info($this->user_id);
+            if (isset($my_category[0]) && $my_category[0]->is_certificate_available($this->user_id)) {
+                $courseId = api_get_course_int_id();
+                $sessionId = api_get_session_id();
 
-            $scoredisplay = ScoreDisplay :: instance();
-            $scorecourse = $my_category[0]->calc_score($this->user_id);
-            $scorecourse_display = isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable');
+                $skill = new Skill();
+                $skill->add_skill_to_user(
+                    $this->user_id,
+                    $this->certificate_data['cat_id'],
+                    $courseId,
+                    $sessionId
+                );
 
-            // Prepare all necessary variables:
-            $organization_name = api_get_setting('Institution');
-            //$portal_name         = api_get_setting('siteName');
-            $stud_fn = $user['firstname'];
-            $stud_ln = $user['lastname'];
+                if (is_dir($this->certification_user_path)) {
+                    if (!empty($this->certificate_data)) {
+                        $new_content_html = GradebookUtils::get_user_certificate_content(
+                            $this->user_id,
+                            $my_category[0]->get_course_code(),
+                            $my_category[0]->get_session_id(),
+                            false,
+                            $params['hide_print_button']
+                        );
 
-            //@todo this code is not needed
-            $certif_text = sprintf(
-                get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),
-                $organization_name, $stud_fn.' '.$stud_ln, $my_category[0]->get_name(),
-                $scorecourse_display
-            );
-            $certif_text = str_replace("\\n","\n", $certif_text);
+                        if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
+                            $name = $this->certificate_data['path_certificate'];
+                            $my_path_certificate = $this->certification_user_path.basename($name);
+                            if (file_exists($my_path_certificate) &&
+                                !empty($name) &&
+                                !is_dir($my_path_certificate) &&
+                                $this->force_certificate_generation == false
+                            ) {
+                                //Seems that the file was already generated
+                                return true;
+                            } else {
+                                // Creating new name
+                                $name = md5($this->user_id.$this->certificate_data['cat_id']).'.html';
+                                $my_path_certificate = $this->certification_user_path.$name;
+                                $path_certificate = '/'.$name;
 
-            //If the gradebook is related to skills we added the skills to the user
+                                // Getting QR filename
+                                $file_info = pathinfo($path_certificate);
+                                $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';
 
-            $courseId = api_get_course_int_id();
-            $sessionId = api_get_session_id();
-
-            $skill = new Skill();
-            $skill->add_skill_to_user(
-                $this->user_id,
-                $this->certificate_data['cat_id'],
-                $courseId,
-                $sessionId
-            );
-
-            if (is_dir($this->certification_user_path)) {
-                if (!empty($this->certificate_data)) {
-                    $new_content_html = GradebookUtils::get_user_certificate_content(
-                        $this->user_id,
-                        $my_category[0]->get_course_code(),
-                        $my_category[0]->get_session_id(),
-                        false,
-                        $params['hide_print_button']
-                    );
-
-                    if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
-                        $name = $this->certificate_data['path_certificate'];
-                        $my_path_certificate = $this->certification_user_path.basename($name);
-                        if (file_exists($my_path_certificate) &&
-                            !empty($name) &&
-                            !is_dir($my_path_certificate) &&
-                            $this->force_certificate_generation == false
-                        ) {
-                            //Seems that the file was already generated
-                            return true;
-                        } else {
-                            // Creating new name
-                            $name = md5($this->user_id.$this->certificate_data['cat_id']).'.html';
-                            $my_path_certificate = $this->certification_user_path.$name;
-                            $path_certificate    ='/'.$name;
-
-                            //Getting QR filename
-                            $file_info = pathinfo($path_certificate);
-                            $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';
-
-                            $my_new_content_html = str_replace(
-                                '((certificate_barcode))',
-                                Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'),
-                                $new_content_html['content']
-                            );
-                            $my_new_content_html = mb_convert_encoding($my_new_content_html,'UTF-8', api_get_system_encoding());
-
-                            $result = @file_put_contents($my_path_certificate, $my_new_content_html);
-                            if ($result) {
-                                //Updating the path
-                                self::update_user_info_about_certificate(
-                                    $this->certificate_data['cat_id'],
-                                    $this->user_id,
-                                    $path_certificate
+                                $my_new_content_html = str_replace(
+                                    '((certificate_barcode))',
+                                    Display::img(
+                                        $this->certification_web_user_path.$file_info['filename'].'_qr.png',
+                                        'QR'
+                                    ),
+                                    $new_content_html['content']
                                 );
-                                $this->certificate_data['path_certificate'] = $path_certificate;
+                                $my_new_content_html = mb_convert_encoding(
+                                    $my_new_content_html,
+                                    'UTF-8',
+                                    api_get_system_encoding()
+                                );
 
-                                if ($this->html_file_is_generated()) {
-                                    if (!empty($file_info)) {
-                                        $text = $this->parse_certificate_variables($new_content_html['variables']);
-                                        $this->generate_qr($text, $qr_code_filename);
+                                $result = @file_put_contents($my_path_certificate, $my_new_content_html);
+                                if ($result) {
+                                    // Updating the path
+                                    self::update_user_info_about_certificate(
+                                        $this->certificate_data['cat_id'],
+                                        $this->user_id,
+                                        $path_certificate
+                                    );
+                                    $this->certificate_data['path_certificate'] = $path_certificate;
+
+                                    if ($this->html_file_is_generated()) {
+                                        if (!empty($file_info)) {
+                                            $text = $this->parse_certificate_variables($new_content_html['variables']);
+                                            $this->generate_qr($text, $qr_code_filename);
+                                        }
                                     }
                                 }
-                            }
 
-                            return $result;
+                                return $result;
+                            }
                         }
                     }
                 }
             }
+        } else {
+            // General certificate
+
+            $name = md5($this->user_id).'.html';
+            $my_path_certificate = $this->certification_user_path.$name;
+            $path_certificate = '/'.$name;
+
+            // Getting QR filename
+            $file_info = pathinfo($path_certificate);
+            $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';
+
+            $content = $this->generateCustomCertificate();
+
+            $my_new_content_html = str_replace(
+                '((certificate_barcode))',
+                Display::img(
+                    $this->certification_web_user_path.$file_info['filename'].'_qr.png',
+                    'QR'
+                ),
+                $content
+            );
+
+            $my_new_content_html = mb_convert_encoding(
+                $my_new_content_html,
+                'UTF-8',
+                api_get_system_encoding()
+            );
+
+            $result = @file_put_contents($my_path_certificate, $my_new_content_html);
+
+            if ($result) {
+                // Updating the path
+                self::update_user_info_about_certificate(
+                    0,
+                    $this->user_id,
+                    $path_certificate
+                );
+                $this->certificate_data['path_certificate'] = $path_certificate;
+
+                if ($this->html_file_is_generated()) {
+                    if (!empty($file_info)) {
+                        //$text = $this->parse_certificate_variables($new_content_html['variables']);
+                        //$this->generate_qr($text, $qr_code_filename);
+                    }
+                }
+            }
+
+            return $result;
         }
 
         return false;
@@ -279,8 +311,9 @@ class Certificate extends Model
     ) {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         if (!UserManager::is_user_certified($cat_id, $user_id)) {
-            $sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
-                 WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
+            $sql = 'UPDATE '.$table_certificate.' SET 
+                        path_certificate="'.Database::escape_string($path_certificate).'"
+                    WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
             Database::query($sql);
         }
     }
@@ -428,5 +461,78 @@ class Certificate extends Model
             Display :: display_warning_message(get_lang('NoCertificateAvailable'));
         }
         exit;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateCustomCertificate()
+    {
+        $myCertificate = GradebookUtils::get_certificate_by_user_id(
+            0,
+            $this->user_id
+        );
+
+        if (empty($myCertificate)) {
+             GradebookUtils::register_user_info_about_certificate(
+                0,
+                $this->user_id,
+                100,
+                api_get_utc_datetime()
+            );
+        }
+
+        $userInfo = api_get_user_info($this->user_id);
+
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($this->user_id, 'legal_accept');
+        $time = api_time_to_hms(Tracking::get_time_spent_on_the_platform($this->user_id));
+
+        $tplContent = new Template(null, false, false, false, false, false);
+        // variables for the default template
+        $tplContent->assign('complete_name', $userInfo['complete_name']);
+        $tplContent->assign('time_in_platform', $time);
+
+        $sessions = SessionManager::get_sessions_by_user($this->user_id);
+
+        $skill = new Skill();
+        $skills = $skill->getStudentSkills($this->user_id);
+
+        $tplContent->assign('terms_validation_date', api_get_local_time($value['value']));
+        $tplContent->assign('skills', $skills);
+        $tplContent->assign('sessions', $sessions);
+
+        $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
+        $content = $tplContent->fetch($layoutContent);
+
+        return $content;
+    }
+
+    /**
+     *
+     */
+    public function generatePdfFromCustomCertificate()
+    {
+        $orientation = api_get_configuration_value('certificate_pdf_orientation');
+
+        $params['orientation'] = 'landscape';
+        if (!empty($orientation)) {
+            $params['orientation'] = $orientation;
+        }
+
+        $params['left'] = 0;
+        $params['right'] = 0;
+        $params['top'] = 0;
+        $params['bottom'] = 0;
+        $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
+        $pdf = new PDF($page_format, $params['orientation'], $params);
+
+        $pdf->html_to_pdf(
+            $this->html_file,
+            get_lang('Certificates'),
+            null,
+            false,
+            false
+        );
     }
 }

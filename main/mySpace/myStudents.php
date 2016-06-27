@@ -170,6 +170,11 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
+    case 'generate_certificate':
+        $certificate = new Certificate(0, $student_id);
+        $certificate->generatePdfFromCustomCertificate();
+        exit;
+        break;
     case 'send_legal':
         LegalManager::sendLegal($student_id);
         break;
@@ -571,6 +576,18 @@ if (!empty($student_id)) {
                 </tr>
             <?php
             }
+
+            $icon = ' '.Display::url(
+                get_lang('Generate'),
+                api_get_self().'?action=generate_certificate&student='.$student_id.'&course='.$course_code,
+                ['class' => 'btn btn-primary btn-xs']
+            );
+
+            echo '<tr>
+                <td align="right">';
+            echo get_lang('Certificate').' </td>  <td align="left">'.$icon;
+            echo '</td></tr>';
+
 
             if (api_get_setting('allow_terms_conditions') === 'true') {
                 $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);

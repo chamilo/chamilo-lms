@@ -945,7 +945,6 @@ if (@$_POST['step2']) {
         $connection->executeQuery('CREATE TABLE version (version varchar(255), PRIMARY KEY(version));');
 
         // Tickets
-
         $table = Database::get_main_table(TABLE_TICKET_PROJECT);
 
         // Default Project Table Ticket

@@ -5,6 +5,9 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use CpChart\Classes\pCache as pCache;
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  *  Class Tracking
@@ -4299,9 +4302,7 @@ class Tracking
                 $html .= Display::page_subheader(
                     Display::return_icon('course.png', get_lang('MyCourses'), array(), ICON_SIZE_SMALL).' '.get_lang('MyCourses')
                 );
-                $html .= '<div class="table-responsive">';
-                $html .= '<table class="table table-striped table-hover">';
-                $html .= '<thead>';
+                $html .= '<table class="data_table" width="100%">';
                 $html .= '<tr>
                           '.Display::tag('th', get_lang('Course'), array('width'=>'300px')).'
                           '.Display::tag('th', get_lang('TimeSpentInTheCourse'), array('class'=>'head')).'
@@ -4310,7 +4311,6 @@ class Tracking
                           '.Display::tag('th', get_lang('LastConnexion'), array('class'=>'head')).'
                           '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
                         </tr>';
-                $html .= '</thead><tbody>';
 
                 foreach ($courses as $course_code => $course_title) {
                     $courseInfo = api_get_course_info($course_code);
@@ -4377,8 +4377,7 @@ class Tracking
                     $html .= '</a>';
                     $html .= '</td></tr>';
                 }
-                $html .= '</tbody></table>';
-                $html .= '</div>';
+                $html .= '</table>';
             }
         }
 
@@ -4489,9 +4488,7 @@ class Tracking
                 Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL) . ' ' . get_lang('Sessions')
             );
 
-            $html .= '<div class="table-responsive">';
-            $html .= '<table class="table table-striped table-hover">';
-            $html .= '<thead>';
+            $html .= '<table class="data_table" width="100%">';
             $html .= '<tr>
                   '.Display::tag('th', get_lang('Session'), array('width'=>'300px')).'
                   '.Display::tag('th', get_lang('PublishedExercises'), array('width'=>'300px')).'
@@ -4499,8 +4496,6 @@ class Tracking
                   '.Display::tag('th', get_lang('AverageExerciseResult'), array('class'=>'head')).'
                   '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
                   </tr>';
-            $html .= '</thead>';
-            $html .= '<tbody>';
 
             foreach ($course_in_session as $my_session_id => $session_data) {
                 $course_list  = $session_data['course_list'];
@@ -4577,8 +4572,7 @@ class Tracking
                 $html .= Display::tag('td', $icon);
                 $html .= '</tr>';
             }
-            $html .= '</tbody>';
-            $html .= '</table></div><br />';
+            $html .= '</table><br />';
             $html .= Display::div($main_session_graph, array('id'=>'session_graph','class'=>'chart-session', 'style'=>'position:relative; text-align: center;') );
 
             // Checking selected session.
@@ -4590,11 +4584,9 @@ class Tracking
 
                 $html .= Display::tag('h3',$session_data['name'].' - '.get_lang('CourseList'));
 
-                $html .= '<div class="table-responsive">';
-                $html .= '<table class="table table-hover table-striped">';
+                $html .= '<table class="data_table" width="100%">';
                 //'.Display::tag('th', get_lang('DoneExercises'),         array('class'=>'head')).'
                 $html .= '
-                    <thead>
                     <tr>
                       <th width="300px">'.get_lang('Course').'</th>
                       '.Display::tag('th', get_lang('PublishedExercises'),    	array('class'=>'head')).'
@@ -4606,10 +4598,7 @@ class Tracking
                       '.Display::tag('th', get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
                       '.Display::tag('th', get_lang('LastConnexion'),         	array('class'=>'head')).'
                       '.Display::tag('th', get_lang('Details'),               	array('class'=>'head')).'
-                    </tr>
-                    </thead>
-                    <tbody>
-                ';
+                    </tr>';
 
                 foreach ($course_list as $course_data) {
                     $course_code  = $course_data['code'];
@@ -4726,7 +4715,7 @@ class Tracking
                     $html .= Display::tag('td', $details, array('align'=>'center'));
                     $html .= '</tr>';
                 }
-                $html .= '</tbody></table></div>';
+                $html .= '</table>';
             }
         }
 
@@ -4751,22 +4740,18 @@ class Tracking
             $course_info = CourseManager::get_course_information($course);
 
             $html .= Display::page_subheader($course_info['title']);
-            $html .= '<div class="table-responsive">';
-            $html .= '<table class="table table-striped table-hover">';
+            $html .= '<table class="data_table" width="100%">';
 
             //Course details
             $html .= '
-                <thead>
                 <tr>
-                <th>'.get_lang('Exercises').'</th>
-                <th>'.get_lang('Attempts').'</th>
-                <th>'.get_lang('BestAttempt').'</th>
-                <th>'.get_lang('Ranking').'</th>
-                <th>'.get_lang('BestResultInCourse').'</th>
-                <th>'.get_lang('Statistics').' '.Display :: return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>
-                </tr>
-                </thead>
-                <tbody>';
+                <th class="head" style="color:#000">'.get_lang('Exercises').'</th>
+                <th class="head" style="color:#000">'.get_lang('Attempts').'</th>
+                <th class="head" style="color:#000">'.get_lang('BestAttempt').'</th>
+                <th class="head" style="color:#000">'.get_lang('Ranking').'</th>
+                <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>
+                <th class="head" style="color:#000">'.get_lang('Statistics').' '.Display :: return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>
+                </tr>';
 
             if (empty($session_id)) {
                 $user_list = CourseManager::get_user_list_from_course_code(
@@ -4930,19 +4915,17 @@ class Tracking
             } else {
                 $html .= '<tr><td colspan="5" align="center">'.get_lang('NoEx').'</td></tr>';
             }
-            $html .= '</tbody></table></div>';
+            $html .= '</table>';
 
 
             // LP table results
-            $html .= '<div class="table-responsive">';
-            $html .='<table class="table table-striped table-hover">';
-            $html .= '<thead><tr>';
+            $html .='<table class="data_table">';
             $html .= Display::tag('th', get_lang('Learnpaths'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('LatencyTimeSpent'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('Progress'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('Score'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('LastConnexion'), array('class'=>'head', 'style'=>'color:#000'));
-            $html .= '</tr></thead><tbody>';
+            $html .= '</tr>';
 
             $list = new LearnpathList(
                 api_get_user_id(),
@@ -5000,7 +4983,7 @@ class Tracking
                         </td>
                       </tr>';
             }
-            $html .='</tbody></table></div>';
+            $html .='</table>';
 
             $html .= self::displayUserSkills($user_id, $course_info['id'], $session_id);
         }
@@ -5791,6 +5774,41 @@ class Tracking
         }
         return $data;
     }
+
+    /**
+         * @param User $user
+         * @param string $tool
+         * @param Course $course
+         * @param Session|null $session Optional.
+         * @return \Chamilo\CourseBundle\Entity\CStudentPublication|null
+         * @throws \Doctrine\ORM\NonUniqueResultException
+         */
+        public static function getLastStudentPublication(User $user, $tool, Course $course, Session $session = null)
+        {
+            return Database::getManager()
+                ->createQuery("
+                    SELECT csp
+                    FROM ChamiloCourseBundle:CStudentPublication csp
+                    INNER JOIN ChamiloCourseBundle:CItemProperty cip
+                        WITH (
+                            csp.iid = cip.ref AND
+                            csp.sessionId = cip.session AND
+                            csp.cId = cip.course AND
+                            csp.userId = cip.lasteditUserId
+                        )
+                    WHERE
+                        cip.session = :session AND cip.course = :course AND cip.lasteditUserId = :user AND cip.tool = :tool
+                    ORDER BY csp.iid DESC
+                ")
+                ->setMaxResults(1)
+                ->setParameters([
+                    'tool' => $tool,
+                    'session' => $session,
+                    'course' => $course,
+                    'user' => $user
+                ])
+                ->getOneOrNullResult();
+        }
 
     /**
      * Get the HTML code for show a block with the achieved user skill on course/session

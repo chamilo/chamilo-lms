@@ -47,12 +47,11 @@ $strings['tool_enable_help'] = "Choose whether you want to enable the BigBlueBut
 $strings['big_blue_button_welcome_message'] = 'Welcome message';
 $strings['enable_global_conference'] = 'Enable global conference';
 $strings['enable_conference_in_course_groups'] = 'Enable conference in course groups';
+$strings['enable_global_conference_link'] = 'Enable the link to the global conference in the homepage';
 
 $strings['big_blue_button_record_and_store'] = 'Record and store sessions';
 $strings['bbb_enable_conference_in_groups'] = 'Allow conference in groups';
-
 $strings['plugin_tool_bbb'] = 'Video';
-
 $strings['ThereAreNotRecordingsForTheMeetings'] = 'There are not recording for the meeting sessions';
 $strings['NoRecording'] = 'No recording';
 $strings['ClickToContinue'] = 'Click to continue';

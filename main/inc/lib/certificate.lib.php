@@ -40,23 +40,23 @@ class Certificate extends Model
     /**
      * Constructor
      * @param int $certificate_id ID of the certificate.
+     * @param int $userId
      *
      * If no ID given, take user_id and try to generate one
      */
-    public function __construct($certificate_id = null)
+    public function __construct($certificate_id = 0, $userId = 0)
     {
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         unset($this->certificate_data);
 
-        if (isset($certificate_id)) {
+        $this->user_id = !empty($userId) ? $userId : api_get_user_id();
+
+        if (empty($certificate_id)) {
             $certificate = $this->get($certificate_id);
             if (!empty($certificate) && is_array($certificate)) {
                 $this->certificate_data = $certificate;
                 $this->user_id = $this->certificate_data['user_id'];
             }
-        } else {
-            //Try with the current user
-            $this->user_id = api_get_user_id();
         }
 
         if ($this->user_id) {

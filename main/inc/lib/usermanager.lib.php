@@ -1898,7 +1898,7 @@ class UserManager
                     0 => $rowf['id'],
                     1 => $rowf['variable'],
                     2 => $rowf['field_type'],
-                    3 => (empty($rowf['display_text']) ? '' : $rowf['display_text']),
+                    3 => empty($rowf['display_text']) ? '' : $rowf['display_text'],
                     4 => $rowf['default_value'],
                     5 => $rowf['field_order'],
                     6 => $rowf['visible'],
@@ -1917,7 +1917,7 @@ class UserManager
                         $fields[$rowf['id']][9][$rowo['id']] = array(
                             0 => $rowo['id'],
                             1 => $rowo['option_value'],
-                            2 => (empty($rowo['display_text']) ? '' : $rowo['display_text']),
+                            2 => empty($rowo['display_text']) ? '' : $rowo['display_text'],
                             3 => $rowo['option_order']
                         );
                     }
@@ -2052,7 +2052,7 @@ class UserManager
 
     /**
      * Check if a field is available
-     * @param    string    th$variable
+     * @param    string    $variable
      * @return    boolean
      */
     public static function is_extra_field_available($variable)
@@ -2060,7 +2060,7 @@ class UserManager
         $extraField = new ExtraField('user');
         $data = $extraField->get_handler_field_info_by_field_variable($variable);
 
-        return empty($data) ? true : false;
+        return !empty($data) ? true : false;
     }
 
     /**
@@ -2279,7 +2279,7 @@ class UserManager
     {
         $extraField = new ExtraFieldValue('user');
 
-        $data = $extraField->get_values_by_handler_and_field_variable(
+        $data = $extraField->get_item_id_from_field_variable_and_field_value(
             $field_variable,
             $field_value,
             null,

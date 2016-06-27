@@ -929,7 +929,7 @@ class IndexManager
 
         $setting = api_get_plugin_setting('bbb', 'enable_global_conference');
         $settingLink = api_get_plugin_setting('bbb', 'enable_global_conference_link');
-        if ($setting === 'true' && $settingLink === true) {
+        if ($setting === 'true' && $settingLink === 'true') {
             $url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?global=1';
             $content = Display::url(get_lang('LaunchVideoConferenceRoom'), $url);
             $html .= self::show_right_block(

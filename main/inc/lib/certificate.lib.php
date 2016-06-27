@@ -492,15 +492,42 @@ class Certificate extends Model
         // variables for the default template
         $tplContent->assign('complete_name', $userInfo['complete_name']);
         $tplContent->assign('time_in_platform', $time);
+        $tplContent->assign('certificate_generated_date', api_get_local_time($myCertificate['created_at']));
 
         $sessions = SessionManager::get_sessions_by_user($this->user_id);
+        $sessionsApproved = [];
+        if ($sessions) {
+            foreach ($sessions as $session) {
+                $allCoursesApproved = [];
+                foreach ($session['courses'] as $course) {
+                    $courseInfo = api_get_course_info_by_id($course['real_id']);
+                    $gradebookCategories = Category::load(null, null, $courseInfo['code'], null, false, $session['session_id']);
+
+                    if (isset($gradebookCategories[0])) {
+                        /** @var Category $category */
+                        $category = $gradebookCategories[0];
+                        $categoryId = $category->get_id();
+                        // @todo how we check if user pass a gradebook?
+                        $certificateInfo = GradebookUtils::get_certificate_by_user_id($categoryId, $this->user_id);
+
+                        if ($certificateInfo) {
+                            $allCoursesApproved[] = true;
+                        }
+                    }
+                }
+
+                if (count($allCoursesApproved) == count($session['courses'])) {
+                    $sessionsApproved[] = $session;
+                }
+            }
+        }
 
         $skill = new Skill();
         $skills = $skill->getStudentSkills($this->user_id);
 
         $tplContent->assign('terms_validation_date', api_get_local_time($value['value']));
         $tplContent->assign('skills', $skills);
-        $tplContent->assign('sessions', $sessions);
+        $tplContent->assign('sessions', $sessionsApproved);
 
         $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
         $content = $tplContent->fetch($layoutContent);

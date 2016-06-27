@@ -2,7 +2,7 @@
 
 {{ complete_name }}
 
-{{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, terms_validation_date, 'xx', time_in_platform)}}
+{{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, terms_validation_date, certificate_generated_date, time_in_platform)}}
 
 {{ 'TheContentsAreValidated' | get_lang }}
 

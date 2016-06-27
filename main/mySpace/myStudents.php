@@ -603,7 +603,6 @@ if (!empty($student_id)) {
                             ['class' => 'btn btn-primary btn-xs']
                         );
                     }
-
                     echo '<tr>
                         <td align="right">';
                     echo get_lang('LegalAccepted').' </td>  <td align="left">'.$icon;

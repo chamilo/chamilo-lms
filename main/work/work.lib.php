@@ -1439,6 +1439,7 @@ function getWorkListTeacher(
                     $where_condition
                 ORDER BY $column $direction
                 LIMIT $start, $limit";
+        echo "<pre>$sql</pre>";
         $result = Database::query($sql);
 
         if ($getCount) {

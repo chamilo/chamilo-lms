@@ -5,12 +5,18 @@
  * Generate a teacher time report in platform by session only
  * @package chamilo.admin
  */
+
+use \Chamilo\CoreBundle\Entity\Session;
+use \Doctrine\Common\Collections\Criteria;
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH) . 'work/work.lib.php';
 
 api_protect_admin_script();
+
+$toolName = get_lang('TeacherTimeReportBySession');
 
 $em = Database::getManager();
 $sessionsInfo = SessionManager::get_sessions_list([], ['name']);
@@ -31,22 +37,27 @@ if (isset($_GET['session']) && intval($_GET['session'])) {
 }
 
 $data = [];
+$coursesInfo = [];
+$usersInfo = [];
 
 if ($session) {
     $sessionCourses = $session->getCourses();
 
     foreach ($sessionCourses as $sessionCourse) {
         $course = $sessionCourse->getCourse();
-        $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
-            $course,
-            \Chamilo\CoreBundle\Entity\Session::COACH
+        $coursesInfo[$course->getId()] =  $course->getCode();
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq("status", Session::COACH)
         );
+        $userCourseSubscriptions = $session
+            ->getUserCourseSubscriptions()
+            ->matching($criteria);
 
         foreach ($userCourseSubscriptions as $userCourseSubscription) {
             $user = $userCourseSubscription->getUser();
 
-            if (!array_key_exists($user->getId(), $data)) {
-                $data[$user->getId()] = [
+            if (!array_key_exists($user->getId(), $usersInfo)) {
+                $usersInfo[$user->getId()] = [
                     'code' => $user->getOfficialCode(),
                     'complete_name' => $user->getCompleteName(),
                     'time_in_platform' => api_time_to_hms(
@@ -54,11 +65,15 @@ if ($session) {
                     ),
                     'first_connection' => Tracking::get_first_connection_date($user->getId()),
                     'last_connection' => Tracking::get_last_connection_date($user->getId()),
-                    'courses' => []
                 ];
             }
 
-            if (array_key_exists($course->getId(), $data[$user->getId()]['courses'])) {
+            $usersInfo[$user->getId()][$course->getId() . '_number_of_students'] = null;
+            $usersInfo[$user->getId()][$course->getId() . '_number_of_works'] = null;
+            $usersInfo[$user->getId()][$course->getId() . '_last_work'] = null;
+            $usersInfo[$user->getId()][$course->getId() . '_time_spent_of_course'] = null;
+
+            if (!$session->hasCoachInCourseWithStatus($user, $course)) {
                 continue;
             }
 
@@ -66,43 +81,52 @@ if ($session) {
                 ->getRepository('ChamiloCourseBundle:CStudentPublication')
                 ->findByTeacher($user, $course, $session->getId());
             $lastWork = array_pop($works);
-            $lastFormattedDate = null;
 
-            if ($lastWork) {
-                $lastFormattedDate = api_format_date($lastWork->getSentDate()->getTimestamp(), DATE_TIME_FORMAT_SHORT);
+            $usersInfo[$user->getId()][$course->getId() . '_number_of_students'] = $sessionCourse->getNbrUsers();
+            $usersInfo[$user->getId()][$course->getId() . '_number_of_works'] = count($works);
+            $usersInfo[$user->getId()][$course->getId() . '_time_spent_of_course'] = api_time_to_hms(
+                Tracking::get_time_spent_on_the_course($user->getId(), $course->getId(), $session->getId())
+            );
+
+            if (!$lastWork) {
+                continue;
             }
 
-            $data[$user->getId()]['courses'][$course->getId()] = [
-                'id' => $course->getId(),
-                'title' => $course->getTitle(),
-                'code' => $course->getCode(),
-                'number_of_students' => $sessionCourse->getNbrUsers(),
-                'number_of_works' => count($works),
-                'last_work' => $lastFormattedDate,
-                'time_spent_of_course' => api_time_to_hms(
-                    Tracking::get_time_spent_on_the_course(
-                        $user->getId(),
-                        $course->getId(),
-                        $session->getId()
-                    )
-                )
-            ];
+            $lastFormattedDate = api_format_date($lastWork->getSentDate()->getTimestamp(), DATE_TIME_FORMAT_SHORT);
+
+            $usersInfo[$user->getId()][$course->getId() . '_last_work'] = api_format_date(
+                $lastWork->getSentDate()->getTimestamp(),
+                DATE_TIME_FORMAT_SHORT
+            );
         }
     }
 }
 
-if (isset($_GET['export']) && $session && $data) {
-    $dataToExport = [];
+if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
     $fileName = get_lang('TeacherTimeReport') . ' ' . api_get_local_time();
 
+    $dataToExport = [];
+    $dataToExport[] = [$toolName, $session->getName()];
+    $dataToExport['headers'] = [
+        get_lang('OfficialCode'),
+        get_lang('CoachName'),
+        get_lang('TimeSpentOnThePlatform'),
+        get_lang('FirstLoginInPlatform'),
+        get_lang('LatestLoginInPlatform'),
+    ];
+
+    foreach ($coursesInfo as $courseCode) {
+        $dataToExport['headers'][] = $courseCode;
+        $dataToExport['headers'][] = get_lang('NumberOfWorks');
+        $dataToExport['headers'][] = get_lang('LastWork');
+        $dataToExport['headers'][] = sprintf(get_lang('TimeReportForCourseX'), $courseCode);
+    }
+
+    foreach ($usersInfo as $user) {
+        $dataToExport[] = $user;
+    }
+
     foreach ($data as $row) {
-        $headers = [
-            get_lang('OfficialCode'),
-            get_lang('Name'),
-            get_lang('TimeSpentOnThePlatform'),
-            get_lang('FirstLoginInPlatform'),
-            get_lang('LatestLoginInPlatform')
-        ];
         $contents = [
             $row['code'],
             $row['complete_name'],
@@ -145,7 +169,6 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH) . 'admin/teacher_time_report.php',
     'name' => get_lang('TeacherTimeReport')
 ];
-$toolName = get_lang('TeacherTimeReportBySession');
 
 $actions = [];
 
@@ -167,7 +190,8 @@ $view->assign('form', $form->returnForm());
 
 if ($session) {
     $view->assign('session', ['id' => $session->getId(), 'name' => $session->getName()]);
-    $view->assign('data', $data);
+    $view->assign('courses', $coursesInfo);
+    $view->assign('users', $usersInfo);
 }
 
 $template = $view->get_template('admin/teachers_time_by_session_report.tpl');

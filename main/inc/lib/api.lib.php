@@ -5247,11 +5247,8 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
         $sql .= " ORDER BY 1,2 ASC";
     }
     $result = Database::query($sql);
-    if ($result == false) {
-        return array();
-    } else {
-        return Database::store_result($result);
-    }
+    $result = Database::store_result($result,'ASSOC');
+    return $result;
 }
 
 /**
@@ -5268,12 +5265,8 @@ function & api_get_settings_categories($exceptions = array(), $access_url = 1) {
     if ($list != "'',''" && $list != "''" && !empty($list)) {
         $sql .= " AND category NOT IN ($list) ";
     }
-    $result = Database::query($sql);
-    if ($result == false) {
-        return array();
-    } else {
-        return Database::store_result($result);
-    }
+    $result = Database::store_result(Database::query($sql));
+    return $result;
 }
 
 /**

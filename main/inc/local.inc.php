@@ -588,6 +588,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
          * - Work on a better validation for webservices paths. Current is very poor and exit
          */
         $subsso = api_get_setting('sso_authentication_subclass');
+
         if (!empty($subsso)) {
             require_once api_get_path(SYS_CODE_PATH).'auth/sso/sso.'.$subsso.'.class.php';
             $subsso = 'sso'.$subsso;
@@ -595,6 +596,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         } else {
             $osso = new sso();
         }
+
         if (isset($_SESSION['_user']['user_id'])) {
             if ($logout) {
                 // Make custom redirect after logout
@@ -605,6 +607,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             // Handle cookie from Master Server
 
             $forceSsoRedirect = api_get_setting('sso_force_redirect');
+
             if ($forceSsoRedirect === 'true') {
                 // all users to be redirected unless they are connected (removed req on sso_cookie)
                 $redirectToMasterConditions = !isset($_GET['sso_referer']) && !isset($_GET['loginFailed']);
@@ -624,6 +627,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $matches_domain = false;
                 if (isset($_GET['sso_referer'])) {
                     $protocol = api_get_setting('sso_authentication_protocol');
+
                     // sso_authentication_domain can list
                     // several, comma-separated, domains
                     $master_urls = preg_split('/,/', api_get_setting('sso_authentication_domain'));

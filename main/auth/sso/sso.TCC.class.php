@@ -104,8 +104,11 @@ class ssoTCC
             $value
         );
 
-        $userId = $userData['value'];
-
+        if ($userData) {
+            $userId = $userData['value'];
+        } else {
+            return false;
+        }
 
         //get token that should have been used and delete it
         //from session since it can only be used once
@@ -115,7 +118,7 @@ class ssoTCC
             unset($_SESSION['sso_challenge']);
         }
 
-        //lookup the user in the main database
+        // lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT id, username, password, auth_source, active, expiration_date, status
                 FROM $user_table
@@ -125,15 +128,16 @@ class ssoTCC
             $uData = Database::fetch_array($result);
             //Check the user's password
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
-
-                if ($sso['secret'] === sha1($uData['username'].$sso_challenge.api_get_security_key())
-                    && ($sso['username'] == $uData['username'])) {
-
+                if ($sso['secret'] === sha1($uData['username'].$sso_challenge.api_get_security_key())&&
+                    ($sso['username'] == $uData['username'])
+                ) {
                     //Check if the account is active (not locked)
                     if ($uData['active']=='1') {
                         // check if the expiration date has not been reached
-                        if (empty($uData['expiration_date']) OR $uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
-
+                        if (empty($uData['expiration_date']) ||
+                            $uData['expiration_date'] > date('Y-m-d H:i:s') ||
+                            $uData['expiration_date']=='0000-00-00 00:00:00'
+                        ) {
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {
                                 //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
@@ -249,6 +253,7 @@ class ssoTCC
             header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_not_found');
             exit;
         }
+
         return $loginFailed;
     }
 
@@ -261,7 +266,7 @@ class ssoTCC
      */
     private function decode_cookie($value)
     {
-        $key = substr(api_get_security_key(), 0, 10);
+        $key = substr(api_get_security_key(), 0, 16);
         $ivsize = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
         $iv = mcrypt_create_iv($ivsize);
         $valuedecode = base64_decode($value);
@@ -308,6 +313,7 @@ class ssoTCC
         // In all other cases, generate a link to the Drupal profile edition
         $drupalUserId = $drupalUserIdData['value'];
         $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
+
         return $url;
     }
 

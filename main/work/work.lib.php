@@ -2025,14 +2025,15 @@ function get_work_user_list(
                     $correction = '
                         <form
                         id="file_upload_'.$item_id.'"
-                        class="work_correction_file_upload file_upload_small"
+                        class="work_correction_file_upload file_upload_small fileinput-button"
                         action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
                         >
-                        <div class="button-load">
+                        <div class="text-center button-load">
                             '.get_lang('ClickOrDropOneFileHere').'
+                            '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
                         </div>
-                        <input type="file" name="file" multiple>
-                        <button type="submit"></button>
+
+                        <input type="file" name="file" class="" multiple>
                         </form>
                     ';
 
@@ -2043,8 +2044,7 @@ function get_work_user_list(
                             downloadTable: $('.files'),
                             buildUploadRow: function (files, index) {
                                 $('.files').show();
-                                return
-                                    $('<tr><td>' + files[index].name + '<\/td>' +
+                                return $('<tr><td>' + files[index].name + '<\/td>' +
                                     '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
                                     '<td class=\"file_upload_cancel\">' +
                                     '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' +

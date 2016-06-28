@@ -2,6 +2,35 @@
 
 {% if session %}
     <h3 class="page-header">{{ session.name }}</h3>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>{{ 'OfficialCode'|get_lang }}</th>
+                    <th>{{ 'CoachName'|get_lang }}</th>
+                    <th>{{ 'TimeSpentOnThePlatform'|get_lang }}</th>
+                    <th>{{ 'FirstLoginInPlatform'|get_lang }}</th>
+                    <th>{{ 'LatestLoginInPlatform'|get_lang }}</th>
+
+                    {% for course_code in courses %}
+                        <th>{{ course_code }}</th>
+                        <th>{{ 'NumberOfWorks'|get_lang }}</th>
+                        <th>{{ 'LastWork'|get_lang }}</th>
+                        <th>{{ 'TimeReportForCourseX'|get_lang|format(course.code) }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        {% for data in user %}
+                            <td>{{ data }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     {% for row in data %}
         <div class="table-responsive">

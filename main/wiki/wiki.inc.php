@@ -669,31 +669,31 @@ class Wiki
                     'user_ip' => $_SERVER['REMOTE_ADDR'],
                     'session_id' => $session_id,
                 ];
-                $Id = Database::insert($tbl_wiki, $params);
-                if ($Id > 0) {
+                $id = Database::insert($tbl_wiki, $params);
+                if ($id > 0) {
 
-                    $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $Id";
+                    $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
                     Database::query($sql);
 
                     //insert into item_property
                     api_item_property_update(
                         api_get_course_info(),
                         TOOL_WIKI,
-                        $Id,
+                        $id,
                         'WikiAdded',
                         api_get_user_id(),
                         $groupId
                     );
 
 
-                    $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'"
-                            WHERE c_id = '.$course_id.' AND id = "'.$Id.'"';
+                    $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$id.'"
+                            WHERE c_id = '.$course_id.' AND id = "'.$id.'"';
                     Database::query($sql);
 
                     // insert wiki config
                     $params = [
                         'c_id' => $course_id,
-                        'page_id' => $Id,
+                        'page_id' => $id,
                         'task' => $_clean['task'],
                         'feedback1' => $_clean['feedback1'],
                         'feedback2' => $_clean['feedback2'],
@@ -710,7 +710,7 @@ class Wiki
 
                     Database::insert($tbl_wiki_conf, $params);
 
-                    $this->setWikiData($Id);
+                    $this->setWikiData($id);
                     self::check_emailcue(0, 'A');
                     return get_lang('NewWikiSaved');
                 }

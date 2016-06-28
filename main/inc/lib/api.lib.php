@@ -1870,7 +1870,7 @@ function api_add_url_param($url, $param, $filter_xss = true) {
 
 /**
  * Returns a difficult to guess password.
- * @param int $length, the length of the password
+ * @param int $length the length of the password
  * @return string the generated password
  */
 function api_generate_password($length = 8) {
@@ -2466,9 +2466,9 @@ function api_is_platform_admin($allow_sessions_admins = false, $allow_drh = fals
 
 /**
  * Checks whether the user given as user id is in the admin table.
- * @param int $user_id. If none provided, will use current user
+ * @param int $user_id If none provided, will use current user
  * @param int $url URL ID. If provided, also check if the user is active on given URL
- * @result bool True if the user is admin, false otherwise
+ * @return bool True if the user is admin, false otherwise
  */
 function api_is_platform_admin_by_id($user_id = null, $url = null)
 {
@@ -2496,8 +2496,8 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
 
 /**
  * Returns the user's numeric status ID from the users table
- * @param int $user_id. If none provided, will use current user
- * @result int User's status (1 for teacher, 5 for student, etc)
+ * @param int $user_id If none provided, will use current user
+ * @return int User's status (1 for teacher, 5 for student, etc)
  */
 function api_get_user_status($user_id = null)
 {
@@ -2620,17 +2620,17 @@ function api_get_user_platform_status($user_id = null) {
             if ($user_course_status) {
                 $course_status = array('id'=> $course_id);
                 switch($user_course_status) {
-                    case 1;
+                    case 1:
                         $course_status['status'] = 'teacher';
-                    break;
-                    case 5;
+                        break;
+                    case 5:
                         $course_status['status'] = 'student';
                         //check if tutor
                         $tutor_course_status = CourseManager::get_tutor_in_course_status($user_id, $course_code);
                         if ($tutor_course_status) {
                             $course_status['status'] = 'tutor';
                         }
-                    break;
+                        break;
                 }
             }
         }
@@ -2990,8 +2990,6 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
         if (api_get_setting('allow_coach_to_edit_course_session') == 'true') {
             // Check if coach is allowed to edit a course.
             $is_courseAdmin = $is_courseAdmin || $is_allowed_coach_to_edit;
-        } else {
-            $is_courseAdmin = $is_courseAdmin;
         }
     }
 
@@ -3543,9 +3541,9 @@ function api_item_property_delete(
  * (2) "delete"
  * (3) "visible"
  * (4) "invisible"
- * @param int $user_id : id of the editing/adding user
- * @param int $to_group_id : id of the intended group (0 = for everybody), only relevant for $type (1)
- * @param int $to_user_id : id of the intended user (always has priority over $to_group_id !), only relevant for $type (1)
+ * @param int $user_id id of the editing/adding user
+ * @param int $to_group_id id of the intended group (0 = for everybody), only relevant for $type (1)
+ * @param int $to_user_id id of the intended user (always has priority over $to_group_id !), only relevant for $type (1)
  * @param string $start_visible 0000-00-00 00:00:00 format
  * @param string $end_visible 0000-00-00 00:00:00 format
  * @param int $session_id The session ID, if any, otherwise will default to 0
@@ -3786,7 +3784,7 @@ function api_item_property_update(
                 $result = Database::query($sql);
             }
             break;
-        default : // The item will be added or updated.
+        default: // The item will be added or updated.
             $set_type = ", lastedit_type = '$last_edit_type' ";
             $visibility = '1';
             //$filter .= $to_filter; already added
@@ -4383,7 +4381,7 @@ function api_get_themes() {
  * This function is used when we are moving a course to a different category
  * and also when a user subscribes to courses (the new course is added at the end of the main category
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @param int $user_course_category: the id of the user_course_category
+ * @param int $user_course_category the id of the user_course_category
  * @param integer $user_id
  * @return int the value of the highest sort of the user_course_category
  */

@@ -56,7 +56,7 @@ a:focus {
   overflow: hidden !important;
 }
 .navbar-default {
-  background: #1D5591;
+  background: #337AB7;
   -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 }
@@ -68,7 +68,7 @@ a:focus {
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus{
   color: #fff;
-  background-color:#18477A;
+  background-color:#2C5B8E;
 }
 .navbar-default .navbar-nav > li > a{
   color: #ffffff;

@@ -7,7 +7,7 @@
             <thead>
                 <tr>
                     <th>{{ 'OfficialCode'|get_lang }}</th>
-                    <th>{{ 'Name'|get_lang }}</th>
+                    <th>{{ 'StudentName'|get_lang }}</th>
                     <th>{{ 'TimeSpentOnThePlatform'|get_lang }}</th>
                     <th>{{ 'FirstLoginInPlatform'|get_lang }}</th>
                     <th>{{ 'LatestLoginInPlatform'|get_lang }}</th>

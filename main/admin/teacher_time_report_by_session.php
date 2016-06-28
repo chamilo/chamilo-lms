@@ -27,7 +27,6 @@ foreach ($sessionsInfo as $sessionInfo) {
 if (isset($_GET['session']) && intval($_GET['session'])) {
     $form->setDefaults(['session' => intval($_GET['session'])]);
 
-    $sessionId = $form->exportValue('session');
     $session = $em->find('ChamiloCoreBundle:Session', intval($_GET['session']));
 }
 
@@ -154,11 +153,11 @@ if ($session) {
     $actions = [
         Display::url(
             Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
-            api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session ? $session->getId() : 0])
+            api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
         ),
         Display::url(
             Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-            api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session ? $session->getId() : 0])
+            api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
         )
     ];
 }

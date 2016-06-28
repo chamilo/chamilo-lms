@@ -3535,7 +3535,7 @@ function api_item_property_delete(
  *
  * @param array $_course array with course properties
  * @param string $tool tool id, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
- * @param int $item_id id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ * @param int $item_id id of the item itself, linked to key of every tool ('id', ...)
  * @param string $last_edit_type add or update action
  * (1) message to be translated (in trad4all) : e.g. DocumentAdded, DocumentUpdated;
  * (2) "delete"
@@ -3629,12 +3629,7 @@ function api_item_property_update(
     }
 
     $filter = " c_id = $course_id AND tool = '$tool' AND ref = $item_id $condition_session ";
-
-    if ($item_id === '*') {
-        // For all (not deleted) items of the tool
-        $filter = " c_id = $course_id  AND tool = '$tool' AND visibility <> 2 $condition_session";
-    }
-
+    
     // Check whether $to_user_id and $to_group_id are passed in the function call.
     // If both are not passed (both are null) then it is a message for everybody and $to_group_id should be 0 !
     if (is_null($to_user_id) && is_null($to_group_id)) {

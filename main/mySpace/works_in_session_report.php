@@ -104,11 +104,10 @@ if ($session) {
 }
 
 if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
-    $dataToExport = [
-        [$toolName]
-    ];
     $fileName = 'works_in_session_' . api_get_local_time();
 
+    $dataToExport = [];
+    $dataToExport[] = [$toolName, $session->getName()];
     $dataToExport['headers'][] = get_lang('OfficialCode');
     $dataToExport['headers'][] = get_lang('StudentName');
     $dataToExport['headers'][] = get_lang('TimeSpentOnThePlatform');
@@ -166,7 +165,7 @@ if ($session) {
     $view->assign('users', $usersInfo);
 }
 
-$template = $view->get_template('my_space/works.tpl');
+$template = $view->get_template('my_space/works_in_session_report.tpl');
 $content = $view->fetch($template);
 
 $view->assign('header', $toolName);

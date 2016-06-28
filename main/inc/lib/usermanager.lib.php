@@ -2282,15 +2282,15 @@ class UserManager
         $data = $extraField->get_item_id_from_field_variable_and_field_value(
             $field_variable,
             $field_value,
-            null,
-            true,
-            intval($all_visibility)
+            false,
+            false,
+            true
         );
 
         $result = [];
         if (!empty($data)) {
-            foreach ($data as $data) {
-                $result[] = $data['item_id'];
+            foreach ($data as $value) {
+                $result[] = $value['item_id'];
             }
         }
 

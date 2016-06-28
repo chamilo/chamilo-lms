@@ -2099,7 +2099,7 @@ class UserManager
         $extraField = new ExtraField('user');
         $data = $extraField->get_handler_field_info_by_field_variable($variable);
 
-        return empty($data) ? true : false;
+        return !empty($data) ? true : false;
     }
 
     /**
@@ -2325,17 +2325,13 @@ class UserManager
             return [];
         }
 
-        if ($info['field_type'] === ExtraField::FIELD_TYPE_TAG) {
-
-        } else {
-            $data = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
-                $variable,
-                $value,
-                false,
-                false,
-                true
-            );
-        }
+        $data = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $variable,
+            $value,
+            false,
+            false,
+            true
+        );
 
         $result = [];
         if (!empty($data)) {

@@ -1034,7 +1034,7 @@ switch ($action) {
                 $detailButtons = [];
                 $detailButtons[] = Display::url(
                     Display::return_icon('works.png', get_lang('Works')),
-                    api_get_path(WEB_CODE_PATH) . 'mySpace/works.php'
+                    api_get_path(WEB_CODE_PATH) . 'mySpace/works_in_session_report.php'
                 );
                 $detailButtons[] = Display::url(
                     Display::return_icon('2rightarrow.png'),

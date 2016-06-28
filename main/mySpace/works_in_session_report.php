@@ -17,11 +17,13 @@ if (api_is_student()) {
     exit;
 }
 
+$toolName = get_lang('WorksInSessionReport');
+
 $em = Database::getManager();
 $session = null;
 $sessionsInfo = SessionManager::getSessionsFollowedByUser(api_get_user_id(), COURSEMANAGER);
 
-$form = new FormValidator('work_report');
+$form = new FormValidator('work_report', 'GET');
 $selectSession = $form->addSelect('session', get_lang('Session'), [0 => get_lang('None')]);
 $form->addButtonFilter(get_lang('Filter'));
 
@@ -29,9 +31,10 @@ foreach ($sessionsInfo as $sessionInfo) {
     $selectSession->addOption($sessionInfo['name'], $sessionInfo['id']);
 }
 
-if ($form->validate()) {
-    $sessionId = $form->exportValue('session');
-    $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+if (isset($_GET['session']) && intval($_GET['session'])) {
+    $form->setDefaults(['session' => intval($_GET['session'])]);
+
+    $session = $em->find('ChamiloCoreBundle:Session', intval($_GET['session']));
 }
 
 $coursesInfo = [];
@@ -100,12 +103,59 @@ if ($session) {
     }
 }
 
+if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
+    $dataToExport = [
+        [$toolName]
+    ];
+    $fileName = 'works_in_session_' . api_get_local_time();
+
+    $dataToExport['headers'][] = get_lang('OfficialCode');
+    $dataToExport['headers'][] = get_lang('StudentName');
+    $dataToExport['headers'][] = get_lang('TimeSpentOnThePlatform');
+    $dataToExport['headers'][] = get_lang('FirstLoginInPlatform');
+    $dataToExport['headers'][] = get_lang('LatestLoginInPlatform');
+
+    foreach ($coursesInfo as $courseCode) {
+        $dataToExport['headers'][] = $courseCode;
+        $dataToExport['headers'][] = get_lang('Progress');
+        $dataToExport['headers'][] = get_lang('LastSentWorkDate');
+    }
+
+    foreach ($usersInfo as $user) {
+        $dataToExport[] = $user;
+    }
+
+    switch ($_GET['export']) {
+        case 'xls':
+            Export::export_table_xls_html($dataToExport, $fileName);
+            break;
+        case 'csv':
+            Export::arrayToCsv($dataToExport, $fileName);
+            break;
+    }
+
+    exit;
+}
+
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH) . 'mySpace/index.php',
     'name' => get_lang('MySpace')
 ];
 
-$toolName = get_lang('WorkReport');
+$actions = [];
+
+if ($session) {
+    $actions = [
+        Display::url(
+            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
+            api_get_self() . '?' . http_build_query(['export' => 'csv', 'session' => $session->getId()])
+        ),
+        Display::url(
+            Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+            api_get_self() . '?' . http_build_query(['export' => 'xls', 'session' => $session->getId()])
+        )
+    ];
+}
 
 $view = new Template($toolName);
 $view->assign('form', $form->returnForm());
@@ -121,4 +171,5 @@ $content = $view->fetch($template);
 
 $view->assign('header', $toolName);
 $view->assign('content', $content);
+$view->assign('actions', implode(' ', $actions));
 $view->display_one_col_template();

@@ -859,7 +859,8 @@ class UserManager
         $language = 'english',
         $encrypt_method = '',
         $send_email = false,
-        $reset_password = 0
+        $reset_password = 0,
+        $address
     ) {
         $hook = HookUpdateUser::create();
         if (!empty($hook)) {
@@ -932,6 +933,7 @@ class UserManager
             ->setEmail($email)
             ->setOfficialCode($official_code)
             ->setPhone($phone)
+            ->setAddress($address)
             ->setPictureUri($picture_uri)
             ->setExpirationDate($expiration_date)
             ->setActive($active)

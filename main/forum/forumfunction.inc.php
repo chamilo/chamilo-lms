@@ -1930,7 +1930,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
         ->andWhere($visibleCriteria)
     ;
 
-    if (!api_is_allowed_to_edit()) {
+    if (! (api_is_allowed_to_edit() || GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id()))) {
         if ($forumInfo['moderated']) {
             $criteria->where(Criteria::expr()->eq('status', 1));
         }

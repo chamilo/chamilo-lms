@@ -3629,7 +3629,7 @@ function api_item_property_update(
     }
 
     $filter = " c_id = $course_id AND tool = '$tool' AND ref = $item_id $condition_session ";
-    
+
     // Check whether $to_user_id and $to_group_id are passed in the function call.
     // If both are not passed (both are null) then it is a message for everybody and $to_group_id should be 0 !
     if (is_null($to_user_id) && is_null($to_group_id)) {
@@ -3792,7 +3792,7 @@ function api_item_property_update(
     }
 
     // Insert if no entries are found (can only happen in case of $last_edit_type switch is 'default').
-    if (Database::affected_rows($result) == 0) {
+    if ($result == false || Database::affected_rows($result) == 0) {
         $sessionCondition = empty($session_id) ? "NULL" : "'$session_id'";
         $sql = "INSERT INTO $tableItemProperty (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
                 VALUES ($course_id, '$tool', $item_id, '$time', $user_id, '$time', '$last_edit_type', $user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $sessionCondition)";
@@ -3975,7 +3975,11 @@ function api_get_track_item_property_history($tool, $ref)
             WHERE item_property_id = $item_property_id AND course_id = $course_id
             ORDER BY lastedit_date DESC";
     $result = Database::query($sql);
-    $result = Database::store_result($result,'ASSOC');
+    if ($result == false) {
+        $result = array();
+    } else {
+        $result = Database::store_result($result,'ASSOC');
+    }
 
     return $result;
 }
@@ -5242,8 +5246,12 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
     } else {
         $sql .= " ORDER BY 1,2 ASC";
     }
-    $result = Database::store_result(Database::query($sql));
-    return $result;
+    $result = Database::query($sql);
+    if ($result == false) {
+        return array();
+    } else {
+        return Database::store_result($result);
+    }
 }
 
 /**
@@ -5260,8 +5268,12 @@ function & api_get_settings_categories($exceptions = array(), $access_url = 1) {
     if ($list != "'',''" && $list != "''" && !empty($list)) {
         $sql .= " AND category NOT IN ($list) ";
     }
-    $result = Database::store_result(Database::query($sql));
-    return $result;
+    $result = Database::query($sql);
+    if ($result == false) {
+        return array();
+    } else {
+        return Database::store_result($result);
+    }
 }
 
 /**
@@ -5429,7 +5441,7 @@ function api_add_setting(
  * @return  bool
  */
 function api_is_course_visible_for_user($userid = null, $cid = null) {
-    if ($userid == null) {
+    if ($userid === null) {
         $userid = api_get_user_id();
     }
     if (empty($userid) || strval(intval($userid)) != $userid) {
@@ -7414,8 +7426,10 @@ function api_can_login_as($loginAsUserId, $userId = null)
             if (api_drh_can_access_all_session_content()) {
                 $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
                 $userList = array();
-                foreach ($users as $user) {
-                    $userList[] = $user['user_id'];
+                if (is_array($users)) {
+                    foreach ($users as $user) {
+                        $userList[] = $user['user_id'];
+                    }
                 }
                 if (in_array($loginAsUserId, $userList)) {
                     return true;

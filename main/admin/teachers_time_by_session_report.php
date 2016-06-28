@@ -170,7 +170,7 @@ if ($session) {
     $view->assign('data', $data);
 }
 
-$template = $view->get_template('admin/teacher_time_report_by_session.tpl');
+$template = $view->get_template('admin/teachers_time_by_session_report.tpl');
 $content = $view->fetch($template);
 
 $view->assign('header', $toolName);

@@ -692,7 +692,8 @@ class ExtraFieldValue extends Model
         $field_variable,
         $field_value,
         $transform = false,
-        $last = false
+        $last = false,
+        $all = false
     ) {
         $field_value = Database::escape_string($field_value);
         $field_variable = Database::escape_string($field_variable);
@@ -707,7 +708,7 @@ class ExtraFieldValue extends Model
                     sf.extra_field_type = $extraFieldType
                 ORDER BY item_id
                 ";
-
+        
         if ($last) {
             // If we want the last element instead of the first
             // This is useful in special cases where there might
@@ -717,7 +718,11 @@ class ExtraFieldValue extends Model
 
         $result = Database::query($sql);
         if ($result !== false && Database::num_rows($result)) {
-            $result = Database::fetch_array($result, 'ASSOC');
+            if ($all) {
+                $result = Database::store_result($result, 'ASSOC');
+            } else {
+                $result = Database::fetch_array($result, 'ASSOC');
+            }
 
             return $result;
         } else {

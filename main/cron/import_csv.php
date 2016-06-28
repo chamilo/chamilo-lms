@@ -838,7 +838,7 @@ class ImportCsv
 
                     $item = null;
                     foreach ($items as $tempItem) {
-                        if ($tempItem['c_id'] == $event['course_id']) {
+                        if ($tempItem['item_id'] == $event['course_id']) {
                             $item = $tempItem;
                         }
                     }

@@ -145,13 +145,8 @@ class UserManager
      */
     public static function isPasswordValid($encoded, $raw, $salt)
     {
-        //$encoder = self::getEncoder($user);
         $encoder = new \Chamilo\UserBundle\Security\Encoder(self::getPasswordEncryption());
-        /*$user->getPassword(),
-            $password,
-            $user->getSalt()*/
         $validPassword = $encoder->isPasswordValid($encoded, $raw, $salt);
-
 
         return $validPassword;
     }
@@ -2313,28 +2308,39 @@ class UserManager
     }
 
     /** Get extra user data by value
-     * @param string $field_variable the internal variable name of the field
-     * @param string $field_value the internal value of the field
+     * @param string $variable the internal variable name of the field
+     * @param string $value the internal value of the field
      * @param bool $all_visibility
      *
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-     public static function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true)
+     public static function get_extra_user_data_by_value($variable, $value, $all_visibility = true)
     {
-        $extraField = new ExtraFieldValue('user');
+        $extraFieldValue = new ExtraFieldValue('user');
+        $extraField = new ExtraField('user');
 
-        $data = $extraField->get_values_by_handler_and_field_variable(
-            $field_variable,
-            $field_value,
-            null,
-            true,
-            intval($all_visibility)
-        );
+        $info = $extraField->get_handler_field_info_by_field_variable($variable);
+
+        if (false === $info) {
+            return [];
+        }
+
+        if ($info['field_type'] === ExtraField::FIELD_TYPE_TAG) {
+
+        } else {
+            $data = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                $variable,
+                $value,
+                false,
+                false,
+                true
+            );
+        }
 
         $result = [];
         if (!empty($data)) {
-            foreach ($data as $data) {
-                $result[] = $data['item_id'];
+            foreach ($data as $item) {
+                $result[] = $item['item_id'];
             }
         }
 
@@ -3154,28 +3160,27 @@ class UserManager
         }
     }
 
-    /*
+    /**
      *
+     * Gets the tags of a specific field_id
      * USER TAGS
      *
-     * Intructions to create a new user tag by Julio Montoya <gugli100@gmail.com>
+     * Instructions to create a new user tag by Julio Montoya <gugli100@gmail.com>
      *
-     * 1. Create a new extra field in main/admin/user_fields.php with the "TAG" field type make it available and visible. Called it "books" for example.
+     * 1. Create a new extra field in main/admin/user_fields.php with the "TAG" field type make it available and visible.
+     *    Called it "books" for example.
      * 2. Go to profile main/auth/profile.php There you will see a special input (facebook style) that will show suggestions of tags.
      * 3. All the tags are registered in the user_tag table and the relationship between user and tags is in the user_rel_tag table
      * 4. Tags are independent this means that tags can't be shared between tags + book + hobbies.
      * 5. Test and enjoy.
      *
-     */
-
-    /**
-     * Gets the tags of a specific field_id
+     * @param string $tag
+     * @param int $field_id field_id
+     * @param string $return_format how we are going to result value in array or in a string (json)
+     * @param $limit
      *
-     * @param int field_id
-     * @param string how we are going to result value in array or in a string (json)
      * @return mixed
-     * @since Nov 2009
-     * @version 1.8.6.2
+     *
      */
     public static function get_tags($tag, $field_id, $return_format = 'json', $limit = 10)
     {
@@ -3192,18 +3197,20 @@ class UserManager
         $return = array();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $return[] = array('caption' => $row['tag'], 'value' => $row['tag']);
+                $return[] = array('key' => $row['tag'], 'value' => $row['tag']);
             }
         }
-        if ($return_format == 'json') {
+        if ($return_format === 'json') {
             $return = json_encode($return);
         }
+
         return $return;
     }
 
     /**
      * @param int $field_id
      * @param int $limit
+     *
      * @return array
      */
     public static function get_top_tags($field_id, $limit = 100)
@@ -3233,8 +3240,9 @@ class UserManager
 
     /**
      * Get user's tags
-     * @param int field_id
-     * @param int user_id
+     * @param int $user_id
+     * @param int $field_id
+     *
      * @return array
      */
     public static function get_user_tags($user_id, $field_id)
@@ -3265,9 +3273,10 @@ class UserManager
 
     /**
      * Get user's tags
-     * @param int user_id
-     * @param int field_id
-     * @param bool show links or not
+     * @param int $user_id
+     * @param int $field_id
+     * @param bool $show_links show links or not
+     *
      * @return array
      */
     public static function get_user_tags_to_string($user_id, $field_id, $show_links = true)
@@ -3301,18 +3310,21 @@ class UserManager
                 $tag_tmp[] = $tag['tag'];
             }
         }
+
         if (is_array($user_tags) && count($user_tags) > 0) {
             $return = implode(', ', $tag_tmp);
         } else {
+
             return '';
         }
+
         return $return;
     }
 
     /**
      * Get the tag id
-     * @param int tag
-     * @param int field_id
+     * @param int $tag
+     * @param int $field_id
      * @return int returns 0 if fails otherwise the tag id
      */
     public static function get_tag_id($tag, $field_id)
@@ -3326,16 +3338,19 @@ class UserManager
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result, 'ASSOC');
+
             return $row['id'];
         } else {
+
             return 0;
         }
     }
 
     /**
      * Get the tag id
-     * @param int tag
-     * @param int field_id
+     * @param int $tag_id
+     * @param int $field_id
+     *
      * @return int 0 if fails otherwise the tag id
      */
     public static function get_tag_id_from_id($tag_id, $field_id)
@@ -3356,9 +3371,9 @@ class UserManager
 
     /**
      * Adds a user-tag value
-     * @param mixed tag
-     * @param int The user id
-     * @param int field id of the tag
+     * @param mixed $tag
+     * @param int $user_id
+     * @param int $field_id field id of the tag
      * @return bool
      */
     public static function add_tag($tag, $user_id, $field_id)
@@ -3388,8 +3403,6 @@ class UserManager
               $result = Database::query($sql);
               $last_insert_id = Database::insert_id();
               } */
-        } else {
-
         }
 
         //this is a new tag
@@ -3420,8 +3433,8 @@ class UserManager
 
     /**
      * Deletes an user tag
-     * @param int user id
-     * @param int field id
+     * @param int $user_id
+     * @param int $field_id
      *
      */
     public static function delete_user_tags($user_id, $field_id)
@@ -3467,7 +3480,7 @@ class UserManager
 
     /**
      * Returns a list of all administrators
-     * @author jmontoya
+     *
      * @return array
      */
     public static function get_all_administrators()

@@ -47,7 +47,6 @@ class Certificate extends Model
     public function __construct($certificate_id = 0, $userId = 0)
     {
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        unset($this->certificate_data);
 
         $this->user_id = !empty($userId) ? $userId : api_get_user_id();
 
@@ -163,7 +162,7 @@ class Certificate extends Model
 
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
 
-        if (isset($this->certificate_data)) {
+        if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
             $my_category = Category :: load($this->certificate_data['cat_id']);
         }
 

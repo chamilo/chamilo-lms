@@ -86,7 +86,7 @@ class ExtraField extends Model
     public function __construct($type)
     {
         parent::__construct();
-        
+
         $this->type = $type;
 
         $this->table = Database::get_main_table(TABLE_EXTRA_FIELD);
@@ -463,9 +463,8 @@ class ExtraField extends Model
 
                 if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
                     $tags = UserManager::get_user_tags_to_string($itemId, $field['id'], false);
-
-
                     $extra_data['extra_'.$field['variable']] = $tags;
+
                     continue;
                 }
 
@@ -776,7 +775,6 @@ class ExtraField extends Model
 
             foreach ($extra as $field_details) {
                 if (!empty($showOnlyThisFields)) {
-
                     if (!in_array($field_details['variable'], $showOnlyThisFields)) {
                         continue;
                     }
@@ -2213,7 +2211,7 @@ JAVASCRIPT;
         //filter can be all/any = and/or
         $inject_joins = null;
         $inject_where = null;
-        $where        = null;
+        $where = null;
 
         if (!empty($options['where'])) {
             if (!empty($options['extra'])) {
@@ -2539,5 +2537,28 @@ JAVASCRIPT;
         $camelCase = api_underscore_to_camel_case($variable);
 
         return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+    }
+
+    /**
+     * @param int $fieldId
+     * @param string $tag
+     *
+     * @return array
+     */
+    public function getAllUserPerTag($fieldId, $tag)
+    {
+        $tagRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
+        $tag = Database::escape_string($tag);
+        $fieldId = (int) $fieldId;
+
+        $sql = "SELECT user_id 
+                FROM {$this->table_field_tag} f INNER JOIN $tagRelUserTable ft 
+                ON tag_id = f.id 
+                WHERE tag = '$tag' AND f.field_id = $fieldId;
+        ";
+
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
     }
 }

@@ -3321,84 +3321,81 @@ class SurveyUtil
         // Displaying an information message that only the questions with predefined answers can be used in a comparative report
         Display::display_normal_message(get_lang('OnlyQuestionsWithPredefinedAnswers'), false);
 
-        // The form for selecting the axis of the table
-        echo '<form id="form1" name="form1" method="get" action="'.api_get_self().'?'.api_get_cidreq().'&action='.Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&xaxis='.Security::remove_XSS($_GET['xaxis']).'&y='.Security::remove_XSS($_GET['yaxis']).'">';
-        // Survey_id
-        echo '<input type="hidden" name="action" value="'.Security::remove_XSS($_GET['action']).'"/>';
-        echo '<input type="hidden" name="survey_id" value="'.$surveyId.'"/>';
-        // X axis
-        echo get_lang('SelectXAxis').': ';
-        echo '<select name="xaxis">';
-        echo '<option value="">---</option>';
+        $xAxis = isset($_GET['xaxis']) ? Security::remove_XSS($_GET['xaxis']) : '';
+        $yAxis = isset($_GET['yaxis']) ? Security::remove_XSS($_GET['yaxis']) : '';
+
+        $url = api_get_self().'?'.api_get_cidreq().'&action='.Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&xaxis='.$xAxis.'&y='.$yAxis;
+
+        $form = new FormValidator('compare', 'get', $url);
+        $form->addHidden('action', Security::remove_XSS($_GET['action']));
+        $form->addHidden('survey_id', $surveyId);
+        $optionsX = ['----'];
+        $optionsY = ['----'];
+        $defaults = [];
         foreach ($questions as $key => & $question) {
             if (is_array($allowed_question_types)) {
                 if (in_array($question['type'], $allowed_question_types)) {
-                    echo '<option value="'.$question['question_id'].'"';
+                    //echo '<option value="'.$question['question_id'].'"';
                     if (isset($_GET['xaxis']) && $_GET['xaxis'] == $question['question_id']) {
-                        echo ' selected="selected"';
+                        $defaults['xaxis'] = $question['question_id'];
                     }
-                    echo '">'.api_substr(strip_tags($question['question']), 0, 50).'</option>';
-                }
-            }
 
-        }
-        echo '</select><br /><br />';
-        // Y axis
-        echo get_lang('SelectYAxis').': ';
-        echo '<select name="yaxis">';
-        echo '<option value="">---</option>';
-        foreach ($questions as $key => &$question) {
-            if (in_array($question['type'], $allowed_question_types)) {
-                echo '<option value="'.$question['question_id'].'"';
-                if (isset($_GET['yaxis']) && $_GET['yaxis'] == $question['question_id']) {
-                    echo ' selected="selected"';
+                    if (isset($_GET['yaxis']) && $_GET['yaxis'] == $question['question_id']) {
+                        $defaults['yaxis'] = $question['question_id'];
+                    }
+
+                    $optionsX[$question['question_id']] = api_substr(strip_tags($question['question']), 0, 50);
+                    $optionsY[$question['question_id']] = api_substr(strip_tags($question['question']), 0, 50);
                 }
-                echo '">'.api_substr(strip_tags($question['question']), 0, 50).'</option>';
             }
         }
-        echo '</select><br /><br />';
-        echo '<button class="save" type="submit" name="Submit" value="Submit">'.get_lang('CompareQuestions').'</button>';
-        echo '</form>';
+
+        $form->addSelect('xaxis', get_lang('SelectXAxis'), $optionsX);
+        $form->addSelect('yaxis', get_lang('SelectYAxis'), $optionsY);
+
+        $form->addButtonSearch(get_lang('CompareQuestions'));
+        $form->setDefaults($defaults);
+        $form->display();
 
         // Getting all the information of the x axis
-        if (isset($_GET['xaxis']) && is_numeric($_GET['xaxis'])) {
-            $question_x = SurveyManager::get_question($_GET['xaxis']);
+        if (is_numeric($xAxis)) {
+            $question_x = SurveyManager::get_question($xAxis);
         }
 
         // Getting all the information of the y axis
-        if (isset($_GET['yaxis']) && is_numeric($_GET['yaxis'])) {
-            $question_y = SurveyManager::get_question($_GET['yaxis']);
+        if (is_numeric($yAxis)) {
+            $question_y = SurveyManager::get_question($yAxis);
         }
 
-        if (isset($_GET['xaxis']) && is_numeric($_GET['xaxis']) && isset($_GET['yaxis']) && is_numeric($_GET['yaxis'])) {
+        if (is_numeric($xAxis) && is_numeric($yAxis)) {
             // Getting the answers of the two questions
-            $answers_x = SurveyUtil::get_answers_of_question_by_user($surveyId, $_GET['xaxis']);
-            $answers_y = SurveyUtil::get_answers_of_question_by_user($surveyId, $_GET['yaxis']);
+            $answers_x = SurveyUtil::get_answers_of_question_by_user($surveyId, $xAxis);
+            $answers_y = SurveyUtil::get_answers_of_question_by_user($surveyId, $yAxis);
 
             // Displaying the table
             $tableHtml = '<table border="1" class="data_table">';
 
             $xOptions = array();
             // The header
-            $tableHtml .=  '	<tr>';
+            $tableHtml .= '<tr>';
             for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
                 if ($ii == 0) {
-                    $tableHtml .=  '		<th>&nbsp;</th>';
+                    $tableHtml .=  '<th>&nbsp;</th>';
                 } else {
                     if ($question_x['type'] == 'score') {
                         for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
-                            $tableHtml .= '		<th>'.$question_x['answers'][($ii-1)].'<br />'.$x.'</th>';
+                            $tableHtml .= '<th>'.$question_x['answers'][($ii-1)].'<br />'.$x.'</th>';
                         }
                         $x = '';
                     } else {
-                        $tableHtml .= '		<th>'.$question_x['answers'][($ii-1)].'</th>';
+                        $tableHtml .= '<th>'.$question_x['answers'][($ii-1)].'</th>';
                     }
                     $optionText = strip_tags($question_x['answers'][$ii-1]);
                     $optionText = html_entity_decode($optionText);
                     array_push($xOptions, trim($optionText));
                 }
             }
-            $tableHtml .=  '	</tr>';
+            $tableHtml .= '</tr>';
             $chartData = array();
 
             // The main part
@@ -3408,15 +3405,15 @@ class SurveyUtil
                 // The Y axis is a scoring question type so we have more rows than the options (actually options * maximum score)
                 if ($question_y['type'] == 'score') {
                     for ($y = 1; $y <= $question_y['maximum_score']; $y++) {
-                        $tableHtml .=  '	<tr>';
+                        $tableHtml .=  '<tr>';
                         for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
                             if ($question_x['type'] == 'score') {
                                 for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
                                     if ($ii == 0) {
-                                        $tableHtml .=  ' <th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
+                                        $tableHtml .=  '<th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
                                         break;
                                     } else {
-                                        $tableHtml .=  ' <td align="center">';
+                                        $tableHtml .=  '<td align="center">';
                                         $votes = SurveyUtil::comparative_check(
                                             $answers_x,
                                             $answers_y,
@@ -3439,9 +3436,9 @@ class SurveyUtil
                                 }
                             } else {
                                 if ($ii == 0) {
-                                    $tableHtml .=  '<th>'.$question_y['answers'][$ij].' '.$y.'</th>';
+                                    $tableHtml .= '<th>'.$question_y['answers'][$ij].' '.$y.'</th>';
                                 } else {
-                                    $tableHtml .=  '<td align="center">';
+                                    $tableHtml .= '<td align="center">';
                                     $votes = SurveyUtil::comparative_check(
                                         $answers_x,
                                         $answers_y,
@@ -3463,20 +3460,20 @@ class SurveyUtil
                                 }
                             }
                         }
-                        $tableHtml .=  '	</tr>';
+                        $tableHtml .=  '</tr>';
                     }
                 }
                 // The Y axis is NOT a score question type so the number of rows = the number of options
                 else {
-                    $tableHtml .=  '	<tr>';
+                    $tableHtml .=  '<tr>';
                     for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
                         if ($question_x['type'] == 'score') {
                             for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
                                 if ($ii == 0) {
-                                    $tableHtml .=  '		<th>'.$question_y['answers'][$ij].'</th>';
+                                    $tableHtml .=  '<th>'.$question_y['answers'][$ij].'</th>';
                                     break;
                                 } else {
-                                    $tableHtml .=  '		<td align="center">';
+                                    $tableHtml .=  '<td align="center">';
                                     $votes =  SurveyUtil::comparative_check(
                                         $answers_x,
                                         $answers_y,
@@ -3499,9 +3496,9 @@ class SurveyUtil
                             }
                         } else {
                             if ($ii == 0) {
-                                $tableHtml .=  '		<th>'.$question_y['answers'][($ij)].'</th>';
+                                $tableHtml .=  '<th>'.$question_y['answers'][($ij)].'</th>';
                             } else {
-                                $tableHtml .=  '		<td align="center">';
+                                $tableHtml .=  '<td align="center">';
                                 $votes = SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)]);
                                 $tableHtml .= $votes;
                                 array_push(
@@ -3512,11 +3509,11 @@ class SurveyUtil
                                         'votes' => $votes
                                     )
                                 );
-                                $tableHtml .=  '</td>';
+                                $tableHtml .= '</td>';
                             }
                         }
                     }
-                    $tableHtml .=  '	</tr>';
+                    $tableHtml .= '</tr>';
                 }
             }
             $tableHtml .=  '</table>';

@@ -71,7 +71,7 @@ a.thumbnail:hover{
     display: block;
     padding-bottom: 100%;
     overflow: hidden;
-    
+
 }
 .gallery .frame{
     background-color: #eeeeee;
@@ -5794,7 +5794,7 @@ a.sessionView {
 }
 /* Landscape phones and down */
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-  
+
   #learning_path_breadcrumb_zone {
   }
   #learning_path_main{
@@ -5869,7 +5869,7 @@ a.sessionView {
   #show_graph{
    text-align: center;
   }
-  
+
 }
 @media (min-width : 480px) and (max-width: 767px) {
   #touch-button{
@@ -5979,4 +5979,8 @@ a.sessionView {
     border: 2px dashed #bbbbbb;
     font-size: 120%;
     margin-bottom: 0;
+}
+
+#upload_form .fa-plus-square-o, #upload_form .fa-minus-square-o {
+    cursor:pointer;
 }

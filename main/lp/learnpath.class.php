@@ -494,7 +494,7 @@ class learnpath
     public function add_item(
         $parent,
         $previous,
-        $type = 'dokeos_chapter',
+        $type = 'dir',
         $id,
         $title,
         $description,
@@ -622,7 +622,7 @@ class learnpath
         $new_item_id = Database::insert($tbl_lp_item, $params);
 
         if ($this->debug > 2) {
-            error_log('New LP - Inserting chapter: ' . $new_item_id, 0);
+            error_log('New LP - Inserting dir/chapter: ' . $new_item_id, 0);
         }
 
         if ($new_item_id) {
@@ -1585,11 +1585,11 @@ class learnpath
      * @param	integer	Item ID
      * @return	array	A list of all the "brother items" (or an empty array on failure)
      */
-    public function get_brother_chapters($id)
+    public function getSiblingDirectories($id)
     {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_brother_chapters()', 0);
+            error_log('New LP - In learnpath::getSiblingDirectories()', 0);
         }
 
         if (empty($id) || $id != strval(intval($id))) {
@@ -1599,7 +1599,7 @@ class learnpath
 
         $lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $sql_parent = "SELECT * FROM $lp_item
-                       WHERE c_id = ".$course_id." AND id = $id AND item_type='dokeos_chapter'";
+                       WHERE c_id = ".$course_id." AND id = $id AND item_type='dir'";
         $res_parent = Database::query($sql_parent);
         if (Database :: num_rows($res_parent) > 0) {
             $row_parent = Database :: fetch_array($res_parent);
@@ -1609,7 +1609,7 @@ class learnpath
                         c_id = ".$course_id." AND
                         parent_item_id = $parent AND
                         id = $id AND
-                        item_type='dokeos_chapter'
+                        item_type='dir'
                     ORDER BY display_order";
             $res_bros = Database::query($sql);
 
@@ -1707,7 +1707,6 @@ class learnpath
         foreach ($this->items as $id => $dummy) {
             // Trying failed and browsed considered "progressed" as well.
             if ($this->items[$id]->status_is($completedStatusList) &&
-                $this->items[$id]->get_type() != 'dokeos_chapter' &&
                 $this->items[$id]->get_type() != 'dir'
             ) {
                 $i++;
@@ -1764,10 +1763,10 @@ class learnpath
      * Gets the total number of items available for viewing in this SCORM but without chapters
      * @return	integer	The total no-chapters number of items
      */
-    public function get_total_items_count_without_chapters()
+    public function getTotalItemsCountWithoutDirs()
     {
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_total_items_count_without_chapters()', 0);
+            error_log('New LP - In learnpath::getTotalItemsCountWithoutDirs()', 0);
         }
         $total = 0;
         $typeListNotToCount = self::getChapterTypes();
@@ -1804,8 +1803,7 @@ class learnpath
 
         if (!empty($this->last_item_seen) &&
             !empty($this->items[$this->last_item_seen]) &&
-            $this->items[$this->last_item_seen]->get_type() != 'dir' &&
-            $this->items[$this->last_item_seen]->get_type() != 'dokeos_chapter'
+            $this->items[$this->last_item_seen]->get_type() != 'dir'
             //with this change (below) the LP will NOT go to the next item, it will take lp item we left
             //&& !$this->items[$this->last_item_seen]->is_done()
         ) {
@@ -1842,7 +1840,6 @@ class learnpath
                 is_a($this->items[$this->ordered_items[$index]], 'learnpathItem') AND
                 (
                     $this->items[$this->ordered_items[$index]]->get_type() == 'dir' OR
-                    $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter' OR
                     $this->items[$this->ordered_items[$index]]->is_done() === true
                 ) AND $index < $this->max_ordered_items) {
                 $index++;
@@ -2028,10 +2025,10 @@ class learnpath
         if ($this->debug > 2) {
             error_log('New LP - Now looking at ordered_items[' . ($index) . '] - type is ' . $this->items[$this->ordered_items[$index]]->type, 0);
         }
-        while (!empty ($this->ordered_items[$index]) AND ($this->items[$this->ordered_items[$index]]->get_type() == 'dir' || $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter') AND $index < $this->max_ordered_items) {
+        while (!empty ($this->ordered_items[$index]) AND ($this->items[$this->ordered_items[$index]]->get_type() == 'dir') AND $index < $this->max_ordered_items) {
             $index++;
             if ($index == $this->max_ordered_items){
-                if ($this->items[$this->ordered_items[$index]]->get_type() == 'dir' || $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter') {
+                if ($this->items[$this->ordered_items[$index]]->get_type() == 'dir') {
                     return $this->index;
                 } else {
                     return $index;
@@ -2170,7 +2167,7 @@ class learnpath
         $index = $this->index;
         if (isset ($this->ordered_items[$index -1])) {
             $index--;
-            while (isset($this->ordered_items[$index]) && ($this->items[$this->ordered_items[$index]]->get_type() == 'dir' || $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter')) {
+            while (isset($this->ordered_items[$index]) && ($this->items[$this->ordered_items[$index]]->get_type() == 'dir')) {
                 $index--;
                 if ($index < 0) {
                     return $this->index;
@@ -2506,7 +2503,7 @@ class learnpath
         if (empty($mode)) {
             $mode = $this->progress_bar_mode;
         }
-        $total_items = $this->get_total_items_count_without_chapters();
+        $total_items = $this->getTotalItemsCountWithoutDirs();
         if ($this->debug > 2) {
             error_log('New LP - Total items available in this learnpath: ' . $total_items, 0);
         }
@@ -3161,9 +3158,6 @@ class learnpath
     public static function getChapterTypes()
     {
         return array(
-            'dokeos_chapter',
-            'dokeos_module',
-            'chapter',
             'dir'
         );
     }
@@ -3432,7 +3426,7 @@ class learnpath
                     }
 
                     switch ($lp_item_type) {
-                        case 'dokeos_chapter':
+                        case 'dir':
                             $file = 'lp_content.php?type=dir';
                             break;
                         case 'link':
@@ -5687,7 +5681,7 @@ class learnpath
 
                 // No edit for this item types
                 if (!in_array($arrLP[$i]['item_type'], array('sco', 'asset', 'final_item'))) {
-                    if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module'))) {
+                    if ($arrLP[$i]['item_type'] != 'dir') {
                         $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&view=build&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '" class="btn btn-default">';
                         $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
@@ -5752,7 +5746,7 @@ class learnpath
                     );
                 }
 
-                if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module', 'dir'))) {
+                if ($arrLP[$i]['item_type'] != 'dir') {
                     $prerequisities_icon = Display::url(
                         Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY),
                         $url.'&action=edit_item_prereq', ['class' => 'btn btn-default']
@@ -5876,7 +5870,7 @@ class learnpath
                 $item['type'] = $default_content[$item['load_data']]['item_type'];
             }
             $sub_list = '';
-            if (isset($item['type']) && $item['type'] == 'dokeos_chapter') {
+            if (isset($item['type']) && $item['type'] == 'dir') {
                 $sub_list = Display::tag('li', '', array('class'=>'sub_item empty')); // empty value
             }
             if (empty($item['children'])) {
@@ -6286,10 +6280,10 @@ class learnpath
                     WHERE c_id = ".$course_id." AND lp.id = " . intval($item_id);
             $result = Database::query($sql);
             while ($row = Database :: fetch_array($result,'ASSOC')) {
-                $_SESSION['parent_item_id'] = ($row['item_type'] == 'dokeos_chapter' || $row['item_type'] == 'dokeos_module' || $row['item_type'] == 'dir') ? $item_id : 0;
+                $_SESSION['parent_item_id'] = $row['item_type'] == 'dir' ? $item_id : 0;
 
                 // Prevents wrong parent selection for document, see Bug#1251.
-                if ($row['item_type'] != 'dokeos_chapter' && $row['item_type'] != 'dokeos_module') {
+                if ($row['item_type'] != 'dir') {
                     $_SESSION['parent_item_id'] = $row['parent_item_id'];
                 }
 
@@ -6361,7 +6355,6 @@ class learnpath
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
             switch ($row['item_type']) {
-                case 'dokeos_chapter':
                 case 'dir':
                 case 'asset':
                 case 'sco':
@@ -6417,14 +6410,6 @@ class learnpath
                     $row_step = Database :: fetch_array($res_step, 'ASSOC');
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_document_form('edit', $item_id, $row_step);
-                    break;
-                case 'dokeos_module':
-                    if (isset ($_GET['view']) && $_GET['view'] == 'build') {
-                        $return .= $this->display_manipulate($item_id, $row['item_type']);
-                        $return .= $this->display_item_form($row['item_type'], get_lang('EditCurrentModule') . ' :', 'edit', $item_id, $row);
-                    } else {
-                        $return .= $this->display_item_small_form($row['item_type'], get_lang('EditCurrentModule') . ' :', $row);
-                    }
                     break;
                 case TOOL_QUIZ:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -6490,10 +6475,10 @@ class learnpath
         );
 
         echo Display::display_normal_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'));
-        $chapter = $_SESSION['oLP']->display_item_form('chapter', get_lang('EnterDataNewChapter'), 'add_item');
+        $dir = $_SESSION['oLP']->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
         echo Display::tabs(
             $headers,
-            array($documents, $exercises, $links, $works, $forums, $chapter, $finish), 'resource_tab'
+            array($documents, $exercises, $links, $works, $forums, $dir, $finish), 'resource_tab'
         );
 
         return true;
@@ -6639,11 +6624,7 @@ class learnpath
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if (
-                    (
-                        $arrLP[$i]['item_type'] == 'dokeos_module' ||
-                        $arrLP[$i]['item_type'] == 'dokeos_chapter' ||
-                        $arrLP[$i]['item_type'] == 'dir'
-                    ) &&
+                    ($arrLP[$i]['item_type'] == 'dir') &&
                     !in_array($arrLP[$i]['id'], $arrHide) &&
                     !in_array($arrLP[$i]['parent_item_id'], $arrHide)
                 ) {
@@ -6660,11 +6641,7 @@ class learnpath
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
-                if (
-                    $arrLP[$i]['item_type'] == 'dokeos_module' ||
-                    $arrLP[$i]['item_type'] == 'dokeos_chapter' ||
-                    $arrLP[$i]['item_type'] == 'dir'
-                ) {
+                if ($arrLP[$i]['item_type'] == 'dir') {
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'], ['style' => 'padding-left: ' . (20 + $arrLP[$i]['depth'] * 20) . 'px']
@@ -6709,7 +6686,7 @@ class learnpath
             }
             $arrHide = array ();
             for ($i = 0; $i < count($arrLP); $i++) {
-                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter') {
+                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
                     if (is_array($extra_info)) {
                         if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
                             $s_selected_position = $arrLP[$i]['id'];
@@ -6870,13 +6847,13 @@ class learnpath
         if (count($arrLP) > 0) {
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($action != 'add') {
-                    if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
+                    if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
                         $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
                     } else {
                         $arrHide[] = $arrLP[$i]['id'];
                     }
                 } else {
-                    if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
+                    if ($arrLP[$i]['item_type'] == 'dir')
                         $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
                 }
             }
@@ -6925,7 +6902,7 @@ class learnpath
 
                 $arrHide = array ();
                 for ($i = 0; $i < count($arrLP); $i++) {
-                    if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter') {
+                    if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
                         if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
                             $s_selected_position = $arrLP[$i]['id'];
                         elseif ($action == 'add') $s_selected_position = 0;
@@ -7056,7 +7033,7 @@ class learnpath
         //$parent_item_id = $_SESSION['parent_item_id'];
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
-                if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
+                if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
@@ -7070,11 +7047,7 @@ class learnpath
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
-                if (
-                    $arrLP[$i]['item_type'] == 'dokeos_module' ||
-                    $arrLP[$i]['item_type'] == 'dokeos_chapter' ||
-                    $arrLP[$i]['item_type'] == 'dir'
-                ) {
+                if ($arrLP[$i]['item_type'] == 'dir') {
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
@@ -7124,7 +7097,7 @@ class learnpath
 
             $arrHide = array();
             for ($i = 0; $i < count($arrLP); $i++) {
-                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter') {
+                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
                     if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id'])
                         $s_selected_position = $arrLP[$i]['id'];
                     elseif ($action == 'add') $s_selected_position = 0;
@@ -7250,11 +7223,7 @@ class learnpath
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if (
-                    (
-                        $arrLP[$i]['item_type'] == 'dokeos_module' ||
-                        $arrLP[$i]['item_type'] == 'dokeos_chapter' ||
-                        $arrLP[$i]['item_type'] == 'dir'
-                    ) &&
+                    ($arrLP[$i]['item_type'] == 'dir') &&
                     !in_array($arrLP[$i]['id'], $arrHide) &&
                     !in_array($arrLP[$i]['parent_item_id'], $arrHide)
                 ) {
@@ -7271,11 +7240,7 @@ class learnpath
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
-                if (
-                    $arrLP[$i]['item_type'] == 'dokeos_module' ||
-                    $arrLP[$i]['item_type'] == 'dokeos_chapter' ||
-                    $arrLP[$i]['item_type'] == 'dir'
-                ) {
+                if ($arrLP[$i]['item_type'] == 'dir') {
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
@@ -7329,7 +7294,7 @@ class learnpath
             $s_selected_position = 0;
 
             for ($i = 0; $i < count($arrLP); $i++) {
-                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter') {
+                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
                     if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
                         $s_selected_position = $arrLP[$i]['id'];
                     elseif ($action == 'add') $s_selected_position = 0;
@@ -7379,8 +7344,8 @@ class learnpath
     }
 
     /**
-     * Return the HTML form to display an item (generally a section/module item)
-     * @param	string	Item type (module/dokeos_module)
+     * Return the HTML form to display an item (generally a dir item)
+     * @param	string	Item type (dir)
      * @param	string	Title (optional, only when creating)
      * @param	string	Action ('add'/'edit')
      * @param	integer	lp_item ID
@@ -7420,7 +7385,7 @@ class learnpath
                     lp_id = " . $this->lp_id . " AND
                     id != $id";
 
-        if ($item_type == 'module')
+        if ($item_type == 'dir')
             $sql .= " AND parent_item_id = 0";
 
         $result = Database::query($sql);
@@ -7466,44 +7431,43 @@ class learnpath
         $arrHide[0]['padding'] = 20;
         $charset = api_get_system_encoding();
 
-        if ($item_type != 'module' && $item_type != 'dokeos_module') {
-            for ($i = 0; $i < count($arrLP); $i++) {
-                if ($action != 'add') {
-                    if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-                        $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-                        $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
-                        if ($parent == $arrLP[$i]['id']) {
-                            $s_selected_parent = $arrHide[$arrLP[$i]['id']];
-                        }
+        for ($i = 0; $i < count($arrLP); $i++) {
+            if ($action != 'add') {
+                if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
+                    $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
+                    $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
+                    if ($parent == $arrLP[$i]['id']) {
+                        $s_selected_parent = $arrHide[$arrLP[$i]['id']];
                     }
-                } else {
-                    if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') {
-                        $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-                        $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
-                        if ($parent == $arrLP[$i]['id']) {
-                            $s_selected_parent = $arrHide[$arrLP[$i]['id']];
-                        }
+                }
+            } else {
+                if ($arrLP[$i]['item_type'] == 'dir') {
+                    $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
+                    $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
+                    if ($parent == $arrLP[$i]['id']) {
+                        $s_selected_parent = $arrHide[$arrLP[$i]['id']];
                     }
                 }
             }
-
-            if ($action != 'move') {
-                $form->addElement('text', 'title', get_lang('Title'));
-                $form->applyFilter('title', 'html_filter');
-                $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
-            } else {
-                $form->addElement('hidden', 'title');
-            }
-
-            $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', array('id' => 'idParent', 'onchange' => "javascript: load_cbo(this.value);"));
-
-            foreach ($arrHide as $key => $value) {
-                $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
-            }
-            if (!empty($s_selected_parent)) {
-                $parent_select->setSelected($s_selected_parent);
-            }
         }
+
+        if ($action != 'move') {
+            $form->addElement('text', 'title', get_lang('Title'));
+            $form->applyFilter('title', 'html_filter');
+            $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+        } else {
+            $form->addElement('hidden', 'title');
+        }
+
+        $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', array('id' => 'idParent', 'onchange' => "javascript: load_cbo(this.value);"));
+
+        foreach ($arrHide as $key => $value) {
+            $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
+        }
+        if (!empty($s_selected_parent)) {
+            $parent_select->setSelected($s_selected_parent);
+        }
+
         if (is_array($arrLP)) {
             reset($arrLP);
         }
@@ -7542,12 +7506,9 @@ class learnpath
 
         $form->addButtonSave(get_lang('SaveSection'), 'submit_button');
 
-        if ($item_type == 'module' || $item_type == 'dokeos_module') {
-            $form->addElement('hidden', 'parent', '0');
-        }
         //fix in order to use the tab
-        if ($item_type == 'chapter') {
-            $form->addElement('hidden', 'type', 'chapter');
+        if ($item_type == 'dir') {
+            $form->addElement('hidden', 'type', 'dir');
         }
 
         $extension = null;
@@ -7583,7 +7544,7 @@ class learnpath
             $defaults['content_lp'] = file_get_contents($content_path);
         }
 
-        $form->addElement('hidden', 'type', 'dokeos_' . $item_type);
+        $form->addElement('hidden', 'type', $item_type);
         $form->addElement('hidden', 'post_time', time());
         $form->setDefaults($defaults);
         return $form->return_form();
@@ -7742,7 +7703,7 @@ class learnpath
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
-                if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
+                if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                     $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
                     if ($parent == $arrLP[$i]['id']) {
@@ -7750,7 +7711,7 @@ class learnpath
                     }
                 }
             } else {
-                if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') {
+                if ($arrLP[$i]['item_type'] == 'dir') {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                     $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
                     if ($parent == $arrLP[$i]['id']) {
@@ -7825,7 +7786,7 @@ class learnpath
 
             $arrHide = array();
             for ($i = 0; $i < count($arrLP); $i++) {
-                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM) {
+                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir' && $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM) {
                     if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id'])
                         $s_selected_position = $arrLP[$i]['id'];
                     elseif ($action == 'add') $s_selected_position = $arrLP[$i]['id'];
@@ -8035,11 +7996,7 @@ class learnpath
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if (
-                    (
-                        $arrLP[$i]['item_type'] == 'dokeos_module' ||
-                        $arrLP[$i]['item_type'] == 'dokeos_chapter' ||
-                        $arrLP[$i]['item_type'] == 'dir'
-                    ) &&
+                    ($arrLP[$i]['item_type'] == 'dir') &&
                     !in_array($arrLP[$i]['id'], $arrHide) &&
                     !in_array($arrLP[$i]['parent_item_id'], $arrHide)
                 ) {
@@ -8056,7 +8013,7 @@ class learnpath
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
-                if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') {
+                if ($arrLP[$i]['item_type'] == 'dir') {
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
@@ -8116,7 +8073,7 @@ class learnpath
 
             $arrHide = array();
             for ($i = 0; $i < count($arrLP); $i++) {
-                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter') {
+                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
                     if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
                         $s_selected_position = $arrLP[$i]['id'];
                     elseif ($action == 'add') $s_selected_position = 0;
@@ -8245,11 +8202,7 @@ class learnpath
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if (
-                    (
-                        $arrLP[$i]['item_type'] == 'dokeos_module' ||
-                        $arrLP[$i]['item_type'] == 'dokeos_chapter' ||
-                        $arrLP[$i]['item_type'] == 'dir'
-                    ) &&
+                    ($arrLP[$i]['item_type'] == 'dir') &&
                     !in_array($arrLP[$i]['id'], $arrHide) &&
                     !in_array($arrLP[$i]['parent_item_id'], $arrHide)
                 ) {
@@ -8266,10 +8219,7 @@ class learnpath
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
-                if (
-                    $arrLP[$i]['item_type'] == 'dokeos_module' ||
-                    $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir'
-                ) {
+                if ($arrLP[$i]['item_type'] == 'dir') {
                     $parentSelect->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
@@ -8321,7 +8271,7 @@ class learnpath
             }
             $arrHide = array ();
             for ($i = 0; $i < count($arrLP); $i++) {
-                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter') {
+                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
                     if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
                         $s_selected_position = $arrLP[$i]['id'];
                     elseif ($action == 'add') $s_selected_position = 0;
@@ -8375,17 +8325,11 @@ class learnpath
         $return = '<div class="actions">';
 
         switch ($item_type) {
-            case 'dokeos_chapter' :
-            case 'chapter' :
+            case 'dir' :
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateChapter');
                 break;
 
-            case 'dokeos_module' :
-            case 'module' :
-                // Commented the message cause should not show it.
-                //$lang = get_lang('TitleManipulateModule');
-                break;
             case TOOL_LP_FINAL_ITEM :
             case TOOL_DOCUMENT :
                 // Commented the message cause should not show it.
@@ -8444,7 +8388,7 @@ class learnpath
         );
 
         // Commented for now as prerequisites cannot be added to chapters.
-        if ($item_type != 'dokeos_chapter' && $item_type != 'chapter') {
+        if ($item_type != 'dir') {
             $return .= Display::url(
                 Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_SMALL),
                 $url.'&action=edit_item_prereq'
@@ -8548,15 +8492,10 @@ class learnpath
             $row = Database :: fetch_array($res);
 
             switch ($row['item_type']) {
-                case 'dokeos_chapter' :
                 case 'dir' :
                 case 'asset' :
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_item_form($row['item_type'], get_lang('MoveCurrentChapter'), 'move', $item_id, $row);
-                    break;
-                case 'dokeos_module' :
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_item_form($row['item_type'], 'Move th current module:', 'move', $item_id, $row);
                     break;
                 case TOOL_DOCUMENT :
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -8698,7 +8637,7 @@ class learnpath
             $return .= '<tr>';
             $return .= '<td class="radio"' . (($item['item_type'] != TOOL_QUIZ && $item['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
             $return .= '<label for="id' . $item['id'] . '">';
-            $return .= '<input' . (in_array($prerequisiteId, array($item['id'], $item['ref'])) ? ' checked="checked" ' : '') . (($item['item_type'] == 'dokeos_module' || $item['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $item['id'] . '" name="prerequisites" style="margin-left:' . $item['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $item['id'] . '" />';
+            $return .= '<input' . (in_array($prerequisiteId, array($item['id'], $item['ref'])) ? ' checked="checked" ' : '') . ($item['item_type'] == 'dir' ? ' disabled="disabled" ' : ' ') . 'id="id' . $item['id'] . '" name="prerequisites" style="margin-left:' . $item['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $item['id'] . '" />';
             $icon_name = str_replace(' ', '', $item['item_type']);
 
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
@@ -8814,7 +8753,7 @@ class learnpath
 
         $headers = array(
             get_lang('Files'),
-            get_lang('NewDocument'),
+            get_lang('CreateTheDocument'),
             get_lang('Upload')
         );
 
@@ -10084,9 +10023,7 @@ EOD;
                                 $files_to_export[] = array('title'=>$item->get_title(), 'path' => $file_path);
                             }
                             break;
-                        case 'dokeos_chapter':
                         case 'dir':
-                        case 'chapter':
                             $files_to_export[] = array('title'=> $item->get_title(), 'path'=>null);
                             break;
                     }
@@ -10336,36 +10273,36 @@ EOD;
             $previous_item_id = null;
             $previous_item_max = 0;
             $previous_item_type = null;
-            $last_item_not_chapter = null;
-            $last_item_not_chapter_type = null;
-            $last_item_not_chapter_max = null;
+            $last_item_not_dir = null;
+            $last_item_not_dir_type = null;
+            $last_item_not_dir_max = null;
             foreach ($this->items as $item) {
                 // if there was a previous item... (otherwise jump to set it)
                 if (!empty($previous_item_id)) {
                     $current_item_id = $item->get_id(); //save current id
-                    if (!in_array($item->get_type(), array('dokeos_chapter', 'chapter'))) {
+                    if ($item->get_type() != 'dir') {
                         // Current item is not a folder, so it qualifies to get a prerequisites
-                        if ($last_item_not_chapter_type == 'quiz') {
+                        if ($last_item_not_dir_type == 'quiz') {
                             // if previous is quiz, mark its max score as default score to be achieved
-                            $sql = "UPDATE $tbl_lp_item SET mastery_score = '$last_item_not_chapter_max'
-                                    WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$last_item_not_chapter'";
+                            $sql = "UPDATE $tbl_lp_item SET mastery_score = '$last_item_not_dir_max'
+                                    WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$last_item_not_dir'";
                             Database::query($sql);
                         }
                         // now simply update the prerequisite to set it to the last non-chapter item
-                        $sql = "UPDATE $tbl_lp_item SET prerequisite = '$last_item_not_chapter'
+                        $sql = "UPDATE $tbl_lp_item SET prerequisite = '$last_item_not_dir'
                                 WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$current_item_id'";
                         Database::query($sql);
                         // record item as 'non-chapter' reference
-                        $last_item_not_chapter = $item->get_id();
-                        $last_item_not_chapter_type = $item->get_type();
-                        $last_item_not_chapter_max = $item->get_max();
+                        $last_item_not_dir = $item->get_id();
+                        $last_item_not_dir_type = $item->get_type();
+                        $last_item_not_dir_max = $item->get_max();
                     }
                 } else {
-                    if (!in_array($item->get_type(), array('dokeos_chapter', 'chapter'))) {
+                    if ($item->get_type() != 'dir') {
                         // Current item is not a folder (but it is the first item) so record as last "non-chapter" item
-                        $last_item_not_chapter = $item->get_id();
-                        $last_item_not_chapter_type = $item->get_type();
-                        $last_item_not_chapter_max = $item->get_max();
+                        $last_item_not_dir = $item->get_id();
+                        $last_item_not_dir_type = $item->get_type();
+                        $last_item_not_dir_max = $item->get_max();
                     }
                 }
                 // Saving the item as "previous item" for the next loop

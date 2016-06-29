@@ -69,7 +69,7 @@ class learnpathItem
     public $title;
     /**
      * Type attribute can contain one of
-     * chapter|link|student_publication|module|quiz|document|forum|thread
+     * link|student_publication|dir|quiz|document|forum|thread
      */
     public $type;
     public $view_id;
@@ -517,7 +517,7 @@ class learnpathItem
         $path = $this->get_path();
         $type = $this->get_type();
         if (empty($path)) {
-            if ($type == 'dokeos_chapter' || $type == 'chapter' || $type == 'dir') {
+            if ($type == 'dir') {
                 return '';
             } else {
                 return '-1';
@@ -525,9 +525,7 @@ class learnpathItem
         } elseif ($path == strval(intval($path))) {
             // The path is numeric, so it is a reference to a Chamilo object.
             switch ($type) {
-                case 'dokeos_chapter':
                 case 'dir':
-                case 'chapter':
                     return '';
                 case TOOL_DOCUMENT:
                     $table_doc = Database::get_course_table(TABLE_DOCUMENT);
@@ -3790,6 +3788,8 @@ class learnpathItem
         $course_id = api_get_course_int_id();
         $mode = $this->get_lesson_mode();
         $credit = $this->get_credit();
+        $total_time = ' ';
+        $my_status = ' ';
 
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $sql = 'SELECT status FROM ' . $item_view_table . '
@@ -4004,7 +4004,7 @@ class learnpathItem
                                     $my_status = " status = '" . $this->get_status(false) . "' ,";
                                 } else {
                                     if (($my_type_lp == 3 && $this->type == 'au') ||
-                                        ($my_type_lp == 1 && $this->type != 'chapter')) {
+                                        ($my_type_lp == 1 && $this->type != 'dir')) {
                                         // Is AICC or Chamilo LP
                                         $total_time = " total_time = total_time + " . $this->get_total_time() . ", ";
                                         $my_status = " status = '" . $this->get_status(false) . "' ,";

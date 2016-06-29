@@ -1139,13 +1139,13 @@ window.HotspotQuestion = (function () {
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercice/hotspot_actionscript_admin.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_actionscript_admin.as.php', {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
 
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercice/hotspot_actionscript.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_actionscript.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1154,7 +1154,7 @@ window.HotspotQuestion = (function () {
             case 'solution':
                 //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercice/hotspot_answers.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_answers.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1763,13 +1763,13 @@ window.DelineationQuestion = (function () {
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercice/hotspot_actionscript_admin.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_actionscript_admin.as.php', {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
 
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercice/hotspot_actionscript.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_actionscript.as.php', {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
@@ -1777,7 +1777,7 @@ window.DelineationQuestion = (function () {
             case 'solution':
                 //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath+'main/exercice/hotspot_answers.as.php', {
+                xhrQuestion = $.getJSON(config.relPath+'main/exercise/hotspot_answers.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });

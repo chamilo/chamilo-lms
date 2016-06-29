@@ -58,7 +58,6 @@ class Event
     public static function event_login($userId)
     {
         $userInfo = api_get_user_info($userId);
-
         $userId = intval($userId);
 
         if (empty($userInfo)) {
@@ -235,6 +234,7 @@ class Event
                      '".api_get_session_id()."'
                     )";
         Database::query($sql);
+
         return 1;
     }
 
@@ -316,7 +316,7 @@ class Event
      *
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
-     * @desc Record result of user when an exercice was done
+     * @desc Record result of user when an exercise was done
      */
     public static function update_event_exercice(
         $exeid,
@@ -567,8 +567,10 @@ class Event
                 }
                 $attempt_id = $exe_id;
             }
+
             return $attempt_id;
         } else {
+
             return false;
         }
     }
@@ -1788,6 +1790,7 @@ class Event
                     WHERE user_from = '.$user_from.' AND user_to = '.$user_to.' AND event_type_name = "'.$event_name.'"';
         }
         $result = Database::store_result(Database::query($sql), 'ASSOC');
+        
         return $result[0]["total"];
     }
 

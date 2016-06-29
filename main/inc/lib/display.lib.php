@@ -734,8 +734,12 @@ class Display
     ) {
         $code_path = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
-        $alternateCssPath = api_get_path(SYS_CSS_PATH);
-        $alternateWebCssPath = api_get_path(WEB_CSS_PATH);
+        // The following path is checked to see if the file exist. It's
+        // important to use the public path (i.e. web/css/) rather than the
+        // internal path (/app/Resource/public/css/) because the path used
+        // in the end must be the public path
+        $alternateCssPath = api_get_path(SYS_PUBLIC_PATH) . 'css/';
+        $alternateWebCssPath = api_get_path(WEB_PUBLIC_PATH) . 'css/';
 
         $image = trim($image);
 

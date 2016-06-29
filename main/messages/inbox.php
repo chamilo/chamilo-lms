@@ -100,7 +100,10 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 
 if (isset($_GET['f']) && $_GET['f'] == 'social') {
     $this_section = SECTION_SOCIAL;
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'main/social/home.php', 'name' => get_lang('SocialNetwork'));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_PATH).'main/social/home.php',
+        'name' => get_lang('SocialNetwork')
+    );
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Inbox'));
 } else {
     $this_section = SECTION_MYPROFILE;
@@ -109,14 +112,14 @@ if (isset($_GET['f']) && $_GET['f'] == 'social') {
 
 $social_parameter = '';
 
-if ((isset($_GET['f']) && $_GET['f'] == 'social') ||
-    api_get_setting('allow_social_tool') == 'true'
+if ((isset($_GET['f']) && $_GET['f'] === 'social') ||
+    api_get_setting('allow_social_tool') === 'true'
 ) {
     $social_parameter = '?f=social';
 } else {
     $actions = null;
     //Comes from normal profile
-    if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+    if (api_get_setting('allow_social_tool') === 'true' && api_get_setting('allow_message_tool') === 'true') {
         $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
             Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
     }
@@ -132,7 +135,7 @@ if ((isset($_GET['f']) && $_GET['f'] == 'social') ||
 }
 
 //LEFT CONTENT
-if (api_get_setting('allow_social_tool') == 'true') {
+if (api_get_setting('allow_social_tool') === 'true') {
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
 }
@@ -140,7 +143,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 //Right content
 $social_right_content = null;
 $keyword = '';
-if (api_get_setting('allow_social_tool') == 'true') {
+if (api_get_setting('allow_social_tool') === 'true') {
     $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.
         Display::return_icon('new-message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.

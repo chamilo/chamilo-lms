@@ -50,7 +50,7 @@ $defaults['new_dir'] = Security::remove_XSS($title);
 $there_is_a_end_date = false;
 
 if (Gradebook::is_active()) {
-    $link_info = GradebookUtils::is_resource_in_course_gradebook(
+    $link_info = GradebookUtils::isResourceInCourseGradebook(
         api_get_course_id(),
         LINK_STUDENTPUBLICATION,
         $workId

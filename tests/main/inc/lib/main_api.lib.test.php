@@ -146,13 +146,6 @@ class TestMainApi extends UnitTestCase {
 //        $this->assertTrue(is_null($variable[session_register]));
 //    }
 
-    function testApiSessionUnregister() {
-        $variable=strval($variable);
-        $res=Session::erase($variable);
-        $this->assertTrue(is_null($res));
-        $this->assertTrue(is_null($_SESSION[$variable]=null));
-    }
-
 	function testApiSessionClear() {
 		$variable = 'test';
 		 if (!headers_sent()) {

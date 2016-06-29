@@ -739,6 +739,8 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
 	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
     RewriteRule "^badge/(\d{1,})/user/(\d{1,})$" main/badge/issued.php?skill=$1&user=$2 [L]
+    RewriteRule ^main/exercice/(.+)$ main/exercise/$1 [QSA,L]
+    RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
   &lt;/Directory&gt;
 </pre>
 <h3>Nginx</h3>
@@ -777,6 +779,8 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
+    rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
 
     fastcgi_pass unix:/var/run/php5-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;

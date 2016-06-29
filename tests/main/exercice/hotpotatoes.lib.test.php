@@ -1,10 +1,10 @@
 <?php
-require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php');
 
 class TestHotpotatoes extends UnitTestCase {
 
     public function __construct() {
-        $this->UnitTestCase('Hotpotatoes exercises library - main/exercice/hotpotatoes.lib.test.php');
+        $this->UnitTestCase('Hotpotatoes exercises library - main/exercise/hotpotatoes.lib.test.php');
     }
 
 	function testCheckImageName() {
@@ -18,7 +18,7 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testCheckSubFolder() {
-		$path='Location: /main/exercice/';
+		$path='Location: /main/exercise/';
 		$res=CheckSubFolder($path);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
@@ -42,7 +42,7 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testGenerateHpFolder() {
-		$folder='main/exercice/hotpotatoes.lib.php';
+		$folder='main/exercise/hotpotatoes.lib.php';
 		$res=GenerateHpFolder($folder);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
@@ -61,21 +61,21 @@ class TestHotpotatoes extends UnitTestCase {
 
 	/*  Deprecated
 	function testGetFileName() {
-		$fname='main/exercice/hotpotatoes.lib.php';
+		$fname='main/exercise/hotpotatoes.lib.php';
 		$res=GetFileName($fname);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}*/
 
 	function testGetFolderName() {
-		$fname='main/exercice/hotpotatoes.lib.php';
+		$fname='main/exercise/hotpotatoes.lib.php';
 		$res=GetFolderName($fname);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
 	function testGetFolderPath() {
-		$fname='main/exercice/hotpotatoes.lib.php';
+		$fname='main/exercise/hotpotatoes.lib.php';
 		$res=GetFolderPath($fname);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
@@ -101,7 +101,7 @@ class TestHotpotatoes extends UnitTestCase {
 	function testGetQuizName() {
 		$course_code = 'COURSETEST';
 		$fname='exercice_submit.php';
-		$fpath='main/exercice/exercice_submit.php';
+		$fpath='main/exercise/exercice_submit.php';
 		$res=GetQuizName($fname,$fpath);
 
 		$this->assertTrue(is_string($res));
@@ -117,14 +117,14 @@ class TestHotpotatoes extends UnitTestCase {
 
 	function testhotpotatoes_init() {
 		$base = api_get_path(SYS_CODE_PATH);
-		$baseWorkDir=$base.'exercice/';
+		$baseWorkDir=$base.'exercise/';
 		$res=hotpotatoes_init($baseWorkDir);
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
 
 	function testHotPotGCt() {
-		$folder='/main/exercice';
+		$folder='/main/exercise';
 		$flag=4;
 		$userID=1;
 		$res=HotPotGCt($folder,$flag,$userID);
@@ -156,7 +156,7 @@ class TestHotpotatoes extends UnitTestCase {
 
 	function testSetComment() {
 		global $dbTable;
-		$path='/main/exercice';
+		$path='/main/exercise';
 		$comment='testing this function';
 		$comment = Database::escape_string($comment);
 		$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
@@ -168,7 +168,7 @@ class TestHotpotatoes extends UnitTestCase {
 
 	function testWriteFileCont() {
 		$course_code = 'COURSETEST';
-		$full_file_path='/main/exercice/';
+		$full_file_path='/main/exercise/';
 		$content='test test test';
 		$res=WriteFileCont($full_file_path,$content);
 		$this->assertTrue(is_bool($res));

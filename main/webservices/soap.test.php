@@ -8,7 +8,7 @@
  * Init
  */
 exit; //remove to enable
-// Include the necessary files, assuming this script is located in main/newscorm/ or something like that
+// Include the necessary files, assuming this script is located in main/lp/ or something like that
 require_once '../inc/global.inc.php';
 global $_configuration;
 

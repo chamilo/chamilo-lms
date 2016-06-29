@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Show the skills report
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.social.skill
  */
+
 require_once '../inc/global.inc.php';
 
 $isStudent = api_is_student();
@@ -27,8 +29,8 @@ $tableRows = array();
 $tpl = new Template(get_lang('Skills'));
 $tplPath = null;
 
-$tpl->assign('allowSkillsTool', api_get_setting('allow_skills_tool') == 'true');
-$tpl->assign('allowDrhSkillsManagement', api_get_setting('allow_hr_skills_management') == 'true');
+$tpl->assign('allowSkillsTool', api_get_setting('allow_skills_tool') === 'true');
+$tpl->assign('allowDrhSkillsManagement', api_get_setting('allow_hr_skills_management') === 'true');
 
 if ($isStudent) {
     $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory

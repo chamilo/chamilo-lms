@@ -23,6 +23,7 @@ class AppPlugin
         'footer_left',
         'footer_center',
         'footer_right',
+        'menu_administrator',
         'course_tool_plugin'
     );
 

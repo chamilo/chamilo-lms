@@ -1047,6 +1047,10 @@ class SocialManager extends UserManager
             }
 
             $userPicture = $user_info['avatar'];
+            $officialCode = '';
+            if (api_get_setting('show_official_code_whoisonline') == 'true') {
+                $officialCode .= '<div class="items-user-official-code"><p style="min-height: 30px;" title="'.get_lang('OfficialCode').'">'.$user_info['official_code'].'</p></div>';
+            }
             $img = '<img class="img-responsive img-circle" title="'.$completeName.'" alt="'.$completeName.'" src="'.$userPicture.'">';
 
             $url =  null;
@@ -1068,6 +1072,7 @@ class SocialManager extends UserManager
                             <div class="items-user-name">
                             '.$name.'
                             </div>
+                            '.$officialCode.'
                             <div class="items-user-status">'.$status_icon_chat.' '.$user_rol.'</div>
                         </div>
                       </div>';
@@ -1735,6 +1740,7 @@ class SocialManager extends UserManager
         $template->assign('chat_enabled', $chatEnabled);
         $template->assign('user_relation', $userRelationType);
         $template->assign('user_relation_type_friend', USER_RELATION_TYPE_FRIEND);
+        $template->assign('show_full_profile', $show_full_profile);
         $templateName = $template->get_template('social/user_block.tpl');
 
         if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {

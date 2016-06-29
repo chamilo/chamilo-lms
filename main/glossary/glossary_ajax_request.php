@@ -46,14 +46,14 @@ if (isset($_POST['glossary_id']) &&
     $my_glossary_name = api_convert_encoding($my_glossary_name, $charset, 'UTF-8');
     $my_glossary_name = trim($my_glossary_name);
 
-    $glossary_description = GlossaryManager::get_glossary_term_by_glossary_name(
+    $glossaryInfo = GlossaryManager::get_glossary_term_by_glossary_name(
         $my_glossary_name
     );
-
+    
     $glossary_description = str_replace(
         $path_image_search,
         $path_image,
-        $glossary_description
+        $glossaryInfo['description']
     );
 
     if (is_null($glossary_description) || strlen(trim($glossary_description)) == 0) {

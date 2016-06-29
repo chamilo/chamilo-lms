@@ -63,14 +63,6 @@ class TestWork extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testconvert_date_to_array() {
-		$date=date('d/m/Y',time());
-		$group=array();
-		$res=convert_date_to_array($date,$group);
-		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-
 	/**
 	* This function displays the number of files contained in a directory
 	* @param	string the path of the directory complete e.g. /var/www/dokeos
@@ -88,19 +80,7 @@ class TestWork extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-
-	/**
-	* create a group of select from a date
-	* @return array list
-	*/
-
-	function testcreate_group_date_select() {
-		$res=create_group_date_select($prefix='');
-		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-
-
+    
 	/**
 	 * Transform an all directory structure (only directories) in an array
 	 * @param	string path of the directory
@@ -174,17 +154,6 @@ class TestWork extends UnitTestCase {
 		$res=display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cur_dir_path,$cur_dir_path_url);
 		$this->assertTrue(is_null($res));
 		ob_end_clean();
-		//var_dump($res);
-	}
-
-	/**
-	* create a group of select from a date
-	*/
-
-	function testget_date_from_group() {
-		$group='';
-		$res=get_date_from_group($group);
-		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 

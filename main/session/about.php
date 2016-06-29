@@ -1,14 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
+use \Chamilo\CoreBundle\Entity\SequenceResource;
+
 /**
  * Session about page
  * Show information about a session and its courses
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.session
  */
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CourseBundle\Entity\CCourseDescription;
-use \Chamilo\CoreBundle\Entity\SequenceResource;
 
 $cidReset = true;
 
@@ -24,18 +26,12 @@ if (!$session) {
     api_not_allowed(true);
 }
 
-$sessionCourses = $entityManager->getRepository('ChamiloCoreBundle:Session')
-    ->getCoursesOrderedByPosition($session);
-
 $courses = [];
-
-$entityManager = Database::getManager();
+$sessionCourses = $entityManager->getRepository('ChamiloCoreBundle:Session')->getCoursesOrderedByPosition($session);
 $fieldsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldTagsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 $userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
-$sequenceResourceRepo = $entityManager->getRepository(
-    'ChamiloCoreBundle:SequenceResource'
-);
+$sequenceResourceRepo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
 
 $tagField = $fieldsRepo->findOneBy([
     'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,

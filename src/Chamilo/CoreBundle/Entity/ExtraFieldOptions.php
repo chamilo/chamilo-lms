@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Class ExtraField
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ExtraFieldOptionsRepository")
  * @ORM\Table(name="extra_field_options")
  *
  * @ORM\MappedSuperclass
@@ -135,10 +135,15 @@ class ExtraFieldOptions
     }
 
     /**
+     * @param bool $translated Optional. Whether translate the display text
      * @return string
      */
-    public function getDisplayText()
+    public function getDisplayText($translated = true)
     {
+        if ($translated) {
+            return \ExtraFieldOption::translateDisplayName($this->displayText);
+        }
+
         return $this->displayText;
     }
 
@@ -165,7 +170,7 @@ class ExtraFieldOptions
     /**
      * @param string $priority
      *
-     * @return ExtraFieldOptions
+     * @return $this
      */
     public function setPriority($priority)
     {
@@ -185,7 +190,7 @@ class ExtraFieldOptions
     /**
      * @param string $priorityMessage
      *
-     * @return ExtraFieldOptions
+     * @return $this
      */
     public function setPriorityMessage($priorityMessage)
     {

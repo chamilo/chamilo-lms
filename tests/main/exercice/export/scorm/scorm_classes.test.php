@@ -1,15 +1,15 @@
 <?php
 
-require_once(api_get_path(SYS_CODE_PATH).'exercice/question.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/unique_answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/multiple_answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/multiple_answer_combination.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/fill_blanks.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/freeanswer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/hotspot.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/matching.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/hotspot.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/question.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/exercise.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/unique_answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/multiple_answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/multiple_answer_combination.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/fill_blanks.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/freeanswer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/hotspot.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/matching.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercise/hotspot.class.php');
 
 class TestScormClasses extends UnitTestCase {
 
@@ -22,7 +22,7 @@ class TestScormClasses extends UnitTestCase {
 	public $sScormQuestion;
 
 	public function __construct() {
-	   $this->UnitTestCase('SCORM exercises export library - main/exercice/export/scorm/scorm_classes.test.php');
+	   $this->UnitTestCase('SCORM exercises export library - main/exercise/export/scorm/scorm_classes.test.php');
 	}
 
 	public function setUp() {

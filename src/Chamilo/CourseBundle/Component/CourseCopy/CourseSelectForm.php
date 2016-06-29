@@ -19,8 +19,9 @@ class CourseSelectForm
 {
 	/**
 	 * Display the form
+     * @param array $course
 	 * @param array $hidden_fields Hidden fields to add to the form.
-	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
+	 * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
 	 */
 	public static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
     {
@@ -48,14 +49,11 @@ class CourseSelectForm
 		<script>
 			function exp(item) {
 				el = document.getElementById('div_'+item);
-				if (el.style.display=='none'){
-					el.style.display='';
-					//document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('1.gif'); ?>';
-					document.getElementById('img_'+item).className='fa fa-minus-square-o fa-lg';
-				}
-				else{
+                if (el.style.display == 'none') {
+                    el.style.display = '';
+					document.getElementById('img_'+item).className = 'fa fa-minus-square-o fa-lg';
+				} else {
 					el.style.display='none';
-					//document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('0.gif'); ?>';
 					document.getElementById('img_'+item).className ='fa fa-plus-square-o fa-lg';
 				}
 			}
@@ -65,8 +63,7 @@ class CourseSelectForm
  				for (i = 0; i < d.elements.length; i++) {
    					if (d.elements[i].type == "checkbox") {
 						var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
-
- 						if( name.indexOf(type) > 0 || type == 'all' ){
+ 						if (name.indexOf(type) > 0 || type == 'all') {
                             if ($(d.elements[i]).attr('rel') == item_id) {
                                 d.elements[i].checked = value;
                             }
@@ -141,13 +138,9 @@ class CourseSelectForm
             }
 		</script>
 		<?php
-
-		//get destination course title
+		// get destination course title
 		if (!empty($hidden_fields['destination_course'])) {
-            $sessionTitle = !empty($hidden_fields['destination_session']) ? ' (' . api_get_session_name(
-                $hidden_fields['destination_session']
-            ) . ')' : null;
-
+            $sessionTitle = !empty($hidden_fields['destination_session']) ? ' (' . api_get_session_name($hidden_fields['destination_session']) . ')' : null;
             $course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
 			echo get_lang('DestinationCourse').' : '.$course_infos['title'] . ' ('.$course_infos['code'].') '.$sessionTitle;
@@ -204,14 +197,13 @@ class CourseSelectForm
                         $element_count++;
                         break;
                     case RESOURCE_LINKCATEGORY:
-					case RESOURCE_FORUMPOST:
-					case RESOURCE_QUIZQUESTION:
-					case RESOURCE_SURVEYQUESTION:
-					case RESOURCE_SURVEYINVITATION:
-					case RESOURCE_SCORM:
-						break;
-                    default :
-						//echo '<img id="img_'.$type.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$type'".');" />&nbsp;';
+                    case RESOURCE_FORUMPOST:
+                    case RESOURCE_QUIZQUESTION:
+                    case RESOURCE_SURVEYQUESTION:
+                    case RESOURCE_SURVEYINVITATION:
+                    case RESOURCE_SCORM:
+                        break;
+                    default:
 						echo '<span id="img_'.$type.'" class="fa fa-minus-square-o fa-lg" onclick="javascript:exp('."'$type'".');" >&nbsp;</span>&nbsp;';
 						echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
 						echo '<div id="div_'.$type.'">';
@@ -256,8 +248,6 @@ class CourseSelectForm
         //Fixes forum order
         if (!empty($forum_categories)) {
             $type = RESOURCE_FORUMCATEGORY;
-
-            //echo '<img id="img_'.$type.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$type'".');" />&nbsp;';
             echo '<span id="img_'.$type.'" class="fa fa-minus-square-o fa-lg" onclick="javascript:exp('."'$type'".');" >&nbsp;</span>&nbsp;';
             echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[RESOURCE_FORUM].'</b><br />';
             echo '<div id="div_'.$type.'">';
@@ -351,7 +341,7 @@ class CourseSelectForm
     /**
      * @param $course
      */
-    static function display_hidden_quiz_questions($course)
+    public static function display_hidden_quiz_questions($course)
     {
 		if(is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
@@ -371,7 +361,7 @@ class CourseSelectForm
     /**
      * @param $course
      */
-    static function display_hidden_scorm_directories($course)
+    public static function display_hidden_scorm_directories($course)
     {
         if (is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
@@ -584,8 +574,9 @@ class CourseSelectForm
 
 	/**
 	 * Display the form session export
+     * @param array $list_course
 	 * @param array $hidden_fields Hidden fields to add to the form.
-	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
+     * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
 	 */
 	 public static function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize = false)
      {
@@ -593,14 +584,12 @@ class CourseSelectForm
 		<script>
 			function exp(item) {
 				el = document.getElementById('div_'+item);
-				if (el.style.display=='none'){
-					el.style.display='';
-					//document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('1.gif'); ?>';
+                if (el.style.display == 'none') {
+                    el.style.display = '';
 					document.getElementById('img_'+item).className('fa fa-minus-square-o fa-lg');
 				}
 				else{
-					el.style.display='none';
-					//document.getElementById('img_'+item).src='<?php echo Display::returnIconPath('0.gif'); ?>';
+                    el.style.display = 'none';
 					document.getElementById('img_'+item).className('fa fa-plus-square-o fa-lg');
 				}
 			}
@@ -651,10 +640,9 @@ class CourseSelectForm
         $icon = Display::returnIconPath('progress_bar.gif');
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.$icon.'\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
-		foreach ($list_course as $course){
+		foreach ($list_course as $course) {
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
-					//echo '<img id="img_'.$course->code.'" src="'.Display::returnIconPath('1.gif').'" onclick="javascript:exp('."'$course->code'".');" />';
 					echo '<span id="img_'.$course->code.'" class="fa fa-minus-square-o fa-lg" onclick="javascript:exp('."'$course->code'".');" >&nbsp;</span>';
 					echo '<b  onclick="javascript:exp('."'$course->code'".');" > '.$course->code.'</b><br />';
 					echo '<div id="div_'.$course->code.'">';

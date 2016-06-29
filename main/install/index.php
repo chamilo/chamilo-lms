@@ -773,7 +773,32 @@ if (@$_POST['step2']) {
                         }
                     }
 
-                    error_log('Finish upgrade process! ('.date('Y-m-d H:i:s').')');
+                    error_log('Upgrade process concluded! ('.date('Y-m-d H:i:s').')');
+                } else {
+                    error_log('There was an error during running migrations. Check error.log');
+                }
+                //TODO: check if this can be used to migrate directly from 1.9 to 1.11
+                break;
+            case '1.10.0':
+                // no break
+            case '1.10.2':
+            // no break
+            case '1.10.4':
+            // no break
+            case '1.10.6':
+                // Migrate using the migration files located in:
+                // src/Chamilo/CoreBundle/Migrations/Schema/V111
+                $result = migrate(
+                    111,
+                    $manager
+                );
+
+                echo '</div>';
+
+                if ($result) {
+                    error_log('Migrations files were executed.');
+                    include 'update-files-1.10.0-1.11.0.inc.php';
+                    error_log('Upgrade process concluded!  ('.date('Y-m-d H:i:s').')');
                 } else {
                     error_log('There was an error during running migrations. Check error.log');
                 }
@@ -916,8 +941,10 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;");
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
 
-        // Tickets
+        // Add version table
+        $connection->executeQuery('CREATE TABLE version (version varchar(255), PRIMARY KEY(version));');
 
+        // Tickets
         $table = Database::get_main_table(TABLE_TICKET_PROJECT);
 
         // Default Project Table Ticket

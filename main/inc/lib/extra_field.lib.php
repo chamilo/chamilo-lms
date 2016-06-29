@@ -85,6 +85,8 @@ class ExtraField extends Model
      */
     public function __construct($type)
     {
+        parent::__construct();
+
         $this->type = $type;
 
         $this->table = Database::get_main_table(TABLE_EXTRA_FIELD);
@@ -108,7 +110,7 @@ class ExtraField extends Model
                 $this->primaryKey = 'id';
                 break;
             case 'session':
-                $this->extraFieldType = EntityExtraField::SESSION_FIELD_TYPE;                
+                $this->extraFieldType = EntityExtraField::SESSION_FIELD_TYPE;
                 $this->primaryKey = 'id';
                 break;
             case 'question':
@@ -461,9 +463,8 @@ class ExtraField extends Model
 
                 if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
                     $tags = UserManager::get_user_tags_to_string($itemId, $field['id'], false);
-
-
                     $extra_data['extra_'.$field['variable']] = $tags;
+
                     continue;
                 }
 
@@ -774,7 +775,6 @@ class ExtraField extends Model
 
             foreach ($extra as $field_details) {
                 if (!empty($showOnlyThisFields)) {
-
                     if (!in_array($field_details['variable'], $showOnlyThisFields)) {
                         continue;
                     }
@@ -1593,11 +1593,14 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
+                        $dataValue = isset($extraData['extra_'.$field_details['variable']])
+                            ? $extraData['extra_'.$field_details['variable']]
+                            : '';
                         $form->addElement(
                             'text',
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
-                            array()
+                            ['id' => 'extra_'.$field_details['variable']]
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
@@ -1608,6 +1611,126 @@ EOF;
                                 );
                             }
                         }
+
+                        $form->addHtml(
+                            '<script>
+                                $(document).ready(function() {
+
+                                    var address = "' . $dataValue . '";
+                                    initializeGeo'.$field_details['variable'].'(address, false);
+
+                                    $("#geolocalization_extra_'.$field_details['variable'].'").on("click", function() {
+                                        var address = $("#extra_'.$field_details['variable'].'").val();
+                                        initializeGeo'.$field_details['variable'].'(address, false);
+                                        return false;
+                                    });
+
+                                    $("#myLocation_extra_'.$field_details['variable'].'").on("click", function() {
+                                        myLocation'.$field_details['variable'].'();
+                                        return false;
+                                    });
+
+                                    $("#extra_'.$field_details['variable'].'").keypress(function (event) {
+                                        if (event.which == 13) {
+                                            $("#geolocalization_extra_'.$field_details['variable'].'").click();
+                                            return false;
+                                        }
+                                    });
+                                });
+
+                                function myLocation'.$field_details['variable'].'() {
+                                    if (navigator.geolocation) {
+                                        var geoPosition = function(position) {
+                                            var lat = position.coords.latitude;
+                                            var lng = position.coords.longitude;
+                                            var latLng = new google.maps.LatLng(lat, lng);
+                                            initializeGeo'.$field_details['variable'].'(false, latLng)
+                                        };
+
+                                        var geoError = function(error) {
+                                            alert("Geocode ' . get_lang('Error') . ': " + error);
+                                        };
+
+                                        var geoOptions = {
+                                            enableHighAccuracy: true
+                                        };
+
+                                        navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
+                                    }
+                                }
+
+                                function initializeGeo'.$field_details['variable'].'(address, latLng) {
+                                    var geocoder = new google.maps.Geocoder();
+                                    var latlng = new google.maps.LatLng(-34.397, 150.644);
+                                    var myOptions = {
+                                        zoom: 15,
+                                        center: latlng,
+                                        mapTypeControl: true,
+                                        mapTypeControlOptions: {
+                                            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+                                        },
+                                        navigationControl: true,
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                                    };
+
+                                    map_'.$field_details['variable'].' = new google.maps.Map(document.getElementById("map_extra_'.$field_details['variable'].'"), myOptions);
+
+                                    var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
+
+                                    if (geocoder && parameter) {
+                                        geocoder.geocode(parameter, function(results, status) {
+                                            if (status == google.maps.GeocoderStatus.OK) {
+                                                if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                                                    map_'.$field_details['variable'].'.setCenter(results[0].geometry.location);
+                                                    if (!address) {
+                                                        $("#extra_'.$field_details['variable'].'").val(results[0].formatted_address);
+                                                    }
+                                                    var infowindow = new google.maps.InfoWindow({
+                                                        content: "<b>" + $("#extra_'.$field_details['variable'].'").val() + "</b>",
+                                                        size: new google.maps.Size(150, 50)
+                                                    });
+
+                                                    var marker = new google.maps.Marker({
+                                                        position: results[0].geometry.location,
+                                                        map: map_'.$field_details['variable'].',
+                                                        title: $("#extra_'.$field_details['variable'].'").val()
+                                                    });
+                                                    google.maps.event.addListener(marker, "click", function() {
+                                                        infowindow.open(map_'.$field_details['variable'].', marker);
+                                                    });
+                                                } else {
+                                                    alert("' . get_lang("NotFound") . '");
+                                                }
+
+                                            } else {
+                                                alert("Geocode ' . get_lang('Error') . ': " + status);
+                                            }
+                                        });
+                                    }
+                                }
+                            </script>
+                        ');
+                        $form->addHtml('
+                            <div class="form-group">
+                                <label for="geolocalization_extra_'.$field_details['variable'].'" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-8">
+                                    <button class="null btn btn-default " id="geolocalization_extra_'.$field_details['variable'].'" name="geolocalization_extra_'.$field_details['variable'].'" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
+                                    <button class="null btn btn-default " id="myLocation_extra_'.$field_details['variable'].'" name="myLocation_extra_'.$field_details['variable'].'" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
+                                </div>
+                            </div>
+                        ');
+
+                        $form->addHtml('
+                            <div class="form-group">
+                                <label for="map_extra_'.$field_details['variable'].'" class="col-sm-2 control-label">
+                                    '.$field_details['display_text'].' - '.get_lang('Map').'
+                                </label>
+                                <div class="col-sm-8">
+                                    <div name="map_extra_'.$field_details['variable'].'" id="map_extra_'.$field_details['variable'].'" style="width:100%; height:300px;">
+                                    </div>
+                                </div>
+                            </div>
+                        ');
                         break;
                 }
             }
@@ -1619,7 +1742,11 @@ EOF;
         return $return;
     }
 
-    function setupBreadcrumb(&$breadcrumb, $action)
+    /**
+     * @param $breadcrumb
+     * @param $action
+     */
+    public function setupBreadcrumb(&$breadcrumb, $action)
     {
         if ($action == 'add') {
             $breadcrumb[] = array('url' => $this->pageUrl, 'name' => $this->pageName);
@@ -1763,24 +1890,18 @@ EOF;
 
         $form->addElement('header', $header);
 
-        $platformLanguage = api_get_setting('platformLanguage');
-        $languageId = api_get_language_id($platformLanguage);
-        $languageInfo = api_get_language_info($languageId);
-
-        if ($action === 'edit' && $languageInfo['parent_id']) {
-            $translateUrl = api_get_path(WEB_CODE_PATH) . 'admin/sub_language.php?' . http_build_query([
-                'id' => $languageInfo['parent_id'],
-                'action' => 'registersublanguage',
-                'sub_language_id' => $languageInfo['id'],
+        if ($action == 'edit') {
+            $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
                 'extra_field' => $id
             ]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+
             $form->addText(
                 'display_text',
                 [get_lang('Name'), $translateButton]
             );
         } else {
-            $form->addText('display_text', get_lang('Name'));
+            $form->addElement('text', 'display_text', get_lang('Name'));
         }
 
         // Field type
@@ -2090,7 +2211,7 @@ JAVASCRIPT;
         //filter can be all/any = and/or
         $inject_joins = null;
         $inject_where = null;
-        $where        = null;
+        $where = null;
 
         if (!empty($options['where'])) {
             if (!empty($options['extra'])) {
@@ -2419,37 +2540,25 @@ JAVASCRIPT;
     }
 
     /**
-     * Get the info from an extra field by its id
-     * @param int $id
-     * @param bool $translateDisplayText
+     * @param int $fieldId
+     * @param string $tag
+     *
      * @return array
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public static function getInfoById($id, $translateDisplayText = true)
+    public function getAllUserPerTag($fieldId, $tag)
     {
-        $extraField = Database::getManager()
-            ->find('ChamiloCoreBundle:ExtraField', $id);
+        $tagRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
+        $tag = Database::escape_string($tag);
+        $fieldId = (int) $fieldId;
 
-        $objExtraField = null;
+        $sql = "SELECT user_id 
+                FROM {$this->table_field_tag} f INNER JOIN $tagRelUserTable ft 
+                ON tag_id = f.id 
+                WHERE tag = '$tag' AND f.field_id = $fieldId;
+        ";
 
-        switch ($extraField->getExtraFieldType()) {
-            case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
-                $objExtraField = new self('user');
-                break;
-            case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
-                $objExtraField = new self('course');
-                break;
-            case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
-                $objExtraField = new self('session');
-                break;
-        }
+        $result = Database::query($sql);
 
-        if (!$objExtraField) {
-            return [];
-        }
-
-        return $objExtraField->get($extraField->getId(), $translateDisplayText);
+        return Database::store_result($result, 'ASSOC');
     }
 }

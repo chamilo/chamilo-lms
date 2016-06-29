@@ -11,7 +11,6 @@
  * "Course validation" feature, technical adaptation for Chamilo 1.8.8:
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>
  */
-use \ChamiloSession as Session;
 
 // Flag forcing the "current course" reset.
 $cidReset = true;
@@ -26,7 +25,7 @@ $this_section = SECTION_COURSES;
 // true  - the new course is requested only and it is created after approval;
 // false - the new course is created immediately, after filling this form.
 $course_validation_feature = false;
-if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
+if (api_get_setting('course_validation') === 'true' && !api_is_platform_admin()) {
     $course_validation_feature = true;
 }
 
@@ -49,10 +48,7 @@ $tool_name = $course_validation_feature ? get_lang('CreateCourseRequest') : get_
 
 $tpl = new Template($tool_name);
 
-if (
-    api_get_setting('allow_users_to_create_courses') == 'false' &&
-    !api_is_platform_admin()
-) {
+if (api_get_setting('allow_users_to_create_courses') === 'false' && !api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
@@ -123,7 +119,6 @@ $form->addRule(
 );
 
 // The teacher
-//array(get_lang('Professor'), null), null, array('size' => '60', 'disabled' => 'disabled'));
 $titular = & $form->addElement('hidden', 'tutor_name', '');
 if ($course_validation_feature) {
 
@@ -153,14 +148,20 @@ if ($course_validation_feature) {
 }
 
 // Course language.
-$form->addElement(
-    'select_language',
-    'course_language',
-    get_lang('Ln'),
-    array(),
-    array('style' => 'width:150px')
-);
-$form->applyFilter('select_language', 'html_filter');
+$languages = api_get_languages();
+if (count($languages['name']) === 1) {
+    // If there's only one language available, there's no point in asking
+    $form->addElement('hidden', 'course_language', $languages['folder'][0]);
+} else {
+    $form->addElement(
+        'select_language',
+        'course_language',
+        get_lang('Ln'),
+        array(),
+        array('style' => 'width:150px')
+    );
+    $form->applyFilter('select_language', 'html_filter');
+}
 
 // Exemplary content checkbox.
 $form->addElement(
@@ -361,7 +362,7 @@ if ($form->validate()) {
                     false
                 );
                 // Display the form.
-                $content = $form->return_form();
+                $content = $form->returnForm();
             }
         }
     } else {
@@ -371,7 +372,7 @@ if ($form->validate()) {
             false
         );
         // Display the form.
-        $content = $form->return_form();
+        $content = $form->returnForm();
     }
 } else {
     if (!$course_validation_feature) {

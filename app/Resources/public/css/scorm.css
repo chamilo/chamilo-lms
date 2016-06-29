@@ -109,7 +109,7 @@ See https://support.chamilo.org/issues/6976
 }
 
 .inner_lp_toc .scorm_item_section .scorm_item:before {
-    content : url('../../main/img/lp_section.png');  /* path from main/newscorm/lp_controller.php file */
+    content : url('../../main/img/lp_section.png');  /* path from main/lp/lp_controller.php file */
     vertical-align: text-top;
     margin-right : 5px;
 }

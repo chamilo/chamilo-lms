@@ -1213,9 +1213,9 @@ class CourseBuilder
         if ($db_result) {
             while ($obj = Database::fetch_object($db_result)) {
                 $items = array();
-                $sql_items = "SELECT * FROM ".$table_item."
-                              WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
-                $db_items = Database::query($sql_items);
+                $sql = "SELECT * FROM ".$table_item."
+                        WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
+                $db_items = Database::query($sql);
                 while ($obj_item = Database::fetch_object($db_items)) {
                     $item['id'] = $obj_item->id;
                     $item['item_type'] = $obj_item->item_type;
@@ -1237,12 +1237,12 @@ class CourseBuilder
                     $items[] = $item;
                 }
 
-                $sql_tool = "SELECT id FROM $table_tool
-                         WHERE
+                $sql = "SELECT id FROM $table_tool
+                        WHERE
                             c_id = $courseId AND
                             (link LIKE '%lp_controller.php%lp_id=".$obj->id."%' AND image='scormbuilder.gif') AND
                             visibility = '1' ";
-                $db_tool = Database::query($sql_tool);
+                $db_tool = Database::query($sql);
 
                 if (Database::num_rows($db_tool)) {
                     $visibility = '1';

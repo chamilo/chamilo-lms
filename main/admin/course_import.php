@@ -55,16 +55,11 @@ function validate_data($courses)
                 if (empty($teacherInfo)) {
                     $course['error'] = get_lang('UnknownTeacher').' ('.$teacher.')';
                     $errors[] = $course;
-                } else {
-                    /*if ($teacherInfo['status'] != COURSEMANAGER) {
-                        $course['error'] = get_lang('UserIsNotATeacher').' ('.$teacher.')';
-                        $errors[] = $course;
-                    }*/
                 }
             }
         }
 
-        if(!empty($course['CourseCategory'])) {
+        if (!empty($course['CourseCategory'])) {
             $categoryInfo = CourseCategory::getCategory($course['CourseCategory']);
             if (empty($categoryInfo)) {
                 CourseCategory::addNode($course['CourseCategory'], $course['CourseCategoryName'] ? $course['CourseCategoryName'] : $course['CourseCategory'], 'TRUE', null);

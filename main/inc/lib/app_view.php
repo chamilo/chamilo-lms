@@ -2,12 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This library provides methods for using views with MVC pattern
- * @package chamilo.library
- * @author Christian Fasanando <christian1827@gmail.com>
+ * Class View
  */
-
-class ViewException extends Exception {}
 class View
 {
     private $data;
@@ -31,7 +27,7 @@ class View
             if (is_dir($path)) {
                 $this->tool_path = $path;
             } else {
-                throw new ViewException('View::__construct() $path directory does not exist ' . $path);
+                throw new Exception('View::__construct() $path directory does not exist ' . $path);
             }
         }
     }
@@ -43,7 +39,7 @@ class View
     public function set_data($data)
     {
         if (!is_array($data)) {
-            throw new ViewException('View::set_data() $data must to be an array, you have sent a' . gettype( $data ));
+            throw new Exception('View::set_data() $data must to be an array, you have sent a' . gettype( $data ));
         }
         $this->data = $data;
     }
@@ -78,7 +74,7 @@ class View
         if (file_exists($target)) {
             require_once $target;
         } else {
-            throw new ViewException('View::render() invalid file path '.$target);
+            throw new Exception('View::render() invalid file path '.$target);
         }
     }
 
@@ -96,7 +92,7 @@ class View
             $content = ob_get_clean();
             return $content;
         } else {
-            throw new ViewException('View::render_template() invalid file path '.$target);
+            throw new Exception('View::render_template() invalid file path '.$target);
         }
     }
 }

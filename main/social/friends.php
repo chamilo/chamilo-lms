@@ -17,7 +17,6 @@ if (api_get_setting('allow_social_tool') != 'true') {
 $this_section = SECTION_SOCIAL;
 
 $htmlHeadXtra[] = '<script>
-
 function delete_friend (element_div) {
 	id_image=$(element_div).attr("id");
 	user_id=id_image.split("_");

@@ -12,7 +12,8 @@ api_block_anonymous_users();
 if (!api_is_allowed_to_create_course() &&
     !api_is_session_admin() &&
     !api_is_drh() &&
-    !api_is_student_boss()
+    !api_is_student_boss() &&
+    !api_is_platform_admin()
 ) {
     // Check if the user is tutor of the course
     $user_course_status = CourseManager::get_tutor_in_course_status(
@@ -164,9 +165,9 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 }
 
 // Action behaviour
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 
-
-switch ($_GET['action']) {
+switch ($action) {
     case 'send_legal':
         $subject = get_lang('SendLegalSubject');
         $content = sprintf(
@@ -602,7 +603,6 @@ if (!empty($student_id)) {
                             ['class' => 'btn btn-primary btn-xs']
                         );
                     }
-
                     echo '<tr>
                         <td align="right">';
                     echo get_lang('LegalAccepted').' </td>  <td align="left">'.$icon;
@@ -1144,14 +1144,14 @@ if (!empty($student_id)) {
                 if (Database :: num_rows($result_last_attempt) > 0) {
                     $id_last_attempt = Database :: result($result_last_attempt, 0, 0);
                     if ($count_attempts > 0)
-                        echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
+                        echo '<a href="../exercise/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
                         '.Display::return_icon('quiz.gif').'
                      </a>';
                 }
                 echo '</td>';
 
                 echo '<td>';
-                $all_attempt_url = "../exercice/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
+                $all_attempt_url = "../exercise/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
                 echo Display::url(Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), ICON_SIZE_SMALL), $all_attempt_url );
 
                 echo '</td></tr>';

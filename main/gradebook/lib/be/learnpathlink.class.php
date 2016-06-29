@@ -173,7 +173,7 @@ class LearnpathLink extends AbstractLink
 	public function get_link()
 	{
 		$session_id = api_get_session_id();
-		$url = api_get_path(WEB_PATH).'main/newscorm/lp_controller.php?'.api_get_cidreq_params($this->get_course_code(), $session_id).'&gradebook=view';
+		$url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq_params($this->get_course_code(), $session_id).'&gradebook=view';
 
 		if (!api_is_allowed_to_edit() || $this->calc_score(api_get_user_id()) == null) {
 			$url .= '&action=view&lp_id='.$this->get_ref_id();

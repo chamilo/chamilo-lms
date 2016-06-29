@@ -55,11 +55,21 @@ class bbb
         $this->groupSupport = isset($columns['group_id']) ? true : false;
 
         if ($this->groupSupport) {
+            // Plugin check
             $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
             if ($this->groupSupport) {
-                $courseInfo = api_get_course_info();
-                if ($courseInfo) {
-                    $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+
+                // Platform check
+                $bbbSetting = api_get_setting('bbb_enable_conference_in_course_groups');
+                $bbbSetting = isset($bbbSetting['bbb']) ? $bbbSetting['bbb'] === 'true' : false;
+
+                if ($bbbSetting) {
+                    // Course check
+                    $courseInfo = api_get_course_info();
+
+                    if ($courseInfo) {
+                        $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+                    }
                 }
             }
         }
@@ -152,7 +162,7 @@ class bbb
         # a user joins. If after this period, a user hasn't joined, the meeting is
         # removed from memory.
         defaultMeetingCreateJoinDuration=5
-     * 
+     *
      * @return mixed
      */
     public function createMeeting($params)
@@ -165,8 +175,9 @@ class bbb
             $params['group_id'] = api_get_group_id();
         }
 
+        $courseCode = is_null($courseCode) ? '' : $courseCode;
         $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $courseCode;
-        $attendeePassword =  $params['attendee_pw'];
+        $attendeePassword = $params['attendee_pw'];
         $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
 

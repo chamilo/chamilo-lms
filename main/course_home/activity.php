@@ -39,7 +39,7 @@ if (api_is_platform_admin()) {
 // Course legal
 $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 $pluginExtra = null;
-if ($enabled == 'true') {
+if ($enabled === 'true') {
     require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
     $plugin = CourseLegalPlugin::create();
     $pluginExtra = $plugin->getTeacherLink();

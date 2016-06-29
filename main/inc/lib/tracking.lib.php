@@ -5,6 +5,9 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use CpChart\Classes\pCache as pCache;
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  *  Class Tracking
@@ -959,7 +962,7 @@ class Tracking
                                                             </td>';
                                                 } else {
                                                     $output .= '<td>
-                                                            <a href="../exercice/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
+                                                            <a href="../exercise/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
                                                             <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
                                                             </a></td>';
                                                 }
@@ -969,7 +972,7 @@ class Tracking
                                                                 <img src="' . Display::returnIconPath('quiz_na.gif').'" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
                                                 } else {
                                                     $output .= '<td>
-                                                                    <a href="../exercice/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
+                                                                    <a href="../exercise/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
                                                                     <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
                                                 }
                                             }
@@ -4799,7 +4802,7 @@ class Tracking
                     );
 
                     $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
+                    $url = api_get_path(WEB_CODE_PATH) . "exercise/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
 
                     if ($visible_return['value'] == true) {
                         $exercices['title'] = Display::url(
@@ -4858,7 +4861,7 @@ class Tracking
                                 $weighting      = $exercise_stat['exe_weighting'];
                                 $exe_id         = $exercise_stat['exe_id'];
 
-                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
+                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH) . 'exercise/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
                                 $percentage_score_result = Display::url(ExerciseLib::show_score($score, $weighting), $latest_attempt_url);
                                 $my_score = 0;
                                 if (!empty($weighting) && intval($weighting) != 0) {
@@ -4951,7 +4954,7 @@ class Tracking
                     $time_spent_in_lp = api_time_to_hms($time_spent_in_lp);
 
                     $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."newscorm/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
+                    $url = api_get_path(WEB_CODE_PATH) . "lp/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
 
                     if ($learnpath['lp_visibility'] == 0) {
                         $html .= Display::tag('td', $learnpath['lp_name']);
@@ -5769,6 +5772,41 @@ class Tracking
         }
         return $data;
     }
+
+    /**
+     * @param User $user
+     * @param string $tool
+     * @param Course $course
+     * @param Session|null $session Optional.
+     * @return \Chamilo\CourseBundle\Entity\CStudentPublication|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public static function getLastStudentPublication(User $user, $tool, Course $course, Session $session = null)
+    {
+        return Database::getManager()
+            ->createQuery("
+                SELECT csp
+                FROM ChamiloCourseBundle:CStudentPublication csp
+                INNER JOIN ChamiloCourseBundle:CItemProperty cip
+                    WITH (
+                        csp.iid = cip.ref AND
+                        csp.sessionId = cip.session AND
+                        csp.cId = cip.course AND
+                        csp.userId = cip.lasteditUserId
+                    )
+                WHERE
+                    cip.session = :session AND cip.course = :course AND cip.lasteditUserId = :user AND cip.tool = :tool
+                ORDER BY csp.iid DESC
+            ")
+            ->setMaxResults(1)
+            ->setParameters([
+                'tool' => $tool,
+                'session' => $session,
+                'course' => $course,
+                'user' => $user
+            ])
+            ->getOneOrNullResult();
+    }
 }
 
 /**
@@ -6087,12 +6125,12 @@ class TrackingCourseLog
     			break;
     		case 'learnpath':
     			$table_name = TABLE_LP_MAIN;
-    			$link_tool = 'newscorm/lp_controller.php';
+    			$link_tool = 'lp/lp_controller.php';
     			$id_tool = 'id';
     			break;
     		case 'quiz':
     			$table_name = TABLE_QUIZ_TEST;
-    			$link_tool = 'exercice/exercice.php';
+    			$link_tool = 'exercise/exercise.php';
     			$id_tool = 'id';
     			break;
     		case 'glossary':

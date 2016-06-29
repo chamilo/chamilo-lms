@@ -35,9 +35,7 @@ $userGeolocalization = api_get_setting('enable_profile_user_address_geolocalizat
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
-if ($userGeolocalization) {
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
-}
+$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     var $image = $("#previewImage");
@@ -153,6 +151,7 @@ $user_data['api_key_generate'] = $value_array;
 if ($userGeolocalization) {
     $htmlHeadXtra[] = '<script>
     $(document).ready(function() {
+
         var address = "' . $user_data['address'] . '";
         initializeGeo(address, false);
 
@@ -165,6 +164,13 @@ if ($userGeolocalization) {
         $("#myLocation").on("click", function() {
             myLocation();
             return false;
+        });
+
+        $("#address").keypress(function (event) {
+            if (event.which == 13) {
+                $("#geolocalization").click();
+                return false;
+            }
         });
     });
 
@@ -423,7 +429,7 @@ if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
 }
 
 //    EXTENDED PROFILE  this make the page very slow!
-if (api_get_setting('extended_profile') == 'true') {
+if (api_get_setting('extended_profile') === 'true') {
     $width_extended_profile = 500;
     //    MY COMPETENCES
     $form->addHtmlEditor(
@@ -624,7 +630,7 @@ if ($form->validate()) {
     if ($user &&
         (!empty($user_data['password0']) &&
         !empty($user_data['password1'])) ||
-        (!empty($user_data['password0']) && 
+        (!empty($user_data['password0']) &&
         api_get_setting('profile', 'email') == 'true')
     ) {
         $passwordWasChecked = true;
@@ -805,7 +811,7 @@ if ($form->validate()) {
     unset($user_data['api_key_generate']);
 
     foreach ($user_data as $key => $value) {
-        if (substr($key, 0, 6) == 'extra_') { //an extra field
+        if (substr($key, 0, 6) === 'extra_') { //an extra field
            continue;
         } elseif (strpos($key, 'remove_extra_') !== false) {
         } else {
@@ -853,7 +859,7 @@ if ($form->validate()) {
         UserManager::updatePassword(api_get_user_id(), $password);
     }
 
-    if (api_get_setting('profile', 'officialcode') == 'true' &&
+    if (api_get_setting('profile', 'officialcode') === 'true' &&
         isset($user_data['official_code'])
     ) {
         $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
@@ -891,41 +897,41 @@ if ($form->validate()) {
 // the header
 
 $actions = null;
-if (api_get_setting('allow_social_tool') != 'true') {
-    if (api_get_setting('extended_profile') == 'true') {
+if (api_get_setting('allow_social_tool') !== 'true') {
+    if (api_get_setting('extended_profile') === 'true') {
         $actions .= '<div class="actions">';
 
-        if (api_get_setting('allow_social_tool') == 'true' &&
-            api_get_setting('allow_message_tool') == 'true'
+        if (api_get_setting('allow_social_tool') === 'true' &&
+            api_get_setting('allow_message_tool') === 'true'
         ) {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
                 Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
         }
-        if (api_get_setting('allow_message_tool') == 'true') {
+        if (api_get_setting('allow_message_tool') === 'true') {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
                 Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
         }
         $show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
 
-        if (isset($_GET['type']) && $_GET['type'] == 'extended') {
+        if (isset($_GET['type']) && $_GET['type'] === 'extended') {
             $actions .= '<a href="profile.php?type=reduced'.$show.'">'.
-                Display::return_icon('edit.png', get_lang('EditNormalProfile'),'',16).'</a>';
+                Display::return_icon('edit.png', get_lang('EditNormalProfile'), '', 16).'</a>';
         } else {
             $actions .= '<a href="profile.php?type=extended'.$show.'">'.
-                Display::return_icon('edit.png', get_lang('EditExtendProfile'),'',16).'</a>';
+                Display::return_icon('edit.png', get_lang('EditExtendProfile'), '', 16).'</a>';
         }
         $actions .= '</div>';
     }
 }
 
-$show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') == 'true' ? true : false;
+$show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') === 'true' ? true : false;
 
 $tpl = new Template(get_lang('ModifyProfile'));
 $tpl->assign('actions', $actions);
 
 SocialManager::setSocialUserBlock($tpl, $user_id, 'messages');
 
-if (api_get_setting('allow_social_tool') == 'true') {
+if (api_get_setting('allow_social_tool') === 'true') {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
     $menu = SocialManager::show_social_menu(
         'home',

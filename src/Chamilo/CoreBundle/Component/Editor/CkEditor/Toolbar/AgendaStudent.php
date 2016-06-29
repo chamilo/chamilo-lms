@@ -10,9 +10,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class AgendaStudent extends Basic
 {
-
-    public $plugins = array(
-    );
+    public $plugins = array();
 
     /**
      * Get the toolbar config
@@ -116,5 +114,4 @@ class AgendaStudent extends Basic
             ['Toolbarswitch']
         ];
     }
-
 }

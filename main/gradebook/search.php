@@ -1,12 +1,11 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * Search user certificates if them are publics
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.gradebook
  */
-use \ChamiloSession as Session;
 
 $cidReset = true;
 

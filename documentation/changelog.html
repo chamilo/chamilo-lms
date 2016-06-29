@@ -47,6 +47,48 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
+    <a name="1.11.0"></a>
+
+    <h1>Chamilo 1.11.0 - tobenamed, xxth of July 2016</h1>
+    <h3>Release notes - summary</h3>
+    <p>Chamilo 1.11.0 is a major release of the 1.11.x branch. It is meant as a transition between 1.10 and 2.0 versions.</p>
+    <h3>Release name</h3>
+    <p><a href="http://www.openstreetmap.org/#map="></a> </p>
+    <h3>Security fixes</h3>
+    <p>None in this version.</p>
+    <h3>Possibly breaking changes</h3>
+    <p>None in this version.</p>
+    <h3>Notable new Features</h3>
+    <h4>For end-users, teachers and Chamilo admins</h4>
+    <ul>
+    </ul>
+    <h4>For developers and sysadmins</h4>
+    <ul>
+    </ul>
+    <h3>Stylesheets and theming</h3>
+    <ul>
+    </ul>
+    <h3>Files structure</h3>
+    <ul>
+        <li>The main/exercice/ folder has been renamed main/exercise/</li>
+        <li>The main/newscorm/ folder has been renamed main/lp/ (for Learning Path)</li>
+    </ul>
+    <h3>Web services</h3>
+    <ul>
+    </ul>
+    <h3>Removals</h3>
+    <ul>
+    </ul>
+    <h3>Known issues</h3>
+    <ul>
+        <li>IMS/QTI import/export has issues</li>
+        <li>In Internet Explorer 9, learning paths might not show other pages than the first to be opened. We lacked computers with IE9 at the time of release of 1.10.4. Guaranteeing IE9 support will likely require additional services. See <a href="https://support.chamilo.org/issues/8075">the corresponding bug report</a></li>
+        <li>The text-to-speech converter based on Google now requires an API key</li>
+        <li>The Xapian search module is broken. We'll fix that soon, but not a lot of people use it</li>
+        <li>Encoding issues when importing accentuated characters from MS-Office-generated .xlsx files (for example when importing exercises). This isn't really a Chamilo issue, but since some users might have issues with that, we've decided to report it to avoid any surprise.</li>
+    </ul>
+
+
     <a name="1.10.6"></a>
 
     <h1>Chamilo 1.10.6 - Zacatecas, 24th of May 2016</h1>

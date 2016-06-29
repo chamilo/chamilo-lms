@@ -295,28 +295,28 @@ if ($_GET["source_id"])
 			}
 			$originaltoolname = get_lang("Agenda");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath');
+			unset($_SESSION['from_learnpath']);
 			unset ($from_learnpath);
 			break;
 		case "2" : // coming from forum: new topic
 			$url = "../phpbb/newtopic.php?forum=$source_forum&md5=$md5";
 			$originaltoolname = get_lang("ForumAddNewTopic");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath');
+			unset($_SESSION['from_learnpath']);
 			unset ($from_learnpath);
 			break;
 		case "3" : // coming from forum: edit topic
 			$url = "../phpbb/editpost.php?post_id=$post_id&topic=$topic&forum=$forum&md5=$md5&originalresource=no";
 			$originaltoolname = get_lang("ForumEditTopic");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath');
+			unset($_SESSION['from_learnpath']);
 			unset ($from_learnpath);
 			break;
 		case "4" : // coming from exercises: edit topic
-			$url = "../exercice/admin.php?modifyAnswers=$modifyAnswers";
+			$url = "../exercise/admin.php?modifyAnswers=$modifyAnswers";
 			$originaltoolname = get_lang("ExerciseAnswers");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath');
+			unset($_SESSION['from_learnpath']);
 			unset ($from_learnpath);
 			break;
 		case "5" : // coming from learning path
@@ -359,7 +359,7 @@ else
 	$therow2 = Database::fetch_array($sql_result);
 
 	$from_learnpath = 'yes';
-	session_register('from_learnpath');
+	$_SESSION['from_learnpath'] = $from_learnpath;
 	$interbreadcrumb[] = array ("url" => "../scorm/scormdocument.php", "name" => get_lang('LearningPath'));
 	$interbreadcrumb[] = array ("url" => "../learnpath/learnpath_handler.php?learnpath_id=$learnpath_id", "name" => "{$therow['learnpath_name']}");
 	$interbreadcrumb[] = array ("url" => api_get_self()."?action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no", "name" => "{$therow2['chapter_name']}");

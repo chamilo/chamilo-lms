@@ -64,9 +64,8 @@ switch ($action) {
     case 'update_lp_item_order':
         if (api_is_allowed_to_edit(null, true)) {
 
-            $new_order   = $_POST['new_order'];
-
-            $sections	= explode('^', $new_order);
+            $new_order = $_POST['new_order'];
+            $sections = explode('^', $new_order);
             $new_array = array();
 
             // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database
@@ -187,12 +186,7 @@ switch ($action) {
             break;
         }
 
-        $learningPath = new learnpath(
-            api_get_course_id(),
-            $lpId,
-            api_get_user_id()
-        );
-
+        $learningPath = learnpath::getLpFromSession(api_get_course_id(), $lpId, api_get_user_id());
         $lpItem = $learningPath->getItem($lpItemId);
 
         if (empty($lpItem)) {

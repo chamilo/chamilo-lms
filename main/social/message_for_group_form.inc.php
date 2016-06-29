@@ -21,7 +21,7 @@ if (isset($_REQUEST['user_friend'])) {
     $info_path_friend=array();
     $userfriend_id = intval($_REQUEST['user_friend']);
     $info_user_friend = api_get_user_info($userfriend_id);
-    $info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id,'web');
+    $info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id, 'web');
 }
 
 $group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
@@ -73,11 +73,11 @@ $form->addElement('hidden', 'token', $tok);
 
 $tpl = new Template(get_lang('Groups'));
 
-if (api_get_setting('allow_message_tool')=='true') {
+if (api_get_setting('allow_message_tool') === 'true') {
     // Normal message
     $user_info = api_get_user_info($userfriend_id);
     $height = 180;
-    if ($allowed_action == 'add_message_group') {
+    if ($allowed_action === 'add_message_group') {
         $form->addElement('text', 'title', get_lang('Title'));
         $height = 140;
     }

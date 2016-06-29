@@ -228,7 +228,7 @@ function return_logo($theme)
  * Return HTML string of a list as <li> items
  * @return string
  */
-function return_notification_menu()
+function returnNotificationMenu()
 {
     $_course = api_get_course_info();
     $course_id = 0;
@@ -239,51 +239,42 @@ function return_notification_menu()
     $user_id = api_get_user_id();
 
     $html = '';
+    $cacheEnabled = function_exists('apcu_exists');
 
     if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
         (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
         (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
     ) {
-        $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
 
-        $number_online_in_course = 0;
-        if (!empty($_course['id'])) {
-            $number_online_in_course = who_is_online_in_this_course_count(
-                $user_id,
-                api_get_setting('time_limit_whosonline'),
-                $_course['id']
-            );
-        }
+        $number = getOnlineUsersCount($cacheEnabled);
+
+        $number_online_in_course = getOnlineUsersInCourseCount($user_id, $_course, $cacheEnabled);
 
         // Display the who's online of the platform
-        if ($number) {
-            if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
+        if ($number &&
+            (api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
                 (api_get_setting('showonline', 'users') == 'true' && $user_id)
-            ) {
+           )
+        {
                 $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'.get_lang('UsersOnline').'" >'.
                             Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY).' '.$number.'</a></li>';
-            }
         }
 
         // Display the who's online for the course
-        if ($number_online_in_course) {
-            if (is_array($_course) &&
-                api_get_setting('showonline', 'course') == 'true' &&
-                isset($_course['sysCode'])
-            ) {
+        if ($number_online_in_course &&
+            (is_array($_course) &&
+               api_get_setting('showonline', 'course') == 'true' && isset($_course['sysCode'])
+            )
+           )
+        {
                 $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_self">'.
                         Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY).' '.$number_online_in_course.' </a></li>';
-            }
         }
 
-        //if (api_get_setting('showonline', 'session') == 'true') {
-
-            // Display the who's online for the session
-            if (isset($user_id) && api_get_session_id() != 0) {
-                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_self">'.
-                        Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
-            }
-        //}
+        if (isset($user_id) && api_get_session_id() != 0) {
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_self">'.
+                Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
+        }
     }
 
     return $html;
@@ -775,4 +766,59 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     }
 
     return $html;
+}
+
+/**
+ * Helper function to get the number of users online, using cache if available
+ * @param   bool    $cacheEnabled    Whether APCu is available or not
+ * @return  int     The number of users currently online
+ */
+function getOnlineUsersCount($cacheEnabled = false)
+{
+    $number = 0;
+    if ($cacheEnabled) {
+        $apc = apcu_cache_info(true);
+        $apc_end = $apc['start_time'] + $apc['ttl'];
+        if (apcu_exists('my_campus_whoisonline_count_simple') AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple') > 0 ) {
+            $number = apcu_fetch('my_campus_whoisonline_count_simple');
+        } else {
+            $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+            apcu_clear_cache();
+            apcu_store('my_campus_whoisonline_count_simple', $number, 15);
+        }
+    } else {
+        $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+    }
+
+    return $number;
+}
+
+/**
+ * Helper function to get the number of users online in a course, using cache if available
+ * @param   int     $userId         The user ID
+ * @param   bool    $cacheEnabled   Whether APCu is available or not
+ * @return  int     The number of users currently online
+ */
+function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
+{
+    $numberOnlineInCourse = 0;
+    if (!empty($_course['id'])) {
+        if ($cacheEnabled) {
+            $apc = apcu_cache_info(true);
+            $apc_end = $apc['start_time']+$apc['ttl'];
+            if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id']) AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0) {
+                $numberOnlineInCourse = apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']);
+            } else {
+                $numberOnlineInCourse = who_is_online_in_this_course_count($userId, api_get_setting('time_limit_whosonline'), $_course['id']);
+                apcu_store('my_campus_whoisonline_count_simple_'.$_course['id'],$numberOnlineInCourse,15);
+            }
+        } else {
+            $numberOnlineInCourse = who_is_online_in_this_course_count(
+                $userId,
+                api_get_setting('time_limit_whosonline'),
+                $_course['id']
+            );
+        }
+    }
+    return $numberOnlineInCourse;
 }

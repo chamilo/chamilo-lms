@@ -35,15 +35,16 @@ class CourseRecycler
      * Delete all items from the course.
      * This deletes all items in the course-object from the current Chamilo-
      * course
-     * @param string $type 'full_backup' or 'select_items'
+     * @param string $backupType 'full_backup' or 'select_items'
      *
      * @return bool
      *
      * @assert (null) === false
      */
-    public function recycle($type)
+    public function recycle($backupType)
     {
-        if (empty($type)) {
+        if (empty($backupType)) {
+
             return false;
         }
 
@@ -51,7 +52,7 @@ class CourseRecycler
         $table_linked_resources = Database::get_course_table(TABLE_LINKED_RESOURCES);
         $table_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        $this->type = $type;
+        $this->type = $backupType;
         $this->recycle_links();
         $this->recycle_link_categories();
         $this->recycle_events();
@@ -99,7 +100,7 @@ class CourseRecycler
         $table = Database :: get_course_table(TABLE_DOCUMENT);
         $tableItemProperty = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-        if ($this->type == 'full_backup') {
+        if ($this->type === 'full_backup') {
             $sql = "DELETE FROM $tableItemProperty
                         WHERE
                             c_id = ".$this->course_id." AND
@@ -431,11 +432,13 @@ class CourseRecycler
 
             // Identifying again and deletion of the orphan questions, if it was desired.
             if ($delete_orphan_questions) {
-
+                // If this query was ever too slow, there is an alternative here:
+                // https://github.com/beeznest/chamilo-lms-icpna/commit/a38eab725402188dffff50245ee068d79bcef779
                 $sql = " (
                         SELECT q.id, ex.c_id FROM $table_qui_que q
                         INNER JOIN $table_rel r
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        
                         INNER JOIN $table_qui ex
                         ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
                         WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
@@ -633,13 +636,12 @@ class CourseRecycler
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_THEMATIC] as $last_id => $thematic) {
                 if (is_numeric($last_id)) {
-
                     foreach($thematic->thematic_advance_list as $thematic_advance) {
                         $cond = array(
                             'id = ? AND  c_id = ?' => array(
                                 $thematic_advance['id'],
-                                $this->course_id,
-                            ),
+                                $this->course_id
+                            )
                         );
                         api_item_property_update(
                             $this->course_info,

@@ -1,6 +1,6 @@
 <?php
-require_once(api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php');
+require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpathItem.class.php';
+require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpath.class.php';
 
 
 class TestLearnpathItem extends UnitTestCase {

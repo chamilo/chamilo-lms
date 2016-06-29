@@ -43,7 +43,7 @@ class Export
     public static function arrayToCsv($data, $filename = 'export')
     {
         if (empty($data)) {
-            
+
             return false;
         }
 
@@ -59,7 +59,7 @@ class Export
 
         DocumentManager::file_send_for_download($filePath, true, $filename.'.csv');
         exit;
-	}
+    }
 
     /**
      * Export tabular data to XLS-file
@@ -82,7 +82,7 @@ class Export
 
         DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
         exit;
-	}
+    }
 
     /**
      * Export tabular data to XLS-file (as html table)
@@ -151,7 +151,7 @@ class Export
         fclose($handle);
         DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
         exit;
-	}
+    }
 
     /**
      * Export hierarchical tabular data to XML-file
@@ -343,5 +343,4 @@ class Export
             }
         }
     }
-
 }

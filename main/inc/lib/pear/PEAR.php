@@ -19,10 +19,6 @@
  * @since      File available since Release 0.1
  */
 
-// Added by Chamilo team, 16-MAR-2010
-if (class_exists('pear')) { return; }
-//
-
 /**#@+
  * ERROR constants
  */
@@ -156,7 +152,7 @@ class PEAR
      * @access public
      * @return void
      */
-    public function __construc($error_class = null)
+    public function __construct($error_class = null)
     {
         $classname = strtolower(get_class($this));
         if ($this->_debug) {
@@ -867,9 +863,13 @@ class PEAR_Error
      * @access public
      *
      */
-    public function __construct($message = 'unknown error', $code = null,
-                        $mode = null, $options = null, $userinfo = null)
-    {
+    public function __construct(
+        $message = 'unknown error',
+        $code = null,
+        $mode = null,
+        $options = null,
+        $userinfo = null
+    ) {
         if ($mode === null) {
             $mode = PEAR_ERROR_RETURN;
         }

@@ -24,7 +24,7 @@ class ExtraFieldValue extends Model
         'created_at',
         'updated_at',
     );
-    /** @var string session_id, course_code, user_id, question id */
+    /** @var ExtraField */
     public $extraField;
 
     /**
@@ -36,6 +36,7 @@ class ExtraFieldValue extends Model
      */
     public function __construct($type)
     {
+        parent::__construct();
         $this->type = $type;
         $extraField = new ExtraField($this->type);
         $this->extraField = $extraField;
@@ -173,7 +174,7 @@ class ExtraFieldValue extends Model
                             $tags = array_merge($tags, $tagsResult);
                         }
                     }
-                    
+
                     foreach ($tags as $tag) {
                         $tagUses = $em
                             ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
@@ -585,8 +586,8 @@ class ExtraFieldValue extends Model
 
     /**
      * @param string $tag
-     * @param int    $field_id
-     * @param int    $limit
+     * @param int   $field_id
+     * @param int   $limit
      *
      * @return array
      */
@@ -691,7 +692,8 @@ class ExtraFieldValue extends Model
         $field_variable,
         $field_value,
         $transform = false,
-        $last = false
+        $last = false,
+        $all = false
     ) {
         $field_value = Database::escape_string($field_value);
         $field_variable = Database::escape_string($field_variable);
@@ -706,7 +708,7 @@ class ExtraFieldValue extends Model
                     sf.extra_field_type = $extraFieldType
                 ORDER BY item_id
                 ";
-
+        
         if ($last) {
             // If we want the last element instead of the first
             // This is useful in special cases where there might
@@ -716,7 +718,11 @@ class ExtraFieldValue extends Model
 
         $result = Database::query($sql);
         if ($result !== false && Database::num_rows($result)) {
-            $result = Database::fetch_array($result, 'ASSOC');
+            if ($all) {
+                $result = Database::store_result($result, 'ASSOC');
+            } else {
+                $result = Database::fetch_array($result, 'ASSOC');
+            }
 
             return $result;
         } else {
@@ -744,6 +750,7 @@ class ExtraFieldValue extends Model
         $result = Database::query($sql);
 
         if (Database::num_rows($result)) {
+
             return Database::store_result($result, 'ASSOC');
         }
 
@@ -831,8 +838,10 @@ class ExtraFieldValue extends Model
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
+
             return Database::store_result($result, 'ASSOC');
         }
+
         return false;
     }
 
@@ -868,7 +877,7 @@ class ExtraFieldValue extends Model
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$item_id' AND
-                    field_id = '".$field_id."' AND
+                    field_id = '$field_id' AND
                     extra_field_type = $extraFieldType
                 ";
         Database::query($sql);
@@ -906,12 +915,11 @@ class ExtraFieldValue extends Model
         $itemId = intval($itemId);
         $fieldId = intval($fieldId);
         $fieldValue = Database::escape_string($fieldValue);
-        //$extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$itemId' AND
-                    field_id = '".$fieldId."' AND
+                    field_id = '$fieldId' AND
                     value = '$fieldValue'
                 ";
         Database::query($sql);

@@ -19,7 +19,7 @@ if (isset($_POST['convert'])) {
     if (isset($_FILES['user_file'])) {
         $allowed_extensions = array('odp', 'sxi', 'ppt', 'pps', 'sxd', 'pptx');
         if (in_array(strtolower(pathinfo($_FILES['user_file']['name'], PATHINFO_EXTENSION)), $allowed_extensions)) {
-            require_once api_get_path(SYS_CODE_PATH).'newscorm/lp_upload.php';
+            require_once api_get_path(SYS_CODE_PATH) . 'lp/lp_upload.php';
             if (isset($o_ppt) && $first_item_id != 0) {
                 if (api_get_setting('search_enabled')=='true') {
                     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -36,7 +36,7 @@ if (isset($_POST['convert'])) {
                         }
                     }
                 }
-                header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_ppt->lp_id.'&action=view_item&id='.$first_item_id);
+                header('Location: ../lp/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_ppt->lp_id.'&action=view_item&id='.$first_item_id);
                 exit;
             } else {
                 if (!empty($o_ppt->error)) {
@@ -60,7 +60,7 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Doc"));
+$interbreadcrumb[]= array ("url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang("Doc"));
 
 $nameTools = get_lang("OogieConversionPowerPoint");
 Display :: display_header($nameTools);

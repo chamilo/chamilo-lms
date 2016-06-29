@@ -7,7 +7,6 @@
  * refactoring and tighter integration
  */
 
-// Including the global initialization file
 require_once '../inc/global.inc.php';
 
 $current_course_tool  = TOOL_NOTEBOOK;
@@ -20,12 +19,12 @@ api_protect_course_script(true);
 
 // Additional javascript
 $htmlHeadXtra[] = NotebookManager::javascript_notebook();
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function setFocus(){
-$("#note_title").focus();
+    $("#note_title").focus();
 }
 $(document).ready(function () {
-  setFocus();
+    setFocus();
 });
 </script>';
 
@@ -35,12 +34,14 @@ $tool = TOOL_NOTEBOOK;
 // Tracking
 Event::event_access_tool(TOOL_NOTEBOOK);
 
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+
 // Tool name
-if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
+if ($action === 'addnote') {
 	$tool = 'NoteAddNew';
 	$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('ToolNotebook'));
 }
-if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
+if ($action === 'editnote') {
 	$tool = 'ModifyNote';
 	$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('ToolNotebook'));
 }
@@ -52,7 +53,7 @@ Display::display_header(get_lang(ucfirst($tool)));
 Display::display_introduction_section(TOOL_NOTEBOOK);
 
 // Action handling: Adding a note
-if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
+if ($action === 'addnote') {
 	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
@@ -103,7 +104,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
         $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
-} elseif (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id'])) {
+} elseif ($action === 'editnote' && is_numeric($_GET['notebook_id'])) {
     // Action handling: Editing a note
 
     if (!empty($_GET['isStudentView'])) {
@@ -112,12 +113,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
     }
 
     // Initialize the object
-    $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.Security::remove_XSS($_GET['notebook_id']));
+    $form = new FormValidator(
+        'note',
+        'post',
+        api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.intval($_GET['notebook_id'])
+    );
     // Setting the form elements
     $form->addElement('header', '', get_lang('ModifyNote'));
     $form->addElement('hidden', 'notebook_id');
     $form->addElement('text', 'note_title', get_lang('NoteTitle'), array('size' => '100'));
-    //$form->applyFilter('note_title', 'html_filter');
     $form->addElement('html_editor', 'note_comment', get_lang('NoteComment'), null, api_is_allowed_to_edit()
         ? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
         : array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
@@ -154,7 +158,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
         $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
-} elseif (isset($_GET['action']) && $_GET['action'] == 'deletenote' && is_numeric($_GET['notebook_id'])) {
+} elseif ($action === 'deletenote' && is_numeric($_GET['notebook_id'])) {
     // Action handling: deleting a note
 
     $res = NotebookManager::delete_note(Security::remove_XSS($_GET['notebook_id']));
@@ -164,28 +168,26 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
 
     NotebookManager::display_notes();
 } elseif (
-    isset($_GET['action']) && $_GET['action'] == 'changeview' &&
-    in_array($_GET['view'], array('creation_date', 'update_date', 'title'))
-    ) {
+    $action === 'changeview' && in_array($_GET['view'], array('creation_date', 'update_date', 'title')) ) {
 
     // Action handling: changing the view (sorting order)
     switch ($_GET['view']) {
         case 'creation_date':
-            if (!$_GET['direction'] OR $_GET['direction'] == 'ASC') {
+            if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
                 Display::display_confirmation_message(get_lang('NotesSortedByCreationDateAsc'));
             } else {
                 Display::display_confirmation_message(get_lang('NotesSortedByCreationDateDESC'));
             }
             break;
         case 'update_date':
-            if (!$_GET['direction'] OR $_GET['direction'] == 'ASC') {
+            if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
                 Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateAsc'));
             } else {
                 Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateDESC'));
             }
             break;
         case 'title':
-            if (!$_GET['direction'] OR $_GET['direction'] == 'ASC') {
+            if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
                 Display::display_confirmation_message(get_lang('NotesSortedByTitleAsc'));
             } else {
                 Display::display_confirmation_message(get_lang('NotesSortedByTitleDESC'));
@@ -198,5 +200,4 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
     NotebookManager::display_notes();
 }
 
-// Footer
 Display::display_footer();

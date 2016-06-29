@@ -7,7 +7,8 @@
 /**
  * Requires
  */
-require_once ('xajax/xajax.inc.php');
+require_once 'xajax/xajax.inc.php';
+
 /**
  * AddManySessionToCategoryFunctions class
  */
@@ -46,6 +47,7 @@ class AddManySessionToCategoryFunctions
 			$xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));
 		}
 		$_SESSION['course_list'] = $course_list;
+        
 		return $xajax_response;
 	}
 }

@@ -150,9 +150,7 @@ switch ($action) {
         }
         $iconsTools .= '</div>';
         $iconsTools .= '</div>';
-
         $content = $iconsTools;
-
         break;
 }
 
@@ -163,7 +161,7 @@ function getCustomWebIconPath()
 {
     // Check if directory exists or create it if it doesn't
     $dir = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/course_home_icons/';
-
+    
     return $dir;
 }
 $tpl = new Template($toolName);

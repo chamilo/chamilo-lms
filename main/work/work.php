@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *	@package chamilo.work
  **/
-
-use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
@@ -43,12 +43,12 @@ $base_work_dir = $course_dir . '/work';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 
 //Download folder
-if ($action == 'downloadfolder') {
+if ($action === 'downloadfolder') {
     require 'downloadfolder.inc.php';
 }
 
 $display_upload_form = false;
-if ($action == 'upload_form') {
+if ($action === 'upload_form') {
     $display_upload_form = true;
 }
 

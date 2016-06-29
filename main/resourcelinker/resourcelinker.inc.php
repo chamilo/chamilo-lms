@@ -17,7 +17,7 @@ use ChamiloSession as Session;
  * INIT SECTION
  */
 
-include(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
+include(api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php');
 
 /**
  * FUNCTIONS
@@ -273,13 +273,13 @@ function display_addedresource_link($type, $id, $style='')
 			$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 			$result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND  id=$id");
 			$myrow = Database::fetch_array($result);
-			echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
+			echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercise/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Forum':
 			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
 			$result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
 			$myrow = Database::fetch_array($result);
-			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow['forum_name']."</a><br />\n";
+			echo '<img src="../img/forum.gif" align="middle" /> <a href="../forum/viewforum.php?forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow['forum_name']."</a><br />\n";
 			break;
 		case 'Thread':  //=topics
         //deprecated
@@ -292,7 +292,7 @@ function display_addedresource_link($type, $id, $style='')
 			$sql_title = "SELECT * FROM $tbl_posts_text WHERE post_id=".$myrow["post_id"];
 			$result_title = Database::query($sql_title);
 			$myrow_title = Database::fetch_array($result_title);
-			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$myrow['topic_id'].'&amp;forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow_title['post_title']."</a><br />\n";
+			echo '<img src="../img/forum.gif" align="middle" /> <a href="../forum/viewtopic.php?topic='.$myrow['topic_id'].'&amp;forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow_title['post_title']."</a><br />\n";
 			break;
 		case 'Post':
         //deprecated
@@ -572,7 +572,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			}
 			else
 			{
-				echo "<a href=\"../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"]."\" class='$completed' target='_blank'>".shorten($myrow["title"],($length-3*$level))."</a>";
+				echo "<a href=\"../exercise/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"]."\" class='$completed' target='_blank'>".shorten($myrow["title"],($length-3*$level))."</a>";
 			}
 			break;
 
@@ -630,7 +630,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			}
 			else
 			{
-				echo "&nbsp;<a href=\"../exercice/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id']."\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
+				echo "&nbsp;<a href=\"../exercise/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id']."\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
 
@@ -1203,7 +1203,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			}
 			else
 			{
-				$link .= "../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"];
+				$link .= "../exercise/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"];
 			}
 			break;
 
@@ -1225,7 +1225,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			}
 			else
 			{
-				$link .= "../exercice/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id']."";
+				$link .= "../exercise/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id']."";
 			}
 			break;
 

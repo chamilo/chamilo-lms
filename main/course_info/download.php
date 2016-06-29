@@ -31,12 +31,12 @@ $content_type = '';
 
 if (in_array($extension, array('xml', 'csv')) && (api_is_platform_admin(true) || api_is_drh())) {
 	$content_type = 'application/force-download';
-} elseif ($extension == 'zip' && $_cid && (api_is_platform_admin(true) || $is_courseAdmin)) {
+} elseif ($extension === 'zip' && $_cid && (api_is_platform_admin(true) || $is_courseAdmin)) {
 	$content_type = 'application/force-download';
 }
 
 if (empty($content_type)) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 if (Security::check_abs_path($archive_path.$archive_file, $archive_path)) {

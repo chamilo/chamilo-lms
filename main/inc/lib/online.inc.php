@@ -149,8 +149,7 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
-    require_once api_get_path(SYS_PATH) . 'main/chat/chat_functions.lib.php';
-    exit_of_chat($user_id);
+    CourseChatUtils::exitChat($user_id);
     session_regenerate_id();
     Session::destroy();
     if ($logout_redirect) {
@@ -470,56 +469,5 @@ function GetFullUserName($uid) {
 			$str = str_replace(' ', '&nbsp;', api_get_person_name($firstname, $lastname));
 			return $str;
 		}
-	}
-}
-
-/**
- * Gets a list of chat calls made by others to the current user (info kept in main.user table)
- * @param   none - taken from global space
- * @return  string  An HTML-formatted message
- */
-function chatcall() {
-    $_cid = api_get_course_id();
-    $_user = api_get_user_info();
-
-	if (!$_user['user_id']) {
-		return (false);
-	}
-    $userId = intval($_user['user_id']);
-	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
-	$sql="SELECT chatcall_user_id, chatcall_date FROM $track_user_table
-	      WHERE ( id = $userId )";
-	$result=Database::query($sql);
-	$row=Database::fetch_array($result);
-
-	$login_date=$row['chatcall_date'];
-	$hour = substr($login_date,11,2);
-	$minute = substr($login_date,14,2);
-	$second = substr($login_date,17,2);
-	$month = substr($login_date,5,2);
-	$day = substr($login_date,8,2);
-	$year = substr($login_date,0,4);
-	$calltime = mktime($hour,$minute,$second,$month,$day,$year);
-
-	$time = api_get_utc_datetime();
-	$minute_passed=5;  //within this limit, the chat call request is valid
-	$limittime = mktime(date("H"),date("i")-$minute_passed,date("s"),date("m"),date("d"),date("Y"));
-
-	if (($row['chatcall_user_id']) and ($calltime>$limittime)) {
-		$webpath=api_get_path(WEB_CODE_PATH);
-		$message=get_lang('YouWereCalled').' : '.GetFullUserName($row['chatcall_user_id'],'').'<br>'.get_lang('DoYouAccept')
-							."<p>"
-				."<a href=\"".$webpath."chat/chat.php?cidReq=".$_cid."&origin=whoisonlinejoin\">"
-				. get_lang("Yes")
-				."</a>"
-				."&nbsp;&nbsp;|&nbsp;&nbsp;"
-				."<a href=\"".api_get_path(WEB_PATH)."webchatdeny.php\">"
-				. get_lang("No")
-				."</a>"
-				."</p>";
-
-		return($message);
-	} else {
-		return false;
 	}
 }

@@ -1506,7 +1506,7 @@ class Skill extends Model
      */
     public function getStudentSkills($userId)
     {
-        $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
+        $sql = "SELECT s.name, sru.acquired_skill_at
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} sru
                 ON s.id = sru.skill_id

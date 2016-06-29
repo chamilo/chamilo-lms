@@ -677,6 +677,9 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
         $courseVisibility = $courseInfo['visibility'];
         $visibilityCondition = ' AND course.visibility <> 1';
     }
+
+    $visibilityCondition .= ' AND course.visibility <> '.COURSE_VISIBILITY_HIDDEN;
+
     if (!empty($random_value)) {
         $random_value = intval($random_value);
 
@@ -936,12 +939,8 @@ function searchCategoryById($list)
  */
 function getLimitArray()
 {
-    $pageCurrent = isset($_REQUEST['pageCurrent']) ?
-        intval($_GET['pageCurrent']) :
-        1;
-    $pageLength = isset($_REQUEST['pageLength']) ?
-        intval($_GET['pageLength']) :
-        12;
+    $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
+    $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : 12;
     return array(
         'start' => ($pageCurrent - 1) * $pageLength,
         'current' => $pageCurrent,

@@ -19,7 +19,7 @@
 {% if skills %}
     <ul>
     {% for skill in skills %}
-        <li>{{ skill.id }}</li>
+        <li>{{ skill.name }}</li>
     {% endfor %}
     </ul>
 {% endif %}

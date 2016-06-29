@@ -77,7 +77,7 @@ foreach ($list as $toc) {
     $html .= '<div id="step-'.$step.'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
     $html .= '<div class="impress-content">';
     $src = $_SESSION['oLP']->get_link('http', $toc['id']);
-    if ($toc['type'] !== 'dokeos_chapter') {
+    if ($toc['type'] !== 'dir') {
         //just showing the src in a iframe ...
         $html .= '<h2>'.$toc['title'].'</h2>';
         $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="' . $src . '"></iframe>';

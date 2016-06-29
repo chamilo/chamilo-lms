@@ -418,7 +418,7 @@ class Tracking
                         // Remove "NaN" if any (@todo: locate the source of these NaN)
                         $time = str_replace('NaN', '00' . $h . '00\'00"', $time);
 
-                        if ($row['item_type'] != 'dokeos_chapter') {
+                        if ($row['item_type'] != 'dir') {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                             } else {

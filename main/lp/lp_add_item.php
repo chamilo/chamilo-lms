@@ -112,7 +112,7 @@ $interbreadcrumb[] = array(
 );
 
 switch ($type) {
-    case 'chapter':
+    case 'dir':
         $interbreadcrumb[] = array(
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
@@ -247,7 +247,7 @@ if (in_array($message, array('ItemUpdated'))) {
 
 if (isset($new_item_id) && is_numeric($new_item_id)) {
     switch ($type) {
-        case 'chapter':
+        case 'dir':
             echo $learnPath->display_manipulate($new_item_id, $_POST['type']);
             Display::display_confirmation_message(get_lang('NewChapterCreated'));
             break;
@@ -258,10 +258,6 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
         case TOOL_STUDENTPUBLICATION:
             echo $learnPath->display_manipulate($new_item_id, $type);
             Display::display_confirmation_message(get_lang('NewStudentPublicationCreated'));
-            break;
-        case 'module':
-            echo $learnPath->display_manipulate($new_item_id, $type);
-            Display::display_confirmation_message(get_lang('NewModuleCreated'));
             break;
         case TOOL_QUIZ:
             echo $learnPath->display_manipulate($new_item_id, $type);
@@ -282,11 +278,8 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
     }
 } else {
     switch ($type) {
-        case 'chapter':
+        case 'dir':
             echo $learnPath->display_item_form($type, get_lang('EnterDataNewChapter'));
-            break;
-        case 'module':
-            echo $learnPath->display_item_form($type, get_lang('EnterDataNewModule'));
             break;
         case TOOL_DOCUMENT:
             if (isset($_GET['file']) && is_numeric($_GET['file'])) {

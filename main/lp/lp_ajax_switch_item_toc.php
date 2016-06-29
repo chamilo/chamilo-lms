@@ -110,7 +110,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
         $interactionsString = substr($interactionsString, 1);
     }
     */
-    $totalItems = $myLP->get_total_items_count_without_chapters();
+    $totalItems = $myLP->getTotalItemsCountWithoutDirs();
     $completedItems = $myLP->get_complete_items_count();
     $progressMode = $myLP->get_progress_bar_mode();
     $progressMode = ($progressMode == '' ? '%' : $progressMode);

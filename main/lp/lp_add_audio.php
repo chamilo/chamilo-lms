@@ -51,7 +51,7 @@ $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => g
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => $_SESSION['oLP']->get_name());
 
 switch ($type) {
-    case 'chapter':
+    case 'dir':
         $interbreadcrumb[] = array(
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),

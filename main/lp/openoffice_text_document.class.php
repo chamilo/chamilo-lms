@@ -89,7 +89,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
     }
 
     /**
-     * Manages chapter splitting
+     * Manages dir/chapter splitting
      * @param	string	Chapter header
      * @param	string	Content
      * @return	void
@@ -103,7 +103,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
         // Get all the h1.
         preg_match_all("|<h1[^>]*>([^(h1)+]*)</h1>|is", $content, $matches_temp);
 
-        // Empty the fake chapters.
+        // Empty the fake dir/chapters.
         $new_index = 0;
         for ($i = 0; $i < count($matches_temp[0]); $i++) {
             if (trim($matches_temp[1][$i]) !== '') {
@@ -124,11 +124,11 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 
             $content = api_strstr($content, $matches[0][$i]);
             if ($i + 1 !== count($matches[0])) {
-                $chapter_content = api_substr($content, 0, api_strpos($content, $matches[0][$i + 1]));
+                $dir_content = api_substr($content, 0, api_strpos($content, $matches[0][$i + 1]));
             } else {
-                $chapter_content = $content;
+                $dir_content = $content;
             }
-            $items_to_create[$matches[1][$i]] = $chapter_content;
+            $items_to_create[$matches[1][$i]] = $dir_content;
         }
 
         $i = 0;

@@ -34,16 +34,14 @@ if ($debug > 0) {
 
 $list = $_SESSION['oLP']->get_toc();
 
-$dokeos_chapter = false;
+$dir = false;
 
 foreach ($list as $toc) {
-    if ($toc['id'] == $lp_item_id &&
-        ($toc['type'] == 'dokeos_chapter' || $toc['type'] == 'dokeos_module' || $toc['type'] == 'dir')
-    ) {
-        $dokeos_chapter = true;
+    if ($toc['id'] == $lp_item_id && $toc['type'] == 'dir') {
+        $dir = true;
     }
 }
-if ($dokeos_chapter) {
+if ($dir) {
     $src = 'blank.php';
 } else {
     switch ($lp_type) {

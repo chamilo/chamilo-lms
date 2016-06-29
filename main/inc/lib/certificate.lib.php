@@ -486,6 +486,8 @@ class Certificate extends Model
 
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($this->user_id, 'legal_accept');
+        list($id, $id2, $termsValidationDate) = explode(':', $value['value']);
+
         $time = api_time_to_hms(Tracking::get_time_spent_on_the_platform($this->user_id));
 
         $tplContent = new Template(null, false, false, false, false, false);
@@ -525,7 +527,7 @@ class Certificate extends Model
         $skill = new Skill();
         $skills = $skill->getStudentSkills($this->user_id);
 
-        $tplContent->assign('terms_validation_date', api_get_local_time($value['value']));
+        $tplContent->assign('terms_validation_date', api_get_local_time($termsValidationDate));
         $tplContent->assign('skills', $skills);
         $tplContent->assign('sessions', $sessionsApproved);
 

@@ -1499,15 +1499,19 @@ class Skill extends Model
         return false;
     }
 
+    /**
+     * Get skills
+     * @param int $userId
+     * @return array
+     */
     public function getStudentSkills($userId)
     {
         $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} sru
                 ON s.id = sru.skill_id
-                INNER JOIN {$this->table_course} c
-                ON sru.course_id = c.id
                 WHERE sru.user_id = $userId";
+
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

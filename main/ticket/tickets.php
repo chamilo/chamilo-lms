@@ -246,15 +246,15 @@ if ($isAdmin ) {
     $advancedSearchForm = new FormValidator(
         'advanced_search',
         'get',
-        api_get_self().'&project_id='.$projectId,
+        api_get_self().'?project_id='.$projectId,
         null,
         ['style' => 'display:"none"', 'id' => 'advanced_search_form']
     );
     $advancedSearchForm->addHeader(get_lang('AdvancedSearch'));
     $advancedSearchForm->addSelect('keyword_category', get_lang('Category'), $selectTypes, ['placeholder' => get_lang('Select')]);
     //$advancedSearchForm->addText('keyword_request_user', get_lang('User'), false);
-    $advancedSearchForm->addDateTimePicker('keyword_start_date_start', get_lang('RegisterDate'));
-    $advancedSearchForm->addDateTimePicker('keyword_start_date_end', get_lang('Untill'));
+    $advancedSearchForm->addDateTimePicker('keyword_start_date_start', get_lang('Created'));
+    $advancedSearchForm->addDateTimePicker('keyword_start_date_end', get_lang('Until'));
     $advancedSearchForm->addSelect('keyword_admin', get_lang('AssignedTo') , $selectAdmins, ['placeholder' => get_lang('All')]);
     $advancedSearchForm->addSelect('keyword_status', get_lang('Status'), $selectStatus, ['placeholder' => get_lang('Select')]);
     $advancedSearchForm->addSelect('keyword_priority', get_lang('Priority'), $selectPriority, ['placeholder' => get_lang('All')]);

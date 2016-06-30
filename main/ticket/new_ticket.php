@@ -363,6 +363,19 @@ function show_form_send_ticket()
         )
     );
 
+    $courseInfo = api_get_course_info();
+    if (!empty($courseInfo)) {
+        $form->addLabel(get_lang('Course'), $courseInfo['title']);
+        $form->addHidden('course_id', $courseInfo['real_id']);
+
+        $sessionInfo = api_get_session_info(api_get_session_id());
+        if (!empty($sessionInfo)) {
+            $form->addLabel(get_lang('Session'), $sessionInfo['name']);
+            $form->addHidden('session_id', $sessionInfo['id']);
+        }
+    }
+
+
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
     $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 
@@ -405,6 +418,8 @@ function save_ticket()
         $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . Security::remove_XSS($_POST['phone']). '</p>';
     }
     $course_id = isset($_POST['course_id']) ? $_POST['course_id'] : '';
+    $sessionId = isset($_POST['session_id']) ? $_POST['session_id'] : '';
+
     $project_id = $_POST['project_id'];
     $subject = $_POST['subject'];
     $other_area = (int) $_POST['other_area'];
@@ -419,6 +434,7 @@ function save_ticket()
     if (TicketManager::add(
         $category_id,
         $course_id,
+        $sessionId,
         $project_id,
         $other_area,
         $email,

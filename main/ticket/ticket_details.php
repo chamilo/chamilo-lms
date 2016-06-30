@@ -319,11 +319,18 @@ if (!isset($_POST['compose'])) {
     }
     if ($ticket['ticket']['course_url'] != null) {
         echo '<tr>
-				<td><p>' . get_lang('Course') . ':</p></td>
-	            <td></td>
-			    <td>' . $ticket['ticket']['course_url'] . '</td>
+				<td><b>' . get_lang('Course') . ':</b> ' . $ticket['ticket']['course_url'] . ' </td>
+			    <td></td>
 	            <td colspan="2"></td>
 	          </tr>';
+        if (!empty($ticket['ticket']['session_id'])) {
+            $sessionInfo = api_get_session_info($ticket['ticket']['session_id']);
+            echo '<tr>
+				<td><b>' . get_lang('Session') . ':</b> ' . $sessionInfo['name'] . ' </td>
+			    <td></td>
+	            <td colspan="2"></td>
+	          </tr>';
+        }
     }
     echo '<tr>
             <td>
@@ -350,7 +357,7 @@ if (!isset($_POST['compose'])) {
            $admin['complete_name'] . "</option>";
     }
     $select_admins .= "</select>";
-    echo '<div id="dialog-form" title="' . get_lang('AssignTicket') . '" >';
+    echo '<div id="dialog-form" title="' . get_lang('Assign') . '" >';
     echo '<form id="frmResponsable" method="POST" action="ticket_details.php?ticket_id=' . $ticket['ticket']['id'] . '">
 			<input type="hidden" name ="action" id="action" value="assign"/>
 			<div>

@@ -65,7 +65,7 @@ class TicketManager
         return $types;
     }
 
-    /** 
+    /**
      * @param $from
      * @param $numberItems
      * @param $column
@@ -269,6 +269,7 @@ class TicketManager
     public static function add(
         $category_id,
         $course_id,
+        $sessionId,
         $project_id,
         $other_area,
         $email,
@@ -355,6 +356,9 @@ class TicketManager
             $params['course_id'] = $course_id;
         }
 
+        if (!empty($sessionId)) {
+            $params['session_id'] = $sessionId;
+        }
         $ticket_id = Database::insert($table_support_tickets, $params);
 
         if ($ticket_id) {
@@ -1321,8 +1325,12 @@ class TicketManager
                 $row['course_url'] = null;
                 if ($row['course_id'] != 0) {
                     $course = api_get_course_info_by_id($row['course_id']);
+                    $sessionId = 0;
+                    if ($row['session_id']) {
+                        $sessionId = $row['session_id'];
+                    }
                     if ($course) {
-                        $row['course_url'] = '<a href="'.$course['course_public_url'].'">'.$course['name'].'</a>';
+                        $row['course_url'] = '<a href="'.$course['course_public_url'].'?id_session='.$sessionId.'">'.$course['name'].'</a>';
                     }
                 }
 

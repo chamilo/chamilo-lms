@@ -61,18 +61,12 @@ function validate() {
     document.getElementById("content").value= fckEditor1val;
     var selected = document.getElementById("category_id").selectedIndex;
     var id = document.getElementById("category_id").options[selected].value;
-    if (id == 0) {
-        alert("' . get_lang("ValidType") . '");
-        return false;
-    } else if(document.getElementById("subject").value == "") {
-        alert("' . get_lang("ValidSubject") . '");
-        return false;
-    } else if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0) {
+    if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0) {
         alert("' . get_lang("ValidCourse") . '");
         return false;
     } else if(id != "CUR" && parseInt(course_required[id]) != 1  && !re.test(document.getElementById("personal_email").value)) {
         if (document.getElementById("personal_email").value != "") {
-            alert("' . get_lang("ValidEmail") . '");
+            alert("' . get_lang("PleaseEnterValidEmail") . '");
             return false;
         }
     } else if(fckEditor1val == "") {
@@ -217,8 +211,7 @@ function show_form_send_ticket()
     if (api_is_platform_admin()) {
         $sourceAttributes = array(
             'id' => 'source_id',
-            'for' => 'source_id',
-            'style' => 'width: 562px;'
+            'for' => 'source_id'
         );
         $sourceList[TicketManager::SOURCE_EMAIL] = get_lang('SrcEmail');
         $sourceList[TicketManager::SOURCE_PHONE] = get_lang('SrcPhone');
@@ -393,6 +386,10 @@ function show_form_send_ticket()
             'id' => 'btnsubmit'
         )
     );
+
+    $form->addRule('content', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('category_id', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('subject', get_lang('ThisFieldIsRequired'), 'required');
 
     $form->display();
 }

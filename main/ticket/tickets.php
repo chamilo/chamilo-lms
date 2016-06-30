@@ -204,9 +204,9 @@ if ($isAdmin ) {
     ];
 
     $selectStatusUnread = [
-        '' => get_lang('All'),
-        'yes' => get_lang('Unread'),
-        'no' => get_lang('Read')
+        '' => get_lang('StatusAll'),
+        'yes' => get_lang('StatusUnread'),
+        'no' => get_lang('StatusRead')
     ];
 
     // Create a search-box
@@ -266,7 +266,7 @@ if ($isAdmin ) {
     if (api_get_setting('ticket_allow_student_add') == 'true') {
         echo '<div class="actions" >';
         echo '<span style="float:right;">' .
-                '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php">' .
+                '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id='.$projectId.'">' .
                     Display::return_icon('add.png', get_lang('Add'), '', '32') .
                 '</a>' .
               '</span>';

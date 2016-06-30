@@ -40,7 +40,7 @@ class CStudentPublicationRepository extends EntityRepository
                     $qb->expr()->eq('w.userId', ':user')
                 )
             )
-            ->orderBy('w.sentDate', 'DESC')
+            ->orderBy('w.sentDate', 'ASC')
             ->setParameters([
                 'course' => intval($course->getId()),
                 'session' => intval($sessionId),

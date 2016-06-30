@@ -1,11 +1,19 @@
+<div id="navigation" class="notification-panel">
+    {{ help_content }}
+    {{ bug_notification }}
+</div>
+    {% block topbar %}
+        {% include template ~ "/layout/topbar.tpl" %}
+    {% endblock %}
+<div class="extra-header">{{ header_extra_content }}</div>
 <header id="header-section">
 <section>
     <div class="container">
 	<div class="row">
 	    <div class="col-md-3">
 	    	<div class="logo">
-                    {{ logo }}
-                </div>
+                {{ logo }}
+            </div>
 	    </div>
             <div class="col-md-9">
                 <div class="col-sm-4">
@@ -36,7 +44,7 @@
                     {{ accessibility }}
                 </div>
             </div>
-	</div>
+        </div>
     </div>
 </section>
 {% block menu %}

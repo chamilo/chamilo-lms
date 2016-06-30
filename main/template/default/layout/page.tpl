@@ -32,21 +32,22 @@
         </form>
     </div>
     {% endif %}
-    	{% include template ~ "/layout/page-header.tpl" %}
+    	{% include template ~ "/layout/page_header.tpl" %}
 	<section id="content-section">
             <div class="container">
                 {% block breadcrumb %}
                     {{ breadcrumb }}
                 {% endblock %}
-		{% block body %}
+                {% include template ~ "/layout/course_navigation.tpl" %}
+                {% block body %}
                     {{ content }}
-                {% endblock %}
+                {% endblock %} 
             </div>
 	</section>
-        {% if show_sniff == 1 %}
+    {% if show_sniff == 1 %}
             {% include template ~ "/layout/sniff.tpl" %}
-        {% endif %}
-	{% include template ~ "/layout/page-footer.tpl" %}	
+    {% endif %}
+	{% include template ~ "/layout/page_footer.tpl" %}	
     </div>
   </body>
 </html>

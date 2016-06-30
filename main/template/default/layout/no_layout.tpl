@@ -32,7 +32,7 @@
             </form>
         </div>
         {% endif %}
-    	{% include template ~ "/layout/page-header.tpl" %}
+    	{% include template ~ "/layout/page_header.tpl" %}
 		<section id="content-section">
 			<div class="container">
                                 {% block breadcrumb %}
@@ -43,7 +43,7 @@
                                 {% endblock %}
 			</div>
 		</section>
-	{% include template ~ "/layout/page-footer.tpl" %}	
+	{% include template ~ "/layout/page_footer.tpl" %}	
     </div>
   </body>
 </html>

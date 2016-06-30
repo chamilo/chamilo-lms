@@ -189,12 +189,6 @@ if ($showCourses && $action != 'display_sessions') {
 
     if (!empty($browse_courses_in_category)) {
         foreach ($browse_courses_in_category as $course) {
-            $course_hidden = ($course['visibility'] == COURSE_VISIBILITY_HIDDEN);
-
-            if ($course_hidden) {
-                continue;
-            }
-
             $user_registerd_in_course = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
             $user_registerd_in_course_as_teacher = CourseManager::is_course_teacher($user_id, $course['code']);
             $user_registerd_in_course_as_student = ($user_registerd_in_course && !$user_registerd_in_course_as_teacher);

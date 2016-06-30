@@ -16,7 +16,7 @@
                         <th>{{ course_code }}</th>
                         <th>{{ 'NumberOfWorks'|get_lang }}</th>
                         <th>{{ 'LastWork'|get_lang }}</th>
-                        <th>{{ 'TimeReportForCourseX'|get_lang|format(course.code) }}</th>
+                        <th>{{ 'TimeReportForCourseX'|get_lang|format(course_code) }}</th>
                     {% endfor %}
                 </tr>
             </thead>
@@ -47,7 +47,7 @@
                             <th>{{ course.code }}</th>
                             <th>{{ 'NumberOfWorks'|get_lang }}</th>
                             <th>{{ 'LastWork'|get_lang }}</th>
-                            <th>{{ 'TimeReportForCourseX'|get_lang|format(course.code) }}</th>
+                            <th>{{ 'TimeReportForCourseX'|get_lang|format(course_code) }}</th>
                         {% endfor %}
                     </tr>
                 </thead>

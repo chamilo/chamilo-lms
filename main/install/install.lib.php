@@ -1880,10 +1880,22 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
                     $url = preg_replace('#:///#', '://'.$host.'/', $url);
                 }
                 $path = isset($parsed_url['path']) ? $parsed_url['path'] : '/';
-                $port = isset($parsed_url['port']) ? $parsed_url['port'] : '80';
+                $port = '';
+                $scheme = '';
+                switch ($parsed_url['scheme']) {
+                    case 'https':
+                        $scheme = 'ssl://';
+                        $port = 443;
+                        break;
+                    case 'http':
+                    default:
+                        $scheme = '';
+                        $port = 80;
+                }
 
-                //Check fsockopen (doesn't work with https)
-                if ($fp = @fsockopen(str_replace('http://', '', $url), -1, $sock_errno, $sock_errmsg, 60)) {
+                //Check fsockopen (not sure it works with https). If that is your case, you might want to try the
+                // suggestion at https://support.chamilo.org/issues/8260#note-3 (although it ignores SSL peer checks)
+                if ($fp = @fsockopen(str_replace('http://', $scheme, $url), $port, $sock_errno, $sock_errmsg, 60)) {
                     $out  = "GET $path HTTP/1.1\r\n";
                     $out .= "Host: $host\r\n";
                     $out .= "Connection: Close\r\n\r\n";

@@ -2,7 +2,6 @@
     {% include template ~ "/layout/footer.tpl" %}
 {% endif %}
 
-    {# Global modal, load content by AJAX call to href attribute on anchor tag with 'ajax' class #}
     <div class="modal fade" id="global-modal" tabindex="-1" role="dialog" aria-labelledby="global-modal-title" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">

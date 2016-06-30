@@ -1,6 +1,5 @@
-{% extends template ~ "/layout/main.tpl" %}
+{% extends template ~ "/layout/page.tpl" %}
 
-{#  1 column  #}
 {% block body %}
     {# Plugin main top #}
     {% if plugin_main_top %}

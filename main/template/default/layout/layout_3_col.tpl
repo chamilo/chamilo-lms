@@ -1,5 +1,5 @@
-{#  This template is NOT used in chamilo 1.9 #}
-{% extends template ~ "/layout/main.tpl" %}
+
+{% extends template ~ "/layout/page.tpl" %}
 
 {% block body %}
 	<div id="maincontent" class="maincontent">

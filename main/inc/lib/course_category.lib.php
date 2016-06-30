@@ -913,7 +913,7 @@ class CourseCategory
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
 
         $sql = "SELECT c.*, c.name as text FROM $tableCategory c $conditions
-            WHERE c.id IN $list $whereCondition";
+                WHERE c.id IN $list $whereCondition";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

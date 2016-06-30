@@ -61,7 +61,7 @@ if ($session) {
                     'code' => $user->getOfficialCode(),
                     'complete_name' => $user->getCompleteName(),
                     'time_in_platform' => api_time_to_hms(
-                        Tracking::get_time_spent_on_the_platform($user->getId())
+                        Tracking::get_time_spent_on_the_platform($user->getId(), 'ever')
                     ),
                     'first_connection' => Tracking::get_first_connection_date($user->getId()),
                     'last_connection' => Tracking::get_last_connection_date($user->getId()),
@@ -80,13 +80,14 @@ if ($session) {
             $works = $em
                 ->getRepository('ChamiloCourseBundle:CStudentPublication')
                 ->findByTeacher($user, $course, $session->getId());
-            $lastWork = array_pop($works);
 
             $usersInfo[$user->getId()][$course->getId() . '_number_of_students'] = $sessionCourse->getNbrUsers();
             $usersInfo[$user->getId()][$course->getId() . '_number_of_works'] = count($works);
             $usersInfo[$user->getId()][$course->getId() . '_time_spent_of_course'] = api_time_to_hms(
                 Tracking::get_time_spent_on_the_course($user->getId(), $course->getId(), $session->getId())
             );
+
+            $lastWork = array_pop($works);
 
             if (!$lastWork) {
                 continue;

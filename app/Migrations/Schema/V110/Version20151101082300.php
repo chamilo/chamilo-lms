@@ -20,6 +20,8 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $accessUrl = $schema->getTable('access_url');
         $accessUrl->getColumn('id')->setUnsigned(false);
 
+        $this->connection->executeQuery('UPDATE access_url_rel_course SET access_url_id = NULL WHERE access_url_id NOT IN (SELECT id FROM access_url)');
+
         $accessUrlRelCourse = $schema->getTable('access_url_rel_course');
         $accessUrlRelCourse->getColumn('access_url_id')->setUnsigned(false);
         $accessUrlRelCourse->addForeignKeyConstraint('access_url', ['access_url_id'], ['id']);
@@ -223,6 +225,8 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $session->addForeignKeyConstraint('session_category', ['session_category_id'], ['id']);
         $session->addForeignKeyConstraint('user', ['id_coach'], ['id']);
 
+        $this->connection->executeQuery('UPDATE session_category SET access_url_id = 1 WHERE access_url_id NOT IN (SELECT id FROM access_url)');
+
         $sessionCategory = $schema->getTable('session_category');
         $sessionCategory->addIndex(['access_url_id']);
         $sessionCategory->addForeignKeyConstraint('access_url', ['access_url_id'], ['id']);
@@ -237,6 +241,10 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $sessionRelCourse->addForeignKeyConstraint('course', ['c_id'], ['id']);
         $sessionRelCourse->addForeignKeyConstraint('session', ['session_id'], ['id']);
 
+        $this->connection->executeQuery('DELETE FROM session_rel_course_rel_user WHERE c_id NOT IN (SELECT id FROM course)');
+        $this->connection->executeQuery('DELETE FROM session_rel_course_rel_user WHERE session_id NOT IN (SELECT id FROM session)');
+        $this->connection->executeQuery('DELETE FROM session_rel_course_rel_user WHERE user_id NOT IN (SELECT id FROM user)');
+
         $sessionRelCourseRelUser = $schema->getTable('session_rel_course_rel_user');
         $sessionRelCourseRelUser->dropColumn('course_code');
         $sessionRelCourseRelUser->addColumn('id', Type::INTEGER)->setAutoincrement(true);
@@ -248,11 +256,13 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $sessionRelCourseRelUser->addForeignKeyConstraint('session', ['session_id'], ['id']);
         $sessionRelCourseRelUser->addForeignKeyConstraint('user', ['user_id'], ['id']);
 
+        $this->connection->executeQuery('DELETE FROM session_rel_user WHERE user_id NOT IN (SELECT id FROM user)');
+        $this->connection->executeQuery('DELETE FROM session_rel_user WHERE session_id NOT IN (SELECT id FROM session)');
+
         $sessionRelUser = $schema->getTable('session_rel_user');
         $sessionRelUser->addColumn('moved_to', Type::INTEGER)->setNotnull(false);
         $sessionRelUser->addColumn('moved_status', Type::INTEGER)->setNotnull(false);
         $sessionRelUser->addColumn('moved_at', Type::DATETIME)->setNotnull(false);
-
         $sessionRelUser->addIndex(['session_id']);
         $sessionRelUser->addIndex(['user_id']);
         $sessionRelUser->addIndex(['user_id', 'moved_to']);
@@ -282,6 +292,9 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $schema->getTable('track_e_online')->addIndex(['c_id']);
         $schema->getTable('track_e_uploads')->addIndex(['c_id']);
         $schema->getTable('user')->addUniqueIndex(['username_canonical']);
+
+        $this->connection->executeQuery('DELETE FROM usergroup_rel_user WHERE user_id NOT IN (SELECT id FROM user)');
+        $this->connection->executeQuery('DELETE FROM usergroup_rel_user WHERE usergroup_id NOT IN (SELECT id FROM usergroup)');
 
         $usergroupRelUSer = $schema->getTable('usergroup_rel_user');
         $usergroupRelUSer->addIndex(['user_id']);

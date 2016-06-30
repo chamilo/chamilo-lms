@@ -29,7 +29,7 @@ class Version20151101082200 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session_rel_course_rel_user DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE session MODIFY session_category_id INT NULL");
 
-        $this->addSql("UPDATE session SET session_category_id = NULL WHERE session_category_id = 0");
+        $this->addSql("UPDATE session SET session_category_id = NULL WHERE session_category_id NOT IN (SELECT id FROM session_category)");
     }
 
     /**

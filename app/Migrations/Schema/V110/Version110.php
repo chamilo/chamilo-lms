@@ -153,7 +153,9 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN category varchar(255) default ''");
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN c_id int unsigned");
         $this->addSql("ALTER TABLE session_rel_course CHANGE id_session session_id int");
+        $this->addSql('DELETE FROM session_rel_course WHERE session_id NOT IN (SELECT id FROM session)');
 
+        $this->addSql("DELETE course_rel_user WHERE course_code NOT IN (SELECT code FROM course)");
         $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
         // Add iid
@@ -417,6 +419,7 @@ class Version110 extends AbstractMigrationChamilo
 
         $this->addSql("ALTER TABLE session_rel_user CHANGE id_session session_id int");
         $this->addSql("ALTER TABLE session_rel_user CHANGE id_user user_id int");
+        $this->addSql("DELETE FROM session_rel_user WHERE user_id NOT IN (SELECT user_id FROM user)");
         $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
         $this->addSql("ALTER TABLE c_item_property CHANGE id_session session_id int");
@@ -511,8 +514,10 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("UPDATE track_e_attempt SET c_id = (SELECT id FROM course WHERE code = course_code)");
         $this->addSql("UPDATE course_field_values SET c_id = (SELECT id FROM course WHERE code = course_code)");
         $this->addSql("UPDATE session_rel_course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
+        $this->addSql('DELETE FROM session_rel_course WHERE course_code NOT IN (SELECT code FROM course)');
         $this->addSql("UPDATE session_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
+        $this->addSql("DELETE access_url_rel_course WHERE course_code NOT IN (SELECT code FROM course)");
         $this->addSql("UPDATE access_url_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
         $this->addSql("ALTER TABLE settings_current DROP INDEX unique_setting");

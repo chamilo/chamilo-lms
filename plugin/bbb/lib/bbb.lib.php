@@ -498,7 +498,7 @@ class bbb
             }
             $meetingBBB['end_url'] = $this->endUrl($meetingDB);
 
-            if ((string)$meetingBBB['returncode'] == 'FAILED') {
+            if (isset($meetingBBB['returncode']) && (string)$meetingBBB['returncode'] == 'FAILED') {
                 if ($meetingDB['status'] == 1 && $this->isConferenceManager()) {
                     $this->endMeeting($meetingDB['id']);
                 }

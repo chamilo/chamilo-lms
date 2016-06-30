@@ -32,5 +32,5 @@ var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
 {% include template ~ '/layout/header.js.tpl' %}
 
 {{ css_custom_file_to_string }}
-{{ css_style_print }}11
+{{ css_style_print }}
 {{ header_extra_content }}

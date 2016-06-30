@@ -779,7 +779,8 @@ class Display
         // ask for the SVG version directly
         $testServer = api_get_setting('server_type');
         if ($testServer == 'test' && $return_only_path == false) {
-            $svgImage = substr($image, 0, -3) . 'svg';
+            // if you want to uncomment this add a setting
+            /*$svgImage = substr($image, 0, -3) . 'svg';
             if (is_file($code_path . $theme . 'svg/' . $svgImage)) {
                 $icon = $w_code_path . $theme . 'svg/' . $svgImage;
             } elseif (is_file($code_path . 'img/icons/svg/' . $svgImage)) {
@@ -791,7 +792,7 @@ class Display
             }
             if (empty($additional_attributes['width'])) {
                 $additional_attributes['width'] = $size;
-            }
+            }*/
         }
 
         $icon = api_get_cdn_path($icon);
@@ -1536,7 +1537,7 @@ class Display
             $rs = Database::query($sql);
             $session_info = Database::store_result($rs, 'ASSOC');
             $session_info = $session_info[0];
-            
+
             $session = array();
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
@@ -1616,7 +1617,7 @@ class Display
                     }
 
                     $session['dates'] = $start_buffer . " " . $stop_buffer;
-                   
+
                 }
 
                 if ( api_get_setting('show_session_coach') === 'true' ) {

@@ -293,7 +293,7 @@ if (empty($projectId)) {
 if ($isAdmin) {
     $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Date'), true);
-    $table->set_header(2, get_lang('DateLastEdition'), true);
+    $table->set_header(2, get_lang('LastUpdate'), true);
     $table->set_header(3, get_lang('Category'), true);
     $table->set_header(4, get_lang('CreatedBy'), true);
     $table->set_header(5, get_lang('AssignedTo'), true);
@@ -304,7 +304,7 @@ if ($isAdmin) {
     echo '<center><p>' . get_lang('MsgWelcome') . '</p></center>';
     $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Date'), true);
-    $table->set_header(2, get_lang('DateLastEdition'), true);
+    $table->set_header(2, get_lang('LastUpdate'), true);
     $table->set_header(3, get_lang('Category'));
     $table->set_header(4, get_lang('Status'), false);
 }

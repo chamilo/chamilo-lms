@@ -328,6 +328,7 @@ Please note that if you (unluckily) upgraded from any of the 1.9 versions to 1.1
 
 <h3>3.2 Upgrading from Chamilo 1.9.x</h3>
 <ul>
+  <li> make sure you don't have tables from previous versions of Chamilo still hanging around. These can cause the upgrade to fail. In particular, tables from versions 1.8.* could have multiple tables for each course, resulting in many tables with the same prefix. Only tables without prefix or with a "c_" prefix exist in 1.9 and superior versions. Make sure none of these tables persist. Take a backup of your database (just in case) and delete these prefixed tables (drop table ...).</li>
   <li> check that you haven't left any customised stylesheet or image <span class="text-muted">(if you have, make sure you keep a copy on the side*)</span></li>
   <li> download the Chamilo 1.10 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
   <li> unzip the new files of Chamilo 1.10 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
@@ -361,7 +362,8 @@ Do not delete the previous Chamilo installation directory before installing
 the new one. The upgrade process should take care of all unrequired folders.</p>
 
     <h3>3.2 Upgrading from Chamilo 1.8.x</h3>
-    To upgrade from version of Chamilo prior to 1.9.0, you will need to first upgrade them to 1.9.10.2, then upgrade again (separately) to 1.10.x
+    To upgrade from version of Chamilo prior to 1.9.0, you will need to first upgrade them to 1.9.10.x, then upgrade again (separately) to 1.10.x.
+    You can find the 1.9.10.x packages here: <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>
 
     <p></p>
 <h3>3.5 In both last cases</h3>

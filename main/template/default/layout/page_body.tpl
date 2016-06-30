@@ -1,4 +1,3 @@
-
 {% if actions != '' %}
     <div class="actions">
         {{ actions }}

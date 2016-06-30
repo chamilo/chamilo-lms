@@ -52,7 +52,7 @@
 	{{ sniff_notification }}
         
         {% block page_body %}
-        {% include template ~ "/layout/page_body.tpl" %}
+            {% include template ~ "/layout/page_body.tpl" %}
         {% endblock %}
         
         {% if welcome_to_course_block %}

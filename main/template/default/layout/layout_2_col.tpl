@@ -12,14 +12,13 @@
                 {{plugin_menu_top}}
             </div>
         {% endif %}
-        {% block login_form %}
-		{% if _u.logged  == 0 %}
-			{% include template ~ "/layout/login_form.tpl" %}
-		{% endif %}
-        {% endblock %}
+	
+        {% include template ~ "/layout/login_form.tpl" %}
+        
         {% if _u.logged  == 1 %}
             {{ user_image_block }}
         {% endif %}
+        
         {{ profile_block }}
 	{{ course_block }}
 	{{ teacher_block }}

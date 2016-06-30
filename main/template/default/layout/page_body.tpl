@@ -2,10 +2,6 @@
     <div class="actions">
         {{ actions }}
     </div>
-{% else %}
-    <div class="actions-line">
-        {{ actions }}
-    </div>
 {% endif %}
 {{ flash_messages }}
 <span id="js_alerts"></span>

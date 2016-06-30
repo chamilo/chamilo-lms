@@ -5,7 +5,6 @@
  *
  * @package chamilo.plugin.ticket
  */
-$cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -276,38 +275,37 @@ if (!isset($_POST['compose'])) {
         $senderData = get_lang('AddedBy'). ' '.$ticket['usuario']['complete_name'].' (' . $ticket['usuario']['username']. ').';
     }
 
-    echo '
-			<table width="100%" >
-				<tr>
-	              <td colspan="3">
-	              <h1>'.$title.' '.$form_close_ticket.' '.$img_assing.' </h1>
-	              <h2>'.$ticket['ticket']['subject'].'</h2>
-	              <p>
-	                '.$senderData.' ' .
-                    get_lang('Created') . ' '.
-                    Display::url(
-                        date_to_str_ago($ticket['ticket']['start_date_from_db']),
-                        '#',
-                        ['title' => $ticket['ticket']['start_date'], 'class' => 'boot-tooltip']
-                    ).'. '.
-                    get_lang('TicketUpdated').' '.
-                    Display::url(
-                        date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
-                        '#',
-                        ['title' => $ticket['ticket']['sys_lastedit_datetime'], 'class' => 'boot-tooltip']
-                    ).'
-	              </p>
-	              </td>
-	            </tr>
-	            <tr>
-	               <td><p><b>' . get_lang('Category') . ': </b>' . $ticket['ticket']['name'] . '</p></td>
-	            </tr>
-	            <tr>
-	               <td><p ' . $bold . '><b>' . get_lang('Status') . ':</b> ' . $ticket['ticket']['status'] . '</p></td>
-	            </tr>
-	            <tr>
-	                <td><p><b>' . get_lang('Priority') . ': </b>' . $ticket['ticket']['priority'] . '<p></td>
-	            </tr>';
+    echo '<table width="100%" >
+            <tr>
+              <td colspan="3">
+              <h1>'.$title.' '.$form_close_ticket.' '.$img_assing.' </h1>
+              <h2>'.$ticket['ticket']['subject'].'</h2>
+              <p>
+                '.$senderData.' ' .
+                get_lang('Created') . ' '.
+                Display::url(
+                    date_to_str_ago($ticket['ticket']['start_date_from_db']),
+                    '#',
+                    ['title' => $ticket['ticket']['start_date'], 'class' => 'boot-tooltip']
+                ).'. '.
+                get_lang('TicketUpdated').' '.
+                Display::url(
+                    date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
+                    '#',
+                    ['title' => $ticket['ticket']['sys_lastedit_datetime'], 'class' => 'boot-tooltip']
+                ).'
+              </p>
+              </td>
+            </tr>
+            <tr>
+               <td><p><b>' . get_lang('Category') . ': </b>' . $ticket['ticket']['name'] . '</p></td>
+            </tr>
+            <tr>
+               <td><p ' . $bold . '><b>' . get_lang('Status') . ':</b> ' . $ticket['ticket']['status'] . '</p></td>
+            </tr>
+            <tr>
+                <td><p><b>' . get_lang('Priority') . ': </b>' . $ticket['ticket']['priority'] . '<p></td>
+            </tr>';
 
     if (!empty($ticket['ticket']['assigned_last_user'])) {
         $assignedUser = api_get_user_info($ticket['ticket']['assigned_last_user']);
@@ -473,17 +471,6 @@ function show_form_send_message($ticket)
     );
 
     if ($isAdmin) {
-
-        /*$statusList[TicketManager::STATUS_NEW] = get_lang('StatusNew');
-        $statusAttributes = array(
-            'id' => 'status_id',
-            'for' => 'status_id',
-            'style' => 'width: 562px;'
-        );
-        $statusList[TicketManager::STATUS_PENDING] = get_lang('StatusPending');
-        $statusList[TicketManager::STATUS_UNCONFIRMED] = get_lang('StatusUnconfirmed');
-        $statusList[TicketManager::STATUS_CLOSE] = get_lang('StatusClose');
-        $statusList[TicketManager::STATUS_FORWARDED] = get_lang('StatusForwarded');*/
         $statusList = TicketManager::getStatusList();
         $form->addElement(
             'select',
@@ -491,11 +478,6 @@ function show_form_send_message($ticket)
             get_lang('Status'),
             $statusList
         );
-
-        /*$priorityList = array();
-        $priorityList[TicketManager::PRIORITY_NORMAL] = get_lang('PriorityNormal');
-        $priorityList[TicketManager::PRIORITY_HIGH] = get_lang('PriorityHigh');
-        $priorityList[TicketManager::PRIORITY_LOW] = get_lang('PriorityLow');*/
 
         $priorityList = TicketManager::getPriorityList();
         $form->addElement(

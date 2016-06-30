@@ -37,21 +37,24 @@ class TicketManager
      * Get categories of tickets
      * @return array
      */
-    public static function get_all_tickets_categories($order = '')
+    public static function get_all_tickets_categories($projectId, $order = '')
     {
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $table_support_project = Database::get_main_table(TABLE_TICKET_PROJECT);
 
         $order = empty($order) ? 'category.total_tickets DESC' : $order;
+        $projectId = (int) $projectId;
+
         $sql = "SELECT 
                     category.*, 
                     category.id category_id,
                     project.other_area, 
                     project.email
                 FROM 
-                $table_support_category category, 
+                $table_support_category category INNER JOIN
                 $table_support_project project
-                WHERE project.id = category.project_id
+                ON project.id = category.project_id
+                WHERE project.id  = $projectId
                 ORDER BY $order";
         $result = Database::query($sql);
         $types = array();
@@ -62,7 +65,7 @@ class TicketManager
         return $types;
     }
 
-    /**
+    /** 
      * @param $from
      * @param $numberItems
      * @param $column
@@ -263,7 +266,7 @@ class TicketManager
      * @param int $assigned_user
      * @return bool
      */
-    public static function insert_new_ticket(
+    public static function add(
         $category_id,
         $course_id,
         $project_id,
@@ -1875,11 +1878,12 @@ class TicketManager
      * @param string $url
      * @return FormValidator
      */
-    public static function getCategoryForm($url)
+    public static function getCategoryForm($url, $projectId)
     {
         $form = new FormValidator('category', 'post', $url);
         $form->addText('name', get_lang('Name'));
         $form->addHtmlEditor('description', get_lang('Description'));
+        $form->addHidden('project_id', $projectId);
         $form->addButtonUpdate(get_lang('Save'));
 
         return $form;
@@ -1917,7 +1921,6 @@ class TicketManager
         return $list;
     }
 
-
     /**
      * @return array
      */
@@ -1931,7 +1934,10 @@ class TicketManager
             $list[] = [
                 'id' => $row->getId(),
                 '0' => $row->getId(),
-                '1' => $row->getName(),
+                '1' => Display::url(
+                    $row->getName(),
+                    api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$row->getId()
+                ),
                 '2' => $row->getDescription(),
                 '3' => $row->getId()
             ];
@@ -1939,6 +1945,33 @@ class TicketManager
 
         return $list;
     }
+
+    /**
+     * @return array
+     */
+    public static function getProjectsSimple()
+    {
+        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Project')->findAll();
+
+        $list = [];
+        /** @var Project $row */
+        foreach ($projects as $row) {
+            $list[] = [
+                'id' => $row->getId(),
+                '0' => $row->getId(),
+                '1' => Display::url(
+                    $row->getName(),
+                    api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$row->getId()
+                ),
+                '2' => $row->getDescription()
+            ];
+        }
+
+        return $list;
+    }
+
+
+
 
     /**
      * @return int

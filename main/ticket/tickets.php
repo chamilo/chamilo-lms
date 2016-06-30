@@ -6,9 +6,6 @@
  * @package chamilo.plugin.ticket
  */
 
-$cidReset = true;
-// needed in order to load the plugin lang variables
-$course_plugin = 'ticket';
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -70,6 +67,7 @@ if ($table->per_page == 0) {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
 
 switch ($action) {
     case 'assign':
@@ -90,7 +88,7 @@ switch ($action) {
     case 'export':
         $data = array(
             array(
-                get_lang('TicketNum'),
+                '#',
                 get_lang('Date'),
                 get_lang('DateLastEdition'),
                 get_lang('Category'),
@@ -127,12 +125,21 @@ switch ($action) {
         break;
 }
 
+if (empty($projectId)) {
+    $projects = TicketManager::getProjectsSimple();
+    if (!empty($projects) && isset($projects[0])) {
+        $project = $projects[0];
+        header('Location: '.api_get_self().'?project_id='.$project['id']);
+        exit;
+    }
+}
+
 $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 
 Display::display_header(get_lang('MyTickets'));
-
-if ($isAdmin) {
+if (!empty($projectId))
+if ($isAdmin ) {
     $getParameters = [
         'keyword',
         'keyword_status',
@@ -171,7 +178,7 @@ if ($isAdmin) {
 
     // Select categories
     $selectTypes = [];
-    $types = TicketManager::get_all_tickets_categories();
+    $types = TicketManager::get_all_tickets_categories($projectId);
     foreach ($types as $type) {
         $selectTypes[$type['category_id']] = $type['name'];
     }
@@ -215,30 +222,23 @@ if ($isAdmin) {
     echo '<div class="actions" >';
     if (api_is_platform_admin()) {
         echo '<span class="left">' .
-                '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php">' .
-                    Display::return_icon('add.png', get_lang('TckNew'), '', ICON_SIZE_MEDIUM) . '</a>' .
-                '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' .
+                '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id='.$projectId.'">' .
+                    Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM) . '</a>' .
+                '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '&project_id='.$projectId.'">' .
                     Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_MEDIUM) . '</a>';
 
         if (api_get_setting('ticket_allow_category_edition')) {
             echo Display::url(
-                Display::return_icon('folder_document.gif'),
-                api_get_path(WEB_CODE_PATH) . 'ticket/categories.php'
+                Display::return_icon('folder_document.gif', get_lang('Categories')),
+                api_get_path(WEB_CODE_PATH) . 'ticket/categories.php?project_id='.$projectId
             );
 
             echo Display::url(
-                Display::return_icon('folder_document.gif'),
+                Display::return_icon('folder_document.gif', get_lang('Projects')),
                 api_get_path(WEB_CODE_PATH) . 'ticket/projects.php'
             );
         }
-
-        echo Display::url(
-            Display::return_icon('settings.png'),
-            api_get_path(WEB_CODE_PATH) . 'admin/configure_plugin.php?name=ticket'
-        );
-
         echo '</span>';
-
     }
     $form->display();
     echo '</div>';
@@ -246,7 +246,7 @@ if ($isAdmin) {
     $advancedSearchForm = new FormValidator(
         'advanced_search',
         'get',
-        api_get_self(),
+        api_get_self().'&project_id='.$projectId,
         null,
         ['style' => 'display:"none"', 'id' => 'advanced_search_form']
     );
@@ -267,15 +267,31 @@ if ($isAdmin) {
         echo '<div class="actions" >';
         echo '<span style="float:right;">' .
                 '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php">' .
-                    Display::return_icon('add.png', get_lang('TckNew'), '', '32') .
+                    Display::return_icon('add.png', get_lang('Add'), '', '32') .
                 '</a>' .
               '</span>';
         echo '</div>';
     }
 }
 
+if (empty($projectId)) {
+    $table = new SortableTable(
+        'TicketProject',
+        array('TicketManager', 'getProjectsCount'),
+        array('TicketManager', 'getProjectsSimple'),
+        1
+    );
+
+    $table->set_header(0, '', false);
+    $table->set_header(1, get_lang('Title'), false);
+    $table->set_header(2, get_lang('Description'), true, array("style" => "width:200px"));
+
+    $table->display();
+    Display::display_footer();
+}
+
 if ($isAdmin) {
-    $table->set_header(0, get_lang('TicketNum'), true);
+    $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Date'), true);
     $table->set_header(2, get_lang('DateLastEdition'), true);
     $table->set_header(3, get_lang('Category'), true);
@@ -286,10 +302,7 @@ if ($isAdmin) {
 } else {
     echo '<center><h1>' . get_lang('MyTickets') . '</h1></center>';
     echo '<center><p>' . get_lang('MsgWelcome') . '</p></center>';
-    if (isset($_GET['message'])) {
-        Display::display_confirmation_message(get_lang('TckSuccessSave'));
-    }
-    $table->set_header(0, get_lang('TicketNum'), true);
+    $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Date'), true);
     $table->set_header(2, get_lang('DateLastEdition'), true);
     $table->set_header(3, get_lang('Category'));

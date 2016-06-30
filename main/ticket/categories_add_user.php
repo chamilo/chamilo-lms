@@ -5,13 +5,14 @@
  *
  * @package chamilo.plugin.ticket
  */
-$cidReset = true;
+
 require_once __DIR__.'/../inc/global.inc.php';
-$plugin = TicketPlugin::create();
 
 api_protect_admin_script(true);
 
 $categoryId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
+
 $categoryInfo = TicketManager::getCategory($categoryId);
 
 if (empty($categoryInfo)) {
@@ -45,16 +46,16 @@ if ($form->validate()) {
     TicketManager::deleteAllUserInCategory($categoryId);
     TicketManager::addUsersToCategory($categoryId, $values['users']);
     Display::addFlash(Display::return_message(get_lang('Updated')));
-    header("Location: ".api_get_self()."?id=".$categoryId);
+    header("Location: ".api_get_self()."?id=".$categoryId.'&project_id='.$projectId);
     exit;
 }
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId,
     'name' => get_lang('MyTickets')
 );
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php?project_id='.$projectId,
     'name' => get_lang('Categories')
 );
 Display::display_header(get_lang('Users'));

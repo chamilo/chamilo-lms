@@ -1367,8 +1367,8 @@ class Tracking
                 $condition_time .= " AND logout_date <= '{$today->format('Y-m-d H:i:s')}') ";
                 break;
             case 'last_30_days':
-                $new_date = date('Y-m-d H:i:s', strtotime('-30 day'));
-                $condition_time = " AND (login_date >= '{$new_date->format('Y-m-d H:i:s')}'";
+                $newDate = new DateTime('-30 days', new DateTimeZone('UTC'));
+                $condition_time = " AND (login_date >= '{$newDate->format('Y-m-d H:i:s')}'";
                 $condition_time .= "AND logout_date <= '{$today->format('Y-m-d H:i:s')}') ";
                break;
             case 'custom':

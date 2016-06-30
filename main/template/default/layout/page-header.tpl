@@ -8,7 +8,33 @@
                 </div>
 	    </div>
             <div class="col-md-9">
-	    					
+                <div class="col-sm-4">
+                    {% if plugin_header_left is not null %}
+                    <div id="plugin_header_left">
+                        {{ plugin_header_left }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-sm-4">
+                    {% if plugin_header_center is not null %}
+                    <div id="plugin_header_center">
+                        {{ plugin_header_center }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-sm-4">
+                    {% if plugin_header_right is not null %}
+                    <div id="plugin_header_right">
+                        {{ plugin_header_right }}
+                    </div>
+                    {% endif %}
+                    <div class="section-notifications">
+                        <ul id="notifications" class="nav nav-pills pull-right">
+                            {{ notification_menu }}
+                        </ul>
+                    </div>
+                    {{ accessibility }}
+                </div>
             </div>
 	</div>
     </div>

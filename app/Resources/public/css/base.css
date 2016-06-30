@@ -43,6 +43,9 @@ a.thumbnail:hover{
   -webkit-border-radius: 5px;
   text-align: justify;
 }
+#content-section{
+    margin-bottom: 90px;
+}
 .version-checking{
   padding: 10px;
   width: 100%;

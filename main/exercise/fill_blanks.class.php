@@ -117,9 +117,11 @@ class FillBlanks extends Question
                         }
                         // get input size
                         var lainputsize = 200;
+                        var lainputsizetrue = 200;
                         if ($("#samplesize\\\["+i+"\\\]").width()) {
                         // this is a weird patch to avoid to reduce the size of input blank when you are writing in the ckeditor.
-                            lainputsize = $("#samplesize\\\["+i+"\\\]").width() + 9;
+                            lainputsize = $("#samplesize\\\["+i+"\\\]").width();
+                            lainputsizetrue = $("#samplesize\\\["+i+"\\\]").width() + 9;
                         }
 
                         if (document.getElementById("weighting["+i+"]")) {
@@ -133,7 +135,7 @@ class FillBlanks extends Question
                         fields += "<td>";
                         fields += "<input type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">";
                         fields += "<input type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">";
-                        fields += "<input value=\""+blanks[i].substr(1, blanks[i].length - 2)+"\" style=\"width:"+lainputsize+"px\" disabled=disabled id=\"samplesize["+i+"]\"/>";
+                        fields += "<input value=\""+blanks[i].substr(1, blanks[i].length - 2)+"\" style=\"width:"+lainputsizetrue+"px\" disabled=disabled id=\"samplesize["+i+"]\"/>";
                         fields += "<input type=\"hidden\" id=\"sizeofinput["+i+"]\" name=\"sizeofinput["+i+"]\" value=\""+lainputsize+"\" \"/>";
                         fields += "</td>";
                         fields += "</tr>";

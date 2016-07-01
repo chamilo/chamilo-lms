@@ -41,7 +41,7 @@ class bbb
         // Initialize video server settings from global settings
         $plugin = BBBPlugin::create();
 
-        $bbbPlugin = $plugin->get('tool_enable');
+        $bbbPluginEnabled = $plugin->get('tool_enable');
 
         $bbb_host = !empty($host) ? $host : $plugin->get('host');
         $bbb_salt = !empty($salt) ? $salt : $plugin->get('salt');
@@ -74,7 +74,7 @@ class bbb
             }
         }
 
-        if ($bbbPlugin == true) {
+        if ($bbbPluginEnabled === 'true') {
             $userInfo = api_get_user_info();
             $this->userCompleteName = $userInfo['complete_name'];
             $this->salt = $bbb_salt;

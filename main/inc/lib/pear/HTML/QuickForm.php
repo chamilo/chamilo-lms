@@ -1105,6 +1105,8 @@ class HTML_QuickForm extends HTML_Common
     ) {
         if (!$force) {
             if (!is_array($element) && !$this->elementExists($element)) {
+                throw new Exception( "Element '$element' does not exist in HTML_QuickForm::addRule()");
+                /*
                 return PEAR::raiseError(
                     null,
                     QUICKFORM_NONEXIST_ELEMENT,
@@ -1113,11 +1115,13 @@ class HTML_QuickForm extends HTML_Common
                     "Element '$element' does not exist in HTML_QuickForm::addRule()",
                     'HTML_QuickForm_Error',
                     true
-                );
+                );*/
             } elseif (is_array($element)) {
                 foreach ($element as $el) {
                     if (!$this->elementExists($el)) {
-                        return PEAR::raiseError(
+                        throw new Exception( "Element '$el' does not exist in HTML_QuickForm::addRule()");
+
+                        /*return PEAR::raiseError(
                             null,
                             QUICKFORM_NONEXIST_ELEMENT,
                             null,
@@ -1125,12 +1129,16 @@ class HTML_QuickForm extends HTML_Common
                             "Element '$el' does not exist in HTML_QuickForm::addRule()",
                             'HTML_QuickForm_Error',
                             true
-                        );
+                        );*/
                     }
                 }
             }
         }
         if (false === ($newName = $this->isRuleRegistered($type, true))) {
+
+            throw new Exception("Rule '$type' is not registered in HTML_QuickForm::addRule()");
+
+            /*
             return PEAR::raiseError(
                 null,
                 QUICKFORM_INVALID_RULE,
@@ -1139,7 +1147,7 @@ class HTML_QuickForm extends HTML_Common
                 "Rule '$type' is not registered in HTML_QuickForm::addRule()",
                 'HTML_QuickForm_Error',
                 true
-            );
+            );*/
         } elseif (is_string($newName)) {
             $type = $newName;
         }

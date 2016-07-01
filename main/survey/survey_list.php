@@ -82,7 +82,6 @@ if ($action == 'copy_survey') {
 
 // Header
 Display::display_header($tool_name, 'Survey');
-
 // Tool introduction
 Display::display_introduction_section('survey', 'left');
 

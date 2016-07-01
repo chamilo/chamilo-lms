@@ -408,7 +408,7 @@ function save_item(
         $myStatus = $myStatusInDB;
     }
 
-    $myTotal = $myLP->get_total_items_count_without_chapters();
+    $myTotal = $myLP->getTotalItemsCountWithoutDirs();
     $myComplete = $myLP->get_complete_items_count();
     $myProgressMode = $myLP->get_progress_bar_mode();
     $myProgressMode = $myProgressMode == '' ? '%' : $myProgressMode;

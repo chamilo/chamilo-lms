@@ -6,9 +6,6 @@
  * @package chamilo.plugin.ticket
  */
 
-$cidReset = true;
-// needed in order to load the plugin lang variables
-$course_plugin = 'ticket';
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
@@ -34,78 +31,75 @@ if ($table->per_page == 0) {
 
 $formToString = '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $interbreadcrumb[] = array(
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
 );
 
-if (isset($_GET['action'])) {
-    global $table;
-    $action = $_GET['action'];
-    switch ($action) {
-        case 'delete':
-            TicketManager::deleteProject($id);
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
+switch ($action) {
+    case 'delete':
+        TicketManager::deleteProject($id);
+        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        header("Location: ".api_get_self());
+        break;
+    case 'add':
+        $toolName = get_lang('Add');
+        $interbreadcrumb[] = array(
+            'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
+            'name' => get_lang('Categories')
+        );
+        $url = api_get_self().'?action=add';
+        $form = TicketManager::getProjectForm($url);
+        $formToString = $form->returnForm();
+        if ($form->validate()) {
+            $values =$form->getSubmitValues();
+
+            $params = [
+                'name' => $values['name'],
+                'description' => $values['description']
+            ];
+            TicketManager::addProject($params);
+
+            Display::addFlash(Display::return_message(get_lang('Added')));
+
             header("Location: ".api_get_self());
-            break;
-        case 'add':
-            $toolName = get_lang('Add');
-            $interbreadcrumb[] = array(
-                'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
-                'name' => get_lang('Categories')
-            );
-            $url = api_get_self().'?action=add';
-            $form = TicketManager::getProjectForm($url);
-            $formToString = $form->returnForm();
-            if ($form->validate()) {
-                $values =$form->getSubmitValues();
+            exit;
+        }
+        break;
+    case 'edit':
+        $toolName = get_lang('Edit');
+        $interbreadcrumb[] = array(
+            'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
+            'name' => get_lang('Categories')
+        );
+        $url = api_get_self().'?action=edit&id='.$id;
+        $form = TicketManager::getProjectForm($url);
 
-                $params = [
-                    'name' => $values['name'],
-                    'description' => $values['description']
-                ];
-                TicketManager::addProject($params);
+        $item = TicketManager::getProject($_GET['id']);
+        $form->setDefaults([
+            'name' => $item->getName(),
+            'description' => $item->getDescription()]
+        );
+        $formToString = $form->returnForm();
+        if ($form->validate()) {
+            $values =$form->getSubmitValues();
 
-                Display::addFlash(Display::return_message(get_lang('Added')));
-
-                header("Location: ".api_get_self());
-                exit;
-            }
-            break;
-        case 'edit':
-            $toolName = get_lang('Edit');
-            $interbreadcrumb[] = array(
-                'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
-                'name' => get_lang('Categories')
-            );
-            $url = api_get_self().'?action=edit&id='.$id;
-            $form = TicketManager::getProjectForm($url);
-
-            $item = TicketManager::getProject($_GET['id']);
-            $form->setDefaults([
-                'name' => $item->getName(),
-                'description' => $item->getDescription()]
-            );
-            $formToString = $form->returnForm();
-            if ($form->validate()) {
-                $values =$form->getSubmitValues();
-
-                $params = [
-                    'name' => $values['name'],
-                    'description' => $values['description'],
-                    'sys_lastedit_datetime' => api_get_utc_datetime(),
-                    'sys_lastedit_user_id' => api_get_user_id()
-                ];
-                $cat = TicketManager::updateProject($_GET['id'], $params);
-                Display::addFlash(Display::return_message(get_lang('Updated')));
-                header("Location: ".api_get_self());
-                exit;
-            }
-            break;
-        default:
-            break;
-    }
+            $params = [
+                'name' => $values['name'],
+                'description' => $values['description'],
+                'sys_lastedit_datetime' => api_get_utc_datetime(),
+                'sys_lastedit_user_id' => api_get_user_id()
+            ];
+            $cat = TicketManager::updateProject($_GET['id'], $params);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+            header("Location: ".api_get_self());
+            exit;
+        }
+        break;
+    default:
+        break;
 }
 
 $user_id = api_get_user_id();

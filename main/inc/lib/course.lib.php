@@ -115,11 +115,14 @@ class CourseManager
                         $params['exemplary_content']
                     );
 
-                    CourseManager::createDefaultGradebook($params['gradebook_model_id'], $course_info['code']);
+                    if (isset($params['gradebook_model_id'])) {
+                        CourseManager::createDefaultGradebook($params['gradebook_model_id'], $course_info['code']);
+                    }
                     // If parameter defined, copy the contents from a specific
                     // template course into this new course
-                    CourseManager::useTemplateAsBasisIfRequired($course_info['id'], $params['course_template']);
-
+                    if (isset($params['course_template'])) {
+                        CourseManager::useTemplateAsBasisIfRequired($course_info['id'], $params['course_template']);
+                    }
                     $params['course_code'] = $course_info['code'];
                     $params['item_id'] = $course_info['real_id'];
 

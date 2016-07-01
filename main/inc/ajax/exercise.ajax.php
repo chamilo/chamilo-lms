@@ -117,7 +117,7 @@ switch ($action) {
             $results[] = $row;
         }
 
-        $oExe = new exercise();
+        $oExe = new Exercise();
         $oExe->read($exercise_id);
 
         $response = new stdClass();

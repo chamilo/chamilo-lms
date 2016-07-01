@@ -5,7 +5,6 @@
  * @package chamilo.plugin.ticket
  */
 
-$cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') != 'true') {
@@ -34,7 +33,7 @@ function load_course_list (div_course, my_user_id, user_email) {
 function changeType() {
     var selected = document.getElementById("category_id").selectedIndex;
     var id = $("#category_id").val();
-    $("#project_id").val(projects[id]);
+    //$("#project_id").val(projects[id]);
     $("#other_area").val(other_area[id]);
     $("#email").val(email[id]);
     if (parseInt(course_required[id]) == 0){
@@ -62,18 +61,12 @@ function validate() {
     document.getElementById("content").value= fckEditor1val;
     var selected = document.getElementById("category_id").selectedIndex;
     var id = document.getElementById("category_id").options[selected].value;
-    if (id == 0) {
-        alert("' . get_lang("ValidType") . '");
-        return false;
-    } else if(document.getElementById("subject").value == "") {
-        alert("' . get_lang("ValidSubject") . '");
-        return false;
-    } else if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0) {
+    if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0) {
         alert("' . get_lang("ValidCourse") . '");
         return false;
     } else if(id != "CUR" && parseInt(course_required[id]) != 1  && !re.test(document.getElementById("personal_email").value)) {
         if (document.getElementById("personal_email").value != "") {
-            alert("' . get_lang("ValidEmail") . '");
+            alert("' . get_lang("PleaseEnterValidEmail") . '");
             return false;
         }
     } else if(fckEditor1val == "") {
@@ -148,7 +141,9 @@ div.divTicket {
     padding-top: 100px;
 }
 </style>';
-$types = TicketManager::get_all_tickets_categories('category.name ASC');
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
+
+$types = TicketManager::get_all_tickets_categories($projectId, 'category.name ASC');
 $htmlHeadXtra[] = '<script language="javascript">
     var projects = ' . js_array($types, 'projects', 'project_id') . '
     var course_required = ' . js_array($types, 'course_required', 'course_required') . '
@@ -187,7 +182,7 @@ function js_array($array, $name, $key)
  */
 function show_form_send_ticket()
 {
-    global $types, $plugin;
+    global $types;
 
     // Category List
     $categoryList = array();
@@ -204,19 +199,6 @@ function show_form_send_ticket()
     );
 
     $statusList = TicketManager::getStatusList();
-    /*$statusList[TicketManager::STATUS_NEW] = get_lang('StatusNew');
-    if (api_is_platform_admin()) {
-        $statusAttributes = array(
-            'id' => 'status_id',
-            'for' => 'status_id',
-            'style' => 'width: 562px;'
-        );
-        $statusList[TicketManager::STATUS_PENDING] = get_lang('StatusPending');
-        $statusList[TicketManager::STATUS_UNCONFIRMED] = get_lang('StatusUnconfirmed');
-        $statusList[TicketManager::STATUS_CLOSE] = get_lang('StatusClose');
-        $statusList[TicketManager::STATUS_FORWARDED] = get_lang('StatusForwarded');
-    }*/
-    //End Status List
 
     // Source List
     $sourceList = array();
@@ -229,8 +211,7 @@ function show_form_send_ticket()
     if (api_is_platform_admin()) {
         $sourceAttributes = array(
             'id' => 'source_id',
-            'for' => 'source_id',
-            'style' => 'width: 562px;'
+            'for' => 'source_id'
         );
         $sourceList[TicketManager::SOURCE_EMAIL] = get_lang('SrcEmail');
         $sourceList[TicketManager::SOURCE_PHONE] = get_lang('SrcPhone');
@@ -238,16 +219,13 @@ function show_form_send_ticket()
     }
 
     // Priority List
-    /*$priorityList = array();
-    $priorityList[TicketManager::PRIORITY_NORMAL] = get_lang('PriorityNormal');
-    $priorityList[TicketManager::PRIORITY_HIGH] = get_lang('PriorityHigh');
-    $priorityList[TicketManager::PRIORITY_LOW] = get_lang('PriorityLow');*/
     $priorityList = TicketManager::getPriorityList();
 
+    $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
     $form = new FormValidator(
         'send_ticket',
         'POST',
-        api_get_self(),
+        api_get_self().'?project_id='.$projectId,
         '',
         array(
             'enctype' => 'multipart/form-data',
@@ -267,10 +245,7 @@ function show_form_send_ticket()
     $form->addElement(
         'hidden',
         'project_id',
-        '',
-        array(
-            'id' => 'project_id'
-        )
+        $projectId
     );
 
     $form->addElement(
@@ -388,6 +363,19 @@ function show_form_send_ticket()
         )
     );
 
+    $courseInfo = api_get_course_info();
+    if (!empty($courseInfo)) {
+        $form->addLabel(get_lang('Course'), $courseInfo['title']);
+        $form->addHidden('course_id', $courseInfo['real_id']);
+
+        $sessionInfo = api_get_session_info(api_get_session_id());
+        if (!empty($sessionInfo)) {
+            $form->addLabel(get_lang('Session'), $sessionInfo['name']);
+            $form->addHidden('session_id', $sessionInfo['id']);
+        }
+    }
+
+
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
     $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 
@@ -412,6 +400,10 @@ function show_form_send_ticket()
         )
     );
 
+    $form->addRule('content', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('category_id', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('subject', get_lang('ThisFieldIsRequired'), 'required');
+
     $form->display();
 }
 
@@ -426,21 +418,23 @@ function save_ticket()
         $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . Security::remove_XSS($_POST['phone']). '</p>';
     }
     $course_id = isset($_POST['course_id']) ? $_POST['course_id'] : '';
+    $sessionId = isset($_POST['session_id']) ? $_POST['session_id'] : '';
+
     $project_id = $_POST['project_id'];
-    $project_id = 1;
     $subject = $_POST['subject'];
     $other_area = (int) $_POST['other_area'];
     $email = $_POST['email'];
     $personal_email = $_POST['personal_email'];
     $source = $_POST['source_id'];
     $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
-    $priority = $_POST['priority_id'];
-    $status = $_POST['status_id'];
+    $priority = isset($_POST['priority_id']) ? $_POST['priority_id'] : '';
+    $status = isset($_POST['status_id']) ? $_POST['status_id'] : '';
     $file_attachments = $_FILES;
 
-    if (TicketManager::insert_new_ticket(
+    if (TicketManager::add(
         $category_id,
         $course_id,
+        $sessionId,
         $project_id,
         $other_area,
         $email,
@@ -454,7 +448,7 @@ function save_ticket()
         $user_id
     )) {
         Display::addFlash(
-            Display::return_message(get_lang('TckSuccessSave'), 'success')
+            Display::return_message(get_lang('Saved'), 'success')
         );
         header('Location:' . api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
         exit;

@@ -82,15 +82,11 @@ $(document).ready(function(){
         $("#student-list-work").fadeOut(300);
     });
     check_brand();
-    
-    
-    
-    
-var id;
-$(window).resize(function() {
-    clearTimeout(id);
-    id = setTimeout(doneResizing, 200);
-});
+    var id;
+    $(window).resize(function() {
+        clearTimeout(id);
+        id = setTimeout(doneResizing, 200);
+    });
 
 function doneResizing(){
   var widhtWindow = $(window).width();
@@ -108,13 +104,7 @@ function doneResizing(){
         $("#user_image_block").addClass("invisible");
     }
 };
-    /* if($('#toolbar-admin').length){
-        var heigthToolBar= $('#toolbar-admin').height();
-        $('header').css('margin-top', heigthToolBar+'px');
-        $('#page-back').css('padding-top', heigthToolBar+20+'px');
-    } */
-
-    // Removes the yellow input in Chrome
+// Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
         $(window).load(function(){
             $('input:-webkit-autofill').each(function(){

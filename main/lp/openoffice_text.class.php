@@ -93,7 +93,7 @@ class OpenofficeText extends OpenofficeDocument {
     }
 
     /**
-     * Manages chapter splitting
+     * Manages dir/chapter splitting
      * @param	string	Chapter header
      * @param	string	Content
      * @return	void
@@ -128,11 +128,11 @@ class OpenofficeText extends OpenofficeDocument {
 
             $content = strstr($content,$matches[0][$i]);
             if ($i + 1 !== count($matches[0])) {
-                $chapter_content = substr($content, 0, strpos($content, $matches[0][$i + 1]));
+                $dir_content = substr($content, 0, strpos($content, $matches[0][$i + 1]));
             } else {
-                $chapter_content = $content;
+                $dir_content = $content;
             }
-            $items_to_create[$matches[1][$i]] = $chapter_content;
+            $items_to_create[$matches[1][$i]] = $dir_content;
 
         }
 

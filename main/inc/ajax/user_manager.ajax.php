@@ -1,14 +1,15 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls
  */
 require_once '../global.inc.php';
+
 $action = $_GET['a'];
 
 switch ($action) {
     case 'get_user_like':
-
         $query = $_REQUEST['q'];
         $conditions = [
             'username' => $query,

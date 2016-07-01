@@ -955,12 +955,12 @@ if (@$_POST['step2']) {
         Database::insert($table, $attributes);
 
         $categories = array(
-            get_lang('Enrollment') => get_lang('TicketsAboutEnrollment'),
-            get_lang('GeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
-            get_lang('RequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
-            get_lang('AcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
-            get_lang('VirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
-            get_lang('OnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation')
+            get_lang('TicketEnrollment') => get_lang('TicketsAboutEnrollment'),
+            get_lang('TicketGeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
+            get_lang('TicketRequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
+            get_lang('TicketAcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
+            get_lang('TicketVirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
+            get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation')
         );
 
         $i = 1;

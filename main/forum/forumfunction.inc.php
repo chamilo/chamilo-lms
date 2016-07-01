@@ -718,8 +718,8 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
             'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
-            'start_time' => isset($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
-            'end_time' => isset($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
+            'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
+            'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
@@ -761,8 +761,8 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
             'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
-            'start_time' => isset($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
-            'end_time' => isset($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
+            'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
+            'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
             'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0,
@@ -1930,7 +1930,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
         ->andWhere($visibleCriteria)
     ;
 
-    if (!api_is_allowed_to_edit()) {
+    if (! (api_is_allowed_to_edit() || GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id()))) {
         if ($forumInfo['moderated']) {
             $criteria->where(Criteria::expr()->eq('status', 1));
         }

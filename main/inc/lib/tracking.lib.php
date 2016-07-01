@@ -418,7 +418,7 @@ class Tracking
                         // Remove "NaN" if any (@todo: locate the source of these NaN)
                         $time = str_replace('NaN', '00' . $h . '00\'00"', $time);
 
-                        if ($row['item_type'] != 'dokeos_chapter') {
+                        if ($row['item_type'] != 'dir') {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                             } else {
@@ -1358,16 +1358,18 @@ class Tracking
             $timeFilter = 'last_week';
         }
 
-        $today = date('Y-m-d H:i:s');
+        $today = new DateTime('now', new DateTimeZone('UTC'));
 
         switch ($timeFilter) {
             case 'last_7_days':
-                $new_date = date('Y-m-d H:i:s', strtotime('-7 day'));
-                $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
+                $newDate = new DateTime('-7 day', new DateTimeZone('UTC'));
+                $condition_time = " AND (login_date >= '{$newDate->format('Y-m-d H:i:s')}'";
+                $condition_time .= " AND logout_date <= '{$today->format('Y-m-d H:i:s')}') ";
                 break;
             case 'last_30_days':
-                $new_date = date('Y-m-d H:i:s', strtotime('-30 day'));
-                $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
+                $newDate = new DateTime('-30 days', new DateTimeZone('UTC'));
+                $condition_time = " AND (login_date >= '{$newDate->format('Y-m-d H:i:s')}'";
+                $condition_time .= "AND logout_date <= '{$today->format('Y-m-d H:i:s')}') ";
                break;
             case 'custom':
                 if (!empty($start_date) && !empty($end_date)) {

@@ -582,7 +582,7 @@ switch ($action) {
                 );
 
                 if (is_numeric($new_lp_id)) {
-                    // TODO: Maybe create a first module directly to avoid bugging the user with useless queries
+                    // TODO: Maybe create a first directory directly to avoid bugging the user with useless queries
                     $_SESSION['oLP'] = new learnpath(
                         api_get_course_id(),
                         $new_lp_id,
@@ -1023,7 +1023,7 @@ switch ($action) {
             exit;
         }
         break;
-    case 'add_sub_item': // Add an item inside a chapter.
+    case 'add_sub_item': // Add an item inside a dir/chapter.
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }

@@ -388,6 +388,6 @@ $tpl->assign('form', $form->returnForm());
 
 $tpl->assign('rows', $timeReport->data);
 
-$contentTemplate = $tpl->get_template('admin/teacher_time_report.tpl');
-
-$tpl->display($contentTemplate);
+$contentTemplate = $tpl->fetch('default/admin/teacher_time_report.tpl');
+$tpl->assign('content', $contentTemplate);
+$tpl->display_one_col_template();

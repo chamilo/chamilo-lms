@@ -14,14 +14,17 @@ html{
     min-height: 100%;
 }
 body{
-    margin-bottom: 60px;
+    margin-bottom: 120px;
 }
 /* Sticky footer style */
 .sticky-footer{
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 60px;
+    height: 120px;
+}
+#content-section{
+    margin-bottom: 150px;
 }
 /* End Sticky footer style */
 select {
@@ -43,9 +46,7 @@ a.thumbnail:hover{
   -webkit-border-radius: 5px;
   text-align: justify;
 }
-#content-section{
-    margin-bottom: 90px;
-}
+
 .version-checking{
   padding: 10px;
   width: 100%;
@@ -5675,6 +5676,10 @@ a.sessionView {
 #user_image_block img,
 #sn-avatar-one a.expand-image img{
     width: 120px;
+}
+footer{
+    font-size: 12px;
+    padding-top: 10px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

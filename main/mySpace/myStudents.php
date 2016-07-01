@@ -805,12 +805,12 @@ if (!empty($student_id)) {
             if (empty($sessionId)) {
                 $query->setParameters([
                     'session' => 0,
-                    'course' => $info_course['real_id']
+                    'course' => $courseInfo['real_id']
                 ]);
             } else {
                 $query->setParameters([
                     'session' => $sessionId,
-                    'course' => $info_course['real_id']
+                    'course' => $courseInfo['real_id']
                 ]);
             }
 
@@ -1024,12 +1024,13 @@ if (!empty($student_id)) {
                     $data_learnpath[$i][] = $lp_name;
                     $data_learnpath[$i][] = $progress . '%';
                 }
+                ?>
+                </tbody>
+                </table>
+                </div>
+                <?php
             }
-            ?>
-            </tbody>
-            </table>
-            </div>
-        <?php } ?>
+        } ?>
         <!-- line about exercises -->
         <?php if ($user_info['status'] != INVITEE) { ?>
         <div class="table-responsive">
@@ -1297,7 +1298,7 @@ if (!empty($student_id)) {
         </table>
         </div>
     <?php
-        echo Tracking::displayUserSkills($user_info['user_id'], $info_course['id'], $sessionId);
+        echo Tracking::displayUserSkills($user_info['user_id'], $courseInfo['id'], $sessionId);
 
     } //end details
 }

@@ -1041,6 +1041,10 @@ class bbb
      */
     public function endUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=end&id='.$meeting['id'];
     }
 
@@ -1062,6 +1066,9 @@ class bbb
      */
     public function publishUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=publish&id='.$meeting['id'];
     }
 
@@ -1071,6 +1078,9 @@ class bbb
      */
     public function unPublishUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=unpublish&id='.$meeting['id'];
     }
 
@@ -1080,6 +1090,10 @@ class bbb
      */
     public function deleteRecordUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=delete_record&id='.$meeting['id'];
     }
 
@@ -1089,6 +1103,10 @@ class bbb
      */
     public function copyToRecordToLinkTool($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id'];
     }
 }

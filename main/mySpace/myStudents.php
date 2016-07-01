@@ -809,22 +809,13 @@ if (!empty($student_id)) {
                 ');
 
             if (empty($sessionId)) {
-                $query = $em->createQuery('
-                    SELECT lp FROM ChamiloCourseBundle:CLp lp
-                    WHERE lp.sessionId = 0 AND lp.cId = :course
-                    ORDER BY lp.displayOrder ASC
-                ');
-
                 $query->setParameters([
+                    'session' => 0,
                     'course' => $courseInfo['real_id']
                 ]);
             } else {
-                $query = $em->createQuery('
-                    SELECT lp FROM ChamiloCourseBundle:CLp lp
-                    WHERE lp.cId = :course
-                    ORDER BY lp.displayOrder ASC
-                ');
                 $query->setParameters([
+                    'session' => $sessionId,
                     'course' => $courseInfo['real_id']
                 ]);
             }
@@ -1038,13 +1029,14 @@ if (!empty($student_id)) {
                     }
                     $data_learnpath[$i][] = $lp_name;
                     $data_learnpath[$i][] = $progress . '%';
-                }
             }
             ?>
             </tbody>
             </table>
             </div>
-        <?php } ?>
+                <?php
+            }
+        } ?>
         <!-- line about exercises -->
         <?php if ($user_info['status'] != INVITEE) { ?>
         <div class="table-responsive">
@@ -1312,7 +1304,7 @@ if (!empty($student_id)) {
         </table>
         </div>
     <?php
-        echo Tracking::displayUserSkills($user_info['user_id'], $info_course['id'], $sessionId);
+        echo Tracking::displayUserSkills($user_info['user_id'], $courseInfo['id'], $sessionId);
 
     } //end details
 }

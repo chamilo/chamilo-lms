@@ -140,7 +140,7 @@ if ($bbb->isGlobalConference() === false &&
     $form = new FormValidator(api_get_self());
     $groupId = api_get_group_id();
     $groups = GroupManager::get_groups();
-    if ($groups && !empty($groupId)) {
+    if ($groups) {
         $groupList[0] = get_lang('Select');
         $groupList = array_merge($groupList, array_column($groups, 'name', 'iid'));
         $form->addSelect('group_id', get_lang('Groups'), $groupList, ['id' => 'group_select']);

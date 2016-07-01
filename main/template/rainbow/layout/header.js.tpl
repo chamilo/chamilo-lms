@@ -132,9 +132,15 @@ $(document).ready(function(){
     $('body').on('click', 'a.ajax', function(e) {
         e.preventDefault();
 
-        var contentUrl = this.href,
-                loadModalContent = $.get(contentUrl),
-                self = $(this);
+        var panelId = $('#' + this.id+ '_panel');
+        if (panelId.length) {
+            var loadModalContent = panelId.html();
+            self = $(this);
+        } else {
+            var contentUrl = this.href,
+            loadModalContent = $.get(contentUrl),
+            self = $(this);
+        }
 
         $.when(loadModalContent).done(function(modalContent) {
             var modalDialog = $('#global-modal').find('.modal-dialog'),

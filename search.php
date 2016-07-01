@@ -205,11 +205,18 @@ if ($form->validate()) {
 }
 
 $extraField = new ExtraField('user');
-
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 $jqueryExtra = '';
 
-$userForm->addHeader(get_lang('Filière'));
+$htmlHeadXtra[] ='<script>
+$(document).ready(function(){
+	$("#filiere_panel").hide();
+ 		
+});
+</script>';
+
+$panel = Display::panel(get_lang('FiliereExplanation'), '', '', '',  '', 'filiere_panel');
+$userForm->addHeader(Display::url(get_lang('Filière'), '#', ['id'=> 'filiere', 'class' => 'ajax']).''.$panel);
 $fieldsToShow = [
     'statusocial',
     'filiere_user',

@@ -2302,7 +2302,7 @@ class Display
      *
      * @return string
      */
-    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '')
+    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '', $id = '')
     {
         $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
         $footer = !empty($footer) ? '<div class="panel-footer ">'.$footer.'</div>' : '';
@@ -2310,7 +2310,7 @@ class Display
         $style = !in_array($style, $styles) ? 'default' : $style;
 
         return '
-            <div class="panel panel-'.$style.'">
+            <div id = '.$id.' class="panel panel-'.$style.'">
                 '.$title.'
                 '.self::contentPanel($content).'
                 '.$footer.'

@@ -2496,6 +2496,8 @@ table#skill_holder {
   padding-top: .5em;
   padding-bottom: .5em;
   width: auto;
+  font-size: 12px;
+  line-height: 16px;
 }
 .lp-add-item{
   display:block;
@@ -3014,31 +3016,6 @@ a.forum_group_link {
     border: 1px solid #ccc;
     margin-bottom:5px;
 }
-
-#hide_bar_template {
-    vertical-align: middle;
-    width: 10px;
-    display: inline;
-    float:left;
-    height: 100%;
-    padding-bottom: 90em;
-    margin-bottom: -90em;
-    cursor:pointer;
-    background-color:#eee;
-    margin-left: 4px !important;
-    background-image: url("../../main/img/hide0.png");
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
-.hide_bar_template_not_hide {
-    background-image: url("../../main/img/hide2.png") !important;
-}
-
-#hide_bar_template:hover {
-    background-color:#aaa;
-}
-
 .timeline-example {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;

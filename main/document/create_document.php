@@ -23,7 +23,7 @@ var hide_bar = function() {
 
 $(document).ready(function() {
     $(".scrollbar-light").scrollbar();
-
+    
     if ($(window).width() <= 785 ) {
         hide_bar();
     }    
@@ -31,13 +31,15 @@ $(document).ready(function() {
     $("#hide_bar_template").click(function() {
         
         $("#template_col").toggleClass("hide");
+        $("#expand").toggleClass("hide");
+        $("#contract").toggleClass("hide");
         
-        if ($("#doc_form").is(".col-md-8")) {
-            $("#doc_form").removeClass("col-md-8");
+        if ($("#doc_form").is(".col-md-9")) {
+            $("#doc_form").removeClass("col-md-9");
             $("#doc_form").addClass("col-md-11");
         } else {
             $("#doc_form").removeClass("col-md-11");
-            $("#doc_form").addClass("col-md-8");
+            $("#doc_form").addClass("col-md-9");
         }
         
         $("#hide_bar_template").toggleClass("hide_bar_template_not_hide");
@@ -611,11 +613,13 @@ if ($form->validate()) {
 
 	// link back to the documents overview
 	if ($is_certificate_mode) {
-		$actionsLeft =  '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.
+            $actionsLeft =  '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.
             Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Back'),null,ICON_SIZE_MEDIUM).'</a>';
         } else {
-		$actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
+            $actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
             Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Back'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Back'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
         }
 
         echo $toolbar = Display::toolbarAction('actions-documents', array(0 => $actionsLeft, 1 => ''));
@@ -632,20 +636,18 @@ if ($form->validate()) {
 		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
 	}
     // HTML-editor
-    echo '<div class="row" style="overflow:hidden">
-            <div id="template_col" class="col-md-2">
+    echo '<div class="page-create">
+            <div class="row" style="overflow:hidden">
+            <div id="template_col" class="col-md-3">
                 <div class="panel panel-default">
                 <div class="panel-body">
                     <div id="frmModel" class="items-templates scrollbar-light"></div>
                 </div>
                 </div>
             </div>
-            <div class="col-md-1">
-                <div id="hide_bar_template"></div>
-            </div>
             <div id="doc_form" class="col-md-9">
                 '.$form->returnForm().'
             </div>
-          </div>';
+          </div></div>';
 	Display :: display_footer();
 }

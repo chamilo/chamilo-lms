@@ -8839,7 +8839,7 @@ class learnpath
         $return = '<ul class="lp_resource">';
 
         $return .= '<li class="lp_resource_element">';
-        $return .= Display::return_icon('new_test_small.gif');
+        $return .= Display::return_icon('new_exercice.png');
         $return .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id=' . $this->lp_id . '">' .
             get_lang('NewExercise') . '</a>';
         $return .= '</li>';
@@ -9035,7 +9035,7 @@ class learnpath
 
         //First add link
         $return .= '<li class="lp_resource_element">';
-        $return .= Display::return_icon('forum_new_small.gif');
+        $return .= Display::return_icon('new_forum.png');
         $return .= Display::url(
             get_lang('CreateANewForum'),
             api_get_path(WEB_CODE_PATH) . 'forum/index.php?' . api_get_cidreq() . '&' . http_build_query([

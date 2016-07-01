@@ -3144,7 +3144,6 @@ a.forum_group_link {
 .subnav .nav > li > .logout {
     padding-top:8px;
 }
-
 .subnav-fixed {
     position: fixed;
     top: 0px;
@@ -3156,12 +3155,7 @@ a.forum_group_link {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
-    /*-webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-        -moz-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-            box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-    */
 }
-
 .doc_folder {
     margin-right:5px;
     margin-top:5px;
@@ -3197,7 +3191,6 @@ a.forum_group_link {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .handle.expanded{
     background-image:  url('../../main/img/div_hide.gif');
     background-repeat: no-repeat;
@@ -3205,7 +3198,6 @@ a.forum_group_link {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .collapsible .handle{
     background-image: url('../../main/img/div_hide.gif');
     background-repeat: no-repeat;
@@ -3213,7 +3205,6 @@ a.forum_group_link {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .collapsible .handle.collapsed{
     background-image:  url('../../main/img/div_show.gif');
     background-repeat: no-repeat;
@@ -3229,7 +3220,6 @@ a.forum_group_link {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .btn.show{
     border:none;
     border-radius: 0;
@@ -3244,7 +3234,6 @@ a.forum_group_link {
     background-position:center center;
     box-shadow:none;
 }
-
 .btn.hide{
     border:none;
     border-radius: 0;
@@ -3259,7 +3248,6 @@ a.forum_group_link {
     background-position:center center;
     box-shadow:none;
 }
-
 .btn.loading{
     border:none;
     border-radius: 0;
@@ -3283,7 +3271,6 @@ a.forum_group_link {
 .boot-tooltip {
     cursor: pointer;
 }
-
 /*
     link
 */
@@ -3386,7 +3373,6 @@ i.size-32.icon-new-note{
 .nav-list img {
     margin-right: 6px;
 }
-
 /* Only for Firefox */
 @-moz-document url-prefix() {
     select#question_type_hidden option {
@@ -3409,12 +3395,9 @@ i.size-32.icon-new-note{
     select#question_type_hidden option[value="14"] {background-image: url(../../main/img/icons/32/mcmagl.png);}
     select#question_type_hidden option[value="16"] {background-image: url(../../main/img/icons/32/calculated_answer.png);}
 }
-
-
 .btn-success.btn-install{
     float: right;
 }
-
 /*
  * work
  */
@@ -3493,7 +3476,6 @@ i.size-32.icon-new-work{
 #settings .panel:hover .admin-edit-block {
     display: block;
 }
-
 /***** Survey *****/
 #list-survey p{
   display: inline-block;
@@ -3968,8 +3950,6 @@ i.size-32.icon-new-work{
   height:20px;
   width: 70%;
 }
-
-
 .bottom_actions {
   display: block;
 }
@@ -4068,11 +4048,9 @@ ul.holder li.bit-box{
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
 }
-
 #file-descrtiption.form-control{
   width: 80%;
 }
-
 .session-course-edit .control{
   padding-top: 2em;
   padding-bottom: 2em;
@@ -4143,7 +4121,6 @@ ul.holder li.bit-box{
   padding-left: 10px;
   margin-left: 0px;
 }
-
 .question_options label > input + div.thumbnail {
   padding: 10px;
   box-sizing: border-box;
@@ -4157,7 +4134,6 @@ ul.holder li.bit-box{
   background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
 }
-
 .question_options label > input:checked + div.thumbnail {
   border: 2px solid #337AB7;
   -webkit-box-shadow: 0 4px 18px #C8C8C8;
@@ -4173,11 +4149,9 @@ ul.holder li.bit-box{
   background: linear-gradient(to bottom, #ffffff 0%,#fffef2 47%,#ffffe2 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffe2',GradientType=0 ); /* IE6-9 */
 }
-
 .question_options div.thumbnail p {
   margin: 0;
 }
-
 .question_options div.thumbnail img {
   height: 150px !important;
   width: 190px !important;
@@ -4192,7 +4166,6 @@ ul.holder li.bit-box{
   display: block;
   height: auto !important;
 }
-
 /***    Draggable answer    ***/
 .question_options ul.exercise-draggable-answer{
   float: left;
@@ -4269,7 +4242,6 @@ ul.exercise-draggable-answer .touch-items:hover{
   font-size: 12px;
   cursor: pointer;
 }
-
 /***    Matching Draggable answer ***/
 .drag_question {
   min-height: 4em;
@@ -4932,7 +4904,6 @@ div#chat-remote-video video {
   margin-left: auto;
   margin-right: auto;
 }
-
 #session-list .information-item{
   padding: 10px;
   min-height: 185px;
@@ -5163,8 +5134,6 @@ div#chat-remote-video video {
 .ui-tabs .ui-widget-content a.btn-success{
     color: #fff;
 }
-
-
 .ui-priority-secondary,
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary{
@@ -5202,7 +5171,6 @@ div#chat-remote-video video {
 .ui-dialog .ui-dialog-buttonpane{
   border-top: 1px solid #DDD;
 }
-
 .ui-button.ui-widget.ui-state-default {
   background-color:#f5f5f5;
   background-image:-moz-linear-gradient(top,#fff,#e6e6e6);
@@ -5217,7 +5185,6 @@ div#chat-remote-video video {
   text-shadow:0 1px 1px rgba(255,255,255,.75);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05)
 }
-
 .ui-button.ui-widget.ui-state-hover{
   border-width: 1px;
   border-style:solid;
@@ -5228,9 +5195,6 @@ div#chat-remote-video video {
   font-weight:normal;
   color:#333333;
 }
-
-
-
 .select2-container .select2-selection--single{
   height: 32px !important;
   border-color: #CCCCCC !important;
@@ -5412,24 +5376,19 @@ div#chat-remote-video video {
 .session-view-row {
   padding: 8px 0;
 }
-
 .session-view-lvl-2 {
   margin-left : 66px;
 }
-
 .session-view-lvl-3 {
   padding-left : 92px;
 }
-
 .session-view-lvl-4 {
   padding-left : 102px;
 }
-
 .session-view-lvl-5 {
   padding-left : 128px;
   font-weight : normal;
 }
-
 .session-view-lvl-6 {
   padding-left : 20px;
 }
@@ -5441,25 +5400,20 @@ div#chat-remote-video video {
 img.sessionView {
   margin-right: 10px;
 }
-
 a.sessionView {
   font-weight : bold;
 }
-
 .session-view-user-category {
   font-weight : bold;
   padding-bottom : 10px;
 }
-
 .session-view-session-category {
   font-weight : bold;
   padding-bottom : 10px;
 }
-
 .session-view-session {
   font-weight : bold;
 }
-
 /* Like the well class */
 .session-view-well {
   min-height: 20px;
@@ -5470,16 +5424,13 @@ a.sessionView {
   border-radius: 4px;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05) inset;
 }
-
 .session-view-button {
   border : none;
   min-width : 28px;
 }
-
 .view-by-session-link {
   min-height: 38px;
 }
-
 .view-by-session-teachers {
   display : none; /* change this if you want to display teachers name in this view */
   font-size : 10px;
@@ -5487,15 +5438,12 @@ a.sessionView {
   overflow-y: auto;
   max-height:50px;
 }
-
 .view-by-session-right-actions {
   float : right;
 }
-
 .view-by-session-right-actions img {
   width : 12px;
 }
-
 .session-view-session-go-to-course-in-session {
   font-size : 12px;
 }
@@ -5680,11 +5628,9 @@ a.sessionView {
 }
 #grad_left {
     left: 0;
-     /* background: url('../../main/img/timeline/grad_left.png') repeat-y; */
 }
 #grad_right {
     right: 0;
-    /* background: url('../../main/img/timeline/grad_right.png') repeat-y; */
 }
 #next,
 #prev {
@@ -5735,7 +5681,19 @@ a.sessionView {
     height: 144px;
     position: relative;
 }
-
+/*
+* Lesson scorm
+*/
+#subtab.tab-wrapper,
+#resource_tab.tab-wrapper .tab-content .tab-pane{
+    margin-top: 20px;
+}
+#resource_tab li a {
+    padding: 5px 10px;
+}
+#resource_tab li.lp_resource_element a{
+    padding: 5px;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

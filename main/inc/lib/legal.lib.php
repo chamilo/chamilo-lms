@@ -181,7 +181,8 @@ class LegalManager
                     $preview = '<div class="legal-terms">'.$term_preview['content'].'</div><br />';
                 }
                 $preview .= get_lang('ByClickingRegisterYouAgreeTermsAndConditions');
-                if (api_get_setting('load_term_conditions_section') === 'course') {
+                $courseInfo = api_get_course_info();
+                if (api_get_setting('load_term_conditions_section') === 'course' && empty($courseInfo)) {
                     $preview = '';
                 }
                 break;

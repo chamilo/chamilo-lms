@@ -309,12 +309,19 @@ if ($form->validate()) {
 
                 $add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
                 $message = $tpl->fetch($add_course_tpl);*/
+                $splash = api_get_setting('course_creation_splash_screen');
+                if ($splash === 'true') {
+                    $url = api_get_path(WEB_CODE_PATH);
+                    $url .= 'course_info/start.php?' . api_get_cidreq_params($course_info['code']);
+                    $url .= '&first=1';
+                    header('Location: ' . $url);
+                    exit;
+                } else {
 
-                $url = api_get_path(WEB_CODE_PATH);
-                $url .= 'course_info/start.php?'.api_get_cidreq_params($course_info['code']);
-                $url .= '&first=1';
-                header('Location: ' . $url);
-                exit;
+                    $url = api_get_path(WEB_COURSE_PATH) . $course_info['directory'] . '/';
+                    header('Location: ' . $url);
+                    exit;
+                }
             } else {
                 $message = Display::return_message(
                     get_lang('CourseCreationFailed'),

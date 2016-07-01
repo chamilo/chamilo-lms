@@ -7804,4 +7804,11 @@ $SrcEmail = "Email";
 $SrcPhone = "Phone";
 $SrcPresential = "Presential";
 $TicketXCreated = "Ticket %s created";
+$ShowLinkTicketNotificationTitle = "Show ticket creation link";
+$ShowLinkTicketNotificationComment = "Show the ticket creation link to users on the right side of the portal";
+$LastSentWorkDate = "Last sent work date";
+$SSOSubclassTitle = "Single Sign On sub-class";
+$SSOSubclassComment = "To enable a Single Sign On method, you will have to create your own sub-class in main/auth/sso/ based on the default class. Indicate here the name of the sub-class. For example, if the file is sso.Drupal.class.php, indicate 'Drupal' in this field.";
+$CourseCreationSplashScreenTitle = "Course creation splash screen";
+$CourseCreationSplashScreenComment = "The course splash screen show a series of suggested options to the teacher when creating a new course. Disable it to let your teachers land directly on the course homepage.";
 ?>

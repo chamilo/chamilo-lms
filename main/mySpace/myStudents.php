@@ -358,6 +358,12 @@ if (!empty($student_id)) {
             Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
     }
 
+    echo Display::url(
+        Display::return_icon('skill-badges.png', get_lang('AssignSkill'), null, ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . 'badge/assign.php?' . http_build_query(['user' => $student_id])
+    );
+
+
     echo '</div>';
 
     // is the user online ?

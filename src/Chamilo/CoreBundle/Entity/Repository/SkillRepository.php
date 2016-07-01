@@ -33,21 +33,21 @@ class SkillRepository extends EntityRepository
             'ChamiloCoreBundle:SkillRelUser',
             'su',
             Join::WITH,
-            's.id = su.skillId'
+            's.id = su.skill'
         )
         ->where(
-            $qb->expr()->eq('su.userId', $user->getId())
+            $qb->expr()->eq('su.user', $user)
         );
 
         if ($course) {
             $qb->andWhere(
-                $qb->expr()->eq('su.courseId', $course->getId())
+                $qb->expr()->eq('su.course', $course)
             );
         }
 
         if ($session) {
             $qb->andWhere(
-                $qb->expr()->eq('su.sessionId', $session->getId())
+                $qb->expr()->eq('su.session', $session)
             );
         }
 

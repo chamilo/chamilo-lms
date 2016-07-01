@@ -5849,14 +5849,14 @@ class Tracking
             return '';
         }
 
-        $filter = ['userId' => $userId];
+        $filter = ['user' => $userId];
 
         if (!empty($courseId)) {
-            $filter['courseId'] = $courseId;
+            $filter['course'] = $courseId;
         }
 
         if (!empty($sessionId)) {
-            $filter['sessionId'] = $sessionId;
+            $filter['session'] = $sessionId;
         }
 
         $em = Database::getManager();
@@ -5883,7 +5883,7 @@ class Tracking
             ';
 
             foreach ($skillsRelUser as $userSkill) {
-                $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill->getSkillId());
+                $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill->getSkill()->getId());
 
                 $html .= '
                                             <li class="thumbnail">

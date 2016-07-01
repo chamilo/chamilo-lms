@@ -4263,6 +4263,10 @@ function api_get_language_info($languageId) {
     $language = Database::getManager()
         ->find('ChamiloCoreBundle:Language', intval($languageId));
 
+    if (!$language) {
+        return [];
+    }
+
     return [
         'id' => $language->getId(),
         'original_name' => $language->getOriginalName(),

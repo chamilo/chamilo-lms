@@ -4,12 +4,10 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\SkillBundle\Entity\Level;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
-use Chamilo\CoreBundle\Entity\Skill;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * SkillRelUser
@@ -34,20 +32,6 @@ class SkillRelUser
      * @ORM\GeneratedValue
      */
     private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
-    private $userId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="skill_id", type="integer", nullable=false)
-     */
-    private $skillId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="achievedSkills", cascade={"persist"})
@@ -75,22 +59,8 @@ class SkillRelUser
     private $assignedBy;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="course_id", type="integer", nullable=false)
-     */
-    private $courseId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    private $sessionId;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="issuedSkills", cascade={"persist"})
-     * @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true)
      */
     private $course;
 
@@ -98,7 +68,7 @@ class SkillRelUser
      * @var Session
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="issuedSkills", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
     private $session;
 
@@ -135,52 +105,6 @@ class SkillRelUser
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-    }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     * @return SkillRelUser
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set skillId
-     *
-     * @param integer $skillId
-     * @return SkillRelUser
-     */
-    public function setSkillId($skillId)
-    {
-        $this->skillId = $skillId;
-
-        return $this;
-    }
-
-    /**
-     * Get skillId
-     *
-     * @return integer
-     */
-    public function getSkillId()
-    {
-        return $this->skillId;
     }
 
     /**
@@ -312,52 +236,6 @@ class SkillRelUser
     public function getAssignedBy()
     {
         return $this->assignedBy;
-    }
-
-    /**
-     * Set courseId
-     *
-     * @param integer $courseId
-     * @return SkillRelUser
-     */
-    public function setCourseId($courseId)
-    {
-        $this->courseId = $courseId;
-
-        return $this;
-    }
-
-    /**
-     * Get courseId
-     *
-     * @return integer
-     */
-    public function getCourseId()
-    {
-        return $this->courseId;
-    }
-
-    /**
-     * Set sessionId
-     *
-     * @param integer $sessionId
-     * @return SkillRelUser
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId
-     *
-     * @return integer
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
     }
 
     /**
@@ -499,9 +377,9 @@ class SkillRelUser
     public function getComments($sortDescByDateTime = false)
     {
         if ($sortDescByDateTime) {
-            $criteria = \Doctrine\Common\Collections\Criteria::create();
+            $criteria = Criteria::create();
             $criteria->orderBy([
-                'feedbackDateTime' => \Doctrine\Common\Collections\Criteria::DESC
+                'feedbackDateTime' => Criteria::DESC
             ]);
 
             return $this->comments->matching($criteria);
@@ -517,7 +395,6 @@ class SkillRelUser
     public function getAverage()
     {
         $sum = 0;
-        $average = 0;
         $countValues = 0;
 
         foreach ($this->comments as $comment) {

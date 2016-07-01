@@ -5671,6 +5671,11 @@ a.sessionView {
 #resource_tab li.lp_resource_element a{
     padding: 5px;
 }
+/* Gravatar */
+#user_image_block img,
+#sn-avatar-one a.expand-image img{
+    width: 120px;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

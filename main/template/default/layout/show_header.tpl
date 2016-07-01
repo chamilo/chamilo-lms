@@ -35,4 +35,6 @@
 {% include template ~ "/layout/page_header.tpl" %}
 <section id="content-section">
     <div class="container">
-        
+        {% block breadcrumb %}
+            {{ breadcrumb }}
+        {% endblock %}

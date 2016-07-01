@@ -149,11 +149,6 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
     #resExercise .ui-selected { background: #F39814; color: white; }
     #resExercise { list-style-type: none; margin: 0; padding: 0; width: 60%; }
     #resExercise li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
-
-    /* Fixes LP toolbar */
-    #resource_tab li a {
-        padding: 5px 4px;
-    }
 </style>
 
 <script>

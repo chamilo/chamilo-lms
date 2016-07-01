@@ -48,14 +48,7 @@ if ($myLP) {
 }
 session_write_close();
 ?>
-<script>
-    $(document).ready(function() {
-        jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer({
-            success: function(player, node) {
-            }
-        });
-    });
-</script>
+
 <span>
     <?php echo !empty($mediaplayer) ? $mediaplayer : '&nbsp;' ?>
 </span>

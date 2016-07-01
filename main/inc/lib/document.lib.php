@@ -3664,7 +3664,7 @@ class DocumentManager
             $return .= '<li class="doc_resource lp_resource_element '.$visibilityClass.' " data_id="' . $documentId . '" data_type="document" title="' . $my_file_title . '" >';
         }
 
-        $return .= '<div class="item_data" style="margin-left:' . ($num  * 18) . 'px;margin-right:5px;">';
+        $return .= '<div class="item_data" style="margin-left:' . ($num  * 5 ) . 'px;margin-right:5px;">';
 
         if ($add_move_button) {
             $return .= '<a class="moved" href="#">';

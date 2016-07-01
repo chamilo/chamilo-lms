@@ -2042,8 +2042,8 @@ class Display
             case 'wav':
                 //no break;
             case 'ogg':
-                $html = '<audio src="' . $params['url'] . '" controls class="skip"></audio>';
-
+                $html = '<audio width="300px" controls src="'.$params['url'].'" >';
+                
                 return $html;
                 break;
         }

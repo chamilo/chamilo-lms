@@ -16,7 +16,10 @@ See https://support.chamilo.org/issues/6976
 #scorm-info.panel-default{
 
 }
-
+.audio-scorm #container{
+    min-height: 45px;
+    margin-bottom: 5px;
+}
 #author_image {
   border: 1px solid #CCCCCC;
   float: left;

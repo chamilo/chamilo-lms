@@ -827,7 +827,7 @@ class IndexManager
     {
         $html = null;
         if (!api_is_anonymous()) {
-            $userPicture = UserManager::getUserPicture(api_get_user_id());
+            $userPicture = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);
             $content = null;
 
             if (api_get_setting('allow_social_tool') == 'true') {

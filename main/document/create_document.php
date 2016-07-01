@@ -30,7 +30,7 @@ $(document).ready(function() {
 
     $("#hide_bar_template").click(function() {
         
-        $("#template_col").toggleClass("hide");
+        $("#expand").toggleClass("hide");
         $("#expand").toggleClass("hide");
         $("#contract").toggleClass("hide");
         

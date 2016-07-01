@@ -9,29 +9,21 @@
         yannik.warnier@beeznest.com
     Version: 1.0
 */
-pre {
-    margin-top:50px !important;
+html{
+    position: relative;
+    min-height: 100%;
 }
-html,body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
+body{
+    margin-bottom: 60px;
 }
-#page-wrap{
-  min-height: 100%;
-  margin-bottom: 0;
+/* Sticky footer style */
+.sticky-footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
 }
-#page-wrap:after{
-  content: "";
-  display: block;
-  clear: both;
-}
-footer {
-  padding-top: 15px;
-}
-footer #footer_right{
-  text-align: right;
-}
+/* End Sticky footer style */
 select {
   width : auto;
 }
@@ -50,6 +42,9 @@ a.thumbnail:hover{
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   text-align: justify;
+}
+#content-section{
+    margin-bottom: 90px;
 }
 .version-checking{
   padding: 10px;
@@ -5917,7 +5912,7 @@ a.sessionView {
 }
 @media (min-width:320px) and (max-width: 479px){
     footer {
-        height: 12em;
+        
         padding-top: 15px;
     }
     footer #footer_right{

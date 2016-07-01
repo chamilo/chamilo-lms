@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default">
+<nav id="menubar" class="navbar navbar-default">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -9,7 +9,6 @@
                 <span class="icon-bar"></span>
             </button>
         </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
                 {% for item in menu %}
@@ -51,6 +50,6 @@
                {% endif %}
             </ul>
             {% endif %}
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+        </div>
+    </div>
 </nav>

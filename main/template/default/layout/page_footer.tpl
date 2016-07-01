@@ -70,7 +70,7 @@
         </div>
     </div>
 </div>
-
+                
 {% include template ~ '/layout/footer.js.tpl' %}
 
 {{ execution_stats }}

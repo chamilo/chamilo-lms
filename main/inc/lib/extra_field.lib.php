@@ -286,6 +286,39 @@ class ExtraField extends Model
     }
 
     /**
+     * Get all the field info for User Tags
+     * @param string $variable
+     *
+     * @return array|bool
+     */
+    public function get_handler_field_info_by_tags($variable)
+    {
+        $variable = Database::escape_string($variable);
+        $sql = "SELECT * FROM {$this->table}
+                WHERE
+                    variable = '$variable' AND
+                    extra_field_type = $this->extraFieldType";
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result, 'ASSOC');
+            $row['display_text'] = ExtraField::translateDisplayName($row['variable'], $row['display_text']);
+
+            // All the tags of the field
+            $sql = "SELECT * FROM $this->table_field_tag
+                    WHERE field_id='".intval($row['id'])."'
+                    ORDER BY id ASC";
+            $result = Database::query($sql);
+            while ($option = Database::fetch_array($result, 'ASSOC')) {
+                $row['options'][$option['id']] = $option;
+            }
+
+            return $row;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * @param int $fieldId
      *
      * @return array|bool

@@ -172,4 +172,62 @@ class UserRepository extends EntityRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * Get the sessions admins for a user
+     * @param \Chamilo\UserBundle\Entity\User $user The user
+     * @return array
+     */
+    public function getSessionAdmins($user)
+    {
+        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder
+            ->distinct()
+            ->innerJoin(
+                'ChamiloCoreBundle:SessionRelUser',
+                'su',
+                Join::WITH,
+                $queryBuilder->expr()->eq('u', 'su.user')
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:SessionRelCourseRelUser',
+                'scu',
+                Join::WITH,
+                $queryBuilder->expr()->eq('su.session', 'scu.session')
+            )
+            ->where(
+                $queryBuilder->expr()->eq('scu.user', $user->getId())
+            )
+            ->andWhere(
+                $queryBuilder->expr()->eq('su.relationType', SESSION_RELATION_TYPE_RRHH)
+            );
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * Get the student bosses for a user
+     * @param User $user The user
+     * @return array
+     */
+    public function getStudentBosses($user)
+    {
+        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder
+            ->distinct()
+            ->innerJoin(
+                'ChamiloCoreBundle:UserRelUser',
+                'uu',
+                Join::WITH,
+                $queryBuilder->expr()->eq('u.id', 'uu.friendUserId')
+            )
+            ->where(
+                $queryBuilder->expr()->eq('uu.relationType', USER_RELATION_TYPE_BOSS)
+            )
+            ->andWhere(
+                $queryBuilder->expr()->eq('uu.userId', $user->getId())
+            );
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

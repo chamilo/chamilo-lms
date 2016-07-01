@@ -1304,9 +1304,13 @@ if (!empty($student_id)) {
         </table>
         </div>
     <?php
-        echo Tracking::displayUserSkills($user_info['user_id'], $courseInfo['id'], $sessionId);
-
     } //end details
+
+    echo Tracking::displayUserSkills(
+        $user_info['user_id'],
+        $courseInfo ? $courseInfo['real_id'] : 0,
+        $sessionId
+    );
 }
 
 if ($export) {

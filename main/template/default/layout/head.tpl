@@ -6,7 +6,6 @@
 <!--[if IE]>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <![endif]-->
-
 {{ prefetch }}
 {{ favico }}
 <link rel="apple-touch-icon" href="{{ _p.web }}apple-touch-icon.png" />
@@ -34,5 +33,4 @@ var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
 
 {{ css_custom_file_to_string }}
 {{ css_style_print }}
-{# Extra header configured in admin section, only shown to non-admins #}
 {{ header_extra_content }}

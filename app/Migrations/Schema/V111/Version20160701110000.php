@@ -8,11 +8,11 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * Class Version20160628220000
- * Integrate the Skype plugin and create new settings current to enable it
+ * Class Version20160701110000
+ * Add option to remove splash screen on course creation
  * @package Application\Migrations\Schema\V111
  */
-class Version20160628220000 extends AbstractMigrationChamilo
+class Version20160701110000 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
@@ -21,18 +21,9 @@ class Version20160628220000 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $this
-            ->connection
-            ->executeQuery("UPDATE c_lp_item SET item_type = 'dir' WHERE item_type = 'dokeos_chapter'");
-        $this
-            ->connection
-            ->executeQuery("UPDATE c_lp_item SET item_type = 'dir' WHERE item_type = 'dokeos_module'");
-        $this
-            ->connection
-            ->executeQuery("UPDATE c_lp_item SET item_type = 'dir' WHERE item_type = 'chapter'");
-        $this
-            ->connection
-            ->executeQuery("UPDATE c_lp_item SET item_type = 'dir' WHERE item_type = 'module'");
+        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_creation_splash_screen',NULL,'radio','Course','true','CourseCreationSplashScreenTitle','CourseCreationSplashScreenComment','',NULL, 1)");
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('course_creation_splash_screen','true','Yes') ");
+        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('course_creation_splash_screen','false','No') ");
     }
 
     /**
@@ -42,6 +33,7 @@ class Version20160628220000 extends AbstractMigrationChamilo
      */
     public function down(Schema $schema)
     {
-
+        $this->addSql("DELETE FROM settings_current WHERE variable = 'course_creation_splash_screen'");
+        $this->addSql("DELETE FROM settings_options WHERE variable = 'course_creation_splash_screen'");
     }
 }

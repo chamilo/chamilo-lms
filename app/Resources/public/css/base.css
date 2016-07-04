@@ -3934,24 +3934,6 @@ i.size-32.icon-new-work{
 .bottom_actions .form-group{
   margin-bottom: 10px;
 }
-.bottom_actions_fixed {
-  position: fixed;
-  z-index: 9999;
-  bottom: 0;
-  left: 0px;
-  margin-bottom: 0px;
-  padding-top: 20px;
-  padding-bottom: 10px;
-  border-top: 1px solid #DCE4EC;
-  background: #ffffff;
-  background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed));
-  background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
-  background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
-  background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
-  background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 );
-}
 .sessions-items{
   list-style: none;
   padding: 0;
@@ -5680,6 +5662,18 @@ a.sessionView {
 footer{
     font-size: 12px;
     padding-top: 10px;
+}
+.bottom_actions_fixed {
+  position: fixed;
+  z-index: 9999;
+  bottom: 0;
+  left: 0px;
+  margin-bottom: 0px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  border-top: 1px solid #DCE4EC;
+  background: #ffffff;
+  width: 100%;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

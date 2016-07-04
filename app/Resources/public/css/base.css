@@ -5675,6 +5675,25 @@ footer{
   background: #ffffff;
   width: 100%;
 }
+#toolshortcuts_horizontal{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+#toolshortcuts_horizontal .items-icon{
+    padding: 0px;
+    display: inline-block;
+}
+#toolshortcuts_horizontal .items-icon img{
+    padding:5px;
+    border-radius:5px;
+    -webkit-box-shadow: 0 1px 3px #C8C8C8;
+    -opera-box-shadow: 0 1px 3px #C8C8C8;
+    -moz-box-shadow: 0 1px 3px #C8C8C8;
+    box-shadow: 0 1px 3px #C8C8C8;
+    border: 1px solid #e6e6e6;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

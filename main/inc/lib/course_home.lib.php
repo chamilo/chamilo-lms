@@ -1218,7 +1218,6 @@ class CourseHome
                 $style_id = "toolshortcuts_vertical";
             }
             $html .= '<div id="'.$style_id.'">';
-
             foreach ($navigation_items as $key => $navigation_item) {
                 if (strpos($navigation_item['link'], 'chat') !== false &&
                     api_get_course_setting('allow_open_chat_window')

@@ -129,14 +129,20 @@ switch ($action) {
             if (isset($result['url'])) {
                 $json['result'] = Display::return_icon(
                     'accept.png',
-                    get_lang('Uploaded')
+                    get_lang('Uploaded'),
+                    [],
+                    ICON_SIZE_TINY
                 );
             } else {
                 $json['result'] = Display::return_icon(
                     'exclamation.png',
-                    get_lang('Error')
+                    get_lang('Error'),
+                    [],
+                    ICON_SIZE_TINY
                 );
             }
+
+            header('Content-Type: application/json');
             echo json_encode($json);
         }
 

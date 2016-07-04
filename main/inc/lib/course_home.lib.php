@@ -1222,21 +1222,23 @@ class CourseHome
                 if (strpos($navigation_item['link'], 'chat') !== false &&
                     api_get_course_setting('allow_open_chat_window')
                 ) {
-                    $html .= '<a href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$navigation_item['target'].'"';
+                    $html .= '<a class="items-icon" href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$navigation_item['target'].'"';
                 } else {
-                    $html .= '<a href="'.$navigation_item['link'].'"';
+                    $html .= '<a class="items-icon" href="'.$navigation_item['link'].'"';
                 }
                 if (strpos(api_get_self(), $navigation_item['link']) !== false) {
                     $html .= ' id="here"';
                 }
                 $html .= ' target="_top" title="'.$navigation_item['name'].'">';
-                $html .= '<img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/>';
+                $html .= Display::return_icon(substr($navigation_item['image'],0,-3)."png", $navigation_item['name'], null, ICON_SIZE_MEDIUM);
+                //$html .= '<img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/>';
                 $html .= '</a> ';
                 if ($orientation == SHORTCUTS_VERTICAL) {
                     $html .= '<br />';
                 }
             }
             $html .= '</div>';
+            
         }
 
         return $html;

@@ -350,11 +350,9 @@ if (api_is_platform_admin()) {
 
     $items[] = array('url' => 'archive_cleanup.php', 'label' => get_lang('ArchiveDirCleanup'));
     $items[] = array('url' => 'resource_sequence.php', 'label' => get_lang('ResourcesSequencing'));
+    $items[] = ['url' => 'email_tester.php', 'label' => get_lang('EMailTester')];
 
-    if (isset($_configuration['db_manager_enabled']) &&
-        $_configuration['db_manager_enabled'] == true &&
-        api_is_global_platform_admin()
-    ) {
+    if (api_get_configuration_value('db_manager_enabled') == true && api_is_global_platform_admin()) {
         $host = $_configuration['db_host'];
         $username = $_configuration['db_user'];
         $databaseName = $_configuration['main_database'];

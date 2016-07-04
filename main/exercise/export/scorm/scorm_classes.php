@@ -98,6 +98,15 @@ class ScormQuestion extends Question
 				$this->answer = new ScormAnswerHotspot($this->id);
 				$this->answer->questionJSId = $this->js_id;
 				break;
+			// not supported
+			case UNIQUE_ANSWER_NO_OPTION:
+			case MULTIPLE_ANSWER_TRUE_FALSE:
+			case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
+			case UNIQUE_ANSWER_IMAGE:
+			case CALCULATED_ANSWER:
+				$this->answer = new ScormAnswerMultipleChoice($this->id);
+				$this->answer->questionJSId = $this->js_id;
+				break;
 			default:
 				$this->answer = new stdClass();
 				$this->answer->questionJSId = $this->js_id;
@@ -112,13 +121,15 @@ class ScormQuestion extends Question
 		$html = $this->getQuestionHTML();
 		$js = $this->getQuestionJS();
 
-		if (is_object($this->answer)) {
+		if (is_object($this->answer) && $this->answer instanceof Answer) {
 			list($js2, $html2) = $this->answer->export();
 			$js .= $js2;
 			$html .= $html2;
+		} else {
+			throw new \Exception('Question not supported. Exercise: '.$this->selectTitle());
 		}
 
-		return array($js,$html);
+		return array($js, $html);
 	}
 
 	function createAnswersForm($form)

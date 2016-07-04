@@ -165,7 +165,7 @@ if (!$inATest) {
         //$questionList = $objExercise->getQuestionListWithMediasUncompressed();
 
         // Show all questions no matter the category settings.
-        $tempCategoryOrder = $objExercise->specialCategoryOrders;
+        $tempCategoryOrder = $objExercise->specialCategoryOrders ? $objExercise->specialCategoryOrders : false;
         $objExercise->specialCategoryOrders = false;
         $questionList = $objExercise->selectQuestionList(true);
         $objExercise->specialCategoryOrders = $tempCategoryOrder;

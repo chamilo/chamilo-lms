@@ -33,7 +33,7 @@
                     </div>
                     {% endif %}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 text-right">
                     {% if administrator_name is not null %}
                     <div class="administrator-name">
                         {{ administrator_name }}

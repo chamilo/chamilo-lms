@@ -1569,7 +1569,7 @@ class UserManager
             case USER_IMAGE_SIZE_ORIGINAL:
                 $pictureAnonymousSize = '128';
                 $realSizeName = '';
-                $gravatarSize = 108;
+                $gravatarSize = 200;
                 break;
             case USER_IMAGE_SIZE_BIG:
                 $pictureAnonymousSize = '128';
@@ -2301,6 +2301,22 @@ class UserManager
     }
 
     /**
+     * Get the extra field information for user tag (the options as well)
+     * @param  int     $variable The name of the field we want to know everything about
+     * @return array   Array containing all the information about the extra profile field
+     * (first level of array contains field details, then 'options' sub-array contains options details,
+     * as returned by the database)
+     * @author José Loguercio
+     * @since v1.11.0
+     */
+    public static function get_extra_field_tags_information_by_name($variable)
+    {
+        $extraField = new ExtraField('user');
+
+        return $extraField->get_handler_field_info_by_tags($variable);
+    }
+
+    /**
      * @param string $type
      *
      * @return array
@@ -2365,6 +2381,26 @@ class UserManager
     }
 
     /**
+     * Get extra user data by tags value
+     *
+     * @param int $fieldId the ID of the field we want to know everything of
+     * @param string $tag the tag name for search
+     * @return array with extra data info of a user
+     * @author José Loguercio
+     * @since v1.11.0
+     */
+    public static function get_extra_user_data_by_tags($fieldId, $tag)
+    {
+        $extraField = new ExtraField('user');
+        $result = $extraField->getAllUserPerTag($fieldId, $tag);
+        $array = [];
+        foreach ($result as $index => $user) {
+            $array[] = $user['user_id'];
+        }
+        return $array;
+    }
+
+    /**
      * Get extra user data by field variable
      * @param string    field variable
      * @return array    data
@@ -2385,6 +2421,20 @@ class UserManager
         }
 
         return $data;
+    }
+
+    /**
+     * Get extra user data tags by field variable
+     *
+     * @param string    field variable
+     * @return array    data
+     */
+    public static function get_extra_user_data_for_tags($field_variable)
+    {
+        $extra_information_by_variable = self::get_extra_field_tags_information_by_name($field_variable);
+
+
+        return $extra_information_by_variable;
     }
 
     /**

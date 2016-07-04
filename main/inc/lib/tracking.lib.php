@@ -5834,8 +5834,8 @@ class Tracking
     /**
      * Get the HTML code for show a block with the achieved user skill on course/session
      * @param int $userId
-     * @param int $courseId
-     * @param int $sessionId
+     * @param int $courseId Optional.
+     * @param int $sessionId Optional.
      * @return string
      */
     public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0)
@@ -5848,15 +5848,10 @@ class Tracking
             return '';
         }
 
-        $filter = ['userId' => $userId];
+        $filter = ['user' => $userId];
 
-        if (!empty($courseId)) {
-            $filter['courseId'] = $courseId;
-        }
-
-        if (!empty($sessionId)) {
-            $filter['sessionId'] = $sessionId;
-        }
+        $filter['course'] = $courseId ?: null;
+        $filter['session'] = $sessionId ?: null;
 
         $em = Database::getManager();
 
@@ -5882,11 +5877,11 @@ class Tracking
             ';
 
             foreach ($skillsRelUser as $userSkill) {
-                $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill->getSkillId());
+                $skill = $userSkill->getSkill();
 
                 $html .= '
                                             <li class="thumbnail">
-                                                <a href="' . api_get_path(WEB_PATH) . 'badge/' . $skill->getId() . '/user/' . $userId . '" target="_blank">
+                                                <a href="' . api_get_path(WEB_PATH) . 'badge/' . $userSkill->getId() . '/user/' . $userId . '" target="_blank">
                                                     <img class="img-responsive" title="' . $skill->getName() . '" src="' . $skill->getWebIconPath() . '" width="64" height="64">
                                                     <div class="caption">
                                                         <p class="text-center">' . $skill->getName() . '</p>

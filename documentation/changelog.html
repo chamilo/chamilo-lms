@@ -47,9 +47,51 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
+    <a name="1.11.0"></a>
+
+    <h1>Chamilo 1.11.0 - tobenamed, xxth of July 2016</h1>
+    <h3>Release notes - summary</h3>
+    <p>Chamilo 1.11.0 is a major release of the 1.11.x branch. It is meant as a transition between 1.10 and 2.0 versions.</p>
+    <h3>Release name</h3>
+    <p><a href="http://www.openstreetmap.org/#map="></a> </p>
+    <h3>Security fixes</h3>
+    <p>None in this version.</p>
+    <h3>Possibly breaking changes</h3>
+    <p>None in this version.</p>
+    <h3>Notable new Features</h3>
+    <h4>For end-users, teachers and Chamilo admins</h4>
+    <ul>
+    </ul>
+    <h4>For developers and sysadmins</h4>
+    <ul>
+    </ul>
+    <h3>Stylesheets and theming</h3>
+    <ul>
+    </ul>
+    <h3>Files structure</h3>
+    <ul>
+        <li>The main/exercice/ folder has been renamed main/exercise/</li>
+        <li>The main/newscorm/ folder has been renamed main/lp/ (for Learning Path)</li>
+    </ul>
+    <h3>Web services</h3>
+    <ul>
+    </ul>
+    <h3>Removals</h3>
+    <ul>
+    </ul>
+    <h3>Known issues</h3>
+    <ul>
+        <li>IMS/QTI import/export has issues</li>
+        <li>In Internet Explorer 9, learning paths might not show other pages than the first to be opened. We lacked computers with IE9 at the time of release of 1.10.4. Guaranteeing IE9 support will likely require additional services. See <a href="https://support.chamilo.org/issues/8075">the corresponding bug report</a></li>
+        <li>The text-to-speech converter based on Google now requires an API key</li>
+        <li>The Xapian search module is broken. We'll fix that soon, but not a lot of people use it</li>
+        <li>Encoding issues when importing accentuated characters from MS-Office-generated .xlsx files (for example when importing exercises). This isn't really a Chamilo issue, but since some users might have issues with that, we've decided to report it to avoid any surprise.</li>
+    </ul>
+
+
     <a name="1.10.6"></a>
 
-    <h1>Chamilo 1.10.6 - Zacatecas, 23rd of May 2016</h1>
+    <h1>Chamilo 1.10.6 - Zacatecas, 24th of May 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.10.6 is a minor, bugfix release of the 1.10.x branch, with a few new features and bugfixes on top of 1.10.4.</p>
     <h3>Release name</h3>
@@ -61,7 +103,6 @@
     <h3>Notable new Features</h3>
     <h4>For end-users, teachers and Chamilo admins</h4>
     <ul>
-        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/700d3516f86c441460f30d5feb64916465d1d545">700d3516</a> - <a href="https://task.beeznest.com/issues/11186">BT#11186</a>) Fix random questions</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/dd051695d71cb7e69969d6b3644a5b1ee79bedfb">dd051695</a>) Add option to show right answers only during the last exercise attempt (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT)</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1c76446ff2967542afc9f1ec963f6444593b3c5e">1c76446f</a>) Add course setting "bbb_enable_conference_in_groups" to allow for conferences through course groups (requires the BigBlueButton plugin)</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/88842fd706130a593d2a5e95cd37784a4d0de389">88842fd7</a> - <a href="https://task.beeznest.com/issues/11141">BT#11141</a>) Allow platform admins to manage all sessions</li>
@@ -86,6 +127,21 @@
     </ul>
     <h3>Improvements (minor features) and debug</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/700d3516f86c441460f30d5feb64916465d1d545">700d3516</a> - <a href="https://task.beeznest.com/issues/11186">BT#11186</a>) Fix random questions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c7dc81a679f944f868c0243b8bb66a545cd6d783">c7dc81a6</a> - <a href="https://task.beeznest.com/issues/11202">BT#11202</a>) Fix option  RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT BT#11202</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/397c9dcfd1bccc648b78ba423b132ccacc5aae2a">397c9dcf</a>) Update version to 1.10.6 in main/install/version.php</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0ad4eaee3cfa47acbc8bbab2bf70f55d92ed49bc">0ad4eaee</a> - <a href="https://support.chamilo.org/issues/1170">#1170</a>) Scrutinizer Auto-Fixes (#1170)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/8f76ee8d0cf33a8c52313b19067c2d7566e823e6">8f76ee8d</a> - <a href="https://support.chamilo.org/issues/8237">#8237</a>) Save calculated answer without correct answer</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6b3e77efabf6750a7aeec266eb7ad1fa8b3fbed0">6b3e77ef</a> - <a href="https://support.chamilo.org/issues/8237">#8237</a>) Fix read question of calculated answer type</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/aafde67b9c4e1dca98e2064bd3d4774979e045ca">aafde67b</a> - <a href="https://support.chamilo.org/issues/8237">#8237</a>) Order code + showw CALCULATED_ANSWER questions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/dfaa4f873da912c58dbc9b8a588b56e3c83d159d">dfaa4f87</a> - <a href="https://task.beeznest.com/issues/11202">BT#11202</a>) Fix hotspot question result by a new parameter</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/73a570bfd0163e84361856f78dec57a2d9ea953e">73a570bf</a>) Update gitlog to better ignore language terms messages</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a82e76b76648e86490c2f6481e1febd0ed7ea6b8">a82e76b7</a> - <a href="https://support.chamilo.org/issues/8237">#8237</a>) Revert "Fix CALCULATED_ANSWER</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d3a5c1e8db761f738dcfe98181a473a87084759e">d3a5c1e8</a> - <a href="https://support.chamilo.org/issues/8237">#8237</a>) Revert "Fix questions list with calculated questions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ee763e840555125e82549213e040178961934525">ee763e84</a> - <a href="https://support.chamilo.org/issues/8237">#8237</a>) Revert "Fix showing resuls for calculated answers</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ee874accf2a186902a8815a5e45244bf381f2b98">ee874acc</a> - <a href="https://support.chamilo.org/issues/8237">#8237</a>) Revert "Fix questions list for calculated answers</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9cb2a9214cba10f5a3b40465211bc084d7e4bf69">9cb2a921</a> - <a href="https://support.chamilo.org/issues/8237">#8237</a>) Revert "Fix conflict</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6096b797f6c210fa8444d34ff7a3d95487fd4d63">6096b797</a> - <a href="https://support.chamilo.org/issues/8237">#8237</a>) Revert "Save the calculated answer without whished anser</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6b51fae1a37d3c7b3f7c656e3631cb2eb50d028e">6b51fae1</a> - <a href="https://task.beeznest.com/issues/10052">BT#10052</a>) Add function needed for exercises categories</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1eac339bacb87237413064b9f20f6047d4093dad">1eac339b</a>) Fix the update of API keys when no key exists previously (update_api_key())</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f40efabc34cbffb840a47f44495e0fa59fc476e9">f40efabc</a>) Fix - Enable/disable tickets plugin from menu, display blank screen</li>

@@ -24,12 +24,13 @@
                                         </div>
                                     {% endif %}
                                 </div>
-
+                                
                                 {% if show_audio_player %}
-                                    <div id="lp_media_file">
+                                    <div id="lp_media_file" class="audio-scorm">
                                         {{ media_player }}
                                     </div>
                                 {% endif %}
+                                
 
                                 {% if gamification_mode == 1 %}
                                     <hr>
@@ -214,7 +215,7 @@
                 $('.lp-view-tabs').fadeIn();
             });
 
-            loadForumThead({{ lp_id }}, {{ lp_current_item_id }});
+            loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
             checkCurrentItemPosition({{ lp_current_item_id }});
 
             {% if glossary_extra_tools in glossary_tool_availables %}

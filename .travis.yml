@@ -12,6 +12,18 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq mysql-server
   - sudo apt-get install -qq apache2 libapache2-mod-fastcgi
+  # enable php-fpm
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "memory_limit = 2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "phar.readonly = 0" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "date.timezone = Europe/Paris" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  # configure apache virtual hosts
+  - sudo cp -f tests/travis-apache /etc/apache2/sites-available/default
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+  - sudo service apache2 restart
   # Install additional PHP packages (check http://docs.travis-ci.com/user/ci-environment/#CI-environment-OS
   # for pre-installed packages)
   #- sudo apt-get install -qq php5-imagick
@@ -19,12 +31,12 @@ before_install:
   # php is compiled with --enable-fpm, so no install of FPM is needed.
   # However, not installing it generates errors with service php5-fpm restart
   # further down (need to use php-fpm without 5)
-  - sudo apt-get install -qq php5-cli php5-fpm
+  #- sudo apt-get install -qq php5-cli php5-fpm
 
 before_script:
-  - php5 -v
-  - php5 -m
-  - composer self-update
+  #- which composer
+  #- php -d memory_limit=2G /usr/bin/composer update
+  #- php -d memory_limit=2G /home/travis/.phpenv/shims/composer update
   # Previously, fxp/composer-asset-plugin was required but was causing a lot of trouble updating. Now it's disabled.
   #- composer global require "fxp/composer-asset-plugin:1.0.3"
   # You can either use the composer install method and face the Github limit
@@ -43,23 +55,14 @@ before_script:
   # Continue...
   - phpenv config-add tests/travis-php-config.ini
   # enable php-fpm
-  - sudo /etc/init.d/php5-fpm stop
-  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-  - sudo a2enmod rewrite actions fastcgi alias
-  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
   # configure apache virtual hosts
-  - sudo cp -f tests/travis-apache /etc/apache2/sites-available/default
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
-  - sudo service apache2 restart
-  - sudo service php5-fpm restart
-  - php5 -v
+  - php -v
   # install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash
   - cd chash
   - composer install
   - composer update
-  - php5 -d phar.readonly=0 createPhar.php
+  - php -d phar.readonly=0 createPhar.php
   - chmod +x chash.phar
   - sudo mv chash.phar /usr/local/bin/chash
   #- cd ..
@@ -74,7 +77,7 @@ before_script:
   - cd /home/travis/build/chamilo/chamilo-lms
   # There's an issue with Chash, starting in version 1.10, whereby PHP CLI on Travis-ci is PHP5.3, whatever the version you ask for.
   # This effectively breaks the installer and renders these tests useless. We are looking for a solution (for example using containers)
-  - sudo chash chash:chamilo_install --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="mysqlnd" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.x
+  - sudo chash chash:chamilo_install --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.x
 
 script:
   # - phpunit -c tests/phpunit

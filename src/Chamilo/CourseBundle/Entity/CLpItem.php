@@ -198,9 +198,9 @@ class CLpItem
     private $prerequisiteMaxScore;
 
     /**
-     * Constructor
+     * CLpItem constructor.
      */
-    public function __constructor()
+    public function __construct()
     {
         $this->maxScore = 100;
     }

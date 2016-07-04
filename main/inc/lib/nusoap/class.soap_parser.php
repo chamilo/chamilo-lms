@@ -26,7 +26,7 @@ class nusoap_parser extends nusoap_base
 	var $default_namespace = '';
 	var $namespaces = array();
 	var $message = array();
-    var $parent = '';
+    var $parent;
 	var $fault = false;
 	var $fault_code = '';
 	var $fault_str = '';
@@ -51,7 +51,8 @@ class nusoap_parser extends nusoap_base
 	* @param    string $xml SOAP message
 	* @param    string $encoding character encoding scheme of message
 	* @param    string $method method for which XML is parsed (unused?)
-	* @param    string $decode_utf8 whether to decode UTF-8 to ISO-8859-1
+	* @param    bool $decode_utf8 whether to decode UTF-8 to ISO-8859-1
+	* @return void|bool
 	* @access   public
 	*/
 	function nusoap_parser($xml,$encoding='UTF-8',$method='',$decode_utf8=true){
@@ -74,7 +75,7 @@ class nusoap_parser extends nusoap_base
 						$this->debug($err);
 						if ($encoding != 'ISO-8859-1' || strtoupper($xml_encoding) != 'UTF-8') {
 							$this->setError($err);
-							return;
+							return false;
 						}
 						// when HTTP says ISO-8859-1 (the default) and XML says UTF-8 (the typical), assume the other endpoint is just sloppy and proceed
 					} else {

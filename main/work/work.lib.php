@@ -117,66 +117,6 @@ function two_digits($number)
 }
 
 /**
- * Converts 2008-10-06 12:45:00 to -> array('prefix' => array(year'=>2008, 'month'=>10, etc...)
- * @param string
- * @param string
- * @param array
- */
-function convert_date_to_array($date, $group)
-{
-    $parts = explode(' ', $date);
-    $date_parts = explode('-', $parts[0]);
-    $date_parts_tmp = array();
-    foreach ($date_parts as $item) {
-        $date_parts_tmp[] = intval($item);
-    }
-
-    $time_parts = explode(':', $parts[1]);
-    $time_parts_tmp = array();
-    foreach ($time_parts as $item) {
-        $time_parts_tmp[] = intval($item);
-    }
-    list($data[$group]['year'], $data[$group]['month'], $data[$group]['day']) = $date_parts_tmp;
-    list($data[$group]['hour'], $data[$group]['minute']) = $time_parts_tmp;
-    return $data;
-}
-
-/**
- * get date from a group of date
- */
-function get_date_from_group($group)
-{
-    return
-        $_POST[$group]['year'].'-'.
-        two_digits($_POST[$group]['month']).'-'.
-        two_digits($_POST[$group]['day']).' '.
-        two_digits($_POST[$group]['hour']).':'.
-        two_digits($_POST[$group]['minute']).':00';
-}
-
-/**
- * Create a group of select from a date
- * @param FormValidator $form
- * @param string $prefix
- * @return array
- */
-function create_group_date_select($form, $prefix = '')
-{
-    $minute = range(10, 59);
-    $d_year = date('Y');
-    array_unshift($minute, '00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
-
-    $group_name = array(
-        $form->createElement('select', $prefix.'day', '', array_combine(range(1, 31), range(1, 31))),
-        $form->createElement('select', $prefix.'month', '', array_combine(range(1, 12), api_get_months_long())),
-        $form->createElement('select', $prefix.'year', '', array($d_year => $d_year, $d_year + 1 => $d_year + 1)),
-        $form->createElement('select', $prefix.'hour', '', array_combine(range(0, 23), range(0, 23))),
-        $form->createElement('select', $prefix.'minute', '', $minute)
-    );
-    return $group_name;
-}
-
-/**
  * @param string $path
  * @param int $courseId
  *
@@ -331,7 +271,7 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null)
     $group_id = api_get_group_id();
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-    $linkInfo = GradebookUtils::is_resource_in_course_gradebook(
+    $linkInfo = GradebookUtils::isResourceInCourseGradebook(
         api_get_course_id(),
         3,
         $id,
@@ -840,7 +780,7 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND publication_id = $id";
             Database::query($sql);
 
-            $link_info = GradebookUtils::is_resource_in_course_gradebook(
+            $link_info = GradebookUtils::isResourceInCourseGradebook(
                 api_get_course_id(),
                 3,
                 $id,
@@ -1499,6 +1439,7 @@ function getWorkListTeacher(
                     $where_condition
                 ORDER BY $column $direction
                 LIMIT $start, $limit";
+
         $result = Database::query($sql);
 
         if ($getCount) {
@@ -1997,7 +1938,6 @@ function get_work_user_list(
             $work['qualification_score'] = $work['qualification'];
 
             $add_string = '';
-
             $time_expires = '';
             if (!empty($work_assignment['expires_on'])) {
                 $time_expires = api_strtotime(
@@ -2046,10 +1986,10 @@ function get_work_user_list(
                 $count = getWorkCommentCount($item_id, $course_info);
                 if (!is_null($count) && !empty($count)) {
                     if ($qualification_exists) {
-                        $feedback .= "<br />";
+                        $feedback .= ' ';
                     }
                     $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::label($count.' '.get_lang('Feedback'), 'info').'</a> ';
+                            $count . ' ' . Display::returnFontAwesomeIcon('comments-o') . '</a> ';
                 }
 
                 $work['qualification'] = $qualification_string.$feedback;
@@ -2057,9 +1997,10 @@ function get_work_user_list(
 
                 // Date.
                 $work_date = api_convert_and_format_date($work['sent_date']);
+                $date = date_to_str_ago($work['sent_date']). ' ' . $add_string . ' ' . $work_date;
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="date-time">' . date_to_str_ago($work['sent_date']). ' ' . $add_string . ' ' . $work_date . '</div>';
+                $work['sent_date'] = '<div class="text-center" title="'.$date.'">' . $work['sent_date'] . '</div>';
 
                 // Actions.
                 $correction = '';
@@ -2080,50 +2021,50 @@ function get_work_user_list(
                         $action .=  '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
-
+                    $loadingText = get_lang('Loading');
+                    $uploadedText = get_lang('Uploaded');
+                    $failsUploadText = get_lang('UplNoFileUploaded');
+                    $failsUploadIcon = Display::return_icon('closed-circle.png', '', [], ICON_SIZE_TINY);
                     $correction = '
                         <form
                         id="file_upload_'.$item_id.'"
-                        class="work_correction_file_upload file_upload_small"
+                        class="work_correction_file_upload file_upload_small fileinput-button"
                         action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
                         >
-                        <div class="button-load">
+                        <div id="progress_'.$item_id.'" class="text-center button-load">
                             '.get_lang('ClickOrDropOneFileHere').'
+                            '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
                         </div>
-                        <input type="file" name="file" multiple>
-                        <button type="submit"></button>
+
+                        <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
                         </form>
                     ';
 
-                    $correction .= "
-                        <script>
-                        $(document).ready(function() {
-                            $('#file_upload_".$item_id."').fileupload({
-                                uploadTable: $('.files'),
-                                downloadTable: $('.files'),
-                                buildUploadRow: function (files, index) {
-                                    $('.files').show();
-                                    return
-                                        $('<tr><td>' + files[index].name + '<\/td>' +
-                                        '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
-                                        '<td class=\"file_upload_cancel\">' +
-                                        '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' +
-                                        '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
-                                        '<\/td><\/tr>');
-                                },
-                                buildDownloadRow: function (file) {
-                                    return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
+                    $correction .= "<script>
+                    $(document).ready(function() {
+                        $('#file_upload_".$item_id."').fileupload({
+                            add: function (e, data) {
+                                $('#progress_$item_id').html();
+                                $('#file_$item_id').remove();
+                                data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
+                                data.submit();
+                            },
+                            done: function (e, data) {
+                                if (data._response.result.name) {
+                                    $('#progress_$item_id').html('$uploadedText '+data._response.result.result+'<br />'+data._response.result.name);
+                                } else {
+                                    $('#progress_$item_id').html('$failsUploadText $failsUploadIcon');
                                 }
-                            });
+                            }
                         });
-                        </script>
-                    ";
+                    });
+                    </script>";
 
                     if ($locked) {
                         if ($qualification_exists) {
                             $action .= Display::return_icon('rate_work_na.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL);
                         } else {
-                            $action .= Display::return_icon('edit_na.png', get_lang('Comment'),array(), ICON_SIZE_SMALL);
+                            $action .= Display::return_icon('edit_na.png', get_lang('Comment'), array(), ICON_SIZE_SMALL);
                         }
                     } else {
                         if ($qualification_exists) {
@@ -2160,22 +2101,22 @@ function get_work_user_list(
                     }
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
+                        Display::return_icon('default.png', get_lang('View'), array(), ICON_SIZE_SMALL).'</a>';
 
                     if (api_get_course_setting('student_delete_own_publication') == 1) {
                         if (api_is_allowed_to_session_edit(false, true)) {
                             $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
-                                Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
+                                Display::return_icon('edit.png', get_lang('Comment'), array(), ICON_SIZE_SMALL).'</a>';
                         }
                         $action .= ' <a href="'.$url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
                             Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
+                        $action .= Display::return_icon('edit_na.png', get_lang('Modify'), array(), ICON_SIZE_SMALL);
                     }
                 } else {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
-                    $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
+                        Display::return_icon('default.png', get_lang('View'), array(), ICON_SIZE_SMALL).'</a>';
+                    $action .= Display::return_icon('edit_na.png', get_lang('Modify'), array(), ICON_SIZE_SMALL);
                 }
 
                 // Status.
@@ -2315,77 +2256,6 @@ function is_work_exist_by_url($url)
     } else {
         return false;
     }
-}
-
-/**
- * @param $name
- * @param $values
- * @param string $checked
- * @return string
- */
-function make_select($name, $values, $checked = '')
-{
-    $output = '<select name="'.$name.'" id="'.$name.'">';
-    foreach ($values as $key => $value) {
-        $output .= '<option value="'.$key.'" '.(($checked==$key) ? 'selected="selected"' : '').'>'.$value.'</option>';
-    }
-    $output .= '</select>';
-    return $output;
-}
-
-/**
- * @param $name
- * @param string $checked
- * @param null $label
- * @return string
- */
-function make_checkbox($name, $checked = '', $label = null)
-{
-    $check = '<input id ="'.$name.'" type="checkbox" value="1" name="'.$name.'" '.((!empty($checked))?'checked="checked"':'').'/>';
-    if (!empty($label)) {
-        $check .="<label for ='$name'>$label</label>";
-    }
-    return $check;
-}
-
-/**
- * @param $prefix
- * @param string $default
- * @return string
- */
-function draw_date_picker($prefix, $default = '')
-{
-    if (empty($default)) {
-        $default = api_get_local_time();
-    }
-    $parts = explode(' ', $default);
-    list($d_year, $d_month, $d_day) = explode('-', $parts[0]);
-    list($d_hour, $d_minute) = explode(':', $parts[1]);
-
-    $minute = range(10, 59);
-    array_unshift($minute, '00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
-    $date_form = make_select($prefix.'_day', array_combine(range(1, 31), range(1, 31)), $d_day);
-    $date_form .= make_select($prefix.'_month', array_combine(range(1, 12), api_get_months_long()), $d_month);
-    $date_form .= make_select($prefix.'_year', array($d_year => $d_year, $d_year + 1 => $d_year + 1), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
-    $date_form .= make_select($prefix.'_hour', array_combine(range(0, 23), range(0, 23)), $d_hour).' : ';
-    $date_form .= make_select($prefix.'_minute', $minute, $d_minute);
-    return $date_form;
-}
-
-/**
- * @param string $prefix
- * @param array of values
- * @return string
- *
- */
-function get_date_from_select($prefix, $array = array())
-{
-    return
-        $array[$prefix]['year'].'-'.
-        two_digits($array[$prefix]['month']).'-'.
-        two_digits($array[$prefix]['day']).' '.
-        two_digits($array[$prefix]['hour']).':'.
-        two_digits($array[$prefix]['minute']).':00';
 }
 
 /**
@@ -3104,12 +2974,7 @@ function getLastWorkStudentFromParent(
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
         $comment = Database::fetch_array($result, 'ASSOC');
-        /*if (!empty($comment)) {
-            $comment['assignment'] = get_work_assignment_by_id(
-                $comment['id'],
-                $courseInfo['real_id']
-            );
-        }*/
+
         return $comment;
     }
 
@@ -3156,12 +3021,7 @@ function getLastWorkStudentFromParentByUser(
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
         $work = Database::fetch_array($result, 'ASSOC');
-        /*if (!empty($comment)) {
-            $comment['assignment'] = get_work_assignment_by_id(
-                $comment['id'],
-                $courseInfo['real_id']
-            );
-        }*/
+
         return $work;
     }
 
@@ -3311,9 +3171,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         $workParent = get_work_data_by_id($work['parent_id']);
         if (!empty($workParent)) {
             $uploadDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work'.$workParent['url'];
-            $newFileName = 'comment_'.$commentId.'_'.php2phps(
-                    api_replace_dangerous_char($fileData['name'])
-                );
+            $newFileName = 'comment_'.$commentId.'_'.php2phps(api_replace_dangerous_char($fileData['name']));
             $newFilePath = $uploadDir.'/'.$newFileName;
             $result = move_uploaded_file($fileData['tmp_name'], $newFilePath);
             if ($result) {
@@ -3370,8 +3228,8 @@ function getWorkDateValidationStatus($homework)
             $time_now = time();
 
             if (!empty($homework['expires_on'])) {
-                $time_expires   = api_strtotime($homework['expires_on'], 'UTC');
-                $difference     = $time_expires - $time_now;
+                $time_expires = api_strtotime($homework['expires_on'], 'UTC');
+                $difference = $time_expires - $time_now;
                 if ($difference < 0) {
                     $has_expired = true;
                 }
@@ -3489,7 +3347,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
             'error' => Display:: return_message(
                 get_lang('UplUnableToSaveFileFilteredExtension'),
                 'error'
-            ),
+            )
         );
     }
 
@@ -3515,7 +3373,6 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     }
 
     $curdirpath = basename($my_folder_data['url']);
-
     // If we come from the group tools the groupid will be saved in $work_table
     if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
         $result = move_uploaded_file(
@@ -3534,6 +3391,8 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     $url = null;
     if ($result) {
         $url = 'work/'.$curdirpath.'/'.$new_file_name;
+    } else {
+        return false;
     }
 
     return array(
@@ -3670,6 +3529,9 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
 
     if ($values['contains_file']) {
         $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+        if (!$result) {
+            return false;
+        }
         if (isset($result['error'])) {
             $message = $result['error'];
             $saveWork = false;
@@ -4012,7 +3874,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
     if (!empty($params['category_id'])) {
 
-        $link_info = GradebookUtils::is_resource_in_course_gradebook(
+        $link_info = GradebookUtils::isResourceInCourseGradebook(
             $courseInfo['code'],
             LINK_STUDENTPUBLICATION,
             $workId,
@@ -4585,6 +4447,7 @@ function getWorkUserListData(
             );
         }
     }
+
     return $results;
 }
 
@@ -4768,13 +4631,11 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
                 foreach ($workPerUser as $work) {
                     $work = $work['work'];
                     foreach ($work->user_results as $userResult) {
-                        //var_dump($userResult);exit;
                         $content .= $userResult['title'];
                         // No need to use api_get_local_time()
                         $content .= $userResult['sent_date'];
                         $content .= $userResult['qualification'];
                         $content .= $userResult['description'];
-                        //$content .= getWorkComments($userResult);
                     }
                 }
 

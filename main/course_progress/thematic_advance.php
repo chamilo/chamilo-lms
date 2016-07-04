@@ -11,10 +11,10 @@
 // protect a course script
 api_protect_course_script(true);
 
-if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
+if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
 
     $header_form = get_lang('NewThematicAdvance');
-    if ($action == 'thematic_advance_edit') {
+    if ($action === 'thematic_advance_edit') {
         $header_form = get_lang('EditThematicAdvance');
     }
 
@@ -25,17 +25,17 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         'index.php?action=thematic_advance_list&thematic_id='.$thematic_id.'&'.api_get_cidreq(
         )
     );
-    $form->addElement('header',  $header_form);
+    $form->addElement('header', $header_form);
     //$form->addElement('hidden', 'thematic_advance_token',$token);
     $form->addElement('hidden', 'action', $action);
 
     if (!empty($thematic_advance_id)) {
-        $form->addElement('hidden', 'thematic_advance_id',$thematic_advance_id);
+        $form->addElement('hidden', 'thematic_advance_id', $thematic_advance_id);
     }
     if (!empty($thematic_id)) {
-        $form->addElement('hidden', 'thematic_id',$thematic_id);
+        $form->addElement('hidden', 'thematic_id', $thematic_id);
     }
-
+    
     $radios = array();
     $radios[] = $form->createElement(
         'radio',
@@ -80,14 +80,30 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     }
 
     if (count($attendance_select) > 1) {
-        $form->addElement('select', 'attendance_select', get_lang('Attendances'), $attendance_select, array('id' => 'id_attendance_select', 'onchange' => 'datetime_by_attendance(this.value)'));
+        $form->addElement(
+            'select',
+            'attendance_select',
+            get_lang('Attendances'),
+            $attendance_select,
+            array('id' => 'id_attendance_select', 'onchange' => 'datetime_by_attendance(this.value)')
+        );
     } else {
-        $form->addElement('label', get_lang('Attendances'), '<strong><em>'.get_lang('ThereAreNoAttendancesInsideCourse').'</em></strong>');
+        $form->addElement(
+            'label',
+            get_lang('Attendances'),
+            '<strong><em>'.get_lang('ThereAreNoAttendancesInsideCourse').'</em></strong>'
+        );
     }
 
     $form->addElement('html', '<div id="div_datetime_attendance">');
     if (!empty($calendar_select)) {
-        $form->addElement('select', 'start_date_by_attendance', get_lang('StartDate'), $calendar_select, array('id'=>'start_date_select_calendar'));
+        $form->addElement(
+            'select',
+            'start_date_by_attendance',
+            get_lang('StartDate'),
+            $calendar_select,
+            array('id' => 'start_date_select_calendar')
+        );
     }
     $form->addElement('html', '</div>');
     $form->addElement('html', '</div>');

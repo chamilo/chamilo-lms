@@ -29,28 +29,21 @@ if (api_is_allowed_to_edit(null, true)) {
         $msgDestroy = get_lang('DelLk').'<br />';
         $msgDestroy .= '<a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;';
         $msgDestroy .= '<a href="'.api_get_self().'?destroy=yes&amp;id='.$id.'">'.get_lang('Yes').'</a>';
-        $show_message .= Display :: return_message($msgDestroy, 'confirmation',false);
-    }
-
-    /*
-     * Process hiding a tools from available tools.
-     * visibility=2 are only view  by Dokeos Administrator (visibility 0,1->2)
-     */
-
-    elseif ($_GET['destroy']) {
+        $show_message .= Display :: return_message($msgDestroy, 'confirmation', false);
+    } elseif ($_GET['destroy']) {
+        /*
+         * Process hiding a tools from available tools.
+         * visibility=2 are only view  by Dokeos Administrator (visibility 0,1->2)
+         */
         Database::query("UPDATE $tool_table SET visibility='2' WHERE c_id = $course_id AND id='".$id."'");
-    }
-
-    /*	HIDE */
-
-    elseif ($_GET['hide']) { // visibility 1 -> 0
+    } elseif ($_GET['hide']) {
+        /*	HIDE */
+        // visibility 1 -> 0
         Database::query("UPDATE $tool_table SET visibility=0 WHERE c_id = $course_id AND id='".$id."'");
         $show_message .= Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
-    }
-
-    /*	REACTIVATE */
-
-    elseif ($_GET["restore"]) { // visibility 0,2 -> 1
+    } elseif ($_GET["restore"]) {
+        // visibility 0,2 -> 1
+        /*	REACTIVATE */
         Database::query("UPDATE $tool_table SET visibility=1  WHERE c_id = $course_id AND id='".$id."'");
         $show_message .= Display::return_message(get_lang('ToolIsNowVisible'), 'confirmation');
     }
@@ -79,8 +72,8 @@ if (api_is_platform_admin()) {
 
 /*	TOOLS VISIBLE FOR EVERYBODY */
 
-$content .=  '<div class="everybodyview">';
-$content .=  '<table width="100%">';
+$content .= '<div class="everybodyview">';
+$content .= '<table width="100%">';
 $content .= CourseHome::show_tool_2column(TOOL_PUBLIC);
 $content .= '</table>';
 $content .= '</div>';

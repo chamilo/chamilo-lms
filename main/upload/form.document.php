@@ -12,7 +12,7 @@
  */
 $noPHP_SELF = false;
 $nameTools = get_lang('FileUpload');
-$interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang(TOOL_DOCUMENT));
+$interbreadcrumb[]= array ("url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang(TOOL_DOCUMENT));
 Display::display_header($nameTools,"Doc");
 //show the title
 api_display_tool_title($nameTools.$add_group_to_title);

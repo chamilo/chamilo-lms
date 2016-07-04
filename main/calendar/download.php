@@ -80,8 +80,8 @@ if (Database::num_rows($result)) {
     $title = str_replace(' ', '_', $row['filename']);
     if (Security::check_abs_path(
         $full_file_name,
-        api_get_path(SYS_COURSE_PATH).$course_info['path'].'/upload/calendar/')
-    ) {
+        api_get_path(SYS_COURSE_PATH).$course_info['path'].'/upload/calendar/'
+    )) {
         DocumentManager::file_send_for_download($full_file_name, true, $title);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-require_once(api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php');
+require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpath.class.php';
 
 class TestLearnpath extends UnitTestCase {
 
@@ -9,10 +9,10 @@ class TestLearnpath extends UnitTestCase {
         //ob_start();
         $parent = 2;
         $previous = 1;
-        $type = 'dokeos_chapter';
+        $type = 'dir';
         $id = 1;
-        $title = 'Titulo';
-        $description = 'Descripcion';
+        $title = 'Title';
+        $description = 'Description';
         $prerequisites = 0;
         $max_time_allowed = 0;
 
@@ -402,7 +402,7 @@ class TestLearnpath extends UnitTestCase {
     public function testGetBrotherChapters() {
         //ob_start();
         $id = '';
-        $res = learnpath::get_brother_chapters($id);
+        $res = learnpath::getSiblingDirectories($id);
         $this->assertTrue(is_array($res));
         //ob_end_clean();
         //var_dump($res);
@@ -891,7 +891,7 @@ class TestLearnpath extends UnitTestCase {
 /*
     public function testGetTotalItemsCountWithoutChapters() {
         //ob_start();
-        $res = learnpath::get_total_items_count_without_chapters();
+        $res = learnpath::getTotalItemsCountWithoutDirs();
         $this->assertTrue(is_numeric($res));
         //ob_end_clean();
         //var_dump($res);

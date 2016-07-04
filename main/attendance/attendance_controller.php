@@ -608,7 +608,6 @@ class AttendanceController
      * Gets attendance base in the table:
      * TABLE_STATISTIC_TRACK_E_COURSE_ACCESS
      * @param bool $showForm
-     * @throws ViewException
      */
     public function getAttendanceBaseInLogin($showForm = false, $exportToPdf = true)
     {

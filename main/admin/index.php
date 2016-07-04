@@ -402,6 +402,34 @@ if (api_is_platform_admin()) {
         $blocks['skills']['search_form'] = null;
     }
 
+    /* Plugins */
+    global $_plugins;
+    if (isset($_plugins['menu_administrator']) && count($_plugins['menu_administrator']) > 0) {
+        $blocks['plugins']['icon'] = Display::return_icon(
+            'plugins.png',
+             get_lang('Plugins'),
+             array(),
+             ICON_SIZE_MEDIUM,
+             false
+        );
+        $blocks['plugins']['label'] = api_ucfirst(get_lang('Plugins'));
+        $blocks['plugins']['class'] = 'block-admin-platform';
+        $blocks['plugins']['editable'] = true;
+
+        $plugin_obj = new AppPlugin();
+        $items = array();
+        foreach ($_plugins['menu_administrator'] as $plugin_name) {
+            $plugin_info = $plugin_obj->getPluginInfo($plugin_name);
+            $items[] = array(
+                'url' => api_get_path(WEB_CODE_PATH) . '../plugin/'.$plugin_name.'/start.php',
+                'label' => $plugin_info['title']
+            );
+        }
+
+        $blocks['plugins']['items'] = $items;
+        $blocks['plugins']['extra'] = null;
+    }
+
     /* Chamilo.org */
 
     $blocks['chamilo']['icon'] = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_MEDIUM, false);
@@ -446,6 +474,30 @@ if (api_is_platform_admin()) {
             $blocks = $data['blocks'];
         }
     }
+
+    //Hack for fix migration on session_rel_user
+    $tableColumns = Database::getManager()
+        ->getConnection()
+        ->getSchemaManager()
+        ->listTableColumns(
+            Database::get_main_table(TABLE_MAIN_SESSION_USER)
+        );
+
+    if (!array_key_exists('duration', $tableColumns)) {
+        try {
+            $dbSchema = Database::getManager()->getConnection()->getSchemaManager();
+            $durationColumn = new \Doctrine\DBAL\Schema\Column(
+                'duration',
+                Doctrine\DBAL\Types\Type::getType(\Doctrine\DBAL\Types\Type::INTEGER),
+                ['notnull' => false]
+            );
+            $tableDiff = new \Doctrine\DBAL\Schema\TableDiff('session_rel_user', [$durationColumn]);
+            $dbSchema->alterTable($tableDiff);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+    }
+    //end hack
 }
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH) . 'admin.ajax.php';
 

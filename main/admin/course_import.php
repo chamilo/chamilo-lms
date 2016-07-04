@@ -9,6 +9,9 @@
 
 /**
  * Validates imported data.
+ *
+ * @param array $courses
+ * @return array $errors
  */
 function validate_data($courses)
 {
@@ -20,14 +23,14 @@ function validate_data($courses)
         // 1. Check whether mandatory fields are set.
         $mandatory_fields = array ('Code', 'Title', 'CourseCategory');
         foreach ($mandatory_fields as $field) {
-            if (!isset($course[$field]) || strlen($course[$field]) == 0) {
+            if (empty($course[$field])) {
                 $course['error'] = get_lang($field.'Mandatory');
                 $errors[] = $course;
             }
         }
 
         // 2. Check current course code.
-        if (isset ($course['Code']) && strlen($course['Code']) != 0) {
+        if (!empty($course['Code'])) {
             // 2.1 Check whether code has been already used by this CVS-file.
             if (isset($coursecodes[$course['Code']])) {
                 $course['error'] = get_lang('CodeTwiceInFile');
@@ -52,21 +55,18 @@ function validate_data($courses)
                 if (empty($teacherInfo)) {
                     $course['error'] = get_lang('UnknownTeacher').' ('.$teacher.')';
                     $errors[] = $course;
-                } else {
-                    /*if ($teacherInfo['status'] != COURSEMANAGER) {
-                        $course['error'] = get_lang('UserIsNotATeacher').' ('.$teacher.')';
-                        $errors[] = $course;
-                    }*/
                 }
             }
         }
 
-        // 4. Check whether course category exists.
-        if (isset($course['CourseCategory']) && strlen($course['CourseCategory']) != 0) {
+        if (!empty($course['CourseCategory'])) {
             $categoryInfo = CourseCategory::getCategory($course['CourseCategory']);
             if (empty($categoryInfo)) {
-                CourseCategory::addNode($course['CourseCategory'], $course['CourseCategory'], 'TRUE', null);
+                CourseCategory::addNode($course['CourseCategory'], $course['CourseCategoryName'] ? $course['CourseCategoryName'] : $course['CourseCategory'], 'TRUE', null);
             }
+        } else {
+            $course['error'] = get_lang('NoCourseCategorySupplied');
+            $errors[] = $course;
         }
     }
 
@@ -74,8 +74,9 @@ function validate_data($courses)
 }
 
 /**
- * @param array $teachers
+ * Get the teacher list
  *
+ * @param array $teachers
  * @return array
  */
 function getTeacherListInArray($teachers)
@@ -149,7 +150,7 @@ function save_data($courses)
  */
 function parse_csv_data($file)
 {
-    $courses = Import::csvToArray($file);
+    $courses = Import::csv_reader($file);
     return $courses;
 }
 
@@ -186,6 +187,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
         } else {
             $courses = parse_csv_data($_FILES['import_file']['tmp_name']);
+
             $errors = validate_data($courses);
             if (count($errors) == 0) {
                 save_data($courses);
@@ -219,10 +221,10 @@ $form->display();
 
 <blockquote>
 <pre>
-<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;Teacher;Language
-BIO0015;Biology;BIO;teacher1;english
-BIO0016;Maths;MATH;teacher2|teacher3;english
-BIO0017;Language;LANG;;english
+<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>CourseCategoryName</strong>;Teacher;Language
+BIO0015;Biology;BIO;Science;teacher1;english
+BIO0016;Maths;MATH;Engineerng;teacher2|teacher3;english
+BIO0017;Language;LANG;;;english
 </pre>
 </blockquote>
 

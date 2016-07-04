@@ -124,7 +124,7 @@ function get_settings($category = null)
 
     if (isset($category) && $category== 'search_setting') {
         if (!empty($_REQUEST['search_field'])) {
-            $settings = search_setting($_REQUEST['search_field']);
+            $settings = searchSetting($_REQUEST['search_field']);
         }
     }
 
@@ -142,7 +142,7 @@ if (!empty($_GET['category']) &&
     $settings_array = get_settings($my_category);
     $settings = $settings_array['settings'];
     $settings_by_access_list = $settings_array['settings_by_access_list'];
-    $form = generate_settings_form($settings, $settings_by_access_list);
+    $form = generateSettingsForm($settings, $settings_by_access_list);
 
     if ($form->validate()) {
         $values = $form->exportValues();
@@ -193,7 +193,7 @@ if (!empty($_GET['category']) &&
                 $settings_array = get_settings($my_category);
                 $settings = $settings_array['settings'];
                 $settings_by_access_list = $settings_array['settings_by_access_list'];
-                $form = generate_settings_form(
+                $form = generateSettingsForm(
                     $settings,
                     $settings_by_access_list
                 );
@@ -469,7 +469,7 @@ echo $form_search_html;
 if (!empty($_GET['category'])) {
     switch ($_GET['category']) {
         case 'Regions':
-            handle_regions();
+            handleRegions();
             break;
         case 'Plugins':
             // Displaying the extensions: Plugins.
@@ -505,7 +505,7 @@ if (!empty($_GET['category'])) {
             echo '</ul>';
 
             echo '<div id="tabs-1">';
-            handle_plugins();
+            handlePlugins();
             echo '</div>';
 
             echo '<div id="tabs-2">';
@@ -513,30 +513,30 @@ if (!empty($_GET['category'])) {
             echo '</div>';
 
             echo '<div id="tabs-3">';
-            handle_extensions();
+            handleExtensions();
             echo '</div>';
             echo '</div>';
             break;
         case 'Stylesheets':
             // Displaying the extensions: Stylesheets.
-            handle_stylesheets();
+            handleStylesheets();
             break;
         case 'Search':
-            handle_search();
+            handleSearch();
             break;
         case 'Templates':
-            handle_templates();
+            handleTemplates();
             break;
         case 'search_setting':
             if (isset($_REQUEST['search_field'])) {
-
-                search_setting($_REQUEST['search_field']);
+                searchSetting($_REQUEST['search_field']);
                 $form->display();
             }
             break;
         default:
-            if (isset($form))
+            if (isset($form)) {
                 $form->display();
+            }
     }
 }
 

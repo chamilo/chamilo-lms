@@ -1,12 +1,5 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
-/**
- * Profile Entity
- *
- * @package chamilo.skill
- */
 
 namespace Chamilo\SkillBundle\Entity;
 
@@ -16,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Profile
  *
  * @ORM\Table(
- *  name="skill_level_profile",
+ *  name="skill_level_profile"
  * )
  * @ORM\Entity
  */
@@ -49,6 +42,9 @@ class Profile
      **/
     protected $levels;
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return (string) $this->getName();

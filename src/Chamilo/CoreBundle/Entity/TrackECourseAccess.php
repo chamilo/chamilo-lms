@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -20,6 +21,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TrackECourseAccess
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="course_access_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $courseAccessId;
+
     /**
      * @var integer
      *
@@ -68,16 +78,6 @@ class TrackECourseAccess
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
     private $userIp;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="course_access_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $courseAccessId;
-
 
     /**
      * Set cId

@@ -295,13 +295,14 @@ Dado que se trata sólo de un cambio de versión menor  previa de Chamilo 1.10.*
 
 <h3>3.2 Actualizar desde Chamilo 1.9.x</h3>
 <ul>
+  <li>Asegúrese que ninguna tabla de una versión anterior (a la 1.9) exista en su base de datos. Estas tablas pueden causar errores durante el proceso de actualización hacia versiones superiores. En particular, las tablas de versiones 1.8.* y anteriores podían repetirse una vez por curso, resultando en una gran cantidad de tablas que compartían el mismo prefijo. Solo las tablas sin prefijo o con un prefijo "c_" son legítimas en Chamilo 1.9 y siguientes. Asegúrese de que ninguna de estas antiguas tablas persista. Tóme una copia de seguridad de la base de datos (por si a caso) y luego borre estas tablas con prefijo (drop table ...).</li>
   <li>Compruebe que no ha dejado ninguna hoja de estilo o imagen personalizada (si la tuviera, asegúrese de realizar una copia de respaldo*)</li>
   <li>Descargue el paquete de instalación de Chamilo 1.9 desde la página de descarga de Chamilo</li>
   <li>Descomprima los nuevos ficheros de Chamilo 1.9 sobre los ficheros de la antigua versión ( o descomprima en una carpeta y luego copie los archivos en el directorio de la versión antigua)</li>
-    <li>Asegúrese *por completo* que el archivo .htaccess de la versión 1.10 ha sido copiado en la raíz también</li>
-    <li>Asegúrese que "AllowOverride All" está presente en su configuración de Apache, ya que interpretar el archivo .htaccess es muy importante para que Chamilo funcione (ojo que la directiva Order-Allow ha sido remplazada por "Require all granted" en Apache 2.4)</li>
-    <li>Escriba en su navegador web la URL de su portal + main/install/</li>
-    <li>Elija su idioma y haga click sobre Actualizar desde 1.9.x</li>
+  <li>Asegúrese *por completo* que el archivo .htaccess de la versión 1.10 ha sido copiado en la raíz también</li>
+  <li>Asegúrese que "AllowOverride All" está presente en su configuración de Apache, ya que interpretar el archivo .htaccess es muy importante para que Chamilo funcione (ojo que la directiva Order-Allow ha sido remplazada por "Require all granted" en Apache 2.4)</li>
+  <li>Escriba en su navegador web la URL de su portal + main/install/</li>
+  <li>Elija su idioma y haga click sobre Actualizar desde 1.9.x</li>
 </ul>
 <p>
     * Los estilos e imágenes están ubicados en el directorio main/css o main/img.
@@ -319,8 +320,8 @@ Dado que se trata sólo de un cambio de versión menor  previa de Chamilo 1.10.*
 <br />
 
 <h3>3.3 Actualizar desde Chamilo o Dok€os 1.8.x</h3>
-Para actualizar desde una versión previa a la 1.9.0, deberá a partir de ahora primero actualizar a la versión 1.9.10.2, para luego actualizar de ahí a la 1.10.x.
-
+Para actualizar desde una versión previa a la 1.9.0, deberá a partir de ahora primero actualizar a la versión 1.9.10.x, para luego actualizar de ahí a la 1.10.x.
+Podrá encontrar una versión descargable de 1.9.10.x aquí: <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>
 
 <h3>3.4 En ambos últimos casos</h3>
 
@@ -711,6 +712,8 @@ por ejemplo. El efecto debería ser inmediato.
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
+    rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
 
     fastcgi_pass unix:/var/run/php5-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;
@@ -777,6 +780,8 @@ Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería
 	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
     RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]
+    RewriteRule ^main/exercice/(.+)$ main/exercise/$1 [QSA,L]
+    RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
   &lt;/Directory&gt;
 
   php_value display_errors Off

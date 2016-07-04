@@ -5058,7 +5058,6 @@ $ToAttend = "Apmeklēt";
 $AssignCoach = "Nozīmēt mācību spēku";
 $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Jūsu kontu %s tikko ir apstiprinājis viens no mūsu administratoriem.";
 $NotInserted = "Nav ievietots";
-$Multipleresponse = "Vairākkārtīgas atbildes";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Tagad Jūs varat ielogoties %s, izmantojot Jums izsniegto lietotājvārdu un paroli.";
 $HaveFun = "Izbaudiet,";
 $AreYouSureToEditTheUserStatus = "Vai esat pārliecināts, ka vēlaties rediģēt lietotāja statusu?";

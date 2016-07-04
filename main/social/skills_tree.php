@@ -12,7 +12,7 @@ $this_section = SECTION_MYPROFILE;
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_skills_tool') != 'true') {
+if (api_get_setting('allow_skills_tool') !== 'true') {
     api_not_allowed();
 }
 

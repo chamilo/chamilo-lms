@@ -32,15 +32,15 @@
                         <tr data-item="{{ item.course_id }}" data-type="course">
                             <td>
                                 {% if item.course_visibility == 0 %}
-                                    <img src="{{ 'bullet_red.gif'|icon() }}" alt="{{ 'CourseVisibilityClosed'|get_lang }}" title="{{ 'CourseVisibilityClosed'|get_lang }}">
+                                    <img src="{{ 'bullet_red.png'|icon() }}" alt="{{ 'CourseVisibilityClosed'|get_lang }}" title="{{ 'CourseVisibilityClosed'|get_lang }}">
                                 {% elseif item.course_visibility == 1 %}
-                                    <img src="{{ 'bullet_orange.gif'|icon() }}" alt="{{ 'Private'|get_lang }}" title="{{ 'Private'|get_lang }}">
+                                    <img src="{{ 'bullet_orange.png'|icon() }}" alt="{{ 'Private'|get_lang }}" title="{{ 'Private'|get_lang }}">
                                 {% elseif item.course_visibility == 2 %}
-                                    <img src="{{ 'bullet_green.gif'|icon() }}" alt="{{ 'OpenToThePlatform'|get_lang }}" title="{{ 'OpenToThePlatform'|get_lang }}">
+                                    <img src="{{ 'bullet_green.png'|icon() }}" alt="{{ 'OpenToThePlatform'|get_lang }}" title="{{ 'OpenToThePlatform'|get_lang }}">
                                 {% elseif item.course_visibility == 3 %}
-                                    <img src="{{ 'bullet_blue.gif'|icon() }}" alt="{{ 'OpenToTheWorld'|get_lang }}" title="{{ 'OpenToTheWorld'|get_lang }}">
+                                    <img src="{{ 'bullet_blue.png'|icon() }}" alt="{{ 'OpenToTheWorld'|get_lang }}" title="{{ 'OpenToTheWorld'|get_lang }}">
                                 {% elseif item.course_visibility == 4 %}
-                                    <img src="{{ 'bullet_gray.gif'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}" title="{{ 'CourseVisibilityHidden'|get_lang }}">
+                                    <img src="{{ 'bullet_gray.png'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}" title="{{ 'CourseVisibilityHidden'|get_lang }}">
                                 {% endif %}
 
                                 <a href="{{ _p.web_course ~ item.course_code ~ '/index.php' }}">{{ item.course_title }}</a>
@@ -90,15 +90,15 @@
                             <tr data-item="{{ item.session_id }}" data-type="session">
                                 <td>
                                     {% if item.session_visibility == 0 %}
-                                        <img src="{{ 'bullet_red.gif'|icon() }}" alt="{{ 'CourseVisibilityClosed'|get_lang }}" title="{{ 'CourseVisibilityClosed'|get_lang }}">
+                                        <img src="{{ 'bullet_red.png'|icon() }}" alt="{{ 'CourseVisibilityClosed'|get_lang }}" title="{{ 'CourseVisibilityClosed'|get_lang }}">
                                     {% elseif item.session_visibility == 1 %}
-                                        <img src="{{ 'bullet_orange.gif'|icon() }}" alt="{{ 'Private'|get_lang }}" title="{{ 'Private'|get_lang }}">
+                                        <img src="{{ 'bullet_orange.png'|icon() }}" alt="{{ 'Private'|get_lang }}" title="{{ 'Private'|get_lang }}">
                                     {% elseif item.session_visibility == 2 %}
-                                        <img src="{{ 'bullet_green.gif'|icon() }}" alt="{{ 'OpenToThePlatform'|get_lang }}" title="{{ 'OpenToThePlatform'|get_lang }}">
+                                        <img src="{{ 'bullet_green.png'|icon() }}" alt="{{ 'OpenToThePlatform'|get_lang }}" title="{{ 'OpenToThePlatform'|get_lang }}">
                                     {% elseif item.session_visibility == 3 %}
-                                        <img src="{{ 'bullet_blue.gif'|icon() }}" alt="{{ 'OpenToTheWorld'|get_lang }}" title="{{ 'OpenToTheWorld'|get_lang }}">
+                                        <img src="{{ 'bullet_blue.png'|icon() }}" alt="{{ 'OpenToTheWorld'|get_lang }}" title="{{ 'OpenToTheWorld'|get_lang }}">
                                     {% elseif item.session_visibility == 4 %}
-                                        <img src="{{ 'bullet_gray.gif'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}" title="{{ 'CourseVisibilityHidden'|get_lang }}">
+                                        <img src="{{ 'bullet_gray.png'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}" title="{{ 'CourseVisibilityHidden'|get_lang }}">
                                     {% endif %}
 
                                     <a href="{{ _p.web_main ~ 'session/index.php?' ~ {'session_id': item.session_id}|url_encode() }}">{{ item.session_name }}</a>

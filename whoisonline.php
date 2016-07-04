@@ -18,26 +18,11 @@ if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
 $_SESSION['who_is_online_counter'] = 2;
 $this_section = SECTION_SOCIAL;
 // table definitions
-$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 
 $social_right_content = null;
 $whoisonline_list = null;
 $social_search = '';
 
-/* if (isset($_GET['chatid'])) {
-    //send out call request
-    $time = time();
-    $time = date("Y-m-d H:i:s", $time);
-    $chatid = intval($_GET['chatid']);
-    if ($_GET['chatid'] == strval(intval($_GET['chatid']))) {
-        $sql = "update $track_user_table set chatcall_user_id = ".intval($_user['user_id']).", chatcall_date = '".Database::escape_string($time)."', chatcall_text = '' where (user_id = ".(int)Database::escape_string($chatid).")";
-        $result = Database::query($sql);
-        //redirect caller to chat
-        header("Location: ".api_get_path(WEB_CODE_PATH)."chat/chat.php?".api_get_cidreq()."&origin=whoisonline&target=".Security::remove_XSS($chatid));
-        exit;
-    }
-}
-*/
 // This if statement prevents users accessing the who's online feature when it has been disabled.
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
     ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])

@@ -1,6 +1,8 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
 
 /**
  * Page for assign skills to a user
@@ -9,12 +11,9 @@
  * @package chamilo.badge
  */
 
-use \Chamilo\CoreBundle\Entity\Skill;
-use \Chamilo\CoreBundle\Entity\SkillRelUser;
-
 require_once '../inc/global.inc.php';
 
-if (!api_is_platform_admin(false, true)) {
+if (!api_is_platform_admin(false, true) && !api_is_student_boss()) {
     api_not_allowed(true);
 }
 

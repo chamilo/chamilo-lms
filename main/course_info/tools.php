@@ -44,7 +44,7 @@ switch ($action) {
         }
 
         $interbreadcrumb[] = array('url' => api_get_self().'?'.api_get_cidreq(), 'name' => get_lang('CustomizeIcons'));
-        $toolName = $tool['name'];
+        $toolName = Security::remove_XSS(stripslashes($tool['name']));
 
         $currentUrl = api_get_self().'?action=edit_icon&id=' . $id.'&'.api_get_cidreq();
 
@@ -115,6 +115,7 @@ switch ($action) {
         $iconsTools .= Display::page_header(get_lang('CustomizeIcons'), null, 'h4');
         $iconsTools .= '<div class="row">';
         foreach ($toolList as $tool) {
+            $tool['name'] = Security::remove_XSS(stripslashes($tool['name']));
             $toolIconName = 'Tool' . api_underscore_to_camel_case($tool['name']);
             $toolIconName = isset($$toolIconName) ? get_lang($toolIconName) : $tool['name'];
 
@@ -149,9 +150,7 @@ switch ($action) {
         }
         $iconsTools .= '</div>';
         $iconsTools .= '</div>';
-
         $content = $iconsTools;
-
         break;
 }
 
@@ -162,7 +161,7 @@ function getCustomWebIconPath()
 {
     // Check if directory exists or create it if it doesn't
     $dir = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/course_home_icons/';
-
+    
     return $dir;
 }
 $tpl = new Template($toolName);

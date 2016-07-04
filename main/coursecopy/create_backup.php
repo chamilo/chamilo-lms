@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
+
 /**
  * Create a backup.
  *
@@ -31,19 +35,13 @@ $this_section = SECTION_COURSES;
 
 // Breadcrumbs
 $interbreadcrumb[] = array(
-    'url' => '../course_info/maintenance.php',
+    'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php',
     'name' => get_lang('Maintenance')
 );
 
 // Displaying the header
 $nameTools = get_lang('CreateBackup');
 Display::display_header($nameTools);
-
-// Include additional libraries
-require_once 'classes/CourseBuilder.class.php';
-require_once 'classes/CourseArchiver.class.php';
-require_once 'classes/CourseRestorer.class.php';
-require_once 'classes/CourseSelectForm.class.php';
 
 // Display the tool title
 echo Display::page_header($nameTools);
@@ -95,7 +93,11 @@ if (Security::check_token('post') && (
     if (!$course->has_resources()) {
         echo get_lang('NoResourcesToBackup');
     } else {
-        $form = new FormValidator('create_backup_form', 'post', api_get_self() . '?' . api_get_cidreq());
+        $form = new FormValidator(
+            'create_backup_form',
+            'post',
+            api_get_self() . '?' . api_get_cidreq()
+        );
         $form->addElement('header', get_lang('SelectOptionForBackup'));
         $form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');
         $form->addElement('radio', 'backup_option', '', get_lang('LetMeSelectItems'), 'select_items');
@@ -118,7 +120,6 @@ if (Security::check_token('post') && (
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-
         $form->display();
     }
 }

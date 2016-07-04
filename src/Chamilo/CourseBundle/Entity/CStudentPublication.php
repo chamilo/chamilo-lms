@@ -12,10 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  *  name="c_student_publication",
  *  indexes={
  *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
+ *      @ORM\Index(name="session_id", columns={"session_id"}),
+ *      @ORM\Index(name="idx_csp_u", columns={"user_id"})
  *  }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository")
  */
 class CStudentPublication
 {

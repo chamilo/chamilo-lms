@@ -71,7 +71,7 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults['survey_id'] = $survey_id;
     $defaults['anonymous'] = $survey_data['anonymous'];
 
-    $link_info = GradebookUtils::is_resource_in_course_gradebook(
+    $link_info = GradebookUtils::isResourceInCourseGradebook(
         $course_id,
         $gradebook_link_type,
         $survey_id,
@@ -100,7 +100,7 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 $form = new FormValidator(
     'survey',
     'post',
-    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id
+    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id. '&' . api_get_cidreq()
 );
 
 $form->addElement('header', $tool_name);

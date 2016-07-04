@@ -102,7 +102,7 @@ class TestResourcelinker extends UnitTestCase {
 	function testShowDocuments() {
 		ob_start();
 		$folder='';
-		$res = show_documents($folder);
+		$res = show_documents($folder, 1);
 		$this->assertTrue(is_null($res)); 
 		ob_end_clean();
 		//var_dump($res);
@@ -110,7 +110,7 @@ class TestResourcelinker extends UnitTestCase {
 	
 	function testShowFolderUp() {
 		//ob_start();
-		$res = show_folder_up();
+		$res = show_folder_up(1);
 		$this->assertTrue(is_null($res)); 
 		//ob_end_clean();
 		//var_dump($res);

@@ -4,8 +4,6 @@
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
-/*	Configuration settings */
-
 api_protect_course_script(true);
 
 // Including necessary files

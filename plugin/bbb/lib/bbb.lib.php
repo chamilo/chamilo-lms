@@ -41,7 +41,7 @@ class bbb
         // Initialize video server settings from global settings
         $plugin = BBBPlugin::create();
 
-        $bbbPlugin = $plugin->get('tool_enable');
+        $bbbPluginEnabled = $plugin->get('tool_enable');
 
         $bbb_host = !empty($host) ? $host : $plugin->get('host');
         $bbb_salt = !empty($salt) ? $salt : $plugin->get('salt');
@@ -55,16 +55,26 @@ class bbb
         $this->groupSupport = isset($columns['group_id']) ? true : false;
 
         if ($this->groupSupport) {
+            // Plugin check
             $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
             if ($this->groupSupport) {
-                $courseInfo = api_get_course_info();
-                if ($courseInfo) {
-                    $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+
+                // Platform check
+                $bbbSetting = api_get_setting('bbb_enable_conference_in_course_groups');
+                $bbbSetting = isset($bbbSetting['bbb']) ? $bbbSetting['bbb'] === 'true' : false;
+
+                if ($bbbSetting) {
+                    // Course check
+                    $courseInfo = api_get_course_info();
+
+                    if ($courseInfo) {
+                        $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+                    }
                 }
             }
         }
 
-        if ($bbbPlugin === 'true') {
+        if ($bbbPluginEnabled === 'true') {
             $userInfo = api_get_user_info();
             $this->userCompleteName = $userInfo['complete_name'];
             $this->salt = $bbb_salt;
@@ -152,7 +162,7 @@ class bbb
         # a user joins. If after this period, a user hasn't joined, the meeting is
         # removed from memory.
         defaultMeetingCreateJoinDuration=5
-     * 
+     *
      * @return mixed
      */
     public function createMeeting($params)
@@ -165,8 +175,9 @@ class bbb
             $params['group_id'] = api_get_group_id();
         }
 
+        $courseCode = is_null($courseCode) ? '' : $courseCode;
         $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $courseCode;
-        $attendeePassword =  $params['attendee_pw'];
+        $attendeePassword = $params['attendee_pw'];
         $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
 
@@ -487,7 +498,7 @@ class bbb
             }
             $meetingBBB['end_url'] = $this->endUrl($meetingDB);
 
-            if ((string)$meetingBBB['returncode'] == 'FAILED') {
+            if (isset($meetingBBB['returncode']) && (string)$meetingBBB['returncode'] == 'FAILED') {
                 if ($meetingDB['status'] == 1 && $this->isConferenceManager()) {
                     $this->endMeeting($meetingDB['id']);
                 }
@@ -1030,6 +1041,10 @@ class bbb
      */
     public function endUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=end&id='.$meeting['id'];
     }
 
@@ -1051,6 +1066,9 @@ class bbb
      */
     public function publishUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=publish&id='.$meeting['id'];
     }
 
@@ -1060,6 +1078,9 @@ class bbb
      */
     public function unPublishUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=unpublish&id='.$meeting['id'];
     }
 
@@ -1069,6 +1090,10 @@ class bbb
      */
     public function deleteRecordUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=delete_record&id='.$meeting['id'];
     }
 
@@ -1078,6 +1103,10 @@ class bbb
      */
     public function copyToRecordToLinkTool($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id'];
     }
 }

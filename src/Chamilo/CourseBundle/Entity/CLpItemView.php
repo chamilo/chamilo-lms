@@ -122,9 +122,9 @@ class CLpItemView
     private $maxScore;
 
     /**
-     * Constructor
+     * CLpItemView constructor.
      */
-    public function __constructor()
+    public function __construct()
     {
         $this->status = 'not attempted';
         $this->coreExit = 'none';

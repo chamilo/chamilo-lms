@@ -19,13 +19,34 @@ class MySpace
     {
         $actions = array(
             //array('url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php', 'content' => get_lang('Home')),
-            array('url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=coaches', 'content' => get_lang('DisplayCoaches')),
-            array('url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=user', 'content' => get_lang('DisplayUserOverview')),
-            array('url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=session', 'content' => get_lang('DisplaySessionOverview')),
-            array('url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=course', 'content' => get_lang('DisplayCourseOverview')),
-            array('url' => api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin', 'content' => get_lang('LPQuestionListResults')),
-            array('url' => api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin', 'content' => get_lang('LPExerciseResultsBySession')),
-            ['url' => api_get_path(WEB_CODE_PATH) . 'mySpace/admin_view.php?display=accessoverview', 'content' => get_lang('DisplayAccessOverview') . ' (' . get_lang('Beta') . ')']
+            array(
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=coaches',
+                'content' => get_lang('DisplayCoaches'),
+            ),
+            array(
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=user',
+                'content' => get_lang('DisplayUserOverview'),
+            ),
+            array(
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=session',
+                'content' => get_lang('DisplaySessionOverview'),
+            ),
+            array(
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=course',
+                'content' => get_lang('DisplayCourseOverview'),
+            ),
+            array(
+                'url' => api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin',
+                'content' => get_lang('LPQuestionListResults'),
+            ),
+            array(
+                'url' => api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin',
+                'content' => get_lang('LPExerciseResultsBySession'),
+            ),
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=accessoverview',
+                'content' => get_lang('DisplayAccessOverview').' ('.get_lang('Beta').')',
+            ],
         );
 
         return Display :: actions($actions, null);
@@ -34,10 +55,19 @@ class MySpace
     public static function getTopMenu()
     {
         $menu_items = array();
-        $menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
-        $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher');
+        $menu_items[] = Display::url(
+            Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32),
+            api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher'
+        );
         $menu_items[] = Display::url(Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), 32), '#');
-        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
+        $menu_items[] = Display::url(
+            Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32),
+            api_get_path(WEB_CODE_PATH).'tracking/exams.php'
+        );
         $menu = null;
         foreach ($menu_items as $item) {
             $menu .= $item;
@@ -54,7 +84,7 @@ class MySpace
      * @param string $file_name     The name of the file which contains exported data.
      * @return string mixed             Returns a message (string) if an error occurred.
      */
-    function export_csv($header, $data, $file_name = 'export.csv')
+    public function export_csv($header, $data, $file_name = 'export.csv')
     {
         $archive_path = api_get_path(SYS_ARCHIVE_PATH);
         $archive_url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
@@ -93,7 +123,7 @@ class MySpace
      * @param   int     Session id (optional, default = 0)
      * @return  array   Conections
      */
-    static function get_connections_to_course($user_id, $courseId, $session_id = 0)
+    public static function get_connections_to_course($user_id, $courseId, $session_id = 0)
     {
         // Database table definitions
         $tbl_track_course = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
@@ -128,7 +158,7 @@ class MySpace
      * @param int $session_id
      * @return array|bool
      */
-    static function get_connections_from_course_list($user_id, $course_list, $session_id = 0)
+    public static function get_connections_from_course_list($user_id, $course_list, $session_id = 0)
     {
         // Database table definitions
         $tbl_track_course = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
@@ -2332,10 +2362,10 @@ class MySpace
 
     /**
      * Checks whether a username has been already subscribed in a session.
-     * @param string a given username
-     * @param array  the array with the course list id
-     * @param the session id
-     * @return 0 if the user is not subscribed  otherwise it returns the user_id of the given username
+     * @param string $username a given username
+     * @param array $course_list the array with the course list id
+     * @param int $id_session the session id
+     * @return int 0 if the user is not subscribed otherwise it returns the user_id of the given username
      * @author Julio Montoya
      */
     public static function user_available_in_session($username, $course_list, $id_session)
@@ -2361,6 +2391,7 @@ class MySpace
                 return 0;
             }
         }
+        return 0;
     }
 
     /**

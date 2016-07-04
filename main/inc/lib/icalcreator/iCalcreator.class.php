@@ -327,7 +327,7 @@ class vcalendar {
      * @param array $params optional
      * @return bool
      */
-    function setXprop( $label, $value, $params=FALSE ) {
+    function setXprop($label, $value, $params = array()) {
         if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
         if( empty( $label )) return FALSE;
         $xprop           = array( 'value' => $value );
@@ -343,11 +343,11 @@ class vcalendar {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.4.5 - 2008-11-14
-     * @param mixed $propName, bool FALSE => X-property
-     * @param int @propix, optional, if specific property is wanted in case of multiply occurences
-     * @return bool, if successfull delete
+     * @param mixed $propName bool FALSE => X-property
+     * @param mixed $propix optional, if specific property is wanted in case of multiple instances
+     * @return bool if successful delete
      */
-    function deleteProperty( $propName, $propix=FALSE ) {
+    function deleteProperty( $propName, $propix = FALSE ) {
         $propName = ( $propName ) ? strtoupper( $propName ) : 'X-PROP';
         if( !$propix )
             $propix = ( isset( $this->propdelix[$propName] )) ? $this->propdelix[$propName] + 2 : 1;
@@ -394,9 +394,9 @@ class vcalendar {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-02
-     * @param string $propName, optional
-     * @param int @propix, optional, if specific property is wanted in case of multiply occurences
-     * @param bool $inclParam=FALSE
+     * @param string    $propName optional
+     * @param int       $propix optional, if specific property is wanted in case of multiply occurences
+     * @param bool      $inclParam FALSE by default
      * @return mixed
      */
     function getProperty( $propName=FALSE, $propix=FALSE, $inclParam=FALSE ) {
@@ -447,7 +447,7 @@ class vcalendar {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.2.13 - 2007-11-04
-     * @param mixed $args variable number of function arguments,
+     * @param mixed  variable number of function arguments,
      *                    first argument is ALWAYS component name,
      *                    second ALWAYS component value!
      * @return bool
@@ -470,7 +470,6 @@ class vcalendar {
                 if( !isset( $arglist[2] )) $arglist[2] = null;
                 return $this->setXprop( $arglist[0], $arglist[1], $arglist[2] );
         }
-        return FALSE;
     }
     /*********************************************************************************/
     /**
@@ -555,7 +554,7 @@ class vcalendar {
                     return $this->url;
                 else
                     return FALSE;
-                break;
+                // no break needed
         }
     }
     /**
@@ -590,10 +589,10 @@ class vcalendar {
                     $this->directory = $value;
                     $this->url       = null;
                     return TRUE;
+                } else {
+                    return false;
                 }
-                else
-                    return FALSE;
-                break;
+                // no break needed
             case 'FILENAME':
                 $value   = trim( $value );
                 if( !empty( $this->url )) {
@@ -608,18 +607,18 @@ class vcalendar {
                         clearstatcache();
                         $this->filename = $value;
                         return TRUE;
-                    }
-                    else
+                    } else {
                         return FALSE;
+                    }
                 }
                 elseif( FALSE !== touch( $dirfile )) {
                     /* new local file created */
                     $this->filename = $value;
                     return TRUE;
+                } else {
+                    return false;
                 }
-                else
-                    return FALSE;
-                break;
+                // no break needed
             case 'FORMAT':
                 $value   = trim( $value );
                 if( 'xcal' == strtolower( $value )) {
@@ -1608,45 +1607,45 @@ class vcalendar {
      * @param string $filename optional
      * @param string $delimiter optional
      * @param int timeout optional, default 3600 sec
-     * @return redirect/FALSE
+     * @return mixed
      */
-    function useCachedCalendar( $directory=FALSE, $filename=FALSE, $delimiter=FALSE, $timeout=3600) {
+    function useCachedCalendar($directory=FALSE, $filename=FALSE, $delimiter=FALSE, $timeout=3600) {
         if ( $directory && ctype_digit( (string) $directory ) && !$filename ) {
             $timeout   = (int) $directory;
             $directory = FALSE;
         }
-        if( $directory )
+        if ( $directory )
             $this->setConfig( 'directory', $directory );
-        if( $filename )
+        if ( $filename )
             $this->setConfig( 'filename',  $filename );
-        if( $delimiter && ( $delimiter != DIRECTORY_SEPARATOR ))
+        if ( $delimiter && ( $delimiter != DIRECTORY_SEPARATOR ))
             $this->setConfig( 'delimiter', $delimiter );
         $filesize    = $this->getConfig( 'filesize' );
-        if( 0 >= $filesize )
+        if ( 0 >= $filesize )
             return FALSE;
         $dirfile     = $this->getConfig( 'dirfile' );
-        if( time() - filemtime( $dirfile ) < $timeout) {
+        if ( time() - filemtime( $dirfile ) < $timeout) {
             clearstatcache();
             $dirfile   = $this->getConfig( 'dirfile' );
             $filename  = $this->getConfig( 'filename' );
 //    if( headers_sent( $filename, $linenum ))
 //      die( "Headers already sent in $filename on line $linenum\n" );
-            if( 'xcal' == $this->format )
+            if ( 'xcal' == $this->format )
                 header( 'Content-Type: application/calendar+xml; charset=utf-8' );
             else
                 header( 'Content-Type: text/calendar; charset=utf-8' );
             header( 'Content-Length: '.$filesize );
             header( 'Content-Disposition: attachment; filename="'.$filename.'"' );
             header( 'Cache-Control: max-age=10' );
-            $fp = @$fopen( $dirfile, 'r' );
-            if( $fp ) {
+            $fp = @fopen($dirfile, 'r');
+            if ( $fp ) {
                 fpassthru( $fp );
                 fclose( $fp );
             }
             die();
-        }
-        else
+        } else {
             return FALSE;
+        }
     }
 }
 /*********************************************************************************/
@@ -1766,8 +1765,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-06
      * @param string $value
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setAttach( $value, $params=FALSE, $index=FALSE ) {
@@ -1856,8 +1855,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-05
      * @param string $value
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setAttendee( $value, $params=FALSE, $index=FALSE ) {
@@ -1957,8 +1956,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-06
      * @param mixed $value
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setCategories( $value, $params=FALSE, $index=FALSE ) {
@@ -2023,14 +2022,15 @@ class calendarComponent {
         }
         return $output;
     }
+
     /**
      * set calendar component property comment
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-06
      * @param string $value
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array|bool $params optional
+     * @param bool|int $index optional
      * @return bool
      */
     function setComment( $value, $params=FALSE, $index=FALSE ) {
@@ -2078,7 +2078,7 @@ class calendarComponent {
      * @param array $params optional
      * @return bool
      */
-    function setCompleted( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $params=FALSE ) {
+    function setCompleted( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $params=array() ) {
         if( empty( $year )) {
             if( $this->getConfig( 'allowEmpty' )) {
                 $this->completed = array( 'value' => null, 'params' => $this->_setParams( $params ));
@@ -2120,8 +2120,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-05
      * @param string $value
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setContact( $value, $params=FALSE, $index=FALSE ) {
@@ -2197,8 +2197,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-05
      * @param string $value
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setDescription( $value, $params=FALSE, $index=FALSE ) {
@@ -2362,7 +2362,7 @@ class calendarComponent {
      * @param array $params optional
      * @return bool
      */
-    function setDtstart( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $tz=FALSE, $params=FALSE ) {
+    function setDtstart( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $tz=FALSE, $params=array() ) {
         if( empty( $year )) {
             if( $this->getConfig( 'allowEmpty' )) {
                 $this->dtstart = array( 'value' => null, 'params' => $this->_setParams( $params ));
@@ -2414,7 +2414,7 @@ class calendarComponent {
      * @param array $params optional
      * @return bool
      */
-    function setDue( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $tz=FALSE, $params=FALSE ) {
+    function setDue( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $tz=FALSE, $params=array() ) {
         if( empty( $year )) {
             if( $this->getConfig( 'allowEmpty' )) {
                 $this->due = array( 'value' => null, 'params' => $this->_setParams( $params ));
@@ -2463,7 +2463,7 @@ class calendarComponent {
      * @param array $params optional
      * @return bool
      */
-    function setDuration( $week, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $params=FALSE ) {
+    function setDuration( $week, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $params=array() ) {
         if( empty( $week )) if( $this->getConfig( 'allowEmpty' )) $week = null; else return FALSE;
         if( is_array( $week ) && ( 1 <= count( $week )))
             $this->duration = array( 'value' => $this->_duration_array( $week ), 'params' => $this->_setParams( $day ));
@@ -2472,11 +2472,14 @@ class calendarComponent {
             if( in_array( substr( $week, 0, 1 ), array( '+', '-' )))
                 $week = substr( $week, 1 );
             $this->duration = array( 'value' => $this->_duration_string( $week ), 'params' => $this->_setParams( $day ));
+        } elseif (empty( $week ) && empty( $day ) && empty( $hour ) && empty( $min ) && empty( $sec )) {
+            return false;
+        } else {
+            $this->duration = array(
+                'value' => $this->_duration_array(array($week, $day, $hour, $min, $sec)),
+                'params' => $this->_setParams($params)
+            );
         }
-        elseif( empty( $week ) && empty( $day ) && empty( $hour ) && empty( $min ) && empty( $sec ))
-            return FALSE;
-        else
-            $this->duration = array( 'value' => $this->_duration_array( array( $week, $day, $hour, $min, $sec )), 'params' => $this->_setParams( $params ));
         return TRUE;
     }
     /*********************************************************************************/
@@ -2530,8 +2533,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-05
      * @param array exdates
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setExdate( $exdates, $params=FALSE, $index=FALSE ) {
@@ -2595,8 +2598,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-05
      * @param array $exruleset
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setExrule( $exruleset, $params=FALSE, $index=FALSE ) {
@@ -2667,8 +2670,8 @@ class calendarComponent {
      * @since 2.5.1 - 2008-11-05
      * @param string $fbType
      * @param array $fbValues
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setFreebusy( $fbType, $fbValues, $params=FALSE, $index=FALSE ) {
@@ -2751,7 +2754,7 @@ class calendarComponent {
      * @param array $params optional
      * @return bool
      */
-    function setGeo( $latitude, $longitude, $params=FALSE ) {
+    function setGeo( $latitude, $longitude, $params=array() ) {
         if( !empty( $latitude ) && !empty( $longitude )) {
             if( !is_array( $this->geo )) $this->geo = array();
             $this->geo['value']['latitude']  = $latitude;
@@ -2933,7 +2936,7 @@ class calendarComponent {
      * @param array $params optional
      * @return bool
      */
-    function setPriority( $value, $params=FALSE  ) {
+    function setPriority( $value, $params=array()  ) {
         if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
         $this->priority = array( 'value' => $value, 'params' => $this->_setParams( $params ));
         return TRUE;
@@ -3044,8 +3047,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-07
      * @param array $rdates
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setRdate( $rdates, $params=FALSE, $index=FALSE ) {
@@ -3215,8 +3218,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-07
      * @param float $relid
-     * @param array $params, optional
-     * @param index $index, optional
+     * @param array $params optional
+     * @param index $index optional
      * @return bool
      */
     function setRelatedTo( $value, $params=FALSE, $index=FALSE ) {
@@ -3293,9 +3296,9 @@ class calendarComponent {
      * @since 2.5.1 - 2008-11-05
      * @param float $statcode
      * @param string $text
-     * @param string $extdata, optional
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param string $extdata optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setRequestStatus( $statcode, $text, $extdata=FALSE, $params=FALSE, $index=FALSE ) {
@@ -3343,8 +3346,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-05
      * @param mixed $value
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setResources( $value, $params=FALSE, $index=FALSE ) {
@@ -3373,8 +3376,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-05
      * @param array $rruleset
-     * @param array $params, optional
-     * @param integer $index, optional
+     * @param array $params optional
+     * @param integer $index optional
      * @return void
      */
     function setRrule( $rruleset, $params=FALSE, $index=FALSE ) {
@@ -3703,8 +3706,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-05
      * @param string $value
-     * @param string $params, optional
-     * @param integer $index, optional
+     * @param string $params optional
+     * @param integer $index optional
      * @return bool
      */
     function setTzname( $value, $params=FALSE, $index=FALSE ) {
@@ -4139,9 +4142,9 @@ class calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.4.16 - 2008-10-25
-     * @param array $date, date to check
-     * @param int $parno, no of date parts (i.e. year, month.. .)
-     * @return array $params, property parameters
+     * @param array $date date to check
+     * @param int $parno no of date parts (i.e. year, month.. .)
+     * @return array $params property parameters
      */
     function _chkdatecfg( $theDate, & $parno, & $params ) {
         if( isset( $params['TZID'] ))
@@ -4194,8 +4197,8 @@ class calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.2.11 - 2007-11-03
-     * @param array $startdate, optional
-     * @param array $duration, optional
+     * @param array $startdate optional
+     * @param array $duration optional
      * @return array duration
      */
     function _date2duration( $startdate=FALSE, $enddate=FALSE ) {
@@ -4473,9 +4476,9 @@ class calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.4.8 - 2008-10-30
-     * @param array $startdate, optional
-     * @param array $duration, optional
-     * @return array, date format
+     * @param array $startdate optional
+     * @param array $duration optional
+     * @return array date format
      */
     function duration2date( $startdate=FALSE, $duration=FALSE ) {
         if( $startdate && $duration ) {
@@ -4574,8 +4577,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.4.16 - 2008-11-08
      * @param array $array
-     * @param string $expkey, expected key
-     * @param string $expval, expected value
+     * @param string $expkey expected key
+     * @param string $expval expected value
      * @param int $hitVal optional, return value if found
      * @param int $elseVal optional, return value if not found
      * @param int $preSet optional, return value if already preset
@@ -4602,7 +4605,7 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.4.8 - 2008-10-30
      * @param array   $datetime
-     * @param int     $parno, optional, default 6
+     * @param int     $parno optional, default 6
      * @return string
      */
     function _format_date_time( $datetime, $parno=6 ) {
@@ -4877,11 +4880,11 @@ class calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.4.16 - 2008-10-18
-     * @param array $result, array to update, array([timestamp] => timestamp)
-     * @param array $recur, pattern for recurrency (only value part, params ignored)
-     * @param array $wdate, component start date
-     * @param array $startdate, start date
-     * @param array $enddate, optional
+     * @param array $result array to update, array([timestamp] => timestamp)
+     * @param array $recur pattern for recurrency (only value part, params ignored)
+     * @param array $wdate component start date
+     * @param array $startdate start date
+     * @param array $enddate optional
      * @return array of recurrence (start-)dates as index
      * @todo BYHOUR, BYMINUTE, BYSECOND, ev. BYSETPOS due to ambiguity, WEEKLY at year end/start
      */
@@ -5489,9 +5492,9 @@ class calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.4.16 - 2008-10-18
-     * @param array $date, date to step
+     * @param array $date date to step
      * @param int $timestamp
-     * @param array $step, default array( 'day' => 1 )
+     * @param array $step default array( 'day' => 1 )
      * @return void
      */
     function _stepdate( &$date, &$timestamp, $step=array( 'day' => 1 )) {
@@ -5719,8 +5722,8 @@ class calendarComponent {
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-14
      * @param string $propName
-     * @param int @propix, optional, if specific property is wanted in case of multiply occurences
-     * @return bool, if successfull delete TRUE
+     * @param int $propix optional, if specific property is wanted in case of multiply occurences
+     * @return bool if successfull delete TRUE
      */
     function deleteProperty( $propName, $propix=FALSE ) {
         if( $this->_notExistProp( $propName )) return FALSE;
@@ -5979,8 +5982,8 @@ class calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.4.5 - 2008-11-07
-     * @param array $multiprop, reference to a component property
-     * @param int @propix, default 0
+     * @param array $multiprop reference to a component property
+     * @param int $propix default 0
      * @return bool TRUE
      */
     function deletePropertyM( & $multiprop, $propix=0 ) {
@@ -5996,10 +5999,10 @@ class calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.1 - 2008-11-02
-     * @param string $propName, optional
-     * @param int @propix, optional, if specific property is wanted in case of multiply occurences
-     * @param bool $inclParam=FALSE
-     * @param bool $specform=FALSE
+     * @param string $propName optional
+     * @param int $propix optional, if specific property is wanted in case of multiply occurences
+     * @param bool $inclParam =FALSE
+     * @param bool $specform =FALSE
      * @return mixed
      */
     function getProperty( $propName=FALSE, $propix=FALSE, $inclParam=FALSE, $specform=FALSE ) {
@@ -6307,7 +6310,7 @@ class calendarComponent {
      *
      * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
      * @since 2.5.2 - 2008-10-23
-     * @param mixed $unparsedtext, optional, strict rfc2445 formatted, single property string or array of property strings
+     * @param mixed $unparsedtext optional, strict rfc2445 formatted, single property string or array of property strings
      * @return bool FALSE if error occurs during parsing
      *
      */

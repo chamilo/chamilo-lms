@@ -5,6 +5,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/coverage.png?b=1.11.x)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=1.11.x)
 [![Bountysource](https://www.bountysource.com/badge/team?team_id=12439&style=raised)](https://www.bountysource.com/teams/chamilo?utm_source=chamilo&utm_medium=shield&utm_campaign=raised)
 [![Code Consistency](https://squizlabs.github.io/PHP_CodeSniffer/analysis/chamilo/chamilo-lms/grade.svg)](http://squizlabs.github.io/PHP_CodeSniffer/analysis/chamilo/chamilo-lms/)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/166/badge)](https://bestpractices.coreinfrastructure.org/projects/166)
 
 ## Installation
 
@@ -164,7 +165,7 @@ php bin/doctrine.php migrations:execute 20150527120703 --up --configuration=app/
 
 You can also print the differences between your database and what it should be by issuing the following command from the Chamilo base folder:
 ```
-php bin/doctrine.php orm:schema:update --dump-sql
+php bin/doctrine.php orm:schema-tool:update --dump-sql
 ```
 
 ## Contributing

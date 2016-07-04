@@ -386,6 +386,7 @@
 
             <h3>3.2 Mettre à jour depuis Chamilo 1.9.x</h3>
             <ul>
+                <li> assurez-vous qu'aucune table ne persiste d'une version antérieure de Chamilo. Ces tables peuvent en effet causer une erreur durant la mise à jour. En particulier, les tables des versions 1.8.* et antérieures pouvaient se répéter une fois par cours, résultant en un grand nombre de tables partageant le même préfixe. Seules les tables sans préfixe ou avec un préfixe "c_" sont légitimes dans les versions 1.9 et supérieures. Assurez-vous qu'aucune de ces anciennes tables ne persiste. Prenez une copie de sauvegarde de votre base de données (au cas où) puis supprimez-les (drop table ...).</li>
                 <li> vérifiez que vous n'avez pas laissé de feuille de style personnalisée ou d'image <span class="text-muted">(le cas échant, faites-en une sauvegarde*)</span></li>
                 <li> télécharger le paquet Chamilo 1.10 depuis la <a href="http://www.chamilo.org/download">page de téléchargement de Chamilo</a></li>
                 <li> décompressez les nouveaux fichiers de Chamilo 1.10 sur les fichiers de votre ancienne installation (ou décompressez les dans un nouveau dossier et copier les fichiers extraits sur les anciens fichiers).</li>
@@ -420,8 +421,9 @@
             </p>
 
             <h3>3.3 Mettre à jour depuis Chamilo 1.8.x</h3>
-            Pour mettre à jour depuis une version antérieure à la 1.9.0, vous devrez commencer par la mettre à jour vers la version 1.9.10.2,
-            et seulement alors mettre à jours vers la 1.10.x
+            Pour mettre à jour depuis une version antérieure à la 1.9.0, vous devrez commencer par la mettre à jour vers la version 1.9.10.x,
+            et seulement alors mettre à jours vers la 1.10.x.
+            Vous pouvez trouver une version téléchargeable de 1.9.10.x ici: <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>
             <p></p>
             <h3>3.4 Dans les deux derniers cas</h3>
 
@@ -739,6 +741,8 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
 	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
     RewriteRule "^badge/(\d{1,})/user/(\d{1,})$" main/badge/issued.php?skill=$1&user=$2 [L]
+    RewriteRule ^main/exercice/(.+)$ main/exercise/$1 [QSA,L]
+    RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
   &lt;/Directory&gt;
 </pre>
 <h3>Nginx</h3>
@@ -777,6 +781,8 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
+    rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
 
     fastcgi_pass unix:/var/run/php5-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;

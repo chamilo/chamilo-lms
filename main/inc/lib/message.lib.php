@@ -201,14 +201,14 @@ class MessageManager
     /**
      * Sends a message to a user/group
      *
-     * @param int 	   $receiver_user_id
+     * @param int 	  $receiver_user_id
      * @param string  $subject
      * @param string  $content
      * @param array   $file_attachments files array($_FILES) (optional)
      * @param array   $file_comments about attachment files (optional)
      * @param int     $group_id (optional)
      * @param int     $parent_id (optional)
-     * @param int 	   $edit_message_id id for updating the message (optional)
+     * @param int 	  $edit_message_id id for updating the message (optional)
      * @param int     $topic_id (optional) the default value is the current user_id
      * @param int     $sender_id
      * @param bool $directMessage
@@ -253,7 +253,7 @@ class MessageManager
         $total_filesize = 0;
         if (is_array($file_attachments)) {
             foreach ($file_attachments as $file_attach) {
-                $total_filesize += $file_attach['size'];
+                $total_filesize += isset($file_attach['size']) && is_int($file_attach['size']) ? $file_attach['size'] : 0;
             }
         }
 
@@ -1024,14 +1024,6 @@ class MessageManager
 
         // get file attachments by message id
         $files_attachments = self::get_links_message_attachment_files($message_id, $source);
-
-        $user_con = self::users_connected_by_id();
-        $band = 0;
-        for ($i = 0; $i < count($user_con); $i++) {
-            if ($user_sender_id == $user_con[$i]) {
-                $band = 1;
-            }
-        }
 
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
@@ -1855,5 +1847,39 @@ class MessageManager
         $form->addButtonSearch(get_lang('Search'));
 
         return $form;
+    }
+
+    /**
+     * Send a notification to all amdinistrators when a new user is registered
+     * @param \Chamilo\UserBundle\Entity\User $user
+     */
+    public static function sendNotificationByRegisteredUser(\Chamilo\UserBundle\Entity\User $user)
+    {
+        $tplMailBody = new Template(null, false, false, false, false, false, false);
+        $tplMailBody->assign('user', $user);
+        $tplMailBody->assign('is_western_name_order', api_is_western_name_order());
+        $tplMailBody->assign('manageUrl', api_get_path(WEB_CODE_PATH) . 'admin/user_edit.php?user_id=' . $user->getId());
+
+        $layoutContent = $tplMailBody->get_template('mail/new_user_mail_to_admin.tpl');
+
+        $emailsubject = '[' . get_lang('UserRegistered') . '] ' . $user->getUsername();
+        $emailbody = $tplMailBody->fetch($layoutContent);
+
+        $admins = UserManager::get_all_administrators();
+
+        foreach ($admins as $admin_info) {
+            MessageManager::send_message(
+                $admin_info['user_id'],
+                $emailsubject,
+                $emailbody,
+                [],
+                [],
+                null,
+                null,
+                null,
+                null,
+                $user->getId()
+            );
+        }
     }
 }

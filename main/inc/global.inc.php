@@ -24,13 +24,6 @@
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
-// Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
-// To remove CKeditor libs from HTML, set this constant to true before loading
-// global.inc.php
-if (!defined('CHAMILO_LOAD_WYSIWYG')) {
-    define('CHAMILO_LOAD_WYSIWYG', true);
-}
-
 // Include the libraries that are necessary everywhere
 require_once __DIR__.'/../../vendor/autoload.php';
 require_once __DIR__.'/../../app/AppKernel.php';
@@ -92,6 +85,9 @@ define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
+define('_MPDF_TEMP_PATH', __DIR__.'/../../app/cache/mpdf/');
+define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../app/cache/mpdf/');
+
 // Include the libraries that are necessary everywhere
 require_once __DIR__.'/../../vendor/autoload.php';
 
@@ -109,7 +105,6 @@ require_once $libraryPath.'fileUpload.lib.php';
 require_once $libraryPath.'fileDisplay.lib.php';
 require_once $libraryPath.'course_category.lib.php';
 
-define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/');
 if (!is_dir(_MPDF_TEMP_PATH)) {
     mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
 }
@@ -442,7 +437,7 @@ if (!empty($valid_languages)) {
         $language_interface = api_get_language_from_type($language_priority4);
     } else {
         $language_interface = api_get_setting('platformLanguage');
-    }    
+    }
 
     if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false) {
         $language_interface = api_get_language_from_type($language_priority3);

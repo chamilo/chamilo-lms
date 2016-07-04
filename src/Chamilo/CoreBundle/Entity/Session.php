@@ -1006,4 +1006,24 @@ class Session
         return $this->userCourseSubscriptions->matching($criteria);
     }
 
+    public function getBuyCoursePluginPrice()
+    {
+        // start buycourse validation
+        // display the course price and buy button if the buycourses plugin is enabled and this course is configured
+        $plugin = \BuyCoursesPlugin::create();
+        $isThisCourseInSale = $plugin->buyCoursesForGridCatalogVerificator($this->id, \BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+        $return = [];
+
+        if ($isThisCourseInSale) {
+            // set the Price label
+            $return['html'] = $isThisCourseInSale['html'];
+            // set the Buy button instead register.
+            if ($isThisCourseInSale['verificator']) {
+                $return['buy_button'] = $plugin->returnBuyCourseButton($this->id, \BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+            }
+        }
+        // end buycourse validation
+        return $return;
+    }
+
 }

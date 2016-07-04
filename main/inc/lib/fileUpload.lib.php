@@ -15,9 +15,9 @@
  * Changes the file name extension from .php to .phps
  * Useful for securing a site.
  *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - file_name (string) name of a file
- * @return - the filenam phps'ized
+ * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @param string $file_name Name of a file
+ * @return string the filename phps'ized
  */
 function php2phps($file_name) {
     return preg_replace('/\.(php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
@@ -693,15 +693,12 @@ function moveUploadedFile($file, $storePath)
  * Checks if there is enough place to add a file on a directory
  * on the base of a maximum directory size allowed
  * deprecated: use enough_space instead!
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - file_size (int) - size of the file in byte
- * @param  - dir (string) - Path of the directory
- *           whe the file should be added
- * @param  - max_dir_space (int) - maximum size of the diretory in byte
- * @return - boolean true if there is enough space,
- *				boolean false otherwise
- *
- * @see    - enough_size() uses  dir_total_space() function
+ * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @param  int $file_size Size of the file in byte
+ * @param  string $dir Path of the directory where the file should be added
+ * @param  int $max_dir_space Maximum size of the diretory in byte
+ * @return boolean true if there is enough space, false otherwise
+ * @see enough_size() uses  dir_total_space() function
  */
 function enough_size($file_size, $dir, $max_dir_space)
 {
@@ -723,9 +720,9 @@ function enough_size($file_size, $dir, $max_dir_space)
 /**
  * Computes the size already occupied by a directory and is subdirectories
  *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - dir_path (string) - size of the file in byte
- * @return - int - return the directory size in bytes
+ * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @param string $dir_path Size of the file in byte
+ * @return int Return the directory size in bytes
  */
 function dir_total_space($dir_path)
 {
@@ -768,11 +765,11 @@ function dir_total_space($dir_path)
  * Note : some browsers don't send the MIME Type (e.g. Netscape 4).
  *        We don't have solution for this kind of situation
  *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @author - Bert Vanderkimpen
- * @param  - file_name (string) - Name of the file
- * @param  - file_type (string) - Type of the file
- * @return - file_name (string)
+ * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @author Bert Vanderkimpen
+ * @param  string $file_name Name of the file
+ * @param  string $file_type Type of the file
+ * @return string File name
  */
 function add_ext_on_mime($file_name, $file_type)
 {
@@ -1096,14 +1093,18 @@ function unzip_uploaded_document(
  * This function is a callback function that is used while extracting a zipfile
  * http://www.phpconcept.net/pclzip/man/en/index.php?options-pclzip_cb_pre_extract
  *
- * @param $p_event
- * @param $p_header
- * @return 1 (If the function returns 1, then the extraction is resumed)
+ * @param object $p_event
+ * @param object $p_header
+ * @return int (If the function returns 1, then the extraction is resumed, if 0 the path was skipped)
  */
 function clean_up_files_in_zip($p_event, &$p_header)
 {
-    $res = clean_up_path($p_header['filename']);
-    return $res;
+    $originalFilePath = $p_header['filename'];
+    $originalFileName = basename($p_header['filename']);
+    $modifiedFileName = clean_up_path($originalFileName);
+    $p_header['filename'] = str_replace($originalFileName, $modifiedFileName, $originalFilePath);
+    
+    return 1;
 }
 
 /**
@@ -1111,11 +1112,11 @@ function clean_up_files_in_zip($p_event, &$p_header)
  * by eliminating dangerous file names and cleaning them
  *
  * @param string $path
- * @return $path
+ * @return string
  * @see disable_dangerous_file()
  * @see api_replace_dangerous_char()
  */
-function clean_up_path(&$path)
+function clean_up_path($path)
 {
     // Split the path in folders and files
     $path_array = explode('/', $path);
@@ -1129,7 +1130,8 @@ function clean_up_path(&$path)
     // Join the "cleaned" path (modified in-place as passed by reference)
     $path = implode('/', $path_array);
     $res = filter_extension($path);
-    return $res;
+
+    return $path;
 }
 
 /**
@@ -1202,7 +1204,7 @@ function filter_extension(&$filename)
  * @param int $group_id
  * @param int $session_id Session ID, if any
  * @param int $userId creator id
- * 
+ *
  * @return int id if inserted document
  */
 function add_document(
@@ -1548,7 +1550,7 @@ function create_unexisting_directory(
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
-        
+
                 $document_id = add_document(
                     $_course,
                     $systemFolderName,

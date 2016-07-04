@@ -21,39 +21,35 @@ if (isset($_GET['messages_page_nr'])) {
 	}
 }
 
-if (api_get_setting('allow_message_tool')!='true'){
+if (api_get_setting('allow_message_tool') != 'true') {
 	api_not_allowed();
 }
 //jquery thickbox already called from main/inc/header.inc.php
 
-$htmlHeadXtra[]='<script language="javascript">
+$htmlHeadXtra[] = '<script>
 function enviar(miforma) {
 	if(confirm("'.get_lang('SureYouWantToDeleteSelectedMessages', '').'"))
 		miforma.submit();
 }
-function select_all(formita)
-{
+function select_all(formita) {
    for (i=0;i<formita.elements.length;i++)
 	{
       		if(formita.elements[i].type == "checkbox")
 				formita.elements[i].checked=1
 	}
 }
-function deselect_all(formita)
-{
-   for (i=0;i<formita.elements.length;i++)
-	{
-      		if(formita.elements[i].type == "checkbox")
-				formita.elements[i].checked=0
+function deselect_all(formita) {
+   for (i=0;i<formita.elements.length;i++) {
+        if(formita.elements[i].type == "checkbox")
+            formita.elements[i].checked=0
 	}
 }
-//-->
 </script>';
 
 /*
 		MAIN CODE
 */
-if (isset($_GET['f']) && $_GET['f']=='social') {
+if (isset($_GET['f']) && $_GET['f'] === 'social') {
 	$this_section = SECTION_SOCIAL;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
 	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Outbox'));
@@ -66,13 +62,17 @@ if (isset($_GET['f']) && $_GET['f']=='social') {
 $actions = '';
 if (api_get_setting('extended_profile') == 'true') {
     if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-        $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
+        $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
+            Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
     }
     if (api_get_setting('allow_message_tool') == 'true') {
         //echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
-        $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).'</a>';
-        $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).'</a>';
-        $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).'</a>';
+        $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+            Display::return_icon('message_new.png',get_lang('ComposeMessage')).'</a>';
+        $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+            Display::return_icon('inbox.png',get_lang('Inbox')).'</a>';
+        $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+            Display::return_icon('outbox.png',get_lang('Outbox')).'</a>';
     }
 }
 
@@ -81,7 +81,7 @@ $info_delete_outbox =array();
 $info_delete_outbox = isset($_GET['form_delete_outbox']) ? explode(',',$_GET['form_delete_outbox']) : '';
 $count_delete_outbox = count($info_delete_outbox) - 1;
 
-if (isset($info_delete_outbox[0]) && trim($info_delete_outbox[0])=='delete') {
+if (isset($info_delete_outbox[0]) && trim($info_delete_outbox[0]) == 'delete') {
     for ($i = 1; $i <= $count_delete_outbox; $i++) {
 		MessageManager::delete_message_by_user_sender(api_get_user_id(),$info_delete_outbox[$i]);
 	}

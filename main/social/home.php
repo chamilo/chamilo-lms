@@ -206,7 +206,14 @@ if (count($sessionList) > 0) {
     $social_session_block = $sessionList;
 }
 
-$social_group_block = Display::panelCollapse(get_lang('Group'), $social_group_block, 'sm-groups', null, 'grups-acordion', 'groups-collapse');
+$social_group_block = Display::panelCollapse(
+    get_lang('Group'),
+    $social_group_block,
+    'sm-groups',
+    null,
+    'grups-acordion',
+    'groups-collapse'
+);
 
 $tpl = new Template(get_lang('SocialNetwork'));
 

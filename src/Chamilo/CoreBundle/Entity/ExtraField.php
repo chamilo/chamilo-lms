@@ -51,7 +51,7 @@ class ExtraField extends BaseAttribute
     /**
      * @var string
      *
-     * @ORM\Column(name="variable", type="string", length=64, nullable=false, unique=false)
+     * @ORM\Column(name="variable", type="string", length=255, nullable=false, unique=false)
      */
     protected $variable;
 
@@ -181,10 +181,15 @@ class ExtraField extends BaseAttribute
     }
 
     /**
+     * @param bool $translated Optional. Whether translate the display text
      * @return string
      */
-    public function getDisplayText()
+    public function getDisplayText($translated = true)
     {
+        if ($translated) {
+            return \ExtraField::translateDisplayName($this->variable, $this->displayText);
+        }
+
         return $this->displayText;
     }
 
@@ -316,5 +321,4 @@ class ExtraField extends BaseAttribute
                 return 'text';
         }
     }
-
 }

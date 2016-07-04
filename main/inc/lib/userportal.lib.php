@@ -79,7 +79,7 @@ class IndexManager
             if (!empty($exercise_list)) {
                 $exercise_list = msort($exercise_list, 'tms');
                 $my_exercise = $exercise_list[0];
-                $url = Display::url($my_exercise['title'], api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']);
+                $url = Display::url($my_exercise['title'], api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']);
                 $this->tpl->assign('exercise_url', $url);
                 $this->tpl->assign('exercise_end_date', api_convert_and_format_date($my_exercise['end_time'], DATE_FORMAT_SHORT));
             }
@@ -229,7 +229,7 @@ class IndexManager
         $html = '';
 
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
-            $open = @(string)file_get_contents(api_get_path(SYS_PATH).$this->home.$_GET['include']);
+            $open = @(string)file_get_contents($this->home.$_GET['include']);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             // Hiding home top when user not connected.
@@ -278,14 +278,13 @@ class IndexManager
 
     function return_notice()
     {
-        $sys_path = api_get_path(SYS_PATH);
         $user_selected_language = api_get_interface_language();
 
         $html = '';
         // Notice
-        $home_notice = @(string)file_get_contents($sys_path.$this->home.'home_notice_'.$user_selected_language.'.html');
+        $home_notice = @(string)file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
         if (empty($home_notice)) {
-            $home_notice = @(string)file_get_contents($sys_path.$this->home.'home_notice.html');
+            $home_notice = @(string)file_get_contents($this->home.'home_notice.html');
         }
 
         if (!empty($home_notice)) {
@@ -306,7 +305,6 @@ class IndexManager
     function return_help()
     {
         $user_selected_language = api_get_interface_language();
-        $sys_path               = api_get_path(SYS_PATH);
         $platformLanguage       = api_get_setting('platformLanguage');
 
         // Help section.
@@ -317,7 +315,7 @@ class IndexManager
         }
 
         $html = null;
-        $home_menu = @(string)file_get_contents($sys_path.$this->home.'home_menu_'.$user_selected_language.'.html');
+        $home_menu = @(string)file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
             $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
             $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
@@ -829,7 +827,7 @@ class IndexManager
     {
         $html = null;
         if (!api_is_anonymous()) {
-            $userPicture = UserManager::getUserPicture(api_get_user_id());
+            $userPicture = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
             $content = null;
 
             if (api_get_setting('allow_social_tool') == 'true') {
@@ -910,8 +908,16 @@ class IndexManager
 
         $editProfileUrl = Display::getProfileEditionLink($user_id);
 
-        $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.Display::return_icon('edit-profile.png',get_lang('EditProfile'),null,ICON_SIZE_SMALL).get_lang('EditProfile').'</a></li>';
+        $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.
+            Display::return_icon(
+                'edit-profile.png',
+                get_lang('EditProfile'),
+                null,
+                ICON_SIZE_SMALL
+            ).
+            get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';
+
         $html = self::show_right_block(
             get_lang('Profile'),
             $profile_content,
@@ -920,6 +926,21 @@ class IndexManager
             'profile',
             'profileCollapse'
         );
+
+        $setting = api_get_plugin_setting('bbb', 'enable_global_conference');
+        $settingLink = api_get_plugin_setting('bbb', 'enable_global_conference_link');
+        if ($setting === 'true' && $settingLink === 'true') {
+            $url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?global=1';
+            $content = Display::url(get_lang('LaunchVideoConferenceRoom'), $url);
+            $html .= self::show_right_block(
+                get_lang('VideoConference'),
+                $content,
+                'videoconference_block',
+                null,
+                'videoconference',
+                'videoconferenceCollapse'
+            );
+        }
 
         return $html;
     }
@@ -1053,7 +1074,7 @@ class IndexManager
         if ($load_history) {
             // Load sessions in category in *history*
             $session_categories = UserManager::get_sessions_by_category($user_id, true);
-            
+
         } else {
             // Load sessions in category
             $session_categories = UserManager::get_sessions_by_category($user_id, false);
@@ -1067,7 +1088,7 @@ class IndexManager
                 $html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
             }
         }
-        
+
         $sessionCount = 0;
         $courseCount = 0;
 
@@ -1087,7 +1108,7 @@ class IndexManager
 
             $this->tpl->assign('special_courses', $specialCourses);
             $this->tpl->assign('courses', $courses);
-            
+
             if (api_get_configuration_value('view_grid_courses') && ($courses || $specialCourses)) {
                 $listCourse = $this->tpl->fetch(
                 $this->tpl->get_template('/user_portal/grid_courses.tpl'));
@@ -1095,19 +1116,20 @@ class IndexManager
                 $listCourse = $this->tpl->fetch(
                 $this->tpl->get_template('/user_portal/classic_courses.tpl'));
             }
-            if (!empty($specialCourses['course_count']) && !empty($courses['course_count'])) {
-                $courseCount = intval($specialCourses['course_count']) + intval($courses['course_count']);
-            }
+
+            $courseCount = count($specialCourses) + count($courses['in_category']) + count($courses['not_category']);
         }
 
         $sessions_with_category = '';
-        $sessions_with_no_category = '';
 
         $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
         $coursesListSessionStyle = $coursesListSessionStyle === false ? 1 : $coursesListSessionStyle;
         if (api_is_drh()) {
             $coursesListSessionStyle = 1;
         }
+
+        // Declared listSession variable
+        $listSession = [];
 
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
@@ -1209,11 +1231,11 @@ class IndexManager
                             if (api_is_platform_admin()) {
                                 $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session_id;
                             }
-                            
+
                             $coachId = $session_box['id_coach'];
                             $extraFieldValue = new ExtraFieldValue('session');
                             $imageField = $extraFieldValue->get_values_by_handler_and_field_variable($session_id, 'image');
-                            
+
                             $params['category_id'] = $session_box['category_id'];
                             $params['title'] = $session_box['title'];
                             //$params['subtitle'] = $extra_info;
@@ -1226,10 +1248,10 @@ class IndexManager
                             $params['duration'] = isset($session_box['duration']) ? ' ' . $session_box['duration'] : null;
                             $params['edit_actions'] = $actions;
                             $params['show_description'] = $session_box['show_description'];
-                            $params['description'] = $session_box['description'];   
+                            $params['description'] = $session_box['description'];
                             $params['visibility'] = $session_box['visibility'];
                             $params['show_simple_session_info'] = false;
-                            $params['course_list_session_style'] = $coursesListSessionStyle;                          
+                            $params['course_list_session_style'] = $coursesListSessionStyle;
                             $params['num_users'] = $session_box['num_users'];
                             $params['num_courses'] = $session_box['num_courses'];
                             $params['courses'] = $html_courses_session;
@@ -1248,19 +1270,7 @@ class IndexManager
                                 $params['points'] = GamificationUtils::getSessionPoints($params['id'], $this->user_id);
                             }
                             $listSession[] = $params;
-                            $this->tpl->assign('session', $listSession);
-                            $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
-                            $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
 
-                            if (api_get_configuration_value('view_grid_courses')){
-                                $sessions_with_no_category = $this->tpl->fetch(
-                                    $this->tpl->get_template('/user_portal/grid_session.tpl')
-                                );
-                            } else {
-                                $sessions_with_no_category = $this->tpl->fetch(
-                                    $this->tpl->get_template('/user_portal/session.tpl')
-                                );
-                            }
                             $sessionCount++;
                         }
                     }
@@ -1357,7 +1367,7 @@ class IndexManager
 
                                 $this->tpl->assign('session', $sessionParams);
                                 $html_sessions .= $this->tpl->fetch(
-                                    $this->tpl->get_template('user_portal/session.tpl')
+                                    $this->tpl->get_template('user_portal/classic_session.tpl')
                                 );
 
                                 $sessionCount++;
@@ -1410,6 +1420,32 @@ class IndexManager
                         );
                     }
                 }
+            }
+
+            $allCoursesInSessions = [];
+
+            foreach ($listSession as $currentSession) {
+                $coursesInSessions = $currentSession['courses'];
+                unset($currentSession['courses']);
+                foreach ($coursesInSessions as $coursesInSession) {
+                    $coursesInSession['session'] = $currentSession;
+                    $allCoursesInSessions[] = $coursesInSession;
+                }
+            }
+
+            $this->tpl->assign('all_courses', $allCoursesInSessions);
+            $this->tpl->assign('session', $listSession);
+            $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
+            $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
+
+            if (api_get_configuration_value('view_grid_courses')){
+                $sessions_with_no_category = $this->tpl->fetch(
+                    $this->tpl->get_template('/user_portal/grid_session.tpl')
+                );
+            } else {
+                $sessions_with_no_category = $this->tpl->fetch(
+                    $this->tpl->get_template('/user_portal/classic_session.tpl')
+                );
             }
         }
 
@@ -1485,7 +1521,7 @@ class IndexManager
         $listCoursesInfo = array();
         if (!isset($_GET['history'])) {
             // Display special courses
-            $specialCoursesResult = CourseManager::display_special_courses(
+            $specialCoursesResult = CourseManager::returnSpecialCourses(
                 $user_id,
                 $loadDirs
             );

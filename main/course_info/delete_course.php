@@ -21,12 +21,12 @@ $current_course_code = $_course['official_code'];
 $current_course_name = $_course['name'];
 
 if (!api_is_allowed_to_edit()) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 $tool_name = get_lang('DelCourse');
 
-    if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
+if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
     CourseManager::delete_course($_course['sysCode']);
     $obj_cat = new Category();
     $obj_cat->update_category_delete($_course['sysCode']);
@@ -38,7 +38,6 @@ $tool_name = get_lang('DelCourse');
     $message = '<h2>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h2>';
     $message .=get_lang('HasDel');
     $message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').' '.api_get_setting('siteName').'</a>';
-
 } else {
     $message = '<h3>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h3>';
     $message .= '<p>'.get_lang('ByDel').'</p>';

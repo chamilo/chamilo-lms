@@ -145,13 +145,8 @@ class UserManager
      */
     public static function isPasswordValid($encoded, $raw, $salt)
     {
-        //$encoder = self::getEncoder($user);
         $encoder = new \Chamilo\UserBundle\Security\Encoder(self::getPasswordEncryption());
-        /*$user->getPassword(),
-            $password,
-            $user->getSalt()*/
         $validPassword = $encoder->isPasswordValid($encoded, $raw, $salt);
-
 
         return $validPassword;
     }
@@ -212,6 +207,8 @@ class UserManager
      * @param  bool $send_mail
      * @param  bool $isAdmin
      * @param  string $address
+     * @param  bool $sendEmailToAllAdmins
+     * @param FormValidator $form
      *
      * @return mixed   new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -239,7 +236,9 @@ class UserManager
         $encrypt_method = '',
         $send_mail = false,
         $isAdmin = false,
-        $address = ''
+        $address = '',
+        $sendEmailToAllAdmins = false,
+        $form = null
     ) {
         $currentUserId = api_get_user_id();
         $hook = HookCreateUser::create();
@@ -294,8 +293,11 @@ class UserManager
         //Checking the user language
         $languages = api_get_languages();
         $language = strtolower($language);
-        if (!in_array($language, $languages['folder'])) {
-            $language = api_get_setting('platformLanguage');
+
+        if (isset($languages['folder'])) {
+            if (!in_array($language, $languages['folder'])) {
+                $language = api_get_setting('platformLanguage');
+            }
         }
 
         if (!empty($currentUserId)) {
@@ -445,6 +447,31 @@ class UserManager
                         null,
                         $additionalParameters
                     );
+                }
+
+                if ($sendEmailToAllAdmins) {
+                    $adminList = UserManager::get_all_administrators();
+
+                    $tplContent = new Template(null, false, false, false, false, false);
+                    // variables for the default template
+                    $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
+                    $tplContent->assign('user_added', $user);
+                    /** @var FormValidator $form */
+                    $form->freeze();
+                    $form->removeElement('submit');
+                    $formData = $form->returnForm();
+                    $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();
+                    $tplContent->assign('link', Display::url($url, $url));
+                    $tplContent->assign('form', $formData);
+
+                    $layoutContent = $tplContent->get_template('mail/content_registration_platform_to_admin.tpl');
+                    $emailBody = $tplContent->fetch($layoutContent);
+                    $subject = get_lang('UserAdded');
+
+                    foreach ($adminList as $adminId => $data) {
+                        MessageManager::send_message_simple($adminId, $subject, $emailBody);
+                    }
+
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
@@ -832,7 +859,8 @@ class UserManager
         $language = 'english',
         $encrypt_method = '',
         $send_email = false,
-        $reset_password = 0
+        $reset_password = 0,
+        $address
     ) {
         $hook = HookUpdateUser::create();
         if (!empty($hook)) {
@@ -905,6 +933,7 @@ class UserManager
             ->setEmail($email)
             ->setOfficialCode($official_code)
             ->setPhone($phone)
+            ->setAddress($address)
             ->setPictureUri($picture_uri)
             ->setExpirationDate($expiration_date)
             ->setActive($active)
@@ -1365,7 +1394,7 @@ class UserManager
 
             $result['complete_name'] = api_get_person_name(
                 $result['firstname'],
-                $result['lastname']               
+                $result['lastname']
             );
             $return_array[] = $result;
         }
@@ -1509,7 +1538,7 @@ class UserManager
 
         switch ($size) {
             case USER_IMAGE_SIZE_SMALL:
-                $pictureAnonymousSize = '22';
+                $pictureAnonymousSize = '32';
                 $realSizeName = 'small_';
                 $gravatarSize = 22;
                 break;
@@ -1521,7 +1550,7 @@ class UserManager
             case USER_IMAGE_SIZE_ORIGINAL:
                 $pictureAnonymousSize = '128';
                 $realSizeName = '';
-                $gravatarSize = 108;
+                $gravatarSize = 200;
                 break;
             case USER_IMAGE_SIZE_BIG:
                 $pictureAnonymousSize = '128';
@@ -1664,7 +1693,7 @@ class UserManager
         // Storing the new photos in 4 versions with various sizes.
 
         $small = new Image($source_file);
-        $small->resize(22);
+        $small->resize(32);
         $small->send_image($path.'small_'.$filename);
         $medium = new Image($source_file);
         $medium->resize(85);
@@ -2072,7 +2101,7 @@ class UserManager
         $extraField = new ExtraField('user');
         $data = $extraField->get_handler_field_info_by_field_variable($variable);
 
-        return empty($data) ? true : false;
+        return !empty($data) ? true : false;
     }
 
     /**
@@ -2253,6 +2282,22 @@ class UserManager
     }
 
     /**
+     * Get the extra field information for user tag (the options as well)
+     * @param  int     $variable The name of the field we want to know everything about
+     * @return array   Array containing all the information about the extra profile field
+     * (first level of array contains field details, then 'options' sub-array contains options details,
+     * as returned by the database)
+     * @author José Loguercio
+     * @since v1.11.0
+     */
+    public static function get_extra_field_tags_information_by_name($variable)
+    {
+        $extraField = new ExtraField('user');
+
+        return $extraField->get_handler_field_info_by_tags($variable);
+    }
+
+    /**
      * @param string $type
      *
      * @return array
@@ -2267,7 +2312,7 @@ class UserManager
     /**
      * Get all the extra field information of a certain field (also the options)
      *
-     * @param int $field_name the name of the field we want to know everything of
+     * @param int $fieldId the ID of the field we want to know everything of
      * @return array $return containing all th information about the extra profile field
      * @author Julio Montoya
      * @deprecated
@@ -2281,28 +2326,59 @@ class UserManager
     }
 
     /** Get extra user data by value
-     * @param string the internal variable name of the field
-     * @param string the internal value of the field
+     * @param string $variable the internal variable name of the field
+     * @param string $value the internal value of the field
+     * @param bool $all_visibility
+     *
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-    public static function get_extra_user_data_by_value($field_variable, $field_value)
+     public static function get_extra_user_data_by_value($variable, $value, $all_visibility = true)
     {
-        $extraField = new ExtraFieldValue('user');
+        $extraFieldValue = new ExtraFieldValue('user');
+        $extraField = new ExtraField('user');
 
-        $data = $extraField->get_item_id_from_field_variable_and_field_value(
-            $field_variable,
-            $field_value,
+        $info = $extraField->get_handler_field_info_by_field_variable($variable);
+
+        if (false === $info) {
+            return [];
+        }
+
+        $data = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $variable,
+            $value,
+            false,
+            false,
             true
         );
 
         $result = [];
         if (!empty($data)) {
-            foreach ($data as $data) {
-                $result[] = $data;
+            foreach ($data as $item) {
+                $result[] = $item['item_id'];
             }
         }
 
         return $result;
+    }
+
+    /**
+     * Get extra user data by tags value
+     *
+     * @param int $fieldId the ID of the field we want to know everything of
+     * @param string $tag the tag name for search
+     * @return array with extra data info of a user
+     * @author José Loguercio
+     * @since v1.11.0
+     */
+    public static function get_extra_user_data_by_tags($fieldId, $tag)
+    {
+        $extraField = new ExtraField('user');
+        $result = $extraField->getAllUserPerTag($fieldId, $tag);
+        $array = [];
+        foreach ($result as $index => $user) {
+            $array[] = $user['user_id'];
+        }
+        return $array;
     }
 
     /**
@@ -2326,6 +2402,20 @@ class UserManager
         }
 
         return $data;
+    }
+
+    /**
+     * Get extra user data tags by field variable
+     *
+     * @param string    field variable
+     * @return array    data
+     */
+    public static function get_extra_user_data_for_tags($field_variable)
+    {
+        $extra_information_by_variable = self::get_extra_field_tags_information_by_name($field_variable);
+
+
+        return $extra_information_by_variable;
     }
 
     /**
@@ -3118,28 +3208,27 @@ class UserManager
         }
     }
 
-    /*
+    /**
      *
+     * Gets the tags of a specific field_id
      * USER TAGS
      *
-     * Intructions to create a new user tag by Julio Montoya <gugli100@gmail.com>
+     * Instructions to create a new user tag by Julio Montoya <gugli100@gmail.com>
      *
-     * 1. Create a new extra field in main/admin/user_fields.php with the "TAG" field type make it available and visible. Called it "books" for example.
+     * 1. Create a new extra field in main/admin/user_fields.php with the "TAG" field type make it available and visible.
+     *    Called it "books" for example.
      * 2. Go to profile main/auth/profile.php There you will see a special input (facebook style) that will show suggestions of tags.
      * 3. All the tags are registered in the user_tag table and the relationship between user and tags is in the user_rel_tag table
      * 4. Tags are independent this means that tags can't be shared between tags + book + hobbies.
      * 5. Test and enjoy.
      *
-     */
-
-    /**
-     * Gets the tags of a specific field_id
+     * @param string $tag
+     * @param int $field_id field_id
+     * @param string $return_format how we are going to result value in array or in a string (json)
+     * @param $limit
      *
-     * @param int field_id
-     * @param string how we are going to result value in array or in a string (json)
      * @return mixed
-     * @since Nov 2009
-     * @version 1.8.6.2
+     *
      */
     public static function get_tags($tag, $field_id, $return_format = 'json', $limit = 10)
     {
@@ -3156,18 +3245,20 @@ class UserManager
         $return = array();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $return[] = array('caption' => $row['tag'], 'value' => $row['tag']);
+                $return[] = array('key' => $row['tag'], 'value' => $row['tag']);
             }
         }
-        if ($return_format == 'json') {
+        if ($return_format === 'json') {
             $return = json_encode($return);
         }
+
         return $return;
     }
 
     /**
      * @param int $field_id
      * @param int $limit
+     *
      * @return array
      */
     public static function get_top_tags($field_id, $limit = 100)
@@ -3197,8 +3288,9 @@ class UserManager
 
     /**
      * Get user's tags
-     * @param int field_id
-     * @param int user_id
+     * @param int $user_id
+     * @param int $field_id
+     *
      * @return array
      */
     public static function get_user_tags($user_id, $field_id)
@@ -3229,9 +3321,10 @@ class UserManager
 
     /**
      * Get user's tags
-     * @param int user_id
-     * @param int field_id
-     * @param bool show links or not
+     * @param int $user_id
+     * @param int $field_id
+     * @param bool $show_links show links or not
+     *
      * @return array
      */
     public static function get_user_tags_to_string($user_id, $field_id, $show_links = true)
@@ -3265,18 +3358,21 @@ class UserManager
                 $tag_tmp[] = $tag['tag'];
             }
         }
+
         if (is_array($user_tags) && count($user_tags) > 0) {
             $return = implode(', ', $tag_tmp);
         } else {
+
             return '';
         }
+
         return $return;
     }
 
     /**
      * Get the tag id
-     * @param int tag
-     * @param int field_id
+     * @param int $tag
+     * @param int $field_id
      * @return int returns 0 if fails otherwise the tag id
      */
     public static function get_tag_id($tag, $field_id)
@@ -3290,16 +3386,19 @@ class UserManager
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result, 'ASSOC');
+
             return $row['id'];
         } else {
+
             return 0;
         }
     }
 
     /**
      * Get the tag id
-     * @param int tag
-     * @param int field_id
+     * @param int $tag_id
+     * @param int $field_id
+     *
      * @return int 0 if fails otherwise the tag id
      */
     public static function get_tag_id_from_id($tag_id, $field_id)
@@ -3320,9 +3419,9 @@ class UserManager
 
     /**
      * Adds a user-tag value
-     * @param mixed tag
-     * @param int The user id
-     * @param int field id of the tag
+     * @param mixed $tag
+     * @param int $user_id
+     * @param int $field_id field id of the tag
      * @return bool
      */
     public static function add_tag($tag, $user_id, $field_id)
@@ -3352,8 +3451,6 @@ class UserManager
               $result = Database::query($sql);
               $last_insert_id = Database::insert_id();
               } */
-        } else {
-
         }
 
         //this is a new tag
@@ -3384,8 +3481,8 @@ class UserManager
 
     /**
      * Deletes an user tag
-     * @param int user id
-     * @param int field id
+     * @param int $user_id
+     * @param int $field_id
      *
      */
     public static function delete_user_tags($user_id, $field_id)
@@ -3409,9 +3506,10 @@ class UserManager
 
     /**
      * Process the tag list comes from the UserManager::update_extra_field_value() function
-     * @param array the tag list that will be added
-     * @param int user id
-     * @param int field id
+     * @param array $tags the tag list that will be added
+     * @param int $user_id
+     * @param int $field_id
+     *
      * @return bool
      */
     public static function process_tags($tags, $user_id, $field_id)
@@ -3430,7 +3528,7 @@ class UserManager
 
     /**
      * Returns a list of all administrators
-     * @author jmontoya
+     *
      * @return array
      */
     public static function get_all_administrators()
@@ -3614,7 +3712,7 @@ class UserManager
             $finalResult = array();
             if (count($extraFieldResult)>1) {
                 for ($i=0; $i < count($extraFieldResult) -1; $i++) {
-                    if (is_array($extraFieldResult[$i+1])) {
+                if (is_array($extraFieldResult[$i]) && is_array($extraFieldResult[$i+1])) {
                         $finalResult  = array_intersect($extraFieldResult[$i], $extraFieldResult[$i+1]);
                     }
                 }
@@ -3638,7 +3736,7 @@ class UserManager
      * @param string $query the value of the search box
      * @return string HTML form
      */
-    public static function get_search_form($query)
+    public static function get_search_form($query, $defaultParams = [])
     {
         $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
         $form = new FormValidator(
@@ -3690,6 +3788,10 @@ class UserManager
 
         $defaults['search_type'] = intval($searchType);
         $defaults['q'] = api_htmlentities(Security::remove_XSS($query));
+
+        if (!empty($defaultParams)) {
+            $defaults = array_merge($defaults, $defaultParams);
+        }
         $form->setDefaults($defaults);
 
         $form->addButtonSearch(get_lang('Search'));
@@ -4832,7 +4934,7 @@ EOF;
 
     /**
      * Subscribe boss to students
-     * 
+     *
      * @param int $bossId The boss id
      * @param array $usersId The users array
      * @return int Affected rows
@@ -5080,6 +5182,26 @@ EOF;
     }
 
     /**
+     * @param int $bossId
+     * @param int $studentId
+     *
+     * @return bool
+     */
+    public static function userIsBossOfStudent($bossId, $studentId)
+    {
+        $result = false;
+        $bossList = UserManager::getStudentBossList($studentId);
+        if ($bossList) {
+            $bossList = array_column($bossList, 'boss_id');
+            if (in_array($bossId, $bossList)) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get either a Gravatar URL or complete image tag for a specified email address.
      *
      * @param string $email The email address
@@ -5210,7 +5332,7 @@ SQL;
                 [
                     'url' => $userPath.'class.php?'.api_get_cidreq(),
                     'content' => get_lang('Classes'),
-                ],
+                ]
             ];
 
             return Display::tabsOnlyLink($headers, $optionSelected);

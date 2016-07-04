@@ -644,15 +644,19 @@ function api_format_date($time, $format = null, $language = null)
  * Example: $date = '2008-03-07 15:44:08';
  * 			date_to_str($date) it will return 3 days, 20 hours
  * The given date should be in the timezone chosen by the user or administrator. Use api_get_local_time() to get it...
+ * You can use it like this:
+ * Display::tip(date_to_str_ago($dateInUtc), api_get_local_time($dateInUtc));
  *
- * @param  string The string has to be the result of a date function in this format -> date('Y-m-d H:i:s', time());
- * @return string The difference between the current date and the parameter in a literal way "3 days, 2 hour" *
+ * @param  string $date The string has to be the result of a date function in this format -> date('Y-m-d H:i:s', time());
+ * @return string $timeZone
+ *
  * @author Julio Montoya
  */
 
 function date_to_str_ago($date, $timeZone = 'UTC')
 {
-    if ($date == '0000-00-00 00:00:00')  {
+    if ($date === '0000-00-00 00:00:00')  {
+        
         return '';
     }
 
@@ -732,7 +736,7 @@ function api_get_months_long($language = null) {
  * @param string $first_name			The first name of the person.
  * @param string $last_name				The last name of the person.
  * @param string $title					The title of the person.
- * @param int/string $format (optional)	The person name format. It may be a pattern-string (for example '%t %l, %f' or '%T %F %L', ...) or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
+ * @param int|string $format (optional)	The person name format. It may be a pattern-string (for example '%t %l, %f' or '%T %F %L', ...) or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
  * @param string $language (optional)	The language id. If it is omitted, the current interface language is assumed. This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return bool							The result is sort of full name of the person.
@@ -829,7 +833,7 @@ function api_get_person_name(
 
 /**
  * Checks whether a given format represents person name in Western order (for which first name is first).
- * @param int/string $format (optional)	The person name format. It may be a pattern-string (for example '%t. %l, %f') or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
+ * @param int|string $format (optional)	The person name format. It may be a pattern-string (for example '%t. %l, %f') or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
  * @param string $language (optional)	The language id. If it is omitted, the current interface language is assumed. This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
  * @return bool							The result TRUE means that the order is first_name last_name, FALSE means last_name first_name.
  * Note: You may use this function for determing the order of the fields or columns "First name" and "Last name" in forms, tables and reports.
@@ -1048,7 +1052,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null)
  * @link http://php.net/manual/en/function.ord.php
  * Note the difference with the original funtion ord(): ord('') returns 0, api_ord('') returns 0xFFFD (unknown character).
  */
-function api_ord($character, $encoding) {
+function api_ord($character, $encoding = null) {
     return Patchwork\Utf8::ord(api_utf8_encode($character, $encoding));
 }
 
@@ -1562,7 +1566,7 @@ function api_natrsort(&$array, $language = null, $encoding = null)
 
 /**
  * This function unifies the encoding identificators, so they could be compared.
- * @param string/array $encoding	The specified encoding.
+ * @param string|array $encoding	The specified encoding.
  * @return string					Returns the encoding identificator modified in suitable for comparison way.
  */
 function api_refine_encoding_id($encoding) {
@@ -1574,8 +1578,8 @@ function api_refine_encoding_id($encoding) {
 
 /**
  * This function checks whether two $encoding are equal (same, equvalent).
- * @param string/array $encoding1		The first encoding
- * @param string/array $encoding2		The second encoding
+ * @param string|array $encoding1		The first encoding
+ * @param string|array $encoding2		The second encoding
  * @param bool $strict					When this parameter is TRUE the comparison ignores aliases of encodings.
  * When the parameter is FALSE, aliases are taken into account.
  * @return bool							Returns TRUE if the encodings are equal, FALSE otherwise.
@@ -1965,15 +1969,15 @@ function _api_convert_encoding_supports($encoding) {
 function apiGetHumanDateTime($date, $showTime = true, $humanForm = false) {
     if ($showTime) {
         if ($humanForm) {
-           return $date->format('j M Y H:i:s');    
+           return $date->format('j M Y H:i:s');
         } else {
-           return $date->format('Y-m-d H:i:s');     
+           return $date->format('Y-m-d H:i:s');
         }
     } else {
         if ($humanForm) {
-           return $date->format('j M Y');    
+           return $date->format('j M Y');
         } else {
-           return $date->format('Y-m-d');     
+           return $date->format('Y-m-d');
         }
     }
 }

@@ -63,14 +63,14 @@ $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_
 $actionsRight = '';
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee()) {
     $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin;
-    $actionsRight = Display::toolbarButton(get_lang('UploadMyAssignment'), $url, 'upload', 'success');
+    $actionsRight = Display::url(Display::return_icon('upload_package.png', get_lang('UploadMyAssignment'), null, ICON_SIZE_MEDIUM) . get_lang('UploadMyAssignment'), $url, array('class'=>'btn-toolbar'));
 }
 echo Display::toolbarAction('toolbar-work', array(0 => $actionsLeft . $actionsRight));
-
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);
 }
-
+echo Session::read('message');
+Session::erase('message');
 if (!empty($my_folder_data['description'])) {
     $contentWork = Security::remove_XSS($my_folder_data['description']);
     $html = '';

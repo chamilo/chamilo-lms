@@ -52,7 +52,7 @@ class TestGlossary extends UnitTestCase {
 	function testGetGlossaryTermByGlossaryName() {
 		$glossary_name = '';
 		$res = GlossaryManager::get_glossary_term_by_glossary_name($glossary_name);
-		$this->assertTrue(is_string($res));
+		$this->assertTrue(is_array($res));
 	}
 
 	function testUpdateGlossary() {
@@ -92,7 +92,7 @@ class TestGlossary extends UnitTestCase {
 
 	function testDisplayGlossaryList() {
 		ob_start();
-		$res = GlossaryManager::display_glossary_list();
+		$res = GlossaryManager::displayGlossaryList();
 		ob_end_clean();
         $this->assertTrue($res);
 	}

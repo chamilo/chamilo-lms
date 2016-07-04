@@ -128,7 +128,7 @@ EOT;
     {
         return '
             <div class="form-group {error_class}">
-                <label {label-for} class="col-sm-2 control-label" >
+                <label {label-for} class="col-sm-2 control-label {extra_label_class}" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
@@ -840,6 +840,7 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
+
         if ($style) {
             $config['style'] = true;
         }
@@ -953,8 +954,8 @@ EOT;
     /**
      * This function has been created for avoiding changes directly within QuickForm class.
      * When we use it, the element is threated as 'required' to be dealt during validation.
-     * @param array $element					The array of elements
-     * @param string $message					The message displayed
+     * @param array $element The array of elements
+     * @param string $message The message displayed
      */
     public function add_multiple_required_rule($elements, $message)
     {
@@ -1452,7 +1453,7 @@ EOT;
                 });
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
-                    var error = $('<span class=\"text-danger\"/>').text('".get_lang('Failed')."');
+                    var error = $('<span class=\"text-danger\"/>').text('".get_lang('UploadError')."');
                     $(data.context.children()[index])
                         .append('<br>')
                         .append(error);

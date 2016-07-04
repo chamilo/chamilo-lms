@@ -1,7 +1,7 @@
 {% for item in hot_courses %}
     {% if item.title %}
-        <div class="col-md-4 col-sm-4 col-xs-6">
-            <div class="items">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="items items-hotcourse">
                 <div class="image">
                     <img src="{{ item.course_image_large }}" class="img-responsive">
                     {% if item.categoryName != '' %}
@@ -36,16 +36,18 @@
                     <div class="ranking">
                         {{ item.rating_html }}
                     </div>
-                    {% if item.price %}
-                        {{ item.price }}
-                    {% else %}
-                        <div class="separator">&nbsp;</div>
-                    {% endif %}
                     <div class="toolbar">
-                        <div class="btn-group" role="group">
-                            {{ item.register_button }}
-                            {{ item.unsubscribe_button }}
-                            {{ item.already_register_as }}
+                        <div class="left">
+                            {% if item.price %}
+                                {{ item.price }}
+                            {% endif %}
+                        </div>
+                        <div class="right">
+                            <div class="btn-group" role="group">
+                                {{ item.register_button }}
+                                {{ item.unsubscribe_button }}
+                                {{ item.already_register_as }}
+                            </div>
                         </div>
                     </div>
                 </div>

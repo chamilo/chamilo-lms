@@ -11,7 +11,7 @@ class TestAnswer extends UnitTestCase {
 	public function setUp() {
 		/*
 		//Create a new exercise
-		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
+		require_once api_get_path(SYS_CODE_PATH).'exercise/exercise.class.php';
 		require_once api_get_path(SYS_CODE_PATH).'inc/lib/pear/HTML/QuickForm.php';
 		$this->aAnswer = new Answer(2);
 		$this->aAnswer->read();

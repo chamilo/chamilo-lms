@@ -31,14 +31,14 @@ $dbParams = array(
     'host' => $_configuration['db_host'],
     'user' => $_configuration['db_user'],
     'password' => $_configuration['db_password'],
-    'dbname' => $_configuration['main_database'],
+    'dbname' => $_configuration['main_database']
 );
 
 $database->connect($dbParams, realpath(__DIR__).'/', realpath(__DIR__).'/');
-$entityManager = $database->getManager();
+$entityManager = $database::getManager();
 
 $helperSet = ConsoleRunner::createHelperSet($entityManager);
-$dialogHelper = new Symfony\Component\Console\Helper\DialogHelper();
+$dialogHelper = new Symfony\Component\Console\Helper\QuestionHelper();
 $helperSet->set($dialogHelper);
 
 return $helperSet;

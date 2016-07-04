@@ -734,8 +734,12 @@ class Display
     ) {
         $code_path = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
-        $alternateCssPath = api_get_path(SYS_CSS_PATH);
-        $alternateWebCssPath = api_get_path(WEB_CSS_PATH);
+        // The following path is checked to see if the file exist. It's
+        // important to use the public path (i.e. web/css/) rather than the
+        // internal path (/app/Resource/public/css/) because the path used
+        // in the end must be the public path
+        $alternateCssPath = api_get_path(SYS_PUBLIC_PATH) . 'css/';
+        $alternateWebCssPath = api_get_path(WEB_PUBLIC_PATH) . 'css/';
 
         $image = trim($image);
 
@@ -775,7 +779,8 @@ class Display
         // ask for the SVG version directly
         $testServer = api_get_setting('server_type');
         if ($testServer == 'test' && $return_only_path == false) {
-            $svgImage = substr($image, 0, -3) . 'svg';
+            // if you want to uncomment this add a setting
+            /*$svgImage = substr($image, 0, -3) . 'svg';
             if (is_file($code_path . $theme . 'svg/' . $svgImage)) {
                 $icon = $w_code_path . $theme . 'svg/' . $svgImage;
             } elseif (is_file($code_path . 'img/icons/svg/' . $svgImage)) {
@@ -787,7 +792,7 @@ class Display
             }
             if (empty($additional_attributes['width'])) {
                 $additional_attributes['width'] = $size;
-            }
+            }*/
         }
 
         $icon = api_get_cdn_path($icon);
@@ -818,6 +823,15 @@ class Display
      */
     public static function img($image_path, $alt_text = '', $additional_attributes = array(), $filterPath = true)
     {
+        if (empty($image_path)) {
+            // For some reason, the call to img() happened without a proper
+            // image. Log the error and return an empty string to avoid
+            // breaking the HTML
+            $trace = debug_backtrace();
+            $caller = $trace[1];
+            error_log('No image provided in Display::img(). Caller info: '.print_r($caller, 1));
+            return '';
+        }
         // Sanitizing the parameter $image_path
         if ($filterPath) {
             $image_path = Security::filter_img_path($image_path);
@@ -1523,7 +1537,7 @@ class Display
             $rs = Database::query($sql);
             $session_info = Database::store_result($rs, 'ASSOC');
             $session_info = $session_info[0];
-            
+
             $session = array();
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
@@ -1603,7 +1617,7 @@ class Display
                     }
 
                     $session['dates'] = $start_buffer . " " . $stop_buffer;
-                   
+
                 }
 
                 if ( api_get_setting('show_session_coach') === 'true' ) {
@@ -1680,9 +1694,9 @@ class Display
 
 		$labels[]= $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
 		$labels[]= $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
-		if (!empty($number_of_users_who_voted)) {
+		/* if (!empty($number_of_users_who_voted)) {
 			$labels[]= get_lang('Average').' '.$point_info['point_average_star'].'/5';
-		}
+		} */
 
 		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote'). ' [?] ';
 
@@ -2028,8 +2042,8 @@ class Display
             case 'wav':
                 //no break;
             case 'ogg':
-                $html = '<audio src="' . $params['url'] . '" controls class="skip"></audio>';
-
+                $html = '<audio width="300px" controls src="'.$params['url'].'" >';
+                
                 return $html;
                 break;
         }

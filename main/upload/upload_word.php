@@ -37,7 +37,7 @@ if (isset($_POST['convert'])) {
     if (isset($_FILES['user_file'])) {
         $allowed_extensions = array('doc','docx','odt','txt','sxw','rtf');
         if (in_array(strtolower(pathinfo($_FILES['user_file']['name'],PATHINFO_EXTENSION)),$allowed_extensions)) {
-            require('../newscorm/lp_upload.php');
+            require('../lp/lp_upload.php');
             if (isset($o_doc) && $first_item_id != 0) {
                 // Search-related section
                 if (api_get_setting('search_enabled')=='true') {
@@ -56,7 +56,7 @@ if (isset($_POST['convert'])) {
                         }
                     }
                 } //end of search-related section
-                header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_doc->lp_id.'&action=view_item&id='.$first_item_id);
+                header('Location: ../lp/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_doc->lp_id.'&action=view_item&id='.$first_item_id);
             } else {
                 if (!empty($o_doc->error)) {
                     $errorMessage = $o_doc->error;
@@ -77,7 +77,7 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Doc"));
+$interbreadcrumb[]= array ("url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang("Doc"));
 $nameTools = get_lang("WoogieConversionPowerPoint");
 Display :: display_header($nameTools);
 

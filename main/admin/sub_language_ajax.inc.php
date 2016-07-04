@@ -44,10 +44,34 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
             }
         }
     }
+
+    if (isset($_REQUEST['redirect'], $_REQUEST['extra_field_type'])) {
+        Display::addFlash(
+            Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success')
+        );
+
+        $redirectUrl = api_get_path(WEB_CODE_PATH) . 'admin/extra_fields.php?type=';
+
+        switch ($_REQUEST['extra_field_type']) {
+            case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
+                $redirectUrl .= 'user';
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
+                $redirectUrl .= 'course';
+                break;
+            case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
+                $redirectUrl .= 'session';
+                break;
+        }
+
+        header("Location: $redirectUrl");
+        exit;
+    }
+
     if (!empty($variables_with_problems)) {
         echo $path_folder.' '.get_lang('IsNotWritable').'<br /> '.api_ucwords(get_lang('ErrorsFound')).': <br />'.$variables_with_problems;
     } else {
-        echo get_lang('Saved');
+        echo 1;
     }
 }
 

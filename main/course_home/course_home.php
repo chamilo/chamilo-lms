@@ -151,7 +151,7 @@ if (api_is_invitee()) {
     }
 }
 
-//Deleting group session
+// Deleting group session
 Session::erase('toolgroup');
 Session::erase('_gid');
 
@@ -167,6 +167,7 @@ if ($isSpecialCourse) {
         }
     }
 }
+
 if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
@@ -208,7 +209,7 @@ if (!empty($auto_launch)) {
             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
             if (!isset($_SESSION[$session_key])) {
                 //redirecting to the LP
-                $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&id_session='.$session_id;
+                $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq() . '&id_session=' . $session_id;
                 $_SESSION[$session_key] = true;
                 header("Location: $url");
                 exit;
@@ -245,7 +246,7 @@ if (!empty($auto_launch)) {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
                         //redirecting to the LP
-                        $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
+                        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq() . '&action=view&lp_id=' . $lp_data['id'];
 
                         $_SESSION[$session_key] = true;
                         header("Location: $url");
@@ -304,15 +305,13 @@ if ($show_autolaunch_lp_warning) {
     );
 }
 
-if (api_get_setting('homepage_view') == 'activity' ||
-    api_get_setting('homepage_view') == 'activity_big'
-) {
+if (api_get_setting('homepage_view') === 'activity' || api_get_setting('homepage_view') === 'activity_big') {
 	require 'activity.php';
-} elseif (api_get_setting('homepage_view') == '2column') {
+} elseif (api_get_setting('homepage_view') === '2column') {
 	require '2column.php';
-} elseif (api_get_setting('homepage_view') == '3column') {
+} elseif (api_get_setting('homepage_view') === '3column') {
 	require '3column.php';
-} elseif (api_get_setting('homepage_view') == 'vertical_activity') {
+} elseif (api_get_setting('homepage_view') === 'vertical_activity') {
 	require 'vertical_activity.php';
 }
 

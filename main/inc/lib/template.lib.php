@@ -273,7 +273,7 @@ class Template
         if (api_get_setting('enable_help_link') == 'true') {
             if (!empty($help)) {
                 $help = Security::remove_XSS($help);
-                $content = '<li class="help">';
+                $content = '<div class="help">';
                 $content .= Display::url(
                     Display::return_icon('help.large.png', get_lang('Help')),
                     api_get_path(WEB_CODE_PATH) . 'help/help.php?open=' . $help,
@@ -282,7 +282,7 @@ class Template
                         'data-title' => get_lang('Help')
                     ]
                 );
-                $content .= '</li>';
+                $content .= '</div>';
             }
         }
         $this->assign('help_content', $content);
@@ -779,8 +779,8 @@ class Template
         global $httpHeadXtra, $interbreadcrumb, $language_file, $_configuration, $this_section;
         $_course = api_get_course_info();
         $help = $this->help;
-        $nameTools             = $this->title;
-        $navigation            = return_navigation_array();
+        $nameTools = $this->title;
+        $navigation = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
 
         $this->assign('system_charset', api_get_system_encoding());
@@ -883,19 +883,35 @@ class Template
         $this->setHelp();
 
         //@todo move this in the template
-        $bug_notification_link = '';
+        $rightFloatMenu = '';
         $iconBug = Display::return_icon('bug.png', get_lang('ReportABug'), null, ICON_SIZE_LARGE);
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
-            $bug_notification_link = '<li class="report">
+            $rightFloatMenu = '<div class="report">
 		<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
                     '. $iconBug . '
                 </a>
-		</li>';
+		</div>';
         }
 
-        $this->assign('bug_notification_link', $bug_notification_link);
+        if (api_get_setting('show_link_ticket_notification') == 'true' && $this->user_is_logged_in) {
+            // by default is project_id = 1
+            $iconTicket = Display::return_icon('bug.png', get_lang('Ticket'), null, ICON_SIZE_LARGE);
+            $courseInfo = api_get_course_info();
+            $courseParams = '';
+            if (!empty($courseInfo)) {
+                $courseParams = api_get_cidreq();
+            }
+            $url = api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id=1&'.$courseParams;
+            $rightFloatMenu .= '<div class="report">
+		        <a href="'.$url.'" target="_blank">
+                    '. $iconTicket . '
+                </a>
+		    </div>';
+        }
 
-        $notification = return_notification_menu();
+        $this->assign('bug_notification', $rightFloatMenu);
+
+        $notification = returnNotificationMenu();
         $this->assign('notification_menu', $notification);
 
         $resize = '';
@@ -923,12 +939,12 @@ class Template
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
             $profile_url  = api_get_path(WEB_CODE_PATH).'social/home.php';
-            $profile_link = Display::url(get_lang('Profile'), $profile_url);
+
         } else {
             $profile_url  = api_get_path(WEB_CODE_PATH).'auth/profile.php';
-            $profile_link = Display::url(get_lang('Profile'), $profile_url);
+
         }
-        $this->assign('profile_link', $profile_link);
+
         $this->assign('profile_url', $profile_url);
 
         //Message link
@@ -942,9 +958,11 @@ class Template
         $this->assign('message_url', $message_url);
 
         //Certificate Link
-        $certificatesUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';
-        $certificateLink = Display::url(get_lang('MyCertificates'), $certificatesUrl);
+        $certificateUrl = null;
+        $certificateUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';
+        $certificateLink = Display::url(get_lang('MyCertificates'), $certificateUrl);
         $this->assign('certificate_link', $certificateLink);
+        $this->assign('certificate_url', $certificateUrl);
 
         $institution = api_get_setting('Institution');
         $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;

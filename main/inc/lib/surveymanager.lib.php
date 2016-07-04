@@ -19,7 +19,7 @@ class SurveyTree
     {
         // Database table definitions
         $table_survey = Database :: get_course_table(TABLE_SURVEY);
-        $table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
         // searching
@@ -39,18 +39,17 @@ class SurveyTree
 				LEFT JOIN $table_survey_question  survey_question
 				ON survey.survey_id = survey_question.survey_id , $table_user user
 				WHERE
-					survey.c_id 			=  $course_id AND
-					survey_question.c_id 	=  $course_id AND
-					survey.author 			= user.user_id
+					survey.c_id =  $course_id AND
+					survey_question.c_id = $course_id AND
+					survey.author = user.user_id
 				GROUP BY survey.survey_id";
 
         $res = Database::query($sql);
-        $surveys_parents = array ();
         $refs = array();
         $list = array();
         $plain_array=array();
 
-        while ($survey = Database::fetch_array($res,'ASSOC')) {
+        while ($survey = Database::fetch_array($res, 'ASSOC')) {
             $plain_array[$survey['survey_id']]=$survey;
             $surveys_parents[]=$survey['survey_version'];
             $thisref = &$refs[ $survey['survey_id'] ];

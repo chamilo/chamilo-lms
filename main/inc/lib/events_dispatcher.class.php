@@ -10,6 +10,11 @@
  */
 class EventsDispatcher
 {
+    /**
+     * @param string $event_name
+     * @param array $event_data
+     * @return bool
+     */
     public static function events($event_name, $event_data = array())
     {
         global $event_config;

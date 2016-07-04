@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /*
  This script is included by local.inc.php to redirect users to some url if some conditions are satisfied.
  * Please populate the $login_conditions array with a conditional function and an url.
@@ -15,7 +17,7 @@
  */
 $login_conditions = array();
 
-//"Term and conditions" condition
+// "Terms and conditions" condition
 array_push(
     $login_conditions,
     array(
@@ -47,26 +49,23 @@ function dc_check_phone_number($user)
  */
 function check_platform_legal_conditions($user)
 {
-    if (api_get_setting('allow_terms_conditions') == 'true') {
-        $term_and_condition_status = api_check_term_condition($user['user_id']);
+    if (api_get_setting('allow_terms_conditions') === 'true' &&
+        api_get_setting('load_term_conditions_section') === 'login'
+    ) {
+        $termAndConditionStatus = api_check_term_condition($user['user_id']);
         // @todo not sure why we need the login password and update_term_status
-        if ($term_and_condition_status == false) {
-            $_SESSION['term_and_condition'] = array(
-                'user_id' => $user['user_id'],
-                //'login'             => $user['username'],
-                //'password'          => $user['password'],
-                //'update_term_status' => true,
-            );
+        if ($termAndConditionStatus === false) {
+            Session::write('term_and_condition', array('user_id' => $user['user_id']));
 
             return false;
         } else {
-            unset($_SESSION['term_and_condition']);
+            Session::erase('term_and_condition');
 
             return true;
         }
     } else {
 
-        //No validation user can pass
+        // No validation user can pass
         return true;
     }
 }

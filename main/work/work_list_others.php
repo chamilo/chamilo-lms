@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once '../inc/global.inc.php';
+
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
@@ -36,7 +37,7 @@ protectWork($courseInfo, $workId);
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 if (!empty($group_id)) {
-    $group_properties  = GroupManager :: get_group_properties($group_id);
+    $group_properties = GroupManager :: get_group_properties($group_id);
     $show_work = false;
 
     if (api_is_allowed_to_edit(false, true)) {
@@ -99,27 +100,100 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
         get_lang('Actions')
     );
     $column_model = array(
-        array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-        array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
-        array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'sent_date',       'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-        array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+        array(
+            'name' => 'type',
+            'index' => 'file',
+            'width' => '12',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),
+        array('name' => 'firstname', 'index' => 'firstname', 'width' => '35', 'align' => 'left', 'search' => 'true'),
+        array('name' => 'lastname', 'index' => 'lastname', 'width' => '35', 'align' => 'left', 'search' => 'true'),
+        array(
+            'name' => 'title',
+            'index' => 'title',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false',
+            'wrap_cell' => 'true',
+        ),
+        array(
+            'name' => 'qualification',
+            'index' => 'qualification',
+            'width' => '20',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'sent_date',
+            'index' => 'sent_date',
+            'width' => '50',
+            'align' => 'left',
+            'search' => 'true',
+            'wrap_cell' => 'true',
+        ),
+        array(
+            'name' => 'qualificator_id',
+            'index' => 'qualificator_id',
+            'width' => '30',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'actions',
+            'index' => 'actions',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),
     );
 } else {
     $type = 'complex';
-    $columns  = array(
-        get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions')
+    $columns = array(
+        get_lang('Type'),
+        get_lang('FirstName'),
+        get_lang('LastName'),
+        get_lang('Title'),
+        get_lang('Date'),
+        get_lang('Actions'),
     );
     $column_model = array(
-        array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-        array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-        array('name'=>'sent_date',       'index'=>'sent_date',            'width'=>'50',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-        array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+        array(
+            'name' => 'type',
+            'index' => 'file',
+            'width' => '12',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),
+        array('name' => 'firstname', 'index' => 'firstname', 'width' => '35', 'align' => 'left', 'search' => 'true'),
+        array('name' => 'lastname', 'index' => 'lastname', 'width' => '35', 'align' => 'left', 'search' => 'true'),
+        array(
+            'name' => 'title',
+            'index' => 'title',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false',
+            'wrap_cell' => "true",
+        ),
+        array(
+            'name' => 'sent_date',
+            'index' => 'sent_date',
+            'width' => '50',
+            'align' => 'left',
+            'search' => 'true',
+            'wrap_cell' => 'true',
+        ),
+        array(
+            'name' => 'actions',
+            'index' => 'actions',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),
     );
 }
 
@@ -129,13 +203,13 @@ $extra_params['height'] = 'auto';
 $extra_params['sortname'] = 'firstname';
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_others&work_id='.$workId.'&type='.$type;
 ?>
-    <script>
-        $(function() {
-            <?php
-            echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
-        ?>
-        });
-    </script>
+<script>
+    $(function() {
+        <?php
+        echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
+    ?>
+    });
+</script>
 <?php
 echo Display::grid_html('results');
 

@@ -65,7 +65,7 @@ class SessionManager
      * @param   int     $showDescription Optional. Whether show the session description
      * @param   array   $extraFields
      * @param   int     $sessionAdminId Optional. If this sessions was created by a session admin, assign it to him
-     * @param boolean $sendSubscritionNotification Optional.
+     * @param boolean $sendSubscriptionNotification Optional.
      *          Whether send a mail notification to users being subscribed
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
@@ -87,7 +87,7 @@ class SessionManager
         $showDescription = 0,
         $extraFields = array(),
         $sessionAdminId = 0,
-        $sendSubscritionNotification = false
+        $sendSubscriptionNotification = false
     ) {
         global $_configuration;
 
@@ -160,7 +160,7 @@ class SessionManager
                     'visibility' => $visibility,
                     'description' => $description,
                     'show_description' => intval($showDescription),
-                    'send_subscription_notification' => $sendSubscritionNotification
+                    'send_subscription_notification' => (int) $sendSubscriptionNotification
                 );
 
                 if (!empty($startDate)) {
@@ -1375,11 +1375,11 @@ class SessionManager
             Display::return_message(get_lang('CoachIsRequired'), 'warning');
 
             return false;
-        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i')) {
+        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') && !api_is_valid_date($startDate, 'Y-m-d H:i:s')) {
             Display::return_message(get_lang('InvalidStartDate'), 'warning');
 
             return false;
-        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i')) {
+        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i') && !api_is_valid_date($endDate, 'Y-m-d H:i:s')) {
             Display::return_message(get_lang('InvalidEndDate'), 'warning');
 
             return false;
@@ -2223,8 +2223,8 @@ class SessionManager
                 }
 
                 // If the course isn't subscribed yet
-                $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id)
-                        VALUES ($sessionId, $courseId)";
+                $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id, nbr_users, position)
+                        VALUES ($sessionId, $courseId, 0, 0)";
                 Database::query($sql);
 
                 Event::addEvent(
@@ -2366,7 +2366,7 @@ class SessionManager
             'variable' => $variable,
             'value' => $value,
         ];
-        $extraFieldValue->save($params);
+        return $extraFieldValue->save($params);
     }
 
     /**
@@ -3170,7 +3170,7 @@ class SessionManager
         if (Database::num_rows($result) > 0) {
             $sysUploadPath = api_get_path(SYS_UPLOAD_PATH). 'sessions/';
             $webUploadPath = api_get_path(WEB_UPLOAD_PATH). 'sessions/';
-            $imgPath = Display::returnIconPath('session_default_small.png');
+            $imgPath = Display::return_icon('session_default_small.png', null, null, null, null, true);
 
             $tableExtraFields = Database::get_main_table(TABLE_EXTRA_FIELD);
             $sql = "SELECT id FROM " . $tableExtraFields . "
@@ -4040,7 +4040,7 @@ class SessionManager
      * @param array $groupBackup
      * @return array
      */
-    static function importCSV(
+    public static function importCSV(
         $file,
         $updateSession,
         $defaultUserId = null,
@@ -6661,7 +6661,7 @@ class SessionManager
         $userInfo = api_get_user_info();
 
         $categoriesOptions = array(
-            '0' => get_lang('None'),
+            '0' => get_lang('None')
         );
 
         if ($categoriesList != false) {
@@ -6784,12 +6784,12 @@ class SessionManager
 
         $options = [
             0 => get_lang('ByDuration'),
-            1 => get_lang('ByDates'),
+            1 => get_lang('ByDates')
         ];
 
         $form->addSelect('access', get_lang('Access'), $options, array(
             'onchange' => 'accessSwitcher()',
-            'id' => 'access',
+            'id' => 'access'
         ));
 
         $form->addElement('html', '<div id="duration" style="display:none">');
@@ -6807,11 +6807,9 @@ class SessionManager
         );
 
         $form->addElement('html', '</div>');
-
         $form->addElement('html', '<div id="date_fields" style="display:none">');
 
         // Dates
-
         $form->addDateTimePicker(
             'access_start_date',
             array(get_lang('SessionStartDate'), get_lang('SessionStartDateComment')),

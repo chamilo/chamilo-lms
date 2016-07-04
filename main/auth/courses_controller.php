@@ -90,14 +90,20 @@ class CoursesController
      * @internal param \action $string
      * @internal param \Category $string code (optional)
      */
-    public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null, $limit = array())
-    {
+    public function courses_categories(
+        $action,
+        $category_code = null,
+        $message = '',
+        $error = '',
+        $content = null,
+        $limit = array()
+    ) {
         $data = array();
         $browse_course_categories = $this->model->browse_course_categories();
         $data['countCoursesInCategory'] = $this->model->count_courses_in_category($category_code);
-        if ($action == 'display_random_courses') {
+        if ($action === 'display_random_courses') {
             // Random value is used instead limit filter
-            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 10);
+            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 12);
             $data['countCoursesInCategory'] = count($data['browse_courses_in_category']);
         } else {
             if (!isset($category_code)) {
@@ -110,6 +116,7 @@ class CoursesController
         $data['browse_course_categories'] = $browse_course_categories;
         $data['code'] = Security::remove_XSS($category_code);
 
+
         // getting all the courses to which the user is subscribed to
         $curr_user_id = api_get_user_id();
         $user_courses = $this->model->get_courses_of_user($curr_user_id);
@@ -117,7 +124,7 @@ class CoursesController
 
         // we need only the course codes as these will be used to match against the courses of the category
         if ($user_courses != '') {
-            foreach($user_courses as $key => $value) {
+            foreach ($user_courses as $key => $value) {
                 $user_coursecodes[] = $value['code'];
             }
         }
@@ -143,7 +150,7 @@ class CoursesController
         }
 
         // render to the view
-        
+
         $this->view->set_data($data);
         $this->view->set_layout('catalog_layout');
         $this->view->set_template('courses_categories');
@@ -750,7 +757,7 @@ class CoursesController
                 'coach_access_start_date' => $session->getCoachAccessStartDate(),
                 'coach_access_end_date' => $session->getCoachAccessEndDate(),
             ]);
-            
+
             $imageField = $extraFieldValue->get_values_by_handler_and_field_variable($session->getId(), 'image');
 
             $sessionCourseTags = [];
@@ -799,13 +806,16 @@ class CoursesController
             } else {
                 $catName = $cat->getName();
             }
-            
+
             $coachId = $session->getGeneralCoach()->getId();
             $coachName = $session->getGeneralCoach()->getCompleteName();
             $actions = null;
             if (api_is_platform_admin()) {
                 $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session->getId();
             }
+
+            $isThisSessionOnSale = $session->getBuyCoursePluginPrice();
+
             $sessionsBlock = array(
                 'id' => $session->getId(),
                 'name' => $session->getName(),
@@ -819,7 +829,8 @@ class CoursesController
                 'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
-                'subscribe_button' => $this->getRegisteredInSessionButton(
+                'price' => $isThisSessionOnSale['html'],
+                'subscribe_button' => isset($isThisSessionOnSale['buy_button']) ? $isThisSessionOnSale['buy_button'] : $this->getRegisteredInSessionButton(
                     $session->getId(),
                     $session->getName(),
                     $hasRequirements
@@ -830,7 +841,7 @@ class CoursesController
                 'tags' => $sessionCourseTags,
                 'edit_actions' => $actions
             );
-              
+
             $sessionsBlock = array_merge($sessionsBlock, $sequences);
             $sessionsBlocks[] = $sessionsBlock;
         }

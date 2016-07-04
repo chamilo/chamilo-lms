@@ -89,7 +89,7 @@ if ($from_learnpath == 'yes')
 }
 
 // Process a new chapter?
-if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
+if (!empty ($_POST['add_dir']) && !empty ($_POST['title']))
 {
 	$title = $_POST['title'];
 	$description = '';
@@ -295,28 +295,28 @@ if ($_GET["source_id"])
 			}
 			$originaltoolname = get_lang("Agenda");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath');
+			unset($_SESSION['from_learnpath']);
 			unset ($from_learnpath);
 			break;
 		case "2" : // coming from forum: new topic
 			$url = "../phpbb/newtopic.php?forum=$source_forum&md5=$md5";
 			$originaltoolname = get_lang("ForumAddNewTopic");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath');
+			unset($_SESSION['from_learnpath']);
 			unset ($from_learnpath);
 			break;
 		case "3" : // coming from forum: edit topic
 			$url = "../phpbb/editpost.php?post_id=$post_id&topic=$topic&forum=$forum&md5=$md5&originalresource=no";
 			$originaltoolname = get_lang("ForumEditTopic");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath');
+			unset($_SESSION['from_learnpath']);
 			unset ($from_learnpath);
 			break;
 		case "4" : // coming from exercises: edit topic
-			$url = "../exercice/admin.php?modifyAnswers=$modifyAnswers";
+			$url = "../exercise/admin.php?modifyAnswers=$modifyAnswers";
 			$originaltoolname = get_lang("ExerciseAnswers");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath');
+			unset($_SESSION['from_learnpath']);
 			unset ($from_learnpath);
 			break;
 		case "5" : // coming from learning path
@@ -359,7 +359,7 @@ else
 	$therow2 = Database::fetch_array($sql_result);
 
 	$from_learnpath = 'yes';
-	session_register('from_learnpath');
+	$_SESSION['from_learnpath'] = $from_learnpath;
 	$interbreadcrumb[] = array ("url" => "../scorm/scormdocument.php", "name" => get_lang('LearningPath'));
 	$interbreadcrumb[] = array ("url" => "../learnpath/learnpath_handler.php?learnpath_id=$learnpath_id", "name" => "{$therow['learnpath_name']}");
 	$interbreadcrumb[] = array ("url" => api_get_self()."?action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no", "name" => "{$therow2['chapter_name']}");
@@ -620,10 +620,10 @@ if ($content == "Agenda")
 */
 if ($content == "chapter")
 {
-	echo '<table><form name="add_chapter" action="'.'" method="POST">'."\n";
+	echo '<table><form name="add_dir" action="'.'" method="POST">'."\n";
 	echo '  <tr><td>'.get_lang('Title').'</td><td><input type="text" name="title" value="'.$title.'"></input></td></tr>'."\n";
 	echo '  <tr><td>'.get_lang('Description').'</td><td><input type="text" name="description" value="'.$description.'"></input></td></tr>'."\n";
-	echo '  <tr><td></td><td><input type="submit" name="add_chapter" value="'.get_lang('AddIt').'"/></td></tr>'."\n";
+	echo '  <tr><td></td><td><input type="submit" name="add_dir" value="'.get_lang('AddIt').'"/></td></tr>'."\n";
 	echo '</form></table>'."\n";
 	//echo "<hr>";
 }
@@ -645,7 +645,7 @@ if ($content == "Document" OR (empty($content) AND (api_is_allowed_to_edit() OR 
 	$courseDir = $_course['path']."/document";
 	$baseWorkDir = $baseServDir.$courseDir;
 	// showing the link to move one folder up (when not in the root folder)
-	show_folder_up();
+	show_folder_up($chapter_id);
 	// showing the blue bar with the path in it when we are not in the root
 	if (get_levels($folder))
 	{
@@ -655,7 +655,7 @@ if ($content == "Document" OR (empty($content) AND (api_is_allowed_to_edit() OR 
 	}
 
 	// showing the documents and subfolders of the folder we are in.
-	show_documents($folder);
+	show_documents($folder, $chapter_id);
 	//echo "<hr>";
 }
 

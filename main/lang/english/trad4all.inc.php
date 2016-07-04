@@ -2503,7 +2503,7 @@ $TitleManipulateStudentPublication = "Edit assignment";
 $EnterDataNewChapter = "Adding a section to the course";
 $EnterDataNewModule = "Enter information for section";
 $CreateNewStep = "Create new rich media page";
-$NewDocument = "Rich media page / activity";
+$TicketUpdated = "Ticket updated";
 $UseAnExistingResource = "Or use an existing resource :";
 $Position = "In table of contents";
 $NewChapterCreated = "A new section has now been created. You may continue by adding a section or step.";
@@ -2539,7 +2539,7 @@ $NoItemSelected = "Select a learning object in the table of contents";
 $NewDocumentCreated = "The rich media page/activity has been added to the course";
 $EditCurrentChapter = "Edit the current section";
 $ditCurrentModule = "Edit the current section";
-$CreateTheDocument = "Adding a rich media page/activity to the course";
+$CreateTheDocument = "Create a new document";
 $MoveTheCurrentDocument = "Move the current document";
 $EditTheCurrentDocument = "Edit the current document";
 $Warning = "Warning !";
@@ -6003,7 +6003,7 @@ $Off = "Off";
 $webserver = "Web server";
 $mysql = "MySQL";
 $NotInserted = "Not inserted";
-$Multipleresponse = "Multiple answer";
+$StudentBoss = "Superior (n+1)";
 $EnableMathJaxComment = "Enable the MathJax library to visualize mathematical formulas. This is only useful if either ASCIIMathML or ASCIISVG settings are enabled.";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "You can now login at %s using the login and the password you have provided.";
 $HaveFun = "Have fun,";
@@ -6980,7 +6980,7 @@ $EventType = "Event type";
 $WamiFlashDialog = "It will display a dialog box which asks for your permission to access the microphone, answer yes and close the dialog box (if you do not want to appear again, before closing check remember)";
 $WamiStartRecorder = "Start recording by pressing the microphone and stop it by pressing again. Each time you do this will generate a file.";
 $WamiNeedFilename = "Before you activate recording it is necessary a file name.";
-$InputNameHere = "Enter name here";
+$InputNameHere = "Enter filename here";
 $Reload = "Reload";
 $SelectGradeModel = "Select a calification model";
 $AllMustWeight100 = "The sum of all values must be 100";
@@ -7009,7 +7009,46 @@ $ResourceLockedByGradebook = "This option is not available because this activity
 $GradebookLockedAlert = "This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).";
 $GradebookEnableLockingTitle = "Enable locking of assessments by teachers";
 $GradebookEnableLockingComment = "Once enabled, this option will enable locking of any assessment by the teachers of the corresponding course. This, in turn, will prevent any modification of results by the teacher inside the resources used in the assessment: exams, learning paths, tasks, etc. The only role authorized to unlock a locked assessment is the administrator. The teacher will be informed of this possibility. The locking and unlocking of gradebooks will be registered in the system's report of important activities";
-$LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>LDAP authentication : <br />See I. below to configure LDAP <br />See II. below to activate LDAP authentication </li><br /><br /><li> Update user attributes, with LDAP data, after CAS authentication(see <a href='settings.php?category=CAS'>CAS configuration </a>) : <br />See I. below to configure LDAP <br />CAS manage user authentication, LDAP activation isn't required. </li><br /></ul></div><br /><h4>I. LDAP configuration</h4><h5>Edit file main/inc/conf/auth.conf.php </h5>-&gt; Edit values of array <code>&#36;extldap_config</code> <br /><br />Parameters are <br /><ul><li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>admin password (ex : 'admin_password' =&gt; '123456') </li><li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filter (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>protocol version (2 or 3) (ex : 'protocol_version' =&gt; 3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>encoding (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; To update correspondences between user and LDAP attributes, edit array <code>&#36;extldap_user_correspondance</code> <br />Array values are &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br />Array structure is explained in file main/auth/external_login/ldap.conf.php<br /><br /><br /><h4>II. Activate LDAP authentication </h4><h5>Edit file main/inc/conf/configuration.php </h5>-&gt; Uncomment lines <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/newUser.ldap.php&quot;;<br /><br />N.B. : LDAP users use same fields than platform users to login. <br />N.B. : LDAP activation adds a menu External authentication [LDAP] in &quot;add or modify&quot; user pages.";
+$LdapDescriptionComment = "    <div class=\"alert alert-info\">
+        <ul>
+            <li>LDAP authentication : <br>
+                See I. below to configure LDAP <br>
+                See II. below to activate LDAP authentication
+            </li>
+            <li>Update user attributes, with LDAP data, after CAS authentication(see <a href=\"settings.php?category=CAS\">CAS configuration </a>) : <br>
+                See I. below to configure LDAP <br>
+                CAS manage user authentication, LDAP activation isn't required.
+            </li>
+        </ul>
+    </div>
+    <h4>I. LDAP configuration</h4>
+    <h5>Edit file app/config/auth.conf.php </h5>
+    <p>-&gt; Edit values of array <code>\$extldap_config</code></p>
+    <ul>
+        <li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be')</li>
+        <li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be')</li>
+        <li>admin password (ex : 'admin_password' =&gt; '123456') </li>
+        <li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6'))</li>
+        <li>filter (ex : 'filter' =&gt; '') </li>
+        <li>port (ex : 'port' =&gt; 389) </li>
+        <li>protocol version (2 or 3) (ex : 'protocol_version' =&gt; 3)</li>
+        <li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li>
+        <li>encoding (ex : 'encoding' =&gt; 'UTF-8')</li>
+        <li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li>
+    </ul>
+    <p>-&gt; To update correspondences between user and LDAP attributes, edit array <code>\$extldap_user_correspondance</code></p>
+    <p>Array values are &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt;</p><p>
+    </p>
+    <h4>II. Activate LDAP authentication </h4>
+    <h5>Edit file main/inc/conf/configuration.php </h5>
+    <p>-&gt; Uncomment lines:</p>
+    <ul>
+        <li>
+    \$extAuthSource[\"extldap\"][\"login\"] = \$_configuration['root_sys'].\"main/auth/external_login/login.ldap.php\";</li>
+        <li>\$extAuthSource[\"extldap\"][\"newUser\"] = \$_configuration['root_sys'].\"main/auth/external_login/newUser.ldap.php\";</li>
+    </ul>
+    <p>N.B.: LDAP users use same fields than platform users to login. <br>
+    N.B.: LDAP activation adds a menu External authentication [LDAP] in \"add or modify\" user pages.</p>";
 $ShibbolethMainActivateTitle = "<h3>Shibboleth authentication</h3>";
 $ShibbolethMainActivateComment = "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus.";
 $LdapDescriptionTitle = "<h3>LDAP autentication</h3>";
@@ -7176,7 +7215,7 @@ $CourseRssTitle = "Course RSS";
 $CourseRssDescription = "RSS feed for all course notifications";
 $AllowPublicCertificates = "Learner certificates are public";
 $GlossaryTermUpdated = "Term updated";
-$DeleteAllGlossaryTerms = "Delete all terms";
+$DeleteAllGlossaryTerms = "Delete all terms before import.";
 $PortalHomepageEdited = "Portal homepage updated";
 $UserRegistrationTitle = "User registration";
 $UserRegistrationComment = "Actions to be fired when a user registers to the platform";
@@ -7664,4 +7703,112 @@ $RecordAudio = "Record audio";
 $StartRecordingAudio = "Start recording";
 $StopRecordingAudio = "Stop recording";
 $SaveRecordedAudio = "Save recorded audio";
+$GradeFromX = "Grades from course: %s";
+$TitleMandatory = "A title is required";
+$NoCourseCategorySupplied = "No course category was provided";
+$ForumStartDate = "Publication date";
+$ForumEndDate = "Closing date";
+$ForumStartDateComment = "The forum will be visible starting from this date";
+$ForumEndDateComment = "Once this date has passed, the forum will be closed";
+$ModeratedForum = "Moderated forum";
+$DiagnosisFilledSubject = "Diagnosis filled successfully";
+$DiagnosisFilledDescription = "The diagnosis has been filled successfully";
+$UserXHasFilledTheDiagnosis = "User %s has filled the diagnosis";
+$UserXHasFilledTheDiagnosisDescription = "User %s has filled the diagnosis on the platform and it is ready for you to review.";
+$SendLegal = "Send legal agreement";
+$DeleteLegal = "Delete legal agreement";
+$LegalAccepted = "Legal accepted";
+$LoadTermConditionsSectionTitle = "Load term conditions section";
+$LoadTermConditionsSectionDescription = "The legal agreement will appear during the login or when enter to a course.";
+$SendTermsSubject = "Your terms and conditions are ready to be signed";
+$SendTermsDescriptionToUrlX = "Hello,
+
+Your tutor sent you your terms and conditions. You can sign it following this url: %s";
+$UserXSignedTheAgreement = "User %s signed the agreement.";
+$UserXSignedTheAgreementTheY = "User %s signed the agreement the %s.";
+$ShowTermsIfProfileCompletedTitle = "Terms and conditions only if profile complete";
+$ShowTermsIfProfileCompletedComment = "By enabling this option, terms and conditions will be available to the user only when the extra profile fields that start with 'terms_' and set to visible are completed.";
+$EnableProfileUsersAddressGeolocalizationTitle = "Enable user's geolocalization";
+$EnableProfileUsersAddressGeolocalizationComment = "Enable user's address field and show it on a map using geolocalization features";
+$ProfileIsNotCompleted = "You must first fill your profile to continue";
+$TermActivatedIsNeededDescription = "The terms and conditions have not yet been validated by your tutor.";
+$DiagnosisManagement = "Diagnosis management";
+$TermYourProfileIsNotCompleted = "You must first fill your profile to enable the terms and conditions validation.";
+$Diagnostic = "Diagnostic";
+$AllowShowSkypeAccountTitle = "Allow show the user Skype account";
+$AllowShowSkypeAccountComment = "Add a link on the user social block allowing start a chat by Skype";
+$AllowShowLinkedInUrlTitle = "Allow show the user LinkedIn URL";
+$AllowShowLinkedInUrlComment = "Add a link on the user social block, allowing visit the user's LinkedIn profile";
+$LaunchVideoConferenceRoom = "Launch videoconference room";
+$VideoConference = "Videoconference";
+$TermsDuplicatedInFile = "Terms duplicated in file";
+$GlossaryTermAlreadyExists = "Term already exists";
+$LinkedInUrl = "LinkedIn profile URL";
+$SaveTheCorrectAnswersForTheNextAttempt = "Save the correct answer for the next attempt";
+$TranslateThisTerm = "Translate this term";
+$OnlyActiveSubLanguagesAreListed = "Only active sub-languages appear in this list";
+$Translation = "Translation";
+$IfThisTranslationExistsThisWillReplaceTheTerm = "If this term has already been translated, this operation will replace its translation for this sub-language.";
+$LastConnection = "Last connection";
+$HisProfileIs = "His profile is";
+$UserXWithLangXRegisteredTheSite = "User %s with language %s is registered in the site";
+$YouCanAssignATutorInThisLinkX = "You can assign a tutor in this link %s";
+$UpdateExistingGlossaryTerms = "Update existing terms.";
+$TermsUpdated = "Terms updated";
+$TermsAdded = "Terms added";
+$TeacherTimeReportBySession = "Teachers time report by session";
+$NumberOfWorks = "Number of works";
+$LastWork = "Last work";
+$WaitingModeration = "Waiting for moderation";
+$WorksInSessionReport = "Works in session report";
+$Files = "Files";
+$AssignedTo = "Assigned to";
+$UpdatedByX = "Updated by %s";
+$AssignedChangeFromXToY = "Assignee changed from %s to %s";
+$RequestConfirmation = "Request confirmation";
+$ChangeAssign = "Change assign";
+$ToBeAssigned = "To be assigned";
+$StatusNew = "New";
+$StatusPending = "Pending";
+$StatusUnconfirmed = "Unconfirmed";
+$StatusClose = "Close";
+$StatusForwarded = "Forwarded";
+$MyTickets = "My tickets";
+$PriorityNormal = "Normal";
+$PriorityHigh = "High";
+$PriorityLow = "Low";
+$TicketDetail = "Ticket details";
+$StatusAll = "All";
+$StatusUnread = "Unread";
+$StatusRead = "Read";
+$Projects = "Projects";
+$AssignUser = "Assign user";
+$TicketEnrollment = "Enrollment";
+$TicketGeneralInformation = "General information";
+$TicketRequestAndPapework = "Requests and paperwork";
+$TicketAcademicIncidence = "Academic Incidents";
+$TicketVirtualCampus = "Virtual campus";
+$TicketOnlineEvaluation = "Online evaluation";
+$TicketsAboutEnrollment = "Tickets about enrollment";
+$TicketsAboutGeneralInformation = "Tickets about general information";
+$TicketsAboutRequestAndPapework = "Tickets about requests and paperwork";
+$TicketsAboutAcademicIncidence = "Tickets about academic incidents, like exams, practices, tasks, etc.";
+$TicketsAboutVirtualCampus = "Tickets about virtual campus";
+$TicketsAboutOnlineEvaluation = "Tickets about online evaluation";
+$Assign = "Assign";
+$PersonalEmail = "Personal email";
+$Priority = "Priority";
+$Source = "Source";
+$SrcPlatform = "Platform";
+$SrcEmail = "Email";
+$SrcPhone = "Phone";
+$SrcPresential = "Presential";
+$TicketXCreated = "Ticket %s created";
+$ShowLinkTicketNotificationTitle = "Show ticket creation link";
+$ShowLinkTicketNotificationComment = "Show the ticket creation link to users on the right side of the portal";
+$LastSentWorkDate = "Last sent work date";
+$SSOSubclassTitle = "Single Sign On sub-class";
+$SSOSubclassComment = "To enable a Single Sign On method, you will have to create your own sub-class in main/auth/sso/ based on the default class. Indicate here the name of the sub-class. For example, if the file is sso.Drupal.class.php, indicate 'Drupal' in this field.";
+$CourseCreationSplashScreenTitle = "Course creation splash screen";
+$CourseCreationSplashScreenComment = "The course splash screen show a series of suggested options to the teacher when creating a new course. Disable it to let your teachers land directly on the course homepage.";
 ?>

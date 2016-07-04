@@ -147,12 +147,10 @@ function search($needle,$type)
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
-        if ($type == 'single') {
-        } else {
+        if ($type != 'single') {
             $list = CourseManager::get_courses_list(0, 0, 2, 'ASC', -1, $needle);
         }
-        if ($type=='single') {
-        } else {
+        if ($type != 'single') {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
 
             foreach ($list as $row) {

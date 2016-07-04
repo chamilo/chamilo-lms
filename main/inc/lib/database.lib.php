@@ -127,8 +127,8 @@ class Database
      * @param string $entityRootPath
      *
      * @throws \Doctrine\ORM\ORMException
-     * 
-     * @return 
+     *
+     * @return
      */
     public function connect($params = array(), $sysPath = '', $entityRootPath = '', $returnConnection = false)
     {
@@ -140,7 +140,8 @@ class Database
                 'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity'
+                'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
+                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity'
             )
         );
 
@@ -178,7 +179,7 @@ class Database
         $listener = new \Gedmo\Sortable\SortableListener();
         $entityManager->getEventManager()->addEventSubscriber($listener);
         $connection = $entityManager->getConnection();
-        
+        $connection->executeQuery('SET sql_mode = "";');
         if ($returnConnection) {
             return $connection;
         }
@@ -476,6 +477,12 @@ class Database
      * @example array('where'=> array('course_code LIKE "?%"'))
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"'))
+     * @param array $columns
+     * @param string $table_name
+     * @param array $conditions
+     * @param string $type_result
+     * @param string $option
+     * @return array
      */
     public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC')
     {
@@ -660,6 +667,8 @@ class Database
             $path.'src/Chamilo/CoreBundle/Entity',
             $path.'src/Chamilo/UserBundle/Entity',
             $path.'src/Chamilo/CourseBundle/Entity',
+            $path.'src/Chamilo/TicketBundle/Entity',
+            $path.'src/Chamilo/SkillBundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',
@@ -692,7 +701,7 @@ class Database
      * @param string $table
      * @return \Doctrine\DBAL\Schema\Column[]
      */
-    public static function listTableColumns($table) 
+    public static function listTableColumns($table)
     {
         return self::getManager()->getConnection()->getSchemaManager()->listTableColumns($table);
     }

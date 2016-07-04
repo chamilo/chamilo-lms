@@ -236,70 +236,14 @@
   left: 50%;
   top: 50%
 }
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 900;
-
-  src: url('../fonts/lato-black.eot');
-  src: url('../fonts/lato-black.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/lato-black.woff') format('woff'), url('../fonts/lato/lato-black.ttf') format('truetype'), url('../fonts/lato/lato-black.svg#latoblack') format('svg');
-}
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: bold;
-
-  src: url('../fonts/lato-bold.eot');
-  src: url('../fonts/lato-bold.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/lato-bold.woff') format('woff'), url('../fonts/lato/lato-bold.ttf') format('truetype'), url('../fonts/lato/lato-bold.svg#latobold') format('svg');
-}
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: bold;
-
-  src: url('../fonts/lato-bolditalic.eot');
-  src: url('../fonts/lato-bolditalic.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/lato-bolditalic.woff') format('woff'), url('../fonts/lato/lato-bolditalic.ttf') format('truetype'), url('../fonts/lato/lato-bolditalic.svg#latobold-italic') format('svg');
-}
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: normal;
-
-  src: url('../fonts/lato-italic.eot');
-  src: url('../fonts/lato-italic.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/lato-italic.woff') format('woff'), url('../fonts/lato/lato-italic.ttf') format('truetype'), url('../fonts/lato/lato-italic.svg#latoitalic') format('svg');
-}
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 300;
-
-  src: url('../fonts/lato-light.eot');
-  src: url('../fonts/lato-light.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/lato-light.woff') format('woff'), url('../fonts/lato/lato-light.ttf') format('truetype'), url('../fonts/lato/lato-light.svg#latolight') format('svg');
-}
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: normal;
-
-  src: url('../fonts/lato-regular.eot');
-  src: url('../fonts/lato-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/lato-regular.woff') format('woff'), url('../fonts/lato/lato-regular.ttf') format('truetype'), url('../fonts/lato/lato-regular.svg#latoregular') format('svg');
-}
-
 .tour-warning {
   color: #fff;
   font-weight: 400;
   background-color: #E95D4E;
   border: none;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
   border-radius: 10px;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 1.72222;
-  padding-left: 1em;
-  padding-right: 1em;
-  border-bottom: 2px solid #C0392B;
-  border-right: 2px solid #C0392B;
-  font-family: "Lato",Helvetica,Arial,sans-serif;
 }
 .tour-warning img{
   padding-right: .5em;
@@ -312,15 +256,11 @@
 .open > .dropdown-toggle.btn-warning {
   color: #fff;
   background-color: #EC7063;
-  border-bottom: 2px solid #C0392B;
-  border-right: 2px solid #C0392B;
 }
 .tour-warning:active,
 .tour-warning.active,
 .open > .dropdown-toggle.tour-warning {
   background: #EC7063;
-  border-bottom: 2px solid #C0392B;
-  border-right: 2px solid #C0392B;
 }
 .tour-warning.disabled,
 .tour-warning[disabled],

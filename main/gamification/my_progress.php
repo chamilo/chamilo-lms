@@ -116,7 +116,7 @@ if ($currentSession) {
         foreach ($learningPathList->list as $learningPathId => $learningPath) {
             $courseData['stats'][] = [
                 $learningPath['lp_name'],
-                'newscorm/lp_controller.php?' . http_build_query([
+                'lp/lp_controller.php?' . http_build_query([
                     'action' => 'stats',
                     'cidReq' => $course->getCode(),
                     'id_session' => $currentSession->getId(),

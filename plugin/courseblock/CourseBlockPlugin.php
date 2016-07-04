@@ -10,6 +10,10 @@ class CourseBlockPlugin extends Plugin
 
     // When creating a new course this settings are added to the course
     public $course_settings = array(
+         array(
+            'name' => 'course_block_pre_footer',
+            'type' => 'textarea'
+        ),
         array(
             'name' => 'course_block_footer_left',
             'type' => 'textarea'
@@ -79,6 +83,10 @@ class CourseBlockPlugin extends Plugin
                 break;
             case 'footer_right':
                 $content = api_get_course_setting('course_block_footer_right');
+                $content = $content === -1 ? '' : $content;
+                break;
+            case 'pre_footer':
+                $content = api_get_course_setting('course_block_pre_footer');
                 $content = $content === -1 ? '' : $content;
                 break;
         }

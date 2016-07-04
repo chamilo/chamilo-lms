@@ -1,15 +1,9 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
-/**
- * SkillRelUserComment Entity
- *
- * @package chamilo.skill
- */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="idx_select_su_giver", columns={"skill_rel_user_id", "feedback_giver_id"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SkillRelUserCommentRepository")
+ * @ORM\Entity
  */
 class SkillRelUserComment
 {
@@ -30,7 +24,7 @@ class SkillRelUserComment
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
      */
     private $id;
 
@@ -78,7 +72,7 @@ class SkillRelUserComment
 
     /**
      * Get skillRelUser
-     * @return Chamilo\CoreBundle\Entity\SkillRelUser
+     * @return SkillRelUser
      */
     public function getSkillRelUser()
     {
@@ -87,7 +81,7 @@ class SkillRelUserComment
 
     /**
      * Get feedbackGiver
-     * @return Chamilo\UserBundle\Entity\User
+     * @return User
      */
     public function getFeedbackGiver()
     {
@@ -123,8 +117,8 @@ class SkillRelUserComment
 
     /**
      * Set skillRelUser
-     * @param \Chamilo\CoreBundle\Entity\SkillRelUser $skillRelUser
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUserComment
+     * @param SkillRelUser $skillRelUser
+     * @return SkillRelUserComment
      */
     public function setSkillRelUser(SkillRelUser $skillRelUser)
     {
@@ -135,10 +129,10 @@ class SkillRelUserComment
 
     /**
      * Set feedbackGiver
-     * @param \Chamilo\UserBundle\Entity\User $feedbackGiver
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUserComment
+     * @param User $feedbackGiver
+     * @return SkillRelUserComment
      */
-    public function setFeedbackGiver(\Chamilo\UserBundle\Entity\User $feedbackGiver)
+    public function setFeedbackGiver(User $feedbackGiver)
     {
         $this->feedbackGiver = $feedbackGiver;
 
@@ -148,7 +142,7 @@ class SkillRelUserComment
     /**
      * Set feedbackText
      * @param string $feedbackText
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUserComment
+     * @return SkillRelUserComment
      */
     public function setFeedbackText($feedbackText)
     {
@@ -160,7 +154,7 @@ class SkillRelUserComment
     /**
      * Set feebackValue
      * @param int $feedbackValue
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUserComment
+     * @return SkillRelUserComment
      */
     public function setFeedbackValue($feedbackValue)
     {
@@ -172,7 +166,8 @@ class SkillRelUserComment
     /**
      * Set feedbackDateTime
      * @param \DateTime $feedbackDateTime
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUserComment
+     *
+     * @return SkillRelUserComment
      */
     public function setFeedbackDateTime(\DateTime $feedbackDateTime)
     {

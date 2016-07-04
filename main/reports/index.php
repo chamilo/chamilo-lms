@@ -209,6 +209,6 @@ foreach ($reports_template as $key => $value) {
 		}
 </script>
 
-<?
+<?php
 // Footer
 Display::display_footer();

@@ -52,7 +52,7 @@ class learnpath_processor extends search_processor {
                     $visibility = api_get_item_visibility(api_get_course_info($courseid), TOOL_LEARNPATH, $lp_id);
                     if ($visibility) {
                         list($thumbnail, $image, $name, $author) = $this->get_information($courseid, $lp_id, $lp['has_document_id']);
-                        $url = api_get_path(WEB_PATH) . 'main/newscorm/lp_controller.php?cidReq=%s&action=view&lp_id=%s';
+                        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?cidReq=%s&action=view&lp_id=%s';
                         $url = sprintf($url, $courseid, $lp_id);
                         $result = array(
                             'toolid' => TOOL_LEARNPATH,

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraField;
+
 /**
  * Class Auth
  * Auth can be used to instantiate objects or as a library to manage courses
@@ -31,7 +33,7 @@ class Auth
         $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
-        $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE;
+        $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
         // get course list auto-register
         $sql = "SELECT item_id FROM $TABLE_COURSE_FIELD_VALUE tcfv
                 INNER JOIN $TABLE_COURSE_FIELD tcf
@@ -92,7 +94,7 @@ class Auth
                 'user_course_category' => $row['user_course_cat']
             );
         }
-        
+
         return $courses;
     }
 
@@ -118,7 +120,7 @@ class Auth
 
     /**
      * This function get all the courses in the particular user category;
-     * @return string: the name of the user defined course category
+     * @return string The name of the user defined course category
      */
     public function get_courses_in_category()
     {
@@ -130,7 +132,7 @@ class Auth
         $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
-        $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE;
+        $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
 
         // get course list auto-register
         $sql = "SELECT item_id
@@ -168,7 +170,6 @@ class Auth
                     $without_special_courses
                 ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
         $result = Database::query($sql);
-        $number_of_courses = Database::num_rows($result);
         $data = array();
         while ($course = Database::fetch_array($result)) {
             $data[$course['user_course_cat']][] = $course;
@@ -378,10 +379,12 @@ class Auth
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $category_id = intval($category_id);
         $result = false;
-        $sql_delete = "DELETE FROM $tucc
-                      WHERE id='" . $category_id . "' and user_id='" . $current_user_id . "'";
-        $resultQuery = Database::query($sql_delete);
-       if (Database::affected_rows($resultQuery)) {
+        $sql = "DELETE FROM $tucc
+                WHERE 
+                    id='" . $category_id . "' AND 
+                    user_id='" . $current_user_id . "'";
+        $resultQuery = Database::query($sql);
+        if (Database::affected_rows($resultQuery)) {
             $result = true;
         }
         $sql = "UPDATE $TABLECOURSUSER
@@ -417,7 +420,7 @@ class Auth
                 WHERE
                     tcf.variable = 'special_course' AND
                     tcfv.value = 1 ";
-                                                                 
+
         $special_course_result = Database::query($sql);
         if (Database::num_rows($special_course_result) > 0) {
             $special_course_list = array();
@@ -525,6 +528,7 @@ class Auth
         }
 
         CourseManager::unsubscribe_user($current_user_id, $course_code);
+
         return $result;
     }
 
@@ -543,24 +547,31 @@ class Auth
         $result = false;
 
         // step 1: we determine the max value of the user defined course categories
-        $sql = "SELECT sort FROM $tucc WHERE user_id='" . $current_user_id . "' ORDER BY sort DESC";
+        $sql = "SELECT sort FROM $tucc 
+                WHERE user_id='" . $current_user_id . "' 
+                ORDER BY sort DESC";
         $rs_sort = Database::query($sql);
         $maxsort = Database::fetch_array($rs_sort);
         $nextsort = $maxsort['sort'] + 1;
 
         // step 2: we check if there is already a category with this name, if not we store it, else we give an error.
-        $sql = "SELECT * FROM $tucc WHERE user_id='" . $current_user_id . "' AND title='" . $category_title . "'ORDER BY sort DESC";
+        $sql = "SELECT * FROM $tucc 
+                WHERE 
+                    user_id='" . $current_user_id . "' AND 
+                    title='" . $category_title . "'
+                ORDER BY sort DESC";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) == 0) {
-            $sql_insert = "INSERT INTO $tucc (user_id, title,sort)
-                           VALUES ('" . $current_user_id . "', '" . api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding()) . "', '" . $nextsort . "')";
-            $resultQuery = Database::query($sql_insert);
+            $sql = "INSERT INTO $tucc (user_id, title,sort)
+                    VALUES ('" . $current_user_id . "', '" . api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding()) . "', '" . $nextsort . "')";
+            $resultQuery = Database::query($sql);
             if (Database::affected_rows($resultQuery)) {
                 $result = true;
             }
         } else {
             $result = false;
         }
+
         return $result;
     }
 
@@ -599,7 +610,7 @@ class Auth
 
     /**
      * Subscribe the user to a given course
-     * @param string Course code
+     * @param string $course_code Course code
      * @return string  Message about results
      */
     public function subscribe_user($course_code)
@@ -698,7 +709,7 @@ class Auth
      * @param string $date in Y-m-d format
      * @return int
      */
-    function countSessions($date = null)
+    public function countSessions($date = null)
     {
         $count = 0;
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -720,7 +731,7 @@ SQL;
 
         return $count;
     }
-    
+
     /**
      * Search sessions by the tags in their courses
      * @param string $termTag Term for search in tags
@@ -763,7 +774,7 @@ SQL;
                 $qb->expr()->like('t.tag', ":tag")
             )
             ->andWhere(
-                $qb->expr()->eq('f.extraFieldType', Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE)
+                $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
             )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length'])

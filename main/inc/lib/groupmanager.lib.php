@@ -386,7 +386,7 @@ class GroupManager
 
         if (api_is_course_coach()) {
             //a coach can only delete courses from his session
-            for ($i=0 ; $i<count($group_ids) ; $i++) {
+            for ($i = 0; $i < count($group_ids); $i++) {
                 if (!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i])) {
                     array_splice($group_ids,$i,1);
                     $i--;
@@ -641,6 +641,7 @@ class GroupManager
                 WHERE c_id = $course_id ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->number_of_groups;
     }
 
@@ -682,7 +683,8 @@ class GroupManager
         $id = intval($id);
         $table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
         $sql = "SELECT * FROM $table_group_cat
-                WHERE c_id = $course_id AND id = $id LIMIT 1";
+                WHERE c_id = $course_id AND id = $id
+                LIMIT 1";
         $res = Database::query($sql);
 
         return Database::fetch_array($res);
@@ -815,7 +817,7 @@ class GroupManager
                 WHERE c_id = $course_id ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
-        if (!isset ($obj->new_order)) {
+        if (!isset($obj->new_order)) {
             $obj->new_order = 1;
         }
 
@@ -1078,6 +1080,7 @@ class GroupManager
         while ($obj = Database::fetch_object($res)) {
             $users[] = api_get_user_info($obj->user_id);
         }
+
         return $users;
     }
 
@@ -1100,6 +1103,7 @@ class GroupManager
         while ($obj = Database::fetch_object($res)) {
             $users[] = api_get_user_info($obj->user_id);
         }
+
         return $users;
     }
 
@@ -1121,6 +1125,7 @@ class GroupManager
         while ($obj = Database::fetch_object($res)) {
             $users[] = api_get_user_info($obj->user_id);
         }
+
         return $users;
     }
 
@@ -1146,6 +1151,7 @@ class GroupManager
         while ($row = Database::fetch_array($rs)) {
             $result[] = $row['user_id'];
         }
+        
         return $result;
     }
 
@@ -1180,7 +1186,7 @@ class GroupManager
         $group_ids = array_map('intval', $group_ids);
 
         if (api_is_course_coach()) {
-            for ($i=0 ; $i< count($group_ids) ; $i++) {
+            for ($i=0 ; $i < count($group_ids) ; $i++) {
                 if (!api_is_element_in_the_session(TOOL_GROUP, $group_ids[$i])){
                     array_splice($group_ids,$i,1);
                     $i--;

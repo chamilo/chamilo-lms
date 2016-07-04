@@ -48,6 +48,7 @@ function plusItem(item) {
    	 	document.getElementById("plus-"+(item+1)).style.display = "inline";
 	 	//document.getElementById("txta-"+(item)).value = "100";
 	 	//document.getElementById("txta-"+(item-1)).value = "";
+	 	$("input").removeClass("form-control");
         }
   }
 
@@ -59,15 +60,17 @@ function minItem(item) {
      document.getElementById("plus-"+item).style.display = "inline";
      document.getElementById("min-"+(item-1)).style.display = "inline";
 	 //document.getElementById("txta-"+(item-1)).value = "100";
+	 $("input").removeClass("form-control");
 	}
 	if (item = 1) {
 		document.getElementById("min-"+(item)).style.display = "none";
+		$("input").removeClass("form-control");
 	}
 }
 </script>';
 
 // The header.
-Display::display_header($tool_name);
+Display::display_header();
 
 //jqgrid will use this URL to do the selects
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_grade_models';
@@ -168,4 +171,5 @@ switch ($action) {
         $obj->display();
         break;
 }
+echo '<script> $(document).ready(function(){ $("input").removeClass("form-control"); }); </script>';
 Display :: display_footer();

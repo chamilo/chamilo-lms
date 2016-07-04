@@ -9,9 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Level
  *
- * @ORM\Table(
- *  name="skill_level",
- * )
+ * @ORM\Table(name="skill_level")
  * @ORM\Entity
  */
 class Level
@@ -155,6 +153,4 @@ class Level
 
         return $this;
     }
-
-
 }

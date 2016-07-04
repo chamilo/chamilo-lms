@@ -17,7 +17,7 @@
                 <div class="form-group">
                     <label>{{ "ByDate"|get_lang }}</label>
                 <div class="input-group">
-                    <input type="date" name="date" id="date" class="form-control" value="{{ search_date }}" readonly>
+                    <input type="date" name="date" id="date" title="{{ 'Date'|get_lang }}" class="form-control" value="{{ search_date }}" readonly>
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
                     </span>
@@ -29,7 +29,7 @@
                 <form class="form-inline" method="post" action="{{ _p.web_self }}?action=search_tag">
                 <label>{{ "ByTag"|get_lang }}</label>
                 <div class="input-group">
-                    <input type="text" name="search_tag" class="form-control" value="{{ search_tag }}" />
+                    <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control" value="{{ search_tag }}" />
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
                         </span>
@@ -55,7 +55,7 @@
         <div class="col-md-3 col-sm-6 col-xs-6">
             <div id="session-{{ item.id }}" class="items">
                 <div class="image">
-                    <img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : _p.web_img ~ 'session_default.png' }}">
+                    <img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : 'session_default.png'|icon() }}">
                     {% if item.category != '' %}
                     <span class="category">{{ item.category }}</span>
                     <div class="cribbon"></div>
@@ -99,6 +99,12 @@
                         </a>
                     </h4>
                     <div class="toolbar">
+                        <div class="left">
+                            {% if item.price %}
+                                {{ item.price }}
+                            {% endif %}
+                        </div>
+                        <br />
                         <div class="info">
                             <span><i class="fa fa-book" aria-hidden="true"></i> {{ item.nbr_courses }} {{ 'Courses'|get_lang }}</span>
                             <span><i class="fa fa-user" aria-hidden="true"></i> {{ item.nbr_users }} {{ 'NbUsers'|get_lang }} </span>

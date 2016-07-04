@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-
+use Chamilo\CoreBundle\Entity\Course;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
 /**
@@ -44,7 +44,7 @@ class UserGroupAdmin extends Admin
 
     /**
      * Very important in order to save the related entities!
-     * @param \Chamilo\CoreBundle\Entity\Course $userGroup
+     * @param Course $userGroup
      * @return mixed|void
      */
     public function preUpdate($userGroup)

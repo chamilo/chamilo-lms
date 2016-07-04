@@ -295,9 +295,9 @@ function WSGetLpList($params)
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
+    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpathList.class.php';
+    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpath.class.php';
+    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpathItem.class.php';
 
     $courseIdName = $params['course_id_name'];
     $courseIdValue = $params['course_id_value'];
@@ -390,9 +390,9 @@ function WSDeleteLp($params)
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
+    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpathList.class.php';
+    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpath.class.php';
+    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpathItem.class.php';
 
     $courseIdName = $params['course_id_name'];
     $courseIdValue = $params['course_id_value'];

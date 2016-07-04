@@ -44,8 +44,7 @@ if (isset($current_thread['thread_id'])) {
 
     if (!empty($rows)) {
         $postCount = count($rows);
-        //$postCount = 1;
-
+        
         foreach ($rows as $row) {
             if ($row['user_id'] == '0') {
                 $name = prepare4display($row['poster_name']);
@@ -90,7 +89,6 @@ if (isset($current_thread['thread_id'])) {
                     }
                 }
             } else {
-
                 if (($current_forum_category && $current_forum_category['locked'] == 1)) {
                     $closedPost = Display::tag(
                         'div',
@@ -163,11 +161,13 @@ if (isset($current_thread['thread_id'])) {
             $attachment_list = get_attachment($row['post_id']);
             $id_attach = !empty($attachment_list) ? $attachment_list['iid'] : '';
             $iconEdit = '';
+            $statusIcon = '';
+
+
             // The user who posted it can edit his thread only if the course admin allowed
             // this in the properties of the forum
             // The course admin him/herself can do this off course always
-            if (
-                GroupManager::is_tutor_of_group($userId, $groupId) ||
+            if (GroupManager::is_tutor_of_group($userId, $groupId) ||
                 ($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
                 (
                 api_is_allowed_to_edit(false, true) &&
@@ -189,8 +189,7 @@ if (isset($current_thread['thread_id'])) {
                     api_is_allowed_to_edit(false, true) &&
                     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 ) {
-
-                    if ($locked == false) {
+                    if ($locked === false) {
                         $deleteUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
                             'forum' => $clean_forum_id,
                             'thread' => $clean_thread_id,
@@ -210,9 +209,12 @@ if (isset($current_thread['thread_id'])) {
                         );
                     }
                 }
+
                 if (
-                    api_is_allowed_to_edit(false, true) &&
-                    !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+                    GroupManager::is_tutor_of_group($userId, $groupId) ||
+                        (api_is_allowed_to_edit(false, true) &&
+                        !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+                        )
                 ) {
                     $statusIcon = getPostStatus($current_forum, $row);
                     $iconEdit .= return_visible_invisible_icon(
@@ -222,10 +224,10 @@ if (isset($current_thread['thread_id'])) {
                         array(
                             'forum' => $clean_forum_id,
                             'thread' => $clean_thread_id,
-                            'origin' => $origin,
+                            'origin' => $origin
                         )
                     );
-                    $iconEdit .= "";
+
                     if ($increment > 0) {
                         $iconEdit .= "<a href=\"viewthread.php?" . api_get_cidreq() . "&forum=" . $clean_forum_id
                             . "&thread=" . $clean_thread_id . "&action=move&post=" . $row['post_id']
@@ -238,11 +240,7 @@ if (isset($current_thread['thread_id'])) {
 
             $user_status = api_get_status_of_user_in_course($row['user_id'], api_get_course_int_id());
             $current_qualify_thread = showQualify('1', $row['poster_id'], $_GET['thread']);
-            if (
-                (
-                    $current_thread['thread_peer_qualify'] == 1 ||
-                    api_is_allowed_to_edit(null, true)
-                ) &&
+            if (($current_thread['thread_peer_qualify'] == 1 || api_is_allowed_to_edit(null, true)) &&
                 $current_thread['thread_qualify_max'] > 0 && $origin != 'learnpath'
             ) {
                 $my_forum_id = $clean_forum_id;
@@ -267,12 +265,8 @@ if (isset($current_thread['thread_id'])) {
             if ($iconEdit != '') {
                 $html .= '<div class="tools-icons">' . $iconEdit . $statusIcon.'</div>';
             }
-
-
-
             $html .= $closedPost;
             $html .= '</div>';
-
             $html .= '<div class="col-md-10">';
 
             $titlePost = Display::tag(
@@ -288,7 +282,6 @@ if (isset($current_thread['thread_id'])) {
             );
 
             // see comments inside forumfunction.inc.php to lower filtering and allow more visual changes
-
             $html .= Display::tag(
                 'div',
                 $row['post_text'],
@@ -301,10 +294,7 @@ if (isset($current_thread['thread_id'])) {
             $html .= '<div class="col-md-7">';
 
             // prepare the notification icon
-            if (
-                isset(
-                    $whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]
-                ) &&
+            if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) &&
                 !empty(
                     $whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]
                 ) &&

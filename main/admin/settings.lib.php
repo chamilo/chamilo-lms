@@ -19,10 +19,10 @@ use Symfony\Component\Filesystem\Filesystem;
  * This function allows easy activating and inactivating of regions
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_regions()
+function handleRegions()
 {
     if (isset($_POST['submit_plugins'])) {
-        store_regions();
+        storeRegions();
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
@@ -93,7 +93,7 @@ function handle_regions()
     echo '<button class="btn btn-success" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
 }
 
-function handle_extensions()
+function handleExtensions()
 {
     echo Display::page_subheader(get_lang('ConfigureExtensions'));
     echo '<a class="btn btn-success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Ppt2lp').'</a>';
@@ -106,12 +106,12 @@ function handle_extensions()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_plugins()
+function handlePlugins()
 {
     $plugin_obj = new AppPlugin();
     $token = Security::get_token();
     if (isset($_POST['submit_plugins'])) {
-        store_plugins();
+        storePlugins();
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
@@ -222,24 +222,14 @@ function handle_plugins()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com>, Chamilo
  */
-function handle_stylesheets()
+function handleStylesheets()
 {
     global $_configuration;
 
     // Current style.
     $currentstyle = api_get_setting('stylesheets');
 
-    $is_style_changeable = false;
-
-    if ($_configuration['access_url'] != 1) {
-        $style_info = api_get_settings('stylesheets', '', 1, 0);
-        $url_info = api_get_access_url($_configuration['access_url']);
-        if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
-            $is_style_changeable = true;
-        }
-    } else {
-        $is_style_changeable = true;
-    }
+    $is_style_changeable = isStyleChangeable();
 
     $form = new FormValidator(
         'stylesheet_upload',
@@ -250,21 +240,7 @@ function handle_stylesheets()
         array('size' => '40', 'maxlength' => '40'));
     $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
-    $allowed_file_types = array(
-        'css',
-        'zip',
-        'jpeg',
-        'jpg',
-        'png',
-        'gif',
-        'ico',
-        'psd',
-        'xcf',
-        'svg',
-        'webp',
-        'woff',
-        'woff2'
-    );
+    $allowed_file_types = getAllowedFileTypes();
 
     $form->addRule('new_stylesheet', get_lang('InvalidExtension') . ' (' . implode(',', $allowed_file_types) . ')',
         'filetype', $allowed_file_types);
@@ -293,7 +269,7 @@ function handle_stylesheets()
             $values = $form->exportValues();
             $picture_element = $form->getElement('new_stylesheet');
             $picture = $picture_element->getValue();
-            $result = upload_stylesheet($values, $picture);
+            $result = uploadStylesheet($values, $picture);
 
             // Add event to the system log.
             $user_id = api_get_user_id();
@@ -375,22 +351,11 @@ function handle_stylesheets()
     if ($form_change->validate()) {
         // Submit stylesheets.
         if (isset($_POST['save'])) {
-            store_stylesheets();
+            storeStylesheets();
             Display::display_normal_message(get_lang('Saved'));
         }
         if (isset($_POST['download'])) {
-            $arch = api_get_path(SYS_ARCHIVE_PATH).$safe_style_dir.'.zip';
-            $dir = api_get_path(SYS_CSS_PATH).'themes/'.$safe_style_dir;
-            if (is_dir($dir)) {
-                $zip = new PclZip($arch);
-                // Remove path prefix except the style name and put file on disk
-                $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($safe_style_dir)));
-                //@TODO: use more generic script to download.
-                $str = '<a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
-                Display::display_normal_message($str, false);
-            } else {
-                Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
-            }
+            generateCSSDownloadLink($safe_style_dir);
         }
     }
 
@@ -502,15 +467,14 @@ function handle_stylesheets()
 
 /**
  * Creates the folder (if needed) and uploads the stylesheet in it
- *
  * @param array $values the values of the form
  * @param array $picture the values of the uploaded file
- *
+ * @return bool
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version May 2008
- * @since Dokeos 1.8.5
+ * @since v1.8.5
  */
-function upload_stylesheet($values, $picture)
+function uploadStylesheet($values, $picture)
 {
     $result = false;
     // Valid name for the stylesheet folder.
@@ -535,20 +499,7 @@ function upload_stylesheet($values, $picture)
             $single_directory = true;
             $invalid_files = array();
 
-            $allowedFiles = array(
-                'jpg',
-                'jpeg',
-                'png',
-                'gif',
-                'css',
-                'ico',
-                'psd',
-                'woff',
-                'woff2',
-                'xcf',
-                'svg',
-                'webp'
-            );
+            $allowedFiles = getAllowedFileTypes();
 
             for ($i = 0; $i < $num_files; $i++) {
                 $file = $zip->statIndex($i);
@@ -632,7 +583,7 @@ function upload_stylesheet($values, $picture)
 /**
  * Store plugin regions.
  */
-function store_regions()
+function storeRegions()
 {
     $plugin_obj = new AppPlugin();
 
@@ -670,7 +621,7 @@ function store_regions()
  * This function allows easy activating and inactivating of plugins
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function store_plugins()
+function storePlugins()
 {
     $appPlugin = new AppPlugin();
 
@@ -701,10 +652,10 @@ function store_plugins()
  * This function allows the platform admin to choose which should be the default stylesheet
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function store_stylesheets()
+function storeStylesheets()
 {
     // Insert the stylesheet.
-    if (is_style($_POST['style'])) {
+    if (isStyle($_POST['style'])) {
         api_set_setting(
             'stylesheets',
             $_POST['style'],
@@ -722,7 +673,7 @@ function store_stylesheets()
  * @param string    Style
  * @return bool     True if this style is recognized, false otherwise
  */
-function is_style($style)
+function isStyle($style)
 {
     $dir = CSS_UPLOAD_PATH;
     $dirs = scandir($dir);
@@ -738,7 +689,7 @@ function is_style($style)
  * TODO: support for multiple site. aka $_configuration['access_url'] == 1
  * @author Marco Villegas <marvil07@gmail.com>
  */
-function handle_search()
+function handleSearch()
 {
     global $SettingsStored, $_configuration;
 
@@ -749,37 +700,25 @@ function handle_search()
     $values = api_get_settings_options('search_enabled');
     $form->addElement('header', null, get_lang('SearchEnabledTitle'));
 
-    $group = array ();
-    if (is_array($values)) {
-        foreach ($values as $key => $value) {
-            $element = & $form->createElement('radio', 'search_enabled', '', get_lang($value['display_text']), $value['value']);
-            $group[] = $element;
-        }
-    }
+    $group = formGenerateElementsGroup($form, $values, 'search_enabled');
+
     //SearchEnabledComment
     $form->addGroup($group, 'search_enabled', array(get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')), '<br />', false);
 
     $search_enabled = api_get_setting('search_enabled');
 
     if ($form->validate()) {
-        $formvalues = $form->exportValues();
-        $r = api_set_settings_category('Search', 'false', $_configuration['access_url']);
-        // Save the settings.
-        foreach ($formvalues as $key => $value) {
-            $result = api_set_setting($key, $value, null, null);
-        }
-        $search_enabled = $formvalues['search_enabled'];
+        $formValues = $form->exportValues();
+        setConfigurationSettingsInDatabase($formValues, $_configuration['access_url']);
+        $search_enabled = $formValues['search_enabled'];
         Display::display_confirmation_message($SettingsStored);
     }
     $specific_fields = get_specific_field_list();
 
     if ($search_enabled == 'true') {
         $values = api_get_settings_options('search_show_unlinked_results');
-        $group = array ();
-        foreach ($values as $key => $value) {
-            $element = & $form->createElement('radio', 'search_show_unlinked_results', '', get_lang($value['display_text']), $value['value']);
-            $group[] = $element;
-        }
+
+        $group = formGenerateElementsGroup($form, $values, 'search_show_unlinked_results');
         $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), '', false);
         $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
 
@@ -787,7 +726,6 @@ function handle_search()
         foreach ($specific_fields as $sf) {
             $sf_values[$sf['code']] = $sf['name'];
         }
-        $group = array();
         $url =  Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
         if (empty($sf_values)) {
             $form->addElement('label', [get_lang('SearchPrefilterPrefix'), $url]);
@@ -807,33 +745,33 @@ function handle_search()
     echo '</div>';
 
     if ($search_enabled == 'true') {
-        $xapian_path = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb';
+        $xapianPath = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb';
 
         /*
         @todo Test the Xapian connection
         if (extension_loaded('xapian')) {
             require_once 'xapian.php';
             try {
-                $db = new XapianDatabase($xapian_path.'/');
+                $db = new XapianDatabase($xapianPath.'/');
             } catch (Exception $e) {
                 var_dump($e->getMessage());
             }
 
-            require_once api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php';
+            require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
             require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
             require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
             $indexable = new IndexableChunk();
             $indexable->addValue("content", 'Test');
 
-            $di = new DokeosIndexer();
+            $di = new ChamiloIndexer();
             $di->connectDb(NULL, NULL, 'english');
             $di->addChunk($indexable);
             $did = $di->index();
         }
         */
 
-        $xapian_loaded = Display::return_icon('bullet_green.png', get_lang('Ok'));
+        $xapianLoaded = Display::return_icon('bullet_green.png', get_lang('Ok'));
         $dir_exists = Display::return_icon('bullet_green.png', get_lang('Ok'));
         $dir_is_writable = Display::return_icon('bullet_green.png', get_lang('Ok'));
         $specific_fields_exists = Display::return_icon('bullet_green.png', get_lang('Ok'));
@@ -844,58 +782,25 @@ function handle_search()
         }
         //Testing xapian extension
         if (!extension_loaded('xapian')) {
-            $xapian_loaded = Display::return_icon('bullet_red.png', get_lang('Error'));
+            $xapianLoaded = Display::return_icon('bullet_red.png', get_lang('Error'));
         }
         //Testing xapian searchdb path
-        if (!is_dir($xapian_path)) {
+        if (!is_dir($xapianPath)) {
             $dir_exists = Display::return_icon('bullet_red.png', get_lang('Error'));
         }
         //Testing xapian searchdb path is writable
-        if (!is_writable($xapian_path)) {
+        if (!is_writable($xapianPath)) {
             $dir_is_writable = Display::return_icon('bullet_red.png', get_lang('Error'));
         }
 
-        $data[] = array(get_lang('XapianModuleInstalled'),$xapian_loaded);
-        $data[] = array(get_lang('DirectoryExists').' - '.$xapian_path,$dir_exists);
-        $data[] = array(get_lang('IsWritable').' - '.$xapian_path,$dir_is_writable);
-        $data[] = array(get_lang('SpecificSearchFieldsAvailable') ,$specific_fields_exists);
+        $data = array();
+        $data[] = array(get_lang('XapianModuleInstalled'), $xapianLoaded);
+        $data[] = array(get_lang('DirectoryExists').' - '.$xapianPath, $dir_exists);
+        $data[] = array(get_lang('IsWritable').' - '.$xapianPath, $dir_is_writable);
+        $data[] = array(get_lang('SpecificSearchFieldsAvailable'), $specific_fields_exists);
 
-        echo Display::tag('h3', get_lang('Settings'));
-        $table = new SortableTableFromArray($data);
-        $table->set_header(0, get_lang('Setting'), false);
-        $table->set_header(1, get_lang('Status'), false);
-        echo  $table->display();
-
-        //@todo windows support
-        if (api_is_windows_os() == false) {
-            $list_of_programs = array('pdftotext','ps2pdf', 'catdoc','html2text','unrtf', 'catppt', 'xls2csv');
-
-            foreach($list_of_programs as $program) {
-                $output = [];
-                $ret_val = null;
-                exec("which $program", $output, $ret_val);
-
-                if (!$output) {
-                    $output[] = '';
-                }
-
-                $icon = Display::return_icon('bullet_red.png', get_lang('NotInstalled'));
-                if (!empty($output[0])) {
-                    $icon = Display::return_icon('bullet_green.png', get_lang('Installed'));
-                }
-                $data2[]= array($program, $output[0], $icon);
-            }
-            echo Display::tag('h3', get_lang('ProgramsNeededToConvertFiles'));
-            $table = new SortableTableFromArray($data2);
-            $table->set_header(0, get_lang('Program'), false);
-            $table->set_header(1, get_lang('Path'), false);
-            $table->set_header(2, get_lang('Status'), false);
-            echo  $table->display();
-        } else {
-            Display::display_warning_message(
-                get_lang('YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool')
-            );
-        }
+        showSearchSettingsTable($data);
+        showSearchToolsStatusTable();
     }
 }
 
@@ -905,9 +810,9 @@ function handle_search()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @author Julio Montoya.
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
-function handle_templates()
+function handleTemplates()
 {
     /* Drive-by fix to avoid undefined var warnings, without repeating
      * isset() combos all over the place. */
@@ -921,7 +826,7 @@ function handle_templates()
     }
 
     if ($action == 'add' || ($action == 'edit' && is_numeric($_GET['id']))) {
-        add_edit_template();
+        addEditTemplate();
 
         // Add event to the system log.
         $user_id = api_get_user_id();
@@ -935,7 +840,7 @@ function handle_templates()
         );
     } else {
         if ($action == 'delete' && is_numeric($_GET['id'])) {
-            delete_template($_GET['id']);
+            deleteTemplate($_GET['id']);
 
             // Add event to the system log
             $user_id = api_get_user_id();
@@ -948,7 +853,7 @@ function handle_templates()
                 $user_id
             );
         }
-        display_templates();
+        displayTemplates();
     }
 }
 
@@ -957,17 +862,17 @@ function handle_templates()
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
-function display_templates()
+function displayTemplates()
 {
-    $table = new SortableTable('templates', 'get_number_of_templates', 'get_template_data', 1);
+    $table = new SortableTable('templates', 'getNumberOfTemplates', 'getTemplateData', 1);
     $table->set_additional_parameters(array('category' => Security::remove_XSS($_GET['category'])));
     $table->set_header(0, get_lang('Image'), true, array('style' => 'width: 101px;'));
     $table->set_header(1, get_lang('Title'));
     $table->set_header(2, get_lang('Actions'), false, array('style' => 'width:50px;'));
-    $table->set_column_filter(2, 'actions_filter');
-    $table->set_column_filter(0, 'image_filter');
+    $table->set_column_filter(2, 'actionsFilter');
+    $table->set_column_filter(0, 'searchImageFilter');
     $table->display();
 }
 
@@ -978,9 +883,9 @@ function display_templates()
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
-function get_number_of_templates()
+function getNumberOfTemplates()
 {
     // Database table definition.
     $table_system_template = Database :: get_main_table('system_template');
@@ -1005,9 +910,9 @@ function get_number_of_templates()
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
-function get_template_data($from, $number_of_items, $column, $direction)
+function getTemplateData($from, $number_of_items, $column, $direction)
 {
     // Database table definition.
     $table_system_template = Database :: get_main_table('system_template');
@@ -1034,9 +939,9 @@ function get_template_data($from, $number_of_items, $column, $direction)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
-function actions_filter($id) {
+function actionsFilter($id) {
     $return = '<a href="settings.php?category=Templates&action=edit&id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
     $return .= '<a href="settings.php?category=Templates&action=delete&id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
     return $return;
@@ -1050,9 +955,9 @@ function actions_filter($id) {
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
-function image_filter($image)
+function searchImageFilter($image)
 {
     if (!empty($image)) {
         return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
@@ -1067,9 +972,9 @@ function image_filter($image)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
-function add_edit_template()
+function addEditTemplate()
 {
     // Initialize the object.
     $id = isset($_GET['id']) ? '&id='.Security::remove_XSS($_GET['id']) : '';
@@ -1195,7 +1100,7 @@ function add_edit_template()
             }
         }
         Security::clear_token();
-        display_templates();
+        displayTemplates();
     } else {
         $token = Security::get_token();
         $form->addElement('hidden','sec_token');
@@ -1212,9 +1117,9 @@ function add_edit_template()
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
- * @since Dokeos 1.8.6
+ * @since v1.8.6
  */
-function delete_template($id)
+function deleteTemplate($id)
 {
     // First we remove the image.
     $table_system_template = Database :: get_main_table('system_template');
@@ -1257,45 +1162,37 @@ function select_gradebook_number_decimals() {
     return array('0', '1', '2');
 }
 
+/**
+ * Get the options for a select element to select gradebook default grade model
+ * @return array
+ */
 function select_gradebook_default_grade_model_id()
 {
     $grade_model = new GradeModel();
     $models = $grade_model->get_all();
     $options = array();
     $options[-1] = get_lang('None');
+
     if (!empty($models)) {
         foreach ($models as $model) {
             $options[$model['id']] = $model['name'];
         }
     }
+
     return $options;
 }
 
 /**
- * Updates the gradebook score custom values using the scoredisplay class of the
- * gradebook module
+ * @param array $settings
+ * @param array $settings_by_access_list
  *
- * @param array List of gradebook score custom values
+ * @return FormValidator
  *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ * @throws \Doctrine\ORM\ORMException
+ * @throws \Doctrine\ORM\OptimisticLockException
+ * @throws \Doctrine\ORM\TransactionRequiredException
  */
-function update_gradebook_score_display_custom_values($values)
-{
-    $scoredisplay = ScoreDisplay::instance();
-    $scores = $values['gradebook_score_display_custom_values_endscore'];
-    $displays = $values['gradebook_score_display_custom_values_displaytext'];
-    $nr_displays = count($displays);
-    $final = array();
-    for ($i = 1; $i < $nr_displays; $i++) {
-        if (!empty($scores[$i]) && !empty($displays[$i])) {
-            $final[$i]['score'] = $scores[$i];
-            $final[$i]['display'] = $displays[$i];
-        }
-    }
-    $scoredisplay->update_custom_score_display_settings($final);
-}
-
-function generate_settings_form($settings, $settings_by_access_list)
+function generateSettingsForm($settings, $settings_by_access_list)
 {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
     $em = Database::getManager();
@@ -1303,8 +1200,11 @@ function generate_settings_form($settings, $settings_by_access_list)
 
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
 
-    $form->addElement('hidden', 'search_field',
-        (!empty($_GET['search_field']) ? Security::remove_XSS($_GET['search_field']) : null));
+    $form->addElement(
+        'hidden',
+        'search_field',
+        (!empty($_GET['search_field']) ? Security::remove_XSS($_GET['search_field']) : null)
+    );
 
     $url_id = api_get_current_access_url_id();
 
@@ -1335,19 +1235,31 @@ function generate_settings_form($settings, $settings_by_access_list)
                 if ($row['access_url_locked'] == 0) {
                     if ($url_id == 1) {
                         if ($row['access_url_changeable'] == '1') {
-                            $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                            $form->addElement(
+                                'html',
+                                '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>'
+                            );
                         } else {
-                            $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                            $form->addElement(
+                                'html',
+                                '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>'
+                            );
                         }
                     } else {
                         if ($row['access_url_changeable'] == '1') {
-                            $form->addElement('html', '<div style="float: right;">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</div>');
+                            $form->addElement(
+                                'html',
+                                '<div style="float: right;">'.
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</div>'
+                            );
                         } else {
-                            $form->addElement('html', '<div style="float: right;">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</div>');
+                            $form->addElement(
+                                'html',
+                                '<div style="float: right;">'.
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</div>'
+                            );
                         }
                     }
                 }
@@ -1393,7 +1305,7 @@ function generate_settings_form($settings, $settings_by_access_list)
                         array(
                             get_lang($row['title']),
                             get_lang($row['comment']),
-                            get_lang('MB'),
+                            get_lang('MB')
                         ),
                         array('maxlength' => '8')
                     );
@@ -1422,7 +1334,7 @@ function generate_settings_form($settings, $settings_by_access_list)
                         $row['variable'],
                         array(
                             get_lang($row['title']),
-                            get_lang($row['comment']),
+                            get_lang($row['comment'])
                         ),
                         $hideme
                     );
@@ -1479,7 +1391,7 @@ function generate_settings_form($settings, $settings_by_access_list)
                 );
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
-            case 'checkbox';
+            case 'checkbox':
                 // 1. We collect all the options of this variable.
                 $sql = "SELECT * FROM $table_settings_current
                         WHERE variable='".$row['variable']."' AND access_url =  1";
@@ -1489,13 +1401,13 @@ function generate_settings_form($settings, $settings_by_access_list)
                 while ($rowkeys = Database::fetch_array($result)) {
                     // Profile tab option should be hidden when the social tool is enabled.
                     if (api_get_setting('allow_social_tool') == 'true') {
-                        if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_profile') {
+                        if ($rowkeys['variable'] === 'show_tabs' && $rowkeys['subkey'] === 'my_profile') {
                             continue;
                         }
                     }
 
                     // Hiding the gradebook option.
-                    if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_gradebook') {
+                    if ($rowkeys['variable'] === 'show_tabs' && $rowkeys['subkey'] === 'my_gradebook') {
                         continue;
                     }
 
@@ -1520,11 +1432,11 @@ function generate_settings_form($settings, $settings_by_access_list)
                                     access_url =  $access_url";
                         $result_access = Database::query($sql);
                         $row_access = Database::fetch_array($result_access);
-                        if ($row_access['selected_value'] == 'true' && !$form->isSubmitted()) {
+                        if ($row_access['selected_value'] === 'true' && !$form->isSubmitted()) {
                             $element->setChecked(true);
                         }
                     } else {
-                        if ($rowkeys['selected_value'] == 'true' && !$form->isSubmitted()) {
+                        if ($rowkeys['selected_value'] === 'true' && !$form->isSubmitted()) {
                             $element->setChecked(true);
                         }
                     }
@@ -1536,7 +1448,7 @@ function generate_settings_form($settings, $settings_by_access_list)
                 $form->addGroup(
                     $group,
                     $row['variable'],
-                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    array(get_lang($row['title']), get_lang($row['comment']) . 'aaaaaa'),
                     ''
                 );
                 break;
@@ -1549,7 +1461,13 @@ function generate_settings_form($settings, $settings_by_access_list)
                 * To populate the list of options, the select type dynamically calls a function that must be called select_ + the name of the variable being displayed.
                 * The functions being called must be added to the file settings.lib.php.
                 */
-                $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), call_user_func('select_'.$row['variable']), $hideme);
+                $form->addElement(
+                    'select',
+                    $row['variable'],
+                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    call_user_func('select_'.$row['variable']),
+                    $hideme
+                );
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
             case 'custom':
@@ -1612,7 +1530,7 @@ function generate_settings_form($settings, $settings_by_access_list)
  * @param string $search
  * @return array
  */
-function search_setting($search)
+function searchSetting($search)
 {
     if (empty($search)) {
         return array();
@@ -1654,4 +1572,147 @@ function search_setting($search)
         }
     }
     return $settings;
+}
+/**
+ * Helper function to generates a form elements group
+ * @param object $form The form where the elements group has to be added
+ * @param array $values Values to browse through
+ * @return array
+ */
+function formGenerateElementsGroup($form, $values = array(), $elementName)
+{
+    $group = array();
+    if (is_array($values)) {
+        foreach ($values as $key => $value) {
+            $element = &$form->createElement('radio', $elementName, '', get_lang($value['display_text']), $value['value']);
+            $group[] = $element;
+        }
+    }
+    return $group;
+}
+/**
+ * Helper function with allowed file types for CSS
+ * @return  array Array of file types (no indexes)
+ */
+function getAllowedFileTypes()
+{
+    $allowedFiles = array(
+        'css',
+        'zip',
+        'jpeg',
+        'jpg',
+        'png',
+        'gif',
+        'ico',
+        'psd',
+        'xcf',
+        'svg',
+        'webp',
+        'woff',
+        'woff2'
+    );
+    return $allowedFiles;
+}
+/**
+ * Helper function to set settings in the database
+ * @param   array   $parameters     List of values
+ * @param   int     $accessUrl      The current access URL
+ * @return  void
+ */
+function setConfigurationSettingsInDatabase($parameters, $accessUrl)
+{
+    $r = api_set_settings_category('Search', 'false', $accessUrl);
+    // Save the settings.
+    foreach ($parameters as $key => $value) {
+        $result = api_set_setting($key, $value, null, null);
+    }
+}
+
+/**
+ * Helper function to show the status of the search settings table
+ * @param   array   $data   Data to show
+ * @return void
+ */
+function showSearchSettingsTable($data)
+{
+    echo Display::tag('h3', get_lang('Settings'));
+    $table = new SortableTableFromArray($data);
+    $table->set_header(0, get_lang('Setting'), false);
+    $table->set_header(1, get_lang('Status'), false);
+    echo $table->display();
+}
+/**
+ * Helper function to show status table for each command line tool installed
+ * @return void
+ */
+function showSearchToolsStatusTable()
+{
+    //@todo windows support
+    if (api_is_windows_os() == false) {
+        $list_of_programs = array('pdftotext', 'ps2pdf', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv');
+
+        foreach($list_of_programs as $program) {
+            $output = [];
+            $ret_val = null;
+            exec("which $program", $output, $ret_val);
+
+            if (!$output) {
+                $output[] = '';
+            }
+
+            $icon = Display::return_icon('bullet_red.png', get_lang('NotInstalled'));
+            if (!empty($output[0])) {
+                $icon = Display::return_icon('bullet_green.png', get_lang('Installed'));
+            }
+            $data2[]= array($program, $output[0], $icon);
+        }
+        echo Display::tag('h3', get_lang('ProgramsNeededToConvertFiles'));
+        $table = new SortableTableFromArray($data2);
+        $table->set_header(0, get_lang('Program'), false);
+        $table->set_header(1, get_lang('Path'), false);
+        $table->set_header(2, get_lang('Status'), false);
+        echo $table->display();
+    } else {
+        Display::display_warning_message(
+            get_lang('YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool')
+        );
+    }
+}
+/**
+ * Helper function to generate and show CSS Zip download message
+ * @param   string $style Style path
+ * @return void
+ */
+function generateCSSDownloadLink($style)
+{
+    $arch = api_get_path(SYS_ARCHIVE_PATH).$style.'.zip';
+    $dir = api_get_path(SYS_CSS_PATH).'themes/'.$style;
+    if (is_dir($dir)) {
+        $zip = new PclZip($arch);
+        // Remove path prefix except the style name and put file on disk
+        $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($style)));
+        //@TODO: use more generic script to download.
+        $str = '<a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+        Display::display_normal_message($str, false);
+    } else {
+        Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
+    }
+}
+/**
+ * Helper function to tell if the style is changeable in the current URL
+ * @return bool $changeable Whether the style can be changed in this URL or not
+ */
+function isStyleChangeable() {
+    global $_configuration;
+    $changeable = false;
+    if ($_configuration['access_url'] != 1) {
+        $style_info = api_get_settings('stylesheets', '', 1, 0);
+        $url_info = api_get_access_url($_configuration['access_url']);
+        if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
+            $changeable = true;
+        }
+    } else {
+        $changeable = true;
+    }
+    return $changeable;
 }

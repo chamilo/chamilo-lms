@@ -182,6 +182,7 @@ VALUES
 ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
 ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1),
 ('show_link_bug_notification', NULL, 'radio', 'Platform', 'false', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0),
+('show_link_ticket_notification', NULL, 'radio', 'Platform', 'false', 'ShowLinkTicketNotificationTitle', 'ShowLinkTicketNotificationComment', NULL, NULL, 0),
 ('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 1),
 ('course_validation_terms_and_conditions_url', NULL, 'textfield', 'Platform', '', 'CourseValidationTermsAndConditionsLink', 'CourseValidationTermsAndConditionsLinkComment', NULL, NULL, 1),
 ('sso_authentication',NULL,'radio','Security','false','EnableSSOTitle','EnableSSOComment',NULL,NULL,1),
@@ -308,7 +309,13 @@ VALUES
 ('cron_remind_course_expiration_frequency', NULL, 'textfield', 'Crons', '2', 'CronRemindCourseExpirationFrequencyTitle', 'CronRemindCourseExpirationFrequencyComment', NULL, NULL, 1),
 ('cron_remind_course_expiration_activate', NULL, 'radio', 'Crons', 'false', 'CronRemindCourseExpirationActivateTitle', 'CronRemindCourseExpirationActivateComment', NULL, NULL, 1),
 ('allow_coach_feedback_exercises',NULL,'radio','Session','true','AllowCoachFeedbackExercisesTitle','AllowCoachFeedbackExercisesComment',NULL,NULL, 0),
-('allow_my_files',NULL,'radio','Platform','true','AllowMyFilesTitle','AllowMyFilesComment','',NULL, 1);
+('allow_my_files',NULL,'radio','Platform','true','AllowMyFilesTitle','AllowMyFilesComment','',NULL, 1),
+('ticket_allow_student_add', NULL, 'radio','Ticket', 'false','TicketAllowStudentAddTitle','TicketAllowStudentAddComment',NULL,NULL, 0),
+('ticket_send_warning_to_all_admins', NULL, 'radio','Ticket', 'false','TicketSendWarningToAllAdminsTitle','TicketSendWarningToAllAdminsComment',NULL,NULL, 0),
+('ticket_warn_admin_no_user_in_category', NULL, 'radio','Ticket', 'false','TicketWarnAdminNoUserInCategoryTitle','TicketWarnAdminNoUserInCategoryComment',NULL,NULL, 0),
+('ticket_allow_category_edition', NULL, 'radio','Ticket', 'false','TicketAllowCategoryEditionTitle','TicketAllowCategoryEditionComment',NULL,NULL, 0),
+('load_term_conditions_section', NULL, 'radio','Platform', 'login','LoadTermConditionsSectionTitle','LoadTermConditionsSectionDescription',NULL,NULL, 0),
+('show_terms_if_profile_completed', NULL, 'radio','Ticket', 'false','ShowTermsIfProfileCompletedTitle','ShowTermsIfProfileCompletedComment',NULL,NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -491,6 +498,8 @@ VALUES
 ('allow_user_course_subscription_by_course_admin', 'false', 'No'),
 ('show_link_bug_notification', 'true', 'Yes'),
 ('show_link_bug_notification', 'false', 'No'),
+('show_link_ticket_notification', 'true', 'Yes'),
+('show_link_ticket_notification', 'false', 'No'),
 ('course_validation', 'true', 'Yes'),
 ('course_validation', 'false', 'No'),
 ('sso_authentication', 'true', 'Yes'),
@@ -628,7 +637,19 @@ VALUES
 ('allow_coach_feedback_exercises','true','Yes'),
 ('allow_coach_feedback_exercises','false','No'),
 ('allow_my_files','true','Yes'),
-('allow_my_files','false','No');
+('allow_my_files','false','No'),
+('ticket_allow_student_add','true','Yes'),
+('ticket_allow_student_add','false','No'),
+('ticket_allow_category_edition', 'true', 'Yes'),
+('ticket_allow_category_edition', 'false', 'No'),
+('ticket_send_warning_to_all_admins', 'true', 'Yes'),
+('ticket_send_warning_to_all_admins', 'false', 'No'),
+('ticket_warn_admin_no_user_in_category', 'true', 'Yes'),
+('ticket_warn_admin_no_user_in_category', 'false', 'No'),
+('load_term_conditions_section', 'login', 'Login'),
+('load_term_conditions_section', 'course', 'Course'),
+('show_terms_if_profile_completed', 'true', 'Yes'),
+('show_terms_if_profile_completed', 'false', 'No');
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),
@@ -725,7 +746,7 @@ INSERT INTO course_module VALUES
 (17,'AddedLearnpath','','scormbuilder.gif',0,0,'external'),
 (18,'conference','conference/index.php?type=conference','conf.gif',0,0,'external'),
 (19,'conference','conference/index.php?type=classroom','conf.gif',0,0,'external'),
-(20,'learnpath','newscorm/lp_controller.php','scorms.gif',5,1,'basic'),
+(20,'learnpath','lp/lp_controller.php','scorms.gif',5,1,'basic'),
 (21,'blog','blog/blog.php','blog.gif',1,2,'basic'),
 (22,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
 (23,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
@@ -1832,7 +1853,34 @@ VALUES
 ('enable_record_audio', 'true', 'Yes'),
 ('enable_record_audio', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.11.0.3' WHERE variable = 'chamilo_database_version';
+-- Version 1.11.0.4
+
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at)
+VALUES
+(1, 1, 'skype', 'Skype', 1, 1, now()),
+(1, 1, 'linkedin_url', 'LinkedInUrl', 1, 1, now());
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, access_url_changeable)
+VALUES
+('allow_show_skype_account', NULL, 'radio', 'Platform', 'true', 'AllowShowSkypeAccountTitle', 'AllowShowSkypeAccountComment', 1),
+('allow_show_linkedin_url', NULL, 'radio', 'Platform', 'true', 'AllowShowLinkedInUrlTitle', 'AllowShowLinkedInUrlComment', 1);
+
+INSERT INTO settings_options (variable, value, display_text)
+VALUES
+('allow_show_skype_account', 'true', 'Yes'),
+('allow_show_skype_account', 'false', 'No'),
+('allow_show_linkedin_url', 'true', 'Yes'),
+('allow_show_linkedin_url', 'false', 'No');
+
+UPDATE settings_current SET selected_value = '1.11.0.4' WHERE variable = 'chamilo_database_version';
+
+INSERT INTO settings_current (variable, type, category, selected_value, title, comment) VALUES ('enable_profile_user_address_geolocalization', 'radio', 'User', 'false', 'EnableProfileUsersAddressGeolocalizationTitle', 'EnableProfileUsersAddressGeolocalizationComment');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_profile_user_address_geolocalization', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_profile_user_address_geolocalization', 'false', 'No');
+
+INSERT INTO settings_current (variable, type, category, selected_value, title, comment) VALUES ('show_official_code_whoisonline', 'radio', 'User', 'false', 'ShowOfficialCodeInWhoIsOnlinePage', 'ShowOfficialCodeInWhoIsOnlinePageComment');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_official_code_whoisonline', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_official_code_whoisonline', 'false', 'No');
 
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 1);
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 2);

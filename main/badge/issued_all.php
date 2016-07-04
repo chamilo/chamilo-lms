@@ -36,8 +36,8 @@ if (!$user || !$skill) {
 }
 
 $userSkills = $skillUserRepo->findBy([
-    'userId' => $user->getId(),
-    'skillId' => $skill->getId()
+    'user' => $user,
+    'skill' => $skill
 ]);
 
 $userInfo = [

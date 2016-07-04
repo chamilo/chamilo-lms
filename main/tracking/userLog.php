@@ -26,17 +26,13 @@ $is_allowed = true;
 
 /* Libraries */
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
 
-/* Header */
-
-/*
-$interbreadcrumb[]= array ("url"=>"../group/group.php", "name"=> get_lang('BredCrumpGroups'));
-$interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=$_gid", "name"=> get_lang('BredCrumpGroupSpace'));
-*/
-
-if(isset($uInfo)) {
-    $interbreadcrumb[]= array ('url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), "name"=> api_ucfirst(get_lang('Users')));
+if (isset($uInfo)) {
+    $interbreadcrumb[]= array(
+        'url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), 
+        "name"=> api_ucfirst(get_lang('Users'))
+    );
 }
 
 $nameTools = get_lang('ToolName');
@@ -327,7 +323,7 @@ if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                                    </td>
                                    </tr>";
                             while ($ar3['status'] != '') {
-                                require_once '../newscorm/learnpathItem.class.php';
+                                require_once '../lp/learnpathItem.class.php';
                                 $time = learnpathItem::getScormTimeFromParameter('php', $ar3['total_time']);
                                 echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
                                 echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";

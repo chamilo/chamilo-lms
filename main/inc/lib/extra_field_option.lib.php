@@ -26,6 +26,7 @@ class ExtraFieldOption extends Model
      */
     public function __construct($type)
     {
+        parent::__construct();
         $this->type = $type;
         $extraField = new ExtraField($this->type);
         $this->extraField = $extraField;
@@ -73,12 +74,12 @@ class ExtraFieldOption extends Model
         $fieldId = intval($fieldId);
 
         $sql = "SELECT count(*) as count
-                FROM $this->table o INNER JOIN $this->tableExtraField e
+                FROM $this->table o 
+                INNER JOIN $this->tableExtraField e
                 ON o.field_id = e.id
                 WHERE
                     o.field_id = $fieldId AND
-                    e.extra_field_type = ".$extraFieldType."
-                ";
+                    e.extra_field_type = $extraFieldType ";
         $result = Database::query($sql);
         $result = Database::fetch_array($result);
 
@@ -171,7 +172,6 @@ class ExtraFieldOption extends Model
             return false;
         }
 
-        $time = api_get_utc_datetime();
         if (!empty($params['field_options']) &&
             in_array(
                 $params['field_type'],
@@ -411,72 +411,116 @@ class ExtraFieldOption extends Model
      * Gets an array of options for a specific field
      * @param int $field_id The field ID
      * @param bool $add_id_in_array Whether to add the row ID in the result
-     * @param string $ordered_by Extra ordering query bit
-     * @result mixed Row on success, false on failure
-     * @assert (0, '') === false
+     * @param null $ordered_by Extra ordering query bit
+     * @return array The options if they exists. Otherwise return false
      */
     public function get_field_options_by_field($field_id, $add_id_in_array = false, $ordered_by = null)
     {
         $field_id = intval($field_id);
 
-        $sql = "SELECT * FROM {$this->table}
-                WHERE field_id = $field_id ";
+        $orderBy = null;
 
-        if (!empty($ordered_by)) {
-            $sql .= " ORDER BY $ordered_by ";
+        switch ($ordered_by) {
+            case 'id':
+                $orderBy = ['id' => 'ASC'];
+                break;
+            case 'field_id':
+                $orderBy = ['fieldId' => 'ASC'];
+                break;
+            case 'option_value':
+                $orderBy = ['optionValue' => 'ASC'];
+                break;
+            case 'display_text':
+                $orderBy = ['displayText' => 'ASC'];
+                break;
+            case 'priority':
+                $orderBy = ['priority' => 'ASC'];
+                break;
+            case 'priority_message':
+                $orderBy = ['priorityMessage' => 'ASC'];
+                break;
+            case 'option_order':
+                $orderBy = ['optionOrder' => 'ASC'];
+                break;
         }
 
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
+        $result = Database::getManager()
+            ->getRepository('ChamiloCoreBundle:ExtraFieldOptions')
+            ->findBy(['field' => $field_id], $orderBy);
+
+        if (!$result) {
+            return false;
+        }
+
+        $options = [];
+
+        foreach ($result as $row) {
+            $option = [
+                'id' => $row->getId(),
+                'field_id' => $row->getField()->getId(),
+                'option_value' => $row->getValue(),
+                'display_text' => $row->getDisplayText(),
+                'priority' => $row->getPriority(),
+                'priority_message' => $row->getPriorityMessage(),
+                'option_order' => $row->getOptionOrder()
+            ];
+
             if ($add_id_in_array) {
-                $options = array();
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    $options[$row['id']] = $row;
-                }
+                $options[$row->getId()] = $option;
 
-                return $options;
-            } else {
-                return Database::store_result($result, 'ASSOC');
+                continue;
             }
+
+            $options[] = $option;
         }
 
-        return false;
+        return $options;
     }
 
     /**
      * Get options for a specific field as array or in JSON format suited for the double-select format
-     * @param int $field_id
      * @param int $option_value_id Option value ID
      * @param bool $to_json Return format (whether it should be formatted to JSON or not)
      * @return mixed Row/JSON on success
      */
-    public function get_second_select_field_options_by_field($field_id, $option_value_id, $to_json = false)
+    public function get_second_select_field_options_by_field($option_value_id, $to_json = false)
     {
-        $field_id = intval($field_id);
-        $option_value_id = intval($option_value_id);
-        $options = array();
-        $sql = "SELECT * FROM {$this->table}
-                WHERE field_id = $field_id AND option_value = $option_value_id
-                ORDER BY display_text";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $options = Database::store_result($result, 'ASSOC');
+        $em = Database::getManager();
+        $option = $em->find('ChamiloCoreBundle:ExtraFieldOptions', intval($option_value_id));
+
+        if (!$option) {
+            return !$to_json ? [] : '{}';
         }
 
-        if ($to_json) {
-            $string = null;
-            if (!empty($options)) {
-                $array = array();
-                foreach ($options as $option) {
-                    $array[$option['id']] = $option['display_text'];
-                }
-                $string = json_encode($array);
-            }
+        $subOptions = $em
+            ->getRepository('ChamiloCoreBundle:ExtraFieldOptions')
+            ->findSecondaryOptions($option);
 
-            return $string;
+        $optionsInfo = [];
+
+        foreach ($subOptions as $subOption) {
+            $optionsInfo[] = [
+                'id' => $subOption->getId(),
+                'field_id' => $subOption->getField()->getId(),
+                'option_value' => $subOption->getValue(),
+                'display_text' => $subOption->getDisplayText(),
+                'priority' => $subOption->getPriority(),
+                'priority_message' => $subOption->getPriorityMessage(),
+                'option_order' => $subOption->getOptionOrder()
+            ];
         }
 
-        return $options;
+        if (!$to_json) {
+            return $optionsInfo;
+        }
+
+        $json = [];
+
+        foreach ($optionsInfo as $optionInfo) {
+            $json[$optionInfo['id']] = $optionInfo['display_text'];
+        }
+
+        return json_encode($json);
     }
 
     /**
@@ -552,7 +596,7 @@ class ExtraFieldOption extends Model
         echo '<div class="actions">';
         $field_id = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : null;
         echo '<a href="'.api_get_self().'?action=add&type='.$this->type.'&field_id='.$field_id.'">'.
-                Display::return_icon('add_user_fields.png', get_lang('Add'), '', ICON_SIZE_MEDIUM ).'</a>';
+                Display::return_icon('add_user_fields.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         echo Display::grid_html('extra_field_options');
     }
@@ -615,7 +659,20 @@ class ExtraFieldOption extends Model
         $form->addElement('hidden', 'type', $this->type);
         $form->addElement('hidden', 'field_id', $this->field_id);
 
-        $form->addElement('text', 'display_text', get_lang('Name'));
+        if ($action == 'edit') {
+            $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
+                'extra_field_option' => $id
+            ]);
+            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+
+            $form->addText(
+                'display_text',
+                [get_lang('Name'), $translateButton]
+            );
+        } else {
+            $form->addElement('text', 'display_text', get_lang('Name'));
+        }
+
         $form->addElement('text', 'option_value', get_lang('Value'));
         $form->addElement('text', 'option_order', get_lang('Order'));
         $form->addElement('select', 'priority', get_lang('Priority'), $this->getPriorityOptions());
@@ -625,7 +682,7 @@ class ExtraFieldOption extends Model
 
         if ($action == 'edit') {
             // Setting the defaults
-            $defaults = $this->get($id);
+            $defaults = $this->get($id, false);
             $form->freeze('option_value');
             $form->addButtonUpdate(get_lang('Modify'));
         } else {
@@ -665,6 +722,7 @@ class ExtraFieldOption extends Model
         if (Database::num_rows($result)) {
             $values = Database::store_result($result, 'ASSOC');
         }
+
         return $values;
     }
 
@@ -692,5 +750,62 @@ class ExtraFieldOption extends Model
         }
 
         return $json;
+    }
+
+    /**
+     * Gets an element
+     * @param int $id
+     * @param bool $translateDisplayText Optional
+     * @return array
+     */
+    public function get($id, $translateDisplayText = true)
+    {
+        $info = parent::get($id);
+
+        if ($translateDisplayText) {
+            $info['display_text'] = self::translateDisplayName($info['display_text']);
+        }
+
+        return $info;
+    }
+
+    /**
+     * Translate the display text for a extra field option
+     * @param string $defaultDisplayText
+     * @return string
+     */
+    public static function translateDisplayName($defaultDisplayText)
+    {
+        $variableLanguage = self::getLanguageVariable($defaultDisplayText);
+
+        return isset($GLOBALS[$variableLanguage]) ? $GLOBALS[$variableLanguage] : $defaultDisplayText;
+    }
+
+    /**
+     * @param $defaultDisplayText
+     * @return mixed|string
+     */
+    public static function getLanguageVariable($defaultDisplayText)
+    {
+        $variableLanguage = api_replace_dangerous_char($defaultDisplayText);
+        $variableLanguage = str_replace('-', '_', $variableLanguage);
+        $variableLanguage = api_underscore_to_camel_case($variableLanguage);
+
+        return $variableLanguage;
+    }
+
+    /**
+     * @param null $options
+     * @return array
+     */
+    public function get_all($options = null)
+    {
+        $result = parent::get_all($options);
+
+        foreach ($result as &$row) {
+            $row['display_text'] = self::translateDisplayName($row['display_text']);
+        }
+
+        return $result;
     }
 }

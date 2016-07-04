@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+
 /**
  * Copy resources from one course in a session to another one.
  *
@@ -11,14 +15,10 @@
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
-$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+$current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_global_admin_script();
 api_protect_limit_for_session_admin();
-
-require_once 'classes/CourseBuilder.class.php';
-require_once 'classes/CourseRestorer.class.php';
-require_once 'classes/CourseSelectForm.class.php';
 
 $xajax = new xajax();
 $xajax->registerFunction('search_courses');
@@ -36,7 +36,10 @@ if (function_exists('ini_set')) {
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $nameTools = get_lang('CopyCourse');
-$interbreadcrumb[] = array('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+    'name' => get_lang('PlatformAdmin')
+);
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -62,7 +65,7 @@ function make_select_session_list($name, $sessions, $attr = array())
     } else {
         $output .= '<option value = "0">'.get_lang('SelectASession').'</option>';
     }
- 
+
     if (is_array($sessions)) {
         foreach ($sessions as $session) {
             $categoryName = '';
@@ -86,13 +89,12 @@ function display_form()
     $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
 
     // Actions
-    
+
     // Link back to the documents overview
     $actionsLeft = '<a href="../admin/index.php">'.
         Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).
         '</a>';
-    
-    
+
     $html .= Display::toolbarAction('toolbar-copysession', array(0 => $actionsLeft));
 
     $html .= Display::return_message(get_lang('CopyCourseFromSessionToSessionExplanation'), 'warning');
@@ -117,25 +119,24 @@ function display_form()
     $html .= '<div class="col-sm-5" id="ajax_list_courses_destination">';
     $html .= '<select id="destination" class="form-control" name="SessionCoursesListDestination[]" ></select>';
     $html .= '</div></div>';
-    
+
     $options = '<div class="radio"><label><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
     $options .= get_lang('FullCopy').'</label></div>';
     $options .= '<div class="radio"><label><input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
     $options .= ' '.get_lang('LetMeSelectItems').'</label></div>';
 
     $options .= '<div class="checkbox"><label><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('CopyOnlySessionItems').'</label></div>';
-     
+
     $html .= Display::panel($options, get_lang('TypeOfCopy'));
-    
+
     $html .= '<div class="form-group"><div class="col-sm-12">';
     $html .= '<button class="btn btn-success" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><em class="fa fa-files-o"></em> '.get_lang('CopyCourse').'</button>';
 
     // Add Security token
     $html .= '<input type="hidden" value="' . Security::get_token() . '" name="sec_token">';
     $html .= '</div></div>';
-
     $html .= '</form>';
-    
+
     echo $html;
 }
 
@@ -159,8 +160,8 @@ function search_courses($id_session, $type)
             }
 
             $return .= '</select>';
-            $_SESSION['course_list']     = $temp_course_list;
-            $_SESSION['session_origin']  = $id_session;
+            $_SESSION['course_list'] = $temp_course_list;
+            $_SESSION['session_origin'] = $id_session;
 
             // Build select for destination sessions where is not included current session from select origin
             if (!empty($id_session)) {

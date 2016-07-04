@@ -9,7 +9,7 @@
  */
 
 $cwdir = getcwd();
-require_once '../newscorm/lp_upload.php';
+require_once '../lp/lp_upload.php';
 
 // Reinit current working directory as many functions in upload change it
 chdir($cwdir);
@@ -58,5 +58,5 @@ if ($error == 'upload_file_too_big') {
         $dialogtype = 'confirmation';
     }
 }
-header('location: ../newscorm/lp_controller.php?action=list&dialog_box=' . $msg . '&dialogtype=' . $dialogtype);
+header('location: ../lp/lp_controller.php?action=list&dialog_box=' . $msg . '&dialogtype=' . $dialogtype);
 exit;

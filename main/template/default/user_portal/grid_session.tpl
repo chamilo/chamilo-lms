@@ -16,8 +16,11 @@
             {{ row.description }}
         {% endif %}
         <div class="info-session">
-            <span><i class="fa fa-user" aria-hidden="true"></i>
-            {{ row.coach_name }}
+            {% if row.coach_name  != '' %}
+                <span><i class="fa fa-user" aria-hidden="true"></i>
+                    {{ row.coach_name }}
+                </span>
+            {% endif %}
             </span>
             <span><i class="fa fa-calendar" aria-hidden="true"></i>
             {{ row.date }}
@@ -26,10 +29,10 @@
         <div class="grid-courses">
             <div class="row">
             {% for item in row.courses %}
-            <div class="col-md-4 col-sm-4 col-xs-6">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="items">
                     <div class="image">
-                        <img src="{{ item.icon }}" class="img-responsive">
+                        <img src="{{ item.image }}" class="img-responsive">
                         {% if item.category != '' %}
                         <span class="category">{{ item.category }}</span>
                         <div class="cribbon"></div>

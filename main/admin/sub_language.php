@@ -14,13 +14,13 @@ api_protect_admin_script();
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
 	$(".save").click(function() {
-		button_name=$(this).attr("name");
-		button_array=button_name.split("|");
-		button_name=button_array[1];
-		file_id=button_array[2];
-		is_variable_language="$"+button_name;
+		var button_name=$(this).attr("name");
+		var button_array=button_name.split("|");
+		var button_name=button_array[1];
+		var file_id=button_array[2];
+		var is_variable_language="$"+button_name;
 
-		is_new_language = $("#txtid_"+file_id+"_"+button_name).val();
+		var is_new_language = $("#txtid_"+file_id+"_"+button_name).val();
 		if (is_new_language == undefined) {
 			is_new_language="_";
     	}
@@ -28,21 +28,28 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
-					$("#div_message_information_id").html("<div class=\"normal-message\"><img src=\'../inc/lib/javascript/indicator.gif\' /></div>");
+					$("#div_message_information_id").html("<div class=\"alert alert-info\"><img src=\'../inc/lib/javascript/indicator.gif\' /></div>");
 				},
 				type: "POST",
 				url: "../admin/sub_language_ajax.inc.php",
-				data: "new_language="+is_new_language+"&variable_language="+is_variable_language+"&file_id="+file_id+"&id="+'.intval($_REQUEST['id']).'+"&sub="+'.intval($_REQUEST['sub_language_id']).',
+				data: {
+				    \'new_language\': is_new_language,
+				    \'variable_language\': is_variable_language,
+				    \'file_id\': file_id,
+				    \'id\': ' . intval($_REQUEST['id']) . ',
+                    \'sub\': ' . intval($_REQUEST['sub_language_id']) . ',
+                    \'sub_language_id\': ' . intval($_REQUEST['sub_language_id']) . '
+				},
 				success: function(datos) {
 					if (datos == "1") {
-						$("#div_message_information_id").html("<div class=\"confirmation-message\">'.get_lang('TheNewWordHasBeenAdded').'</div>");
+						$("#div_message_information_id").html(\'' . Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success') . '\');
 					} else {
-						$("#div_message_information_id").html("<div class=\"warning-message\">" + datos +"</div>");
+						$("#div_message_information_id").html("<div class=\"alert alert-warning\">" + datos +"</div>");
 					}
 				}
 			});
 		} else {
-			$("#div_message_information_id").html("<div class=\"error-message\">'.get_lang('FormHasErrorsPleaseComplete').'</div>");
+			$("#div_message_information_id").html(\'' . Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error') . '\');
 		}
 	});
 });
@@ -120,14 +127,13 @@ if (!empty($sublanguage_folder_error)) {
 echo '<div id="div_message_information_id">&nbsp;</div>';
 
 /**
- * Search a term in the language
- * @param string $term the term to search
- * @param bool $search_in_variable the search will include the variable definition of the term
- * @param bool $search_in_english the search will include the english language variables
- * @param bool $search_in_parent the search will include the parent language variables of the sub language
- * @param bool $search_in_sub_language the search will include the sub language variables
+ * @param $term The term to search
+ * @param bool $search_in_variable The search will include the variable definition of the term
+ * @param bool $search_in_english The search will include the english language variables
+ * @param bool $search_in_parent The search will include the parent language variables of the sub language
+ * @param bool $search_in_sub_language The search will include the sub language variables
  * @author Julio Montoya
- *
+ * @return array
  */
 function search_language_term(
 	$term,
@@ -259,6 +265,10 @@ function search_language_term(
 					continue;
 				}
 
+				if (is_array($variable_value)) {
+					continue;
+				}
+
 				$founded = false;
 				// searching the item in the parent tool
 				if (preg_match($term,$variable_value)!==0) {
@@ -313,8 +323,8 @@ $table->set_header(0, get_lang('LanguageFile'));
 $table->set_header(1, get_lang('LanguageVariable'));
 $table->set_header(2, get_lang('EnglishName'));
 $table->set_header(3, get_lang('OriginalName'));
-$table->set_header(4, get_lang('SubLanguage'),false);
-$table->set_header(5, get_lang('Edit'),false);
+$table->set_header(4, get_lang('Translation'),false);
+$table->set_header(5, get_lang('Action'),false);
 $table->display();
 
 Display :: display_footer();

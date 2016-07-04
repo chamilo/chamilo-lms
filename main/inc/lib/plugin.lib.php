@@ -19,9 +19,11 @@ class AppPlugin
         'header_center',
         'header_left',
         'header_right',
+        'pre_footer',
         'footer_left',
         'footer_center',
         'footer_right',
+        'menu_administrator',
         'course_tool_plugin'
     );
 
@@ -427,7 +429,7 @@ class AppPlugin
                     "subkey = ? AND category = ? AND type = ? " => array($plugin_name, 'Plugins','setting')
                 )
             );
-            
+
             $settings_filtered = array();
             foreach ($plugin_settings as $item) {
                 $settings_filtered[$item['variable']] = $item['selected_value'];

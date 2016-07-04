@@ -74,9 +74,8 @@ framework:
     http_method_override: true
 
 theodo_evolution_session:
-    bag_manager:
-          class: Theodo\Evolution\Bundle\SessionBundle\Manager\Symfony1\BagManager
-          configuration_class: Theodo\Evolution\Bundle\SessionBundle\Manager\Symfony1\BagConfiguration
+    bag_manager_service: theodo_evolution.session.symfony1.bag_manager
+    bag_configuration_service: theodo_evolution.session.symfony1.bag_manager_configuration
 
 # Twig Configuration
 twig:

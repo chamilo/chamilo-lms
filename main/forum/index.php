@@ -180,7 +180,7 @@ echo '<div class="actions">';
 
 //if is called from learning path
 if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
-    echo "<a href=\"../newscorm/lp_controller.php?"
+    echo "<a href=\"../lp/lp_controller.php?"
         . api_get_cidreq()
         . "&gradebook=&action=add_item&type=step&lp_id=$lp_id#resource_tab-5\">"
         . Display::return_icon(
@@ -469,7 +469,7 @@ if (is_array($forumCategories)) {
                         }
                         $forum['forum_of_group'] == 0 ? $groupid = '' : $groupid = $forum['forum_of_group'];
 
-                        $number_threads = isset($forum['number_of_threads']) ? $forum['number_of_threads'] : 0;
+                        $number_threads = isset($forum['number_of_threads']) ? (int) $forum['number_of_threads'] : 0;
                         $number_posts = isset($forum['number_of_posts']) ? $forum['number_of_posts'] : 0;
 
                         $html .= '<div class="row">';
@@ -486,24 +486,32 @@ if (is_array($forumCategories)) {
                             null,
                             ICON_SIZE_MEDIUM
                         );
+
                         $linkForum = Display::tag(
                             'a',
                             $forum['forum_title'],
-                            array (
+                            [
                                 'href' => 'viewforum.php?' . api_get_cidreq()
                                     . '&gidReq=' . intval($groupid)
                                     . '&forum=' . intval($forum['forum_id']),
                                 'class' => return_visible_invisible(strval(intval($forum['visibility'])))
-                            )
+                            ]
                         );
+
+                        if (!empty($forum['start_time']) && !empty($forum['end_time'])) {
+                            $res = apiIsDateInDateRange($forum['start_time'], $forum['end_time']);
+                            if (!$res) {
+                                $linkForum = $forum['forum_title'];
+                            }
+                        }
 
                         $html .= '<h3 class="title">' . $iconForum . $linkForum . '</h3>';
                         $html .= Display::tag(
                             'p',
                             Security::remove_XSS($forum['forum_comment']),
-                            array(
+                            [
                                 'class'=>'description'
-                            )
+                            ]
                         );
                         $html .= '</div>';
                         $html .= '</div>';

@@ -7,7 +7,6 @@
 
 use \ChamiloSession as Session;
 define('CHAMILO_HOMEPAGE', true);
-// Avoid loading CKeditor lib on homepage (very heavy lib)
 define('CHAMILO_LOAD_WYSIWYG', false);
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */
@@ -15,7 +14,6 @@ define('CHAMILO_LOAD_WYSIWYG', false);
 $cidReset = true;
 
 require_once 'main/inc/global.inc.php';
-require_once 'main/chat/chat_functions.lib.php';
 //require_once 'main/auth/external_login/facebook.inc.php';
 
 // The section (for the tabs).

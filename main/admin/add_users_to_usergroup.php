@@ -177,7 +177,7 @@ if ($use_extra_fields) {
     if (count($extra_field_result)>1) {
         for ($i=0; $i<count($extra_field_result)-1; $i++) {
             if (is_array($extra_field_result[$i+1])) {
-                $final_result  = array_intersect($extra_field_result[$i], $extra_field_result[$i+1]);
+                $final_result = array_intersect($extra_field_result[$i], $extra_field_result[$i+1]);
             }
         }
     } else {
@@ -318,9 +318,7 @@ if (!empty($user_list)) {
             ).' ('.$item['username'].') ';
         }
 
-        if (in_array($item['user_id'], $list_in)) {
-            //$elements_in[$item['user_id']] = $person_name;
-        } else {
+        if (!in_array($item['user_id'], $list_in)) {
             $elements_not_in[$item['user_id']] = $person_name;
         }
     }

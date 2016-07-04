@@ -82,7 +82,6 @@ if ($action == 'copy_survey') {
 
 // Header
 Display::display_header($tool_name, 'Survey');
-
 // Tool introduction
 Display::display_introduction_section('survey', 'left');
 
@@ -175,8 +174,7 @@ if (api_is_course_coach() && $extend_rights_for_coachs == 'false') {
     SurveyUtil::display_survey_list();
 }
 
-// Footer
-Display :: display_footer();
+Display::display_footer();
 
 /* Bypass functions to make direct use from SortableTable possible */
 
@@ -223,5 +221,3 @@ function get_survey_data_drh($from, $number_of_items, $column, $direction)
 {
     return SurveyUtil::get_survey_data($from, $number_of_items, $column, $direction, true);
 }
-
-

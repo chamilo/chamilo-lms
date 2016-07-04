@@ -171,9 +171,9 @@ An optional additional caching mechanism you may use is the realpath_cache_size
     See <a href="http://php.net/manual/en/ini.core.php">the PHP documentation</a>
     for more details.
 <br />
-<br />
+    <br />
     <h3>APC</h3>
-If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>,
+    If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>,
     you can use the same kind of trick as above, just changing the code a little:
 <pre>
     $xc = function_exists('apc_exists');
@@ -205,6 +205,77 @@ If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>,
                 }
             } else {
                 $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
+            }
+        }
+     ...
+</pre>
+<br />
+<br />
+    <h3>APCu</h3>
+In PHP 5.5 and above, APC is rendered practically obsolete by the presence of ZendOPCache by default.
+    However, APC does not cover the "user cache", like the caching of specific variables in memory.
+    Considering this, you can <a href="http://php.net/manual/en/book.apcu.php">APCu</a> to add the same level of variable caching as described above, just changing the code a little:
+    On a local computer, this lead to an increase of RAM consumption and a decrease of 20% of CPU time (for just one user). This has been included in 1.11.x, so this section is only there for historical purposes.
+<pre>
+function return_notification_menu()
+{
+    $_course = api_get_course_info();
+    $course_id = 0;
+    if (!empty($_course)) {
+        $course_id  = $_course['code'];
+    }
+
+    $user_id = api_get_user_id();
+
+    $html = '';
+    $cacheEnabled = function_exists('apcu_exists');
+
+    if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
+        (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
+        (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
+    ) {
+
+        if ($cacheEnabled) {
+            $apc = apcu_cache_info(null,true);
+            $apc_end = $apc['start_time']+$apc['ttl'];
+            if (apcu_exists('my_campus_whoisonline_count_simple') AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple') > 0 ) {
+                $number = apcu_fetch('my_campus_whoisonline_count_simple');
+            } else {
+                $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+                apcu_clear_cache();
+                apcu_store('my_campus_whoisonline_count_simple',$number,15);
+            }
+        } else {
+            $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+        }
+
+        $number_online_in_course = 0;
+        if (!empty($_course['id'])) {
+            if ($cacheEnabled) {
+                $apc = apcu_cache_info(null,true);
+                $apc_end = $apc['start_time']+$apc['ttl'];
+                if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id']) AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0) {
+                    $number_online_in_course = apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']);
+                } else {
+                    $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
+                    apcu_store('my_campus_whoisonline_count_simple_'.$_course['id'],$number_online_in_course,15);
+                }
+            } else {
+                $number_online_in_course = who_is_online_in_this_course_count(
+                    $user_id,
+                    api_get_setting('time_limit_whosonline'),
+                    $_course['id']
+                );
+            }
+        }
+
+        // Display the who's online of the platform
+        if ($number) {
+            if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
+                (api_get_setting('showonline', 'users') == 'true' && $user_id)
+            ) {
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'.get_lang('UsersOnline').'" >'.
+                            Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY).' '.$number.'</a></li>';
             }
         }
      ...
@@ -342,7 +413,7 @@ ALTER TABLE user_rel_tag ADD INDEX idx_user_rel_tag_user (user_id);
 In Chamilo 1.10.0 (the first version of the serie), many indexes were forgotten, so you can boost your database by adding the following indexes:<br />
 <pre>
 alter table extra_field_values add index idx_extra_field_values (field_id, item_id);
-alter table usergroup_rel_user add index idx_usergroup_ru (group_id);
+alter table usergroup_rel_user add index idx_usergroup_ru (usergroup_id);
 alter table usergroup_rel_user add index idx_usergroup_ru_u (user_id);
 alter table c_student_publication add index idxstudpub_cid (c_id);
 alter table c_student_publication add index idxstudpub_uid (user_id);
@@ -351,10 +422,13 @@ alter table c_quiz_rel_question ADD INDEX idx_cqrq_qid (question_id);
 alter table c_quiz_rel_question ADD INDEX idx_cqrq_cid (c_id);
 alter table c_quiz_answer add index idx_qa_cidqid (c_id, question_id);
 </pre>
+In Chamilo 1.10.6, an additional query was confirmed to still have effect a considerable effect:
+<pre>
+alter table c_quiz_question_rel_category add index idx_qqrc_qid (question_id);
+</pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>
 One good reference: <a href="http://dev.mysql.com/doc/refman/5.1/en/multiple-key-caches.html">MySQL documentation on multiple key caches</a><br />
-
 <hr />
 
 <h2><a name="4.Sessions-directories"></a>4. Sessions directories</h2>
@@ -555,23 +629,23 @@ This is easy, doesn't require a server reload and you should see the results pre
     you should avoid using this technique.
 </p>
 <p>
-You can also mitigate the risk by disabling permissions check only 
+You can also mitigate the risk by disabling permissions check only
 for some static resource like css,js and fonts files.
 <br/>
-For that is required to load header module  
+For that is required to load header module
 in apache (check with a2enmod in your favorite root terminal)<br />
 add theses line after RewriteBase /courses/:
 <pre>
 &lt;IfModule mod_headers.c&gt;
     # all file name ended with these  extensions names will bypass the permission check   (and also served by the browser cache at  the next request)
     &lt;FilesMatch &quot;\.(gif|jpg|jpeg|png|js|pdf|ico|icon|css|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff)$&quot;&gt;
-        Header unset Cache-Control  
-        Header set Cache-Control &quot;public, max-age=29030400&quot; 
-        RequestHeader unset Cookie      
+        Header unset Cache-Control
+        Header set Cache-Control &quot;public, max-age=29030400&quot;
+        RequestHeader unset Cookie
         Header unset ETag
     &lt;/FilesMatch&gt;
 &lt;/IfModule&gt;
-# also adjust files here 
+# also adjust files here
 RewriteRule (\.(html|gif|jpg|jpeg|png|js|pdf|ico|icon|css|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff))$ - [L]
 </pre>
 </p>

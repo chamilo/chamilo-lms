@@ -42,6 +42,7 @@ class BBBPlugin extends Plugin
                 'salt' => 'text',
                 'enable_global_conference' => 'boolean',
                 'enable_conference_in_course_groups' => 'boolean',
+                'enable_global_conference_link' => 'boolean'
             ]
         );
     }
@@ -52,7 +53,7 @@ class BBBPlugin extends Plugin
      */
     public function validateCourseSetting($variable)
     {
-        if ($variable == 'bbb_enable_conference_in_groups') {
+        if ($variable === 'bbb_enable_conference_in_groups') {
             if ($this->get('enable_conference_in_course_groups') === 'true') {
 
                 return true;
@@ -117,6 +118,7 @@ class BBBPlugin extends Plugin
             'bbb_host',
             'bbb_tool_enable',
             'enable_global_conference',
+            'enable_global_conference_link',
             'enable_conference_in_course_groups',
             'bbb_plugin',
             'bbb_plugin_host',

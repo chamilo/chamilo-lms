@@ -370,7 +370,7 @@ class GradebookUtils
                 $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . ' &' . $courseParams. '" onclick="return confirmation();">' .
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
             }
-            
+
             return $modify_icons;
         }
     }
@@ -384,7 +384,7 @@ class GradebookUtils
      *
      * @return   array     false on error or array of resource
      */
-    public static function is_resource_in_course_gradebook($course_code, $resource_type, $resource_id, $session_id = 0)
+    public static function isResourceInCourseGradebook($course_code, $resource_type, $resource_id, $session_id = 0)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $course_code = Database::escape_string($course_code);
@@ -399,7 +399,7 @@ class GradebookUtils
             return false;
         }
         $row = Database::fetch_array($res, 'ASSOC');
-        
+
         return $row;
     }
 
@@ -583,7 +583,7 @@ class GradebookUtils
      * @param integer $cat_id
      * @param integer $user_id
      * @param string $date_certificate
-     * @return void()
+     * @return void
      */
     public static function register_user_info_about_certificate($cat_id, $user_id, $score_certificate, $date_certificate)
     {
@@ -1395,7 +1395,7 @@ class GradebookUtils
         $sessionName = !empty($sessionName) ? " - $sessionName" : '';
 
         $params = array(
-            'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['department_name']),
+            'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
             'session_info' => '',
             'course_info' => '',
             'pdf_date' => '',

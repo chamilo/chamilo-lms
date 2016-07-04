@@ -5,6 +5,9 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use CpChart\Classes\pCache as pCache;
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  *  Class Tracking
@@ -415,7 +418,7 @@ class Tracking
                         // Remove "NaN" if any (@todo: locate the source of these NaN)
                         $time = str_replace('NaN', '00' . $h . '00\'00"', $time);
 
-                        if ($row['item_type'] != 'dokeos_chapter') {
+                        if ($row['item_type'] != 'dir') {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                             } else {
@@ -959,7 +962,7 @@ class Tracking
                                                             </td>';
                                                 } else {
                                                     $output .= '<td>
-                                                            <a href="../exercice/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
+                                                            <a href="../exercise/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
                                                             <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
                                                             </a></td>';
                                                 }
@@ -969,7 +972,7 @@ class Tracking
                                                                 <img src="' . Display::returnIconPath('quiz_na.gif').'" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
                                                 } else {
                                                     $output .= '<td>
-                                                                    <a href="../exercice/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
+                                                                    <a href="../exercise/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
                                                                     <img src="' . Display::returnIconPath('quiz.gif').'" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
                                                 }
                                             }
@@ -1121,8 +1124,10 @@ class Tracking
                 STUDENT
             );
             $students = array();
-            foreach ($studentList as $studentData) {
-                $students[] = $studentData['user_id'];
+            if (is_array($studentList)) {
+                foreach ($studentList as $studentData) {
+                    $students[] = $studentData['user_id'];
+                }
             }
 
             $studentBossesList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -1141,8 +1146,10 @@ class Tracking
                 STUDENT_BOSS
             );
             $studentBosses = array();
-            foreach ($studentBossesList as $studentBossData) {
-                $studentBosses[] = $studentBossData['user_id'];
+            if (is_array($studentBossesList)) {
+                foreach ($studentBossesList as $studentBossData) {
+                    $studentBosses[] = $studentBossData['user_id'];
+                }
             }
 
             $teacherList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -1182,8 +1189,10 @@ class Tracking
             );
 
             $humanResourcesList = array();
-            foreach ($humanResources as $item) {
-                $humanResourcesList[] = $item['user_id'];
+            if (is_array($humanResources)) {
+                foreach ($humanResources as $item) {
+                    $humanResourcesList[] = $item['user_id'];
+                }
             }
 
             $platformCourses = SessionManager::getAllCoursesFollowedByUser(
@@ -1349,16 +1358,18 @@ class Tracking
             $timeFilter = 'last_week';
         }
 
-        $today = date('Y-m-d H:i:s');
+        $today = new DateTime('now', new DateTimeZone('UTC'));
 
         switch ($timeFilter) {
             case 'last_7_days':
-                $new_date = date('Y-m-d H:i:s', strtotime('-7 day'));
-                $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
+                $newDate = new DateTime('-7 day', new DateTimeZone('UTC'));
+                $condition_time = " AND (login_date >= '{$newDate->format('Y-m-d H:i:s')}'";
+                $condition_time .= " AND logout_date <= '{$today->format('Y-m-d H:i:s')}') ";
                 break;
             case 'last_30_days':
-                $new_date = date('Y-m-d H:i:s', strtotime('-30 day'));
-                $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
+                $newDate = new DateTime('-30 days', new DateTimeZone('UTC'));
+                $condition_time = " AND (login_date >= '{$newDate->format('Y-m-d H:i:s')}'";
+                $condition_time .= "AND logout_date <= '{$today->format('Y-m-d H:i:s')}') ";
                break;
             case 'custom':
                 if (!empty($start_date) && !empty($end_date)) {
@@ -1772,7 +1783,11 @@ class Tracking
 
     		$sql = "SELECT count(id) FROM $tbl_course_quiz
     				WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz ";
-    		$count_quiz = Database::fetch_row(Database::query($sql));
+            $count_quiz = 0;
+            $countQuizResult = Database::query($sql);
+            if (!empty($countQuizResult)) {
+                $count_quiz = Database::fetch_row($countQuizResult);
+            }
 
     		if (!empty($count_quiz[0]) && !empty($student_id)) {
     			if (is_array($student_id)) {
@@ -1789,7 +1804,7 @@ class Tracking
                     $result = Database::query($sql);
                     $exercise_list = array();
     				$exercise_id = null;
-                    if (Database::num_rows($result)) {
+                    if (!empty($result) && Database::num_rows($result)) {
                         while ($row = Database::fetch_array($result)) {
                             $exercise_list[] = $row['id'];
                         }
@@ -4289,7 +4304,9 @@ class Tracking
                 $html .= Display::page_subheader(
                     Display::return_icon('course.png', get_lang('MyCourses'), array(), ICON_SIZE_SMALL).' '.get_lang('MyCourses')
                 );
-                $html .= '<table class="data_table" width="100%">';
+                $html .= '<div class="table-responsive">';
+                $html .= '<table class="table table-striped table-hover">';
+                $html .= '<thead>';
                 $html .= '<tr>
                           '.Display::tag('th', get_lang('Course'), array('width'=>'300px')).'
                           '.Display::tag('th', get_lang('TimeSpentInTheCourse'), array('class'=>'head')).'
@@ -4298,6 +4315,7 @@ class Tracking
                           '.Display::tag('th', get_lang('LastConnexion'), array('class'=>'head')).'
                           '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
                         </tr>';
+                $html .= '</thead><tbody>';
 
                 foreach ($courses as $course_code => $course_title) {
                     $courseInfo = api_get_course_info($course_code);
@@ -4364,7 +4382,8 @@ class Tracking
                     $html .= '</a>';
                     $html .= '</td></tr>';
                 }
-                $html .= '</table>';
+                $html .= '</tbody></table>';
+                $html .= '</div>';
             }
         }
 
@@ -4475,7 +4494,9 @@ class Tracking
                 Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL) . ' ' . get_lang('Sessions')
             );
 
-            $html .= '<table class="data_table" width="100%">';
+            $html .= '<div class="table-responsive">';
+            $html .= '<table class="table table-striped table-hover">';
+            $html .= '<thead>';
             $html .= '<tr>
                   '.Display::tag('th', get_lang('Session'), array('width'=>'300px')).'
                   '.Display::tag('th', get_lang('PublishedExercises'), array('width'=>'300px')).'
@@ -4483,6 +4504,8 @@ class Tracking
                   '.Display::tag('th', get_lang('AverageExerciseResult'), array('class'=>'head')).'
                   '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
                   </tr>';
+            $html .= '</thead>';
+            $html .= '<tbody>';
 
             foreach ($course_in_session as $my_session_id => $session_data) {
                 $course_list  = $session_data['course_list'];
@@ -4559,7 +4582,8 @@ class Tracking
                 $html .= Display::tag('td', $icon);
                 $html .= '</tr>';
             }
-            $html .= '</table><br />';
+            $html .= '</tbody>';
+            $html .= '</table></div><br />';
             $html .= Display::div($main_session_graph, array('id'=>'session_graph','class'=>'chart-session', 'style'=>'position:relative; text-align: center;') );
 
             // Checking selected session.
@@ -4571,9 +4595,11 @@ class Tracking
 
                 $html .= Display::tag('h3',$session_data['name'].' - '.get_lang('CourseList'));
 
-                $html .= '<table class="data_table" width="100%">';
+                $html .= '<div class="table-responsive">';
+                $html .= '<table class="table table-hover table-striped">';
                 //'.Display::tag('th', get_lang('DoneExercises'),         array('class'=>'head')).'
                 $html .= '
+                    <thead>
                     <tr>
                       <th width="300px">'.get_lang('Course').'</th>
                       '.Display::tag('th', get_lang('PublishedExercises'),    	array('class'=>'head')).'
@@ -4585,7 +4611,10 @@ class Tracking
                       '.Display::tag('th', get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
                       '.Display::tag('th', get_lang('LastConnexion'),         	array('class'=>'head')).'
                       '.Display::tag('th', get_lang('Details'),               	array('class'=>'head')).'
-                    </tr>';
+                    </tr>
+                    </thead>
+                    <tbody>
+                ';
 
                 foreach ($course_list as $course_data) {
                     $course_code  = $course_data['code'];
@@ -4686,7 +4715,10 @@ class Tracking
                     }
                     //Score
                     $html .= Display::tag('td', $percentage_score, array('align'=>'center'));
-                    $html .= Display::tag('td', $last_connection,  array('align'=>'center'));
+                    if (empty($last_connection) or is_bool($last_connection)) {
+                        $last_connection = '';
+                    }
+                    $html .= Display::tag('td', $last_connection, array('align' => 'center'));
 
                     if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
                         $details = '<a href="#">';
@@ -4699,7 +4731,7 @@ class Tracking
                     $html .= Display::tag('td', $details, array('align'=>'center'));
                     $html .= '</tr>';
                 }
-                $html .= '</table>';
+                $html .= '</tbody></table></div>';
             }
         }
 
@@ -4724,18 +4756,22 @@ class Tracking
             $course_info = CourseManager::get_course_information($course);
 
             $html .= Display::page_subheader($course_info['title']);
-            $html .= '<table class="data_table" width="100%">';
+            $html .= '<div class="table-responsive">';
+            $html .= '<table class="table table-striped table-hover">';
 
             //Course details
             $html .= '
+                <thead>
                 <tr>
-                <th class="head" style="color:#000">'.get_lang('Exercises').'</th>
-                <th class="head" style="color:#000">'.get_lang('Attempts').'</th>
-                <th class="head" style="color:#000">'.get_lang('BestAttempt').'</th>
-                <th class="head" style="color:#000">'.get_lang('Ranking').'</th>
-                <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>
-                <th class="head" style="color:#000">'.get_lang('Statistics').' '.Display :: return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>
-                </tr>';
+                <th>'.get_lang('Exercises').'</th>
+                <th>'.get_lang('Attempts').'</th>
+                <th>'.get_lang('BestAttempt').'</th>
+                <th>'.get_lang('Ranking').'</th>
+                <th>'.get_lang('BestResultInCourse').'</th>
+                <th>'.get_lang('Statistics').' '.Display :: return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>
+                </tr>
+                </thead>
+                <tbody>';
 
             if (empty($session_id)) {
                 $user_list = CourseManager::get_user_list_from_course_code(
@@ -4786,7 +4822,7 @@ class Tracking
                     );
 
                     $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
+                    $url = api_get_path(WEB_CODE_PATH) . "exercise/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
 
                     if ($visible_return['value'] == true) {
                         $exercices['title'] = Display::url(
@@ -4845,13 +4881,16 @@ class Tracking
                                 $weighting      = $exercise_stat['exe_weighting'];
                                 $exe_id         = $exercise_stat['exe_id'];
 
-                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
+                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH) . 'exercise/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
                                 $percentage_score_result = Display::url(ExerciseLib::show_score($score, $weighting), $latest_attempt_url);
                                 $my_score = 0;
                                 if (!empty($weighting) && intval($weighting) != 0) {
                                     $my_score = $score/$weighting;
                                 }
                                 //@todo this function slows the page
+                                if (is_int($user_list)) {
+                                    $user_list = array($user_list);
+                                }
                                 $position = ExerciseLib::get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
 
                                 $graph = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
@@ -4896,17 +4935,19 @@ class Tracking
             } else {
                 $html .= '<tr><td colspan="5" align="center">'.get_lang('NoEx').'</td></tr>';
             }
-            $html .= '</table>';
+            $html .= '</tbody></table></div>';
 
 
             // LP table results
-            $html .='<table class="data_table">';
+            $html .= '<div class="table-responsive">';
+            $html .='<table class="table table-striped table-hover">';
+            $html .= '<thead><tr>';
             $html .= Display::tag('th', get_lang('Learnpaths'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('LatencyTimeSpent'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('Progress'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('Score'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('LastConnexion'), array('class'=>'head', 'style'=>'color:#000'));
-            $html .= '</tr>';
+            $html .= '</tr></thead><tbody>';
 
             $list = new LearnpathList(
                 api_get_user_id(),
@@ -4935,7 +4976,7 @@ class Tracking
                     $time_spent_in_lp = api_time_to_hms($time_spent_in_lp);
 
                     $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."newscorm/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
+                    $url = api_get_path(WEB_CODE_PATH) . "lp/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
 
                     if ($learnpath['lp_visibility'] == 0) {
                         $html .= Display::tag('td', $learnpath['lp_name']);
@@ -4964,7 +5005,9 @@ class Tracking
                         </td>
                       </tr>';
             }
-            $html .='</table>';
+            $html .='</tbody></table></div>';
+
+            $html .= self::displayUserSkills($user_id, $course_info['id'], $session_id);
         }
 
         return $html;
@@ -5527,7 +5570,8 @@ class Tracking
      * @param   int $sessionId  The session ID (session.id)
      * @param   int $courseId   The course ID (course.id)
      * @param   int $exerciseId The quiz ID (c_quiz.id)
-     * @param   int $answer     The answer status (0 = incorrect, 1 = correct, 2 = both)
+     * @param   string $date_from
+     * @param   string $date_to
      * @param   array   $options    An array of options you can pass to the query (limit, where and order)
      * @return array An array with the data of exercise(s) progress
      */
@@ -5751,6 +5795,121 @@ class Tracking
             */
         }
         return $data;
+    }
+
+    /**
+     * @param User $user
+     * @param string $tool
+     * @param Course $course
+     * @param Session|null $session Optional.
+     * @return \Chamilo\CourseBundle\Entity\CStudentPublication|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public static function getLastStudentPublication(User $user, $tool, Course $course, Session $session = null)
+    {
+        return Database::getManager()
+            ->createQuery("
+                SELECT csp
+                FROM ChamiloCourseBundle:CStudentPublication csp
+                INNER JOIN ChamiloCourseBundle:CItemProperty cip
+                    WITH (
+                        csp.iid = cip.ref AND
+                        csp.sessionId = cip.session AND
+                        csp.cId = cip.course AND
+                        csp.userId = cip.lasteditUserId
+                    )
+                WHERE
+                    cip.session = :session AND cip.course = :course AND cip.lasteditUserId = :user AND cip.tool = :tool
+                ORDER BY csp.iid DESC
+            ")
+            ->setMaxResults(1)
+            ->setParameters([
+                'tool' => $tool,
+                'session' => $session,
+                'course' => $course,
+                'user' => $user
+            ])
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * Get the HTML code for show a block with the achieved user skill on course/session
+     * @param int $userId
+     * @param int $courseId Optional.
+     * @param int $sessionId Optional.
+     * @return string
+     */
+    public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0)
+    {
+        $userId = intval($userId);
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        if (api_get_setting('allow_skills_tool') !== 'true') {
+            return '';
+        }
+
+        $filter = ['user' => $userId];
+
+        $filter['course'] = $courseId ?: null;
+        $filter['session'] = $sessionId ?: null;
+
+        $em = Database::getManager();
+
+        $skillsRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelUser')->findBy($filter);
+
+        $html = '
+            <div class="table-responsive">
+                <table class="table" id="skillList">
+                    <thead>
+                        <tr>
+                            <th>' . get_lang('AchievedSkills') . '</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+        ';
+
+        if (count($skillsRelUser)) {
+            $html .= '
+                                <div class="scrollbar-inner badges-sidebar">
+                                    <ul class="list-unstyled list-badges">
+            ';
+
+            foreach ($skillsRelUser as $userSkill) {
+                $skill = $userSkill->getSkill();
+
+                $html .= '
+                                            <li class="thumbnail">
+                                                <a href="' . api_get_path(WEB_PATH) . 'badge/' . $userSkill->getId() . '/user/' . $userId . '" target="_blank">
+                                                    <img class="img-responsive" title="' . $skill->getName() . '" src="' . $skill->getWebIconPath() . '" width="64" height="64">
+                                                    <div class="caption">
+                                                        <p class="text-center">' . $skill->getName() . '</p>
+                                                    </div>
+                                                </a>
+                                            </li>
+                ';
+            }
+
+
+            $html .= '
+                                    </ul>
+                                </div>
+            ';
+        } else {
+            $html .= get_lang('WithoutAchievedSkills');
+        }
+
+        $html .= '
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        ';
+
+        return $html;
     }
 }
 
@@ -6070,12 +6229,12 @@ class TrackingCourseLog
     			break;
     		case 'learnpath':
     			$table_name = TABLE_LP_MAIN;
-    			$link_tool = 'newscorm/lp_controller.php';
+    			$link_tool = 'lp/lp_controller.php';
     			$id_tool = 'id';
     			break;
     		case 'quiz':
     			$table_name = TABLE_QUIZ_TEST;
-    			$link_tool = 'exercice/exercice.php';
+    			$link_tool = 'exercise/exercise.php';
     			$id_tool = 'id';
     			break;
     		case 'glossary':

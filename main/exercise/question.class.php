@@ -1627,7 +1627,7 @@ abstract class Question
                     $icon = Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
                 }
             }
-            
+
             echo $icon;
             echo '</div>';
             echo '</li>';
@@ -1779,8 +1779,17 @@ abstract class Question
         }
 
         $header .= Display::page_subheader2($counter_label . ". " . $question_title);
+
+        $hideLabel = api_get_configuration_value('exercise_hide_label');
+
+        $label = "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4>{$score['result']}</h4>";
+
+        if ($hideLabel === true) {
+            $label = "<h4>{$score['result']}<h4/>;";
+        }
+
         $header .= Display::div(
-            "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4>{$score['result']}</h4>",
+            $label,
             array('class' => 'ribbon')
         );
         $header .= Display::div($this->description, array('id' => 'question_description'));

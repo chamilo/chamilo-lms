@@ -443,6 +443,34 @@ class bbb
     }
 
     /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $status
+     *
+     * @return array
+     */
+    public function getAllMeetingsInCourse($courseId, $sessionId, $status)
+    {
+        $conditions =  array(
+            'where' => array(
+                'status = ? AND c_id = ? AND session_id = ? ' => array(
+                    $status,
+                    $courseId,
+                    $sessionId,
+                ),
+            ),
+        );
+        
+        $meetingList = Database::select(
+            '*',
+            $this->table,
+            $conditions
+        );
+        
+        return $meetingList;
+    }
+
+    /**
      * Gets all the course meetings saved in the plugin_bbb_meeting table
      * @return array Array of current open meeting rooms
      */

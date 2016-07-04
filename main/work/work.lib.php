@@ -2023,6 +2023,8 @@ function get_work_user_list(
                     }
                     $loadingText = get_lang('Loading');
                     $uploadedText = get_lang('Uploaded');
+                    $failsUploadText = get_lang('UplNoFileUploaded');
+                    $failsUploadIcon = Display::return_icon('closed-circle.png', '', [], ICON_SIZE_TINY);
                     $correction = '
                         <form
                         id="file_upload_'.$item_id.'"
@@ -2048,8 +2050,11 @@ function get_work_user_list(
                                 data.submit();
                             },
                             done: function (e, data) {
-                                data.context.text('Upload finished.');
-                                $('#progress_$item_id').html('$uploadedText '+data._response.result.result+'<br />'+data._response.result.name);
+                                if (data._response.result.name) {
+                                    $('#progress_$item_id').html('$uploadedText '+data._response.result.result+'<br />'+data._response.result.name);
+                                } else {
+                                    $('#progress_$item_id').html('$failsUploadText $failsUploadIcon');
+                                }
                             }
                         });
                     });
@@ -3368,7 +3373,6 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     }
 
     $curdirpath = basename($my_folder_data['url']);
-
     // If we come from the group tools the groupid will be saved in $work_table
     if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
         $result = move_uploaded_file(
@@ -3387,6 +3391,8 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     $url = null;
     if ($result) {
         $url = 'work/'.$curdirpath.'/'.$new_file_name;
+    } else {
+        return false;
     }
 
     return array(
@@ -3523,6 +3529,9 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
 
     if ($values['contains_file']) {
         $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+        if (!$result) {
+            return false;
+        }
         if (isset($result['error'])) {
             $message = $result['error'];
             $saveWork = false;

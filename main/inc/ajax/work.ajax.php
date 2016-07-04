@@ -95,7 +95,10 @@ switch ($action) {
             $workInfo = get_work_data_by_id($itemId);
             $workInfoParent = get_work_data_by_id($workInfo['parent_id']);
             $resultUpload = uploadWork($workInfoParent, $courseInfo, true, $workInfo);
-
+            if (!$resultUpload) {
+                echo false;
+                break;
+            }
             $work_table = Database:: get_course_table(
                 TABLE_STUDENT_PUBLICATION
             );

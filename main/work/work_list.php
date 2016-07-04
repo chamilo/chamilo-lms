@@ -69,7 +69,8 @@ echo Display::toolbarAction('toolbar-work', array(0 => $actionsLeft . $actionsRi
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);
 }
-
+echo Session::read('message');
+Session::erase('message');
 if (!empty($my_folder_data['description'])) {
     $contentWork = Security::remove_XSS($my_folder_data['description']);
     $html = '';

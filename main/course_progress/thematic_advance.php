@@ -22,8 +22,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     $form = new FormValidator(
         'thematic_advance',
         'POST',
-        'index.php?action=thematic_advance_list&thematic_id='.$thematic_id.'&'.api_get_cidreq(
-        )
+        api_get_self() . '?' . api_get_cidreq()
     );
     $form->addElement('header',  $header_form);
     //$form->addElement('hidden', 'thematic_advance_token',$token);
@@ -170,6 +169,41 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         }
     }
     $form->setDefaults($default);
+
+    if ($form->validate()) {
+        $values = $form->exportValues();
+
+        $thematic = new Thematic();
+        $thematic->set_thematic_advance_attributes(
+            isset($values['thematic_advance_id']) ? $values['thematic_advance_id']: null,
+            $values['thematic_id'],
+            $values['start_date_type'] == 1 && isset($values['attendance_select']) ? $values['attendance_select'] : 0,
+            $values['content'],
+            $values['start_date_type'] == 2 ? $values['custom_start_date'] : $values['start_date_by_attendance'],
+            $values['duration_in_hours']
+        );
+
+        $affected_rows = $thematic->thematic_advance_save();
+
+        if ($affected_rows) {
+            // get last done thematic advance before move thematic list
+            $last_done_thematic_advance = $thematic->get_last_done_thematic_advance();
+            // update done advances with de current thematic list
+            if (!empty($last_done_thematic_advance)) {
+                $thematic->update_done_thematic_advances($last_done_thematic_advance);
+            }
+        }
+
+        $redirectUrlParams = 'course_progress/index.php?' .  api_get_cidreq() . '&' .
+            http_build_query([
+                'action' => 'thematic_advance_list',
+                'thematic_id' => $values['thematic_id']
+            ]);
+
+        header('Location: ' . api_get_path(WEB_CODE_PATH) . $redirectUrlParams);
+        exit;
+    }
+
     $form->display();
 
 } else if ($action == 'thematic_advance_list') {

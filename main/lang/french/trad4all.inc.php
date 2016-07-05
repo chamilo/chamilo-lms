@@ -7465,7 +7465,7 @@ $BlankInputSize = "Taille de la zone à remplir";
 $DateFormatLongNoDayJS = "dd 'du' MM yy";
 $TimeFormatNoSecJS = "HH:mm";
 $AtTime = "à";
-$SendSubscriptionNotification = "Envoyer un avis d'inscription par e-mail";
+$SendSubscriptionNotification = "Envoyer un avis d'inscription par e-mail aux apprenants";
 $SendAnEmailWhenAUserBeingSubscribed = "Envoyer un e-mail lorsqu'un nouvel utilisateur est inscrit à la session";
 $SelectDate = "Choisir une date";
 $OnlyLettersAndSpaces = "Lettres et espaces uniquement";
@@ -7758,4 +7758,5 @@ $SSOSubclassTitle = "Single Sign On: Sous-classe";
 $SSOSubclassComment = "Pour activer une méthode de Single Sign On, vous devrez créer une sous-classe dans main/auth/sso/ basée sur la classe par défaut. Indiquez ici le nom de la sous-classe. Par exemple, si le fichier se nomme sso.Drupal.class.php, indiquez 'Drupal' dans ce champ.";
 $CourseCreationSplashScreenTitle = "Écran d'accueil de création de cours";
 $CourseCreationSplashScreenComment = "L'écran d'accueil de création de cours montre une série d'options suggérées à l'enseignant lorsqu'il vient de créer un nouveau cours. Désactivez cette option si vous souhaitez envoyer directement les enseignants sur la page principale du cours.";
+$WorksReport = "Rapport de travaux";
 ?>

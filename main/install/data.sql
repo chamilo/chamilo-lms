@@ -1652,7 +1652,7 @@ VALUES
 ('allow_captcha','','radio','Security','false','EnableCaptchaText','EnableCaptchaComment',NULL,'',true),
 ('captcha_number_mistakes_to_block_account','','textfield','Security',5,'CaptchaNumberOfMistakesBeforeBlockingAccountText','CaptchaNumberOfMistakesBeforeBlockingAccountComment',NULL,'',true),
 ('captcha_time_to_block','','textfield','Security',5,'CaptchaTimeAccountIsLockedText','CaptchaTimeAccountIsLockedComment',NULL,'',true),
-('drh_can_access_all_session_content','','radio','Session','true','DRHAccessToAllSessionContentText','DRHAccessToAllSessionContentComment',NULL,'',true),
+('drh_can_access_all_session_content','','radio','Session','false','DRHAccessToAllSessionContentText','DRHAccessToAllSessionContentComment',NULL,'',true),
 ('display_groups_forum_in_general_tool','','radio','Tools','true','ShowGroupForaInGeneralToolText','ShowGroupForaInGeneralToolComment',NULL,'',true),
 ('allow_tutors_to_assign_students_to_session','','radio','Session','false','TutorsCanAssignStudentsToSessionsText','TutorsCanAssignStudentsToSessionsComment',NULL,'',true);
 

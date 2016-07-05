@@ -4969,7 +4969,6 @@ class SessionManager
         }
 
         $urlId = api_get_current_access_url_id();
-
         $sessionConditions = null;
         $courseConditions = null;
         $userConditions = null;
@@ -4977,6 +4976,13 @@ class SessionManager
         if (isset($active)) {
             $active = intval($active);
             $userConditions .= " AND active = $active";
+        }
+
+        $courseList = CourseManager::get_courses_followed_by_drh($userId, DRH);
+        $courseConditions = ' AND 1 <> 1';
+        if (!empty($courseList)) {
+            $courseIdList = array_column($courseList, 'id');
+            $courseConditions = ' AND c.id IN ("'.implode('","', $courseIdList).'")';
         }
 
         switch ($status) {
@@ -5069,8 +5075,7 @@ class SessionManager
                     INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
                     $where
                     $sessionConditions
-                )
-                UNION (
+                ) UNION (
                     $select
                     FROM $tbl_course c
                     INNER JOIN $tbl_course_user cu ON (cu.c_id = c.id)
@@ -5098,6 +5103,7 @@ class SessionManager
         }
 
         $sql .= $limitCondition;
+
         $result = Database::query($sql);
         $result = Database::store_result($result);
 

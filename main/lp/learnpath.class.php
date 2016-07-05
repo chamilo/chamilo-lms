@@ -1132,9 +1132,9 @@ class learnpath
         );
 
         $link_info = GradebookUtils::isResourceInCourseGradebook(
-            api_get_course_id(), 
-            4, 
-            $id, 
+            api_get_course_id(),
+            4,
+            $id,
             api_get_session_id()
         );
         if ($link_info !== false) {
@@ -9136,7 +9136,7 @@ class learnpath
 
         // Remove memory and time limits as much as possible as this might be a long process...
         if (function_exists('ini_set')) {
-            api_set_memory_limit('128M');
+            api_set_memory_limit('256M');
             ini_set('max_execution_time', 600);
         }
 
@@ -9228,8 +9228,8 @@ class learnpath
             $path_to_replace = $folder_name.'/';
         }
 
-        //Fixes chamilo scorm exports
-        if ($this->ref == 'chamilo_scorm_export') {
+        // Fixes chamilo scorm exports
+        if ($this->ref === 'chamilo_scorm_export') {
             $path_to_remove = 'scorm/'.$this->path.'/document/';
         }
 
@@ -9293,7 +9293,7 @@ class learnpath
                     $my_xml_file_path = str_replace($path_to_remove, $path_to_replace, $my_file_path);
 
                     //From quiz
-                    if ($this->ref == 'chamilo_scorm_export') {
+                    if ($this->ref === 'chamilo_scorm_export') {
                         $path_to_remove = 'scorm/'.$this->path.'/';
                         $my_xml_file_path = str_replace($path_to_remove, '', $my_file_path);
                     }
@@ -9624,7 +9624,9 @@ class learnpath
                         $contents = ScormSection::export_exercise_to_scorm($exe_id, true);
                         $tmp_file_path = $archive_path.$temp_dir_short.'/'.$my_file_path;
                         $res = file_put_contents($tmp_file_path, $contents);
-                        if ($res === false) { error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0); }
+                        if ($res === false) {
+                            error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0);
+                        }
                         $files_cleanup[] = $tmp_file_path;
                         //error_log($tmp_path); die();
                         //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_QUOTES, 'UTF-8');

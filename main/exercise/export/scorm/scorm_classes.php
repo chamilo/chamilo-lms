@@ -170,7 +170,7 @@ class ScormQuestion extends Question
 	{
 		$w = $this->selectWeighting();
 		$s = 'questions.push('.$this->js_id.');'."\n";
-        if ($this->type == FREE_ANSWER || $this->type == HOT_SPOT) {
+        if ($this->type == HOT_SPOT) {
             //put the max score to 0 to avoid discounting the points of
             //non-exported quiz types in the SCORM
             $w = 0;
@@ -201,7 +201,7 @@ class ScormAnswerMultipleChoice extends Answer
 
 		//not sure if we are going to export also the MULTIPLE_ANSWER_COMBINATION to SCORM
 		//if ($type == MCMA  || $type == MULTIPLE_ANSWER_COMBINATION ) {
-		if ($type == MCMA ) {
+		if ($type == MCMA) {
 			//$questionTypeLang = get_lang('MultipleChoiceMultipleAnswers');
 			$id = 1;
 			$jstmp = '';
@@ -533,17 +533,20 @@ class ScormAnswerFree extends Answer
 	function export()
 	{
 		$js = '';
+
+        $identifier = 'question_'.$this->questionJSId.'_free';
 		// currently the free answers cannot be displayed, so ignore the textarea
-		$html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
+		$html = '<tr><td colspan="2">';
+        $html .= '<textarea minlength="20" name="'.$identifier.'" id="'.$identifier.'" ></textarea>';
+        $html .= '</td></tr>';
+        $score = $this->selectWeighting(1);
 		$js .= 'questions_answers['.$this->questionJSId.'] = new Array();';
-		$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();';
-		$js .= 'questions_types['.$this->questionJSId.'] = \'free\';'."\n";
-		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();';
-		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;';
-		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'.";\n";
+		$js .= 'questions_answers_correct['.$this->questionJSId.'] = "";';
+		$js .= 'questions_types['.$this->questionJSId.'] = \'free\';';
+		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = "'.$score.'";';
 		$js .= $jstmpw;
 
-		return array($js,$html);
+		return array($js, $html);
 	}
 }
 /**
@@ -675,7 +678,7 @@ class ScormAssessmentItem
 	 */
 	function start_page()
 	{
-		global $charset;
+		$charset = 'UTF-8';
         $head = '';
         if ($this->standalone) {
             $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>';

@@ -7362,7 +7362,8 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
 function api_drh_can_access_all_session_content()
 {
     $a = api_get_setting('drh_can_access_all_session_content');
-    return $a == 'true';
+
+    return $a === 'true';
 }
 
 /**

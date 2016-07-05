@@ -159,7 +159,7 @@ $UserList = array();
 
 $msg = '';
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
-    $courses_list = $_POST['CoursesList'];
+    $courses_list = isset($_POST['CoursesList']) ? $_POST['CoursesList'] : [];
     $affected_rows = CourseManager::subscribeCoursesToDrhManager($user_id, $courses_list);
     if ($affected_rows)	{
         $msg = get_lang('AssignedCoursesHaveBeenUpdatedSuccessfully');
@@ -228,7 +228,7 @@ if(!empty($msg)) {
 <div class="row">
     <div class="col-md-4">
         <h5><?php echo get_lang('CoursesListInPlatform') ?> :</h5>
-        
+
         <div id="ajax_list_courses_multiple">
 	<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">
 	<?php while ($enreg = Database::fetch_array($result)) { ?>
@@ -236,7 +236,7 @@ if(!empty($msg)) {
 	<?php } ?>
 	</select>
         </div>
-        
+
     </div>
     <div class="col-md-4">
         <div class="code-course">
@@ -262,10 +262,10 @@ if(!empty($msg)) {
             <div class="separate-action">
                 <?php echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>'; ?>
             </div>
-        </div>    
-        
-        
-        
+        </div>
+
+
+
     </div>
     <div class="col-md-4">
         <h5><?php
@@ -277,7 +277,7 @@ if(!empty($msg)) {
 			echo get_lang('AssignedCoursesListToHumanResourcesManager');
 		}
             ?>: </h5>
-        
+
         <select id='destination' name="CoursesList[]" multiple="multiple" size="20" style="width:320px;">
             <?php
             if (is_array($assigned_courses_to_hrm)) {

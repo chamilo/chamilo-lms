@@ -96,7 +96,7 @@ if ($form->validate()) {
 
         /*	Uncompress zip file*/
         // We extract using a callback function that "cleans" the path
-        $zip->extract(
+        $result = $zip->extract(
             PCLZIP_OPT_PATH,
             $destinationDir,
             PCLZIP_CB_PRE_EXTRACT,
@@ -128,7 +128,6 @@ if ($form->validate()) {
 
         $finder = new Finder();
         $finder->files()->in($destinationDir);
-
         $table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
 
         /** @var SplFileInfo $file */
@@ -137,6 +136,7 @@ if ($form->validate()) {
             $fileName = substr($fileName, 20, strlen($fileName));
             $pos = strpos($fileName, '-') + 1;
             $fileName = substr($fileName, $pos, strlen($fileName));
+
             if (isset($finalResult[$fileName])) {
                 $workStudentId = $finalResult[$fileName];
                 $workStudent = get_work_data_by_id($workStudentId);

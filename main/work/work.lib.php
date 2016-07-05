@@ -2021,38 +2021,40 @@ function get_work_user_list(
                         $action .=  '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
-
+                    $loadingText = get_lang('Loading');
+                    $uploadedText = get_lang('Uploaded');
+                    $failsUploadText = get_lang('UplNoFileUploaded');
+                    $failsUploadIcon = Display::return_icon('closed-circle.png', '', [], ICON_SIZE_TINY);
                     $correction = '
                         <form
                         id="file_upload_'.$item_id.'"
                         class="work_correction_file_upload file_upload_small fileinput-button"
                         action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
                         >
-                        <div class="text-center button-load">
+                        <div id="progress_'.$item_id.'" class="text-center button-load">
                             '.get_lang('ClickOrDropOneFileHere').'
                             '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
                         </div>
 
-                        <input type="file" name="file" class="" multiple>
+                        <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
                         </form>
                     ';
 
                     $correction .= "<script>
                     $(document).ready(function() {
                         $('#file_upload_".$item_id."').fileupload({
-                            uploadTable: $('.files'),
-                            downloadTable: $('.files'),
-                            buildUploadRow: function (files, index) {
-                                $('.files').show();
-                                return $('<tr><td>' + files[index].name + '<\/td>' +
-                                    '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
-                                    '<td class=\"file_upload_cancel\">' +
-                                    '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' +
-                                    '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
-                                    '<\/td><\/tr>');
+                            add: function (e, data) {
+                                $('#progress_$item_id').html();
+                                $('#file_$item_id').remove();
+                                data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
+                                data.submit();
                             },
-                            buildDownloadRow: function (file) {
-                                return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
+                            done: function (e, data) {
+                                if (data._response.result.name) {
+                                    $('#progress_$item_id').html('$uploadedText '+data._response.result.result+'<br />'+data._response.result.name);
+                                } else {
+                                    $('#progress_$item_id').html('$failsUploadText $failsUploadIcon');
+                                }
                             }
                         });
                     });
@@ -3371,7 +3373,6 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     }
 
     $curdirpath = basename($my_folder_data['url']);
-
     // If we come from the group tools the groupid will be saved in $work_table
     if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
         $result = move_uploaded_file(
@@ -3390,6 +3391,8 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     $url = null;
     if ($result) {
         $url = 'work/'.$curdirpath.'/'.$new_file_name;
+    } else {
+        return false;
     }
 
     return array(
@@ -3526,6 +3529,9 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
 
     if ($values['contains_file']) {
         $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+        if (!$result) {
+            return false;
+        }
         if (isset($result['error'])) {
             $message = $result['error'];
             $saveWork = false;

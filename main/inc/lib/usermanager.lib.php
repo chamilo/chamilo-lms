@@ -4072,7 +4072,7 @@ class UserManager
 
         $userId = intval($userId);
 
-        $limitCondition = null;
+        $limitCondition = '';
 
         if (isset($from) && isset($numberItems)) {
             $from = intval($from);
@@ -4231,6 +4231,7 @@ class UserManager
 
         $sql .= $orderBy;
         $sql .= $limitCondition;
+
         $result = Database::query($sql);
         $users = array();
         if (Database::num_rows($result) > 0) {

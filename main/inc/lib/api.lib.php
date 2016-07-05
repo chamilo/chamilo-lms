@@ -6458,7 +6458,6 @@ function api_get_jquery_libraries_js($libraries) {
         $js .= api_get_asset('blueimp-canvas-to-blob/js/canvas-to-blob.min.js');
         $js .= api_get_asset('jquery-file-upload/js/jquery.iframe-transport.js');
         $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload.js');
-        $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-ui.js');
         $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-process.js');
         $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-image.js');
         $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-audio.js');
@@ -7364,7 +7363,8 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
 function api_drh_can_access_all_session_content()
 {
     $a = api_get_setting('drh_can_access_all_session_content');
-    return $a == 'true';
+
+    return $a === 'true';
 }
 
 /**

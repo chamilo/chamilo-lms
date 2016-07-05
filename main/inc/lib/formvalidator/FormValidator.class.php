@@ -1453,7 +1453,7 @@ EOT;
                 });
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
-                    var error = $('<span class=\"text-danger\"/>').text('".get_lang('Failed')."');
+                    var error = $('<span class=\"text-danger\"/>').text('".get_lang('UploadError')."');
                     $(data.context.children()[index])
                         .append('<br>')
                         .append(error);

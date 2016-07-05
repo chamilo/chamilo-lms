@@ -121,7 +121,7 @@
         "aferrandini/phpqrcode": "1.0.1",
         "mpdf/mpdf": "6.1.*",
         "barryvdh/elfinder-builds": "2.1.0.3",
-        "jbroadway/urlify": "1.0.3-stable",
+        "jbroadway/urlify": "1.0.7-stable",
         "monolog/monolog": "~1.0",
 
         "ircmaxell/password-compat": "~1.0.4",

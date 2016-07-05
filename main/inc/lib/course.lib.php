@@ -3696,6 +3696,8 @@ class CourseManager
                 $course_title .= ' (' . $course_info['visual_code'] . ') ';
             }
 
+            $teachers = '';
+
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
                 $teachers = CourseManager::get_teacher_list_from_course_code_to_string(
                     $course['code'],

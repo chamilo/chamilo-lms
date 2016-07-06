@@ -1,7 +1,20 @@
 <legend>
     <h1>{{ "ManageSkills" | get_lang }}</h1>
 </legend>
-
+<div class="row">
+    <div class="col-md-3" >
+        <select id="tag-filter" class="form-control">
+            <option value="0">{{ 'PleaseSelectAChoice' | get_lang }}</option>
+            {% for tag in tags %}
+                <option value="{{ tag.id }}">{{ tag.tag }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <a id="filter-button" class="btn btn-default">{{ 'FilterByTags' | get_lang }}</a>
+    </div>
+</div>
+<br />
 <div class="table table-responsive">
     <table class="table table-hover table-striped">
         <thead>
@@ -62,3 +75,13 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $("#tag-filter").val("{{ current_tag_id }}");
+        $("#filter-button").click(function() {
+            var tagId = $( "#tag-filter option:selected" ).val();
+            $(location).attr('href', '{{ _p.web_main }}admin/skill_list.php?tag_id='+tagId);
+        });
+    });
+</script>

@@ -2389,7 +2389,6 @@ $TitleManipulateStudentPublication = "Manipuleaza publicatia studentului actuala
 $EnterDataNewChapter = "Introduceti data noului capitol";
 $EnterDataNewModule = "Introduceti data noului modul";
 $CreateNewStep = "Creati un pas nou :";
-$NewDocument = "Document nou";
 $UseAnExistingResource = "sau folositi o resursa existenta :";
 $Position = "Pozitie";
 $NewChapterCreated = "Noul capitolul a fost creat. Acum puteti sa-i adaugati un alt capitol sau pas.";

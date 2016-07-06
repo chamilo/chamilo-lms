@@ -7112,7 +7112,7 @@ $TeacherAutosubscribeComment = "Auto-inscription des enseignants - pas encore fo
 $DRHAutosubscribeTitle = "Auto-inscription des directeurs RH";
 $DRHAutosubscribeComment = "Auto-inscription des directeurs RH - pas encore fonctionnel";
 $ScormCumulativeSessionTimeTitle = "Temps cumulatif SCORM";
-$ScormCumulativeSessionTimeComment = "Si activé, le temps de session pour les parcours SCORM sera cumulatif. Sinon, il sera uniquement compté depuis le dernier temps de connexion.";
+$ScormCumulativeSessionTimeComment = "Si activé, le temps de session pour les parcours SCORM sera cumulatif. Sinon, il sera uniquement compté depuis le dernier temps de connexion. Ce paramètre est global. Il est utilisé au moment de la création des parcours, mais peut ensuite être redéfini pour chacun des parcours.";
 $SessionAdminPageAfterLoginTitle = "Page après connexion pour les admins de session";
 $SessionAdminPageAfterLoginComment = "Cette page s'affichera aux administrateurs de sessions après connexion (login)";
 $SessionadminAutosubscribeTitle = "Auto-inscription d'administrateurs de session";
@@ -7759,4 +7759,6 @@ $SSOSubclassComment = "Pour activer une méthode de Single Sign On, vous devrez 
 $CourseCreationSplashScreenTitle = "Écran d'accueil de création de cours";
 $CourseCreationSplashScreenComment = "L'écran d'accueil de création de cours montre une série d'options suggérées à l'enseignant lorsqu'il vient de créer un nouveau cours. Désactivez cette option si vous souhaitez envoyer directement les enseignants sur la page principale du cours.";
 $WorksReport = "Rapport de travaux";
+$AccumulateScormTime = "Temps cumulatif SCORM";
+$AccumulateScormTimeInfo = "Si activé, le temps de session pour les parcours SCORM sera cumulatif. Sinon, il sera uniquement compté depuis le dernier temps de connexion.";
 ?>

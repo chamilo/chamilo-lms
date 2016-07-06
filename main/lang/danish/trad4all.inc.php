@@ -1358,7 +1358,6 @@ $TitleManipulateStudentPublication = "Håndter den aktuelle aflevering";
 $EnterDataNewChapter = "Indtast informationerne om det nye kapitel";
 $EnterDataNewModule = "Indtast informationerne om det nye kapitel";
 $CreateNewStep = "Opret et nyt trin";
-$NewDocument = "Nyt dokument";
 $UseAnExistingResource = "Eller anvend en eksisterende ressource";
 $Position = "Postition";
 $NewChapterCreated = "Det nye kapitel er oprettet. Du kan nu tilføje et nyt kapitel eller tilføje trin til kapitlet";

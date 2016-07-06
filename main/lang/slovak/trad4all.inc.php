@@ -2517,7 +2517,6 @@ $TitleManipulateStudentPublication = "Spravovať túto študentskú publikáciu"
 $EnterDataNewChapter = "Zadajte údaje pre novú kapitolu";
 $EnterDataNewModule = "Zadajte údaje pre novú kapitolu";
 $CreateNewStep = "Vytvoriť novú etapu";
-$NewDocument = "Nový dokument";
 $UseAnExistingResource = "Alebo použite existujúci zdroj :";
 $Position = "Pozícia";
 $NewChapterCreated = "Nová kapitola bola vytvorená. Teraz môžete do nej vstúpiť alebo pridať ďalšiu kapitolu.";

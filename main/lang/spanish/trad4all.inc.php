@@ -7180,7 +7180,7 @@ $TeacherAutosubscribeComment = "Inscripción por el propio profesor";
 $DRHAutosubscribeTitle = "Inscripción por el propio Director de Recursos Humanos";
 $DRHAutosubscribeComment = "Inscripción por el propio Director de Recursos Humanos";
 $ScormCumulativeSessionTimeTitle = "Tiempo acumulado de sesión para SCORM";
-$ScormCumulativeSessionTimeComment = "Cuando se activa el tiempo de una sesión para una secuencia de aprendizaje SCORM será acumulativo, de lo contrario, sólo se contará desde el momento en la última actualización.";
+$ScormCumulativeSessionTimeComment = "Cuando se activa el tiempo de una sesión para un itinerario de aprendizaje SCORM será acumulativo, de lo contrario, sólo se contará desde el momento en la última actualización. Este parámetro es global. Se utiliza a la creación de cada nuevo itinerario de aprendizaje, pero luego puede ser redefinido en la configuracinó de cada uno.";
 $SessionAdminPageAfterLoginTitle = "Página del administrador de sesiones después de identificarse";
 $SessionAdminPageAfterLoginComment = "Página que será cargada después de que un administrador de sesiones se haya identificado";
 $SessionadminAutosubscribeTitle = "Inscripción por el propio administrador de sesiones";
@@ -7830,4 +7830,7 @@ $SSOSubclassTitle = "Single Sign On: sub-clase";
 $SSOSubclassComment = "Para activar algun método de Single Sign On, es necesario definir su propia sub-clase en main/auth/sso/, basada en la clase por defecto. Indique aquí el nombre de la sub-clase. Por ejemplo, si el archivo se llama sso.Drupal.class.php, indique 'Drupal' en este campo.";
 $CourseCreationSplashScreenTitle = "Pantalla de bienvenida de curso";
 $CourseCreationSplashScreenComment = "La pantalla de bienvenida muestra una serie de sugerencias al profesor cuando acaba de crear un nuevo curso. Deactive esta opción para que el profesor llegue directamente a la pantalla principal del curso.";
+$WorksReport = "Reporte de tareas";
+$AccumulateScormTime = "Acumular tiempo de sesión SCORM";
+$AccumulateScormTimeInfo = "Cuando se activa, el tiempo de una sesión para una secuencia de aprendizaje SCORM será acumulativo, de lo contrario, sólo se contará desde el momento de la última actualización.";
 ?>

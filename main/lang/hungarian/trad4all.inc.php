@@ -1545,7 +1545,6 @@ $TitleManipulateStudentPublication = "A jelenlegi hallgatói publikáció módos
 $EnterDataNewChapter = "Adja meg az új fejezet adatait";
 $EnterDataNewModule = "Adja meg az új modul adatait";
 $CreateNewStep = "Új lépés létrehozása:";
-$NewDocument = "Új dokumentum";
 $UseAnExistingResource = "vagy már létező elem használata:";
 $Position = "Pozíció";
 $NewChapterCreated = "Az új fejezet létrehozása megtörtént. Hozzáadhat lépést vagy létrehozhat újabb fejezetet.";

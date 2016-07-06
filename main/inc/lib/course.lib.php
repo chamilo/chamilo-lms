@@ -778,6 +778,108 @@ class CourseManager
     }
 
     /**
+     * Add the user $userId visibility to the course $courseCode in the catalogue.
+     * @author David Nos
+     *
+     * @param  int $userId the id of the user
+     * @param  string $courseCode the course code
+     * @param  int $visible (optional) The course visibility in the catalogue to the user (1=visible, 0=invisible)
+     *
+     * @return boolean true if added succesfully, false otherwise.
+     */
+    public static function addUserVisibilityToCourseInCatalogue($userId, $courseCode, $visible = 1)
+    {
+        $debug = false;
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_CATALOGUE_USER);
+
+        if (empty($userId) || empty($courseCode) || ($userId != strval(intval($userId)))) {
+            return false;
+        }
+
+        $courseCode = Database::escape_string($courseCode);
+        $courseInfo = api_get_course_info($courseCode);
+        $courseId = $courseInfo['real_id'];
+
+        // Check in advance whether the user has already been registered on the platform.
+        $sql = "SELECT status FROM " . $userTable . " WHERE user_id = $userId ";
+        if (Database::num_rows(Database::query($sql)) == 0) {
+            if ($debug) {
+                error_log('The user has not been registered to the platform');
+            }
+            return false; // The user has not been registered to the platform.
+        }
+
+        // Check whether the user has already been registered to the course visibility in the catalogue.
+        $sql = "SELECT * FROM $courseUserTable
+                WHERE
+                    user_id = $userId AND
+                    visible = " . $visible . " AND
+                    c_id = $courseId";
+        if (Database::num_rows(Database::query($sql)) > 0) {
+            if ($debug) {
+                error_log('The user has been already registered to the course visibility in the catalogue');
+            }
+            return true; // The visibility of the user to the course in the catalogue does already exist.
+        }
+
+        // Register the user visibility to course in catalogue.
+        $params = [
+            'user_id' => $userId,
+            'c_id' => $courseId,
+            'visible' => $visible
+        ];
+        $insertId = Database::insert($courseUserTable, $params);
+
+        return $insertId;
+    }
+
+
+    /**
+     * Remove the user $userId visibility to the course $courseCode in the catalogue.
+     * @author David Nos
+     *
+     * @param  int $userId the id of the user
+     * @param  string $courseCode the course code
+     * @param  int $visible (optional) The course visibility in the catalogue to the user (1=visible, 0=invisible)
+     *
+     * @return boolean true if removed succesfully or register not found, false otherwise.
+     */
+    public static function removeUserVisibilityToCourseInCatalogue($userId, $courseCode, $visible = 1)
+    {
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_CATALOGUE_USER);
+
+        if (empty($userId) || empty($courseCode) || ($userId != strval(intval($userId)))) {
+            return false;
+        }
+
+        $courseCode = Database::escape_string($courseCode);
+        $courseInfo = api_get_course_info($courseCode);
+        $courseId = $courseInfo['real_id'];
+
+        // Check whether the user has already been registered to the course visibility in the catalogue.
+        $sql = "SELECT * FROM $courseUserTable
+                WHERE
+                    user_id = $userId AND
+                    visible = " . $visible . " AND
+                    c_id = $courseId";
+        if (Database::num_rows(Database::query($sql)) > 0) {
+            $cond = array(
+                'user_id = ? AND c_id = ? AND visible = ? ' => array(
+                    $userId,
+                    $courseId,
+                    $visible
+                )
+            );
+            return Database::delete($courseUserTable, $cond);
+        }
+        else {
+            return true; // Register does not exist
+        }
+    }
+
+
+    /**
      *    Checks wether a parameter exists.
      *    If it doesn't, the function displays an error message.
      *

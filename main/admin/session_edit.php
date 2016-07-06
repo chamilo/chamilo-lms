@@ -34,6 +34,13 @@ $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" 
 list($year_start, $month_start, $day_start) = explode('-', $infos['date_start']);
 list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
 
+
+
+if (array_key_exists('calendar_start_date', $infos)) {
+    list($calendarStartDateYear, $calendarStartDateMonth, $calendarStartDateDay) = explode('-', $infos['calendar_start_date']);
+}
+
+
 // Default value
 $showDescriptionChecked = 'checked';
 
@@ -76,6 +83,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $nolimit = null;
     }
 
+    $calendarStartDay = isset($_POST['calendar_start_date_day']) ? $_POST['calendar_start_date_day'] : '';
+    $calendarStartMonth = isset($_POST['calendar_start_date_month']) ? $_POST['calendar_start_date_month'] : '';
+    $calendarStartYear = isset($_POST['calendar_start_date_year']) ? $_POST['calendar_start_date_year'] : '';
+    $calendarStartDate = $calendarStartYear.'-'.$calendarStartMonth.'-'.$calendarStartDay;
+    $calendarStartDate = $calendarStartDate.' 13:00:00';
+
 	$return = SessionManager::edit_session(
         $id,
         $name,
@@ -95,7 +108,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $end_limit,
         $description,
         $showDescription,
-        $duration
+        $duration,
+        $calendarStartDate
     );
 
 	if ($return == strval(intval($return))) {
@@ -407,6 +421,81 @@ $page = isset($_GET['page']) && $_GET['page'] == 'resume_session.php' ? 'resume_
 
         <?php
         }
+
+    if (array_key_exists('calendar_start_date', $infos)) {
+        ?>
+        <div class="control-group">
+            <label class="control-label">
+                <?php echo get_lang('CalendarStartDate') ?>
+            </label>
+
+
+            <div class="controls">
+
+                <select name="calendar_start_date_day" >
+                    <option value="1" <?php if($calendarStartDateDay == 1) echo 'selected="selected"'; ?> >01</option>
+                    <option value="2" <?php if($calendarStartDateDay == 2) echo 'selected="selected"'; ?> >02</option>
+                    <option value="3" <?php if($calendarStartDateDay == 3) echo 'selected="selected"'; ?> >03</option>
+                    <option value="4" <?php if($calendarStartDateDay == 4) echo 'selected="selected"'; ?> >04</option>
+                    <option value="5" <?php if($calendarStartDateDay == 5) echo 'selected="selected"'; ?> >05</option>
+                    <option value="6" <?php if($calendarStartDateDay == 6) echo 'selected="selected"'; ?> >06</option>
+                    <option value="7" <?php if($calendarStartDateDay == 7) echo 'selected="selected"'; ?> >07</option>
+                    <option value="8" <?php if($calendarStartDateDay == 8) echo 'selected="selected"'; ?> >08</option>
+                    <option value="9" <?php if($calendarStartDateDay == 9) echo 'selected="selected"'; ?> >09</option>
+                    <option value="10" <?php if($calendarStartDateDay == 10) echo 'selected="selected"'; ?> >10</option>
+                    <option value="11" <?php if($calendarStartDateDay == 11) echo 'selected="selected"'; ?> >11</option>
+                    <option value="12" <?php if($calendarStartDateDay == 12) echo 'selected="selected"'; ?> >12</option>
+                    <option value="13" <?php if($calendarStartDateDay == 13) echo 'selected="selected"'; ?> >13</option>
+                    <option value="14" <?php if($calendarStartDateDay == 14) echo 'selected="selected"'; ?> >14</option>
+                    <option value="15" <?php if($calendarStartDateDay == 15) echo 'selected="selected"'; ?> >15</option>
+                    <option value="16" <?php if($calendarStartDateDay == 16) echo 'selected="selected"'; ?> >16</option>
+                    <option value="17" <?php if($calendarStartDateDay == 17) echo 'selected="selected"'; ?> >17</option>
+                    <option value="18" <?php if($calendarStartDateDay == 18) echo 'selected="selected"'; ?> >18</option>
+                    <option value="19" <?php if($calendarStartDateDay == 19) echo 'selected="selected"'; ?> >19</option>
+                    <option value="20" <?php if($calendarStartDateDay == 20) echo 'selected="selected"'; ?> >20</option>
+                    <option value="21" <?php if($calendarStartDateDay == 21) echo 'selected="selected"'; ?> >21</option>
+                    <option value="22" <?php if($calendarStartDateDay == 22) echo 'selected="selected"'; ?> >22</option>
+                    <option value="23" <?php if($calendarStartDateDay == 23) echo 'selected="selected"'; ?> >23</option>
+                    <option value="24" <?php if($calendarStartDateDay == 24) echo 'selected="selected"'; ?> >24</option>
+                    <option value="25" <?php if($calendarStartDateDay == 25) echo 'selected="selected"'; ?> >25</option>
+                    <option value="26" <?php if($calendarStartDateDay == 26) echo 'selected="selected"'; ?> >26</option>
+                    <option value="27" <?php if($calendarStartDateDay == 27) echo 'selected="selected"'; ?> >27</option>
+                    <option value="28" <?php if($calendarStartDateDay == 28) echo 'selected="selected"'; ?> >28</option>
+                    <option value="29" <?php if($calendarStartDateDay == 29) echo 'selected="selected"'; ?> >29</option>
+                    <option value="30" <?php if($calendarStartDateDay == 30) echo 'selected="selected"'; ?> >30</option>
+                    <option value="31" <?php if($calendarStartDateDay == 31) echo 'selected="selected"'; ?> >31</option>
+                </select>
+                /
+                <select name="calendar_start_date_month">
+                    <option value="1" <?php if($calendarStartDateMonth == 1) echo 'selected="selected"'; ?> >01</option>
+                    <option value="2" <?php if($calendarStartDateMonth == 2) echo 'selected="selected"'; ?> >02</option>
+                    <option value="3" <?php if($calendarStartDateMonth == 3) echo 'selected="selected"'; ?> >03</option>
+                    <option value="4" <?php if($calendarStartDateMonth == 4) echo 'selected="selected"'; ?> >04</option>
+                    <option value="5" <?php if($calendarStartDateMonth == 5) echo 'selected="selected"'; ?> >05</option>
+                    <option value="6" <?php if($calendarStartDateMonth == 6) echo 'selected="selected"'; ?> >06</option>
+                    <option value="7" <?php if($calendarStartDateMonth == 7) echo 'selected="selected"'; ?> >07</option>
+                    <option value="8" <?php if($calendarStartDateMonth == 8) echo 'selected="selected"'; ?> >08</option>
+                    <option value="9" <?php if($calendarStartDateMonth == 9) echo 'selected="selected"'; ?> >09</option>
+                    <option value="10" <?php if($calendarStartDateMonth == 10) echo 'selected="selected"'; ?> >10</option>
+                    <option value="11" <?php if($calendarStartDateMonth == 11) echo 'selected="selected"'; ?> >11</option>
+                    <option value="12" <?php if($calendarStartDateMonth == 12) echo 'selected="selected"'; ?> >12</option>
+                </select>
+                /
+                <select name="calendar_start_date_year">
+
+                    <?php
+                    for($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
+                        ?>
+                        <option value="<?php echo $i; ?>" <?php if($calendarStartDateYear == $i) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
+                        <?php
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <?php
+    }
+
     ?>
 
     <div class="control-group">

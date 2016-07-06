@@ -943,12 +943,13 @@ class Agenda
             case 'course':
                 $session_id = $this->sessionId;
                 $courseInfo = api_get_course_info_by_id($course_id);
+                $sessionInfo = api_get_session_info($session_id);
                 $this->get_course_events(
                     $start,
                     $end,
                     $courseInfo,
                     $groupId,
-                    $session_id,
+                    $sessionInfo,
                     $user_id
                 );
                 break;
@@ -1005,10 +1006,11 @@ class Agenda
                     foreach ($session_list as $session_item) {
                         $my_courses = $session_item['courses'];
                         $my_session_id = $session_item['session_id'];
+                        $sessionInfo = api_get_session_info($my_session_id);
                         if (!empty($my_courses)) {
                             foreach ($my_courses as $course_item) {
                                 $courseInfo = api_get_course_info($course_item['code']);
-                                $this->get_course_events($start, $end, $courseInfo, 0, $my_session_id);
+                                $this->get_course_events($start, $end, $courseInfo, 0, $sessionInfo);
                             }
                         }
                     }
@@ -1314,7 +1316,7 @@ class Agenda
      * @param int $user_id
      * @return array
      */
-    public function get_course_events($start, $end, $courseInfo, $groupId = 0, $session_id = 0, $user_id = 0)
+    public function get_course_events($start, $end, $courseInfo, $groupId = 0, $sessionInfo = array(), $user_id = 0)
     {
         $start = isset($start) && !empty($start) ? api_get_utc_datetime(intval($start)) : null;
         $end = isset($end) && !empty($end) ? api_get_utc_datetime(intval($end)) : null;
@@ -1324,6 +1326,14 @@ class Agenda
         }
 
         $course_id = $courseInfo['real_id'];
+        $session_id = isset($sessionInfo['id']) ? $sessionInfo['id'] : 0;
+
+        $checkStartCalendarDate = isset($sessionInfo['calendar_start_date']) ? $sessionInfo['calendar_start_date'] : '';
+
+        $checkStartCalendarDateCondition = '';
+        if (!empty($checkStartCalendarDate)) {
+            $checkStartCalendarDateCondition = ' AND agenda.start_date > "'.$checkStartCalendarDate.'"';
+        }
 
         if (empty($course_id)) {
             return array();
@@ -1389,6 +1399,7 @@ class Agenda
                         ip.c_id         = $course_id AND
                         agenda.session_id = $session_id AND
                         ip.id_session = $session_id
+                        $checkStartCalendarDateCondition
                     ";
         } else {
             $visibilityCondition = " ip.visibility='1' AND";
@@ -1415,6 +1426,7 @@ class Agenda
                         ip.c_id = $course_id AND
                         agenda.session_id = $session_id AND
                         ip.id_session = $session_id
+                        $checkStartCalendarDateCondition
                     ";
         }
 
@@ -1433,7 +1445,6 @@ class Agenda
 
         $sql .= $dateCondition;
         $allowComments = api_get_configuration_value('allow_agenda_event_comment');
-
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $eventsAdded = array();

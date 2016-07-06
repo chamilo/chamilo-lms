@@ -105,7 +105,6 @@ class ExerciseLib
             // suggestions here, for the sake of comprehensions, while the ones
             // on the right side are called answers
             $num_suggestions = 0;
-
             if (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
                 if ($answerType == DRAGGABLE) {
                     $s .= '<div class="col-md-12 ui-widget ui-helper-clearfix">
@@ -319,6 +318,7 @@ class ExerciseLib
                         }
 
                         $answer = Security::remove_XSS($answer, STUDENT);
+          
                         $s .= Display::input(
                             'hidden',
                             'choice2[' . $questionId . ']',

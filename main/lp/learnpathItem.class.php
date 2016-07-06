@@ -3627,8 +3627,18 @@ class learnpathItem
             error_log("total_time: $total_time");
         }
 
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_id = intval($this->lp_id);
+        $sql = "SELECT * FROM $lp_table
+                    WHERE id = '$lp_id' AND c_id = $course_id";
+        $res = Database::query($sql);
+        $accumulate_scorm_time = 'false';
+        if (Database::num_rows($res) > 0) {
+            $accumulate_scorm_time = $row['accumulate_scorm_time'];
+        }
+
         //Step 2.1 : if normal mode total_time = total_time + total_sec
-        if (api_get_setting('scorm_cumulative_session_time') != 'false') {
+        if ($accumulate_scorm_time != 'false') {
             $total_time += $total_sec;
             //$this->last_scorm_session_time = $total_sec;
         } else {

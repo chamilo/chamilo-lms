@@ -11,7 +11,7 @@
  * Find the SCO functions (startTimer, computeTime, etc in the second section)
  * Find the Chamilo-proper functions (checkAnswers, etc in the third section)
  */
-var _debug = false;
+var _debug = true;
 var findAPITries = 0;
 var _apiHandle = null; //private variable
 var errMsgLocate = "Unable to locate the LMS's API implementation";
@@ -399,6 +399,12 @@ function checkAnswers(interrupted)
     var tmpScore = 0;
     var status = 'not attempted';
     var scoreMax = 0;
+
+    if (_debug) {
+        console.log('questions_answers_correct:');
+        console.log(questions_answers_correct);
+    }
+
     for (var i=0; i < questions.length; i++) {
         if (questions[i] != undefined && questions[i] != null){
             var idQuestion = questions[i];
@@ -408,6 +414,17 @@ function checkAnswers(interrupted)
             var interactionCorrectResponses = '';
             var interactionType = '';
 
+            if (_debug) {
+                console.log('Type: ' +type);
+                console.log('idQuestion: ' +idQuestion);
+                console.log('questions_answers: ');
+                console.log(questions_answers[idQuestion]);
+                console.log('questions_answers_ponderation: ');
+                console.log(questions_answers_ponderation[idQuestion]);
+                console.log('questions_answers_correct: ');
+                console.log(questions_answers_correct[idQuestion]);
+            }
+
             if (type == 'mcma') {
                 interactionType = 'choice';
                 var myScore = 0;
@@ -416,11 +433,14 @@ function checkAnswers(interrupted)
                     var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
                     if (answer.checked) {
                         interactionAnswers += idAnswer+'__|';// changed by isaac flores
-                        myScore +=questions_answers_ponderation[idQuestion][idAnswer];
+                        myScore += questions_answers_ponderation[idQuestion][idAnswer];
                     }
                 }
                 interactionScore = myScore;
                 scoreMax += questions_score_max[idQuestion];
+                if (_debug) {
+                    console.log("Score: "+myScore);
+                }
             } else if (type == 'mcua') {
                 interactionType = 'choice';
                 var myScore = 0;
@@ -429,7 +449,11 @@ function checkAnswers(interrupted)
                     var answer = document.getElementById('question_'+(idQuestion)+'_unique_'+(idAnswer));
                     if (answer.checked) {
                         interactionAnswers += idAnswer;
-                        if (questions_answers_correct[idQuestion] == idAnswer) {
+                        if (_debug) {
+                            console.log("idAnswer: "+idAnswer);
+                            console.log("questions_answers_correct: "+questions_answers_correct[idQuestion][idAnswer]);
+                        }
+                        if (questions_answers_correct[idQuestion][idAnswer] == idAnswer) {
                             if (questions_answers_ponderation[idQuestion][idAnswer]) {
                                 myScore += questions_answers_ponderation[idQuestion][idAnswer];
                             } else {
@@ -437,6 +461,9 @@ function checkAnswers(interrupted)
                             }
                         }
                     }
+                }
+                if (_debug) {
+                    console.log("Score: "+myScore);
                 }
                 interactionScore = myScore;
                 scoreMax += questions_score_max[idQuestion];
@@ -459,6 +486,9 @@ function checkAnswers(interrupted)
                         }
                     }
                 }
+                if (_debug) {
+                    console.log("Score: "+myScore);
+                }
                 interactionScore = myScore;
                 scoreMax += questions_score_max[idQuestion];
             } else if (type == 'fib') {
@@ -479,6 +509,9 @@ function checkAnswers(interrupted)
                             }
                         }
                     }
+                }
+                if (_debug) {
+                    console.log("Score: "+myScore);
                 }
                 interactionScore = myScore;
                 scoreMax += questions_score_max[idQuestion];
@@ -502,6 +535,9 @@ function checkAnswers(interrupted)
                             }
                         }
                     }
+                }
+                if (_debug) {
+                    console.log("Score: "+myScore);
                 }
                 interactionScore = myScore;
                 scoreMax += questions_score_max[idQuestion];
@@ -536,12 +572,12 @@ function checkAnswers(interrupted)
                 interactionType = 'exact';
                 interactionScore = 0;
                 var real_answers = new Array();
-                console.log(questions_answers_correct[idQuestion]);
                 for (var j = 0; j < questions_answers[idQuestion].length; j++) {
                     var idAnswer = questions_answers[idQuestion][j];
                     var answer = document.getElementById('question_' + (idQuestion) + '_exact_' + (idAnswer));
 
                     if (answer.checked == true) {
+                        interactionAnswers += idAnswer+', ';
                         if (questions_answers_correct[idQuestion][idAnswer] != 0) {
                             real_answers[j] = true;
                         } else {
@@ -562,10 +598,14 @@ function checkAnswers(interrupted)
                         final_answer = false;
                     }
                 }
-
+                interactionScore = 0;
+                console.log(real_answers);
                 if (final_answer) {
                      //getting only the first score where we save the weight of all the question
                      interactionScore = questions_answers_ponderation[idQuestion][1];
+                }
+                if (_debug) {
+                    console.log("Score: "+interactionScore);
                 }
                 scoreMax += questions_score_max[idQuestion];
             }
@@ -580,6 +620,7 @@ function checkAnswers(interrupted)
     doLMSSetValue('cmi.core.score.min', 0);
     doLMSSetValue('cmi.core.score.max', scoreMax);
     doLMSSetValue('cmi.core.score.raw', tmpScore);
+
     //get status
     var mastery_score = doLMSGetValue('cmi.student_data.mastery_score');
     if (mastery_score <= 0) {
@@ -590,6 +631,14 @@ function checkAnswers(interrupted)
     } else {
         status = 'failed';
     }
+
+    if (_debug) {
+        console.log('student_score: ' + tmpScore);
+        console.log('mastery_score: ' + mastery_score);
+        console.log('cmi.core.score.max: ' + scoreMax);
+        console.log('cmi.core.lesson_status: ' + status);
+    }
+
     doLMSSetValue('cmi.core.lesson_status', status);
 
     if (interrupted && (status != 'completed') && (status != 'passed')) {

@@ -200,13 +200,11 @@ class ScormAnswerMultipleChoice extends Answer
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;';
 
         $jstmpw .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();';
-        $jstmpw .= 'questions_answers_correct['.$this->questionJSId.'][0] = 0;';
 
 		//not sure if we are going to export also the MULTIPLE_ANSWER_COMBINATION to SCORM
 		//if ($type == MCMA  || $type == MULTIPLE_ANSWER_COMBINATION ) {
 		if ($type == MCMA) {
-			//$questionTypeLang = get_lang('MultipleChoiceMultipleAnswers');
-			$id = 1;
+            $id = 1;
 			$jstmp = '';
 			$jstmpc = '';
             foreach ($this->answer as $i => $answer) {
@@ -225,11 +223,11 @@ class ScormAnswerMultipleChoice extends Answer
                 if ($this->correct[$i]) {
                     $jstmpc .= $i.',';
                 }
-				$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$this->weighting[$i].";\n";
+				$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$this->weighting[$i].";";
+                $jstmpw .= 'questions_answers_correct['.$this->questionJSId.']['.$i.'] = '.$this->correct[$i].';';
 				$id++;
 			}
 			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
-			$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
             $js .= 'questions_types['.$this->questionJSId.'] = \'mcma\';'."\n";
 			$js .= $jstmpw;
 		} elseif ($type == MULTIPLE_ANSWER_COMBINATION) {
@@ -281,10 +279,10 @@ class ScormAnswerMultipleChoice extends Answer
                     $jstmpc .= $i;
                 }
 				$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$this->weighting[$i].";";
+                $jstmpw .= 'questions_answers_correct['.$this->questionJSId.']['.$i.'] = '.$this->correct[$i].';';
 				$id++;
 			}
 			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');';
-			$js .= 'questions_answers_correct['.$this->questionJSId.'] = '.$jstmpc.';';
 			$js .= 'questions_types['.$this->questionJSId.'] = \'mcua\';';
 			$js .= $jstmpw;
 		}

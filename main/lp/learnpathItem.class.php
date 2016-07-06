@@ -3630,7 +3630,7 @@ class learnpathItem
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($this->lp_id);
         $sql = "SELECT * FROM $lp_table
-                    WHERE id = '$lp_id' AND c_id = $course_id";
+                    WHERE id = $lp_id AND c_id = $course_id";
         $res = Database::query($sql);
         $accumulate_scorm_time = 'false';
         if (Database::num_rows($res) > 0) {

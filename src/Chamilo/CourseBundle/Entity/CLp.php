@@ -259,9 +259,9 @@ class CLp
     private $expiredOn;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="accumulate_scorm_time", type="boolean", nullable=false)
+     * @ORM\Column(name="accumulate_scorm_time", type="string", length=5, nullable=false)
      */
     private $accumulateScormTime;
 
@@ -989,7 +989,7 @@ class CLp
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     public function getAccumulateScormTime()
     {
@@ -997,7 +997,7 @@ class CLp
     }
 
     /**
-     * @param boolean $accumulateScormTime
+     * @param string $accumulateScormTime
      * @return CLp
      */
     public function setAccumulateScormTime($accumulateScormTime)

@@ -55,4 +55,4 @@ $template = $view->get_template('chat/chat.tpl');
 $content = $view->fetch($template);
 
 $view->assign('content', $content);
-$view->display_one_col_template();
+$view->display_no_layout_template();

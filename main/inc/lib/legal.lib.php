@@ -31,14 +31,6 @@ class LegalManager
         $time = time();
 
         if ($last['content'] != $content) {
-            $maxLegalId = Database::getManager()
-                ->createQuery('
-                    SELECT MAX(l.legalId) FROM ChamiloCoreBundle:Legal l
-                ')
-                ->getSingleScalarResult();
-
-            $legalId = $maxLegalId + 1;
-
             $version = intval(LegalManager::get_last_condition_version($language));
             $version++;
             $params = [
@@ -47,8 +39,7 @@ class LegalManager
                 'changes' => $changes,
                 'type' => $type,
                 'version' => intval($version),
-                'date' => $time,
-                'legal_id' => $legalId
+                'date' => $time
             ];
             Database::insert($legal_table, $params);
 

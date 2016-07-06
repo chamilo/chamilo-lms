@@ -117,6 +117,13 @@ $form->addElement('html', '<div id="advanced_params_options" style="display:none
 $items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id(), true);
 $form->addElement('select', 'category_id', get_lang('Category'), $items);
 
+// accumulate_scorm_time
+$form->addElement(
+    'checkbox',
+    'accumulate_scorm_time',
+    [get_lang('AccumulateScormTime'), get_lang('AccumulateScormTimeInfo')]
+);
+
 // Start date
 $form->addElement('checkbox', 'activate_start_date_check', null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 $form->addElement('html','<div id="start_date_div" style="display:block;">');
@@ -132,6 +139,12 @@ $form->addElement('html','</div>');
 $form->addElement('html','</div>');
 
 $defaults['activate_start_date_check']  = 1;
+
+if (api_get_setting('scorm_cumulative_session_time') == 'true') {
+    $defaults['accumulate_scorm_time']  = 1;
+} else {
+    $defaults['accumulate_scorm_time']  = 0;
+}
 
 $defaults['publicated_on'] = date('Y-m-d 08:00:00');
 $defaults['expired_on'] = date('Y-m-d 08:00:00',time()+86400);

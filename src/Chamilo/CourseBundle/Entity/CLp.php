@@ -259,6 +259,13 @@ class CLp
     private $expiredOn;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="accumulate_scorm_time", type="boolean", nullable=false)
+     */
+    private $accumulateScormTime;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -980,4 +987,24 @@ class CLp
 
         return $this;
     }
+
+    /**
+     * @return boolean
+     */
+    public function getAccumulateScormTime()
+    {
+        return $this->accumulateScormTime;
+    }
+
+    /**
+     * @param boolean $accumulateScormTime
+     * @return CLp
+     */
+    public function setAccumulateScormTime($accumulateScormTime)
+    {
+        $this->accumulateScormTime = $accumulateScormTime;
+
+        return $this;
+    }
+
 }

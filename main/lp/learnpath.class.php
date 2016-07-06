@@ -44,6 +44,7 @@ class learnpath
     public $path = ''; // Path inside the scorm directory (if scorm).
     public $theme; // The current theme of the learning path.
     public $preview_image; // The current image of the learning path.
+    public $accumulate_scorm_time; // Flag to accumulate scorm time
 
     // Tells if all the items of the learnpath can be tried again. Defaults to "no" (=1).
     public $prevent_reinit = 1;
@@ -150,6 +151,7 @@ class learnpath
                 $this->modified_on = $row['modified_on'];
                 $this->ref = $row['ref'];
                 $this->categoryId = $row['category_id'];
+                $this->accumulate_scorm_time = isset($row['accumulate_scorm_time']) ? $row['accumulate_scorm_time'] : 'false';
 
                 if (!empty($row['publicated_on'])) {
                     $this->publicated_on = $row['publicated_on'];

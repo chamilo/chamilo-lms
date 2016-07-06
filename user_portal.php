@@ -192,14 +192,6 @@ if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
 
 $controller->tpl->assign('content', $courseAndSessions['html']);
 
-if (api_get_setting('allow_browser_sniffer') == 'true') {
-    if ($_SESSION['sniff_navigator'] != "checked") {
-        $controller->tpl->assign('show_sniff', 1);
-    } else {
-        $controller->tpl->assign('show_sniff', 0);
-    }
-}
-
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');
 if ($useCookieValidation === 'true') {

@@ -199,6 +199,9 @@ class ScormAnswerMultipleChoice extends Answer
 		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();';
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;';
 
+        $jstmpw .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();';
+        $jstmpw .= 'questions_answers_correct['.$this->questionJSId.'][0] = 0;';
+
 		//not sure if we are going to export also the MULTIPLE_ANSWER_COMBINATION to SCORM
 		//if ($type == MCMA  || $type == MULTIPLE_ANSWER_COMBINATION ) {
 		if ($type == MCMA) {
@@ -227,36 +230,37 @@ class ScormAnswerMultipleChoice extends Answer
 			}
 			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
 			$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
-			if ($type == MCMA) {
-				$js .= 'questions_types['.$this->questionJSId.'] = \'mcma\';'."\n";
-			} else {
-				$js .= 'questions_types['.$this->questionJSId.'] = \'exact\';'."\n";
-			}
+            $js .= 'questions_types['.$this->questionJSId.'] = \'mcma\';'."\n";
 			$js .= $jstmpw;
 		} elseif ($type == MULTIPLE_ANSWER_COMBINATION) {
-			//To this items we show the ThisItemIsNotExportable
-			$qId = $this->questionJSId;
-			$js = '';
-			$html = '<tr><td colspan="2"><table width="100%">';
-			// some javascript must be added for that kind of questions
-			$html .= '<tr>
-				<td>
-				<textarea name="question_'.$qId.'_free" id="question_'.$qId.'_exact" rows="20" cols="100"></textarea>
-				</td>
-				</tr>';
-			$html .= '</table></td></tr>';
-			// currently the exact answers cannot be displayed, so ignore the textarea
-			$html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
-			$js .= 'questions_answers['.$this->questionJSId.'] = new Array();'."\n";
-			$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();'."\n";
-			$js .= 'questions_types['.$this->questionJSId.'] = \'exact\';'."\n";
-			$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
-			$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
-			$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'.";\n";
-			$js .= $jstmpw;
-			return array($js, $html);
+	    	$js = '';
+            $id = 1;
+            $jstmp = '';
+            $jstmpc = '';
+            foreach ($this->answer as $i => $answer) {
+                $identifier = 'question_'.$this->questionJSId.'_exact_'.$i;
+                $html .=
+                    '<tr>
+					<td align="center" width="5%">
+					<input name="'.$identifier.'" id="'.$identifier.'" value="'.$i.'" type="checkbox" />
+					</td>
+					<td width="95%">
+					<label for="'.$identifier.'">' . $this->answer[$i] . '</label>
+					</td>
+					</tr>';
+
+                $jstmp .= $i.',';
+                if ($this->correct[$i]) {
+                    $jstmpc .= $i.',';
+                }
+                $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$this->weighting[$i].";";
+                $jstmpw .= 'questions_answers_correct['.$this->questionJSId.']['.$i.'] = '.$this->correct[$i].";";
+                $id++;
+            }
+            $js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');';
+            $js .= 'questions_types['.$this->questionJSId.'] = "exact";';
+            $js .= $jstmpw;
 		} else {
-			//$questionTypeLang = get_lang('MultipleChoiceUniqueAnswer');
 			$id = 1;
 			$jstmp = '';
 			$jstmpc = '';
@@ -266,7 +270,7 @@ class ScormAnswerMultipleChoice extends Answer
 				$html .=
 					'<tr>
 					<td align="center" width="5%">
-					<input name="'.$identifier_name.'" id="'.$identifier.'" value="'.$i.'" type="radio"/>
+					<input name="'.$identifier_name.'" id="'.$identifier.'" value="'.$i.'" type="checkbox"/>
 					</td>
 					<td width="95%">
 					<label for="'.$identifier.'">' . $this->answer[$i] . '</label>
@@ -539,11 +543,10 @@ class ScormAnswerFree extends Answer
 		$html = '<tr><td colspan="2">';
         $html .= '<textarea minlength="20" name="'.$identifier.'" id="'.$identifier.'" ></textarea>';
         $html .= '</td></tr>';
-        $score = $this->selectWeighting(1);
 		$js .= 'questions_answers['.$this->questionJSId.'] = new Array();';
 		$js .= 'questions_answers_correct['.$this->questionJSId.'] = "";';
 		$js .= 'questions_types['.$this->questionJSId.'] = \'free\';';
-		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = "'.$score.'";';
+		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = "0";';
 		$js .= $jstmpw;
 
 		return array($js, $html);

@@ -50,8 +50,8 @@ $actions = array(
 );
 
 $action  = 'thematic_details';
-if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
-    $action = $_GET['action'];
+if (isset($_REQUEST['action']) && in_array($_REQUEST['action'], $actions)) {
+    $action = $_REQUEST['action'];
 }
 
 if (isset($_POST['action']) && $_POST['action'] == 'thematic_delete_select') {

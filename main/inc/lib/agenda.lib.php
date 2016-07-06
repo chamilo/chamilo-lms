@@ -1594,7 +1594,7 @@ class Agenda
 
         $coachCanEdit = false;
         if (!empty($session_id)) {
-            $coachCanEdit = api_is_coach($session_id, $course_id);
+            $coachCanEdit = api_is_coach($session_id, $course_id) || api_is_platform_admin();
         }
 
         if (Database::num_rows($result)) {

@@ -1939,7 +1939,7 @@ class UserManager
                     0 => $rowf['id'],
                     1 => $rowf['variable'],
                     2 => $rowf['field_type'],
-                    3 => (empty($rowf['display_text']) ? '' : $rowf['display_text']),
+                    3 => empty($rowf['display_text']) ? '' : $rowf['display_text'],
                     4 => $rowf['default_value'],
                     5 => $rowf['field_order'],
                     6 => $rowf['visible'],
@@ -1958,7 +1958,7 @@ class UserManager
                         $fields[$rowf['id']][9][$rowo['id']] = array(
                             0 => $rowo['id'],
                             1 => $rowo['option_value'],
-                            2 => (empty($rowo['display_text']) ? '' : $rowo['display_text']),
+                            2 => empty($rowo['display_text']) ? '' : $rowo['display_text'],
                             3 => $rowo['option_order']
                         );
                     }
@@ -2093,7 +2093,7 @@ class UserManager
 
     /**
      * Check if a field is available
-     * @param    string    th$variable
+     * @param    string    $variable
      * @return    boolean
      */
     public static function is_extra_field_available($variable)
@@ -4052,7 +4052,7 @@ class UserManager
 
         $userId = intval($userId);
 
-        $limitCondition = null;
+        $limitCondition = '';
 
         if (isset($from) && isset($numberItems)) {
             $from = intval($from);
@@ -4211,6 +4211,7 @@ class UserManager
 
         $sql .= $orderBy;
         $sql .= $limitCondition;
+
         $result = Database::query($sql);
         $users = array();
         if (Database::num_rows($result) > 0) {

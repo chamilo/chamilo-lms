@@ -1652,7 +1652,7 @@ VALUES
 ('allow_captcha','','radio','Security','false','EnableCaptchaText','EnableCaptchaComment',NULL,'',true),
 ('captcha_number_mistakes_to_block_account','','textfield','Security',5,'CaptchaNumberOfMistakesBeforeBlockingAccountText','CaptchaNumberOfMistakesBeforeBlockingAccountComment',NULL,'',true),
 ('captcha_time_to_block','','textfield','Security',5,'CaptchaTimeAccountIsLockedText','CaptchaTimeAccountIsLockedComment',NULL,'',true),
-('drh_can_access_all_session_content','','radio','Session','true','DRHAccessToAllSessionContentText','DRHAccessToAllSessionContentComment',NULL,'',true),
+('drh_can_access_all_session_content','','radio','Session','false','DRHAccessToAllSessionContentText','DRHAccessToAllSessionContentComment',NULL,'',true),
 ('display_groups_forum_in_general_tool','','radio','Tools','true','ShowGroupForaInGeneralToolText','ShowGroupForaInGeneralToolComment',NULL,'',true),
 ('allow_tutors_to_assign_students_to_session','','radio','Session','false','TutorsCanAssignStudentsToSessionsText','TutorsCanAssignStudentsToSessionsComment',NULL,'',true);
 
@@ -1885,3 +1885,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_offic
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 1);
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 2);
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 3);
+
+UPDATE settings_current SET selected_value = '1.11.0.5' WHERE variable = 'chamilo_database_version';
+
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (8, 10, 'tags', 'Tags', 1, 1, NOW());

@@ -29,9 +29,9 @@ $document_id = $document_data['id'];
 $dir = $document_data['path'];
 
 //make some vars
-$wamidir=$dir;
-if($wamidir=="/"){
-	$wamidir="";
+$wamidir = $dir;
+if ($wamidir == "/") {
+	$wamidir = "";
 }
 $wamiurlplay = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$wamidir."/";
 $groupId = api_get_group_id();

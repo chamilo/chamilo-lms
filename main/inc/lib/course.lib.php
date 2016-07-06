@@ -3720,6 +3720,8 @@ class CourseManager
             $course_title_url = '';
             $course_title_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
 
+            $teachers = '';
+
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
                 $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
             }
@@ -4026,7 +4028,7 @@ class CourseManager
         if (1) {
             $session = '';
             $active = false;
-            if (!empty($course_info['session_name'])) {
+            if (!empty($course_info['id_session'])) {
 
                 // Request for the name of the general coach
                 $sql = 'SELECT lastname, firstname,sc.name
@@ -4040,13 +4042,12 @@ class CourseManager
 
                 $rs = Database::query($sql);
                 $sessioncoach = Database::store_result($rs);
-                $sessioncoach = $sessioncoach[0];
+                $sessioncoach = $sessioncoach ? $sessioncoach[0] : null;
 
-                $session = array();
-                $session['title'] = $course_info['session_name'];
+                $session = api_get_session_info($course_info['id_session']);
                 $session_category_id = CourseManager::get_session_category_id_by_session_id($course_info['id_session']);
                 $session['category'] = $sessioncoach['name'];
-                if ($course_info['access_start_date'] == '0000-00-00') {
+                if ($session['access_start_date'] == '0000-00-00') {
                     //$session['dates'] = get_lang('WithoutTimeLimits');
                     $session['dates'] = '';
                     if (api_get_setting('show_session_coach') === 'true') {
@@ -4055,12 +4056,15 @@ class CourseManager
                     }
                     $active = true;
                 } else {
-                    $session ['dates'] = ' - ' . get_lang('From') . ' ' . $course_info['access_start_date'] . ' ' . get_lang('To') . ' ' . $course_info['access_end_date'];
+                    $session ['dates'] = ' - ' . get_lang('From') . ' ' . $session['access_start_date'] . ' ' . get_lang('To') . ' ' . $session['access_end_date'];
                     if (api_get_setting('show_session_coach') === 'true') {
                         $session['coach'] = get_lang('GeneralCoach') . ': ' . api_get_person_name($sessioncoach['firstname'],
                                 $sessioncoach['lastname']);
                     }
-                    $active = ($date_start <= $now && $date_end >= $now);
+                    $date_start = $session['access_start_date'];
+                    $date_end = $session['access_end_date'];
+
+                    $active = !$date_end ? ($date_start <= $now) : ($date_start <= $now && $date_end >= $now);
                 }
             }
             $user_course_category = '';

@@ -122,6 +122,8 @@ class ExtraField extends Model
             case 'lp_item':
                 $this->extraFieldType = EntityExtraField::LP_ITEM_FIELD_TYPE;
                 break;
+            case 'skill':
+                $this->extraFieldType = EntityExtraField::SKILL_FIELD_TYPE;
         }
 
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
@@ -149,7 +151,8 @@ class ExtraField extends Model
             'question',
             'lp',
             'calendar_event',
-            'lp_item'
+            'lp_item',
+            'skill'
         );
     }
 
@@ -286,7 +289,7 @@ class ExtraField extends Model
     }
 
     /**
-     * Get all the field info for User Tags
+     * Get all the field info for tags
      * @param string $variable
      *
      * @return array|bool
@@ -410,8 +413,12 @@ class ExtraField extends Model
 
         switch ($handler) {
             case 'course':
+                // no break
             case 'session':
+                // no break
             case 'user':
+                // no break
+            case 'skill':
                 break;
         }
 
@@ -594,9 +601,9 @@ class ExtraField extends Model
      * France:Paris;Bretagne;Marseille;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
      * into
      * array(
- *      'France' =>
+     *   'France' =>
      *      array('Paris', 'Bregtane', 'Marseille'),
-     *  'Belgique' =>
+     *   'Belgique' =>
      *      array('Namur', 'Liège')
      * ), etc
      * @param string $string
@@ -769,15 +776,17 @@ class ExtraField extends Model
     }
 
     /**
+     * Add an element that matches the given extra field to the given $form object
      * @param FormValidator $form
      * @param array $extraData
      * @param bool $admin_permissions
-     * @param int $user_id
      * @param array $extra
      * @param int $itemId
      * @param array $exclude variables of extra field to exclude
-     * @param array
-     * @return array
+     * @param bool $useTagAsSelect
+     * @param array $showOnlyThisFields
+     * @param array $orderFields
+     * @return array If relevant, returns a one-element array with JS code to be added to the page HTML headers
      */
     public function set_extra_fields_in_form(
         $form,
@@ -1348,16 +1357,16 @@ class ExtraField extends Model
                         //if cache is set to true the jquery will be called 1 time
 
                         $jquery_ready_content .= <<<EOF
-                    $("#extra_$variable").fcbkcomplete({
-                        json_url: "$url?a=search_tags&field_id=$field_id&type={$this->type}",
-                        cache: false,
-                        filter_case: true,
-                        filter_hide: true,
-                        complete_text:"$complete_text",
-                        firstselected: false,
-                        filter_selected: true,                        
-                        newel: true
-                    });
+                            $("#extra_$variable").fcbkcomplete({
+                                json_url: "$url?a=search_tags&field_id=$field_id&type={$this->type}",
+                                cache: false,
+                                filter_case: true,
+                                filter_hide: true,
+                                complete_text:"$complete_text",
+                                firstselected: false,
+                                filter_selected: true,                        
+                                newel: true
+                            });
 EOF;
                         }
                         break;

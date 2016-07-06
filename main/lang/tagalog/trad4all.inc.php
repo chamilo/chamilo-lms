@@ -446,7 +446,6 @@ $LearnpathDeleteModule = "Tanggalin ang seksyon";
 $NewChapter = "Magdagdag ng seksyon";
 $NewStep = "Magdagdag ng bagay na pinag-aaralan o aktibidad";
 $EnterDataNewChapter = "Pagdadagdag ng isang seksyon sa kurso";
-$NewDocument = "Matingkad na pahina ng media / aktibidad";
 $Position = "Sa talaan ng mga nilalaman";
 $ViewModeEmbedded = "Kasalukuyang view mode: embedded";
 $ShowDebug = "Ipakita ang debug";

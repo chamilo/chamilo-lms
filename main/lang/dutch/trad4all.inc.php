@@ -2042,7 +2042,6 @@ $TitleManipulateStudentPublication = "Dit document wijzigen";
 $EnterDataNewChapter = "Informatie van het nieuwe hoofdstuk ingeven";
 $EnterDataNewModule = "Informatie van de nieuwe module ingeven";
 $CreateNewStep = "Nieuwe stap aanmaken:";
-$NewDocument = "Nieuw document";
 $UseAnExistingResource = "of gebruik bestaand materiaal :";
 $Position = "Positie";
 $NewChapterCreated = "Het nieuwe hoofdstuk is aangemaakt. U kunt nu nog een hoofdstuk aanmaken of een nieuwe stap toevoegen aan het zopas aangemaakte hoofdstuk.";

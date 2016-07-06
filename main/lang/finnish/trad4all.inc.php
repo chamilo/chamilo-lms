@@ -868,7 +868,6 @@ $TitleManipulateStudentPublication = "Muokkaa tehtävää";
 $EnterDataNewChapter = "Osion lisääminen tälle kurssille";
 $EnterDataNewModule = "Syötä osion tiedot";
 $CreateNewStep = "Luo uusi askel";
-$NewDocument = "Uusi dokumentti";
 $UseAnExistingResource = "Tai käytä jo olemassa olevaa resurssia:";
 $Position = "Sisällysluettelossa";
 $NewChapterCreated = "Uusi osio on luotu. Voit jatkaa lisäämällä osion tai askeleen.";

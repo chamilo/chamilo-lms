@@ -1308,7 +1308,6 @@ $TitleManipulateStudentPublication = "Upravljanje s trenutnim studentskim radom"
 $EnterDataNewChapter = "Unesite podatke za novo poglavlje";
 $EnterDataNewModule = "Unesite podatke za novi modul";
 $CreateNewStep = "Napravi novi korak :";
-$NewDocument = "Novi dokument";
 $UseAnExistingResource = "Ili upotrijebite postojeći skup podataka :";
 $Position = "Pozicija";
 $NewChapterCreated = "Napravljeno je novo poglavlje. Sada mu možete pridodati sljedeće poglavlje ili korak.";

@@ -44,6 +44,7 @@ class learnpath
     public $path = ''; // Path inside the scorm directory (if scorm).
     public $theme; // The current theme of the learning path.
     public $preview_image; // The current image of the learning path.
+    public $accumulate_scorm_time; // Flag to accumulate scorm time
 
     // Tells if all the items of the learnpath can be tried again. Defaults to "no" (=1).
     public $prevent_reinit = 1;
@@ -150,6 +151,7 @@ class learnpath
                 $this->modified_on = $row['modified_on'];
                 $this->ref = $row['ref'];
                 $this->categoryId = $row['category_id'];
+                $this->accumulate_scorm_time = isset($row['accumulate_scorm_time']) ? $row['accumulate_scorm_time'] : 'false';
 
                 if (!empty($row['publicated_on'])) {
                     $this->publicated_on = $row['publicated_on'];
@@ -1132,9 +1134,9 @@ class learnpath
         );
 
         $link_info = GradebookUtils::isResourceInCourseGradebook(
-            api_get_course_id(), 
-            4, 
-            $id, 
+            api_get_course_id(),
+            4,
+            $id,
             api_get_session_id()
         );
         if ($link_info !== false) {
@@ -9136,7 +9138,7 @@ class learnpath
 
         // Remove memory and time limits as much as possible as this might be a long process...
         if (function_exists('ini_set')) {
-            api_set_memory_limit('128M');
+            api_set_memory_limit('256M');
             ini_set('max_execution_time', 600);
         }
 
@@ -9228,8 +9230,8 @@ class learnpath
             $path_to_replace = $folder_name.'/';
         }
 
-        //Fixes chamilo scorm exports
-        if ($this->ref == 'chamilo_scorm_export') {
+        // Fixes chamilo scorm exports
+        if ($this->ref === 'chamilo_scorm_export') {
             $path_to_remove = 'scorm/'.$this->path.'/document/';
         }
 
@@ -9293,7 +9295,7 @@ class learnpath
                     $my_xml_file_path = str_replace($path_to_remove, $path_to_replace, $my_file_path);
 
                     //From quiz
-                    if ($this->ref == 'chamilo_scorm_export') {
+                    if ($this->ref === 'chamilo_scorm_export') {
                         $path_to_remove = 'scorm/'.$this->path.'/';
                         $my_xml_file_path = str_replace($path_to_remove, '', $my_file_path);
                     }
@@ -9624,7 +9626,9 @@ class learnpath
                         $contents = ScormSection::export_exercise_to_scorm($exe_id, true);
                         $tmp_file_path = $archive_path.$temp_dir_short.'/'.$my_file_path;
                         $res = file_put_contents($tmp_file_path, $contents);
-                        if ($res === false) { error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0); }
+                        if ($res === false) {
+                            error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0);
+                        }
                         $files_cleanup[] = $tmp_file_path;
                         //error_log($tmp_path); die();
                         //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_QUOTES, 'UTF-8');
@@ -9951,16 +9955,10 @@ EOD;
 
         // Add the extra files that go along with a SCORM package.
         $main_code_path = api_get_path(SYS_CODE_PATH) . 'lp/packaging/';
-        $extra_files = scandir($main_code_path);
-        foreach ($extra_files as $extra_file) {
-            if (strpos($extra_file, '.') === 0) {
-                continue;
-            } else {
-                $dest_file = $archive_path.$temp_dir_short.'/'.$extra_file;
-                $this->create_path($dest_file);
-                copy($main_code_path.$extra_file, $dest_file);
-            }
-        }
+
+        $fs = new \Symfony\Component\Filesystem\Filesystem;
+        $fs->mirror($main_code_path, $archive_path.$temp_dir_short);
+       
 
         // Finalize the imsmanifest structure, add to the zip, then return the zip.
 

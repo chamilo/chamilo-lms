@@ -60,6 +60,11 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
         );
     }
 
+    $menu_items[] = Display::url(
+        Display::return_icon('works.png', get_lang('WorksReport'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . 'mySpace/works_in_session_report.php'
+    );
+
     $actionsLeft = '';
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {
@@ -82,7 +87,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
     $toolbar = Display::toolbarAction(
         'toolbar-session',
-        $content = array(0 => $actionsLeft, 1 => $actionsRight)
+        array($actionsLeft, $actionsRight)
     );
     echo $toolbar;
 

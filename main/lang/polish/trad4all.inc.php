@@ -2058,7 +2058,6 @@ $TitleManipulateStudentPublication = "Edytuj zadanie";
 $EnterDataNewChapter = "Dodawanie modułu do kursu";
 $EnterDataNewModule = "Wprowadź dane nowego modułu";
 $CreateNewStep = "Utwórz nową bogatą stronę mediów";
-$NewDocument = "Nowy dokument";
 $UseAnExistingResource = "Lub wykorzystaj istniejące zasoby:";
 $Position = "Pozycja";
 $NewChapterCreated = "Utworzono nowy moduł. Możesz kontynuować dodając do niego kolejny moduł lub krok.";

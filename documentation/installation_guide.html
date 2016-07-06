@@ -336,6 +336,7 @@ Please note that if you (unluckily) upgraded from any of the 1.9 versions to 1.1
   <li> make sure "AllowOverride All" is present in your Apache configuration, as interpreting the .htaccess files is very important for Chamilo to work (note that the Order-Allow directive has been replaced by "Require all granted" in Apache 2.4)</li>
   <li> point your browser on your portal URL + main/install/</li>
   <li> click&nbsp;<span style="font-style: italic;">Install</span>, then choose <span style="font-style: italic;">Upgrade from 1.9.*</span></li>
+  <li> once your portal is upgraded, clean your app/cache/twig directory: delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!). It will all be re-generated. You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
 </ul>
 
 <br />

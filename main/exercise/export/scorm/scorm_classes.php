@@ -166,18 +166,27 @@ class ScormQuestion extends Question
 	/**
 	 * Return the JavaScript code bound to the question
 	 */
-	function getQuestionJS()
+	public function getQuestionJS()
 	{
-		$w = $this->selectWeighting();
-		$s = 'questions.push('.$this->js_id.');'."\n";
-        if ($this->type == HOT_SPOT) {
-            //put the max score to 0 to avoid discounting the points of
-            //non-exported quiz types in the SCORM
-            $w = 0;
-        }
-		$s .= 'questions_score_max['.$this->js_id.'] = '.$w.";";
+		$weight = $this->selectWeighting();
+		$js = 'questions.push('.$this->js_id.');'."\n";
 
-		return $s;
+        switch ($this->type) {
+            case ORAL_EXPRESSION:
+                $script = file_get_contents(api_get_path(LIBRARY_PATH) . 'javascript/rtc/RecordRTC.js');
+                $script .= file_get_contents(api_get_path(LIBRARY_PATH) . 'wami-recorder/recorder.js');
+                $script .= file_get_contents(api_get_path(LIBRARY_PATH) . 'wami-recorder/gui.js');
+                $js .= $script;
+                break;
+           case HOT_SPOT:
+                //put the max score to 0 to avoid discounting the points of
+                //non-exported quiz types in the SCORM
+                $weight = 0;
+                break;
+        }
+        $js .= 'questions_score_max['.$this->js_id.'] = '.$weight.";";
+
+		return $js;
 	}
 }
 
@@ -199,11 +208,12 @@ class ScormAnswerMultipleChoice extends Answer
 		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();';
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;';
 
+        $jstmpw .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();';
+
 		//not sure if we are going to export also the MULTIPLE_ANSWER_COMBINATION to SCORM
 		//if ($type == MCMA  || $type == MULTIPLE_ANSWER_COMBINATION ) {
 		if ($type == MCMA) {
-			//$questionTypeLang = get_lang('MultipleChoiceMultipleAnswers');
-			$id = 1;
+            $id = 1;
 			$jstmp = '';
 			$jstmpc = '';
             foreach ($this->answer as $i => $answer) {
@@ -214,7 +224,7 @@ class ScormAnswerMultipleChoice extends Answer
 					<input name="'.$identifier.'" id="'.$identifier.'" value="'.$i.'" type="checkbox" />
 					</td>
 					<td width="95%">
-					<label for="'.$identifier.'">' . $this->answer[$i] . '</label>
+					<label for="'.$identifier.'">' . Security::remove_XSS($this->answer[$i]) . '</label>
 					</td>
 					</tr>';
 
@@ -222,41 +232,42 @@ class ScormAnswerMultipleChoice extends Answer
                 if ($this->correct[$i]) {
                     $jstmpc .= $i.',';
                 }
-				$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$this->weighting[$i].";\n";
+				$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$this->weighting[$i].";";
+                $jstmpw .= 'questions_answers_correct['.$this->questionJSId.']['.$i.'] = '.$this->correct[$i].';';
 				$id++;
 			}
 			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
-			$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
-			if ($type == MCMA) {
-				$js .= 'questions_types['.$this->questionJSId.'] = \'mcma\';'."\n";
-			} else {
-				$js .= 'questions_types['.$this->questionJSId.'] = \'exact\';'."\n";
-			}
+            $js .= 'questions_types['.$this->questionJSId.'] = \'mcma\';'."\n";
 			$js .= $jstmpw;
 		} elseif ($type == MULTIPLE_ANSWER_COMBINATION) {
-			//To this items we show the ThisItemIsNotExportable
-			$qId = $this->questionJSId;
-			$js = '';
-			$html = '<tr><td colspan="2"><table width="100%">';
-			// some javascript must be added for that kind of questions
-			$html .= '<tr>
-				<td>
-				<textarea name="question_'.$qId.'_free" id="question_'.$qId.'_exact" rows="20" cols="100"></textarea>
-				</td>
-				</tr>';
-			$html .= '</table></td></tr>';
-			// currently the exact answers cannot be displayed, so ignore the textarea
-			$html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
-			$js .= 'questions_answers['.$this->questionJSId.'] = new Array();'."\n";
-			$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();'."\n";
-			$js .= 'questions_types['.$this->questionJSId.'] = \'exact\';'."\n";
-			$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
-			$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
-			$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'.";\n";
-			$js .= $jstmpw;
-			return array($js, $html);
+	    	$js = '';
+            $id = 1;
+            $jstmp = '';
+            $jstmpc = '';
+            foreach ($this->answer as $i => $answer) {
+                $identifier = 'question_'.$this->questionJSId.'_exact_'.$i;
+                $html .=
+                    '<tr>
+					<td align="center" width="5%">
+					<input name="'.$identifier.'" id="'.$identifier.'" value="'.$i.'" type="checkbox" />
+					</td>
+					<td width="95%">
+					<label for="'.$identifier.'">' . Security::remove_XSS($this->answer[$i]) . '</label>
+					</td>
+					</tr>';
+
+                $jstmp .= $i.',';
+                if ($this->correct[$i]) {
+                    $jstmpc .= $i.',';
+                }
+                $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$this->weighting[$i].";";
+                $jstmpw .= 'questions_answers_correct['.$this->questionJSId.']['.$i.'] = '.$this->correct[$i].";";
+                $id++;
+            }
+            $js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');';
+            $js .= 'questions_types['.$this->questionJSId.'] = "exact";';
+            $js .= $jstmpw;
 		} else {
-			//$questionTypeLang = get_lang('MultipleChoiceUniqueAnswer');
 			$id = 1;
 			$jstmp = '';
 			$jstmpc = '';
@@ -266,10 +277,10 @@ class ScormAnswerMultipleChoice extends Answer
 				$html .=
 					'<tr>
 					<td align="center" width="5%">
-					<input name="'.$identifier_name.'" id="'.$identifier.'" value="'.$i.'" type="radio"/>
+					<input name="'.$identifier_name.'" id="'.$identifier.'" value="'.$i.'" type="checkbox"/>
 					</td>
 					<td width="95%">
-					<label for="'.$identifier.'">' . $this->answer[$i] . '</label>
+					<label for="'.$identifier.'">' . Security::remove_XSS($this->answer[$i]) . '</label>
 					</td>
 					</tr>';
 				$jstmp .= $i.',';
@@ -277,10 +288,10 @@ class ScormAnswerMultipleChoice extends Answer
                     $jstmpc .= $i;
                 }
 				$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$this->weighting[$i].";";
+                $jstmpw .= 'questions_answers_correct['.$this->questionJSId.']['.$i.'] = '.$this->correct[$i].';';
 				$id++;
 			}
 			$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');';
-			$js .= 'questions_answers_correct['.$this->questionJSId.'] = '.$jstmpc.';';
 			$js .= 'questions_types['.$this->questionJSId.'] = \'mcua\';';
 			$js .= $jstmpw;
 		}
@@ -537,13 +548,24 @@ class ScormAnswerFree extends Answer
         $identifier = 'question_'.$this->questionJSId.'_free';
 		// currently the free answers cannot be displayed, so ignore the textarea
 		$html = '<tr><td colspan="2">';
+        $type = $this->getQuestionType();
+
+        if ($type == ORAL_EXPRESSION) {
+            $template = new Template('');
+            $template->assign('directory', '/tmp/');
+            $template->assign('user_id', api_get_user_id());
+
+            $layout = $template->get_template('document/record_audio.tpl');
+            $html .= $template->fetch($layout);
+
+        }
+
         $html .= '<textarea minlength="20" name="'.$identifier.'" id="'.$identifier.'" ></textarea>';
         $html .= '</td></tr>';
-        $score = $this->selectWeighting(1);
 		$js .= 'questions_answers['.$this->questionJSId.'] = new Array();';
 		$js .= 'questions_answers_correct['.$this->questionJSId.'] = "";';
 		$js .= 'questions_types['.$this->questionJSId.'] = \'free\';';
-		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = "'.$score.'";';
+		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = "0";';
 		$js .= $jstmpw;
 
 		return array($js, $html);
@@ -678,12 +700,13 @@ class ScormAssessmentItem
 	 */
 	function start_page()
 	{
-		$charset = 'UTF-8';
         $head = '';
         if ($this->standalone) {
+            $charset = 'UTF-8';
             $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>';
             $head .= '<html>';
         }
+
 		return $head;
 	}
 
@@ -728,6 +751,7 @@ class ScormAssessmentItem
 			$css .= '/*]]>*/'."\n";
 			$css .= '</style>';
 		}
+
 		return $css;
 	}
 
@@ -748,10 +772,11 @@ class ScormAssessmentItem
 	 */
 	function start_js()
 	{
+        $js = '<script type="text/javascript" src="assets/api_wrapper.js"></script>';
 		if ($this->standalone) {
 			return '<script>';
 		}
-		return '';
+		return $js;
 	}
 
 	/**
@@ -759,7 +784,6 @@ class ScormAssessmentItem
 	 */
 	function common_js()
 	{
-		$js = file_get_contents('../lp/js/api_wrapper.js');
 		$js .= 'var questions = new Array();';
 		$js .= 'var questions_answers = new Array();';
 		$js .= 'var questions_answers_correct = new Array();';
@@ -841,7 +865,7 @@ class ScormAssessmentItem
 	function end_body()
 	{
 		if ($this->standalone) {
-			return '<br /><input type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form></body>';
+			return '<br /><input class="btn" type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form></body>';
 		}
 
 		return '';
@@ -857,8 +881,7 @@ class ScormAssessmentItem
 	 */
 	function export()
 	{
-		$js = $html = '';
-		list($js,$html) = $this->question->export();
+		list($js, $html) = $this->question->export();
 		if ($this->standalone) {
 			$res = $this->start_page()
 				. $this->start_header()
@@ -933,7 +956,7 @@ class ScormSection
 	 */
 	function start_page()
 	{
-		global $charset;
+        $charset = 'UTF-8';
 		$head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?><html>';
 
 		return $head;
@@ -959,24 +982,15 @@ class ScormSection
 	/**
 	 * Print CSS inclusion
 	 */
-	function css()
+	private function css()
 	{
-		$css = '<style type="text/css" media="screen, projection">';
-		$css .= '/*<![CDATA[*/'."\n";
-		$css .= '/*]]>*/'."\n";
-		$css .= '</style>'."\n";
-		$css .= '<style type="text/css" media="print">';
-		$css .= '/*<![CDATA[*/'."\n";
-		$css .= '/*]]>*/'."\n";
-		$css .= '</style>';
-
-		return $css;
+		return '';
 	}
 
 	/**
 	 * End document header
 	 */
-	function end_header()
+    private function end_header()
 	{
 		return '</head>';
 	}
@@ -985,7 +999,7 @@ class ScormSection
 	 * Start the itemBody
 	 *
 	 */
-	function start_js()
+    private function start_js()
 	{
 		return '<script>';
 	}
@@ -993,11 +1007,10 @@ class ScormSection
 	/**
 	 * Common JS functions
 	 */
-	function common_js()
+	public function common_js()
 	{
-		$js = "\n";
-		$js .= file_get_contents('../inc/lib/javascript/hotspot/js/hotspot.js');
-		$js .= file_get_contents('../lp/js/api_wrapper.js');
+		$js = file_get_contents('../inc/lib/javascript/hotspot/js/hotspot.js');
+
 		$js .= 'var questions = new Array();' . "\n";
 		$js .= 'var questions_answers = new Array();' . "\n";
 		$js .= 'var questions_answers_correct = new Array();' . "\n";
@@ -1077,7 +1090,7 @@ class ScormSection
 	 */
 	function end_body()
 	{
-		return '</table><br /><input type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form></body>';
+		return '</table><br /><input class="btn btn-primary" type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form></body>';
 	}
 
 	/**
@@ -1102,6 +1115,7 @@ class ScormSection
 		$res = $this->start_page()
 			. $this->start_header()
 			. $this->css()
+            . $this->globalAssets()
 			. $this->start_js()
 			. $this->common_js()
 			. $js
@@ -1115,6 +1129,18 @@ class ScormSection
 		return $res;
 	}
 
+    /**
+     * @return string
+     */
+    private function globalAssets()
+    {
+        $assets = '<script type="text/javascript" src="assets/jquery/jquery.min.js"></script>';
+        $assets .= '<script type="text/javascript" src="assets/api_wrapper.js"></script>';
+        $assets .= '<link href="assets/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />';
+
+        return $assets;
+    }
+
 	/**
 	 * Export the questions, as a succession of <items>
 	 * @author Amand Tihon <amand@alrj.org>
@@ -1124,7 +1150,7 @@ class ScormSection
 		$js = $html = "";
 		$js_id = 0;
 		foreach ($this->exercise->selectQuestionList() as $q) {
-			list($jstmp,$htmltmp)= ScormQuestion::export_question($q, false, $js_id);
+			list($jstmp, $htmltmp)= ScormQuestion::export_question($q, false, $js_id);
 			$js .= $jstmp."\n";
 			$html .= $htmltmp."\n";
 			++$js_id;

@@ -9955,16 +9955,10 @@ EOD;
 
         // Add the extra files that go along with a SCORM package.
         $main_code_path = api_get_path(SYS_CODE_PATH) . 'lp/packaging/';
-        $extra_files = scandir($main_code_path);
-        foreach ($extra_files as $extra_file) {
-            if (strpos($extra_file, '.') === 0) {
-                continue;
-            } else {
-                $dest_file = $archive_path.$temp_dir_short.'/'.$extra_file;
-                $this->create_path($dest_file);
-                copy($main_code_path.$extra_file, $dest_file);
-            }
-        }
+
+        $fs = new \Symfony\Component\Filesystem\Filesystem;
+        $fs->mirror($main_code_path, $archive_path.$temp_dir_short);
+       
 
         // Finalize the imsmanifest structure, add to the zip, then return the zip.
 

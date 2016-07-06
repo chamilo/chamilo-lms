@@ -54,7 +54,7 @@
 </div>
 
 <script>
-    $(document).on('ready', function () {
+    $(document).on('ready', function() {
         function useRecordRTC() {
             $('#record-audio-recordrtc').show();
 

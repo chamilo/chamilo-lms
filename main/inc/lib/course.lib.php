@@ -2535,6 +2535,58 @@ class CourseManager
     }
 
     /**
+     * Get the course codes that have been restricted in the catalogue, and if byUserId is set
+     * then the courses that the user is allowed or not to see in catalogue
+     *
+     * @param boolean allowed Either if the courses have some users that are or are not allowed to see in catalogue
+     * @param boolean byUserId if the courses are or are not allowed to see to the user
+     * @return array Course codes allowed or not to see in catalogue by some user or the user
+     */
+    public static function getCatalogueCourseList($allowed = true, $byUserId = -1)
+    {
+        $courseTable = Database:: get_main_table(TABLE_MAIN_COURSE);
+        $tblCourseRelUserCatalogue = Database:: get_main_table(TABLE_MAIN_COURSE_CATALOGUE_USER);
+        $visibility = ($allowed?1:0);
+
+        // Restriction by user id
+        $currentUserRestriction = "";
+        if ($byUserId > 0) {
+            $currentUserRestriction = " AND tcruc.user_id = $byUserId ";
+        }
+
+        //we filter the courses from the URL
+        $joinAccessUrl = '';
+        $whereAccessUrl = '';
+        if (api_get_multiple_access_url()) {
+            $accessUrlId = api_get_current_access_url_id();
+            if ($accessUrlId != -1) {
+                $tblUrlCourse = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $joinAccessUrl = "LEFT JOIN $tblUrlCourse url_rel_course
+                                    ON url_rel_course.c_id = c.id ";
+                $whereAccessUrl = " AND access_url_id = $accessUrlId ";
+            }
+        }
+
+        // get course list auto-register
+        $sql = "SELECT DISTINCT(c.code)
+                FROM $tblCourseRelUserCatalogue tcruc
+                INNER JOIN $courseTable c
+                ON (c.id = tcruc.c_id) $joinAccessUrl
+                WHERE tcruc.visible = $visibility $currentUserRestriction $whereAccessUrl";
+
+        $result = Database::query($sql);
+        $courseList = array();
+
+        if (Database::num_rows($result) > 0) {
+            while ($resultRow = Database::fetch_array($result)) {
+                $courseList[] = $resultRow['code'];
+            }
+        }
+
+        return $courseList;
+    }
+
+    /**
      * Get list of courses for a given user
      * @param int $user_id
      * @param boolean $include_sessions Whether to include courses from session or not
@@ -4823,6 +4875,39 @@ class CourseManager
     }
 
     /**
+     * Returns the SQL conditions to filter course only visible by the user in the catalogue
+     *
+     * @param $courseTableAlias Alias of the course table
+     * @return string SQL conditions
+     */
+    public static function getCourseVisibilitySQLCondition($courseTableAlias) {
+        $visibilityCondition = '';
+        $hidePrivate = api_get_setting('course_catalog_hide_private');
+        if ($hidePrivate === 'true') {
+            $visibilityCondition = ' AND '.$courseTableAlias.'.visibility <> 1';
+        }
+
+        // Check if course have users allowed to see it in the catalogue, then show only if current user is allowed to see it
+        $currentUserId = api_get_user_id();
+        $restrictedCourses = self::getCatalogueCourseList(true);
+        $allowedCoursesToCurrentUser = self::getCatalogueCourseList(true, $currentUserId);
+        if (!empty($restrictedCourses)) {
+            $visibilityCondition .= ' AND ('.$courseTableAlias.'.code NOT IN ("' . implode('","', $restrictedCourses) . '")';
+            $visibilityCondition .= ' OR '.$courseTableAlias.'.code IN ("' . implode('","', $allowedCoursesToCurrentUser) . '"))';
+        }
+
+        // Check if course have users denied to see it in the catalogue, then show only if current user is not denied to see it
+        $restrictedCourses = self::getCatalogueCourseList(false);
+        $notAllowedCoursesToCurrentUser = self::getCatalogueCourseList(false, $currentUserId);
+        if (!empty($restrictedCourses)) {
+            $visibilityCondition .= ' AND ('.$courseTableAlias.'.code NOT IN ("' . implode('","', $restrictedCourses) . '")';
+            $visibilityCondition .= ' OR '.$courseTableAlias.'.code NOT IN ("' . implode('","', $notAllowedCoursesToCurrentUser) . '"))';
+        }
+
+        return $visibilityCondition;
+    }
+
+    /**
      * Get available le courses count
      * @param int Access URL ID (optional)
      * @param integer $accessUrlId
@@ -4839,14 +4924,8 @@ class CourseManager
             $withoutSpecialCourses = ' AND c.code NOT IN ("' . implode('","', $specialCourseList) . '")';
         }
 
-        $visibilityCondition = null;
+        $visibilityCondition = self::getCourseVisibilitySQLCondition("c");
 
-        $hidePrivate = api_get_setting('course_catalog_hide_private');
-        if ($hidePrivate === 'true') {
-            $courseInfo = api_get_course_info();
-            $courseVisibility = $courseInfo['visibility'];
-            $visibilityCondition = ' AND c.visibility <> 1';
-        }
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
             $sql = "SELECT count(c.id) FROM $tableCourse c, $tableCourseRelAccessUrl u
                     WHERE

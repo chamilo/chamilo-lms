@@ -654,6 +654,7 @@ class ExtraFieldValue extends Model
             $sql .= " AND visible = $visibility ";
         }
         $sql .= " ORDER BY id";
+
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_array($result, 'ASSOC');

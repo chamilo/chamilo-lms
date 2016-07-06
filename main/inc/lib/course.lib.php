@@ -3720,6 +3720,8 @@ class CourseManager
             $course_title_url = '';
             $course_title_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
 
+            $teachers = '';
+
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
                 $teachers = CourseManager::getTeachersFromCourseByCode($course['code']);
             }

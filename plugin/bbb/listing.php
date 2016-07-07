@@ -141,8 +141,8 @@ if ($bbb->isGlobalConference() === false &&
     $groupId = api_get_group_id();
     $groups = GroupManager::get_groups();
     if ($groups) {
-        $meetings = $bbb->getAllMeetingsInCourse(api_get_course_int_id(), api_get_session_id(), 1);
-        $meetingsGroup = array_column($meetings, 'status', 'group_id');
+        $meetingsInGroup = $bbb->getAllMeetingsInCourse(api_get_course_int_id(), api_get_session_id(), 1);
+        $meetingsGroup = array_column($meetingsInGroup, 'status', 'group_id');
 
         foreach ($groups as &$groupData) {
             $itemGroupId = $groupData['id'];

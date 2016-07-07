@@ -139,32 +139,32 @@ class bbb
      * See this file in you BBB to set up default values
      * @param   array $params Array of parameters that will be completed if not containing all expected variables
 
-       /var/lib/tomcat6/webapps/bigbluebutton/WEB-INF/classes/bigbluebutton.properties
+    /var/lib/tomcat6/webapps/bigbluebutton/WEB-INF/classes/bigbluebutton.properties
      *
-       More record information:
-       http://code.google.com/p/bigbluebutton/wiki/RecordPlaybackSpecification
+    More record information:
+    http://code.google.com/p/bigbluebutton/wiki/RecordPlaybackSpecification
 
-       # Default maximum number of users a meeting can have.
-        # Doesn't get enforced yet but is the default value when the create
-        # API doesn't pass a value.
-        defaultMaxUsers=20
+    # Default maximum number of users a meeting can have.
+    # Doesn't get enforced yet but is the default value when the create
+    # API doesn't pass a value.
+    defaultMaxUsers=20
 
-        # Default duration of the meeting in minutes.
-        # Current default is 0 (meeting doesn't end).
-        defaultMeetingDuration=0
+    # Default duration of the meeting in minutes.
+    # Current default is 0 (meeting doesn't end).
+    defaultMeetingDuration=0
 
-        # Remove the meeting from memory when the end API is called.
-        # This allows 3rd-party apps to recycle the meeting right-away
-        # instead of waiting for the meeting to expire (see below).
-        removeMeetingWhenEnded=false
+    # Remove the meeting from memory when the end API is called.
+    # This allows 3rd-party apps to recycle the meeting right-away
+    # instead of waiting for the meeting to expire (see below).
+    removeMeetingWhenEnded=false
 
-        # The number of minutes before the system removes the meeting from memory.
-        defaultMeetingExpireDuration=1
+    # The number of minutes before the system removes the meeting from memory.
+    defaultMeetingExpireDuration=1
 
-        # The number of minutes the system waits when a meeting is created and when
-        # a user joins. If after this period, a user hasn't joined, the meeting is
-        # removed from memory.
-        defaultMeetingCreateJoinDuration=5
+    # The number of minutes the system waits when a meeting is created and when
+    # a user joins. If after this period, a user hasn't joined, the meeting is
+    # removed from memory.
+    defaultMeetingCreateJoinDuration=5
      *
      * @return mixed
      */
@@ -446,6 +446,34 @@ class bbb
     }
 
     /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $status
+     *
+     * @return array
+     */
+    public function getAllMeetingsInCourse($courseId, $sessionId, $status)
+    {
+        $conditions =  array(
+            'where' => array(
+                'status = ? AND c_id = ? AND session_id = ? ' => array(
+                    $status,
+                    $courseId,
+                    $sessionId,
+                ),
+            ),
+        );
+
+        $meetingList = Database::select(
+            '*',
+            $this->table,
+            $conditions
+        );
+
+        return $meetingList;
+    }
+
+    /**
      * Gets all the course meetings saved in the plugin_bbb_meeting table
      * @return array Array of current open meeting rooms
      */
@@ -463,7 +491,7 @@ class bbb
                 ),
             ),
         );
-        
+
         if ($this->hasGroupSupport()) {
             $groupId = api_get_group_id();
             $conditions =  array(

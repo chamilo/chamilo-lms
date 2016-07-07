@@ -137,12 +137,23 @@ if ($bbb->isGlobalConference() === false &&
         });
 </script>';
 
-    $form = new FormValidator(api_get_self());
+    $form = new FormValidator(api_get_self().'?'.api_get_cidreq());
     $groupId = api_get_group_id();
     $groups = GroupManager::get_groups();
     if ($groups) {
+        $meetingsInGroup = $bbb->getAllMeetingsInCourse(api_get_course_int_id(), api_get_session_id(), 1);
+        $meetingsGroup = array_column($meetingsInGroup, 'status', 'group_id');
+
+        foreach ($groups as &$groupData) {
+            $itemGroupId = $groupData['id'];
+            if (isset($meetingsGroup[$itemGroupId]) && $meetingsGroup[$itemGroupId] == 1) {
+                $groupData['name'] .= ' ('.get_lang('Active').')';
+            }
+        }
+
         $groupList[0] = get_lang('Select');
         $groupList = array_merge($groupList, array_column($groups, 'name', 'iid'));
+
         $form->addSelect('group_id', get_lang('Groups'), $groupList, ['id' => 'group_select']);
         $form->setDefaults(['group_id' => $groupId]);
         $formToString = $form->returnForm();

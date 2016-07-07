@@ -16,9 +16,6 @@ class Version20151221150100 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $this->addSql(" 
-            ALTER TABLE c_quiz_answer ADD INDEX idx_quiz_qid (question_id)");
-
         $this->addSql("
             UPDATE track_e_attempt a
             INNER JOIN c_quiz_answer qa

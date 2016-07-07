@@ -7,7 +7,6 @@
  * @package chamilo.badge
  */
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/baker.lib.php';
 
 $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
 $skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
@@ -132,9 +131,7 @@ foreach ($userSkills as $index => $skillIssue) {
     }
 
     if ($profile) {
-
         $profileId = $profile->getId();
-
         $levels = $skillLevelRepo->findBy([
             'profile' => $profileId
         ]);
@@ -149,10 +146,13 @@ foreach ($userSkills as $index => $skillIssue) {
             $profileId = key($profileLevel);
             $acquiredLevel[$profileId] = $profileLevel[$profileId];
         }
-
     }
 
-    $formAcquiredLevel = new FormValidator('acquired_level'.$skillIssue->getId(), 'post', $skillIssue->getIssueUrlAll());
+    $formAcquiredLevel = new FormValidator(
+        'acquired_level'.$skillIssue->getId(), 
+        'post', 
+        $skillIssue->getIssueUrlAll()
+    );
     $formAcquiredLevel->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
     $formAcquiredLevel->addHidden('user', $skillIssue->getUser()->getId());
     $formAcquiredLevel->addHidden('issue', $skillIssue->getId());
@@ -161,7 +161,7 @@ foreach ($userSkills as $index => $skillIssue) {
     if ($formAcquiredLevel->validate() && $allowComment) {
         $values = $formAcquiredLevel->exportValues();
 
-        $level = $skillLevelRepo->find(intval($values['acquired_level']));
+        $level = $skillLevelRepo->find($values['acquired_level']);
         $skillIssue->setAcquiredLevel($level);
 
         $entityManager->persist($skillIssue);

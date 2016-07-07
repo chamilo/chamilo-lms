@@ -60,7 +60,7 @@ class Import
         $resultArray = [];
 
         if ($csvReader) {
-            $workflow = new Workflow($csvReader);
+            $workflow = new Workflow\StepAggregator($csvReader);
             $writer = new ArrayWriter($resultArray);
             $workflow->addWriter($writer)->process();
         }

@@ -234,8 +234,7 @@ if (isset($_POST['formSent'])) {
 			if (!empty($courses) && $cvs) {
 				$courses = api_substr($courses, 0, api_strlen($courses) - 1);
 			}
-			$add .= $courses;
-
+			$add = $courses;
 
 			if (in_array($file_type, ['csv', 'xls'])) {
 				$sessionListToExport[] = [

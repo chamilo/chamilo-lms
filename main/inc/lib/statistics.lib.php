@@ -327,6 +327,7 @@ class Statistics
                     $row[6] = get_lang('Unknown');
                 }
             }
+
             $activities[] = $row;
         }
 

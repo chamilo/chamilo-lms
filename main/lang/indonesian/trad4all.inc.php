@@ -1071,7 +1071,6 @@ $TitleManipulateStudentPublication = "Ubah publikasi siswa ini";
 $EnterDataNewChapter = "Masukkan data pada bab baru";
 $EnterDataNewModule = "Masukkan data ke modul baru";
 $CreateNewStep = "Buat sebuah langkah/step baru :";
-$NewDocument = "Dokumen baru";
 $UseAnExistingResource = "Atau gunakan sumberdaya yang ada :";
 $Position = "Posisi";
 $NewChapterCreated = "Bab baru telah dibuat.  Anda kini dapat menambah bab lain atau langkah pada bab tsb.";

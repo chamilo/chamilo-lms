@@ -808,12 +808,15 @@ switch ($action) {
         if ($hideScormExportLink === 'true') {
             api_not_allowed(true);
         }
-        if ($debug > 0) error_log('New LP - export action triggered', 0);
-        if (!$lp_found) { error_log('New LP - No learnpath given for export', 0); require 'lp_list.php'; }
-        else {
+        if ($debug > 0) {
+            error_log('New LP - export action triggered', 0);
+        }
+        if (!$lp_found) {
+            error_log('New LP - No learnpath given for export', 0);
+            require 'lp_list.php';
+        } else {
             $_SESSION['oLP']->scorm_export();
             exit();
-            //require 'lp_list.php';
         }
         break;
     case 'export_to_pdf':

@@ -1400,7 +1400,6 @@ $TitleManipulateStudentPublication = "处理当前作业";
 $EnterDataNewChapter = "请输入章节标题";
 $EnterDataNewModule = "请输入学习路径标题";
 $CreateNewStep = "创建步骤：";
-$NewDocument = "创建文档";
 $UseAnExistingResource = "使用现有资源：";
 $Position = "位置";
 $NewChapterCreated = "章节已创建，您可以添加其他章节或加入步骤。";

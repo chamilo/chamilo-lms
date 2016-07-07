@@ -225,7 +225,7 @@ $AccountBlockedByCaptcha = "Compte bloqué par CAPTCHA";
 $CatchScreenCasts = "Capturer un screenshot/screencast";
 $View = "Visualiser";
 $AmountSubmitted = "Envoyés";
-$InstallWarningCouldNotInterpretPHP = "Attention: l'installateur a détecté une erreur au moment d'essayer de se connecter au fichier de test %s. Il semblerait que le script PHP n'ait pas pu être interprété. Ceci peut être un signe précurseur de problèmes à venir lors de la création d'îlots. Consultez le guide d'installation pour plus d'informations concernant les permissions. Si vous installez un site en configurant une URL qui n'est pas encore habilitée, vous pouvez probablement ignorer ce message.";
+$InstallWarningCouldNotInterpretPHP = "Attention: l'installateur a détecté une erreur au moment d'essayer de se connecter au fichier de test %s. Il semblerait que le script PHP n'ait pas pu être interprété. Ceci peut être un signe précurseur de problèmes à venir lors de la création de cours. Consultez le guide d'installation pour plus d'informations concernant les permissions. Si vous installez un site en configurant une URL qui n'est pas encore habilitée, vous pouvez probablement ignorer ce message.";
 $BeforeX = "Avant %s";
 $AfterX = "Après %s";
 $ExportSettingsAsXLS = "Exporter configuration en XLS";
@@ -240,7 +240,7 @@ $IncorrectScore = "Score réponse incorrecte";
 $CorrectScore = "Score réponse correcte";
 $UseCustomScoreForAllQuestions = "Utiliser le score sur mesure pour toutes les questions";
 $YouShouldAddItemsBeforeAttachAudio = "
-Vous devez ajouter des étapes à votre parcpours avant de pouvoir leur affecter des fichiers audio";
+Vous devez ajouter des étapes à votre parcours avant de pouvoir leur affecter des fichiers audio";
 $InactiveDays = "Joours inactifs";
 $FollowedHumanResources = "DRH suivis";
 $TheTextYouEnteredDoesNotMatchThePicture = "Le texte introduit ne correspond pas à l'image.";
@@ -7758,6 +7758,10 @@ $SSOSubclassTitle = "Single Sign On: Sous-classe";
 $SSOSubclassComment = "Pour activer une méthode de Single Sign On, vous devrez créer une sous-classe dans main/auth/sso/ basée sur la classe par défaut. Indiquez ici le nom de la sous-classe. Par exemple, si le fichier se nomme sso.Drupal.class.php, indiquez 'Drupal' dans ce champ.";
 $CourseCreationSplashScreenTitle = "Écran d'accueil de création de cours";
 $CourseCreationSplashScreenComment = "L'écran d'accueil de création de cours montre une série d'options suggérées à l'enseignant lorsqu'il vient de créer un nouveau cours. Désactivez cette option si vous souhaitez envoyer directement les enseignants sur la page principale du cours.";
+$WorksReport = "Rapport de travaux";
+$AccumulateScormTime = "Temps cumulatif SCORM";
+$AccumulateScormTimeInfo = "Si activé, le temps de session pour les parcours SCORM sera cumulatif. Sinon, il sera uniquement compté depuis le dernier temps de connexion.";
+
 $TCCConnection = 'Connexion à TCC';
 $TCCConnect = 'Se connecter';
 $ForMoreDetailsVisitX = "Pour que nous puissions mieux te connaître et te proposer un parcours sur mesure, tu dois d’abord remplir ce questionnaire %s.

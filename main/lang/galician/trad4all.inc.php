@@ -2474,7 +2474,6 @@ $TitleManipulateStudentPublication = "Manipular a actual publicación de estudan
 $EnterDataNewChapter = "Introduza os datos do novo capítulo";
 $EnterDataNewModule = "Introduza os datos do novo módulo";
 $CreateNewStep = " \tCrear un novo paso :";
-$NewDocument = "Novo documento";
 $UseAnExistingResource = " \tOu use un recurso xa existente :";
 $Position = "Posición";
 $NewChapterCreated = "Creouse o capítulo novo. Agora pode engadir outro capítulo ou un paso.";

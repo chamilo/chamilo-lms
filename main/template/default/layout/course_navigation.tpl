@@ -2,8 +2,7 @@
 {% if show_header == true %}
 
     {% if show_course_shortcut is not null %}
-        <div class="col-md-12">
-            
+        <div class="nav-tools">
             {{ show_course_shortcut }}
         </div>
     {% endif %}

@@ -1986,7 +1986,6 @@ $TitleManipulateStudentPublication = "Modificar el trabayu actual";
 $EnterDataNewChapter = "Escriba los datos del módulu nuevu";
 $EnterDataNewModule = "Escriba los datos del módulu nuevu";
 $CreateNewStep = "Crear un recursu nuevu :";
-$NewDocument = "Documentu nuevu";
 $UseAnExistingResource = "O usar un recursu que yá esiste :";
 $Position = "Posición";
 $NewChapterCreated = "El módulu nuevu creóse. Agora pue amestar un elementu o crear otru módulu.";

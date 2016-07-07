@@ -78,7 +78,7 @@ if (!empty($hook)) {
 }
 
 /* Users */
-$blocks['users']['icon'] = Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_MEDIUM, false);
+$blocks['users']['icon'] = Display::return_icon('members.png', get_lang('Users'), array(), ICON_SIZE_MEDIUM, false);
 $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 $blocks['users']['class'] = 'block-admin-users';
 
@@ -350,11 +350,9 @@ if (api_is_platform_admin()) {
 
     $items[] = array('url' => 'archive_cleanup.php', 'label' => get_lang('ArchiveDirCleanup'));
     $items[] = array('url' => 'resource_sequence.php', 'label' => get_lang('ResourcesSequencing'));
+    $items[] = ['url' => 'email_tester.php', 'label' => get_lang('EMailTester')];
 
-    if (isset($_configuration['db_manager_enabled']) &&
-        $_configuration['db_manager_enabled'] == true &&
-        api_is_global_platform_admin()
-    ) {
+    if (api_get_configuration_value('db_manager_enabled') == true && api_is_global_platform_admin()) {
         $host = $_configuration['db_host'];
         $username = $_configuration['db_user'];
         $databaseName = $_configuration['main_database'];
@@ -405,34 +403,47 @@ if (api_is_platform_admin()) {
     /* Plugins */
     global $_plugins;
     if (isset($_plugins['menu_administrator']) && count($_plugins['menu_administrator']) > 0) {
-        $blocks['plugins']['icon'] = Display::return_icon(
-            'plugins.png',
-             get_lang('Plugins'),
-             array(),
-             ICON_SIZE_MEDIUM,
-             false
-        );
-        $blocks['plugins']['label'] = api_ucfirst(get_lang('Plugins'));
-        $blocks['plugins']['class'] = 'block-admin-platform';
-        $blocks['plugins']['editable'] = true;
+        $menuAdministratorItems = [];
 
-        $plugin_obj = new AppPlugin();
-        $items = array();
-        foreach ($_plugins['menu_administrator'] as $plugin_name) {
-            $plugin_info = $plugin_obj->getPluginInfo($plugin_name);
-            $items[] = array(
-                'url' => api_get_path(WEB_CODE_PATH) . '../plugin/'.$plugin_name.'/start.php',
-                'label' => $plugin_info['title']
-            );
+        foreach ($_plugins['menu_administrator'] as $pluginName) {
+            if (!file_exists(api_get_path(SYS_PLUGIN_PATH) . $pluginName . '/start.php')) {
+                continue;
+            }
+
+            $menuAdministratorItems[] = $pluginName;
         }
 
-        $blocks['plugins']['items'] = $items;
-        $blocks['plugins']['extra'] = null;
+        if ($menuAdministratorItems) {
+            $blocks['plugins']['icon'] = Display::return_icon(
+                'plugins.png',
+                get_lang('Plugins'),
+                array(),
+                ICON_SIZE_MEDIUM,
+                false
+            );
+            $blocks['plugins']['label'] = api_ucfirst(get_lang('Plugins'));
+            $blocks['plugins']['class'] = 'block-admin-platform';
+            $blocks['plugins']['editable'] = true;
+
+            $plugin_obj = new AppPlugin();
+            $items = array();
+
+            foreach ($menuAdministratorItems as $plugin_name) {
+                $plugin_info = $plugin_obj->getPluginInfo($plugin_name);
+                $items[] = array(
+                    'url' => api_get_path(WEB_PLUGIN_PATH) . $plugin_name . '/start.php',
+                    'label' => $plugin_info['title']
+                );
+            }
+
+            $blocks['plugins']['items'] = $items;
+            $blocks['plugins']['extra'] = null;
+        }
     }
 
     /* Chamilo.org */
 
-    $blocks['chamilo']['icon'] = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_MEDIUM, false);
+    $blocks['chamilo']['icon'] = Display::return_icon('platform.png', 'Chamilo.org', array(), ICON_SIZE_MEDIUM, false);
     $blocks['chamilo']['label'] = 'Chamilo.org';
     $blocks['chamilo']['class'] = 'block-admin-chamilo';
 
@@ -456,7 +467,7 @@ if (api_is_platform_admin()) {
     $blocks['chamilo']['search_form'] = null;
 
     // Version check
-    $blocks['version_check']['icon'] = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_MEDIUM, false);
+    $blocks['version_check']['icon'] = Display::return_icon('platform.png', 'Chamilo.org', array(), ICON_SIZE_MEDIUM, false);
     $blocks['version_check']['label'] = get_lang('VersionCheck');
     $blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;

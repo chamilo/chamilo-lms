@@ -1874,7 +1874,6 @@ $TitleManipulateStudentPublication = "Rediģēt mājas darbu";
 $EnterDataNewChapter = "Pievienot tēmai nodaļu";
 $EnterDataNewModule = "Ievadīt informāciju par nodaļu";
 $CreateNewStep = "Veidojiet mācību tēmas saturu pakāpeniski.<br>Pievienojiet saturam:<br><br>___jaunu interaktīvu mācību satura lapu ar teksta un mēdiju elementiem:";
-$NewDocument = "- Pievienot jaunu mācību satura lapu,<br>-- jeb, materiālu no mapes  Dokumenti, zemāk";
 $UseAnExistingResource = "___ jau iepriekš sagatavotus resursus :";
 $Position = "Vieta satura rādītājā";
 $NewChapterCreated = "Jauna tēmas nodaļa ir izveidota. Jūs variet pievienot jaunu apakšnodaļu vai apgūstamu mācību elementu";

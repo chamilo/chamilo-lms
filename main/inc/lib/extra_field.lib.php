@@ -122,6 +122,8 @@ class ExtraField extends Model
             case 'lp_item':
                 $this->extraFieldType = EntityExtraField::LP_ITEM_FIELD_TYPE;
                 break;
+            case 'skill':
+                $this->extraFieldType = EntityExtraField::SKILL_FIELD_TYPE;
         }
 
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
@@ -149,7 +151,8 @@ class ExtraField extends Model
             'question',
             'lp',
             'calendar_event',
-            'lp_item'
+            'lp_item',
+            'skill'
         );
     }
 
@@ -286,7 +289,7 @@ class ExtraField extends Model
     }
 
     /**
-     * Get all the field info for User Tags
+     * Get all the field info for tags
      * @param string $variable
      *
      * @return array|bool
@@ -410,8 +413,12 @@ class ExtraField extends Model
 
         switch ($handler) {
             case 'course':
+                // no break
             case 'session':
+                // no break
             case 'user':
+                // no break
+            case 'skill':
                 break;
         }
 
@@ -2636,5 +2643,36 @@ JAVASCRIPT;
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
+    }
+
+    /**
+     * @param int $fieldId
+     * @param int $tagId
+     *
+     * @return array
+     */
+    public function getAllSkillPerTag($fieldId, $tagId)
+    {
+        $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
+        $tagRelXtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
+        $fieldId = intval($fieldId);
+        $tagId = intval($tagId);
+
+        $sql = "SELECT s.id
+                FROM $skillTable s INNER JOIN $tagRelXtraTable t
+                ON t.item_id = s.id
+                WHERE tag_id = $tagId AND t.field_id = $fieldId;
+        ";
+
+        $result = Database::query($sql);
+        $result = Database::store_result($result, 'ASSOC');
+
+        $skillList = [];
+
+        foreach ($result as $index => $value) {
+            $skillList[$value['id']] = $value['id'];
+        }
+
+        return $skillList;
     }
 }

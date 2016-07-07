@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
@@ -55,8 +53,6 @@ $interbreadcrumb[] = array(
 
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
-Display :: display_header(null);
-
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'">'.
     Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
 
@@ -65,17 +61,17 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
     $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin;
     $actionsRight = Display::url(Display::return_icon('upload_package.png', get_lang('UploadMyAssignment'), null, ICON_SIZE_MEDIUM) . get_lang('UploadMyAssignment'), $url, array('class'=>'btn-toolbar'));
 }
-echo Display::toolbarAction('toolbar-work', array(0 => $actionsLeft . $actionsRight));
+
+$tpl = new Template('');
+
+$content = Display::toolbarAction('toolbar-work', array($actionsLeft . $actionsRight));
 if (!empty($my_folder_data['title'])) {
-    echo Display::page_subheader($my_folder_data['title']);
+    $content .= Display::page_subheader($my_folder_data['title']);
 }
-echo Session::read('message');
-Session::erase('message');
+
 if (!empty($my_folder_data['description'])) {
     $contentWork = Security::remove_XSS($my_folder_data['description']);
-    $html = '';
-    $html .= Display::panel($contentWork, get_lang('Description'));
-    echo $html;
+    $content .= Display::panel($contentWork, get_lang('Description'));
 }
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
@@ -94,7 +90,7 @@ switch ($action) {
 }
 
 $result = getWorkDateValidationStatus($work_data);
-echo $result['message'];
+$content .= $result['message'];
 $check_qualification = intval($my_folder_data['qualification']);
 
 if (!api_is_invitee()) {
@@ -145,20 +141,16 @@ if (!api_is_invitee()) {
     );
 
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();
-    ?>
+    $content .= '
         <script>
             $(function() {
-            <?php
-                echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
-            ?>
+                '.Display::grid_js('results', $url, $columns, $column_model, $extra_params).'            
             });
         </script>
-    <?php
+    ';
 
-    $html = '';
     $tableWork = Display::grid_html('results');
-    $html = Display::panel($tableWork);
-    echo $html;
+    $content .= Display::panel($tableWork);
 }
-
-Display :: display_footer();
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

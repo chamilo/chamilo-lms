@@ -8,7 +8,6 @@
 require_once '../inc/global.inc.php';
 
 use \Chamilo\CoreBundle\Entity\Session;
-use \Doctrine\Common\Collections\Criteria;
 
 api_block_anonymous_users(true);
 
@@ -46,12 +45,7 @@ if ($session) {
     foreach ($sessionCourses as $sessionCourse) {
         $course = $sessionCourse->getCourse();
         $coursesInfo[$course->getId()] =  $course->getCode();
-        $criteria = Criteria::create()->where(
-            Criteria::expr()->eq("status", Session::STUDENT)
-        );
-        $userCourseSubscriptions = $session
-            ->getUserCourseSubscriptions()
-            ->matching($criteria);
+        $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
 
         foreach ($userCourseSubscriptions as $userCourseSubscription) {
             $user = $userCourseSubscription->getUser();

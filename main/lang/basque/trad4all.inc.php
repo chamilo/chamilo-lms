@@ -2048,7 +2048,6 @@ $TitleManipulateStudentPublication = "Editatu egin beharreko lana";
 $EnterDataNewChapter = "Sartu atalaren ezaugarriak";
 $EnterDataNewModule = "Sartu atalaren inguruko informazioa";
 $CreateNewStep = "Sortu beste urrats bat";
-$NewDocument = "Dokumentu berria";
 $UseAnExistingResource = "Edo erabili lehendik badagoen baliabide bat";
 $Position = "Kokalekua";
 $NewChapterCreated = "Oraintxe atal bat sortu da. Beste atal bat edo beste ikaskuntza objketuak gehitzen jarraitu dezakezu.";

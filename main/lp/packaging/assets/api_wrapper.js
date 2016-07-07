@@ -11,11 +11,10 @@
  * Find the SCO functions (startTimer, computeTime, etc in the second section)
  * Find the Chamilo-proper functions (checkAnswers, etc in the third section)
  */
-var _debug = false;
+var _debug = true;
 var findAPITries = 0;
 var _apiHandle = null; //private variable
 var errMsgLocate = "Unable to locate the LMS's API implementation";
-
 var _NoError = 0;
 var _GeneralException = 101;
 var _ServerBusy = 102;
@@ -28,17 +27,18 @@ var _InvalidSetValue = 402;
 var _ElementIsReadOnly = 403;
 var _ElementIsWriteOnly = 404;
 var _IncorrectDataType = 405;
+
 /**
  * Gets the API handle right into the local API object and ensure there is only one.
  * Using the singleton pattern to ensure there's only one API object.
  * @return	object The API object as given by the LMS
  */
-var API = new function ()
+var API = new function()
 {
-    if (_apiHandle == null)
-    {
+    if (_apiHandle == null) {
         _apiHandle = getAPI();
     }
+
     return _apiHandle;
 }
 
@@ -49,11 +49,9 @@ var API = new function ()
  */
 function findAPI(win)
 {
-    while((win.API == null) && (win.parent != null) && (win.parent != win))
-    {
+    while((win.API == null) && (win.parent != null) && (win.parent != win)) {
         findAPITries++;
-        if(findAPITries>10)
-        {
+        if (findAPITries>10) {
             alert("Error finding API - too deeply nested");
             return null;
         }
@@ -61,6 +59,7 @@ function findAPI(win)
     }
     return win.API;
 }
+
 /**
  * Gets the API from the current window/frame or from parent objects if not found
  * @return	object	The API object recovered from the LMS's implementation of the SCORM API
@@ -70,13 +69,11 @@ function getAPI()
     //window is the global/root object of the current window/frame
     var MyAPI = findAPI(window);
     //look through parents if any
-    if((MyAPI == null) && (window.opener != null) && (typeof(window.opener) != "undefined"))
-    {
+    if ((MyAPI == null) && (window.opener != null) && (typeof(window.opener) != "undefined")) {
         MyAPI = findAPI(window.opener);
     }
     //still not found? error message
-    if(MyAPI == null)
-    {
+    if (MyAPI == null) {
         alert("Unable to find SCORM API adapter.\nPlease check your LMS is considering this page as SCORM and providing the right JavaScript interface.")
     }
     return MyAPI;
@@ -87,71 +84,60 @@ function getAPI()
  */
 function ErrorHandler()
 {
-    if(API == null)
-    {
+    if (API == null) {
         alert("Unable to locate the LMS's API. Cannot determine LMS error code");
         return;
     }
     var errCode = API.LMSGetLastError().toString();
-    if(errCode != _NoError)
-    {
-        if(errCode == _NotImplementedError)
-        {
+    if (errCode != _NoError) {
+        if (errCode == _NotImplementedError) {
             var errDescription = "The LMS doesn't support this feature";
-            if(_debug)
-            {
+            if (_debug) {
                 errDescription += "\n";
                 errDescription += api.LMSGetDiagnostic(null);
             }
-            alert (errDescription);
-        }
-        else
-        {
+            console.log(errDescription);
+        } else {
             var errDescription = API.LMSGetErrorString(errCode);
-            if(_debug)
-            {
+            if (_debug) {
                 errDescription += "\n";
                 errDescription += api.LMSGetDiagnostic(null);
             }
-            alert (errDescription);
+            console.log(errDescription);
         }
     }
     return errCode;
 }
+
 /**
  * Calls the LMSInitialize method of the LMS's API object
  * @return string	The string value of the LMS returned value or false if error (should be "true" otherwise)
  */
 function doLMSInitialize()
 {
-    if(API == null)
-    {
+    if (API == null) {
         alert(errMsgLocate + "\nLMSInitialize failed");
         return false;
     }
     var result = API.LMSInitialize("");
-    if(result.toString() != "true")
-    {
+    if (result.toString() != "true") {
         var err = ErrorHandler();
     }
     return result.toString();
 }
+
 /**
  * Calls the LMSFinish method of the LMS's API object
  * @return	string	The string value of the LMS return value, or false if error (should be "true" otherwise)
  */
 function doLMSFinish()
 {
-    if(API == null)
-    {
+    if (API == null) {
         alert(errMsgLocate + "\nLMSFinish failed");
         return false;
-    }
-    else
-    {
+    } else {
         var result = API.LMSFinish('');
-        if(result.toString() != "true")
-        {
+        if (result.toString() != "true") {
             var err = ErrorHandler();
         }
     }
@@ -164,28 +150,21 @@ function doLMSFinish()
  */
 function doLMSGetValue(name)
 {
-    if (API == null)
-    {
+    if (API == null) {
         alert(errMsgLocate + "\nLMSGetValue was not successful.");
         return "";
-    }
-    else
-    {
+    } else {
         var value = API.LMSGetValue(name);
         var errCode = API.LMSGetLastError().toString();
-        if (errCode != _NoError)
-        {
+        if (errCode != _NoError) {
             // an error was encountered so display the error description
             var errDescription = API.LMSGetErrorString(errCode);
-            alert("LMSGetValue("+name+") failed. \n"+ errDescription);
+            alert("LMSGetValue(" + name + ") failed. \n" + errDescription);
             return "";
-        }
-        else
-        {
-            return value.toString();
         }
     }
 }
+
 /**
  * Calls the LMSSetValue method of the API object
  * @param	string	The name of the SCORM parameter to set
@@ -194,74 +173,68 @@ function doLMSGetValue(name)
  */
 function doLMSSetValue(name, value)
 {
-   if (API == null)
-   {
-      alert("Unable to locate the LMS's API Implementation.\nLMSSetValue was not successful.");
-      return;
-   }
-   else
-   {
-      var result = API.LMSSetValue(name, value);
-      if (result.toString() != "true")
-      {
-         var err = ErrorHandler();
-      }
-   }
-   return;
+    if (API == null) {
+        alert("Unable to locate the LMS's API Implementation.\nLMSSetValue was not successful.");
+        return;
+    } else {
+        var result = API.LMSSetValue(name, value);
+        if (result.toString() != "true") {
+            var err = ErrorHandler();
+        }
+    }
+    return;
 }
+
 /**
  * Calls the LMSCommit method
  */
 function doLMSCommit()
 {
-    if(API == null)
-    {
-        alert(errMsgLocate +"\nLMSCommit was not successful.");
+    if (API == null) {
+        alert(errMsgLocate + "\nLMSCommit was not successful.");
         return "false";
-    }
-    else
-    {
+    } else {
         var result = API.LMSCommit("");
-        if (result != "true")
-        {
+        if (result != "true") {
             var err = ErrorHandler();
         }
     }
     return result.toString();
 }
+
 /**
  * Calls GetLastError()
  */
 function doLMSGetLastError()
 {
-    if (API == null)
-    {
-        alert(errMsgLocate + "\nLMSGetLastError was not successful.");      //since we can't get the error code from the LMS, return a general error
+    if (API == null) {
+        alert(errMsgLocate + "\nLMSGetLastError was not successful.");
+        //since we can't get the error code from the LMS, return a general error
         return _GeneralError;
     }
     return API.LMSGetLastError().toString();
 }
+
 /**
  * Calls LMSGetErrorString()
  */
 function doLMSGetErrorString(errorCode)
 {
-   if (API == null)
-   {
-      alert(errMsgLocate + "\nLMSGetErrorString was not successful.");
-   }
+    if (API == null) {
+        alert(errMsgLocate + "\nLMSGetErrorString was not successful.");
+    }
 
    return API.LMSGetErrorString(errorCode).toString();
 }
+
 /**
  * Calls LMSGetDiagnostic()
  */
 function doLMSGetDiagnostic(errorCode)
 {
-   if (API == null)
-   {
-      alert(errMsgLocate + "\nLMSGetDiagnostic was not successful.");
-   }
+    if (API == null) {
+        alert(errMsgLocate + "\nLMSGetDiagnostic was not successful.");
+    }
 
    return API.LMSGetDiagnostic(errorCode).toString();
 }
@@ -278,17 +251,16 @@ var exitPageStatus;
 function loadPage()
 {
     var result = doLMSInitialize();
-    if(result)
-    {
+    if (result) {
         var status = doLMSGetValue("cmi.core.lesson_status");
-        if(status == "not attempted")
-        {
-            doLMSSetValue("cmi.core.lesson_status","incomplete");
+        if (status == "not attempted") {
+            doLMSSetValue("cmi.core.lesson_status", "incomplete");
         }
         exitPageStatus = false;
         startTimer();
     }
 }
+
 /**
  * Starts the local timer
  */
@@ -296,23 +268,21 @@ function startTimer()
 {
     startTime = new Date().getTime();
 }
+
 /**
  * Calculates the total time and sends the result to the LMS
  */
 function computeTime()
 {
-       if ( startTime != 0 )
-       {
-          var currentDate = new Date().getTime();
-          var elapsedSeconds = ( (currentDate - startTime) / 1000 );
-          var formattedTime = convertTotalSeconds( elapsedSeconds );
-       }
-       else
-       {
-          formattedTime = "00:00:00.0";
-       }
+    if (startTime != 0) {
+        var currentDate = new Date().getTime();
+        var elapsedSeconds = ( (currentDate - startTime) / 1000 );
+        var formattedTime = convertTotalSeconds(elapsedSeconds);
+    } else {
+        formattedTime = "00:00:00.0";
+    }
 
-       doLMSSetValue( "cmi.core.session_time", formattedTime );
+    doLMSSetValue( "cmi.core.session_time", formattedTime );
 }
 /**
  * Formats the time in a SCORM time format
@@ -330,31 +300,28 @@ function convertTotalSeconds(ts)
     var strWholeSec = strSec;
     var strFractionSec = "";
 
-    if (strSec.indexOf(".") != -1)
-    {
-        strWholeSec =  strSec.substring(0, strSec.indexOf("."));
-        strFractionSec = strSec.substring(strSec.indexOf(".")+1, strSec.length);
+    if (strSec.indexOf(".") != -1) {
+        strWholeSec = strSec.substring(0, strSec.indexOf("."));
+        strFractionSec = strSec.substring(strSec.indexOf(".") + 1, strSec.length);
     }
-    if (strWholeSec.length < 2)
-    {
+    if (strWholeSec.length < 2) {
         strWholeSec = "0" + strWholeSec;
     }
     strSec = strWholeSec;
-    if (strFractionSec.length)
-    {
-        strSec = strSec+ "." + strFractionSec;
+    if (strFractionSec.length) {
+        strSec = strSec + "." + strFractionSec;
     }
-    if ((ts % 3600) != 0 )
+    if ((ts % 3600) != 0)
         var hour = 0;
     else var hour = (ts / 3600);
-    if ( (tmp % 60) != 0 )
+    if ((tmp % 60) != 0)
         var min = 0;
     else var min = (tmp / 60);
     if ((new String(hour)).length < 2)
-        hour = "0"+hour;
+        hour = "0" + hour;
     if ((new String(min)).length < 2)
-        min = "0"+min;
-    var rtnVal = hour+":"+min+":"+strSec;
+        min = "0" + min;
+    var rtnVal = hour + ":" + min + ":" + strSec;
     return rtnVal
 }
 /**
@@ -370,6 +337,7 @@ function doBack()
     result = doLMSCommit();
     result = doLMSFinish();
 }
+
 /**
  * Handles the closure of the current SCO before an interruption. This is only useful if the LMS
  * deals with the cmi.core.exit, cmi.core.lesson_status and cmi.core.lesson_mode *and* the SCO
@@ -390,6 +358,7 @@ function doContinue(status)
     result = doLMSCommit();
     result = doLMSFinish();
 }
+
 /**
  * handles the recording of everything on a normal shutdown
  */
@@ -402,6 +371,7 @@ function doQuit()
     result = doLMSCommit();
     result = doLMSFinish();
 }
+
 /**
  * Called upon unload event from body element
  */
@@ -429,8 +399,14 @@ function checkAnswers(interrupted)
     var tmpScore = 0;
     var status = 'not attempted';
     var scoreMax = 0;
-    for(var i=0; i<questions.length;i++) {
-        if(questions[i] != undefined && questions[i] != null){
+
+    if (_debug) {
+        console.log('questions_answers_correct:');
+        console.log(questions_answers_correct);
+    }
+
+    for (var i=0; i < questions.length; i++) {
+        if (questions[i] != undefined && questions[i] != null){
             var idQuestion = questions[i];
             var type = questions_types[idQuestion];
             var interactionScore = 0;
@@ -438,183 +414,150 @@ function checkAnswers(interrupted)
             var interactionCorrectResponses = '';
             var interactionType = '';
 
+            if (_debug) {
+                console.log('Type: ' +type);
+                console.log('idQuestion: ' +idQuestion);
+                console.log('questions_answers: ');
+                console.log(questions_answers[idQuestion]);
+                console.log('questions_answers_ponderation: ');
+                console.log(questions_answers_ponderation[idQuestion]);
+                console.log('questions_answers_correct: ');
+                console.log(questions_answers_correct[idQuestion]);
+            }
+
             if (type == 'mcma') {
-                var interactionType = 'choice';
+                interactionType = 'choice';
                 var myScore = 0;
-                for(var j=0; j<questions_answers[idQuestion].length;j++)
-                {
+                for(var j=0; j<questions_answers[idQuestion].length;j++) {
                     var idAnswer = questions_answers[idQuestion][j];
                     var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
-                    if(answer.checked)
-                    {
+                    if (answer.checked) {
                         interactionAnswers += idAnswer+'__|';// changed by isaac flores
-                        myScore +=questions_answers_ponderation[idQuestion][idAnswer];
-
-                        /*for(k=0;k<questions_answers_correct[idQuestion].length;k++)
-                        {
-                            if(questions_answers_correct[idQuestion][k] == idAnswer)
-                            {
-                                if(questions_answers_ponderation[idQuestion][idAnswer])
-                                {
-                                    myScore += questions_answers_ponderation[idQuestion][idAnswer];
-                                }
-                                else
-                                {
-                                    myScore ++;
-                                }
-                            }
-                        }*/
+                        myScore += questions_answers_ponderation[idQuestion][idAnswer];
                     }
                 }
                 interactionScore = myScore;
-                //correct responses work by pattern, see SCORM Runtime Env Doc
-                //for(k=0;k<questions_answers_correct[idQuestion].length;k++)
-                //{
-                //	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
-                //}
                 scoreMax += questions_score_max[idQuestion];
-            }
-            else if(type == 'mcua')
-            {
-                var interactionType = 'choice';
+                if (_debug) {
+                    console.log("Score: "+myScore);
+                }
+            } else if (type == 'mcua') {
+                interactionType = 'choice';
                 var myScore = 0;
-                for(var j=0; j<questions_answers[idQuestion].length;j++)
-                {
+                for (var j=0; j<questions_answers[idQuestion].length;j++) {
                     var idAnswer = questions_answers[idQuestion][j];
                     var answer = document.getElementById('question_'+(idQuestion)+'_unique_'+(idAnswer));
-                    if(answer.checked)
-                    {
+                    if (answer.checked) {
                         interactionAnswers += idAnswer;
-                        if(questions_answers_correct[idQuestion] == idAnswer)
-                        {
-                            if(questions_answers_ponderation[idQuestion][idAnswer])
-                            {
+                        if (_debug) {
+                            console.log("idAnswer: "+idAnswer);
+                            console.log("questions_answers_correct: "+questions_answers_correct[idQuestion][idAnswer]);
+                        }
+                        if (questions_answers_correct[idQuestion][idAnswer] == idAnswer) {
+                            if (questions_answers_ponderation[idQuestion][idAnswer]) {
                                 myScore += questions_answers_ponderation[idQuestion][idAnswer];
-                            }
-                            else
-                            {
-                                myScore ++;
+                            } else {
+                                myScore++;
                             }
                         }
                     }
                 }
+                if (_debug) {
+                    console.log("Score: "+myScore);
+                }
                 interactionScore = myScore;
-                //correct responses work by pattern, see SCORM Runtime Env Doc
-                //interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
                 scoreMax += questions_score_max[idQuestion];
-            }
-            else if(type == 'tf')
-            {
-                var interactionType = 'true-false';
+            } else if (type == 'tf') {
+                interactionType = 'true-false';
                 var myScore = 0;
-                for(var j=0; j<questions_answers[idQuestion].length;j++)
-                {
+                for (var j = 0; j < questions_answers[idQuestion].length; j++) {
                     var idAnswer = questions_answers[idQuestion][j];
-                    var answer = document.getElementById('question_'+(idQuestion)+'_tf_'+(idAnswer));
-                    if(answer.checked.value)
-                    {
+                    var answer = document.getElementById('question_' + idQuestion + '_tf_' + (idAnswer));
+                    if (answer.checked.value) {
                         interactionAnswers += idAnswer;
-                        for(k=0;k<questions_answers_correct[idQuestion].length;k++)
-                        {
-                            if(questions_answers_correct[idQuestion][k] == idAnswer)
-                            {
-                                if(questions_answers_ponderation[idQuestion][idAnswer])
-                                {
+                        for (k = 0; k < questions_answers_correct[idQuestion].length; k++) {
+                            if (questions_answers_correct[idQuestion][k] == idAnswer) {
+                                if (questions_answers_ponderation[idQuestion][idAnswer]) {
                                     myScore += questions_answers_ponderation[idQuestion][idAnswer];
-                                }
-                                else
-                                {
-                                    myScore ++;
+                                } else {
+                                    myScore++;
                                 }
                             }
                         }
                     }
                 }
+                if (_debug) {
+                    console.log("Score: "+myScore);
+                }
                 interactionScore = myScore;
-                //correct responses work by pattern, see SCORM Runtime Env Doc
-                //interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
                 scoreMax += questions_score_max[idQuestion];
-            }
-            else if(type == 'fib')
-            {
-                var interactionType = 'fill-in';
+            } else if (type == 'fib') {
+                interactionType = 'fill-in';
                 var myScore = 0;
-                for(var j=0; j<questions_answers[idQuestion].length;j++)
-                {
+                for (var j = 0; j < questions_answers[idQuestion].length; j++) {
                     var idAnswer = questions_answers[idQuestion][j];
                     var answer = document.getElementById('question_'+(idQuestion)+'_fib_'+(idAnswer));
-                    if(answer.value)
-                    {
-                        interactionAnswers += answer.value+'__|';//changed by isaac flores
-                        for(k=0;k<questions_answers_correct[idQuestion].length;k++)
-                        {
-                            if(questions_answers_correct[idQuestion][k] == answer.value)
-                            {
-                                if(questions_answers_ponderation[idQuestion][idAnswer])
-                                {
+                    if (answer.value) {
+                        interactionAnswers += answer.value + '__|';//changed by isaac flores
+                        for (k = 0; k < questions_answers_correct[idQuestion].length; k++) {
+                            if (questions_answers_correct[idQuestion][k] == answer.value) {
+                                if (questions_answers_ponderation[idQuestion][idAnswer]) {
                                     myScore += questions_answers_ponderation[idQuestion][idAnswer];
-                                }
-                                else
-                                {
-                                    myScore ++;
+                                } else {
+                                    myScore++;
                                 }
                             }
                         }
                     }
                 }
+                if (_debug) {
+                    console.log("Score: "+myScore);
+                }
                 interactionScore = myScore;
-                //correct responses work by pattern, see SCORM Runtime Env Doc
-                //for(k=0;k<questions_answers_correct[idQuestion].length;k++)
-                //{
-                //	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
-                //}
                 scoreMax += questions_score_max[idQuestion];
-            }
-            else if(type == 'matching')
-            {
-                var interactionType = 'matching';
+            } else if (type == 'matching') {
+                interactionType = 'matching';
                 var myScore = 0;
-                for(var j=0; j<questions_answers[idQuestion].length;j++)
-                {
+                for (var j = 0; j < questions_answers[idQuestion].length; j++) {
                     var idAnswer = questions_answers[idQuestion][j];
-                    var answer = document.getElementById('question_'+(idQuestion)+'_matching_'+(idAnswer));
-                    if(answer && answer.value)
-                    {
-                        interactionAnswers += answer.value+'__|';//changed by isaac flores
-                        for(k=0;k<questions_answers_correct[idQuestion].length;k++)
-                        {
+                    var answer = document.getElementById('question_' + (idQuestion) + '_matching_' + (idAnswer));
+                    if (answer && answer.value) {
+                        interactionAnswers += answer.value + '__|';//changed by isaac flores
+                        for (k = 0; k < questions_answers_correct[idQuestion].length; k++) {
                             var left = questions_answers_correct[idQuestion][k][0];
                             var right = questions_answers_correct[idQuestion][k][1];
-                            if(left == idAnswer && right == answer.value)
-                            {
-                                if(questions_answers_ponderation[idQuestion][idAnswer])
-                                {
+                            if (left == idAnswer && right == answer.value) {
+                                if (questions_answers_ponderation[idQuestion][idAnswer]) {
                                     myScore += questions_answers_ponderation[idQuestion][idAnswer];
-                                }
-                                else
-                                {
-                                    myScore ++;
+                                } else {
+                                    myScore++;
                                 }
                             }
                         }
                     }
                 }
+                if (_debug) {
+                    console.log("Score: "+myScore);
+                }
                 interactionScore = myScore;
-                //correct responses work by pattern, see SCORM Runtime Env Doc
-                //for(k=0;k<questions_answers_correct[idQuestion].length;k++)
-                //{
-                //	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
-                //}
                 scoreMax += questions_score_max[idQuestion];
-            } else if(type == 'free') {
+            } else if (type == 'free') {
                 //ignore for now as a score cannot be given
-                var interactionType = 'likert';
+                interactionType = 'free';
+                var answer = document.getElementById('question_'+(idQuestion)+'_free');
+                if (answer && answer.value) {
+                    interactionAnswers += answer.value
+                }
+
+                //interactionScore = questions_score_max[idQuestion];
                 interactionScore = 0;
+                scoreMax += questions_score_max[idQuestion];
+
                 //interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').value;
                 //correct responses work by pattern, see SCORM Runtime Env Doc
                 //interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
-            } else if(type == 'hotspot') {
-                var interactionType = 'sequencing';
+            } else if (type == 'hotspot') {
+                interactionType = 'sequencing';
                 interactionScore = 0;
                 //if(question_score && question_score[idQuestion]){
                 //	interactionScore = question_score[idQuestion];
@@ -625,96 +568,82 @@ function checkAnswers(interrupted)
                 //{
                 //	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
                 //}
-            } else if(type == 'exact') {
-                var interactionType = 'exact';
+            } else if (type == 'exact') {
+                interactionType = 'exact';
                 interactionScore = 0;
-                // not yet implemented see scorm_classes.php ScormAnswerMultipleChoice::export() function
-                /*
-
-                var myScore = 0;
                 var real_answers = new Array();
-
-                for(var j=0; j<questions_answers[idQuestion].length;j++) {
+                for (var j = 0; j < questions_answers[idQuestion].length; j++) {
                     var idAnswer = questions_answers[idQuestion][j];
-                    var answer   = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
-                    if (answer.checked) {
-                        if(questions_answers_ponderation[idQuestion][idAnswer] != 0 ) {
+                    var answer = document.getElementById('question_' + (idQuestion) + '_exact_' + (idAnswer));
+
+                    if (answer.checked == true) {
+                        interactionAnswers += idAnswer+', ';
+                        if (questions_answers_correct[idQuestion][idAnswer] != 0) {
                             real_answers[j] = true;
                         } else {
                             real_answers[j] = false;
                         }
                     } else {
-                        if(questions_answers_ponderation[idQuestion][idAnswer] != 0) {
+                        if (questions_answers_correct[idQuestion][idAnswer] != 0) {
                             real_answers[j] = false;
                         } else {
                             real_answers[j] = true;
                         }
                     }
-                    //alert(real_answers[j] +' ' + answer.checked + ' ' + questions_answers_ponderation[idQuestion][idAnswer]);
                 }
 
                 var final_answer = true;
-                for(var z=0; z<real_answers.length ;z++) {
-                     if (!real_answers[z]) {
-                         final_answer = false;
-                     }
-                 }
-
-                 if (final_answer) {
-                     //getting only the first score where we save the weight of all the question
-                    myScore += questions_answers_ponderation[idQuestion][1];
+                for (var z = 0; z < real_answers.length; z++) {
+                    if (real_answers[z] == false) {
+                        final_answer = false;
+                    }
                 }
-
-                interactionScore = myScore;
-                //correct responses work by pattern, see SCORM Runtime Env Doc
-                //for(k=0;k<questions_answers_correct[idQuestion].length;k++)
-                //{
-                //	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
-                //}
+                interactionScore = 0;
+                console.log(real_answers);
+                if (final_answer) {
+                     //getting only the first score where we save the weight of all the question
+                     interactionScore = questions_answers_ponderation[idQuestion][1];
+                }
+                if (_debug) {
+                    console.log("Score: "+interactionScore);
+                }
                 scoreMax += questions_score_max[idQuestion];
-                */
-            }
-            else
-            {
-                //
             }
             tmpScore += interactionScore;
 
-            doLMSSetValue('cmi.interactions.'+idQuestion+'.id','Q'+idQuestion);
-            doLMSSetValue('cmi.interactions.'+idQuestion+'.type',interactionType);
-            doLMSSetValue('cmi.interactions.'+idQuestion+'.student_response',interactionAnswers);
-            doLMSSetValue('cmi.interactions.'+idQuestion+'.result',interactionScore);
-            //correct responses work by pattern, see SCORM Runtime Env Doc
-            //doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',questions_answers_correct[idQuestion]);
-            //doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',interactionCorrectResponses);
+            doLMSSetValue('cmi.interactions.'+idQuestion+'.id', 'Q'+idQuestion);
+            doLMSSetValue('cmi.interactions.'+idQuestion+'.type', interactionType);
+            doLMSSetValue('cmi.interactions.'+idQuestion+'.student_response', interactionAnswers);
+            doLMSSetValue('cmi.interactions.'+idQuestion+'.result', interactionScore);
         }
     }
-    doLMSSetValue('cmi.core.score.min',0);
-    doLMSSetValue('cmi.core.score.max',scoreMax);
-    doLMSSetValue('cmi.core.score.raw',tmpScore);
-    //doLMSSetValue('cmi.student_data.mastery_score',(scoreMax*0.7));
+    doLMSSetValue('cmi.core.score.min', 0);
+    doLMSSetValue('cmi.core.score.max', scoreMax);
+    doLMSSetValue('cmi.core.score.raw', tmpScore);
+
     //get status
     var mastery_score = doLMSGetValue('cmi.student_data.mastery_score');
-    if(mastery_score <= 0)
-    {
-        mastery_score = (scoreMax*0.80);
+    if (mastery_score <= 0) {
+        mastery_score = (scoreMax * 0.80);
     }
-    if(tmpScore > mastery_score)
-    {
+    if (tmpScore > mastery_score) {
         status = 'passed';
-    }
-    else
-    {
+    } else {
         status = 'failed';
     }
-    doLMSSetValue('cmi.core.lesson_status',status);
 
-    if (interrupted && (status != 'completed') && (status != 'passed'))
-    {
-        doLMSSetValue('cmi.core.exit','suspended');
+    if (_debug) {
+        console.log('student_score: ' + tmpScore);
+        console.log('mastery_score: ' + mastery_score);
+        console.log('cmi.core.score.max: ' + scoreMax);
+        console.log('cmi.core.lesson_status: ' + status);
     }
-    else
-    {
+
+    doLMSSetValue('cmi.core.lesson_status', status);
+
+    if (interrupted && (status != 'completed') && (status != 'passed')) {
+        doLMSSetValue('cmi.core.exit', 'suspended');
     }
+
     return false; //do not submit the form
 }

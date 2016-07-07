@@ -90,14 +90,20 @@ class CoursesController
      * @internal param \action $string
      * @internal param \Category $string code (optional)
      */
-    public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null, $limit = array())
-    {
+    public function courses_categories(
+        $action,
+        $category_code = null,
+        $message = '',
+        $error = '',
+        $content = null,
+        $limit = array()
+    ) {
         $data = array();
         $browse_course_categories = $this->model->browse_course_categories();
         $data['countCoursesInCategory'] = $this->model->count_courses_in_category($category_code);
         if ($action == 'display_random_courses') {
             // Random value is used instead limit filter
-            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 10);
+            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 12);
             $data['countCoursesInCategory'] = count($data['browse_courses_in_category']);
         } else {
             if (!isset($category_code)) {
@@ -109,6 +115,7 @@ class CoursesController
 
         $data['browse_course_categories'] = $browse_course_categories;
         $data['code'] = Security::remove_XSS($category_code);
+
 
         // getting all the courses to which the user is subscribed to
         $curr_user_id = api_get_user_id();

@@ -580,7 +580,7 @@ class Login
                        WHERE
                         user_id  = '" . $user_id . "' AND
                         relation_type <> " . COURSE_RELATION_TYPE_RRHH . " AND
-                        course_code = '$course_id'";
+                        c_id = '".$_real_cid."'";
                 $result = Database::query($sql);
 
                 $cuData = null;

@@ -103,7 +103,7 @@ class Forum extends Coursecopy\Resource
     /**
      * Create a new Forum
      */
-    function __construct($obj)
+    public function __construct($obj)
     {
         parent::__construct($obj->forum_id, RESOURCE_FORUM);
         $this->obj = $obj;
@@ -112,7 +112,8 @@ class Forum extends Coursecopy\Resource
     /**
      * Show this resource
      */
-    function show() {
+    public function show()
+    {
         parent::show();
         echo $this->obj->forum_title;
     }

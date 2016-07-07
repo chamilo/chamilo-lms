@@ -28,15 +28,16 @@
     </script>
     <div class="col-md-12">
         <div class="actions">
-            <div class="row">
-                <div class="col-md-12">
-                    <a href="{{ _p.web_self }}?export=pdf&from={{ selectedFrom }}&until={{ selectedUntil }}&course={{ selectedCourse }}&session={{ selectedSession }}&teacher={{ selectedTeacher }}">
-                        {{ 'pdf.png' | img(32, 'ExportToPDF'|get_lang ) }}
-                    </a>
-                    <a href="{{ _p.web_self }}?export=xls&from={{ selectedFrom }}&until={{ selectedUntil }}&course={{ selectedCourse }}&session={{ selectedSession }}&teacher={{ selectedTeacher }}">
-                         {{ 'export_excel.png' | img(32, 'ExportExcel'|get_lang ) }}
-                    </a>
-                </div>
+            <a href="{{ _p.web_main }}admin/teachers_time_by_session_report.php">
+                {{ 'session.png'|img(32, 'Sessions'|get_lang) }}
+            </a>
+            <div class="pull-right">
+                <a href="{{ _p.web_self ~ '?' ~ {'export':'pdf','from':selectedFrom,'until':selectedUntil,'course':selectedCourse,'session':selectedSession,'teacher':selectedTeacher}|url_encode }}">
+                    {{ 'pdf.png' | img(32, 'ExportToPDF'|get_lang ) }}
+                </a>
+                <a href="{{ _p.web_self ~ '?' ~ {'export':'xls','from':selectedFrom,'until':selectedUntil,'course':selectedCourse,'session':selectedSession,'teacher':selectedTeacher}|url_encode }}">
+                    {{ 'export_excel.png' | img(32, 'ExportExcel'|get_lang ) }}
+                </a>
             </div>
         </div>
         <h1 class="page-header">{{ 'TeacherTimeReport' | get_lang }}</h1>

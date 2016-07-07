@@ -16,7 +16,7 @@ class CourseSelectForm
 	 * @param array $hidden_fields Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
+	public static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
     {
         global $charset;
         $resource_titles[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
@@ -224,7 +224,6 @@ class CourseSelectForm
 
 						foreach ($resources as $id => $resource) {
                             if ($resource) {
-								// Event obj in 1.9.x in 1.10.x the class is CalendarEvent
                                 Coursecopy\Resource::setClassType($resource);
                                 echo '<label class="checkbox">';
                                 echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';

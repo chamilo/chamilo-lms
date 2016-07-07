@@ -15,16 +15,10 @@ if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 
 
 $showCourses = CoursesAndSessionsCatalog::showCourses();
 $showSessions = CoursesAndSessionsCatalog::showSessions();
-$pageCurrent = isset($pageCurrent) ? $pageCurrent :
-    isset($_GET['pageCurrent']) ? intval($_GET['pageCurrent']) :
-        1;
-$pageLength = isset($pageLength) ? $pageLength :
-    isset($_GET['pageLength']) ? intval($_GET['pageLength']) :
-        10;
+$pageCurrent = isset($pageCurrent) ? $pageCurrent : isset($_GET['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
+$pageLength = isset($pageLength) ? $pageLength : isset($_GET['pageLength']) ? intval($_GET['pageLength']) : 12;
 $pageTotal = intval(ceil(intval($countCoursesInCategory) / $pageLength));
-$cataloguePagination = $pageTotal > 1 ?
-    getCataloguePagination($pageCurrent, $pageLength, $pageTotal) :
-    '';
+$cataloguePagination = $pageTotal > 1 ? getCataloguePagination($pageCurrent, $pageLength, $pageTotal) : '';
 $search_term = isset($search_term) ? $search_term :null;
 
 if ($showSessions && isset($_POST['date'])) {
@@ -195,12 +189,6 @@ if ($showCourses && $action != 'display_sessions') {
 
     if (!empty($browse_courses_in_category)) {
         foreach ($browse_courses_in_category as $course) {
-            $course_hidden = ($course['visibility'] == COURSE_VISIBILITY_HIDDEN);
-
-            if ($course_hidden) {
-                continue;
-            }
-
             $user_registerd_in_course = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
             $user_registerd_in_course_as_teacher = CourseManager::is_course_teacher($user_id, $course['code']);
             $user_registerd_in_course_as_student = ($user_registerd_in_course && !$user_registerd_in_course_as_teacher);

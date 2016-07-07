@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -19,7 +20,16 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  */
 class TrackStoredValuesStack
-{
+{    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+    
     /**
      * @var integer
      *
@@ -61,17 +71,6 @@ class TrackStoredValuesStack
      * @ORM\Column(name="sv_value", type="text", nullable=false)
      */
     private $svValue;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set userId

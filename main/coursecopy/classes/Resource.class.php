@@ -233,28 +233,49 @@ class Resource
     }
 
     /**
-     * Fix objects coming from  1.9.x to 1.10.x
+     * Fix objects coming from 1.9.x to 1.10.x
      * Example class Event to CalendarEvent
      *
      * @param Resource $resource
      */
     public static function setClassType(&$resource)
     {
-        if (get_class($resource) == 'Event') {
-            /** @var $resource CalendarEvent */
-            $newResource = new CalendarEvent(
-                $resource->source_id,
-                $resource->title,
-                $resource->content,
-                $resource->start_date,
-                $resource->end_date,
-                $resource->attachment_path,
-                $resource->attachment_filename,
-                $resource->attachment_size,
-                $resource->attachment_comment,
-                $resource->all_day
-            );
-            $resource = $newResource;
+        $class = get_class($resource);
+        switch ($class) {
+            case 'Event':
+                /** @var $resource \CalendarEvent */
+                $newResource = new \CalendarEvent(
+                    $resource->source_id,
+                    $resource->title,
+                    $resource->content,
+                    $resource->start_date,
+                    $resource->end_date,
+                    $resource->attachment_path,
+                    $resource->attachment_filename,
+                    $resource->attachment_size,
+                    $resource->attachment_comment,
+                    $resource->all_day
+                );
+                $resource = $newResource;
+                break;
+            case 'CourseDescription':
+                if (!method_exists($resource, 'show')) {
+                    $resource = (array) $resource;
+                    $newResource = new CourseDescription(
+                        isset($resource['id']) ? $resource['id'] : '',
+                        $resource['title'],
+                        $resource['content'],
+                        $resource['description_type']
+                    );
+                    $newResource->source_id = $resource['source_id'];
+                    $newResource->destination_id = $resource['source_id'];
+                    $newResource->linked_resources = $resource['source_id'];
+                    $newResource->item_properties = $resource['source_id'];
+                    $newResource->obj = $resource['obj'];
+                    $resource = $newResource;
+                }
+
+                break;
         }
     }
 }

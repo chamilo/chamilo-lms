@@ -1834,4 +1834,38 @@ class MessageManager
 
         return $form;
     }
+
+    /**
+     * Send a notification to all amdinistrators when a new user is registered
+     * @param \Chamilo\UserBundle\Entity\User $user
+     */
+    public static function sendNotificationByRegisteredUser(\Chamilo\UserBundle\Entity\User $user)
+    {
+        $tplMailBody = new Template(null, false, false, false, false, false, false);
+        $tplMailBody->assign('user', $user);
+        $tplMailBody->assign('is_western_name_order', api_is_western_name_order());
+        $tplMailBody->assign('manageUrl', api_get_path(WEB_CODE_PATH) . 'admin/user_edit.php?user_id=' . $user->getId());
+
+        $layoutContent = $tplMailBody->get_template('mail/new_user_mail_to_admin.tpl');
+
+        $emailsubject = '[' . get_lang('UserRegistered') . '] ' . $user->getUsername();
+        $emailbody = $tplMailBody->fetch($layoutContent);
+
+        $admins = UserManager::get_all_administrators();
+
+        foreach ($admins as $admin_info) {
+            MessageManager::send_message(
+                $admin_info['user_id'],
+                $emailsubject,
+                $emailbody,
+                [],
+                [],
+                null,
+                null,
+                null,
+                null,
+                $user->getId()
+            );
+        }
+    }
 }

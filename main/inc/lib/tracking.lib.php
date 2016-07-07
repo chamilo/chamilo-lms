@@ -5,6 +5,9 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use CpChart\Classes\pCache as pCache;
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  *  Class Tracking
@@ -1349,16 +1352,18 @@ class Tracking
             $timeFilter = 'last_week';
         }
 
-        $today = date('Y-m-d H:i:s');
+        $today = new DateTime('now', new DateTimeZone('UTC'));
 
         switch ($timeFilter) {
             case 'last_7_days':
-                $new_date = date('Y-m-d H:i:s', strtotime('-7 day'));
-                $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
+                $newDate = new DateTime('-7 day', new DateTimeZone('UTC'));
+                $condition_time = " AND (login_date >= '{$newDate->format('Y-m-d H:i:s')}'";
+                $condition_time .= " AND logout_date <= '{$today->format('Y-m-d H:i:s')}') ";
                 break;
             case 'last_30_days':
-                $new_date = date('Y-m-d H:i:s', strtotime('-30 day'));
-                $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
+                $newDate = new DateTime('-30 days', new DateTimeZone('UTC'));
+                $condition_time = " AND (login_date >= '{$newDate->format('Y-m-d H:i:s')}'";
+                $condition_time .= "AND logout_date <= '{$today->format('Y-m-d H:i:s')}') ";
                break;
             case 'custom':
                 if (!empty($start_date) && !empty($end_date)) {
@@ -5751,6 +5756,41 @@ class Tracking
             */
         }
         return $data;
+    }
+
+    /**
+     * @param User $user
+     * @param string $tool
+     * @param Course $course
+     * @param Session|null $session Optional.
+     * @return \Chamilo\CourseBundle\Entity\CStudentPublication|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public static function getLastStudentPublication(User $user, $tool, Course $course, Session $session = null)
+    {
+        return Database::getManager()
+            ->createQuery("
+                SELECT csp
+                FROM ChamiloCourseBundle:CStudentPublication csp
+                INNER JOIN ChamiloCourseBundle:CItemProperty cip
+                    WITH (
+                        csp.iid = cip.ref AND
+                        csp.sessionId = cip.session AND
+                        csp.cId = cip.course AND
+                        csp.userId = cip.lasteditUserId
+                    )
+                WHERE
+                    cip.session = :session AND cip.course = :course AND cip.lasteditUserId = :user AND cip.tool = :tool
+                ORDER BY csp.iid DESC
+            ")
+            ->setMaxResults(1)
+            ->setParameters([
+                'tool' => $tool,
+                'session' => $session,
+                'course' => $course,
+                'user' => $user
+            ])
+            ->getOneOrNullResult();
     }
 }
 

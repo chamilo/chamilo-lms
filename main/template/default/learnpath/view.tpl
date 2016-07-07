@@ -33,7 +33,7 @@
 
                                 {% if gamification_mode == 1 %}
                                     <hr>
-                                    <!--- gamification -->    
+                                    <!--- gamification -->
                                     <div id="scorm-gamification">
                                         <div class="row">
                                             <div class="col-xs-6">
@@ -61,8 +61,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                   <!--- end gamification -->          
-                                {% else %}         
+                                   <!--- end gamification -->
+                                {% else %}
                                     <div id="progress_bar">
                                         {{ progress_bar }}
                                     </div>
@@ -79,7 +79,7 @@
                                     <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
                                 </a>
                             </div>
-                            
+
                         </div>
                     </div>
 
@@ -139,7 +139,7 @@
                                 {% endif %}
                             </div>
                             <div role="tabpanel" class="tab-pane" id="lp-view-forum">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -161,7 +161,7 @@
         };
 
         $(document).on('ready', function () {
-            
+
             {% if lp_mode == 'embedframe' %}
                 //$('#learning_path_main').addClass('lp-view-collapsed');
                 $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
@@ -181,7 +181,7 @@
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
             });
-            
+
             {% endif %}
 
             $('.lp-view-tabs').on('click', '.disabled', function (e) {
@@ -214,7 +214,7 @@
                 $('.lp-view-tabs').fadeIn();
             });
 
-            loadForumThead({{ lp_id }}, {{ lp_current_item_id }});
+            loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
 
             {% if glossary_extra_tools in glossary_tool_availables %}
                 // Loads the glossary library.

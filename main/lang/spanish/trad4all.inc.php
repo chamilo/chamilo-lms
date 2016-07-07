@@ -2503,7 +2503,6 @@ $TitleManipulateStudentPublication = "Modificar la tarea actual";
 $EnterDataNewChapter = "Introduzca los datos de la sección";
 $EnterDataNewModule = "Introduzca los datos de la sección";
 $CreateNewStep = "Crear un documento :";
-$NewDocument = "Cree e incorpore a su lección documentos con componentes multimedia";
 $UseAnExistingResource = "O usar un recurso ya existente :";
 $Position = "Posición";
 $NewChapterCreated = "La sección ha sido creada. Ahora puede incorporarle objetos de aprendizaje o crear otra sección";
@@ -2539,7 +2538,7 @@ $NoItemSelected = "Seleccione un objeto de aprendizaje de la tabla contenidos";
 $NewDocumentCreated = "El documento ha sido creado.";
 $EditCurrentChapter = "Editar la sección actual";
 $ditCurrentModule = "Editar la sección actual";
-$CreateTheDocument = "Cree e incorpore a su lección documentos con componentes multimedia";
+$CreateTheDocument = "Crear un nuevo documento";
 $MoveTheCurrentDocument = "Mover el documento actual";
 $EditTheCurrentDocument = "Editar el documento actual";
 $Warning = "¡ Atención !";
@@ -6001,7 +6000,7 @@ $Off = "Desactivado";
 $webserver = "Webserver";
 $mysql = "mysql";
 $NotInserted = "No insertado";
-$Multipleresponse = "Respuesta múltiple";
+$StudentBoss = "Superior (n+1)";
 $EnableMathJaxComment = "Activar el visualizador matemático MathJax. Este parámetro es útil únicamente si ASCIIMathML o ASCIISVG están activados.";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Ahora puede identificarse en %s usando el nombre de usuario y contraseña que le han sido facilitados";
 $HaveFun = "Diviértase,";
@@ -6250,7 +6249,7 @@ $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "La configurac
 $UniqueAnswerNoOption = "Respuesta única con no-se";
 $MultipleAnswerTrueFalse = "Respuestas múltiples v/f/no-se";
 $MultipleAnswerCombinationTrueFalse = "Combinación v/f/no-se";
-$DontKnow = "No se";
+$DontKnow = "No sé";
 $ExamNotAvailableAtThisTime = "Examen no disponible en este momento";
 $LoginOrEmailAddress = "Nombre de usuario o dirección e-mail";
 $EnableMathJaxTitle = "Activar MathJax";
@@ -7010,7 +7009,46 @@ $ResourceLockedByGradebook = "Esta opción no está disponible porque la activid
 $GradebookLockedAlert = "Esta evaluación ha sido bloqueada y no puede ser desbloqueada. Si necesita realmente desbloquearla, por favor contacte el administrador de la plataforma, explicando su razón (sino podría ser considerado como un intento de fraude).";
 $GradebookEnableLockingTitle = "Activar bloqueo de Evaluaciones por los profesores";
 $GradebookEnableLockingComment = "Una vez activada, esta opción permitirá a los profesores bloquear cualquier evaluación dentro de su curso. Esto prohibirá al profesor cualquier modificación posterior de los resultados de sus alumnos en los recursos usados para esta evaluación: exámenes, lecciones, tareas, etc. El único rol autorizado a desbloquear una evaluación es el administrador. El profesor estará informado de esta posibilidad al intentar desbloquear la evaluación. El bloqueo como el desbloqueo estarán guardados en el registro de actividades importantes del sistema.";
-$LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>LDAP authentication : <br />See I. below to configure LDAP <br />See II. below to activate LDAP authentication </li><br /><br /><li> Update user attributes, with LDAP data, after CAS authentication(see <a href='settings.php?category=CAS'>CAS configuration </a>) : <br />See I. below to configure LDAP <br />CAS manage user authentication, LDAP activation isn't required. </li><br /></ul></div><br /><h4>I. LDAP configuration</h4><h5>Edit file main/inc/conf/auth.conf.php </h5>-&gt; Edit values of array <code>&#36;extldap_config</code> <br /><br />Parameters are <br /><ul><li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>admin password (ex : 'admin_password' =&gt; '123456') </li><li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filter (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>protocol version (2 or 3) (ex : 'protocol_version' =&gt; 3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>encoding (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; To update correspondences between user and LDAP attributes, edit array <code>&#36;extldap_user_correspondance</code> <br />Array values are &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br />Array structure is explained in file main/auth/external_login/ldap.conf.php<br /><br /><br /><h4>II. Activate LDAP authentication </h4><h5>Edit file main/inc/conf/configuration.php </h5>-&gt; Uncomment lines <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/newUser.ldap.php&quot;;<br /><br />N.B. : LDAP users use same fields than platform users to login. <br />N.B. : LDAP activation adds a menu External authentication [LDAP] in &quot;add or modify&quot; user pages.</div>";
+$LdapDescriptionComment = "<div class=\"alert alert-info\">
+        <ul>
+            <li>Autentificación LDAP: <br>
+                Véase I. a continuación para configurar LDAP<br>
+                Véase II. a continuación para activar la autentificación LDAP
+            </li>
+            <li>Actualizar los atributos de usuario, con los datos de LDAP, después de la autentificación CAS (véase <a href=\"settings.php?category=CAS\">Configuración CAS</a>): <br>
+                Véase I. a continuación para configurar LDAP<br>
+                Para gestionar la autentificación de usuarios por CAS, no se requere la activación de LDAP.
+            </li>
+        </ul>
+    </div>
+    <h4>I. Configuración de LDAP</h4>
+    <h5>Editar el archivo app/config/auth.conf.php </h5>
+    <p>-&gt; Editar los valores del array <code>\$extldap_config</code></p>
+    <ul>
+        <li>base domain string (p. ej.: 'base_dn' =&gt; 'DC=cblue,DC=be')</li>
+        <li>admin distinguished name (p. ej.: 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be')</li>
+        <li>admin password (p. ej.: 'admin_password' =&gt; '123456') </li>
+        <li>ldap host (p. ej.: 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6'))</li>
+        <li>filter (p. ej.: 'filter' =&gt; '') </li>
+        <li>port (p. ej.: 'port' =&gt; 389) </li>
+        <li>protocol version (2 or 3) (p. ej.: 'protocol_version' =&gt; 3)</li>
+        <li>user_search (p. ej.: 'user_search' =&gt; 'sAMAccountName=%username%') </li>
+        <li>encoding (p. ej.: 'encoding' =&gt; 'UTF-8')</li>
+        <li>update_userinfo (p. ej.: 'update_userinfo' =&gt; true) </li>
+    </ul>
+    <p>-&gt; Para actualizar las correspondencias entre los atributos de usuario y LDAP, editar el array <code>\$extldap_user_correspondance</code></p>
+    <p>Los valores del Array son &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt;</p><p>
+    </p>
+    <h4>II. Activar la atenticación LDAP</h4>
+    <h5>Editar el archivo main/inc/conf/configuration.php </h5>
+    <p>-&gt; Descomentar las líneas:</p>
+    <ul>
+        <li>
+    \$extAuthSource[\"extldap\"][\"login\"] = \$_configuration['root_sys'].\"main/auth/external_login/login.ldap.php\";</li>
+        <li>\$extAuthSource[\"extldap\"][\"newUser\"] = \$_configuration['root_sys'].\"main/auth/external_login/newUser.ldap.php\";</li>
+    </ul>
+    <p>N.B.: Los usuarios de LDAP usan los mismos campos que los usuarios de la plataforma para iniciar sesión.<br>
+    N.B.: La activación LDAP agrega un menú \"Autentificación externa\" [LDAP] en las páginas de \"agregar o modificar\" usuarios.</p>";
 $ShibbolethMainActivateTitle = "<h3>Autenticación Shibboleth</h3>";
 $ShibbolethMainActivateComment = "En primer lugar, tiene que configurar Shibboleth para su servidor web.
 
@@ -7683,5 +7721,62 @@ $RecordAudio = "Grabar audio";
 $StartRecordingAudio = "Lanzar la grabación";
 $StopRecordingAudio = "Finalizar la grabación";
 $SaveRecordedAudio = "Guardar el audio grabado";
-$GradeFromX = "Notas para el curso: %s";
+$GradeFromX = "Libreta de notas del curso: %s";
+$TitleMandatory = "Título obligatorio";
+$NoCourseCategorySupplied = "No se ha proporcionado una categoría de curso";
+$ForumStartDate = "Fecha de publicación";
+$ForumEndDate = "Fecha de cierre";
+$ForumStartDateComment = "El foro será visible a partir de esta fecha";
+$ForumEndDateComment = "Pasada esta fecha, el foro será automáticamente cerrado";
+$ModeratedForum = "Foro moderado";
+$DiagnosisFilledSubject = "Diagnóstico completado";
+$DiagnosisFilledDescription = "El diagnóstico ha sido exitosamente completado";
+$UserXHasFilledTheDiagnosis = "El usuario %s ha llenado su diagnóstico";
+$UserXHasFilledTheDiagnosisDescription = "El usuario %s ha llenado su diagnóstico en la plataforma. Ahora está listo para revisión.";
+$SendLegal = "Enviar acuerdo legal";
+$DeleteLegal = "Borrar acuerdo legal";
+$LegalAccepted = "Acuerdo legal aceptado";
+$LoadTermConditionsSectionTitle = "Cargar la sección de términos y condiciones";
+$LoadTermConditionsSectionDescription = "El acuerdo legal aparecerá durante el login o cuando entre a un curso.";
+$SendTermsSubject = "Su contrato de aprendizaje está listo para firmar.";
+$SendTermsDescriptionToUrlX = "Hola,
+
+Su tutor le ha enviado s contrato de aprendizaje. Puede ir a firmarlo siguiendo esta URL: %s";
+$UserXSignedTheAgreement = "El usuario %s ha firmado el acuerdo.";
+$UserXSignedTheAgreementTheY = "El usuario %s ha firmado el acuerdo el %s.";
+$ShowTermsIfProfileCompletedTitle = "Términos y condiciones pendiente de perfil completado";
+$ShowTermsIfProfileCompletedComment = "Activando esta opción, los términos y condiciones serán disponibles únicamente una vez el usuario haya completado todos los campos de perfil que inicien con 'terms_' y estén visibles.";
+$EnableProfileUsersAddressGeolocalizationTitle = "Activar geolocalización";
+$EnableProfileUsersAddressGeolocalizationComment = "Activar un campo de dirección en el perfil del usuario y ubicar su dirección en un mapa usando la geolocalización";
+$ProfileIsNotCompleted = "Debe llenar su perfil para seguir adelante";
+$TermActivatedIsNeededDescription = "Los términos y condiciones no han sido validados por su tutor";
+$DiagnosisManagement = "Gestión de diagnóstico";
+$TermYourProfileIsNotCompleted = "Debe completar su perfil para acceder a la validación del contrato.";
+$Diagnostic = "Diagnóstico";
+$AllowShowSkypeAccountTitle = "Permitir mostrar la cuenta de usuario de Skype";
+$AllowShowSkypeAccountComment = "Añadir un enlace en el bloque social de usuario que permite iniciar una conversación por Skype";
+$AllowShowLinkedInUrlTitle = "Permitir mostrar la URL de LinkedIn del usuario";
+$AllowShowLinkedInUrlComment = "Añadir un enlace en el bloque social del usuario, lo que permite visitar el perfil del usuario en LinkedIn";
+$LaunchVideoConferenceRoom = "Lanzar una sala de video conferencia";
+$VideoConference = "Video conferencia";
+$TermsDuplicatedInFile = "Términos duplicados en el archivo";
+$GlossaryTermAlreadyExists = "El término ya existe";
+$LinkedInUrl = "URL de perfil LinkedIn";
+$SaveTheCorrectAnswersForTheNextAttempt = "Guardar la respuesta correcta para el siguiente intento";
+$TranslateThisTerm = "Traducir este término";
+$OnlyActiveSubLanguagesAreListed = "Solo los sub-idiomas activos aparecen en la lista";
+$Translation = "Traducción";
+$IfThisTranslationExistsThisWillReplaceTheTerm = "Si este término ha sido traducido anteriormente, esta operación remplazará su traducción para este sub-idioma.";
+$LastConnection = "Última conexión";
+$HisProfileIs = "Su perfil es";
+$YouCanAssignATutorInThisLinkX = "Puede asignar un tutor siguiendo este enlace: %s";
+$UpdateExistingGlossaryTerms = "Actualizar términos existentes";
+$TermsUpdated = "Términos actualizados";
+$TermsAdded = "Términos añadidos";
+$TeacherTimeReportBySession = "Reporte de tiempos de profesores por sesión";
+$NumberOfWorks = "Número de tareas";
+$LastWork = "Última tarea";
+$WaitingModeration = "Esperando moderación";
+$WorksInSessionReport = "Tareas en reporte de sesión";
+$Files = "Archivos";
 ?>

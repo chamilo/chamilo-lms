@@ -11,33 +11,33 @@ require_once 'Resource.class.php';
  */
 class Link extends Coursecopy\Resource
 {
-	/**
-	 * The title
-	 */
+    /**
+     * The title
+     */
     public $title;
-	/**
-	 * The URL
-	 */
+    /**
+     * The URL
+     */
     public $url;
-	/**
-	 * The description
-	 */
+    /**
+     * The description
+     */
     public $description;
-	/**
-	 * Id of this links category
-	 */
+    /**
+     * Id of this links category
+     */
     public $category_id;
-	/**
-	 * Display link on course homepage
-	 */
+    /**
+     * Display link on course homepage
+     */
     public $on_homepage;
-	/**
-	 * Create a new Link
-	 * @param int $id The id of this link in the Chamilo-course
-	 * @param string $title
-	 * @param string $url
-	 * @param string $description
-	 */
+    /**
+     * Create a new Link
+     * @param int $id The id of this link in the Chamilo-course
+     * @param string $title
+     * @param string $url
+     * @param string $description
+     */
     public function __construct(
         $id,
         $title,
@@ -45,22 +45,21 @@ class Link extends Coursecopy\Resource
         $description,
         $category_id,
         $on_homepage
-    )
-	{
-		parent::__construct($id,RESOURCE_LINK);
-		$this->title = $title;
-		$this->url = $url;
-		$this->description = $description;
-		$this->category_id = $category_id;
-		$this->on_homepage = $on_homepage;
-	}
+    ) {
+        parent::__construct($id,RESOURCE_LINK);
+        $this->title = $title;
+        $this->url = $url;
+        $this->description = $description;
+        $this->category_id = $category_id;
+        $this->on_homepage = $on_homepage;
+    }
 
     /**
-	 * Show this resource
-	 */
+     * Show this resource
+     */
     public function show()
-	{
-		parent::show();
-		echo $this->title.' ('.$this->url.')';
-	}
+    {
+        parent::show();
+        echo $this->title.' ('.$this->url.')';
+    }
 }

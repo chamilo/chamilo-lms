@@ -62,7 +62,7 @@ if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
     $action = Security::remove_XSS($_GET['action']);
 }
 
-$categoryCode = isset($_GET['category_code']) ? $_GET['category_code'] : 'ALL';
+$categoryCode = isset($_GET['category_code']) && !empty($_GET['category_code']) ? $_GET['category_code'] : 'ALL';
 
 $nameTools = getCourseCatalogNameTools($action);
 if (empty($nameTools)) {

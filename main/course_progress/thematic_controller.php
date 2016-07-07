@@ -425,60 +425,13 @@ class ThematicController
                     exit;
                 }
 
-                if ((isset($_REQUEST['start_date_type']) && $_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) ||
-                    (!empty($_REQUEST['duration_in_hours']) && !is_numeric($_REQUEST['duration_in_hours']))
-                ) {
-                    if ($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) {
-                        $start_date_error = true;
-                        $data['start_date_error'] = $start_date_error;
-                    }
-
-                    if (!empty($_REQUEST['duration_in_hours']) && !is_numeric($_REQUEST['duration_in_hours'])) {
-                        $duration_error = true;
-                        $data['duration_error'] = $duration_error;
-                    }
-
-                    $data['action'] = $_REQUEST['action'];
-                    $data['thematic_id'] = $_REQUEST['thematic_id'];
-                    $data['attendance_select'] = $attendance_select;
-                    if (isset($_REQUEST['thematic_advance_id'])) {
-                        $data['thematic_advance_id'] = $_REQUEST['thematic_advance_id'];
-                        $thematic_advance_data = $thematic->get_thematic_advance_list($_REQUEST['thematic_advance_id']);
-                        $data['thematic_advance_data'] = $thematic_advance_data;
-                    }
-                } else {
-                    if (api_is_allowed_to_edit(null, true)) {
-                        $thematic_advance_id = isset($_REQUEST['thematic_advance_id']) ? $_REQUEST['thematic_advance_id'] : null;
-                        $thematic_id = $_REQUEST['thematic_id'];
-                        $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : null;
-                        $duration = isset($_REQUEST['duration_in_hours']) ? $_REQUEST['duration_in_hours'] : null;
-                        if (isset($_REQUEST['start_date_type']) && $_REQUEST['start_date_type'] == 2) {
-                            $start_date = $_REQUEST['custom_start_date'];
-                            $attendance_id = 0;
-                        } else {
-                            $start_date = isset($_REQUEST['start_date_by_attendance']) ? $_REQUEST['start_date_by_attendance'] : null;
-                            $attendance_id = isset($_REQUEST['attendance_select']) ? $_REQUEST['attendance_select'] : null;
-                        }
-                        $thematic->set_thematic_advance_attributes(
-                            $thematic_advance_id,
-                            $thematic_id,
-                            $attendance_id,
-                            $content,
-                            $start_date,
-                            $duration
-                        );
-
-                        $affected_rows = $thematic->thematic_advance_save();
-
-                        if ($affected_rows) {
-                            // get last done thematic advance before move thematic list
-                            $last_done_thematic_advance = $thematic->get_last_done_thematic_advance();
-                            // update done advances with de current thematic list
-                            if (!empty($last_done_thematic_advance)) {
-                                $thematic->update_done_thematic_advances($last_done_thematic_advance);
-                            }
-                        }
-                    }
+                $data['action'] = $_REQUEST['action'];
+                $data['thematic_id'] = $_REQUEST['thematic_id'];
+                $data['attendance_select'] = $attendance_select;
+                if (isset($_REQUEST['thematic_advance_id'])) {
+                    $data['thematic_advance_id'] = $_REQUEST['thematic_advance_id'];
+                    $thematic_advance_data = $thematic->get_thematic_advance_list($_REQUEST['thematic_advance_id']);
+                    $data['thematic_advance_data'] = $thematic_advance_data;
                 }
                 break;
             default:

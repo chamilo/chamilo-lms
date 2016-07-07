@@ -24,7 +24,7 @@ $type = Security::remove_XSS($_GET['type']);
 $doExerciseUrl = null;
 
 if (isset($_GET['doexercise'])) {
-    $doExerciseUrl = api_get_path(WEB_CODE_PATH) . 'exercise/overview.php?' . http_build_query([
+    $doExerciseUrl = api_get_path(WEB_CODE_PATH) . 'exercice/overview.php?' . http_build_query([
         'session_id' => $session_id,
         'cidReq' => $cidReq,
         'gradebook' => $gradebook,

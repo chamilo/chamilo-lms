@@ -582,7 +582,7 @@ function browseCourseCategories()
  * @param string $searchTerm
  * @return int
  */
-function countCoursesInCategory($category_code="", $searchTerm = '')
+function countCoursesInCategory($category_code = '', $searchTerm = '')
 {
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $categoryCode = Database::escape_string($category_code);
@@ -628,6 +628,7 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
                 $without_special_courses
                 $visibilityCondition
             ";
+
     // Showing only the courses of the current portal access_url_id.
 
     if (api_is_multiple_url_enabled()) {
@@ -676,6 +677,9 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
         $courseVisibility = $courseInfo['visibility'];
         $visibilityCondition = ' AND course.visibility <> 1';
     }
+
+    $visibilityCondition .= ' AND course.visibility <> '.COURSE_VISIBILITY_HIDDEN;
+
     if (!empty($random_value)) {
         $random_value = intval($random_value);
 
@@ -935,12 +939,8 @@ function searchCategoryById($list)
  */
 function getLimitArray()
 {
-    $pageCurrent = isset($_REQUEST['pageCurrent']) ?
-        intval($_GET['pageCurrent']) :
-        1;
-    $pageLength = isset($_REQUEST['pageLength']) ?
-        intval($_GET['pageLength']) :
-        10;
+    $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
+    $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : 12;
     return array(
         'start' => ($pageCurrent - 1) * $pageLength,
         'current' => $pageCurrent,
@@ -967,16 +967,17 @@ function getLimitFilterFromArray($limit)
 
 /**
  * Get Pagination HTML div
- * @param $pageCurrent
- * @param $pageLength
- * @param integer $pageTotal
+ * @param int $pageCurrent
+ * @param int $pageLength
+ * @param int $pageTotal
+ *
  * @return string
  */
 function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
 {
     // Start empty html
     $pageDiv = '';
-    $html='';
+    $html = '';
     $pageBottom = max(1, $pageCurrent - 3);
     $pageTop = min($pageTotal, $pageCurrent + 3);
 
@@ -985,16 +986,10 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
         if ($pageBottom > 2) {
             $pageDiv .= getPageNumberItem($pageBottom - 1, $pageLength, null, '...');
         }
-    } else {
-        // Nothing to do
     }
 
     // For each page add its page button to html
-    for (
-        $i = $pageBottom;
-        $i <= $pageTop;
-        $i++
-    ) {
+    for ($i = $pageBottom; $i <= $pageTop; $i++) {
         if ($i === $pageCurrent) {
             $pageItemAttributes = array('class' => 'active');
         } else {
@@ -1014,7 +1009,6 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
 
     // Complete pagination html
     $pageDiv = Display::tag('ul', $pageDiv, array('class' => 'pagination'));
-
 
     $html .= '<nav>'.$pageDiv.'</nav>';
     return $html;
@@ -1060,18 +1054,17 @@ function getCourseCategoryUrl(
     ;
 
     switch ($action) {
-        case 'subscribe' :
+        case 'subscribe':
             // for search
             $pageUrl .=
                 '&search_term=' . $searchTerm .
                 '&search_course=1' .
                 '&sec_token=' . $_SESSION['sec_token'];
             break;
-        case 'display_courses' :
+        case 'display_courses':
             // No break
-        default :
+        default:
             break;
-
     }
 
     return $pageUrl;

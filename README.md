@@ -168,7 +168,7 @@ php bin/doctrine.php migrations:execute 20150527120703 --up --configuration=app/
 
 You can also print the differences between your database and what it should be by issuing the following command from the Chamilo base folder:
 ```
-php bin/doctrine.php orm:schema:update --dump-sql
+php bin/doctrine.php orm:schema-tool:update --dump-sql
 ```
 
 ## Contributing

@@ -209,14 +209,54 @@ $userForm = new FormValidator('user_form', 'post', api_get_self());
 $jqueryExtra = '';
 
 $htmlHeadXtra[] ='<script>
-$(document).ready(function(){
-	$("#filiere_panel").hide();
- 		
+$(document).ready(function() {
+	$("#filiere_panel").hide();	
+    $("#dispo_panel").hide();    
+    $("#dispo_pendant_panel").hide();
+    $("#niveau_panel").hide();
+    $("#methode_panel").hide();
+    $("#themes_panel").hide();    
+    $("#objectifs_panel").hide();
+
+	$("#filiere").on("click", function() {
+	    $("#filiere_panel").toggle();
+	    return false;
+	});
+	
+	$("#dispo").on("click", function() {
+	    $("#dispo_panel").toggle();
+	    return false;
+	});
+	
+	$("#dispo_pendant").on("click", function() {
+	    $("#dispo_pendant_panel").toggle();
+	    return false;
+	});	
+	
+	$("#niveau").on("click", function() {
+	    $("#niveau_panel").toggle();
+	    return false;
+	});
+	
+	$("#methode").on("click", function() {
+	    $("#methode_panel").toggle();
+	    return false;
+	});
+	
+	$("#themes").on("click", function() {
+	    $("#themes_panel").toggle();
+	    return false;
+	});
+	
+	$("#objectifs").on("click", function() {
+	    $("#objectifs_panel").toggle();
+	    return false;
+	});
 });
 </script>';
 
 $panel = Display::panel(get_lang('FiliereExplanation'), '', '', '',  '', 'filiere_panel');
-$userForm->addHeader(Display::url(get_lang('Filière'), '#', ['id'=> 'filiere', 'class' => 'ajax']).''.$panel);
+$userForm->addHeader(Display::url(get_lang('Filiere'), '#', ['id'=> 'filiere']).''.$panel);
 $fieldsToShow = [
     'statusocial',
     'filiere_user',
@@ -253,7 +293,8 @@ $extra = $extraFieldSession->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addHeader(get_lang('Disponibilité avant mon stage'));
+$panel = Display::panel(get_lang('DisponibiliteAvantExplanation'), '', '', '',  '', 'dispo_panel');
+$userForm->addHeader(Display::url(get_lang('DisponibiliteAvant'), '#', ['id'=> 'dispo']).''.$panel);
 
 $extra = $extraFieldSession->addElements(
     $userForm,
@@ -287,7 +328,8 @@ $extra = $extraField->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addHeader(get_lang('Disponibilité pendant mon stage'));
+$panel = Display::panel(get_lang('DisponibilitePendantMonStageExplanation'), '', '', '',  '', 'dispo_pendant_panel');
+$userForm->addHeader(Display::url(get_lang('DisponibilitePendantMonStage'), '#', ['id'=> 'dispo_pendant']).''.$panel);
 
 $fieldsToShow = [
     'datedebutstage',
@@ -308,7 +350,8 @@ $extra = $extraField->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addHeader(get_lang('Les thèmes qui m’intéressent / Mes objectifs d’apprentissage'));
+$panel = Display::panel(get_lang('ThemesObjectifsExplanation'), '', '', '',  '', 'themes_panel');
+$userForm->addHeader(Display::url(get_lang('ThemesObjectifs'), '#', ['id'=> 'themes']).''.$panel);
 
 $fieldsToShow = [
     'domaine',
@@ -334,7 +377,8 @@ $extra = $extraFieldSession->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addHeader(get_lang('Mon niveau de langue'));
+$panel = Display::panel(get_lang('NiveauLangueExplanation'), '', '', '',  '', 'niveau_panel');
+$userForm->addHeader(Display::url(get_lang('NiveauLangue'), '#', ['id'=> 'niveau']).''.$panel);
 
 $fieldsToShow = [
     //'competenceniveau'
@@ -358,7 +402,8 @@ $extra = $extraFieldSession->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addHeader(get_lang('Mes objectifs d’apprentissage'));
+$panel = Display::panel(get_lang('ObjectifsApprentissageExplanation'), '', '', '',  '', 'objectifs_panel');
+$userForm->addHeader(Display::url(get_lang('ObjectifsApprentissage'), '#', ['id'=> 'objectifs']).''.$panel);
 
 $fieldsToShow = [
     'objectif-apprentissage'
@@ -376,7 +421,8 @@ $extra = $extraField->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addHeader(get_lang('Ma méthode de travail'));
+$panel = Display::panel(get_lang('MethodeTravailExplanation'), '', '', '',  '', 'methode_panel');
+$userForm->addHeader(Display::url(get_lang('MethodeTravail'), '#', ['id'=> 'methode']).''.$panel);
 
 $fieldsToShow = [
     'methode-de-travaille'
@@ -391,7 +437,6 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     $fieldsToShow
 );
-
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 

@@ -7769,4 +7769,26 @@ Cette préparation correspond à un volume horaire d’environ %s heures';
 $TheContentsAreValidated = 'Les contenus suivants ont été validés';
 $SkillsValidatedOfUserX = 'Sur cette plateforme l’investissement dans le réseau social est valorisé et %s a fait preuve des compétences suivantes';
 $MyGeneralCertificate = 'Mon certificat général';
+
+$FiliereExplanation = "";
+$Filiere = "Filière";
+
+$DisponibiliteAvantExplanation = "";
+$DisponibiliteAvant = "Disponibilité avant mon stage";
+
+$DisponibilitePendantMonStageExplanation = "";
+$DisponibilitePendantMonStage = "Disponibilité pendant mon stage";
+
+$ThemesObjectifsExplanation = "";
+$ThemesObjectifs = "Les thèmes qui m’intéressent / Mes objectifs d’apprentissage";
+
+$NiveauLangueExplanation = "";
+$NiveauLangue = "Mon niveau de langue";
+
+$ObjectifsApprentissageExplanation = "";
+$ObjectifsApprentissage = "Mes objectifs d’apprentissage";
+
+$MethodeTravailExplanation = "";
+$MethodeTravail = "Ma méthode de travail";
+
 ?>

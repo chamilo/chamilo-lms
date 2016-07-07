@@ -24,11 +24,6 @@ if (!api_is_anonymous()) {
     $header_title = " ";
 }
 
-// Facebook connexion, if activated
-/*if (api_is_facebook_auth_activated() && !api_get_user_id()) {
-    facebookConnect();
-}
-*/
 $controller = new IndexManager($header_title);
 
 //Actions

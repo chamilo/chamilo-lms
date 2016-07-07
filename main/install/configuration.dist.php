@@ -67,7 +67,7 @@ $_configuration['url_append'] = '{URL_APPEND_PATH}';
 // $extAuthSource["extldap"]["newUser"] = $_configuration['root_sys']."main/auth/external_login/newUser.ldap.php";
 //
 // FACEBOOK IMPLEMENTATION BASED ON external_login info
-// -> Uncomment the line bellow to activate Facebook Auth AND edit main/auth/external_login/ldap.conf.php for configuration
+// -> Uncomment the line bellow to activate Facebook Auth AND edit app/config/auth.conf.php for configuration
 // $_configuration['facebook_auth'] = 1;
 //
 // OTHER EXTERNAL LOGIN INFORMATION

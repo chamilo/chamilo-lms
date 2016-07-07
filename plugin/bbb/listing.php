@@ -13,6 +13,7 @@ $tool_name = $plugin->get_lang('Videoconference');
 $isGlobal = isset($_GET['global']) ? true : false;
 
 $bbb = new bbb('', '', $isGlobal);
+
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $conferenceManager = $bbb->isConferenceManager();
@@ -104,7 +105,6 @@ if ($conferenceManager) {
             break;
     }
 }
-
 $meetings = $bbb->getMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);

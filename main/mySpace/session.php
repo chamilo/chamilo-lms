@@ -40,7 +40,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
             Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+            api_get_path(WEB_CODE_PATH) . "auth/my_progress.php"
         );
         $menu_items[] = Display::url(
             Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
@@ -64,10 +64,6 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
         Display::return_icon('works.png', get_lang('WorksReport'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH) . 'mySpace/works_in_session_report.php'
     );
-    $menu_items[] = Display::url(
-        Display::return_icon('clock.png', get_lang('TeacherTimeReportBySession'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . 'admin/teachers_time_by_session_report.php'
-    );
 
     $actionsLeft = '';
     $nb_menu_items = count($menu_items);
@@ -81,11 +77,11 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
         $actionsRight = Display::url(
             Display::return_icon('printer.png', get_lang('Print'), array(), 32),
             'javascript: void(0);',
-            array('onclick'=>'javascript: window.print();')
+            array('onclick' => 'javascript: window.print();')
         );
         $actionsRight .= Display::url(
             Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32),
-            api_get_self().'?export=csv'
+            api_get_self() . '?export=csv'
         );
     }
 
@@ -97,6 +93,19 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
     echo Display::page_header(get_lang('YourSessionsList'));
 
+} elseif (api_is_teacher()) {
+    $actionsRight = Display::url(
+        Display::return_icon('clock.png', get_lang('TeacherTimeReportBySession'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . 'admin/teachers_time_by_session_report.php'
+    );
+
+    $toolbar = Display::toolbarAction(
+        'toolbar-session',
+        array('', $actionsRight)
+    );
+    echo $toolbar;
+
+    echo Display::page_header(get_lang('YourSessionsList'));
 } else {
     $a_sessions = Tracking::get_sessions_coached_by_user($id_coach);
 }

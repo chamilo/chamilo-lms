@@ -592,7 +592,7 @@ class CourseCategory
             $without_special_courses = ' AND course.code NOT IN ("'.implode('","', $specialCourseList).'")';
         }
 
-    $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition("course");
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course');
 
         if ($categoryCode == 'ALL') {
             // Nothing to do

@@ -23,7 +23,7 @@ class Version20160706182000 extends AbstractMigrationChamilo
     public function up(Schema $schema)
     {
          $this->addSql(
-             'CREATE TABLE course_rel_user_catalogue (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) DEFAULT NULL, c_id int(11) DEFAULT NULL, visible int(11) NOT NULL, PRIMARY KEY (id), KEY (user_id), KEY (c_id), CONSTRAINT FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE, CONSTRAINT FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci'
+             'CREATE TABLE course_rel_user_catalogue (id int NOT NULL AUTO_INCREMENT, user_id int DEFAULT NULL, c_id int DEFAULT NULL, visible int NOT NULL, PRIMARY KEY (id), KEY (user_id), KEY (c_id), CONSTRAINT FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE, CONSTRAINT FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci'
              );
     }
 

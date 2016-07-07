@@ -434,7 +434,7 @@ class Auth
             $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
         }
 
-        $visibilityCondition = ($justVisible?CourseManager::getCourseVisibilitySQLCondition("course"):'');
+        $visibilityCondition = ($justVisible?CourseManager::getCourseVisibilitySQLCondition('course'):'');
 
         $search_term_safe = Database::escape_string($search_term);
         $sql_find = "SELECT * FROM $courseTable

@@ -779,7 +779,7 @@ class CourseManager
 
     /**
      * Add the user $userId visibility to the course $courseCode in the catalogue.
-     * @author David Nos
+     * @author David Nos (https://github.com/dnos)
      *
      * @param  int $userId the id of the user
      * @param  string $courseCode the course code
@@ -837,7 +837,7 @@ class CourseManager
 
     /**
      * Remove the user $userId visibility to the course $courseCode in the catalogue.
-     * @author David Nos
+     * @author David Nos (https://github.com/dnos)
      *
      * @param  int $userId the id of the user
      * @param  string $courseCode the course code
@@ -872,8 +872,7 @@ class CourseManager
                 )
             );
             return Database::delete($courseUserTable, $cond);
-        }
-        else {
+        } else {
             return true; // Register does not exist
         }
     }
@@ -5026,7 +5025,7 @@ class CourseManager
             $withoutSpecialCourses = ' AND c.code NOT IN ("' . implode('","', $specialCourseList) . '")';
         }
 
-        $visibilityCondition = self::getCourseVisibilitySQLCondition("c");
+        $visibilityCondition = self::getCourseVisibilitySQLCondition('c');
 
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
             $sql = "SELECT count(c.id) FROM $tableCourse c, $tableCourseRelAccessUrl u

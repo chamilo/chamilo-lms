@@ -34,8 +34,6 @@ $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" 
 list($year_start, $month_start, $day_start) = explode('-', $infos['date_start']);
 list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
 
-
-
 if (array_key_exists('calendar_start_date', $infos)) {
     list($calendarStartDateYear, $calendarStartDateMonth, $calendarStartDateDay) = explode('-', $infos['calendar_start_date']);
 }
@@ -86,9 +84,11 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $calendarStartDay = isset($_POST['calendar_start_date_day']) ? $_POST['calendar_start_date_day'] : '';
     $calendarStartMonth = isset($_POST['calendar_start_date_month']) ? $_POST['calendar_start_date_month'] : '';
     $calendarStartYear = isset($_POST['calendar_start_date_year']) ? $_POST['calendar_start_date_year'] : '';
-    $calendarStartDate = $calendarStartYear.'-'.$calendarStartMonth.'-'.$calendarStartDay;
-    $calendarStartDate = $calendarStartDate.' 13:00:00';
-
+    $calendarStartDate = $calendarStartYear.'-'.$calendarStartMonth.'-'.$calendarStartDay.' 00:00:00';
+    if (empty($calendarStartYear) || empty($calendarStartMonth) || empty($calendarStartDay)) {
+        $calendarStartDate = '';
+    }
+    
 	$return = SessionManager::edit_session(
         $id,
         $name,
@@ -433,6 +433,7 @@ $page = isset($_GET['page']) && $_GET['page'] == 'resume_session.php' ? 'resume_
             <div class="controls">
 
                 <select name="calendar_start_date_day" >
+                    <option value=""></option>
                     <option value="1" <?php if($calendarStartDateDay == 1) echo 'selected="selected"'; ?> >01</option>
                     <option value="2" <?php if($calendarStartDateDay == 2) echo 'selected="selected"'; ?> >02</option>
                     <option value="3" <?php if($calendarStartDateDay == 3) echo 'selected="selected"'; ?> >03</option>
@@ -467,6 +468,8 @@ $page = isset($_GET['page']) && $_GET['page'] == 'resume_session.php' ? 'resume_
                 </select>
                 /
                 <select name="calendar_start_date_month">
+
+                    <option value=""></option>
                     <option value="1" <?php if($calendarStartDateMonth == 1) echo 'selected="selected"'; ?> >01</option>
                     <option value="2" <?php if($calendarStartDateMonth == 2) echo 'selected="selected"'; ?> >02</option>
                     <option value="3" <?php if($calendarStartDateMonth == 3) echo 'selected="selected"'; ?> >03</option>
@@ -483,8 +486,9 @@ $page = isset($_GET['page']) && $_GET['page'] == 'resume_session.php' ? 'resume_
                 /
                 <select name="calendar_start_date_year">
 
+                    <option value=""></option>
                     <?php
-                    for($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
+                    for($i=$thisYear-2;$i <= ($thisYear+5);$i++) {
                         ?>
                         <option value="<?php echo $i; ?>" <?php if($calendarStartDateYear == $i) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
                         <?php

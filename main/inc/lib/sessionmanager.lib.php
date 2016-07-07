@@ -1369,7 +1369,7 @@ class SessionManager
         $description = null,
         $showDescription = null,
         $duration = null,
-        $calendarStartDate = null
+        $calendarStartDate = ''
     ) {
         $name = trim(stripslashes($name));
         $year_start = intval($year_start);
@@ -1465,9 +1465,12 @@ class SessionManager
                 }
 
                 $calendarStartDateCondition = '';
-
-                if (array_key_exists('calendar_start_date', $sessionInfo) && !empty($calendarStartDate)) {
-                    $calendarStartDateCondition = " calendar_start_date = '".api_get_utc_datetime($calendarStartDate)."', ";
+                if (array_key_exists('calendar_start_date', $sessionInfo)) {
+                    if (empty($calendarStartDate)) {
+                        $calendarStartDateCondition = " calendar_start_date = NULL, ";
+                    } else {
+                        $calendarStartDateCondition = " calendar_start_date = '".api_get_utc_datetime($calendarStartDate)."', ";
+                    }
                 }
 
                 $sql = "UPDATE $tbl_session SET

@@ -28,6 +28,7 @@ class bbb
     public $enableGlobalConference = false;
     public $isGlobalConference = false;
     public $groupSupport = false;
+    public $table;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -48,15 +49,18 @@ class bbb
 
         $this->logoutUrl = $this->getListingUrl();
         $this->table = Database::get_main_table('plugin_bbb_meeting');
+
         $this->enableGlobalConference = $plugin->get('enable_global_conference');
         $this->isGlobalConference = (bool) $isGlobalConference;
 
         $columns = Database::listTableColumns($this->table);
+
         $this->groupSupport = isset($columns['group_id']) ? true : false;
 
         if ($this->groupSupport) {
             // Plugin check
             $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
+
             if ($this->groupSupport) {
 
                 // Platform check
@@ -66,9 +70,8 @@ class bbb
                 if ($bbbSetting) {
                     // Course check
                     $courseInfo = api_get_course_info();
-
                     if ($courseInfo) {
-                        $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+                        $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups', $courseInfo['code']) === '1';
                     }
                 }
             }
@@ -460,7 +463,7 @@ class bbb
                 ),
             ),
         );
-
+        
         if ($this->hasGroupSupport()) {
             $groupId = api_get_group_id();
             $conditions =  array(
@@ -667,7 +670,6 @@ class bbb
                     $actionLinksArray[] = $actionLinks;
                     $item['action_links'] = implode('<br />', $actionLinksArray);
                 }
-                //var_dump($recordArray);
                 $item['show_links']  = implode('<br />', $recordArray);
                 $item['action_links'] = implode('<br />', $actionLinksArray);
             }

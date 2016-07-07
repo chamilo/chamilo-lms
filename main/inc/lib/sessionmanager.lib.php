@@ -3853,6 +3853,7 @@ class SessionManager
      * Protect a session to be edited.
      * @param int $id
      * @param bool $checkSession
+     * @return mixed | bool true if pass the check, api_not_allowed otherwise
      */
     public static function protectSession($id, $checkSession = true)
     {
@@ -3951,7 +3952,7 @@ class SessionManager
      */
     public static function allowManageAllSessions()
     {
-        if (api_is_platform_admin()) {
+        if (api_is_platform_admin() || api_is_session_admin()) {
             return true;
         }
 

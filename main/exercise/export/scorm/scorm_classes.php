@@ -173,10 +173,10 @@ class ScormQuestion extends Question
 
         switch ($this->type) {
             case ORAL_EXPRESSION:
-                $script = file_get_contents(api_get_path(LIBRARY_PATH) . 'javascript/rtc/RecordRTC.js');
+                /*$script = file_get_contents(api_get_path(LIBRARY_PATH) . 'javascript/rtc/RecordRTC.js');
                 $script .= file_get_contents(api_get_path(LIBRARY_PATH) . 'wami-recorder/recorder.js');
                 $script .= file_get_contents(api_get_path(LIBRARY_PATH) . 'wami-recorder/gui.js');
-                $js .= $script;
+                $js .= $script;*/
                 break;
            case HOT_SPOT:
                 //put the max score to 0 to avoid discounting the points of
@@ -544,20 +544,23 @@ class ScormAnswerFree extends Answer
 	function export()
 	{
 		$js = '';
-
         $identifier = 'question_'.$this->questionJSId.'_free';
 		// currently the free answers cannot be displayed, so ignore the textarea
 		$html = '<tr><td colspan="2">';
         $type = $this->getQuestionType();
 
         if ($type == ORAL_EXPRESSION) {
+            /*
             $template = new Template('');
             $template->assign('directory', '/tmp/');
             $template->assign('user_id', api_get_user_id());
 
             $layout = $template->get_template('document/record_audio.tpl');
-            $html .= $template->fetch($layout);
+            $html .= $template->fetch($layout);*/
 
+			$html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
+
+            return array($js, $html);
         }
 
         $html .= '<textarea minlength="20" name="'.$identifier.'" id="'.$identifier.'" ></textarea>';

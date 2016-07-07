@@ -750,6 +750,13 @@ if ($form->validate()) {
             }
         }
 
+        $userFromDb = UserManager::getManager()->findUserByEmail($values['email']);
+        if ($userFromDb) {
+            Display::addFlash(Display::return_message(get_lang('EmailUsedTwice'), 'warning'));
+            header('Location: '.api_get_self());
+            exit;
+        }
+
         $status = isset($values['status']) ? $values['status'] : STUDENT;
         $phone = isset($values['phone']) ? $values['phone'] : null;
         $values['language'] = isset($values['language']) ? $values['language'] : api_get_interface_language();

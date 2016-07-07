@@ -161,4 +161,5 @@ $tpl->assign('form', $formToString);
 
 $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
-$tpl->assign('content', $content);$tpl->display_one_col_template();
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

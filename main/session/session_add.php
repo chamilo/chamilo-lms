@@ -78,7 +78,6 @@ $interbreadcrumb[] = array(
     'name' => get_lang('SessionList'),
 );
 
-
 function search_coachs($needle)
 {
     $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -192,19 +191,19 @@ $(function() {
 });
 </script>';
 
-$form->addHtml(''
-    . '<div class="form-group">'
-    . '<label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>'
-    . '<div class="col-sm-8">'
-    . '<div id="cropImage" class="cropCanvas">'
-    . '<img id="previewImage" >'
-    . '</div>'
-    . '<div>'
-    . '<button class="btn btn-primary hidden" name="cropButton" id="cropButton"><em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>'
-    . '</div>'
-    . '</div>'
-    . '</div>'
-    . '');
+$form->addHtml('
+    <div class="form-group">
+    label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>
+    <div class="col-sm-8">
+    <div id="cropImage" class="cropCanvas">
+    <img id="previewImage">
+    </div>
+    <div>
+    <button class="btn btn-primary hidden" name="cropButton" id="cropButton"><em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>
+    </div>
+    </div>
+    </div>
+');
 $form->addHidden('cropResult', '');
 
 $form->addButtonNext(get_lang('NextStep'));

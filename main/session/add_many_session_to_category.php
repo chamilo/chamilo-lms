@@ -16,16 +16,15 @@ $xajax->registerFunction('search_courses');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Database Table Definitions
-$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
 $tool_name = get_lang('SubscribeSessionsToCategory');
@@ -49,7 +48,7 @@ if (!api_is_platform_admin() && !api_is_session_admin()) {
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
 function add_course_to_session (code, content) {
     document.getElementById("course_to_add").value = "";
     document.getElementById("ajax_list_courses_single").innerHTML = "";

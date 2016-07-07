@@ -2628,7 +2628,7 @@ class SessionManager
         $return_array = array();
 
         $sql_query = " SELECT
-                    s.id,
+                    DISTINCT(s.id),
                     s.name,
                     s.nbr_courses,
                     s.access_start_date,

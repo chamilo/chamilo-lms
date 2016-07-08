@@ -203,11 +203,8 @@ $(document).ready(function() {
 /* DISPLAY SECTION */
 
 echo $learnPath->build_action_menu();
-
 echo '<div class="row" style="overflow:hidden">';
-
 echo '<div id="lp_sidebar" class="col-md-4">';
-
 echo $learnPath->return_new_tree(null, true);
 
 $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
@@ -217,16 +214,12 @@ if ($type == 'document' && !isset($_GET['file'])) {
     // Show the template list.
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
 }
-
 echo '</div>';
-
 // hide bar div
 if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
     echo '<div class="col-md-1"><div id="hide_bar_template"></div></div> ';
 }
-
 echo '<div id="doc_form" class="col-md-8">';
-
 //@todo use session flash messages
 if (in_array($message, array('ItemUpdated'))) {
     echo Display::return_message(get_lang($message));

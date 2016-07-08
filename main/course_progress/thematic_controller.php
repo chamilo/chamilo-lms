@@ -109,7 +109,7 @@ class ThematicController
                 case 'thematic_import_select':
                     break;
                 case 'thematic_import':
-                    $csv_import_array = Import::csvToArray($_FILES['file']['tmp_name']);
+                    $csv_import_array = Import::csv_reader($_FILES['file']['tmp_name'], false);
 
                     if (isset($_POST['replace']) && $_POST['replace']) {
                         // Remove current thematic.
@@ -122,14 +122,17 @@ class ThematicController
                     // Import the progress.
                     $current_thematic = null;
 
-                    foreach ($csv_import_array as $item) {
-                        $key = $item['type'];
-                        switch ($key) {
+                    foreach ($csv_import_array as $key => $item) {
+                        if (!$key) {
+                            continue;
+                        }
+
+                        switch ($item[0]) {
                             case 'title':
                                 $thematic->set_thematic_attributes(
                                     null,
-                                    $item['data1'],
-                                    $item['data2'],
+                                    $item[1],
+                                    $item[2],
                                     api_get_session_id()
                                 );
                                 $current_thematic = $thematic->thematic_save();
@@ -138,8 +141,8 @@ class ThematicController
                             case 'plan':
                                 $thematic->set_thematic_plan_attributes(
                                     $current_thematic,
-                                    $item['data1'],
-                                    $item['data2'],
+                                    $item[1],
+                                    $item[2],
                                     $description_type
                                 );
                                 $thematic->thematic_plan_save();
@@ -150,14 +153,15 @@ class ThematicController
                                     null,
                                     $current_thematic,
                                     0,
-                                    $item['data3'],
-                                    $item['data1'],
-                                    $item['data2']
+                                    $item[3],
+                                    $item[1],
+                                    $item[2]
                                 );
                                 $thematic->thematic_advance_save();
                                 break;
                         }
                     }
+
                     $action = 'thematic_details';
                     break;
                 case 'thematic_export':
@@ -169,7 +173,15 @@ class ThematicController
                         $data = $thematic->get_thematic_plan_data($theme['id']);
                         if (!empty($data)) {
                             foreach ($data as $plan) {
-                                $csv[] = array('plan', $plan['title'], $plan['description']);
+                                if (empty($plan['description'])) {
+                                    continue;
+                                }
+
+                                $csv[] = [
+                                    'plan',
+                                    strip_tags($plan['title']),
+                                    strip_tags($plan['description'])
+                                ];
                             }
                         }
                         $data = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
@@ -177,9 +189,9 @@ class ThematicController
                             foreach ($data as $advance) {
                                 $csv[] = array(
                                     'progress',
-                                    $advance['start_date'],
-                                    $advance['duration'],
-                                    $advance['content'],
+                                    strip_tags($advance['start_date']),
+                                    strip_tags($advance['duration']),
+                                    strip_tags($advance['content']),
                                 );
                             }
                         }
@@ -201,6 +213,10 @@ class ThematicController
                         $plan_html = null;
                         if (!empty($data)) {
                             foreach ($data as $plan) {
+                                if (empty($plan['description'])) {
+                                    continue;
+                                }
+
                                 $plan_html .= '<strong>' . $plan['title'] . '</strong><br /> ' . $plan['description'] . '<br />';
                             }
                         }

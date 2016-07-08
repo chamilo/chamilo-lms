@@ -965,8 +965,10 @@ class IndexManager
                 $content .= '</li>';
             }
             $content .= '</ul>';
+    
             $html = self::show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
         }
+        var_dump($this->tpl->menu_navigation);
         return $html;
     }
 

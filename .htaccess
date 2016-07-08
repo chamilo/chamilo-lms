@@ -23,6 +23,8 @@ RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1
 RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 
 # Rewrite everything in the document folder of a course to the download script
+# Except certificate resources, which might need to be accessible publicly to all
+RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
 
 # Rewrite everything in the work folder

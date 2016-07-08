@@ -2415,9 +2415,10 @@ table#skill_holder {
 .badges-sidebar{
     height: 250px;
 }
-/* ****************************************************
-                     END SKILL
- **************************************************** */
+.panel figure figcaption{
+    background: none;
+    text-align: center;
+}
 
 .skill_root {
     box-shadow: 2px 2px 19px #aaa;
@@ -5693,6 +5694,38 @@ footer{
     -moz-box-shadow: 0 1px 3px #C8C8C8;
     box-shadow: 0 1px 3px #C8C8C8;
     border: 1px solid #e6e6e6;
+}
+#toolnav{
+    position: fixed;
+    left: 0;
+    top: 50px;
+    z-index: 2000;
+}
+#toolnavbox ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#toolnavbox ul li{
+    height: 40px;
+    
+}
+#toolnavbox ul li a {
+	display: inline-block;
+    margin: 0;
+	color:#fff;
+	padding: 7px;
+	text-decoration: none;
+	-webkit-transition:all 500ms ease;
+	-o-transition:all 500ms ease;
+    transition:all 500ms ease;
+    width: 38px
+}
+#toolnavbox ul li a:hover {
+	padding: 5px 10px;
+}
+.btn-tool{
+    margin-bottom: 2px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

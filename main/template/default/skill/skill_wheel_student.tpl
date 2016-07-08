@@ -146,6 +146,9 @@
         $('#frm-course-info').on('', function () {
             $('#frm-course-info').find('.modal-body').html('');
         });
+        $(".facebook-auto").css("width","100%");
+        $(".facebook-auto ul").css("width","100%");
+        $("ul.holder").css("width","100%");
     });
 
 </script>
@@ -162,7 +165,7 @@
                     <div class="panel-body">
                         <figure class="text-center">
                             <img width="100px" src="{{ user_info.avatar }}" class="img-circle center-block">
-                            <figcaption class="lead">{{ user_info.complete_name }}</figcaption>
+                            <figcaption class="avatar-author">{{ user_info.complete_name }}</figcaption>
                         </figure>
                         <p class="text-center">
                             <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default" target="_blank">{{ 'YourSkillRankingX'|get_lang|format(ranking) }}</a>

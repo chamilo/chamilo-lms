@@ -5911,10 +5911,12 @@ class learnpath
     public function build_action_menu($returnContent = false)
     {
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
-        $return = '<div class="actions">';
-        $return .=  '<a href="lp_controller.php?'.api_get_cidreq().'&gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '&isStudentView=true" target="_self">' . Display :: return_icon('preview_view.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a> ';
-        $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=admin_view&lp_id=' . $_SESSION['oLP']->lp_id . '&updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'',ICON_SIZE_MEDIUM).'</a>';
-        $return .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft = null;
+        
+        $actionsLeft .=  '<a href="lp_controller.php?'.api_get_cidreq().'&gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '&isStudentView=true" target="_self">' . Display :: return_icon('preview_view.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a> ';
+        $actionsLeft .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=admin_view&lp_id=' . $_SESSION['oLP']->lp_id . '&updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'',ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
         $buttons = array(
             array(
                 'title' => get_lang('SetPrerequisiteForEachItem'),
@@ -5925,13 +5927,15 @@ class learnpath
                 'href' => 'lp_controller.php?'.api_get_cidreq().'&action=clear_prerequisites&lp_id=' . $_SESSION['oLP']->lp_id,
             ),
         );
-        $return .= Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
-        $return .= '</div>';
+        $actionsRigth = Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
+        
 
         if ($returnContent) {
-            return $return;
+            return $toolbar=null;
         }
-        echo $return;
+        
+        echo $toolbar = Display::toolbarAction('actions-lp-controller', array(0 => $actionsLeft, 1 => $actionsRigth));
+        
     }
 
     /**

@@ -1159,27 +1159,31 @@ class CourseHome
         $navigation_items = self::get_navigation_items(true);
         $course_id = api_get_course_id();
 
-        $html = '<div id="toolnav"> <!-- start of #toolnav -->';
+        $html = '<div id="toolnav">'
+                . '<div class="btn-tool">'
+                . '<a class="btn btn-default" href="javascript: void(0);" id="swap_menu_link" onclick="javascript: swap_menu();">'.Display::returnFontAwesomeIcon('bars').'</a></div>';
         if (api_get_setting('show_navigation_menu') == 'icons') {
             $html .= self::show_navigation_tool_shortcuts($orientation = SHORTCUTS_VERTICAL);
         } else {
             $html .= '<div id="toolnavbox">';
-            $html .= '<div id="toolnavlist"><dl>';
+            $html .= '<ul>';
+            $count = 0;
             foreach ($navigation_items as $key => $navigation_item) {
                 //students can't see the course settings option
+                $count++;
                 if (!api_is_allowed_to_edit() && $key == 'course_settings') {
                     continue;
                 }
-                $html .= '<dd>';
+                $html .= '<li>';
                 $url_item = parse_url($navigation_item['link']);
                 $url_current = parse_url($_SERVER['REQUEST_URI']);
 
                 if (strpos($navigation_item['link'], 'chat') !== false &&
                     api_get_course_setting('allow_open_chat_window', $course_id)
                 ) {
-                    $html .= '<a href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$navigation_item['target'].'"';
+                    $html .= '<a class="btn btn-default" href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$navigation_item['target'].'"';
                 } else {
-                    $html .= '<a href="'.$navigation_item['link'].'" target="_top" ';
+                    $html .= '<a class="btn btn-default" href="'.$navigation_item['link'].'" target="_top" ';
                 }
 
                 if (stristr($url_item['path'], $url_current['path'])) {
@@ -1189,15 +1193,15 @@ class CourseHome
                 }
                 $html .= ' title="'.$navigation_item['name'].'">';
                 if (api_get_setting('show_navigation_menu') != 'text') {
-                    $html .= '<div align="left"><img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/></div>';
+                    $html .= '<div class="pull-left">'.Display::return_icon(substr($navigation_item['image'],0,-3)."png", $navigation_item['name'], array('class'=>'tool-img'), ICON_SIZE_SMALL).'</div>';
                 }
                 if (api_get_setting('show_navigation_menu') != 'icons') {
-                    $html .= $navigation_item['name'];
+                    $html .= '<span class="tool-text-'.$count.'">'.$navigation_item['name'].'</span>';
                 }
                 $html .= '</a>';
-                $html .= '</dd>';
+                $html .= '</li>';
             }
-            $html .= '</dl></div></div>';
+            $html .= '</ul></div>';
         }
         $html .= '</div><!-- end "#toolnav" -->';
 

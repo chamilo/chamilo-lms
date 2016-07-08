@@ -13,6 +13,8 @@
                 if (readCookie('menu_state') == 0) {
                     swap_menu();
                 }
+
+              
             });
             function createCookie(name, value, days) {
                 if (days) {
@@ -35,7 +37,7 @@
                 return null;
             }
             function swap_menu() {
-                toolnavlist_el = document.getElementById('toolnav');
+                toolnavlist_el = document.getElementById('toolnavbox');
                 center_el = document.getElementById('center');
                 swap_menu_link_el = document.getElementById('swap_menu_link');
 
@@ -44,18 +46,17 @@
                     if (center_el) {
                         center_el.style.margin = '0 190px 0 0';
                     }
-                    swap_menu_link_el.innerHTML = '{{'Hide'|get_lang}}';
+                    swap_menu_link_el.innerHTML = '<i class="fa fa-bars" aria-hidden="true"></i>';
                     createCookie('menu_state',1,10);
                 } else {
                     toolnavlist_el.style.display = 'none';
                     if (center_el) {
                         center_el.style.margin = '0 0 0 0';
                     }
-                    swap_menu_link_el.innerHTML = '{{'Show'|get_lang}}';
+                    swap_menu_link_el.innerHTML = '<i class="fa fa-bars" aria-hidden="true"></i>';
                     createCookie('menu_state',0,10);
                 }
             }
-            document.write('<div class="col-md-12 pull-right"> <a class="btn btn-default" href="javascript: void(0);" id="swap_menu_link" onclick="javascript: swap_menu();">{{'Hide'|get_lang}}<\/a></div>');
         </script>
     {{ show_course_navigation_menu }}
     {% endif %}

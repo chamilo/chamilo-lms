@@ -2603,4 +2603,35 @@ JAVASCRIPT;
 
         return Database::store_result($result, 'ASSOC');
     }
+
+    /**
+     * @param int $fieldId
+     * @param int $tagId
+     *
+     * @return array
+     */
+    public function getAllSkillPerTag($fieldId, $tagId)
+    {
+        $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
+        $tagRelXtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
+        $fieldId = intval($fieldId);
+        $tagId = intval($tagId);
+
+        $sql = "SELECT s.id
+                FROM $skillTable s INNER JOIN $tagRelXtraTable t
+                ON t.item_id = s.id
+                WHERE tag_id = $tagId AND t.field_id = $fieldId;
+        ";
+
+        $result = Database::query($sql);
+        $result = Database::store_result($result, 'ASSOC');
+
+        $skillList = [];
+
+        foreach ($result as $index => $value) {
+            $skillList[$value['id']] = $value['id'];
+        }
+
+        return $skillList;
+    }
 }

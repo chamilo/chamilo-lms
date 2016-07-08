@@ -422,7 +422,7 @@ class IndexManager
         // Initialization.
         $user_identified = (api_get_user_id() > 0 && !api_is_anonymous());
         $web_course_path = api_get_path(WEB_COURSE_PATH);
-        $category = Database::escape_string($_GET['category']);
+        $category = isset($_GET['category']) ? Database::escape_string($_GET['category']) : '';
         $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
 
         // Database table definitions.
@@ -431,7 +431,7 @@ class IndexManager
 
         // Get list of courses in category $category.
         $sql_get_course_list = "SELECT * FROM $main_course_table cours
-                                    WHERE category_code = '".Database::escape_string($_GET['category'])."'
+                                    WHERE category_code = '" . $category . "'
                                     ORDER BY title, UPPER(visual_code)";
 
         // Showing only the courses of the current access_url_id.

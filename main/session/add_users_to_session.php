@@ -21,8 +21,11 @@ $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 SessionManager::protectSession($id_session);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
-$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+$interbreadcrumb[] = array(
+    'url' => "resume_session.php?id_session=".$id_session,
+    "name" => get_lang('SessionOverview'),
+);
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);

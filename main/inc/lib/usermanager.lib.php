@@ -860,7 +860,7 @@ class UserManager
         $encrypt_method = '',
         $send_email = false,
         $reset_password = 0,
-        $address
+        $address = null
     ) {
         $hook = HookUpdateUser::create();
         if (!empty($hook)) {

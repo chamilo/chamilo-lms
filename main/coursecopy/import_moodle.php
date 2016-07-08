@@ -39,9 +39,9 @@ $form->addFile('moodle_file', get_lang('MoodleFile'));
 $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
-    $file = $_FILES['moodle_file']['tmp_name'];
+    $file = $_FILES['moodle_file'];
     $moodleImport = new MoodleImport();
-    var_dump($moodleImport->readMoodleFile($file));
+    $moodleImport->readMoodleFile($file);
 }
 
 $templateName = get_lang('ImportFromMoodle');

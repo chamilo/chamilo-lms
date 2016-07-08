@@ -146,6 +146,9 @@
         $('#frm-course-info').on('', function () {
             $('#frm-course-info').find('.modal-body').html('');
         });
+        $(".facebook-auto").css("width","100%");
+        $(".facebook-auto ul").css("width","100%");
+        $("ul.holder").css("width","100%");
     });
 
 </script>

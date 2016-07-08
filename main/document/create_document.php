@@ -14,36 +14,27 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = '
 <script>
 
-var hide_bar = function() {
-    $("#template_col").hide();
-    $("#doc_form").removeClass("col-md-9");
-    $("#doc_form").addClass("col-md-11");
-    $("#hide_bar_template").css({"background-image" : \'url("'.Display::returnIconPath('hide2.png').'")\'})
-}
-
 $(document).ready(function() {
     $(".scrollbar-light").scrollbar();
     
-    if ($(window).width() <= 785 ) {
-        hide_bar();
-    }    
-
+    
     $("#hide_bar_template").click(function() {
-        
-        $("#expand").toggleClass("hide");
         $("#expand").toggleClass("hide");
         $("#contract").toggleClass("hide");
-        
         if ($("#doc_form").is(".col-md-9")) {
             $("#doc_form").removeClass("col-md-9");
             $("#doc_form").addClass("col-md-11");
+            
+            $("#template_col").removeClass("col-md-3");
+            $("#template_col").addClass("hide");
+            
         } else {
             $("#doc_form").removeClass("col-md-11");
             $("#doc_form").addClass("col-md-9");
+            
+            $("#template_col").removeClass("hide");
+            $("#template_col").addClass("col-md-3");
         }
-        
-        $("#hide_bar_template").toggleClass("hide_bar_template_not_hide");
-        
     });
 
     CKEDITOR.on("instanceReady", function (e) {
@@ -615,11 +606,11 @@ if ($form->validate()) {
 	if ($is_certificate_mode) {
             $actionsLeft =  '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.
             Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-            $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Back'),null,ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Back'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Back'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
         } else {
             $actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
             Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-            $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Back'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Back'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
         }
 
         echo $toolbar = Display::toolbarAction('actions-documents', array(0 => $actionsLeft, 1 => ''));

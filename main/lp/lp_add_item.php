@@ -227,7 +227,8 @@ $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 // Show the template list.
 if ($type == 'document' && !isset($_GET['file'])) {
     // Show the template list.
-    echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
+    echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
+    echo '</div>';
 }
 
 echo '</div>';

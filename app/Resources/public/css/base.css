@@ -2415,7 +2415,10 @@ table#skill_holder {
 .badges-sidebar{
     height: 250px;
 }
-
+.panel figure figcaption{
+    background: none;
+    text-align: center;
+}
 
 .skill_root {
     box-shadow: 2px 2px 19px #aaa;

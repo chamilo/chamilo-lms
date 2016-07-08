@@ -177,19 +177,23 @@ jQuery(document).ready(function(){
 });
 
 $(document).ready(function() {
-    $("#doc_form").removeClass( "col-md-8" ).addClass( "col-md-7" );
-    $("#hide_bar_template").click(function() {
-        $("#lp_sidebar").toggleClass("hide");
-
-        if ($('#doc_form').is('.col-md-7')) {
-            $('#doc_form').removeClass('col-md-7');
-            $('#doc_form').addClass('col-md-11');
+     $("#hide_bar_template").click(function() {
+        $("#expand").toggleClass("hide");
+        $("#contract").toggleClass("hide");
+        if ($("#doc_form").is(".col-md-8")) {
+            $("#doc_form").removeClass("col-md-8");
+            $("#doc_form").addClass("col-md-11");
+            
+            $("#lp_sidebar").removeClass("col-md-4");
+            $("#lp_sidebar").addClass("hide");
+            
         } else {
-            $('#doc_form').removeClass('col-md-11');
-            $('#doc_form').addClass('col-md-7');
+            $("#doc_form").removeClass("col-md-11");
+            $("#doc_form").addClass("col-md-8");
+            
+            $("#lp_sidebar").removeClass("hide");
+            $("#lp_sidebar").addClass("col-md-4");
         }
-
-        $("#hide_bar_template").toggleClass("hide_bar_template_not_hide");
     });
 
     $('.lp-btn-associate-forum').on('click', function (e) {
@@ -227,11 +231,6 @@ if ($type == 'document' && !isset($_GET['file'])) {
 }
 
 echo '</div>';
-
-// hide bar div
-if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
-    echo '<div class="col-md-1"><div id="hide_bar_template"></div></div> ';
-}
 
 echo '<div id="doc_form" class="col-md-8">';
 

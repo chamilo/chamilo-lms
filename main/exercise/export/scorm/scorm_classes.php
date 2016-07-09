@@ -18,6 +18,8 @@
  */
 class ScormQuestion extends Question
 {
+    public $js_id;
+    public $answer;
 	/**
 	 * Returns the HTML + JS flow corresponding to one question
 	 *
@@ -27,6 +29,7 @@ class ScormQuestion extends Question
 	 * Due to the nature of interactions, we must have a natural sequence for
 	 * questions in the generated JavaScript.
 	 * @param integer $js_id
+     * @return string|array
 	 */
 	public static function export_question($questionId, $standalone = true, $js_id)
 	{
@@ -378,7 +381,6 @@ class ScormAnswerFillInBlanks extends Answer
 		foreach ($this->answer as $i => $answer) {
 			$blankList[] = '['.$answer.']';
 		}
-		$answerCount = count($blankList);
 
 		// splits text and weightings that are joined with the character '::'
 		list($answer,$weight)=explode('::',$answer);
@@ -881,11 +883,8 @@ class ScormAssessmentItem
 
 	/**
 	 * Export the question as a SCORM Item.
-	 *
 	 * This is a default behaviour, some classes may want to override this.
-	 *
-	 * @param $standalone: Boolean stating if it should be exported as a stand-alone question
-	 * @return A string, the XML flow for an Item.
+	 * @return string|array A string, the XML flow for an Item.
 	 */
 	function export()
 	{

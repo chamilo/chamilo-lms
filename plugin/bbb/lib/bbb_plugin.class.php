@@ -96,7 +96,8 @@ class BBBPlugin extends Plugin
                 session_id INT unsigned DEFAULT 0,
                 remote_id CHAR(30),
                 visibility TINYINT NOT NULL DEFAULT 1,
-                voice_bridge INT NOT NULL DEFAULT 1
+                voice_bridge INT NOT NULL DEFAULT 1,
+                access_url INT NOT NULL DEFAULT 1
                 )";
         Database::query($sql);
 

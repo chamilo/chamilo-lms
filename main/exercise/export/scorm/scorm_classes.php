@@ -345,7 +345,7 @@ class ScormAnswerTrueFalse extends Answer
 		} else {
 			$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array(\'false\');'."\n";
 		}
-		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = '.$this->weighting[1].";\n";
 		$js .= $jstmpw;
@@ -792,7 +792,7 @@ class ScormAssessmentItem
 	 */
 	function common_js()
 	{
-		$js .= 'var questions = new Array();';
+		$js = 'var questions = new Array();';
 		$js .= 'var questions_answers = new Array();';
 		$js .= 'var questions_answers_correct = new Array();';
 		$js .= 'var questions_types = new Array();';

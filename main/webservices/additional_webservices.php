@@ -62,9 +62,11 @@ function wsConvertPpt($pptData)
 
     if ($return === 0) {
         $images = array();
-        foreach ($files as $file) {
-            $imageData = explode('||', $file);
-            $images[$imageData[1]] = base64_encode(file_get_contents($tempPathNewFiles . $fileName . '/' . $imageData[1]));
+        if (is_array($files) && !empty($files)) {
+            foreach ($files as $file) {
+                $imageData = explode('||', $file);
+                $images[$imageData[1]] = base64_encode(file_get_contents($tempPathNewFiles . $fileName . '/' . $imageData[1]));
+            }
         }
         $data = array(
             'files' => $files,

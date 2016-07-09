@@ -404,19 +404,21 @@ if (!$is_certificate_mode &&
 			}
 		}
 	} else {
-		foreach ($folders as & $folder) {
-			$selected = (substr($dir,0,-1)==$folder) ? ' selected="selected"' : '';
-			$label = $folder_titles[$folder];
-			if ($folder == $group_dir) {
-				$label = '/ ('.get_lang('HomeDirectory').')';
-			} else {
-				$path_parts = explode('/', str_replace($group_dir, '', $folder));
-				$label = cut($label, 80);
-				$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
-			}
-			$parent_select -> addOption($label, $folder);
-			if ($selected != '') {
-				$parent_select->setSelected($folder);
+		if (is_array($folders) && !empty($folders)) {
+			foreach ($folders as & $folder) {
+				$selected = (substr($dir, 0, -1) == $folder) ? ' selected="selected"' : '';
+				$label = $folder_titles[$folder];
+				if ($folder == $group_dir) {
+					$label = '/ (' . get_lang('HomeDirectory') . ')';
+				} else {
+					$path_parts = explode('/', str_replace($group_dir, '', $folder));
+					$label = cut($label, 80);
+					$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2) . ' &mdash; ' . $label;
+				}
+				$parent_select->addOption($label, $folder);
+				if ($selected != '') {
+					$parent_select->setSelected($folder);
+				}
 			}
 		}
 	}

@@ -401,7 +401,12 @@ class ScormAnswerFillInBlanks extends Answer
                 ($endlocations-$startlocations)+1
             );
             $jstmp .= $i.',';
-            $jstmpc .= "'".api_htmlentities(api_substr($texstring, 1, -1), ENT_QUOTES, $charset)."',";
+			if (!empty($texstring)) {
+				$sub = api_substr($texstring, 1, -1);
+				if (!empty($sub)) {
+					$jstmpc .= "'" . api_htmlentities($sub, ENT_QUOTES, $charset) . "',";
+				}
+			}
             $my_weight = explode('@', $weights[$i - 1]);
             if (count($my_weight) == 2) {
                 $weight_db = $my_weight[0];

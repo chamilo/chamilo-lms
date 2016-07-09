@@ -112,7 +112,7 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $results = SessionManager::get_course_list_by_session_id($_GET['session_id'], $_GET['q']);
             $results2 = array();
-            if (!empty($results)) {
+            if (is_array($results) && !empty($results)) {
                 foreach ($results as $item) {
                     $item2 = array();
                     foreach ($item as $id => $internal) {

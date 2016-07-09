@@ -95,6 +95,7 @@ class MoodleImport
                                     $questionsValues = $this->readMainQuestionsXml($questionsXml, $question['questionid']);
                                     //$moduleValues['question_instances'][$index] =
                                 }
+                                exit;
 
                                 break;
                             case 'resource1':
@@ -352,6 +353,7 @@ class MoodleImport
             foreach ($questions as $question) {
                 if (intval($question->getAttribute('id')) == $questionId) {
                     if ($question->childNodes->length) {
+                        $currentItem['questionid'] = $questionId;
                         $questionType = '';
                         foreach($question->childNodes as $item) {
                             $currentItem[$item->nodeName] = $item->nodeValue;
@@ -362,17 +364,19 @@ class MoodleImport
                             if ($item->nodeName == 'plugin_qtype_'.$questionType.'_question') {
                                 $answer = $item->getElementsByTagName('answer');
                                 $currentItem['plugin_qtype_'.$questionType.'_question'] = [];
-                                $answerId = 0;
-                                foreach ($answer as $value) {
-                                    $answerId = $value->getAttribute('id');
-                                    if ($value->childNodes) {
-                                        foreach ($value->childNodes as $aItem) {
-                                            $currentItem['plugin_qtype_'.$questionType.'_question'] = [$aItem->nodeName => $aItem->nodeValue];
-                                        }
+                                for ($i = 0; $i <= $answer->length - 1; $i++) {
+                                    $currentItem['plugin_qtype_'.$questionType.'_question'][$i]['answerid'] = $answer->item($i)->getAttribute('id');
+                                    foreach ($answer->item($i)->childNodes as $properties) {
+                                        $currentItem['plugin_qtype_'.$questionType.'_question'][$i][$properties->nodeName] = $properties->nodeValue;
                                     }
                                 }
 
-
+                                $typeValues = $item->getElementsByTagName($questionType);
+                                for ($i = 0; $i <= $typeValues->length - 1; $i++) {
+                                    foreach ($typeValues->item($i)->childNodes as $properties) {
+                                        $currentItem[$questionType.'_values'][$properties->nodeName] = $properties->nodeValue;
+                                    }
+                                }
                             }
                         }
                     }

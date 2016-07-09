@@ -11,6 +11,8 @@
 
 /**
  * Validates imported data.
+ * @param   array   $classes A list of classes to be validated
+ * @return array An array with error messages (if any)
  */
 function validate_data($classes) {
     $errors = array();
@@ -35,6 +37,8 @@ function validate_data($classes) {
 
 /**
  * Save imported class data to database
+ * @param   array   $classes    A list of classes to be imported
+ * @return  int The number of classes that where successfully imported
  */
 function save_data($classes) {
     $number_of_added_classes = 0;

@@ -12,7 +12,7 @@
 /**
  * Validates imported data.
  */
-function validate_data($user_classes) {
+function validate_users_data($user_classes) {
     global $purification_option_for_usernames;
     $errors = array ();
     $classcodes = array ();
@@ -71,7 +71,7 @@ function validate_data($user_classes) {
 /**
  * Saves imported data.
  */
-function save_data($users_classes) {
+function save_users_data($users_classes) {
 
     global $purification_option_for_usernames;
 
@@ -157,9 +157,9 @@ $form->addButtonImport(get_lang('Import'));
 if ($form->validate()) {
     $users_classes = parse_csv_data($_FILES['import_file']['tmp_name']);
 
-    $errors = validate_data($users_classes);
+    $errors = validate_users_data($users_classes);
     if (count($errors) == 0) {
-        save_data($users_classes);
+        save_users_data($users_classes);
         header('Location: class_list.php?action=show_message&message='.urlencode(get_lang('FileImported')));
         exit();
     }

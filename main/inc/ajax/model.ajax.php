@@ -1742,7 +1742,7 @@ if (in_array($action, $allowed_actions)) {
             }
             $array = array();
             foreach ($columns as $col) {
-                if ($col == 'correction') {
+                if (in_array($col, ['correction', 'actions'])) {
                     $array[] = isset($row[$col]) ? $row[$col] : '';
                 } else {
                     $array[] = isset($row[$col]) ? Security::remove_XSS($row[$col]) : '';

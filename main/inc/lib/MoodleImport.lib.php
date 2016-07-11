@@ -87,14 +87,49 @@ class MoodleImport
                             case 'quiz':
 
                                 // Read the current quiz module xml.
+                                // The quiz case is the very complicate process of all the import.
+                                // Please if you want to review the script, try to see the readingXML functions.
+                                // The readingXML functions in this clases do all the mayor work here.
+
                                 $moduleDir = $currentItem['directory'];
                                 $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                                 $questionsXml = @file_get_contents($destinationDir.'/questions.xml');
                                 $moduleValues = $this->readQuizModule($moduleXml);
+
+                                // At this point we got all the prepared resources from Moodle file
+                                // $moduleValues variable contains all the necesary info to the quiz import
+                                // var_dump($moduleValues['question_instances']); // <-- uncomment this to see the final array
+
+                                // Lets do this ...
+                                $exercise = new Exercise();
+                                $exercise->updateTitle(Exercise::format_title_variable($moduleValues['name']));
+                                $exercise->updateDescription($moduleValues['intro']);
+                                $exercise->updateAttempts($moduleValues['attempts_number']);
+                                $exercise->updateFeedbackType(0);
+                                $exercise->setRandom(intval($moduleValues['shufflequestions']) + 1);
+                                $exercise->updateRandomAnswers($moduleValues['shuffleanswers']);
+                                $exercise->updateExpiredTime($moduleValues['timelimit']);
+
+                                if ($moduleValues['questionsperpage'] == 1) {
+                                    $exercise->updateType(2);
+                                } else {
+                                    $exercise->updateType(1);
+                                }
+
+                                // Create the new Quiz
+                                $exercise->save();
+
+                                // Ok, we got the Quiz and create it, now its time to add the Questions
                                 foreach ($moduleValues['question_instances'] as $index => $question) {
                                     $questionsValues = $this->readMainQuestionsXml($questionsXml, $question['questionid']);
-                                    //$moduleValues['question_instances'][$index] =
+                                    $moduleValues['question_instances'][$index] = $questionsValues;
+                                    // Add the matched chamilo question type to the array
+                                    $moduleValues['question_instances'][$index]['chamilo_qtype'] = $this->matchMoodleChamiloQuestionTypes($moduleValues['question_instances'][$index]['qtype']);
+
+                                    var_dump($moduleValues['question_instances'][$index]);
+                                    $questionInstance = Question::getInstance($moduleValues['question_instances'][$index]['chamilo_qtype']);
                                 }
+
                                 exit;
 
                                 break;
@@ -362,7 +397,7 @@ class MoodleImport
                             }
 
                             if ($item->nodeName == 'plugin_qtype_'.$questionType.'_question') {
-                                $answer = $item->getElementsByTagName('answer');
+                                $answer = $item->getElementsByTagName($this->getQuestionTypeAnswersTag($questionType));
                                 $currentItem['plugin_qtype_'.$questionType.'_question'] = [];
                                 for ($i = 0; $i <= $answer->length - 1; $i++) {
                                     $currentItem['plugin_qtype_'.$questionType.'_question'][$i]['answerid'] = $answer->item($i)->getAttribute('id');
@@ -371,10 +406,18 @@ class MoodleImport
                                     }
                                 }
 
-                                $typeValues = $item->getElementsByTagName($questionType);
+                                $typeValues = $item->getElementsByTagName($this->getQuestionTypeOptionsTag($questionType));
                                 for ($i = 0; $i <= $typeValues->length - 1; $i++) {
                                     foreach ($typeValues->item($i)->childNodes as $properties) {
                                         $currentItem[$questionType.'_values'][$properties->nodeName] = $properties->nodeValue;
+                                        if ($properties->nodeName == 'sequence') {
+                                            $sequence = $properties->nodeValue;
+                                            $sequenceIds = explode(',', $sequence);
+                                            foreach ($sequenceIds as $qId) {
+                                                $questionMatch = $this->readMainQuestionsXml($questionsXml, $qId);
+                                                $currentItem['plugin_qtype_'.$questionType.'_question'][] = $questionMatch;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -382,11 +425,92 @@ class MoodleImport
                     }
                 }
             }
-            var_dump($currentItem);
+
+            $this->traverseArray($currentItem, ['#text', 'question_hints', 'tags']);
             return $currentItem;
         }
 
         return false;
+    }
+
+    /**
+     * return the correct question type options tag
+     *
+     * @param string $questionType name
+     * @return string question type tag
+     */
+    public function getQuestionTypeOptionsTag($questionType)
+    {
+        switch ($questionType) {
+            case 'match':
+            case 'ddmatch':
+                return 'matchoptions';
+                break;
+            default:
+                return $questionType;
+                break;
+        }
+    }
+
+    /**
+     * return the correct question type answers tag
+     *
+     * @param string $questionType name
+     * @return string question type tag
+     */
+    public function getQuestionTypeAnswersTag($questionType)
+    {
+        switch ($questionType) {
+            case 'match':
+            case 'ddmatch':
+                return 'match';
+                break;
+            default:
+                return 'answer';
+                break;
+        }
+    }
+
+    /**
+     *
+     * @param string $moodleQuestionType
+     * @return integer Chamilo question type
+     */
+    public function matchMoodleChamiloQuestionTypes($moodleQuestionType)
+    {
+        switch ($moodleQuestionType) {
+            case 'multichoice':
+                return UNIQUE_ANSWER;
+                break;
+            case 'multianswer':
+            case 'shortanswer':
+            case 'match':
+                return FILL_IN_BLANKS;
+                break;
+            case 'essay':
+                return FREE_ANSWER;
+            case 'truefalse':
+                return MULTIPLE_ANSWER_TRUE_FALSE;
+        }
+    }
+
+
+    /**
+     * Litle utility to delete the unuseful tags
+     *
+     * @param $array
+     * @param $keys
+     */
+    public function traverseArray(&$array, $keys) {
+        foreach ($array as $key => &$value) {
+            if (is_array($value)) {
+                $this->traverseArray($value, $keys);
+            } else {
+                if (in_array($key, $keys)){
+                    unset($array[$key]);
+                }
+            }
+        }
     }
 
 }

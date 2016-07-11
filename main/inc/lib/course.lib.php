@@ -5959,7 +5959,8 @@ class CourseManager
      * @param string $msgLabel
      * @return bool|string
      */
-    private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel) {
+    private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel)
+    {
         if (isset($_configuration[$accessUrlId][$param]) && $_configuration[$accessUrlId][$param] > 0) {
             $num = self::count_courses($accessUrlId);
             if ($num >= $_configuration[$accessUrlId][$param]) {
@@ -5976,7 +5977,8 @@ class CourseManager
      * @param array $params Parameters from the course creation form
      * @return void
      */
-    private static function fillCourse($courseInfo, $params) {
+    private static function fillCourse($courseInfo, $params)
+    {
         AddCourse::prepare_course_repository($courseInfo['directory'], $courseInfo['code']);
         AddCourse::fill_db_course(
             $courseInfo['real_id'],

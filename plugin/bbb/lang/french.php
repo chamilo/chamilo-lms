@@ -38,3 +38,4 @@ $strings['plugin_tool_bbb'] = 'Vidéo';
 $strings['ThereAreNotRecordingsForTheMeetings'] = 'Aucun enregistrement disponible';
 $strings['NoRecording'] = "Pas d'enregistrement";
 $strings['ClickToContinue'] = 'Cliquez pour continuer';
+$strings['NoGroup'] = 'Sans groupe';

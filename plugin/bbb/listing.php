@@ -1,4 +1,7 @@
 <?php
+
+use ChamiloSession as Session;
+
 /**
  * This script initiates a video conference session, calling the BigBlueButton API
  * @package chamilo.plugin.bigbluebutton
@@ -6,6 +9,10 @@
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
+
+if (isset($_REQUEST['gidReq'])) {
+    Session::write('_gid', (int) $_REQUEST['gidReq']);
+}
 
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
@@ -139,6 +146,7 @@ if ($bbb->isGlobalConference() === false &&
 
     $form = new FormValidator(api_get_self().'?'.api_get_cidreq());
     $groupId = api_get_group_id();
+
     $groups = GroupManager::get_groups();
     if ($groups) {
         $meetingsInGroup = $bbb->getAllMeetingsInCourse(api_get_course_int_id(), api_get_session_id(), 1);
@@ -151,7 +159,7 @@ if ($bbb->isGlobalConference() === false &&
             }
         }
 
-        $groupList[0] = get_lang('Select');
+        $groupList[0] = $plugin->get_lang('NoGroup');
         $groupList = array_merge($groupList, array_column($groups, 'name', 'iid'));
 
         $form->addSelect('group_id', get_lang('Groups'), $groupList, ['id' => 'group_select']);

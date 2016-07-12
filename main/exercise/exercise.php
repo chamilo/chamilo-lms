@@ -66,21 +66,12 @@ $exercisePath = substr($exercisePath, 0, strpos($exercisePath, $exfile));
 $exercisePath = $exercisePath."exercise.php";
 
 // Clear the exercise session
-if (isset($_SESSION['objExercise'])) {
-    Session::erase('objExercise');
-}
-if (isset($_SESSION['objQuestion'])) {
-    Session::erase('objQuestion');
-}
-if (isset($_SESSION['objAnswer'])) {
-    Session::erase('objAnswer');
-}
-if (isset($_SESSION['questionList'])) {
-    Session::erase('questionList');
-}
-if (isset($_SESSION['exerciseResult'])) {
-    Session::erase('exerciseResult');
-}
+
+Session::erase('objExercise');
+Session::erase('objQuestion');
+Session::erase('objAnswer');
+Session::erase('questionList');
+Session::erase('exerciseResult');
 
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : null;
@@ -172,11 +163,10 @@ if (!empty($errorXmlExport)) {
 HotPotGCt($documentPath, 1, $userId);
 
 // Only for administrator
-
 if ($is_allowedToEdit) {
     if (!empty($choice)) {
         // All test choice, clean all test's results
-        if ($choice == 'clean_all_test') {
+        if ($choice === 'clean_all_test') {
             $check = Security::check_token('get');
             if ($check) {
                 // list of exercises in a course/session

@@ -28,11 +28,7 @@ $threadhold1 = null;
 $threadhold2 = null;
 $threadhold3 = null;
 
-$exerciseResult = [];
-
-if (isset($_SESSION['exerciseResult'])) {
-    $exerciseResult = $_SESSION['exerciseResult'];
-}
+$exerciseResult = Session::read('exerciseResult');
 
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 

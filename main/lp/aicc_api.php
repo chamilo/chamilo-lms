@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *	API event handler functions for AICC / CMIv4 in API communication mode
  *
@@ -31,7 +33,7 @@ require_once '../inc/global.inc.php';
 
 // Is this needed? This is probabaly done in the header file.
 $file = $_SESSION['file'];
-$oLP = unserialize($_SESSION['lpobject']);
+$oLP = unserialize(Session::read('lpobject'));
 $oItem = $oLP->items[$oLP->current];
 if (!is_object($oItem)) {
     error_log('New LP - scorm_api - Could not load oItem item', 0);

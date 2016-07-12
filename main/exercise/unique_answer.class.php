@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class UniqueAnswer
  *
@@ -34,7 +36,7 @@ class UniqueAnswer extends Question
     public function createAnswersForm($form)
     {
         // Getting the exercise list
-        $obj_ex = $_SESSION['objExercise'];
+        $obj_ex = Session::read('objExercise');
 
         $editor_config = array(
             'ToolbarSet' => 'TestProposedAnswer',

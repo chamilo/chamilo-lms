@@ -141,12 +141,29 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
             fwrite($handle, $page_content);
             fclose($handle);
 
-            $document_id = add_document($_course, $this->created_dir.'/'.$html_file, 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$html_file), $html_file);
+            $document_id = add_document(
+                $_course,
+                $this->created_dir.'/'.$html_file,
+                'file',
+                filesize($this->base_work_dir.$this->created_dir.'/'.$html_file),
+                $html_file
+            );
 
             if ($document_id) {
 
                 // Put the document in item_property update.
-                api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_SESSION['_uid'], 0, 0, null, null, api_get_session_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $document_id,
+                    'DocumentAdded',
+                    api_get_user_id(),
+                    0,
+                    0,
+                    null,
+                    null,
+                    api_get_session_id()
+                );
 
                 $infos = pathinfo($this->filepath);
                 $slide_name = strip_tags(nl2br($item_title));
@@ -185,14 +202,29 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
             fwrite($handle, $page_content);
             fclose($handle);
 
-            $document_id = add_document($_course, $this->created_dir.$html_file, 'file', filesize($this->base_work_dir.$this->created_dir.$html_file), $html_file);
+            $document_id = add_document(
+                $_course,
+                $this->created_dir.$html_file,
+                'file',
+                filesize($this->base_work_dir.$this->created_dir.$html_file),
+                $html_file
+            );
 
             $slide_name = '';
-
             if ($document_id) {
-
                 // Put the document in item_property update.
-                api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_SESSION['_uid'], 0, 0, null, null, api_get_session_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $document_id,
+                    'DocumentAdded',
+                    api_get_user_id(),
+                    0,
+                    0,
+                    null,
+                    null,
+                    api_get_session_id()
+                );
 
                 $infos = pathinfo($this->filepath);
                 $slide_name = 'Page '.str_repeat('0', 2 - strlen($key)).$key;

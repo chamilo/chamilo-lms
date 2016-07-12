@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class MultipleAnswerTrueFalse
  * This class allows to instantiate an object of type MULTIPLE_ANSWER
@@ -37,7 +39,7 @@ class MultipleAnswerTrueFalse extends Question
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         $course_id = api_get_course_int_id();
-        $obj_ex = $_SESSION['objExercise'];
+        $obj_ex = Session::read('objExercise');
         $renderer = & $form->defaultRenderer();
         $defaults = array();
 

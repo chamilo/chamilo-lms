@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *  Shows the exercise results
  *
@@ -11,8 +13,6 @@
  * @todo small letters for table variables
  *
  */
-
-use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $debug = false;
@@ -41,7 +41,7 @@ if (empty($formSent)) {
     $formSent = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null;
 }
 if (empty($exerciseResult)) {
-    $exerciseResult = isset($_SESSION['exerciseResult']) ? $_SESSION['exerciseResult'] : null;
+    $exerciseResult = Session::read('exerciseResult');
 }
 if (empty($questionId)) {
     $questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;
@@ -56,10 +56,10 @@ if (empty($nbrQuestions)) {
     $nbrQuestions = isset($_REQUEST['nbrQuestions']) ? $_REQUEST['nbrQuestions'] : null;
 }
 if (empty($questionList)) {
-    $questionList = isset($_SESSION['questionList']) ? $_SESSION['questionList'] : null;
+    $questionList = Session::read('questionList');
 }
 if (empty($objExercise)) {
-    $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
+    $objExercise = Session::read('objExercise');
 }
 if (empty($exeId)) {
     $exeId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;

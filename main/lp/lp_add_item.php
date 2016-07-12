@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously
  * learnpath_handler.php
@@ -21,7 +23,7 @@ require_once 'learnpath_functions.inc.php';
 require_once 'resourcelinker.inc.php';
 
 /** @var learnpath $learnPath */
-$learnPath = $_SESSION['oLP'];
+$learnPath = Session::read('oLP');
 
 $htmlHeadXtra[] = '<script>'.
 $learnPath->get_js_dropdown_array()."

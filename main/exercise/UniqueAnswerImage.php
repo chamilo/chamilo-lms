@@ -1,6 +1,7 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
 
 /**
  * UniqueAnswerImage
@@ -22,9 +23,13 @@ class UniqueAnswerImage extends UniqueAnswer
         $this->isContent = $this->getIsContent();
     }
 
+    /**
+     * @param FormValidator $form
+     * @throws Exception
+     */
     public function createAnswersForm($form)
     {
-        $objExercise = $_SESSION['objExercise'];
+        $objExercise = Session::read('objExercise');
 
         $editorConfig = array(
             'ToolbarSet' => 'TestFreeAnswer',

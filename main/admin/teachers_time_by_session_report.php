@@ -14,11 +14,14 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH) . 'work/work.lib.php';
 
-api_protect_admin_script();
+if (!api_is_platform_admin(true) && !api_is_teacher()) {
+    api_not_allowed(true);
+}
 
 $toolName = get_lang('TeacherTimeReportBySession');
 
 $em = Database::getManager();
+SessionManager::get_sessions_by_user();
 $sessionsInfo = SessionManager::get_sessions_list([], ['name']);
 $session = null;
 

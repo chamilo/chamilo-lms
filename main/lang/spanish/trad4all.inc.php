@@ -7076,7 +7076,7 @@ Modificar valores de \$result con el nombre de los atributos de Shibboleth
 Ir a Plug-in para añadir el botón 'Shibboleth Login' en su campus de Chamilo.";
 $LdapDescriptionTitle = "<h3>Autentificacion LDAP</h3>";
 $FacebookMainActivateTitle = "Autenticación con Facebook";
-$FacebookMainActivateComment = "<p>En primer lugar, ustede tiene que crear una Aplicación Facebook (ver <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) con su cuenta de Facebook. En la configuración de Aplicaciones de Facebook, el valor de la URL del sitio debe ser la URL de este campus.</p><p>Luego, edite el archivo <code>/app/config/auth.conf.php</code> e ingresa los valores de '<code>appId</code>' y '<code>secret</code>' para <code>&#36;facebook_config</code>.</p><p>Ir a <a href='settings.php?category=Plugins'>Plugins</a> para agregar un botón configurable de <em>Incio de sesión con Facebook</em> para su campus Chamilo.</p>";
+$FacebookMainActivateComment = "<p>En primer lugar, usted tiene que crear una Aplicación Facebook (ver <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) con su cuenta de Facebook. En la configuración de Aplicaciones de Facebook, el valor de la URL del sitio debe ser la URL de este campus. Tener habilitada la opción Web OAuth Login. Y agregar la URL de tu campus en el campo Valid OAuth redirect URIs</p><p>Descomenta la línea <code>$_configuration['facebook_auth'] = 1;</code> para habilitar la Autenticación con Facebook</p><p>Luego, edite el archivo <code>/app/config/auth.conf.php</code> e ingresa los valores de '<code>appId</code>' y '<code>secret</code>' para <code>&#36;facebook_config</code>.</p><p>Ir a <a href='settings.php?category=Plugins'>Plugins</a> para agregar un botón configurable de <em>Incio de sesión con Facebook</em> para su campus Chamilo.</p>";
 $AnnouncementForGroup = "Anuncios para un grupo";
 $AllGroups = "Todos los grupos";
 $LanguagePriority1Title = "Prioridad del idioma 1";
@@ -7833,4 +7833,7 @@ $CourseCreationSplashScreenComment = "La pantalla de bienvenida muestra una seri
 $WorksReport = "Reporte de tareas";
 $AccumulateScormTime = "Acumular tiempo de sesión SCORM";
 $AccumulateScormTimeInfo = "Cuando se activa, el tiempo de una sesión para una secuencia de aprendizaje SCORM será acumulativo, de lo contrario, sólo se contará desde el momento de la última actualización.";
+$DownloadTasksPackage = "Descargar tareas en paquete";
+$IconsModeSVGTitle = "Modo SVG de iconos";
+$IconsModeSVGComment = "Esta opción permite, si es activada, preferir el formato vectorial SVG al formato bitmap PNG para todos los iconos que tienen tal versión. Esto permite obtener una calidad de iconos mucho más fina, pero algunos iconos podrían tener problemas de tamaño, y algunos navegadores podrían no soportarlas.";
 ?>

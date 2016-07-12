@@ -7053,7 +7053,7 @@ $ShibbolethMainActivateTitle = "<h3>Shibboleth authentication</h3>";
 $ShibbolethMainActivateComment = "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus.";
 $LdapDescriptionTitle = "<h3>LDAP autentication</h3>";
 $FacebookMainActivateTitle = "<h3>Facebook authentication</h3>";
-$FacebookMainActivateComment = "<p>First of all, you have to create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus.</p><p>Then, edit the <code>app/config/auth.conf.php</code> file and enter '<code>appId</code>' and '<code>secret</code>' values for <code>&#36;facebook_config</code>.</p><p>Go to <a href='settings.php?category=Plugins'>Plugins</a> to add a configurable <em>Facebook Login</em> button for your Chamilo campus.</p>";
+$FacebookMainActivateComment = "<p>First of all, you have to create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus. Enable the Web OAuth Login option. And add the site URL of your campus to the Valid OAuth redirect URIs field</p><p>Uncommentt the line <code>$_configuration['facebook_auth'] = 1;</code> to enable the Facebook Auth.</p><p>Then, edit the <code>app/config/auth.conf.php</code> file and enter '<code>appId</code>' and '<code>secret</code>' values for <code>&#36;facebook_config</code>.</p><p>Go to <a href='settings.php?category=Plugins'>Plugins</a> to add a configurable <em>Facebook Login</em> button for your Chamilo campus.</p>";
 $AnnouncementForGroup = "Announcement for a group";
 $AllGroups = "All groups";
 $LanguagePriority1Title = "Language priority 1";
@@ -7814,4 +7814,8 @@ $CourseCreationSplashScreenComment = "The course splash screen show a series of 
 $WorksReport = "Assignments report";
 $AccumulateScormTime = "Accumulate SCORM session time";
 $AccumulateScormTimeInfo = "When enabled, the session time for SCORM learning paths will be cumulative, otherwise, it will only be counted from the last update time.";
+$DownloadTasksPackage = "Download assignments package";
+$UploadCorrectionsPackage = "Upload corrections package";
+$IconsModeSVGTitle = "SVG icons mode";
+$IconsModeSVGComment = "By enabling this option, all icons that have an SVG version will prefer the SVG format to PNG. This will give a much better icons quality but some icons might still have some rendering size issue, and some browsers might not support it.";
 ?>

@@ -149,6 +149,7 @@ class CourseSelectForm
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
         $icon = Display::returnIconPath('myprogress_bar.gif');
+        echo '<div class="tool-backups-options">';
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.$icon.',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 
@@ -204,9 +205,10 @@ class CourseSelectForm
                     case RESOURCE_SCORM:
                         break;
                     default:
-						echo '<span id="img_'.$type.'" class="fa fa-minus-square-o fa-lg" onclick="javascript:exp('."'$type'".');" >&nbsp;</span>&nbsp;';
-						echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
-						echo '<div id="div_'.$type.'">';
+                        echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
+						echo '<em id="img_'.$type.'" class="fa fa-minus-square-o fa-lg" ></em>';
+						echo '<span class="title">'.$resource_titles[$type].'</span></div>';
+						echo '<div class="item-content" id="div_'.$type.'">';
 						if ($type == RESOURCE_LEARNPATH) {
     						Display::display_warning_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
     						Display::display_warning_message(get_lang('IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'));
@@ -222,8 +224,8 @@ class CourseSelectForm
                         echo '<div class="btn-group">';
 						echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
                         echo "<a class=\"btn btn-default\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
-						echo '</div><br />';
-                        echo '<ul class="list-unstyled">';
+						echo '</div>';
+                        echo '<ul class="list-backups-options">';
 						foreach ($resources as $id => $resource) {
                             if ($resource) {
                                 echo '<li>';
@@ -248,11 +250,12 @@ class CourseSelectForm
         //Fixes forum order
         if (!empty($forum_categories)) {
             $type = RESOURCE_FORUMCATEGORY;
-            echo '<span id="img_'.$type.'" class="fa fa-minus-square-o fa-lg" onclick="javascript:exp('."'$type'".');" >&nbsp;</span>&nbsp;';
-            echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[RESOURCE_FORUM].'</b><br />';
-            echo '<div id="div_'.$type.'">';
+            echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
+            echo '<em id="img_'.$type.'" class="fa fa-minus-square-o fa-lg"></em>';
+            echo '<span class="title">'.$resource_titles[RESOURCE_FORUM].'</span></div>';
+            echo '<div class="item-content" id="div_'.$type.'">';
 
-            echo '<ul>';
+            echo '<ul class="list-backups-options">';
             foreach ($forum_categories as $forum_category_id => $forum_category) {
                 echo '<li>';
                 echo '<label class="checkbox">';
@@ -335,6 +338,7 @@ class CourseSelectForm
 		CourseSelectForm::display_hidden_quiz_questions($course);
 		CourseSelectForm::display_hidden_scorm_directories($course);
 		echo '</form>';
+        echo '</div>';
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
 	}
 
@@ -638,20 +642,22 @@ class CourseSelectForm
 		echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
         $icon = Display::returnIconPath('progress_bar.gif');
+        echo '<div class="tool-backups-options">';
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.$icon.'\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 		foreach ($list_course as $course) {
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
-					echo '<span id="img_'.$course->code.'" class="fa fa-minus-square-o fa-lg" onclick="javascript:exp('."'$course->code'".');" >&nbsp;</span>';
-					echo '<b  onclick="javascript:exp('."'$course->code'".');" > '.$course->code.'</b><br />';
-					echo '<div id="div_'.$course->code.'">';
+                    echo '<div class="item-backup" onclick="javascript:exp('."'$course->code'".');">';
+					echo '<em id="img_'.$course->code.'" class="fa fa-minus-square-o fa-lg"></em>';
+					echo '<span class="title"> '.$course->code.'</span></div>';
+					echo '<div class="item-content" id="div_'.$course->code.'">';
 					echo '<blockquote>';
 
                     echo '<div class="btn-group">';
 					echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',true);\" >".get_lang('All')."</a>";
                     echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',false);\" >".get_lang('None')."</a>";
-					echo '</div><br />';
+					echo '</div>';
 
 					foreach ($resources as $id => $resource) {
 						echo '<label class="checkbox" for="resource['.$course->code.']['.$id.']">';
@@ -681,6 +687,7 @@ class CourseSelectForm
 		CourseSelectForm :: display_hidden_quiz_questions($course);
 		CourseSelectForm :: display_hidden_scorm_directories($course);
 		echo '</form>';
+        echo '</div>';
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
 	}
 }

@@ -5734,6 +5734,24 @@ footer{
 .btn-tool{
     margin-bottom: 2px;
 }
+/* CSS BACKUP *****/
+.item-backup{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+    cursor: hand;
+}
+.item-backup .title{
+    margin-left: 10px;
+    font-weight: bold;
+}
+.tool-backups-options{
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.list-backups-options{
+    list-style: none;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
@@ -5937,21 +5955,16 @@ footer{
         margin: -2.5px -15px;
     }
 }
-
 .elfinder-cwd-filename {
     color: black !important;
 }
-
 .skill-badge-img{
     width: 150px;
     overflow: hidden;
 }
-
 .text-light{
     color: #00CCFF;
 }
-
-
 #dropzone {
     position: relative;
     overflow: hidden;
@@ -5972,8 +5985,4 @@ footer{
     border: 2px dashed #bbbbbb;
     font-size: 120%;
     margin-bottom: 0;
-}
-
-#upload_form .fa-plus-square-o, #upload_form .fa-minus-square-o {
-    cursor:pointer;
 }

@@ -41,7 +41,7 @@ class IndexManager
             }
         }*/
 
-        if (api_get_setting('show_documents_preview') == 'true') {
+        if (api_get_setting('show_documents_preview') === 'true') {
             $this->load_directories_preview = true;
         }
     }
@@ -55,11 +55,14 @@ class IndexManager
         $this->tpl->setLoginForm($setLoginForm);
     }
 
+    /**
+     * @param array $personal_course_list
+     */
     function return_exercise_block($personal_course_list)
     {
         $exercise_list = array();
         if (!empty($personal_course_list)) {
-            foreach($personal_course_list as  $course_item) {
+            foreach ($personal_course_list as  $course_item) {
                 $course_code = $course_item['c'];
                 $session_id = $course_item['id_session'];
 
@@ -68,7 +71,7 @@ class IndexManager
                     $session_id
                 );
 
-                foreach($exercises as $exercise_item) {
+                foreach ($exercises as $exercise_item) {
                     $exercise_item['course_code']     = $course_code;
                     $exercise_item['session_id']     = $session_id;
                     $exercise_item['tms']     = api_strtotime($exercise_item['end_time'], 'UTC');
@@ -79,14 +82,21 @@ class IndexManager
             if (!empty($exercise_list)) {
                 $exercise_list = msort($exercise_list, 'tms');
                 $my_exercise = $exercise_list[0];
-                $url = Display::url($my_exercise['title'], api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']);
+                $url = Display::url(
+                    $my_exercise['title'],
+                    api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']
+                );
                 $this->tpl->assign('exercise_url', $url);
                 $this->tpl->assign('exercise_end_date', api_convert_and_format_date($my_exercise['end_time'], DATE_FORMAT_SHORT));
             }
         }
     }
 
-    function return_announcements($show_slide = true)
+    /**
+     * @param bool $show_slide
+     * @return null|string
+     */
+    public function return_announcements($show_slide = true)
     {
         //// Display System announcements
         $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
@@ -131,7 +141,7 @@ class IndexManager
      * Alias for the online_logout() function
      * @param   bool    $redirect   Whether to ask online_logout to redirect to index.php or not
      */
-    function logout($redirect = true)
+    public function logout($redirect = true)
     {
         online_logout($this->user_id, true);
     }
@@ -142,7 +152,7 @@ class IndexManager
      * @param string $category
      * @return boolean
      */
-    function category_has_open_courses($category)
+    public function category_has_open_courses($category)
     {
         $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
         $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -164,7 +174,7 @@ class IndexManager
         return false;
     }
 
-    function return_teacher_link()
+    public function return_teacher_link()
     {
         $html = '';
         $show_menu = false;

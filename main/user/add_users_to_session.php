@@ -197,7 +197,6 @@ if ($allowTutors == 'true') {
 
     			$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
     		} else {
-    			global $nosessionUsersList;
     			$return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
     			while ($user = Database :: fetch_array($rs)) {
     				$person_name = api_get_person_name($user['firstname'], $user['lastname']);
@@ -207,14 +206,14 @@ if ($allowTutors == 'true') {
     			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
     		}
     	}
+
     	return $xajax_response;
     }
 
     $xajax -> processRequests();
 
     $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-    $htmlHeadXtra[] = '
-    <script type="text/javascript">
+    $htmlHeadXtra[] = '<script>
     function add_user_to_session (code, content) {
     	document.getElementById("user_to_add").value = "";
     	document.getElementById("ajax_list_users_single").innerHTML = "";
@@ -241,9 +240,9 @@ if ($allowTutors == 'true') {
     }
 
     function validate_filter() {
-    		document.formulaire.add_type.value = \''.$add_type.'\';
-    		document.formulaire.form_sent.value=0;
-    		document.formulaire.submit();
+        document.formulaire.add_type.value = \''.$add_type.'\';
+        document.formulaire.form_sent.value=0;
+        document.formulaire.submit();
     }
 
     function checked_in_no_session(checked) {
@@ -261,7 +260,7 @@ if ($allowTutors == 'true') {
     </script>';
 
     $form_sent = 0;
-    $errorMsg = $firstLetterUser = $firstLetterSession='';
+    $firstLetterUser = $firstLetterSession='';
     $UserList = $SessionList = array();
     $sessions = array();
     $noPHP_SELF = true;
@@ -289,16 +288,18 @@ if ($allowTutors == 'true') {
 
     $nosessionUsersList = $sessionUsersList = array();
 
-    $ajax_search = $add_type == 'unique' ? true : false;
+    $ajax_search = $add_type === 'unique' ? true : false;
 
     $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
     if ($ajax_search) {
         $sql = "SELECT u.user_id, lastname, firstname, username, session_id
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user
-                ON $tbl_session_rel_user.user_id = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                    AND $tbl_session_rel_user.session_id = ".intval($id_session)."
-                WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
+                ON 
+                    $tbl_session_rel_user.user_id = u.user_id AND 
+                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND 
+                    $tbl_session_rel_user.session_id = ".intval($id_session)."
+                WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -307,9 +308,12 @@ if ($allowTutors == 'true') {
                 $sql = "SELECT u.user_id, lastname, firstname, username, session_id
                         FROM $tbl_user u
                         INNER JOIN $tbl_session_rel_user
-                        ON $tbl_session_rel_user.user_id = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                        AND $tbl_session_rel_user.session_id = ".intval($id_session)."
-                        INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+                        ON 
+                            $tbl_session_rel_user.user_id = u.user_id AND 
+                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND 
+                            $tbl_session_rel_user.session_id = ".intval($id_session)."
+                        INNER JOIN $tbl_user_rel_access_url url_user 
+                        ON (url_user.user_id=u.user_id)
                         WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
             }
@@ -324,8 +328,8 @@ if ($allowTutors == 'true') {
         //Filter by Extra Fields
         $use_extra_fields = false;
         if (is_array($extra_field_list)) {
-            if (is_array($new_field_list) && count($new_field_list)>0 ) {
-                $result_list=array();
+            if (is_array($new_field_list) && count($new_field_list) > 0) {
+                $result_list = array();
                 foreach ($new_field_list as $new_field) {
                     $varname = 'field_'.$new_field['variable'];
                     if (UserManager::is_extra_field_available($new_field['variable'])) {
@@ -391,7 +395,7 @@ if ($allowTutors == 'true') {
                     ON $tbl_session_rel_user.user_id = u.user_id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
                     $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                    WHERE u.status<>".DRH." AND u.status<>6
+                    WHERE u.status <> ".DRH." AND u.status<>6
                     $order_clause";
         }
         if (api_is_multiple_url_enabled()) {
@@ -427,28 +431,28 @@ if ($allowTutors == 'true') {
         unset($users); //clean to free memory
 
         //filling the correct users in list
-        $sql="SELECT  user_id, lastname, firstname, username, session_id
-              FROM $tbl_user u
-              LEFT JOIN $tbl_session_rel_user
-              ON
-                $tbl_session_rel_user.user_id = u.id AND
-                $tbl_session_rel_user.session_id = '$id_session' AND
-                $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-              WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
+        $sql = "SELECT  user_id, lastname, firstname, username, session_id
+                FROM $tbl_user u
+                LEFT JOIN $tbl_session_rel_user
+                ON
+                    $tbl_session_rel_user.user_id = u.id AND
+                    $tbl_session_rel_user.session_id = '$id_session' AND
+                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql="SELECT  u.user_id, lastname, firstname, username, session_id
-                    FROM $tbl_user u
-                    LEFT JOIN $tbl_session_rel_user
-                    ON
-                        $tbl_session_rel_user.user_id = u.user_id AND
-                        $tbl_session_rel_user.session_id = '$id_session' AND
-                        $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                    INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-                    WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
+                $sql = "SELECT  u.user_id, lastname, firstname, username, session_id
+                        FROM $tbl_user u
+                        LEFT JOIN $tbl_session_rel_user
+                        ON
+                            $tbl_session_rel_user.user_id = u.user_id AND
+                            $tbl_session_rel_user.session_id = '$id_session' AND
+                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                        INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+                        WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
             }
         }
@@ -466,14 +470,15 @@ if ($allowTutors == 'true') {
         unset($users); //clean to free memory
     }
 
-    if ($add_type == 'multiple') {
+    if ($add_type === 'multiple') {
     	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
     } else {
     	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&amp;add='.Security::remove_XSS($_GET['add']).'&amp;add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+    	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
     }
-    	$link_add_group = '<a href="usergroups.php">'.Display::return_icon('multiple.gif',get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
+    	$link_add_group = '<a href="usergroups.php">'.
+            Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
     ?>
     <div class="actions">
     	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
@@ -481,7 +486,7 @@ if ($allowTutors == 'true') {
     <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
     <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
     <?php
-    if ($add_type == 'multiple') {
+    if ($add_type === 'multiple') {
     	if (is_array($extra_field_list)) {
     		if (is_array($new_field_list) && count($new_field_list)>0 ) {
     			echo '<h3>'.get_lang('FilterUsers').'</h3>';
@@ -508,15 +513,8 @@ if ($allowTutors == 'true') {
     	}
     }
     ?>
-
     <input type="hidden" name="form_sent" value="1" />
     <input type="hidden" name="add_type"  />
-
-    <?php
-    if (!empty($errorMsg)) {
-    	Display::display_normal_message($errorMsg); //main API
-    }
-    ?>
     <div class="row">
         <div class="span5">
             <div class="multiple_select_header">
@@ -610,7 +608,6 @@ if ($allowTutors == 'true') {
     </div>
     </form>
     <script>
-    <!--
     function moveItem(origin , destination) {
     	for (var i = 0 ; i<origin.options.length ; i++) {
     		if (origin.options[i].selected) {
@@ -689,7 +686,6 @@ if ($allowTutors == 'true') {
     		ret = ret + options[i].value +'::'+options[i].text+";;";
     	return ret;
     }
-    -->
     </script>
 <?php
 } else {

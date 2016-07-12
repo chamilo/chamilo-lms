@@ -63,7 +63,7 @@ class MoodleImport
 
                         $moduleName = isset($currentItem['modulename']) ? $currentItem['modulename'] : false;
                         switch ($moduleName) {
-                            case 'forum1':
+                            case 'forum':
                                 require_once '../forum/forumfunction.inc.php';
                                 $catForumValues = [];
 
@@ -123,17 +123,41 @@ class MoodleImport
                                 foreach ($moduleValues['question_instances'] as $index => $question) {
                                     $questionsValues = $this->readMainQuestionsXml($questionsXml, $question['questionid']);
                                     $moduleValues['question_instances'][$index] = $questionsValues;
+                                    // Set Question Type
+                                    $qType = $moduleValues['question_instances'][$index]['qtype'];
                                     // Add the matched chamilo question type to the array
-                                    $moduleValues['question_instances'][$index]['chamilo_qtype'] = $this->matchMoodleChamiloQuestionTypes($moduleValues['question_instances'][$index]['qtype']);
-
-                                    var_dump($moduleValues['question_instances'][$index]);
+                                    $moduleValues['question_instances'][$index]['chamilo_qtype'] = $this->matchMoodleChamiloQuestionTypes($qType);
                                     $questionInstance = Question::getInstance($moduleValues['question_instances'][$index]['chamilo_qtype']);
+                                    $questionInstance->updateTitle($moduleValues['question_instances'][$index]['name']);
+                                    $questionInstance->updateDescription($moduleValues['question_instances'][$index]['questiontext']);
+                                    $questionInstance->updateLevel(1);
+                                    $questionInstance->updateCategory(0);
+
+                                    //Save normal question if NOT media
+                                    if ($questionInstance->type != MEDIA_QUESTION) {
+                                        $questionInstance->save($exercise->id);
+
+                                        // modify the exercise
+                                        $exercise->addToList($questionInstance->id);
+                                        $exercise->update_question_positions();
+                                    }
+
+                                    $objAnswer = new Answer($questionInstance->id);
+
+                                    foreach ($moduleValues['question_instances'][$index]['plugin_qtype_'.$qType.'_question'] as $slot => $answer) {
+                                        $questionWeighting = $this->processAnswers($qType, $objAnswer, $answer, $slot + 1);
+                                    }
+
+                                    // saves the answers into the data base
+                                    $objAnswer->save();
+
+                                    // sets the total weighting of the question
+                                    $questionInstance->updateWeighting($questionWeighting);
+                                    $questionInstance->save();
                                 }
 
-                                exit;
-
                                 break;
-                            case 'resource1':
+                            case 'resource':
                                 // Read the current resource module xml.
                                 $moduleDir = $currentItem['directory'];
                                 $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
@@ -171,7 +195,7 @@ class MoodleImport
                                 }
 
                                 break;
-                            case 'url1':
+                            case 'url':
                                 // Read the current url module xml.
                                 $moduleDir = $currentItem['directory'];
                                 $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
@@ -190,7 +214,7 @@ class MoodleImport
             }
         }
 
-        //removeDir($destinationDir);
+        removeDir($destinationDir);
         return $packageContent[$mainFileKey];
     }
 
@@ -489,9 +513,107 @@ class MoodleImport
                 break;
             case 'essay':
                 return FREE_ANSWER;
+                break;
             case 'truefalse':
                 return MULTIPLE_ANSWER_TRUE_FALSE;
+            break;
         }
+    }
+
+    /**
+     * Process Moodle Answers to Chamilo
+     *
+     * @param string $questionType
+     * @param object $objAnswer
+     * @param array $answerValues
+     * @param integer $position
+     * @return integer db response
+     */
+    public function processAnswers($questionType, $objAnswer, $answerValues, $position)
+    {
+        switch ($questionType) {
+            case 'multichoice':
+                return $this->processUniqueAnswer($objAnswer, $answerValues, $position) ;
+                break;
+            case 'multianswer':
+            case 'shortanswer':
+            case 'match':
+                break;
+            case 'essay':
+                break;
+            case 'truefalse':
+                break;
+        }
+    }
+
+    /**
+     * Process Chamilo Unique Answer
+     *
+     * @param object $objAnswer
+     * @param array $answerValues
+     * @param integer $position
+     * @return integer db response
+     */
+    public function processUniqueAnswer($objAnswer, $answerValues, $position)
+    {
+        $questionWeighting = $nbrGoodAnswers = 0;
+        $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
+        $answer = $answerValues['answertext'];
+        $comment = $answerValues['feedback'];
+        $weighting = $answerValues['fraction'];
+        $weighting = abs($weighting);
+        if ($weighting > 0) {
+            $questionWeighting += $weighting;
+        }
+        $goodAnswer =  $correct ? true : false;
+
+        $objAnswer->createAnswer(
+            $answer,
+            $goodAnswer,
+            $comment,
+            $weighting,
+            $position,
+            null,
+            null,
+            ''
+        );
+
+        return $questionWeighting;
+    }
+
+    /**
+     * Process Chamilo FillBlanks
+     *
+     * @param object $objAnswer
+     * @param array $answerValues
+     * @param integer $position
+     * @return integer db response
+     */
+    public function processFillBlanks($objAnswer, $answerValues, $position)
+    {
+        $questionWeighting = $nbrGoodAnswers = 0;
+        $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
+        $answer = $answerValues['answertext'];
+        $comment = $answerValues['feedback'];
+        $weighting = $answerValues['fraction'];
+        $weighting = abs($weighting);
+        if ($weighting > 0) {
+            $questionWeighting += $weighting;
+        }
+        $goodAnswer =  $correct ? true : false;
+
+        $objAnswer->createAnswer(
+            $answer,
+            $goodAnswer,
+            $comment,
+            $weighting,
+            $position,
+            null,
+            null,
+            ''
+        );
+
+        return $questionWeighting;
     }
 
 

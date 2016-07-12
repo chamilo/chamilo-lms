@@ -395,21 +395,6 @@ class AddCourse
     }
 
     /**
-     * Function to convert a string from the language files to a string ready
-     * to insert into the database (escapes single quotes)
-     * @author Bart Mollet (bart.mollet@hogent.be)
-     * @param string $string The string to convert
-     * @return string The string converted to insert into the database
-     * @assert ('a\'b') === 'ab'
-     */
-    public static function lang2db($string)
-    {
-        $string = str_replace("\\'", "'", $string);
-        $string = Database::escape_string($string);
-        return $string;
-    }
-
-    /**
      * Fills the course database with some required content and example content.
      * @param int Course (int) ID
      * @param string Course directory name (e.g. 'ABC')
@@ -451,13 +436,6 @@ class AddCourse
         $TABLEGRADEBOOKLINK = Database::get_main_table(
             TABLE_MAIN_GRADEBOOK_LINK
         );
-
-        include_once api_get_path(SYS_CODE_PATH) . 'lang/english/trad4all.inc.php';
-        $file_to_include = api_get_path(SYS_CODE_PATH) . 'lang/' . $language . '/trad4all.inc.php';
-
-        if (file_exists($file_to_include)) {
-            include_once $file_to_include;
-        }
 
         $visible_for_all = 1;
         $visible_for_course_admin = 0;
@@ -686,21 +664,28 @@ class AddCourse
         /* Course homepage tools for platform admin only */
 
         /* Group tool */
-
-        Database::query(
-            "INSERT INTO $TABLEGROUPCATEGORIES (c_id, id, title , description, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order, doc_state,calendar_state, work_state ,announcements_state, forum_state, wiki_state, chat_state)
-             VALUES ($course_id, '2', '" . self::lang2db(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0', 1, 1 ,1 ,1 ,1, 1, 1);"
+        Database::insert(
+            $TABLEGROUPCATEGORIES,
+            [
+                'c_id' => $course_id,
+                'id' => 2,
+                'title' => get_lang('DefaultGroupCategory'),
+                'description' => '',
+                'max_student' => 8,
+                'self_reg_allowed' => 0,
+                'self_unreg_allowed' => 0,
+                'groups_per_user' => 0,
+                'display_order' => 0,
+                'doc_state' => 1,
+                'calendar_state' => 1,
+                'work_state' => 1,
+                'announcements_state' => 1,
+                'forum_state' => 1,
+                'wiki_state' => 1,
+                'chat_state' => 1
+            ]
         );
 
-        /*    Example Material  */
-        global $language_interface;
-        $language_interface = !empty($language_interface) ? $language_interface : api_get_setting(
-            'platformLanguage'
-        );
-
-        // Example material should be in the same language as the course is.
-        $language_interface_original = $language_interface;
-        $language_interface = $language;
         $now = api_get_utc_datetime();
 
         $files = [
@@ -996,7 +981,7 @@ class AddCourse
             /* Introduction text */
             $intro_text = '<p style="text-align: center;">
                             <img src="' . api_get_path(REL_CODE_PATH) . 'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
-                            <h2>' . self::lang2db(get_lang('IntroductionText')) . '</h2>
+                            <h2>' . get_lang('IntroductionText') . '</h2>
                          </p>';
 
             $toolIntro = new Chamilo\CourseBundle\Entity\CToolIntro();
@@ -1120,8 +1105,6 @@ class AddCourse
         //Installing plugins in course
         $app_plugin = new AppPlugin();
         $app_plugin->install_course_plugins($course_id);
-
-        $language_interface = $language_interface_original;
         return true;
     }
 
@@ -1298,30 +1281,31 @@ class AddCourse
         $course_id = 0;
 
         if ($ok_to_register_course) {
-
             // Here we must add 2 fields.
-            $sql = "INSERT INTO " . $TABLECOURSE . " SET
-                        code = '".Database:: escape_string($code)."',
-                        directory = '".Database:: escape_string($directory)."',
-                        course_language = '".Database:: escape_string($course_language)."',
-                        title = '".Database:: escape_string($title)."',
-                        description = '".self::lang2db(get_lang('CourseDescription'))."',
-                        category_code = '".Database:: escape_string($category_code)."',
-                        visibility      = '" . $visibility . "',
-                        show_score      = '1',
-                        disk_quota      = '" . intval($disk_quota) . "',
-                        creation_date   = '$time',
-                        expiration_date = '" . $expiration_date . "',
-                        last_edit       = '$time',
-                        last_visit      = NULL,
-                        tutor_name = '" . Database:: escape_string($tutor_name) . "',
-                        department_name = '" . Database:: escape_string($department_name) . "',
-                        department_url = '" . Database:: escape_string($department_url) . "',
-                        subscribe = '" . intval($subscribe) . "',
-                        unsubscribe = '" . intval($unsubscribe) . "',
-                        visual_code = '" . Database:: escape_string($visual_code) . "'";
-            Database::query($sql);
-            $course_id = Database::insert_id();
+            $course_id = Database::insert(
+                $TABLECOURSE,
+                [
+                    'code' => $code,
+                    'directory' => $directory,
+                    'course_language' => $course_language,
+                    'title' => $title,
+                    'description' => get_lang('CourseDescription'),
+                    'category_code' => $category_code,
+                    'visibility' => $visibility,
+                    'show_score' => 1,
+                    'disk_quota' => intval($disk_quota),
+                    'creation_date' => $time,
+                    'expiration_date' => $expiration_date,
+                    'last_edit' => $time,
+                    'last_visit' => NULL,
+                    'tutor_name' => $tutor_name,
+                    'department_name' => $department_name,
+                    'department_url' => $department_url,
+                    'subscribe' => intval($subscribe),
+                    'unsubscribe' => intval($unsubscribe),
+                    'visual_code' => $visual_code
+                ]
+            );
 
             if ($course_id) {
                 $sort = api_max_sort_value('0', api_get_user_id());

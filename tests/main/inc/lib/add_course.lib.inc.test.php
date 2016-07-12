@@ -91,11 +91,6 @@ class TestAddCourse extends UnitTestCase {
         $this->assertTrue($res);
     }
 */
-    function TestLang2db(){
-        $string = 'test';
-        $res = AddCourse::lang2db($string);
-        $this->assertTrue($res);
-    }
 
     function TestFillDbCourse(){
         global $_configuration, $_user;

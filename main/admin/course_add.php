@@ -200,6 +200,14 @@ if ($form->validate()) {
     $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
     // Fixing category code
     $course['course_category'] = isset($course['category_code']) ? $course['category_code'] :  '';
+
+    include_once api_get_path(SYS_CODE_PATH) . 'lang/english/trad4all.inc.php';
+    $file_to_include = api_get_path(SYS_CODE_PATH) . 'lang/' . $course['course_language'] . '/trad4all.inc.php';
+
+    if (file_exists($file_to_include)) {
+        include $file_to_include;
+    }
+
     $course_info = CourseManager::create_course($course);
 
     header('Location: course_list.php'.($course_info===false?'?action=show_msg&warn='.api_get_last_failure():''));

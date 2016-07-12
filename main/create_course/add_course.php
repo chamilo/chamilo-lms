@@ -293,6 +293,13 @@ if ($form->validate()) {
             $params['course_language'] = $course_language;
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
 
+            include_once api_get_path(SYS_CODE_PATH) . 'lang/english/trad4all.inc.php';
+            $file_to_include = api_get_path(SYS_CODE_PATH) . 'lang/' . $course_language . '/trad4all.inc.php';
+
+            if (file_exists($file_to_include)) {
+                include $file_to_include;
+            }
+
             $course_info = CourseManager::create_course($params);
 
             if (!empty($course_info)) {

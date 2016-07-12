@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *	This file allows creating audio files from a text.
  *
@@ -14,14 +16,14 @@
 require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/createpaint';
 $this_section = SECTION_COURSES;
-
 $nameTools = get_lang('PhotoRetouching');
+$groupRights = Session::read('group_member_with_upload_rights');
 
 api_protect_course_script();
 api_block_anonymous_users();
 $_course = api_get_course_info();
 
-if (api_get_setting('enabled_support_paint') == 'false') {
+if (api_get_setting('enabled_support_paint') === 'false') {
     api_not_allowed(true);
 }
 
@@ -96,7 +98,7 @@ if (!$is_allowed_in_course) {
     api_not_allowed(true);
 }
 
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] ||
+if (!($is_allowed_to_edit || $groupRights ||
 	DocumentManager::is_my_shared_folder($_user['user_id'], Security::remove_XSS($dir), api_get_session_id()))
 ) {
     api_not_allowed(true);

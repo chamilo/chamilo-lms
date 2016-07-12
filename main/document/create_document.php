@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  *	This file allows creating new html documents with an online WYSIWYG html editor.
  *
@@ -11,13 +14,12 @@ require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 
+$groupRights = Session::read('group_member_with_upload_rights');
+
 $htmlHeadXtra[] = '
 <script>
-
 $(document).ready(function() {
     $(".scrollbar-light").scrollbar();
-    
-    
     $("#hide_bar_template").click(function() {
         $("#expand").toggleClass("hide");
         $("#contract").toggleClass("hide");
@@ -221,7 +223,7 @@ if (!$is_allowed_in_course) {
 }
 
 if (!($is_allowed_to_edit ||
-    $_SESSION['group_member_with_upload_rights'] ||
+    $groupRights ||
     DocumentManager::is_my_shared_folder($userId, $dir, api_get_session_id()))
 ) {
 	api_not_allowed(true);

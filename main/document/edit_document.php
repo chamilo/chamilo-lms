@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This file allows editing documents.
  *
@@ -27,10 +29,11 @@
 
 require_once '../inc/global.inc.php';
 
+$groupRights = Session::read('group_member_with_upload_rights');
+
 // Template's javascript
 $htmlHeadXtra[] = '
 <script>
-
 $(document).ready(function() {
     $(".scrollbar-light").scrollbar();
 
@@ -103,7 +106,7 @@ if (isset($_GET['id'])) {
 }
 
 if (empty($document_data)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
@@ -148,7 +151,7 @@ if ($is_certificate_mode) {
 	$editorConfig['BaseHref'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']||
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $groupRights ||
 	DocumentManager::is_my_shared_folder(api_get_user_id(), $dir, $sessionId);
 $noPHP_SELF = true;
 
@@ -187,7 +190,7 @@ if (empty($document_data['parents'])) {
 }
 
 if (!($is_allowed_to_edit ||
-    $_SESSION['group_member_with_upload_rights'] ||
+    $groupRights ||
     DocumentManager::is_my_shared_folder($user_id, $dir, api_get_session_id()))
 ) {
     api_not_allowed(true);
@@ -588,9 +591,7 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc)
 //return button back to
 function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_certificate_mode=false)
 {
-    
     $actionsLeft = null;
-    $actionsRight =  null;
     
     global $parent_id;
     $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parent_id;
@@ -621,6 +622,6 @@ function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_c
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
 	}
-    
-    echo $toolbar = Display::toolbarAction('actions-documents', array(0 => $actionsLeft, 1 => ''));
+
+    echo $toolbar = Display::toolbarAction('actions-documents', array($actionsLeft));
 }

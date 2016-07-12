@@ -836,8 +836,7 @@ switch ($action) {
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = array(
                 //'type',
-                'firstname',
-                'lastname',
+                'fullname',
                 'title',
                 'qualification',
                 'sent_date',
@@ -848,8 +847,7 @@ switch ($action) {
         } else {
             $columns = array(
                 //'type',
-                'firstname',
-                'lastname',
+                'fullname',               
                 'title',
                 'qualification',
                 'sent_date',
@@ -858,6 +856,7 @@ switch ($action) {
             );
         }
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $whereCondition);
+        
         break;
     case 'get_work_user_list_others':
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {

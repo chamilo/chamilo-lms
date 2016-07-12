@@ -321,6 +321,12 @@ header{
 #results .file_upload_highlight {
     background: #F4D364;
 }
+.work-action, .work-date, .work-title{
+    text-align: center;
+}
+.work-name{
+    padding-left: 10px;
+}
 .file_upload{
     position: relative;
 }
@@ -333,13 +339,13 @@ header{
     background: none;
 }
 .file_upload_small{
-    line-height: 15px;
     border: 1px solid #AFDDE9;
     background: #D4E6F0;
     width: 100%;
+    border-radius: 5px;
+    padding-bottom: 5px;
 }
 .work_correction_file_upload {
-    height: 40px !important;
     margin-bottom: 5px;
     margin-top: 5px;
 }
@@ -5051,7 +5057,7 @@ div#chat-remote-video video {
   border: none;
 }
 .ui-jqgrid tr.jqgrow td{
-  height: 45px;
+  line-height: 22px;
   font-size: 13px;
 }
 .ui-jqgrid .ui-jqgrid-labels .ui-state-hover{
@@ -5113,6 +5119,7 @@ div#chat-remote-video video {
 }
 .ui-jqgrid .ui-jqgrid-htable th {
     height: 35px;
+    font-weight: bold;
 }
 .ui-jqgrid .ui-state-highlight, .ui-jqgrid .ui-widget-content .ui-state-highlight,.ui-jqgrid .ui-widget-header .ui-state-highlight{
   background: #F7F7F7;

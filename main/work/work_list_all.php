@@ -174,7 +174,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $count = get_count_work($workId);
     if ($count > 0) {
         $display_output .= '<a class="btn-toolbar" href="downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq().'">'.
-            Display::return_icon('save_pack.png', get_lang('LowerPackageTasks'), null, ICON_SIZE_MEDIUM).' '.get_lang('LowerPackageTasks').'</a>';
+            Display::return_icon('save_pack.png', get_lang('DownloadPackageTasks'), null, ICON_SIZE_MEDIUM).' '.get_lang('DownloadPackageTasks').'</a>';
     }
     $actionsLeft .= $display_output;
     $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
@@ -204,8 +204,8 @@ if (!empty($work_data['enable_qualification']) &&
 
     $columns = array(
         //get_lang('Type'),
-        get_lang('FirstName'),
-        get_lang('LastName'),
+        get_lang('FullUserName'),
+        //get_lang('LastName'),
         get_lang('Title'),
         get_lang('Feedback'),
         get_lang('Date'),
@@ -224,23 +224,23 @@ if (!empty($work_data['enable_qualification']) &&
             'sortable' => 'false',
         ),*/
         array(
-            'name' => 'firstname',
-            'index' => 'firstname',
-            'width' => '35',
+            'name' => 'fullname',
+            'index' => 'fullname',
+            'width' => '30',
             'align' => 'left',
             'search' => 'true',
         ),
-        array(
+        /*array(
             'name' => 'lastname',
             'index' => 'lastname',
             'width' => '35',
             'align' => 'left',
             'search' => 'true',
-        ),
+        ),*/
         array(
             'name' => 'title',
             'index' => 'title',
-            'width' => '40',
+            'width' => '25',
             'align' => 'left',
             'search' => 'false',
             'wrap_cell' => 'true',
@@ -248,14 +248,14 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'qualification',
             'index' => 'qualification',
-            'width' => '20',
-            'align' => 'left',
+            'width' => '15',
+            'align' => 'center',
             'search' => 'true',
         ),
         array(
             'name' => 'sent_date',
             'index' => 'sent_date',
-            'width' => '40',
+            'width' => '25',
             'align' => 'left',
             'search' => 'true',
             'wrap_cell' => 'true',
@@ -263,7 +263,7 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'qualificator_id',
             'index' => 'qualificator_id',
-            'width' => '25',
+            'width' => '20',
             'align' => 'left',
             'search' => 'true',
         ),
@@ -278,7 +278,7 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'actions',
             'index' => 'actions',
-            'width' => '30',
+            'width' => '25',
             'align' => 'left',
             'search' => 'false',
             'sortable' => 'false',

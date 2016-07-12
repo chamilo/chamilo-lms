@@ -27,25 +27,24 @@ $baseWordDir = $courseDir;
  * Display initialisation and security checks
  */
 // Extra javascript functions for in html head:
-$htmlHeadXtra[] =
-    "<script>
+$htmlHeadXtra[] = "<script>
 function confirmation(name) {
-    if (confirm(\" ".trim(get_lang('AreYouSureToDeleteJS'))." \"+name+\"?\"))
-        {return true;}
-    else
-        {return false;}
+    if (confirm(\" ".trim(get_lang('AreYouSureToDeleteJS'))." \"+name+\"?\")) {
+        return true;
+    } else {
+        return false;
+    }
 }
 </script>";
 $nameTools = get_lang('LearningPaths');
 Event::event_access_tool(TOOL_LEARNPATH);
-
 api_protect_course_script();
 
 /**
  * Display
  */
 /* Require the search widget and prepare the header with its stuff. */
-if (api_get_setting('search_enabled') == 'true') {
+if (api_get_setting('search_enabled') === 'true') {
     require api_get_path(LIBRARY_PATH).'search/search_widget.php';
     search_widget_prepare($htmlHeadXtra);
 }
@@ -101,7 +100,7 @@ if ($is_allowed_to_edit) {
         '../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
     );
 
-    if (api_get_setting('service_ppt2lp', 'active') == 'true') {
+    if (api_get_setting('service_ppt2lp', 'active') === 'true') {
         $actions .= Display::url(
             Display::return_icon('import_powerpoint.png', get_lang('PowerPointConvert'), '', ICON_SIZE_MEDIUM),
             '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
@@ -112,7 +111,6 @@ if ($is_allowed_to_edit) {
 $token = Security::get_token();
 
 /* DISPLAY SCORM LIST */
-
 $categoriesTempList = learnpath::getCategories(api_get_course_int_id());
 $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
@@ -120,7 +118,7 @@ $categoryTest->setName(get_lang('WithOutCategory'));
 $categoryTest->setPosition(0);
 
 $categories = array(
-    $categoryTest,
+    $categoryTest
 );
 
 if (!empty($categoriesTempList)) {
@@ -142,7 +140,6 @@ foreach ($categories as $item) {
 
     if (!$is_allowed_to_edit) {
         $users = $item->getUsers();
-
         if (!empty($users) && $users->count() > 0) {
             if (!$item->hasUserAdded($user)) {
                 continue;

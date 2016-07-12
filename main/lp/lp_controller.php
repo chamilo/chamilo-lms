@@ -32,8 +32,8 @@ $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
 
 if ($showGlossary) {
-    if (api_get_setting('show_glossary_in_documents') == 'ismanual' ||
-        api_get_setting('show_glossary_in_documents') == 'isautomatic'
+    if (api_get_setting('show_glossary_in_documents') === 'ismanual' ||
+        api_get_setting('show_glossary_in_documents') === 'isautomatic'
     ) {
         $htmlHeadXtra[] = '<script>
     <!--
@@ -52,30 +52,12 @@ function setFocus(){
 $(window).load(function () {
     setFocus();
 });
-</script>
-<style>
-form .label {
-    padding: 1px 3px 2px;
-    font-size: 100%;
-    font-weight: normal;
-    color: #ffffff;
-    text-transform: none;
-    background: none;
-    border-radius: unset;
-    color: #404040;
-    float: left;
-    line-height: 18px;
-    padding-top: 6px;
-    text-align: right;
-    width: 150px;
-    text-shadow:none;
-}
-</style>';
+</script>';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
 $htmlHeadXtra[] = '
 <script>
     /*
-    Script to manipuplate Learning Path items with Drag and drop
+    Script to manipulate Learning Path items with Drag and drop
      */
     var newOrderData = "";
     var lptree_debug = "";  // for debug
@@ -169,7 +151,6 @@ $htmlHeadXtra[] = '
                     }
                 );
             },
-
             receive: function(event, ui) {
                 var id = $(ui.item).attr("data_id");
                 var type = $(ui.item).attr("data_type");
@@ -214,15 +195,12 @@ $htmlHeadXtra[] = '
         });
         processReceive = false;
     });
-</script>
-';
+</script>';
 
 $session_id = api_get_session_id();
-
 api_protect_course_script(true);
 
 $lpfound = false;
-
 $myrefresh = 0;
 $myrefresh_id = 0;
 
@@ -298,22 +276,38 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         if ($debug > 0) error_log('New LP - found row - type dokeos - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
 
                         $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
-                        if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
+                        if ($oLP !== false) {
+                            $lp_found = true;
+                        } else {
+                            error_log($oLP->error, 0);
+                        }
                         break;
                     case 2:
                         if ($debug > 0) error_log('New LP - found row - type scorm - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new scorm(api_get_course_id(), $lp_id, api_get_user_id());
-                        if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
+                        if ($oLP !== false) {
+                            $lp_found = true;
+                        } else {
+                            error_log($oLP->error, 0);
+                        }
                         break;
                     case 3:
                         if ($debug > 0) error_log('New LP - found row - type aicc - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new aicc(api_get_course_id(), $lp_id, api_get_user_id());
-                        if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
+                        if ($oLP !== false) {
+                            $lp_found = true;
+                        } else {
+                            error_log($oLP->error, 0);
+                        }
                         break;
                     default:
                         if ($debug > 0) error_log('New LP - found row - type other - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
-                        if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
+                        if ($oLP !== false) {
+                            $lp_found = true;
+                        } else {
+                            error_log($oLP->error, 0);
+                        }
                         break;
                 }
             }
@@ -337,7 +331,7 @@ if (isset($_SESSION['oLP'])) {
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
-    if ($_REQUEST['action'] != 'list' AND $_REQUEST['action'] != 'view') {
+    if ($_REQUEST['action'] != 'list' && $_REQUEST['action'] != 'view') {
         if (!empty($_REQUEST['lp_id'])) {
             $_REQUEST['action'] = 'view';
         } else {
@@ -368,7 +362,6 @@ $redirectTo = null;
 
 switch ($action) {
     case 'add_item':
-
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
@@ -683,6 +676,8 @@ switch ($action) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
                 $is_success = true;
+
+                Display::addFlash(Display::return_message(get_lang('Updated')));
 
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
@@ -1453,4 +1448,5 @@ if (!empty($_SESSION['oLP'])) {
 
 if (!empty($redirectTo)) {
     header("Location: $redirectTo");
+    exit;
 }

@@ -1840,8 +1840,7 @@ function get_work_user_list(
                         qualification,
                         weight,
                         allow_text_assignment,
-                        u.firstname,
-                        u.lastname,
+                        CONCAT (u.firstname," ",u.lastname) as fullname,
                         u.username,
                         parent_id,
                         accepted,
@@ -1956,16 +1955,18 @@ function get_work_user_list(
                 ($is_allowed_to_edit || api_is_drh())
             ) {
                 // Firstname, lastname, username
-                $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
-                $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
+                $work['fullname'] = Display::div($work['fullname'], array('class' => 'work-name'));
+                
+                //$work['firstname'] = Display::div($work['firstname'], array('class' => $class));
+                //$work['lastname'] = Display::div($work['lastname'], array('class' => $class));
 
                 $work['title_clean'] = $work['title'];
 
                 if (strlen($work['title']) > 30) {
                     $short_title = substr($work['title'], 0, 27).'...';
-                    $work['title'] = Display::span($short_title, array('class' => $class, 'title' => $work['title']));
+                    $work['title'] = Display::span($short_title, array('class' => 'work-title', 'title' => $work['title']));
                 } else {
-                    $work['title'] = Display::div($work['title'], array('class' => $class));
+                    $work['title'] = Display::div($work['title'], array('class' => 'work-title'));
                 }
 
                 // Type.
@@ -2000,7 +2001,7 @@ function get_work_user_list(
                 $date = date_to_str_ago($work['sent_date']). ' ' . $add_string . ' ' . $work_date;
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="text-center" title="'.$date.'">' . $work['sent_date'] . '</div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $work['sent_date'] . '</div>';
 
                 // Actions.
                 $correction = '';
@@ -2126,13 +2127,13 @@ function get_work_user_list(
                     $qualificator_id = Display::label(get_lang('Revised'), 'success');
                 }
                 $work['qualificator_id'] = $qualificator_id;
-                $work['actions'] = $send_to.$link_to_download.$action;
+                $work['actions'] = '<div class="work-action">'.$send_to.$link_to_download.$action.'</div>';
                 $work['correction'] = $correction;
 
                 $works[] = $work;
             }
         }
-
+        
         return $works;
     }
 }

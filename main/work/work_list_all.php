@@ -179,7 +179,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $actionsLeft .= $display_output;
     $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
     $actionsLeft .= '<a class="btn-toolbar" href="'.$url.'">'.
-        Display::return_icon('upload_package.png', get_lang('UpPackageFixes'), '', ICON_SIZE_MEDIUM) . ' ' . get_lang('UpPackageFixes') . '</a>';
+        Display::return_icon('upload_package.png', get_lang('UploadCorrectionsPackage'), '', ICON_SIZE_MEDIUM) . ' ' . get_lang('UploadCorrectionsPackage') . '</a>';
 }
 
 echo Display::toolbarAction('toolbar-worklist', array($actionsLeft), 1);
@@ -289,8 +289,7 @@ if (!empty($work_data['enable_qualification']) &&
 
     $columns = array(
         //get_lang('Type'),
-        get_lang('FirstName'),
-        get_lang('LastName'),
+        get_lang('FullUserName'),
         get_lang('Title'),
         get_lang('Feedback'),
         get_lang('Date'),
@@ -308,15 +307,8 @@ if (!empty($work_data['enable_qualification']) &&
             'sortable' => 'false',
         ),*/
         array(
-            'name' => 'firstname',
-            'index' => 'firstname',
-            'width' => '35',
-            'align' => 'left',
-            'search' => 'true',
-        ),
-        array(
-            'name' => 'lastname',
-            'index' => 'lastname',
+            'name' => 'fullname',
+            'index' => 'fullname',
             'width' => '35',
             'align' => 'left',
             'search' => 'true',
@@ -324,7 +316,7 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'title',
             'index' => 'title',
-            'width' => '40',
+            'width' => '30',
             'align' => 'left',
             'search' => 'false',
             'wrap_cell' => "true",
@@ -332,7 +324,7 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'qualification',
             'index' => 'qualification',
-            'width' => '25',
+            'width' => '30',
             'align' => 'left',
             'search' => 'true',
         ),
@@ -347,7 +339,7 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'correction',
             'index' => 'correction',
-            'width' => '30',
+            'width' => '45',
             'align' => 'left',
             'search' => 'false',
             'sortable' => 'false',
@@ -355,7 +347,7 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'actions',
             'index' => 'actions',
-            'width' => '40',
+            'width' => '30',
             'align' => 'left',
             'search' => 'false',
             'sortable' => 'false'
@@ -367,7 +359,7 @@ if (!empty($work_data['enable_qualification']) &&
 $extra_params = array(
     'autowidth' =>  'true',
     'height' =>  'auto',
-    'sortname' => 'firstname',
+    'sortname' => 'fullname',
     'sortable' => 'false'
 );
 

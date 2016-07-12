@@ -1496,8 +1496,9 @@ class Display
             } else {
                 $notification['link'] = $notification['link'].'&notification=1';
             }
+            $imagen = substr($notification['image'], 0, -4).'.png';
             $return .= Display::url(
-                Display::return_icon($notification['image'], $label),
+                Display::return_icon($imagen, $label),
                 api_get_path(WEB_CODE_PATH).
                 $notification['link'].'&cidReq='.$course_code.
                 '&ref='.$notification['ref'].

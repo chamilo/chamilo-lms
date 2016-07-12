@@ -417,7 +417,7 @@ class DisplayGradebook
      * where we have only one calification per course or session)
      * @return void Everything is printed on screen upon closing
      */
-    static function header(
+    public static function header(
         $catobj,
         $showtree,
         $selectcat,
@@ -613,15 +613,14 @@ class DisplayGradebook
                     }
 
                     $actionsLeft .= Display::url(
-                            Display::return_icon(
-                                    'user.png',
-                                    get_lang('GradebookListOfStudentsReports'),
-                                    '',
-                                    ICON_SIZE_MEDIUM
-                                    ),
-                            "gradebook_display_summary.php?$my_api_cidreq&selectcat=" . intval($_GET['selectcat'])
-                        );
-
+                        Display::return_icon(
+                                'user.png',
+                                get_lang('GradebookListOfStudentsReports'),
+                                '',
+                                ICON_SIZE_MEDIUM
+                                ),
+                        "gradebook_display_summary.php?$my_api_cidreq&selectcat=" . intval($_GET['selectcat'])
+                    );
 
                     // Right icons
                     $actionsRight = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . '&amp;cidReq=' . $catobj->get_course_code() . '&id_session='.$catobj->get_session_id(). '">' .
@@ -656,7 +655,7 @@ class DisplayGradebook
         }
 
         if (api_is_allowed_to_edit(null, true)){
-            echo $toolbar = Display::toolbarAction('gradebook-actions', array(0 => $actionsLeft, 1 => $actionsRight ));
+            echo $toolbar = Display::toolbarAction('gradebook-actions', array($actionsLeft, $actionsRight));
         }
 
         if (api_is_allowed_to_edit(null, true)) {

@@ -11,7 +11,7 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-$htmlHeadXtra[] ='<script type="text/javascript">
+$htmlHeadXtra[] ='<script>
  $(document).ready(function() {
 	$(".save").click(function() {
 		var button_name=$(this).attr("name");

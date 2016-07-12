@@ -29,6 +29,7 @@ class bbb
     public $isGlobalConference = false;
     public $groupSupport = false;
     public $table;
+    public $accessUrl = 1;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -56,6 +57,8 @@ class bbb
         $columns = Database::listTableColumns($this->table);
 
         $this->groupSupport = isset($columns['group_id']) ? true : false;
+
+        $this->accessUrl = api_get_current_access_url_id();
 
         if ($this->groupSupport) {
             // Plugin check
@@ -201,6 +204,8 @@ class bbb
         }
 
         $params['created_at'] = api_get_utc_datetime();
+        $params['access_url'] = $this->accessUrl;
+
         $id = Database::insert($this->table, $params);
 
         if ($id) {
@@ -279,8 +284,8 @@ class bbb
         $sessionId = api_get_session_id();
         $conditions =  array(
             'where' => array(
-                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 ' =>
-                    array($courseId, $sessionId, $meetingName)
+                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 AND access_url = ?' =>
+                    array($courseId, $sessionId, $meetingName, $this->accessUrl)
             )
         );
 
@@ -288,8 +293,8 @@ class bbb
             $groupId = api_get_group_id();
             $conditions =  array(
                 'where' => array(
-                    'c_id = ? AND session_id = ? AND meeting_name = ? AND group_id = ? AND status = 1 ' =>
-                        array($courseId, $sessionId, $meetingName, $groupId)
+                    'c_id = ? AND session_id = ? AND meeting_name = ? AND group_id = ? AND status = 1 AND access_url = ?' =>
+                        array($courseId, $sessionId, $meetingName, $groupId, $this->accessUrl)
                 )
             );
         }
@@ -333,7 +338,7 @@ class bbb
         $meetingData = Database::select(
             '*',
             $this->table,
-            array('where' => array('meeting_name = ? AND status = 1 ' => $meetingName)),
+            array('where' => array('meeting_name = ? AND status = 1 AND access_url = ?' => array($meetingName, $this->accessUrl))),
             'first'
         );
 
@@ -485,9 +490,10 @@ class bbb
 
         $conditions =  array(
             'where' => array(
-                'c_id = ? AND session_id = ? ' => array(
+                'c_id = ? AND session_id = ? AND access_url = ?' => array(
                     $courseId,
                     $sessionId,
+                    $this->accessUrl
                 ),
             ),
         );
@@ -496,8 +502,8 @@ class bbb
             $groupId = api_get_group_id();
             $conditions =  array(
                 'where' => array(
-                    'c_id = ? AND session_id = ? AND group_id = ? ' =>
-                        array($courseId, $sessionId, $groupId)
+                    'c_id = ? AND session_id = ? AND group_id = ? AND access_url = ?' =>
+                        array($courseId, $sessionId, $groupId, $this->accessUrl)
                 )
             );
         }
@@ -833,9 +839,10 @@ class bbb
 
         $conditions = array(
             'where' => array(
-                'c_id = ? AND session_id = ? AND status = 1 ' => array(
+                'c_id = ? AND session_id = ? AND status = 1 AND access_url = ?' => array(
                     $courseId,
                     $sessionId,
+                    $this->accessUrl
                 ),
             ),
         );
@@ -844,10 +851,11 @@ class bbb
             $groupId = api_get_group_id();
             $conditions = array(
                 'where' => array(
-                    'c_id = ? AND session_id = ? AND group_id = ? AND status = 1 ' => array(
+                    'c_id = ? AND session_id = ? AND group_id = ? AND status = 1 AND access_url = ?' => array(
                         $courseId,
                         $sessionId,
-                        $groupId
+                        $groupId,
+                        $this->accessUrl
                     ),
                 ),
             );
@@ -990,7 +998,7 @@ class bbb
         $meetingList = Database::select(
             'count(id) as count',
             $this->table,
-            array('where' => array('status = ?' => array(1))),
+            array('where' => array('status = ? AND access_url = ?' => array(1, $this->accessUrl))),
             'first'
         );
 

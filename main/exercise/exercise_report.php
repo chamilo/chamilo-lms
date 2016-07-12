@@ -588,6 +588,21 @@ $extra_params['height'] = 'auto';
                 var sgrid = $("#results")[0];
                 sgrid.triggerToolbar();
 
+                $('#results').on('click', 'a.exercise-recalculate', function (e) {
+                    e.preventDefault();
+
+                    if (!$(this).data('user') || !$(this).data('exercise') || !$(this).data('id')) {
+                        return;
+                    }
+
+                    var url = '<?php echo api_get_path(WEB_CODE_PATH) ?>exercise/recalculate.php?<?php echo api_get_cidreq() ?>';
+
+                    var recalculateXhr = $.post(url, $(this).data());
+
+                    $.when(recalculateXhr).done(function (response) {
+                        $('#results').trigger('reloadGrid');
+                    });
+                });
         <?php } ?>
         });
 

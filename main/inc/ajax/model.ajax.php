@@ -109,6 +109,10 @@ $search = isset($_REQUEST['_search']) ? $_REQUEST['_search'] : false;
 $forceSearch = isset($_REQUEST['_force_search']) ? $_REQUEST['_force_search'] : false;
 $extra_fields = array();
 
+if (!empty($searchString)) {
+    $search = 'true';
+}
+
 if (($search || $forceSearch) && ($search !== 'false')) {
     $whereCondition = ' 1 = 1 ';
     $whereConditionInForm = getWhereClause($searchField, $searchOperator, $searchString);
@@ -1742,7 +1746,7 @@ if (in_array($action, $allowed_actions)) {
             }
             $array = array();
             foreach ($columns as $col) {
-                if ($col == 'correction') {
+                if (in_array($col, ['correction', 'actions'])) {
                     $array[] = isset($row[$col]) ? $row[$col] : '';
                 } else {
                     $array[] = isset($row[$col]) ? Security::remove_XSS($row[$col]) : '';

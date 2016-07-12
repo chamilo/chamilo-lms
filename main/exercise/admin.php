@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  *	Exercise administration
  * 	This script allows to manage (create, modify) an exercise and its questions
@@ -43,8 +46,6 @@
  * 	@author Olivier Brouckaert
  * Modified by Hubert Borderiou 21-10-2011 Question by category
  */
-
-use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;
@@ -94,7 +95,7 @@ if (empty($deleteQuestion)) {
 }
 $clone_question = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
 if (empty($questionId)) {
-    $questionId = isset($_SESSION['questionId']) ? $_SESSION['questionId'] : 0;
+    $questionId = Session::read('questionId');
 }
 if (empty($modifyExercise)) {
     $modifyExercise = isset($_GET['modifyExercise']) ? $_GET['modifyExercise'] : null;
@@ -117,13 +118,14 @@ Event::delete_all_incomplete_attempts(
 );
 
 // get from session
-$objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
-$objQuestion = isset($_SESSION['objQuestion']) ? $_SESSION['objQuestion'] : null;
+$objExercise = Session::read('objExercise');
+$objQuestion = Session::read('objQuestion');
+
 if (isset($_REQUEST['convertAnswer'])) {
     $objQuestion = $objQuestion->swapSimpleAnswerTypes();
-    $_SESSION['objQuestion'] = $objQuestion;
+    Session::write('objQuestion', $objQuestion);
 }
-$objAnswer   = isset($_SESSION['objAnswer']) ? $_SESSION['objAnswer'] : null;
+$objAnswer = Session::read('objAnswer');
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';

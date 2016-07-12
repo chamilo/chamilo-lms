@@ -45,34 +45,16 @@ class CourseManager
             $access_url_id = api_get_current_access_url_id();
         }
 
-        if (isset($_configuration[$access_url_id]) &&
-            is_array($_configuration[$access_url_id])
-        ) {
-            if (isset($_configuration[$access_url_id]['hosting_limit_courses']) &&
-                $_configuration[$access_url_id]['hosting_limit_courses'] > 0
-            ) {
-                $num = self::count_courses($access_url_id);
-                if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
-                    api_warn_hosting_contact('hosting_limit_courses');
-
-                    return api_set_failure(get_lang('PortalCoursesLimitReached'));
-                }
+        if (isset($_configuration[$access_url_id]) && is_array($_configuration[$access_url_id])) {
+            $return = self::checkCreateCourseAccessUrlParam($_configuration, $access_url_id, 'hosting_limit_courses', 'PortalCoursesLimitReached');
+            if ($return != false) {
+                return $return;
             }
-
-            if (isset($_configuration[$access_url_id]['hosting_limit_active_courses']) &&
-                $_configuration[$access_url_id]['hosting_limit_active_courses'] > 0
-            ) {
-                $num = self::countActiveCourses($access_url_id);
-                if ($num >= $_configuration[$access_url_id]['hosting_limit_active_courses']) {
-                    api_warn_hosting_contact('hosting_limit_active_courses');
-
-                    return api_set_failure(
-                        get_lang('PortalActiveCoursesLimitReached')
-                    );
-                }
+            $return = self::checkCreateCourseAccessUrlParam($_configuration, $access_url_id, 'hosting_limit_active_courses', 'PortalActiveCoursesLimitReached');
+            if ($return != false) {
+                return $return;
             }
         }
-
 
         if (empty($params['title'])) {
             return false;
@@ -107,27 +89,7 @@ class CourseManager
                 $course_info = api_get_course_info_by_id($course_id);
 
                 if (!empty($course_info)) {
-                    AddCourse::prepare_course_repository($course_info['directory'], $course_info['code']);
-                    AddCourse::fill_db_course(
-                        $course_id,
-                        $course_info['directory'],
-                        $course_info['course_language'],
-                        $params['exemplary_content']
-                    );
-
-                    if (isset($params['gradebook_model_id'])) {
-                        CourseManager::createDefaultGradebook($params['gradebook_model_id'], $course_info['code']);
-                    }
-                    // If parameter defined, copy the contents from a specific
-                    // template course into this new course
-                    if (isset($params['course_template'])) {
-                        CourseManager::useTemplateAsBasisIfRequired($course_info['id'], $params['course_template']);
-                    }
-                    $params['course_code'] = $course_info['code'];
-                    $params['item_id'] = $course_info['real_id'];
-
-                    $courseFieldValue = new ExtraFieldValue('course');
-                    $courseFieldValue->saveFieldValues($params);
+                    self::fillCourse($course_info, $params);
 
                     return $course_info;
                 }
@@ -5987,5 +5949,56 @@ class CourseManager
         }
 
         return $registered_users_with_extra_field;
+    }
+
+    /**
+     * Check if a specific access-url-related setting is a problem or not
+     * @param array $_configuration The $_configuration array
+     * @param int $accessUrlId The access URL ID
+     * @param string $param
+     * @param string $msgLabel
+     * @return bool|string
+     */
+    private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel)
+    {
+        if (isset($_configuration[$accessUrlId][$param]) && $_configuration[$accessUrlId][$param] > 0) {
+            $num = self::count_courses($accessUrlId);
+            if ($num >= $_configuration[$accessUrlId][$param]) {
+                api_warn_hosting_contact($param);
+
+                return api_set_failure(get_lang($msgLabel));
+            }
+        }
+        return false;
+    }
+    /**
+     * Fill course with all necessary items
+     * @param array $courseInfo Course info array
+     * @param array $params Parameters from the course creation form
+     * @return void
+     */
+    private static function fillCourse($courseInfo, $params)
+    {
+        AddCourse::prepare_course_repository($courseInfo['directory'], $courseInfo['code']);
+        AddCourse::fill_db_course(
+            $courseInfo['real_id'],
+            $courseInfo['directory'],
+            $courseInfo['course_language'],
+            $params['exemplary_content']
+        );
+
+        if (isset($params['gradebook_model_id'])) {
+            CourseManager::createDefaultGradebook($params['gradebook_model_id'], $courseInfo['code']);
+        }
+        // If parameter defined, copy the contents from a specific
+        // template course into this new course
+        if (isset($params['course_template'])) {
+            CourseManager::useTemplateAsBasisIfRequired($courseInfo['id'], $params['course_template']);
+        }
+        $params['course_code'] = $courseInfo['code'];
+        $params['item_id'] = $courseInfo['real_id'];
+
+        $courseFieldValue = new ExtraFieldValue('course');
+        $courseFieldValue->saveFieldValues($params);
     }
 }

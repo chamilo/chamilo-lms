@@ -229,7 +229,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
 /**
  * Filter to display the edit-buttons
  */
-function modify_filter($code)
+function modify_courses_filter($code)
 {
     $icourse = api_get_course_info($code);
     $path = api_get_path(WEB_CODE_PATH);
@@ -455,7 +455,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
     //$table->set_header(7, get_lang('Teacher'));
     $table->set_header(7, get_lang('Action'), false, null, array('class'=>'td_actions'));
-    $table->set_column_filter(7, 'modify_filter');
+    $table->set_column_filter(7, 'modify_courses_filter');
     $table->set_form_actions(array('delete_courses' => get_lang('DeleteCourse')), 'course');
     $content .= $table->return_table();
 }

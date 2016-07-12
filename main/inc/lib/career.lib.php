@@ -239,27 +239,36 @@ class Career extends Model
     }
 
     /**
-     * @param int $id
-     * @return bool|void
+     * Delete a record from the career table and report in the default events log table
+     * @param int $id The ID of the career to delete
+     * @return bool True if the career could be deleted, false otherwise
      */
     public function delete($id)
     {
-        parent::delete($id);
-        Event::addEvent(
-            LOG_CAREER_DELETE,
-            LOG_CAREER_ID,
-            $id,
-            api_get_utc_datetime(),
-            api_get_user_id()
-        );
+        $res = parent::delete($id);
+        if ($res) {
+            Event::addEvent(
+                LOG_CAREER_DELETE,
+                LOG_CAREER_ID,
+                $id,
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
+        }
+        return $res;
     }
 
+    /**
+     * Update the career table with the given params
+     * @param array $params The field values to be set
+     * @return bool Returns true if the record could be updated, false otherwise
+     */
     public function update($params)
     {
         if (isset($params['description'])) {
             $params['description'] = Security::remove_XSS($params['description']);
         }
 
-        parent::update($params);
+        return parent::update($params);
     }
 }

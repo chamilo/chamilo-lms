@@ -1,15 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
 *   Session view
 *   @package chamilo.session
 *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
 */
 
-use ChamiloSession as Session;
-
 $cidReset = true;
-
 require_once '../inc/global.inc.php';
 
 if (empty($_GET['session_id'])) {
@@ -17,10 +17,8 @@ if (empty($_GET['session_id'])) {
 }
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
-
 $sessionField = new ExtraFieldValue('session');
 $valueAllowVisitors = $sessionField->get_values_by_handler_and_field_variable($session_id, 'allow_visitors');
-
 $allowVisitors = $valueAllowVisitors != false;
 
 if (!$allowVisitors) {
@@ -30,15 +28,11 @@ if (!$allowVisitors) {
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
-
 $course_id  = isset($_GET['course_id'])  ? intval($_GET['course_id']) : null;
-
-$_SESSION['id_session'] = $session_id;
+Session::write('id_session', $session_id);
 
 // Clear the exercise session just in case
-if (isset($_SESSION['objExercise'])) {
-    Session::erase('objExercise');
-}
+Session::erase('objExercise');
 
 $userId = api_get_user_id();
 $session_info = SessionManager::fetch($session_id);
@@ -303,7 +297,7 @@ foreach ($final_array as $session_data) {
                     if (!empty($best_score_data)) {
                         $best_score = ExerciseLib::show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
                     }
-                    
+
                     // Exercise results
                     $counter = 1;
                     foreach ($exercise_data as $exercise_item) {

@@ -165,17 +165,20 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 // display header
 Display::display_header($tool_name);
 
-// actions
-
+// Actions
 if ($user_info['status'] != SESSIONADMIN) {
-    $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">' . Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM ) . '</a>';
-    $actionsLeft .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">' . Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM) . '</a>';
+    $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">' .
+        Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM ) . '</a>';
+    $actionsLeft .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">' .
+        Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM) . '</a>';
 }
 
-
-echo Display::toolbarAction('toolbar-dashboard', array( 0 => $actionsLeft, 1 => ''));
-
-echo Display::page_header(sprintf(get_lang('AssignSessionsToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])), null, 'h3');
+echo Display::toolbarAction('toolbar-dashboard', array($actionsLeft));
+echo Display::page_header(
+    sprintf(get_lang('AssignSessionsToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
+    null,
+    'h3'
+);
 
 $assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
 $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
@@ -207,11 +210,11 @@ $result	= Database::query($sql);
 ?>
     <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){ echo ' onsubmit="valide();"';}?>>
         <input type="hidden" name="formSent" value="1" />
-        
+
         <div class="row">
             <div class="col-md-4">
                 <h5><?php echo get_lang('SessionsListInPlatform') ?> :</h5>
-                
+
                 <div id="ajax_list_sessions_multiple">
                     <select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">
                         <?php
@@ -242,7 +245,7 @@ $result	= Database::query($sql);
                             <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))">
                                 <em class="fa fa-arrow-left"></em>
                             </button>
-                        </div>    
+                        </div>
                     <?php
                     }
                     else
@@ -258,15 +261,15 @@ $result	= Database::query($sql);
                             <em class="fa fa-arrow-left"></em>
                         </button>
                     </div>
-                        
+
                     <?php
                     }
                     ?>
-                    
+
                     <?php
                     echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
                     ?>
-                </div>        
+                </div>
             </div>
             <div class="col-md-4">
                 <h5><?php
@@ -292,7 +295,7 @@ $result	= Database::query($sql);
                     </select>
             </div>
         </div>
-        
+
     </form>
 
 <?php

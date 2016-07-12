@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.main
  */
 
-use \ChamiloSession as Session;
 define('CHAMILO_HOMEPAGE', true);
 define('CHAMILO_LOAD_WYSIWYG', false);
 
@@ -21,7 +22,7 @@ $this_section = SECTION_CAMPUS;
 
 $header_title = null;
 if (!api_is_anonymous()) {
-    $header_title = " ";
+    $header_title = ' ';
 }
 
 $controller = new IndexManager($header_title);
@@ -33,17 +34,6 @@ if (!empty($_GET['logout'])) {
     $redirect = !empty($_GET['no_redirect']) ? false : true;
     $controller->logout($redirect);
 }
-
-
-/* Table definitions */
-
-/* Constants and CONFIGURATION parameters */
-/** @todo these configuration settings should move to the Chamilo config settings. */
-
-/** Defines wether or not anonymous visitors can see a list of the courses on the Chamilo homepage that are open to the world. */
-$_setting['display_courses_to_anonymous_users'] = 'true';
-
-/* LOGIN */
 
 /**
  * Registers in the track_e_default table (view in important activities in admin
@@ -65,7 +55,7 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
 }
 
 // Delete session item necessary to check for legal terms
-if (api_get_setting('allow_terms_conditions') == 'true') {
+if (api_get_setting('allow_terms_conditions') === 'true') {
     Session::erase('term_and_condition');
 }
 //If we are not logged in and customapages activated
@@ -87,28 +77,26 @@ if (!api_get_user_id() && CustomPages::enabled()) {
 if (!empty($_POST['submitAuth'])) {
     // The user has been already authenticated, we are now to find the last login of the user.
     if (isset ($_user['user_id'])) {
-        $track_login_table      = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql_last_login = "SELECT UNIX_TIMESTAMP(login_date)
-                                FROM $track_login_table
-                                WHERE login_user_id = '".$_user['user_id']."'
-                                ORDER BY login_date DESC LIMIT 1";
-        $result_last_login = Database::query($sql_last_login);
+        $track_login_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $sql = "SELECT UNIX_TIMESTAMP(login_date)
+                FROM $track_login_table
+                WHERE login_user_id = '".$_user['user_id']."'
+                ORDER BY login_date DESC LIMIT 1";
+        $result_last_login = Database::query($sql);
         if (!$result_last_login) {
             if (Database::num_rows($result_last_login) > 0) {
                 $user_last_login_datetime = Database::fetch_array($result_last_login);
                 $user_last_login_datetime = $user_last_login_datetime[0];
-                Session::write('user_last_login_datetime',$user_last_login_datetime);
+                Session::write('user_last_login_datetime', $user_last_login_datetime);
             }
         }
-        //Event::event_login();
     }
-    // End login -- if ($_POST['submitAuth'])
 } else {
     // Only if login form was not sent because if the form is sent the user was already on the page.
     Event::event_open();
 }
 
-if (api_get_setting('display_categories_on_homepage') == 'true') {
+if (api_get_setting('display_categories_on_homepage') === 'true') {
     $controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());
 }
 
@@ -175,7 +163,7 @@ if (isset($_GET['firstpage'])) {
     api_set_firstpage_parameter($_GET['firstpage']);
     // if we are already logged, go directly to course
     if (api_user_is_login()) {
-        echo "<script type='text/javascript'>self.location.href='index.php?firstpage=".Security::remove_XSS($_GET['firstpage'])."'</script>";
+        echo "<script>self.location.href='index.php?firstpage=".Security::remove_XSS($_GET['firstpage'])."'</script>";
     }
 } else {
     api_delete_firstpage_parameter();

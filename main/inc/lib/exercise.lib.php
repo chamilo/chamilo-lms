@@ -1956,8 +1956,7 @@ HOTSPOT;
                             }
 
                             //Admin can always delete the attempt
-                            if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()
-                            ) {
+                            if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
                                 $ip = TrackingUserLog::get_ip_from_user_event(
                                     $results[$i]['exe_user_id'],
                                     date('Y-m-d h:i:s'),
@@ -1966,6 +1965,25 @@ HOTSPOT;
                                 $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip=' . $ip . '" target="_blank">
                                 ' . Display::return_icon('info.png', $ip) . '
                                 </a>';
+
+
+                                $recalculateUrl = api_get_path(WEB_CODE_PATH) . 'exercise/recalculate.php?' .
+                                    api_get_cidreq() . '&' .
+                                    http_build_query([
+                                        'id' => $id,
+                                        'exercise' => $exercise_id,
+                                        'user' => $results[$i]['exe_user_id']
+                                    ]);
+                                $actions .= Display::url(
+                                    Display::return_icon('reload.png', get_lang('RecalculateResults')),
+                                    $recalculateUrl,
+                                    [
+                                        'data-exercise' => $exercise_id,
+                                        'data-user' => $results[$i]['exe_user_id'],
+                                        'data-id' => $id,
+                                        'class' => 'exercise-recalculate'
+                                    ]
+                                );
 
                                 $delete_link = '<a href="exercise_report.php?' . api_get_cidreq() . '&filter_by_user=' . intval($_GET['filter_by_user']) . '&filter=' . $filter . '&exerciseId=' . $exercise_id . '&delete=delete&did=' . $id . '"
                                 onclick="javascript:if(!confirm(\'' . sprintf(
@@ -2010,6 +2028,8 @@ HOTSPOT;
                                 'info'
                             );
                         }
+
+                        $results[$i]['id'] = $results[$i]['exe_id'];
 
                         if ($is_allowedToEdit) {
                             $results[$i]['status'] = $revised;

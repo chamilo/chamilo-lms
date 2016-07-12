@@ -12,7 +12,7 @@ require_once '../inc/global.inc.php';
 $xajax = new xajax();
 
 //$xajax->debugOn();
-$xajax->registerFunction('search_sessions');
+$xajax->registerFunction('search_usergroup_sessions');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -119,7 +119,7 @@ $ajax_search = $add_type == 'unique' ? true : false;
 
 //checking for extra field with filter on
 
-function search_sessions($needle,$type) {
+function search_usergroup_sessions($needle,$type) {
     global $elements_in;
     $xajax_response = new xajaxResponse();
     $return = '';
@@ -154,13 +154,14 @@ $xajax->processRequests();
 
 Display::display_header($tool_name);
 
+$add = (empty($_GET['add']) ? '' : Security::remove_XSS($_GET['add']));
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="'.api_get_self().'?add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.
+    $link_add_type_unique = '<a href="' . api_get_self() . '?add=' . $add . '&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.
+    $link_add_type_multiple = '<a href="' . api_get_self() . '?add=' . $add . '&add_type=multiple">'.
         Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
@@ -170,7 +171,7 @@ echo '<a href="javascript://" class="advanced_parameters" style="margin-top: 8px
     Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>';
 echo '</div>';
 echo '<div id="advancedSearch" style="display: none">'. get_lang('SearchSessions'); ?> :
-     <input name="SearchSession" onchange = "xajax_search_sessions(this.value,'searchbox')" onkeyup="this.onchange()">
+     <input name="SearchSession" onchange = "xajax_search_usergroup_sessions(this.value,'searchbox')" onkeyup="this.onchange()">
      </div>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <?php
@@ -195,7 +196,7 @@ if(!empty($errorMsg)) {
 <tr>
 <td align="center">
 <?php echo get_lang('FirstLetterSessions'); ?> :
-     <select name="firstLetterUser" onchange = "xajax_search_sessions(this.value,'multiple')" >
+     <select name="firstLetterUser" onchange = "xajax_search_usergroup_sessions(this.value,'multiple')" >
       <option value = "%">--</option>
       <?php
         echo Display :: get_alphabet_options();

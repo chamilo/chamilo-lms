@@ -8,8 +8,8 @@
  */
 class Draggable extends Question
 {
-    static $typePicture = 'ordering.png';
-    static $explanationLangVar = 'Draggable';
+    public static $typePicture = 'ordering.png';
+    public static $explanationLangVar = 'Draggable';
 
     /**
      * Class constructor
@@ -17,7 +17,6 @@ class Draggable extends Question
     public function __construct()
     {
         parent::__construct();
-
         $this->type = DRAGGABLE;
         $this->isContent = $this->getIsContent();
     }

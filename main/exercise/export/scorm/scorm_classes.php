@@ -18,6 +18,8 @@
  */
 class ScormQuestion extends Question
 {
+    public $js_id;
+    public $answer;
 	/**
 	 * Returns the HTML + JS flow corresponding to one question
 	 *
@@ -27,6 +29,7 @@ class ScormQuestion extends Question
 	 * Due to the nature of interactions, we must have a natural sequence for
 	 * questions in the generated JavaScript.
 	 * @param integer $js_id
+     * @return string|array
 	 */
 	public static function export_question($questionId, $standalone = true, $js_id)
 	{
@@ -345,7 +348,7 @@ class ScormAnswerTrueFalse extends Answer
 		} else {
 			$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array(\'false\');'."\n";
 		}
-		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = '.$this->weighting[1].";\n";
 		$js .= $jstmpw;
@@ -378,7 +381,6 @@ class ScormAnswerFillInBlanks extends Answer
 		foreach ($this->answer as $i => $answer) {
 			$blankList[] = '['.$answer.']';
 		}
-		$answerCount = count($blankList);
 
 		// splits text and weightings that are joined with the character '::'
 		list($answer,$weight)=explode('::',$answer);
@@ -401,7 +403,12 @@ class ScormAnswerFillInBlanks extends Answer
                 ($endlocations-$startlocations)+1
             );
             $jstmp .= $i.',';
-            $jstmpc .= "'".api_htmlentities(api_substr($texstring, 1, -1), ENT_QUOTES, $charset)."',";
+			if (!empty($texstring)) {
+				$sub = api_substr($texstring, 1, -1);
+				if (!empty($sub)) {
+					$jstmpc .= "'" . api_htmlentities($sub, ENT_QUOTES, $charset) . "',";
+				}
+			}
             $my_weight = explode('@', $weights[$i - 1]);
             if (count($my_weight) == 2) {
                 $weight_db = $my_weight[0];
@@ -787,7 +794,7 @@ class ScormAssessmentItem
 	 */
 	function common_js()
 	{
-		$js .= 'var questions = new Array();';
+		$js = 'var questions = new Array();';
 		$js .= 'var questions_answers = new Array();';
 		$js .= 'var questions_answers_correct = new Array();';
 		$js .= 'var questions_types = new Array();';
@@ -876,11 +883,8 @@ class ScormAssessmentItem
 
 	/**
 	 * Export the question as a SCORM Item.
-	 *
 	 * This is a default behaviour, some classes may want to override this.
-	 *
-	 * @param $standalone: Boolean stating if it should be exported as a stand-alone question
-	 * @return A string, the XML flow for an Item.
+	 * @return string|array A string, the XML flow for an Item.
 	 */
 	function export()
 	{

@@ -194,9 +194,8 @@ if (api_is_allowed_to_edit(false, true)) {
         Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
-
 $actionsRight = GroupManager::getSearchForm();
-$toolbar = Display::toolbarAction('toolbar-groups', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
+$toolbar = Display::toolbarAction('toolbar-groups', $content = array($actionsLeft, $actionsRight));
 $group_cats = GroupManager::get_categories(api_get_course_id());
 
 echo $toolbar;

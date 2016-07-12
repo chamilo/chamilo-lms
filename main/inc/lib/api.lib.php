@@ -1655,16 +1655,25 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true)
     return $url;
 }
 
+/**
+ * get gradebook in session
+ */
 function api_is_in_gradebook()
 {
     return Session::read('in_gradebook', false);
 }
 
+/**
+ * set gradebook session
+ */
 function api_set_in_gradebook()
 {
     Session::write('in_gradebook', true);
 }
 
+/**
+ * remove gradebook session
+ */
 function api_remove_in_gradebook()
 {
     Session::erase('in_gradebook');

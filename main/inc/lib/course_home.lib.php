@@ -654,7 +654,7 @@ class CourseHome
      * @param array $all_tools_list List of tools as returned by get_tools_category()
      * @param bool  $rows
      *
-     * @return void
+     * @return string
      */
     public static function show_tools_category($all_tools_list, $rows = false)
     {
@@ -1242,7 +1242,7 @@ class CourseHome
                 }
             }
             $html .= '</div>';
-            
+
         }
 
         return $html;

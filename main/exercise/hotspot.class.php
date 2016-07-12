@@ -12,13 +12,16 @@
  **/
 class HotSpot extends Question
 {
-	static $typePicture = 'hotspot.png';
-	static $explanationLangVar = 'HotSpot';
+	public static $typePicture = 'hotspot.png';
+	public static $explanationLangVar = 'HotSpot';
 
+    /**
+     * HotSpot constructor.
+     */
 	public function __construct()
 	{
 		parent::__construct();
-		$this -> type = HOT_SPOT;
+		$this->type = HOT_SPOT;
 	}
 
 	public function display()
@@ -91,17 +94,20 @@ class HotSpot extends Question
  */
 class HotSpotDelineation extends HotSpot
 {
-	static $typePicture = 'hotspot-delineation.png';
-	static $explanationLangVar = 'HotspotDelineation';
+	public static $typePicture = 'hotspot-delineation.png';
+	public static $explanationLangVar = 'HotspotDelineation';
 
-	function __construct()
+    /**
+     * HotSpotDelineation constructor.
+     */
+	public function __construct()
 	{
 		parent::__construct();
 		$this -> type = HOT_SPOT_DELINEATION;
 
 	}
 
-	function createForm (&$form, $fck_config=0)
+	function createForm(&$form, $fck_config=0)
 	{
 		parent::createForm ($form, $fck_config);
 	}

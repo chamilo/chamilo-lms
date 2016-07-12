@@ -95,7 +95,7 @@ class CourseRestorer
     }
 
     /**
-     * @param string $status
+     * @param bool $status
      */
     public function set_add_text_in_items($status)
     {

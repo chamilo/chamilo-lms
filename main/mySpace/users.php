@@ -197,9 +197,16 @@ if (api_is_drh()) {
     }
 }
 
-$actionsRight = Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
-$actionsRight .= Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=csv&keyword='.$keyword);
-$toolbar = Display::toolbarAction('toolbar-user', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
+$actionsRight = Display::url(
+    Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM),
+    'javascript: void(0);',
+    array('onclick'=>'javascript: window.print();')
+);
+$actionsRight .= Display::url(
+    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
+    api_get_self().'?export=csv&keyword='.$keyword
+);
+$toolbar = Display::toolbarAction('toolbar-user', [$actionsLeft, $actionsRight]);
 
 $table = new SortableTable(
     'tracking_student',

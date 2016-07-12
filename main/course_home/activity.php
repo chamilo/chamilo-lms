@@ -73,22 +73,22 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
 
     $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
     $items = CourseHome::show_tools_category($my_list);
-    $content .= return_block(get_lang('Authoring'),  $items, 'course-tools-author');
+    $content .= return_block(get_lang('Authoring'), $items, 'course-tools-author');
 
     $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
     $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
 
     $my_list = array_merge($my_list,$list2);
     $items =  CourseHome::show_tools_category($my_list);
-    $content .= return_block(get_lang('Interaction'),  $items, 'course-tools-interaction');
+    $content .= return_block(get_lang('Interaction'), $items, 'course-tools-interaction');
 
     $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
     $items = CourseHome::show_tools_category($my_list);
-    $content .= return_block(get_lang('Administration'),  $items , 'course-tools-administration');
+    $content .= return_block(get_lang('Administration'), $items, 'course-tools-administration');
 
 } elseif (api_is_coach()) {
     $content .= $pluginExtra;
-    if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
+    if (api_get_setting('show_session_data') === 'true' && $session_id > 0) {
         $content .= '<div class="row">
             <div class="col-xs-12 col-md-12">
 			<span class="viewcaption">'.get_lang('SessionData').'</span>
@@ -109,7 +109,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
         $onlyMaintenanceList = array();
 
         foreach ($myList as $item) {
-            if ($item['name'] == 'course_maintenance') {
+            if ($item['name'] === 'course_maintenance') {
                 $item['link'] = 'course_info/maintenance_coach.php';
 
                 $onlyMaintenanceList[] = $item;
@@ -131,7 +131,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     if ($isDrhOfCourse) {
         $addUserTool = true;
         foreach ($tools as $tool) {
-            if ($tool['name'] == 'user') {
+            if ($tool['name'] === 'user') {
                 $addUserTool = false;
                 break;
             }

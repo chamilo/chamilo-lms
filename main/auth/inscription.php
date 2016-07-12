@@ -669,7 +669,7 @@ if ($form->validate()) {
 
         //update the extra fields
         $count_extra_field = count($extras);
-        if ($count_extra_field > 0) {
+        if ($count_extra_field > 0 && is_integer($user_id)) {
             foreach ($extras as $key => $value) {
                 // For array $value -> if exists key 'tmp_name' then must not be empty
                 // This avoid delete from user field value table when doesn't upload a file

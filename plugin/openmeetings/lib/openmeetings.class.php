@@ -44,7 +44,7 @@ class OpenMeetings
         // initialize video server settings from global settings
         $plugin = \OpenMeetingsPlugin::create();
 
-        $om_plugin = $plugin->get('tool_enable');
+        $om_plugin = (bool) $plugin->get('tool_enable');
         $om_host   = $plugin->get('host');
         $om_user   = $plugin->get('user');
         $om_pass   = $plugin->get('pass');

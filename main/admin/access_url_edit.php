@@ -44,7 +44,8 @@ if ($form->validate()) {
             foreach ($image_fields as $image_field) {
                 if ($_FILES[$image_field]['error'] == 0) {
                     // Hardcoded: only PNG files allowed
-                    if (end(explode('.', $_FILES[$image_field]['name'])) == 'png') {
+                    $fileFields = explode('.', $_FILES[$image_field]['name']);
+                    if (end($fileFields) == 'png') {
                         if (file_exists($url_images_dir . $url_id . '_' . $image_field . '.png')) {
                             // if the file exists, we have to remove it before move_uploaded_file
                             unlink($url_images_dir . $url_id . '_' . $image_field . '.png');
@@ -83,7 +84,8 @@ if ($form->validate()) {
             foreach ($image_fields as $image_field) {
                 if ($_FILES[$image_field]['error'] == 0) {
                     // Hardcoded: only PNG files allowed
-                    if (end(explode('.', $_FILES[$image_field]['name'])) == 'png') {
+                    $fileFields = explode('.', $_FILES[$image_field]['name']);
+                    if (end($fileFields) == 'png') {
                         move_uploaded_file($_FILES[$image_field]['tmp_name'], $url_images_dir . $url_id . '_' . $image_field . '.png');
                     }
                     // else fail silently

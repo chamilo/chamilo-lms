@@ -56,8 +56,7 @@ function plus_repeated_event() {
 </script>
 ";
 
-
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 var counter_image = 1;
 function add_image_form() {
 	// Multiple filepaths for image form
@@ -82,7 +81,6 @@ function add_image_form() {
 }
 </script>';
 
-
 // setting the name of the tool
 $nameTools = get_lang('Agenda');
 
@@ -94,13 +92,13 @@ $agenda = new Agenda();
 $agenda->type = $type;
 $actions = $agenda->displayActions('calendar');
 
-if ($type == 'fromjs') {
+if ($type === 'fromjs') {
     $id_list = explode('_', $eventId);
     $eventId = $id_list[1];
     $event_type = $id_list[0];
 }
 
-if (!api_is_allowed_to_edit(null, true) && $event_type == 'course') {
+if (!api_is_allowed_to_edit(null, true) && $event_type === 'course') {
     api_not_allowed(true);
 }
 if ($event_type == 'course') {

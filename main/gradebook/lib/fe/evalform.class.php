@@ -1,16 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
-/*$htmlHeadXtra[] = '<script type="text/javascript">
-function setFocus(){
-    $("#evaluation_title").focus();
-}
-$(document).ready(function () {
-    setFocus();
-});
-</script>';*/
-
 /**
  * Class EvalForm
  *
@@ -41,8 +31,16 @@ class EvalForm extends FormValidator
      * @param method
      * @param action
      */
-    public function __construct($form_type, $evaluation_object, $result_object, $form_name, $method = 'post', $action = null, $extra1 = null, $extra2 = null)
-    {
+    public function __construct(
+        $form_type,
+        $evaluation_object,
+        $result_object,
+        $form_name,
+        $method = 'post',
+        $action = null,
+        $extra1 = null,
+        $extra2 = null
+    ) {
         parent::__construct($form_name, $method, $action);
 
         if (isset($evaluation_object)) {

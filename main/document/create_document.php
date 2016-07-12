@@ -609,19 +609,24 @@ if ($form->validate()) {
 	// link back to the documents overview
 	if ($is_certificate_mode) {
             $actionsLeft =  '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.
-            Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-            $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Back'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Back'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="hide_bar_template" href="#">'.
+                Display::return_icon('expand.png',get_lang('Back'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Back'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
         } else {
             $actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
-            Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-            $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="hide_bar_template" href="#">'.
+                Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).
+                Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
         }
 
-        echo $toolbar = Display::toolbarAction('actions-documents', array(0 => $actionsLeft, 1 => ''));
-
+    echo $toolbar = Display::toolbarAction('actions-documents', array($actionsLeft));
 
 	if ($is_certificate_mode) {
-		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(api_get_user_id(), api_get_course_id());
+        $all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(
+            api_get_user_id(),
+            api_get_course_id()
+        );
 
 		$str_info = '';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
@@ -630,6 +635,7 @@ if ($form->validate()) {
 		$create_certificate = get_lang('CreateCertificateWithTags');
 		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
 	}
+    
     // HTML-editor
     echo '<div class="page-create">
             <div class="row" style="overflow:hidden">

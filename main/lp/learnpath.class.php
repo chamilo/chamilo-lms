@@ -5911,8 +5911,7 @@ class learnpath
     public function build_action_menu($returnContent = false)
     {
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
-        $actionsLeft = null;
-        
+        $actionsLeft = '';
         $actionsLeft .=  '<a href="lp_controller.php?'.api_get_cidreq().'&gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '&isStudentView=true" target="_self">' . Display :: return_icon('preview_view.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a> ';
         $actionsLeft .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=admin_view&lp_id=' . $_SESSION['oLP']->lp_id . '&updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'',ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -5927,15 +5926,16 @@ class learnpath
                 'href' => 'lp_controller.php?'.api_get_cidreq().'&action=clear_prerequisites&lp_id=' . $_SESSION['oLP']->lp_id,
             ),
         );
-        $actionsRigth = Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
-        
+        $actionsRight = Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
+
+        $toolbar = Display::toolbarAction('actions-lp-controller', array($actionsLeft, $actionsRight));
 
         if ($returnContent) {
-            return $toolbar=null;
+
+            return $toolbar;
         }
-        
-        echo $toolbar = Display::toolbarAction('actions-lp-controller', array(0 => $actionsLeft, 1 => $actionsRigth));
-        
+
+        echo $toolbar;
     }
 
     /**
@@ -9962,7 +9962,7 @@ EOD;
 
         $fs = new \Symfony\Component\Filesystem\Filesystem;
         $fs->mirror($main_code_path, $archive_path.$temp_dir_short);
-       
+
 
         // Finalize the imsmanifest structure, add to the zip, then return the zip.
 

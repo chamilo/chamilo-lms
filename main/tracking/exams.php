@@ -68,7 +68,6 @@ if ($global) {
     while ($row = Database::fetch_array($result)) {
         $exerciseList[$row['id']] = $row['title'];
     }
-
     $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
 }
 
@@ -83,13 +82,9 @@ if (!$exportToXLS) {
     Display :: display_header(get_lang('Reporting'));
     $actionsLeft = $actionsRight ='';
     if ($global) {
-
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
         Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM);
         $actionsLeft .= '</a>';
-
-        
-
         $courseLink = '';
         $courseInfo = api_get_course_info();
 
@@ -101,7 +96,6 @@ if (!$exportToXLS) {
             Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';
         $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
             Display::return_icon('printer.png',get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
-        
 
         $menuItems[] = Display::url(
             Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32),
@@ -122,7 +116,7 @@ if (!$exportToXLS) {
 
         $nb_menu_items = count($menuItems);
         if ($nb_menu_items > 1) {
-            foreach ($menuItems as $key=> $item) {
+            foreach ($menuItems as $key => $item) {
                 $actionsLeft .= $item;
             }
         }
@@ -143,11 +137,9 @@ if (!$exportToXLS) {
             Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), array(), 32),
             api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId
         );
-
     }
-    
-    
-    $toolbar = Display::toolbarAction('toolbar-exams', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
+
+    $toolbar = Display::toolbarAction('toolbar-exams', [$actionsLeft, $actionsRight]);
     echo $toolbar;
 
     $form->display();

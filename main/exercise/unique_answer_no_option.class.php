@@ -12,15 +12,14 @@
  */
 class UniqueAnswerNoOption extends Question
 {
-	static $typePicture = 'mcuao.png';
-	static $explanationLangVar = 'UniqueAnswerNoOption';
+	public static $typePicture = 'mcuao.png';
+	public static $explanationLangVar = 'UniqueAnswerNoOption';
 
 	/**
 	 * Constructor
 	 */
 	public function __construct()
     {
-		//this is highly important
 		parent::__construct();
 		$this -> type = UNIQUE_ANSWER_NO_OPTION;
 		$this -> isContent = $this-> getIsContent();

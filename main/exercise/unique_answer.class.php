@@ -14,15 +14,14 @@
  **/
 class UniqueAnswer extends Question
 {
-    static $typePicture = 'mcua.png';
-    static $explanationLangVar = 'UniqueSelect';
+    public static $typePicture = 'mcua.png';
+    public static $explanationLangVar = 'UniqueSelect';
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        //this is highly important
         parent::__construct();
         $this->type = UNIQUE_ANSWER;
         $this->isContent = $this->getIsContent();

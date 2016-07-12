@@ -12,8 +12,8 @@
  **/
 class MultipleAnswer extends Question
 {
-    static $typePicture = 'mcma.png';
-    static $explanationLangVar = 'MultipleSelect';
+    public static $typePicture = 'mcma.png';
+    public static $explanationLangVar = 'MultipleSelect';
 
     /**
      * Constructor

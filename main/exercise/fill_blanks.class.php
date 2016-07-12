@@ -10,8 +10,8 @@
  **/
 class FillBlanks extends Question
 {
-    static $typePicture = 'fill_in_blanks.png';
-    static $explanationLangVar = 'FillBlanks';
+    public static $typePicture = 'fill_in_blanks.png';
+    public static $explanationLangVar = 'FillBlanks';
 
     const FILL_THE_BLANK_STANDARD = 0;
     const FILL_THE_BLANK_MENU = 1;

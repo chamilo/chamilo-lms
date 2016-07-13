@@ -1618,7 +1618,7 @@ class UserManager
      * @return  string/bool Returns the resulting common file name of created images which usually should be stored in database.
      * When deletion is requested returns empty string. In case of internal error or negative validation returns FALSE.
      */
-    public static function update_user_picture($user_id, $file = null, $source_file = null, $cropParameters)
+    public static function update_user_picture($user_id, $file = null, $source_file = null, $cropParameters = '')
     {
         if (empty($user_id)) {
             return false;

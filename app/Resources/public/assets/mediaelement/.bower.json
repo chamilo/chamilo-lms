@@ -23,12 +23,12 @@
     "./build/mediaelement-and-player.js",
     "./build/mediaelementplayer.css"
   ],
-  "version": "2.21.1",
-  "_release": "2.21.1",
+  "version": "2.21.2",
+  "_release": "2.21.2",
   "_resolution": {
     "type": "version",
-    "tag": "2.21.1",
-    "commit": "701dfeac106ae8373e4d14819f8b8bbf22c52f43"
+    "tag": "2.21.2",
+    "commit": "47e85a3cb8f7d0a61d99c8d36b151b1a16b01112"
   },
   "_source": "https://github.com/johndyer/mediaelement.git",
   "_target": "2.*",

@@ -1671,13 +1671,13 @@ function display_configuration_settings_form(
     } else {
         $html .= '<div class="control-group">';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" '. ($allowSelfReg == 'true' ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
+                        <input type="radio" name="allowSelfReg" value="true" id="allowSelfReg1" '. ($allowSelfReg == 'true' ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
                     </label>';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg == 'false' ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
+                        <input type="radio" name="allowSelfReg" value="false" id="allowSelfReg0" '. ($allowSelfReg == 'false' ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
                     </label>';
          $html .= '<label class="checkbox-inline">
-                    <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg == 'approval' ? '' : 'checked="checked" ') .' /> '. get_lang('AfterApproval') .'
+                    <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '. ($allowSelfReg == 'approval' ? '' : 'checked="checked" ') .' /> '. get_lang('AfterApproval') .'
                 </label>';
         $html .= '</div>';
     }
@@ -1965,9 +1965,10 @@ function installSettings(
     $allowTeacherSelfRegistration,
     $installationProfile = ''
 ) {
-    $allowRegistration = $allowRegistration ? 'true' : 'false';
+    //$allowRegistration = $allowRegistration ? 'true' : 'false';
     $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
 
+    error_log($allowRegistration);
     // Use PHP 5.3 to avoid issue with weird peripherical auto-installers like travis-ci
     $settings = array(
         'Institution' => $organizationName,

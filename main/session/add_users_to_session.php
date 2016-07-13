@@ -51,11 +51,21 @@ $new_field_list = array();
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
         //if is enabled to filter and is a "<select>" field type
-        if ($extra_field[8]==1 && $extra_field[2]==4) {
+        if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_SELECT) {
             $new_field_list[] = array(
-                'name'=> $extra_field[3],
-                'variable'=>$extra_field[1],
-                'data'=> $extra_field[9]
+                'name' => $extra_field[3],
+                'type' => $extra_field[2],
+                'variable' => $extra_field[1],
+                'data' => $extra_field[9],
+            );
+        }
+        if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_TAG) {
+            $options = UserManager::get_extra_user_data_for_tags($extra_field[1]);
+            $new_field_list[] = array(
+                'name' => $extra_field[3],
+                'type' => $extra_field[2],
+                'variable' => $extra_field[1],
+                'data' => $options['options'],
             );
         }
     }
@@ -386,19 +396,28 @@ if ($ajax_search) {
     unset($users); //clean to free memory
 } else {
     //Filter by Extra Fields
+    $extra_field_result = [];
     $use_extra_fields = false;
     if (is_array($extra_field_list)) {
-        if (is_array($new_field_list) && count($new_field_list)>0 ) {
-            $result_list=array();
+        if (is_array($new_field_list) && count($new_field_list) > 0) {
+            $result_list = array();
             foreach ($new_field_list as $new_field) {
                 $varname = 'field_'.$new_field['variable'];
+                $fieldtype = $new_field['type'];
                 if (UserManager::is_extra_field_available($new_field['variable'])) {
-                    if (isset($_POST[$varname]) && $_POST[$varname]!='0') {
+                    if (isset($_POST[$varname]) && $_POST[$varname] != '0') {
                         $use_extra_fields = true;
-                        $extra_field_result[] = UserManager::get_extra_user_data_by_value(
-                            $new_field['variable'],
-                            $_POST[$varname]
-                        );
+                        if ($fieldtype == ExtraField::FIELD_TYPE_TAG) {
+                            $extra_field_result[]= UserManager::get_extra_user_data_by_tags(
+                                intval($_POST['field_id']),
+                                $_POST[$varname]
+                            );
+                        } else {
+                            $extra_field_result[]= UserManager::get_extra_user_data_by_value(
+                                $new_field['variable'],
+                                $_POST[$varname]
+                            );
+                        }
                     }
                 }
             }
@@ -567,19 +586,31 @@ if ($add_type=='multiple') {
 			foreach ($new_field_list as $new_field) {
 				echo $new_field['name'];
 				$varname = 'field_'.$new_field['variable'];
+                $fieldtype = $new_field['type'];
 				echo '&nbsp;<select name="'.$varname.'">';
 				echo '<option value="0">--'.get_lang('Select').'--</option>';
 				foreach	($new_field['data'] as $option) {
 					$checked='';
-					if (isset($_POST[$varname])) {
-						if ($_POST[$varname]==$option[1]) {
-							$checked = 'selected="true"';
-						}
-					}
-					echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
-				}
-				echo '</select>';
-				echo '&nbsp;&nbsp;';
+                    if ($fieldtype == ExtraField::FIELD_TYPE_TAG) {
+                        if (isset($_POST[$varname])) {
+                            if ($_POST[$varname] == $option['tag']) {
+                                $checked = 'selected="true"';
+                            }
+                        }
+                        echo '<option value="'.$option['tag'].'" '.$checked.'>'.$option['tag'].'</option>';
+                    } else {
+                        if (isset($_POST[$varname])) {
+                            if ($_POST[$varname] == $option[1]) {
+                                $checked = 'selected="true"';
+                            }
+                        }
+                        echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
+                    }
+                }
+                echo '</select>';
+                $extraHidden = $fieldtype == ExtraField::FIELD_TYPE_TAG ? '<input type="hidden" name="field_id" value="'.$option['field_id'].'" />' : '';
+                echo $extraHidden;
+                echo '&nbsp;&nbsp;';
 			}
 			echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
 			echo '<br /><br />';

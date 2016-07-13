@@ -44,7 +44,7 @@ class learnpath
     public $path = ''; // Path inside the scorm directory (if scorm).
     public $theme; // The current theme of the learning path.
     public $preview_image; // The current image of the learning path.
-    public $accumulate_scorm_time; // Flag to accumulate scorm time
+    public $accumulateScormTime; // Flag to decide whether to accumulate SCORM time or not
 
     // Tells if all the items of the learnpath can be tried again. Defaults to "no" (=1).
     public $prevent_reinit = 1;
@@ -151,7 +151,7 @@ class learnpath
                 $this->modified_on = $row['modified_on'];
                 $this->ref = $row['ref'];
                 $this->categoryId = $row['category_id'];
-                $this->accumulate_scorm_time = isset($row['accumulate_scorm_time']) ? $row['accumulate_scorm_time'] : 'false';
+                $this->accumulateScormTime = isset($row['accumulate_scorm_time']) ? $row['accumulate_scorm_time'] : 'true';
 
                 if (!empty($row['publicated_on'])) {
                     $this->publicated_on = $row['publicated_on'];
@@ -865,7 +865,8 @@ class learnpath
                     'seriousgame_mode' => 0,
                     'autolaunch' => 0,
                     'max_attempts' => 0,
-                    'subscribe_users' => 0
+                    'subscribe_users' => 0,
+                    'accumulate_scorm_time' => 1
                 ];
 
                 $id = Database::insert($tbl_lp, $params);
@@ -11122,6 +11123,34 @@ EOD;
         return $answer;
     }
 
+    /**
+     * Get whether this is a learning path with the accumulated SCORM time or not
+     * @return int
+     */
+    public function getAccumulateScormTime()
+    {
+        return $this->accumulateScormTime;
+    }
+
+    /**
+     * Set whether this is a learning path with the accumulated SCORM time or not
+     * @param int $value (0 = false, 1 = true)
+     * @return bool Always returns true
+     */
+    public function setAccumulateScormTime($value)
+    {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::setAccumulateScormTime()', 0);
+        }
+        $this->accumulateScormTime = intval($value);
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET accumulate_scorm_time = ".$this->accumulateScormTime."
+                WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
+        Database::query($sql);
+
+        return true;
+    }
 }
 
 if (!function_exists('trim_value')) {

@@ -581,6 +581,10 @@ switch ($action) {
                         $new_lp_id,
                         api_get_user_id()
                     );
+
+                    $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
+                    $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
+
                     //require 'lp_build.php';
                     $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($new_lp_id).'&'.api_get_cidreq();
                     header("Location: $url&isStudentView=false");
@@ -957,6 +961,9 @@ switch ($action) {
 
             $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
             $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
+
+            $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
+            $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
             	$publicated_on  = $_REQUEST['publicated_on'];

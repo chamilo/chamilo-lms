@@ -21,7 +21,7 @@ class Version20160705190000 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $this->addSql("ALTER TABLE c_lp ADD COLUMN accumulate_scorm_time VARCHAR(5)");
+        $this->addSql("ALTER TABLE c_lp ADD COLUMN accumulate_scorm_time INT NOT NULL DEFAULT 1");
     }
 
     /**

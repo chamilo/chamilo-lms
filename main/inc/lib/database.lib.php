@@ -152,11 +152,11 @@ class Database
         // Registering Constraints
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
-            $sysPath."vendor/symfony/symfony/src"
+            $sysPath."vendor/symfony/validator"
         );
 
         AnnotationRegistry::registerFile(
-            $sysPath."vendor/symfony/symfony/src/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
+            $sysPath."vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php"
         );
 
         // Registering gedmo extensions

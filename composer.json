@@ -45,11 +45,14 @@
 
         "twig/twig": "1.*",
         "twig/extensions": "~1.0",
-        "symfony/symfony": ">=2.8",
         "doctrine/orm": "~2.4",
         "doctrine/dbal": "~2.4",
 
         "doctrine/migrations": "~1.0@dev",
+        "symfony/doctrine-bridge": "~2.8",
+        "symfony/validator": "2.6.4",
+        "symfony/filesystem": "~2.8",
+        "symfony/security": "~2.8",
         "doctrine/data-fixtures": "~1.0@dev",
 
         "knplabs/gaufrette": "~0.1.6",

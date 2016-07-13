@@ -485,7 +485,7 @@ if ($form->validate() && is_settings_editable()) {
             $course_code,
             $picture['name'],
             $picture['tmp_name'],
-            $updateValues['cropResult']
+            $updateValues['picture_crop_result']
         );
     }
 

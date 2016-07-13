@@ -634,7 +634,7 @@ if ($form->validate()) {
             api_get_user_id(),
             $_FILES['picture']['name'],
             $_FILES['picture']['tmp_name'],
-            $user_data['cropResult']
+            $user_data['picture_crop_result']
         );
 
         if ($new_picture) {

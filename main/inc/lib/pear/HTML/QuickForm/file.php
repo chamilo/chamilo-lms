@@ -61,6 +61,8 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     {
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('file');
+
+
     } //end constructor
 
     // }}}
@@ -275,21 +277,21 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         $id = $this->getAttribute('id');
         return '<script>
         $(document).ready(function() {
-            var $image = $("#previewImage");
-            var $input = $("[name=\'cropResult\']");
-            var $cropButton = $("#cropButton");
+            var $image = $("#'.$id.'_preview_image");
+            var $input = $("[name=\''.$id.'_crop_result\']");
+            var $cropButton = $("#'.$id.'_crop_button");
             var canvas = "";
             var imageWidth = "";
             var imageHeight = "";
             
-            $("input:file").change(function() {
+            $("#'.$id.'").change(function() {
                 var oFReader = new FileReader();
                 oFReader.readAsDataURL(document.getElementById("'.$id.'").files[0]);
         
                 oFReader.onload = function (oFREvent) {
                     $image.attr("src", this.result);
-                    $("#labelCropImage").html("'.get_lang('Preview').'");
-                    $("#cropImage").addClass("thumbnail");
+                    $("#'.$id.'_label_crop_image").html("'.get_lang('Preview').'");
+                    $("#'.$id.'_crop_image").addClass("thumbnail");
                     $cropButton.removeClass("hidden");
                     // Destroy cropper
                     $image.cropper("destroy");
@@ -311,7 +313,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 };
             });
             
-            $("#cropButton").on("click", function() {
+            $("#'.$id.'_crop_button").on("click", function() {
                 var canvas = $image.cropper("getCroppedCanvas");
                 var dataUrl = canvas.toDataURL();
                 $image.attr("src", dataUrl);

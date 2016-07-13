@@ -160,7 +160,7 @@ if ($form->validate()) {
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1: 0;
     $sendSubscriptionNotification = isset($params['send_subscription_notification']);
-    $isThisImageCropped = isset($params['cropResult']);
+    $isThisImageCropped = isset($params['picture_crop_result']);
 
     $extraFields = [];
     foreach ($params as $key => $value) {
@@ -170,7 +170,7 @@ if ($form->validate()) {
     }
 
     if (isset($extraFields['extra_image']) && $isThisImageCropped) {
-        $extraFields['extra_image']['crop_parameters'] = $params['cropResult'];
+        $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
     }
 
     $return = SessionManager::edit_session(

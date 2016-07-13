@@ -490,7 +490,7 @@ if ($form->validate()) {
                 $user_id,
                 $_FILES['picture']['name'],
                 $_FILES['picture']['tmp_name'],
-                $user['cropResult']
+                $user['picture_crop_result']
 
             );
 		}

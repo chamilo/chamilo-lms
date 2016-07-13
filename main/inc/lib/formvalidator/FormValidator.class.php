@@ -808,23 +808,29 @@ EOT;
      */
     public function addFile($name, $label, $attributes = array())
     {
-        $this->addElement('file', $name, $label, $attributes);
+        $element = $this->addElement('file', $name, $label, $attributes);
         if (isset($attributes['crop_image'])) {
+            $id = $element->getAttribute('id');
+            if (empty($id)) {
+                throw new Exception('If you use the crop functionality the element must have an id');
+            }
             $this->addHtml('
                 <div class="form-group">
-                <label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>
+                <label for="cropImage" id="'.$id.'_label_crop_image" class="col-sm-2 control-label"></label>
                 <div class="col-sm-8">
-                <div id="cropImage" class="cropCanvas">
-                <img id="previewImage">
+                <div id="'.$id.'_crop_image" class="cropCanvas">
+                <img id="'.$id.'_preview_image">
                 </div>
                 <div>
-                <button class="btn btn-primary hidden" name="cropButton" id="cropButton" ><em class="fa fa-crop"></em> '.
-                get_lang('CropYourPicture').'</button>
+                <button class="btn btn-primary hidden" name="cropButton" id="'.$id.'_crop_button" >
+                    <em class="fa fa-crop"></em> '.
+                    get_lang('CropYourPicture').'
+                </button>
                 </div>
                 </div>
                 </div>'
             );
-            $this->addHidden('cropResult', '');
+            $this->addHidden($id.'_crop_result', '');
         }
     }
 

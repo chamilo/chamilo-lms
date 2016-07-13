@@ -21,8 +21,7 @@ if (!api_is_platform_admin(true) && !api_is_teacher()) {
 $toolName = get_lang('TeacherTimeReportBySession');
 
 $em = Database::getManager();
-SessionManager::get_sessions_by_user();
-$sessionsInfo = SessionManager::get_sessions_list([], ['name']);
+$sessionsInfo = Tracking::get_sessions_coached_by_user(api_get_user_id());
 $session = null;
 
 $form = new FormValidator('teacher_time_report_by_session', 'GET');
@@ -168,10 +167,10 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH) . 'mySpace/', 'name' => get_lang('Reporting')];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH) . 'admin/teacher_time_report.php',
-    'name' => get_lang('TeacherTimeReport')
+    'url' => api_get_path(WEB_CODE_PATH) . 'mySpace/session.php',
+    'name' => get_lang('FollowedSessions')
 ];
 
 $actions = [];

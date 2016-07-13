@@ -163,15 +163,16 @@ class CoursesController
      * @param string $error
      * @param string $content
      * @param $limit
+     * @param boolean $justVisible Whether to search only in courses visibles in the catalogue
      */
-    public function search_courses($search_term, $message = '', $error = '', $content = null, $limit = array())
+    public function search_courses($search_term, $message = '', $error = '', $content = null, $limit = array(), $justVisible = false)
     {
         $data = array();
         $limit = !empty($limit) ? $limit : CourseCategory::getLimitArray();
 
         $browse_course_categories = $this->model->browse_course_categories();
         $data['countCoursesInCategory'] = $this->model->count_courses_in_category('ALL', $search_term);
-        $data['browse_courses_in_category'] = $this->model->search_courses($search_term, $limit);
+        $data['browse_courses_in_category'] = $this->model->search_courses($search_term, $limit, $justVisible);
         $data['browse_course_categories']   = $browse_course_categories;
 
         $data['search_term'] = Security::remove_XSS($search_term); //filter before showing in template

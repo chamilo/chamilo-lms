@@ -261,7 +261,7 @@ class CLp
     /**
      * @var string
      *
-     * @ORM\Column(name="accumulate_scorm_time", type="string", length=5, nullable=false)
+     * @ORM\Column(name="accumulate_scorm_time", type="integer", nullable=false, options={"default":1})
      */
     private $accumulateScormTime;
 

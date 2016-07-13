@@ -1364,6 +1364,8 @@ class CourseRestorer
 
                 $id = Database::insert($tool_intro_table, $params);
                 if ($id) {
+
+                    // id is a varchar not an int
                     //$sql = "UPDATE $tool_intro_table SET id = iid WHERE iid = $id";
                     //Database::query($sql);
 

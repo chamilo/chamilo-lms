@@ -84,7 +84,7 @@ Chamilo is mainly a LMS running (the so called <span style="font-weight: bold;">
 <ul>
 <li><span style="font-weight: bold;">Apache 2.2+</span></li>
 <li><span style="font-weight: bold;">MySQL 5.1+ or MariaDB 5+</span></li>
-<li><span style="font-weight: bold;">PHP 5.4+ (5.6 recommended for greater efficiency) (support for PHP7 has not been thoroughly tested)</span></li>
+<li><span style="font-weight: bold;">PHP 5.4+ (5.6 recommended for greater efficiency) (support for PHP7 seems OK but not evaluated on high load setups just yet)</span></li>
 </ul>
 <br />
 
@@ -129,6 +129,7 @@ Before you start installing Chamilo LMS, you must understand that, because we pr
     <li>As an all-in-one package through an official provider, certified by the Chamilo Association</li>
     <li>As an installable solution from one of many hosting providers who support cPanel with Scriptaculous</li>
     <li>At your preferred hosting provider using remote installers like Installatron</li>
+    <li>Through a Docker container image</li>
     <li>On your own server, downloading and installing manually</li>
     <li>On your own computer, at home or at the office, just for testing or development</li>
 </ul>
@@ -620,7 +621,7 @@ If you have issues with files taking a long time to download, make sure you reco
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="15._Videoconference"></a>Videoconference</h2>
 <p>
-  Chamilo supports the connection to two different videoconference servers: BigBlueButton (versions 0.81 and 0.9) and OpenMeetings.<br />
+  Chamilo supports the connection to two different videoconference servers: BigBlueButton (versions 0.81, 0.9 and 1.0) and OpenMeetings.<br />
   While BigBlueButton seem easier to install, more clearly documented and more
   esthetically finished, some users have manifested that OpenMeetings
   consumes less bandwidth, is less restrictive in terms of running environments
@@ -775,9 +776,9 @@ If you have issues with files taking a long time to download, make sure you reco
     <li>Get into your Chamilo Git repository</li>
     <li>Make sure you have no additional elements that were not commited (git status/git stash)</li>
     <li>If you have issues, you can always save your code somewhere else and ask Git to put you exactly at the most recent 1.9.x stage ("git pull"/"git reset --hard origin/1.9.x")</li>
-    <li>Once you're sure you have a "clean" local Chamilo repository, create a 1.10.x branch with "git checkout -b 1.10.x"</li>
-    <li>In the new branch, download all code from the 1.10.x branch upstream: "git pull origin 1.10.x"</li>
-    <li>If you never used composer or used it only a few times in the past, you might need to update it (rm -rf ~/.composer/vendor; composer global require "fxp/composer-asset-plugin:1.0.3"; composer clear-cache) before trying the following command</li>
+    <li>Once you're sure you have a "clean" local Chamilo repository, create a 1.11.x branch with "git checkout -b 1.11.x"</li>
+    <li>In the new branch, download all code from the 1.11.x branch upstream: "git pull origin 1.11.x"</li>
+    <li>If you never used composer or used it only a few times in the past, you might need to update it (rm -rf ~/.composer/vendor; composer clear-cache) before trying the following command</li>
     <li>Update composer: "composer update" (you might need to give a Github token here)</li>
     <li>Change permissions on folders app, web, main/lang and main/default_course_document/images</li>
     <li>Go to your portal install page (main/install/) and follow the upgrade procedure</li>

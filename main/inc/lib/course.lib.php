@@ -740,6 +740,107 @@ class CourseManager
     }
 
     /**
+     * Add the user $userId visibility to the course $courseCode in the catalogue.
+     * @author David Nos (https://github.com/dnos)
+     *
+     * @param  int $userId the id of the user
+     * @param  string $courseCode the course code
+     * @param  int $visible (optional) The course visibility in the catalogue to the user (1=visible, 0=invisible)
+     *
+     * @return boolean true if added succesfully, false otherwise.
+     */
+    public static function addUserVisibilityToCourseInCatalogue($userId, $courseCode, $visible = 1)
+    {
+        $debug = false;
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_CATALOGUE_USER);
+
+        if (empty($userId) || empty($courseCode) || ($userId != strval(intval($userId)))) {
+            return false;
+        }
+
+        $courseCode = Database::escape_string($courseCode);
+        $courseInfo = api_get_course_info($courseCode);
+        $courseId = $courseInfo['real_id'];
+
+        // Check in advance whether the user has already been registered on the platform.
+        $sql = "SELECT status FROM " . $userTable . " WHERE user_id = $userId ";
+        if (Database::num_rows(Database::query($sql)) == 0) {
+            if ($debug) {
+                error_log('The user has not been registered to the platform');
+            }
+            return false; // The user has not been registered to the platform.
+        }
+
+        // Check whether the user has already been registered to the course visibility in the catalogue.
+        $sql = "SELECT * FROM $courseUserTable
+                WHERE
+                    user_id = $userId AND
+                    visible = " . $visible . " AND
+                    c_id = $courseId";
+        if (Database::num_rows(Database::query($sql)) > 0) {
+            if ($debug) {
+                error_log('The user has been already registered to the course visibility in the catalogue');
+            }
+            return true; // The visibility of the user to the course in the catalogue does already exist.
+        }
+
+        // Register the user visibility to course in catalogue.
+        $params = [
+            'user_id' => $userId,
+            'c_id' => $courseId,
+            'visible' => $visible
+        ];
+        $insertId = Database::insert($courseUserTable, $params);
+
+        return $insertId;
+    }
+
+
+    /**
+     * Remove the user $userId visibility to the course $courseCode in the catalogue.
+     * @author David Nos (https://github.com/dnos)
+     *
+     * @param  int $userId the id of the user
+     * @param  string $courseCode the course code
+     * @param  int $visible (optional) The course visibility in the catalogue to the user (1=visible, 0=invisible)
+     *
+     * @return boolean true if removed succesfully or register not found, false otherwise.
+     */
+    public static function removeUserVisibilityToCourseInCatalogue($userId, $courseCode, $visible = 1)
+    {
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_CATALOGUE_USER);
+
+        if (empty($userId) || empty($courseCode) || ($userId != strval(intval($userId)))) {
+            return false;
+        }
+
+        $courseCode = Database::escape_string($courseCode);
+        $courseInfo = api_get_course_info($courseCode);
+        $courseId = $courseInfo['real_id'];
+
+        // Check whether the user has already been registered to the course visibility in the catalogue.
+        $sql = "SELECT * FROM $courseUserTable
+                WHERE
+                    user_id = $userId AND
+                    visible = " . $visible . " AND
+                    c_id = $courseId";
+        if (Database::num_rows(Database::query($sql)) > 0) {
+            $cond = array(
+                'user_id = ? AND c_id = ? AND visible = ? ' => array(
+                    $userId,
+                    $courseId,
+                    $visible
+                )
+            );
+            return Database::delete($courseUserTable, $cond);
+        } else {
+            return true; // Register does not exist
+        }
+    }
+
+
+    /**
      *    Checks wether a parameter exists.
      *    If it doesn't, the function displays an error message.
      *
@@ -2490,6 +2591,58 @@ class CourseManager
         if (Database::num_rows($result) > 0) {
             while ($result_row = Database::fetch_array($result)) {
                 $courseList[] = $result_row['code'];
+            }
+        }
+
+        return $courseList;
+    }
+
+    /**
+     * Get the course codes that have been restricted in the catalogue, and if byUserId is set
+     * then the courses that the user is allowed or not to see in catalogue
+     *
+     * @param boolean allowed Either if the courses have some users that are or are not allowed to see in catalogue
+     * @param boolean byUserId if the courses are or are not allowed to see to the user
+     * @return array Course codes allowed or not to see in catalogue by some user or the user
+     */
+    public static function getCatalogueCourseList($allowed = true, $byUserId = -1)
+    {
+        $courseTable = Database:: get_main_table(TABLE_MAIN_COURSE);
+        $tblCourseRelUserCatalogue = Database:: get_main_table(TABLE_MAIN_COURSE_CATALOGUE_USER);
+        $visibility = ($allowed?1:0);
+
+        // Restriction by user id
+        $currentUserRestriction = "";
+        if ($byUserId > 0) {
+            $currentUserRestriction = " AND tcruc.user_id = $byUserId ";
+        }
+
+        //we filter the courses from the URL
+        $joinAccessUrl = '';
+        $whereAccessUrl = '';
+        if (api_get_multiple_access_url()) {
+            $accessUrlId = api_get_current_access_url_id();
+            if ($accessUrlId != -1) {
+                $tblUrlCourse = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $joinAccessUrl = "LEFT JOIN $tblUrlCourse url_rel_course
+                                    ON url_rel_course.c_id = c.id ";
+                $whereAccessUrl = " AND access_url_id = $accessUrlId ";
+            }
+        }
+
+        // get course list auto-register
+        $sql = "SELECT DISTINCT(c.code)
+                FROM $tblCourseRelUserCatalogue tcruc
+                INNER JOIN $courseTable c
+                ON (c.id = tcruc.c_id) $joinAccessUrl
+                WHERE tcruc.visible = $visibility $currentUserRestriction $whereAccessUrl";
+
+        $result = Database::query($sql);
+        $courseList = array();
+
+        if (Database::num_rows($result) > 0) {
+            while ($resultRow = Database::fetch_array($result)) {
+                $courseList[] = $resultRow['code'];
             }
         }
 
@@ -4785,6 +4938,39 @@ class CourseManager
     }
 
     /**
+     * Returns the SQL conditions to filter course only visible by the user in the catalogue
+     *
+     * @param $courseTableAlias Alias of the course table
+     * @return string SQL conditions
+     */
+    public static function getCourseVisibilitySQLCondition($courseTableAlias) {
+        $visibilityCondition = '';
+        $hidePrivate = api_get_setting('course_catalog_hide_private');
+        if ($hidePrivate === 'true') {
+            $visibilityCondition = ' AND '.$courseTableAlias.'.visibility <> 1';
+        }
+
+        // Check if course have users allowed to see it in the catalogue, then show only if current user is allowed to see it
+        $currentUserId = api_get_user_id();
+        $restrictedCourses = self::getCatalogueCourseList(true);
+        $allowedCoursesToCurrentUser = self::getCatalogueCourseList(true, $currentUserId);
+        if (!empty($restrictedCourses)) {
+            $visibilityCondition .= ' AND ('.$courseTableAlias.'.code NOT IN ("' . implode('","', $restrictedCourses) . '")';
+            $visibilityCondition .= ' OR '.$courseTableAlias.'.code IN ("' . implode('","', $allowedCoursesToCurrentUser) . '"))';
+        }
+
+        // Check if course have users denied to see it in the catalogue, then show only if current user is not denied to see it
+        $restrictedCourses = self::getCatalogueCourseList(false);
+        $notAllowedCoursesToCurrentUser = self::getCatalogueCourseList(false, $currentUserId);
+        if (!empty($restrictedCourses)) {
+            $visibilityCondition .= ' AND ('.$courseTableAlias.'.code NOT IN ("' . implode('","', $restrictedCourses) . '")';
+            $visibilityCondition .= ' OR '.$courseTableAlias.'.code NOT IN ("' . implode('","', $notAllowedCoursesToCurrentUser) . '"))';
+        }
+
+        return $visibilityCondition;
+    }
+
+    /**
      * Get available le courses count
      * @param int Access URL ID (optional)
      * @param integer $accessUrlId
@@ -4801,14 +4987,8 @@ class CourseManager
             $withoutSpecialCourses = ' AND c.code NOT IN ("' . implode('","', $specialCourseList) . '")';
         }
 
-        $visibilityCondition = null;
+        $visibilityCondition = self::getCourseVisibilitySQLCondition('c');
 
-        $hidePrivate = api_get_setting('course_catalog_hide_private');
-        if ($hidePrivate === 'true') {
-            $courseInfo = api_get_course_info();
-            $courseVisibility = $courseInfo['visibility'];
-            $visibilityCondition = ' AND c.visibility <> 1';
-        }
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
             $sql = "SELECT count(c.id) FROM $tableCourse c, $tableCourseRelAccessUrl u
                     WHERE

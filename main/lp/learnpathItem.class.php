@@ -3632,13 +3632,13 @@ class learnpathItem
         $sql = "SELECT * FROM $lp_table
                     WHERE id = $lp_id AND c_id = $course_id";
         $res = Database::query($sql);
-        $accumulate_scorm_time = 'false';
+        $accumulateScormTime = 'false';
         if (Database::num_rows($res) > 0) {
-            $accumulate_scorm_time = $row['accumulate_scorm_time'];
+            $accumulateScormTime = $row['accumulate_scorm_time'];
         }
 
         //Step 2.1 : if normal mode total_time = total_time + total_sec
-        if ($accumulate_scorm_time != 'false') {
+        if ($accumulateScormTime != 0) {
             $total_time += $total_sec;
             //$this->last_scorm_session_time = $total_sec;
         } else {

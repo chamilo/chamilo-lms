@@ -136,6 +136,7 @@ $defaults['lp_name'] = Security::remove_XSS($_SESSION['oLP']->get_name());
 $defaults['lp_author'] = Security::remove_XSS($_SESSION['oLP']->get_author());
 $defaults['hide_toc_frame'] = Security::remove_XSS($_SESSION['oLP']->get_hide_toc_frame());
 $defaults['category_id'] = intval($_SESSION['oLP']->getCategoryId());
+$defaults['accumulate_scorm_time']  = $_SESSION['oLP']->getAccumulateScormTime();
 
 $expired_on = $_SESSION['oLP']->expired_on;
 $publicated_on = $_SESSION['oLP']->publicated_on;
@@ -191,6 +192,13 @@ if (api_is_platform_admin()) {
 }
 
 $form->addElement('checkbox', 'subscribe_users', null, get_lang('SubscribeUsersToLp'));
+
+// accumulate_scorm_time
+$form->addElement(
+    'checkbox',
+    'accumulate_scorm_time',
+    [get_lang('AccumulateScormTime'), get_lang('AccumulateScormTimeInfo')]
+);
 
 $enableLpExtraFields = false;
 

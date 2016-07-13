@@ -139,6 +139,13 @@ switch ($action) {
             'warning',
             ['title' => get_lang('BadgesManagement')]
         );
+        $toolbar .= Display::toolbarButton(
+            get_lang('ImportSkillsListCSV'),
+            api_get_path(WEB_CODE_PATH) . 'admin/skills_import.php',
+            'arrow-up',
+            'info',
+            ['title' => get_lang('BadgesManagement')]
+        );
 
         $extraField = new ExtraField('skill');
         $arrayVals = $extraField->get_handler_field_info_by_tags('tags');

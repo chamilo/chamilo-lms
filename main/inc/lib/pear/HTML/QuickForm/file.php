@@ -61,6 +61,8 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     {
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('file');
+
+
     } //end constructor
 
     // }}}
@@ -266,4 +268,75 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             return null;
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getElementJS()
+    {
+        $id = $this->getAttribute('id');
+        return '<script>
+        $(document).ready(function() {
+            var $image = $("#'.$id.'_preview_image");
+            var $input = $("[name=\''.$id.'_crop_result\']");
+            var $cropButton = $("#'.$id.'_crop_button");
+            var canvas = "";
+            var imageWidth = "";
+            var imageHeight = "";
+            
+            $("#'.$id.'").change(function() {
+                var oFReader = new FileReader();
+                oFReader.readAsDataURL(document.getElementById("'.$id.'").files[0]);
+        
+                oFReader.onload = function (oFREvent) {
+                    $image.attr("src", this.result);
+                    $("#'.$id.'_label_crop_image").html("'.get_lang('Preview').'");
+                    $("#'.$id.'_crop_image").addClass("thumbnail");
+                    $cropButton.removeClass("hidden");
+                    // Destroy cropper
+                    $image.cropper("destroy");
+        
+                    $image.cropper({
+                        aspectRatio: 1 / 1,
+                        responsive : true,
+                        center : false,
+                        guides : false,
+                        movable: false,
+                        zoomable: false,
+                        rotatable: false,
+                        scalable: false,
+                        crop: function(e) {
+                            // Output the result data for cropping image.
+                            $input.val(e.x+","+e.y+","+e.width+","+e.height);
+                        }
+                    });
+                };
+            });
+            
+            $("#'.$id.'_crop_button").on("click", function() {
+                var canvas = $image.cropper("getCroppedCanvas");
+                var dataUrl = canvas.toDataURL();
+                $image.attr("src", dataUrl);
+                $image.cropper("destroy");
+                $cropButton.addClass("hidden");
+                return false;
+            });
+        });
+        </script>';
+    }
+
+    public function toHtml()
+    {
+        $js = '';
+        if (isset($this->_attributes['crop_image'])) {
+            $js = $this->getElementJS();
+        }
+
+        if ($this->_flagFrozen) {
+            return $this->getFrozenHtml();
+        } else {
+            return $js.$this->_getTabs() . '<input' . $this->_getAttrString($this->_attributes) . ' />';
+        }
+    } //end func toHtml
+
 }

@@ -45,6 +45,7 @@
 
         "twig/twig": "1.*",
         "twig/extensions": "~1.0",
+        "symfony/symfony": ">=2.8",
         "doctrine/orm": "~2.4",
         "doctrine/dbal": "~2.4",
 

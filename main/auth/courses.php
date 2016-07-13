@@ -144,7 +144,7 @@ if (isset($_POST['create_course_category']) &&
 // search courses
 if (isset($_REQUEST['search_course'])) {
     if ($ctok == $_REQUEST['sec_token']) {
-        $courses_controller->search_courses($_REQUEST['search_term'], null, null, null, $limit);
+        $courses_controller->search_courses($_REQUEST['search_term'], null, null, null, $limit, true);
     }
 }
 

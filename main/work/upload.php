@@ -105,6 +105,11 @@ if ($form->validate()) {
         if ($is_allowed_to_edit) {
             $script = 'work_list_all.php';
         }
+        if (!$result) {
+            Display::addFlash(Display::return_message(get_lang('UploadError'), 'error'));
+        } else {
+            Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded'), 'success'));
+        }
         header('Location: '.api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id);
         exit;
     } else {

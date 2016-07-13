@@ -14,9 +14,9 @@
  * Variables used from the main/install/index.php
  */
 $new_version = '1.11.0';
-$new_version_status = 'stable';
+$new_version_status = 'alpha';
 $new_version_last_id = 0;
-$new_version_stable = true;
-$new_version_major = false;
+$new_version_stable = false;
+$new_version_major = true;
 $software_name = 'Chamilo';
-$software_url = 'http://www.chamilo.org/';
+$software_url = 'https://chamilo.org/';

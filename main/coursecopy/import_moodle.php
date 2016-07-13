@@ -9,7 +9,7 @@
  */
 
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/MoodleImport.lib.php';
+require_once '../inc/lib/MoodleImport.class.php';
 
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);

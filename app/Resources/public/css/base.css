@@ -9,29 +9,24 @@
         yannik.warnier@beeznest.com
     Version: 1.0
 */
-pre {
-    margin-top:50px !important;
+html{
+    position: relative;
+    min-height: 100%;
 }
-html,body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
+body{
+    margin-bottom: 120px;
 }
-#page-wrap{
-  min-height: 100%;
-  margin-bottom: 0;
+/* Sticky footer style */
+.sticky-footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 120px;
 }
-#page-wrap:after{
-  content: "";
-  display: block;
-  clear: both;
+#content-section{
+    margin-bottom: 150px;
 }
-footer {
-  padding-top: 15px;
-}
-footer #footer_right{
-  text-align: right;
-}
+/* End Sticky footer style */
 select {
   width : auto;
 }
@@ -51,6 +46,7 @@ a.thumbnail:hover{
   -webkit-border-radius: 5px;
   text-align: justify;
 }
+
 .version-checking{
   padding: 10px;
   width: 100%;
@@ -71,7 +67,7 @@ a.thumbnail:hover{
     display: block;
     padding-bottom: 100%;
     overflow: hidden;
-    
+
 }
 .gallery .frame{
     background-color: #eeeeee;
@@ -127,6 +123,14 @@ a.thumbnail:hover{
   margin-bottom: 5px;
   padding-top: 10px;
   margin-top: 5px;
+}
+#toolbar-admin.navbar{
+    margin-bottom: 0;
+    border-radius: 0;
+    border: none;
+}
+header{
+    padding-top: 20px;
 }
 .blackboard_show {
     float:left;
@@ -317,6 +321,12 @@ a.thumbnail:hover{
 #results .file_upload_highlight {
     background: #F4D364;
 }
+.work-action, .work-date, .work-title{
+    text-align: center;
+}
+.work-name{
+    padding-left: 10px;
+}
 .file_upload{
     position: relative;
 }
@@ -329,13 +339,13 @@ a.thumbnail:hover{
     background: none;
 }
 .file_upload_small{
-    line-height: 15px;
     border: 1px solid #AFDDE9;
     background: #D4E6F0;
     width: 100%;
+    border-radius: 5px;
+    padding-bottom: 5px;
 }
 .work_correction_file_upload {
-    height: 40px !important;
     margin-bottom: 5px;
     margin-top: 5px;
 }
@@ -2411,9 +2421,10 @@ table#skill_holder {
 .badges-sidebar{
     height: 250px;
 }
-/* ****************************************************
-                     END SKILL
- **************************************************** */
+.panel figure figcaption{
+    background: none;
+    text-align: center;
+}
 
 .skill_root {
     box-shadow: 2px 2px 19px #aaa;
@@ -2493,6 +2504,8 @@ table#skill_holder {
   padding-top: .5em;
   padding-bottom: .5em;
   width: auto;
+  font-size: 12px;
+  line-height: 16px;
 }
 .lp-add-item{
   display:block;
@@ -3011,31 +3024,6 @@ a.forum_group_link {
     border: 1px solid #ccc;
     margin-bottom:5px;
 }
-
-#hide_bar_template {
-    vertical-align: middle;
-    width: 10px;
-    display: inline;
-    float:left;
-    height: 100%;
-    padding-bottom: 90em;
-    margin-bottom: -90em;
-    cursor:pointer;
-    background-color:#eee;
-    margin-left: 4px !important;
-    background-image: url("../../main/img/hide0.png");
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
-.hide_bar_template_not_hide {
-    background-image: url("../../main/img/hide2.png") !important;
-}
-
-#hide_bar_template:hover {
-    background-color:#aaa;
-}
-
 .timeline-example {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
@@ -3141,7 +3129,6 @@ a.forum_group_link {
 .subnav .nav > li > .logout {
     padding-top:8px;
 }
-
 .subnav-fixed {
     position: fixed;
     top: 0px;
@@ -3153,12 +3140,7 @@ a.forum_group_link {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
-    /*-webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-        -moz-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-            box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-    */
 }
-
 .doc_folder {
     margin-right:5px;
     margin-top:5px;
@@ -3194,7 +3176,6 @@ a.forum_group_link {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .handle.expanded{
     background-image:  url('../../main/img/div_hide.gif');
     background-repeat: no-repeat;
@@ -3202,7 +3183,6 @@ a.forum_group_link {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .collapsible .handle{
     background-image: url('../../main/img/div_hide.gif');
     background-repeat: no-repeat;
@@ -3210,7 +3190,6 @@ a.forum_group_link {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .collapsible .handle.collapsed{
     background-image:  url('../../main/img/div_show.gif');
     background-repeat: no-repeat;
@@ -3226,7 +3205,6 @@ a.forum_group_link {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .btn.show{
     border:none;
     border-radius: 0;
@@ -3241,7 +3219,6 @@ a.forum_group_link {
     background-position:center center;
     box-shadow:none;
 }
-
 .btn.hide{
     border:none;
     border-radius: 0;
@@ -3256,7 +3233,6 @@ a.forum_group_link {
     background-position:center center;
     box-shadow:none;
 }
-
 .btn.loading{
     border:none;
     border-radius: 0;
@@ -3280,7 +3256,6 @@ a.forum_group_link {
 .boot-tooltip {
     cursor: pointer;
 }
-
 /*
     link
 */
@@ -3383,7 +3358,6 @@ i.size-32.icon-new-note{
 .nav-list img {
     margin-right: 6px;
 }
-
 /* Only for Firefox */
 @-moz-document url-prefix() {
     select#question_type_hidden option {
@@ -3406,12 +3380,9 @@ i.size-32.icon-new-note{
     select#question_type_hidden option[value="14"] {background-image: url(../../main/img/icons/32/mcmagl.png);}
     select#question_type_hidden option[value="16"] {background-image: url(../../main/img/icons/32/calculated_answer.png);}
 }
-
-
 .btn-success.btn-install{
     float: right;
 }
-
 /*
  * work
  */
@@ -3490,7 +3461,6 @@ i.size-32.icon-new-work{
 #settings .panel:hover .admin-edit-block {
     display: block;
 }
-
 /***** Survey *****/
 #list-survey p{
   display: inline-block;
@@ -3965,31 +3935,11 @@ i.size-32.icon-new-work{
   height:20px;
   width: 70%;
 }
-
-
 .bottom_actions {
   display: block;
 }
 .bottom_actions .form-group{
   margin-bottom: 10px;
-}
-.bottom_actions_fixed {
-  position: fixed;
-  z-index: 9999;
-  bottom: 0;
-  left: 0px;
-  margin-bottom: 0px;
-  padding-top: 20px;
-  padding-bottom: 10px;
-  border-top: 1px solid #DCE4EC;
-  background: #ffffff;
-  background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed));
-  background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
-  background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
-  background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
-  background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 );
 }
 .sessions-items{
   list-style: none;
@@ -4065,11 +4015,9 @@ ul.holder li.bit-box{
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
 }
-
 #file-descrtiption.form-control{
   width: 80%;
 }
-
 .session-course-edit .control{
   padding-top: 2em;
   padding-bottom: 2em;
@@ -4140,7 +4088,6 @@ ul.holder li.bit-box{
   padding-left: 10px;
   margin-left: 0px;
 }
-
 .question_options label > input + div.thumbnail {
   padding: 10px;
   box-sizing: border-box;
@@ -4154,7 +4101,6 @@ ul.holder li.bit-box{
   background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
 }
-
 .question_options label > input:checked + div.thumbnail {
   border: 2px solid #337AB7;
   -webkit-box-shadow: 0 4px 18px #C8C8C8;
@@ -4170,11 +4116,9 @@ ul.holder li.bit-box{
   background: linear-gradient(to bottom, #ffffff 0%,#fffef2 47%,#ffffe2 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffe2',GradientType=0 ); /* IE6-9 */
 }
-
 .question_options div.thumbnail p {
   margin: 0;
 }
-
 .question_options div.thumbnail img {
   height: 150px !important;
   width: 190px !important;
@@ -4189,7 +4133,6 @@ ul.holder li.bit-box{
   display: block;
   height: auto !important;
 }
-
 /***    Draggable answer    ***/
 .question_options ul.exercise-draggable-answer{
   float: left;
@@ -4266,7 +4209,6 @@ ul.exercise-draggable-answer .touch-items:hover{
   font-size: 12px;
   cursor: pointer;
 }
-
 /***    Matching Draggable answer ***/
 .drag_question {
   min-height: 4em;
@@ -4929,7 +4871,6 @@ div#chat-remote-video video {
   margin-left: auto;
   margin-right: auto;
 }
-
 #session-list .information-item{
   padding: 10px;
   min-height: 185px;
@@ -5116,7 +5057,7 @@ div#chat-remote-video video {
   border: none;
 }
 .ui-jqgrid tr.jqgrow td{
-  height: 45px;
+  line-height: 22px;
   font-size: 13px;
 }
 .ui-jqgrid .ui-jqgrid-labels .ui-state-hover{
@@ -5160,8 +5101,6 @@ div#chat-remote-video video {
 .ui-tabs .ui-widget-content a.btn-success{
     color: #fff;
 }
-
-
 .ui-priority-secondary,
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary{
@@ -5180,6 +5119,7 @@ div#chat-remote-video video {
 }
 .ui-jqgrid .ui-jqgrid-htable th {
     height: 35px;
+    font-weight: bold;
 }
 .ui-jqgrid .ui-state-highlight, .ui-jqgrid .ui-widget-content .ui-state-highlight,.ui-jqgrid .ui-widget-header .ui-state-highlight{
   background: #F7F7F7;
@@ -5199,7 +5139,6 @@ div#chat-remote-video video {
 .ui-dialog .ui-dialog-buttonpane{
   border-top: 1px solid #DDD;
 }
-
 .ui-button.ui-widget.ui-state-default {
   background-color:#f5f5f5;
   background-image:-moz-linear-gradient(top,#fff,#e6e6e6);
@@ -5214,7 +5153,6 @@ div#chat-remote-video video {
   text-shadow:0 1px 1px rgba(255,255,255,.75);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05)
 }
-
 .ui-button.ui-widget.ui-state-hover{
   border-width: 1px;
   border-style:solid;
@@ -5225,9 +5163,6 @@ div#chat-remote-video video {
   font-weight:normal;
   color:#333333;
 }
-
-
-
 .select2-container .select2-selection--single{
   height: 32px !important;
   border-color: #CCCCCC !important;
@@ -5409,24 +5344,19 @@ div#chat-remote-video video {
 .session-view-row {
   padding: 8px 0;
 }
-
 .session-view-lvl-2 {
   margin-left : 66px;
 }
-
 .session-view-lvl-3 {
   padding-left : 92px;
 }
-
 .session-view-lvl-4 {
   padding-left : 102px;
 }
-
 .session-view-lvl-5 {
   padding-left : 128px;
   font-weight : normal;
 }
-
 .session-view-lvl-6 {
   padding-left : 20px;
 }
@@ -5438,25 +5368,20 @@ div#chat-remote-video video {
 img.sessionView {
   margin-right: 10px;
 }
-
 a.sessionView {
   font-weight : bold;
 }
-
 .session-view-user-category {
   font-weight : bold;
   padding-bottom : 10px;
 }
-
 .session-view-session-category {
   font-weight : bold;
   padding-bottom : 10px;
 }
-
 .session-view-session {
   font-weight : bold;
 }
-
 /* Like the well class */
 .session-view-well {
   min-height: 20px;
@@ -5467,16 +5392,13 @@ a.sessionView {
   border-radius: 4px;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05) inset;
 }
-
 .session-view-button {
   border : none;
   min-width : 28px;
 }
-
 .view-by-session-link {
   min-height: 38px;
 }
-
 .view-by-session-teachers {
   display : none; /* change this if you want to display teachers name in this view */
   font-size : 10px;
@@ -5484,15 +5406,12 @@ a.sessionView {
   overflow-y: auto;
   max-height:50px;
 }
-
 .view-by-session-right-actions {
   float : right;
 }
-
 .view-by-session-right-actions img {
   width : 12px;
 }
-
 .session-view-session-go-to-course-in-session {
   font-size : 12px;
 }
@@ -5677,11 +5596,9 @@ a.sessionView {
 }
 #grad_left {
     left: 0;
-     /* background: url('../../main/img/timeline/grad_left.png') repeat-y; */
 }
 #grad_right {
     right: 0;
-    /* background: url('../../main/img/timeline/grad_right.png') repeat-y; */
 }
 #next,
 #prev {
@@ -5732,7 +5649,109 @@ a.sessionView {
     height: 144px;
     position: relative;
 }
-
+/*
+* Lesson scorm
+*/
+#subtab.tab-wrapper,
+#resource_tab.tab-wrapper .tab-content .tab-pane{
+    margin-top: 20px;
+}
+#resource_tab li a {
+    padding: 5px 10px;
+}
+#resource_tab li.lp_resource_element a{
+    padding: 5px;
+}
+/* Gravatar */
+#user_image_block img,
+#sn-avatar-one a.expand-image img{
+    width: 120px;
+}
+footer{
+    font-size: 12px;
+    padding-top: 10px;
+}
+.bottom_actions_fixed {
+  position: fixed;
+  z-index: 9999;
+  bottom: 0;
+  left: 0px;
+  margin-bottom: 0px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  border-top: 1px solid #DCE4EC;
+  background: #ffffff;
+  width: 100%;
+}
+#toolshortcuts_horizontal{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+#toolshortcuts_horizontal .items-icon{
+    padding: 0px;
+    display: inline-block;
+}
+#toolshortcuts_horizontal .items-icon img{
+    padding:5px;
+    border-radius:5px;
+    -webkit-box-shadow: 0 1px 3px #C8C8C8;
+    -opera-box-shadow: 0 1px 3px #C8C8C8;
+    -moz-box-shadow: 0 1px 3px #C8C8C8;
+    box-shadow: 0 1px 3px #C8C8C8;
+    border: 1px solid #e6e6e6;
+}
+#toolnav{
+    position: fixed;
+    left: 0;
+    top: 50px;
+    z-index: 2000;
+}
+#toolnavbox ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#toolnavbox ul li{
+    height: 40px;
+    
+}
+#toolnavbox ul li a {
+	display: inline-block;
+    margin: 0;
+	color:#fff;
+	padding: 7px;
+	text-decoration: none;
+	-webkit-transition:all 500ms ease;
+	-o-transition:all 500ms ease;
+    transition:all 500ms ease;
+    width: 38px
+}
+#toolnavbox ul li a:hover {
+	padding: 5px 10px;
+}
+.btn-tool{
+    margin-bottom: 2px;
+}
+/* CSS BACKUP *****/
+.item-backup{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+    cursor: hand;
+}
+.item-backup .title{
+    margin-left: 10px;
+    font-weight: bold;
+}
+.tool-backups-options{
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.list-backups-options{
+    list-style: none;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
@@ -5786,7 +5805,7 @@ a.sessionView {
 }
 /* Landscape phones and down */
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-  
+
   #learning_path_breadcrumb_zone {
   }
   #learning_path_main{
@@ -5861,7 +5880,7 @@ a.sessionView {
   #show_graph{
    text-align: center;
   }
-  
+
 }
 @media (min-width : 480px) and (max-width: 767px) {
   #touch-button{
@@ -5909,7 +5928,7 @@ a.sessionView {
 }
 @media (min-width:320px) and (max-width: 479px){
     footer {
-        height: 12em;
+        
         padding-top: 15px;
     }
     footer #footer_right{
@@ -5936,21 +5955,16 @@ a.sessionView {
         margin: -2.5px -15px;
     }
 }
-
 .elfinder-cwd-filename {
     color: black !important;
 }
-
 .skill-badge-img{
     width: 150px;
     overflow: hidden;
 }
-
 .text-light{
     color: #00CCFF;
 }
-
-
 #dropzone {
     position: relative;
     overflow: hidden;

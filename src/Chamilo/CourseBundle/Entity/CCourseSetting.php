@@ -72,7 +72,7 @@ class CCourseSetting
     /**
      * @var string
      *
-     * @ORM\Column(name="value", type="string", length=255, nullable=true)
+     * @ORM\Column(name="value", type="text", nullable=true)
      */
     private $value;
 

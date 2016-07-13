@@ -518,7 +518,6 @@ $LearnpathDeleteModule = "セクションを削除";
 $NewChapter = "セクションを追加";
 $NewStep = "学習オブジェクトまたは活動項目を追加";
 $EnterDataNewChapter = "セクションをコースに追加しています";
-$NewDocument = "リッチ メディアのページ / 活動項目";
 $Position = "目次";
 $ViewModeEmbedded = "現在の表示モード: 埋め込み";
 $ShowDebug = "デバッグを表示する";

@@ -68,10 +68,10 @@ require_once 'simpletest/xml.php';
  * Start to load the tests files
  * @package chamilo.tests
  */
-class TestsSuite extends TestSuite {
-
-    function TestsSuite() {
-
+class TestsSuite extends TestSuite
+{
+    public function _construct()
+    {
         // Name of this test suite
         $this->TestSuite('All tests suite');
 
@@ -82,7 +82,6 @@ class TestsSuite extends TestSuite {
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/surveymanager.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/session_handler.class.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/sessionmanager.lib.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/classmanager.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/export.lib.inc.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/legal.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/mail.lib.inc.test.php');
@@ -99,7 +98,7 @@ class TestsSuite extends TestSuite {
     	//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/blog.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/urlmanager.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/stats.lib.inc.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/course_document.lib.test.php');        
+        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/course_document.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/display.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/document.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/events.lib.inc.test.php');

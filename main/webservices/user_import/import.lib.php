@@ -43,13 +43,6 @@ function validate_data($users) {
 				$user['error'] = get_lang('WrongStatus');
 				$errors[] = $user;
 			}
-			// 4. Check classname.
-			if (isset ($user['ClassName']) && strlen($user['ClassName']) != 0) {
-				if (!ClassManager :: class_name_exists($user['ClassName'])) {
-					$user['error'] = get_lang('ClassNameNotAvailable');
-					$errors[] = $user;
-				}
-			}
 			// 5. Check authentication source.
 			if (isset ($user['AuthSource']) && strlen($user['AuthSource']) != 0) {
 				if (!in_array($user['AuthSource'], $defined_auth_sources)) {
@@ -100,10 +93,6 @@ function save_data($users) {
 			foreach ($user['Courses'] as $index => $course) {
 				if(CourseManager :: course_exists($course))
 					CourseManager :: subscribe_user($user_id, $course,$user['Status']);
-			}
-			if (strlen($user['ClassName']) > 0) {
-				$class_id = ClassManager :: get_class_id($user['ClassName']);
-				ClassManager :: add_user($user_id, $class_id);
 			}
 
 			// TODO: Hard-coded French texts.

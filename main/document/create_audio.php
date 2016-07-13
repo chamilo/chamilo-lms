@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This file allows creating audio files from a text.
  *
@@ -20,9 +22,10 @@ $nameTools = get_lang('CreateAudio');
 api_protect_course_script();
 api_block_anonymous_users();
 
+$groupRights = Session::read('group_member_with_upload_rights');
 $groupId = api_get_group_id();
 
-if (api_get_setting('enabled_text2audio') == 'false') {
+if (api_get_setting('enabled_text2audio') === 'false') {
     api_not_allowed(true);
 }
 
@@ -99,8 +102,7 @@ if (!$is_allowed_in_course) {
     api_not_allowed(true);
 }
 
-
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] ||
+if (!($is_allowed_to_edit || $groupRights ||
     DocumentManager::is_my_shared_folder(
         api_get_user_id(),
         Security::remove_XSS($dir),
@@ -327,7 +329,7 @@ function downloadMP3_google($filepath, $dir)
     $clean_text = trim($_POST['text']);
     if (empty($clean_title) || empty($clean_text)) {
         echo '<script>window.location.href="' . $location . '"</script>';
-        
+
         return;
     }
     $clean_title = Security::remove_XSS($clean_title);

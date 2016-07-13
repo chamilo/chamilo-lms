@@ -69,19 +69,19 @@ $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();
 $condition_session = api_get_session_condition($session_id, true, true);
 
-if ($action == 'addlink') {
+if ($action === 'addlink') {
     $nameTools = '';
     $interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddLink'));
 }
 
-if ($action == 'addcategory') {
+if ($action === 'addcategory') {
     $nameTools = '';
     $interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddCategory'));
 }
 
-if ($action == 'editlink') {
+if ($action === 'editlink') {
     $nameTools = '';
     $interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditLink'));

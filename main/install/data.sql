@@ -182,6 +182,7 @@ VALUES
 ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
 ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1),
 ('show_link_bug_notification', NULL, 'radio', 'Platform', 'false', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0),
+('show_link_ticket_notification', NULL, 'radio', 'Platform', 'false', 'ShowLinkTicketNotificationTitle', 'ShowLinkTicketNotificationComment', NULL, NULL, 0),
 ('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 1),
 ('course_validation_terms_and_conditions_url', NULL, 'textfield', 'Platform', '', 'CourseValidationTermsAndConditionsLink', 'CourseValidationTermsAndConditionsLinkComment', NULL, NULL, 1),
 ('sso_authentication',NULL,'radio','Security','false','EnableSSOTitle','EnableSSOComment',NULL,NULL,1),
@@ -268,7 +269,6 @@ VALUES
 ('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
 ('login_is_email', NULL, 'radio', 'Platform', 'false', 'LoginIsEmailTitle', 'LoginIsEmailComment', NULL, NULL, 0),
 ('courses_default_creation_visibility', NULL, 'radio', 'Course', '2', 'CoursesDefaultCreationVisibilityTitle', 'CoursesDefaultCreationVisibilityComment', NULL, NULL, 1),
-('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('gradebook_enable_grade_model', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableGradeModelTitle', 'GradebookEnableGradeModelComment', NULL, NULL, 1),
 ('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
 ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
@@ -497,6 +497,8 @@ VALUES
 ('allow_user_course_subscription_by_course_admin', 'false', 'No'),
 ('show_link_bug_notification', 'true', 'Yes'),
 ('show_link_bug_notification', 'false', 'No'),
+('show_link_ticket_notification', 'true', 'Yes'),
+('show_link_ticket_notification', 'false', 'No'),
 ('course_validation', 'true', 'Yes'),
 ('course_validation', 'false', 'No'),
 ('sso_authentication', 'true', 'Yes'),
@@ -593,8 +595,6 @@ VALUES
 ('courses_default_creation_visibility', '2', 'OpenToThePlatform'),
 ('courses_default_creation_visibility', '1', 'Private'),
 ('courses_default_creation_visibility', '0', 'CourseVisibilityClosed'),
-('allow_browser_sniffer', 'true', 'Yes'),
-('allow_browser_sniffer', 'false', 'No'),
 ('teachers_can_change_score_settings', 'true', 'Yes'),
 ('teachers_can_change_score_settings', 'false', 'No'),
 ('teachers_can_change_grade_model_settings', 'true', 'Yes'),
@@ -1649,7 +1649,7 @@ VALUES
 ('allow_captcha','','radio','Security','false','EnableCaptchaText','EnableCaptchaComment',NULL,'',true),
 ('captcha_number_mistakes_to_block_account','','textfield','Security',5,'CaptchaNumberOfMistakesBeforeBlockingAccountText','CaptchaNumberOfMistakesBeforeBlockingAccountComment',NULL,'',true),
 ('captcha_time_to_block','','textfield','Security',5,'CaptchaTimeAccountIsLockedText','CaptchaTimeAccountIsLockedComment',NULL,'',true),
-('drh_can_access_all_session_content','','radio','Session','true','DRHAccessToAllSessionContentText','DRHAccessToAllSessionContentComment',NULL,'',true),
+('drh_can_access_all_session_content','','radio','Session','false','DRHAccessToAllSessionContentText','DRHAccessToAllSessionContentComment',NULL,'',true),
 ('display_groups_forum_in_general_tool','','radio','Tools','true','ShowGroupForaInGeneralToolText','ShowGroupForaInGeneralToolComment',NULL,'',true),
 ('allow_tutors_to_assign_students_to_session','','radio','Session','false','TutorsCanAssignStudentsToSessionsText','TutorsCanAssignStudentsToSessionsComment',NULL,'',true);
 
@@ -1882,3 +1882,13 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_offic
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 1);
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 2);
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 3);
+
+UPDATE settings_current SET selected_value = '1.11.0.5' WHERE variable = 'chamilo_database_version';
+
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (8, 10, 'tags', 'Tags', 1, 1, NOW());
+
+UPDATE settings_current SET selected_value = '1.11.0.6' WHERE variable = 'chamilo_database_version';
+
+INSERT INTO settings_current (variable, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('icons_mode_svg', NULL, 'radio', 'Tuning', 'false', 'IconsModeSVGTitle', 'IconsModeSVGComment', '', NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('icons_mode_svg', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('icons_mode_svg', 'false', 'No');

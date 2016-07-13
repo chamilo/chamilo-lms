@@ -159,7 +159,7 @@ $UserList = array();
 
 $msg = '';
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
-    $courses_list = $_POST['CoursesList'];
+    $courses_list = isset($_POST['CoursesList']) ? $_POST['CoursesList'] : [];
     $affected_rows = CourseManager::subscribeCoursesToDrhManager($user_id, $courses_list);
     if ($affected_rows)	{
         $msg = get_lang('AssignedCoursesHaveBeenUpdatedSuccessfully');
@@ -171,12 +171,18 @@ Display::display_header($tool_name);
 
 // actions
 
-$actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM).'</a>';
-$actionsLeft .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('session-add.png', get_lang('AssignSessions'), null, ICON_SIZE_MEDIUM).'</a>';
+$actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
+    Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM).'</a>';
+$actionsLeft .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.
+    Display::return_icon('session-add.png', get_lang('AssignSessions'), null, ICON_SIZE_MEDIUM).'</a>';
 
 echo $html = Display::toolbarAction('toolbar-dashboard', array($actionsLeft));
 
-echo Display::page_header(sprintf(get_lang('AssignCoursesToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])), null, 'h3');
+echo Display::page_header(
+    sprintf(get_lang('AssignCoursesToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
+    null,
+    'h3'
+);
 
 $assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
 $assigned_courses_code = array_keys($assigned_courses_to_hrm);
@@ -228,7 +234,7 @@ if(!empty($msg)) {
 <div class="row">
     <div class="col-md-4">
         <h5><?php echo get_lang('CoursesListInPlatform') ?> :</h5>
-        
+
         <div id="ajax_list_courses_multiple">
 	<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">
 	<?php while ($enreg = Database::fetch_array($result)) { ?>
@@ -236,7 +242,7 @@ if(!empty($msg)) {
 	<?php } ?>
 	</select>
         </div>
-        
+
     </div>
     <div class="col-md-4">
         <div class="code-course">
@@ -262,10 +268,10 @@ if(!empty($msg)) {
             <div class="separate-action">
                 <?php echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>'; ?>
             </div>
-        </div>    
-        
-        
-        
+        </div>
+
+
+
     </div>
     <div class="col-md-4">
         <h5><?php
@@ -277,7 +283,7 @@ if(!empty($msg)) {
 			echo get_lang('AssignedCoursesListToHumanResourcesManager');
 		}
             ?>: </h5>
-        
+
         <select id='destination' name="CoursesList[]" multiple="multiple" size="20" style="width:320px;">
             <?php
             if (is_array($assigned_courses_to_hrm)) {

@@ -109,6 +109,10 @@ $search = isset($_REQUEST['_search']) ? $_REQUEST['_search'] : false;
 $forceSearch = isset($_REQUEST['_force_search']) ? $_REQUEST['_force_search'] : false;
 $extra_fields = array();
 
+if (!empty($searchString)) {
+    $search = 'true';
+}
+
 if (($search || $forceSearch) && ($search !== 'false')) {
     $whereCondition = ' 1 = 1 ';
     $whereConditionInForm = getWhereClause($searchField, $searchOperator, $searchString);
@@ -832,8 +836,7 @@ switch ($action) {
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = array(
                 //'type',
-                'firstname',
-                'lastname',
+                'fullname',
                 'title',
                 'qualification',
                 'sent_date',
@@ -844,8 +847,7 @@ switch ($action) {
         } else {
             $columns = array(
                 //'type',
-                'firstname',
-                'lastname',
+                'fullname',               
                 'title',
                 'qualification',
                 'sent_date',
@@ -854,6 +856,7 @@ switch ($action) {
             );
         }
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $whereCondition);
+        
         break;
     case 'get_work_user_list_others':
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
@@ -1030,13 +1033,23 @@ switch ($action) {
                 } else {
                     $session_date_string = implode(' ', $session_date);
                 }
-                $sessionUrl = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id'];
+
+                $detailButtons = [];
+                $detailButtons[] = Display::url(
+                    Display::return_icon('works.png', get_lang('WorksReport')),
+                    api_get_path(WEB_CODE_PATH) . 'mySpace/works_in_session_report.php?session=' . $session['id']
+                );
+                $detailButtons[] = Display::url(
+                    Display::return_icon('2rightarrow.png'),
+                    api_get_path(WEB_CODE_PATH) . 'mySpace/course.php?session_id=' . $session['id']
+                );
+
                 $result[] = array(
                     'name' => $session['name'],
                     'date' => $session_date_string,
                     'course_per_session' => $count_courses_in_session,
                     'student_per_session' => $count_users_in_session,
-                    'details' => Display::url(Display::return_icon('2rightarrow.png'), $sessionUrl)
+                    'details' => implode(' ', $detailButtons)
                 );
             }
         }
@@ -1732,7 +1745,7 @@ if (in_array($action, $allowed_actions)) {
             }
             $array = array();
             foreach ($columns as $col) {
-                if ($col == 'correction') {
+                if (in_array($col, ['correction', 'actions'])) {
                     $array[] = isset($row[$col]) ? $row[$col] : '';
                 } else {
                     $array[] = isset($row[$col]) ? Security::remove_XSS($row[$col]) : '';

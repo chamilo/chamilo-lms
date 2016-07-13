@@ -575,7 +575,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_info', $term_preview['id'].':'.$term_preview['language_id']);
 
-    if ($term_preview['type'] === 1) {
+    if ($term_preview['type'] == 1) {
         $form->addElement(
             'checkbox',
             'legal_accept',
@@ -669,7 +669,7 @@ if ($form->validate()) {
 
         //update the extra fields
         $count_extra_field = count($extras);
-        if ($count_extra_field > 0) {
+        if ($count_extra_field > 0 && is_integer($user_id)) {
             foreach ($extras as $key => $value) {
                 // For array $value -> if exists key 'tmp_name' then must not be empty
                 // This avoid delete from user field value table when doesn't upload a file

@@ -29,29 +29,31 @@ class SkillRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('s');
 
-        $qb->innerJoin(
-            'ChamiloCoreBundle:SkillRelUser',
-            'su',
-            Join::WITH,
-            's.id = su.skillId'
-        )
-        ->where(
-            $qb->expr()->eq('su.userId', $user->getId())
-        );
+        $qb
+            ->innerJoin(
+                'ChamiloCoreBundle:SkillRelUser',
+                'su',
+                Join::WITH,
+                's.id = su.skill'
+            )
+            ->where(
+                $qb->expr()->eq('su.user', $user->getId())
+            );
 
         if ($course) {
             $qb->andWhere(
-                $qb->expr()->eq('su.courseId', $course->getId())
+                $qb->expr()->eq('su.course', $course->getId())
             );
         }
 
         if ($session) {
             $qb->andWhere(
-                $qb->expr()->eq('su.sessionId', $session->getId())
+                $qb->expr()->eq('su.session', $session->getId())
             );
         }
 
-        $qb->setMaxResults(1)
+        $qb
+            ->setMaxResults(1)
             ->orderBy('su.id', 'DESC');
 
         return $qb->getQuery()->getOneOrNullResult();

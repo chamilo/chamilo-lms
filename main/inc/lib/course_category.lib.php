@@ -592,13 +592,7 @@ class CourseCategory
             $without_special_courses = ' AND course.code NOT IN ("'.implode('","', $specialCourseList).'")';
         }
 
-        $visibilityCondition = null;
-        $hidePrivate = api_get_setting('course_catalog_hide_private');
-        if ($hidePrivate === 'true') {
-            $courseInfo = api_get_course_info();
-            $courseVisibility = $courseInfo['visibility'];
-            $visibilityCondition = ' AND course.visibility <> 1';
-        }
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course');
 
         if ($categoryCode == 'ALL') {
             // Nothing to do
@@ -664,13 +658,8 @@ class CourseCategory
         if (!empty($specialCourseList)) {
             $without_special_courses = ' AND course.code NOT IN ("'.implode('","', $specialCourseList).'")';
         }
-        $visibilityCondition = null;
-        $hidePrivate = api_get_setting('course_catalog_hide_private');
-        if ($hidePrivate === 'true') {
-            $courseInfo = api_get_course_info();
-            $courseVisibility = $courseInfo['visibility'];
-            $visibilityCondition = ' AND course.visibility <> 1';
-        }
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition("course");
+
         if (!empty($random_value)) {
             $random_value = intval($random_value);
 
@@ -913,7 +902,7 @@ class CourseCategory
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
 
         $sql = "SELECT c.*, c.name as text FROM $tableCategory c $conditions
-            WHERE c.id IN $list $whereCondition";
+                WHERE c.id IN $list $whereCondition";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

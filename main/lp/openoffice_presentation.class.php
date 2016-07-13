@@ -226,9 +226,26 @@ class OpenofficePresentation extends OpenofficeDocument
             $slide_name = str_replace('&rsquo;', '\'', $slide_name);
             $slide_name = api_convert_encoding($slide_name, api_get_system_encoding(), $this->original_charset);
             $slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_system_encoding());
-            $did = add_document($_course, $this->created_dir.'/'.urlencode($file_name), 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$file_name), $slide_name);
+            $did = add_document(
+                $_course,
+                $this->created_dir.'/'.urlencode($file_name),
+                'file',
+                filesize($this->base_work_dir.$this->created_dir.'/'.$file_name),
+                $slide_name
+            );
             if ($did) {
-                api_item_property_update($_course, TOOL_DOCUMENT, $did, 'DocumentAdded', $_SESSION['_uid'], 0, null, null, null, api_get_session_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $did,
+                    'DocumentAdded',
+                    api_get_user_id(),
+                    0,
+                    null,
+                    null,
+                    null,
+                    api_get_session_id()
+                );
             }
         }
     }

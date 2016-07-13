@@ -6,7 +6,6 @@
  */
 
 ob_start();
-$nameTools = 'Cours';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -57,7 +56,7 @@ if (api_get_setting('add_users_by_coach') == 'true') {
     }
 }
 
-Display :: display_header($nameTools);
+Display :: display_header(get_lang('Courses'));
 
 $a_courses = array();
 if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
@@ -115,20 +114,18 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
             $actionsLeft .= $item;
         }
     }
+    
     if (count($a_courses) > 0) {
-        
         $actionsRight .= Display::url(
             Display::return_icon('printer.png', get_lang('Print'), array(), 32),
             'javascript: void(0);',
             array('onclick'=>'javascript: window.print();')
         );
-       
-    }
-    
-    $toolbar = Display::toolbarAction('toolbar-course', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
 
+    }
+
+    $toolbar = Display::toolbarAction('toolbar-course', [$actionsLeft, $actionsRight]);
     echo $toolbar;
-    
     echo Display::page_header($title);
 }
 
@@ -300,7 +297,6 @@ function get_courses($from, $limit, $column, $direction)
 
     return $courseList;
 }
-
 
 $table = new SortableTable(
     'tracking_course',

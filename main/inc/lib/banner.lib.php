@@ -25,10 +25,12 @@ function get_tabs($courseId = null)
     $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
     $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
     $navigation[SECTION_CAMPUS]['key'] = 'homepage';
+    $navigation[SECTION_CAMPUS]['icon'] = 'homepage.png';
 
     $navigation[SECTION_CATALOG]['url'] = api_get_path(WEB_PATH).'main/auth/courses.php';
     $navigation[SECTION_CATALOG]['title'] = get_lang('Courses');
     $navigation[SECTION_CATALOG]['key'] = 'catalog';
+    $navigation[SECTION_CATALOG]['icon'] = 'catalog.png';
 
 
     // My Courses
@@ -42,21 +44,26 @@ function get_tabs($courseId = null)
     }
     $navigation['mycourses']['title'] = get_lang('MyCourses');
     $navigation['mycourses']['key'] = 'my-course';
+    $navigation['mycourses']['icon'] = 'my-course.png';
+    
 
     // My Profile
     $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
     $navigation['myprofile']['title'] = get_lang('ModifyProfile');
     $navigation['myprofile']['key'] = 'profile';
+    $navigation['myprofile']['icon'] = 'profile.png';
 	// Link to my agenda
     $navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal';
     $navigation['myagenda']['title'] = get_lang('MyAgenda');
     $navigation['myagenda']['key'] = 'agenda';
+    $navigation['myagenda']['icon'] = 'agenda.png';
 
 	// Gradebook
 	if (api_get_setting('gradebook_enable') == 'true') {
         $navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
         $navigation['mygradebook']['title'] = get_lang('MyGradebook');
         $navigation['mygradebook']['key'] = 'gradebook';
+        $navigation['mygradebook']['icon'] = 'gradebook.png';
 	}
 
 	// Reporting
@@ -65,10 +72,12 @@ function get_tabs($courseId = null)
         $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/'.(api_is_drh()?'session.php':'');
         $navigation['session_my_space']['title'] = get_lang('MySpace');
         $navigation['session_my_space']['key'] = 'my-space';
+        $navigation['session_my_space']['icon'] = 'my-space.png';
     } else if (api_is_student_boss()) {
         $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH) . 'mySpace/student.php';
         $navigation['session_my_space']['title'] = get_lang('MySpace');
         $navigation['session_my_space']['key'] = 'my-space';
+        $navigation['session_my_space']['icon'] = 'my-space.png';
     } else {
         $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH);
             // Link to my progress
@@ -82,6 +91,7 @@ function get_tabs($courseId = null)
 
         $navigation['session_my_progress']['title'] = get_lang('MyProgress');
         $navigation['session_my_progress']['key'] = 'my-progress';
+        $navigation['session_my_progress']['icon'] = 'my-progress.png';
     }
 
 	// Social
@@ -89,6 +99,7 @@ function get_tabs($courseId = null)
         $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
         $navigation['social']['title'] = get_lang('SocialNetwork');
         $navigation['social']['key'] = 'social-network';
+        $navigation['social']['icon'] = 'social-network.png';
 	}
 
 	// Dashboard
@@ -96,6 +107,7 @@ function get_tabs($courseId = null)
         $navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
         $navigation['dashboard']['title'] = get_lang('Dashboard');
         $navigation['dashboard']['key'] = 'dashboard';
+        $navigation['dashboard']['icon'] = 'dashboard.png';
 	}
 
 	// Reports
@@ -126,6 +138,7 @@ function get_tabs($courseId = null)
         $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
         $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
         $navigation['platform_admin']['key'] = 'admin';
+        $navigation['platform_admin']['icon'] = 'admin.png';
 	}
 
 	return $navigation;

@@ -255,14 +255,13 @@ $form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAY
 $form->addText('keyword', '', false);
 $form->addElement('hidden', 'type', $type);
 $form->addButtonSearch(get_lang('Search'));
-echo Display::toolbarAction('toolbar-subscriber', array(0 => $actionsLeft, 1 => $form->returnForm()));
+echo Display::toolbarAction('toolbar-subscriber', [$actionsLeft, $form->returnForm()]);
 
 $option = $type == COURSEMANAGER ? 2 : 1;
 echo UserManager::getUserSubscriptionTab($option);
 
 // Display table
 $table->display();
-
 Display::display_footer();
 
 /*		SHOW LIST OF USERS  */
@@ -281,10 +280,8 @@ function get_number_of_users()
     $courseCode = api_get_course_id();
     $sessionId = api_get_session_id();
 
-	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
-
+	if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'teacher') {
 		if (api_get_session_id() != 0) {
-
 			$sql = "SELECT COUNT(u.user_id)
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu

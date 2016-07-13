@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class UniqueAnswer
  *
@@ -14,15 +16,14 @@
  **/
 class UniqueAnswer extends Question
 {
-    static $typePicture = 'mcua.png';
-    static $explanationLangVar = 'UniqueSelect';
+    public static $typePicture = 'mcua.png';
+    public static $explanationLangVar = 'UniqueSelect';
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        //this is highly important
         parent::__construct();
         $this->type = UNIQUE_ANSWER;
         $this->isContent = $this->getIsContent();
@@ -35,7 +36,7 @@ class UniqueAnswer extends Question
     public function createAnswersForm($form)
     {
         // Getting the exercise list
-        $obj_ex = $_SESSION['objExercise'];
+        $obj_ex = Session::read('objExercise');
 
         $editor_config = array(
             'ToolbarSet' => 'TestProposedAnswer',

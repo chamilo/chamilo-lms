@@ -1052,7 +1052,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null)
  * @link http://php.net/manual/en/function.ord.php
  * Note the difference with the original funtion ord(): ord('') returns 0, api_ord('') returns 0xFFFD (unknown character).
  */
-function api_ord($character, $encoding) {
+function api_ord($character, $encoding = null) {
     return Patchwork\Utf8::ord(api_utf8_encode($character, $encoding));
 }
 

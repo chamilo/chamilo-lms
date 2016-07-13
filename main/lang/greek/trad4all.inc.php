@@ -2486,7 +2486,6 @@ $TitleManipulateStudentPublication = "Επεξεργασία ανάθεσης";
 $EnterDataNewChapter = "Adding a section to the course";
 $EnterDataNewModule = "Enter information for section";
 $CreateNewStep = "Δημιουργία πολυμεσικής σελίδας";
-$NewDocument = "Σελίδα Πλούσιου Κειμένου / δραστηριότητα";
 $UseAnExistingResource = "Η χρησιμοποιήστε ένα υπάρχον πόρο:";
 $Position = "Στον πίνακα περιεχομένων";
 $NewChapterCreated = "A new section has now been created. You may continue by adding a section or step.";

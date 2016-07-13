@@ -2628,7 +2628,7 @@ class SessionManager
         $return_array = array();
 
         $sql_query = " SELECT
-                    s.id,
+                    DISTINCT(s.id),
                     s.name,
                     s.nbr_courses,
                     s.access_start_date,
@@ -3853,6 +3853,7 @@ class SessionManager
      * Protect a session to be edited.
      * @param int $id
      * @param bool $checkSession
+     * @return mixed | bool true if pass the check, api_not_allowed otherwise
      */
     public static function protectSession($id, $checkSession = true)
     {
@@ -3951,7 +3952,7 @@ class SessionManager
      */
     public static function allowManageAllSessions()
     {
-        if (api_is_platform_admin()) {
+        if (api_is_platform_admin() || api_is_session_admin()) {
             return true;
         }
 
@@ -4969,7 +4970,6 @@ class SessionManager
         }
 
         $urlId = api_get_current_access_url_id();
-
         $sessionConditions = null;
         $courseConditions = null;
         $userConditions = null;
@@ -4977,6 +4977,13 @@ class SessionManager
         if (isset($active)) {
             $active = intval($active);
             $userConditions .= " AND active = $active";
+        }
+
+        $courseList = CourseManager::get_courses_followed_by_drh($userId, DRH);
+        $courseConditions = ' AND 1 <> 1';
+        if (!empty($courseList)) {
+            $courseIdList = array_column($courseList, 'id');
+            $courseConditions = ' AND c.id IN ("'.implode('","', $courseIdList).'")';
         }
 
         switch ($status) {
@@ -5069,8 +5076,7 @@ class SessionManager
                     INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
                     $where
                     $sessionConditions
-                )
-                UNION (
+                ) UNION (
                     $select
                     FROM $tbl_course c
                     INNER JOIN $tbl_course_user cu ON (cu.c_id = c.id)
@@ -5098,6 +5104,7 @@ class SessionManager
         }
 
         $sql .= $limitCondition;
+
         $result = Database::query($sql);
         $result = Database::store_result($result);
 
@@ -6892,7 +6899,7 @@ class SessionManager
         $extra_field = new ExtraField('session');
         $extra = $extra_field->addElements($form, $sessionId);
 
-        $form->addElement('html','</div>');
+        $form->addElement('html', '</div>');
 
         $js = $extra['jquery_ready_content'];
 

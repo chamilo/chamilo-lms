@@ -89,7 +89,7 @@ if ($from_learnpath == 'yes')
 }
 
 // Process a new chapter?
-if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
+if (!empty ($_POST['add_dir']) && !empty ($_POST['title']))
 {
 	$title = $_POST['title'];
 	$description = '';
@@ -620,10 +620,10 @@ if ($content == "Agenda")
 */
 if ($content == "chapter")
 {
-	echo '<table><form name="add_chapter" action="'.'" method="POST">'."\n";
+	echo '<table><form name="add_dir" action="'.'" method="POST">'."\n";
 	echo '  <tr><td>'.get_lang('Title').'</td><td><input type="text" name="title" value="'.$title.'"></input></td></tr>'."\n";
 	echo '  <tr><td>'.get_lang('Description').'</td><td><input type="text" name="description" value="'.$description.'"></input></td></tr>'."\n";
-	echo '  <tr><td></td><td><input type="submit" name="add_chapter" value="'.get_lang('AddIt').'"/></td></tr>'."\n";
+	echo '  <tr><td></td><td><input type="submit" name="add_dir" value="'.get_lang('AddIt').'"/></td></tr>'."\n";
 	echo '</form></table>'."\n";
 	//echo "<hr>";
 }
@@ -645,7 +645,7 @@ if ($content == "Document" OR (empty($content) AND (api_is_allowed_to_edit() OR 
 	$courseDir = $_course['path']."/document";
 	$baseWorkDir = $baseServDir.$courseDir;
 	// showing the link to move one folder up (when not in the root folder)
-	show_folder_up();
+	show_folder_up($chapter_id);
 	// showing the blue bar with the path in it when we are not in the root
 	if (get_levels($folder))
 	{
@@ -655,7 +655,7 @@ if ($content == "Document" OR (empty($content) AND (api_is_allowed_to_edit() OR 
 	}
 
 	// showing the documents and subfolders of the folder we are in.
-	show_documents($folder);
+	show_documents($folder, $chapter_id);
 	//echo "<hr>";
 }
 

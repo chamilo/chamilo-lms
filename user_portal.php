@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This is the index file displayed when a user is logged in on Chamilo.
  *
@@ -14,8 +16,6 @@
  * @todo check for duplication of functions with index.php (user_portal.php is orginally a copy of index.php)
  * @todo display_digest, shouldn't this be removed and be made into an extension?
  */
-
-use ChamiloSession as Session;
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore */
 $cidReset = true;
@@ -47,8 +47,7 @@ if ($load_dirs) {
     $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
     $folder_icon = api_get_path(WEB_IMG_PATH).'icons/22/folder.png';
     $close_icon = api_get_path(WEB_IMG_PATH).'loading1.gif';
-
-    $htmlHeadXtra[] =  '<script type="text/javascript">
+    $htmlHeadXtra[] =  '<script>
 	$(document).ready(function() {
 		$(".document_preview_container").hide();
 		$(".document_preview").click(function() {
@@ -58,10 +57,9 @@ if ($load_dirs) {
 
 			//showing div
 			$(".document_preview_container").hide();
-
 			$("#document_result_" +course_id+"_" + session_id).show();
 
-			//Loading
+			// Loading
 			var image = $("img", this);
 			image.attr("src", "'.$close_icon.'");
 
@@ -85,7 +83,7 @@ if ($displayMyCourseViewBySessionLink) {
         $(document).ready(function() {
             changeMyCoursesView($.cookie("defaultMyCourseView"+userId));
         });
-
+    
         /**
         * Keep in cookie the last teacher view for the My Courses Tab. default view, or view by session
         * @param inView
@@ -190,14 +188,6 @@ if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
 }
 
 $controller->tpl->assign('content', $courseAndSessions['html']);
-
-if (api_get_setting('allow_browser_sniffer') == 'true') {
-    if (isset($_SESSION['sniff_navigator']) && $_SESSION['sniff_navigator'] != "checked") {
-        $controller->tpl->assign('show_sniff', 1);
-    } else {
-        $controller->tpl->assign('show_sniff', 0);
-    }
-}
 
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');

@@ -241,8 +241,7 @@ $actionsRight .= Display::url(
     api_get_self().'?export=csv&keyword='.$keyword
 );
 
-
-$toolbar = Display::toolbarAction('toolbar-student', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
+$toolbar = Display::toolbarAction('toolbar-student', [$actionsLeft, $actionsRight]);
 
 $table = new SortableTable(
     'tracking_student',

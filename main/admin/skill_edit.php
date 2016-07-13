@@ -74,13 +74,31 @@ $editForm->addSelect(
     ['id' => 'gradebook_id', 'multiple' => 'multiple', 'size' => 10]
 );
 $editForm->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
+// EXTRA FIELDS
+$extraField = new ExtraField('skill');
+$returnParams = $extraField->addElements($editForm, $skillId);
+$jquery_ready_content = $returnParams['jquery_ready_content'];
+
+// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+if (!empty($jquery_ready_content)) {
+    $htmlHeadXtra[] = '<script>
+    $(document).ready(function(){
+        ' . $jquery_ready_content . '
+    });
+    </script>';
+}
+
 $editForm->addButtonSave(get_lang('Save'));
 $editForm->addHidden('id', null);
 
 $editForm->setDefaults($skillDefaultInfo);
 
 if ($editForm->validate()) {
-    $updated = $objSkill->edit($editForm->getSubmitValues());
+    $skillValues = $editForm->getSubmitValues();
+    $updated = $objSkill->edit($skillValues);
+
+    $extraFieldValue = new ExtraFieldValue('skill');
+    $extraFieldValue->saveFieldValues($skillValues);
 
     if ($updated) {
         Session::write(

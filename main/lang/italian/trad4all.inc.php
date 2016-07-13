@@ -2493,7 +2493,6 @@ $TitleManipulateStudentPublication = "Modifica la pagina degli elaborati";
 $EnterDataNewChapter = "Configura le proprietà del capitolo";
 $EnterDataNewModule = "Modifica le informazioni del capitolo";
 $CreateNewStep = "Crea un nuovo elemento";
-$NewDocument = "Nuovo documento";
 $UseAnExistingResource = "oppure usa una risorsa esistente :";
 $Position = "Posizione";
 $NewChapterCreated = "Il nuovo capitolo è stato creato. Puoi aggiungere altri capitoli o immettere nuovi elementi.";

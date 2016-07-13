@@ -208,7 +208,7 @@ $actionsRight .= Display::url(
 );
 
 
-$toolbar = Display::toolbarAction('toolbar-teachers', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
+$toolbar = Display::toolbarAction('toolbar-teachers', [$actionsLeft, $actionsRight]);
 
 $table = new SortableTable(
     'tracking_teachers',

@@ -6830,6 +6830,226 @@ function WSDeleteUserFromGroup($params)
 
 /* Delete user from group Web Service end */
 
+
+
+
+/** WSRegisterUserVisibilityToCourseCatalogue **/
+// Register the data structures used by the service
+
+$server->wsdl->addComplexType(
+    'user_course_visibility',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array (
+        'course_id' => array('name' => 'course_id', 'type' => 'tns:course_id'),
+        'user_id'   => array('name' => 'user_id',   'type' => 'tns:user_id'),
+        'visible'   => array('name' => 'status',    'type' => 'xsd:int')
+    )
+);
+
+$server->wsdl->addComplexType(
+    'user_course_visibility_array',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+        array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_course_visibility[]')
+    ),
+    'tns:user_course_visibility'
+);
+
+$server->wsdl->addComplexType(
+    'registerUserToCourseCatalogue_arg',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array (
+        'userscourses'  => array('name' => 'userscourses',  'type' => 'tns:user_course_visibility_array'),
+        'secret_key'    => array('name' => 'secret_key',    'type' => 'xsd:string')
+    )
+);
+
+
+$server->wsdl->addComplexType(
+    'registerUserToCourseCatalogue_return',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_value'    => array('name' => 'original_user_id_value',    'type' => 'xsd:string'),
+        'original_course_id_value'  => array('name' => 'original_course_id_value',  'type' => 'xsd:string'),
+        'visible'                   => array('name' => 'visible',                   'type' => 'xsd:int'),
+        'result'                    => array('name' => 'result',                    'type' => 'xsd:int')
+    )
+);
+
+$server->wsdl->addComplexType(
+    'registerUserToCourseCatalogue_return_global',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:registerUserToCourseCatalogue_return[]')),
+    'tns:registerUserToCourseCatalogue_return'
+);
+
+// Register the method to expose
+$server->register('WSAddUserVisibilityToCourseInCatalogue',          // method name
+    array('registerUserToCourseCatalogue' => 'tns:registerUserToCourseCatalogue_arg'),  // input parameters
+    array('return' => 'tns:registerUserToCourseCatalogue_return_global'),
+    'urn:WSRegistration',                                               // namespace
+    'urn:WSRegistration#WSRegisterUserVisibilityToCourseCatalogue',     // soapaction
+    'rpc',                                                              // style
+    'encoded',                                                          // use
+    'This service registers the visibility of users to course in catalogue' // documentation
+);
+
+// define the method WSRegisterUserVisibilityToCourseInCatalogue
+function WSAddUserVisibilityToCourseInCatalogue($params) {
+    global $debug;
+    if (!WSHelperVerifyKey($params)) {
+        return returnError(WS_ERROR_SECRET_KEY);
+    }
+    if ($debug) error_log('WSAddUserVisibilityToCourseCatalogue params: '.print_r($params, 1));
+
+    $results = array();
+    $userscourses = $params['userscourses'];
+    foreach ($userscourses as $usercourse) {
+        $original_course_id = $usercourse['course_id'];
+        $original_user_id   = $usercourse['user_id'];
+        $visible = $usercourse['visible'];
+
+        $resultValue = 0;
+
+        // Get user id
+        $userId = UserManager::get_user_id_from_original_id(
+            $original_user_id['original_user_id_value'],
+            $original_user_id['original_user_id_name']
+        );
+        if ($debug) error_log('WSAddUserVisibilityToCourseCatalogue userId: '.$userId);
+
+        if ($userId == 0) {
+            // If user was not found, there was a problem
+            $resultValue = 0;
+        } else {
+            // User was found
+            $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+                $original_course_id['original_course_id_value'],
+                $original_course_id['original_course_id_name']
+            );
+
+            $courseCode = $courseInfo['code'];
+            if (empty($courseCode)) {
+                // Course was not found
+                $resultValue = 0;
+            } else {
+                if ($debug) error_log('WSAddUserVisibilityToCourseCatalogue courseCode: '.$courseCode);
+                $result = CourseManager::addUserVisibilityToCourseInCatalogue($userId, $courseCode, $visible);
+                if ($result) {
+                    $resultValue = 1;
+                    if ($debug) error_log('WSAddUserVisibilityToCourseCatalogue registered');
+                } else {
+                    if ($debug) error_log('WSAddUserVisibilityToCourseCatalogue NOT registered: ');
+                }
+            }
+        }
+
+        $results[] = array(
+            'original_user_id_value' => $original_user_id['original_user_id_value'],
+            'original_course_id_value' => $original_course_id['original_course_id_value'],
+            'visible' => $visible,
+            'result' => $resultValue
+        );
+    }
+
+    return $results;
+}
+
+// Register the method to expose
+$server->register('WSRemoveUserVisibilityToCourseInCatalogue',          // method name
+    array('registerUserToCourseCatalogue' => 'tns:registerUserToCourseCatalogue_arg'),  // input parameters
+    array('return' => 'tns:registerUserToCourseCatalogue_return_global'),
+    'urn:WSRegistration',                                               // namespace
+    'urn:WSRegistration#WSRegisterUserVisibilityToCourseCatalogue',     // soapaction
+    'rpc',                                                              // style
+    'encoded',                                                          // use
+    'This service removes the visibility of users to course in catalogue' // documentation
+);
+
+// define the method WSRemoveUserVisibilityToCourseInCatalogue
+function WSRemoveUserVisibilityToCourseInCatalogue($params) {
+    global $debug;
+    if (!WSHelperVerifyKey($params)) {
+        return returnError(WS_ERROR_SECRET_KEY);
+    }
+    if ($debug) error_log('WSRemoveUserVisibilityToCourseInCatalogue params: '.print_r($params, 1));
+
+    $results = array();
+    $userscourses = $params['userscourses'];
+    foreach ($userscourses as $usercourse) {
+        $original_course_id = $usercourse['course_id'];
+        $original_user_id   = $usercourse['user_id'];
+        $visible = $usercourse['visible'];
+
+        $resultValue = 0;
+
+        // Get user id
+        $userId = UserManager::get_user_id_from_original_id(
+            $original_user_id['original_user_id_value'],
+            $original_user_id['original_user_id_name']
+        );
+        if ($debug) error_log('WSRemoveUserVisibilityToCourseInCatalogue user_id: '.$userId);
+
+        if ($userId == 0) {
+            // If user was not found, there was a problem
+            $resultValue = 0;
+        } else {
+            // User was found
+            $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+                $original_course_id['original_course_id_value'],
+                $original_course_id['original_course_id_name']
+            );
+
+            $courseCode = $courseInfo['code'];
+
+            if (empty($courseCode)) {
+                // Course was not found
+                $resultValue = 0;
+            } else {
+                if ($debug) error_log('WSRemoveUserVisibilityToCourseInCatalogue courseCode: '.$courseCode);
+                $result = CourseManager::removeUserVisibilityToCourseInCatalogue($userId, $courseCode, $visible);
+                if ($result) {
+                    $resultValue = 1;
+                    if ($debug) error_log('WSRemoveUserVisibilityToCourseInCatalogue removed');
+                } else {
+                    if ($debug) error_log('WSRemoveUserVisibilityToCourseInCatalogue NOT removed: ');
+                }
+            }
+        }
+
+        $results[] = array(
+            'original_user_id_value' => $original_user_id['original_user_id_value'],
+            'original_course_id_value' => $original_course_id['original_course_id_value'],
+            'visible' => $visible,
+            'result' => $resultValue
+        );
+    }
+
+    return $results;
+}
+
+
+
+
+
+
 // Add more webservices through hooks from plugins
 if (!empty($hook)) {
     $hook->setEventData(array('server' => $server));

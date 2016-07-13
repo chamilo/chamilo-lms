@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
 *	This file saves every click in the hotspot tool into track_e_hotspots
 *	@package chamilo.exercise
@@ -10,32 +12,24 @@
 
 require_once '../inc/global.inc.php';
 
-$courseCode   = $_GET['coursecode'];
-$questionId   = $_GET['questionId'];
-$coordinates  = $_GET['coord'];
-$objExcercise = $_SESSION['objExercise'];
-$hotspotId	  = $_GET['hotspotId'];
-$exerciseId   = $objExcercise->selectId();
+$courseCode = $_GET['coursecode'];
+$questionId = $_GET['questionId'];
+$coordinates = $_GET['coord'];
+$objExercise = Session::read('objExercise');
+$hotspotId = $_GET['hotspotId'];
+$exerciseId = $objExercise->selectId();
 if ($_GET['answerId'] == "0") { // click is NOT on a hotspot
-	$hit = 0;
+    $hit = 0;
 	$answerId = $hotspotId;
 
 	// remove from session
 	unset($_SESSION['exerciseResult'][$questionId][$answerId]);
-
-	// Save clicking order
-	//$answerOrderId = count($_SESSION['exerciseResult'][$questionId]['order'])+1;
-	//$_SESSION['exerciseResult'][$questionId]['order'][$answerOrderId] = $answerId;
 } else { // user clicked ON a hotspot
 	$hit = 1;
 	$answerId = $hotspotId;
 
 	// Save into session
 	$_SESSION['exerciseResult'][$questionId][$answerId] = $hit;
-
-	// Save clicking order
-	//$answerOrderId = count($_SESSION['exerciseResult'][$questionId]['order'])+1;
-	//$_SESSION['exerciseResult'][$questionId]['order'][$answerOrderId] = $answerId;
 }
 
 //round-up the coordinates
@@ -47,9 +41,12 @@ foreach ($coords as $coord) {
 }
 $coordinates = substr($coordinates,0,-1);
 
-$TBL_TRACK_E_HOTSPOT   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+$TBL_TRACK_E_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 
 // update db
 $update_id = $_SESSION['exerciseResult'][$questionId]['ids'][$answerId];
-$sql = "UPDATE $TBL_TRACK_E_HOTSPOT SET coordinate = '".Database::escape_string($coordinates)."' WHERE id = ".intval($update_id)." LIMIT 1 ;;";
+$sql = "UPDATE $TBL_TRACK_E_HOTSPOT 
+        SET coordinate = '".Database::escape_string($coordinates)."'
+        WHERE id = ".intval($update_id)." 
+        LIMIT 1";
 $result = Database::query($sql);

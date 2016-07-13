@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Responses to AJAX calls
  */
@@ -126,7 +128,7 @@ switch ($action) {
             exit;
         }
         /** @var Learnpath $lp */
-        $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
+        $lp = Session::read('oLP');
         $course_info = api_get_course_info();
 
         $lpPathInfo = $lp->generate_lp_folder($course_info);
@@ -259,7 +261,7 @@ switch ($action) {
         ]);
         break;
     case 'update_gamification':
-        $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
+        $lp = Session::read('oLP');
 
         $jsonGamification = [
             'stars' => 0,
@@ -276,10 +278,10 @@ switch ($action) {
         echo json_encode($jsonGamification);
         break;
     case 'check_item_position':
-        $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
+        $lp = Session::read('oLP');
         $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
         if ($lp) {
-            $position = $_SESSION['oLP']->isFirstOrLastItem($lpItemId);
+            $position = $lp->isFirstOrLastItem($lpItemId);
         }
 
         echo json_encode($position);

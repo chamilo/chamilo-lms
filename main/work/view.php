@@ -126,7 +126,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                 if (isset($work['url_correction'])) {
                     $actions .= Display::url(
                         Display::return_icon(
-                            'check.png',
+                            'check-circle.png',
                             get_lang('Correction'),
                             null,
                             ICON_SIZE_MEDIUM

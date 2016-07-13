@@ -120,7 +120,13 @@ if (Security::check_token('post') && (
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-        $form->display();
+        echo '<div class="row">';
+        echo '<div class="col-md-12">';
+        echo '<div class="tool-backup">';
+            $form->display();
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
     }
 }
 

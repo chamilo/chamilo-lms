@@ -68,56 +68,11 @@ function confirmation(name) {
 }
 </script>';
 
+$userGeolocalization = api_get_setting('enable_profile_user_address_geolocalization') == 'true';
+
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
-$htmlHeadXtra[] = '<script>
-$(document).ready(function() {
-    var $image = $("#previewImage");
-    var $input = $("[name=\'cropResult\']");
-    var $cropButton = $("#cropButton");
-    var canvas = "";
-    var imageWidth = "";
-    var imageHeight = "";
-    
-    $("input:file").change(function() {
-        var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("picture").files[0]);
-
-        oFReader.onload = function (oFREvent) {
-            $image.attr("src", this.result);
-            $("#labelCropImage").html("'.get_lang('Preview').'");
-            $("#cropImage").addClass("thumbnail");
-            $cropButton.removeClass("hidden");
-            // Destroy cropper
-            $image.cropper("destroy");
-
-            $image.cropper({
-                aspectRatio: 1 / 1,
-                responsive : true,
-                center : false,
-                guides : false,
-                movable: false,
-                zoomable: false,
-                rotatable: false,
-                scalable: false,
-                crop: function(e) {
-                    // Output the result data for cropping image.
-                    $input.val(e.x+","+e.y+","+e.width+","+e.height);
-                }
-            });
-        };
-    });
-    
-    $("#cropButton").on("click", function() {
-        var canvas = $image.cropper("getCroppedCanvas");
-        var dataUrl = canvas.toDataURL();
-        $image.attr("src", dataUrl);
-        $image.cropper("destroy");
-        $cropButton.addClass("hidden");
-        return false;
-    });
-});
-</script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 
 $libpath = api_get_path(LIBRARY_PATH);
 $noPHP_SELF = true;
@@ -145,6 +100,106 @@ $user_data['old_password'] = $user_data['password'];
 
 $user_data['registration_date'] = api_get_local_time($user_data['registration_date']);
 unset($user_data['password']);
+
+if ($userGeolocalization) {
+	$htmlHeadXtra[] = '<script>
+    $(document).ready(function() {
+
+        var address = "' . $user_data['address'] . '";
+        initializeGeo(address, false);
+
+        $("#geolocalization").on("click", function() {
+            var address = $("#address").val();
+            initializeGeo(address, false);
+            return false;
+        });
+
+        $("#myLocation").on("click", function() {
+            myLocation();
+            return false;
+        });
+
+        $("#address").keypress(function (event) {
+            if (event.which == 13) {
+                $("#geolocalization").click();
+                return false;
+            }
+        });
+    });
+
+    function myLocation() {
+        if (navigator.geolocation) {
+            var geoPosition = function(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                var latLng = new google.maps.LatLng(lat, lng);
+                initializeGeo(false, latLng)
+            };
+
+            var geoError = function(error) {
+                alert("Geocode ' . get_lang('Error') . ': " + error);
+            };
+
+            var geoOptions = {
+                enableHighAccuracy: true
+            };
+
+            navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
+        }
+    }
+
+    function initializeGeo(address, latLng) {
+        var geocoder = new google.maps.Geocoder();
+        var latlng = new google.maps.LatLng(-34.397, 150.644);
+        var myOptions = {
+            zoom: 15,
+            center: latlng,
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+            },
+            navigationControl: true,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+        var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
+
+        if (geocoder && parameter) {
+            geocoder.geocode(parameter, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                        map.setCenter(results[0].geometry.location);
+                        if (!address) {
+                            $("#address").val(results[0].formatted_address);
+                        }
+                        var infowindow = new google.maps.InfoWindow({
+                            content: "<b>" + $("#address").val() + "</b>",
+                            size: new google.maps.Size(150, 50)
+                        });
+
+                        var marker = new google.maps.Marker({
+                            position: results[0].geometry.location,
+                            map: map,
+                            title: $("#address").val()
+                        });
+                        google.maps.event.addListener(marker, "click", function() {
+                            infowindow.open(map, marker);
+                        });
+                    } else {
+                        alert("' . get_lang("NotFound") . '");
+                    }
+
+                } else {
+                    alert("Geocode ' . get_lang('Error') . ': " + status);
+                }
+            });
+        }
+    }
+
+    </script>';
+}
 
 // Create the form
 $form = new FormValidator(
@@ -205,24 +260,39 @@ if (api_get_setting('openid_authentication') == 'true') {
 // Phone
 $form->addElement('text', 'phone', get_lang('PhoneNumber'));
 
+if ($userGeolocalization) {
+	// Geolocation
+	$form->addElement('text', 'address', get_lang('AddressField'), ['id' => 'address']);
+	$form->addHtml('
+        <div class="form-group">
+            <label for="geolocalization" class="col-sm-2 control-label"></label>
+            <div class="col-sm-8">
+                <button class="null btn btn-default " id="geolocalization" name="geolocalization" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
+                <button class="null btn btn-default " id="myLocation" name="myLocation" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
+            </div>
+        </div>
+    ');
+
+	$form->addHtml('
+        <div class="form-group">
+            <label for="map" class="col-sm-2 control-label">
+                '.get_lang('Map').'
+            </label>
+            <div class="col-sm-8">
+                <div name="map" id="map" style="width:100%; height:300px;">
+                </div>
+            </div>
+        </div>
+    ');
+}
+
 // Picture
-$form->addElement('file', 'picture', get_lang('AddPicture'), array('id' => 'picture', 'class' => 'picture-form'));
+$form->addFile(
+    'picture',
+    get_lang('AddImage'),
+    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true)
+);
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-
-$form->addHtml('<div class="form-group">
-    <label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>
-    <div class="col-sm-8">
-        <div id="cropImage" class="cropCanvas">
-            <img id="previewImage" >
-        </div>
-        <div>
-        <button class="btn btn-primary hidden" name="cropButton" id="cropButton">
-        <em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>
-        </div>
-    </div>
-</div>');
-
-$form->addHidden('cropResult', '');
 
 $form->addRule(
 	'picture',
@@ -420,7 +490,7 @@ if ($form->validate()) {
                 $user_id,
                 $_FILES['picture']['name'],
                 $_FILES['picture']['tmp_name'],
-                $user['cropResult']
+                $user['picture_crop_result']
 
             );
 		}
@@ -477,7 +547,8 @@ if ($form->validate()) {
             $language,
             null,
             $send_mail,
-            $reset_password
+            $reset_password,
+			$user['address']
         );
 
         if (isset($user['student_boss'])) {
@@ -490,7 +561,7 @@ if ($form->validate()) {
         $currentUserId = api_get_user_id();
 
         $userObj = api_get_user_entity($user_id);
-		
+
         UserManager::add_user_as_admin($userObj);
 
 		if ($user_id != $currentUserId) {

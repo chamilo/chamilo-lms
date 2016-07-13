@@ -10,8 +10,8 @@
  **/
 class FillBlanks extends Question
 {
-    static $typePicture = 'fill_in_blanks.png';
-    static $explanationLangVar = 'FillBlanks';
+    public static $typePicture = 'fill_in_blanks.png';
+    public static $explanationLangVar = 'FillBlanks';
 
     const FILL_THE_BLANK_STANDARD = 0;
     const FILL_THE_BLANK_MENU = 1;
@@ -117,9 +117,11 @@ class FillBlanks extends Question
                         }
                         // get input size
                         var lainputsize = 200;
+                        var lainputsizetrue = 200;
                         if ($("#samplesize\\\["+i+"\\\]").width()) {
                         // this is a weird patch to avoid to reduce the size of input blank when you are writing in the ckeditor.
-                            lainputsize = $("#samplesize\\\["+i+"\\\]").width() + 9;
+                            lainputsize = $("#samplesize\\\["+i+"\\\]").width();
+                            lainputsizetrue = $("#samplesize\\\["+i+"\\\]").width() + 9;
                         }
 
                         if (document.getElementById("weighting["+i+"]")) {
@@ -133,7 +135,7 @@ class FillBlanks extends Question
                         fields += "<td>";
                         fields += "<input type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">";
                         fields += "<input type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">";
-                        fields += "<input value=\""+blanks[i].substr(1, blanks[i].length - 2)+"\" style=\"width:"+lainputsize+"px\" disabled=disabled id=\"samplesize["+i+"]\"/>";
+                        fields += "<input value=\""+blanks[i].substr(1, blanks[i].length - 2)+"\" style=\"width:"+lainputsizetrue+"px\" disabled=disabled id=\"samplesize["+i+"]\"/>";
                         fields += "<input type=\"hidden\" id=\"sizeofinput["+i+"]\" name=\"sizeofinput["+i+"]\" value=\""+lainputsize+"\" \"/>";
                         fields += "</td>";
                         fields += "</tr>";
@@ -148,7 +150,6 @@ class FillBlanks extends Question
                 ';
 
         if (isset($listAnswersInfo) && count($listAnswersInfo["tabweighting"]) > 0) {
-
             foreach ($listAnswersInfo["tabweighting"] as $i => $weighting) {
                 echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
             }
@@ -309,7 +310,6 @@ class FillBlanks extends Question
         $answer = api_preg_replace("/\xc2\xa0/", " ", $answer);
 
         // start and end separator
-
         $blankStartSeparator = self::getStartSeparator($form->getSubmitValue('select_separator'));
         $blankEndSeparator = self::getEndSeparator($form->getSubmitValue('select_separator'));
         $blankStartSeparatorRegexp = self::escapeForRegexp($blankStartSeparator);
@@ -456,9 +456,9 @@ class FillBlanks extends Question
         $inTeacherSolution = $inTabTeacherSolution[$inBlankNumber];
         switch (self::getFillTheBlankAnswerType($inTeacherSolution)) {
             case self::FILL_THE_BLANK_MENU:
-                $selected = "";
+                $selected = '';
                 // the blank menu
-                $optionMenu = "";
+                $optionMenu = '';
                 // display a menu from answer separated with |
                 // if display for student, shuffle the correct answer menu
                 $listMenu = self::getFillTheBlankMenuAnswers($inTeacherSolution, $displayForStudent);
@@ -751,13 +751,18 @@ class FillBlanks extends Question
     *         )
     * )
     */
-    public static function getFillTheBlankTabResult($testId, $questionId, $studentsIdList, $startDate, $endDate, $useLastAnswerredAttempt = true) {
-
+    public static function getFillTheBlankTabResult(
+        $testId,
+        $questionId,
+        $studentsIdList,
+        $startDate,
+        $endDate,
+        $useLastAnswerredAttempt = true
+    ) {
        $tblTrackEAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
        $tblTrackEExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
        $courseId = api_get_course_int_id();
 
-       require_once api_get_path(SYS_PATH).'main/exercise/fill_blanks.class.php';
 
        // request to have all the answers of student for this question
        // student may have doing it several time
@@ -766,7 +771,6 @@ class FillBlanks extends Question
        // we got the less recent attempt first
        $sql = '
            SELECT * FROM '.$tblTrackEAttempt.' tea
-
            LEFT JOIN '.$tblTrackEExercise.' tee
            ON tee.exe_id = tea.exe_id
            AND tea.c_id = '.$courseId.'
@@ -797,7 +801,10 @@ class FillBlanks extends Question
                            // get the indice of the choosen answer in the menu
                            // we know that the right answer is the first entry of the menu, ie 0
                            // (remember, menu entries are shuffled when taking the test)
-                           $tabUserResult[$data['user_id']][$bracketNumber] = FillBlanks::getFillTheBlankMenuAnswerNum($tabAnswer['tabwords'][$bracketNumber], $tabAnswer['studentanswer'][$bracketNumber]);
+                           $tabUserResult[$data['user_id']][$bracketNumber] = FillBlanks::getFillTheBlankMenuAnswerNum(
+                               $tabAnswer['tabwords'][$bracketNumber],
+                               $tabAnswer['studentanswer'][$bracketNumber]
+                           );
                            break;
                        default :
                            if (FillBlanks::isGoodStudentAnswer($tabAnswer['studentanswer'][$bracketNumber], $tabAnswer['tabwords'][$bracketNumber])) {
@@ -819,13 +826,10 @@ class FillBlanks extends Question
                    }
                }
            }
-
-
        }
+
        return $tabUserResult;
     }
-
-
 
     /**
      * Return the number of student that give at leat an answer in the fill the blank test

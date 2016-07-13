@@ -1439,6 +1439,7 @@ function getWorkListTeacher(
                     $where_condition
                 ORDER BY $column $direction
                 LIMIT $start, $limit";
+
         $result = Database::query($sql);
 
         if ($getCount) {
@@ -1839,8 +1840,7 @@ function get_work_user_list(
                         qualification,
                         weight,
                         allow_text_assignment,
-                        u.firstname,
-                        u.lastname,
+                        CONCAT (u.firstname," ",u.lastname) as fullname,
                         u.username,
                         parent_id,
                         accepted,
@@ -1955,16 +1955,18 @@ function get_work_user_list(
                 ($is_allowed_to_edit || api_is_drh())
             ) {
                 // Firstname, lastname, username
-                $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
-                $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
+                $work['fullname'] = Display::div($work['fullname'], array('class' => 'work-name'));
+                
+                //$work['firstname'] = Display::div($work['firstname'], array('class' => $class));
+                //$work['lastname'] = Display::div($work['lastname'], array('class' => $class));
 
                 $work['title_clean'] = $work['title'];
 
                 if (strlen($work['title']) > 30) {
                     $short_title = substr($work['title'], 0, 27).'...';
-                    $work['title'] = Display::span($short_title, array('class' => $class, 'title' => $work['title']));
+                    $work['title'] = Display::span($short_title, array('class' => 'work-title', 'title' => $work['title']));
                 } else {
-                    $work['title'] = Display::div($work['title'], array('class' => $class));
+                    $work['title'] = Display::div($work['title'], array('class' => 'work-title'));
                 }
 
                 // Type.
@@ -1999,7 +2001,7 @@ function get_work_user_list(
                 $date = date_to_str_ago($work['sent_date']). ' ' . $add_string . ' ' . $work_date;
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="text-center" title="'.$date.'">' . $work['sent_date'] . '</div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $work['sent_date'] . '</div>';
 
                 // Actions.
                 $correction = '';
@@ -2020,50 +2022,50 @@ function get_work_user_list(
                         $action .=  '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
-
+                    $loadingText = get_lang('Loading');
+                    $uploadedText = get_lang('Uploaded');
+                    $failsUploadText = get_lang('UplNoFileUploaded');
+                    $failsUploadIcon = Display::return_icon('closed-circle.png', '', [], ICON_SIZE_TINY);
                     $correction = '
                         <form
                         id="file_upload_'.$item_id.'"
-                        class="work_correction_file_upload file_upload_small"
+                        class="work_correction_file_upload file_upload_small fileinput-button"
                         action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
                         >
-                        <div class="button-load">
+                        <div id="progress_'.$item_id.'" class="text-center button-load">
                             '.get_lang('ClickOrDropOneFileHere').'
+                            '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
                         </div>
-                        <input type="file" name="file" multiple>
-                        <button type="submit"></button>
+
+                        <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
                         </form>
                     ';
 
-                    $correction .= "
-                        <script>
-                        $(document).ready(function() {
-                            $('#file_upload_".$item_id."').fileupload({
-                                uploadTable: $('.files'),
-                                downloadTable: $('.files'),
-                                buildUploadRow: function (files, index) {
-                                    $('.files').show();
-                                    return
-                                        $('<tr><td>' + files[index].name + '<\/td>' +
-                                        '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
-                                        '<td class=\"file_upload_cancel\">' +
-                                        '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' +
-                                        '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
-                                        '<\/td><\/tr>');
-                                },
-                                buildDownloadRow: function (file) {
-                                    return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
+                    $correction .= "<script>
+                    $(document).ready(function() {
+                        $('#file_upload_".$item_id."').fileupload({
+                            add: function (e, data) {
+                                $('#progress_$item_id').html();
+                                $('#file_$item_id').remove();
+                                data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
+                                data.submit();
+                            },
+                            done: function (e, data) {
+                                if (data._response.result.name) {
+                                    $('#progress_$item_id').html('$uploadedText '+data._response.result.result+'<br />'+data._response.result.name);
+                                } else {
+                                    $('#progress_$item_id').html('$failsUploadText $failsUploadIcon');
                                 }
-                            });
+                            }
                         });
-                        </script>
-                    ";
+                    });
+                    </script>";
 
                     if ($locked) {
                         if ($qualification_exists) {
                             $action .= Display::return_icon('rate_work_na.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL);
                         } else {
-                            $action .= Display::return_icon('edit_na.png', get_lang('Comment'),array(), ICON_SIZE_SMALL);
+                            $action .= Display::return_icon('edit_na.png', get_lang('Comment'), array(), ICON_SIZE_SMALL);
                         }
                     } else {
                         if ($qualification_exists) {
@@ -2100,22 +2102,22 @@ function get_work_user_list(
                     }
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
+                        Display::return_icon('default.png', get_lang('View'), array(), ICON_SIZE_SMALL).'</a>';
 
                     if (api_get_course_setting('student_delete_own_publication') == 1) {
                         if (api_is_allowed_to_session_edit(false, true)) {
                             $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
-                                Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
+                                Display::return_icon('edit.png', get_lang('Comment'), array(), ICON_SIZE_SMALL).'</a>';
                         }
                         $action .= ' <a href="'.$url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
                             Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
+                        $action .= Display::return_icon('edit_na.png', get_lang('Modify'), array(), ICON_SIZE_SMALL);
                     }
                 } else {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
-                    $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
+                        Display::return_icon('default.png', get_lang('View'), array(), ICON_SIZE_SMALL).'</a>';
+                    $action .= Display::return_icon('edit_na.png', get_lang('Modify'), array(), ICON_SIZE_SMALL);
                 }
 
                 // Status.
@@ -2125,13 +2127,13 @@ function get_work_user_list(
                     $qualificator_id = Display::label(get_lang('Revised'), 'success');
                 }
                 $work['qualificator_id'] = $qualificator_id;
-                $work['actions'] = $send_to.$link_to_download.$action;
+                $work['actions'] = '<div class="work-action">'.$send_to.$link_to_download.$action.'</div>';
                 $work['correction'] = $correction;
 
                 $works[] = $work;
             }
         }
-
+        
         return $works;
     }
 }
@@ -3372,7 +3374,6 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     }
 
     $curdirpath = basename($my_folder_data['url']);
-
     // If we come from the group tools the groupid will be saved in $work_table
     if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
         $result = move_uploaded_file(
@@ -3391,6 +3392,8 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     $url = null;
     if ($result) {
         $url = 'work/'.$curdirpath.'/'.$new_file_name;
+    } else {
+        return false;
     }
 
     return array(
@@ -3527,6 +3530,9 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
 
     if ($values['contains_file']) {
         $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+        if (!$result) {
+            return false;
+        }
         if (isset($result['error'])) {
             $message = $result['error'];
             $saveWork = false;
@@ -4626,13 +4632,11 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
                 foreach ($workPerUser as $work) {
                     $work = $work['work'];
                     foreach ($work->user_results as $userResult) {
-                        //var_dump($userResult);exit;
                         $content .= $userResult['title'];
                         // No need to use api_get_local_time()
                         $content .= $userResult['sent_date'];
                         $content .= $userResult['qualification'];
                         $content .= $userResult['description'];
-                        //$content .= getWorkComments($userResult);
                     }
                 }
 

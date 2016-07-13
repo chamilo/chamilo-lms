@@ -40,23 +40,22 @@ class Certificate extends Model
     /**
      * Constructor
      * @param int $certificate_id ID of the certificate.
+     * @param int $userId
      *
      * If no ID given, take user_id and try to generate one
      */
-    public function __construct($certificate_id = null)
+    public function __construct($certificate_id = 0, $userId = 0)
     {
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        unset($this->certificate_data);
 
-        if (isset($certificate_id)) {
+        $this->user_id = !empty($userId) ? $userId : api_get_user_id();
+
+        if (empty($certificate_id)) {
             $certificate = $this->get($certificate_id);
             if (!empty($certificate) && is_array($certificate)) {
                 $this->certificate_data = $certificate;
                 $this->user_id = $this->certificate_data['user_id'];
             }
-        } else {
-            //Try with the current user
-            $this->user_id = api_get_user_id();
         }
 
         if ($this->user_id) {
@@ -147,8 +146,11 @@ class Certificate extends Model
     }
 
     /**
-    *  Generates an HTML Certificate and fills the path_certificate field in the DB
-    **/
+     *  Generates an HTML Certificate and fills the path_certificate field in the DB
+     *
+     * @param array $params
+     * @return bool|int
+     */
     public function generate($params = array())
     {
         // The user directory should be set
@@ -160,35 +162,13 @@ class Certificate extends Model
 
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
 
-        if (isset($this->certificate_data)) {
+        if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
             $my_category = Category :: load($this->certificate_data['cat_id']);
         }
 
         if (isset($my_category[0]) &&
             $my_category[0]->is_certificate_available($this->user_id)
         ) {
-            $user = api_get_user_info($this->user_id);
-
-            $scoredisplay = ScoreDisplay :: instance();
-            $scorecourse = $my_category[0]->calc_score($this->user_id);
-            $scorecourse_display = isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable');
-
-            // Prepare all necessary variables:
-            $organization_name = api_get_setting('Institution');
-            //$portal_name         = api_get_setting('siteName');
-            $stud_fn = $user['firstname'];
-            $stud_ln = $user['lastname'];
-
-            //@todo this code is not needed
-            $certif_text = sprintf(
-                get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),
-                $organization_name, $stud_fn.' '.$stud_ln, $my_category[0]->get_name(),
-                $scorecourse_display
-            );
-            $certif_text = str_replace("\\n","\n", $certif_text);
-
-            //If the gradebook is related to skills we added the skills to the user
-
             $courseId = api_get_course_int_id();
             $sessionId = api_get_session_id();
 
@@ -235,7 +215,11 @@ class Certificate extends Model
                                 Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'),
                                 $new_content_html['content']
                             );
-                            $my_new_content_html = mb_convert_encoding($my_new_content_html,'UTF-8', api_get_system_encoding());
+                            $my_new_content_html = mb_convert_encoding(
+                                $my_new_content_html,
+                                'UTF-8',
+                                api_get_system_encoding()
+                            );
 
                             $result = @file_put_contents($my_path_certificate, $my_new_content_html);
                             if ($result) {
@@ -279,8 +263,9 @@ class Certificate extends Model
     ) {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         if (!UserManager::is_user_certified($cat_id, $user_id)) {
-            $sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
-                 WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
+            $sql = 'UPDATE '.$table_certificate.' SET 
+                        path_certificate="'.Database::escape_string($path_certificate).'"
+                    WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
             Database::query($sql);
         }
     }

@@ -2322,7 +2322,6 @@ $TitleManipulateStudentPublication = "Modificar l'actual treball";
 $EnterDataNewChapter = "Introduïu les dades del nou apartat";
 $EnterDataNewModule = "Introduïu les dades del nou apartat";
 $CreateNewStep = "Creeu un nou recurs";
-$NewDocument = "Nou document";
 $UseAnExistingResource = "O utilitzeu un recurs existent:";
 $Position = "Posició";
 $NewChapterCreated = "El nou apartat ha estat creat. Ara podeu afegir-hi un recurs o bé crear un altre apartat.";

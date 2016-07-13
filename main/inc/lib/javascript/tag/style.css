@@ -23,7 +23,7 @@ ul.holder li.bit-box-focus a.closebutton, ul.holder li.bit-box-focus a.closebutt
 
 /* Autocompleter */
 
-.facebook-auto { display: none; position: absolute; background: #eee; z-index:1001;}
+.facebook-auto { display: none; background: #eee; z-index:1001;}
 .facebook-auto .select_all_items {display: block; float: right;}
 .facebook-auto .default { padding: 5px 7px; border: 1px solid #ccc; border-width: 0 1px 1px;font-family:"Lucida Grande","Verdana"; font-size:11px; }
 .facebook-auto ul { display: none; margin: 0; padding: 0; overflow: auto; position:absolute; z-index:9999}

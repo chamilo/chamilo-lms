@@ -533,7 +533,6 @@ class Template
         }
 
         // Default CSS Bootstrap
-
         $bowerCSSFiles = [
             'bootstrap-daterangepicker/daterangepicker-bs3.css',
             'fontawesome/css/font-awesome.min.css',
@@ -568,14 +567,20 @@ class Template
             $this->assign('css_static_file_to_string', $css_file_to_string);
         }
     }
-    public function setCSSEditor() {
+
+    /**
+     *
+     */
+    public function setCSSEditor()
+    {
         $cssEditor = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
-            if (is_file(api_get_path(SYS_CSS_PATH).'themes/'.$this->theme.'/editor.css')) {
-                $cssEditor = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/editor.css';
-            }
+        if (is_file(api_get_path(SYS_CSS_PATH).'themes/'.$this->theme.'/editor.css')) {
+            $cssEditor = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/editor.css';
+        }
 
         $this->assign('cssEditor', $cssEditor);
     }
+
     /**
      * Prepare custom CSS to be added at the very end of the <head> section
      * @return void
@@ -883,17 +888,33 @@ class Template
         $this->setHelp();
 
         //@todo move this in the template
-        $bugLink = '';
+        $rightFloatMenu = '';
         $iconBug = Display::return_icon('bug.png', get_lang('ReportABug'), null, ICON_SIZE_LARGE);
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
-            $bugLink = '<div class="report">
+            $rightFloatMenu = '<div class="report">
 		<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
                     '. $iconBug . '
                 </a>
 		</div>';
         }
 
-        $this->assign('bug_notification', $bugLink);
+        if (api_get_setting('show_link_ticket_notification') == 'true' && $this->user_is_logged_in) {
+            // by default is project_id = 1
+            $iconTicket = Display::return_icon('bug.png', get_lang('Ticket'), null, ICON_SIZE_LARGE);
+            $courseInfo = api_get_course_info();
+            $courseParams = '';
+            if (!empty($courseInfo)) {
+                $courseParams = api_get_cidreq();
+            }
+            $url = api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id=1&'.$courseParams;
+            $rightFloatMenu .= '<div class="report">
+		        <a href="'.$url.'" target="_blank">
+                    '. $iconTicket . '
+                </a>
+		    </div>';
+        }
+
+        $this->assign('bug_notification', $rightFloatMenu);
 
         $notification = returnNotificationMenu();
         $this->assign('notification_menu', $notification);
@@ -923,12 +944,12 @@ class Template
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
             $profile_url  = api_get_path(WEB_CODE_PATH).'social/home.php';
-            
+
         } else {
             $profile_url  = api_get_path(WEB_CODE_PATH).'auth/profile.php';
-            
+
         }
-        
+
         $this->assign('profile_url', $profile_url);
 
         //Message link

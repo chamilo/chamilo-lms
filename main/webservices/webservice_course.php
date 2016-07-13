@@ -213,19 +213,19 @@ class WSCourse extends WS
 			return $course_id;
 		} else {
 			$attributes = array();
-			if(!is_empty($title)) {
+			if(!empty($title)) {
 				$attributes['title'] = $title;
 			}
-			if(!is_empty($category_code)) {
+			if(!empty($category_code)) {
 				$attributes['category_code'] = $category_code;
 			}
-			if(!is_empty($department_name)) {
+			if(!empty($department_name)) {
 				$attributes['department_name'] = $department_name;
 			}
-			if(!is_empty($department_url)) {
+			if(!empty($department_url)) {
 				$attributes['department_url'] = $department_url;
 			}
-			if(!is_empty($language)) {
+			if(!empty($language)) {
 				$attributes['course_language'] = $language;
 			}
 			if($visibility != '') {
@@ -237,10 +237,10 @@ class WSCourse extends WS
 			if($unsubscribe != '') {
 				$attributes['unsubscribe'] = (int)$unsubscribe;
 			}
-			if(!is_empty($visual_code)) {
+			if(!empty($visual_code)) {
 				$attributes['visual_code'] = $visual_code;
 			}
-			if(!is_empty($attributes)) {
+			if(!empty($attributes)) {
 				CourseManager::update_attributes($course_id, $attributes);
 			}
 			if(!empty($extras)) {

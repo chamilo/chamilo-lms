@@ -11,10 +11,6 @@
  * @package chamilo.learnpath
 */
 
-/**
- * INIT SECTION
- */
-
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
@@ -28,7 +24,7 @@ include 'resourcelinker.inc.php';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp      = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
 $isStudentView = isset($_REQUEST['isStudentView']) ? (int)$_REQUEST['isStudentView'] : null;
@@ -141,7 +137,18 @@ if (isset($_POST['save_audio'])) {
             }
 
             // Upload the file in the documents tool.
-            $file_path = handle_uploaded_document($_course, $_FILES[$key], api_get_path(SYS_COURSE_PATH).$_course['path'].'/document','/audio', api_get_user_id(), '', '', '', '', false);
+            $file_path = handle_uploaded_document(
+                $_course,
+                $_FILES[$key],
+                api_get_path(SYS_COURSE_PATH).$_course['path'].'/document',
+                '/audio',
+                api_get_user_id(),
+                '',
+                '',
+                '',
+                '',
+                false
+            );
 
             // Getting the filename only.
             $file_components = explode('/', $file_path);
@@ -161,12 +168,10 @@ if (isset($_POST['save_audio'])) {
 }
 
 Display::display_header(null, 'Path');
-
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
 ?>
 <script>
-
 var newOrderData= "";
 //source code found in http://www.swartzfager.org/blog/dspNestedList.cfm
 

@@ -1127,8 +1127,12 @@ function unzip_uploaded_document(
  */
 function clean_up_files_in_zip($p_event, &$p_header)
 {
-    $res = clean_up_path($p_header['filename']);
-    return $res;
+    $originalFilePath = $p_header['filename'];
+    $originalFileName = basename($p_header['filename']);
+    $modifiedFileName = clean_up_path($originalFileName);
+    $p_header['filename'] = str_replace($originalFileName, $modifiedFileName, $originalFilePath);
+    
+    return 1;
 }
 
 /**
@@ -1136,11 +1140,11 @@ function clean_up_files_in_zip($p_event, &$p_header)
  * by eliminating dangerous file names and cleaning them
  *
  * @param string $path
- * @return int
+ * @return string
  * @see disable_dangerous_file()
  * @see api_replace_dangerous_char()
  */
-function clean_up_path(&$path)
+function clean_up_path($path)
 {
     // Split the path in folders and files
     $path_array = explode('/', $path);
@@ -1154,7 +1158,8 @@ function clean_up_path(&$path)
     // Join the "cleaned" path (modified in-place as passed by reference)
     $path = implode('/', $path_array);
     $res = filter_extension($path);
-    return $res;
+
+    return $path;
 }
 
 /**
@@ -1227,7 +1232,7 @@ function filter_extension(&$filename)
  * @param int $group_id
  * @param int $session_id Session ID, if any
  * @param int $userId creator id
- * 
+ *
  * @return int id if inserted document
  */
 function add_document(
@@ -1573,7 +1578,7 @@ function create_unexisting_directory(
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
-        
+
                 $document_id = add_document(
                     $_course,
                     $systemFolderName,

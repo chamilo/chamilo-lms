@@ -139,14 +139,44 @@ switch ($action) {
             'warning',
             ['title' => get_lang('BadgesManagement')]
         );
+        $toolbar .= Display::toolbarButton(
+            get_lang('ImportSkillsListCSV'),
+            api_get_path(WEB_CODE_PATH) . 'admin/skills_import.php',
+            'arrow-up',
+            'info',
+            ['title' => get_lang('BadgesManagement')]
+        );
+
+        $extraField = new ExtraField('skill');
+        $arrayVals = $extraField->get_handler_field_info_by_tags('tags');
+        $tags = [];
+        foreach ($arrayVals['options'] as $value) {
+            $tags[] = $value;
+        }
 
         /* View */
         $skill = new Skill();
         $skillList = $skill->get_all();
 
+        $extraFieldSearchTagId = isset($_REQUEST['tag_id']) ? $_REQUEST['tag_id'] : 0;
+
+        if ($extraFieldSearchTagId) {
+            $skills = [];
+
+            $skillsFiltered = $extraField->getAllSkillPerTag($arrayVals['id'], $extraFieldSearchTagId);
+            foreach ($skillList as $index => $value) {
+                if (array_search($index, $skillsFiltered)) {
+                    $skills[$index] = $value;
+                }
+            }
+            $skillList = $skills;
+        }
+
         $tpl = new Template(get_lang('ManageSkills'));
         $tpl->assign('message', $message);
         $tpl->assign('skills', $skillList);
+        $tpl->assign('current_tag_id', $extraFieldSearchTagId);
+        $tpl->assign('tags', $tags);
 
         $content = $tpl->fetch('default/skill/list.tpl');
 

@@ -53,9 +53,6 @@ if (!empty($courseId)) {
     $form = new FormValidator('introduction_text');
 }
 
-$renderer =& $form->defaultRenderer();
-$renderer->setCustomElementTemplate('<div style="width: 80%; margin: 0px auto; padding-bottom: 10px; ">{element}</div>');
-
 $config = array(
     'ToolbarSet' => 'IntroductionTool',
     'Width' => '100%',

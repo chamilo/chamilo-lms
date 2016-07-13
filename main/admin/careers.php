@@ -133,7 +133,7 @@ switch ($action) {
         break;
     case 'edit':
         // Action handling: Editing
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+        $url  = api_get_self() . '?action=' . Security::remove_XSS($_GET['action']) . '&id=' . intval($_GET['id']);
         $form = $career->return_form($url, 'edit');
 
         // The validation or display
@@ -142,7 +142,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
                 $old_status = $career->get_status($values['id']);
-                $res    = $career->update($values);
+                $res = $career->update($values);
                 if ($res) {
                     Display::display_confirmation_message(get_lang('CareerUpdated'));
                     if ($values['status'] && !$old_status) {

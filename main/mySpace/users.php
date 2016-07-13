@@ -56,8 +56,7 @@ function get_users($from, $limit, $column, $direction)
     $active = isset($_GET['active']) ? $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
-    $status = isset($_GET['status']) ? Security::remove_XSS($_GET['status']) : null;
-
+    $status = isset($_GET['status']) ? Security::remove_XSS($_GET['status']) : '';
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
@@ -89,7 +88,7 @@ function get_users($from, $limit, $column, $direction)
         }
     }
 
-    if ($drhLoaded == false) {
+    if ($drhLoaded === false) {
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
             $status,
@@ -105,7 +104,7 @@ function get_users($from, $limit, $column, $direction)
             COURSEMANAGER,
             $keyword
         );
-    }
+      }
 
     $all_datas = array();
 
@@ -198,9 +197,16 @@ if (api_is_drh()) {
     }
 }
 
-$actionsRight = Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
-$actionsRight .= Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=csv&keyword='.$keyword);
-$toolbar = Display::toolbarAction('toolbar-user', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
+$actionsRight = Display::url(
+    Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM),
+    'javascript: void(0);',
+    array('onclick'=>'javascript: window.print();')
+);
+$actionsRight .= Display::url(
+    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
+    api_get_self().'?export=csv&keyword='.$keyword
+);
+$toolbar = Display::toolbarAction('toolbar-user', [$actionsLeft, $actionsRight]);
 
 $table = new SortableTable(
     'tracking_student',

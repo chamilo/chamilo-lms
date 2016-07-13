@@ -27,30 +27,12 @@ function wsConvertPpt($pptData)
     $tempPathNewFiles = $tempArchivePath . 'wsConvert/' . $fileName . '-n/';
 
     $perms = api_get_permissions_for_new_directories();
-    if (!is_dir($tempPath)) {
-        mkdir($tempPath, $perms, true);
-    }
-    if (!is_dir($tempPathNewFiles)) {
-        mkdir($tempPathNewFiles, $perms, true);
-    }
-    if (!is_dir($tempPathNewFiles . $fileName)) {
-        mkdir($tempPathNewFiles . $fileName, $perms, true);
-    }
+    pptConverterDirectoriesCreate($tempPath, $tempPathNewFiles, $fileName, $perms);
 
     $file = base64_decode($fileData);
     file_put_contents($tempPath . $fullFileName, $file);
 
-    if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
-        $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png');
-        $classPath = $converterPath . ';' . $converterPath . '/jodconverter-2.2.2.jar;' . $converterPath . '/jodconverter-cli-2.2.2.jar';
-        $cmd = 'java -Dfile.encoding=UTF-8 -cp "' . $classPath . '" DokeosConverter';
-    } else {
-        $converterPath = api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png';
-        $classPath = ' -Dfile.encoding=UTF-8 -cp .:jodconverter-2.2.2.jar:jodconverter-cli-2.2.2.jar';
-        $cmd = 'cd ' . $converterPath . ' && java ' . $classPath . ' DokeosConverter';
-    }
-
-    $cmd .= ' -p ' . api_get_setting('service_ppt2lp', 'port');
+    $cmd = pptConverterGetCommandBaseParams();
     $cmd .= ' -w 720 -h 540 -d oogie "' . $tempPath . $fullFileName.'"  "' . $tempPathNewFiles . $fileName . '.html"';
 
     $perms = api_get_permissions_for_new_files();
@@ -62,9 +44,11 @@ function wsConvertPpt($pptData)
 
     if ($return === 0) {
         $images = array();
-        foreach ($files as $file) {
-            $imageData = explode('||', $file);
-            $images[$imageData[1]] = base64_encode(file_get_contents($tempPathNewFiles . $fileName . '/' . $imageData[1]));
+        if (is_array($files) && !empty($files)) {
+            foreach ($files as $file) {
+                $imageData = explode('||', $file);
+                $images[$imageData[1]] = base64_encode(file_get_contents($tempPathNewFiles . $fileName . '/' . $imageData[1]));
+            }
         }
         $data = array(
             'files' => $files,
@@ -99,6 +83,47 @@ function deleteDirectory($directoryPath)
     }
 
     return rmdir($directoryPath);
+}
+
+/**
+ * Helper function to create the directory structure for the PPT converter
+ * @param string $tempPath
+ * @param string $tempPathNewFiles
+ * @param string $fileName
+ * @param string $perms
+ * @return void
+ */
+function pptConverterDirectoriesCreate($tempPath, $tempPathNewFiles, $fileName, $perms)
+{
+    if (!is_dir($tempPath)) {
+        mkdir($tempPath, $perms, true);
+    }
+    if (!is_dir($tempPathNewFiles)) {
+        mkdir($tempPathNewFiles, $perms, true);
+    }
+    if (!is_dir($tempPathNewFiles . $fileName)) {
+        mkdir($tempPathNewFiles . $fileName, $perms, true);
+    }
+}
+
+/**
+ * Helper function to build the command line parameters for the converter
+ * @return string $cmd
+ */
+function pptConverterGetCommandBaseParams()
+{
+    if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
+        $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png');
+        $classPath = $converterPath . ';' . $converterPath . '/jodconverter-2.2.2.jar;' . $converterPath . '/jodconverter-cli-2.2.2.jar';
+        $cmd = 'java -Dfile.encoding=UTF-8 -cp "' . $classPath . '" DokeosConverter';
+    } else {
+        $converterPath = api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png';
+        $classPath = ' -Dfile.encoding=UTF-8 -cp .:jodconverter-2.2.2.jar:jodconverter-cli-2.2.2.jar';
+        $cmd = 'cd ' . $converterPath . ' && java ' . $classPath . ' DokeosConverter';
+    }
+
+    $cmd .= ' -p ' . api_get_setting('service_ppt2lp', 'port');
+    return $cmd;
 }
 
 

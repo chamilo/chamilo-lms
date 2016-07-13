@@ -292,6 +292,14 @@ if ($form->validate()) {
             $params['course_category'] = $category_code;
             $params['course_language'] = $course_language;
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
+            $params['course_template'] = $course_values['course_template'];
+
+            include_once api_get_path(SYS_CODE_PATH) . 'lang/english/trad4all.inc.php';
+            $file_to_include = api_get_path(SYS_CODE_PATH) . 'lang/' . $course_language . '/trad4all.inc.php';
+
+            if (file_exists($file_to_include)) {
+                include $file_to_include;
+            }
 
             $course_info = CourseManager::create_course($params);
 
@@ -309,12 +317,19 @@ if ($form->validate()) {
 
                 $add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
                 $message = $tpl->fetch($add_course_tpl);*/
+                $splash = api_get_setting('course_creation_splash_screen');
+                if ($splash === 'true') {
+                    $url = api_get_path(WEB_CODE_PATH);
+                    $url .= 'course_info/start.php?' . api_get_cidreq_params($course_info['code']);
+                    $url .= '&first=1';
+                    header('Location: ' . $url);
+                    exit;
+                } else {
 
-                $url = api_get_path(WEB_CODE_PATH);
-                $url .= 'course_info/start.php?'.api_get_cidreq_params($course_info['code']);
-                $url .= '&first=1';
-                header('Location: ' . $url);
-                exit;
+                    $url = api_get_path(WEB_COURSE_PATH) . $course_info['directory'] . '/';
+                    header('Location: ' . $url);
+                    exit;
+                }
             } else {
                 $message = Display::return_message(
                     get_lang('CourseCreationFailed'),

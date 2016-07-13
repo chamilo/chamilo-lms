@@ -10,7 +10,7 @@ Looking for a good alternative to WebcamJS?  Please check out [JpegCamera](https
 
 Google Chrome has made it a strict requirement that your website be secure (HTTPS) if you want to access the camera.  This change is live in Chrome version 47 and up.  So basically, if you want to use WebcamJS, you will need to host your website with SSL / HTTPS.  The only alternative is to force Flash fallback mode on Chrome, which is probably not desirable.
 
-See the Chromium docs for details: [https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features]
+See this Chromium page for details: [https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features](https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features)
 
 Note that you do not need HTTPS for localhost / 127.0.0.1.  Here is the list of rules for Chrome which unlock the camera:
 
@@ -31,7 +31,7 @@ WebcamJS has been tested on the following browsers / operating systems:
 
 | OS | Browser | Notes |
 |----|---------|-------|
-| Mac OS X | Chrome 30+ | Works |
+| Mac OS X | Chrome 30+ | Works -- **Chrome 47+ requires HTTPS** |
 | Mac OS X | Firefox 20+ | Works |
 | Mac OS X | Safari 6+ | **Requires Adobe Flash Player** |
 | Windows | Chrome 30+ | Works -- **Chrome 47+ requires HTTPS** |
@@ -107,7 +107,8 @@ If you want to override the default settings, just call `Webcam.set()` and pass 
 | `force_flash` | false | Setting this to true will always run in Adobe Flash fallback mode. |
 | `flip_horiz` | false | Setting this to true will flip the image horizontally (mirror mode). |
 | `fps` | 30 | Set the desired fps (frames per second) capture rate. |
-
+| `swfURL` | "./webcam.swf" | Set an alternate location for the Adobe Flash fallback SWF file
+| `flashNotDetectedText` | "ERROR: No Adobe Flash Player detected.  Webcam.js relies on Flash for browsers that do not support getUserMedia (like yours)." | text/html for flash player not detected.
 Here is an example of overriding some parameters.  Remember to call this *before* you attach the viewer.
 
 ```javascript
@@ -155,7 +156,7 @@ Your function is also passed a HTML5 Canvas and a 2D Context object, so you can 
 ```javascript
 	Webcam.snap( function(data_uri, canvas, context) {
 		// copy image to my own canvas
-		myContext.drawImage( context, 0, 0 );
+		myContext.drawImage( canvas, 0, 0 );
 	} );
 ```
 
@@ -245,7 +246,7 @@ The idea here is to provide a photo-booth-like experience, where the user can ta
 By default WebcamJS looks for the SWF file in the same directory as the JS file.  If you are hosting the SWF in a different location, please set it using the `Webcam.setSWFLocation()` function.  It should be on the same domain as your page.  Example:
 
 ```javascript
-	Webcam.setSWFLocation("/path/to/the/webcam.swf");
+	Webcam.set("swfURL", "/path/to/the/webcam.swf");
 ```
 
 Note that this is only used if the user's browser doesn't support HTML5 getUserMedia, and WebcamJS has to fallback to using an Adobe Flash movie to capture the camera.
@@ -269,7 +270,6 @@ Here is a list of all the API function calls available in the WebcamJS library.
 | `Webcam.set()` | Set configuration parameters.  Pass a key + value, or a hash with multiple keys/values. |
 | `Webcam.on()` | Register an event listener for a given event.  Pass in the event name, and a callback function. |
 | `Webcam.off()` | Remove an event listener for a given event.  Pass in the event name, and the callback function to remove.  Omit the callback reference to remove *all* listeners. |
-| `Webcam.setSWFLocation()` | Set an alternate location for the Adobe Flash fallback SWF file (defaults to JS location). |
 | `Webcam.attach()` | Initialize library and attach live camera to specified DOM object. |
 | `Webcam.reset()` | Shut down library and reset everything.  Must call `attach()` to use it again.  Does not remove event listeners. |
 | `Webcam.freeze()` | Freeze the current live camera frame, allowing the user to preview before saving. |

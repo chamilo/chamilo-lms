@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\SkillRelUser;
 
 require_once '../inc/global.inc.php';
 
-if (!api_is_platform_admin(false, true)) {
+if (!api_is_platform_admin(false, true) && !api_is_student_boss()) {
     api_not_allowed(true);
 }
 
@@ -43,14 +43,13 @@ $skills = $skillRepo->findBy([
 
 $url = api_get_path(WEB_CODE_PATH)."badge/assign.php?user=".$_REQUEST['user']."&id=";
 
-$htmlHeadXtra[] = ''
-    . '<script>'
-        . '$( document ).ready(function() {'
-            . '$("#skill").on("change", function() {'
-                . '$(location).attr("href", "'. $url .'"+$(this).val());'
-            . '});'
-        . '});'
-    . '</script>';
+$htmlHeadXtra[] = '<script>
+$( document ).ready(function() {
+    $("#skill").on("change", function() {
+        $(location).attr("href", "'. $url .'"+$(this).val());
+    });
+});
+</script>';
 
 $skillsOptions = [];
 $acquiredLevel = [];
@@ -87,9 +86,7 @@ if (!$profile) {
 }
 
 if ($profile) {
-
     $profileId = $profile->getId();
-
     $levels = $skillLevelRepo->findBy([
         'profile' => $profileId
     ]);
@@ -175,7 +172,6 @@ if ($form->validate()) {
 $form->setDefaults(['user_name' => $user->getCompleteName()]);
 $form->freeze(['user_name']);
 
-//View
 $template = new Template('');
 $template->assign('header', get_lang('AssignSkill'));
 $template->assign('content', $form->returnForm());

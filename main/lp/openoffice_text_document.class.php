@@ -89,7 +89,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
     }
 
     /**
-     * Manages chapter splitting
+     * Manages dir/chapter splitting
      * @param	string	Chapter header
      * @param	string	Content
      * @return	void
@@ -103,7 +103,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
         // Get all the h1.
         preg_match_all("|<h1[^>]*>([^(h1)+]*)</h1>|is", $content, $matches_temp);
 
-        // Empty the fake chapters.
+        // Empty the fake dir/chapters.
         $new_index = 0;
         for ($i = 0; $i < count($matches_temp[0]); $i++) {
             if (trim($matches_temp[1][$i]) !== '') {
@@ -124,11 +124,11 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 
             $content = api_strstr($content, $matches[0][$i]);
             if ($i + 1 !== count($matches[0])) {
-                $chapter_content = api_substr($content, 0, api_strpos($content, $matches[0][$i + 1]));
+                $dir_content = api_substr($content, 0, api_strpos($content, $matches[0][$i + 1]));
             } else {
-                $chapter_content = $content;
+                $dir_content = $content;
             }
-            $items_to_create[$matches[1][$i]] = $chapter_content;
+            $items_to_create[$matches[1][$i]] = $dir_content;
         }
 
         $i = 0;
@@ -141,12 +141,29 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
             fwrite($handle, $page_content);
             fclose($handle);
 
-            $document_id = add_document($_course, $this->created_dir.'/'.$html_file, 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$html_file), $html_file);
+            $document_id = add_document(
+                $_course,
+                $this->created_dir.'/'.$html_file,
+                'file',
+                filesize($this->base_work_dir.$this->created_dir.'/'.$html_file),
+                $html_file
+            );
 
             if ($document_id) {
 
                 // Put the document in item_property update.
-                api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_SESSION['_uid'], 0, 0, null, null, api_get_session_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $document_id,
+                    'DocumentAdded',
+                    api_get_user_id(),
+                    0,
+                    0,
+                    null,
+                    null,
+                    api_get_session_id()
+                );
 
                 $infos = pathinfo($this->filepath);
                 $slide_name = strip_tags(nl2br($item_title));
@@ -185,14 +202,29 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
             fwrite($handle, $page_content);
             fclose($handle);
 
-            $document_id = add_document($_course, $this->created_dir.$html_file, 'file', filesize($this->base_work_dir.$this->created_dir.$html_file), $html_file);
+            $document_id = add_document(
+                $_course,
+                $this->created_dir.$html_file,
+                'file',
+                filesize($this->base_work_dir.$this->created_dir.$html_file),
+                $html_file
+            );
 
             $slide_name = '';
-
             if ($document_id) {
-
                 // Put the document in item_property update.
-                api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_SESSION['_uid'], 0, 0, null, null, api_get_session_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $document_id,
+                    'DocumentAdded',
+                    api_get_user_id(),
+                    0,
+                    0,
+                    null,
+                    null,
+                    api_get_session_id()
+                );
 
                 $infos = pathinfo($this->filepath);
                 $slide_name = 'Page '.str_repeat('0', 2 - strlen($key)).$key;

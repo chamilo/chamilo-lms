@@ -1,6 +1,4 @@
 <?php
-//require_once(api_get_path(LIBRARY_PATH).'classManager.lib.php');
-
 
 class TestFileManager extends UnitTestCase {
 

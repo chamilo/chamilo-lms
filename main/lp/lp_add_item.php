@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously
  * learnpath_handler.php
@@ -17,58 +19,51 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-include 'learnpath_functions.inc.php';
-include 'resourcelinker.inc.php';
+require_once 'learnpath_functions.inc.php';
+require_once 'resourcelinker.inc.php';
+
 /** @var learnpath $learnPath */
-$learnPath = $_SESSION['oLP'];
+$learnPath = Session::read('oLP');
 
 $htmlHeadXtra[] = '<script>'.
-
-$learnPath->get_js_dropdown_array() .
-"
-    function load_cbo(id) {
-        if (!id) {
-            return false;
-        }
-
-        var cbo = document.getElementById('previous');
-
-        for(var i = cbo.length - 1; i > 0; i--) {
-            cbo.options[i] = null;
-        }
-
-        var k=0;
-
-        for(var i = 1; i <= child_name[id].length; i++){
-            var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
-            option.style.paddingLeft = '40px';
-
-            cbo.options[i] = option;
-            k = i;
-        }
-
-        cbo.options[k].selected = true;
-        $('#previous').selectpicker('refresh');
+$learnPath->get_js_dropdown_array()."
+function load_cbo(id) {
+    if (!id) {
+        return false;
     }
-" .
-'
+
+    var cbo = document.getElementById('previous');
+    for(var i = cbo.length - 1; i > 0; i--) {
+        cbo.options[i] = null;
+    }
+
+    var k=0;
+    for(var i = 1; i <= child_name[id].length; i++){
+        var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
+        option.style.paddingLeft = '40px';
+        cbo.options[i] = option;
+        k = i;
+    }
+
+    cbo.options[k].selected = true;
+    $('#previous').selectpicker('refresh');
+}
+
 $(function() {
-    if ($(\'#previous\')) {
-        if(\'parent is\'+$(\'#idParent\').val()) {
-            load_cbo($(\'#idParent\').val());
+    if ($('#previous')) {
+        if('parent is'+$('#idParent').val()) {
+            load_cbo($('#idParent').val());
         }
     }
-    $(\'.lp_resource_element\').click(function() {
-        window.location.href = $(\'a\', this).attr(\'href\');
+    $('.lp_resource_element').click(function() {
+        window.location.href = $('a', this).attr('href');
     });
+    
+     CKEDITOR.on('instanceReady', function (e) {
+        showTemplates('content_lp');
+    });    
 });
-
-$(document).on("ready", function() {
-    CKEDITOR.on("instanceReady", function (e) {
-        showTemplates("content_lp");
-    });
-});
-</script>';
+</script>";
 
 /* Constants and variables */
 
@@ -83,7 +78,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 if ($action == 'add' && $type == 'learnpathitem') {
      $htmlHeadXtra[] = "<script type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
-if ((!$is_allowed_to_edit)) {
+if (!$is_allowed_to_edit) {
     error_log('New LP - User not authorized in lp_add_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
@@ -112,7 +107,7 @@ $interbreadcrumb[] = array(
 );
 
 switch ($type) {
-    case 'chapter':
+    case 'dir':
         $interbreadcrumb[] = array(
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
@@ -149,11 +144,6 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
     #resExercise .ui-selected { background: #F39814; color: white; }
     #resExercise { list-style-type: none; margin: 0; padding: 0; width: 60%; }
     #resExercise li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
-
-    /* Fixes LP toolbar */
-    #resource_tab li a {
-        padding: 5px 4px;
-    }
 </style>
 
 <script>
@@ -182,19 +172,23 @@ jQuery(document).ready(function(){
 });
 
 $(document).ready(function() {
-    $("#doc_form").removeClass( "col-md-8" ).addClass( "col-md-7" );
-    $("#hide_bar_template").click(function() {
-        $("#lp_sidebar").toggleClass("hide");
+     $("#hide_bar_template").click(function() {
+        $("#expand").toggleClass("hide");
+        $("#contract").toggleClass("hide");
+        if ($("#doc_form").is(".col-md-8")) {
+            $("#doc_form").removeClass("col-md-8");
+            $("#doc_form").addClass("col-md-11");
 
-        if ($('#doc_form').is('.col-md-7')) {
-            $('#doc_form').removeClass('col-md-7');
-            $('#doc_form').addClass('col-md-11');
+            $("#lp_sidebar").removeClass("col-md-4");
+            $("#lp_sidebar").addClass("hide");
+
         } else {
-            $('#doc_form').removeClass('col-md-11');
-            $('#doc_form').addClass('col-md-7');
-        }
+            $("#doc_form").removeClass("col-md-11");
+            $("#doc_form").addClass("col-md-8");
 
-        $("#hide_bar_template").toggleClass("hide_bar_template_not_hide");
+            $("#lp_sidebar").removeClass("hide");
+            $("#lp_sidebar").addClass("col-md-4");
+        }
     });
 
     $('.lp-btn-associate-forum').on('click', function (e) {
@@ -228,15 +222,11 @@ $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 // Show the template list.
 if ($type == 'document' && !isset($_GET['file'])) {
     // Show the template list.
-    echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
+    echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
+    echo '</div>';
 }
 
 echo '</div>';
-
-// hide bar div
-if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
-    echo '<div class="col-md-1"><div id="hide_bar_template"></div></div> ';
-}
 
 echo '<div id="doc_form" class="col-md-8">';
 
@@ -247,7 +237,7 @@ if (in_array($message, array('ItemUpdated'))) {
 
 if (isset($new_item_id) && is_numeric($new_item_id)) {
     switch ($type) {
-        case 'chapter':
+        case 'dir':
             echo $learnPath->display_manipulate($new_item_id, $_POST['type']);
             Display::display_confirmation_message(get_lang('NewChapterCreated'));
             break;
@@ -258,10 +248,6 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
         case TOOL_STUDENTPUBLICATION:
             echo $learnPath->display_manipulate($new_item_id, $type);
             Display::display_confirmation_message(get_lang('NewStudentPublicationCreated'));
-            break;
-        case 'module':
-            echo $learnPath->display_manipulate($new_item_id, $type);
-            Display::display_confirmation_message(get_lang('NewModuleCreated'));
             break;
         case TOOL_QUIZ:
             echo $learnPath->display_manipulate($new_item_id, $type);
@@ -282,11 +268,8 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
     }
 } else {
     switch ($type) {
-        case 'chapter':
+        case 'dir':
             echo $learnPath->display_item_form($type, get_lang('EnterDataNewChapter'));
-            break;
-        case 'module':
-            echo $learnPath->display_item_form($type, get_lang('EnterDataNewModule'));
             break;
         case TOOL_DOCUMENT:
             if (isset($_GET['file']) && is_numeric($_GET['file'])) {

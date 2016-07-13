@@ -787,7 +787,7 @@ if (!api_is_allowed_to_edit(null, true)) {
     );
 }
 
-echo $toolbar = Display::toolbarAction('gradebook-student-actions', array(0 => $actionsLeft, 1 => ''));
+echo $toolbar = Display::toolbarAction('gradebook-student-actions', array($actionsLeft));
 
 if (api_is_allowed_to_edit(null, true)) {
     // Tool introduction

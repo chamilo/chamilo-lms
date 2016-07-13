@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use \ChamiloSession as Session;
+
 /**
 * Exercise reminder overview
 * Then it shows the results on the screen.
@@ -57,8 +60,9 @@ if (empty($exerciseId)) {
 }
 
 if (empty($objExercise)) {
-    if (!empty($_SESSION['objExercise'])) {
-        $objExercise = $_SESSION['objExercise'];
+    $exerciseInSession = Session::read('objExercise');
+    if (!empty($exerciseInSession)) {
+        $objExercise = $exerciseInSession;
     } else {
         $objExercise = null;
     }
@@ -173,7 +177,7 @@ $attempt_list = Event::getAllExerciseEventByExeId($exe_id);
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
 
-$exercise_result    = array();
+$exercise_result = array();
 
 foreach ($attempt_list as $question_id => $options) {
     foreach ($options as $item) {
@@ -204,11 +208,10 @@ foreach ($question_list as $questionId) {
     unset($objQuestionTmp);
 
     // creates a temporary Question object
-    $objQuestionTmp        = Question :: read($questionId);
-
-    $quesId         = $objQuestionTmp->selectId();
-    $check_id 		= 'remind_list['.$questionId.']';
-    $attributes     = array('id'=>$check_id, 'onclick'=>"save_remind_item(this, '$questionId');");
+    $objQuestionTmp = Question:: read($questionId);
+    $quesId = $objQuestionTmp->selectId();
+    $check_id = 'remind_list['.$questionId.']';
+    $attributes = array('id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');");
 
     if (in_array($questionId, $remind_list)) {
         $attributes['checked'] = 1;
@@ -217,9 +220,8 @@ foreach ($question_list as $questionId) {
     $label_attributes['class'] = 'checkbox';
     $label_attributes['for'] = $check_id;
     $label_attributes['class'] = "checkbox";
-
-    $checkbox          = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
-    $url               = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1';
+    $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
+    $url = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1';
 
     $counter++;
     if ($objExercise->type == ONE_PER_PAGE) {
@@ -232,14 +234,23 @@ foreach ($question_list as $questionId) {
     if (!in_array($questionId, $exercise_result)) {
         $question_title = Display::label($question_title, 'warning');
     }
-    $question_title    = Display::tag('label', $checkbox.$question_title, $label_attributes);
-    $table            .= Display::div($question_title, array('class'=>'exercise_reminder_item'));
+    $question_title = Display::tag('label', $checkbox.$question_title, $label_attributes);
+    $table .= Display::div($question_title, array('class'=>'exercise_reminder_item'));
 } // end foreach() block that loops over all questions
 
 echo Display::div($table, array('class'=>'question-check-test'));
 
-$exercise_actions = Display::url(get_lang('EndTest'), 'javascript://', array('onclick'=>'final_submit();', 'class'=>'btn btn-warning'));
-$exercise_actions .=  '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick'=>'review_questions();','class'=>'btn btn-success'));
+$exercise_actions = Display::url(
+    get_lang('EndTest'),
+    'javascript://',
+    array('onclick' => 'final_submit();', 'class' => 'btn btn-warning')
+);
+$exercise_actions .= '&nbsp;'.
+    Display::url(
+        get_lang('ReviewQuestions'),
+        'javascript://',
+        array('onclick'=>'review_questions();','class'=>'btn btn-success')
+    );
 
 echo Display::div('', array('class'=>'clear'));
 echo Display::div($exercise_actions, array('class'=>'form-actions'));

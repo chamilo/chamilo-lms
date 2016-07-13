@@ -7,7 +7,6 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$plugin = TicketPlugin::create();
 
 api_protect_course_script();
 if (!api_is_allowed_to_edit()) {

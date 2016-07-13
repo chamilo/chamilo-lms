@@ -74,10 +74,13 @@ class SelectAjax extends HTML_QuickForm_select
             $url = "'$url'";
         }
 
-        $tags = !empty($this->getAttribute('tags')) ? (bool) $this->getAttribute('tags') : false;
+        $tagsAttr = $this->getAttribute('tags');
+        $multipleAttr = $this->getAttribute('multiple');
+
+        $tags = !empty($tagsAttr) ? (bool) $tagsAttr : false;
         $tags = $tags ? 'true' : 'false';
 
-        $multiple = !empty($this->getAttribute('multiple')) ? (bool) $this->getAttribute('multiple') : false;
+        $multiple = !empty($multipleAttr) ? (bool) $multipleAttr : false;
         $multiple = $multiple ? 'true' : 'false';
 
         $max = $this->getAttribute('maximumSelectionLength');

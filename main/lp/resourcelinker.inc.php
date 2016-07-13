@@ -36,10 +36,11 @@ function unset_session_resources() {
 
 /**
  * Insert description here.
+ * @param   int $chapter_id The ID of the dir/chapter
  */
-function show_folder_up() {
+function show_folder_up($chapter_id) {
     global $folder;
-    global $source_id, $action, $learnpath_id, $chapter_id, $originalresource;
+    global $source_id, $action, $learnpath_id, $originalresource;
     $learningPathId = $learnpath_id;
 
     $level = get_levels($folder);
@@ -59,10 +60,11 @@ function show_folder_up() {
 
 /**
  * Shows the documents of the document tool
- * @param $folder
+ * @param   int $folder
+ * @param   int $chapter_id
  */
-function show_documents($folder) {
-    global $source_id, $action, $learnpath_id, $chapter_id, $originalresource;
+function show_documents($folder, $chapter_id) {
+    global $source_id, $action, $learnpath_id;
     $learningPathId = $learnpath_id;
 
     // Documents are a special case: The teacher can add an invisible document (it will be viewable by the user)
@@ -1680,7 +1682,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learningPathId, $id_in_
     $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
     $link = '';
     switch ($type) {
-        case 'dokeos_chapter':
+        case 'dir':
             $link .= $main_dir_path . 'lp/blank.php';
         case TOOL_CALENDAR_EVENT:
             $link .= $main_dir_path.'calendar/agenda.php?origin='.$origin.'&agenda_id='.$id;
@@ -1878,7 +1880,7 @@ function rl_get_resource_name($course_code, $learningPathId, $id_in_path)
             $post = Database::fetch_array($result);
             $output = $post['post_title'];
             break;
-        case 'dokeos_chapter':
+        case 'dir':
             $title = $row_item['title'];
             if (!empty($title)) {
                 $output = $title;

@@ -3434,7 +3434,7 @@ class DocumentManager
                 /*$return .= '<div class="lp_resource_element">';
                 $return .= Display::return_icon('new_doc.gif', '', array(), ICON_SIZE_SMALL);
                 $return .= Display::url(
-                    get_lang('NewDocument'),
+                    get_lang('CreateTheDocument'),
                     api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id
                 );
                 $return .= '</div>';*/
@@ -3664,7 +3664,7 @@ class DocumentManager
             $return .= '<li class="doc_resource lp_resource_element '.$visibilityClass.' " data_id="' . $documentId . '" data_type="document" title="' . $my_file_title . '" >';
         }
 
-        $return .= '<div class="item_data" style="margin-left:' . ($num  * 18) . 'px;margin-right:5px;">';
+        $return .= '<div class="item_data" style="margin-left:' . ($num  * 5 ) . 'px;margin-right:5px;">';
 
         if ($add_move_button) {
             $return .= '<a class="moved" href="#">';

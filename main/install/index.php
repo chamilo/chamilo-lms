@@ -126,7 +126,11 @@ $update_from_version_8 = array(
     '1.9.10',
     '1.9.10.2',
     '1.9.10.4',
-    '1.9.10.6'
+    '1.9.10.6',
+    '1.10.0',
+    '1.10.2',
+    '1.10.4',
+    '1.10.6',
 );
 
 $my_old_version = '';
@@ -254,8 +258,8 @@ if (!isset($_GET['running'])) {
     $checkEmailByHashSent = 0;
     $ShowEmailNotCheckedToStudent = 1;
     $userMailCanBeEmpty = 1;
-    $allowSelfReg = 1;
-    $allowSelfRegProf = 1;
+    $allowSelfReg = 'approval';
+    $allowSelfRegProf = 1; //by default, a user can register as teacher (but moderation might be in place)
     $encryptPassForm = 'bcrypt';
     if (!empty($_GET['profile'])) {
         $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
@@ -566,7 +570,7 @@ if (@$_POST['step2']) {
             $encryptPassForm = 'none';
         }
 
-        $allowSelfReg = false;
+        $allowSelfReg = 'approval';
         $tmp = get_config_param_from_db('allow_registration');
         if (!empty($tmp)) {
             $allowSelfReg = $tmp;
@@ -612,7 +616,7 @@ if (@$_POST['step2']) {
         echo get_lang('AdminLogin') . ' : <strong>' . $loginForm . '</strong><br />';
         echo get_lang('AdminPass') . ' : <strong>' . $passForm . '</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
     }
-
+    $allowSelfRegistrationLiteral = ($allowSelfReg == 'true') ? get_lang('Yes') : ($allowSelfReg == 'approval' ? get_lang('Approval') : get_lang('No'));
     echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
     echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
     <?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
@@ -622,7 +626,7 @@ if (@$_POST['step2']) {
     <?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
     <?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
     <?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
-    <?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
+    <?php echo get_lang('AllowSelfReg').' : '. $allowSelfRegistrationLiteral; ?><br />
     <?php echo get_lang('EncryptMethodUserPass').' : ';
     echo $encryptPassForm;
     ?>
@@ -838,7 +842,7 @@ if (@$_POST['step2']) {
         $tool->createSchema($metadataList);
 
         $connection = $manager->getConnection();
-
+        /*
         $connection->executeQuery(
             'CREATE TABLE page__site (id INT AUTO_INCREMENT NOT NULL, enabled TINYINT(1) NOT NULL, name VARCHAR(255) NOT NULL, relative_path VARCHAR(255) DEFAULT NULL, host VARCHAR(255) NOT NULL, enabled_from DATETIME DEFAULT NULL, enabled_to DATETIME DEFAULT NULL, is_default TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, locale VARCHAR(6) DEFAULT NULL, title VARCHAR(64) DEFAULT NULL, meta_keywords VARCHAR(255) DEFAULT NULL, meta_description VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB'
         );
@@ -940,7 +944,7 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_question_translation ADD CONSTRAINT FK_C2D1A2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_question (id) ON DELETE CASCADE;");
         $connection->executeQuery("ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;");
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
-
+        */
         // Add version table
         $connection->executeQuery('CREATE TABLE version (version varchar(255), PRIMARY KEY(version));');
 
@@ -955,12 +959,12 @@ if (@$_POST['step2']) {
         Database::insert($table, $attributes);
 
         $categories = array(
-            get_lang('Enrollment') => get_lang('TicketsAboutEnrollment'),
-            get_lang('GeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
-            get_lang('RequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
-            get_lang('AcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
-            get_lang('VirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
-            get_lang('OnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation')
+            get_lang('TicketEnrollment') => get_lang('TicketsAboutEnrollment'),
+            get_lang('TicketGeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
+            get_lang('TicketRequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
+            get_lang('TicketAcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
+            get_lang('TicketVirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
+            get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation')
         );
 
         $i = 1;

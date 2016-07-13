@@ -2,7 +2,6 @@
 require_once(api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'database.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 //require_once(api_get_path(LIBRARY_PATH).'tablesort.lib.php');moved to autoload

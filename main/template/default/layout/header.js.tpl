@@ -82,15 +82,11 @@ $(document).ready(function(){
         $("#student-list-work").fadeOut(300);
     });
     check_brand();
-    
-    
-    
-    
-var id;
-$(window).resize(function() {
-    clearTimeout(id);
-    id = setTimeout(doneResizing, 200);
-});
+    var id;
+    $(window).resize(function() {
+        clearTimeout(id);
+        id = setTimeout(doneResizing, 200);
+    });
 
 function doneResizing(){
   var widhtWindow = $(window).width();
@@ -108,13 +104,7 @@ function doneResizing(){
         $("#user_image_block").addClass("invisible");
     }
 };
-    /* if($('#toolbar-admin').length){
-        var heigthToolBar= $('#toolbar-admin').height();
-        $('header').css('margin-top', heigthToolBar+'px');
-        $('#page-back').css('padding-top', heigthToolBar+20+'px');
-    } */
-
-    // Removes the yellow input in Chrome
+// Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
         $(window).load(function(){
             $('input:-webkit-autofill').each(function(){
@@ -252,6 +242,20 @@ $(window).resize(function() {
 
 $(document).scroll(function() {
 
+    var valor = $('body').outerHeight() - 700;
+      
+    if ($(this).scrollTop() > 100) {
+        $('.bottom_actions').addClass('bottom_actions_fixed');
+    } else {
+        $('.bottom_actions').removeClass('bottom_actions_fixed');
+    }
+      
+    if ($(this).scrollTop() > valor) {
+        $('.bottom_actions').removeClass('bottom_actions_fixed');
+    } else {
+        $('.bottom_actions').addClass('bottom_actions_fixed');
+    }
+
     //Exercise warning fixed at the top
     var fixed =  $("#exercise_clock_warning");
     if (fixed.length) {
@@ -299,36 +303,8 @@ $(document).scroll(function() {
         }
     }
 
-    // Bottom actions.
-    if ($('.bottom_actions').length) {
-        if (!$('.bottom_actions').attr('data-top')) {
-            // If already fixed, then do nothing
-            if ($('.bottom_actions').hasClass('bottom_actions_fixed')) return;
-
-            // Remember top position
-            var offset = $('.bottom_actions').offset();
-            $('.bottom_actions').attr('data-top', offset.top);
-        }
-
-        if ($('.bottom_actions').attr('data-top') > $('body').outerHeight()) {
-            if ( ($('.bottom_actions').attr('data-top') - $('body').outerHeight() - $('.bottom_actions').outerHeight()) >= $(this).scrollTop()) {
-                $('.bottom_actions').addClass('bottom_actions_fixed');
-                $('.bottom_actions').css("width", "100%");
-            } else {
-                $('.bottom_actions').css("width", "");
-                $('.bottom_actions').removeClass('bottom_actions_fixed');
-            }
-        } else {
-            if ( ($('.bottom_actions').attr('data-top') -  $('.bottom_actions').outerHeight()) <= $(this).scrollTop()) {
-                $('.bottom_actions').addClass('bottom_actions_fixed');
-                $('.bottom_actions').css("width", "100%");
-            } else {
-                $('.bottom_actions').removeClass('bottom_actions_fixed');
-                $('.bottom_actions').css("width", "");
-            }
-        }
-    }
 });
+
 
 function get_url_params(q, attribute) {
     var vars;

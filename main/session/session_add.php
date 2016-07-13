@@ -25,59 +25,11 @@ $errorMsg = '';
 // Crop picture plugin for session images
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
-$htmlHeadXtra[] = '<script>
-$(document).ready(function() {
-    var $image = $("#previewImage");
-    var $input = $("[name=\'cropResult\']");
-    var $cropButton = $("#cropButton");
-
-    $("input:file").change(function() {
-        var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("extra_image").files[0]);
-        $("#extra_image").next("p").remove();
-
-        oFReader.onload = function (oFREvent) {
-            $image.attr("src", this.result);
-            $("#labelCropImage").html("'.get_lang('Preview').'");
-            $("#cropImage").addClass("thumbnail");
-            $cropButton.removeClass("hidden");
-            // Destroy cropper
-            $image.cropper("destroy");
-
-            $image.cropper({
-                aspectRatio: 16 / 9,
-                responsive : true,
-                center : false,
-                guides : false,
-                movable: false,
-                zoomable: false,
-                rotatable: false,
-                scalable: false,
-                crop: function(e) {
-                    // Output the result data for cropping image.
-                    $input.val(e.x+","+e.y+","+e.width+","+e.height);
-                }
-            });
-        };
-    });
-
-    $("#cropButton").on("click", function() {
-        var canvas = $image.cropper("getCroppedCanvas");
-        var dataUrl = canvas.toDataURL();
-        $image.attr("src", dataUrl);
-        $image.cropper("destroy");
-        $cropButton.addClass("hidden");
-        return false;
-    });
-});
-
-</script>';
 
 $interbreadcrumb[] = array(
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList'),
+    'name' => get_lang('SessionList')
 );
-
 
 function search_coachs($needle)
 {
@@ -191,22 +143,7 @@ $(function() {
     '.$result['js'].'
 });
 </script>';
-
-$form->addHtml(''
-    . '<div class="form-group">'
-    . '<label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>'
-    . '<div class="col-sm-8">'
-    . '<div id="cropImage" class="cropCanvas">'
-    . '<img id="previewImage" >'
-    . '</div>'
-    . '<div>'
-    . '<button class="btn btn-primary hidden" name="cropButton" id="cropButton"><em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>'
-    . '</div>'
-    . '</div>'
-    . '</div>'
-    . '');
-$form->addHidden('cropResult', '');
-
+// @todo add an html element
 $form->addButtonNext(get_lang('NextStep'));
 
 if (!$formSent) {
@@ -237,7 +174,7 @@ if ($form->validate()) {
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1: 0;
     $sendSubscriptionNotification = isset($params['send_subscription_notification']);
-    $isThisImageCropped = isset($params['cropResult']);
+    $isThisImageCropped = isset($params['picture_crop_result']);
 
     $extraFields = [];
     foreach ($params as $key => $value) {
@@ -247,7 +184,7 @@ if ($form->validate()) {
     }
 
     if (isset($extraFields['extra_image']) && $isThisImageCropped) {
-        $extraFields['extra_image']['crop_parameters'] = $params['cropResult'];
+        $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
     }
 
     $return = SessionManager::create_session(

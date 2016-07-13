@@ -669,31 +669,31 @@ class Wiki
                     'user_ip' => $_SERVER['REMOTE_ADDR'],
                     'session_id' => $session_id,
                 ];
-                $Id = Database::insert($tbl_wiki, $params);
-                if ($Id > 0) {
+                $id = Database::insert($tbl_wiki, $params);
+                if ($id > 0) {
 
-                    $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $Id";
+                    $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
                     Database::query($sql);
 
                     //insert into item_property
                     api_item_property_update(
                         api_get_course_info(),
                         TOOL_WIKI,
-                        $Id,
+                        $id,
                         'WikiAdded',
                         api_get_user_id(),
                         $groupId
                     );
 
 
-                    $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'"
-                            WHERE c_id = '.$course_id.' AND id = "'.$Id.'"';
+                    $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$id.'"
+                            WHERE c_id = '.$course_id.' AND id = "'.$id.'"';
                     Database::query($sql);
 
                     // insert wiki config
                     $params = [
                         'c_id' => $course_id,
-                        'page_id' => $Id,
+                        'page_id' => $id,
                         'task' => $_clean['task'],
                         'feedback1' => $_clean['feedback1'],
                         'feedback2' => $_clean['feedback2'],
@@ -710,7 +710,7 @@ class Wiki
 
                     Database::insert($tbl_wiki_conf, $params);
 
-                    $this->setWikiData($Id);
+                    $this->setWikiData($id);
                     self::check_emailcue(0, 'A');
                     return get_lang('NewWikiSaved');
                 }
@@ -1093,9 +1093,7 @@ class Wiki
                 );
             }
 
-            echo Display::toolbarAction('toolbar-wikistudent', array(0 => $actionsLeft, 1 => $actionsRight));
-
-
+            echo Display::toolbarAction('toolbar-wikistudent', [$actionsLeft, $actionsRight]);
 
             if (empty($title)) {
                 $pageTitle = get_lang('DefaultTitle');
@@ -1106,7 +1104,6 @@ class Wiki
             } else {
                 $pageTitle = api_htmlentities($title);
             }
-
 
             $pageWiki = self::make_wiki_link_clickable(
                     self::detect_external_link(
@@ -4747,9 +4744,7 @@ class Wiki
         // menu recent changes
         $actionsLeft .= '<a class="btn btn-default" href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.
             get_lang('RecentChanges').'</a>';
-
-
-        echo Display::toolbarAction('toolbar-wiki', array( 0 => $actionsLeft));
+        echo Display::toolbarAction('toolbar-wiki', [$actionsLeft]);
     }
 
     /**

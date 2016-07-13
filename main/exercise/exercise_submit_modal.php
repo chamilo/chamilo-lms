@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use \ChamiloSession as Session;
+
 /**
 *	@package chamilo.exercise
 * 	@author Julio Montoya <gugli100@gmail.com>
 */
-use \ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 api_protect_course_script(false);
@@ -26,11 +28,7 @@ $threadhold1 = null;
 $threadhold2 = null;
 $threadhold3 = null;
 
-$exerciseResult = [];
-
-if (isset($_SESSION['exerciseResult'])) {
-    $exerciseResult = $_SESSION['exerciseResult'];
-}
+$exerciseResult = Session::read('exerciseResult');
 
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 

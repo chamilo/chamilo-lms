@@ -777,8 +777,8 @@ class Display
         // it checks if there is an SVG version. If so, it uses it.
         // When moving this to production, the return_icon() calls should
         // ask for the SVG version directly
-        $testServer = api_get_setting('server_type');
-        if ($testServer == 'test' && $return_only_path == false) {
+        $svgIcons = api_get_setting('icons_mode_svg');
+        if ($svgIcons == 'true' && $return_only_path == false) {
             $svgImage = substr($image, 0, -3) . 'svg';
             if (is_file($code_path . $theme . 'svg/' . $svgImage)) {
                 $icon = $w_code_path . $theme . 'svg/' . $svgImage;
@@ -1495,8 +1495,9 @@ class Display
             } else {
                 $notification['link'] = $notification['link'].'&notification=1';
             }
+            $imagen = substr($notification['image'], 0, -4).'.png';
             $return .= Display::url(
-                Display::return_icon($notification['image'], $label),
+                Display::return_icon($imagen, $label),
                 api_get_path(WEB_CODE_PATH).
                 $notification['link'].'&cidReq='.$course_code.
                 '&ref='.$notification['ref'].
@@ -1536,7 +1537,7 @@ class Display
             $rs = Database::query($sql);
             $session_info = Database::store_result($rs, 'ASSOC');
             $session_info = $session_info[0];
-            
+
             $session = array();
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
@@ -1616,7 +1617,7 @@ class Display
                     }
 
                     $session['dates'] = $start_buffer . " " . $stop_buffer;
-                   
+
                 }
 
                 if ( api_get_setting('show_session_coach') === 'true' ) {
@@ -2041,7 +2042,7 @@ class Display
             case 'wav':
                 //no break;
             case 'ogg':
-                $html = '<audio src="' . $params['url'] . '" controls class="skip"></audio>';
+                $html = '<audio width="300px" controls src="'.$params['url'].'" >';
 
                 return $html;
                 break;
@@ -2370,11 +2371,13 @@ class Display
         $html .= '<div id="' . $id . '" class="actions">';
         $html .= '<div class="row">';
         if ($col > 4) {
-            $html = '<div class="alert alert-warning" role="alert">Action toolbar design does not work when exceeding four columns - check Display::toolbarAction()</div>';
+            $html = '<div class="alert alert-warning" role="alert">
+                Action toolbar design does not work when exceeding four columns - check Display::toolbarAction()
+            </div>';
         } else {
-            for ( $i = 0; $i < $col; $i++ ) {
+            for ($i = 0; $i < $col; $i++) {
                 $html .= '<div class="col-md-' . $columns . '">';
-                if ( $col == 2 && $i == 1 ) {
+                if ($col == 2 && $i == 1) {
                     if ($right === true) {
                         $html .= '<div class="pull-right">';
                         $html .= (isset($content[$i]) ? $content[$i] : '');

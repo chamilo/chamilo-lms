@@ -95,7 +95,10 @@ switch ($action) {
             $workInfo = get_work_data_by_id($itemId);
             $workInfoParent = get_work_data_by_id($workInfo['parent_id']);
             $resultUpload = uploadWork($workInfoParent, $courseInfo, true, $workInfo);
-
+            if (!$resultUpload) {
+                echo 'false';
+                break;
+            }
             $work_table = Database:: get_course_table(
                 TABLE_STUDENT_PUBLICATION
             );
@@ -129,14 +132,20 @@ switch ($action) {
             if (isset($result['url'])) {
                 $json['result'] = Display::return_icon(
                     'accept.png',
-                    get_lang('Uploaded')
+                    get_lang('Uploaded'),
+                    [],
+                    ICON_SIZE_TINY
                 );
             } else {
                 $json['result'] = Display::return_icon(
                     'exclamation.png',
-                    get_lang('Error')
+                    get_lang('Error'),
+                    [],
+                    ICON_SIZE_TINY
                 );
             }
+
+            header('Content-Type: application/json');
             echo json_encode($json);
         }
 

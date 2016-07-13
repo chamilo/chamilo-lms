@@ -9,11 +9,11 @@ require_once __DIR__.'/config.php';
 
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
-$tpl = new Template($tool_name);
 
 $isGlobal = isset($_GET['global']) ? true : false;
 
 $bbb = new bbb('', '', $isGlobal);
+
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $conferenceManager = $bbb->isConferenceManager();
@@ -105,8 +105,6 @@ if ($conferenceManager) {
             break;
     }
 }
-    
-
 $meetings = $bbb->getMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
@@ -118,16 +116,61 @@ $showJoinButton = false;
 if ($meetingExists || $conferenceManager) {
     $showJoinButton = true;
 }
+$conferenceUrl = $bbb->getConferenceUrl();
 
+$courseInfo = api_get_course_info();
+$formToString = '';
+
+if ($bbb->isGlobalConference() === false &&
+    $conferenceManager &&
+    !empty($courseInfo) &&
+    $plugin->get('enable_conference_in_course_groups') === 'true'
+) {
+    $url = api_get_self().'?'.api_get_cidreq(true, false).'&gidReq=';
+    $htmlHeadXtra[] = '<script>        
+        $(document).ready(function(){
+            $("#group_select").on("change", function() {
+                var groupId = $(this).find("option:selected").val();
+                var url = "'.$url.'";                
+                window.location.replace(url+groupId);                
+            });
+        });
+</script>';
+
+    $form = new FormValidator(api_get_self().'?'.api_get_cidreq());
+    $groupId = api_get_group_id();
+    $groups = GroupManager::get_groups();
+    if ($groups) {
+        $meetingsInGroup = $bbb->getAllMeetingsInCourse(api_get_course_int_id(), api_get_session_id(), 1);
+        $meetingsGroup = array_column($meetingsInGroup, 'status', 'group_id');
+
+        foreach ($groups as &$groupData) {
+            $itemGroupId = $groupData['id'];
+            if (isset($meetingsGroup[$itemGroupId]) && $meetingsGroup[$itemGroupId] == 1) {
+                $groupData['name'] .= ' ('.get_lang('Active').')';
+            }
+        }
+
+        $groupList[0] = get_lang('Select');
+        $groupList = array_merge($groupList, array_column($groups, 'name', 'iid'));
+
+        $form->addSelect('group_id', get_lang('Groups'), $groupList, ['id' => 'group_select']);
+        $form->setDefaults(['group_id' => $groupId]);
+        $formToString = $form->returnForm();
+    }
+}
+
+$tpl = new Template($tool_name);
 $tpl->assign('allow_to_edit', $conferenceManager);
 $tpl->assign('meetings', $meetings);
-$conferenceUrl = $bbb->getConferenceUrl();
 $tpl->assign('conference_url', $conferenceUrl);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $showJoinButton);
-
 $tpl->assign('message', $message);
+$tpl->assign('form', $formToString);
+
 $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
-$tpl->assign('content', $content);$tpl->display_one_col_template();
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

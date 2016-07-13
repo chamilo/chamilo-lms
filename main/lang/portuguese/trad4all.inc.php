@@ -2220,7 +2220,6 @@ $TitleManipulateStudentPublication = "Editar trabalho/tarefa";
 $EnterDataNewChapter = "Adicionar uma secção ao curso";
 $EnterDataNewModule = "Editar informação para a secção";
 $CreateNewStep = "Criar uma nova página para conteúdos media";
-$NewDocument = "Página de conteúdos media / actividade";
 $UseAnExistingResource = "Ou utilizar um recurso existente :";
 $Position = "Na tabela de conteúdos";
 $NewChapterCreated = "Foi criada uma nova secção. Pode continuar adicionando uma secção ou etapa.";

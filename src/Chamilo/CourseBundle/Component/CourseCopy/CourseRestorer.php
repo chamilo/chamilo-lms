@@ -95,7 +95,7 @@ class CourseRestorer
     }
 
     /**
-     * @param string $status
+     * @param bool $status
      */
     public function set_add_text_in_items($status)
     {
@@ -300,7 +300,6 @@ class CourseRestorer
             $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
-
                 if (empty($document->item_properties[0]['id_session'])) {
                     $my_session_id = 0;
                 } else {
@@ -1035,7 +1034,6 @@ class CourseRestorer
                 $params['c_id'] = $this->destination_course_id;
                 $params['forum_category'] = $cat_id;
                 $params['session_id'] = $sessionId;
-
                 $params['start_time'] = isset($params['start_time']) && $params['start_time'] === '0000-00-00 00:00:00' ? null : $params['start_time'];
                 $params['end_time'] = isset($params['end_time']) && $params['end_time'] === '0000-00-00 00:00:00' ? null : $params['end_time'];
                 $params['forum_id'] = 0;
@@ -1099,15 +1097,6 @@ class CourseRestorer
                     }
                 }
                 if ($forum_cat && !$forum_cat->is_restored()) {
-                    /*$title = $forum_cat->obj->cat_title;
-                    if (!empty($title)) {
-                        if (!preg_match('/.*\((.+)\)$/', $title, $matches)) {
-                            // This is for avoiding repetitive adding of training code after several backup/restore cycles.
-                            if ($matches[1] != $this->course->code) {
-                                $title = $title.' ('.$this->course->code.')';
-                            }
-                        }
-                    }*/
                     $params = (array) $forum_cat->obj;
                     $params['c_id'] = $this->destination_course_id;
                     $params['cat_comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
@@ -1375,6 +1364,8 @@ class CourseRestorer
 
                 $id = Database::insert($tool_intro_table, $params);
                 if ($id) {
+
+                    // id is a varchar not an int
                     //$sql = "UPDATE $tool_intro_table SET id = iid WHERE iid = $id";
                     //Database::query($sql);
 
@@ -1644,13 +1635,6 @@ class CourseRestorer
 
 						if ($copy_result) {
 							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-							/*$sql = "INSERT INTO ".$table_attachment." SET
-							        c_id = ".$this->destination_course_id." ,
-							        path = '".self::DBUTF8escapestring($new_filename)."',
-							        comment = '".self::DBUTF8escapestring($announcement->attachment_comment)."',
-							        size = '".$announcement->attachment_size."', filename = '".$announcement->attachment_filename."',
-							        announcement_id = '".$new_announcement_id."' ";
-							Database::query($sql);*/
 
                             $params = [
                                 'c_id' => $this->destination_course_id,
@@ -1924,8 +1908,6 @@ class CourseRestorer
                         $this->course->backup_path,
                         $this->course->info['path']
                     );
-
-                    //                     id = '". ($index + 1)."',
 
                     $params = [
                         'c_id' => $this->destination_course_id,
@@ -2329,8 +2311,7 @@ class CourseRestorer
     {
 		$resources = $this->course->resources;
 		$question = $resources[RESOURCE_SURVEYQUESTION][$id];
-
-		$new_id=0;
+        $new_id = 0;
 
 		if (is_object($question)) {
 			if ($question->is_restored()) {

@@ -69,7 +69,7 @@ class learnpathItem
     public $title;
     /**
      * Type attribute can contain one of
-     * chapter|link|student_publication|module|quiz|document|forum|thread
+     * link|student_publication|dir|quiz|document|forum|thread
      */
     public $type;
     public $view_id;
@@ -517,7 +517,7 @@ class learnpathItem
         $path = $this->get_path();
         $type = $this->get_type();
         if (empty($path)) {
-            if ($type == 'dokeos_chapter' || $type == 'chapter' || $type == 'dir') {
+            if ($type == 'dir') {
                 return '';
             } else {
                 return '-1';
@@ -525,9 +525,7 @@ class learnpathItem
         } elseif ($path == strval(intval($path))) {
             // The path is numeric, so it is a reference to a Chamilo object.
             switch ($type) {
-                case 'dokeos_chapter':
                 case 'dir':
-                case 'chapter':
                     return '';
                 case TOOL_DOCUMENT:
                     $table_doc = Database::get_course_table(TABLE_DOCUMENT);
@@ -3629,8 +3627,18 @@ class learnpathItem
             error_log("total_time: $total_time");
         }
 
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_id = intval($this->lp_id);
+        $sql = "SELECT * FROM $lp_table
+                    WHERE id = $lp_id AND c_id = $course_id";
+        $res = Database::query($sql);
+        $accumulateScormTime = 'false';
+        if (Database::num_rows($res) > 0) {
+            $accumulateScormTime = $row['accumulate_scorm_time'];
+        }
+
         //Step 2.1 : if normal mode total_time = total_time + total_sec
-        if (api_get_setting('scorm_cumulative_session_time') != 'false') {
+        if ($accumulateScormTime != 0) {
             $total_time += $total_sec;
             //$this->last_scorm_session_time = $total_sec;
         } else {
@@ -3790,6 +3798,8 @@ class learnpathItem
         $course_id = api_get_course_int_id();
         $mode = $this->get_lesson_mode();
         $credit = $this->get_credit();
+        $total_time = ' ';
+        $my_status = ' ';
 
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $sql = 'SELECT status FROM ' . $item_view_table . '
@@ -4004,7 +4014,7 @@ class learnpathItem
                                     $my_status = " status = '" . $this->get_status(false) . "' ,";
                                 } else {
                                     if (($my_type_lp == 3 && $this->type == 'au') ||
-                                        ($my_type_lp == 1 && $this->type != 'chapter')) {
+                                        ($my_type_lp == 1 && $this->type != 'dir')) {
                                         // Is AICC or Chamilo LP
                                         $total_time = " total_time = total_time + " . $this->get_total_time() . ", ";
                                         $my_status = " status = '" . $this->get_status(false) . "' ,";

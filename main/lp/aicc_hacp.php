@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *	API event handler functions for AICC / CMIv4 in HACP communication mode
  *
@@ -53,8 +55,8 @@ if ($debug > 2) { error_log('New LP - '.__FILE__.','.__LINE__.' - Current sessio
 
 // Is this needed? This is probabaly done in the header file.
 //$_user							= $_SESSION['_user'];
-$file = $_SESSION['file'];
-$oLP = unserialize($_SESSION['lpobject']);
+$file = Session::read('file');
+$oLP = unserialize(Session::read('lpobject'));
 $oItem =& $oLP->items[$oLP->current];
 if (!is_object($oItem)) {
     error_log('New LP - aicc_hacp - Could not load oItem item', 0);
@@ -258,7 +260,8 @@ if (!empty($_REQUEST['command'])) {
             $result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf;
     }
 }
-$_SESSION['lpobject'] = serialize($oLP);
+
+Session::write('lpobject', serialize($oLP));
 session_write_close();
 // Content type must be text/plain.
 header('Content-type: text/plain');

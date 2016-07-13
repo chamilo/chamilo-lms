@@ -25,39 +25,6 @@
  */
 
 /**
- * This function returns false if there is at least one item in the path
- * @param	Learnpath ID
- * @return	boolean	True if nothing was found, false otherwise
- */
-function is_empty($id) {
-    $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
-    $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-    $course_id = api_get_course_int_id();
-
-    $sql = "SELECT * FROM $tbl_learnpath_chapter WHERE c_id = $course_id AND lp_id=$id ORDER BY display_order ASC";
-    $result = Database::query($sql);
-    $num_modules = Database::num_rows($result);
-    $empty = true;
-
-    if ($num_modules != 0) {
-        while ($row = Database::fetch_array($result)) {
-
-            $num_items = 0;
-            $parent_item_id = $row['id'];
-            $sql2 = "SELECT * FROM $tbl_learnpath_item WHERE c_id = $course_id AND (parent_item_id=$parent_item_id) ORDER BY display_order ASC";
-            $result2 = Database::query($sql2);
-            $num_items = Database::num_rows($result2);
-            if ($num_items > 0) {
-                $empty = false;
-            }
-        }
-    }
-
-    return ($empty);
-}
-
-
-/**
  * This function deletes an entire directory
  * @param	string	The directory path
  * @return boolean	True on success, false on failure

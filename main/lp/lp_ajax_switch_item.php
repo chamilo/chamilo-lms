@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.
@@ -172,7 +174,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      * -lms_view_id
      * -lms_user_id
      */
-    $mytotal = $mylp->get_total_items_count_without_chapters();
+    $mytotal = $mylp->getTotalItemsCountWithoutDirs();
     $mycomplete = $mylp->get_complete_items_count();
     $myprogress_mode = $mylp->get_progress_bar_mode();
     $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
@@ -222,8 +224,9 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         error_log('Prereq_match() returned '.htmlentities($mylp->error), 0);
     }
     // Save the new item ID for the exercise tool to use.
-    $_SESSION['scorm_item_id'] = $new_item_id;
-    $_SESSION['lpobject'] = serialize($mylp);
+    Session::write('scorm_item_id', $new_item_id);
+    Session::write('lpobject', serialize($mylp));
+
     return $return;
 }
 

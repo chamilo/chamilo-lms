@@ -261,21 +261,15 @@ $form_search->addElement('hidden', 'session_id', $sessionId);
 $form_search->addElement('hidden', 'id_session', $sessionId);
 $form_search->addElement('text', 'user_keyword');
 $form_search->addButtonSearch(get_lang('SearchUsers'));
-
-
-echo Display::toolbarAction('toolbar-courselog', array( 0 => $actionsLeft, 1 => $form_search->returnForm(), 2 => $actionsRight ), 3);
+echo Display::toolbarAction('toolbar-courselog', [$actionsLeft, $form_search->returnForm(), $actionsRight], 3);
 
 $course_name = get_lang('Course').' '.$courseInfo['name'];
-
 if ($session_id) {
     $titleSession = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id);
     $titleCourse =  Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name;
-
 } else {
     $titleSession = Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$courseInfo['name'];
 }
-
-
 $teacherList = CourseManager::get_teacher_list_from_course_code_to_string(
     $courseInfo['code'],
     ',',

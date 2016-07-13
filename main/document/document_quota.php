@@ -94,8 +94,10 @@ if (is_array($document_list)) {
         if (!empty($course_list)) {
             $total_courses_quota = 0;
             $total_quota_bytes = 0;
-            foreach ($course_list as $course_data) {
-                $total_quota_bytes += DocumentManager::get_course_quota($course_data['id']);
+            if (is_array($course_list) && !empty($course_list)) {
+                foreach ($course_list as $course_data) {
+                    $total_quota_bytes += DocumentManager::get_course_quota($course_data['id']);
+                }
             }
             if ($quota_bytes != 0) {
                 $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;

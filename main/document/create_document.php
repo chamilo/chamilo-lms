@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  *	This file allows creating new html documents with an online WYSIWYG html editor.
  *
@@ -11,37 +14,29 @@ require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 
+$groupRights = Session::read('group_member_with_upload_rights');
+
 $htmlHeadXtra[] = '
 <script>
-
-var hide_bar = function() {
-    $("#template_col").hide();
-    $("#doc_form").removeClass("col-md-9");
-    $("#doc_form").addClass("col-md-11");
-    $("#hide_bar_template").css({"background-image" : \'url("'.Display::returnIconPath('hide2.png').'")\'})
-}
-
 $(document).ready(function() {
     $(".scrollbar-light").scrollbar();
-
-    if ($(window).width() <= 785 ) {
-        hide_bar();
-    }    
-
     $("#hide_bar_template").click(function() {
-        
-        $("#template_col").toggleClass("hide");
-        
-        if ($("#doc_form").is(".col-md-8")) {
-            $("#doc_form").removeClass("col-md-8");
+        $("#expand").toggleClass("hide");
+        $("#contract").toggleClass("hide");
+        if ($("#doc_form").is(".col-md-9")) {
+            $("#doc_form").removeClass("col-md-9");
             $("#doc_form").addClass("col-md-11");
+            
+            $("#template_col").removeClass("col-md-3");
+            $("#template_col").addClass("hide");
+            
         } else {
             $("#doc_form").removeClass("col-md-11");
-            $("#doc_form").addClass("col-md-8");
+            $("#doc_form").addClass("col-md-9");
+            
+            $("#template_col").removeClass("hide");
+            $("#template_col").addClass("col-md-3");
         }
-        
-        $("#hide_bar_template").toggleClass("hide_bar_template_not_hide");
-        
     });
 
     CKEDITOR.on("instanceReady", function (e) {
@@ -228,7 +223,7 @@ if (!$is_allowed_in_course) {
 }
 
 if (!($is_allowed_to_edit ||
-    $_SESSION['group_member_with_upload_rights'] ||
+    $groupRights ||
     DocumentManager::is_my_shared_folder($userId, $dir, api_get_session_id()))
 ) {
 	api_not_allowed(true);
@@ -411,19 +406,21 @@ if (!$is_certificate_mode &&
 			}
 		}
 	} else {
-		foreach ($folders as & $folder) {
-			$selected = (substr($dir,0,-1)==$folder) ? ' selected="selected"' : '';
-			$label = $folder_titles[$folder];
-			if ($folder == $group_dir) {
-				$label = '/ ('.get_lang('HomeDirectory').')';
-			} else {
-				$path_parts = explode('/', str_replace($group_dir, '', $folder));
-				$label = cut($label, 80);
-				$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
-			}
-			$parent_select -> addOption($label, $folder);
-			if ($selected != '') {
-				$parent_select->setSelected($folder);
+		if (is_array($folders) && !empty($folders)) {
+			foreach ($folders as & $folder) {
+				$selected = (substr($dir, 0, -1) == $folder) ? ' selected="selected"' : '';
+				$label = $folder_titles[$folder];
+				if ($folder == $group_dir) {
+					$label = '/ (' . get_lang('HomeDirectory') . ')';
+				} else {
+					$path_parts = explode('/', str_replace($group_dir, '', $folder));
+					$label = cut($label, 80);
+					$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2) . ' &mdash; ' . $label;
+				}
+				$parent_select->addOption($label, $folder);
+				if ($selected != '') {
+					$parent_select->setSelected($folder);
+				}
 			}
 		}
 	}
@@ -611,18 +608,25 @@ if ($form->validate()) {
 
 	// link back to the documents overview
 	if ($is_certificate_mode) {
-		$actionsLeft =  '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.
-            Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft =  '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.
+                Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="hide_bar_template" href="#">'.
+                Display::return_icon('expand.png',get_lang('Back'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Back'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
         } else {
-		$actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
-            Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
+                Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actionsLeft .= '<a id="hide_bar_template" href="#">'.
+                Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).
+                Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
         }
 
-        echo $toolbar = Display::toolbarAction('actions-documents', array(0 => $actionsLeft, 1 => ''));
-
+    echo $toolbar = Display::toolbarAction('actions-documents', array($actionsLeft));
 
 	if ($is_certificate_mode) {
-		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(api_get_user_id(), api_get_course_id());
+        $all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(
+            api_get_user_id(),
+            api_get_course_id()
+        );
 
 		$str_info = '';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
@@ -631,21 +635,20 @@ if ($form->validate()) {
 		$create_certificate = get_lang('CreateCertificateWithTags');
 		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
 	}
+    
     // HTML-editor
-    echo '<div class="row" style="overflow:hidden">
-            <div id="template_col" class="col-md-2">
+    echo '<div class="page-create">
+            <div class="row" style="overflow:hidden">
+            <div id="template_col" class="col-md-3">
                 <div class="panel panel-default">
                 <div class="panel-body">
                     <div id="frmModel" class="items-templates scrollbar-light"></div>
                 </div>
                 </div>
             </div>
-            <div class="col-md-1">
-                <div id="hide_bar_template"></div>
-            </div>
             <div id="doc_form" class="col-md-9">
                 '.$form->returnForm().'
             </div>
-          </div>';
+          </div></div>';
 	Display :: display_footer();
 }

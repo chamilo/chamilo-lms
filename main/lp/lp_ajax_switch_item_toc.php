@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * This script contains the server part of the ajax interaction process. The client part is located
  * in lp_api.php or other api's.
@@ -110,7 +113,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
         $interactionsString = substr($interactionsString, 1);
     }
     */
-    $totalItems = $myLP->get_total_items_count_without_chapters();
+    $totalItems = $myLP->getTotalItemsCountWithoutDirs();
     $completedItems = $myLP->get_complete_items_count();
     $progressMode = $myLP->get_progress_bar_mode();
     $progressMode = ($progressMode == '' ? '%' : $progressMode);
@@ -152,8 +155,9 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     if ($debug > 1) {
         error_log('prerequisites_match() returned '.htmlentities($myLP->error), 0);
     }
-    $_SESSION['scorm_item_id'] = $newItemId; // Save the new item ID for the exercise tool to use.
-    $_SESSION['lpobject'] = serialize($myLP);
+    Session::write('scorm_item_id', $newItemId);
+    Session::write('lpobject', serialize($myLP));
+
     return $return;
 }
 

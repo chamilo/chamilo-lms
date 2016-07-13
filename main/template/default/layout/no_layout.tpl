@@ -7,10 +7,11 @@
 {% include template ~ "/layout/head.tpl" %}
 </head>
 <body dir="{{text_direction}}" class="{{section_name}}">
-{% block name%}
-{% endblock %}
-{% block body %}
-    {{ content }}
-{% endblock %}
+<section id="content-scorm">
+    
+        {% block body %}
+            {{ content }}
+        {% endblock %}
+    
 </body>
 </html>

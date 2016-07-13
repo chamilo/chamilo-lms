@@ -132,7 +132,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
      * -lms_view_id
      * -lms_user_id
      */
-    $mytotal = $mylp->get_total_items_count_without_chapters();
+    $mytotal = $mylp->getTotalItemsCountWithoutDirs();
     $mycomplete = $mylp->get_complete_items_count();
     $myprogress_mode = $mylp->get_progress_bar_mode();
     $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);

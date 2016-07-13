@@ -1838,7 +1838,6 @@ $TitleManipulateStudentPublication = "T'ijrapay kunan kaq llank'ayta";
 $EnterDataNewChapter = "Churay musuq sutichaqaq imayninta";
 $EnterDataNewModule = "Churay musuq sutichaqaq imayninta";
 $CreateNewStep = "Kamay musuq yanapaysinata :";
-$NewDocument = "Musuq qelqa khipu";
 $UseAnExistingResource = "Utaq hap'ipay ña yanapaysina kasqata:";
 $Position = "Posición";
 $NewChapterCreated = "Sutichasqaqa karisqañan. Kunanqa ña churawaq imaymanakunata utaq kamariwaqpas hoq sutichasqata";

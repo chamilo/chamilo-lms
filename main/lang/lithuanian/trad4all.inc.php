@@ -1273,7 +1273,6 @@ $TitleManipulateStudentPublication = "Redaguoti šią studento publikaciją";
 $EnterDataNewChapter = "Įrašyti naujo skyriaus duomenis";
 $EnterDataNewModule = "Įrašyti naujo modulio duomenis";
 $CreateNewStep = "Sukurti naują žingsnį:";
-$NewDocument = "Naujas dokumentas";
 $UseAnExistingResource = "arba naudoti jau esamą resursą:";
 $Position = "Pozicija";
 $NewChapterCreated = "Naujas skyrius sukurtas. Dabar galite į jį įterpti kitą  skyrių arba žingsnį.";

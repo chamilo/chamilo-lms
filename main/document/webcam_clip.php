@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *	This file allows record wav files.
  *
@@ -15,6 +17,7 @@ require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/webcamclip';
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('WebCamClip');
+$groupRights = Session::read('group_member_with_upload_rights');
 
 api_protect_course_script();
 api_block_anonymous_users();
@@ -83,7 +86,7 @@ if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
 
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] ||
+if (!($is_allowed_to_edit || $groupRights ||
 	DocumentManager::is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir),api_get_session_id()))) {
 	api_not_allowed(true);
 }
@@ -157,28 +160,28 @@ echo '</div>';
                Webcam.freeze();
                return false;
            });
-           
+
            $('#btnClean').click(function() {
                Webcam.unfreeze();
                return false;
            });
-           
+
            $('#btnSave').click(function() {
                snap();
                return false;
            });
-           
+
            $('#btnAuto').click(function() {
                start_video();
                return false;
            });
-           
+
            $('#btnStop').click(function() {
                stop_video();
                return false;
            });
         });
-        
+
         function snap() {
             Webcam.snap( function(data_uri) {
                   var clip_filename='video_clip.jpg';
@@ -230,7 +233,7 @@ echo '</div>';
 	</td><td width=50></td><td valign='top' align='center'>
 		<div id="upload_results" style="background-color:#ffffff;"></div>
 	</td></tr></table>
-    
+
     <!-- Implementing Button html5 Tags instead Inputs and some cool bootstrap button styles -->
     <div>
         <br/>

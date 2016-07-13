@@ -222,7 +222,7 @@ class nusoap_base {
 	*
 	* @access	public
 	*/
-	function nusoap_base() {
+	function __construct() {
 		$this->debugLevel = $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'];
 	}
 
@@ -557,7 +557,6 @@ class nusoap_base {
 					$xml .= "<$name$xmlns$type_str$atts>$pXml</$name>";
 				}
 				break;
-			break;
 			case (is_array($val) || $type):
 				// detect if struct or array
 				$valueType = $this->isArraySimpleOrStruct($val);
@@ -991,6 +990,3 @@ function usleepWindows($usec)
 	}
 	while ($timePassed < $usec);
 }
-
-
-?>

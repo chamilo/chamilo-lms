@@ -28,6 +28,8 @@ class bbb
     public $enableGlobalConference = false;
     public $isGlobalConference = false;
     public $groupSupport = false;
+    public $table;
+    public $accessUrl = 1;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -41,22 +43,27 @@ class bbb
         // Initialize video server settings from global settings
         $plugin = BBBPlugin::create();
 
-        $bbbPlugin = $plugin->get('tool_enable');
+        $bbbPluginEnabled = $plugin->get('tool_enable');
 
         $bbb_host = !empty($host) ? $host : $plugin->get('host');
         $bbb_salt = !empty($salt) ? $salt : $plugin->get('salt');
 
         $this->logoutUrl = $this->getListingUrl();
         $this->table = Database::get_main_table('plugin_bbb_meeting');
+
         $this->enableGlobalConference = $plugin->get('enable_global_conference');
         $this->isGlobalConference = (bool) $isGlobalConference;
 
         $columns = Database::listTableColumns($this->table);
+
         $this->groupSupport = isset($columns['group_id']) ? true : false;
+
+        $this->accessUrl = api_get_current_access_url_id();
 
         if ($this->groupSupport) {
             // Plugin check
             $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
+
             if ($this->groupSupport) {
 
                 // Platform check
@@ -66,15 +73,14 @@ class bbb
                 if ($bbbSetting) {
                     // Course check
                     $courseInfo = api_get_course_info();
-
                     if ($courseInfo) {
-                        $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups') === '1';
+                        $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups', $courseInfo['code']) === '1';
                     }
                 }
             }
         }
 
-        if ($bbbPlugin == true) {
+        if ($bbbPluginEnabled === 'true') {
             $userInfo = api_get_user_info();
             $this->userCompleteName = $userInfo['complete_name'];
             $this->salt = $bbb_salt;
@@ -136,32 +142,32 @@ class bbb
      * See this file in you BBB to set up default values
      * @param   array $params Array of parameters that will be completed if not containing all expected variables
 
-       /var/lib/tomcat6/webapps/bigbluebutton/WEB-INF/classes/bigbluebutton.properties
+    /var/lib/tomcat6/webapps/bigbluebutton/WEB-INF/classes/bigbluebutton.properties
      *
-       More record information:
-       http://code.google.com/p/bigbluebutton/wiki/RecordPlaybackSpecification
+    More record information:
+    http://code.google.com/p/bigbluebutton/wiki/RecordPlaybackSpecification
 
-       # Default maximum number of users a meeting can have.
-        # Doesn't get enforced yet but is the default value when the create
-        # API doesn't pass a value.
-        defaultMaxUsers=20
+    # Default maximum number of users a meeting can have.
+    # Doesn't get enforced yet but is the default value when the create
+    # API doesn't pass a value.
+    defaultMaxUsers=20
 
-        # Default duration of the meeting in minutes.
-        # Current default is 0 (meeting doesn't end).
-        defaultMeetingDuration=0
+    # Default duration of the meeting in minutes.
+    # Current default is 0 (meeting doesn't end).
+    defaultMeetingDuration=0
 
-        # Remove the meeting from memory when the end API is called.
-        # This allows 3rd-party apps to recycle the meeting right-away
-        # instead of waiting for the meeting to expire (see below).
-        removeMeetingWhenEnded=false
+    # Remove the meeting from memory when the end API is called.
+    # This allows 3rd-party apps to recycle the meeting right-away
+    # instead of waiting for the meeting to expire (see below).
+    removeMeetingWhenEnded=false
 
-        # The number of minutes before the system removes the meeting from memory.
-        defaultMeetingExpireDuration=1
+    # The number of minutes before the system removes the meeting from memory.
+    defaultMeetingExpireDuration=1
 
-        # The number of minutes the system waits when a meeting is created and when
-        # a user joins. If after this period, a user hasn't joined, the meeting is
-        # removed from memory.
-        defaultMeetingCreateJoinDuration=5
+    # The number of minutes the system waits when a meeting is created and when
+    # a user joins. If after this period, a user hasn't joined, the meeting is
+    # removed from memory.
+    defaultMeetingCreateJoinDuration=5
      *
      * @return mixed
      */
@@ -175,8 +181,9 @@ class bbb
             $params['group_id'] = api_get_group_id();
         }
 
+        $courseCode = is_null($courseCode) ? '' : $courseCode;
         $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $courseCode;
-        $attendeePassword =  $params['attendee_pw'];
+        $attendeePassword = $params['attendee_pw'];
         $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
 
@@ -197,6 +204,8 @@ class bbb
         }
 
         $params['created_at'] = api_get_utc_datetime();
+        $params['access_url'] = $this->accessUrl;
+
         $id = Database::insert($this->table, $params);
 
         if ($id) {
@@ -275,8 +284,8 @@ class bbb
         $sessionId = api_get_session_id();
         $conditions =  array(
             'where' => array(
-                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 ' =>
-                    array($courseId, $sessionId, $meetingName)
+                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 AND access_url = ?' =>
+                    array($courseId, $sessionId, $meetingName, $this->accessUrl)
             )
         );
 
@@ -284,8 +293,8 @@ class bbb
             $groupId = api_get_group_id();
             $conditions =  array(
                 'where' => array(
-                    'c_id = ? AND session_id = ? AND meeting_name = ? AND group_id = ? AND status = 1 ' =>
-                        array($courseId, $sessionId, $meetingName, $groupId)
+                    'c_id = ? AND session_id = ? AND meeting_name = ? AND group_id = ? AND status = 1 AND access_url = ?' =>
+                        array($courseId, $sessionId, $meetingName, $groupId, $this->accessUrl)
                 )
             );
         }
@@ -329,7 +338,7 @@ class bbb
         $meetingData = Database::select(
             '*',
             $this->table,
-            array('where' => array('meeting_name = ? AND status = 1 ' => $meetingName)),
+            array('where' => array('meeting_name = ? AND status = 1 AND access_url = ?' => array($meetingName, $this->accessUrl))),
             'first'
         );
 
@@ -442,6 +451,34 @@ class bbb
     }
 
     /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $status
+     *
+     * @return array
+     */
+    public function getAllMeetingsInCourse($courseId, $sessionId, $status)
+    {
+        $conditions =  array(
+            'where' => array(
+                'status = ? AND c_id = ? AND session_id = ? ' => array(
+                    $status,
+                    $courseId,
+                    $sessionId,
+                ),
+            ),
+        );
+
+        $meetingList = Database::select(
+            '*',
+            $this->table,
+            $conditions
+        );
+
+        return $meetingList;
+    }
+
+    /**
      * Gets all the course meetings saved in the plugin_bbb_meeting table
      * @return array Array of current open meeting rooms
      */
@@ -453,9 +490,10 @@ class bbb
 
         $conditions =  array(
             'where' => array(
-                'c_id = ? AND session_id = ? ' => array(
+                'c_id = ? AND session_id = ? AND access_url = ?' => array(
                     $courseId,
                     $sessionId,
+                    $this->accessUrl
                 ),
             ),
         );
@@ -464,8 +502,8 @@ class bbb
             $groupId = api_get_group_id();
             $conditions =  array(
                 'where' => array(
-                    'c_id = ? AND session_id = ? AND group_id = ? ' =>
-                        array($courseId, $sessionId, $groupId)
+                    'c_id = ? AND session_id = ? AND group_id = ? AND access_url = ?' =>
+                        array($courseId, $sessionId, $groupId, $this->accessUrl)
                 )
             );
         }
@@ -497,7 +535,7 @@ class bbb
             }
             $meetingBBB['end_url'] = $this->endUrl($meetingDB);
 
-            if ((string)$meetingBBB['returncode'] == 'FAILED') {
+            if (isset($meetingBBB['returncode']) && (string)$meetingBBB['returncode'] == 'FAILED') {
                 if ($meetingDB['status'] == 1 && $this->isConferenceManager()) {
                     $this->endMeeting($meetingDB['id']);
                 }
@@ -666,7 +704,6 @@ class bbb
                     $actionLinksArray[] = $actionLinks;
                     $item['action_links'] = implode('<br />', $actionLinksArray);
                 }
-                //var_dump($recordArray);
                 $item['show_links']  = implode('<br />', $recordArray);
                 $item['action_links'] = implode('<br />', $actionLinksArray);
             }
@@ -802,9 +839,10 @@ class bbb
 
         $conditions = array(
             'where' => array(
-                'c_id = ? AND session_id = ? AND status = 1 ' => array(
+                'c_id = ? AND session_id = ? AND status = 1 AND access_url = ?' => array(
                     $courseId,
                     $sessionId,
+                    $this->accessUrl
                 ),
             ),
         );
@@ -813,10 +851,11 @@ class bbb
             $groupId = api_get_group_id();
             $conditions = array(
                 'where' => array(
-                    'c_id = ? AND session_id = ? AND group_id = ? AND status = 1 ' => array(
+                    'c_id = ? AND session_id = ? AND group_id = ? AND status = 1 AND access_url = ?' => array(
                         $courseId,
                         $sessionId,
-                        $groupId
+                        $groupId,
+                        $this->accessUrl
                     ),
                 ),
             );
@@ -959,7 +998,7 @@ class bbb
         $meetingList = Database::select(
             'count(id) as count',
             $this->table,
-            array('where' => array('status = ?' => array(1))),
+            array('where' => array('status = ? AND access_url = ?' => array(1, $this->accessUrl))),
             'first'
         );
 
@@ -1040,6 +1079,10 @@ class bbb
      */
     public function endUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=end&id='.$meeting['id'];
     }
 
@@ -1061,6 +1104,9 @@ class bbb
      */
     public function publishUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=publish&id='.$meeting['id'];
     }
 
@@ -1070,6 +1116,9 @@ class bbb
      */
     public function unPublishUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=unpublish&id='.$meeting['id'];
     }
 
@@ -1079,6 +1128,10 @@ class bbb
      */
     public function deleteRecordUrl($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=delete_record&id='.$meeting['id'];
     }
 
@@ -1088,6 +1141,10 @@ class bbb
      */
     public function copyToRecordToLinkTool($meeting)
     {
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
         return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id'];
     }
 }

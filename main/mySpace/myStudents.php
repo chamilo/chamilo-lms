@@ -62,6 +62,8 @@ if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
 $nameTools = get_lang('StudentDetails');
 $em = Database::getManager();
 
+$em = Database::getManager();
+
 if (isset($_GET['details'])) {
     if ($origin === 'user_course') {
         if (empty ($cidReq)) {
@@ -356,6 +358,12 @@ if (!empty($student_id)) {
             Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
     }
 
+    echo Display::url(
+        Display::return_icon('skill-badges.png', get_lang('AssignSkill'), null, ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . 'badge/assign.php?' . http_build_query(['user' => $student_id])
+    );
+
+
     echo '</div>';
 
     // is the user online ?
@@ -540,7 +548,7 @@ if (!empty($student_id)) {
                 <td align="right"><?php echo get_lang('LatestLoginInPlatform') ?></td>
                 <td align="left"><?php echo $last_connection_date ?></td>
             </tr>
-            <?php if (isset($_GET['details']) && $_GET['details'] == 'true') {?>
+            <?php if (isset($_GET['details']) && $_GET['details'] == 'true') { ?>
                 <tr>
                     <td align="right"><?php echo get_lang('TimeSpentInTheCourse') ?></td>
                     <td align="left"><?php echo  $time_spent_on_the_course ?></td>
@@ -603,7 +611,6 @@ if (!empty($student_id)) {
                             ['class' => 'btn btn-primary btn-xs']
                         );
                     }
-
                     echo '<tr>
                         <td align="right">';
                     echo get_lang('LegalAccepted').' </td>  <td align="left">'.$icon;
@@ -646,14 +653,14 @@ if (!empty($student_id)) {
         );
 
         $attendance = new Attendance();
-        foreach ($courses_in_session as $sessionId => $courses) {
+        foreach ($courses_in_session as $sId => $courses) {
             $session_name = '';
             $access_start_date = '';
             $access_end_date = '';
             $date_session = '';
             $title = Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_SMALL).' '.get_lang('Courses');
 
-            $session_info = api_get_session_info($sessionId);
+            $session_info = api_get_session_info($sId);
             if ($session_info) {
                 $session_name = $session_info['name'];
                 if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00') {
@@ -695,15 +702,15 @@ if (!empty($student_id)) {
 
                     if (CourseManager :: is_user_subscribed_in_course($student_id, $courseCodeItem, true)) {
                         $time_spent_on_course = api_time_to_hms(
-                            Tracking :: get_time_spent_on_the_course($user_info['user_id'], $courseId, $sessionId)
+                            Tracking :: get_time_spent_on_the_course($user_info['user_id'], $courseId, $sId)
                         );
 
                         // get average of faults in attendances by student
-                        $results_faults_avg = $attendance->get_faults_average_by_course($student_id, $courseCodeItem, $sessionId);
+                        $results_faults_avg = $attendance->get_faults_average_by_course($student_id, $courseCodeItem, $sId);
                         if (!empty($results_faults_avg['total'])) {
                             if (api_is_drh()) {
                                 $attendances_faults_avg =
-                                    '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sessionId.'&student_id='.$student_id.'">'.
+                                    '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='.$student_id.'">'.
                                     $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
                             } else {
                                 $attendances_faults_avg =
@@ -717,12 +724,12 @@ if (!empty($student_id)) {
                         }
 
                         // Get evaluations by student
-                        $cats = Category::load(null, null, $courseCodeItem, null, null, $sessionId);
+                        $cats = Category::load(null, null, $courseCodeItem, null, null, $sId);
 
                         $scoretotal = array();
                         if (isset($cats) && isset($cats[0])) {
-                            if (!empty($sessionId)) {
-                                $scoretotal= $cats[0]->calc_score($student_id, null, $courseCodeItem, $sessionId);
+                            if (!empty($sId)) {
+                                $scoretotal= $cats[0]->calc_score($student_id, null, $courseCodeItem, $sId);
                             } else {
                                 $scoretotal= $cats[0]->calc_score($student_id, null, $courseCodeItem);
                             }
@@ -736,8 +743,8 @@ if (!empty($student_id)) {
                                 ' ('.round(($scoretotal[0] / $scoretotal[1]) * 100, 2).' %)';
                         }
 
-                        $progress = Tracking::get_avg_student_progress($user_info['user_id'], $courseCodeItem, null, $sessionId);
-                        $score = Tracking :: get_avg_student_score($user_info['user_id'], $courseCodeItem, null, $sessionId);
+                        $progress = Tracking::get_avg_student_progress($user_info['user_id'], $courseCodeItem, null, $sId);
+                        $score = Tracking :: get_avg_student_score($user_info['user_id'], $courseCodeItem, null, $sId);
                         $progress = empty($progress) ? '0%' : $progress.'%';
                         $score = empty($score) ? '0%' : $score.'%';
 
@@ -752,7 +759,7 @@ if (!empty($student_id)) {
                         );
 
                         echo '<tr>
-                        <td ><a href="' .$courseInfoItem['course_public_url'] .'?id_session=' . $sessionId . '">'.
+                        <td ><a href="' .$courseInfoItem['course_public_url'] .'?id_session=' . $sId . '">'.
                             $courseInfoItem['title'].'</a></td>
                         <td >'.$time_spent_on_course .'</td>
                         <td >'.$progress.'</td>
@@ -761,10 +768,10 @@ if (!empty($student_id)) {
                         <td >'.$scoretotal_display.'</td>';
 
                         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$courseInfoItem['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.$origin.'&id_session='.$sessionId.'#infosStudent">
+                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$courseInfoItem['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.$origin.'&id_session='.$sId.'#infosStudent">
                             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                         } else {
-                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sessionId.'#infosStudent">
+                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId.'#infosStudent">
                             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                         }
                         echo '</tr>';
@@ -794,23 +801,21 @@ if (!empty($student_id)) {
                 get_lang('LastConnexion')
             );
 
-            if (empty($sessionId)) {
-                $query = $em->createQuery('
+            $query = $em
+                ->createQuery('
                     SELECT lp FROM ChamiloCourseBundle:CLp lp
-                    WHERE lp.sessionId = 0 AND lp.cId = :course
+                    WHERE lp.sessionId = :session AND lp.cId = :course
                     ORDER BY lp.displayOrder ASC
                 ');
 
+            if (empty($sessionId)) {
                 $query->setParameters([
+                    'session' => 0,
                     'course' => $courseInfo['real_id']
                 ]);
             } else {
-                $query = $em->createQuery('
-                    SELECT lp FROM ChamiloCourseBundle:CLp lp
-                    WHERE lp.cId = :course
-                    ORDER BY lp.displayOrder ASC
-                ');
                 $query->setParameters([
+                    'session' => $sessionId,
                     'course' => $courseInfo['real_id']
                 ]);
             }
@@ -1025,12 +1030,13 @@ if (!empty($student_id)) {
                     $data_learnpath[$i][] = $lp_name;
                     $data_learnpath[$i][] = $progress . '%';
                 }
+                ?>
+                </tbody>
+                </table>
+                </div>
+                <?php
             }
-            ?>
-            </tbody>
-            </table>
-            </div>
-        <?php } ?>
+        } ?>
         <!-- line about exercises -->
         <?php if ($user_info['status'] != INVITEE) { ?>
         <div class="table-responsive">
@@ -1299,6 +1305,12 @@ if (!empty($student_id)) {
         </div>
     <?php
     } //end details
+
+    echo Tracking::displayUserSkills(
+        $user_info['user_id'],
+        $courseInfo ? $courseInfo['real_id'] : 0,
+        $sessionId
+    );
 }
 
 if ($export) {

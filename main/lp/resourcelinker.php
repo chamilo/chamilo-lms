@@ -56,8 +56,8 @@ $external_link = $_REQUEST['external_link'];
 
 $from_learnpath = $_SESSION['from_learnpath'];
 
-// This variable controls wether the link to add a chapter in a module or
-// another chapter is shown. This allows to create multi-level learnpaths,
+// This variable controls wether the link to add a dir/chapter in a module or
+// another dir/chapter is shown. This allows to create multi-level learnpaths,
 // but export features are not ready for this, yet, so use at your own risks
 // default : false -> do not display link
 // This setting should be moved to the platform configuration page in time...
@@ -77,15 +77,15 @@ if ($from_learnpath == 'yes') {
 
 $course_id = api_get_course_int_id();
 
-// Process a new chapter?
-if (!empty ($_POST['add_chapter']) && !empty ($_POST['title'])) {
+// Process a new dir/chapter?
+if (!empty ($_POST['add_dir']) && !empty ($_POST['title'])) {
     $title = $_POST['title'];
     $description = '';
     /*if (!empty ($_POST['description'])) {
         $description = $_POST['description'];
     }*/
 
-    // Get max display_order so far in this parent chapter.
+    // Get max display_order so far in this parent dir/chapter.
     $sql = "SELECT MAX(display_order) as maxi FROM $tbl_lp_item " .
             "WHERE c_id = $course_id AND lp_id = $learnpath_id ".
             " AND parent_item_id = $chapter_id";
@@ -105,7 +105,7 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title'])) {
     $order = $lastorder_item + 1;
 
     $sql = "INSERT INTO $tbl_lp_item "."(c_id, lp_id,item_type,title,parent_item_id,previous_item_id, next_item_id, display_order) " .
-            "VALUES "."($course_id, $learnpath_id,'dokeos_chapter','$title', $chapter_id, $previous, 0, $order )";
+            "VALUES "."($course_id, $learnpath_id,'dir','$title', $chapter_id, $previous, 0, $order )";
     //error_log('New LP - Inserting new resource: '.$sql, 0);
     $res = Database::query($sql);
     $my_id = Database::insert_id($res);
@@ -168,11 +168,11 @@ if ($add) {
     $_SESSION['addedresource'] = $addedresource;
     $_SESSION['addedresourceid'] = $addedresourceid;
 
-    // We assign to chapters immediately!
+    // We assign to dirs/chapters immediately!
     $resource_added = false;
     if ($from_learnpath == 'yes') {
         $i = 0;
-        // Calculating the last order of the items of this chapter.
+        // Calculating the last order of the items of this dir/chapter.
         $sql = "SELECT MAX(display_order) as maxi FROM $tbl_lp_item " .
                 "WHERE c_id = $course_id AND lp_id = $learnpath_id AND parent_item_id=$chapter_id";
         $result = Database::query($sql);
@@ -191,11 +191,11 @@ if ($add) {
         }
         $lastorder = $lastorder_item + 1;
         foreach ($addedresource as $addedresource_item) {
-            // In the case we added a chapter, add this into the chapters list with the correct parent_id.
+            // In the case we added a dir/chapter, add this into the dirs/chapters list with the correct parent_id.
             if ($addedresource_item == 'Chap') {
                 $sql = "INSERT INTO $tbl_lp_item " .
                         "(c_id, lp_id,item_type,title,parent_item_id,previous_item_id,next_item_id,display_order) " .
-                        "VALUES ($course_id, ".$learnpath_id.",'dokeos_chapter','".$learnpath_chapter_name."',".$chapter_id.",$previous,0,".$lastorder.")";
+                        "VALUES ($course_id, ".$learnpath_id.",'dir','".$learnpath_chapter_name."',".$chapter_id.",$previous,0,".$lastorder.")";
                 //error_log('New LP - Inserting new resource: '.$sql, 0);
                 $res = Database::query($sql);
                 $my_id = Database::insert_id($res);
@@ -403,9 +403,9 @@ if ($from_learnpath != 'yes') {
     $sql_result = Database::query($learnpath_select_query);
     $therow = Database::fetch_array($sql_result);
 
-    $learnpath_chapter_query = "	SELECT * FROM $tbl_lp_item
+    $learnpath_dir_query = "	SELECT * FROM $tbl_lp_item
                                           WHERE (lp_id = '$learnpath_id' and id = '$chapter_id')";
-    $sql_result = Database::query($learnpath_chapter_query);
+    $sql_result = Database::query($learnpath_dir_query);
     $therow2 = Database::fetch_array($sql_result);
 
     $from_learnpath = 'yes';
@@ -502,7 +502,7 @@ while ($row = Database::fetch_array($result_select_active)) {
         </tr-->
 <?php if ($multi_level_learnpath === true ) { ?>
         <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=chapter&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Chapter')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=dir&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Chapter')."</a>"; ?></td>
         </tr>
 <?php } ?>
         <tr>
@@ -639,11 +639,11 @@ if ($content == 'Agenda') {
 
 /* Chapter */
 
-if ($content == 'chapter') {
-    echo '<table><form name="add_chapter" action="'.'" method="POST">'."\n";
+if ($content == 'dir') {
+    echo '<table><form name="add_dir" action="'.'" method="POST">'."\n";
     echo '  <tr><td>'.get_lang('Title').'</td><td><input type="text" name="title" value="'.$title.'"></input></td></tr>'."\n";
     echo '  <tr><td>'.get_lang('Description').'</td><td><input type="text" name="description" value="'.$description.'"></input></td></tr>'."\n";
-    echo '  <tr><td></td><td><input type="submit" name="add_chapter" value="'.get_lang('AddIt').'"/></td></tr>'."\n";
+    echo '  <tr><td></td><td><input type="submit" name="add_dir" value="'.get_lang('AddIt').'"/></td></tr>'."\n";
     echo '</form></table>'."\n";
     //echo "<hr />";
 }
@@ -661,7 +661,7 @@ if ($content == 'Document' || (empty($content) && (api_is_allowed_to_edit() || i
     $courseDir = $_course['path'].'/document';
     $baseWorkDir = $baseServDir.$courseDir;
     // showing the link to move one folder up (when not in the root folder)
-    show_folder_up();
+    show_folder_up($chapter_id);
     // showing the blue bar with the path in it when we are not in the root
     if (get_levels($folder)) {
         echo "<table width=\"100%\"><tr><td bgcolor=\"#4171B5\">";
@@ -670,7 +670,7 @@ if ($content == 'Document' || (empty($content) && (api_is_allowed_to_edit() || i
     }
 
     // Showing the documents and subfolders of the folder we are in.
-    show_documents($folder);
+    show_documents($folder, $chapter_id);
     //echo "<hr />";
 }
 

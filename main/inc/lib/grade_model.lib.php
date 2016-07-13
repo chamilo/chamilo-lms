@@ -106,8 +106,9 @@ class GradeModel extends Model
         // Setting the defaults
 
         $defaults = $this->get($id);
-
-        $components = $this->get_components($defaults['id']);
+        if ($defaults) {
+            $components = $this->get_components($defaults['id']);
+        }
 
         if ($action == 'edit') {
             if (!empty($components)) {
@@ -143,21 +144,20 @@ class GradeModel extends Model
             $template_title =
             '&nbsp{element} <!-- BEGIN error --> <span class="form_error">{error}</span><!-- END error -->
              <a href="javascript:plusItem(' . ($counter+1) . ')">
-                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="'.Display::return_icon('add.png').'" alt="'.get_lang('Add').'" title="'.get_lang('Add').'">
+                '.Display::return_icon('add.png', get_lang('Add'), ['id' => 'plus-' . ($counter+1), 'style' => 'display: '.(($counter>=$nr_items) ? 'inline':'none') ]).'
             </a>
             <a href="javascript:minItem(' . ($counter) . ')">
-                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="min-' . $counter . '" src="'.Display::return_icon('delete.png').'" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'">
+                '.Display::return_icon('delete.png', get_lang('Delete'), ['id' => 'min-' . ($counter), 'style' => 'display: '.(($counter>=$nr_items) ? 'inline':'none') ]).'
             </a>
             </div></p></div>';
-
             $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
             $renderer->setElementTemplate($template_percentage, 'components['.$i.'][percentage]');
             $renderer->setElementTemplate($template_acronym, 'components['.$i.'][acronym]');
 
             if ($i == 0) {
                 $form->addRule('components['.$i.'][percentage]', get_lang('ThisFieldIsRequired'), 'required');
-                $form->addRule('components['.$i.'][title]', get_lang('ThisFieldIsRequired'), 'required');
                 $form->addRule('components['.$i.'][acronym]', get_lang('ThisFieldIsRequired'), 'required');
+                $form->addRule('components['.$i.'][title]', get_lang('ThisFieldIsRequired'), 'required');
             }
             $form->addRule('components['.$i.'][percentage]', get_lang('OnlyNumbers'), 'numeric');
 
@@ -187,7 +187,6 @@ class GradeModel extends Model
                 $counter++;
             }
         }
-
         $form->setDefaults($defaults);
 
         // Setting the rules

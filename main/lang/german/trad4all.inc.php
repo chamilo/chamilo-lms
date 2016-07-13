@@ -2168,7 +2168,6 @@ $TitleManipulateStudentPublication = "Ausarbeitung bearbeiten";
 $EnterDataNewChapter = "Die Daten für das neue Kapitel eingeben";
 $EnterDataNewModule = "Die Daten für das neue Modul eingeben";
 $CreateNewStep = "Neues Dokument erstellen";
-$NewDocument = "Dokument / Aktivität";
 $UseAnExistingResource = "oder eine bestehende Quelle benutzen:";
 $Position = "Position";
 $NewChapterCreated = "Das neue Kapitel wurde erstellt. Sie können nun ein weiteres Kapitel oder einen weiteren Schritt hinzufügen";

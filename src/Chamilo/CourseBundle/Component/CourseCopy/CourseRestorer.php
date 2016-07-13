@@ -2603,9 +2603,9 @@ class CourseRestorer
 						if ($lp->lp_type =='2') {
 							// if is an sco
 							$old_refs[$new_item_id]= $ref;
-						} else {
+						} elseif (isset($new_item_ids[$ref])) {
                             $old_refs[$new_item_id]= $new_item_ids[$ref];
-						}
+                        }
 					}
 
 					$prerequisite_ids[$new_item_id] = $item['prerequisite'];

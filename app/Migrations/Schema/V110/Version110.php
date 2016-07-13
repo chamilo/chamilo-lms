@@ -155,7 +155,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session_rel_course CHANGE id_session session_id int");
         $this->addSql('DELETE FROM session_rel_course WHERE session_id NOT IN (SELECT id FROM session)');
 
-        $this->addSql("DELETE course_rel_user WHERE course_code NOT IN (SELECT code FROM course)");
+        $this->addSql("DELETE FROM course_rel_user WHERE course_code NOT IN (SELECT code FROM course)");
         $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
         // Add iid
@@ -517,7 +517,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM session_rel_course WHERE course_code NOT IN (SELECT code FROM course)');
         $this->addSql("UPDATE session_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
-        $this->addSql("DELETE access_url_rel_course WHERE course_code NOT IN (SELECT code FROM course)");
+        $this->addSql("DELETE FROM access_url_rel_course WHERE course_code NOT IN (SELECT code FROM course)");
         $this->addSql("UPDATE access_url_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
         $this->addSql("ALTER TABLE settings_current DROP INDEX unique_setting");

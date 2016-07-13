@@ -135,4 +135,14 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         }
         return false;
     }
+    /**
+     * Remove a setting completely
+     * @param string $variable The setting variable name
+     * @return void
+     */
+    public function removeSettingCurrent($variable)
+    {
+        //to be implemented
+    }
+
 }

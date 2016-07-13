@@ -2799,10 +2799,11 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     if (!empty($iframe)) {
         $form->addElement('label', get_lang('Thread'), $iframe);
     }
-    $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
-    $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
     if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($myThread)) {
+
+        $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
+        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
         // Thread qualify
         if (Gradebook::is_active()) {
@@ -2849,6 +2850,7 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         );
 
         $form->addElement('html', '</div>');
+        $form->addElement('html', '</div>');
     }
 
     if ($forum_setting['allow_sticky'] && api_is_allowed_to_edit(null, true) && $action == 'newthread') {
@@ -2858,8 +2860,6 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     if ($current_forum['allow_attachments'] == '1' || api_is_allowed_to_edit(null, true)) {
         $values = $form->exportValues();
     }
-
-    $form->addElement('html', '</div>');
 
     if (in_array($action, ['quote', 'replymessage'])) {
         $form->addFile('user_upload[]', get_lang('Attachment'));

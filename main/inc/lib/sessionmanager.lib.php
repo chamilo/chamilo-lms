@@ -6899,7 +6899,7 @@ class SessionManager
         $extra_field = new ExtraField('session');
         $extra = $extra_field->addElements($form, $sessionId);
 
-        $form->addElement('html','</div>');
+        $form->addElement('html', '</div>');
 
         $js = $extra['jquery_ready_content'];
 

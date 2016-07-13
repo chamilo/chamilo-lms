@@ -73,51 +73,6 @@ $userGeolocalization = api_get_setting('enable_profile_user_address_geolocalizat
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
-$htmlHeadXtra[] = '<script>
-$(document).ready(function() {
-    var $image = $("#previewImage");
-    var $input = $("[name=\'cropResult\']");
-    var $cropButton = $("#cropButton");
-    
-    $("input:file").change(function() {
-        var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("picture").files[0]);
-
-        oFReader.onload = function (oFREvent) {
-            $image.attr("src", this.result);
-            $("#labelCropImage").html("'.get_lang('Preview').'");
-            $("#cropImage").addClass("thumbnail");
-            $cropButton.removeClass("hidden");
-            // Destroy cropper
-            $image.cropper("destroy");
-
-            $image.cropper({
-                aspectRatio: 1 / 1,
-                responsive : true,
-                center : false,
-                guides : false,
-                movable: false,
-                zoomable: false,
-                rotatable: false,
-                scalable: false,
-                crop: function(e) {
-                    // Output the result data for cropping image.
-                    $input.val(e.x+","+e.y+","+e.width+","+e.height);
-                }
-            });
-        };
-    });
-    
-    $("#cropButton").on("click", function() {
-        var canvas = $image.cropper("getCroppedCanvas");
-        var dataUrl = canvas.toDataURL();
-        $image.attr("src", dataUrl);
-        $image.cropper("destroy");
-        $cropButton.addClass("hidden");
-        return false;
-    });
-});
-</script>';
 
 $libpath = api_get_path(LIBRARY_PATH);
 $noPHP_SELF = true;
@@ -332,23 +287,12 @@ if ($userGeolocalization) {
 }
 
 // Picture
-$form->addElement('file', 'picture', get_lang('AddPicture'), array('id' => 'picture', 'class' => 'picture-form'));
+$form->addFile(
+    'picture',
+    get_lang('AddImage'),
+    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true)
+);
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-
-$form->addHtml('<div class="form-group">
-    <label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>
-    <div class="col-sm-8">
-        <div id="cropImage" class="cropCanvas">
-            <img id="previewImage" >
-        </div>
-        <div>
-        <button class="btn btn-primary hidden" name="cropButton" id="cropButton">
-        <em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>
-        </div>
-    </div>
-</div>');
-
-$form->addHidden('cropResult', '');
 
 $form->addRule(
 	'picture',
@@ -617,7 +561,7 @@ if ($form->validate()) {
         $currentUserId = api_get_user_id();
 
         $userObj = api_get_user_entity($user_id);
-		
+
         UserManager::add_user_as_admin($userObj);
 
 		if ($user_id != $currentUserId) {

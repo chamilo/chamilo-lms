@@ -809,6 +809,23 @@ EOT;
     public function addFile($name, $label, $attributes = array())
     {
         $this->addElement('file', $name, $label, $attributes);
+        if (isset($attributes['crop_image'])) {
+            $this->addHtml('
+                <div class="form-group">
+                <label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>
+                <div class="col-sm-8">
+                <div id="cropImage" class="cropCanvas">
+                <img id="previewImage">
+                </div>
+                <div>
+                <button class="btn btn-primary hidden" name="cropButton" id="cropButton" ><em class="fa fa-crop"></em> '.
+                get_lang('CropYourPicture').'</button>
+                </div>
+                </div>
+                </div>'
+            );
+            $this->addHidden('cropResult', '');
+        }
     }
 
     /**

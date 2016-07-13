@@ -266,4 +266,75 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             return null;
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getElementJS()
+    {
+        $id = $this->getAttribute('id');
+        return '<script>
+        $(document).ready(function() {
+            var $image = $("#previewImage");
+            var $input = $("[name=\'cropResult\']");
+            var $cropButton = $("#cropButton");
+            var canvas = "";
+            var imageWidth = "";
+            var imageHeight = "";
+            
+            $("input:file").change(function() {
+                var oFReader = new FileReader();
+                oFReader.readAsDataURL(document.getElementById("'.$id.'").files[0]);
+        
+                oFReader.onload = function (oFREvent) {
+                    $image.attr("src", this.result);
+                    $("#labelCropImage").html("'.get_lang('Preview').'");
+                    $("#cropImage").addClass("thumbnail");
+                    $cropButton.removeClass("hidden");
+                    // Destroy cropper
+                    $image.cropper("destroy");
+        
+                    $image.cropper({
+                        aspectRatio: 1 / 1,
+                        responsive : true,
+                        center : false,
+                        guides : false,
+                        movable: false,
+                        zoomable: false,
+                        rotatable: false,
+                        scalable: false,
+                        crop: function(e) {
+                            // Output the result data for cropping image.
+                            $input.val(e.x+","+e.y+","+e.width+","+e.height);
+                        }
+                    });
+                };
+            });
+            
+            $("#cropButton").on("click", function() {
+                var canvas = $image.cropper("getCroppedCanvas");
+                var dataUrl = canvas.toDataURL();
+                $image.attr("src", dataUrl);
+                $image.cropper("destroy");
+                $cropButton.addClass("hidden");
+                return false;
+            });
+        });
+        </script>';
+    }
+
+    public function toHtml()
+    {
+        $js = '';
+        if (isset($this->_attributes['crop_image'])) {
+            $js = $this->getElementJS();
+        }
+
+        if ($this->_flagFrozen) {
+            return $this->getFrozenHtml();
+        } else {
+            return $js.$this->_getTabs() . '<input' . $this->_getAttrString($this->_attributes) . ' />';
+        }
+    } //end func toHtml
+
 }

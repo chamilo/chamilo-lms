@@ -44,56 +44,6 @@ if ($checkPass == 'true') {
 }
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
-$htmlHeadXtra[] = '<script>
-$(document).ready(function() {
-    var $image = $("#previewImage");
-    var $input = $("[name=\'cropResult\']");
-    var $cropButton = $("#cropButton");
-    var canvas = "";
-    var imageWidth = "";
-    var imageHeight = "";
-    
-    $("input:file").change(function() {
-        var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("picture").files[0]);
-
-        oFReader.onload = function (oFREvent) {
-            $image.attr("src", this.result);
-            $("#labelCropImage").html("'.get_lang('Preview').'");
-            $("#cropImage").addClass("thumbnail");
-            $cropButton.removeClass("hidden");
-            // Destroy cropper
-            $image.cropper("destroy");
-
-            $image.cropper({
-                aspectRatio: 1 / 1,
-                responsive : true,
-                center : false,
-                guides : false,
-                movable: false,
-                zoomable: false,
-                rotatable: false,
-                scalable: false,
-                crop: function(e) {
-                    // Output the result data for cropping image.
-                    $input.val(e.x+","+e.y+","+e.width+","+e.height);
-                }
-            });
-        };
-    });
-    
-    $("#cropButton").on("click", function() {
-        var canvas = $image.cropper("getCroppedCanvas");
-        var dataUrl = canvas.toDataURL();
-        $image.attr("src", dataUrl);
-        $image.cropper("destroy");
-        $cropButton.addClass("hidden");
-        return false;
-    });
-});
-</script>';
-
-
 $htmlHeadXtra[] = '
 <script>
 $("#status_select").ready(function() {
@@ -190,23 +140,12 @@ if (api_get_setting('login_is_email') == 'true') {
 // Phone
 $form->addElement('text', 'phone', get_lang('PhoneNumber'));
 // Picture
-$form->addElement('file', 'picture', get_lang('AddImage'), array('id' => 'picture', 'class' => 'picture-form'));
+$form->addFile(
+    'picture',
+    get_lang('AddImage'),
+    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true)
+);
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-
-$form->addHtml(''
-            . '<div class="form-group">'
-                . '<label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>'
-                    . '<div class="col-sm-8">'
-                        . '<div id="cropImage" class="cropCanvas">'
-                            . '<img id="previewImage" >'
-                        . '</div>'
-                        . '<div>'
-                            . '<button class="btn btn-primary hidden" name="cropButton" id="cropButton" type="submit"><em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>'
-                        . '</div>'
-                    . '</div>'
-            . '</div>'
-. '');
-$form->addHidden('cropResult', '');
 
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 

@@ -57,7 +57,7 @@ class MoodleImport
                     if ($activity->childNodes->length) {
                         $currentItem = [];
 
-                        foreach($activity->childNodes as $item) {
+                        foreach ($activity->childNodes as $item) {
                             $currentItem[$item->nodeName] = $item->nodeValue;
                         }
 
@@ -174,7 +174,7 @@ class MoodleImport
                                 $documentPath = $coursePath.'document/';
                                 $currentResourceFilePath = $destinationDir.'/files/';
                                 $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
-                                foreach(new RecursiveIteratorIterator($dirs) as $file) {
+                                foreach (new RecursiveIteratorIterator($dirs) as $file) {
                                     if (is_file($file) && strpos($file, $fileInfo['contenthash']) !== false) {
                                         $files = [];
                                         $files['file']['name'] = $fileInfo['filename'];
@@ -272,7 +272,7 @@ class MoodleImport
             $currentItem = [];
             foreach ($activities as $activity) {
                 if ($activity->childNodes->length) {
-                    foreach($activity->childNodes as $item) {
+                    foreach ($activity->childNodes as $item) {
                         $currentItem[$item->nodeName] = $item->nodeValue;
                     }
                 }
@@ -370,7 +370,7 @@ class MoodleImport
             foreach ($activities as $activity) {
                 if ($activity->childNodes->length) {
                     $isThisItemThatIWant = false;
-                    foreach($activity->childNodes as $item) {
+                    foreach ($activity->childNodes as $item) {
                         if (!$isThisItemThatIWant && $item->nodeName == 'contenthash') {
                             $currentItem['contenthash'] = $item->nodeValue;
                         }
@@ -424,7 +424,7 @@ class MoodleImport
                     if ($question->childNodes->length) {
                         $currentItem['questionid'] = $questionId;
                         $questionType = '';
-                        foreach($question->childNodes as $item) {
+                        foreach ($question->childNodes as $item) {
                             $currentItem[$item->nodeName] = $item->nodeValue;
                             if ($item->nodeName == 'qtype') {
                                 $questionType = $item->nodeValue;

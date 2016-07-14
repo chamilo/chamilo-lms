@@ -7761,8 +7761,15 @@ $CourseCreationSplashScreenComment = "L'écran d'accueil de création de cours m
 $WorksReport = "Rapport";
 $AccumulateScormTime = "Temps cumulatif SCORM";
 $AccumulateScormTimeInfo = "Si activé, le temps de session pour les parcours SCORM sera cumulatif. Sinon, il sera uniquement compté depuis le dernier temps de connexion.";
+$CalendarStartDate = "Date de début";
 $DownloadTasksPackage = "Télécharger tous les travaux";
 $UploadCorrectionsPackage = "Envoyer un paquet de travaux";
 $IconsModeSVGTitle = "Mode SVG des icônes";
 $IconsModeSVGComment = "Cette option, lorsqu'elle est activée, préférera les icônes au format vectoriel SVG aux icônes bitmap PNG. Cela donnera un rendu beaucoup plus fin, mais certaines icônes pourraient avoir de petits problèmes de dimensions, et quelques navigateurs pourraient ne pas supporter ce format.";
+$FilterByTags = "Filtrer par tag";
+$ImportFromMoodle = "Importer depuis Moodle";
+$ImportFromMoodleInfo = "Importer un fichier de backup de cours de Moodle (.mbz) dans ce cours de Chamilo";
+$ImportFromMoodleInstructions = "La fonctionnalité d'importation peut ne pas supporter tous les types de contenus de Moodle, étant donné le fait que les fonctionnalités ne sont pas toutes identiques, et que Moodle et Chamilo continuent d'évoluer continuellement et rapidement. Cette fonctionnalité d'import devrait être considérée comme un travail en cours. Merci de réviser la page suivante pour plus d'information: <a href='https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import'>https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import</a>";
+$MoodleFile = "Fichier de cours de Moodle";
+$FailedToImportThisIsNotAMoodleFile = "Problème rencontré lors de l'importation: le fichier soumis ne semble pas être un fichier de backup de cours de Moodle (.mbz)";
 ?>

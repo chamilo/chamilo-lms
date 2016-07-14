@@ -258,8 +258,8 @@ if (!isset($_GET['running'])) {
     $checkEmailByHashSent = 0;
     $ShowEmailNotCheckedToStudent = 1;
     $userMailCanBeEmpty = 1;
-    $allowSelfReg = 1;
-    $allowSelfRegProf = 1;
+    $allowSelfReg = 'approval';
+    $allowSelfRegProf = 1; //by default, a user can register as teacher (but moderation might be in place)
     $encryptPassForm = 'bcrypt';
     if (!empty($_GET['profile'])) {
         $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
@@ -570,7 +570,7 @@ if (@$_POST['step2']) {
             $encryptPassForm = 'none';
         }
 
-        $allowSelfReg = false;
+        $allowSelfReg = 'approval';
         $tmp = get_config_param_from_db('allow_registration');
         if (!empty($tmp)) {
             $allowSelfReg = $tmp;
@@ -616,7 +616,7 @@ if (@$_POST['step2']) {
         echo get_lang('AdminLogin') . ' : <strong>' . $loginForm . '</strong><br />';
         echo get_lang('AdminPass') . ' : <strong>' . $passForm . '</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
     }
-
+    $allowSelfRegistrationLiteral = ($allowSelfReg == 'true') ? get_lang('Yes') : ($allowSelfReg == 'approval' ? get_lang('Approval') : get_lang('No'));
     echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
     echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
     <?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
@@ -626,7 +626,7 @@ if (@$_POST['step2']) {
     <?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
     <?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
     <?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
-    <?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
+    <?php echo get_lang('AllowSelfReg').' : '. $allowSelfRegistrationLiteral; ?><br />
     <?php echo get_lang('EncryptMethodUserPass').' : ';
     echo $encryptPassForm;
     ?>
@@ -946,7 +946,7 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
         */
         // Add version table
-        $connection->executeQuery('CREATE TABLE version (version varchar(255), PRIMARY KEY(version));');
+        $connection->executeQuery('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id));');
 
         // Tickets
         $table = Database::get_main_table(TABLE_TICKET_PROJECT);

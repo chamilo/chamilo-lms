@@ -126,12 +126,13 @@ class CItemProperty
 
     /**
      * CItemProperty constructor.
+     * @param Course $course
      */
     public function __construct(Course $course)
     {
         $this->course = $course;
-        $this->insertDate = new \DateTime();
-        $this->lasteditDate = new \DateTime();
+        $this->insertDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->lasteditDate = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -189,7 +190,7 @@ class CItemProperty
      *
      * @return CItemProperty
      */
-    public function setLasteditDate($lasteditDate)
+    public function setLasteditDate(\DateTime $lasteditDate)
     {
         $this->lasteditDate = $lasteditDate;
 
@@ -309,7 +310,7 @@ class CItemProperty
      *
      * @return CItemProperty
      */
-    public function setStartVisible($startVisible)
+    public function setStartVisible(\DateTime $startVisible = null)
     {
         $this->startVisible = $startVisible;
 
@@ -333,7 +334,7 @@ class CItemProperty
      *
      * @return CItemProperty
      */
-    public function setEndVisible($endVisible)
+    public function setEndVisible(\DateTime $endVisible = null)
     {
         $this->endVisible = $endVisible;
 
@@ -473,5 +474,14 @@ class CItemProperty
         $this->lasteditUserId = $insertUser->getId();
 
         return $this;
+    }
+
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 }

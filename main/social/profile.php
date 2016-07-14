@@ -286,8 +286,7 @@ $social_wall_block = $wallSocialAddPost;
 // Social Post Wall
 $posts = SocialManager::getWallMessagesByUser($my_user_id, $friendId) ;
 
-$posts = empty($posts) ? '<p>'.get_lang("NoPosts").'</p>' : $posts;
-$social_post_wall_block = Display::panel($posts, get_lang('Posts'));
+$social_post_wall_block = empty($posts) ? '<p>'.get_lang("NoPosts").'</p>' : $posts;
 
 $socialAutoExtendLink = Display::url(
     get_lang('SeeMore'),
@@ -300,8 +299,11 @@ $socialAutoExtendLink = Display::url(
 // Added a Jquery Function to return the Preview of OpenGraph URL Content
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
-    
-    $("[name=\'social_wall_new_msg_main\']").on("paste", function(e) {
+
+    var getUrl = $("[name=\'social_wall_new_msg_main\']");
+    var matchUrl = /https?:\/\/w{0,3}\w*?\.(\w*?\.)?\w{2,3}\S*|www\.(\w*?\.)?\w*?\.\w{2,3}\S*|(\w*?\.)?\w*?\.\w{2,3}[\/\?]\S*/ ;
+
+    getUrl.on("paste", function(e) {
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
             beforeSend: function() {

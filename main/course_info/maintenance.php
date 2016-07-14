@@ -30,6 +30,9 @@ echo Display::page_header($nameTools);
         <li><a href="../coursecopy/import_backup.php?<?php echo api_get_cidreq(); ?>"><?php echo get_lang('ImportBackup'); ?></a><br/>
         <?php echo get_lang('ImportBackupInfo'); ?>
         </li>
+        <li><a href="../coursecopy/import_moodle.php?<?php echo api_get_cidreq(); ?>"><?php echo get_lang('ImportFromMoodle'); ?></a><br/>
+            <?php echo get_lang('ImportFromMoodleInfo'); ?>
+        </li>
     </ul>
 </div>
 

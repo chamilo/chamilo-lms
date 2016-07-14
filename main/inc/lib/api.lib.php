@@ -3583,6 +3583,8 @@ function api_item_property_update(
         return false;
     }
 
+    $em = Database::getManager();
+
     // Definition of variables.
     $tool = Database::escape_string($tool);
     $item_id = intval($item_id);
@@ -3802,14 +3804,41 @@ function api_item_property_update(
 
     // Insert if no entries are found (can only happen in case of $last_edit_type switch is 'default').
     if ($result == false || Database::affected_rows($result) == 0) {
-        $sessionCondition = empty($session_id) ? "NULL" : "'$session_id'";
-        $sql = "INSERT INTO $tableItemProperty (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
-                VALUES ($course_id, '$tool', $item_id, '$time', $user_id, '$time', '$last_edit_type', $user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $sessionCondition)";
-        Database::query($sql);
-        $id = Database::insert_id();
+        $objCourse = $em->find('ChamiloCoreBundle:Course', intval($course_id));
+        $objTime = new DateTime('now', new DateTimeZone('UTC'));
+        $objUser = $em->find('ChamiloUserBundle:User', intval($user_id));
+        $objGroup = $em->find('ChamiloCourseBundle:CGroupInfo', intval($to_group_id));
+        $objToUser = $em->find('ChamiloUserBundle:User', intval($to_user_id));
+        $objSession = $em->find('ChamiloCoreBundle:Session', intval($session_id));
+
+        $startVisibleDate = !empty($start_visible) ? new DateTime($start_visible, new DateTimeZone('UTC')) : null;
+        $endVisibleDate = !empty($endVisibleDate) ? new DateTime($endVisibleDate, new DateTimeZone('UTC')) : null;
+
+        $cItemProperty = new \Chamilo\CourseBundle\Entity\CItemProperty($objCourse);
+        $cItemProperty
+            ->setTool($tool)
+            ->setRef($item_id)
+            ->setInsertDate($objTime)
+            ->setInsertUser($objUser)
+            ->setLasteditDate($objTime)
+            ->setLasteditType($last_edit_type)
+            ->setGroup($objGroup)
+            ->setToUser($objToUser)
+            ->setVisibility($visibility)
+            ->setStartVisible($startVisibleDate)
+            ->setEndVisible($endVisibleDate)
+            ->setSession($objSession);
+
+        $em->persist($cItemProperty);
+        $em->flush();
+
+        $id = $cItemProperty->getIid();
+
         if ($id) {
-            $sql = "UPDATE $tableItemProperty SET id = iid WHERE iid = $id";
-            Database::query($sql);
+            $cItemProperty->setId($id);
+            $em->merge($cItemProperty);
+            $em->flush();
+
             return false;
         }
     }

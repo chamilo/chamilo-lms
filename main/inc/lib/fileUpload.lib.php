@@ -582,16 +582,30 @@ function handle_uploaded_document(
 
                         // Display success message to user
                         if ($output) {
-                            Display::display_confirmation_message(
-                                get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') .' '.$documentTitle,
-                                false
-                            );
+                            if (isset($_POST['moodle_import'])) {
+                                Display::addFlash(
+                                    Display::display_confirmation_message(
+                                        get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') . ' ' . $documentTitle,
+                                        false,
+                                        true
+                                    )
+                                );
+                            } else {
+                                Display::display_confirmation_message(
+                                    get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') . ' ' . $documentTitle,
+                                    false
+                                );
+                            }
                         }
 
                         return $filePath;
                     } else {
                         if ($output) {
-                            Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                            if (isset($_POST['moodle_import'])) {
+                                Display::addFlash(Display::display_error_message(get_lang('UplUnableToSaveFile'), false, true));
+                            } else {
+                                Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                            }
                         }
 
                         return false;
@@ -601,7 +615,11 @@ function handle_uploaded_document(
                     // Only save the file if it doesn't exist or warn user if it does exist
                     if (file_exists($fullPath) && $docId) {
                         if ($output) {
-                            Display::display_error_message($cleanName.' '.get_lang('UplAlreadyExists'));
+                            if (isset($_POST['moodle_import'])) {
+                                Display::addFlash(Display::display_error_message($cleanName.' '.get_lang('UplAlreadyExists'), false, true));
+                            } else {
+                                Display::display_error_message($cleanName.' '.get_lang('UplAlreadyExists'));
+                            }
                         }
                     } else {
                         if (moveUploadedFile($uploadedFile, $fullPath)) {
@@ -648,10 +666,20 @@ function handle_uploaded_document(
 
                             // Display success message to user
                             if ($output) {
-                                Display::display_confirmation_message(
-                                    get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
-                                    false
-                                );
+                                if (isset($_POST['moodle_import'])) {
+                                    Display::addFlash(
+                                        Display::display_confirmation_message(
+                                            get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle,
+                                            false,
+                                            true
+                                        )
+                                    );
+                                } else {
+                                    Display::display_confirmation_message(
+                                        get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle,
+                                        false
+                                    );
+                                }
                             }
 
                             return $filePath;

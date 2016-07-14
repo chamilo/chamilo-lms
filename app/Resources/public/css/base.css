@@ -4589,20 +4589,29 @@ div#chat-remote-video video {
     padding-bottom: 50px;
 }
 /* INSTALL CHAMILO */
+
 #page-install .logo{
+  text-align: center;
+}
+.installer .logo{
   text-align: center;
 }
 #page-install .icon-install{
   text-align: center;
 }
-#page-install .title{
+.installer .title{
   text-align: center;
-  color:#2E75A3;
+  color:#FFF;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
 }
-#page-install .text{
+.installer .text{
   text-align: center;
+  font-size: 16px;
+  color: #FFF;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
 }
-#page-install .download-info{
+.installer .download-info{
   padding-top: 10px;
   text-align: center;
 }
@@ -4610,14 +4619,8 @@ div#chat-remote-video video {
   font-size: 25px;
 }
 #page-install{
-  background: #d2ebf9; /* Old browsers */
-  background: -moz-linear-gradient(top, #d2ebf9 0%, #feffff 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d2ebf9), color-stop(100%,#feffff)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #d2ebf9 0%,#feffff 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ebf9', endColorstr='#feffff',GradientType=0 ); /* IE6-9 */
+  background: #8EC1DA; /* Old browsers */
+  
 }
 #page-install footer{
   color: #666666;

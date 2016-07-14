@@ -55,7 +55,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     } else {
         $theme = 'chamilo';
     }
-
+    
     $css_path = 'app/Resources/public/css/';
     $css_web_assets = 'web/assets/';
     $css_web_path = 'web/css/';
@@ -64,10 +64,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     $bootstrap_file = $css_web_assets.'bootstrap/dist/css/bootstrap.min.css';
     $css_base_file = $css_web_path.'base.css';
 
-    $css_list = array($bootstrap_file, $css_base_file, $themePath);
+    $css_list = array($bootstrap_file,$css_web_fontawesome, $css_base_file, $themePath);
 
     $web_img = 'main/img';
     $root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
+    
     $root_rel = htmlentities($_SERVER['PHP_SELF']);
     if (!empty($root_rel)) {
         // If we could obtain a relative path for the chamilo dir from the $_SERVER array
@@ -97,10 +98,13 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
     $css_def = '';
     foreach ($css_list as $css_item) {
-        $css_base_chamilo_file = $root_sys.$css_item;
+        $css_base_chamilo_file = $css_item;
+        
         if (file_exists($css_base_chamilo_file)) {
-            $css_def .= @file_get_contents($css_base_chamilo_file);
+            $css_def .= '<link rel="stylesheet" href="'.$css_base_chamilo_file.'">'.PHP_EOL;
+            //$css_def .= @file_get_contents($css_base_chamilo_file);
         }
+        
     }
 
     $global_error_message = array();
@@ -136,7 +140,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                     <h2 class="title">Welcome to the Chamilo installation wizard</h2>
                     <p class="text">Let\'s start hunting skills down with Chamilo LMS! This wizard will guide you through the Chamilo installation and configuration process.</p>
                           <p class="download-info">
-                              <button class="btn btn-primary btn-lg" type="submit" value="INSTALL Chamilo" ><em class="fa fa-download"></em> Install Chamilo</button>
+                              <button class="btn btn-primary btn-lg" type="submit" value="INSTALL Chamilo" ><i class="fa fa-download" aria-hidden="true"></i> Install Chamilo</button>
                               <a class="btn btn-success btn-lg" href="'.$installation_guide_url.'" target="_blank"> <em class="fa fa-file-text-o"></em> '.$read_installation_guide.'</a>
                           </p>
                     </div>
@@ -169,9 +173,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     $global_error_message['powered_by'] = $PoweredBy;
     $global_error_message['encoding'] = 'UTF-8';
     $global_error_message['chamilo_logo'] = "data:image/png;base64,".base64_encode(file_get_contents($root_sys.'web/css/themes/'.$theme.'/images/header-logo.png'));
-
-    $installChamiloImage = base64_encode(file_get_contents("$root_sys/main/img/install-chamilo.gif"));
-
+    $bgImage = base64_encode(file_get_contents("$root_sys/main/img/bg_space.png"));
+    $bgMoon = base64_encode(file_get_contents("$root_sys/main/img/bg_moon_two.png"));
+    $installChamiloImage = "data:image/png;base64,".base64_encode(file_get_contents("$root_sys/main/img/mr_chamilo_install.png"));
+    $global_error_message['mr_chamilo'] = $installChamiloImage;
+    
     $global_error_message_page =
 <<<EOM
 <!DOCTYPE html>
@@ -179,66 +185,89 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		<head>
 			<title>{TITLE}</title>
             <meta charset="{ENCODING}" />
-            <style>
+            
             $css_def
-            </style>
+            
 
             <style type="text/css">
-                body{
-                    background: #d2ebf9; /* Old browsers */
-                    background: -moz-linear-gradient(top, #d2ebf9 0%, #feffff 100%); /* FF3.6+ */
-                    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d2ebf9), color-stop(100%,#feffff)); /* Chrome,Safari4+ */
-                    background: -webkit-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Chrome10+,Safari5.1+ */
-                    background: -o-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Opera 11.10+ */
-                    background: -ms-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* IE10+ */
-                    background: linear-gradient(to bottom, #d2ebf9 0%,#feffff 100%); /* W3C */
-                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ebf9', endColorstr='#feffff',GradientType=0 ); /* IE6-9 */
+                html, body {min-height:100%; padding:0; margin:0;}
+            
+                #wrapper {padding:0; position:absolute; top:0; bottom:0; left:0; right:0;}
+                @keyframes animatedBackground {
+                    from { background-position: 0 0; }
+                    to { background-position: 100% 0; }
                 }
-                .chamilo {
-                    background: url("data:image/gif;base64,$installChamiloImage") no-repeat center 0;
-                    margin:auto;
+                @-webkit-keyframes animatedBackground {
+                    from { background-position: 0 0; }
+                    to { background-position: 100% 0; }
+                }
+                @-ms-keyframes animatedBackground {
+                    from { background-position: 0 0; }
+                    to { background-position: 100% 0; }
+                }
+                @-moz-keyframes animatedBackground {
+                    from { background-position: 0 0; }
+                    to { background-position: 100% 0; }
+                }
+                .install-home{
+                    background-image: url("data:image/gif;base64,$bgImage");
+                    background-position: 0px 0px;
+                    background-repeat: repeat;
+                    animation: animatedBackground 40s linear infinite;
+                    -ms-animation: animatedBackground 40s linear infinite;
+                    -moz-animation: animatedBackground 40s linear infinite;
+                    -webkit-animation: animatedBackground 40s linear infinite;
+                    
+                    
+                }
+                .installer{
+                    background: url("data:image/gif;base64,$bgMoon") no-repeat center 390px;
+                }
+                .avatar{
+                    text-align: center;
+                }
+                .avatar .img-responsive{
+                    display: initial;
                 }
                 .office{
-                    padding-top:250px;
+                    margin-top: 70px;
+                    padding: 10px 20px;
+                    //background-color: rgba(35, 40, 56, 0.7);
+                    background-color: rgba(0, 22, 48, 0.8);
+                    border-radius: 5px;
                 }
-
                 @media (max-width: 480px) {
-                    body{
-
-                        background: url("data:image/gif;base64,$installChamiloImage") no-repeat center 0;
-                        background-repeat: no-repeat;
-                        background-position: -10px -5px;
-                        background-color: #DFF1FA;
-
-                    }
-                    .chamilo{
-                        background: none;
-                        height:300px;
-                        width:100%;
-                        margin:auto;
-                    }
                     .download-info .btn-success{
                         margin-top: 10px;
                     }
                 }
             </style>
 		</head>
-		<body>
-		<div id="page-install">
-			<div class="container chamilo">
-			    <div class="row">
-			        <div class="col-md-12">
-			            <div class="logo">
+		<body class="install-home">
+        <div id="wrapper" class="installer">
+            <header>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="logo">
 			                <img src="{CHAMILO_LOGO}"/>
-			            </div>
-			        </div>
-			    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div id="content">
+                <div class="container">
                 <div class="welcome-install">
+                    <div class="avatar">
+                            <img class="img-responsive" src="{MR_CHAMILO}"/>
+                    </div>
                     {DESCRIPTION}
                     {CODE}
                 </div>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
 		</body>
 </html>
 EOM;

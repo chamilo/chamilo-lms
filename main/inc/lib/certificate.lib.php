@@ -50,7 +50,7 @@ class Certificate extends Model
 
         $this->user_id = !empty($userId) ? $userId : api_get_user_id();
 
-        if (empty($certificate_id)) {
+        if (!empty($certificate_id)) {
             $certificate = $this->get($certificate_id);
             if (!empty($certificate) && is_array($certificate)) {
                 $this->certificate_data = $certificate;
@@ -76,7 +76,11 @@ class Certificate extends Model
         }
 
         //Setting the qr and html variables
-        if (isset($certificate_id) && !empty($this->certification_user_path)) {
+        if (
+            isset($certificate_id) &&
+            !empty($this->certification_user_path) &&
+            isset($this->certificate_data['path_certificate'])
+        ) {
             $pathinfo = pathinfo($this->certificate_data['path_certificate']);
             $this->html_file = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
             $this->qr_file = $this->certification_user_path.$pathinfo['filename'].'_qr.png';

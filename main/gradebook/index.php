@@ -925,15 +925,15 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 
                 if (api_is_allowed_to_edit()) {
                     $gradebooktable->td_attributes = [
-                        4 => 'class=centered'
+                        4 => 'class="text-center"'
                     ];
                 } else {
                     $gradebooktable->td_attributes = [
-                        3 => 'class=centered',
-                        4 => 'class=centered',
-                        5 => 'class=centered',
-                        6 => 'class=centered',
-                        7 => 'class=centered'
+                        3 => 'class="text-right"',
+                        4 => 'class="text-center"',
+                        5 => 'class="text-center"',
+                        6 => 'class="text-center"',
+                        7 => 'class="text-center"'
                     ];
 
                     if ($action == 'export_table') {

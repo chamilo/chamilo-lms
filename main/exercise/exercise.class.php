@@ -1898,7 +1898,7 @@ class Exercise
                     '2',
                     array('id' => 'exerciseType_2')
                 );
-                $form->addGroup($radios_feedback, null, array(get_lang('FeedbackType'),get_lang('FeedbackDisplayOptions')), '');
+                $form->addGroup($radios_feedback, null, array(get_lang('FeedbackType'),get_lang('FeedbackDisplayOptions')));
 
                 // Type of results display on the final page
                 $radios_results_disabled = array();
@@ -1937,7 +1937,7 @@ class Exercise
                     array('id' => 'result_disabled_4')
                 );
 
-                $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
+                $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));
 
                 // Type of questions disposition on page
                 $radios = array();
@@ -1945,7 +1945,7 @@ class Exercise
                 $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
                 $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
 
-                $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
+                $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
 
             } else {
                 // if is Directfeedback but has not questions we can allow to modify the question type
@@ -1979,7 +1979,7 @@ class Exercise
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
-                    $result_disable_group = $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'');
+                    $result_disable_group = $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));
                     $result_disable_group->freeze();
 
                     //we force the options to the DirectFeedback exercisetype
@@ -1990,7 +1990,7 @@ class Exercise
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
 
-                    $type_group = $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
+                    $type_group = $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
                     $type_group->freeze();
                 }
             }
@@ -2101,21 +2101,21 @@ class Exercise
                     $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
                     $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0')
                 );
-                $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '');
+                $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
 
                 // Random answers.
                 $radios_random_answers = array(
                     $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1'),
                     $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0')
                 );
-                $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'), '');
+                $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
 
                 // Hide question title.
                 $group = array(
                     $form->createElement('radio', 'hide_question_title', null, get_lang('Yes'), '1'),
                     $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0')
                 );
-                $form->addGroup($group, null, get_lang('HideQuestionTitle'), '');
+                $form->addGroup($group, null, get_lang('HideQuestionTitle'));
             } else {
 
                 // number of random question

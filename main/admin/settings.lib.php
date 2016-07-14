@@ -703,7 +703,7 @@ function handleSearch()
     $group = formGenerateElementsGroup($form, $values, 'search_enabled');
 
     //SearchEnabledComment
-    $form->addGroup($group, 'search_enabled', array(get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')), '<br />', false);
+    $form->addGroup($group, 'search_enabled', array(get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')), null, false);
 
     $search_enabled = api_get_setting('search_enabled');
 
@@ -719,7 +719,7 @@ function handleSearch()
         $values = api_get_settings_options('search_show_unlinked_results');
 
         $group = formGenerateElementsGroup($form, $values, 'search_show_unlinked_results');
-        $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), '', false);
+        $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), null, false);
         $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
 
         $sf_values = array();
@@ -1386,7 +1386,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $group,
                     $row['variable'],
                     array(get_lang($row['title']), get_lang($row['comment'])),
-                    '',
+                    null,
                     false
                 );
                 $default_values[$row['variable']] = $row['selected_value'];
@@ -1448,8 +1448,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $form->addGroup(
                     $group,
                     $row['variable'],
-                    array(get_lang($row['title']), get_lang($row['comment']) . 'aaaaaa'),
-                    ''
+                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    null
                 );
                 break;
             case 'link':

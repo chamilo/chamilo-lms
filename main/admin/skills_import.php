@@ -282,7 +282,7 @@ $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $group = array();
 $group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="skill_example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
-$form->addGroup($group, '', get_lang('FileType'), '<br/>');
+$form->addGroup($group, '', get_lang('FileType'));
 $form->addButtonImport(get_lang('Import'));
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;

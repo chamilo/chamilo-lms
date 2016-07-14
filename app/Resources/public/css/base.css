@@ -4589,9 +4589,15 @@ div#chat-remote-video video {
     padding-bottom: 50px;
 }
 /* INSTALL CHAMILO */
-
-#page-install .logo{
+#page-install{
+    margin-top: 40px;
+}
+#page-install .logo-install{
   text-align: center;
+  margin-bottom: 10px;
+}
+#page-install .panel-default{
+  border-color: #DDD;
 }
 .installer .logo{
   text-align: center;
@@ -4616,14 +4622,30 @@ div#chat-remote-video video {
   text-align: center;
 }
 .RequirementHeading h2{
-  font-size: 25px;
+  font-weight: bold;
+  font-size: 22px;
+  color: #2E75A3;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
 }
-#page-install{
-  background: #8EC1DA; /* Old browsers */
-  
+#page-install .page-header h2{
+    font-weight: bold;
+    font-size: 28px;
 }
-#page-install footer{
+#page-install .checkbox{
+    margin-bottom: 10px;
+}
+#page-install .footer-install p{
+    padding: 0;
+    margin: 0;
+}
+#page-install .footer-install{
   color: #666666;
+  background: none;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+  padding-bottom: 15px;
+  padding-top: 15px;
 }
 #page-install footer a{
   color: #333333;
@@ -4637,9 +4659,17 @@ div#chat-remote-video video {
 #page-install .page-header{
   margin: 20px 0px 20px;
 }
-.page-header h2{
-    font-size: 22px;
-    margin-top: 25px;
+#page-install .content{
+    padding-left: 3%;
+    padding-right: 3%;
+}
+#page-install .install-steps-menu{
+    background: #c9f4ff;
+    border: none;
+}
+#page-install .install-steps-menu ol li{
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 #page-install .normal-message{
   padding: 20px;

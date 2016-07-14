@@ -402,43 +402,12 @@ if ($encryptPassForm == '1') {
 
 <div id="page-install">
 <div id="main" class="container">
-    <header class="row">
-        <div class="col-md-12">
-            <div class="logo">
-                <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
-            </div>
-        </div>
-    </header>
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <?php
-            echo '<h4>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h4>';
-            ?>
-        </div>
     <div class="panel-body">
     <div class="row">
-        <div class="col-md-4">
-            <div class="well install-steps-menu">
-                <ol>
-                    <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
-                    <li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
-                    <li <?php step_active('3'); ?>><?php echo get_lang('Licence'); ?></li>
-                    <li <?php step_active('4'); ?>><?php echo get_lang('DBSetting'); ?></li>
-                    <li <?php step_active('5'); ?>><?php echo get_lang('CfgSetting'); ?></li>
-                    <li <?php step_active('6'); ?>><?php echo get_lang('PrintOverview'); ?></li>
-                    <li <?php step_active('7'); ?>><?php echo get_lang('Installing'); ?></li>
-                </ol>
-            </div>
-            <div id="note">
-                <a class="btn btn-default" href="<?php echo $installationGuideLink; ?>" target="_blank">
-                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('ReadTheInstallationGuide'); ?>
-                </a>
-            </div>
-        </div>
-
         <div class="col-md-8">
-
-<form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+            <div class="content">
+        <form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
 
 $instalation_type_label = '';
@@ -1084,14 +1053,35 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 ?>
           </form>
         </div>
+        </div>
+        <div class="col-md-4">
+            <div class="logo-install">
+                <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
+            </div>
+            <div class="well install-steps-menu">
+                <ol>
+                    <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
+                    <li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
+                    <li <?php step_active('3'); ?>><?php echo get_lang('Licence'); ?></li>
+                    <li <?php step_active('4'); ?>><?php echo get_lang('DBSetting'); ?></li>
+                    <li <?php step_active('5'); ?>><?php echo get_lang('CfgSetting'); ?></li>
+                    <li <?php step_active('6'); ?>><?php echo get_lang('PrintOverview'); ?></li>
+                    <li <?php step_active('7'); ?>><?php echo get_lang('Installing'); ?></li>
+                </ol>
+            </div>
+            <div id="note">
+                <a class="btn btn-primary btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
+                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('ReadTheInstallationGuide'); ?>
+                </a>
+            </div>
+        </div>
+
       </div>
     </div>
     </div>
-        <footer class="panel panel-default">
-            <div class="panel-body">
-                <div style="text-align: center;">
-                    <?php echo $poweredBy; ?>
-                </div>
+        <footer class="footer-install">
+            <div style="text-align: center;">
+                <?php echo $poweredBy; ?>
             </div>
         </footer>
   </body>

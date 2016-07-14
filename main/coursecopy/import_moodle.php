@@ -47,7 +47,7 @@ if ($form->validate()) {
 $templateName = get_lang('ImportFromMoodle');
 
 $template = new Template($templateName);
-$infoMsg = Display::return_message(get_lang('ImportFromMoodleInstructions'));
+$infoMsg = Display::return_message(get_lang('ImportFromMoodleInstructions'), 'normal', false);
 $template->assign('info_msg', $infoMsg);
 $template->assign('form', $form->returnForm());
 $content = $template->fetch('default/coursecopy/import_moodle.tpl');

@@ -218,6 +218,7 @@ class MoodleImport
                     }
                 }
             } else {
+                removeDir($destinationDir);
                 return false;
             }
         } else {
@@ -521,11 +522,12 @@ class MoodleImport
             case 'match':
                 return FILL_IN_BLANKS;
                 break;
+            case 'match':
             case 'essay':
                 return FREE_ANSWER;
                 break;
             case 'truefalse':
-                return MULTIPLE_ANSWER_TRUE_FALSE;
+                return UNIQUE_ANSWER_NO_OPTION;
             break;
         }
     }
@@ -566,7 +568,7 @@ class MoodleImport
 
                 foreach ($questionList as $slot => $subQuestion) {
                     $qtype = $subQuestion['qtype'];
-                    $optionsValues[] = $this->processFillBlanks($objAnswer, $subQuestion, $subQuestion['plugin_qtype_'.$qtype.'_question'], $placeholder, $slot + 1);
+                    $optionsValues[] = $this->processFillBlanks($objAnswer, $qtype, $subQuestion['plugin_qtype_'.$qtype.'_question'], $placeholder, $slot + 1);
                 }
 
                 $answerOptionsWeight = '::';
@@ -581,34 +583,77 @@ class MoodleImport
                 $answerOptionsWeight = substr($answerOptionsWeight, 0, -1);
                 $answerOptionsSize = substr($answerOptionsSize, 0, -1);
 
-                $suffleAnswers = isset($subQuestion[$qtype.'_values']['shuffleanswers']) ? $subQuestion[$qtype.'_values']['shuffleanswers'] : false;
+                $answerOptions = $answerOptionsWeight.':'.$answerOptionsSize.':0@';
 
-                if ($suffleAnswers) {
-                    $answerOptions = $answerOptionsWeight.':'.$answerOptionsSize.':0@'.$suffleAnswers;
-                } else {
-                    $answerOptions = $answerOptionsWeight.':'.$answerOptionsSize.':0@';
-                }
+                $placeholder = $placeholder.PHP_EOL.$answerOptions;
 
-                $placeholder = $placeholder.$answerOptions;
-
-                $questionInstance->updateWeighting($questionWeighting);
+                // This is a minor trick to clean the question description that in a multianswer is the main placeholder
                 $questionInstance->updateDescription('');
+                // sets the total weighting of the question
+                $questionInstance->updateWeighting($questionWeighting);
                 $questionInstance->save();
+                // saves the answers into the data base
                 $objAnswer->createAnswer($placeholder, 0, '', 0, 1);
                 $objAnswer->save();
-            case 'shortanswer':
+
+                return true;
             case 'match':
+                $objAnswer = new Answer($questionInstance->id);
+                $placeholder = '';
+
+                $optionsValues = $this->processFillBlanks($objAnswer, 'match', $questionList, $placeholder, 0);
+
+                $answerOptionsWeight = '::';
+                $answerOptionsSize = '';
+                $questionWeighting = 0;
+                foreach ($optionsValues as $index => $value) {
+                    $questionWeighting += $value['weight'];
+                    $answerOptionsWeight .= $value['weight'].',';
+                    $answerOptionsSize .= $value['size'].',';
+                }
+
+                $answerOptionsWeight = substr($answerOptionsWeight, 0, -1);
+                $answerOptionsSize = substr($answerOptionsSize, 0, -1);
+
+                $answerOptions = $answerOptionsWeight.':'.$answerOptionsSize.':0@';
+
+                $placeholder = $placeholder.PHP_EOL.$answerOptions;
+
+                // sets the total weighting of the question
+                $questionInstance->updateWeighting($questionWeighting);
+                $questionInstance->save();
+                // saves the answers into the data base
+                $objAnswer->createAnswer($placeholder, 0, '', 0, 1);
+                $objAnswer->save();
+
+                return true;
+                break;
+            case 'shortanswer':
             case 'ddmatch':
-                // Not Supported Yet
+                $questionWeighting = $currentQuestion['defaultmark'];
+                $questionInstance->updateWeighting($questionWeighting);
+                $questionInstance->updateDescription(get_lang('ThisQuestionIsNotSupportedYet'));
+                $questionInstance->save();
                 return false;
                 break;
             case 'essay':
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
                 $questionInstance->save();
+                return true;
                 break;
             case 'truefalse':
-                // Not Supported Yet
+                $objAnswer = new Answer($questionInstance->id);
+                $questionWeighting = 0;
+                foreach ($questionList as $slot => $answer) {
+                    $this->processTrueFalse($objAnswer, $answer, $slot + 1, $questionWeighting);
+                }
+
+                // saves the answers into the data base
+                $objAnswer->save();
+                // sets the total weighting of the question
+                $questionInstance->updateWeighting($questionWeighting);
+                $questionInstance->save();
                 return false;
                 break;
             default:
@@ -651,18 +696,51 @@ class MoodleImport
     }
 
     /**
+     * Process Chamilo True False
+     *
+     * @param object $objAnswer
+     * @param array $answerValues
+     * @param integer $position
+     * @param integer $questionWeighting
+     * @return integer db response
+     */
+    public function processTrueFalse($objAnswer, $answerValues, $position, &$questionWeighting)
+    {
+        $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
+        $answer = $answerValues['answertext'];
+        $comment = $answerValues['feedback'];
+        $weighting = $answerValues['fraction'];
+        $weighting = abs($weighting);
+        if ($weighting > 0) {
+            $questionWeighting += $weighting;
+        }
+        $goodAnswer =  $correct ? true : false;
+
+        $objAnswer->createAnswer(
+            $answer,
+            $goodAnswer,
+            $comment,
+            $weighting,
+            $position,
+            null,
+            null,
+            ''
+        );
+    }
+
+    /**
      * Process Chamilo FillBlanks
      *
      * @param object $objAnswer
-     * @param array $question
+     * @param array $questionType
      * @param array $answerValues
      * @param string $placeholder
      * @param integer $position
      * @return integer db response
      */
-    public function processFillBlanks($objAnswer, $question, $answerValues, &$placeholder, $position)
+    public function processFillBlanks($objAnswer, $questionType, $answerValues, &$placeholder, $position)
     {
-        switch ($question['qtype']) {
+        switch ($questionType) {
             case 'multichoice':
                 $optionsValues = [];
 
@@ -705,6 +783,38 @@ class MoodleImport
                 return $optionsValues;
 
                 break;
+            case 'match':
+                $answers = [];
+                // Here first we need to extract all the possible answers
+                foreach ($answerValues as $slot => $answer) {
+                    $answers[$slot] = $answer['answertext'];
+                }
+
+                // Now we set the order of the values matching the correct answer and set it to the first element
+                $optionsValues = [];
+                foreach ($answerValues as $slot => $answer) {
+                    $correctAnswer = '';
+                    $othersAnswers = '';
+                    $correctAnswer .= $answer['answertext'].'|';
+
+                    foreach ($answers as $other) {
+                        if ($other !== $answer['answertext']) {
+                            $othersAnswers .= $other.'|';
+                        }
+                    }
+
+                    $optionsValues[$slot]['weight'] = 1;
+                    $optionsValues[$slot]['size'] = '200';
+
+                    $currentAnswers = $correctAnswer.$othersAnswers;
+                    $currentAnswers = '['.substr($currentAnswers, 0, -1).'] ';
+
+                    $placeholder .= '<p> ' . strip_tags($answer['questiontext']).' '.$currentAnswers . ' </p>';
+                }
+
+                return $optionsValues;
+
+                break;
             default:
                 return false;
                 break;
@@ -718,7 +828,8 @@ class MoodleImport
      * @param $array
      * @param $keys
      */
-    public function traverseArray(&$array, $keys) {
+    public function traverseArray(&$array, $keys)
+    {
         foreach ($array as $key => &$value) {
             if (is_array($value)) {
                 $this->traverseArray($value, $keys);

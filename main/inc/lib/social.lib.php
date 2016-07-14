@@ -1424,23 +1424,28 @@ class SocialManager extends UserManager
             $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
             $media = '';
             $media .= '<div class="rep-post">';
+            $media .= '<div class="col-md-2 col-xs-2 social-post-answers">';
+            $media .= '<div class="user-image pull-right">';
+            $media .= '<a href="'.$url.'" ><img src="'. $users[$userIdLoop]['avatar'] .
+                       '" alt="'.$users[$userIdLoop]['complete_name'].'" class="avatar-thumb"></a>';
+            $media .= '</div>';
+            $media .= '</div>';
+            $media .= '<div class="col-md-9 col-xs-9 social-post-answers">';
+            $media .= '<div class="user-data">';
+            $media .= '<div class="username">' . '<a href="'.$url.'">'.$nameComplete.'</a> <span>'.Security::remove_XSS($message['content']).'</span></div>';
+            $media .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
+            $media .= '<br />';
+            $media .= '</div>';
+            $media .= '</div>';
+            $media .= '</div>';
             if ($isOwnWall) {
+                $media .= '<div class="col-md-1 col-xs-1 social-post-answers">';
                 $media .= '<div class="pull-right deleted-mgs">';
                 $media .= '<a title="'.get_lang("SocialMessageDelete").'" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
                     $message['id'].'">x</a>';
                 $media .= '</div>';
+                $media .= '</div>';
             }
-            $media .= '<div class="user-image">';
-            $media .= '<a href="'.$url.'" ><img src="'. $users[$userIdLoop]['avatar'] .
-                       '" alt="'.$users[$userIdLoop]['complete_name'].'" class="avatar-thumb"></a>';
-            $media .= '</div>';
-            $media .= '<div class="user-data">';
-            $media .= '<div class="username">' . '<a href="'.$url.'">'.$nameComplete.'</a></div>';
-            $media .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
-            $media .= '</div>';
-            $media .= '<div class="msg-content">';
-            $media .= '<p>'.Security::remove_XSS($message['content']).'</p>';
-            $media .= '</div></div>';
 
             $formattedList .= $media;
         }
@@ -1573,6 +1578,9 @@ class SocialManager extends UserManager
         $html .= '</div>';
         $html .= '</div>'; // end mediaPost
 
+        // Popularity post functionality
+        $html .= '<div class="popularity-mediapost"></div>';
+
         return $html;
     }
 
@@ -1583,28 +1591,26 @@ class SocialManager extends UserManager
      */
     public static function readContentWithOpenGraph($link)
     {
+        if (strpos($link, "://") === false && substr($link, 0, 1) != "/") {
+            $link = "http://".$link;
+        }
         $graph = OpenGraph::fetch($link);
+        $link = parse_url($link);
+        $host = $link['host'] ? strtoupper($link['host']) : $link['path'];
         if (!$graph) {
             return false;
         }
         $url = $graph->url;
         $image = $graph->image;
-        $domain = empty($url) ? parse_url($link) : parse_url($url);
-        $domain = $domain['scheme'].'://'.$domain['host'];
-        // Trick to verify if the Image Url Exist because of some bad metatag dev
-        if (self::verifyUrl($image) == false){
-            if (!($image[0] == '/')){
-                $domain = $domain . '/';
-            }
-            $image = $domain . $image;
-        }
+        $description = $graph->description;
         $title = $graph->title;
-
-        $html  = '<div class="thumbnail">';
-        $html .= '<a target="_blank" href="'.$link.'"><h3>'.$title.'</h3>';
-        $html .= empty($image) ? '' : '<img alt="" src="'.$image.'" /></a>';
-        $html .= empty($graph->description) ? '' : '<p class="description">'.$graph->description.'</p>';
-        $html .= '<a href="'.$link.'">'.$link.'</a>';
+        $html  = '<div class="thumbnail social-thumbnail">';
+        $html .= empty($image) ? '' : '<a target="_blank" href="'.$url.'"><img class="img-responsive social-image" src="'.$image.'" /></a>';
+        $html .= '<div class="social-description">';
+        $html .= '<a target="_blank" href="'.$url.'"><h5 class="social-title"><b>'.$title.'</b></h5></a>';
+        $html .= empty($description) ? '' : '<span>'.$description.'</span>';
+        $html .= empty($host) ? '' : '<p>'.$host.'</p>';
+        $html .= '</div>';
         $html .= '</div>';
 
         return $html;
@@ -1927,7 +1933,7 @@ class SocialManager extends UserManager
             $post = $message['html'];
             $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $message['id']);
 
-            $html .= $post.$comment;
+            $html .= Display::panel($post.$comment, '');
         }
 
         return $html;

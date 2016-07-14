@@ -946,7 +946,7 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
         */
         // Add version table
-        $connection->executeQuery('CREATE TABLE version (version varchar(255), PRIMARY KEY(version));');
+        $connection->executeQuery('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id));');
 
         // Tickets
         $table = Database::get_main_table(TABLE_TICKET_PROJECT);

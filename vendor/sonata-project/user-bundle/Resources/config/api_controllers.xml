@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sonata.user.controller.api.user" class="Sonata\UserBundle\Controller\Api\UserController">
+            <argument type="service" id="sonata.user.user_manager" />
+            <argument type="service" id="sonata.user.group_manager" />
+            <argument type="service" id="form.factory" />
+        </service>
+
+        <service id="sonata.user.controller.api.group" class="Sonata\UserBundle\Controller\Api\GroupController">
+            <argument type="service" id="sonata.user.group_manager" />
+            <argument type="service" id="form.factory" />
+        </service>
+    </services>
+</container>

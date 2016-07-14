@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="security.acl.user_voter.class">Sonata\UserBundle\Security\Authorization\Voter\UserAclVoter</parameter>
+    </parameters>
+
+    <services>
+        <service id="security.acl.voter.user_permissions" class="%security.acl.user_voter.class%" public="false">
+            <tag name="monolog.logger" channel="security" />
+            <tag name="security.voter" priority="255" />
+
+            <argument type="service" id="security.acl.provider" />
+            <argument type="service" id="security.acl.object_identity_retrieval_strategy" />
+            <argument type="service" id="security.acl.security_identity_retrieval_strategy" />
+            <argument type="service" id="security.acl.permission.map" />
+            <argument type="service" id="logger" on-invalid="null" />
+        </service>
+    </services>
+</container>

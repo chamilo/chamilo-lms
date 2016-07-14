@@ -1,0 +1,9 @@
+{{ form_start(form, {'action': path('sonata_user_resetting_reset', {'token': token } ) }) }}
+{{ form_widget(form) }}
+
+<div class="form-actions form-group">
+    <div class="col-sm-offset-3 col-sm-9">
+        <input type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" class="btn btn-primary" />
+    </div>
+</div>
+{{ form_end(form) }}

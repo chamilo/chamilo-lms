@@ -1,9 +1,0 @@
-default:
-    extensions:
-        Behat\MinkExtension\Extension:
-          base_url: http://localhost
-          goutte: ~
-          selenium2: ~
-    paths:
-        features: features
-        bootstrap: %behat.paths.features%/bootstrap

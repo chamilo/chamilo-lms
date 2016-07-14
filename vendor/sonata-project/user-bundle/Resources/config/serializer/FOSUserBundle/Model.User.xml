@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="FOS\UserBundle\Model\User" exclusion-policy="all" xml-root-name="user">
+
+        <property name="username"            type="string"   expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+        <property name="usernameCanonical"   type="string"   expose="true" since-version="1.0" groups="sonata_api_read,sonata_search" />
+        <property name="email"               type="string"   expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+        <property name="emailCanonical"      type="string"   expose="true" since-version="1.0" groups="sonata_api_read,sonata_search" />
+        <property name="enabled"             type="boolean"  expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+        <property name="plainPassword"       type="string"   expose="true" since-version="1.0" groups="sonata_api_write" />
+        <property name="lastLogin"           type="DateTime" expose="true" since-version="1.0" groups="sonata_api_read,sonata_search" />
+        <property name="locked"              type="boolean"  expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+        <property name="expired"             type="boolean"  expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+        <property name="expiresAt"           type="DateTime" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+        <property name="confirmationToken"   type="string"   expose="true" since-version="1.0" groups="sonata_api_read,sonata_search" />
+        <property name="passwordRequestedAt" type="DateTime" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+        <property name="roles"               type="array"    expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+        <property name="credentialsExpired"  type="boolean"  expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+        <property name="credentialsExpireAt" type="DateTime" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+
+    </class>
+</serializer>

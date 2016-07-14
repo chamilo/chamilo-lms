@@ -161,7 +161,7 @@ if ($action_todo) {
     $group[]= $form->createElement('checkbox', 'visible_student', null, get_lang('Student'));
     $group[]= $form->createElement('checkbox', 'visible_guest', null, get_lang('Guest'));
 
-    $form->addGroup($group, null, get_lang('Visible'), '');
+    $form->addGroup($group, null, get_lang('Visible'));
 
     $form->addElement('hidden', 'id');
     $userGroup = new UserGroup();

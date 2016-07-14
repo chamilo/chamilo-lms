@@ -340,7 +340,7 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
         $group[] = $form->createElement('radio', 'reset_password', null, get_lang('ExternalAuthentication').' ', 3);
         $group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
         $group[] = $form->createElement('static', '', '', '<br />');
-        $form->addGroup($group, 'password', null, '', false);
+        $form->addGroup($group, 'password', null, null, false);
     }
 }
 $form->addElement('radio', 'reset_password', null, get_lang('AutoGeneratePassword'), 1);
@@ -352,7 +352,7 @@ $group[] = $form->createElement(
     null,
     array('onkeydown' => 'javascript: password_switch_radio_button();')
 );
-$form->addGroup($group, 'password', null, '', false);
+$form->addGroup($group, 'password', null, null, false);
 
 // Status
 $status = array();
@@ -396,7 +396,7 @@ $form->addElement('select_language', 'language', get_lang('Language'));
 $group = array();
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
-$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;', false);
+$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), null, false);
 
 // Registration User and Date
 $creatorInfo = api_get_user_info($user_data['creator_id']);
@@ -409,7 +409,7 @@ if (!$user_data['platform_admin']) {
 	$group = array ();
 	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
 	$group[] = $form->createElement('DateTimePicker', 'expiration_date', null, array('onchange' => 'javascript: enable_expiration_date();'));
-	$form->addGroup($group, 'max_member_group', null, '', false);
+	$form->addGroup($group, 'max_member_group', null, null, false);
 
 	// Active account or inactive account
 	$form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);

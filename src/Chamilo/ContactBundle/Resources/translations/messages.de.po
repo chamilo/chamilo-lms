@@ -20,7 +20,7 @@ msgid "Send"
 msgstr "Senden"
 
 msgid "You had a new message from %url%"
-msgstr "Vous avez un nouveau message de %url%"
+msgstr "Sie haben eine neue Nachricht erhalten von %url%"
 
 msgid "Your email has been sent! Thanks!"
 msgstr "Ihre Nachricht wurde versendet. Vielen Dank !"

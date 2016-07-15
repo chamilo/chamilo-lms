@@ -230,7 +230,7 @@ $form->setDefaults($defaults);
 
 Display::display_header(get_lang('CourseSettings'), 'Path');
 
-echo $_SESSION['oLP']->build_action_menu();
+echo $_SESSION['oLP']->build_action_menu(false, false, true, false);
 
 echo '<div class="row">';
 

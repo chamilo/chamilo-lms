@@ -842,7 +842,7 @@ $form->addElement('select', 'keyword_status', get_lang('Profile'), $status_optio
 $active_group = array();
 $active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('Active'));
 $active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('Inactive'));
-$form->addGroup($active_group, '', get_lang('ActiveAccount'), '<br/>', false);
+$form->addGroup($active_group, '', get_lang('ActiveAccount'), null, false);
 $form->addElement('checkbox', 'check_easy_passwords', null, get_lang('CheckEasyPasswords'));
 
 

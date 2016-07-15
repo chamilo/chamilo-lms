@@ -187,7 +187,7 @@ $group = array();
 $group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, array('id' => 'max_member_selected'));
 $group[] = $form->createElement('text', 'max_member', null, array('class' => 'span1', 'id' => 'max_member'));
 $group[] = $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
-$form->addGroup($group, 'max_member_group', null, '', false);
+$form->addGroup($group, 'max_member_group', null, null, false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
 
 // Self registration
@@ -195,42 +195,78 @@ $group = array(
     $form->createElement('checkbox', 'self_registration_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1),
     $form->createElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1)
 );
-$form->addGroup($group, '', Display::return_icon('user.png', get_lang('GroupSelfRegistration') , array(), ICON_SIZE_SMALL).' '.get_lang('GroupSelfRegistration'), '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('user.png', get_lang('GroupSelfRegistration')) . ' ' . get_lang('GroupSelfRegistration'),
+    null,
+    false
+);
 
 // Documents settings
 $group = array();
 $group[] = $form->createElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'doc_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'doc_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
-$form->addGroup($group, '', Display::return_icon('folder.png', get_lang('GroupDocument') , array(), ICON_SIZE_SMALL).' '.get_lang('GroupDocument'), '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('folder.png', get_lang('GroupDocument')).' '.get_lang('GroupDocument'),
+    null,
+    false
+);
 
 // Work settings
 $group = array();
 $group[] = $form->createElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'work_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'work_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
-$form->addGroup($group, '', Display::return_icon('work.png', get_lang('GroupWork') , array(), ICON_SIZE_SMALL).' '.get_lang('GroupWork'), '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('work.png', get_lang('GroupWork')) . ' ' . get_lang('GroupWork'),
+    null,
+    false
+);
 
 // Calendar settings
 $group = array();
 $group[] = $form->createElement('radio', 'calendar_state', get_lang('GroupCalendar'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'calendar_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'calendar_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
-$form->addGroup($group, '', Display::return_icon('agenda.png', get_lang('GroupCalendar') , array(), ICON_SIZE_SMALL).' '.get_lang('GroupCalendar'), '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('agenda.png', get_lang('GroupCalendar')) . ' ' . get_lang('GroupCalendar'),
+    null,
+    false
+);
 
 // Announcements settings
 $group = array();
 $group[] = $form->createElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'announcements_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'announcements_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
-$form->addGroup($group, '', Display::return_icon('announce.png', get_lang('GroupAnnouncements') , array(), ICON_SIZE_SMALL).' '.get_lang('GroupAnnouncements'), '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('announce.png', get_lang('GroupAnnouncements')) . ' ' . get_lang('GroupAnnouncements'),
+    null,
+    false
+);
 
 //Forum settings
 $group = array();
 $group[] = $form->createElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
 $group[] = $form->createElement('radio', 'forum_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'forum_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
-$form->addGroup($group, '', Display::return_icon('forum.png', get_lang('GroupForum') , array(), ICON_SIZE_SMALL).' '.get_lang('GroupForum'), '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('forum.png', get_lang('GroupForum')) . ' ' . get_lang('GroupForum'),
+    null,
+    false
+);
 
 // Wiki settings
 $group = array(
@@ -238,7 +274,13 @@ $group = array(
     $form->createElement('radio', 'wiki_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'wiki_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
 );
-$form->addGroup($group, '', Display::return_icon('wiki.png', get_lang('GroupWiki') , array(), ICON_SIZE_SMALL).' '.get_lang('GroupWiki'), '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('wiki.png', get_lang('GroupWiki')) . ' ' . get_lang('GroupWiki'),
+    null,
+    false
+);
 
 // Chat settings
 $group = array(
@@ -246,7 +288,13 @@ $group = array(
     $form->createElement('radio', 'chat_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'chat_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
 );
-$form->addGroup($group, '', Display::return_icon('chat.png', get_lang('Chat'), array(), ICON_SIZE_SMALL).' '.get_lang('Chat'), '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('chat.png', get_lang('Chat')).' '.get_lang('Chat'),
+    null,
+    false
+);
 
 // submit button
 $form->addButtonSave(get_lang('SaveSettings'), 'submit');

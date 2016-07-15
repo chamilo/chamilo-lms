@@ -207,7 +207,7 @@ $group[] = $form->createElement(
     )
 );
 
-$form->addGroup($group, 'password', get_lang('Password'), '');
+$form->addGroup($group, 'password', get_lang('Password'));
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
 if ($checkPass) {
@@ -261,7 +261,7 @@ if (api_is_platform_admin()) {
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
     $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
-    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
+    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'));
     $form->addElement('html', '</div>');
 }
 
@@ -271,7 +271,7 @@ $form->addElement('select_language', 'language', get_lang('Language'), null);
 $group = array();
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
-$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
+$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 // Expiration Date
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 $group = array ();
@@ -284,7 +284,7 @@ $group[] = $form->createElement(
         'onchange' => 'javascript: enable_expiration_date();'
     )
 );
-$form->addGroup($group, 'max_member_group', null, '', false);
+$form->addGroup($group, 'max_member_group', null, null, false);
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
 $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);

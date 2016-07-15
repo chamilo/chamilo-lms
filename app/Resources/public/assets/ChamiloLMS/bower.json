@@ -26,7 +26,8 @@
     "webcamjs": "1.0.*",
     "cropper": "1.0.*",
     "jquery.scrollbar": "0.2.*",
-    "jquery-file-upload": "*"
+    "jquery-file-upload": "*",
+    "pwstrength-bootstrap": "*"
   },
   "resolutions": {
     "jquery": "2.1.4"

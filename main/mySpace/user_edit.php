@@ -91,13 +91,13 @@ $auth_sources = 0; //make available wider as we need it in case of form reset (s
 $group[] =& $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
 $group[] =& $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
 $group[] =& $form->createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button(document.user_add,"password[password_auto]");'));
-$form->addGroup($group, 'password', get_lang('Password'), '');
+$form->addGroup($group, 'password', get_lang('Password'));
 
 // Send email
 $group = array();
 $group[] =& $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] =& $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
-$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
+$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 
 // Set default values
 $defaults = array();

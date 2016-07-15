@@ -276,7 +276,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $group = array();
         $group[] = $form->createElement('radio', 'allow_anonymous', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'allow_anonymous', null, get_lang('No'), 0);
-        $form->addGroup($group, 'allow_anonymous_group', get_lang('AllowAnonymousPosts'), ' ');
+        $form->addGroup($group, 'allow_anonymous_group', get_lang('AllowAnonymousPosts'));
     }
 
     $form->addButtonAdvancedSettings('advanced_params');
@@ -304,12 +304,12 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $group = array();
     $group[] = $form->createElement('radio', 'moderated', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'moderated', null, get_lang('No'), 0);
-    $form->addGroup($group, 'moderated', get_lang('ModeratedForum'), ' ');
+    $form->addGroup($group, 'moderated', get_lang('ModeratedForum'));
 
     $group = array();
     $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('No'), 0);
-    $form->addGroup($group, 'students_can_edit_group', get_lang('StudentsCanEdit'), ' ');
+    $form->addGroup($group, 'students_can_edit_group', get_lang('StudentsCanEdit'));
 
     $group = array();
     $group[] = $form->createElement('radio', 'approval_direct', null, get_lang('Approval'), 1);
@@ -322,13 +322,13 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $group = array();
     $group[] = $form->createElement('radio', 'allow_new_threads', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'allow_new_threads', null, get_lang('No'), 0);
-    $form->addGroup($group, 'allow_new_threads_group', get_lang('AllowNewThreads'), ' ');
+    $form->addGroup($group, 'allow_new_threads_group', get_lang('AllowNewThreads'));
 
     $group = array();
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Flat'), 'flat');
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Threaded'), 'threaded');
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Nested'), 'nested');
-    $form->addGroup($group, 'default_view_type_group', get_lang('DefaultViewType'), ' ');
+    $form->addGroup($group, 'default_view_type_group', get_lang('DefaultViewType'));
 
     // Drop down list: Groups
     $groups = GroupManager::get_group_list();
@@ -342,7 +342,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $group = array();
     $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Public'), 'public');
     $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Private'), 'private');
-    $form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'), '');
+    $form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'));
 
     // Forum image
     $form->add_progress_bar();
@@ -702,7 +702,6 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
                 delete_forum_image($values['forum_id']);
             }
         }
-
         // Storing after edition.
         $params = [
             'forum_title'=> $values['forum_title'],
@@ -717,7 +716,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
-            'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
+            'moderated'=> $values['moderated']['moderated'],
             'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
             'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
@@ -760,7 +759,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
-            'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
+            'moderated'=> (int) $values['moderated'],
             'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
             'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
@@ -1830,7 +1829,6 @@ function get_threads($forum_id, $course_code = null)
             ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
 
     if (api_is_allowed_to_edit()) {
-
         $sql = "SELECT DISTINCT
                     thread.*,
                     item_properties.*,
@@ -1853,7 +1851,6 @@ function get_threads($forum_id, $course_code = null)
                     thread.forum_id = ".intval($forum_id)."
                 ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
     }
-
     $result = Database::query($sql);
     $list = array();
     $alreadyAdded = array();
@@ -1930,10 +1927,21 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
         ->andWhere($visibleCriteria)
     ;
 
-    if (! (api_is_allowed_to_edit() || GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id()))) {
-        if ($forumInfo['moderated']) {
-            $criteria->where(Criteria::expr()->eq('status', 1));
+    $groupId = api_get_group_id();
+    $filterModerated = true;
+
+    if (empty($groupId)) {
+        if (api_is_allowed_to_edit()) {
+            $filterModerated = false;
         }
+    } else {
+        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupId)) {
+            $filterModerated = false;
+        }
+    }
+
+    if ($filterModerated && $forumInfo['moderated'] == 1) {
+        $criteria->where(Criteria::expr()->eq('status', 1));
     }
 
     if ($recursive) {
@@ -2726,8 +2734,7 @@ function showUpdateThreadForm($currentForum, $forumSetting, $formValues = '')
             [
                 get_lang('ForumThreadPeerScoring'),
                 get_lang('ForumThreadPeerScoringComment'),
-            ],
-            ' '
+            ]
         );
         $form->addElement('html', '</div>');
     }
@@ -2908,8 +2915,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
             [
                 get_lang('ForumThreadPeerScoring'),
                 get_lang('ForumThreadPeerScoringComment'),
-            ],
-            ' '
+            ]
         );
         $form->addElement('html', '</div>');
         $form->addElement('html', '</div>');
@@ -3585,8 +3591,7 @@ function show_edit_post_form(
             [
                 get_lang('ForumThreadPeerScoring'),
                 get_lang('ForumThreadPeerScoringComment'),
-            ],
-            ' '
+            ]
         );
 
         $form->addElement('html', '</div>');
@@ -3597,7 +3602,7 @@ function show_edit_post_form(
         $group[] = $form->createElement('radio', 'status', null, get_lang('Validated'), 1);
         $group[] = $form->createElement('radio', 'status', null, get_lang('WaitingModeration'), 2);
         $group[] = $form->createElement('radio', 'status', null, get_lang('Rejected'), 3);
-        $form->addGroup($group, 'status', get_lang('Status'), ' ');
+        $form->addGroup($group, 'status', get_lang('Status'));
     }
 
     $defaults['status']['status'] = isset($current_post['status']) && !empty($current_post['status']) ? $current_post['status'] : 2;
@@ -5195,8 +5200,9 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {
+
             $user_info = api_get_user_info($value['user_id']);
-            $email_body = get_lang('Dear').' '.$user_info['complete_name'].", <br />\n\r";
+            $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
             $email_body .= get_lang('NewForumPost').": ".$current_forum['forum_title'].' - '.$current_thread['thread_title']." <br />\n";
             $email_body .= get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."]  <br />\n";
             $email_body .= get_lang('YouWantedToStayInformed')."<br />\n";

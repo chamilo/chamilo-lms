@@ -99,7 +99,7 @@ $form = new FormValidator('import_classes');
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $group = array();
 $group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="example_class.csv" target="_blank">' . get_lang('ExampleCSVFile') . '</a>)', 'csv');
-$form->addGroup($group, '', get_lang('FileType'), '<br/>');
+$form->addGroup($group, '', get_lang('FileType'), null);
 $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {

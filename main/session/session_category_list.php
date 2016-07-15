@@ -54,7 +54,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $active_group = array();
     $active_group[] = $form->createElement('checkbox', 'active', '', get_lang('Active'));
     $active_group[] = $form->createElement('checkbox', 'inactive', '', get_lang('Inactive'));
-    $form->addGroup($active_group, '', get_lang('ActiveSession'), '<br/>', false);
+    $form->addGroup($active_group, '', get_lang('ActiveSession'), null, false);
     $form->addButtonSearch(get_lang('SearchUsers'));
     $defaults['active'] = 1;
     $defaults['inactive'] = 1;

@@ -2525,7 +2525,6 @@ class UserManager
                     $ignore_visibility_for_admins
                 );
 
-
                 // Course Coach session visibility.
                 $blockedCourseCount = 0;
                 $closedVisibilityList = array(
@@ -2535,14 +2534,14 @@ class UserManager
 
                 foreach ($courseList as $course) {
                     // Checking session visibility
-                    $visibility = api_get_session_visibility(
+                    $sessionCourseVisibility = api_get_session_visibility(
                         $session_id,
                         $course['real_id'],
                         $ignore_visibility_for_admins
                     );
 
                     $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
-                    if ($courseIsVisible == false || $visibility == SESSION_INVISIBLE) {
+                    if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
                         $blockedCourseCount++;
                     }
                 }
@@ -4635,7 +4634,7 @@ class UserManager
                             $option_details[1]
                         );
                     }
-                    $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
+                    $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3]);
                     if (!$admin_permissions) {
                         if ($field_details[7] == 0)
                             $form->freeze('extra_'.$field_details[1]);
@@ -4729,7 +4728,7 @@ class UserManager
                     $group = '';
                     $group[] = $form->createElement('select', 'extra_'.$field_details[1], '', $values[0], '');
                     $group[] = $form->createElement('select', 'extra_'.$field_details[1].'*', '', $values['*'], '');
-                    $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
+                    $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3]);
 
                     if (!$admin_permissions) {
                         if ($field_details[7] == 0)

@@ -2198,7 +2198,7 @@ function finishInstallation(
     $files = $finder->files()->in($path);
     foreach ($files as $version) {
         $version = str_replace(['Version',  '.php' ], '', $version->getFilename());
-        $sql = "INSERT INTO version VALUES ('$version')";
+        $sql = "INSERT INTO version (version) VALUES ('$version')";
         Database::query($sql);
     }
 }

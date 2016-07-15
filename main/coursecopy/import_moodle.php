@@ -41,7 +41,13 @@ $form->addButtonImport(get_lang('Import'));
 if ($form->validate()) {
     $file = $_FILES['moodle_file'];
     $moodleImport = new MoodleImport();
-    $moodleImport->readMoodleFile($file);
+    $responseImport = $moodleImport->readMoodleFile($file);
+    if ($responseImport) {
+        Display::addFlash(Display::return_message(get_lang('MoodleFileImportedSuccessfull'), 'success'));
+    } else {
+        Display::addFlash(Display::return_message(get_lang('ErrorImportingFile'), 'error'));
+    }
+    header('Location: ' . api_get_self() . '?' . api_get_cidreq());
 }
 
 $templateName = get_lang('ImportFromMoodle');

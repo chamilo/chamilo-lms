@@ -3,7 +3,7 @@
         <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="items items-hotcourse">
                 <div class="image">
-                    <img src="{{ item.course_image_large }}" class="img-responsive">
+                    <img src="{{ item.course_image_large }}" class="img-responsive" alt="{{ item.title }}">
                     {% if item.categoryName != '' %}
                         <span class="category">{{ item.categoryName }}</span>
                         <div class="cribbon"></div>
@@ -14,7 +14,7 @@
                             {% set counter = counter + 1 %}
                             {% if counter <= 3 %}
                                 <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                    <img src="{{ teacher.avatar }}"/>
+                                    <img src="{{ teacher.avatar }}" alt="{{ teacher.firstname }} {{ teacher.lastname }}"/>
                                 </a>
                                 <div class="teachers-details">
                                      <h5>

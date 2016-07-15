@@ -44,6 +44,14 @@ foreach ($logs as $log) {
     if (strpos($log['message'], $langMsg) === 0) {
         continue;
     }
+    $langMsg = 'Update language vars';
+    if (strpos($log['message'], $langMsg) === 0) {
+        continue;
+    }
+    $langMsg = 'Update lang vars';
+    if (strpos($log['message'], $langMsg) === 0) {
+        continue;
+    }
     // Look for tasks references
     $issueLink = '';
     $matches = array();

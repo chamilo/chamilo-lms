@@ -1956,7 +1956,7 @@ function get_work_user_list(
             ) {
                 // Firstname, lastname, username
                 $work['fullname'] = Display::div($work['fullname'], array('class' => 'work-name'));
-                
+
                 //$work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 //$work['lastname'] = Display::div($work['lastname'], array('class' => $class));
 
@@ -2133,7 +2133,7 @@ function get_work_user_list(
                 $works[] = $work;
             }
         }
-        
+
         return $works;
     }
 }
@@ -3341,7 +3341,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
             'error' => Display:: return_message(
                 get_lang('UplUploadFailedSizeIsZero'),
                 'error'
-            ),
+            )
         );
     } elseif (!filter_extension($new_file_name)) {
         return array(
@@ -3523,7 +3523,6 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
     $contains_file = isset($values['contains_file']) && !empty($values['contains_file']) ? intval($values['contains_file']): 0;
 
     $saveWork = true;
-    $message = null;
     $filename = null;
     $url = null;
     $filesize = null;
@@ -3531,28 +3530,30 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
     if ($values['contains_file']) {
         $result = uploadWork($workInfo, $courseInfo, false, [], $file);
         if (!$result) {
-            return false;
+            $saveWork = false;
         }
         if (isset($result['error'])) {
             $message = $result['error'];
+            Display::addFlash($message);
+
             $saveWork = false;
         }
-        $filename = isset($result['filename']) ? $result['filename'] : null;
-        if (empty($title)) {
-            $title = isset($result['title']) && !empty($result['title']) ? $result['title'] : get_lang('Untitled');
-        }
-
-        $filesize = isset($result['filesize']) ? $result['filesize'] : null;
-        $url = $result['url'];
-    }
-
-    if (empty($title)) {
-        $title = get_lang('Untitled');
     }
 
     $workData = [];
 
     if ($saveWork) {
+        $filename = isset($result['filename']) ? $result['filename'] : null;
+        if (empty($title)) {
+            $title = isset($result['title']) && !empty($result['title']) ? $result['title'] : get_lang('Untitled');
+        }
+        $filesize = isset($result['filesize']) ? $result['filesize'] : null;
+        $url = $result['url'];
+
+        if (empty($title)) {
+            $title = get_lang('Untitled');
+        }
+
         $active = '1';
         $params = [
             'c_id' => $courseId,

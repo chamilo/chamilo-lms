@@ -702,7 +702,6 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
                 delete_forum_image($values['forum_id']);
             }
         }
-
         // Storing after edition.
         $params = [
             'forum_title'=> $values['forum_title'],
@@ -717,7 +716,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
-            'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
+            'moderated'=> $values['moderated']['moderated'],
             'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
             'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
@@ -760,7 +759,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
-            'moderated'=> isset($values['moderated']['moderated']) ? 1 : 0,
+            'moderated'=> (int) $values['moderated'],
             'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
             'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
@@ -1830,7 +1829,6 @@ function get_threads($forum_id, $course_code = null)
             ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
 
     if (api_is_allowed_to_edit()) {
-
         $sql = "SELECT DISTINCT
                     thread.*,
                     item_properties.*,
@@ -1853,7 +1851,6 @@ function get_threads($forum_id, $course_code = null)
                     thread.forum_id = ".intval($forum_id)."
                 ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
     }
-
     $result = Database::query($sql);
     $list = array();
     $alreadyAdded = array();
@@ -1930,10 +1927,21 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
         ->andWhere($visibleCriteria)
     ;
 
-    if (! (api_is_allowed_to_edit() || GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id()))) {
-        if ($forumInfo['moderated']) {
-            $criteria->where(Criteria::expr()->eq('status', 1));
+    $groupId = api_get_group_id();
+    $filterModerated = true;
+
+    if (empty($groupId)) {
+        if (api_is_allowed_to_edit()) {
+            $filterModerated = false;
         }
+    } else {
+        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupId)) {
+            $filterModerated = false;
+        }
+    }
+
+    if ($filterModerated && $forumInfo['moderated'] == 1) {
+        $criteria->where(Criteria::expr()->eq('status', 1));
     }
 
     if ($recursive) {
@@ -5192,8 +5200,9 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {
+
             $user_info = api_get_user_info($value['user_id']);
-            $email_body = get_lang('Dear').' '.$user_info['complete_name'].", <br />\n\r";
+            $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
             $email_body .= get_lang('NewForumPost').": ".$current_forum['forum_title'].' - '.$current_thread['thread_title']." <br />\n";
             $email_body .= get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."]  <br />\n";
             $email_body .= get_lang('YouWantedToStayInformed')."<br />\n";

@@ -4,6 +4,7 @@
 namespace Chamilo\CourseBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
@@ -16,11 +17,11 @@ class CStudentPublicationRepository extends EntityRepository
      * Find all the works registered by a teacher
      * @param User $user
      * @param Course $course
-     * @param int $sessionId Optional
+     * @param Session $session Optional
      * @param int $groupId Optional
      * @return array
      */
-    public function findByTeacher(User $user, Course $course, $sessionId = 0, $groupId = 0)
+    public function findWorksByTeacher(User $user, Course $course, Session $session = null, $groupId = 0)
     {
         $qb = $this->createQueryBuilder('w');
         return $qb
@@ -43,7 +44,7 @@ class CStudentPublicationRepository extends EntityRepository
             ->orderBy('w.sentDate', 'ASC')
             ->setParameters([
                 'course' => intval($course->getId()),
-                'session' => intval($sessionId),
+                'session' => $session,
                 'group' => intval($groupId),
                 'user' => $user->getId()
             ])

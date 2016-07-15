@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -203,6 +204,12 @@ class Session
     private $sendSubscriptionNotification;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     */
+    private $studentPublications;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -226,6 +233,7 @@ class Session
         $this->userCourseSubscriptions = new ArrayCollection();
         $this->showDescription = 0;
         $this->category = null;
+        $this->studentPublications = new ArrayCollection();
     }
 
     /**
@@ -1026,4 +1034,38 @@ class Session
         return $return;
     }
 
+    /**
+     * @param ArrayCollection $studentPublications
+     * @return Session
+     */
+    public function setStudentPublications(ArrayCollection $studentPublications)
+    {
+        $this->studentPublications = new ArrayCollection();
+
+        foreach ($studentPublications as $studentPublication) {
+            $this->addStudentPublication($studentPublication);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CStudentPublication $studentPublication
+     * @return Session
+     */
+    public function addStudentPublication(CStudentPublication $studentPublication)
+    {
+        $this->studentPublications[] = $studentPublication;
+
+        return $this;
+    }
+
+    /**
+     * Get studentPublications
+     * @return ArrayCollection
+     */
+    public function getStudentPublications()
+    {
+        return $this->studentPublications;
+    }
 }

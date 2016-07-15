@@ -81,7 +81,7 @@ if ($session) {
 
             $works = $em
                 ->getRepository('ChamiloCourseBundle:CStudentPublication')
-                ->findByTeacher($user, $course, $session->getId());
+                ->findWorksByTeacher($user, $course, $session);
 
             $usersInfo[$user->getId()][$course->getId() . '_number_of_students'] = $sessionCourse->getNbrUsers();
             $usersInfo[$user->getId()][$course->getId() . '_number_of_works'] = count($works);

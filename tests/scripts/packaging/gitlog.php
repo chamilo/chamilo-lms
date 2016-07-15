@@ -59,7 +59,8 @@ foreach ($logs as $log) {
             }
         } else {
             $num = substr($issue, 3);
-            if ($formatHTML) {
+            if ($formatHTML && $num != '7683') {
+                //7683 is an internal task at BeezNest for all general contributions to Chamilo - no use in adding this reference
                 $issueLink = ' - <a href="https://task.beeznest.com/issues/' . $num . '">BT#' . $num . '</a>';
             } else {
                 $issueLink = ' - ' . $num;

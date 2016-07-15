@@ -2427,7 +2427,6 @@ class UserManager
                     $ignore_visibility_for_admins
                 );
 
-
                 // Course Coach session visibility.
                 $blockedCourseCount = 0;
                 $closedVisibilityList = array(
@@ -2437,14 +2436,14 @@ class UserManager
 
                 foreach ($courseList as $course) {
                     // Checking session visibility
-                    $visibility = api_get_session_visibility(
+                    $sessionCourseVisibility = api_get_session_visibility(
                         $session_id,
                         $course['real_id'],
                         $ignore_visibility_for_admins
                     );
 
                     $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
-                    if ($courseIsVisible == false || $visibility == SESSION_INVISIBLE) {
+                    if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
                         $blockedCourseCount++;
                     }
                 }

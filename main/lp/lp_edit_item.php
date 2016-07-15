@@ -143,18 +143,10 @@ jQuery(document).ready(function(){
 });
 
 $(document).ready(function() {
-    
-    $("#doc_form").removeClass( "col-md-8" ).addClass( "col-md-7" );  
-    $("#hide_bar_template").click(function() {
-        $("#lp_sidebar").toggleClass("hide");
-        if ($('#doc_form').is('.col-md-7')) {
-            $('#doc_form').removeClass('col-md-7');
-            $('#doc_form').addClass('col-md-11');
-        } else {
-            $('#doc_form').removeClass('col-md-11');
-            $('#doc_form').addClass('col-md-7');
-        }
-       $("#hide_bar_template").toggleClass("hide_bar_template_not_hide");
+    expandColumnToogle('#hide_bar_template', {
+        selector: '#lp_sidebar'
+    }, {
+        selector: '#doc_form'
     });
     
     $('.lp-btn-associate-forum').on('click', function (e) {

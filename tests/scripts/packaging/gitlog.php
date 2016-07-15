@@ -78,6 +78,7 @@ foreach ($logs as $log) {
     }
     $commitLink = '';
     if ($formatHTML) {
+        $log['message'] = ucfirst($log['message']);
         $commitLink = '<a href="https://github.com/chamilo/chamilo-lms/commit/' . $log['sha1'] . '">' .
             substr($log['sha1'], 0, 8) . '</a>';
         echo '<li>('.$commitLink.$issueLink.') '.$log['message'].'</li>'.PHP_EOL;

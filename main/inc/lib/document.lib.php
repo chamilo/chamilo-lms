@@ -1387,18 +1387,17 @@ class DocumentManager
             return false;
         }
 
-        if (isset($session_id)) {
-            $session_id = intval($session_id);
-        } else {
-            $session_id = api_get_session_id();
-        }
+        $session_id = is_null($session_id) ? api_get_session_id() : intval($session_id);
 
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
 
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $id = intval($id);
+
+        $sessionCondition = api_get_session_condition($session_id, true, true);
+
         $sql = "SELECT * FROM $TABLE_DOCUMENT
-                WHERE c_id = $course_id AND session_id = $session_id AND id = $id";
+                WHERE c_id = $course_id $sessionCondition AND id = $id";
 
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
@@ -3382,7 +3381,7 @@ class DocumentManager
 
         $parentData = [];
         if ($folderId !== false) {
-            $parentData = self::get_document_data_by_id($folderId, $course_info['code']);
+            $parentData = self::get_document_data_by_id($folderId, $course_info['code'], false, $session_id);
             if (!empty($parentData)) {
                 $cleanedPath = $parentData['path'];
                 $num = substr_count($cleanedPath, '/');
@@ -3478,7 +3477,7 @@ class DocumentManager
                 'files' => $newResources
             );
         } else {
-            if (!empty($parentData)) {
+            if (is_array($parentData)) {
                 $documents[$parentData['title']] = array(
                     'id' => intval($folderId),
                     'files' => $newResources

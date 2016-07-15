@@ -4,6 +4,7 @@
 namespace Chamilo\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * Class Category
@@ -15,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Category
 {
+    use ORMBehaviors\Translatable\Translatable;
+
     /**
      * @var integer
      *
@@ -26,40 +29,26 @@ class Category
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", nullable=false)
-     */
-    protected $name;
-
-    /**
-     * @var string
      * @ORM\Column(name="email", type="string")
      */
     protected $email;
 
     /**
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     */
+    public function __call($method, $arguments)
+    {
+        return $this->proxyCurrentLocaleTranslation($method, $arguments);
+    }
+
+     /**
      * @return string
      */
     public function __toString()
     {
         return (string) $this->getName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return Category
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
     }
 
     /**
@@ -98,6 +87,4 @@ class Category
 
         return $this;
     }
-
-    
 }

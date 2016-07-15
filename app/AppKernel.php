@@ -97,6 +97,8 @@ class AppKernel extends Kernel
             //new Chamilo\InstallerBundle\ChamiloInstallerBundle(),
             new Chamilo\CoreBundle\ChamiloCoreBundle(),
             new Chamilo\CourseBundle\ChamiloCourseBundle(),
+            new Chamilo\SkillBundle\ChamiloSkillBundle(),
+
             // new Chamilo\SettingsBundle\ChamiloSettingsBundle(),
             new Chamilo\ThemeBundle\ChamiloThemeBundle(),
             //new Chamilo\NotificationBundle\ChamiloNotificationBundle(),

@@ -5192,8 +5192,9 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {
+
             $user_info = api_get_user_info($value['user_id']);
-            $email_body = get_lang('Dear').' '.$user_info['complete_name'].", <br />\n\r";
+            $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
             $email_body .= get_lang('NewForumPost').": ".$current_forum['forum_title'].' - '.$current_thread['thread_title']." <br />\n";
             $email_body .= get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."]  <br />\n";
             $email_body .= get_lang('YouWantedToStayInformed')."<br />\n";

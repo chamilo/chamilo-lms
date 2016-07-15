@@ -67,11 +67,11 @@ $validationStatus = getWorkDateValidationStatus($homework);
 
 $interbreadcrumb[] = array(
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('StudentPublications')
 );
 $interbreadcrumb[] = array(
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id,
-    'name' => $workInfo['title'],
+    'name' => $workInfo['title']
 );
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UploadADocument'));
 
@@ -104,11 +104,6 @@ if ($form->validate()) {
         $script = 'work_list.php';
         if ($is_allowed_to_edit) {
             $script = 'work_list_all.php';
-        }
-        if (!$result) {
-            Display::addFlash(Display::return_message(get_lang('UploadError'), 'error'));
-        } else {
-            Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded'), 'success'));
         }
         header('Location: '.api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id);
         exit;

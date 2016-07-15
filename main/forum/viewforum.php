@@ -431,9 +431,7 @@ echo $html;
 
 // Getting al the threads
 $threads = get_threads($my_forum);
-
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
-
 $course_id = api_get_course_int_id();
 
 echo '<div class="forum_display">';

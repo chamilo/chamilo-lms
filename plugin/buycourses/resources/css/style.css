@@ -2,8 +2,6 @@
     margin-bottom: 15px;
 }
 
-// spinner wobblebar
-
 @-moz-keyframes wobblebar-loader {
   0% {
     left: 4px;

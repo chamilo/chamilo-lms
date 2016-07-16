@@ -172,23 +172,10 @@ jQuery(document).ready(function(){
 });
 
 $(document).ready(function() {
-     $("#hide_bar_template").click(function() {
-        $("#expand").toggleClass("hide");
-        $("#contract").toggleClass("hide");
-        if ($("#doc_form").is(".col-md-8")) {
-            $("#doc_form").removeClass("col-md-8");
-            $("#doc_form").addClass("col-md-11");
-
-            $("#lp_sidebar").removeClass("col-md-4");
-            $("#lp_sidebar").addClass("hide");
-
-        } else {
-            $("#doc_form").removeClass("col-md-11");
-            $("#doc_form").addClass("col-md-8");
-
-            $("#lp_sidebar").removeClass("hide");
-            $("#lp_sidebar").addClass("col-md-4");
-        }
+    expandColumnToogle('#hide_bar_template', {
+        selector: '#lp_sidebar'
+    }, {
+        selector: '#doc_form'
     });
 
     $('.lp-btn-associate-forum').on('click', function (e) {

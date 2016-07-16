@@ -433,4 +433,40 @@ function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide)
         $('#'+inIdTxt).attr("value", inTxtHide);
     }
 }
+
+function expandColumnToogle(buttonSelector, col1Info, col2Info)
+{
+    $(buttonSelector).on('click', function (e) {
+        e.preventDefault();
+
+        col1Info = $.extend({
+            selector: '',
+            width: 4
+        }, col1Info);
+        col2Info = $.extend({
+            selector: '',
+            width: 8
+        }, col2Info);
+
+        if (!col1Info.selector || !col2Info.selector) {
+            return;
+        }
+
+        var col1 = $(col1Info.selector),
+            col2 = $(col2Info.selector);
+
+        $('#expand').toggleClass('hide');
+        $('#contract').toggleClass('hide');
+
+        if (col2.is('.col-md-' + col2Info.width)) {
+            col2.removeClass('col-md-' + col2Info.width).addClass('col-md-12');
+            col1.removeClass('col-md-' + col1Info.width).addClass('hide');
+
+            return;
+        }
+
+        col2.removeClass('col-md-12').addClass('col-md-' + col2Info.width);
+        col1.removeClass('hide').addClass('col-md-' + col1Info.width);
+    });
+}
 </script>

@@ -20,23 +20,13 @@ $htmlHeadXtra[] = '
 <script>
 $(document).ready(function() {
     $(".scrollbar-light").scrollbar();
-    $("#hide_bar_template").click(function() {
-        $("#expand").toggleClass("hide");
-        $("#contract").toggleClass("hide");
-        if ($("#doc_form").is(".col-md-9")) {
-            $("#doc_form").removeClass("col-md-9");
-            $("#doc_form").addClass("col-md-11");
-            
-            $("#template_col").removeClass("col-md-3");
-            $("#template_col").addClass("hide");
-            
-        } else {
-            $("#doc_form").removeClass("col-md-11");
-            $("#doc_form").addClass("col-md-9");
-            
-            $("#template_col").removeClass("hide");
-            $("#template_col").addClass("col-md-3");
-        }
+
+    expandColumnToogle("#hide_bar_template", {
+        selector: "#template_col",
+        width: 3
+    }, {
+        selector: "#doc_form",
+        width: 9
     });
 
     CKEDITOR.on("instanceReady", function (e) {
@@ -302,7 +292,7 @@ $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('title', get_lang('FileExists'), 'callback', 'document_exists');
 
 $current_session_id = api_get_session_id();
-$form->addHtmlEditor('content','', true, true, $editorConfig, true);
+$form->addHtmlEditor('content', get_lang('Content'), true, true, $editorConfig, true);
 
 // Comment-field
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
@@ -610,12 +600,12 @@ if ($form->validate()) {
 	if ($is_certificate_mode) {
             $actionsLeft =  '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.
                 Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-            $actionsLeft .= '<a id="hide_bar_template" href="#">'.
+            $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.
                 Display::return_icon('expand.png',get_lang('Back'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Back'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
         } else {
             $actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
                 Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-            $actionsLeft .= '<a id="hide_bar_template" href="#">'.
+            $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.
                 Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).
                 Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
         }

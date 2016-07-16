@@ -36,24 +36,13 @@ $htmlHeadXtra[] = '
 <script>
 $(document).ready(function() {
     $(".scrollbar-light").scrollbar();
-
-    $("#hide_bar_template").click(function() {
-        $("#expand").toggleClass("hide");
-        $("#contract").toggleClass("hide");
-        if ($("#doc_form").is(".col-md-9")) {
-            $("#doc_form").removeClass("col-md-9");
-            $("#doc_form").addClass("col-md-11");
-            
-            $("#template_col").removeClass("col-md-3");
-            $("#template_col").addClass("hide");
-            
-        } else {
-            $("#doc_form").removeClass("col-md-11");
-            $("#doc_form").addClass("col-md-9");
-            
-            $("#template_col").removeClass("hide");
-            $("#template_col").addClass("col-md-3");
-        }
+    
+    expandColumnToogle("#hide_bar_template", {
+        selector: "#template_col",
+        width: 3
+    }, {
+        selector: "#doc_form",
+        width: 9
     });
 
     CKEDITOR.on("instanceReady", function (e) {
@@ -600,7 +589,7 @@ function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_c
 		$selectedCategory = (isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : '');
 		$actionsLeft .= '<a href="document.php?curdirpath='. $selectedCategory .'&selectcat=' . $selectedCategory .'">'.
             Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
 	} elseif($call_from_tool=='slideshow') {
 		$actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.
             Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -612,7 +601,7 @@ function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_c
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Write'), array(), 32).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
     } elseif($call_from_tool=='editpaint'){
 		$actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), array(), ICON_SIZE_MEDIUM).'</a>';
@@ -620,7 +609,7 @@ function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_c
 	} else {
 		$actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
 	}
 
     echo $toolbar = Display::toolbarAction('actions-documents', array($actionsLeft));

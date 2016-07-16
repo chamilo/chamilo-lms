@@ -7825,4 +7825,6 @@ $ImportFromMoodleInfo = "Import a Moodle course backup file (.mbz) into this Cha
 $ImportFromMoodleInstructions = "The Moodle import feature might not support all content types from Moodle, given the fact that not all features are the same, and that Moodle and Chamilo both evolve continuously and rapidly. This import feature should be considered a work in progress. Please check https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import for more information.";
 $MoodleFile = "Moodle course file";
 $FailedToImportThisIsNotAMoodleFile = "Failed to import: this doesn't seem to be a Moodle course backup file (.mbz)";
+$ThisQuestionIsNotSupportedYet = "This question type is not supported yet";
+$ProcessingImportPleaseDontCloseThisWindowThisActionMayTakeLongTimePlaseWait = "Processing the import... Please don't close this window. This process may take a considerable amount of time. Please be patient.";
 ?>

@@ -579,7 +579,7 @@ class CStudentPublication
      * @param Session $session
      * @return CStudentPublication
      */
-    public function setSession(Session $session)
+    public function setSession(Session $session = null)
     {
         $this->session = $session;
 
@@ -756,5 +756,14 @@ class CStudentPublication
     public function setDocumentId($documentId)
     {
         $this->documentId = $documentId;
+    }
+
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 }

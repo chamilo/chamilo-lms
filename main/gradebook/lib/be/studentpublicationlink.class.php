@@ -100,9 +100,8 @@ class StudentPublicationLink extends AbstractLink
 		if (empty($this->course_code)) {
 			die('Error in get_not_created_links() : course code not set');
 		}
-		$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-
-		$session_id = api_get_session_id();
+		$em = Database::getManager();
+        $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
 		/*
         if (empty($session_id)) {
             $session_condition = api_get_session_condition(0, true);
@@ -114,20 +113,21 @@ class StudentPublicationLink extends AbstractLink
 
 		//Only show works from the session
 		//AND has_properties != ''
-		$sql = "SELECT id, url, title FROM $tbl_grade_links
-				WHERE
-					c_id = {$this->course_id} AND
-					active = 1 AND
-					filetype='folder' AND
-					session_id = ".api_get_session_id()."";
+        $links = $em
+            ->getRepository('ChamiloCourseBundle:CStudentPublication')
+            ->findBy([
+                'cId' => $this->course_id,
+                'active' => true,
+                'filetype' => 'folder',
+                'session' => $session
+            ]);
 
-		$result = Database::query($sql);
-		while ($data = Database::fetch_array($result)) {
-			$work_name = $data['title'];
+        foreach ($links as $data) {
+			$work_name = $data->getTitle();
 			if (empty($work_name)) {
-				$work_name = basename($data['url']);
+				$work_name = basename($data->getUrl());
 			}
-			$cats[] = array ($data['id'], $work_name);
+			$cats[] = array ($data->getId(), $work_name);
 		}
 		$cats=isset($cats) ? $cats : array();
 		return $cats;
@@ -138,14 +138,17 @@ class StudentPublicationLink extends AbstractLink
 	 */
 	public function has_results()
 	{
-		$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links."
-				WHERE 	c_id 		= {$this->course_id} AND
-						parent_id 	= '".intval($this->get_ref_id())."' AND
-						session_id	=".api_get_session_id()."";
-		$result = Database::query($sql);
-		$number = Database::fetch_row($result);
-		return ($number[0] != 0);
+	    $em = Database::getManager();
+        $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
+        $results = $em
+            ->getRepository('ChamiloCourseBundle:CStudentPublication')
+            ->findBy([
+                'cId' => $this->course_id,
+                'parentId' => intval($this->get_ref_id()),
+                'session' => $session
+            ]);
+
+        return count($results) != 0;
 	}
 
 	/**
@@ -155,34 +158,33 @@ class StudentPublicationLink extends AbstractLink
 	public function calc_score($stud_id = null, $type = null)
 	{
 		$stud_id = intval($stud_id);
-		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-		$sql = 'SELECT * FROM '.$table."
+        $em = Database::getManager();
+
+        $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
+
+        $assignment = $em
+            ->getRepository('ChamiloCourseBundle:CStudentPublication')
+            ->findOneBy([
+                'cId' => $this->course_id,
+                'id' => intval($this->get_ref_id()),
+                'session' => $session
+            ]);
+
+        $parentId = !$assignment ? 0 : $assignment->getId();
+
+		$dql = 'SELECT a FROM ChamiloCourseBundle:CStudentPublication a
     			WHERE
-    				c_id = {$this->course_id} AND
-    				id  = '".intval($this->get_ref_id())."' AND
-    				session_id	= ".api_get_session_id()."
-				"
-		;
-
-		$query = Database::query($sql);
-		$assignment = Database::fetch_array($query);
-
-		if (count($assignment) == 0) {
-			$parentId = '0';
-		} else {
-			$parentId = $assignment['id'];
-		}
-
-		$sql = 'SELECT * FROM '.$table.'
-    			WHERE
-    				c_id = '.$this->course_id.' AND
+    				a.cId = :course AND
     				active = 1 AND
-    				parent_id = "'.$parentId.'" AND
-    				session_id = '.api_get_session_id() .' AND
+    				parent_id = :parent AND
+    				session_id = :session AND
     				qualificator_id <> 0
 				';
+        $params = ['course' => $this->course_id, 'parent' => $parentId, 'session' => $session];
+
 		if (!empty($stud_id)) {
-			$sql .= " AND user_id = $stud_id ";
+		    $dql .= ' AND a.userId = :student ';
+            $params['student'] = $stud_id;
 		}
 
 		$order = api_get_setting('student_publication_to_take_in_gradebook');
@@ -190,72 +192,73 @@ class StudentPublicationLink extends AbstractLink
 		switch ($order) {
 			case 'last':
 				// latest attempt
-				$sql .= ' ORDER BY sent_date DESC';
+				$dql .= ' ORDER BY a.sentDate DESC';
 				break;
 			case 'first':
 			default:
 				// first attempt
-				$sql .= ' ORDER BY id';
+				$dql .= ' ORDER BY a.id';
 				break;
 		}
 
-		$scores = Database::query($sql);
+        $scores = $em->createQuery($dql)->execute([$params]);
 
 		// for 1 student
 		if (!empty($stud_id)) {
-			if ($data = Database::fetch_array($scores)) {
-				return array(
-					$data['qualification'],
-					$assignment['qualification']
-				);
-			} else {
-				return '';
-			}
-		} else {
-			$students = array();  // user list, needed to make sure we only
-			// take first attempts into account
-			$rescount = 0;
-			$sum = 0;
-			$bestResult = 0;
-			$weight = 0;
-			$sumResult = 0;
-			$myResult = 0;
+		    if (!count($scores)) {
+		        return '';
+            }
 
-			while ($data = Database::fetch_array($scores)) {
-				if (!(array_key_exists($data['user_id'], $students))) {
-					if ($assignment['qualification'] != 0) {
-						$students[$data['user_id']] = $data['qualification'];
-						$rescount++;
-						$sum += $data['qualification'] / $assignment['qualification'];
-						$sumResult += $data['qualification'];
+            $data = $scores[0];
 
-						if ($data['qualification'] > $bestResult) {
-							$bestResult = $data['qualification'];
-						}
-						$weight = $assignment['qualification'];
-					}
-				}
-			}
-
-			if ($rescount == 0) {
-				return null;
-			} else {
-				switch ($type) {
-					case 'best':
-						return array($bestResult, $weight);
-						break;
-					case 'average':
-						return array($sumResult/$rescount, $weight);
-						break;
-					case 'ranking':
-						return AbstractLink::getCurrentUserRanking($stud_id, $students);
-						break;
-					default:
-						return array($sum, $rescount);
-						break;
-				}
-			}
+            return [
+                $data->getQualification(),
+                $assignment->getQualification()
+            ];
 		}
+
+        $students = array();  // user list, needed to make sure we only
+        // take first attempts into account
+        $rescount = 0;
+        $sum = 0;
+        $bestResult = 0;
+        $weight = 0;
+        $sumResult = 0;
+
+        foreach ($scores as $data) {
+            if (!(array_key_exists($data->getUserId(), $students))) {
+                if ($assignment->getQualification() != 0) {
+                    $students[$data->getUserId()] = $data->getQualification();
+                    $rescount++;
+                    $sum += $data->getQualification() / $assignment->getQualification();
+                    $sumResult += $data->getQualification();
+
+                    if ($data->getQualification() > $bestResult) {
+                        $bestResult = $data->getQualification();
+                    }
+                    $weight = $assignment->getQualification();
+                }
+            }
+        }
+
+        if ($rescount == 0) {
+            return null;
+        }
+
+        switch ($type) {
+            case 'best':
+                return array($bestResult, $weight);
+                break;
+            case 'average':
+                return array($sumResult/$rescount, $weight);
+                break;
+            case 'ranking':
+                return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                break;
+            default:
+                return array($sum, $rescount);
+                break;
+        }
 	}
 
 	/**

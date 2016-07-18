@@ -46,7 +46,6 @@ if (isset($error_checkdate) && $error_checkdate) {
     Display::display_error_message($message, false);
 }
 
-
 if (isset($action) && $action == 'calendar_add') {
     $groupList = GroupManager::get_group_list(null, null, 1);
     $groupIdList = array('--');
@@ -62,13 +61,11 @@ if (isset($action) && $action == 'calendar_add') {
         ''
     );
     $form->addElement('header', get_lang('AddADateTime'));
-    //$form->addElement('date_time_picker', 'date_time');
-
     $form->addDateTimePicker(
-            'date_time',
-            array(get_lang('StartDate')),
-            array('id' => 'date_time')
-        );
+        'date_time',
+        array(get_lang('StartDate')),
+        array('id' => 'date_time')
+    );
 
     $defaults['date_time'] = date('Y-m-d H:i', api_strtotime(api_get_local_time()));
 
@@ -97,7 +94,12 @@ if (isset($action) && $action == 'calendar_add') {
     );
     $form->addElement('select', 'repeat_type', get_lang('RepeatType') , $a_repeat_type);
 
-    $form->addElement('date_picker', 'end_date_time', get_lang('RepeatEnd'), array('form_name'=>'attendance_calendar_add'));
+    $form->addElement(
+        'date_picker',
+        'end_date_time',
+        get_lang('RepeatEnd'),
+        array('form_name'=>'attendance_calendar_add')
+    );
     $defaults['end_date_time'] = date('Y-m-d');
     $form->addElement('html', '</div>');
 
@@ -123,7 +125,7 @@ if (isset($action) && $action == 'calendar_add') {
         foreach ($attendance_calendar as $calendar) {
 
             echo '<li class="list-group-item">';
-            if ((isset($action) && $action == 'calendar_edit') &&
+            if ((isset($action) && $action === 'calendar_edit') &&
                 (isset($calendar_id) && $calendar_id == $calendar['id'])
             ) {
                 // calendar edit form
@@ -134,7 +136,12 @@ if (isset($action) && $action == 'calendar_add') {
                     'index.php?action=calendar_edit&attendance_id=' . $attendance_id . '&calendar_id=' . $calendar_id . '&' . api_get_cidreq(),
                     ''
                 );
-                $form->addDateTimePicker('date_time', array(get_lang('Date')), array('form_name'=>'attendance_calendar_edit'), 5);
+                $form->addDateTimePicker(
+                    'date_time',
+                    array(get_lang('Date')),
+                    array('form_name'=>'attendance_calendar_edit'),
+                    5
+                );
                 $defaults['date_time'] = $calendar['date_time'];
                 $form->addButtonSave(get_lang('Save'));
                 $form->addButtonCancel(get_lang('Cancel'), 'cancel');

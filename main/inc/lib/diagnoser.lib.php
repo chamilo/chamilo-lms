@@ -25,6 +25,9 @@ class Diagnoser
     {
     }
 
+    /**
+     * Show html table
+     */
     public function show_html()
     {
         $sections = array('chamilo', 'php', 'database', 'webserver');

@@ -318,7 +318,6 @@ class GlossaryManager
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
-
         $glossaryInfo = self::get_glossary_information($glossary_id);
 
         if (empty($glossaryInfo)) {
@@ -379,25 +378,25 @@ class GlossaryManager
         $actionsLeft = '';
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add?'.api_get_cidreq().'">'.
-                Display::return_icon('new_glossary_term.png',get_lang('TermAddNew'),'', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('new_glossary_term.png',get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export">'.
-            Display::return_icon('export_csv.png',get_lang('ExportGlossaryAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('export_csv.png',get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
-                Display::return_icon('import_csv.png',get_lang('ImportGlossary'),'',ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('import_csv.png',get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
-            Display::return_icon('pdf.png',get_lang('ExportToPDF'),'', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('pdf.png',get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
         if (($view == 'table') || (!isset($view))) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
-                Display::return_icon('view_detailed.png',get_lang('ListView'),'',ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('view_detailed.png',get_lang('ListView'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.
-                Display::return_icon('view_text.png',get_lang('TableView'),'',ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('view_text.png',get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         /* BUILD SEARCH FORM */
@@ -452,7 +451,7 @@ class GlossaryManager
      */
     public static function displayGlossaryList()
     {
-        $glossary_data = self::get_glossary_data(0,1000,0,'ASC');
+        $glossary_data = self::get_glossary_data(0, 1000, 0, 'ASC');
         $content = '';
         foreach ($glossary_data as $key => $glossary_item) {
             $actions = '';
@@ -593,13 +592,13 @@ class GlossaryManager
     public static function actions_filter($glossary_id, $url_params, $row)
     {
         $glossary_id = $row[2];
-        $return = '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.
+        $return = '<a href="'.api_get_self().'?action=edit_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.
             Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
         $glossary_data = GlossaryManager::get_glossary_information($glossary_id);
         $glossary_term = $glossary_data['name'];
         if (api_is_allowed_to_edit(null, true)) {
             if ($glossary_data['session_id'] == api_get_session_id()) {
-                $return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.
+                $return .= '<a href="'.api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.
                     Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
             } else {
                 $return = get_lang('EditionNotAvailableFromSession');

@@ -24,3 +24,6 @@ msgstr "Sie haben eine neue Nachricht erhalten von %url%"
 
 msgid "Your email has been sent! Thanks!"
 msgstr "Ihre Nachricht wurde versendet. Vielen Dank !"
+
+msgid "Contact"
+msgstr "Kontakt"

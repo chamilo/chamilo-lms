@@ -14,11 +14,11 @@ class LpItem
     public $c_id = 0;
     public $id = 0;
     public $lp_id = 0;
-    public $item_type = "";
-    public $ref = "";
-    public $title = "";
-    public $description = "";
-    public $path = "";
+    public $item_type = '';
+    public $ref = '';
+    public $title = '';
+    public $description = '';
+    public $path = '';
     public $min_score = 0;
     public $max_score = 0;
     public $mastery_score = 0;
@@ -26,15 +26,15 @@ class LpItem
     public $previous_item_id = 0;
     public $next_item_id = 0;
     public $display_order = 0;
-    public $prerequisite = "";
-    public $parameters = "";
-    public $launch_data = "";
-    public $max_time_allowed = "";
-    public $terms = "";
+    public $prerequisite = '';
+    public $parameters = '';
+    public $launch_data = '';
+    public $max_time_allowed = '';
+    public $terms = '';
     public $search_did = 0;
-    public $audio = "";
+    public $audio = '';
 
-    public function __construct($in_c_id=0, $in_id=0)
+    public function __construct($in_c_id = 0, $in_id = 0)
     {
         if ($in_c_id > 0 && $in_id >0) {
             $item_view_table = Database::get_course_table(TABLE_LP_ITEM);

@@ -49,7 +49,7 @@ class IndexManager
     /**
      * @param bool $setLoginForm
      */
-    function set_login_form($setLoginForm = true)
+    public function set_login_form($setLoginForm = true)
     {
         global $loginFailed;
         $this->tpl->setLoginForm($setLoginForm);
@@ -58,7 +58,7 @@ class IndexManager
     /**
      * @param array $personal_course_list
      */
-    function return_exercise_block($personal_course_list)
+    public function return_exercise_block($personal_course_list)
     {
         $exercise_list = array();
         if (!empty($personal_course_list)) {
@@ -286,7 +286,7 @@ class IndexManager
 		return $html;
 	}
 
-    function return_notice()
+    public function return_notice()
     {
         $user_selected_language = api_get_interface_language();
 
@@ -312,7 +312,7 @@ class IndexManager
         return $html;
     }
 
-    function return_help()
+    public function return_help()
     {
         $user_selected_language = api_get_interface_language();
         $platformLanguage       = api_get_setting('platformLanguage');
@@ -342,7 +342,10 @@ class IndexManager
         return $html;
     }
 
-    function return_skills_links()
+    /**
+     * @return null|string
+     */
+    public function return_skills_links()
     {
         $content = '';
         $content .= '<ul class="nav nav-pills nav-stacked">';
@@ -411,7 +414,7 @@ class IndexManager
      *
      * @version 1.0.1
      */
-    function handle_login_failed()
+    public function handle_login_failed()
     {
         return $this->tpl->handleLoginFailed();
     }
@@ -424,7 +427,7 @@ class IndexManager
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University - refactoring and code cleaning
      * @author Julio Montoya <gugli100@gmail.com>, Beeznest template modifs
      */
-    function return_courses_in_categories()
+    public function return_courses_in_categories()
     {
         $result = '';
         $stok = Security::get_token();
@@ -489,7 +492,8 @@ class IndexManager
                     LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
                     LEFT JOIN $main_course_table t3 ON (t3.category_code = t1.code $platform_visible_courses)
                     WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
-                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
+                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count 
+                    ORDER BY t1.tree_pos, t1.name";
 
         // Showing only the category of courses of the current access_url_id
         if (api_is_multiple_url_enabled()) {
@@ -805,7 +809,7 @@ class IndexManager
     public function return_classes_block()
     {
         $html = '';
-        if (api_get_setting('show_groups_to_users') == 'true') {
+        if (api_get_setting('show_groups_to_users') === 'true') {
             $usergroup = new UserGroup();
             $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
             $classes = '';
@@ -955,6 +959,9 @@ class IndexManager
         return $html;
     }
 
+    /**
+     * @return null|string
+     */
     public function return_navigation_links()
     {
         $html = '';
@@ -975,10 +982,10 @@ class IndexManager
                 $content .= '</li>';
             }
             $content .= '</ul>';
-    
+
             $html = self::show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
         }
-        
+
         return $html;
     }
 
@@ -1068,6 +1075,7 @@ class IndexManager
                 'courseCollapse'
             );
         }
+
         return $html;
     }
 

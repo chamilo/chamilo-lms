@@ -227,8 +227,7 @@ class MessageManager
         $topic_id = 0,
         $sender_id = null,
         $directMessage = false
-    )
-    {
+    ) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
         $receiver_user_id = intval($receiver_user_id);
@@ -435,8 +434,7 @@ class MessageManager
         $sender_id = null,
         $sendCopyToDrhUsers = false,
         $directMessage = false
-    )
-    {
+    ) {
         $result = MessageManager::send_message(
             $receiver_user_id,
             $subject,
@@ -521,8 +519,9 @@ class MessageManager
     public static function delete_message_by_user_receiver($user_receiver_id, $id)
     {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
-        if ($id != strval(intval($id)))
+        if ($id != strval(intval($id))) {
             return false;
+        }
         $user_receiver_id = intval($user_receiver_id);
         $id = intval($id);
         $sql = "SELECT * FROM $table_message
@@ -536,6 +535,7 @@ class MessageManager
             $query = "UPDATE $table_message SET msg_status=3
                       WHERE user_receiver_id=" . $user_receiver_id . " AND id=" . $id;
             $result = Database::query($query);
+
             return $result;
         } else {
             return false;
@@ -594,8 +594,7 @@ class MessageManager
         $receiver_user_id = 0,
         $sender_user_id = 0,
         $group_id = 0
-    )
-    {
+    ) {
         $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         // Try to add an extension to the file if it hasn't one
@@ -745,6 +744,7 @@ class MessageManager
         $query = "SELECT * FROM $table_message
                   WHERE user_receiver_id=" . intval($user_id) . " AND id='" . intval($message_id) . "'";
         $result = Database::query($query);
+
         return $row = Database::fetch_array($result);
     }
 
@@ -755,8 +755,9 @@ class MessageManager
      */
     public static function get_messages_by_group($group_id)
     {
-        if ($group_id != strval(intval($group_id)))
+        if ($group_id != strval(intval($group_id))) {
             return false;
+        }
 
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
@@ -783,8 +784,9 @@ class MessageManager
      */
     public static function get_messages_by_group_by_message($group_id, $message_id)
     {
-        if ($group_id != strval(intval($group_id)))
+        if ($group_id != strval(intval($group_id))) {
             return false;
+        }
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
         $sql = "SELECT * FROM $table_message

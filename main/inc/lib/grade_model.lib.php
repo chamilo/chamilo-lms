@@ -55,8 +55,8 @@ class GradeModel extends Model
     {
 		// action links
 		echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="grade_models.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
-		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png',get_lang('Add'),'','32').'</a>';
+        echo '<a href="grade_models.php">'.Display::return_icon('back.png',get_lang('Back'),'', ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
 		echo '</div>';
         echo Display::grid_html('grade_model');
 	}
@@ -215,8 +215,8 @@ class GradeModel extends Model
      */
     public function save($params, $show_query = false)
     {
-	    $id = parent::save($params, $show_query);
-	    if (!empty($id)) {
+        $id = parent::save($params, $show_query);
+        if (!empty($id)) {
             foreach ($params['components'] as $component) {
                 if (!empty($component['title']) && !empty($component['percentage']) && !empty($component['acronym'])) {
                     $obj = new GradeModelComponents();
@@ -227,7 +227,7 @@ class GradeModel extends Model
         }
 
         //event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
-   		return $id;
+        return $id;
     }
 
     /**
@@ -248,7 +248,6 @@ class GradeModel extends Model
                 }
             }
         }
-        //$params['components']
     }
 
     /**
@@ -259,6 +258,12 @@ class GradeModel extends Model
 	    parent::delete($id);
     }
 
+    /**
+     * @param $form
+     * @param string $name
+     * @param null $default_value
+     * @return bool
+     */
     public function fill_grade_model_select_in_form(&$form, $name = 'gradebook_model_id', $default_value = null)
     {
         if (api_get_setting('gradebook_enable_grade_model') == 'false') {
@@ -318,7 +323,7 @@ class GradeModelComponents extends Model
     public function save($params, $show_query = false)
     {
 	    $id = parent::save($params, $show_query);
-        
+
         return $id;
     }
 }

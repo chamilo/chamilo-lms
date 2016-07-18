@@ -406,7 +406,7 @@ class Auth
      * @param boolean $justVisible search only on visible courses in the catalogue
      * @return array An array containing a list of all the courses matching the the search term.
      */
-    public function search_courses($search_term, $limit, $justVisible=false)
+    public function search_courses($search_term, $limit, $justVisible = false)
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $extraFieldTable = Database :: get_main_table(TABLE_EXTRA_FIELD);
@@ -434,7 +434,7 @@ class Auth
             $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
         }
 
-        $visibilityCondition = ($justVisible?CourseManager::getCourseVisibilitySQLCondition('course'):'');
+        $visibilityCondition = $justVisible ? CourseManager::getCourseVisibilitySQLCondition('course') : '';
 
         $search_term_safe = Database::escape_string($search_term);
         $sql_find = "SELECT * FROM $courseTable
@@ -503,7 +503,7 @@ class Auth
 
     /**
      * unsubscribe the user from a given course
-     * @param   string  Course code
+     * @param   string  $course_code
      * @return  bool    True if it success
      */
     public function remove_user_from_course($course_code)
@@ -678,8 +678,7 @@ class Auth
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
 
-        $_sessions = $qb->select('s')
-            ->from('ChamiloCoreBundle:Session', 's');
+        $_sessions = $qb->select('s')->from('ChamiloCoreBundle:Session', 's');
 
         if (!empty($limit)) {
             $_sessions->setFirstResult($limit['start'])
@@ -788,12 +787,10 @@ SQL;
             ->getResult();
 
         $sessionsToBrowse = [];
-
         foreach ($sessions as $session) {
             if ($session->getNbrCourses() === 0) {
                 continue;
             }
-
             $sessionsToBrowse[] = $session;
         }
 

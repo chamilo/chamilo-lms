@@ -80,22 +80,22 @@ class UrlManager
         $tableGroup = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
 
         $sql = "DELETE FROM $tableCourse WHERE access_url_id = ".$id;
-        $result = Database::query($sql);
+        Database::query($sql);
         /*
         $sql = "DELETE FROM $tableCourseCategory WHERE access_url_id = ".$id;
-        $result = Database::query($sql);
+        Database::query($sql);
         */
         $sql = "DELETE FROM $tableSession WHERE access_url_id = ".$id;
-        $result = Database::query($sql);
+        Database::query($sql);
         $sql = "DELETE FROM $tableGroup WHERE access_url_id = ".$id;
-        $result = Database::query($sql);
+        Database::query($sql);
         $sql = "DELETE FROM $tableUser WHERE access_url_id = ".$id;
-        $result = Database::query($sql);
+        Database::query($sql);
 
         $sql= "DELETE FROM $table WHERE id = ".$id;
-        $result = Database::query($sql);
+        Database::query($sql);
 
-        return $result;
+        return true;
     }
 
     /**
@@ -281,8 +281,9 @@ class UrlManager
         $table_url_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 
-        if (!empty($access_url_id))
-            $where ="WHERE $table_url_rel_session.access_url_id = ".intval($access_url_id);
+        if (!empty($access_url_id)) {
+            $where = "WHERE $table_url_rel_session.access_url_id = ".intval($access_url_id);
+        }
 
         $sql = "SELECT id, name, access_url_id
                 FROM $tbl_session u
@@ -430,8 +431,9 @@ class UrlManager
     {
         $table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
         $sql= "SELECT usergroup_id FROM $table
-               WHERE access_url_id = ".intval($urlId)." AND
-                     usergroup_id = ".intval($userGroupId);
+               WHERE 
+                    access_url_id = ".intval($urlId)." AND
+                    usergroup_id = ".intval($userGroupId);
         $result = Database::query($sql);
         $num = Database::num_rows($result);
 
@@ -472,13 +474,15 @@ class UrlManager
         $table_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $result_array = array();
 
-        if (is_array($user_list) && is_array($url_list)){
+        if (is_array($user_list) && is_array($url_list)) {
             foreach ($url_list as $url_id) {
                 foreach ($user_list as $user_id) {
                     $count = UrlManager::relation_url_user_exist($user_id,$url_id);
-                    if ($count==0) {
+                    if ($count == 0) {
                         $sql = "INSERT INTO $table_url_rel_user
-                                SET user_id = ".intval($user_id).", access_url_id = ".intval($url_id);
+                                SET 
+                                    user_id = ".intval($user_id).", 
+                                    access_url_id = ".intval($url_id);
                         $result = Database::query($sql);
                         if ($result) {
                             $result_array[$url_id][$user_id] = 1;
@@ -643,14 +647,15 @@ class UrlManager
 
             return Database::insert_id();
         }
+
         return 0;
     }
 
     /**
      * Add a group of sessions into a group of URLs
      * @author Julio Montoya
-     * @param  array of session ids
-     * @param  array of url_ids
+     * @param  array $session_list of session ids
+     * @param  array $url_list of url_ids
      * @return array
      * */
     public static function add_sessions_to_urls($session_list, $url_list)
@@ -873,8 +878,8 @@ class UrlManager
     /**
      * Updates the access_url_rel_user table  with a given user list
      * @author Julio Montoya
-     * @param array user list
-     * @param int access_url_id
+     * @param array $user_list
+     * @param int $access_url_id
      * */
     public static function update_urls_rel_user($user_list, $access_url_id)
     {
@@ -954,8 +959,8 @@ class UrlManager
     /**
      * Updates the access_url_rel_course table  with a given user list
      * @author Julio Montoya
-     * @param array user list
-     * @param int access_url_id
+     * @param array $userGroupList user list
+     * @param int $urlId
      * */
     public static function update_urls_rel_usergroup($userGroupList, $urlId)
     {
@@ -987,8 +992,8 @@ class UrlManager
     /**
      * Updates the access_url_rel_course_category table with a given list
      * @author Julio Montoya
-     * @param array course category list
-     * @param int access_url_id
+     * @param array $list course category list
+     * @param int $urlId access_url_id
      **/
     public static function updateUrlRelCourseCategory($list, $urlId)
     {
@@ -1031,15 +1036,13 @@ class UrlManager
         }
     }
 
-
-
     /**
      * Updates the access_url_rel_session table with a given user list
      * @author Julio Montoya
-     * @param array user list
-     * @param int access_url_id
+     * @param array $session_list
+     * @param int $access_url_id
      * */
-    public static function update_urls_rel_session($session_list,$access_url_id)
+    public static function update_urls_rel_session($session_list, $access_url_id)
     {
         $table_url_rel_session	= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
@@ -1072,6 +1075,7 @@ class UrlManager
 
     /**
      * @param int $user_id
+     *
      * @return array
      */
     public static function get_access_url_from_user($user_id)
@@ -1083,6 +1087,7 @@ class UrlManager
                 WHERE user_id = ".intval($user_id);
         $result = Database::query($sql);
         $url_list = Database::store_result($result,'ASSOC');
+
         return $url_list;
     }
 
@@ -1130,6 +1135,7 @@ class UrlManager
         $sql = "SELECT id FROM $table_access_url WHERE url = '".Database::escape_string($url)."'";
         $result = Database::query($sql);
         $access_url_id = Database::result($result, 0, 0);
+
         return $access_url_id;
     }
 
@@ -1167,6 +1173,7 @@ class UrlManager
             }
         }
         $response->addAssign('ajax_list_courses', 'innerHTML', api_utf8_encode($return));
+
         return $response;
     }
 }

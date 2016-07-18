@@ -44,7 +44,8 @@ class Security
      * Checks if the absolute path (directory) given is really under the
      * checker path (directory)
      * @param	string	Absolute path to be checked (with trailing slash)
-     * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
+     * @param	string	Checker path under which the path
+     * should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
      * @return	bool	True if the path is under the checker, false otherwise
      */
     public static function check_abs_path($abs_path, $checker_path)
@@ -77,7 +78,8 @@ class Security
      * Checks if the relative path (directory) given is really under the
      * checker path (directory)
      * @param	string	Relative path to be checked (relative to the current directory) (with trailing slash)
-     * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
+     * @param	string	Checker path under which the path
+     * should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
      * @return	bool	True if the path is under the checker, false otherwise
      */
     public static function check_rel_path($rel_path, $checker_path)
@@ -156,7 +158,7 @@ class Security
      */
     public static function check_ua()
     {
-        if (isset($_SESSION['sec_ua']) and $_SESSION['sec_ua'] === $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed']) {
+        if (isset($_SESSION['sec_ua']) && $_SESSION['sec_ua'] === $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed']) {
             return true;
         }
 
@@ -428,7 +430,7 @@ class Security
     		$new_text = str_ireplace($bad_terms, $replace, $text, $count);
     		$text = $new_text;
     	}
-        
+
 		return $text;
     }
 

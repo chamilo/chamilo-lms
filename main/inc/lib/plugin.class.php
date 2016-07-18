@@ -534,7 +534,7 @@ class Plugin
 
     /**
      * Install the course fields and tool link of this plugin in all courses
-     * @param boolean Whether we want to add a plugin link on the course homepage
+     * @param boolean $add_tool_link Whether we want to add a plugin link on the course homepage
      *
      * @return void
      */

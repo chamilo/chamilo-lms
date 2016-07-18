@@ -39,8 +39,7 @@ class ExerciseLib
         $show_comment = false,
         $exercise_feedback = null,
         $show_answers = false
-    )
-    {
+    ) {
         $course_id = api_get_course_int_id();
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
@@ -318,7 +317,7 @@ class ExerciseLib
                         }
 
                         $answer = Security::remove_XSS($answer, STUDENT);
-          
+
                         $s .= Display::input(
                             'hidden',
                             'choice2[' . $questionId . ']',

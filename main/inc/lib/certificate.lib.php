@@ -47,7 +47,6 @@ class Certificate extends Model
     public function __construct($certificate_id = 0, $userId = 0)
     {
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-
         $this->user_id = !empty($userId) ? $userId : api_get_user_id();
 
         if (!empty($certificate_id)) {

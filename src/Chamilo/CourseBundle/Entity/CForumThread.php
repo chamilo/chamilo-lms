@@ -167,6 +167,8 @@ class CForumThread
     public function __construct()
     {
         $this->threadPeerQualify = 0;
+        $this->threadReplies = 0;
+        $this->threadViews = 0;
     }
 
     /**
@@ -178,11 +180,15 @@ class CForumThread
     }
 
     /**
-     * @param boolean $threadPeerQualify
+     * set threadPeerQualify
+     * @param $threadPeerQualify
+     * @return $this
      */
     public function setThreadPeerQualify($threadPeerQualify)
     {
         $this->threadPeerQualify = $threadPeerQualify;
+
+        return $this;
     }
 
     /**
@@ -613,5 +619,14 @@ class CForumThread
     public function getLpItemId()
     {
         return $this->lpItemId;
+    }
+
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 }

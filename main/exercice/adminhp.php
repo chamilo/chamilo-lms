@@ -20,18 +20,17 @@ if (isset($_REQUEST["cancel"])) {
 }
 
 $newName = !empty($_REQUEST['newName']) ? $_REQUEST['newName'] : '';
-$hotpotatoesName = !empty($_REQUEST['hotpotatoesName']) ? $_REQUEST['hotpotatoesName'] : '';
-
-$is_allowedToEdit=api_is_allowed_to_edit(null,true);
+$hotpotatoesName = !empty($_REQUEST['hotpotatoesName']) ? Security::remove_XSS($_REQUEST['hotpotatoesName']) : '';
+$is_allowedToEdit = api_is_allowed_to_edit(null,true);
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // picture path
-$picturePath=$documentPath.'/images';
+$picturePath = $documentPath.'/images';
 
 // audio path
-$audioPath=$documentPath.'/audio';
+$audioPath = $documentPath.'/audio';
 
 // Database table definitions
 if (!$is_allowedToEdit) {
@@ -39,7 +38,7 @@ if (!$is_allowedToEdit) {
 }
 
 if (isset($_SESSION['gradebook'])) {
-    $gradebook=	$_SESSION['gradebook'];
+    $gradebook =	$_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {

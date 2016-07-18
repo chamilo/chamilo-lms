@@ -1202,7 +1202,7 @@ function filter_extension(&$filename)
  * @param int $group_id
  * @param int $session_id Session ID, if any
  * @param int $userId creator id
- * 
+ *
  * @return int id if inserted document
  */
 function add_document(
@@ -1542,13 +1542,12 @@ function create_unexisting_directory(
                     WHERE
                         c_id = $course_id AND
                         (
-                            path = '" . $systemFolderName . "'
+                            path = '" . Database::escape_string($systemFolderName). "'
                         )
             ";
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
-        
                 $document_id = add_document(
                     $_course,
                     $systemFolderName,
@@ -1566,7 +1565,6 @@ function create_unexisting_directory(
                 if ($document_id) {
                     // Update document item_property
                     if (!empty($visibility)) {
-
                         $visibilities = array(
                             0 => 'invisible',
                             1 => 'visible',

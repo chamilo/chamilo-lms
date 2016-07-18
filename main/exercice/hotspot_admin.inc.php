@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  * This script allows to manage answers. It is included from the
  * script admin.php
  * @package chamilo.exercise
  * @author Toon Keppens
  */
-use \ChamiloSession as Session;
 
 $modifyAnswers = intval($_GET['hotspotadmin']);
 
@@ -246,11 +247,11 @@ if ($submitAnswers || $buttonBack) {
         }  // end for()
 
         //now the noerror section
-        $selectQuestionNoError = $_POST['select_question_noerror'];
-        $lp_noerror = $_POST['lp_noerror'];
-        $try_noerror = isset($_POST['try_noerror']) ? $_POST['try_noerror'] : null;
-        $url_noerror = $_POST['url_noerror'];
-        $comment_noerror = $_POST['comment_noerror'];
+        $selectQuestionNoError = Security::remove_XSS($_POST['select_question_noerror']);
+        $lp_noerror = Security::remove_XSS($_POST['lp_noerror']);
+        $try_noerror = isset($_POST['try_noerror']) ? Security::remove_XSS($_POST['try_noerror']) : null;
+        $url_noerror = Security::remove_XSS($_POST['url_noerror']);
+        $comment_noerror = Security::remove_XSS($_POST['comment_noerror']);
         $threadhold_total = '0;0;0';
 
         if ($try_noerror == 'on') {
@@ -292,6 +293,7 @@ if ($submitAnswers || $buttonBack) {
                 if ($weighting[$i]) {
                     $questionWeighting+=$weighting[$i];
                 }
+
                 // creates answer
                 $objAnswer->createAnswer(
                     $reponse[$i],
@@ -324,7 +326,6 @@ if ($submitAnswers || $buttonBack) {
 
             $editQuestion = $questionId;
             unset($modifyAnswers);
-
             echo '<script type="text/javascript">window.location.href="' . $hotspot_admin_url . '&message=ItemUpdated"</script>';
         }
     }

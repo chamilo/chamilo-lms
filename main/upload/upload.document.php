@@ -10,6 +10,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
+$_course = api_get_course_info();
 $courseDir = $_course['path'] . "/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path . $courseDir;
@@ -18,7 +19,7 @@ $max_filled_space = DocumentManager::get_course_quota();
 
 //what's the current path?
 if (isset($_POST['curdirpath'])) {
-    $path = $_POST['curdirpath'];
+    $path = Security::remove_XSS($_POST['curdirpath']);
 } else {
     $path = '/';
 }
@@ -34,7 +35,7 @@ if (!DocumentManager::get_document_id($_course, $path)) {
  */
 $nameTools = get_lang('UplUploadDocument');
 $interbreadcrumb[] = array(
-    "url" => "./document.php?curdirpath=" . urlencode($path) . '&'.api_get_cidreq(),
+    "url" => api_get_path(WEB_CODE_PATH)."document/document.php?curdirpath=" . urlencode($path) . '&'.api_get_cidreq(),
     "name" => $langDocuments
 );
 Display::display_header($nameTools, "Doc");
@@ -54,14 +55,14 @@ if (isset($_FILES['user_upload'])) {
             $_FILES['user_upload'],
             $base_work_dir,
             $_POST['curdirpath'],
-            $_user['user_id'],
+            api_get_user_id(),
             $to_group_id,
             $to_user_id,
             $_POST['unzip'],
             $_POST['if_exists']
         );
-    	$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
-    	$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
+    	$new_comment = isset($_POST['comment']) ? Database::escape_string(trim($_POST['comment'])) : '';
+    	$new_title = isset($_POST['title']) ? Database::escape_string(trim($_POST['title'])) : '';
 
     	if ($new_path && ($new_comment || $new_title))
     	if (($docid = DocumentManager::get_document_id($_course, $new_path))) {
@@ -99,7 +100,7 @@ if (isset($_POST['submit_image'])) {
         $img_directory = str_replace('.', '_', $_POST['related_file']."_files");
         $folderData = create_unexisting_directory(
             $_course,
-            $_user['user_id'],
+            api_get_user_id(),
             api_get_session_id(),
             $to_group_id,
             $to_user_id,
@@ -131,11 +132,11 @@ if (isset($_POST['submit_image'])) {
 }
 //they want to create a directory
 if (isset($_POST['create_dir']) && $_POST['dirname']!='') {
-    $added_slash = ($path == '/') ? '' : '/';
+    $added_slash = $path == '/' ? '' : '/';
 	$dir_name = $path.$added_slash.api_replace_dangerous_char($_POST['dirname']);
     $created_dir = create_unexisting_directory(
         $_course,
-        $_user['user_id'],
+        api_get_user_id(),
         api_get_session_id(),
         $to_group_id,
         $to_user_id,
@@ -206,7 +207,6 @@ if (isset($_GET['createdir'])) {
 &nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="nothing" title="<?php echo (get_lang('UplDoNothingLong'));?>" checked="checked"/>  <?php echo (get_lang('UplDoNothing'));?><br/>
 &nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="overwrite" title="<?php echo (get_lang('UplOverwriteLong'));?>"/> <?php echo (get_lang('UplOverwrite'));?><br/>
 &nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="rename" title="<?php echo (get_lang('UplRenameLong'));?>"/> <?php echo (get_lang('UplRename'));?>
-
 </td>
 </tr>
 </table>

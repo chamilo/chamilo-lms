@@ -121,7 +121,7 @@ class HotpotatoesExerciseResult
 	 * @param	boolean		Whether to include user fields or not
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportCSV($document_path='', $hotpotato_name)
+	public function exportCompleteReportCSV($document_path = '', $hotpotato_name)
     {
 		global $charset;
 		$this->getExercisesReporting($document_path, $hotpotato_name);

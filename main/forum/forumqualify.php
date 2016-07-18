@@ -171,7 +171,7 @@ if ($allowToQualify) {
     // Show max qualify in my form
     $maxQualify = showQualify('2', $userIdToQualify, $threadId);
 
-    $score = isset($_POST['idtextqualify']) ? $_POST['idtextqualify'] : '';
+    $score = isset($_POST['idtextqualify']) ? Security::remove_XSS($_POST['idtextqualify']) : '';
 
     if ($score > $maxQualify) {
         Display:: display_error_message(
@@ -292,7 +292,7 @@ if ($allowToQualify) {
                 $realname = $attachment_list['path'];
                 $user_filename = $attachment_list['filename'];
 
-                echo Display::return_icon('attachment.gif',get_lang('Attachment'));
+                echo Display::return_icon('attachment.gif', get_lang('Attachment'));
                 echo '<a href="download.php?file=';
                 echo $realname;
                 echo ' "> '.$user_filename.' </a>';

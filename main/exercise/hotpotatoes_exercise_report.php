@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  *	Exercise list: This script shows the list of exercises for administrators and students.
  *	@package chamilo.exercise
@@ -7,22 +10,18 @@
  *
  */
 
-use ChamiloSession as Session;
-
-// including the global library
 require_once '../inc/global.inc.php';
 
 // Setting the tabs
 $this_section = SECTION_COURSES;
-
 $htmlHeadXtra[] = api_get_jqgrid_js();
+$_course = api_get_course_info();
 
 // Access control
 api_protect_course_script(true, false, true);
 
 // including additional libraries
 require_once 'hotpotatoes.lib.php';
-
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
@@ -37,7 +36,7 @@ $TBL_TRACK_HOTPOTATOES_EXERCISES = Database :: get_main_table(TABLE_STATISTIC_TR
 $TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
 $course_id = api_get_course_int_id();
-$hotpotatoes_path = isset($_REQUEST['path']) ? $_REQUEST['path'] : null;
+$hotpotatoes_path = isset($_REQUEST['path']) ? Security::remove_XSS($_REQUEST['path']) : null;
 $filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
 
 if (empty($hotpotatoes_path)) {
@@ -73,10 +72,12 @@ $actions = null;
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&path='.Security::remove_XSS($hotpotatoes_path).' ">'.Display::return_icon('save.png',   get_lang('Export'),'',ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&path='.$hotpotatoes_path.' ">'.
+            Display::return_icon('save.png',   get_lang('Export'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 } else {
-    $actions .= '<a href="exercise.php">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+    $actions .= '<a href="exercise.php">' .
+        Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 if ($is_allowedToEdit) {

@@ -1127,12 +1127,8 @@ function unzip_uploaded_document(
  */
 function clean_up_files_in_zip($p_event, &$p_header)
 {
-    $originalFilePath = $p_header['filename'];
-    $originalFileName = basename($p_header['filename']);
-    $modifiedFileName = clean_up_path($originalFileName);
-    $p_header['filename'] = str_replace($originalFileName, $modifiedFileName, $originalFilePath);
-    
-    return 1;
+    $res = clean_up_path($p_header['filename']);
+    return $res;
 }
 
 /**
@@ -1140,11 +1136,11 @@ function clean_up_files_in_zip($p_event, &$p_header)
  * by eliminating dangerous file names and cleaning them
  *
  * @param string $path
- * @return string
+ * @return $path
  * @see disable_dangerous_file()
  * @see api_replace_dangerous_char()
  */
-function clean_up_path($path)
+function clean_up_path(&$path)
 {
     // Split the path in folders and files
     $path_array = explode('/', $path);
@@ -1158,8 +1154,7 @@ function clean_up_path($path)
     // Join the "cleaned" path (modified in-place as passed by reference)
     $path = implode('/', $path_array);
     $res = filter_extension($path);
-
-    return $path;
+    return $res;
 }
 
 /**
@@ -1572,13 +1567,12 @@ function create_unexisting_directory(
                     WHERE
                         c_id = $course_id AND
                         (
-                            path = '" . $systemFolderName . "'
+                            path = '" . Database::escape_string($systemFolderName). "'
                         )
             ";
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
-
                 $document_id = add_document(
                     $_course,
                     $systemFolderName,
@@ -1596,7 +1590,6 @@ function create_unexisting_directory(
                 if ($document_id) {
                     // Update document item_property
                     if (!empty($visibility)) {
-
                         $visibilities = array(
                             0 => 'invisible',
                             1 => 'visible',

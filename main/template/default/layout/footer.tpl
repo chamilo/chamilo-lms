@@ -39,11 +39,15 @@
                         {{ administrator_name }}
                     </div>
                     {% endif %}
-                    <div class="software-name">
-	                <a href="{{_p.web}}" target="_blank">
-                            {{ "PoweredByX" |get_lang | format(_s.software_name) }}
-                        </a>&copy; {{ "now"|date("Y") }}
-                    </div>
+
+                    {% if _s.software_name != '' %}
+                        <div class="software-name">
+	                    <a href="{{_p.web}}" target="_blank">
+                                {{ "PoweredByX" |get_lang | format(_s.software_name) }}
+                            </a>&copy; {{ "now"|date("Y") }}
+                        </div>
+                    {% endif %}
+
                     {% if plugin_footer_right is not null %}
                     <div id="plugin_footer_right">
                         {{ plugin_footer_right }}

@@ -1449,6 +1449,9 @@ class UserManager
                 return $anonymousPath;
             }
             $user = Database::fetch_array($res);
+            if (empty($user['picture_uri'])) {
+                return $anonymousPath;
+            }
         } else {
             $user = $userInfo;
         }
@@ -1793,8 +1796,7 @@ class UserManager
             return false;
         }
 
-        $production_path = self::get_user_picture_path_by_id($user_id, 'web');
-        $production_dir = $production_path['dir'];
+        $production_dir = self::getUserPathById($user_id, 'web');
         $del_image = Display::returnIconPath('delete.png');
         $add_image = Display::returnIconPath('archive.png');
         $del_text = get_lang('Delete');
@@ -1821,8 +1823,7 @@ class UserManager
      */
     public static function get_user_productions($user_id)
     {
-        $production_path = self::get_user_picture_path_by_id($user_id, 'system');
-        $production_repository = $production_path['dir'];
+        $production_repository = self::getUserPathById($user_id, 'system');
         $productions = array();
 
         if (is_dir($production_repository)) {

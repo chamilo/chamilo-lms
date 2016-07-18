@@ -110,6 +110,7 @@ if ($total_invitations == 0 && count($_GET) <= 0) {
 
 if ($number_loop != 0) {
     $invitationHtml = '';
+    
     foreach ($list_get_invitation as $invitation) {
         $sender_user_id = $invitation['user_sender_id'];
         $user_info = api_get_user_info($sender_user_id);

@@ -295,7 +295,7 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_course_setting MODIFY COLUMN value TEXT');
 
         if (!$schema->hasTable('version')) {
-            $this->addSql('CREATE TABLE version (version varchar(255), PRIMARY KEY(version));');
+            $this->addSql('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));');
         }
     }
 

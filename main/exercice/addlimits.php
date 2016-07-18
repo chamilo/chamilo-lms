@@ -59,9 +59,9 @@ if (isset($_SESSION['gradebook'])){
 
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
-			'name' => get_lang('ToolGradebook')
-		);
+        'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
+        'name' => get_lang('ToolGradebook')
+    );
 }
 $nameTools=get_lang('Exercises');
 $interbreadcrumb[] = array(

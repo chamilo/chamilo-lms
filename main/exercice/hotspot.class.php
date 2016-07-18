@@ -12,9 +12,12 @@
  **/
 class HotSpot extends Question
 {
-	static $typePicture = 'hotspot.png';
-	static $explanationLangVar = 'HotSpot';
+	public static $typePicture = 'hotspot.png';
+	public static $explanationLangVar = 'HotSpot';
 
+    /**
+     * HotSpot constructor.
+     */
 	public function __construct()
 	{
 		parent::__construct();
@@ -34,7 +37,14 @@ class HotSpot extends Question
 		parent::createForm($form, $fck_config);
 
 		if (!isset($_GET['editQuestion'])) {
-			$form->addElement('file','imageUpload',array('<img src="'.Display::return_icon('hotspot.png', null, null, ICON_SIZE_BIG, false, true).'" />', get_lang('UploadJpgPicture')) );
+            $form->addElement(
+                'file',
+                'imageUpload',
+                array(
+                    '<img src="'.Display::return_icon('hotspot.png', null, null, ICON_SIZE_BIG, false, true).'" />',
+                    get_lang('UploadJpgPicture'),
+                )
+            );
 
 			// setting the save button here and not in the question class.php
 			// Saving a question
@@ -75,12 +85,12 @@ class HotSpot extends Question
 		}
 	}
 
-	function createAnswersForm ($form)
+	function createAnswersForm($form)
 	{
 		// nothing
 	}
 
-	function processAnswersCreation ($form)
+	function processAnswersCreation($form)
 	{
 		// nothing
 	}

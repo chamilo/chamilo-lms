@@ -366,8 +366,9 @@ if ($modifyAnswers) {
         if ($answerType == HOT_SPOT_DELINEATION) {
             // the magic happens here ...
             // we do this to not count the if no error section
-            if ($nbrAnswers >= 2)
+            if ($nbrAnswers >= 2) {
                 $nbrAnswers--;
+            }
         }
 
         $reponse = array();
@@ -605,19 +606,16 @@ if ($modifyAnswers) {
                         <tr>
                             <th width="5">&nbsp;</th>
                             <th> <?php echo get_lang('HotspotDescription'); ?> *</th>
-                            <?php
-                            if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                                ?>
+                            <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) { ?>
                                 <th><?php echo get_lang('Comment'); ?></th>
                                 <?php
                                 if ($answerType == HOT_SPOT_DELINEATION) {
                                     echo '<th >' . get_lang('Scenario') . '</th>';
                                 }
-                                ?>
-                                <?php
-                            } else {
-                                ?>
-                                <th colspan="2"><?php echo get_lang('Comment'); ?></th>
+                            } else { ?>
+                                <th colspan="2">
+                                    <?php echo get_lang('Comment'); ?>
+                                </th>
                             <?php } ?>
                             <th><?php echo get_lang('QuestionWeighting'); ?> *</th>
                         </tr>
@@ -676,10 +674,8 @@ if ($modifyAnswers) {
                                 }
 
                                 //-------- IF it is a delineation
-
                                 if ($_SESSION['tmp_answers']['hotspot_type'][$i] == 'delineation') {
                                     $option1 = $option2 = $option3 = '';
-
                                     for ($k = 1; $k <= 100; $k++) {
                                         $selected1 = $selected2 = $selected3 = '';
                                         if ($k == $threadhold1[$i])

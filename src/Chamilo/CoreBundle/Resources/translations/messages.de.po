@@ -1,7 +1,7 @@
 msgid "My courses"
 msgstr "Meine Kurse"
 
-msgid "Home"
+msgid "Homepage"
 msgstr "Portal Startseite"
 
 msgid "Inbox"
@@ -24,3 +24,6 @@ msgstr "Kontroll-Anzeige"
 
 msgid "Administration"
 msgstr "Administration"
+
+msgid "Contact"
+msgstr "Kontakt"

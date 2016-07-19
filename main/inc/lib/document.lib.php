@@ -1387,7 +1387,7 @@ class DocumentManager
             return false;
         }
 
-        $session_id = is_null($session_id) ? api_get_session_id() : intval($session_id);
+        $session_id = empty($session_id) ? api_get_session_id() : intval($session_id);
 
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
 

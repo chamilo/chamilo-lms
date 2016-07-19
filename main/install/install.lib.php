@@ -1965,7 +1965,6 @@ function installSettings(
     $allowTeacherSelfRegistration,
     $installationProfile = ''
 ) {
-    //$allowRegistration = $allowRegistration ? 'true' : 'false';
     $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
 
     // Use PHP 5.3 to avoid issue with weird peripherical auto-installers like travis-ci

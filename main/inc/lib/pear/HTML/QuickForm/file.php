@@ -272,9 +272,13 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     /**
      * @return string
      */
-    public function getElementJS()
+    public function getElementJS($param)
     {
         $id = $this->getAttribute('id');
+        $ratio = '16 / 9';
+        if (!empty($param['ratio'])) {
+            $ratio = $param['ratio'];
+        }
         return '<script>
         $(document).ready(function() {
             var $image = $("#'.$id.'_preview_image");
@@ -297,7 +301,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                     $image.cropper("destroy");
         
                     $image.cropper({
-                        aspectRatio: 1 / 1,
+                        aspectRatio: ' . $ratio . ',
                         responsive : true,
                         center : false,
                         guides : false,
@@ -329,7 +333,11 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     {
         $js = '';
         if (isset($this->_attributes['crop_image'])) {
-            $js = $this->getElementJS();
+            $ratio = '16 / 9';
+            if (!empty($this->_attributes['crop_ratio'])) {
+                $ratio = $this->_attributes['crop_ratio'];
+            }
+            $js = $this->getElementJS(array('ratio' => $ratio));
         }
 
         if ($this->_flagFrozen) {

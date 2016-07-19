@@ -1968,7 +1968,6 @@ function installSettings(
     //$allowRegistration = $allowRegistration ? 'true' : 'false';
     $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
 
-    error_log($allowRegistration);
     // Use PHP 5.3 to avoid issue with weird peripherical auto-installers like travis-ci
     $settings = array(
         'Institution' => $organizationName,

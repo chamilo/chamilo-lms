@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-
+exit;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;

@@ -3849,31 +3849,31 @@ class UserManager
                     VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
             Database::query($sql);
             return true;
-        } else {
-            $sql = 'SELECT COUNT(*) as count, relation_type  FROM '.$tbl_my_friend.'
-                    WHERE
-                        friend_user_id='.$friend_id.' AND
-                        user_id='.$my_user_id.' AND
-                        relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
-            $result = Database::query($sql);
-            $row = Database :: fetch_array($result, 'ASSOC');
-            if ($row['count'] == 1) {
-                //only for the case of a RRHH
-                if ($row['relation_type'] != $relation_type && $relation_type == USER_RELATION_TYPE_RRHH) {
-                    $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
-                            VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
-                } else {
-                    $sql = 'UPDATE '.$tbl_my_friend.' SET relation_type='.$relation_type.'
-                            WHERE friend_user_id='.$friend_id.' AND user_id='.$my_user_id;
-                }
-                Database::query($sql);
-
-                return true;
-            } else {
-
-                return false;
-            }
         }
+
+        $sql = 'SELECT COUNT(*) as count, relation_type  FROM '.$tbl_my_friend.'
+                WHERE
+                    friend_user_id='.$friend_id.' AND
+                    user_id='.$my_user_id.' AND
+                    relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
+        $result = Database::query($sql);
+        $row = Database :: fetch_array($result, 'ASSOC');
+
+        if ($row['count'] == 1) {
+            //only for the case of a RRHH
+            if ($row['relation_type'] != $relation_type && $relation_type == USER_RELATION_TYPE_RRHH) {
+                $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
+                        VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
+            } else {
+                $sql = 'UPDATE '.$tbl_my_friend.' SET relation_type='.$relation_type.'
+                        WHERE friend_user_id='.$friend_id.' AND user_id='.$my_user_id;
+            }
+            Database::query($sql);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

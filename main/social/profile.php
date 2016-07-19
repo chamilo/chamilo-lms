@@ -182,27 +182,6 @@ $(document).ready(function (){
 function timeAgo() {
     $(".timeago").timeago();
 }
-
-function register_friend(element_input) {
-    if (confirm("'.get_lang('AddToFriends').'")) {
-        name_button=$(element_input).attr("id");
-        name_div_id="id_"+name_button.substring(13);
-        user_id=name_div_id.split("_");
-        user_friend_id=user_id[1];
-        $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
-                $("li#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />");
-            },
-            type: "POST",
-            url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
-            data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
-            success: function(datos) {
-                $("#dpending_" + user_friend_id).html(datos);
-            }
-        });
-    }
-}
 </script>';
 
 $link_shared = '';
@@ -610,8 +589,18 @@ if ($show_full_profile) {
                                  .api_get_person_name($userInfo['firstname'],$userInfo['lastname']).'</a>';
                     
                     $invitations .='<div class="pull-right">';
-                    $invitations .=  '<a title="'.get_lang('SocialAddToFriends').'" id="btn_accepted_'.$user_invitation_id.'" class="btn btn-default btn-sm" onclick="register_friend(this)" href="javascript:void(0)">'
-                                . Display::returnFontAwesomeIcon('plus').'</a>';
+                    $invitations .= Display::toolbarButton(
+                        get_lang('SocialAddToFriends'),
+                        api_get_path(WEB_AJAX_PATH) . 'social.ajax.php?' . http_build_query([
+                            'a' => 'add_friend',
+                            'friend_id' => $user_invitation_id,
+                            'is_my_friend' => 'friend'
+                        ]),
+                        'plus',
+                        'default',
+                        ['class' => 'btn-sm'],
+                        false
+                    );
                     $invitations .= '</div>';
                     $invitations .=  '<div id="id_response"></div>';
                     $invitations .=  '</li>';

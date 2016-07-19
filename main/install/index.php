@@ -682,6 +682,9 @@ if (@$_POST['step2']) {
 
         error_log('Starting migration process from '.$my_old_version.' ('.date('Y-m-d H:i:s').')');
 
+        echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
+        echo '<div id="details" style="display:none">';
+
         switch ($my_old_version) {
             case '1.9.0':
             case '1.9.2':
@@ -705,16 +708,12 @@ if (@$_POST['step2']) {
                 Database::query("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
                 Database::query("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
 
-                echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
-                echo '<div id="details" style="display:none">';
                 // Migrate using the migration files located in:
                 // src/Chamilo/CoreBundle/Migrations/Schema/V110
                 $result = migrate(
                     110,
                     $manager
                 );
-
-                echo '</div>';
 
                 if ($result) {
                     error_log('Migrations files were executed.');
@@ -746,18 +745,17 @@ if (@$_POST['step2']) {
                         }
                     }
 
-                    error_log('Upgrade process concluded! ('.date('Y-m-d H:i:s').')');
+                    error_log('Upgrade 1.10.x process concluded! ('.date('Y-m-d H:i:s').')');
                 } else {
                     error_log('There was an error during running migrations. Check error.log');
+                    break;
                 }
-                //TODO: check if this can be used to migrate directly from 1.9 to 1.11
-                break;
             case '1.10.0':
                 // no break
             case '1.10.2':
-            // no break
+                // no break
             case '1.10.4':
-            // no break
+                // no break
             case '1.10.6':
                 // Migrate using the migration files located in:
                 // src/Chamilo/CoreBundle/Migrations/Schema/V111
@@ -766,12 +764,10 @@ if (@$_POST['step2']) {
                     $manager
                 );
 
-                echo '</div>';
-
                 if ($result) {
                     error_log('Migrations files were executed.');
                     include 'update-files-1.10.0-1.11.0.inc.php';
-                    error_log('Upgrade process concluded!  ('.date('Y-m-d H:i:s').')');
+                    error_log('Upgrade 1.11.x process concluded!  ('.date('Y-m-d H:i:s').')');
                 } else {
                     error_log('There was an error during running migrations. Check error.log');
                 }
@@ -779,6 +775,7 @@ if (@$_POST['step2']) {
             default:
                 break;
         }
+        echo '</div>';
     } else {
         set_file_folder_permissions();
 
@@ -915,7 +912,7 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
         */
         // Add version table
-        $connection->executeQuery('CREATE TABLE version (version varchar(255), PRIMARY KEY(version))');
+        $connection->executeQuery('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version))');
 
         // Tickets
         $table = Database::get_main_table(TABLE_TICKET_PROJECT);

@@ -340,7 +340,7 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
         ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang(
             'AddImage'
         )),
-        array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9')
+        array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1')
     );
 
     $form->add_progress_bar();

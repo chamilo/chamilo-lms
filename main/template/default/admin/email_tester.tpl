@@ -1,9 +1,13 @@
 <div class="row">
-    <div class="col-sm-5">
+    {% if errors is empty %}
+    <div class="col-md-12">
         {{ form }}
     </div>
-    {% if not errors is empty %}
-        <div class="col-sm-7">
+    {% else %}
+        <div class="col-md-6">
+            {{ form }}
+        </div>
+        <div class="col-md-6">
             <h4 class="page-header">{{ 'Errors'|get_lang }}</h4>
             <ul>
                 {% for error in errors %}

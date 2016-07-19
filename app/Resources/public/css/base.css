@@ -5368,13 +5368,11 @@ div#chat-remote-video video {
 }
 #whoisonline .items-user{
   text-align: center;
-  /*border:1px solid #dddddd; */
   padding: 15px;
   border-radius: 4px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
-  box-shadow: 0 2px 3px #C8C8C8;
-  border: 1px solid #e6e6e6;
+  border: 1px solid #ECF0F1;
   margin-bottom: 20px;
   min-height: 230px;
 }

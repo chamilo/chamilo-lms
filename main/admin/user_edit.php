@@ -290,9 +290,9 @@ if ($userGeolocalization) {
 $form->addFile(
     'picture',
     get_lang('AddImage'),
-    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true)
+    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1')
 );
-$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+$allowed_picture_types = api_get_supported_image_extensions(false);
 
 $form->addRule(
 	'picture',

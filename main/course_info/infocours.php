@@ -150,7 +150,7 @@ $form->addFile(
     array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true)
 );
 
-$allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
+$allowed_picture_types = api_get_supported_image_extensions(false);
 $form->addRule(
     'picture',
     get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',

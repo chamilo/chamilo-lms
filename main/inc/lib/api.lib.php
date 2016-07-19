@@ -7601,12 +7601,16 @@ function api_get_configuration_value($variable)
 
 /**
  * Returns supported image extensions in the portal
+ * @param   bool    $supportVectors Whether vector images should also be accepted or not
  * @return  array   Supported image extensions in the portal
  */
-function api_get_supported_image_extensions()
+function api_get_supported_image_extensions($supportVectors = true)
 {
     // jpg can also be called jpeg, jpe, jfif and jif. See https://en.wikipedia.org/wiki/JPEG#JPEG_filename_extensions
-    $supportedImageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'svg', 'jpe', 'jfif', 'jif');
+    $supportedImageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'jpe', 'jfif', 'jif');
+    if ($supportVectors) {
+        array_push($supportedImageExtensions, 'svg');
+    }
     if (version_compare(PHP_VERSION, '5.5.0', '>=')) {
         array_push($supportedImageExtensions, 'webp');
     }

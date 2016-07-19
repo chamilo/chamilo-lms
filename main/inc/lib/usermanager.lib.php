@@ -1644,7 +1644,7 @@ class UserManager
         $old_file = $path_info['file'];
 
         // Let us delete them.
-        if (!empty($old_file)) {
+        if ($old_file != 'unknown.jpg') {
             if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE) {
                 $prefix = 'saved_'.date('Y_m_d_H_i_s').'_'.uniqid('').'_';
                 @rename($path.'small_'.$old_file, $path.$prefix.'small_'.$old_file);
@@ -1674,7 +1674,7 @@ class UserManager
         }
 
         // This is the common name for the new photos.
-        if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE && !empty($old_file)) {
+        if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE && $old_file != 'unknown.jpg') {
             $old_extension = strtolower(substr(strrchr($old_file, '.'), 1));
             $filename = in_array($old_extension, $allowed_types) ? substr($old_file, 0, -strlen($old_extension)) : $old_file;
             $filename = (substr($filename, -1) == '.') ? $filename.$extension : $filename.'.'.$extension;

@@ -13,8 +13,8 @@ $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 //selected name of database
 $course_id              = GradebookUtils::get_course_id_by_link_id($_GET['editlink']);
 $tbl_forum_thread 		= Database :: get_course_table(TABLE_FORUM_THREAD);
-$tbl_work 				= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 $tbl_attendance 		= Database :: get_course_table(TABLE_ATTENDANCE);
+$em = Database::getManager();
 
 $linkarray 				= LinkFactory :: load($_GET['editlink']);
 /** @var AbstractLink $link */
@@ -77,14 +77,23 @@ if ($form->validate()) {
     Database::query($sql_t);
 
     //Update weight into student publication(work)
-    $sql_t = 'UPDATE '.$tbl_work.' SET
-              weight='.$final_weight.'
-			  WHERE c_id = '.$course_id.' AND id = (
-			    SELECT ref_id FROM '.$tbl_grade_links.'
-			    WHERE id='.intval($_GET['editlink'] ).' AND type=3
-              )';
+    $em
+        ->createQuery('
+            UPDATE ChamiloCourseBundle:CStudentPublication w
+            SET w.weight = :final_weight
+            WHERE w.cId = :course
+                AND w.id = (
+                    SELECT l.refId FROM ChamiloCoreBundle:GradebookLink l
+                    WHERE l.id = :link AND l.type = :type
+                )
+        ')
+        ->execute([
+            'final_weight' => $final_weight,
+            'course' => $course_id,
+            'link' => intval($_GET['editlink'] ),
+            'type' => LINK_STUDENTPUBLICATION
+        ]);
 
-    Database::query($sql_t);
     header('Location: '.$_SESSION['gradebook_dest'].'?linkedited=&selectcat=' . $link->get_category_id().'&'.api_get_cidreq());
     exit;
 }

@@ -2696,7 +2696,7 @@ class CourseRestorer
             unset($folder['id']);
 			$folder['c_id'] = $this->destination_course_id;
             $folder['parent_id'] = 0;
-            $folder['session_id'] = $sessionId;
+            $folder['session_id'] = $sessionId ? $sessionId : null;
 			$new_id = Database::insert($work_table, $folder);
 
             if ($new_id) {
@@ -2727,7 +2727,7 @@ class CourseRestorer
                 foreach ($sub_folders  as $sub_folder) {
                     $sub_folder['c_id'] = $this->destination_course_id;
                     $sub_folder['ref'] = $new_id;
-                    $sub_folder['session_id'] = $sessionId;
+                    $sub_folder['session_id'] = $sessionId ? $sessionId : null;
                     $new_item_id = Database::insert($item_property_table, $sub_folder);
                     if ($new_item_id) {
                         $sql = "UPDATE $item_property_table SET id = iid WHERE iid = $new_item_id";

@@ -109,11 +109,30 @@ class Version20160330103045 extends AbstractMigrationChamilo
         //$this->addSql("CREATE UNIQUE INDEX UNIQ_8D93D649A0D96FBF ON user (email_canonical);");
         */
         $this->addSql('DROP TABLE extra_field_saved_search');
-        $this->addSql('DROP INDEX user_sco_course_sv_stack ON track_stored_values_stack');
-        $this->addSql('ALTER TABLE session_rel_user ADD duration INT DEFAULT NULL');
-        $this->addSql('DROP INDEX user_sco_course_sv ON track_stored_values');
+        $table = $schema->getTable('track_stored_values_stack');
+        $hasIndex = $table->hasIndex('user_sco_course_sv_stack');
+        if ($hasIndex) {
+            $this->addSql('DROP INDEX user_sco_course_sv_stack ON track_stored_values_stack');
+        }
 
-        $this->addSql('DROP INDEX UNIQ_8D93D649F85E0677 ON user');
+        $table = $schema->getTable('session_rel_user');
+        $hasColumn = $table->hasColumn('duration');
+        if (!$hasColumn) {
+            $this->addSql('ALTER TABLE session_rel_user ADD duration INT DEFAULT NULL');
+        }
+
+        $table = $schema->getTable('track_stored_values');
+        $hasIndex = $table->hasIndex('user_sco_course_sv');
+        if ($hasIndex) {
+            $this->addSql('DROP INDEX user_sco_course_sv ON track_stored_values');
+        }
+
+        $table = $schema->getTable('user');
+        $hasIndex = $table->hasIndex('UNIQ_8D93D649F85E0677');
+        if ($hasIndex) {
+            $this->addSql('DROP INDEX UNIQ_8D93D649F85E0677 ON user');
+        }
+
         $this->addSql(
             'ALTER TABLE user ADD email_canonical VARCHAR(255) NOT NULL, ADD credentials_expired TINYINT(1), ADD credentials_expire_at DATETIME DEFAULT NULL, ADD locked TINYINT(1),ADD enabled TINYINT(1) NOT NULL, ADD expired TINYINT(1) NOT NULL, ADD expires_at DATETIME DEFAULT NULL, CHANGE username username VARCHAR(255) NOT NULL, CHANGE username_canonical username_canonical VARCHAR(255) NOT NULL, CHANGE email email VARCHAR(255) NOT NULL'
         );

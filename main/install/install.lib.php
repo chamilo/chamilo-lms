@@ -2876,3 +2876,122 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
 
     return array('dir' => $dir, 'file' => $picture_filename);
 }
+
+/**
+ * @param string $fromVersion
+ * @param EntityManager $manager
+ * @param bool $processFiles
+ */
+function migrateSwitch($fromVersion, $manager, $processFiles = true)
+{
+    error_log('Starting migration process from '.$fromVersion.' ('.date('Y-m-d H:i:s').')');
+
+    echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
+    echo '<div id="details" style="display:none">';
+
+    $connection = $manager->getConnection();
+
+    switch ($fromVersion) {
+        case '1.9.0':
+        case '1.9.2':
+        case '1.9.4':
+        case '1.9.6':
+        case '1.9.6.1':
+        case '1.9.8':
+        case '1.9.8.1':
+        case '1.9.8.2':
+        case '1.9.10':
+        case '1.9.10.2':
+        case '1.9.10.4':
+            // Fix type "enum" before running the migration with Doctrine
+            $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
+            $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
+            $connection->executeQuery("ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL");
+            $connection->executeQuery("ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self'");
+            $connection->executeQuery("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
+            $connection->executeQuery("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
+            $connection->executeQuery("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
+            $connection->executeQuery("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
+            $connection->executeQuery("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
+
+            // Migrate using the migration files located in:
+            // src/Chamilo/CoreBundle/Migrations/Schema/V110
+            $result = migrate(
+                110,
+                $manager
+            );
+
+            if ($result) {
+                error_log('Migrations files were executed.');
+
+                fixIds($manager);
+
+                $connection->executeQuery("UPDATE settings_current SET selected_value = '1.10.0' WHERE variable = 'chamilo_database_version'");
+
+                if ($processFiles) {
+
+                    include __DIR__.'update-files-1.9.0-1.10.0.inc.php';
+                    // Only updates the configuration.inc.php with the new version
+                    include __DIR__.'update-configuration.inc.php';
+
+                    $configurationFiles = array(
+                        'mail.conf.php',
+                        'profile.conf.php',
+                        'course_info.conf.php',
+                        'add_course.conf.php',
+                        'events.conf.php',
+                        'auth.conf.php',
+                        'portfolio.conf.php'
+                    );
+
+                    error_log('Copy conf files');
+
+                    foreach ($configurationFiles as $file) {
+                        if (file_exists(api_get_path(SYS_CODE_PATH).'inc/conf/'.$file)) {
+                            copy(
+                                api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
+                                api_get_path(CONFIGURATION_PATH).$file
+                            );
+                        }
+                    }
+                }
+
+                error_log('Upgrade 1.10.x process concluded! ('.date('Y-m-d H:i:s').')');
+            } else {
+                error_log('There was an error during running migrations. Check error.log');
+                break;
+            }
+        case '1.10.0':
+            // no break
+        case '1.10.2':
+            // no break
+        case '1.10.4':
+            // no break
+        case '1.10.6':
+            // Migrate using the migration files located in:
+            // src/Chamilo/CoreBundle/Migrations/Schema/V111
+            $result = migrate(
+                111,
+                $manager
+            );
+
+            if ($result) {
+                $connection->executeQuery("UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'");
+
+                error_log('Migrations files were executed.');
+                if ($processFiles) {
+                    include __DIR__.'update-files-1.10.0-1.11.0.inc.php';
+                }
+                error_log('Upgrade 1.11.x process concluded!  ('.date('Y-m-d H:i:s').')');
+            } else {
+                error_log('There was an error during running migrations. Check error.log');
+            }
+            break;
+        default:
+            break;
+    }
+
+    echo '</div>';
+
+    return true;
+}

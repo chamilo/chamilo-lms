@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 $table = Database::get_main_table('vchamilo');
 
@@ -9,6 +10,9 @@ if (!defined('CHAMILO_INTERNAL')) {
 $vidlist = isset($_REQUEST['vids']) ? implode("','", array_map('intval', $_REQUEST['vids'])) : '';
 
 switch ($action) {
+    case 'upgrade':
+        Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/upgrade.php?vid='.$vidlist);
+        break;
     case 'import':
         Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/import.php');
         break;

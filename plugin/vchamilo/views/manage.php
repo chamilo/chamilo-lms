@@ -27,7 +27,7 @@ while ($instance = Database::fetch_object($result)) {
     $instances[$instance->id] = $instance;
 }
 
-$templates = Virtual::getAvailableTemplates(false);
+$templates = Virtual::getAvailableTemplates();
 
 if (empty($templates)) {
     $url = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php?what=snapshotinstance';
@@ -73,13 +73,17 @@ foreach ($instances as $instance) {
     $cmd .= '&nbsp;<a href="'.$thisurl.'?what=snapshotinstance&vid='.$instance->id.'" title="'.$plugin->get_lang('snapshotinstance').'">
         '.Display::returnFontAwesomeIcon('camera').'</a>';
 
+    $cmd .= '<a href="'.$thisurl.'?what=upgrade&vids[]='.$instance->id.'" title="'.$plugin->get_lang('Upgrade').'">
+         &nbsp;'.Display::returnFontAwesomeIcon('wrench').' </a>';
+
     if (!$instance->visible) {
         $cmd .= '<a href="'.$thisurl.'?what=fulldeleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('destroyinstances').'">
-        &nbsp;'.Display::returnFontAwesomeIcon('trash').' </a>';
+        &nbsp;'.Display::returnFontAwesomeIcon('remove').' </a>';
     } else {
         $cmd .= '<a href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('deleteinstances').'">
-         &nbsp;'.Display::returnFontAwesomeIcon('trash').' </a>';
+         &nbsp;'.Display::returnFontAwesomeIcon('remove').' </a>';
     }
+
 
     $crondate = $instance->lastcron ? date('r', $instance->lastcron) : '';
     $data = array(

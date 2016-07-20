@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 $cidReset = true;
 define('CHAMILO_INTERNAL', true);
@@ -28,12 +29,7 @@ if ($id) {
     $mode = $registeronly ? 'register' : 'add' ;
 }
 
-$vhost = [];
-if ($id) {
-    $sql = "SELECT * FROM vchamilo WHERE id = $id";
-    $result = Database::query($sql);
-    $vhost = Database::fetch_array($result, 'ASSOC');
-}
+$vhost = Virtual::getInstance($id);
 
 $form = new InstanceForm($plugin, $mode, $vhost);
 

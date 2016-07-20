@@ -739,6 +739,7 @@ class Virtual
         if (empty($coursePath) || empty($homePath) || empty($archivePath) || empty($cmdSql)|| empty($cmdMySql)) {
             api_not_allowed(true, 'You have to complete all plugin settings.');
         }
+
         $separator = DIRECTORY_SEPARATOR;
         $templatePath = api_get_path(SYS_PATH).'plugin'.$separator.'vchamilo'.$separator.'templates';
 
@@ -762,7 +763,7 @@ class Virtual
      * @param object $instance
      * @return \Doctrine\DBAL\Connection
      */
-    public static function getConnectionFromInstance($instance)
+    public static function getConnectionFromInstance($instance, $getManager = false)
     {
         $dbParams = array(
             'driver' => 'pdo_mysql',
@@ -782,14 +783,20 @@ class Virtual
 
         try {
             $database = new \Database();
-            $connection = $database->connect(
+            $manager = $database->connect(
                 $dbParams,
                 api_get_configuration_value('root_sys'),
                 api_get_configuration_value('root_sys'),
+                false,
                 true
             );
 
-            return $connection;
+            if ($getManager) {
+
+                return $manager;
+            }
+
+            return $manager->getConnection();
 
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -875,10 +882,8 @@ class Virtual
         } else {
             // Deploy template database
             self::ctrace("Creating databases from template '$template'");
-            var_dump($data);
             Virtual::createDatabase($data);
             self::ctrace("Loading data template '$template'");
-            var_dump($data);
             Virtual::loadDbTemplate($data, $template);
             self::ctrace("Coying files from template '$template'");
             Virtual::loadFilesFromTemplate($data, $template);
@@ -905,7 +910,7 @@ class Virtual
     }
 
     /**
-     * @param $data
+     * @param stdClass $data
      */
     public static function importInstance($data)
     {
@@ -1053,6 +1058,19 @@ class Virtual
     }
 
     /**
+     * @param stdClass $params
+     */
+    public static function upgradeInstance($params)
+    {
+        $connection = Virtual::getConnectionFromInstance($params);
+        $statement = $connection->query('SELECT * FROM settings_current');
+        $settings = $statement->fetchAll();
+        $settings = array_column($settings, 'selected_value', 'variable');
+        $settings['data_base'];
+
+    }
+
+    /**
      * @param string $slug
      *
      * @return string
@@ -1129,6 +1147,50 @@ class Virtual
             }
         }
         */
+    }
+
+    /**
+     * @param $id
+     * @return array|mixed
+     */
+    public static function getInstance($id)
+    {
+        $vhost = new stdClass();
+        if ($id) {
+            $id = (int) $id;
+            $sql = "SELECT * FROM vchamilo WHERE id = $id";
+            $result = Database::query($sql);
+            $vhost =  (object) Database::fetch_array($result, 'ASSOC');
+        }
+
+        return $vhost;
+    }
+
+    /**
+     * @param stdClass $instance
+     *
+     * @return bool|string returns the original version of the app
+     */
+    public static function canBeUpgraded($instance)
+    {
+        $connection = Virtual::getConnectionFromInstance($instance);
+        $statement = $connection->query('SELECT * FROM settings_current WHERE variable = "chamilo_database_version"');
+        $settings = $statement->fetchAll();
+        $settings = array_column($settings, 'selected_value', 'variable');
+        $version = $settings['chamilo_database_version'];
+        $versionParts = explode('.', $version);
+        $version = implode('.', [$versionParts[0], $versionParts[1], '0']);
+
+        $currentVersion = api_get_setting('chamilo_database_version');
+        $versionParts = explode('.', $currentVersion);
+        $currentVersion = implode('.', [$versionParts[0], $versionParts[1], '0']);
+
+        if (version_compare($version, $currentVersion, '<')) {
+
+            return $version;
+        }
+
+        return false;
     }
 }
 

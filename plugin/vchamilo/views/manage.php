@@ -61,10 +61,10 @@ foreach ($instances as $instance) {
 
     if ($instance->visible) {
         $status = '<a href="'.$thisurl.'?what=disableinstances&vids[]='.$instance->id.'" >
-                  '.Display::returnFontAwesomeIcon('toggle-on').'</a>';
+                  '.Display::returnFontAwesomeIcon('toggle-on', 2).'</a>';
     } else {
         $status = '<a href="'.$thisurl.'?what=enableinstances&vids[]='.$instance->id.'" >
-                  '.Display::returnFontAwesomeIcon('toggle-off').'</a>';
+                  '.Display::returnFontAwesomeIcon('toggle-off', 2).'</a>';
     }
 
     $cmd = '&nbsp;<a href="'.$thisurl.'?what=editinstance&vid='.$instance->id.'" title="'.$plugin->get_lang('edit').'">

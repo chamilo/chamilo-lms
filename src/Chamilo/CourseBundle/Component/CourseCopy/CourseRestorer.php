@@ -2555,6 +2555,8 @@ class CourseRestorer
                         $path = $this->get_new_id($item['item_type'], $path);
                     }
 
+                    $item['item_type'] = $item['item_type'] == 'dokeos_chapter' ? 'dir' : $item['item_type'];
+
                     $params = [
                         'c_id' => $this->destination_course_id,
                         'lp_id' => self::DBUTF8($new_lp_id),

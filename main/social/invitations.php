@@ -115,45 +115,50 @@ if ($number_loop != 0) {
         $sender_user_id = $invitation['user_sender_id'];
         $user_info = api_get_user_info($sender_user_id);
         $userPicture = $user_info['avatar'];
-        $invitationHtml .= '<div id="id_'.$sender_user_id.'" class="panel panel-default">';
+        $invitationHtml .= '<div id="id_'.$sender_user_id.'" class="block-invitation">';
 
         $title = Security::remove_XSS($invitation['title'], STUDENT, true);
         $content = Security::remove_XSS($invitation['content'], STUDENT, true);
         $date = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
         $invitationHtml .= '<div class="row">';
         $invitationHtml .= '<div class="col-md-2">';
-        $invitationHtml .= '<a href="profile.php?u='.$sender_user_id.'"><img class="img-responsive" src="'.$userPicture.'"/></a>';
+        $invitationHtml .= '<a href="profile.php?u='.$sender_user_id.'"><img class="img-responsive img-rounded" src="'.$userPicture.'"/></a>';
         $invitationHtml .= '</div>';
         $invitationHtml .= '<div class="col-md-10">';
-        $invitationHtml .= '<h4 class="title-profile"><a href="profile.php?u='.$sender_user_id.'">
-                                    '.$user_info['complete_name'].'</a>:
-                                    </h4>';
-        $invitationHtml .= '<div class="content-invitation">'.$content.'</div>';
-        $invitationHtml .= '<div class="date-invitation">'.get_lang('DateSend').' : '.$date.'</div>';
-
-        $invitationHtml .= '<div class="btn-group" role="group">';
+        
+        $invitationHtml .= '<div class="pull-right">';
+        $invitationHtml .= '<div class="btn-group btn-group-sm" role="group">';
         $invitationHtml .= Display::toolbarButton(
-            get_lang('AcceptInvitation'),
+            null,
             api_get_path(WEB_AJAX_PATH) . 'social.ajax.php?' . http_build_query([
                 'a' => 'add_friend',
                 'friend_id' => $sender_user_id,
                 'is_my_friend' => 'friend'
             ]),
             'check',
-            'success',
+            'default',
             ['id' => 'btn-accept-' . $sender_user_id]
         );
         $invitationHtml .= Display::toolbarButton(
-            get_lang('DenyInvitation'),
+            null,
             api_get_path(WEB_AJAX_PATH) . 'social.ajax.php?' . http_build_query([
                 'a' => 'deny_friend',
                 'denied_friend_id' => $sender_user_id,
             ]),
             'times',
-            'danger',
+            'default',
             ['id' => 'btn-deny-' . $sender_user_id]
         );
         $invitationHtml .= '</div>';
+        $invitationHtml .= '</div>';
+        
+        $invitationHtml .= '<h5 class="title-profile"><a href="profile.php?u='.$sender_user_id.'">
+                            '.$user_info['complete_name'].'</a>:
+                            </h5>';
+        $invitationHtml .= '<div class="content-invitation">'.$content.'</div>';
+        $invitationHtml .= '<div class="date-invitation">'.get_lang('DateSend').' : '.$date.'</div>';
+        
+        
         $invitationHtml .= '</div>';
         $invitationHtml .= '</div></div>';
     }

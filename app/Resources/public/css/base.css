@@ -5368,13 +5368,11 @@ div#chat-remote-video video {
 }
 #whoisonline .items-user{
   text-align: center;
-  /*border:1px solid #dddddd; */
   padding: 15px;
   border-radius: 4px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
-  box-shadow: 0 2px 3px #C8C8C8;
-  border: 1px solid #e6e6e6;
+  border: 1px solid #ECF0F1;
   margin-bottom: 20px;
   min-height: 230px;
 }
@@ -5803,6 +5801,41 @@ footer{
     margin-bottom: 2px;
 }
 /* CSS BACKUP *****/
+.elfinder-cwd-filename {
+    color: black !important;
+}
+.skill-badge-img{
+    width: 150px;
+    overflow: hidden;
+}
+.text-light{
+    color: #00CCFF;
+}
+#dropzone {
+    position: relative;
+    overflow: hidden;
+    direction: ltr;
+    cursor: pointer;
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    line-height: 50px;
+    background-color: #D4E6F0;
+    border: 2px dashed #bbbbbb;
+    font-size: 120%;
+    margin-bottom: 0;
+}
+
+#upload_form .fa-plus-square-o, #upload_form .fa-minus-square-o {
+    cursor:pointer;
+}
 .item-backup{
     padding-top: 5px;
     padding-bottom: 5px;
@@ -5830,6 +5863,18 @@ footer{
 }
 #invitations-acordion .list-group .list-group-item img{
     margin-right: 5px;
+}
+.block-invitation{
+    padding:10px;
+    border-radius: 5px;
+    border: 1px solid #ECF0F1;
+    margin-bottom: 10px;
+}
+.block-invitation .date-invitation{
+    font-size: 12px;
+}
+.block-invitation .title-profile{
+    font-weight: bold;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
@@ -6034,41 +6079,7 @@ footer{
         margin: -2.5px -15px;
     }
 }
-.elfinder-cwd-filename {
-    color: black !important;
-}
-.skill-badge-img{
-    width: 150px;
-    overflow: hidden;
-}
-.text-light{
-    color: #00CCFF;
-}
-#dropzone {
-    position: relative;
-    overflow: hidden;
-    direction: ltr;
-    cursor: pointer;
-    text-align: center;
-    color: #333;
-    font-weight: bold;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    width: auto;
-    margin-left: auto;
-    margin-right: auto;
-    height: auto;
-    line-height: 50px;
-    background-color: #D4E6F0;
-    border: 2px dashed #bbbbbb;
-    font-size: 120%;
-    margin-bottom: 0;
-}
 
-#upload_form .fa-plus-square-o, #upload_form .fa-minus-square-o {
-    cursor:pointer;
-}
 
 @-moz-keyframes wobblebar-loader {
     0% {

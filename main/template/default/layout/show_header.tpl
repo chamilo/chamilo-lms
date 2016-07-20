@@ -11,6 +11,7 @@
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
 <noscript>{{ "NoJavascript"|get_lang }}</noscript>
+{% if show_header == true %}
 <div class="wrap">   
     {% if displayCookieUsageWarning == true %}
     <!-- Display Cookies validation -->
@@ -38,3 +39,4 @@
         {% block breadcrumb %}
             {{ breadcrumb }}
         {% endblock %}
+{% endif %}

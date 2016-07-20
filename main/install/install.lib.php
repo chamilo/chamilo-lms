@@ -2930,9 +2930,9 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
                 if ($processFiles) {
 
-                    include __DIR__.'update-files-1.9.0-1.10.0.inc.php';
+                    include __DIR__.'/update-files-1.9.0-1.10.0.inc.php';
                     // Only updates the configuration.inc.php with the new version
-                    include __DIR__.'update-configuration.inc.php';
+                    include __DIR__.'/update-configuration.inc.php';
 
                     $configurationFiles = array(
                         'mail.conf.php',
@@ -2980,7 +2980,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
                 error_log('Migrations files were executed.');
                 if ($processFiles) {
-                    include __DIR__.'update-files-1.10.0-1.11.0.inc.php';
+                    include __DIR__.'/update-files-1.10.0-1.11.0.inc.php';
                 }
                 error_log('Upgrade 1.11.x process concluded!  ('.date('Y-m-d H:i:s').')');
             } else {

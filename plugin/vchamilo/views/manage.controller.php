@@ -59,6 +59,10 @@ switch ($action) {
             foreach ($todelete as $fooid => $instance) {
                 $slug = $instance['slug'];
 
+                if (empty($slug)) {
+                    continue;
+                }
+
                 // Remove all files and eventual symlinks
                 $absalternatecourse = Virtual::getConfig('vchamilo', 'course_real_root');
                 $coursedir = $absalternatecourse.$slug;

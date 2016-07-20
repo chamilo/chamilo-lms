@@ -9,6 +9,9 @@ use Symfony\Component\Finder\Finder;
  */
 class Virtual
 {
+    /**
+     * @param array $_configuration
+     */
     public static function hookConfiguration(&$_configuration)
     {
         global $virtualChamilo;
@@ -72,7 +75,6 @@ class Virtual
 
             // Only load if is visible
             if ($data && $data['visible'] === '1') {
-
                 foreach ($data as $key => $value) {
                     if (!in_array($key, $excludes)) {
                         $_configuration[$key] = $value;
@@ -268,9 +270,9 @@ class Virtual
 
         if (in_array($databaseToDelete, $databases)) {
             $connection->getSchemaManager()->dropDatabase($databaseToDelete);
-            Display::addFlash(Display::return_message("Database deleted: ".$databaseToDelete));
+            Display::addFlash(Display::return_message('Database deleted: '.$databaseToDelete));
         } else {
-            Display::addFlash(Display::return_message("Database does not exist: ".$databaseToDelete));
+            Display::addFlash(Display::return_message('Database does not exist: '.$databaseToDelete));
         }
 
         return false;
@@ -317,8 +319,7 @@ class Virtual
         $pgm = str_replace("/", DIRECTORY_SEPARATOR, $pgm);
 
         if (!is_executable($phppgm)) {
-            print_error('databasecommanddoesnotmatchanexecutablefile');
-            return false;
+            throw new Exception('databasecommanddoesnotmatchanexecutablefile');
         }
 
         // Retrieves the host configuration (more secure).
@@ -576,7 +577,7 @@ class Virtual
     }
 
     /**
-     * @param array $vchamilo
+     * @param stdClass $vchamilo
      * @param string $template
      */
     public static function loadFilesFromTemplate($vchamilo, $template)
@@ -585,7 +586,7 @@ class Virtual
 
         // Make template directory (files and SQL).
         $separator = DIRECTORY_SEPARATOR;
-        $absolute_template_datadir = $_configuration['root_sys'].'plugin'.$separator.'vchamilo'.$separator.'templates'.$separator.$template;
+        $templateDir = $_configuration['root_sys'].'plugin'.$separator.'vchamilo'.$separator.'templates'.$separator.$template;
 
         $vchamilo->virtual = true;
 
@@ -593,54 +594,61 @@ class Virtual
         $homePath = self::getConfig('vchamilo', 'home_real_root').$separator.$vchamilo->slug;
         $archivePath = self::getConfig('vchamilo', 'archive_real_root').$separator.$vchamilo->slug;
 
-        // Rename some dirs top match instance requirements
-        $manifest = self::getVmanifest($template);
-        if ($manifest) {
+        // get the protocol free hostname
+        Display::addFlash(
+            Display::return_message("Copying {$templateDir}/data/courses => $coursePath")
+        );
+        copyDirTo(
+            self::chopLastSlash($templateDir.'/data/courses'),
+            self::chopLastSlash($coursePath),
+            false
+        );
 
-            // get the protocol free hostname
-            Display::addFlash(
-                Display::return_message("Copying {$absolute_template_datadir}/data/courses => $coursePath")
-            );
-            copyDirTo(
-                self::chopLastSlash($absolute_template_datadir.'/data/courses'),
-                self::chopLastSlash($coursePath),
-                false
-            );
+        Display::addFlash(
+            Display::return_message("Copying {$templateDir}/data/archive => $archivePath")
+        );
 
-              Display::addFlash(
-                Display::return_message("Copying {$absolute_template_datadir}/data/archive => $archivePath")
-            );
-            copyDirTo(
-                self::chopLastSlash($absolute_template_datadir.'/data/archive'),
-                self::chopLastSlash($archivePath),
-                false
-            );
+        copyDirTo(
+            self::chopLastSlash($templateDir.'/data/archive'),
+            self::chopLastSlash($archivePath),
+            false
+        );
 
-            Display::addFlash(
-                Display::return_message("Copying {$absolute_template_datadir}/data/home => $homePath")
-            );
+        Display::addFlash(
+            Display::return_message("Copying {$templateDir}/data/home => $homePath")
+        );
 
-            copyDirTo(
-                self::chopLastSlash($absolute_template_datadir.'/data/home'),
-                self::chopLastSlash($homePath),
-                false
-            );
-        }
+        copyDirTo(
+            self::chopLastSlash($templateDir.'/data/home'),
+            self::chopLastSlash($homePath),
+            false
+        );
     }
 
+    /**
+     * @param string $path
+     *
+     * @return mixed
+     */
     public static function chopLastSlash($path)
     {
         return preg_replace('/\/$/', '', $path);
     }
 
+    /**
+     * @param string $str
+     */
     public static function ctrace($str)
     {
-        if (!defined('CLI_SCRIPT')) echo "<pre>";
-        Display::addFlash(Display::return_message($str));
-        if (!defined('CLI_SCRIPT')) echo "</pre>";
+        Display::addFlash(Display::return_message($str, 'normal', false));
     }
 
-
+    /**
+     * @param $file
+     * @param $component
+     * @param bool $return
+     * @return string
+     */
     public static function requireJs($file, $component, $return = false)
     {
         global $_configuration, $htmlHeadXtra;
@@ -813,31 +821,6 @@ class Virtual
             unset($data->testdatapath);
         }
 
-        $import = false;
-        if (isset($data->import) && $data->import === true) {
-            $import = true;
-
-            $newDatabase = $data;
-            $newDatabase->main_database = $newDatabase->import_to_main_database;
-            $newDatabase->db_user = $newDatabase->import_to_db_user;
-            $newDatabase->db_password = $newDatabase->import_to_db_password;
-            $newDatabase->db_host = $newDatabase->import_to_db_host;
-
-            unset($data->import);
-            unset($newDatabase->import_to_main_database);
-            unset($newDatabase->import_to_db_user);
-            unset($newDatabase->import_to_db_password);
-            unset($newDatabase->import_to_db_host);
-
-            unset($data->import_to_main_database);
-            unset($data->import_to_db_user);
-            unset($data->import_to_db_password);
-            unset($data->import_to_db_host);
-        }
-
-        // For tests
-        $import = true;
-
         $registeronly = $data->registeronly;
         unset($data->registeronly);
         $data->lastcron = 0;
@@ -860,7 +843,7 @@ class Virtual
             return ;
         }
 
-        self::ctrace("Registering: ".$data->root_web);
+        self::ctrace('Registering: '.$data->root_web);
         $tablename = Database::get_main_table('vchamilo');
         $sql = "SELECT * FROM $tablename 
                 WHERE root_web = '".Database::escape_string($data->root_web)."'";
@@ -877,129 +860,28 @@ class Virtual
 
         if ($registeronly) {
             // Stop it now.
-            self::ctrace("Registering only. out.");
+            self::ctrace('Registering only. out.');
             Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
         }
 
         // or we continue with physical creation
 
-        // Create course directory for operations.
-        // this is very important here (DO NOT USE api_get_path() !!) because storage may be remotely located
-        $absalternatecourse = Virtual::getConfig('vchamilo', 'course_real_root');
-        $coursedir = $absalternatecourse.'/'.$slug;
+        self::createDirsFromSlug($slug);
 
-        if (!is_dir($coursedir)) {
-            self::ctrace("Creating physical course dir in $coursedir");
-            mkdir($coursedir, 0777, true);
-            // initiate default index
-            $indexFile = $coursedir.'/index.html';
-            if ($indexFile) {
-                //file_put_contents($indexFile, vchamilo_get_default_course_index_fragment());
-            }
-
-            $htaccessFile = $coursedir.'/.htaccess';
-            if ($htaccessFile) {
-                file_put_contents($htaccessFile, Virtual::getHtaccessFragment($slug));
-            }
-        }
-
-        $absalternatehome = Virtual::getConfig('vchamilo', 'home_real_root');
-        // absalternatehome is a vchamilo config setting that tells where the
-        // real physical storage for home pages are.
-        $homedir = $absalternatehome.'/'.$slug;
-
-        self::ctrace("Making home dir as $homedir");
-
-        if (!is_dir($homedir)) {
-            if (!mkdir($homedir, 0777, true)) {
-                self::ctrace("Error creating home dir $homedir \n");
-            }
-        }
-
-        // if real homedir IS NOT under chamilo install, link to it
-        // Seems not be necessary as we can globally link the whole Home container
-        /*
-        $standardlocation = $_configuration['root_sys'].'home/'.$home_folder; // where it should be
-        if ($homedir != $standardlocation){
-            self::ctrace("Linking virtual home dir ");
-            if (!symlink($homedir, $standardlocation)){
-                self::ctrace("could not link $standardlocation => $homedir ");
-            }
-        }
-        */
-
-        // create archive
-        $absalternatearchive = Virtual::getConfig('vchamilo', 'archive_real_root');
-        $archivedir = $absalternatearchive.'/'.$slug;
-
-        self::ctrace("Making archive dir as $archivedir ");
-
-        if (!is_dir($archivedir)) {
-            if (!mkdir($archivedir, 0777, true)) {
-                self::ctrace("Error creating archive dir $archivedir\n");
-            }
-        }
-
-        // if real archivedir IS NOT under chamilo install, link to it
-        // Seems not be necessary as we can globally link the whole Home container
-        /*
-        $standardlocation = $_configuration['root_sys'].'archive/'.$archive_folder; // where it should be
-        if ($archivedir != $standardlocation){
-            self::ctrace("Linking virtual archive dir ");
-            if (!symlink($archivedir, $standardlocation)){
-                self::ctrace("could not link $standardlocation => $archivedir ");
-            }
-        }
-        */
-$import = false;
-        if ($import === false) {
-            if (!$template) {
-                // Create empty database for install
-                self::ctrace("Creating database");
-                Virtual::createDatabase($data);
-            } else {
-                // Deploy template database
-                self::ctrace("Creating databases from template '$template'");
-                var_dump($data);
-                Virtual::createDatabase($data);
-                self::ctrace("Loading data template '$template'");
-                var_dump($data);
-                Virtual::loadDbTemplate($data, $template);
-                self::ctrace("Coying files from template '$template'");
-                Virtual::loadFilesFromTemplate($data, $template);
-            }
+        if (!$template) {
+            // Create empty database for install
+            self::ctrace("Creating database");
+            Virtual::createDatabase($data);
         } else {
-            self::ctrace("Create database");
-            Virtual::createDatabase($newDatabase);
-
-            $absolute_datadir = api_get_path(SYS_ARCHIVE_PATH).uniqid('dump_', true).'.sql';
-
-            Virtual::dumpDatabase($data, $absolute_datadir);
-
-            $sqlcmd = Virtual::getDatabaseDumpCmd($data);
-            $sqlcmd = str_replace('%DATABASE%', $data->main_database, $sqlcmd);
-
-            // Make final commands to execute, depending on the database type.
-            $import = $sqlcmd.$absolute_datadir;
-
-            // Execute the command.
-            Display::addFlash(Display::return_message("Load database from template dump: \n $import "));
-
-            if (!defined('CLI_SCRIPT')) {
-                putenv('LANG=en_US.utf-8');
-            }
-            // ensure utf8 is correctly handled by php exec()
-            // @see http://stackoverflow.com/questions/10028925/call-a-program-via-shell-exec-with-utf-8-text-input
-
-            exec($import, $output, $return);
-            echo $import;exit;
-
-            if (!empty($output)) {
-                Display::addFlash(Display::return_message(implode("\n", $output)."\n"));
-            }
-
-            unlink($absolute_datadir);
-
+            // Deploy template database
+            self::ctrace("Creating databases from template '$template'");
+            var_dump($data);
+            Virtual::createDatabase($data);
+            self::ctrace("Loading data template '$template'");
+            var_dump($data);
+            Virtual::loadDbTemplate($data, $template);
+            self::ctrace("Coying files from template '$template'");
+            Virtual::loadFilesFromTemplate($data, $template);
         }
 
         // pluging in site name institution
@@ -1020,6 +902,233 @@ $import = false;
         }
 
         self::ctrace("Finished");
+    }
+
+    /**
+     * @param $data
+     */
+    public static function importInstance($data)
+    {
+        if (isset($data->what)) {
+            unset($data->what);
+        }
+        if (isset($data->submitbutton)) {
+            unset($data->submitbutton);
+        }
+        if (isset($data->id)) {
+            unset($data->id);
+        }
+        if (isset($data->vid)) {
+            unset($data->vid);
+        }
+        if (isset($data->testconnection)) {
+            unset($data->testconnection);
+        }
+        if (isset($data->testdatapath)) {
+            unset($data->testdatapath);
+        }
+
+        $fromCoursePath = $data->course_path;
+        $fromHomePath = $data->home_path;
+
+        unset($data->course_path);
+        unset($data->home_path);
+
+        $newDatabase = clone $data;
+        $newDatabase->main_database = $newDatabase->import_to_main_database;
+        $newDatabase->db_user = $newDatabase->import_to_db_user;
+        $newDatabase->db_password = $newDatabase->import_to_db_password;
+        $newDatabase->db_host = $newDatabase->import_to_db_host;
+
+        unset($newDatabase->import_to_main_database);
+        unset($newDatabase->import_to_db_user);
+        unset($newDatabase->import_to_db_password);
+        unset($newDatabase->import_to_db_host);
+
+        unset($data->import_to_main_database);
+        unset($data->import_to_db_user);
+        unset($data->import_to_db_password);
+        unset($data->import_to_db_host);
+
+        $data->lastcron = 0;
+        $data->lastcrongap = 0;
+        $data->croncount = 0;
+        $template = '';
+
+        $mainDatabase = api_get_configuration_value('main_database');
+
+        if ($mainDatabase == $data->main_database) {
+            Display::addFlash(
+                Display::return_message('You cannot use the same database as the chamilo master', 'error')
+            );
+
+            return ;
+        }
+
+        self::ctrace('Registering: '.$data->root_web);
+
+        $table = Database::get_main_table('vchamilo');
+        $sql = "SELECT * FROM $table 
+                WHERE root_web = '".Database::escape_string($data->root_web)."'";
+        $result = Database::query($sql);
+        $id = null;
+        if (Database::num_rows($result)) {
+            Display::addFlash(
+                Display::return_message('Instance was already added: '.$data->root_web, 'error')
+            );
+            return false;
+        } else {
+
+            $connection = Virtual::getConnectionFromInstance($data);
+
+            $statement = $connection->query('SELECT * FROM settings_current');
+            $settings = $statement->fetchAll();
+            $settings = array_column($settings, 'selected_value', 'variable');
+
+            $institution = $settings['Institution'];
+            $siteName = $settings['siteName'];
+
+            $newDatabase->sitename = $siteName;
+            $newDatabase->institution = $institution;
+
+            $slug = $newDatabase->slug = $data->slug = Virtual::getSlugFromUrl($data->root_web);
+            $id = Database::insert($table, (array) $newDatabase);
+        }
+
+        if (!$id) {
+            throw new Exception('Was not registered');
+        }
+
+        self::createDirsFromSlug($slug);
+        self::ctrace("Create database");
+        Virtual::createDatabase($newDatabase);
+
+        $dumpFile = api_get_path(SYS_ARCHIVE_PATH).uniqid($data->main_database.'_dump_', true).'.sql';
+
+        self::ctrace('Create backup from "'.$data->main_database.'" here: '.$dumpFile.' ');
+
+        Virtual::dumpDatabase($data, $dumpFile);
+
+        $sqlcmd = Virtual::getDatabaseDumpCmd($newDatabase);
+        $sqlcmd = str_replace('%DATABASE%', $newDatabase->main_database, $sqlcmd);
+        $import = $sqlcmd.$dumpFile;
+
+        // Execute the command.
+        if (!defined('CLI_SCRIPT')) {
+            putenv('LANG=en_US.utf-8');
+        }
+        // ensure utf8 is correctly handled by php exec()
+        // @see http://stackoverflow.com/questions/10028925/call-a-program-via-shell-exec-with-utf-8-text-input
+
+        exec($import, $output, $return);
+
+        self::ctrace('Restore backup here "'.$newDatabase->main_database.'" : <br />'.$import.' ');
+
+        if (!empty($output)) {
+            Display::addFlash(Display::return_message(implode("\n", $output)."\n"));
+        }
+
+        @unlink($dumpFile);
+
+        $coursePath = self::getConfig('vchamilo', 'course_real_root').'/'.$slug;
+        $homePath = self::getConfig('vchamilo', 'home_real_root').'/'.$slug;
+
+        self::ctrace("Copy from '$fromCoursePath' to backup '$coursePath' ");
+
+        copyDirTo(
+            self::chopLastSlash($fromCoursePath),
+            self::chopLastSlash($coursePath),
+            false
+        );
+
+        self::ctrace("Copy from '$fromHomePath' to backup '$homePath' ");
+
+        copyDirTo(
+            self::chopLastSlash($fromHomePath),
+            self::chopLastSlash($homePath),
+            false
+        );
+
+        self::ctrace("Finished");
+    }
+
+    /**
+     * @param string $slug
+     *
+     * @return string
+     */
+    public static function createDirsFromSlug($slug)
+    {
+        // We continue with physical creation
+
+        // Create course directory for operations.
+        // this is very important here (DO NOT USE api_get_path() !!) because storage may be remotely located
+        $absAlternateCourse = Virtual::getConfig('vchamilo', 'course_real_root');
+        $courseDir = $absAlternateCourse.'/'.$slug;
+
+        if (!is_dir($courseDir)) {
+            self::ctrace("Creating physical course dir in $courseDir");
+            mkdir($courseDir, 0777, true);
+            // initiate default index
+            $indexFile = $courseDir.'/index.html';
+            if ($indexFile) {
+                file_put_contents($indexFile, self::getDefaultCourseIndexFragment());
+            }
+
+            $htaccessFile = $courseDir.'/.htaccess';
+            if ($htaccessFile) {
+                file_put_contents($htaccessFile, self::getHtaccessFragment($slug));
+            }
+        }
+
+        $absAlternateHome = Virtual::getConfig('vchamilo', 'home_real_root');
+        // absalternatehome is a vchamilo config setting that tells where the
+        // real physical storage for home pages are.
+        $homeDir = $absAlternateHome.'/'.$slug;
+
+        self::ctrace("Making home dir as $homeDir");
+
+        if (!is_dir($homeDir)) {
+            if (!mkdir($homeDir, 0777, true)) {
+                self::ctrace("Error creating home dir $homeDir \n");
+            }
+        }
+
+        // if real homedir IS NOT under chamilo install, link to it
+        // Seems not be necessary as we can globally link the whole Home container
+        /*
+        $standardlocation = $_configuration['root_sys'].'home/'.$home_folder; // where it should be
+        if ($homeDir != $standardlocation){
+            self::ctrace("Linking virtual home dir ");
+            if (!symlink($homeDir, $standardlocation)){
+                self::ctrace("could not link $standardlocation => $homeDir ");
+            }
+        }
+        */
+
+        // create archive
+        $absAlternateArchive = Virtual::getConfig('vchamilo', 'archive_real_root');
+        $archiveDir = $absAlternateArchive.'/'.$slug;
+
+        self::ctrace("Making archive dir as $archiveDir ");
+
+        if (!is_dir($archiveDir)) {
+            if (!mkdir($archiveDir, 0777, true)) {
+                self::ctrace("Error creating archive dir $archiveDir\n");
+            }
+        }
+
+        // if real archivedir IS NOT under chamilo install, link to it
+        // Seems not be necessary as we can globally link the whole Home container
+        /*
+        $standardlocation = $_configuration['root_sys'].'archive/'.$archive_folder; // where it should be
+        if ($archiveDir != $standardlocation){
+            self::ctrace("Linking virtual archive dir ");
+            if (!symlink($archiveDir, $standardlocation)){
+                self::ctrace("could not link $standardlocation => $archiveDir ");
+            }
+        }
+        */
     }
 }
 

@@ -1694,19 +1694,19 @@ class UserManager
         $image->crop($cropParameters);
 
         // Storing the new photos in 4 versions with various sizes.
-
+        $userPath = self::getUserPathById($user_id, 'system');
         $small = new Image($source_file);
         $small->resize(32);
-        $small->send_image($path.'small_'.$filename);
+        $small->send_image($userPath.'small_'.$filename);
         $medium = new Image($source_file);
         $medium->resize(85);
-        $medium->send_image($path.'medium_'.$filename);
+        $medium->send_image($userPath.'medium_'.$filename);
         $normal = new Image($source_file);
         $normal->resize(200);
-        $normal->send_image($path.$filename);
+        $normal->send_image($userPath.$filename);
 
         $big = new Image($source_file); // This is the original picture.
-        $big->send_image($path.'big_'.$filename);
+        $big->send_image($userPath.'big_'.$filename);
 
         $result = $small && $medium && $normal && $big;
 

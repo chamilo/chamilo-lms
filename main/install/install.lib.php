@@ -962,8 +962,7 @@ function display_requirements(
                 <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
-            ';
-    echo '    </table>';
+        </table>';
     echo '  </div>';
     echo '</div>';
 
@@ -1037,14 +1036,17 @@ function display_requirements(
         //--> The user would have to adjust the permissions manually
         if (count($notWritable) > 0) {
             $error = true;
-            echo '<div class="error-message">';
-                echo '<center><h3>'.get_lang('Warning').'</h3></center>';
-                printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '</font>
-                <a href="../../documentation/installation_guide.html" target="blank">', '</a> <font color="red">');
-            echo '</div>';
+            ?>
+            <div class="text-danger">
+                <h3 class="text-center"><?php echo get_lang('Warning') ?></h3>
+                <p>
+                    <?php printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '<a href="../../documentation/installation_guide.html" target="blank">', '</a>'); ?>
+                </p>
+            </div>
+            <?php
             echo '<ul>';
             foreach ($notWritable as $value) {
-                echo '<li>'.$value.'</li>';
+                echo '<li class="text-danger">'.$value.'</li>';
             }
             echo '</ul>';
         } elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
@@ -1052,6 +1054,32 @@ function display_requirements(
             echo '<div class="alert alert-warning"><h4><center>';
             echo get_lang('WarningExistingLMSInstallationDetected');
             echo '</center></h4></div>';
+        }
+
+        $deprecated = [
+            api_get_path(SYS_CODE_PATH) . 'exercice/',
+            api_get_path(SYS_CODE_PATH) . 'newscorm/'
+        ];
+        $deprecatedToRemoved = [];
+
+        foreach ($deprecated as $deprecatedDirectory) {
+            if (!is_dir($deprecatedDirectory)) {
+                continue;
+            }
+
+            $deprecatedToRemoved[] = $deprecatedDirectory;
+        }
+
+        if (count($deprecatedToRemoved) > 0) {
+            $error = true;
+            ?>
+            <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade') ?></p>
+            <ul>
+                <?php foreach ($deprecatedToRemoved as $deprecatedDirectory) { ?>
+                    <li class="text-danger"><?php echo $deprecatedDirectory ?></li>
+                <?php } ?>
+            </ul>
+            <?php
         }
 
         // And now display the choice buttons (go back or install)
@@ -1064,13 +1092,11 @@ function display_requirements(
             <em class="fa fa-forward"> </em> <?php echo get_lang('NewInstallation'); ?>
         </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
+            <button type="submit" class="btn btn-default" <?php echo !$error ?: 'disabled="disabled"' ?> name="step2_update_8" value="Upgrade from Chamilo 1.9.x">
+                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeFromLMS19x') ?>
+            </button>
+            </p>
         <?php
-        // Real code
-        echo '<button type="submit" class="btn btn-default" name="step2_update_8" value="Upgrade from Chamilo 1.9.x"';
-        if ($error) echo ' disabled="disabled"';
-        echo ' ><em class="fa fa-forward"> </em> '.get_lang('UpgradeFromLMS19x').'</button>';
-
-        echo '</p>';
     }
 }
 

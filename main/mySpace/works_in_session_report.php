@@ -41,6 +41,7 @@ $usersInfo = [];
 
 if ($session) {
     $sessionCourses = $session->getCourses();
+    $today = new DateTime('now', new DateTimeZone('UTC'));
 
     foreach ($sessionCourses as $sessionCourse) {
         $course = $sessionCourse->getCourse();
@@ -55,7 +56,7 @@ if ($session) {
                     'code' => $user->getOfficialCode(),
                     'complete_name' => $user->getCompleteName(),
                     'time_in_platform' => api_time_to_hms(
-                        Tracking::get_time_spent_on_the_platform($user->getId())
+                        Tracking::get_time_spent_on_the_platform($user->getId(), 'custom', '0000:00:00', $today->format('Y-m-d H:i:s'))
                     ),
                     'first_connection' => Tracking::get_first_connection_date($user->getId()),
                     'last_connection' => Tracking::get_last_connection_date($user->getId())

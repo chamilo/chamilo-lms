@@ -45,7 +45,6 @@ $row = 0;
 $headers = array(
     '',
     $plugin->get_lang('sitename'),
-    $plugin->get_lang('institution'),
     $plugin->get_lang('dbhost').' - '.get_lang('Database'),
     $plugin->get_lang('coursefolder'),
     $plugin->get_lang('enabled'),
@@ -69,27 +68,26 @@ foreach ($instances as $instance) {
     }
 
     $cmd = '&nbsp;<a href="'.$thisurl.'?what=editinstance&vid='.$instance->id.'" title="'.$plugin->get_lang('edit').'">
-            '.Display::returnFontAwesomeIcon('pencil').'</a>';
+            '.Display::returnFontAwesomeIcon('pencil', 2).'</a>';
     $cmd .= '&nbsp;<a href="'.$thisurl.'?what=snapshotinstance&vid='.$instance->id.'" title="'.$plugin->get_lang('snapshotinstance').'">
-        '.Display::returnFontAwesomeIcon('camera').'</a>';
+        '.Display::returnFontAwesomeIcon('camera', 2).'</a>';
 
     $cmd .= '<a href="'.$thisurl.'?what=upgrade&vids[]='.$instance->id.'" title="'.$plugin->get_lang('Upgrade').'">
-         &nbsp;'.Display::returnFontAwesomeIcon('wrench').' </a>';
+         &nbsp;'.Display::returnFontAwesomeIcon('wrench', 2).' </a>';
 
     if (!$instance->visible) {
-        $cmd .= '<a href="'.$thisurl.'?what=fulldeleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('destroyinstances').'">
+        $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="'.$thisurl.'?what=fulldeleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('destroyinstances').'">
         &nbsp;'.Display::returnFontAwesomeIcon('remove').' </a>';
     } else {
-        $cmd .= '<a href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('deleteinstances').'">
-         &nbsp;'.Display::returnFontAwesomeIcon('remove').' </a>';
+        $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('deleteinstances').'">
+         &nbsp;'.Display::returnFontAwesomeIcon('remove', 2).' </a>';
     }
 
 
     $crondate = $instance->lastcron ? date('r', $instance->lastcron) : '';
     $data = array(
         $checkbox,
-        $sitelink.' ('.Display::url($instance->root_web, $instance->root_web, array('target' => '_blank')).')',
-        $instance->institution,
+        $sitelink.' '.$instance->institution.' ('.Display::url($instance->root_web, $instance->root_web, array('target' => '_blank')).')',
         $instance->db_host.' - '.$instance->main_database,
         $instance->slug,
         $status,

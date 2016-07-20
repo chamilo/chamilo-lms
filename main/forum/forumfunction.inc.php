@@ -1941,7 +1941,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
     }
 
     if ($filterModerated && $forumInfo['moderated'] == 1) {
-        $criteria->where(Criteria::expr()->eq('status', 1));
+        $criteria->andWhere(Criteria::expr()->eq('status', 1));
     }
 
     if ($recursive) {

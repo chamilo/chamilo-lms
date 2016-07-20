@@ -24,12 +24,12 @@ if (defined('SYSTEM_INSTALLATION')) {
     // The main/exercice path was moved to main/exercise, so the code from 1.11
     // should just create the new directory, and we should delete the previous
     // one to avoid the web server to use the old
-    $exercisePath = api_get_path(SYS_CODE_PATH).'exercice';
+    $exercisePath = api_get_path(SYS_CODE_PATH) . 'exercice';
     if (is_dir($exercisePath)) {
         @rrmdir($exercisePath);
     }
     // Same with main/newscorm, renamed main/lp
-    $lpPath = api_get_path(SYS_CODE_PATH).'lp';
+    $lpPath = api_get_path(SYS_CODE_PATH) . 'newscorm';
     if (is_dir($lpPath)) {
         @rrmdir($lpPath);
     }

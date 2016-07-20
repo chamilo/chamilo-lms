@@ -64,37 +64,37 @@ class LegalManager
     /**
      * @param int $id
      */
-	public static function delete($id)
+    public static function delete($id)
     {
-		/*
-		$legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-		$id = intval($id);
-		$sql = "DELETE FROM $legal_table WHERE id = '".$id."'";
-		*/
-	}
+        /*
+        $legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $id = intval($id);
+        $sql = "DELETE FROM $legal_table WHERE id = '".$id."'";
+        */
+    }
 
-	/**
-	 * Gets the last version of a Term and condition by language
-	 * @param int $language language id
-	 * @return array all the info of a Term and condition
-	 */
-	public static function get_last_condition_version($language)
+    /**
+     * Gets the last version of a Term and condition by language
+     * @param int $language language id
+     * @return array all the info of a Term and condition
+     */
+    public static function get_last_condition_version($language)
     {
-		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-		$language= Database::escape_string($language);
-		$sql = "SELECT version FROM $legal_conditions_table
-		        WHERE language_id = '".$language."'
-		        ORDER BY id DESC LIMIT 1 ";
-		$result = Database::query($sql);
-		$row = Database::fetch_array($result);
+        $legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $language= Database::escape_string($language);
+        $sql = "SELECT version FROM $legal_conditions_table
+                WHERE language_id = '".$language."'
+                ORDER BY id DESC LIMIT 1 ";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
         if (Database::num_rows($result) > 0) {
 
-			return $row['version'];
-		} else {
+            return $row['version'];
+        } else {
 
-			return 0;
-		}
-	}
+            return 0;
+        }
+    }
 
 	/**
 	 * Gets the data of a Term and condition by language
@@ -126,7 +126,6 @@ class LegalManager
     {
         if (strpos($content, '{{sessions}}')) {
             $sessionListToString = '';
-
             $sessionList = SessionManager::get_sessions_by_user(api_get_user_id());
             if ($sessionList) {
                 $sessionListToString = get_lang('SessionList').'<ul>';

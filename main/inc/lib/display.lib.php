@@ -2400,17 +2400,17 @@ class Display
     /**
      * Get a HTML code for a icon by Font Awesome
      * @param string $name The icon name
+     * @param int|string $size Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
      * @param boolean $fixWidth Optional. Whether add the fw class
-     * @param int|string $size Optional. The size for the icon.
      * @param string $additionalClass Optional. Additional class
      *
      * @return string
      */
     public static function returnFontAwesomeIcon(
         $name,
+        $size = '',
         $fixWidth = false,
-        $size = null,
-        $additionalClass = null
+        $additionalClass = ''
     ) {
         $className = "fa fa-$name";
 

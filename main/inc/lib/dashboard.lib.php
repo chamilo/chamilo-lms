@@ -22,7 +22,7 @@ class DashboardManager
     public static function handle_dashboard_plugins()
     {
         $token = Security::get_existing_token();
-        $tokenCondition = '&amp;sec_token='.$token;
+        $tokenCondition = '&sec_token='.$token;
 
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
@@ -189,7 +189,8 @@ class DashboardManager
             }
             // clean from block data
             if (!empty($not_selected_blocks_id)) {
-                $sql_check = "SELECT id FROM $tbl_block WHERE id IN(".implode(',',$not_selected_blocks_id).")";
+                $sql_check = "SELECT id FROM $tbl_block 
+                              WHERE id IN(".implode(',',$not_selected_blocks_id).")";
                 $rs_check = Database::query($sql_check);
                 if (Database::num_rows($rs_check) > 0) {
                     $del = "DELETE FROM $tbl_block WHERE id IN(".implode(',',$not_selected_blocks_id).")";
@@ -249,245 +250,246 @@ class DashboardManager
         return $affected_rows;
     }
 
-	/**
-	 * Get all plugins path inside dashboard directory
-	 * @return array name plugins directories
-	 */
-	public static function getPossibleDashboardPluginsPath()
+    /**
+     * Get all plugins path inside dashboard directory
+     * @return array name plugins directories
+     */
+    public static function getPossibleDashboardPluginsPath()
     {
-		// get all plugins path inside plugin directory
-		/* We scan the plugin directory. Each folder is a potential plugin. */
-		$possiblePlugins = array();
-		$dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
-		$handle = @opendir($dashboard_pluginpath);
-		while (false !== ($file = readdir($handle))) {
-			if ($file <> '.' AND $file <> '..' AND is_dir($dashboard_pluginpath.$file)) {
-				$possiblePlugins[] = $file;
-			}
-		}
-		@closedir($handle);
+        // get all plugins path inside plugin directory
+        /* We scan the plugin directory. Each folder is a potential plugin. */
+        $possiblePlugins = array();
+        $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
+        $handle = @opendir($dashboard_pluginpath);
+        while (false !== ($file = readdir($handle))) {
+            if ($file <> '.' AND $file <> '..' AND is_dir($dashboard_pluginpath.$file)) {
+                $possiblePlugins[] = $file;
+            }
+        }
+        @closedir($handle);
 
-		return $possiblePlugins;
-	}
+        return $possiblePlugins;
+    }
 
-	/**
-	 * Get all blocks data without plugin directory
-	 * @return array Block data
-	 */
-	public static function get_block_data_without_plugin()
+    /**
+     * Get all blocks data without plugin directory
+     * @return array Block data
+     */
+    public static function get_block_data_without_plugin()
     {
-		$tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
-		$possibleplugins = self::getPossibleDashboardPluginsPath();
+        $tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
+        $possibleplugins = self::getPossibleDashboardPluginsPath();
 
-		// We check if plugin exists inside directory for updating active field
-		$sql = "SELECT * FROM $tbl_block";
-		$rs = Database::query($sql);
-		if (Database::num_rows($rs) > 0){
-			while ($row = Database::fetch_array($rs)) {
-				$path = $row['path'];
-				if (!in_array($row['path'],$possibleplugins)) {
-					$active = 0;
-				} else {
-					$active = 1;
-				}
-				// update active
-				$upd = "UPDATE $tbl_block SET active = '$active'
-				        WHERE path = '".$row['path']."'";
-				Database::query($upd);
-			}
-		}
+        // We check if plugin exists inside directory for updating active field
+        $sql = "SELECT * FROM $tbl_block";
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs) > 0){
+            while ($row = Database::fetch_array($rs)) {
+                if (!in_array($row['path'], $possibleplugins)) {
+                    $active = 0;
+                } else {
+                    $active = 1;
+                }
+                // update active
+                $upd = "UPDATE $tbl_block SET active = '$active'
+                        WHERE path = '".$row['path']."'";
+                Database::query($upd);
+            }
+        }
 
-		// get disabled block data
-		$block_data = array();
-		$sql = "SELECT * FROM $tbl_block WHERE active = 0";
-		$rs_block = Database::query($sql);
-		if (Database::num_rows($rs_block) > 0) {
-			while ($row_block = Database::fetch_array($rs_block)) {
-				$block_data[] = $row_block;
-			}
-		}
+        // get disabled block data
+        $block_data = array();
+        $sql = "SELECT * FROM $tbl_block WHERE active = 0";
+        $rs_block = Database::query($sql);
+        if (Database::num_rows($rs_block) > 0) {
+            while ($row_block = Database::fetch_array($rs_block)) {
+                $block_data[] = $row_block;
+            }
+        }
 
-		return $block_data;
-
-	}
-
-	/**
-	 * get data about enabled dashboard block (stored insise block table)
-	 * @param  string	plugin path
-	 * @return array 	data
-	 */
-	public static function get_enabled_dashboard_blocks($path = '')
-    {
-		$tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
-		$condition_path = '';
-		if (!empty($path)) {
-			$path = Database::escape_string($path);
-			$condition_path = ' AND path = "'.$path.'" ';
-		}
-
-		$sql = "SELECT * FROM $tbl_block WHERE active = 1 $condition_path ";
-		$rs  = Database::query($sql);
-		$block_data = array();
-		if (Database::num_rows($rs) > 0) {
-			while ($row = Database::fetch_array($rs)) {
-				$block_data[$row['path']] = $row;
-			}
-		}
 		return $block_data;
 	}
 
-	/**
-	 * display user dashboard list
-	 * @param int  User id
-	 * @return void
-	 */
-	public static function display_user_dashboard_list($user_id)
+    /**
+     * get data about enabled dashboard block (stored insise block table)
+     * @param  string	$path plugin path
+     *
+     * @return array 	data
+     */
+    public static function get_enabled_dashboard_blocks($path = '')
     {
-		$enabled_dashboard_plugins = self::get_enabled_dashboard_blocks();
-		$user_block_data = self::get_user_block_data($user_id);
+        $tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
+        $condition_path = '';
+        if (!empty($path)) {
+            $path = Database::escape_string($path);
+            $condition_path = ' AND path = "'.$path.'" ';
+        }
 
-		if (count($enabled_dashboard_plugins) > 0) {
-			echo '<div style="margin-top:20px">';
-			echo '<div><strong>'.get_lang('SelectBlockForDisplayingInsideBlocksDashboardView').'</strong></div><br />';
-			echo '<form name="dashboard_list" method="post" action="index.php?action=store_user_block">';
-			echo '<table class="data_table">';
-			echo '<tr>';
-			echo '<th width="5%">';
-			echo get_lang('Enabled');
-			echo '</th>';
-			echo '<th width="30%">';
-			echo get_lang('Name');
-			echo '</th>';
-			echo '<th width="40%">';
-			echo get_lang('Description');
-			echo '</th>';
-			echo '<th>';
-			echo get_lang('ColumnPosition');
-			echo '</th>';
-			echo '</tr>';
+        $sql = "SELECT * FROM $tbl_block WHERE active = 1 $condition_path ";
+        $rs  = Database::query($sql);
+        $block_data = array();
+        if (Database::num_rows($rs) > 0) {
+            while ($row = Database::fetch_array($rs)) {
+                $block_data[$row['path']] = $row;
+            }
+        }
+        return $block_data;
+    }
 
-			// We display all enabled plugins and the checkboxes
-			foreach ($enabled_dashboard_plugins as $block) {
+    /**
+     * display user dashboard list
+     * @param int  User id
+     * @return void
+     */
+    public static function display_user_dashboard_list($user_id)
+    {
+        $enabled_dashboard_plugins = self::get_enabled_dashboard_blocks();
+        $user_block_data = self::get_user_block_data($user_id);
 
-				$path = $block['path'];
-				$controller_class = $block['controller'];
-				$filename_controller = $path.'.class.php';
-				$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';
-				require_once $dashboard_plugin_path.$filename_controller;
-				if (class_exists($controller_class)) {
-					$obj_block = new $controller_class($user_id);
+        if (count($enabled_dashboard_plugins) > 0) {
+            echo '<div style="margin-top:20px">';
+            echo '<div><strong>'.get_lang('SelectBlockForDisplayingInsideBlocksDashboardView').'</strong></div><br />';
+            echo '<form name="dashboard_list" method="post" action="index.php?action=store_user_block">';
+            echo '<table class="data_table">';
+            echo '<tr>';
+            echo '<th width="5%">';
+            echo get_lang('Enabled');
+            echo '</th>';
+            echo '<th width="30%">';
+            echo get_lang('Name');
+            echo '</th>';
+            echo '<th width="40%">';
+            echo get_lang('Description');
+            echo '</th>';
+            echo '<th>';
+            echo get_lang('ColumnPosition');
+            echo '</th>';
+            echo '</tr>';
 
-					// check if user is allowed to see the block
-					if (method_exists($obj_block, 'is_block_visible_for_user')) {
-						$is_block_visible_for_user = $obj_block->is_block_visible_for_user($user_id);
-						if (!$is_block_visible_for_user) continue;
-					}
+            // We display all enabled plugins and the checkboxes
+            foreach ($enabled_dashboard_plugins as $block) {
+                $path = $block['path'];
+                $controller_class = $block['controller'];
+                $filename_controller = $path.'.class.php';
+                $dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';
+                require_once $dashboard_plugin_path.$filename_controller;
+                if (class_exists($controller_class)) {
+                    $obj_block = new $controller_class($user_id);
 
-					echo '<tr>';
-					// checkboxes
-					self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
-					echo '<td>'.$block['name'].'</td>';
-					echo '<td>'.$block['description'].'</td>';
-					echo '<td>
+                    // check if user is allowed to see the block
+                    if (method_exists($obj_block, 'is_block_visible_for_user')) {
+                        $is_block_visible_for_user = $obj_block->is_block_visible_for_user($user_id);
+                        if (!$is_block_visible_for_user) {
+                            continue;
+                        }
+                    }
+
+                    echo '<tr>';
+                    // checkboxes
+                    self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
+                    echo '<td>'.$block['name'].'</td>';
+                    echo '<td>'.$block['description'].'</td>';
+                    echo '<td>
                             <select class="selectpicker show-tick form-control" name="columns['.$block['id'].']">
                             <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==1?'selected':'').' >1</option>
                             <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==2?'selected':'').' >2</option>
                             </select>
                           </td>';
-					echo '</tr>';
-				} else {
-					echo Display::tag('tr',  Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));
-				}
-			}
+                    echo '</tr>';
+                } else {
+                    echo Display::tag('tr',  Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));
+                }
+            }
 
-			echo '</table>';
-			echo '<div class="row"><div class="col-md-12">';
-			echo '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'"><em class="fa fa-check-square"></em> '.
+            echo '</table>';
+            echo '<div class="row"><div class="col-md-12">';
+            echo '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'"><em class="fa fa-check-square"></em> '.
                 get_lang('EnableDashboardBlock').'</button></form>';
-			echo '</div></div>';
-		} else {
-			echo '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
-			if (api_is_platform_admin()) {
-				echo '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.
+            echo '</div></div>';
+        } else {
+            echo '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
+            if (api_is_platform_admin()) {
+                echo '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.
                     get_lang('ConfigureDashboardPlugin').'</a>';
-			}
-		}
-	}
+            }
+        }
+    }
 
-	/**
-	 * display checkboxes for user dashboard list
-	 * @param int 	User id
-	 * @param int	Block id
-	 * @return void
-	 */
-	public static function display_user_dashboard_list_checkboxes($user_id, $block_id) {
+    /**
+     * display checkboxes for user dashboard list
+     * @param int 	User id
+     * @param int	Block id
+     * @return void
+     */
+    public static function display_user_dashboard_list_checkboxes($user_id, $block_id)
+    {
+        $user_id = intval($user_id);
+        $user_block_data = self::get_user_block_data($user_id);
+        $enabled_blocks_id = array_keys($user_block_data);
 
-		$user_id = intval($user_id);
-		$user_block_data = self::get_user_block_data($user_id);
-		$enabled_blocks_id = array_keys($user_block_data);
+        $checked = '';
+        if (in_array($block_id, $enabled_blocks_id)) {
+            $checked = "checked";
+        }
 
-		$checked = '';
-		if (in_array($block_id, $enabled_blocks_id)) {
-			$checked = "checked";
-		}
+        echo "<td align=\"center\">";
+        echo '<input type="checkbox" name="enabled_blocks['.$block_id.']" value="true" '.$checked.'/>';
+        echo "</td>";
+    }
 
-		echo "<td align=\"center\">";
-		echo '<input type="checkbox" name="enabled_blocks['.$block_id.']" value="true" '.$checked.'/>';
-		echo "</td>";
-	}
+    /**
+     * This function store enabled blocks id with its column position (block_id1:colum;block_id2:colum; ...)
+     * inside extra user fields
+     * @param int $user_id User id
+     * @param array $enabled_blocks selected blocks
+     * @param array $columns columns position
+     * @return bool
+     */
+    public static function store_user_blocks($user_id, $enabled_blocks, $columns)
+    {
+        $selected_blocks_id  = array();
+        if (is_array($enabled_blocks) && count($enabled_blocks) > 0) {
+            $selected_blocks_id = array_keys($enabled_blocks);
+        }
 
-	/**
-	 * This function store enabled blocks id with its column position (block_id1:colum;block_id2:colum; ...) inside extra user fields
-	 * @param int User id
-	 * @param array selected blocks
-	 * @param array columns position
-	 * @return bool
-	 */
-	public static function store_user_blocks($user_id, $enabled_blocks, $columns) {
-		$selected_blocks_id  = array();
-		if (is_array($enabled_blocks) && count($enabled_blocks) > 0) {
-			$selected_blocks_id = array_keys($enabled_blocks);
-		}
-
-		// build data for storing inside extra user field
-		$fname = 'dashboard';
-		$fvalue = array();
-		foreach ($selected_blocks_id as $block_id) {
-			$fvalue[] = $block_id.':'.$columns[$block_id];
-		}
+        // build data for storing inside extra user field
+        $fname = 'dashboard';
+        $fvalue = array();
+        foreach ($selected_blocks_id as $block_id) {
+            $fvalue[] = $block_id.':'.$columns[$block_id];
+        }
         $upd_extra_field = UserManager::update_extra_field_value(
             $user_id,
             $fname,
             $fvalue
         );
 
-		return $upd_extra_field;
+        return $upd_extra_field;
+    }
 
-	}
-
-	/**
-	 * This function get user block data (block id with its number of column) from extra user data
-	 * @param int  		User id
-	 * @return array  	data (block_id,column)
-	 */
-	public static function get_user_block_data($user_id)
+    /**
+     * This function get user block data (block id with its number of column) from extra user data
+     * @param int  		User id
+     * @return array  	data (block_id,column)
+     */
+    public static function get_user_block_data($user_id)
     {
-		$user_id = intval($user_id);
-		$field_variable = 'dashboard';
-		$extra_user_data = UserManager::get_extra_user_data_by_field($user_id, $field_variable);
-		$extra_user_data = explode(';',$extra_user_data[$field_variable]);
-		$data = array();
-		foreach ($extra_user_data as $extra) {
-			$split_extra = explode(':',$extra);
-			if (!empty($split_extra)) {
-				$block_id = $split_extra[0];
-				$column = isset($split_extra[1]) ? $split_extra[1] : null;
-				$data[$block_id] = array('block_id' => $block_id, 'column' => $column);
-			}
-		}
+        $user_id = intval($user_id);
+        $field_variable = 'dashboard';
+        $extra_user_data = UserManager::get_extra_user_data_by_field($user_id, $field_variable);
+        $extra_user_data = explode(';', $extra_user_data[$field_variable]);
+        $data = array();
+        foreach ($extra_user_data as $extra) {
+            $split_extra = explode(':',$extra);
+            if (!empty($split_extra)) {
+                $block_id = $split_extra[0];
+                $column = isset($split_extra[1]) ? $split_extra[1] : null;
+                $data[$block_id] = array('block_id' => $block_id, 'column' => $column);
+            }
+        }
 
-		return $data;
-	}
+        return $data;
+    }
 
 	/**
 	 * This function update extra user blocks data after closing a dashboard block
@@ -527,5 +529,4 @@ class DashboardManager
 
 		return '<link rel="stylesheet" href="'.api_get_path(WEB_PLUGIN_PATH).'dashboard/css/default.css" type="text/css" />'.PHP_EOL;
 	}
-
 }

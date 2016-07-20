@@ -155,8 +155,8 @@ class EventsMail
 
             // we get the message in the correct language (or in english if doesn't exist)
             $result = self::getMessage($event_name, $language);
-            $message = "";
-            $subject = "";
+            $message = '';
+            $subject = '';
             self::getCorrectMessage($message, $subject, $language, $result);
 
             // replace the keycodes used in the message

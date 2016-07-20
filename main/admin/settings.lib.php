@@ -146,25 +146,24 @@ function handlePlugins()
         $plugin_list[$plugin_item] = $plugin_item;
     }
 
-    foreach ($all_plugins as $plugin) {
-        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/plugin.php';
-
+    foreach ($all_plugins as $pluginName) {
+        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
             $plugin_info = array();
             require $plugin_info_file;
 
-            if (in_array($plugin, $installed_plugins)) {
+            if (in_array($pluginName, $installed_plugins)) {
                 echo '<tr class="row_selected">';
             } else {
                 echo '<tr>';
             }
             echo '<td>';
             //Checkbox
-            if (in_array($plugin, $installed_plugins)) {
-                echo '<input type="checkbox" name="plugin_'.$plugin.'[]" checked="checked">';
+            if (in_array($pluginName, $installed_plugins)) {
+                echo '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
 
             } else {
-                echo '<input type="checkbox" name="plugin_'.$plugin.'[]">';
+                echo '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
             }
             echo '</td><td>';
             echo '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
@@ -172,15 +171,15 @@ function handlePlugins()
             echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
 
             echo '<div class="btn-group">';
-            if (in_array($plugin, $installed_plugins)) {
-                echo Display::url('<em class="fa fa-cogs"></em> '.get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn btn-default'));
-                echo Display::url('<em class="fa fa-th-large"></em> '.get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn btn-default'));
+            if (in_array($pluginName, $installed_plugins)) {
+                echo Display::url('<em class="fa fa-cogs"></em> '.get_lang('Configure'), 'configure_plugin.php?name='.$pluginName, array('class' => 'btn btn-default'));
+                echo Display::url('<em class="fa fa-th-large"></em> '.get_lang('Regions'), 'settings.php?category=Regions&name='.$pluginName, array('class' => 'btn btn-default'));
             }
 
-            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
+            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$pluginName.'/readme.txt')) {
                 echo Display::url(
                     "<em class='fa fa-file-text-o'></em> readme.txt",
-                    api_get_path(WEB_PLUGIN_PATH) . $plugin . "/readme.txt",
+                    api_get_path(WEB_PLUGIN_PATH) . $pluginName . "/readme.txt",
                     [
                         'class' => 'btn btn-default ajax',
                         'data-title' => $plugin_info['title'],
@@ -190,11 +189,11 @@ function handlePlugins()
                 );
             }
 
-            $readmeFile = api_get_path(SYS_PLUGIN_PATH).$plugin.'/README.md';
+            $readmeFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/README.md';
             if (file_exists($readmeFile)) {
                 echo Display::url(
                     "<em class='fa fa-file-text-o'></em> README.md",
-                    api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$plugin,
+                    api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$pluginName,
                     [
                         'class' => 'btn btn-default ajax',
                         'data-title' => $plugin_info['title'],
@@ -207,6 +206,7 @@ function handlePlugins()
             echo '</div>';
             echo '</td></tr>';
         }
+
     }
     echo '</table>';
 

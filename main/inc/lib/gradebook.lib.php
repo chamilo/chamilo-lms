@@ -26,6 +26,7 @@ class Gradebook extends Model
      */
     public function __construct()
     {
+        parent::__construct();
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $this->table_skill = Database::get_main_table(TABLE_MAIN_SKILL);
         $this->table_skill_rel_gradebook = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);
@@ -198,8 +199,7 @@ class Gradebook extends Model
         }
 
         $form->addButtonCreate(get_lang('Add'), 'submit');
-
-        $form->setDefaults(array('skill'=>$clean_selected_skills));
+        $form->setDefaults(array('skill' => $clean_selected_skills));
 
         return $form;
     }
@@ -208,7 +208,7 @@ class Gradebook extends Model
      * @param int $gradebook_id
      * @return array|resource
      */
-    function get_skills_by_gradebook($gradebook_id)
+    public function get_skills_by_gradebook($gradebook_id)
     {
         $gradebook_id = intval($gradebook_id);
         $sql = "SELECT skill.id, skill.name FROM {$this->table_skill} skill

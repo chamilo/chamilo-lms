@@ -5906,28 +5906,82 @@ class learnpath
 
     /**
      * This function builds the action menu
-     * @param bool $returnContent
-     * @return void
+     * @param bool $returnContent Optional
+     * @param bool $showRequirementButtons Optional. Allow show the requirements button
+     * @param bool $isConfigPage Optional. If is the config page, show the edit button
+     * @param bool $allowExpand Optional. Allow show the expand/contract button
+     * @return string
      */
-    public function build_action_menu($returnContent = false)
+    public function build_action_menu($returnContent = false, $showRequirementButtons = true, $isConfigPage = false, $allowExpand = true)
     {
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         $actionsLeft = '';
-        $actionsLeft .=  '<a href="lp_controller.php?'.api_get_cidreq().'&gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '&isStudentView=true" target="_self">' . Display :: return_icon('preview_view.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a> ';
-        $actionsLeft .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=admin_view&lp_id=' . $_SESSION['oLP']->lp_id . '&updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'',ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#">'.Display::return_icon('expand.png',get_lang('Expand'),array('id'=>'expand'),ICON_SIZE_MEDIUM).Display::return_icon('contract.png',get_lang('Collapse'),array('id'=>'contract', 'class'=>'hide'),ICON_SIZE_MEDIUM).'</a>';
-        $buttons = array(
-            array(
-                'title' => get_lang('SetPrerequisiteForEachItem'),
-                'href' => 'lp_controller.php?'.api_get_cidreq().'&action=set_previous_step_as_prerequisite&lp_id=' . $_SESSION['oLP']->lp_id,
-            ),
-            array(
-                'title' => get_lang('ClearAllPrerequisites'),
-                'href' => 'lp_controller.php?'.api_get_cidreq().'&action=clear_prerequisites&lp_id=' . $_SESSION['oLP']->lp_id,
-            ),
+        $actionsRight = '';
+
+        $actionsLeft .= Display::url(
+            Display:: return_icon('preview_view.png', get_lang('Display'), '', ICON_SIZE_MEDIUM),
+            'lp_controller.php?'.api_get_cidreq().'&' . http_build_query([
+                'gradebook' => $gradebook,
+                'action' => 'view',
+                'lp_id' => $_SESSION['oLP']->lp_id,
+                'isStudentView' => 'true'
+            ])
         );
-        $actionsRight = Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
+        $actionsLeft .= Display::url(
+            Display:: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'), '', ICON_SIZE_MEDIUM),
+            'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                'action' => 'admin_view',
+                'lp_id' => $_SESSION['oLP']->lp_id,
+                'updateaudio' => 'true'
+            ])
+        );
+
+        if (!$isConfigPage) {
+            $actionsLeft .= Display::url(
+                Display :: return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM),
+                'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                    'action' => 'edit',
+                    'lp_id' => $_SESSION['oLP']->lp_id
+                ])
+            );
+        } else {
+            $actionsLeft .= Display::url(
+                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM),
+                'lp_controller.php?' . http_build_query([
+                    'action' => 'build',
+                    'lp_id' => $_SESSION['oLP']->lp_id
+                ]) . '&' . api_get_cidreq()
+            );
+        }
+
+        if ($allowExpand) {
+            $actionsLeft .= Display::url(
+                Display::return_icon('expand.png', get_lang('Expand'), array('id' => 'expand'), ICON_SIZE_MEDIUM) .
+                Display::return_icon('contract.png', get_lang('Collapse'), array('id' => 'contract', 'class' => 'hide'), ICON_SIZE_MEDIUM),
+                '#',
+                ['role' => 'button', 'id' => 'hide_bar_template']
+            );
+        }
+
+        if ($showRequirementButtons) {
+            $buttons = array(
+                array(
+                    'title' => get_lang('SetPrerequisiteForEachItem'),
+                    'href' => 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                        'action' => 'set_previous_step_as_prerequisite',
+                        'lp_id' => $_SESSION['oLP']->lp_id
+                    ])
+                ),
+                array(
+                    'title' => get_lang('ClearAllPrerequisites'),
+                    'href' => 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                        'action' => 'clear_prerequisites',
+                        'lp_id' => $_SESSION['oLP']->lp_id
+                    ])
+                ),
+            );
+            $actionsRight = Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
+        }
 
         $toolbar = Display::toolbarAction('actions-lp-controller', array($actionsLeft, $actionsRight));
 

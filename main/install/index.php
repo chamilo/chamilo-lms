@@ -680,105 +680,7 @@ if (@$_POST['step2']) {
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
 
-        error_log('Starting migration process from '.$my_old_version.' ('.date('Y-m-d H:i:s').')');
-
-        switch ($my_old_version) {
-            case '1.9.0':
-            case '1.9.2':
-            case '1.9.4':
-            case '1.9.6':
-            case '1.9.6.1':
-            case '1.9.8':
-            case '1.9.8.1':
-            case '1.9.8.2':
-            case '1.9.10':
-            case '1.9.10.2':
-            case '1.9.10.4':
-                // Fix type "enum" before running the migration with Doctrine
-                Database::query("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
-                Database::query("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
-                Database::query("ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL");
-                Database::query("ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self'");
-                Database::query("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
-                Database::query("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
-                Database::query("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
-                Database::query("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
-                Database::query("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
-
-                echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
-                echo '<div id="details" style="display:none">';
-                // Migrate using the migration files located in:
-                // src/Chamilo/CoreBundle/Migrations/Schema/V110
-                $result = migrate(
-                    110,
-                    $manager
-                );
-
-                echo '</div>';
-
-                if ($result) {
-                    error_log('Migrations files were executed.');
-
-                    fixIds($manager);
-
-                    include 'update-files-1.9.0-1.10.0.inc.php';
-                    // Only updates the configuration.inc.php with the new version
-                    include 'update-configuration.inc.php';
-
-                    $configurationFiles = array(
-                        'mail.conf.php',
-                        'profile.conf.php',
-                        'course_info.conf.php',
-                        'add_course.conf.php',
-                        'events.conf.php',
-                        'auth.conf.php',
-                        'portfolio.conf.php'
-                    );
-
-                    error_log('Copy conf files');
-
-                    foreach ($configurationFiles as $file) {
-                        if (file_exists(api_get_path(SYS_CODE_PATH) . 'inc/conf/'.$file)) {
-                            copy(
-                                api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
-                                api_get_path(CONFIGURATION_PATH).$file
-                            );
-                        }
-                    }
-
-                    error_log('Upgrade process concluded! ('.date('Y-m-d H:i:s').')');
-                } else {
-                    error_log('There was an error during running migrations. Check error.log');
-                }
-                //TODO: check if this can be used to migrate directly from 1.9 to 1.11
-                break;
-            case '1.10.0':
-                // no break
-            case '1.10.2':
-            // no break
-            case '1.10.4':
-            // no break
-            case '1.10.6':
-                // Migrate using the migration files located in:
-                // src/Chamilo/CoreBundle/Migrations/Schema/V111
-                $result = migrate(
-                    111,
-                    $manager
-                );
-
-                echo '</div>';
-
-                if ($result) {
-                    error_log('Migrations files were executed.');
-                    include 'update-files-1.10.0-1.11.0.inc.php';
-                    error_log('Upgrade process concluded!  ('.date('Y-m-d H:i:s').')');
-                } else {
-                    error_log('There was an error during running migrations. Check error.log');
-                }
-                break;
-            default:
-                break;
-        }
+        migrateSwitch($my_old_version, $manager);
     } else {
         set_file_folder_permissions();
 
@@ -915,7 +817,7 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
         */
         // Add version table
-        $connection->executeQuery('CREATE TABLE version (version varchar(255), PRIMARY KEY(version))');
+        $connection->executeQuery('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version))');
 
         // Tickets
         $table = Database::get_main_table(TABLE_TICKET_PROJECT);

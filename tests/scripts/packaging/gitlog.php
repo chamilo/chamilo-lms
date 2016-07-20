@@ -44,6 +44,14 @@ foreach ($logs as $log) {
     if (strpos($log['message'], $langMsg) === 0) {
         continue;
     }
+    $langMsg = 'Update language vars';
+    if (strpos($log['message'], $langMsg) === 0) {
+        continue;
+    }
+    $langMsg = 'Update lang vars';
+    if (strpos($log['message'], $langMsg) === 0) {
+        continue;
+    }
     // Look for tasks references
     $issueLink = '';
     $matches = array();
@@ -59,7 +67,8 @@ foreach ($logs as $log) {
             }
         } else {
             $num = substr($issue, 3);
-            if ($formatHTML) {
+            if ($formatHTML && $num != '7683') {
+                //7683 is an internal task at BeezNest for all general contributions to Chamilo - no use in adding this reference
                 $issueLink = ' - <a href="https://task.beeznest.com/issues/' . $num . '">BT#' . $num . '</a>';
             } else {
                 $issueLink = ' - ' . $num;
@@ -78,6 +87,7 @@ foreach ($logs as $log) {
     }
     $commitLink = '';
     if ($formatHTML) {
+        $log['message'] = ucfirst($log['message']);
         $commitLink = '<a href="https://github.com/chamilo/chamilo-lms/commit/' . $log['sha1'] . '">' .
             substr($log['sha1'], 0, 8) . '</a>';
         echo '<li>('.$commitLink.$issueLink.') '.$log['message'].'</li>'.PHP_EOL;

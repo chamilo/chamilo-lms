@@ -21,7 +21,7 @@ class Career extends Model
      */
     public function __construct()
     {
-        $this->table =  Database::get_main_table(TABLE_CAREER);
+        $this->table = Database::get_main_table(TABLE_CAREER);
     }
 
     /**
@@ -77,8 +77,10 @@ class Career extends Model
     public function display()
     {
         echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
-        echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_career.png',get_lang('Add'),'','32').'</a>';
+        echo '<a href="career_dashboard.php">'.
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_self().'?action=add">'.
+                Display::return_icon('new_career.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         echo Display::grid_html('careers');
     }
@@ -88,7 +90,10 @@ class Career extends Model
      */
     public function get_status_list()
     {
-        return array(CAREER_STATUS_ACTIVE => get_lang('Unarchived'), CAREER_STATUS_INACTIVE => get_lang('Archived'));
+        return array(
+            CAREER_STATUS_ACTIVE => get_lang('Unarchived'),
+            CAREER_STATUS_INACTIVE => get_lang('Archived')
+        );
     }
 
     /**
@@ -110,7 +115,6 @@ class Career extends Model
         $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addElement('hidden', 'id', $id);
-
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
         $form->addHtmlEditor(
             'description',
@@ -184,10 +188,10 @@ class Career extends Model
         if ($copy_promotions) {
             //Now also copy each session of the promotion as a new session and register it inside the promotion
             $promotion = new Promotion();
-            $promo_list   = $promotion->get_all_promotions_by_career_id($id);
+            $promo_list = $promotion->get_all_promotions_by_career_id($id);
             if (!empty($promo_list)) {
-                foreach($promo_list  as $item) {
-                    $pid = $promotion->copy($item['id'], $cid, true);
+                foreach ($promo_list as $item) {
+                    $promotion->copy($item['id'], $cid, true);
                 }
             }
         }

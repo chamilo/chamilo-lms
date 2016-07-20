@@ -2,10 +2,10 @@
 
 namespace Application\Migrations\Schema\V111;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-class Version20160405112100 extends AbstractMigration
+class Version20160405112100 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema

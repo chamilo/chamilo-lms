@@ -558,7 +558,7 @@ class Link extends Model
             'display_order' => $max_display_order,
             'on_homepage' => $values['on_homepage'],
             'target' => $values['target'],
-            'category_id' => $values['category_id'],
+            'category_id' => $values['category_id']
         ];
         Database::update($tbl_link, $params, ['c_id = ? AND id = ?' => [$course_id, $id] ]);
 
@@ -887,23 +887,23 @@ class Link extends Model
                 $toolbar = '';
                 $link_validator = '';
                 if (api_is_allowed_to_edit(null, true)) {
-                    $toolbar .= Display::toolbarButton('',
-                            '#',
-                            'retweet',
-                            'default btn-sm',
-                            array(
-                                'onclick' => "check_url('" . $myrow['id'] . "', '" . addslashes($myrow['url']) . "');",
-                                'title' => get_lang('CheckURL')
-                                )
-                            );
+                    $toolbar .= Display::toolbarButton(
+                        '',
+                        '#',
+                        'retweet',
+                        'default btn-sm',
+                        array(
+                            'onclick' => "check_url('" . $myrow['id'] . "', '" . addslashes($myrow['url']) . "');",
+                            'title' => get_lang('CheckURL')
+                        )
+                    );
                     $link_validator .= Display::span(
                         '',
                         array(
-                            'id' => 'url_id_' . $myrow['id'],
-                            'class' => 'check-link'
-                            )
+                        'id' => 'url_id_' . $myrow['id'],
+                        'class' => 'check-link'
+                        )
                     );
-
                 }
 
                 if (api_is_allowed_to_edit(null, true)) {
@@ -954,8 +954,8 @@ class Link extends Model
                                     'title' => $title
                                 )
                             );
-
                         }
+
                         if ($myrow['visibility'] == '0') {
                             $url .= 'link.php?' . api_get_cidreq() .'&sec_token=' . $token .'&action=visible&id=' . $myrow['id'] .'&scope=link&category_id=' . $myrow['category_id'];
                             $title = get_lang('MakeVisible');
@@ -975,37 +975,34 @@ class Link extends Model
                         $title = get_lang('Delete');
 
                         $toolbar .= Display::toolbarButton(
-                                '',
-                                $url,
-                                'trash',
-                                'default btn-sm',
-                                array(
-                                    'onclick' => $event,
-                                    'title' => $title
-                                    )
-                                );
-
-
+                            '',
+                            $url,
+                            'trash',
+                            'default btn-sm',
+                            array(
+                                'onclick' => $event,
+                                'title' => $title
+                            )
+                        );
                     } else {
                         $title = get_lang('EditionNotAvailableFromSession');
                         $toolbar .= Display::toolbarButton(
-                                '',
-                                '#',
-                                'trash-o',
-                                'default btn-sm',
-                                array(
-                                    'title' => $title
-                                    )
-                                );
+                            '',
+                            '#',
+                            'trash-o',
+                            'default btn-sm',
+                            array(
+                                'title' => $title
+                            )
+                        );
                     }
-
                 }
                 $iconLink = Display::return_icon(
-                        'url.png',
-                        get_lang('Link'),
-                        null,
-                        ICON_SIZE_SMALL
-                        );
+                    'url.png',
+                    get_lang('Link'),
+                    null,
+                    ICON_SIZE_SMALL
+                );
 
                 if ($myrow['visibility'] == '1') {
                     $content .= '<div class="list-group-item">';
@@ -1014,13 +1011,13 @@ class Link extends Model
                     $content .= $iconLink;
                     $url =  'link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] .'&link_url=' . urlencode($myrow['url']);
                     $content .= Display::tag(
-                            'a',
-                            Security:: remove_XSS($myrow['title']),
-                            array(
-                                'href' => $url,
-                                'target' => $myrow['target']
-                                    )
-                            );
+                        'a',
+                        Security:: remove_XSS($myrow['title']),
+                        array(
+                            'href' => $url,
+                            'target' => $myrow['target']
+                        )
+                    );
                     $content .= $link_validator;
                     $content .= $session_img;
                     $content .= '</h4>';
@@ -1035,14 +1032,14 @@ class Link extends Model
                         $content .= $iconLink;
                         $url = 'link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] . "&link_url=" . urlencode($myrow['url']);
                         $content .= Display::tag(
-                                'a',
-                                Security:: remove_XSS($myrow['title']),
-                                array(
-                                    'href' => $url,
-                                    'target' => '_blank',
-                                    'class' => 'invisible'
-                                    )
-                                );
+                            'a',
+                            Security:: remove_XSS($myrow['title']),
+                            array(
+                                'href' => $url,
+                                'target' => '_blank',
+                                'class' => 'invisible'
+                            )
+                        );
                         $content .= $link_validator;
                         $content .= $session_img;
                         $content .= '</h4>';
@@ -1285,16 +1282,11 @@ class Link extends Model
                 $result
             ))
         ) {
-            Database:: query(
-                "UPDATE $tbl_link set title='" . Database:: escape_string(
-                    $title
-                ) . "', description='" . Database:: escape_string(
-                    $description
-                ) . "'
-                WHERE c_id = $course_id AND  id='" . Database:: escape_string(
-                    $row['id']
-                ) . "'"
-            );
+            $sql = "UPDATE $tbl_link SET 
+                        title = '" . Database:: escape_string($title) . "', 
+                        description = '" . Database:: escape_string($description) . "'
+                    WHERE c_id = $course_id AND  id='" . Database:: escape_string($row['id']) . "'";
+            Database:: query($sql);
 
             $ipu = 'LinkUpdated';
             $rv = 1; // 1 = upd
@@ -1321,6 +1313,7 @@ class Link extends Model
             $ipu = 'LinkAdded';
             $rv = 2; // 2 = new
         }
+
         api_item_property_update(
             $_course,
             TOOL_LINK,
@@ -1338,6 +1331,7 @@ class Link extends Model
                 $_user['user_id']
             );
         }
+
         return $rv;
     }
 
@@ -1421,7 +1415,6 @@ class Link extends Model
         // i.e. allow some BBcode tags, e.g. [b]...[/b]
     }
 
-
     /**
      * This function checks if the url is a vimeo link
      * @author Julio Montoya
@@ -1430,6 +1423,7 @@ class Link extends Model
     public static function isVimeoLink($url)
     {
         $isLink = strrpos($url, "vimeo.com");
+
         return $isLink;
     }
 
@@ -1463,9 +1457,9 @@ class Link extends Model
     public static function is_youtube_link($url)
     {
         $is_youtube_link = strrpos($url, "youtube") || strrpos(
-                $url,
-                "youtu.be"
-            );
+            $url,
+            "youtu.be"
+        );
         return $is_youtube_link;
     }
 
@@ -1622,8 +1616,8 @@ class Link extends Model
     /**
      * @param int $linkId
      * @param $action
-     * @param null $urlview
      * @param null $token
+     *
      * @return FormValidator
      */
     public static function getLinkForm($linkId, $action, $token = null)

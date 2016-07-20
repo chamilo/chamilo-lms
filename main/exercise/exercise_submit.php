@@ -985,7 +985,7 @@ if (!empty($error)) {
 
             // Only for the first time
 
-            $("#save_for_now_"+question_id).html(\'' . Display::returnFontAwesomeIcon('spinner', true, null, 'fa-spin') . '\');
+            $("#save_for_now_"+question_id).html(\'' . Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin') . '\');
             $.ajax({
                 type:"post",
                 async: false,
@@ -1049,7 +1049,7 @@ if (!empty($error)) {
 
             free_answers = $.param(free_answers);
 
-            $("#save_all_reponse").html(\'' . Display::returnFontAwesomeIcon('spinner', true, null, 'fa-spin') . '\');
+            $("#save_all_reponse").html(\'' . Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin') . '\');
 
             $.ajax({
                 type:"post",

@@ -906,6 +906,7 @@ class SessionManager
          *  Assignments
          */
         //total
+        $params = [$course['real_id']];
         if ($getAllSessions) {
             $sql = "SELECT count(w.id) as count
                     FROM $workTable w
@@ -921,11 +922,17 @@ class SessionManager
                     ON (a.publication_id = w.id AND a.c_id = w.c_id)
                     WHERE w.c_id = %s
                     AND parent_id = 0
-                    AND active IN (1, 0)
-                    AND  session_id = %s";
+                    AND active IN (1, 0)";
+
+            if (empty($sessionId)) {
+                $sql .= ' AND w.session_id = NULL ';
+            } else {
+                $sql .= ' AND w.session_id = %s ';
+                $params[] = $sessionId;
+            }
         }
 
-        $sql_query = sprintf($sql, $course['real_id'], $sessionId);
+        $sql_query = vsprintf($sql, $params);
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $assignments_total = $row['count'];

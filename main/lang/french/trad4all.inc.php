@@ -7772,4 +7772,6 @@ $ImportFromMoodleInfo = "Importer un fichier de backup de cours de Moodle (.mbz)
 $ImportFromMoodleInstructions = "La fonctionnalité d'importation peut ne pas supporter tous les types de contenus de Moodle, étant donné le fait que les fonctionnalités ne sont pas toutes identiques, et que Moodle et Chamilo continuent d'évoluer continuellement et rapidement. Cette fonctionnalité d'import devrait être considérée comme un travail en cours. Merci de réviser la page suivante pour plus d'information: <a href='https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import'>https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import</a>";
 $MoodleFile = "Fichier de cours de Moodle";
 $FailedToImportThisIsNotAMoodleFile = "Problème rencontré lors de l'importation: le fichier soumis ne semble pas être un fichier de backup de cours de Moodle (.mbz)";
+$ThisQuestionIsNotSupportedYet = "Ce type de question n'est pas encore supporté";
+$ProcessingImportPleaseDontCloseThisWindowThisActionMayTakeLongTimePlaseWait = "Processus d'importation en cours... Merci de ne pas fermer cette fenêtre. Le processus peut prendre un temps considérable. Un peu de patience...";
 ?>

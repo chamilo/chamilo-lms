@@ -1,20 +1,18 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 $cidReset = true;
 require_once '../../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
-require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
-require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
-
 $action = isset($_GET['what']) ? $_GET['what'] : '';
 define('CHAMILO_INTERNAL', true);
 
-$plugininstance = VChamiloPlugin::create();
+$plugin = VChamiloPlugin::create();
 $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 
-if ($action){
+if ($action) {
     require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/syncparams.controller.php');
 }
 
@@ -27,10 +25,10 @@ $row = 0;
 // $table->set_additional_parameters($parameters);
 $headers = array(
     '',
-    $plugininstance->get_lang('variable').' ['.$plugininstance->get_lang('subkey').']',
-    $plugininstance->get_lang('category'),
-    $plugininstance->get_lang('accessurl'),
-    $plugininstance->get_lang('value'),
+    $plugin->get_lang('variable').' ['.$plugin->get_lang('subkey').']',
+    $plugin->get_lang('category'),
+    $plugin->get_lang('accessurl'),
+    $plugin->get_lang('value'),
     '',
 );
 $attrs = array('center' => 'left');
@@ -42,10 +40,10 @@ foreach ($settings as $param) {
         continue;
     }
     // $check = '<input type="checkbox" name="sync_'.$param->id.'" value="'.$param->selected_value.'" />';
-    //<input type="checkbox" name="del_'.$param['id'].'" value="1" title="'.$plugininstance->get_lang('deleteifempty').'" />
+    //<input type="checkbox" name="del_'.$param['id'].'" value="1" title="'.$plugin->get_lang('deleteifempty').'" />
     $check = '';
     $attrs = array('center' => 'left');
-    $syncthisbutton = '<input type="button" name="syncthis" value="'.$plugininstance->get_lang('syncthis').'" onclick="ajax_sync_setting(\''.$_configuration['root_web'].'\', \''.$param['id'].'\')" /> 
+    $syncthisbutton = '<input type="button" name="syncthis" value="'.$plugin->get_lang('syncthis').'" onclick="ajax_sync_setting(\''.$_configuration['root_web'].'\', \''.$param['id'].'\')" /> 
          <span id="res_'.$param['id'].'"></span>';
     $data = array(
         $check,
@@ -63,18 +61,17 @@ foreach ($settings as $param) {
 $content  = '<form name="settingsform" action="'.$thisurl.'">';
 $content .= '<input type="hidden" name="what" value="" />';
 $content .=  $table->toHtml();
-// $content .=  '<div class"vchamilo-right"><div></div><div><input type="button" name="syncall" value="'.$plugininstance->get_lang('syncall').'" onclick="this.form.what.value=\'syncall\';this.form.submit();">';
+// $content .=  '<div class"vchamilo-right"><div></div><div><input type="button" name="syncall" value="'.$plugin->get_lang('syncall').'" onclick="this.form.what.value=\'syncall\';this.form.submit();">';
 $content .=  '</form>';
-
 $actions = '';
 
-Display::addFlash(Display::return_message($plugininstance->get_lang('Sync your master settings to all instances.')));
+Display::addFlash(Display::return_message($plugin->get_lang('Sync your master settings to all instances.')));
 
 $message = require_js('ajax.js', 'vchamilo', true);
 
 $interbreadcrumb[] = array('url' => 'manage.php', 'name' => get_lang('VChamilo'));
 
-$tpl = new Template($plugininstance->get_lang('sync_settings'), true, true, false, true, false);
+$tpl = new Template($plugin->get_lang('sync_settings'), true, true, false, true, false);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

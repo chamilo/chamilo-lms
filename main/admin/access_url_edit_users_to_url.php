@@ -9,9 +9,7 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 $xajax = new xajax();
-//$xajax->debugOn();
 $xajax->registerFunction(array('search_users', 'Accessurledituserstourl', 'search_users'));
-
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -23,7 +21,6 @@ if (!api_get_multiple_access_url()) {
     header('Location: index.php');
     exit;
 }
-
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -80,7 +77,6 @@ function remove_item(origin) {
 $form_sent = 0;
 $errorMsg = '';
 $UserList = array();
-
 $message = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -143,7 +139,10 @@ if (!empty($message)) {
 }
 
 echo '<div class="actions">';
-echo Display::url(Display::return_icon('view_more_stats.gif', get_lang('AddUserToURL'), ''), api_get_path(WEB_CODE_PATH) . 'admin/access_url_add_users_to_url.php');
+echo Display::url(
+    Display::return_icon('view_more_stats.gif', get_lang('AddUserToURL'), ''),
+    api_get_path(WEB_CODE_PATH) . 'admin/access_url_add_users_to_url.php'
+);
 echo '</div>';
 
 api_display_tool_title($tool_name);

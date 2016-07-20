@@ -29,7 +29,7 @@ You need :
 Insert the hook at the end of the file.
 
 ```
-include_once $_configuration['root_sys'].'plugin/vchamilo/lib.php';
+include_once $_configuration['root_sys'].'plugin/vchamilo/lib/Virtual.php';
 vchamilo_hook_configuration($_configuration);
 ```
 

@@ -1157,6 +1157,7 @@ class GradebookUtils
         AbstractLink::add_link_log($linkId, $name);
         $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
+        $em = Database::getManager();
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $tbl_forum_thread = Database:: get_course_table(TABLE_FORUM_THREAD);
         $tbl_work = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -1189,13 +1190,22 @@ class GradebookUtils
                 ';
         Database::query($sql);
         //Update weight into student publication(work)
-        $sql = 'UPDATE '.$tbl_work.' SET weight='.$weight.'
-                WHERE
-                    c_id = '.$course_id.' AND id = (
-                    SELECT ref_id FROM '.$table_link.'
-                    WHERE id='.$linkId.' AND type = '.LINK_STUDENTPUBLICATION.'
-                ) ';
-        Database::query($sql);
+        $em
+            ->createQuery('
+                UPDATE ChamiloCourseBundle:CStudentPublication w
+                SET w.weight = :final_weight
+                WHERE w.cId = :course
+                    AND w.id = (
+                        SELECT l.refId FROM ChamiloCoreBundle:GradebookLink l
+                        WHERE l.id = :link AND l.type = :type
+                    )
+            ')
+            ->execute([
+                'final_weight' => $weight,
+                'course' => $course_id,
+                'link' => $linkId,
+                'type' => LINK_STUDENTPUBLICATION
+            ]);
     }
 
     /**

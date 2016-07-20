@@ -75,7 +75,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 $userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
                 $isTutor = isset($_GET['is_tutor']) ? intval($_GET['is_tutor']) : 0;
                 $userInfo = api_get_user_info($userId);
-                
+
                 if (!empty($userId)) {
                     if (!$sessionId) {
                         if ($userInfo['status'] != INVITEE) {
@@ -462,6 +462,18 @@ function get_number_of_users()
     $sessionId = api_get_session_id();
     $courseCode = api_get_course_id();
     $active = isset($_GET['active']) ? $_GET['active'] : null;
+    $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
+
+    if (empty($sessionId)) {
+        $status = $type;
+    } else {
+        if ($type == COURSEMANAGER) {
+            $status = 2;
+        } else {
+            $status = 0;
+        }
+    }
+
 
     if (!empty($sessionId)) {
         $a_course_users = CourseManager::get_user_list_from_course_code(
@@ -469,7 +481,7 @@ function get_number_of_users()
             $sessionId,
             null,
             null,
-            null,
+            $status,
             null,
             false,
             false,
@@ -484,7 +496,7 @@ function get_number_of_users()
             0,
             null,
             null,
-            null,
+            $status,
             null,
             false,
             false,
@@ -770,7 +782,7 @@ function modify_filter($user_id, $row, $data)
     $sessionId = api_get_session_id();
     $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
 
-    $result = "";
+    $result = '';
     if ($is_allowed_to_track) {
         $result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$_course['id'].'&origin=user_course&id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'">
             '.Display::return_icon('stats.png', get_lang('Tracking')).'
@@ -785,7 +797,6 @@ function modify_filter($user_id, $row, $data)
     }
 
     if (api_is_allowed_to_edit(null, true)) {
-
         if (empty($sessionId)) {
             $isTutor = isset($data['is_tutor']) ? intval($data['is_tutor']) : 0;
             $isTutor = empty($isTutor) ? 1 : 0;
@@ -812,7 +823,7 @@ function modify_filter($user_id, $row, $data)
             }
         }
         // edit
-        if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
+        if (api_get_setting('allow_user_course_subscription_by_course_admin') === 'true' or api_is_platform_admin()) {
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
                 $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.
@@ -839,10 +850,12 @@ function hide_field()
 }
 
 $default_column = 3;
-
-$table = new SortableTable('user_list', 'get_number_of_users', 'get_user_data', $default_column);
+$tableLabel = $type === STUDENT ? 'student' : 'teacher';
+$table = new SortableTable($tableLabel.'_list', 'get_number_of_users', 'get_user_data', $default_column);
 $parameters['keyword'] = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $parameters['sec_token'] = Security::get_token();
+$parameters['cidReq'] = api_get_cidreq();
+$parameters['id_session'] = api_get_session_id();
 
 $table->set_additional_parameters($parameters);
 $header_nr = 0;

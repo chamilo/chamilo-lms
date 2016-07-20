@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Symfony\Component\Filesystem\Filesystem;
+
 /**
  *	This is the file manage library for Chamilo.
  *	Include/require it in your code to use its functionality.
@@ -258,7 +261,7 @@ function move($source, $target, $forceMove = false, $moveContent = false)
  */
 function copyDirTo($orig_dir_path, $destination, $move = true)
 {
-    $fs = new \Symfony\Component\Filesystem\Filesystem();
+    $fs = new Filesystem();
     if (is_dir($orig_dir_path)) {
         $fs->mirror($orig_dir_path, $destination);
 

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Michelf\MarkdownExtra;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Class CourseChat
@@ -23,10 +24,10 @@ class CourseChatUtils
      */
     public function __construct($courseId, $userId, $sessionId = 0, $groupId = 0)
     {
-        $this->courseId = intval($courseId);
-        $this->userId = intval($userId);
-        $this->sessionId = intval($sessionId);
-        $this->groupId = intval($groupId);
+        $this->courseId = (int) $courseId;
+        $this->userId = (int) $userId;
+        $this->sessionId = (int) $sessionId;
+        $this->groupId = (int) $groupId;
     }
 
     /**
@@ -42,10 +43,7 @@ class CourseChatUtils
         $course = $em->find('ChamiloCoreBundle:Course', $this->courseId);
 
         if ($this->sessionId) {
-            $criteria = \Doctrine\Common\Collections\Criteria::create()
-                ->where(
-                    \Doctrine\Common\Collections\Criteria::expr()->eq("course", $course)
-                );
+            $criteria = Criteria::create()->where(Criteria::expr()->eq("course", $course));
 
             return $em
                 ->find('ChamiloCoreBundle:Session', $this->sessionId)
@@ -1506,7 +1504,6 @@ class CourseChatUtils
     public function getFileName($absolute = false, $friendId = 0)
     {
         $date = date('Y-m-d');
-
         $base = 'messages-' . $date . '.log.html';
 
         if ($this->groupId && !$friendId) {

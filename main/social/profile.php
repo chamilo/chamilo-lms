@@ -182,27 +182,6 @@ $(document).ready(function (){
 function timeAgo() {
     $(".timeago").timeago();
 }
-
-function register_friend(element_input) {
-    if (confirm("'.get_lang('AddToFriends').'")) {
-        name_button=$(element_input).attr("id");
-        name_div_id="id_"+name_button.substring(13);
-        user_id=name_div_id.split("_");
-        user_friend_id=user_id[1];
-        $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
-                $("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />");
-            },
-            type: "POST",
-            url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
-            data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
-            success: function(datos) {
-                $("#dpending_" + user_friend_id).html(datos);
-            }
-        });
-    }
-}
 </script>';
 
 $link_shared = '';
@@ -596,40 +575,39 @@ if ($show_full_profile) {
         //Pending invitations
         if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
             if ($count_pending_invitations > 0) {
-                $invitations =  '<div><h3>'.get_lang('PendingInvitations').'</h3></div>';
+                
+                $invitations =  '<ul class="list-group">';
+                
                 for ($i=0;$i<$count_pending_invitations;$i++) {
                     $user_invitation_id = $pending_invitations[$i]['user_sender_id'];
-                    $invitations .=  '<div id="dpending_'.$user_invitation_id.'" class="friend_invitations">';
-                        $invitations .=  '<div style="float:left;width:60px;" >';
-                            $invitations .=  '<img style="margin-bottom:5px;"'
+                    $invitations .=  '<li id="dpending_'.$user_invitation_id.'" class="list-group-item">';
+                    $invitations .=  '<img class="img-rounded" '
                                 .' src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'"'
-                                .' width="60px">';
-                        $invitations .=  '</div>';
-
-                        $invitations .=  '<div style="padding-left:70px;">';
-                            $user_invitation_info = api_get_user_info($user_invitation_id);
-                            $invitations .=  '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php'
-                                .'?u='.$user_invitation_id.'">'
-                                .api_get_person_name(
-                                    $user_invitation_info['firstname'],
-                                    $user_invitation_info['lastname'])
-                                .'</a>';
-                            $invitations .=  '<br />';
-                            $invitations .=  Security::remove_XSS(
-                                cut($pending_invitations[$i]['content'], 50),
-                                STUDENT,
-                                true
-                            );
-                            $invitations .=  '<br />';
-                            $invitations .=  '<a id="btn_accepted_'.$user_invitation_id.'"'
-                                .' class="btn btn-default" onclick="register_friend(this)" href="javascript:void(0)">'
-                                .get_lang('SocialAddToFriends')
-                                .'</a>';
-                            $invitations .=  '<div id="id_response"></div>';
-                        $invitations .=  '</div>';
-                    $invitations .=  '</div>';
+                                .' width="40px">';
+                    $userInfo = api_get_user_info($user_invitation_id);
+                    $invitations .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_invitation_id.'">'
+                                 .api_get_person_name($userInfo['firstname'],$userInfo['lastname']).'</a>';
+                    
+                    $invitations .='<div class="pull-right">';
+                    $invitations .= Display::toolbarButton(
+                        get_lang('SocialAddToFriends'),
+                        api_get_path(WEB_AJAX_PATH) . 'social.ajax.php?' . http_build_query([
+                            'a' => 'add_friend',
+                            'friend_id' => $user_invitation_id,
+                            'is_my_friend' => 'friend'
+                        ]),
+                        'plus',
+                        'default',
+                        ['class' => 'btn-sm'],
+                        false
+                    );
+                    $invitations .= '</div>';
+                    $invitations .=  '<div id="id_response"></div>';
+                    $invitations .=  '</li>';
                 }
-                $socialRightInformation .=  SocialManager::social_wrapper_div($invitations, 4);
+                $invitations .= '</ul>';
+                $listInvitations = Display::panelCollapse(get_lang('PendingInvitations'), $invitations, 'invitations', null, 'invitations-acordion', 'invitations-collapse');
+               
             }
         }
 
@@ -697,6 +675,7 @@ $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($my_user_id));
 $tpl->assign('sessionList', $social_session_block);
+$tpl->assign('invitations', $listInvitations);
 $tpl->assign('social_right_information', $socialRightInformation);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 

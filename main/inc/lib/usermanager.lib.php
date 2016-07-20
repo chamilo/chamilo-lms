@@ -1449,6 +1449,9 @@ class UserManager
                 return $anonymousPath;
             }
             $user = Database::fetch_array($res);
+            if (empty($user['picture_uri'])) {
+                return $anonymousPath;
+            }
         } else {
             $user = $userInfo;
         }
@@ -1641,7 +1644,7 @@ class UserManager
         $old_file = $path_info['file'];
 
         // Let us delete them.
-        if (!empty($old_file)) {
+        if ($old_file != 'unknown.jpg') {
             if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE) {
                 $prefix = 'saved_'.date('Y_m_d_H_i_s').'_'.uniqid('').'_';
                 @rename($path.'small_'.$old_file, $path.$prefix.'small_'.$old_file);
@@ -1671,7 +1674,7 @@ class UserManager
         }
 
         // This is the common name for the new photos.
-        if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE && !empty($old_file)) {
+        if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE && $old_file != 'unknown.jpg') {
             $old_extension = strtolower(substr(strrchr($old_file, '.'), 1));
             $filename = in_array($old_extension, $allowed_types) ? substr($old_file, 0, -strlen($old_extension)) : $old_file;
             $filename = (substr($filename, -1) == '.') ? $filename.$extension : $filename.'.'.$extension;
@@ -1793,8 +1796,7 @@ class UserManager
             return false;
         }
 
-        $production_path = self::get_user_picture_path_by_id($user_id, 'web');
-        $production_dir = $production_path['dir'];
+        $production_dir = self::getUserPathById($user_id, 'web');
         $del_image = Display::returnIconPath('delete.png');
         $add_image = Display::returnIconPath('archive.png');
         $del_text = get_lang('Delete');
@@ -1821,8 +1823,7 @@ class UserManager
      */
     public static function get_user_productions($user_id)
     {
-        $production_path = self::get_user_picture_path_by_id($user_id, 'system');
-        $production_repository = $production_path['dir'];
+        $production_repository = self::getUserPathById($user_id, 'system');
         $productions = array();
 
         if (is_dir($production_repository)) {
@@ -3848,31 +3849,31 @@ class UserManager
                     VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
             Database::query($sql);
             return true;
-        } else {
-            $sql = 'SELECT COUNT(*) as count, relation_type  FROM '.$tbl_my_friend.'
-                    WHERE
-                        friend_user_id='.$friend_id.' AND
-                        user_id='.$my_user_id.' AND
-                        relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
-            $result = Database::query($sql);
-            $row = Database :: fetch_array($result, 'ASSOC');
-            if ($row['count'] == 1) {
-                //only for the case of a RRHH
-                if ($row['relation_type'] != $relation_type && $relation_type == USER_RELATION_TYPE_RRHH) {
-                    $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
-                            VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
-                } else {
-                    $sql = 'UPDATE '.$tbl_my_friend.' SET relation_type='.$relation_type.'
-                            WHERE friend_user_id='.$friend_id.' AND user_id='.$my_user_id;
-                }
-                Database::query($sql);
-
-                return true;
-            } else {
-
-                return false;
-            }
         }
+
+        $sql = 'SELECT COUNT(*) as count, relation_type  FROM '.$tbl_my_friend.'
+                WHERE
+                    friend_user_id='.$friend_id.' AND
+                    user_id='.$my_user_id.' AND
+                    relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
+        $result = Database::query($sql);
+        $row = Database :: fetch_array($result, 'ASSOC');
+
+        if ($row['count'] == 1) {
+            //only for the case of a RRHH
+            if ($row['relation_type'] != $relation_type && $relation_type == USER_RELATION_TYPE_RRHH) {
+                $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
+                        VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
+            } else {
+                $sql = 'UPDATE '.$tbl_my_friend.' SET relation_type='.$relation_type.'
+                        WHERE friend_user_id='.$friend_id.' AND user_id='.$my_user_id;
+            }
+            Database::query($sql);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

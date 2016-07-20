@@ -76,7 +76,7 @@ if (empty($docId)) {
         $courseInfo,
         null,
         null,
-        0,
+        api_get_session_id(),
         false,
         '/',
         api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq()

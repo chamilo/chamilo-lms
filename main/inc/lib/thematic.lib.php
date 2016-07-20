@@ -408,6 +408,7 @@ class Thematic
                 );
             }
         }
+
         return $affected_rows;
     }
 
@@ -654,6 +655,7 @@ class Thematic
             $return  .= '</div>';
             $final_return[$thematic_id] = $return;
         }
+
         return $final_return;
     }
 
@@ -668,9 +670,7 @@ class Thematic
     ) {
         $course_info = api_get_course_info($course_code);
         $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
-
         $data = array();
-
         $condition = '';
         if (isset($thematic_advance_id)) {
             $thematic_advance_id = intval($thematic_advance_id);
@@ -691,7 +691,7 @@ class Thematic
                 api_get_session_id()
             );
             foreach ($list as $value) {
-                $elements[$value['ref']]= $value;
+                $elements[$value['ref']] = $value;
             }
         }
 
@@ -1157,9 +1157,7 @@ class Thematic
                         );
 
                         if ($item_info['session_id'] == $sessionId) {
-
                             $a_thematic_advance_ids[] = $thematic_advance['id'];
-
                             // update done thematic for previous advances ((done_advance = 1))
                             $upd = "UPDATE $tbl_thematic_advance SET
                                     done_advance = 1
@@ -1321,7 +1319,10 @@ class Thematic
         if (!empty($thematic_data)) {
             foreach ($thematic_data as $thematic) {
                 $thematic_id = $thematic['id'];
-                $a_average_of_advances_by_thematic[$thematic_id] = $this->get_average_of_advances_by_thematic($thematic_id, $course_code);
+                $a_average_of_advances_by_thematic[$thematic_id] = $this->get_average_of_advances_by_thematic(
+                    $thematic_id,
+                    $course_code
+                );
             }
         }
 
@@ -1331,6 +1332,7 @@ class Thematic
             $score = array_sum($a_average_of_advances_by_thematic);
             $total_average = round(($score * 100) / ($count_tematics * 100));
         }
+        
         return $total_average;
     }
 

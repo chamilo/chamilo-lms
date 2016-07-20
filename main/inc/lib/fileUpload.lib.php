@@ -42,7 +42,8 @@ function htaccess2txt($filename) {
  * @see php2phps()
  * @see htaccess2txt()
  */
-function disable_dangerous_file($filename) {
+function disable_dangerous_file($filename)
+{
     return htaccess2txt(php2phps($filename));
 }
 
@@ -1121,17 +1122,16 @@ function unzip_uploaded_document(
  * This function is a callback function that is used while extracting a zipfile
  * http://www.phpconcept.net/pclzip/man/en/index.php?options-pclzip_cb_pre_extract
  *
- * @param object $p_event
- * @param object $p_header
+ * @param array $p_event
+ * @param array $p_header
  * @return int (If the function returns 1, then the extraction is resumed, if 0 the path was skipped)
  */
 function clean_up_files_in_zip($p_event, &$p_header)
 {
-    $originalFilePath = $p_header['filename'];
-    $originalFileName = basename($p_header['filename']);
-    $modifiedFileName = clean_up_path($originalFileName);
-    $p_header['filename'] = str_replace($originalFileName, $modifiedFileName, $originalFilePath);
-    
+    $originalStoredFileName = $p_header['stored_filename'];
+    $modifiedStoredFileName = clean_up_path($originalStoredFileName);
+    $p_header['filename'] = str_replace($originalStoredFileName, $modifiedStoredFileName, $p_header['filename']);
+
     return 1;
 }
 
@@ -1140,7 +1140,9 @@ function clean_up_files_in_zip($p_event, &$p_header)
  * by eliminating dangerous file names and cleaning them
  *
  * @param string $path
+ *
  * @return string
+ *
  * @see disable_dangerous_file()
  * @see api_replace_dangerous_char()
  */
@@ -1148,7 +1150,7 @@ function clean_up_path($path)
 {
     // Split the path in folders and files
     $path_array = explode('/', $path);
-    // Clean up every foler and filename in the path
+    // Clean up every folder and filename in the path
     foreach ($path_array as $key => & $val) {
         // We don't want to lose the dots in ././folder/file (cfr. zipfile)
         if ($val != '.') {
@@ -1157,7 +1159,7 @@ function clean_up_path($path)
     }
     // Join the "cleaned" path (modified in-place as passed by reference)
     $path = implode('/', $path_array);
-    $res = filter_extension($path);
+    filter_extension($path);
 
     return $path;
 }
@@ -1572,13 +1574,12 @@ function create_unexisting_directory(
                     WHERE
                         c_id = $course_id AND
                         (
-                            path = '" . $systemFolderName . "'
+                            path = '" . Database::escape_string($systemFolderName). "'
                         )
             ";
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
-
                 $document_id = add_document(
                     $_course,
                     $systemFolderName,
@@ -1596,7 +1597,6 @@ function create_unexisting_directory(
                 if ($document_id) {
                     // Update document item_property
                     if (!empty($visibility)) {
-
                         $visibilities = array(
                             0 => 'invisible',
                             1 => 'visible',

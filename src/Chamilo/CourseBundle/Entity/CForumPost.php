@@ -22,6 +22,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CForumPost
 {
+    const STATUS_VALIDATED = 1;
+    const STATUS_WAITING_MODERATION = 2;
+    const STATUS_REJECTED = 3;
+
     /**
      * @var integer
      *
@@ -417,4 +421,12 @@ class CForumPost
         return $this;
     }
 
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
 }

@@ -74,8 +74,6 @@ if (api_is_allowed_to_edit(null, true) ||
         ['id' => 'filter_id', 'onchange' => 'submit();']
     );
 
-    //$form->addElement('select', 'filter', get_lang('Filter'), $values, array('id' => 'filter_id'));
-
     $groupList = GroupManager::get_group_list(null, null, 1);
     $groupIdList = array('--');
     foreach ($groupList as $group) {
@@ -442,7 +440,7 @@ if (api_is_allowed_to_edit(null, true) ||
             $i = 0;
             foreach ($users_presence[$user_id] as $presence) {
                 $class = '';
-                if ($i%2==0) {
+                if ($i % 2 == 0) {
                     $class = 'row_even';
                 } else {
                     $class = 'row_odd';

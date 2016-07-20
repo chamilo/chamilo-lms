@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @deprecated
  * Class Rights
  * @deprecated Don't use this class
  */

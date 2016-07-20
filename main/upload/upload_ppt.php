@@ -72,7 +72,7 @@ if (!empty($errorMessage)) {
 
 $div_upload_limit = get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
 
-$form = new FormValidator('upload_ppt', 'POST', '', '');
+$form = new FormValidator('upload_ppt', 'POST', '?' . api_get_cidreq(), '');
 $form->addElement('header', get_lang("WelcomeOogieSubtitle"));
 $form->addElement('html', Display::return_message($message, 'info', false));
 $form->addElement('file', 'user_file', array(Display::return_icon('powerpoint_big.gif'), $div_upload_limit));

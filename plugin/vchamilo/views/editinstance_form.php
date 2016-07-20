@@ -411,7 +411,7 @@ class InstanceForm extends ChamiloForm
         if ($this->is_in_add_mode()) {
             $form->addElement('header', $this->_plugin->get_lang('templating'));
 
-            $templateoptions = vchamilo_get_available_templates();
+            $templateoptions = Virtual::getAvailableTemplates();
 
             // Template choice
             $form->addSelect(
@@ -457,7 +457,7 @@ class InstanceForm extends ChamiloForm
      */
     public function validation($data, $files = null)
     {
-        global $plugininstance;
+        global $plugin;
 
         $errors = array();
 
@@ -470,7 +470,7 @@ class InstanceForm extends ChamiloForm
         );
 
         if ($vchamilo && isset($data['vid']) && $data['vid'] != $vchamilo['id']) {
-            $errors['root_web'] = $plugininstance->get_lang('RootWebExists');
+            $errors['root_web'] = $plugin->get_lang('RootWebExists');
         }
 
         if (!empty($errors)) {

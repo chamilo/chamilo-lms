@@ -52,7 +52,10 @@ abstract class OpenofficeDocument extends learnpath
          // Create the directory
         $this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
         ///learning_path/ppt_dirname directory
-        $this->created_dir = substr($result['dir'], 0, strlen($result['dir']) -1);
+        $this->created_dir = $result['dir'];
+        if (substr($this->created_dir, -1, 1) == '/') {
+            $this->created_dir = substr($this->created_dir, 0, - 1);
+        }
         $this->file_path = $this->created_dir.'/'.api_replace_dangerous_char($file['name']);
 
         //var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
@@ -135,7 +138,7 @@ abstract class OpenofficeDocument extends learnpath
             $result = $this->_get_remote_ppt2lp_files($file);
             $result = unserialize($result);
             // Save remote images to server
-            chmod($this->base_work_dir.$this->created_dir, api_get_permissions_for_new_directories());
+            chmod($this->base_work_dir . $this->created_dir, api_get_permissions_for_new_directories());
             if (!empty($result['images'])) {
                 foreach ($result['images'] as $image => $img_data) {
                     $image_path = $this->base_work_dir.$this->created_dir;

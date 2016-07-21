@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\Filesystem\Filesystem;
+
 /**
  * Library of the settings.php file
  *
@@ -12,8 +14,6 @@
  */
 
 define('CSS_UPLOAD_PATH', api_get_path(SYS_APP_PATH).'Resources/public/css/themes/');
-
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * This function allows easy activating and inactivating of regions
@@ -62,13 +62,13 @@ function handleRegions()
     // Removing course tool
     unset($plugin_region_list['course_tool_plugin']);
 
-    foreach ($installed_plugins as $plugin) {
-        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/plugin.php';
+    foreach ($installed_plugins as $pluginName) {
+        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
 
         if (file_exists($plugin_info_file)) {
             $plugin_info = array();
             require $plugin_info_file;
-            if (isset($_GET['name']) && $_GET['name'] == $plugin) {
+            if (isset($_GET['name']) && $_GET['name'] === $pluginName) {
                 echo '<tr class="row_selected">';
             } else {
                 echo '<tr>';
@@ -77,14 +77,21 @@ function handleRegions()
             echo '<h4>'.$plugin_info['title'].' <small>v'.$plugin_info['version'].'</small></h4>';
             echo '<p>'.$plugin_info['comment'].'</p>';
             echo '</td><td>';
-            $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);
+            $selected_plugins = $plugin_obj->get_areas_by_plugin($pluginName);
 
             if (isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin']) {
                 $region_list = array('course_tool_plugin' => 'course_tool_plugin');
             } else {
                 $region_list = $plugin_region_list;
             }
-            echo Display::select('plugin_'.$plugin.'[]', $region_list, $selected_plugins, array('multiple' => 'multiple', 'style' => 'width:500px'), true, get_lang('None'));
+            echo Display::select(
+                'plugin_'.$pluginName.'[]',
+                $region_list,
+                $selected_plugins,
+                array('multiple' => 'multiple', 'style' => 'width:500px'),
+                true,
+                get_lang('None')
+            );
             echo '</td></tr>';
         }
     }
@@ -128,7 +135,7 @@ function handlePlugins()
     $all_plugins = $plugin_obj->read_plugins_from_path();
     $installed_plugins = $plugin_obj->get_installed_plugins();
 
-    //Plugins NOT installed
+    // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
     echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token=' . $token . '">';
     echo '<table class="data_table">';
@@ -140,11 +147,11 @@ function handlePlugins()
     echo '</th>';
     echo '</tr>';
 
-    $plugin_list = array();
+    /*$plugin_list = array();
     $my_plugin_list = $plugin_obj->get_plugin_regions();
     foreach($my_plugin_list as $plugin_item) {
         $plugin_list[$plugin_item] = $plugin_item;
-    }
+    }*/
 
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';

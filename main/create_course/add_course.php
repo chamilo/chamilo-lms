@@ -29,7 +29,7 @@ if (api_get_setting('course_validation') === 'true' && !api_is_platform_admin())
     $course_validation_feature = true;
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
     function setFocus(){
         $("#title").focus();
     }

@@ -156,6 +156,7 @@ abstract class OpenofficeDocument extends learnpath
             $this->lp_id = learnpath::add_lp($_course['id'], $this->file_name, '', 'guess', 'manual');
             // make sure we have a course code available for later
             $this->cc = $_course['id'];
+            $this->course_info = $_course;
 
             // Call to the function implemented by child following action_after_conversion parameter.
             switch ($action_after_conversion) {

@@ -1090,7 +1090,14 @@ class IndexManager
 
         $gamificationModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
+        $specialCourseList = '';
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
+
+        $viewGridCourses = api_get_configuration_value('view_grid_courses');
+
+        $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
+        $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
+
         if ($load_history) {
             // Load sessions in category in *history*
             $session_categories = UserManager::get_sessions_by_category($user_id, true);
@@ -1112,6 +1119,8 @@ class IndexManager
         $sessionCount = 0;
         $courseCount = 0;
 
+        $template = new Template(null, false, false, false, false, false, false);
+
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             // Display special courses.
@@ -1126,15 +1135,30 @@ class IndexManager
                 $this->load_directories_preview
             );
 
-            $this->tpl->assign('special_courses', $specialCourses);
-            $this->tpl->assign('courses', $courses);
 
-            if (api_get_configuration_value('view_grid_courses') && ($courses || $specialCourses)) {
-                $listCourse = $this->tpl->fetch(
-                $this->tpl->get_template('/user_portal/grid_courses.tpl'));
-            } else if ($courses || $specialCourses) {
-                $listCourse = $this->tpl->fetch(
-                $this->tpl->get_template('/user_portal/classic_courses.tpl'));
+            if ($viewGridCourses) {
+                $coursesWithoutCategoryTemplate = '/user_portal/grid_courses_without_category.tpl';
+                $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';
+            }
+
+            if ($specialCourses) {
+                $template->assign('courses', $specialCourses);
+
+                $specialCourseList = $template->fetch(
+                    $this->tpl->get_template($coursesWithoutCategoryTemplate)
+                );
+            }
+
+            if ($courses) {
+                $template->assign('courses', $courses['not_category']);
+                $template->assign('categories', $courses['in_category']);
+
+                $listCourse = $template->fetch(
+                    $this->tpl->get_template($coursesWithCategoryTemplate)
+                );
+                $listCourse .= $template->fetch(
+                    $this->tpl->get_template($coursesWithoutCategoryTemplate)
+                );
             }
 
             $courseCount = count($specialCourses) + count($courses['in_category']) + count($courses['not_category']);
@@ -1470,7 +1494,7 @@ class IndexManager
         }
 
         return [
-            'html' => $sessions_with_category.$sessions_with_no_category.$listCourse,
+            'html' => $specialCourseList . $sessions_with_category.$sessions_with_no_category.$listCourse,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

@@ -61,6 +61,10 @@ class OpenofficePresentation extends OpenofficeDocument
                 $slide_name = 'slide'.str_repeat('0', 2 - strlen($i)).$i;
             }
 
+            if (!is_file($this->base_work_dir.$this->created_dir.'/'.$file_name) or filesize($this->base_work_dir.$this->created_dir.'/'.$file_name) == 0) {
+                continue;
+            }
+
             $i++;
             // Add the png to documents.
             $document_id = add_document(

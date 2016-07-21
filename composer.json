@@ -28,7 +28,6 @@
             "main/inc/lib",
             "plugin",
             "main/install",
-            "main/inc/lib/getid3",
             "main/survey",
             "main/inc/lib/hook"
         ]
@@ -39,6 +38,7 @@
         "ext-gd": "*",
         "ext-curl": "*",
         "ext-zlib": "*",
+        "ext-zip": "*",
         "ext-xml": "*",
         "ext-json": "*",
         "ext-mbstring": "*",

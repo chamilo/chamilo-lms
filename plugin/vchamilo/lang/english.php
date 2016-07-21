@@ -23,7 +23,7 @@ $strings['datapathavailable'] = 'Data path is available and ready to be used as 
 $strings['datapathnotavailable'] = 'Data path exists but has already files in it at <br/>';
 $strings['datapathcreated'] = 'Data path has been created as :<br/>';
 $strings['dbgroup'] = 'Database Settings';
-$strings['dbhost'] = 'Host';
+$strings['dbhost'] = 'Database Host';
 $strings['dbpassword'] = 'Password';
 $strings['dbprefix'] = 'Database prefix';
 $strings['dbuser'] = 'Username';
@@ -106,5 +106,6 @@ $strings['InstitutionExample'] = 'Example: Chamilo Association';
 $strings['RootWebExample'] = 'Example: http://www.chamilo.org/';
 $strings['DatabaseDescription'] = 'A new database will be created with that name.';
 $strings['RootWebExists'] = 'An instance with the same root web exists.';
-
+$strings['ImportInstance'] = 'Import instance';
+$strings['ConfigurationPath'] = 'Chamilo configuration path';
 

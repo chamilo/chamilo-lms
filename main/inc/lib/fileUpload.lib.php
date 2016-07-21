@@ -263,7 +263,7 @@ function handle_uploaded_document(
         return false;
     } else {
         // Clean up the name, only ASCII characters should stay. (and strict)
-        $cleanName = api_replace_dangerous_char($uploadedFile['name'], 'strict');
+        $cleanName = api_replace_dangerous_char($uploadedFile['name']);
 
         // No "dangerous" files
         $cleanName = disable_dangerous_file($cleanName);
@@ -913,7 +913,7 @@ function treat_uploaded_file($uploaded_file, $base_work_dir, $upload_path, $max_
         $file_name = trim($uploaded_file['name']);
 
         // CHECK FOR NO DESIRED CHARACTERS
-        $file_name = api_replace_dangerous_char($file_name, 'strict');
+        $file_name = api_replace_dangerous_char($file_name);
 
         // TRY TO ADD AN EXTENSION TO FILES WITOUT EXTENSION
         $file_name = add_ext_on_mime($file_name, $uploaded_file['type']);
@@ -1021,7 +1021,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
                         $filetype = 'file';
                         if (is_dir($base_work_dir.$upload_path.'/'.$file)) $filetype = 'folder';
 
-                        $safe_file = api_replace_dangerous_char($file, 'strict');
+                        $safe_file = api_replace_dangerous_char($file);
                         @rename($base_work_dir.$upload_path.'/'.$file,$base_work_dir.$upload_path.'/'.$safe_file);
                         set_default_settings($upload_path, $safe_file,$filetype);
                     }

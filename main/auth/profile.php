@@ -77,12 +77,6 @@ function show_icon_edit(element_html) {
 }
 </script>';
 
-$warning_msg = '';
-if (!empty($_GET['fe'])) {
-    $warning_msg .= get_lang('UplUnableToSaveFileFilteredExtension');
-    $_GET['fe'] = null;
-}
-
 $jquery_ready_content = '';
 if (api_get_setting('allow_message_tool') == 'true') {
     $jquery_ready_content = <<<EOF
@@ -216,12 +210,7 @@ if ($user_data !== false) {
 /*
  * Initialize the form.
  */
-$form = new FormValidator(
-    'profile',
-    'post',
-    api_get_self()."?".str_replace('&fe=1', '', Security::remove_XSS($_SERVER['QUERY_STRING'])),
-    null
-);
+$form = new FormValidator('profile');
 
 if (api_is_western_name_order()) {
     //    FIRST NAME and LAST NAME

@@ -53,6 +53,8 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/system/net',
             __DIR__.'/../../../../main/inc/lib/system/text/',
             __DIR__.'/../../../../main/inc/lib/system/portfolio/',
+            __DIR__.'/../../../../main/inc/lib/icalcreator/',
+            __DIR__.'/../../../../main/inc/lib/getid3/',
             __DIR__.'/../../../../main/inc/lib/tools/',
             __DIR__.'/../../../../main/inc/lib/pchart/',
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',

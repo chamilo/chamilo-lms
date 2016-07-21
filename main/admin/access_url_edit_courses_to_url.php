@@ -271,7 +271,7 @@ $url_list = UrlManager::get_url_data();
 		</table>
 	</form>
 
-	<script type="text/javascript">
+	<script>
 		function moveItem(origin , destination) {
 			for(var i = 0 ; i<origin.options.length ; i++) {
 				if(origin.options[i].selected) {

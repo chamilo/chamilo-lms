@@ -722,6 +722,10 @@ function display_requirements(
                 <td class="requirements-value">'.checkExtension('pdo_mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable')).'</td>
             </tr>
             <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.zip.php" target="_blank">Zip</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.checkExtension('zip', get_lang('Yes'), get_lang('ExtensionNotAvailable')).'</td>
+            </tr>
+            <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('support').'</td>
                 <td class="requirements-value">'.checkExtension('zlib', get_lang('Yes'), get_lang('ExtensionZlibNotAvailable')).'</td>
             </tr>
@@ -962,8 +966,7 @@ function display_requirements(
                 <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
-            ';
-    echo '    </table>';
+        </table>';
     echo '  </div>';
     echo '</div>';
 
@@ -1037,14 +1040,17 @@ function display_requirements(
         //--> The user would have to adjust the permissions manually
         if (count($notWritable) > 0) {
             $error = true;
-            echo '<div class="error-message">';
-                echo '<center><h3>'.get_lang('Warning').'</h3></center>';
-                printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '</font>
-                <a href="../../documentation/installation_guide.html" target="blank">', '</a> <font color="red">');
-            echo '</div>';
+            ?>
+            <div class="text-danger">
+                <h3 class="text-center"><?php echo get_lang('Warning') ?></h3>
+                <p>
+                    <?php printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '<a href="../../documentation/installation_guide.html" target="blank">', '</a>'); ?>
+                </p>
+            </div>
+            <?php
             echo '<ul>';
             foreach ($notWritable as $value) {
-                echo '<li>'.$value.'</li>';
+                echo '<li class="text-danger">'.$value.'</li>';
             }
             echo '</ul>';
         } elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
@@ -1052,6 +1058,32 @@ function display_requirements(
             echo '<div class="alert alert-warning"><h4><center>';
             echo get_lang('WarningExistingLMSInstallationDetected');
             echo '</center></h4></div>';
+        }
+
+        $deprecated = [
+            api_get_path(SYS_CODE_PATH) . 'exercice/',
+            api_get_path(SYS_CODE_PATH) . 'newscorm/'
+        ];
+        $deprecatedToRemoved = [];
+
+        foreach ($deprecated as $deprecatedDirectory) {
+            if (!is_dir($deprecatedDirectory)) {
+                continue;
+            }
+
+            $deprecatedToRemoved[] = $deprecatedDirectory;
+        }
+
+        if (count($deprecatedToRemoved) > 0) {
+            $error = true;
+            ?>
+            <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade') ?></p>
+            <ul>
+                <?php foreach ($deprecatedToRemoved as $deprecatedDirectory) { ?>
+                    <li class="text-danger"><?php echo $deprecatedDirectory ?></li>
+                <?php } ?>
+            </ul>
+            <?php
         }
 
         // And now display the choice buttons (go back or install)
@@ -1064,13 +1096,11 @@ function display_requirements(
             <em class="fa fa-forward"> </em> <?php echo get_lang('NewInstallation'); ?>
         </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
+            <button type="submit" class="btn btn-default" <?php echo !$error ?: 'disabled="disabled"' ?> name="step2_update_8" value="Upgrade from Chamilo 1.9.x">
+                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeFromLMS19x') ?>
+            </button>
+            </p>
         <?php
-        // Real code
-        echo '<button type="submit" class="btn btn-default" name="step2_update_8" value="Upgrade from Chamilo 1.9.x"';
-        if ($error) echo ' disabled="disabled"';
-        echo ' ><em class="fa fa-forward"> </em> '.get_lang('UpgradeFromLMS19x').'</button>';
-
-        echo '</p>';
     }
 }
 
@@ -2875,4 +2905,123 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
     }
 
     return array('dir' => $dir, 'file' => $picture_filename);
+}
+
+/**
+ * @param string $fromVersion
+ * @param EntityManager $manager
+ * @param bool $processFiles
+ */
+function migrateSwitch($fromVersion, $manager, $processFiles = true)
+{
+    error_log('Starting migration process from '.$fromVersion.' ('.date('Y-m-d H:i:s').')');
+
+    echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
+    echo '<div id="details" style="display:none">';
+
+    $connection = $manager->getConnection();
+
+    switch ($fromVersion) {
+        case '1.9.0':
+        case '1.9.2':
+        case '1.9.4':
+        case '1.9.6':
+        case '1.9.6.1':
+        case '1.9.8':
+        case '1.9.8.1':
+        case '1.9.8.2':
+        case '1.9.10':
+        case '1.9.10.2':
+        case '1.9.10.4':
+            // Fix type "enum" before running the migration with Doctrine
+            $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
+            $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
+            $connection->executeQuery("ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL");
+            $connection->executeQuery("ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self'");
+            $connection->executeQuery("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
+            $connection->executeQuery("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
+            $connection->executeQuery("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
+            $connection->executeQuery("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
+            $connection->executeQuery("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
+
+            // Migrate using the migration files located in:
+            // src/Chamilo/CoreBundle/Migrations/Schema/V110
+            $result = migrate(
+                110,
+                $manager
+            );
+
+            if ($result) {
+                error_log('Migrations files were executed.');
+
+                fixIds($manager);
+
+                $connection->executeQuery("UPDATE settings_current SET selected_value = '1.10.0' WHERE variable = 'chamilo_database_version'");
+
+                if ($processFiles) {
+
+                    include __DIR__.'/update-files-1.9.0-1.10.0.inc.php';
+                    // Only updates the configuration.inc.php with the new version
+                    include __DIR__.'/update-configuration.inc.php';
+
+                    $configurationFiles = array(
+                        'mail.conf.php',
+                        'profile.conf.php',
+                        'course_info.conf.php',
+                        'add_course.conf.php',
+                        'events.conf.php',
+                        'auth.conf.php',
+                        'portfolio.conf.php'
+                    );
+
+                    error_log('Copy conf files');
+
+                    foreach ($configurationFiles as $file) {
+                        if (file_exists(api_get_path(SYS_CODE_PATH).'inc/conf/'.$file)) {
+                            copy(
+                                api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
+                                api_get_path(CONFIGURATION_PATH).$file
+                            );
+                        }
+                    }
+                }
+
+                error_log('Upgrade 1.10.x process concluded! ('.date('Y-m-d H:i:s').')');
+            } else {
+                error_log('There was an error during running migrations. Check error.log');
+                break;
+            }
+        case '1.10.0':
+            // no break
+        case '1.10.2':
+            // no break
+        case '1.10.4':
+            // no break
+        case '1.10.6':
+            // Migrate using the migration files located in:
+            // src/Chamilo/CoreBundle/Migrations/Schema/V111
+            $result = migrate(
+                111,
+                $manager
+            );
+
+            if ($result) {
+                $connection->executeQuery("UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'");
+
+                error_log('Migrations files were executed.');
+                if ($processFiles) {
+                    include __DIR__.'/update-files-1.10.0-1.11.0.inc.php';
+                }
+                error_log('Upgrade 1.11.x process concluded!  ('.date('Y-m-d H:i:s').')');
+            } else {
+                error_log('There was an error during running migrations. Check error.log');
+            }
+            break;
+        default:
+            break;
+    }
+
+    echo '</div>';
+
+    return true;
 }

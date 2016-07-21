@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 api_protect_admin_script();
 

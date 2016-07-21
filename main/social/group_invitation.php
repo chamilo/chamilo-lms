@@ -148,13 +148,14 @@ $social_right_content =  '<h2>'.Security::remove_XSS($group_info['name'], STUDEN
 if (count($nosessionUsersList) == 0) {
     $friends = SocialManager::get_friends(api_get_user_id());
     if ($friends == 0) {
-        $social_right_content .= get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
+        $social_right_content .= Display::return_message(get_lang('YouNeedToHaveFriendsInYourSocialNetwork'), 'warning');
     } else {
-        $social_right_content .= get_lang('YouAlreadyInviteAllYourContacts');
+        $social_right_content .= Display::return_message(get_lang('YouAlreadyInviteAllYourContacts'), 'info');
     }
     $social_right_content .= '<div>';
-    $social_right_content .= '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
+    $social_right_content .= '<a href="search.php" class="btn btn-default">'.get_lang('TryAndFindSomeFriends').' <em class="fa fa-search"></em></a>';
     $social_right_content .= '</div>';
+    $social_right_content .= '<br />';
 }
 
 $form = new FormValidator('invitation', 'post', api_get_self().'?id='.$group_id);
@@ -165,8 +166,7 @@ $group_members_element = $form->addElement(
     'advmultiselect',
     'invitation',
     get_lang('Friends'),
-    $nosessionUsersList,
-    'style="width: 280px;"'
+    $nosessionUsersList
 );
 
 $form->addButtonSave(get_lang('InviteUsersToGroup'));

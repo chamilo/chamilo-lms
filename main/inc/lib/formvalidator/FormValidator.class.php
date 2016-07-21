@@ -805,6 +805,7 @@ EOT;
      * @param string $name
      * @param string $label
      * @param array  $attributes
+     * @throws Exception if the file doesn't have an id
      */
     public function addFile($name, $label, $attributes = array())
     {

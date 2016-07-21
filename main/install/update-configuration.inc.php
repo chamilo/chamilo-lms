@@ -37,16 +37,16 @@ if (defined('SYSTEM_INSTALLATION')) {
         $ignore = false;
         if (stripos($line, '$_configuration[\'system_version\']') !== false) {
             $found_version = true;
-            $line = '$_configuration[\'system_version\'] = \'' . $new_version . '\';' . "\r\n";
+            $line = '$_configuration[\'system_version\'] = \'' . $GLOBALS['new_version'] . '\';' . "\r\n";
        } elseif (stripos($line, '$_configuration[\'system_stable\']') !== false) {
             $found_stable = true;
-            $line = '$_configuration[\'system_stable\'] = ' . ($new_version_stable ? 'true' : 'false') . ';' . "\r\n";
+            $line = '$_configuration[\'system_stable\'] = ' . ($GLOBALS['new_version_stable'] ? 'true' : 'false') . ';' . "\r\n";
         } elseif (stripos($line, '$_configuration[\'software_name\']') !== false) {
             $found_software_name = true;
-            $line = '$_configuration[\'software_name\'] = \'' . $software_name . '\';' . "\r\n";
+            $line = '$_configuration[\'software_name\'] = \'' . $GLOBALS['software_name'] . '\';' . "\r\n";
         } elseif (stripos($line, '$_configuration[\'software_url\']') !== false) {
             $found_software_url = true;
-            $line = '$_configuration[\'software_url\'] = \'' . $software_url . '\';' . "\r\n";
+            $line = '$_configuration[\'software_url\'] = \'' . $GLOBALS['software_url'] . '\';' . "\r\n";
         } elseif (stripos($line, '$userPasswordCrypted') !== false) {
             $line = '$_configuration[\'password_encryption\'] = \'' .$userPasswordCrypted.'\';' . "\r\n";
         } elseif (stripos($line, '?>') !== false) {

@@ -104,14 +104,14 @@ global $DB;
 if ($options['verbose']) echo "building database manager\n";
 $DB = new DatabaseManager();
 if ($options['verbose']) echo "building plugin vchamilo\n";
-$plugininstance = VChamiloPlugin::create();
+$plugin = VChamiloPlugin::create();
 
 if (empty($options['nodes'])) {
     cli_error(get_string('climissingnodes', 'block_vmoodle'));
 }
 
 if ($options['verbose']) echo "parsing nodelist\n";
-$nodes = vchamilo_parse_csv_nodelist($options['nodes'], $plugininstance);
+$nodes = vchamilo_parse_csv_nodelist($options['nodes'], $plugin);
 
 if ($options['lint']) {
     ctrace("Lint mode:\n");

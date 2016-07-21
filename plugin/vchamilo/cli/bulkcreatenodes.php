@@ -93,14 +93,14 @@ global $DB;
 if ($options['verbose']) echo "building database manager\n";
 $DB = new DatabaseManager();
 if ($options['verbose']) echo "building plugin vchamilo\n";
-$plugininstance = VChamiloPlugin::create();
+$plugin = VChamiloPlugin::create();
 
 if (empty($options['nodes'])) {
     cli_error('Missing node definition. Halt.');
 }
 
 if ($options['verbose']) echo "parsing nodelist\n";
-$nodes = vchamilo_parse_csv_nodelist($options['nodes'], $plugininstance);
+$nodes = vchamilo_parse_csv_nodelist($options['nodes'], $plugin);
 
 if ($options['lint']) {
     ctrace("Lint mode:\n");
@@ -134,7 +134,7 @@ foreach($nodes as $data) {
         ctrace('Node exists. skipping');
         continue;
     }
-    
+
     $data->what = 'addinstance';
     $data->registeronly = false;
 
@@ -205,7 +205,7 @@ foreach($nodes as $data) {
     } else {
         ctrace('No Side CNX for setup');
     }
-    
+
     if ($interactive) {
         $input = readline("Continue (y/n|r) ?\n");
         if ($input == 'r' || $input == 'R'){

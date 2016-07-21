@@ -28,7 +28,6 @@
             "main/inc/lib",
             "plugin",
             "main/install",
-            "main/inc/lib/getid3",
             "main/survey",
             "main/inc/lib/hook"
         ]
@@ -39,6 +38,7 @@
         "ext-gd": "*",
         "ext-curl": "*",
         "ext-zlib": "*",
+        "ext-zip": "*",
         "ext-xml": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -97,7 +97,9 @@
         "knplabs/doctrine-behaviors": "~1.1",
         "jimmiw/php-time-ago": "^0.4.11",
         "phpoffice/phpword": "^0.12.1",
-        "facebook/php-sdk-v4" : "~5.0"
+        "facebook/php-sdk-v4" : "~5.0",
+        "kigkonsult/icalcreator" : "dev-master",
+        "james-heinrich/getid3": "~1.9"
     },
     "require-dev": {
         "behat/behat": "@stable",

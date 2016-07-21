@@ -97,7 +97,8 @@
         "knplabs/doctrine-behaviors": "~1.1",
         "jimmiw/php-time-ago": "^0.4.11",
         "phpoffice/phpword": "^0.12.1",
-        "facebook/php-sdk-v4" : "~5.0"
+        "facebook/php-sdk-v4" : "~5.0",
+        "kigkonsult/icalcreator" : "dev-master"
     },
     "require-dev": {
         "behat/behat": "@stable",

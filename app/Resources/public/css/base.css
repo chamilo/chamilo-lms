@@ -1483,7 +1483,7 @@ div.admin_section h4 {
 
 /*LIST MEMBERS*/
 .list_members_grid_container { width:100%;}
-.list_members_grid_item { width:105px;  height: 150px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
+.list_members_grid_item { width:110px;  height: 165px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
 .list_members_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 .list_members_grid_element_0 img {width:50px;height:50px;border:3px solid #E6E6E6;}
 .list_members_grid_element_2 { width:100px; float:left; text-align:center; margin-bottom:5px;}

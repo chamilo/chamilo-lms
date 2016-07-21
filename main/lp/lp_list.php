@@ -615,7 +615,7 @@ foreach ($categories as $item) {
                             array(),
                             ICON_SIZE_SMALL
                         ),
-                        api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".api_replace_dangerous_char($name, 'strict' ).".zip"
+                        api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".api_replace_dangerous_char($name).".zip"
                     );
                 } else {
                     $dsp_disk = Display::return_icon(

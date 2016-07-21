@@ -645,7 +645,7 @@ class TestMainApi extends UnitTestCase {
 		$filename =ereg_replace("\.+$", "", substr(strtr(ereg_replace(
 	    "[^!-~\x80-\xFF]", "_", trim($filename)), '\/:*?"<>|\'',
         /*Keep C1 controls for UTF-8 streams **/ '-----_---_'), 0, 250));
-		$res = api_replace_dangerous_char($filename, $strict = 'loose');
+		$res = api_replace_dangerous_char($filename);
 		$this->assertEqual($res,$filename, $message = 'no se pudo');
 	}
 

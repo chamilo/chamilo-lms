@@ -3444,7 +3444,7 @@ class CourseManager
 
         $special_course_list = self::get_special_course_list();
 
-        $with_special_courses = $without_special_courses = '';
+        $with_special_courses = '';
         if (!empty($special_course_list)) {
             $with_special_courses = ' course.code IN ("' . implode('","', $special_course_list) . '")';
         }
@@ -3526,6 +3526,8 @@ class CourseManager
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                         $params['notifications'] = $show_notification;
                     }
+
+                    $params['is_special_course'] = true;
 
                     $courseList[] = $params;
 
@@ -3668,7 +3670,6 @@ class CourseManager
             $thumbnails = null;
             $image = null;
 
-
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $thumbnails = $course_info['course_image'];
                 $image = $course_info['course_image_large'];
@@ -3693,7 +3694,6 @@ class CourseManager
                 $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
             }
 
-            $courseUrl = '';
             $courseUrl = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
 
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
@@ -3714,23 +3714,14 @@ class CourseManager
             $params['category'] = $course_info['categoryName'];
             $params['teachers'] = $teachers;
 
-
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;
             }
 
-            $isSubContent = true;
-            if (empty($user_category_id)) {
-                $isSubContent = false;
-            }
-
             $courseList[] = $params;
-
         }
 
         return $courseList;
-
-
     }
 
     /**
@@ -3831,8 +3822,6 @@ class CourseManager
                 $params['document'] .= Display::div('', array('id' => 'document_result_' . $course_info['real_id'] . '_0', 'class' => 'document_preview_container'));
             }
 
-
-            $course_title_url = '';
             $course_title_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
 
             $teachers = '';
@@ -3856,11 +3845,6 @@ class CourseManager
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;
-            }
-
-            $isSubContent = true;
-            if (empty($user_category_id)) {
-                $isSubContent = false;
             }
 
             $courseList[] = $params;

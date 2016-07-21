@@ -1,35 +1,14 @@
-{% for row in session %}
-    <div id="session-{{ item.id }}" class="session panel panel-default">
-        <div class="panel-heading">
-            <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
-                 alt="{{ row.title }}" title="{{ row.title }}"/> {{ row.title }}
-
-            {% if row.edit_actions != '' %}
-                <div class="pull-right">
-                    <a class="btn btn-default btn-sm" href="{{ row.edit_actions }}">
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
-                    </a>
-                </div>
-            {% endif %}
-        </div>
-        <div class="panel-body">
-            {% if row.description != '' %}
-                {{ row.description }}
-            {% endif %}
-            <div class="info-session">
-                {% if row.coach_name  != '' %}
-                    <span><i class="fa fa-user" aria-hidden="true"></i>
-                        {{ row.coach_name }}
-                </span>
-                {% endif %}
-                </span>
-                <span><i class="fa fa-calendar" aria-hidden="true"></i>
-                    {{ row.date }}
-            </span>
+<div class="grid-courses">
+    {% for category in courses.in_category %}
+        {% set nameCategory = category.title_category %}
+        {% set idCategory = category.id_category %}
+        <div id="category_{{ idCategory }}" class="panel panel-default">
+            <div class="panel-heading">
+                {{ nameCategory }}
             </div>
-            <div class="grid-courses">
+            <div class="panel-body">
                 <div class="row">
-                    {% for item in row.courses %}
+                    {% for item in category.courses %}
                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <div class="items">
                                 <div class="image">
@@ -93,5 +72,5 @@
                 </div>
             </div>
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
+</div>

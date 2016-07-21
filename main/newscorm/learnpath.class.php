@@ -10680,8 +10680,8 @@ EOD;
                 $headers = substr($response, 0, $httpCode['header_size']);
 
                 $error = false;
-                if (stripos($headers, 'X-Frame-Options: DENY') > -1 ||
-                    stripos($headers, 'X-Frame-Options: SAMEORIGIN') > -1
+                if (stripos($headers, 'X-Frame-Options: DENY') > -1
+                    //|| stripos($headers, 'X-Frame-Options: SAMEORIGIN') > -1
                 ) {
                     $error = true;
                 }

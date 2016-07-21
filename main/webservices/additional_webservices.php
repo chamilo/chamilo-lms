@@ -21,11 +21,18 @@ function wsConvertPpt($pptData)
     $dataInfo = pathinfo($pptData['file_name']);
     $fileName =  basename($pptData['file_name'], '.' . $dataInfo['extension']);
     $fullFileName = $pptData['file_name'];
+    $size = $pptData['service_ppt2lp_size'];
+    $w = '800';
+    $h = '600';
+    if (!empty($size)) {
+        list($w, $h) = explode('x', $size);
+    }
 
     $tempArchivePath = api_get_path(SYS_ARCHIVE_PATH);
     $tempPath = $tempArchivePath . 'wsConvert/' . $fileName . '/';
     $tempPathNewFiles = $tempArchivePath . 'wsConvert/' . $fileName . '-n/';
 
+    $oldumask = umask(0);
     $perms = api_get_permissions_for_new_directories();
     pptConverterDirectoriesCreate($tempPath, $tempPathNewFiles, $fileName, $perms);
 
@@ -33,14 +40,14 @@ function wsConvertPpt($pptData)
     file_put_contents($tempPath . $fullFileName, $file);
 
     $cmd = pptConverterGetCommandBaseParams();
-    $cmd .= ' -w 720 -h 540 -d oogie "' . $tempPath . $fullFileName.'"  "' . $tempPathNewFiles . $fileName . '.html"';
+    $cmd .= ' -w ' . $w . ' -h ' . $h . ' -d oogie "' . $tempPath . $fullFileName.'"  "' . $tempPathNewFiles . $fileName . '.html"';
 
-    $perms = api_get_permissions_for_new_files();
     chmod($tempPathNewFiles . $fileName, $perms);
 
     $files = array();
     $return = 0;
     $shell = exec($cmd, $files, $return);
+    umask($oldumask);
 
     if ($return === 0) {
         $images = array();

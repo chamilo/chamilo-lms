@@ -12,7 +12,7 @@
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-if (api_get_setting('allow_social_tool') !='true') {
+if (api_get_setting('allow_social_tool') != 'true') {
     $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);
     header('Location: '.$url);
     exit;
@@ -315,15 +315,17 @@ $(document).ready(function() {
 });
 </script>';
 
-$socialRightInformation = null;
-$social_right_content = null;
+$socialRightInformation = '';
+$social_right_content = '';
+$listInvitations = '';
+
 if ($show_full_profile) {
 
     $t_ufo = Database :: get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
     $extra_user_data = UserManager::get_extra_user_data($user_id, false, true);
 
     $extra_information = '';
-    if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
+    if (is_array($extra_user_data) && count($extra_user_data) > 0) {
         $extra_information_value = '<ul class="list-group">';
         $extraField = new ExtraField('user');
         foreach ($extra_user_data as $key => $data) {
@@ -409,7 +411,7 @@ if ($show_full_profile) {
                         break;
                     default:
                         $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']) . ': ' . $data . '</li>';
-                    break;
+                        break;
                 }
             }
         }
@@ -418,12 +420,13 @@ if ($show_full_profile) {
         // if there are information to show
         if (!empty($extra_information_value)) {
             $extra_information .= Display::panelCollapse(
-                    get_lang('ExtraInformation'),
-                    $extra_information_value,
-                    'sn-extra-information',
-                    null, 'sn-extra-accordion',
-                    'sn-extra-collapse'
-                    );
+                get_lang('ExtraInformation'),
+                $extra_information_value,
+                'sn-extra-information',
+                null,
+                'sn-extra-accordion',
+                'sn-extra-collapse'
+            );
         }
     }
 
@@ -463,7 +466,7 @@ if ($show_full_profile) {
                 );
             }
             $count_users_group = count($userGroup->get_all_users_by_group($id));
-            if ($count_users_group == 1 ) {
+            if ($count_users_group == 1) {
                 $count_users_group = $count_users_group.' '.get_lang('Member');
             } else {
                 $count_users_group = $count_users_group.' '.get_lang('Members');
@@ -483,7 +486,7 @@ if ($show_full_profile) {
     if (count($grid_my_groups) > 0) {
         $my_groups = '';
         $count_groups = 0;
-        if (count($results) == 1 ) {
+        if (count($results) == 1) {
             $count_groups = count($results);
         } else {
             $count_groups = count($results);
@@ -528,8 +531,8 @@ if ($show_full_profile) {
         $i = 1;
 
         foreach ($list as $key => $value) {
-            if ( empty($value[2]) ) { //if out of any session
-                $my_courses .=  $value[1];
+            if (empty($value[2])) { //if out of any session
+                $my_courses .= $value[1];
                 $i++;
             }
         }
@@ -557,7 +560,11 @@ if ($show_full_profile) {
     $file_list = '';
     if (is_array($course_list_code) && count($course_list_code)>0) {
         foreach ($course_list_code as $course) {
-            $file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code'],$resourcetype='images');
+            $file_list .= UserManager::get_user_upload_files_by_course(
+                $user_id,
+                $course['code'],
+                $resourcetype = 'images'
+            );
         }
     }
 
@@ -571,14 +578,11 @@ if ($show_full_profile) {
     }
 
     if (!empty($production_list) || !empty($file_list) || $count_pending_invitations > 0) {
-
-        //Pending invitations
+        // Pending invitations
         if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
             if ($count_pending_invitations > 0) {
-                
                 $invitations =  '<ul class="list-group">';
-                
-                for ($i=0;$i<$count_pending_invitations;$i++) {
+                for ($i = 0; $i < $count_pending_invitations; $i++) {
                     $user_invitation_id = $pending_invitations[$i]['user_sender_id'];
                     $invitations .=  '<li id="dpending_'.$user_invitation_id.'" class="list-group-item">';
                     $invitations .=  '<img class="img-rounded" '
@@ -587,7 +591,7 @@ if ($show_full_profile) {
                     $userInfo = api_get_user_info($user_invitation_id);
                     $invitations .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_invitation_id.'">'
                                  .api_get_person_name($userInfo['firstname'],$userInfo['lastname']).'</a>';
-                    
+
                     $invitations .='<div class="pull-right">';
                     $invitations .= Display::toolbarButton(
                         get_lang('SocialAddToFriends'),
@@ -606,15 +610,20 @@ if ($show_full_profile) {
                     $invitations .=  '</li>';
                 }
                 $invitations .= '</ul>';
-                $listInvitations = Display::panelCollapse(get_lang('PendingInvitations'), $invitations, 'invitations', null, 'invitations-acordion', 'invitations-collapse');
-               
+                $listInvitations = Display::panelCollapse(
+                    get_lang('PendingInvitations'),
+                    $invitations,
+                    'invitations',
+                    null,
+                    'invitations-acordion',
+                    'invitations-collapse'
+                );
             }
         }
 
         // Productions
         $production_list =  UserManager::build_production_list($user_id);
-
-        $product_content  = '';
+        $product_content = '';
         if (!empty($production_list)) {
             $product_content .= '<div><h3>'.get_lang('MyProductions').'</h3></div>';
             $product_content .=  $production_list;

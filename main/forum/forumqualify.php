@@ -243,7 +243,7 @@ if ($allowToQualify) {
             if ($row['status']=='0') {
                 $style =" id = 'post".$post_en."' class=\"hide-me\" style=\"border:1px solid red; display:none; background-color:#F7F7F7; width:95%; margin: 0px 0px 4px 40px; \" ";
             } else {
-                $style = "";
+                $style = '';
                 $post_en = $row['post_parent_id'];
             }
 
@@ -258,14 +258,14 @@ if ($allowToQualify) {
 
             echo "<div ".$style."><table class=\"data_table\">";
 
-            if ($row['visible']=='0') {
-                $titleclass='forum_message_post_title_2_be_approved';
-                $messageclass='forum_message_post_text_2_be_approved';
-                $leftclass='forum_message_left_2_be_approved';
+            if ($row['visible'] == '0') {
+                $titleclass = 'forum_message_post_title_2_be_approved';
+                $messageclass = 'forum_message_post_text_2_be_approved';
+                $leftclass = 'forum_message_left_2_be_approved';
             } else {
-                $titleclass='forum_message_post_title';
-                $messageclass='forum_message_post_text';
-                $leftclass='forum_message_left';
+                $titleclass = 'forum_message_post_title';
+                $messageclass = 'forum_message_post_text';
+                $leftclass = 'forum_message_left';
             }
 
             echo "<tr>";
@@ -291,7 +291,6 @@ if ($allowToQualify) {
                 echo '<tr ><td height="50%">';
                 $realname = $attachment_list['path'];
                 $user_filename = $attachment_list['filename'];
-
                 echo Display::return_icon('attachment.gif', get_lang('Attachment'));
                 echo '<a href="download.php?file=';
                 echo $realname;
@@ -311,11 +310,11 @@ if ($allowToQualify) {
 
     // Show past data
     if (api_is_allowed_to_edit() && $counter > 0) {
-        if (isset($_GET['gradebook'])){
+        if (isset($_GET['gradebook'])) {
             $view_gradebook='&gradebook=view';
         }
         echo '<h4>'.get_lang('QualificationChangesHistory').'</h4>';
-        if (isset($_GET['type']) && $_GET['type'] == 'false') {
+        if (isset($_GET['type']) && $_GET['type'] === 'false') {
             $buttons = '<a class="btn btn-default" href="forumqualify.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&origin='.$origin.'&thread='.$threadId.'&user='.intval($_GET['user']).'&user_id='.intval($_GET['user_id']).'&type=true&idtextqualify='.$score.$view_gradebook.'#history">'.
                     get_lang('MoreRecent').'</a> <a class="btn btn-default disabled" >'.get_lang('Older').'</a>';
         } else {

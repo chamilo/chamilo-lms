@@ -274,7 +274,7 @@ if (
         );
         $table_list .= Display::tabsOnlyLink($tabs, $active);
 
-        $icon_qualify = 'blog_new.gif';
+        $icon_qualify = 'quiz.png';
         $table_list .= '<center><br /><table class="data_table" style="width:50%">';
         // The column headers (TODO: Make this sortable).
         $table_list .= '<tr >';

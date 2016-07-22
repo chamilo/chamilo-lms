@@ -11,7 +11,7 @@
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
 <noscript>{{ "NoJavascript"|get_lang }}</noscript>
-<div class="wrap">   
+<div class="wrap">
     {% if displayCookieUsageWarning == true %}
     <!-- Display Cookies validation -->
     <div class="toolbar-cookie alert-warning">
@@ -32,22 +32,20 @@
         </form>
     </div>
     {% endif %}
-    	{% include template ~ "/layout/page_header.tpl" %}
+
+    {% include template ~ "/layout/page_header.tpl" %}
 	<section id="content-section">
-            <div class="container">
-                {% block breadcrumb %}
-                    {{ breadcrumb }}
-                {% endblock %}
-                {% include template ~ "/layout/course_navigation.tpl" %}
-                {% block body %}
-                    {{ content }}
-                {% endblock %} 
-            </div>
+        <div class="container">
+            {% block breadcrumb %}
+                {{ breadcrumb }}
+            {% endblock %}
+            {% include template ~ "/layout/course_navigation.tpl" %}
+            {% block body %}
+                {{ content }}
+            {% endblock %}
+        </div>
 	</section>
-    {% if show_sniff == 1 %}
-            {% include template ~ "/layout/sniff.tpl" %}
-    {% endif %}
-	{% include template ~ "/layout/page_footer.tpl" %}	
+	{% include template ~ "/layout/page_footer.tpl" %}
     </div>
   </body>
 </html>

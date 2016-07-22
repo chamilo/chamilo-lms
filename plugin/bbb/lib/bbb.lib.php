@@ -26,10 +26,12 @@ class bbb
     public $logoutUrl = '';
     public $pluginEnabled = false;
     public $enableGlobalConference = false;
+    public $enableGlobalConferencePerUser = false;
     public $isGlobalConference = false;
     public $groupSupport = false;
-    public $table;
+    public $userSupport = false;
     public $accessUrl = 1;
+    public $userId = 0;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -37,8 +39,9 @@ class bbb
      * @param string $host
      * @param string $salt
      * @param bool $isGlobalConference
+     * @param int $isGlobalPerUser
      */
-    public function __construct($host = '', $salt = '', $isGlobalConference = false)
+    public function __construct($host = '', $salt = '', $isGlobalConference = false, $isGlobalPerUser = 0)
     {
         // Initialize video server settings from global settings
         $plugin = BBBPlugin::create();
@@ -50,20 +53,24 @@ class bbb
 
         $this->logoutUrl = $this->getListingUrl();
         $this->table = Database::get_main_table('plugin_bbb_meeting');
-
-        $this->enableGlobalConference = $plugin->get('enable_global_conference');
+        $this->enableGlobalConference = (bool) $plugin->get('enable_global_conference');
         $this->isGlobalConference = (bool) $isGlobalConference;
 
         $columns = Database::listTableColumns($this->table);
-
         $this->groupSupport = isset($columns['group_id']) ? true : false;
-
+        $this->userSupport = isset($columns['user_id']) ? true : false;
         $this->accessUrl = api_get_current_access_url_id();
+
+        if ($this->userSupport && !empty($isGlobalPerUser)) {
+            $this->enableGlobalConferencePerUser = (bool) $plugin->get('enable_global_conference_per_user');
+            $this->userId = $isGlobalPerUser;
+        } else {
+            $this->enableGlobalConferencePerUser = false;
+        }
 
         if ($this->groupSupport) {
             // Plugin check
             $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
-
             if ($this->groupSupport) {
 
                 // Platform check
@@ -105,7 +112,15 @@ class bbb
      */
     public function isGlobalConferenceEnabled()
     {
-        return (bool) $this->enableGlobalConference;
+        return $this->enableGlobalConference;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGlobalConferencePerUserEnabled()
+    {
+        return $this->enableGlobalConferencePerUser;
     }
 
     /**
@@ -181,8 +196,14 @@ class bbb
             $params['group_id'] = api_get_group_id();
         }
 
-        $courseCode = is_null($courseCode) ? '' : $courseCode;
-        $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $courseCode;
+        if ($this->isGlobalConferencePerUserEnabled()) {
+            $currentUserId = api_get_user_id();
+            if ($this->userId === $currentUserId) {
+                $params['user_id'] = $this->userId;
+            }
+        }
+
+        $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getUserMeetingPassword();
         $attendeePassword = $params['attendee_pw'];
         $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
@@ -485,6 +506,9 @@ class bbb
     public function getMeetings()
     {
         $pass = $this->getUserMeetingPassword();
+        $isGlobal = $this->isGlobalConference();
+        $isGlobalPerUser = $this->isGlobalConferencePerUserEnabled();
+
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
@@ -504,6 +528,15 @@ class bbb
                 'where' => array(
                     'c_id = ? AND session_id = ? AND group_id = ? AND access_url = ?' =>
                         array($courseId, $sessionId, $groupId, $this->accessUrl)
+                )
+            );
+        }
+
+        if ($isGlobalPerUser) {
+            $conditions =  array(
+                'where' => array(
+                    'user_id = ? AND access_url = ?' =>
+                        array($this->userId, $this->accessUrl)
                 )
             );
         }
@@ -804,6 +837,11 @@ class bbb
             return $this->getModMeetingPassword();
         } else {
 
+            if ($this->isGlobalConferencePerUserEnabled()) {
+
+                return 'url_'.$this->userId.'_'.api_get_current_access_url_id();
+            }
+
             if ($this->isGlobalConference()) {
 
                 return 'url_'.api_get_current_access_url_id();
@@ -819,6 +857,11 @@ class bbb
      */
     public function getModMeetingPassword()
     {
+        if ($this->isGlobalConferencePerUserEnabled()) {
+
+            return 'url_'.$this->userId.'_'.api_get_current_access_url_id().'_mod';
+        }
+
         if ($this->isGlobalConference()) {
 
             return 'url_'.api_get_current_access_url_id().'_mod';
@@ -860,6 +903,18 @@ class bbb
                 ),
             );
         }
+
+        if ($this->isGlobalConferencePerUserEnabled()) {
+            $conditions = array(
+                'where' => array(
+                    'user_id = ? AND status = 1 AND access_url = ?' => array(
+                        $this->userId,
+                        $this->accessUrl
+                    ),
+                ),
+            );
+        }
+
         $meetingData = Database::select(
             '*',
             $this->table,
@@ -893,7 +948,7 @@ class bbb
 
     /**
      * Deletes a previous recording of a meeting
-     * @param int integral ID of the recording
+     * @param int $id ID of the recording
      * @return array ?
      * @assert () === false
      * @todo Also delete links and agenda items created from this recording
@@ -901,6 +956,7 @@ class bbb
     public function deleteRecord($id)
     {
         if (empty($id)) {
+
             return false;
         }
 
@@ -925,7 +981,7 @@ class bbb
 
         $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
 
-        if (!empty($result) && isset($result['deleted']) && $result['deleted'] == 'true') {
+        if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
             Database::delete(
                 $this->table,
                 array('id = ?' => array($id))
@@ -937,7 +993,7 @@ class bbb
 
     /**
      * Creates a link in the links tool from the given videoconference recording
-     * @param int ID of the item in the plugin_bbb_meeting table
+     * @param int $id ID of the item in the plugin_bbb_meeting table
      * @param string Hash identifying the recording, as provided by the API
      * @return mixed ID of the newly created link, or false on error
      * @assert (null, null) === false
@@ -970,6 +1026,7 @@ class bbb
                     $params['url'] = $url;
                     $params['title'] = $meetingData['meeting_name'];
                     $id = $link->save($params);
+
                     return $id;
                 }
             }
@@ -1030,7 +1087,14 @@ class bbb
 
         if (empty($courseInfo)) {
 
+            if ($this->isGlobalConferencePerUserEnabled()) {
+
+                return 'global=1&user_id='.$this->userId;
+            }
+
+
             if ($this->isGlobalConference()) {
+
                 return 'global=1';
             }
 
@@ -1045,7 +1109,13 @@ class bbb
      */
     public function getCurrentVideoConferenceName()
     {
+        if ($this->isGlobalConferencePerUserEnabled()) {
+
+            return 'url_'.$this->userId.'_'.api_get_current_access_url_id();
+        }
+
         if ($this->isGlobalConference()) {
+
             return 'url_'.api_get_current_access_url_id();
         }
 

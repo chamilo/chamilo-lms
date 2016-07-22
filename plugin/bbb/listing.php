@@ -11,9 +11,9 @@ $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 
 $isGlobal = isset($_GET['global']) ? true : false;
+$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id']: false;
 
-$bbb = new bbb('', '', $isGlobal);
-
+$bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $conferenceManager = $bbb->isConferenceManager();
@@ -105,6 +105,7 @@ if ($conferenceManager) {
             break;
     }
 }
+
 $meetings = $bbb->getMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
@@ -163,6 +164,7 @@ if ($bbb->isGlobalConference() === false &&
 $tpl = new Template($tool_name);
 $tpl->assign('allow_to_edit', $conferenceManager);
 $tpl->assign('meetings', $meetings);
+
 $tpl->assign('conference_url', $conferenceUrl);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);

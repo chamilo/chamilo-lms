@@ -1,4 +1,10 @@
-Version 2.4 2016-05
+Version 2.5 - 2016-07
+---------------------
+* User global conference support
+   * Requires a database change: "ALTER TABLE plugin_bbb_meeting ADD COLUMN user_id INT DEFAULT 0"
+   * Requires a database change: "ALTER TABLE plugin_bbb_meeting ADD COLUMN access_url INT DEFAULT 0"
+   
+Version 2.4 - 2016-05
 ------------------------
 Changes:
 

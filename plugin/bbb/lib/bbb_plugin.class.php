@@ -34,13 +34,14 @@ class BBBPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.4',
+            '2.5',
             'Julio Montoya, Yannick Warnier',
             [
                 'tool_enable' => 'boolean',
                 'host' => 'text',
                 'salt' => 'text',
                 'enable_global_conference' => 'boolean',
+                'enable_global_conference_per_user' => 'boolean',
                 'enable_conference_in_course_groups' => 'boolean',
                 'enable_global_conference_link' => 'boolean'
             ]
@@ -84,6 +85,7 @@ class BBBPlugin extends Plugin
                 id INT unsigned NOT NULL auto_increment PRIMARY KEY,
                 c_id INT unsigned NOT NULL DEFAULT 0,
                 group_id INT unsigned NOT NULL DEFAULT 0,
+                user_id INT unsigned NOT NULL DEFAULT 0,
                 meeting_name VARCHAR(255) NOT NULL DEFAULT '',
                 attendee_pw VARCHAR(255) NOT NULL DEFAULT '',
                 moderator_pw VARCHAR(255) NOT NULL DEFAULT '',

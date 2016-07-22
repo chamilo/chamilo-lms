@@ -16,7 +16,8 @@ $vmIsEnabled = false;
 $host = '';
 $salt = '';
 $isGlobal = isset($_GET['global']) ? true : false;
-$bbb = new bbb('', '', $isGlobal);
+$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id']: false;
+$bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 
 if ($bbb->pluginEnabled) {
     if ($bbb->isServerRunning()) {

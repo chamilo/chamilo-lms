@@ -125,7 +125,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
             if (!$profile && $parent['parent_id'] == 0) {
                 $profile = $skillLevelRepo->findAll();
-                $profile = $profile[0];
+                $profile = !empty($profile) ? $profile[0] : [];
             }
         }
     }

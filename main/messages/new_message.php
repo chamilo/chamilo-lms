@@ -41,7 +41,7 @@ $htmlHeadXtra[] = '<script>
 var counter_image = 1;
 function add_image_form() {
 	// Multiple filepaths for image form
-	var filepaths = document.getElementById("filepaths");
+	var filepaths = document.getElementById("file_uploads");
 	if (document.getElementById("filepath_"+counter_image)) {
 		counter_image = counter_image + 1;
 	}  else {
@@ -52,7 +52,7 @@ function add_image_form() {
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\" />&nbsp; <br />'.get_lang('Description').'&nbsp;&nbsp;<input type=\"text\" name=\"legend[]\"  /><br /><br />";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<div class=\"form-group\" ><label class=\"col-sm-4\">'.get_lang('FilesAttachment').'</label><input class=\"col-sm-8\" type=\"file\" name=\"attach_"+counter_image+"\" /></div><div class=\"form-group\" ><label class=\"col-sm-4\">'.get_lang('Description').'</label><div class=\"col-sm-8\"><input style=\"width:100%\" type=\"text\" name=\"legend[]\" /></div></div>";
 	if (filepaths.childNodes.length == 6) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
@@ -186,14 +186,22 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
         $form->addElement(
             'label',
             '',
-            '<div id="filepaths" class="form-group">
-                <div id="filepath_1">
-                <label>'.get_lang('FilesAttachment').'</label>
-                <input type="file" name="attach_1"/>
-                <label>'.get_lang('Description').'</label>
-                <input id="file-descrtiption" type="text" name="legend[]" />
+            '<div id="file_uploads"><div id="filepath_1">
+                <div id="filepaths" class="form-horizontal">
+                    <div id="paths-file" class="form-group">
+                    <label class="col-sm-4">'.get_lang('FilesAttachment').'</label>
+                    <input class="col-sm-8" type="file" name="attach_1"/>
+                    </div>
                 </div>
-            </div>'
+                <div id="paths-description" class="form-group">
+                    <label class="col-sm-4">'.get_lang('Description').'</label>
+                    <div class="col-sm-8">
+                    <input id="file-descrtiption" style="width:100%;" type="text" name="legend[]" />
+                    </div>
+                </div>
+            </div>
+            </div>
+            '
         );
 
         $form->addLabel('', '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');

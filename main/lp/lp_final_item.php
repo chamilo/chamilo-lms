@@ -118,7 +118,7 @@ if ($accessGranted == false) {
 // Instance a new template : No page tittle, No header, No footer
 $tpl = new Template(null, false, false);
 $tpl->assign('content', $finalItemTemplate);
-$tpl->display_one_col_template();
+$tpl->display_blank_template();
 
 // A few functions used only here...
 

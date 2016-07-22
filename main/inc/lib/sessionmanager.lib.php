@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\ExtraField;
 
 /**
  * Class SessionManager
@@ -6105,7 +6106,7 @@ class SessionManager
             foreach ($extraFields as $field) {
                 $fieldsArray[] = Database::escape_string($field);
             }
-            $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
+            $extraFieldType = ExtraField::SESSION_FIELD_TYPE;
             if (isset ($publicationDate)) {
                 $publicationDateString = $publicationDate->format('Y-m-d H:i:s');
                 $wherePublication = " AND id NOT IN (
@@ -6266,7 +6267,7 @@ class SessionManager
                 )
             );
 
-            $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
+            $extraFieldType = ExtraField::SESSION_FIELD_TYPE;
 
             // Check if session list query had result
             if (!empty($sessionList)) {
@@ -6411,7 +6412,7 @@ class SessionManager
         $sfvTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
         $term = Database::escape_string($term);
-        $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
+        $extraFieldType = ExtraField::SESSION_FIELD_TYPE;
         if (is_array($extraFieldsToInclude) && count($extraFieldsToInclude) > 0) {
             $resultData = Database::select('*', $sTable, array(
                 'where' => array(

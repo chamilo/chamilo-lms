@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt*/
 
+use Chamilo\CoreBundle\Entity\ExtraField;
+
 /**
 * This script allows teachers to subscribe existing users
 * to their course.
@@ -840,7 +842,7 @@ function search_additional_profile_fields($keyword)
 		$profiling_field_options_exact_values_sql .= " OR (field_id = '".$profilingvalue['field_id']."' AND value='".$profilingvalue['option_value']."') ";
 	}
 
-    $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE;
+    $extraFieldType = ExtraField::USER_FIELD_TYPE;
 
 	// getting all the user ids of the users who have chosen on of the predefined fields that contain the keyword
 	// or all the users who have entered the keyword in a free-form field

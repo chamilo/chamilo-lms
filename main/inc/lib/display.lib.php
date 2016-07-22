@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\ExtraField;
 
 /**
  * Class Display
@@ -1639,7 +1640,7 @@ class Display
             $entityManager = Database::getManager();
             $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
             $extraFieldValues = $fieldValuesRepo->getVisibleValues(
-                Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE,
+                ExtraField::SESSION_FIELD_TYPE,
                 $session_id
             );
 

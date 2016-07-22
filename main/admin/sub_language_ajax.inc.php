@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use \Chamilo\CoreBundle\Entity\ExtraField;
+
 /**
  * Sub language AJAX script to update variables
  * @package chamilo.admin.sub_language
@@ -53,13 +56,13 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
         $redirectUrl = api_get_path(WEB_CODE_PATH) . 'admin/extra_fields.php?type=';
 
         switch ($_REQUEST['extra_field_type']) {
-            case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
+            case ExtraField::USER_FIELD_TYPE:
                 $redirectUrl .= 'user';
                 break;
-            case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
+            case ExtraField::COURSE_FIELD_TYPE:
                 $redirectUrl .= 'course';
                 break;
-            case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
+            case ExtraField::SESSION_FIELD_TYPE:
                 $redirectUrl .= 'session';
                 break;
         }

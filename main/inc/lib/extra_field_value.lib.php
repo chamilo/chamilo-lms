@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 
 /**
  * Class ExtraFieldValue
@@ -189,7 +190,7 @@ class ExtraFieldValue extends Model
                     $em->flush();
 
                     foreach ($tags as $tag) {
-                        $fieldRelTag = new Chamilo\CoreBundle\Entity\ExtraFieldRelTag();
+                        $fieldRelTag = new ExtraFieldRelTag();
                         $fieldRelTag->setFieldId($extraFieldInfo['id']);
                         $fieldRelTag->setItemId($params['item_id']);
                         $fieldRelTag->setTagId($tag->getId());
@@ -709,7 +710,7 @@ class ExtraFieldValue extends Model
                     sf.extra_field_type = $extraFieldType
                 ORDER BY item_id
                 ";
-        
+
         if ($last) {
             // If we want the last element instead of the first
             // This is useful in special cases where there might

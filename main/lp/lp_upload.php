@@ -60,7 +60,6 @@ if (isset($_POST) && $is_error) {
 
     switch ($type) {
         case 'scorm':
-            require_once 'scorm.class.php';
             $oScorm = new scorm();
             $manifest = $oScorm->import_package($_FILES['user_file'], $current_dir);
             if (!empty($manifest)) {
@@ -146,18 +145,19 @@ if (isset($_POST) && $is_error) {
                 }
 
                 $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
+                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
             }
             $oScorm->set_proximity($proximity);
             $oScorm->set_maker($maker);
             $oScorm->set_jslib('scorm_api.php');
             break;
         case 'aicc':
-            require_once 'aicc.class.php';
             $oAICC = new aicc();
             $config_dir = $oAICC->import_package($_FILES['user_file']);
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
+                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
             }
             $oAICC->set_proximity($proximity);
             $oAICC->set_maker($maker);
@@ -168,16 +168,18 @@ if (isset($_POST) && $is_error) {
             $take_slide_name = empty($_POST['take_slide_name']) ? false : true;
             $o_ppt = new OpenofficePresentation($take_slide_name);
             $first_item_id = $o_ppt->convert_document($_FILES['user_file'], 'make_lp', $_POST['slide_size']);
+            Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
             break;
         case 'woogie':
             require_once 'openoffice_text.class.php';
             $split_steps = (empty($_POST['split_steps']) || $_POST['split_steps'] == 'per_page') ? 'per_page' : 'per_chapter';
             $o_doc = new OpenofficeText($split_steps);
             $first_item_id = $o_doc->convert_document($_FILES['user_file']);
+            Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
             break;
         case '':
         default:
-            Display::addFlash(Display::return_message(get_lang('ScormUnknownPackageFormat')));
+            Display::addFlash(Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning'));
             return false;
             break;
     }
@@ -211,12 +213,12 @@ if (isset($_POST) && $is_error) {
 
     switch ($type) {
         case 'scorm':
-            require_once 'scorm.class.php';
             $oScorm = new scorm();
             $manifest = $oScorm->import_local_package($s, $current_dir);
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
                 $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
+                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
             }
 
             $proximity = '';
@@ -232,12 +234,12 @@ if (isset($_POST) && $is_error) {
             $oScorm->set_jslib('scorm_api.php');
             break;
         case 'aicc':
-            require_once 'aicc.class.php';
             $oAICC = new aicc();
             $config_dir = $oAICC->import_local_package($s, $current_dir);
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
+                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
             }
             $proximity = '';
             if (!empty($_REQUEST['content_proximity'])) {
@@ -254,7 +256,7 @@ if (isset($_POST) && $is_error) {
         case '':
         default:
             Display::addFlash(
-                Display::return_message(get_lang('ScormUnknownPackageFormat'))
+                Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning')
             );
             return false;
             break;

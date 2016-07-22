@@ -25,8 +25,8 @@ if (!api_get_multiple_access_url()) {
 
 // Setting breadcrumbs
 $tool_name = get_lang('EditUserGroupToURL');
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
@@ -35,7 +35,7 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
 
 $access_url_id = 1;
 if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id'] != '') {
-    $access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
+    $access_url_id = (int) $_REQUEST['access_url_id'];
 }
 
 $xajax->processRequests();
@@ -43,7 +43,6 @@ $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script>
 function add_user_to_url(code, content) {
-
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses").innerHTML = "";
 
@@ -55,7 +54,6 @@ function add_user_to_url(code, content) {
 }
 
 function send() {
-
 	if (document.formulaire.access_url_id.value!=0) {
 		document.formulaire.form_sent.value=0;
 		document.formulaire.add_type.value=\''.$add_type.'\';
@@ -73,10 +71,9 @@ function remove_item(origin) {
 }
 </script>';
 
-$form_sent=0;
-$errorMsg='';
-$UserList=$SessionList = array();
-$users=$sessions = array();
+$form_sent = 0;
+$UserList = $SessionList = array();
+$users = $sessions = array();
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
@@ -123,11 +120,13 @@ if ($ajax_search) {
 }
 
 if ($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeUnique').'</a>';
+	$link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.
+        get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
 } else {
 	$link_add_type_unique = get_lang('SessionAddTypeUnique');
-	$link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeMultiple').'</a>';
+	$link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.
+        get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 $url_list = UrlManager::get_url_data();
@@ -166,13 +165,6 @@ $url_list = UrlManager::get_url_data();
 <br /><br />
 <input type="hidden" name="form_sent" value="1" />
 <input type="hidden" name="add_type" value = "<?php echo $add_type ?>" />
-
-<?php
-if (!empty($errorMsg)) {
-    Display::display_normal_message($errorMsg); //main API
-}
-?>
-
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <!-- Users -->
 <tr>
@@ -190,35 +182,27 @@ if (!empty($errorMsg)) {
 		<div id="ajax_list_courses"></div>
     <?php } else { ?>
 	  <select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:380px;">
-		<?php
-		foreach ($noUserGroupList as $noItem) {
-		?>
+		<?php foreach ($noUserGroupList as $noItem) { ?>
 			<option value="<?php echo $noItem['id']; ?>">
                 <?php echo $noItem['name']; ?>
             </option>
-		<?php
-		}
-		?>
+		<?php } ?>
 	  </select>
-	<?php
-  	  }
-  	 ?>
+    <?php } ?>
   </div>
   </td>
   <td width="10%" valign="middle" align="center">
-  <?php
-  if ($ajax_search) {
-	?>
+  <?php if ($ajax_search) { ?>
 	<button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" ></button>
-  	<?php
-  } else {
-  	?>
-	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" ></button>
+  <?php } else { ?>
+	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
+        <em class="fa fa-arrow-right"></em>
+    </button>
 	<br /><br />
-	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" ></button>
-	<?php
-  }
-  ?>
+	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
+        <em class="fa fa-arrow-left"></em>
+    </button>
+   <?php } ?>
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">

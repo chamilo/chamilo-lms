@@ -78,7 +78,6 @@ function remove_item(origin) {
 </script>';
 
 $form_sent = 0;
-$errorMsg = '';
 $UserList = $SessionList = array();
 $users = $sessions = array();
 
@@ -99,13 +98,17 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             Display::addFlash(Display::return_message(get_lang('CoursesWereEdited')));
             header('Location: access_urls.php?');
         }
+        exit;
     }
 }
 
 Display::display_header($tool_name);
 
 echo '<div class="actions">';
-echo Display::url( Display::return_icon('view_more_stats.gif', get_lang('AddUserToURL'),''), api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php');
+echo Display::url(
+    Display::return_icon('view_more_stats.gif', get_lang('AddUserToURL')),
+    api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php'
+);
 echo '</div>';
 
 api_display_tool_title($tool_name);
@@ -113,40 +116,40 @@ api_display_tool_title($tool_name);
 $no_course_list = $course_list = array();
 $ajax_search = $add_type == 'unique' ? true : false;
 
-if($ajax_search) {
-	$courses = UrlManager::get_url_rel_course_data($access_url_id);
-	foreach ($courses as $course) {
-		$course_list[$course['c_id']] = $course;
-	}
+if ($ajax_search) {
+    $courses = UrlManager::get_url_rel_course_data($access_url_id);
+    foreach ($courses as $course) {
+        $course_list[$course['c_id']] = $course;
+    }
 } else {
-	$courses = UrlManager::get_url_rel_course_data();
+    $courses = UrlManager::get_url_rel_course_data();
 
-	foreach ($courses as $course) {
-		if ($course['access_url_id'] == $access_url_id) {
-			$course_list[$course['c_id']] = $course;
-		}
-	}
+    foreach ($courses as $course) {
+        if ($course['access_url_id'] == $access_url_id) {
+            $course_list[$course['c_id']] = $course;
+        }
+    }
 
-	$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$sql="SELECT id, code, title
-	  	  	FROM $tbl_course u
-			ORDER BY title, code";
-	$result = Database::query($sql);
-	$courses = Database::store_result($result);
-	$course_list_leys = array_keys($course_list);
-	foreach ($courses as $course) {
-		if (!in_array($course['id'], $course_list_leys)) {
-			$no_course_list[$course['id']] = $course;
-		}
-	}
+    $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+    $sql = "SELECT id, code, title
+            FROM $tbl_course u
+            ORDER BY title, code";
+    $result = Database::query($sql);
+    $courses = Database::store_result($result);
+    $course_list_leys = array_keys($course_list);
+    foreach ($courses as $course) {
+        if (!in_array($course['id'], $course_list_leys)) {
+            $no_course_list[$course['id']] = $course;
+        }
+    }
 }
 
-if($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeUnique').'</a>';
-	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
+if ($add_type == 'multiple') {
+    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeUnique').'</a>';
+    $link_add_type_multiple = get_lang('SessionAddTypeMultiple');
 } else {
-	$link_add_type_unique = get_lang('SessionAddTypeUnique');
-	$link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeMultiple').'</a>';
+    $link_add_type_unique = get_lang('SessionAddTypeUnique');
+    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeMultiple').'</a>';
 }
 $url_list = UrlManager::get_url_data();
 ?>
@@ -179,11 +182,6 @@ $url_list = UrlManager::get_url_data();
 		<br /><br />
 		<input type="hidden" name="form_sent" value="1" />
 		<input type="hidden" name="add_type" value = "<?php echo $add_type ?>" />
-		<?php
-		if(!empty($errorMsg)) {
-			Display::display_normal_message($errorMsg); //main API
-		}
-		?>
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 
 			<!-- Users -->

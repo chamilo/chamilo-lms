@@ -837,15 +837,21 @@ class CourseCategory
     public static function getCourseCategoryNotInList($list)
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+
         if (empty($list)) {
-            return array();
+
+            $sql = "SELECT * FROM $table
+                    WHERE (parent_id IS NULL) ";
+            $result = Database::query($sql);
+
+            return Database::store_result($result, 'ASSOC');
         }
 
         $list = array_map('intval', $list);
         $listToString = implode("','", $list);
 
         $sql = "SELECT * FROM $table
-            WHERE id NOT IN ('$listToString') AND (parent_id IS NULL) ";
+                WHERE id NOT IN ('$listToString') AND (parent_id IS NULL) ";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

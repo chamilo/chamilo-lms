@@ -25,17 +25,14 @@ if (!api_is_allowed_to_edit(null, true)) {
 }
 
 // the breadcrumbs
-$interbreadcrumb[]= array ("url"=>"exercise.php", "name"=> get_lang('Exercises'));
+$interbreadcrumb[] = array("url" => 'exercise.php?'.api_get_cidreq(), "name" => get_lang('Exercises'));
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
-
-
-$message = '';
 // import file
 if ((api_is_allowed_to_edit(null, true))) {
     if (isset($_POST['submit'])) {
-        $message = aiken_import_file($_FILES['userFile']);
-        if (is_numeric($message) && !empty($message)) {
-            header('Location: admin.php?' . api_get_cidreq() . '&exerciseId=' . $message);
+        $id = aiken_import_file($_FILES['userFile']);
+        if (is_numeric($id) && !empty($id)) {
+            header('Location: admin.php?' . api_get_cidreq() . '&exerciseId=' . $id);
             exit;
         }
     }
@@ -45,7 +42,7 @@ if ((api_is_allowed_to_edit(null, true))) {
 Display::display_header(get_lang('ImportAikenQuiz'), 'Exercises');
 
 // display Aiken form
-aiken_display_form($message);
+aiken_display_form();
 
 // display the footer
 Display::display_footer();

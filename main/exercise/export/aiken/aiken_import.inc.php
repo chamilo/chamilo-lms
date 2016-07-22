@@ -35,18 +35,25 @@ function tempdir($dir, $prefix = 'tmp', $mode = 0777) {
  * This function displays the form for import of the zip file with qti2
  * @param   string  Report message to show in case of error
  */
-function aiken_display_form($msg = '') {
+function aiken_display_form()
+{
     $name_tools = get_lang('ImportAikenQuiz');
     $form  = '<div class="actions">';
-    $form .= '<a href="exercise.php?show=test">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+    $form .= '<a href="exercise.php?show=test&'.api_get_cidreq().'">' .
+        Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     $form .= '</div>';
-    $form .= $msg;
-    $form_validator  = new FormValidator('aiken_upload', 'post',api_get_self()."?".api_get_cidreq(), null, array('enctype' => 'multipart/form-data') );
+    $form_validator = new FormValidator(
+        'aiken_upload',
+        'post',
+        api_get_self()."?".api_get_cidreq(),
+        null,
+        array('enctype' => 'multipart/form-data')
+    );
     $form_validator->addElement('header', $name_tools);
     $form_validator->addElement('text', 'total_weight', get_lang('TotalWeight'));
     $form_validator->addElement('file', 'userFile', get_lang('DownloadFile'));
-    $form_validator->addButtonUpload(get_lang('Send'), 'submit');
-    $form .= $form_validator->return_form();
+    $form_validator->addButtonUpload(get_lang('Upload'), 'submit');
+    $form .= $form_validator->returnForm();
     $form .= '<blockquote>'.get_lang('ImportAikenQuizExplanation').'<br /><pre>'.get_lang('ImportAikenQuizExplanationExample').'</pre></blockquote>';
     echo $form;
 }
@@ -86,11 +93,6 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
 function aiken_import_exercise($file)
 {
     global $exercise_info;
-    global $element_pile;
-    global $non_HTML_tag_to_avoid;
-    global $record_item_body;
-    // used to specify the question directory where files could be found in relation in any question
-    global $questionTempDir;
     $archive_path = api_get_path(SYS_ARCHIVE_PATH) . 'aiken';
     $baseWorkDir = $archive_path;
 
@@ -104,10 +106,6 @@ function aiken_import_exercise($file)
     $exercise_info = array();
     $exercise_info['name'] = preg_replace('/.(zip|txt)$/i', '', $file);
     $exercise_info['question'] = array();
-    $element_pile = array();
-
-    // create parser and array to retrieve info from manifest
-    $element_pile = array(); //pile to known the depth in which we are
 
     // if file is not a .zip, then we cancel all
     if (!preg_match('/.(zip|txt)$/i', $file)) {
@@ -156,7 +154,8 @@ function aiken_import_exercise($file)
         $result = 'NoTxtFileFoundInTheZip';
     }
 
-    if ($result !== true ) {
+    if ($result !== true) {
+
         return $result;
     }
 
@@ -331,8 +330,8 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
  * Imports the zip file
  * @param array $array_file ($_FILES)
  */
-function aiken_import_file($array_file) {
-
+function aiken_import_file($array_file)
+{
     $unzip = 0;
     $process = process_uploaded_file($array_file, false);
     if (preg_match('/\.(zip|txt)$/i', $array_file['name'])) {
@@ -343,12 +342,15 @@ function aiken_import_file($array_file) {
     if ($process && $unzip == 1) {
         $imported = aiken_import_exercise($array_file['name']);
         if (is_numeric($imported) && !empty($imported)) {
+
+            Display::addFlash(Display::return_message(get_lang('Uploaded')));
+
             return $imported;
 
         } else {
-            $msg = Display::return_message(get_lang($imported), 'error');
+            Display::addFlash(Display::return_message(get_lang($imported), 'error'));
 
-            return $msg;
+            return false;
         }
     }
 }

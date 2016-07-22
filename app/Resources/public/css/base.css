@@ -1670,7 +1670,9 @@ div.admin_section h4 {
     height:38px !important;
     white-space: inherit;
 }
-
+.ui-search-table .ui-search-input input{
+    height: 25px;
+}
 .exercise_overview_options {
     background-color: #F9F9F9;
     -webkit-border-radius: 10px;
@@ -5101,7 +5103,7 @@ div#chat-remote-video video {
 .ui-jqgrid-view .ui-state-default,
 .ui-jqgrid-view .ui-widget-content .ui-state-default,
 .ui-jqgrid-view .ui-widget-header .ui-state-default{
-  background: #EEEEEE;
+  background: transparent;
   color: #666666;
   border: none;
 }
@@ -5117,10 +5119,6 @@ div#chat-remote-video video {
 .ui-jqgrid-view .ui-jqgrid .ui-jqgrid-htable th div{
   height: auto;
 }
-.ui-jqgrid-view .ui-th-ltr, .ui-jqgrid .ui-jqgrid-htable th.ui-th-ltr{
-  padding-bottom: 5px;
-  padding-top: 5px;
-}
 .ui-jqgrid tr.ui-row-ltr td{
   border: none;
 }
@@ -5129,7 +5127,7 @@ div#chat-remote-video video {
   font-size: 13px;
 }
 .ui-jqgrid .ui-jqgrid-labels .ui-state-hover{
-  background-color: #E7E7E7;
+  background-color: transparent;
 }
 .ui-jqgrid .ui-pg-selbox{
   font-size: 12px;
@@ -5875,6 +5873,10 @@ footer{
 }
 .block-invitation .title-profile{
     font-weight: bold;
+}
+.view-options{
+    padding-top: 7px;
+    margin-right: 10px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

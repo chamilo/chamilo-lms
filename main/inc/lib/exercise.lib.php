@@ -1922,7 +1922,7 @@ HOTSPOT;
                                     $teacher_id_list
                                 )) {
                                     $actions .= Display::return_icon(
-                                        'teachers.gif',
+                                        'teacher.png',
                                         get_lang('Teacher')
                                     );
                                 }
@@ -1939,7 +1939,7 @@ HOTSPOT;
                             } else {
                                 $actions .= "<a href='exercise_show.php?" . api_get_cidreq() . "&action=qualify&id=$id'>" .
                                     Display:: return_icon(
-                                        'quiz.gif',
+                                        'quiz.png',
                                         get_lang('Qualify')
                                     );
                                 $actions .= '&nbsp;';
@@ -1949,7 +1949,7 @@ HOTSPOT;
                             if ($filter == 2) {
                                 $actions .= ' <a href="exercise_history.php?' . api_get_cidreq() . '&exe_id=' . $id . '">' .
                                     Display:: return_icon(
-                                        'history.gif',
+                                        'history.png',
                                         get_lang('ViewHistoryChange')
                                     ) . '</a>';
                             }

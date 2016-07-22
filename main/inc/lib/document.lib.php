@@ -1574,6 +1574,7 @@ class DocumentManager
         if (!in_array($file_type, array('file', 'folder'))) {
             $file_type = 'file';
         }
+        $doc_path = Database::escape_string($doc_path).'/';
 
         $sql = "SELECT visibility
                 FROM $docTable d
@@ -1582,7 +1583,7 @@ class DocumentManager
         		WHERE
         		    ip.tool = '" . TOOL_DOCUMENT . "' $condition AND
         			filetype = '$file_type' AND
-        			locate(concat(path,'/'), '" . Database::escape_string($doc_path.'/'). "')=1
+        			locate(concat(path,'/'), '$doc_path')=1
                 ";
 
         $result = Database::query($sql);

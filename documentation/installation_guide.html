@@ -551,8 +551,11 @@ Note: Xapian's licensing for the PHP extension is a bit different than what is n
 On Debian or Ubuntu 11.10 and superior, install LibreOffice v3 (or v4) and start it as a headless server:
 <pre>
 sudo apt-get install libreoffice screen
-sudo screen
-su - www-data
+sudo adduser rapid
+sudo adduser rapid www-data
+screen
+sudo -s
+su - rapid
 soffice --accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" --headless --nodefault --nofirststartwizard --nolockcheck --nologo --norestore
 CTRL+a, CTRL+d
 </pre>

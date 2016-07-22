@@ -20,6 +20,8 @@ abstract class OpenofficeDocument extends learnpath
     public $first_item = 0;
     public $original_charset = 'utf-8';
     public $original_locale = 'en_US.UTF-8';
+    public $slide_width;
+    public $slide_height;
 
     /**
      * Class constructor. Based on the parent constructor.
@@ -38,11 +40,13 @@ abstract class OpenofficeDocument extends learnpath
     }
 
     /**
+     * Calls the LibreOffice server to convert the PPTs to a set of HTML + png files in a learning path
      * @param string $file
      * @param string $action_after_conversion
+     * @param string $size The size to which we want the slides to be generated
      * @return bool|int
      */
-    public function convert_document($file, $action_after_conversion = 'make_lp')
+    public function convert_document($file, $action_after_conversion = 'make_lp', $size = null)
     {
         $_course = api_get_course_info();
         $this->file_name = pathinfo($file['name'], PATHINFO_FILENAME);
@@ -54,9 +58,10 @@ abstract class OpenofficeDocument extends learnpath
         ///learning_path/ppt_dirname directory
         $this->created_dir = $result['dir'];
         if (substr($this->created_dir, -1, 1) == '/') {
-            $this->created_dir = substr($this->created_dir, 0, - 1);
+            $this->file_path = $this->created_dir . api_replace_dangerous_char($file['name']);
+        } else {
+            $this->file_path = $this->created_dir . '/' . api_replace_dangerous_char($file['name']);
         }
-        $this->file_path = $this->created_dir.'/'.api_replace_dangerous_char($file['name']);
 
         //var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
 
@@ -83,6 +88,13 @@ abstract class OpenofficeDocument extends learnpath
             var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
 
         */
+        if (!empty($size)) {
+            list($w, $h) = explode('x', $size);
+            if (!empty($w) && !empty($h)) {
+                $this->slide_width = $w;
+                $this->slide_height = $h;
+            }
+        }
 
         $ppt2lp_host = api_get_setting('service_ppt2lp', 'host');
 
@@ -135,7 +147,7 @@ abstract class OpenofficeDocument extends learnpath
             }
         } else {
             // get result from webservices
-            $result = $this->_get_remote_ppt2lp_files($file);
+            $result = $this->_get_remote_ppt2lp_files($file, $size);
             $result = unserialize($result);
             // Save remote images to server
             chmod($this->base_work_dir . $this->created_dir, api_get_permissions_for_new_directories());
@@ -174,10 +186,11 @@ abstract class OpenofficeDocument extends learnpath
 
     /**
      * Get images files from remote host (with webservices)
-     * @param   array current ppt file
+     * @param   array $file current ppt file details
+     * @param   string  $size The expected final size of the rendered slides
      * @return  array images files
      */
-    private function _get_remote_ppt2lp_files($file)
+    private function _get_remote_ppt2lp_files($file, $size = null)
     {
         // host
         $ppt2lp_host = api_get_setting('service_ppt2lp', 'host');
@@ -198,13 +211,14 @@ abstract class OpenofficeDocument extends learnpath
 
         $file_data = base64_encode(file_get_contents($file['tmp_name']));
         $file_name = $file['name'];
-        $service_ppt2lp_size = api_get_setting('service_ppt2lp', 'size');
-
+        if (empty($size)) {
+            $size = api_get_setting('service_ppt2lp', 'size');
+        }
         $params = array(
             'secret_key' => $secret_key,
             'file_data' => $file_data,
             'file_name' => $file_name,
-            'service_ppt2lp_size' => $service_ppt2lp_size,
+            'service_ppt2lp_size' => $size,
         );
 
         $result = $client->__call('wsConvertPpt', array('pptData' => $params));

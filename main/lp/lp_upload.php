@@ -170,7 +170,7 @@ if (isset($_POST) && $is_error) {
             require_once 'openoffice_presentation.class.php';
             $take_slide_name = empty($_POST['take_slide_name']) ? false : true;
             $o_ppt = new OpenofficePresentation($take_slide_name);
-            $first_item_id = $o_ppt->convert_document($_FILES['user_file']);
+            $first_item_id = $o_ppt->convert_document($_FILES['user_file'], 'make_lp', $_POST['slide_size']);
             break;
         case 'woogie':
             require_once 'openoffice_text.class.php';

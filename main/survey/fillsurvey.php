@@ -1174,7 +1174,7 @@ $g_ic = isset($_GET['invitationcode']) ? Security::remove_XSS($_GET['invitationc
 $g_cr = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : '';
 
-$add_parameters = isset($_GET['user_id']) ? 'user_id='.$_GET['user_id'].'&amp;' : '';
+$add_parameters = isset($_GET['user_id']) ? 'user_id='.intval($_GET['user_id']).'&amp;' : '';
 
 $url = api_get_self().'?'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show.'&cidReq='.$g_cr;
 $form = new FormValidator('question', 'post', $url);

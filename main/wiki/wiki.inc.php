@@ -2136,7 +2136,9 @@ class Wiki
             <tr><td>'.$photo.'<br />'.Display::tag('span', api_get_person_name($userinfo['firstname'], $userinfo['lastname']), array('title'=>$username)).'</td></tr>
         </table></div>';
 
-        $content_orig_B = '<br/><div align="center" style="font-size:24px">'.get_lang('AssignmentDescription').': '.$title_orig.'</div><br/>'.$_POST['content'];
+        $content_orig_B = '<br/><div align="center" style="font-size:24px">'.
+            get_lang('AssignmentDescription').': '.
+            $title_orig.'</div><br/>'.Security::remove_XSS($_POST['content']);
 
         //Second: student list (names, photo and links to their works).
         //Third: Create Students work pages.
@@ -2180,7 +2182,7 @@ class Wiki
                             'span',
                             strtoupper($o_user_to_add['lastname']).', '.$o_user_to_add['firstname'], array('title'=>$username)
                         ).
-                        ' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
+                        ' [['.Security::remove_XSS($_POST['title'])."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
                     //don't change this line without guaranteeing that users will be ordered by last names in the following format (surname, name)
                     $values['assignment']=2;
                 }

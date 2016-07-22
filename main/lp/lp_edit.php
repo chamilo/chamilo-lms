@@ -27,8 +27,11 @@ if (!empty($gradebook) && $gradebook == 'view') {
         'name' => get_lang('ToolGradebook')
     );
 }
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id(), 'name' => $_SESSION['oLP']->get_name());
+$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list?'.api_get_cidreq(), 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array(
+    'url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id().'&'.api_get_cidreq(),
+    'name' => $_SESSION['oLP']->get_name()
+);
 
 $htmlHeadXtra[] = '<script>
 function activate_start_date() {
@@ -52,7 +55,7 @@ function activate_end_date() {
 $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
 
 $defaults = array();
-$form = new FormValidator('form1', 'post', 'lp_controller.php');
+$form = new FormValidator('form1', 'post', 'lp_controller.php?'.api_get_cidreq());
 
 // Form title
 $form->addElement('header', get_lang('EditLPSettings'));
@@ -61,9 +64,7 @@ $form->addElement('header', get_lang('EditLPSettings'));
 $form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), array('size' => 43));
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
-
 $form->addElement('hidden', 'lp_encoding');
-
 $items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id(), true);
 $form->addElement('select', 'category_id', get_lang('Category'), $items);
 
@@ -75,7 +76,7 @@ $hide_toc_frame = $form->addElement(
     get_lang('HideTocFrame'),
     array('onclick' => '$("#lp_layout_column").toggle()')
 );
-if (api_get_setting('allow_course_theme') == 'true') {
+if (api_get_setting('allow_course_theme') === 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) {
         //LP theme picker
@@ -83,7 +84,7 @@ if (api_get_setting('allow_course_theme') == 'true') {
         $form->applyFilter('lp_theme', 'trim');
 
         $s_theme = $_SESSION['oLP']->get_theme();
-        $theme_select ->setSelected($s_theme); //default
+        $theme_select->setSelected($s_theme); //default
     }
 }
 
@@ -98,7 +99,6 @@ $form->addElement(
 $form->applyFilter('lp_author', 'html_filter');
 
 // LP image
-$form->add_progress_bar();
 if (strlen($_SESSION['oLP']->get_preview_image()) > 0) {
     $show_preview_image = '<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
     $form->addElement('label', get_lang('ImagePreview'), $show_preview_image);
@@ -113,7 +113,7 @@ $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', ar
 if (api_get_setting('search_enabled') === 'true') {
     $specific_fields = get_specific_field_list();
     foreach ($specific_fields as $specific_field) {
-        $form -> addElement ('text', $specific_field['code'], $specific_field['name']);
+        $form->addElement('text', $specific_field['code'], $specific_field['name']);
         $filter = array(
             'c_id' => "'".api_get_course_int_id()."'",
             'field_id' => $specific_field['id'],
@@ -142,11 +142,11 @@ $expired_on = $_SESSION['oLP']->expired_on;
 $publicated_on = $_SESSION['oLP']->publicated_on;
 
 // Prerequisites
-$form->addElement('html','<div class="form-group">');
+$form->addElement('html', '<div class="form-group">');
 $items = $_SESSION['oLP']->display_lp_prerequisites_list();
-$form->addElement('html','<label class="col-md-2">'.get_lang('LearnpathPrerequisites').'</label>');
-$form->addElement('html','<div class="col-md-10">');
-$form->addElement('html',$items);
+$form->addElement('html', '<label class="col-md-2">'.get_lang('LearnpathPrerequisites').'</label>');
+$form->addElement('html', '<div class="col-md-10">');
+$form->addElement('html', $items);
 $form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDescription').'</div></div></div>');
 
 //Start date
@@ -160,13 +160,13 @@ $form->addElement(
 
 $display_date = 'none';
 if (!empty($publicated_on)) {
-	$display_date = 'block';
-	$defaults['activate_start_date_check'] = 1;
+    $display_date = 'block';
+    $defaults['activate_start_date_check'] = 1;
 }
 
-$form->addElement('html','<div id="start_date_div" style="display:'.$display_date.';">');
+$form->addElement('html', '<div id="start_date_div" style="display:'.$display_date.';">');
 $form->addDatePicker('publicated_on', get_lang('PublicationDate'));
-$form->addElement('html','</div>');
+$form->addElement('html', '</div>');
 
 //End date
 $form->addElement(
@@ -182,9 +182,9 @@ if (!empty($expired_on)) {
 	$defaults['activate_end_date_check'] = 1;
 }
 
-$form->addElement('html','<div id="end_date_div" style="display:'.$display_date.';">');
+$form->addElement('html', '<div id="end_date_div" style="display:'.$display_date.';">');
 $form->addDatePicker('expired_on', get_lang('ExpirationDate'));
-$form->addElement('html','</div>');
+$form->addElement('html', '</div>');
 
 if (api_is_platform_admin()) {
     $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));
@@ -201,7 +201,6 @@ $form->addElement(
 );
 
 $enableLpExtraFields = false;
-
 if ($enableLpExtraFields) {
     $extraField = new ExtraField('lp');
     $extra = $extraField->addElements($form, $_SESSION['oLP']->get_id());
@@ -231,9 +230,7 @@ $form->setDefaults($defaults);
 Display::display_header(get_lang('CourseSettings'), 'Path');
 
 echo $_SESSION['oLP']->build_action_menu(false, false, true, false);
-
 echo '<div class="row">';
-
 if ($_SESSION['oLP']->get_hide_toc_frame() == 1) {
     echo '<div class="col-md-12">';
     $form -> display();

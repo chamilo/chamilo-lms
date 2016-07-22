@@ -84,10 +84,10 @@ class learnpath
      * Constructor.
      * Needs a database handler, a course code and a learnpath id from the database.
      * Also builds the list of items into $this->items.
-     * @param	string	$course Course code
-     * @param	integer	$lp_id
-     * @param	integer	$user_id
-     * @return mixed True on success, false on error
+     * @param   string $course Course code
+     * @param   integer $lp_id
+     * @param   integer $user_id
+     * @return  mixed True on success, false on error
      */
     public function __construct($course, $lp_id, $user_id)
     {
@@ -11029,7 +11029,7 @@ EOD;
     /**
      * Get the LP Final Item Template
      *
-     * @return html
+     * @return string
      */
     private function getFinalItemTemplate()
     {
@@ -11039,7 +11039,7 @@ EOD;
     /**
      * Get the LP Final Item Url
      *
-     * @return String
+     * @return string
      */
     private function getSavedFinalItem()
     {

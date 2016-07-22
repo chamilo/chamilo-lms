@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  * 	Upload quiz: This script shows the upload quiz feature
  *  Initial work by Isaac flores on Nov 4 of 2010
  *  Encoding fixes Julio Montoya
  * 	@package chamilo.exercise
  */
-use \ChamiloSession as Session;
 
 // setting the help
 $help_content = 'exercise_upload';
@@ -70,8 +71,8 @@ function lp_upload_quiz_secondary_actions()
     return $return;
 }
 
-function lp_upload_quiz_main() {
-
+function lp_upload_quiz_main()
+{
     // variable initialisation
     $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : null;
 
@@ -112,9 +113,13 @@ function lp_upload_quiz_main() {
     $table = $table->toHtml();
 
     $form->addElement('label', get_lang('QuestionType'), $table);
-
-
-    $form->addElement('checkbox', 'user_custom_score', null, get_lang('UseCustomScoreForAllQuestions'), array('id'=> 'user_custom_score'));
+    $form->addElement(
+        'checkbox',
+        'user_custom_score',
+        null,
+        get_lang('UseCustomScoreForAllQuestions'),
+        array('id' => 'user_custom_score')
+    );
     $form->addElement('html', '<div id="options" style="display:none">');
     $form->addElement('text', 'correct_score', get_lang('CorrectScore'));
     $form->addElement('text', 'incorrect_score', get_lang('IncorrectScore'));
@@ -132,7 +137,8 @@ function lp_upload_quiz_main() {
 /**
  * Handles a given Excel spreadsheets as in the template provided
  */
-function lp_upload_quiz_action_handling() {
+function lp_upload_quiz_action_handling()
+{
     global $debug;
     $_course = api_get_course_info();
     $courseId = $_course['real_id'];
@@ -618,7 +624,7 @@ function lp_upload_quiz_action_handling() {
             // Add a Quiz as Lp Item
             $_SESSION['oLP']->add_item($parent, $previous, TOOL_QUIZ, $quiz_id, $quiz_title, '');
             // Redirect to home page for add more content
-            header('location: ../lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.Security::remove_XSS($_GET['lp_id']));
+            header('location: ../lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.intval($_GET['lp_id']));
             exit;
         } else {
             //  header('location: exercise.php?' . api_get_cidreq());
@@ -631,7 +637,8 @@ function lp_upload_quiz_action_handling() {
  * @param array $answers_data
  * @return int
  */
-function detectQuestionType($answers_data) {
+function detectQuestionType($answers_data)
+{
     $correct = 0;
     $isNumeric = false;
 
@@ -650,10 +657,12 @@ function detectQuestionType($answers_data) {
 
     if ($correct == 1) {
         $type = UNIQUE_ANSWER;
-    } else if ($correct > 1) {
-        $type = MULTIPLE_ANSWER;
     } else {
-        $type = FREE_ANSWER;
+        if ($correct > 1) {
+            $type = MULTIPLE_ANSWER;
+        } else {
+            $type = FREE_ANSWER;
+        }
     }
 
     if ($type == MULTIPLE_ANSWER) {

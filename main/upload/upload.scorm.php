@@ -36,7 +36,6 @@ if (api_get_setting('search_enabled') === 'true') {
         }
     }
 }
-//Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
 
-header('location: ../lp/lp_controller.php?action=list');
+header('location: ../lp/lp_controller.php?action=list?'.api_get_cidreq());
 exit;

@@ -256,7 +256,6 @@ unset($Courses);
                 </div>
             <?php } ?>
             <div class="control-course">
-
             <?php
             if ($ajax_search) {
                 ?>
@@ -278,17 +277,13 @@ unset($Courses);
                         <em class="fa fa-chevron-left"></em>
                     </button>
                 </div>
-
-            <?php
-            }
-            ?>
+            <?php } ?>
                 <div class="separate-action">
                     <label>
                         <input type="checkbox" name="copy_evaluation">
                         <?php echo get_lang('ImportGradebookInCourse'); ?>
                     </label>
                 </div>
-
             <?php
             echo '<div class="separate-action">';
             if (isset($_GET['add'])) {
@@ -298,7 +293,6 @@ unset($Courses);
             }
             echo '</div>';
             ?>
-
             </div>
         </div>
         <div class="col-md-4">

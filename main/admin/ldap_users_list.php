@@ -78,7 +78,7 @@ if (isset ($_GET['action']))
 				}
 				if (isset($_GET['id_session']) && ($_GET['id_session'] == strval(intval($_GET['id_session']))) && ($_GET['id_session']>0)) {
 					ldap_add_user_to_session($UserList, $_GET['id_session']);
-					header('Location: resume_session.php?id_session='.$_GET['id_session']);
+					header('Location: resume_session.php?id_session='.intval($_GET['id_session']));
 				} else {
 					Display :: display_header($tool_name);
 					if(count($userid_match_login)>0)

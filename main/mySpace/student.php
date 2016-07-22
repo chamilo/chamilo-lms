@@ -56,6 +56,7 @@ function get_users($from, $limit, $column, $direction)
     $active = isset($_GET['active']) ? $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+    $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
@@ -111,7 +112,7 @@ function get_users($from, $limit, $column, $direction)
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
         if (isset($_GET['id_session'])) {
-            $courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
+            $courses = Tracking :: get_course_list_in_session_from_student($student_id, $sessionId);
         }
 
         $avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
@@ -121,8 +122,8 @@ function get_users($from, $limit, $column, $direction)
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
                 if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
-                    $my_average 		 = Tracking :: get_avg_student_score($student_id, $course_code);
+                    $avg_time_spent += Tracking :: get_time_spent_on_the_course($student_id, $courseId, $sessionId);
+                    $my_average = Tracking :: get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;
                     }
@@ -158,7 +159,7 @@ function get_users($from, $limit, $column, $direction)
         $row[] = $string_date;
 
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$_GET['id_session'].'">
+            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
 				            '.Display::return_icon('2rightarrow.png').'</a>';
         } else {
             $detailsLink =  '<a href="myStudents.php?student='.$student_id.'">

@@ -1187,7 +1187,7 @@ class CourseHome
                 }
 
                 if (stristr($url_item['path'], $url_current['path'])) {
-                    if (!isset($_GET['learnpath_id']) || strpos($url_item['query'], 'learnpath_id='.$_GET['learnpath_id']) === 0) {
+                    if (!isset($_GET['learnpath_id']) || strpos($url_item['query'], 'learnpath_id='.intval($_GET['learnpath_id'])) === 0) {
                         $html .= ' id="here"';
                     }
                 }

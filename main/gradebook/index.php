@@ -104,27 +104,18 @@ if (empty($cats)) {
 $_GET['selectcat'] = $cats[0]->get_id();
 
 if (isset($_GET['isStudentView'])) {
-    if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
-        $interbreadcrumb[]= array ('url' => 'index.php'.'?selectcat=0&amp;isStudentView='.$_GET['isStudentView'],'name' => get_lang('ToolGradebook'));
+    if ((isset($_GET['selectcat']) && $_GET['selectcat'] > 0) && (isset($_SESSION['studentview']) && $_SESSION['studentview'] == 'true')) {
+        $interbreadcrumb[] = array(
+            'url' => 'index.php'.'?selectcat=0&isStudentView=true',
+            'name' => get_lang('ToolGradebook'),
+        );
     }
 }
 
 if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) &&
-    (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')
+    (isset($_SESSION['studentview']) && $_SESSION['studentview']=='true')
 ) {
-    /*Display :: display_header();
-    //Introduction tool: student view
-    Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
-    $category = $_GET['selectcat'];
-    $cats = Category :: load ($category, null, null, null, null, null, false);
-    $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
-    $alleval = $cats[0]->get_evaluations($stud_id);
-    $alllink = $cats[0]->get_links($stud_id);
-    $addparams = array();
-    $gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
-    $gradebooktable->display();
-    Display :: display_footer();
-    exit;*/
+
 } else {
     if (!isset($_GET['selectcat']) &&
         ($_SESSION['studentview']=='studentview') ||

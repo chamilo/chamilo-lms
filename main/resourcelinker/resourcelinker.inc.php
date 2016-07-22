@@ -1275,41 +1275,8 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 				$link .= "../phpbb/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
 			}
 			break;
-
 		case "Post":
-			/* todo REVIEW THIS SECTION - NOT USING VALID TABLES ANYMORE
-			$tbl_posts       = $_course['dbNameGlu'].'bb_posts';
-			$tbl_posts_text  = $_course['dbNameGlu'].'bb_posts_text';
-			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
-			$result= Database::query("SELECT * FROM $tbl_posts where post_id=$id");
-			$myrow=Database::fetch_array($result);
-			// grabbing the title of the post
-			$sql_titel="SELECT * FROM $tbl_posts_text WHERE post_id=".$myrow["post_id"];
-			$result_titel=Database::query($sql_titel);
-			$myrow_titel=Database::fetch_array($result_titel);
-
-			$sql="select * from $tbl_learnpath_item where id=$id_in_path";
-			$result=Database::query($sql);	$row=Database::fetch_array($result);
-			if ($row['title'] != '') { $myrow_titel["post_title"]=$row['title']; }
-			$desc=$row['description'];
-    		$link .= str_repeat("&nbsp;&gt;",$level);
-
-			$posternom=$myrow['nom'];				$posterprenom=$myrow['prenom'];
-			$posttime=$myrow['post_time'];			$posttext=$myrow_titel['post_text'];
-			$posttitle=$myrow_titel['post_title'];
-			$posttext = str_replace('"',"'",$posttext);
-
-			if ($builder != 'builder')
-			{
-				$link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path";
-			}
-			else
-			{
-				$link .= "../phpbb/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
-			}
-			*/
 			break;
-
 		case "Document":
 			$dbTable  = Database::get_course_table(TABLE_DOCUMENT);
 			$result=Database::query("SELECT * FROM $dbTable WHERE id=$id",__FILE__,__LINE);

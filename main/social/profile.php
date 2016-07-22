@@ -38,7 +38,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     $messageId = 0;
     $messageContent = $_POST['social_wall_new_msg_main'];
     if (!empty($_POST['url_content'])) {
-        $messageContent = $_POST['social_wall_new_msg_main'].'<br><br>'.$_POST['url_content'];
+        $messageContent = $_POST['social_wall_new_msg_main'].'<br /><br />'.$_POST['url_content'];
     }
     $idMessage = SocialManager::sendWallMessage(
         api_get_user_id(),

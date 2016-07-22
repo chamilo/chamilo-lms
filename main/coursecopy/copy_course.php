@@ -59,7 +59,9 @@ if (Security::check_token('post') && (
     $cr->set_file_option($_POST['same_file_name_option']);
     $cr->restore($_POST['destination_course']);
     Display::display_normal_message(
-        get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.$_POST['destination_course'].'</a>',
+        get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.
+        Security::remove_XSS($_POST['destination_course']).
+        '</a>',
         false
     );
 } elseif (Security::check_token('post') && (

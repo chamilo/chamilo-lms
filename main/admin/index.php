@@ -33,35 +33,23 @@ if (api_is_multiple_url_enabled()) {
 }
 
 // Displaying the header
-$message = '';
-
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) &&
         !is_writable(api_get_path(SYS_ARCHIVE_PATH))
     ) {
-        $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'warning');
+        Display::addFlash(
+            Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'warning')
+        );
     }
 
     /* ACTION HANDLING */
     if (!empty($_POST['Register'])) {
         api_register_campus(!$_POST['donotlistcampus']);
         $message = Display :: return_message(get_lang('VersionCheckEnabled'), 'confirmation');
+        Display::addFlash($message);
     }
     $keyword_url = Security::remove_XSS((empty($_GET['keyword']) ? '' : $_GET['keyword']));
 }
-
-if (isset($_GET['msg']) && isset($_GET['type'])) {
-    if (in_array($_GET['msg'], array('ArchiveDirCleanupSucceeded', 'ArchiveDirCleanupFailed'))) {
-        switch ($_GET['type']) {
-            case 'error':
-                $message = Display::return_message(get_lang($_GET['msg']), 'error');
-                break;
-            case 'confirmation':
-                $message = Display::return_message(get_lang($_GET['msg']), 'confirm');
-        }
-    }
-}
-
 $blocks = array();
 
 // Instantiate Hook Event for Admin Block
@@ -340,7 +328,6 @@ if (api_is_platform_admin()) {
     $blocks['settings']['label'] = api_ucfirst(get_lang('System'));
     $blocks['settings']['class'] = 'block-admin-settings';
 
-
     $items = array();
     $items[] = array('url' => 'special_exports.php', 'label' => get_lang('SpecialExports'));
     $items[] = array('url' => 'system_status.php', 'label' => get_lang('SystemStatus'));
@@ -602,5 +589,4 @@ if (api_is_platform_admin()) {
 $admin_template = $tpl->get_template('admin/settings_index.tpl');
 $content = $tpl->fetch($admin_template);
 $tpl->assign('content', $content);
-$tpl->assign('message', $message);
 $tpl->display_one_col_template();

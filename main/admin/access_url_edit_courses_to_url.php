@@ -83,21 +83,23 @@ $UserList = $SessionList = array();
 $users = $sessions = array();
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-	$form_sent = $_POST['form_sent'];
-	$course_list = $_POST['course_list'];
+    $form_sent = $_POST['form_sent'];
+    $course_list = $_POST['course_list'];
 
-	if (!is_array($course_list)) {
-		$course_list = array();
-	}
+    if (!is_array($course_list)) {
+        $course_list = array();
+    }
 
-	if ($form_sent == 1) {
-		if ($access_url_id==0) {
-			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
-		} elseif (is_array($course_list)) {
-			UrlManager::update_urls_rel_course($course_list, $access_url_id);
-			header('Location: access_urls.php?action=show_message&message='.get_lang('CoursesWereEdited'));
-		}
-	}
+    if ($form_sent == 1) {
+        if ($access_url_id == 0) {
+            Display::addFlash(Display::return_message(get_lang('SelectURL')));
+            header('Location: access_url_edit_users_to_url.php?');
+        } elseif (is_array($course_list)) {
+            UrlManager::update_urls_rel_course($course_list, $access_url_id);
+            Display::addFlash(Display::return_message(get_lang('CoursesWereEdited')));
+            header('Location: access_urls.php?');
+        }
+    }
 }
 
 Display::display_header($tool_name);
@@ -107,9 +109,6 @@ echo Display::url( Display::return_icon('view_more_stats.gif', get_lang('AddUser
 echo '</div>';
 
 api_display_tool_title($tool_name);
-
-if (isset($_GET['action']) && $_GET['action'] == 'show_message')
-	Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
 
 $no_course_list = $course_list = array();
 $ajax_search = $add_type == 'unique' ? true : false;

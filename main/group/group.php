@@ -44,7 +44,6 @@ $course_id = api_get_course_int_id();
  * Self-registration and un-registration
  */
 $my_group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
-$my_msg	= isset($_GET['msg']) ? Security::remove_XSS($_GET['msg']) : null;
 $my_group = isset($_REQUEST['group']) ? Security::remove_XSS($_REQUEST['group']) : null;
 $my_get_id1 = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
 $my_get_id2 = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;

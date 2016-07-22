@@ -88,10 +88,12 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if ($access_url_id == 0) {
-            header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
+            Display::addFlash(Display::return_message(get_lang('SelectURL')));
+            header('Location: access_url_edit_users_to_url.php?');
         } elseif (is_array($list)) {
             UrlManager::updateUrlRelCourseCategory($list, $access_url_id);
-            header('Location: access_urls.php?action=show_message&message='.get_lang('Updated'));
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+            header('Location: access_urls.php');
         }
         exit;
     }
@@ -100,10 +102,6 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 Display::display_header($tool_name);
 
 api_display_tool_title($tool_name);
-
-if ($_GET['action'] == 'show_message') {
-    Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
-}
 
 $noUserGroupList = $userGroupList = array();
 $ajax_search = $add_type == 'unique' ? true : false;

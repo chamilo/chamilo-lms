@@ -27,7 +27,10 @@ $user_file = isset($_GET['user_file']) ? $_GET['user_file'] : array();
 $user_file = $user_file ? $user_file : array();
 $is_error = isset($user_file['error']) ? $user_file['error'] : false;
 if (isset($_POST) && $is_error) {
-    return api_failure::set_failure('upload_file_too_big');
+    Display::addFlash(
+        Display::return_message(get_lang('UplFileTooBig'))
+    );
+    return false;
     unset($_FILES['user_file']);
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
 
@@ -60,10 +63,6 @@ if (isset($_POST) && $is_error) {
             require_once 'scorm.class.php';
             $oScorm = new scorm();
             $manifest = $oScorm->import_package($_FILES['user_file'], $current_dir);
-            if (!$manifest) {
-                //if api_set_failure
-                return api_failure::set_failure(api_failure::get_last_failure());
-            }
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
                 $fixTemplate = api_get_configuration_value('learnpath_fix_xerte_template');
@@ -147,8 +146,6 @@ if (isset($_POST) && $is_error) {
                 }
 
                 $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
-            } else {
-                // Show error message stored in $oScrom->error_msg.
             }
             $oScorm->set_proximity($proximity);
             $oScorm->set_maker($maker);
@@ -180,7 +177,9 @@ if (isset($_POST) && $is_error) {
             break;
         case '':
         default:
-            return api_failure::set_failure('not_a_learning_path');
+            Display::addFlash(Display::return_message(get_lang('ScormUnknownPackageFormat')));
+            return false;
+            break;
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // end if is_uploaded_file
@@ -204,7 +203,9 @@ if (isset($_POST) && $is_error) {
 
     $result = learnpath::verify_document_size($s);
     if ($result == true) {
-        return api_failure::set_failure('upload_file_too_big');
+        Display::addFlash(
+            Display::return_message(get_lang('UplFileTooBig'))
+        );
     }
     $type = learnpath::get_package_type($s, basename($s));
 
@@ -213,9 +214,6 @@ if (isset($_POST) && $is_error) {
             require_once 'scorm.class.php';
             $oScorm = new scorm();
             $manifest = $oScorm->import_local_package($s, $current_dir);
-            if ($manifest === false) { //if ap i_set_failure
-                return api_failure::set_failure(api_failure::get_last_failure());
-            }
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
                 $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
@@ -255,6 +253,10 @@ if (isset($_POST) && $is_error) {
             break;
         case '':
         default:
-            return api_failure::set_failure('not_a_learning_path');
+            Display::addFlash(
+                Display::return_message(get_lang('ScormUnknownPackageFormat'))
+            );
+            return false;
+            break;
     }
 }

@@ -262,9 +262,11 @@ if ($form->validate()) {
             if ($num >= $_configuration[$urlId]['hosting_limit_active_courses']) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
 
-                api_set_failure(get_lang('PortalActiveCoursesLimitReached'));
+                Display::addFlash(
+                    Display::return_message(get_lang('PortalActiveCoursesLimitReached'))
+                );
 
-                header('Location: course_list.php?action=show_msg&warn=' . urlencode(get_lang('PortalActiveCoursesLimitReached')));
+                header('Location: course_list.php');
                 exit;
             }
         }
@@ -373,9 +375,9 @@ if ($form->validate()) {
     $course_id = $courseInfo['real_id'];
 
     Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
-
     if ($visual_code_is_used) {
-        header('Location: course_list.php?action=show_msg&warn=' . urlencode($warn));
+        Display::addFlash(Display::return_message($warn));
+        header('Location: course_list.php');
     } else {
         header('Location: course_list.php');
     }

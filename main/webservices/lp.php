@@ -197,7 +197,6 @@ function WSImportLP($params)
 
     if (!$manifest) {
         if ($debug) error_log('manifest.xml file not found');
-        //if api_set_failure
         return 'manifest.xml file not found';
     }
 

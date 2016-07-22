@@ -343,21 +343,6 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 } else {
     $interbreadcrumb[] = array ('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
     $tool_name = get_lang('CourseList');
-
-    if (isset($_GET['action'])) {
-        switch ($_GET['action']) {
-            case 'show_msg':
-                if (!empty($_GET['warn'])) {
-                    $message = Display::return_message(urldecode($_GET['warn']), 'warning');
-                }
-                if (!empty($_GET['msg'])) {
-                    $message = Display::return_message(urldecode($_GET['msg']));
-                }
-                break;
-            default:
-                break;
-        }
-    }
     if (isset($_GET['delete_course'])) {
         CourseManager::delete_course($_GET['delete_course']);
         $obj_cat = new Category();

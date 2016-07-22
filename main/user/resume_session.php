@@ -75,10 +75,11 @@ if ($allowTutors === 'true') {
             $result = UrlManager::add_user_to_url($user_id, $url_id);
             $user_info = api_get_user_info($user_id);
             if ($result) {
-                $message = Display::return_message(
+                Display::addFlash(
+                    Display::return_message(
                     get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']),
                     'confirm'
-                );
+                ));
             }
             break;
         case 'delete':
@@ -118,14 +119,6 @@ if ($allowTutors === 'true') {
             break;
     }
     Display::display_header($tool_name);
-
-    if (!empty($_GET['warn'])) {
-        Display::display_warning_message(urldecode($_GET['warn']));
-    }
-
-    if (!empty($message)) {
-        echo $message;
-    }
 
     echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
     echo Display::page_subheader(get_lang('GeneralProperties').$url);

@@ -210,7 +210,7 @@ if ($form->validate()) {
 
     $course_info = CourseManager::create_course($course);
 
-    header('Location: course_list.php'.($course_info===false?'?action=show_msg&warn='.api_get_last_failure():''));
+    header('Location: course_list.php');
     exit;
 }
 

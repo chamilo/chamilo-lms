@@ -209,22 +209,10 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue($res);
 	}
 
-	function testApiSetFailure(){
-		global $api_failureList;
-		$failureType=true;
-		$res = api_set_failure($failureType);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($api_failureList);
-	}
 
 	function testApiSetAnonymous(){
 		$res = api_set_anonymous();
 		$this->assertTrue(is_bool($res));
-	}
-
-	function testApiGetLastFailure(){
-		$res= api_Get_last_failure();
-		$this->assertTrue($res);
 	}
 
 	function testApiGetSessionId(){

@@ -6130,7 +6130,9 @@ class CourseManager
             if ($num >= $_configuration[$accessUrlId][$param]) {
                 api_warn_hosting_contact($param);
 
-                return api_set_failure(get_lang($msgLabel));
+                Display::addFlash(
+                    Display::return_message($msgLabel)
+                );
             }
         }
         return false;

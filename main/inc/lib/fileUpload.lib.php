@@ -904,7 +904,11 @@ function treat_uploaded_file($uploaded_file, $base_work_dir, $upload_path, $max_
     $uploaded_file['name'] = stripslashes($uploaded_file['name']);
 
     if (!enough_size($uploaded_file['size'], $base_work_dir, $max_filled_space)) {
-        return api_failure::set_failure('not_enough_space');
+        Display::addFlash(
+            Display::return_message(get_lang('NoSpace'))
+        );
+
+        return false;
     }
 
     if ($uncompress == 'unzip' && preg_match('/.zip$/', strtolower($uploaded_file['name']))) {
@@ -955,7 +959,11 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         $realFileSize = 0;
         foreach ($zip_content_array as & $this_content) {
             if (preg_match('~.(php.*|phtml)$~i', $this_content['filename'])) {
-                return api_failure::set_failure('php_file_in_zip_file');
+                Display::addFlash(
+                    Display::return_message(get_lang('ZipNoPhp'))
+                );
+
+                return false;
             } elseif (stristr($this_content['filename'], 'imsmanifest.xml')) {
                 $ok_scorm = true;
             } elseif (stristr($this_content['filename'], 'LMS')) {
@@ -975,11 +983,19 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         }
 
         if (!$ok_scorm && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM) {
-            return api_failure::set_failure('not_scorm_content');
+            Display::addFlash(
+                Display::return_message(get_lang('NotScormContent'))
+            );
+
+            return false;
         }
 
         if (!enough_size($realFileSize, $base_work_dir, $max_filled_space)) {
-            return api_failure::set_failure('not_enough_space');
+            Display::addFlash(
+                Display::return_message(get_lang('NoSpace'))
+            );
+
+            return false;
         }
 
         // It happens on Linux that $upload_path sometimes doesn't start with '/'

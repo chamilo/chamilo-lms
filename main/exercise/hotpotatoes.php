@@ -209,19 +209,8 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     'QuizAdded',
                     api_get_user_id()
                 );
-
             } else {
-                if ($finish == 2) {
-                    // delete?
-                    //$dialogBox .= get_lang('NoImg');
-                }
                 $finish = 0;
-                // error
-                if (api_failure::get_last_failure() == 'not_enough_space') {
-                    $dialogBox .= get_lang('NoSpace');
-                } elseif (api_failure::get_last_failure() == 'php_file_in_zip_file') {
-                    $dialogBox .= get_lang('ZipNoPhp');
-                }
             }
         }
     }

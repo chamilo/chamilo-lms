@@ -29,10 +29,6 @@ $url_list = UrlManager::get_url_data();
 
 // Actions
 if (isset($_GET['action'])) {
-    if ($_GET['action'] == 'show_message') {
-        Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
-    }
-
     $url_id = (empty($_GET['url_id']) ? 0 : intval($_GET['url_id']));
 
     switch ($_GET['action']) {
@@ -71,7 +67,6 @@ if (isset($_GET['action'])) {
             }
             break;
     }
-
 }
 
 $parameters['sec_token'] = Security::get_token();

@@ -11,8 +11,6 @@ $current_course_tool  = TOOL_STUDENTPUBLICATION;
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
 $docId = isset($_GET['document_id']) ? intval($_GET['document_id']) : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-$message = Session::read('show_message');
-Session::erase('show_message');
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -55,7 +53,7 @@ switch ($action) {
 if (empty($docId)) {
 
     Display :: display_header(null);
-    echo $message;
+
     $documents = getAllDocumentToWork($workId, api_get_course_int_id());
     if (!empty($documents)) {
         echo Display::page_subheader(get_lang('DocumentsAdded'));
@@ -103,12 +101,10 @@ if (empty($docId)) {
 
         if (empty($data)) {
             addDocumentToWork($docId, $workId, api_get_course_int_id());
-            $message = Display::return_message(get_lang('Added'), 'success');
+            Display::addFlash(Display::return_message(get_lang('Added'), 'success'));
         } else {
-            $message = Display::return_message(get_lang('DocumentAlreadyAdded'), 'warning');
+            Display::addFlash(Display::return_message(get_lang('DocumentAlreadyAdded'), 'warning'));
         }
-
-        Session::write('show_message', $message);
 
         $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq();
         header('Location: '.$url);
@@ -116,7 +112,6 @@ if (empty($docId)) {
     }
 
     Display::display_header(null);
-    echo $message;
     $form->display();
 }
 

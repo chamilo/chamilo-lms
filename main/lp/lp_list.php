@@ -83,9 +83,6 @@ if ($is_allowed_to_edit) {
                 break;
         }
     }
-    if (api_failure::get_last_failure()) {
-        $message = Display::return_message(api_failure::get_last_failure());
-    }
 
     $actions .= Display::url(
         Display::return_icon('new_folder.png', get_lang('AddCategory'), array(), ICON_SIZE_MEDIUM),

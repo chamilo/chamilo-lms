@@ -511,8 +511,12 @@ if ($form->validate() && is_settings_editable()) {
             $num = CourseManager::countActiveCourses($urlId);
             if ($num >= $_configuration[$urlId]['hosting_limit_active_courses']) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
-                api_set_failure(get_lang('PortalActiveCoursesLimitReached'));
-                $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=course_active_warning&'.api_get_cidreq();
+
+                Display::addFlash(
+                    Display::return_message(get_lang('PortalActiveCoursesLimitReached'))
+                );
+
+                $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?'.api_get_cidreq();
                 header("Location: $url");
                 exit;
             }
@@ -579,7 +583,7 @@ if ($form->validate() && is_settings_editable()) {
     $cidReset = true;
     $cidReq = $course_code;
     require '../inc/local.inc.php';
-    $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=show_message&'.api_get_cidreq();
+    $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?'.api_get_cidreq();
     header("Location: $url");
     exit;
 }
@@ -590,14 +594,6 @@ Display :: display_header($nameTools, MODULE_HELP_NAME);
 if ($show_delete_watermark_text_message) {
     Display :: display_normal_message(get_lang('FileDeleted'));
 }
-
-if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
-    Display :: display_normal_message(get_lang('ModifDone'));
-}
-if (isset($_GET['action']) && $_GET['action'] == 'course_active_warning') {
-    Display :: display_warning_message(get_lang('PortalActiveCoursesLimitReached'));
-}
-
 echo '<script>
 $(function() {
 	$("#course_settings").accordion({

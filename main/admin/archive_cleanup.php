@@ -21,46 +21,27 @@ $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmi
 $form = new FormValidator('archive_cleanup_form', 'post', '', '', array(), FormValidator::LAYOUT_BOX);
 $form->addButtonSend(get_lang('ArchiveDirCleanupProceedButton'));
 
-$message = null;
-
 if ($form->validate()) {
-	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
-	$htaccess = @file_get_contents($archive_path.'.htaccess');
-	$result = rmdirr($archive_path, true, true);
+    $archive_path = api_get_path(SYS_ARCHIVE_PATH);
+    $htaccess = @file_get_contents($archive_path.'.htaccess');
+    $result = rmdirr($archive_path, true, true);
 
-	\Chamilo\CoreBundle\Composer\ScriptHandler::dumpCssFiles();
+    \Chamilo\CoreBundle\Composer\ScriptHandler::dumpCssFiles();
 
-	if (!empty($htaccess)) {
-		@file_put_contents($archive_path.'/.htaccess', $htaccess);
-	}
-	if ($result) {
-		$message = 'ArchiveDirCleanupSucceeded';
-		$type = 'confirmation';
-	} else {
-		$message = 'ArchiveDirCleanupFailed';
-		$type = 'error';
-	}
+    if (!empty($htaccess)) {
+        @file_put_contents($archive_path.'/.htaccess', $htaccess);
+    }
+    if ($result) {
+        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupSucceeded')));
+    } else {
+        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupFailed'), 'error'));
+    }
 
-	header('Location: '.api_get_self().'?msg='.$message.'&type='.$type);
-	exit;
+    header('Location: '.api_get_self());
+    exit;
 }
 
 Display::display_header(get_lang('ArchiveDirCleanup'));
 Display::display_warning_message(get_lang('ArchiveDirCleanupDescr'));
-
-if (isset($_GET['msg']) && isset($_GET['type'])) {
-	if (in_array($_GET['msg'], array('ArchiveDirCleanupSucceeded', 'ArchiveDirCleanupFailed')))
-	switch($_GET['type']) {
-		case 'error':
-			$message = Display::return_message(get_lang($_GET['msg']), 'error');
-			break;
-		case 'confirmation':
-			$message = Display::return_message(get_lang($_GET['msg']), 'confirm');
-	}
-}
-
-if (!empty($message)) {
-    echo $message;
-}
 $form->display();
 Display::display_footer();

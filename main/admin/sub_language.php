@@ -99,15 +99,7 @@ echo $intro;
 echo '<br />';
 printf(get_lang('ParentLanguageX'), $language_name);
 echo '</div>';
-
-if (!empty($_SESSION['msg'])) {
-	echo $_SESSION['msg'];
-	unset($_SESSION['msg']);
-} else {
-	echo '<br />';
-}
-
-
+echo '<br />';
 $txt_search_word = (!empty($_REQUEST['txt_search_word']) ? Security::remove_XSS($_REQUEST['txt_search_word']) : '');
 $html ='<div style="float:left" class="actions">';
 $html.='<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="GET" action="sub_language.php">';

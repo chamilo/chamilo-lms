@@ -2675,8 +2675,8 @@ class MySpace
                 $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
             }
         }
-
-        header('Location: course.php?id_session='.$id_session.'&action=show_message&message='.urlencode($registered_users));
+        Display::addFlash(Display::return_message($registered_users));
+        header('Location: course.php?id_session='.$id_session);
         exit;
     }
 

@@ -333,10 +333,8 @@ function WSCreateUsers($params)
 
         // First check wether the login already exists.
         if (!UserManager::is_username_available($loginName)) {
-            if (api_set_failure('login-pass already taken')) {
-                $results[] = 0;
-                continue;
-            }
+            $results[] = 0;
+            continue;
         }
 
         $userId = UserManager::create_user(
@@ -886,10 +884,8 @@ function WSCreateUsersPasswordCrypted($params)
         }
         // First check wether the login already exists
         if (!UserManager::is_username_available($loginName)) {
-            if (api_set_failure('login-pass already taken')) {
-                $results[] = 0;
-                continue;
-            }
+            $results[] = 0;
+            continue;
         }
 
         $sql = "INSERT INTO $table_user SET

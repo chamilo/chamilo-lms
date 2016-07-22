@@ -213,7 +213,6 @@ class UserManager
      * @return mixed   new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
      * If it exists, the current user id is the creator id. If a problem arises,
-     * it stores the error message in global $api_failureList
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
      * @assert ('Pippin','Took',null,null,'jo','jo') === false
      */
@@ -308,7 +307,11 @@ class UserManager
 
         // First check wether the login already exists
         if (!self::is_username_available($loginName)) {
-            return api_set_failure('login-pass already taken');
+            Display::addFlash(
+                Display::return_message(get_lang('LoginAlreadyTaken'))
+            );
+
+            return false;
         }
 
         $currentDate = api_get_utc_datetime();
@@ -477,7 +480,9 @@ class UserManager
             }
             Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $return);
         } else {
-            return api_set_failure('error inserting in Database');
+            Display::addFlash(Display::return_message(get_lang('ErrorContactPlatformAdmin')));
+
+            return false;
         }
 
         if (is_array($extra) && count($extra) > 0) {

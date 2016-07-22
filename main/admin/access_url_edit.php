@@ -95,7 +95,8 @@ if ($form->validate()) {
         }
         Security::clear_token();
         $tok = Security::get_token();
-        header('Location: ' . $url_to_go . '?action=show_message&message=' . urlencode($message) . '&sec_token=' . $tok);
+        Display::addFlash(Display::return_message($message));
+        header('Location: ' . $url_to_go . '?sec_token=' . $tok);
         exit();
     }
 } else {
@@ -144,14 +145,6 @@ $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdm
 $interbreadcrumb[] = array("url" => 'access_urls.php', "name" => get_lang('MultipleAccessURLs'));
 
 Display :: display_header($tool_name);
-
-if (isset($_GET['action'])) {
-    switch ($_GET['action']) {
-        case 'show_message' :
-            Display :: display_normal_message(stripslashes($_GET['message']));
-            break;
-    }
-}
 
 // URL Images
 $form->addElement('file', 'url_image_1', 'URL Image 1 (PNG)');

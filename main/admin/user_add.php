@@ -393,16 +393,8 @@ if ($form->validate()) {
 
 		Security::clear_token();
 		$tok = Security::get_token();
-		if ($user_id === false) {
-			//If any error ocurred during user creation, print it (api_failureList
-			// stores values as separate words, so rework it
-			$message = '';
-			$message_bits = explode(' ',api_get_last_failure());
-			foreach ($message_bits as $bit) {
-				$message .= ucfirst($bit);
-			}
-		} else {
- 			if (!empty($picture['name'])) {
+		if (!empty($user_id)) {
+            if (!empty($picture['name'])) {
                 $picture_uri = UserManager::update_user_picture(
                     $user_id,
                     $_FILES['picture']['name'],
@@ -433,17 +425,19 @@ if ($form->validate()) {
             $extraFieldValues = new ExtraFieldValue('user');
             $user['item_id'] = $user_id;
             $extraFieldValues->saveFieldValues($user);
-
 			$message = get_lang('UserAdded');
 		}
+
 		if (isset($user['submit_plus'])) {
 			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
-			header('Location: user_add.php?message='.urlencode($message).'&sec_token='.$tok);
-			exit ();
+            Display::addFlash(Display::return_message($message));
+			header('Location: user_add.php?sec_token='.$tok);
+			exit;
 		} else {
 			$tok = Security::get_token();
-			header('Location: user_list.php?action=show_message&message='.urlencode($message).'&sec_token='.$tok);
-			exit ();
+            Display::addFlash(Display::return_message($message));
+			header('Location: user_list.php?sec_token='.$tok);
+			exit;
 		}
 	}
 } else {

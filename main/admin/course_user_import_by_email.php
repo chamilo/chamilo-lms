@@ -192,7 +192,8 @@ if ($form->validate()) {
 
         Security::clear_token();
         $tok = Security::get_token();
-        header('Location: user_list.php?action=show_message&warn='.urlencode($warn).'&sec_token='.$tok);
+        Display::addFlash(Display::return_message($warn));
+        header('Location: user_list.php?sec_token='.$tok);
         exit();
     }
 }

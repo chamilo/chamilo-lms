@@ -577,15 +577,15 @@ if ($form->validate()) {
         $extraFieldValue->saveFieldValues($user);
 
 		$tok = Security::get_token();
-		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);
+
+        Display::addFlash(Display::return_message(get_lang('UserUpdated')));
+		header('Location: user_list.php?sec_token='.$tok);
 		exit();
 	}
 }
 
-$message = null;
 if ($error_drh) {
-	$err_msg = get_lang('StatusCanNotBeChangedToHumanResourcesManager');
-	$message = Display::return_message($err_msg, 'error');
+    Display::addFlash(Display::return_message(get_lang('StatusCanNotBeChangedToHumanResourcesManager'), 'error'));
 }
 
 $content = null;
@@ -602,6 +602,5 @@ $content .= '<a class="thumbnail expand-image" href="'.$bigImage.'" /><img src="
 $content .= '</div>';
 
 $tpl = new Template($tool_name);
-$tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

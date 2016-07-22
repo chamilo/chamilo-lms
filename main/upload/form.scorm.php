@@ -55,7 +55,7 @@ echo '</div>';
 $form = new FormValidator(
     '',
     'POST',
-    'upload.php?'.api_get_cidreq(),
+    api_get_path(WEB_CODE_PATH).'upload/upload.php?'.api_get_cidreq(),
     '',
     array(
         'id' => "upload_form",

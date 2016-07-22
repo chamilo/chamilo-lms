@@ -112,9 +112,8 @@ if (empty($document_data)) {
     }
 } else {
     $folder_id = $document_data['id'];
-    $dir       = $document_data['path'];
+    $dir = $document_data['path'];
 }
-
 
 /*	MAIN CODE */
 
@@ -136,8 +135,8 @@ if ($dir[strlen($dir) - 1] != '/') {
 }
 
 if ($is_certificate_mode) {
-	$document_id 	= DocumentManager::get_document_id(api_get_course_info(), '/certificates');
-	$document_data 	= DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true);
+	$document_id = DocumentManager::get_document_id(api_get_course_info(), '/certificates');
+	$document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id(), true);
 	$folder_id = $document_data['id'];
 	$dir = '/certificates/';
 }
@@ -171,11 +170,11 @@ $editorConfig = array(
     'cols-size' => [2, 10, 0],
     'FullPage' => true,
     'InDocument' => true,
-	'CreateDocumentDir'    => $relative_url,
+	'CreateDocumentDir' => $relative_url,
 	'CreateDocumentWebDir' => (empty($group_properties['directory']))
                         		? api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'
                         		: api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/',
-	'BaseHref'             => api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
+	'BaseHref' => api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
 );
 
 if ($is_certificate_mode) {
@@ -195,7 +194,10 @@ $to_group_id = 0;
 
 if (!$is_certificate_mode) {
 	if (api_is_in_group()) {
-		$interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
+        $interbreadcrumb[] = array(
+            "url" => "../group/group_space.php?".api_get_cidreq(),
+            "name" => get_lang('GroupSpace'),
+        );
 		$noPHP_SELF = true;
 		$to_group_id = api_get_group_id();
 		$path = explode('/', $dir);
@@ -203,7 +205,10 @@ if (!$is_certificate_mode) {
 			api_not_allowed(true);
 		}
 	}
-	$interbreadcrumb[] = array("url" => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(), "name" => get_lang('Documents'));
+    $interbreadcrumb[] = array(
+        "url" => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(),
+        "name" => get_lang('Documents'),
+    );
 } else {
 	$interbreadcrumb[]= array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
@@ -281,12 +286,12 @@ function document_exists($filename)
 if ($is_certificate_mode) {
     $form->addText('title', get_lang('CertificateName'), true, array('cols-size' => [2, 10, 0], 'autofocus'));
 } else {
-	$form->addText('title', get_lang('Title'), true, array('cols-size' => [2, 10, 0], 'autofocus'));
+    $form->addText('title', get_lang('Title'), true, array('cols-size' => [2, 10, 0], 'autofocus'));
 }
 
 // Show read-only box only in groups
 if (!empty($groupId)) {
-	$group[]= $form->createElement('checkbox', 'readonly', '', get_lang('ReadOnly'));
+    $group[] = $form->createElement('checkbox', 'readonly', '', get_lang('ReadOnly'));
 }
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('title', get_lang('FileExists'), 'callback', 'document_exists');
@@ -548,17 +553,18 @@ if ($form->validate()) {
 			}
 			$dir= substr($dir,0,-1);
 			$selectcat = '';
-			if (isset($_REQUEST['selectcat']))
-				$selectcat = "&selectcat=".Security::remove_XSS($_REQUEST['selectcat']);
+            if (isset($_REQUEST['selectcat'])) {
+                $selectcat = "&selectcat=".intval($_REQUEST['selectcat']);
+            }
 			$certificate_condition = '';
 			if ($is_certificate_mode) {
 				$df = DocumentManager::get_default_certificate_id($_course['code']);
                 if (!isset($df)) {
-                    DocumentManager::attach_gradebook_certificate ($_course['code'],$document_id);
+                    DocumentManager::attach_gradebook_certificate($_course['code'],$document_id);
 				}
 				$certificate_condition = '&certificate=true&curdirpath=/certificates';
 			}
-
+            Display::addFlash(Display::return_message(get_lang('ItemAdded')));
 			header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$selectcat.$certificate_condition);
 			exit();
 		} else {
@@ -625,7 +631,7 @@ if ($form->validate()) {
 		$create_certificate = get_lang('CreateCertificateWithTags');
 		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
 	}
-    
+
     // HTML-editor
     echo '<div class="page-create">
             <div class="row" style="overflow:hidden">

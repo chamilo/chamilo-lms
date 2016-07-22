@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * @package chamilo.calendar
  */
@@ -53,8 +51,8 @@ function plus_repeated_event() {
             $('#options2').show();
         }
     });
-</script>
-";
+</script>";
+
 
 $htmlHeadXtra[] = '<script>
 var counter_image = 1;
@@ -101,7 +99,7 @@ if ($type === 'fromjs') {
 if (!api_is_allowed_to_edit(null, true) && $event_type === 'course') {
     api_not_allowed(true);
 }
-if ($event_type == 'course') {
+if ($event_type === 'course') {
     $agendaUrl = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq().'&type=course';
 } else {
     $agendaUrl = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?&type='.$event_type;
@@ -109,9 +107,7 @@ if ($event_type == 'course') {
 $course_info = api_get_course_info();
 $agenda->type = $event_type;
 
-$message = null;
 $content = null;
-
 if (api_is_allowed_to_edit(false, true) ||
     (api_get_course_setting('allow_user_edit_agenda') &&
         !api_is_anonymous() &&
@@ -166,7 +162,7 @@ if (api_is_allowed_to_edit(false, true) ||
                 if ($sendEmail) {
                     $message .= Display::return_message(get_lang('AdditionalMailWasSentToSelectedUsers'), 'confirmation');
                 }
-                Session::write('message', $message);
+                Display::addFlash($message);
                 header("Location: $agendaUrl");
                 exit;
             } else {
@@ -220,7 +216,7 @@ if (api_is_allowed_to_edit(false, true) ||
                     );
 
                     $message = Display::return_message(get_lang('Updated'), 'confirmation');
-                    Session::write('message', $message);
+                    Display::addFlash($message);
                     header("Location: $agendaUrl");
                     exit;
                 }
@@ -264,7 +260,7 @@ if (api_is_allowed_to_edit(false, true) ||
                 }
 
                 $message = Display::return_message(get_lang('Updated'), 'confirmation');
-                Session::write('message', $message);
+                Display::addFlash($message);
                 header("Location: $agendaUrl");
                 exit;
             } else {
@@ -274,31 +270,23 @@ if (api_is_allowed_to_edit(false, true) ||
         case 'importical':
             $actionName = get_lang('Import');
             $form = $agenda->getImportCalendarForm();
-            $content = $form->returnForm();
-
             if ($form->validate()) {
                 $ical_name = $_FILES['ical_import']['name'];
                 $ical_type = $_FILES['ical_import']['type'];
                 $ext = substr($ical_name, (strrpos($ical_name, ".") + 1));
 
-                if ($ext === 'ics' || $ext === 'ical' || $ext === 'icalendar' || $ext === 'ifb') {
-                    $result = $agenda->importEventFile($course_info, $_FILES['ical_import']);
-                    $is_ical = true;
+                if (in_array($ext, ['ics', 'ical', 'icalendar', 'ifb'])) {
+                    $content = $agenda->importEventFile($course_info, $_FILES['ical_import']);
+                    $message = Display::return_message(get_lang('AddSuccess'));
                 } else {
-                    $is_ical = false;
-                }
-
-                if (!$is_ical) {
                     $message = Display::return_message(get_lang('IsNotiCalFormatFile'), 'error');
-                    $form = $agenda->getImportCalendarForm();
-                    $content = $form->return_form();
-                    break;
-                } else {
-                    $message = Display::return_message(get_lang('AddSuccess'), 'error');
-                    $content = $result;
                 }
-                Session::write('message', $message);
+                Display::addFlash($message);
+                $url = api_get_self().'?action=importical&type='.$agenda->type;
+                header("Location: $url");
+                exit;
             }
+            $content = $form->returnForm();
             break;
         case "delete":
             if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $eventId) )) {
@@ -329,9 +317,6 @@ if (!empty($actionName)) {
 
 // Tool introduction
 $introduction = Display::return_introduction_section(TOOL_CALENDAR_EVENT);
-
-$message = Session::read('message');
-Session::erase('message');
 
 $tpl = new Template($actionName);
 $tpl->assign('content', $content);

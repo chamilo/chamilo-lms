@@ -5,7 +5,6 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.admin
  */
-use \ChamiloSession as Session;
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
@@ -24,10 +23,7 @@ if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {
 }
 
 global $_configuration;
-
-$message = '';
 $content = '';
-
 $currentUrl = api_get_self() . "?name=$pluginName";
 
 if (isset($pluginInfo['settings_form'])) {
@@ -46,7 +42,9 @@ if (isset($pluginInfo['settings_form'])) {
         $content .= $form->toHtml();
     }
 } else {
-    $message = Display::return_message(get_lang('NoConfigurationSettingsForThisPlugin'), 'warning');
+    Display::addFlash(
+        Display::return_message(get_lang('NoConfigurationSettingsForThisPlugin'), 'warning')
+    );
 }
 
 if (isset($form)) {
@@ -108,8 +106,6 @@ $interbreadcrumb[] = array(
 );
 
 $tpl = new Template($pluginName, true, true, false, true, false);
-$tpl->assign('message', '');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
 
-Session::erase('message');

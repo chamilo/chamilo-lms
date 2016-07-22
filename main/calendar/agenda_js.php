@@ -251,11 +251,6 @@ $tpl->assign('form_add', $form->returnForm());
 // Loading Agenda template.
 $content = $tpl->fetch('default/agenda/month.tpl');
 
-$message = Session::read('message');
-$tpl->assign('message', $message);
-
-Session::erase('message');
-
 $tpl->assign('content', $content);
 
 // Loading main Chamilo 1 col template

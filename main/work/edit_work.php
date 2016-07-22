@@ -114,20 +114,16 @@ if ($form->validate()) {
         updateDirName($workData, $params['new_dir']);
 
         $currentUrl = api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq();
-        Session::write('message', Display::return_message(get_lang('FolderEdited'), 'success'));
+        Display::addFlash(Display::return_message(get_lang('FolderEdited'), 'success'));
         header('Location: '.$currentUrl);
         exit;
 
     } else {
-        Session::write('message', Display::return_message(get_lang('FileExists'), 'warning'));
+        Display::addFlash(Display::return_message(get_lang('FileExists'), 'warning'));
     }
 }
 
 Display::display_header();
-
-$message = Session::read('message');
-echo $message;
-Session::erase('message');
 
 $form->display();
 

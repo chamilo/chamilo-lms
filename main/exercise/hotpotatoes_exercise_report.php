@@ -86,7 +86,7 @@ if ($is_allowedToEdit) {
         case 'delete':
             $fileToDelete = isset($_GET['id']) ? $_GET['id'] : null;
             deleteAttempt($fileToDelete);
-            Session::write('message', Display::return_message(get_lang('ItemDeleted')));
+            Display::addFlash(Display::return_message(get_lang('ItemDeleted')));
             $url = api_get_self().'?'.api_get_cidreq().'&path='.$hotpotatoes_path;
             header("Location: $url");
             exit;
@@ -113,41 +113,39 @@ if ($is_allowedToEdit || $is_tutor) {
 }
 
 Display :: display_header($nameTools);
-
 $actions = Display::div($actions, array('class'=> 'actions'));
 
-$extra =  '<script type="text/javascript">
-    $(document).ready(function() {
+$extra = '<script>
+$(document).ready(function() {
 
-        $( "#dialog:ui-dialog" ).dialog( "destroy" );
-
-        $( "#dialog-confirm" ).dialog({
-                autoOpen: false,
-                show: "blind",
-                resizable: false,
-                height:300,
-                modal: true
-         });
-
-        $("#export_opener").click(function() {
-            var targetUrl = $(this).attr("href");
-            $( "#dialog-confirm" ).dialog({
-                width:400,
-                height:300,
-                buttons: {
-                    "'.addslashes(get_lang('Download')).'": function() {
-                        var export_format = $("input[name=export_format]:checked").val();
-                        var extra_data  = $("input[name=load_extra_data]:checked").val();
-                        location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data;
-                        $( this ).dialog( "close" );
-                    }
-                }
-            });
-            $( "#dialog-confirm" ).dialog("open");
-            return false;
-        });
+    $( "#dialog:ui-dialog" ).dialog( "destroy" );
+    $( "#dialog-confirm" ).dialog({
+        autoOpen: false,
+        show: "blind",
+        resizable: false,
+        height:300,
+        modal: true
     });
-    </script>';
+
+    $("#export_opener").click(function() {
+        var targetUrl = $(this).attr("href");
+        $( "#dialog-confirm" ).dialog({
+            width:400,
+            height:300,
+            buttons: {
+                "'.addslashes(get_lang('Download')).'": function() {
+                    var export_format = $("input[name=export_format]:checked").val();
+                    var extra_data  = $("input[name=load_extra_data]:checked").val();
+                    location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data;
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+        $( "#dialog-confirm" ).dialog("open");
+        return false;
+    });
+});
+</script>';
 
 $extra .= '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
 $form = new FormValidator('report', 'post', null, null, array('class' => 'form-vertical'));
@@ -193,14 +191,28 @@ if ($is_allowedToEdit || $is_tutor) {
 
   // Column config
   // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
-	$column_model   = array(
-        array('name'=>'firstname',      'index'=>'firstname',		'width'=>'50',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'lastname',		    'index'=>'lastname',		'width'=>'50',   'align'=>'left', 'formatter'=>'action_formatter', 'search' => 'false'),
-        array('name'=>'login',          'hidden'=>'true',       'index'=>'username',        'width'=>'40',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'group_name',		  'index'=>'group_id',    'width'=>'40',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'exe_date',		    'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'score',			    'index'=>'exe_result',	'width'=>'50',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'actions',        'index'=>'actions',     'width'=>'60',  'align'=>'left', 'search' => 'false')
+    $column_model = array(
+        array('name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'false'),
+        array(
+            'name' => 'lastname',
+            'index' => 'lastname',
+            'width' => '50',
+            'align' => 'left',
+            'formatter' => 'action_formatter',
+            'search' => 'false',
+        ),
+        array(
+            'name' => 'login',
+            'hidden' => 'true',
+            'index' => 'username',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false',
+        ),
+        array('name' => 'group_name', 'index' => 'group_id', 'width' => '40', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false'),
     );
 
     $action_links = '
@@ -223,10 +235,10 @@ if ($is_allowedToEdit || $is_tutor) {
 
     //Column config
     // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
-    $column_model  = array(
-        array('name'=>'exe_date',		    'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'score',			    'index'=>'exe_result',	'width'=>'50',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'actions',        'index'=>'actions',     'width'=>'60',  'align'=>'left', 'search' => 'false')
+    $column_model = array(
+        array('name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false'),
     );
 }
 
@@ -313,8 +325,5 @@ $(function() {
 </form>
 <?php
 
-$showMessage = Session::read('message');
-Session::erase('message');
-echo isset($showMessage) ? $showMessage : null;
 echo Display::grid_html('results');
 Display :: display_footer();

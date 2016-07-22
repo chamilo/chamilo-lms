@@ -82,7 +82,7 @@ switch ($action) {
                     $message .= $item['title'].'<br />';
                 }
                 $message = Display::return_message($message, 'info', false);
-                Session::write('message', $message);
+                Display::addFlash($message);
             }
             header('Location: '.api_get_self().'?studentId='.$studentId.'&'.api_get_cidreq());
             exit;
@@ -102,9 +102,6 @@ $interbreadcrumb[] = array(
 Display :: display_header(null);
 
 $workPerUser = getWorkPerUser($studentId);
-
-echo Session::read('message');
-Session::erase('message');
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.

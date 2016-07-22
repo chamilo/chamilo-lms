@@ -2921,7 +2921,6 @@ function api_display_tool_view_option() {
             $sourceurl = api_get_self().'?'.api_get_cidreq();
         } else {
             $sourceurl = $_SERVER['REQUEST_URI'];
-            //$sourceurl = str_replace('&', '&amp;', $sourceurl);
         }
     }
 

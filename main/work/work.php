@@ -14,10 +14,11 @@ api_protect_course_script(true);
 
 require_once 'work.lib.php';
 
-$course_info = api_get_course_info();
-$course_id = $course_info['real_id'];
+$courseInfo = api_get_course_info();
+$course_id = $courseInfo['real_id'];
 $user_id = api_get_user_id();
-$id_session = api_get_session_id();
+$sessionId = api_get_session_id();
+$groupId = api_get_group_id();
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -33,12 +34,10 @@ $_course = api_get_course_info();
 /*	Constants and variables */
 
 $tool_name = get_lang('StudentPublications');
-$session_id = api_get_session_id();
-$group_id = api_get_group_id();
 
 $item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
 $origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
-$course_dir = api_get_path(SYS_COURSE_PATH).$_course['path'];
+$course_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
 $base_work_dir = $course_dir . '/work';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 
@@ -60,9 +59,9 @@ if (api_is_in_gradebook()) {
     );
 }
 
-if (!empty($group_id)) {
+if (!empty($groupId)) {
     api_protect_course_group(GroupManager::GROUP_TOOL_WORK);
-    $group_properties = GroupManager::get_group_properties($group_id);
+    $group_properties = GroupManager::get_group_properties($groupId);
 
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -134,7 +133,6 @@ $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 if (!in_array($action, array('add', 'create_dir'))) {
     $token = Security::get_token();
 }
-$courseInfo = api_get_course_info();
 
 $currentUrl = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
 $content = null;
@@ -145,11 +143,11 @@ switch ($action) {
         //if posts
         if ($is_allowed_to_edit && !empty($_POST['changeProperties'])) {
             updateSettings(
-                $course,
+                $courseInfo,
                 $_POST['show_score'],
                 $_POST['student_delete_own_publication']
             );
-            Session::write('message', Display::return_message(get_lang('Saved'), 'success'));
+            Display::addFlash(Display::return_message(get_lang('Saved'), 'success'));
             header('Location: '.$currentUrl);
             exit;
         }
@@ -157,7 +155,7 @@ switch ($action) {
         /*	Display of tool options */
         $content = settingsForm(
             array(
-                'show_score' => $course_info['show_score'],
+                'show_score' => $courseInfo['show_score'],
                 'student_delete_own_publication' =>  $studentDeleteOwnPublication
             )
         );
@@ -183,9 +181,9 @@ switch ($action) {
             $result = addDir(
                 $_POST,
                 $user_id,
-                $_course,
-                $group_id,
-                $id_session
+                $courseInfo,
+                $groupId,
+                $sessionId
             );
 
             if ($result) {
@@ -194,7 +192,7 @@ switch ($action) {
                 $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
             }
 
-            Session::write('message', $message);
+            Display::addFlash($message);
             header('Location: '.$currentUrl);
             exit;
         } else {
@@ -210,7 +208,7 @@ switch ($action) {
                     get_lang('DirDeleted') . ': ' . $work_to_delete['title'],
                     'success'
                 );
-                Session::write('message', $message);
+                Display::addFlash($message);
             }
             header('Location: '.$currentUrl);
             exit;
@@ -223,9 +221,9 @@ switch ($action) {
                 $content = generateMoveForm(
                     $item_id,
                     $curdirpath,
-                    $course_info,
-                    $group_id,
-                    $session_id
+                    $courseInfo,
+                    $groupId,
+                    $sessionId
                 );
             }
         }
@@ -235,7 +233,7 @@ switch ($action) {
         if ($is_allowed_to_edit) {
             $move_to_path = get_work_path($_REQUEST['move_to_id']);
 
-            if ($move_to_path==-1) {
+            if ($move_to_path == -1) {
                 $move_to_path = '/';
             } elseif (substr($move_to_path, -1, 1) != '/') {
                 $move_to_path = $move_to_path .'/';
@@ -252,7 +250,7 @@ switch ($action) {
                     );
 
                     api_item_property_update(
-                        $_course,
+                        $courseInfo,
                         'work',
                         $_REQUEST['move_to_id'],
                         'FolderUpdated',
@@ -286,8 +284,9 @@ switch ($action) {
             null,
             null,
             null,
-            $session_id
+            $sessionId
         );
+
         Display::addFlash(
             Display::return_message(
                 get_lang('VisibilityChanged'),
@@ -314,7 +313,7 @@ switch ($action) {
             null,
             null,
             null,
-            $session_id
+            $sessionId
         );
 
         Display::addFlash(
@@ -357,15 +356,11 @@ switch ($action) {
 Display :: display_header(null);
 Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
 
-if ($origin == 'learnpath') {
+if ($origin === 'learnpath') {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 
 display_action_links($work_id, $curdirpath, $action);
-
-$message = Session::read('message');
-echo $message;
-Session::erase('message');
 echo $content;
 
 Display::display_footer();

@@ -1089,7 +1089,7 @@ class MessageManager
         $message_content .= '
 		        <br />
 		        <hr style="color:#ddd" />
-		        <table height="209px" width="100%">
+		        <table width="100%">
 		            <tr>
 		              <td valign=top class="view-message-content">' . str_replace("\\", "", $content) . '</td>
 		            </tr>

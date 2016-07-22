@@ -7075,7 +7075,7 @@ class SessionManager
         }
 
         // Inject extra session fields
-        $session_field = new \ExtraField('session');
+        $session_field = new ExtraField('session');
         $rules = $session_field->getRules($columns, $column_model);
 
         $column_model[] = array('name'=>'actions', 'index'=>'actions', 'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false');

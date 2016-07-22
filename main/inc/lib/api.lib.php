@@ -1977,35 +1977,6 @@ function get_status_from_code($status_code) {
     }
 }
 
-/* FAILURE MANAGEMENT */
-
-/**
- * The Failure Management module is here to compensate
- * the absence of an 'exception' device in PHP 4.
- */
-
-/**
- * $api_failureList - array containing all the failure recorded in order of arrival.
- */
-$api_failureList = array();
-
-/**
- * Fills a global array called $api_failureList
- * This array collects all the failure occuring during the script runs
- * The main purpose is allowing to manage the display messages externaly
- * from the functions or objects. This strengthens encupsalation principle
- *
- * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  string $failure_type - the type of failure
- * global: array $api_failureList
- * @return boolean false to stay consistent with the main script
- */
-function api_set_failure($failure_type) {
-    global $api_failureList;
-    $api_failureList[] = $failure_type;
-    return false;
-}
-
 /**
  * Sets the current user as anonymous if it hasn't been identified yet. This
  * function should be used inside a tool only. The function api_clear_anonymous()
@@ -2030,67 +2001,6 @@ function api_set_anonymous() {
     Session::write('_user', $_user);
     return true;
 }
-
-/**
- * Gets the last failure stored in $api_failureList;
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- * @param void
- * @return string - the last failure stored
- */
-function api_get_last_failure() {
-    global $api_failureList;
-    return $api_failureList[count($api_failureList) - 1];
-}
-
-/**
- * Collects and manages failures occurring during script execution
- * The main purpose is allowing to manage the display messages externally
- * from functions or objects. This strengthens encapsulation principle
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- * @package chamilo.library
- */
-class api_failure {
-
-    // TODO: $api_failureList to be hidden from global scope and to be renamed according to our coding conventions.
-    /**
-     * IMPLEMENTATION NOTE : For now the $api_failureList list is set to the
-     * global scope, as PHP 4 is unable to manage static variable in class. But
-     * this feature is awaited in PHP 5. The class is already written to minize
-     * the change when static class variable will be possible. And the API won't
-     * change.
-     */
-    public $api_failureList = array();
-
-    /**
-     * Piles the last failure in the failure list
-     *
-     * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
-     * @param  string $failure_type - the type of failure
-     * @global array  $api_failureList
-     * @return boolean false to stay consistent with the main script
-     */
-    static function set_failure($failure_type) {
-        global $api_failureList;
-        $api_failureList[] = $failure_type;
-        return false;
-    }
-
-    /**
-     * Gets the last failure stored
-     *
-     * @author Hugues Peeters <hugues.peeters@claroline.net>
-     * @param void
-     * @return string - the last failure stored
-     */
-    static function get_last_failure() {
-        global $api_failureList;
-        if (count($api_failureList) == 0) { return ''; }
-        return $api_failureList[count($api_failureList) - 1];
-    }
-}
-
 
 /* CONFIGURATION SETTINGS */
 
@@ -8035,7 +7945,7 @@ function api_protect_course_group($tool, $showHeader = true)
  * @param datetime $currentDate
  * @return bool true if date is in rage, false otherwise
  */
-function apiIsDateInDateRange ($startDate, $endDate, $currentDate = null)
+function api_is_date_in_date_range($startDate, $endDate, $currentDate = null)
 {
     $startDate = strtotime(api_get_local_time($startDate));
     $endDate = strtotime(api_get_local_time($endDate));
@@ -8091,7 +8001,7 @@ function api_is_student_view_active() {
  * Returns an array of resolutions that can be used for the conversion of documents to images
  * @return array
  */
-function apiGetDocumentConversionSizes()
+function api_get_document_conversion_sizes()
 {
     return array(
         '540x405'=>'540x405 (3/4)',

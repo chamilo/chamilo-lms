@@ -314,7 +314,7 @@ Display::display_header($nameTool);
 						//$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'path_to_lzx', get_lang('PathToLzx'));
 						//$form -> addElement('html','<br /><br />');
-						$options = apiGetDocumentConversionSizes();
+						$options = api_get_document_conversion_sizes();
 						$form -> addElement('select', 'size', get_lang('SlideSize'), $options);
 
 
@@ -351,7 +351,7 @@ Display::display_header($nameTool);
                 </div>
             </div>
         </div>
-	
+
 	<?php
 	/*
 	<!-- EPHORUS -->

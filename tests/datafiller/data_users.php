@@ -119,7 +119,7 @@ $users[] = array(
 
 $users[] = array(
     'username' => 'bbaggins',
-    'pass' => 'bbagins',
+    'pass' => 'bbaggins',
     'firstname' => 'Bilbo',
     'lastname' => 'Baggins',
     'status' => 5,

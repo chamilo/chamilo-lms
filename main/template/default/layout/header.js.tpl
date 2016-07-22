@@ -243,13 +243,13 @@ $(window).resize(function() {
 $(document).scroll(function() {
 
     var valor = $('body').outerHeight() - 700;
-      
+
     if ($(this).scrollTop() > 100) {
         $('.bottom_actions').addClass('bottom_actions_fixed');
     } else {
         $('.bottom_actions').removeClass('bottom_actions_fixed');
     }
-      
+
     if ($(this).scrollTop() > valor) {
         $('.bottom_actions').removeClass('bottom_actions_fixed');
     } else {

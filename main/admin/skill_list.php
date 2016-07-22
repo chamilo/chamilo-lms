@@ -150,8 +150,11 @@ switch ($action) {
         $extraField = new ExtraField('skill');
         $arrayVals = $extraField->get_handler_field_info_by_tags('tags');
         $tags = [];
-        foreach ($arrayVals['options'] as $value) {
-            $tags[] = $value;
+
+        if (isset($arrayVals['options'])) {
+            foreach ($arrayVals['options'] as $value) {
+                $tags[] = $value;
+            }
         }
 
         /* View */

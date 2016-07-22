@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use \ExtraField as ExtraFieldModel;
 use Chamilo\CoreBundle\Entity\ExtraField;
 
 /**
@@ -411,7 +412,7 @@ class SessionManager
             $where .=" AND s.id_coach = $user_id ";
         }
 
-        $extra_field = new ExtraField('session');
+        $extra_field = new ExtraFieldModel('session');
         $conditions = $extra_field->parseConditions($options);
         $inject_joins = $conditions['inject_joins'];
         $where .= $conditions['where'];
@@ -2349,7 +2350,7 @@ class SessionManager
      */
     public static function create_session_extra_field($variable, $fieldType, $displayText)
     {
-        $extraField = new ExtraField('session');
+        $extraField = new ExtraFieldModel('session');
         $params = [
             'variable' => $variable,
             'field_type' => $fieldType,
@@ -6148,7 +6149,7 @@ class SessionManager
                 $whereFieldIds = 'field_id IN ( ' . $whereParams .  ' )';
             }
             // Get session fields
-            $extraField = new ExtraField('session');
+            $extraField = new ExtraFieldModel('session');
             $questionMarks = substr(str_repeat('?, ', count($fieldsArray)), 0, -2);
             $fieldsList = $extraField->get_all(array(
                 ' variable IN ( ' . $questionMarks . ' )' => $fieldsArray,
@@ -6461,7 +6462,7 @@ class SessionManager
             $variables[] = Database::escape_string($sessionExtraField);
         }
 
-        $sessionExtraField = new ExtraField('session');
+        $sessionExtraField = new ExtraFieldModel('session');
         $fieldList = $sessionExtraField->get_all(array(
             "variable IN ( " . implode(", ", $variablePlaceHolders) . " ) " => $variables,
         ));
@@ -6904,7 +6905,7 @@ class SessionManager
         );
 
         // Extra fields
-        $extra_field = new ExtraField('session');
+        $extra_field = new ExtraFieldModel('session');
         $extra = $extra_field->addElements($form, $sessionId);
 
         $form->addElement('html', '</div>');
@@ -7075,7 +7076,7 @@ class SessionManager
         }
 
         // Inject extra session fields
-        $session_field = new ExtraField('session');
+        $session_field = new ExtraFieldModel('session');
         $rules = $session_field->getRules($columns, $column_model);
 
         $column_model[] = array('name'=>'actions', 'index'=>'actions', 'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false');
@@ -7189,7 +7190,7 @@ class SessionManager
         $extra_fields_info = array();
 
         //for now only sessions
-        $extra_field = new ExtraField('session');
+        $extra_field = new ExtraFieldModel('session');
         $double_fields = array();
 
         $extra_field_option = new ExtraFieldOption('session');

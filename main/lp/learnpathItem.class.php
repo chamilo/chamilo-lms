@@ -3634,6 +3634,7 @@ class learnpathItem
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
         if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_assoc($res);
             $accumulateScormTime = $row['accumulate_scorm_time'];
         }
 

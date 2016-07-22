@@ -1,4 +1,4 @@
-// WebcamJS v1.0.9
+// WebcamJS v1.0.10
 // Webcam library for capturing JPEG/PNG images in JavaScript
 // Attempts getUserMedia, falls back to Flash
 // Author: Joseph Huckaby: http://github.com/jhuckaby
@@ -34,7 +34,7 @@ FlashError.prototype = new IntermediateInheritor();
 WebcamError.prototype = new IntermediateInheritor();
 
 var Webcam = {
-	version: '1.0.8',
+	version: '1.0.10',
 	
 	// globals
 	protocol: location.protocol.match(/https/i) ? 'https' : 'http',
@@ -55,7 +55,8 @@ var Webcam = {
 		upload_name: 'webcam', // name of file in upload post data
 		constraints: null,     // custom user media constraints,
 		swfURL: '',            // URI to webcam.swf movie (defaults to the js location)
-		flashNotDetectedText: 'ERROR: No Adobe Flash Player detected.  Webcam.js relies on Flash for browsers that do not support getUserMedia (like yours).'
+		flashNotDetectedText: 'ERROR: No Adobe Flash Player detected.  Webcam.js relies on Flash for browsers that do not support getUserMedia (like yours).',
+		unfreeze_snap: true    // Whether to unfreeze the camera after snap (defaults to true)
 	},
 
 	errors: {
@@ -551,7 +552,7 @@ var Webcam = {
 		);
 		
 		// remove preview
-		this.unfreeze();
+		if (this.params.unfreeze_snap) this.unfreeze();
 	},
 	
 	snap: function(user_callback, user_canvas) {

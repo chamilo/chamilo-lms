@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This is a code library for Chamilo.
  * It is included by default in every Chamilo file (through including the global.inc.php)
  *
  * @package chamilo.library
  */
-
-use ChamiloSession as Session;
 
 /**
  * Constants declaration
@@ -3291,6 +3291,7 @@ function api_not_allowed($print_headers = false, $message = null)
         );
         $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'autocapitalize_off'));
         $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password')));
+
         $form->addButton('submitAuth', get_lang('LoginEnter'), '', 'primary');
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (above)
@@ -3307,8 +3308,8 @@ function api_not_allowed($print_headers = false, $message = null)
             $content .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
             $content .= "<div style='display:none;'>";
         }
-        $content .= '<div class="well_login">';
-        $content .= $form->return_form();
+        $content .= '<div class="well">';
+        $content .= $form->returnForm();
         $content .='</div>';
         if (api_is_cas_activated()) {
             $content .= "</div>";
@@ -3319,7 +3320,7 @@ function api_not_allowed($print_headers = false, $message = null)
                 get_lang('ReturnToCourseHomepage').'</a></p>';
         } else {
             $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.
-                get_lang('CampusHomepage').'</a></p>';
+                get_lang('BackHome').'</a></p>';
         }
 
         $tpl->setLoginBodyClass();
@@ -3328,7 +3329,7 @@ function api_not_allowed($print_headers = false, $message = null)
         exit;
     }
 
-    if ($user_id !=0 && !api_is_anonymous()) {
+    if ($user_id != 0 && !api_is_anonymous()) {
         $tpl->display_one_col_template();
         exit;
     }
@@ -3337,7 +3338,7 @@ function api_not_allowed($print_headers = false, $message = null)
 
     // The session is over and we were not in a course,
     // or we try to get directly to a private course without being logged
-    if (!is_null(api_get_course_int_id())) {
+    if (!empty(api_get_course_int_id())) {
         api_set_firstpage_parameter(api_get_course_id());
         $tpl->setLoginBodyClass();
         $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
@@ -3363,11 +3364,12 @@ function api_not_allowed($print_headers = false, $message = null)
         if (api_is_cas_activated()) {
             $msg .= "</div>";
         }
-        $msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
+
+        //$msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
     } else {
         // we were not in a course, return to home page
         $msg = Display::return_message(
-            get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a><br />',
+            get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('BackHome').'</a><br />',
             'error',
             false
         );

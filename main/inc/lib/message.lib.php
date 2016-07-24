@@ -1890,6 +1890,10 @@ class MessageManager
 
     /**
      * Get the error log from failed mailing
+     * This assumes a complex setup where you have a cron script regularly copying the mail queue log
+     * into app/cache/mail/mailq.
+     * This can be done with a cron command like (check the location of your mail log file first):
+     * @example 0,30 * * * * root cp /var/log/exim4/mainlog /var/www/chamilo/app/cache/mail/mailq
      * @return array|bool
      */
     public static function failedSentMailErrors()

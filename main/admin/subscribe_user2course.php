@@ -273,7 +273,7 @@ if (is_array($extra_field_list)) {
                             $checked = 'selected="true"';
                         }
                     }
-                    echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
+                    echo '<option value="'.$option[1].'" '.$checked.'>'.$option[2].'</option>';
                 }
             }
             echo '</select>';

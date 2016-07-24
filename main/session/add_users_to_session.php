@@ -604,7 +604,7 @@ if ($add_type=='multiple') {
                                 $checked = 'selected="true"';
                             }
                         }
-                        echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
+                        echo '<option value="'.$option[1].'" '.$checked.'>'.$option[2].'</option>';
                     }
                 }
                 echo '</select>';

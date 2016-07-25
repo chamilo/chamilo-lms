@@ -5461,12 +5461,6 @@ a.sessionView {
   overflow-y: auto;
   max-height:50px;
 }
-.view-by-session-right-actions {
-  float : right;
-}
-.view-by-session-right-actions img {
-  width : 12px;
-}
 .session-view-session-go-to-course-in-session {
   font-size : 12px;
 }

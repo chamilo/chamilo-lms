@@ -133,9 +133,6 @@ define('TOOL_COURSE_HOMEPAGE', 'course_homepage');
 define('TOOL_COURSE_RIGHTS_OVERVIEW', 'course_rights');
 define('TOOL_UPLOAD', 'file_upload');
 define('TOOL_COURSE_MAINTENANCE', 'course_maintenance');
-define('TOOL_VISIO', 'visio');
-define('TOOL_VISIO_CONFERENCE', 'visio_conference');
-define('TOOL_VISIO_CLASSROOM', 'visio_classroom');
 define('TOOL_SURVEY', 'survey');
 define('TOOL_WIKI', 'wiki');
 define('TOOL_GLOSSARY', 'glossary');
@@ -5873,15 +5870,43 @@ function api_calculate_image_size($image_width, $image_height, $target_width, $t
  */
 function api_get_tools_lists($my_tool = null) {
     $tools_list = array(
-        TOOL_DOCUMENT, TOOL_THUMBNAIL, TOOL_HOTPOTATOES,
-        TOOL_CALENDAR_EVENT, TOOL_LINK, TOOL_COURSE_DESCRIPTION, TOOL_SEARCH,
-        TOOL_LEARNPATH, TOOL_ANNOUNCEMENT, TOOL_FORUM, TOOL_THREAD, TOOL_POST,
-        TOOL_DROPBOX, TOOL_QUIZ, TOOL_USER, TOOL_GROUP, TOOL_BLOGS, TOOL_CHAT,
-        TOOL_CONFERENCE, TOOL_STUDENTPUBLICATION, TOOL_TRACKING, TOOL_HOMEPAGE_LINK,
-        TOOL_COURSE_SETTING, TOOL_BACKUP, TOOL_COPY_COURSE_CONTENT, TOOL_RECYCLE_COURSE,
-        TOOL_COURSE_HOMEPAGE, TOOL_COURSE_RIGHTS_OVERVIEW, TOOL_UPLOAD, TOOL_COURSE_MAINTENANCE,
-        TOOL_VISIO, TOOL_VISIO_CONFERENCE, TOOL_VISIO_CLASSROOM, TOOL_SURVEY, TOOL_WIKI,
-        TOOL_GLOSSARY, TOOL_GRADEBOOK, TOOL_NOTEBOOK, TOOL_ATTENDANCE, TOOL_COURSE_PROGRESS
+        TOOL_DOCUMENT,
+        TOOL_THUMBNAIL,
+        TOOL_HOTPOTATOES,
+        TOOL_CALENDAR_EVENT,
+        TOOL_LINK,
+        TOOL_COURSE_DESCRIPTION,
+        TOOL_SEARCH,
+        TOOL_LEARNPATH,
+        TOOL_ANNOUNCEMENT,
+        TOOL_FORUM,
+        TOOL_THREAD,
+        TOOL_POST,
+        TOOL_DROPBOX,
+        TOOL_QUIZ,
+        TOOL_USER,
+        TOOL_GROUP,
+        TOOL_BLOGS,
+        TOOL_CHAT,
+        TOOL_CONFERENCE,
+        TOOL_STUDENTPUBLICATION,
+        TOOL_TRACKING,
+        TOOL_HOMEPAGE_LINK,
+        TOOL_COURSE_SETTING,
+        TOOL_BACKUP,
+        TOOL_COPY_COURSE_CONTENT,
+        TOOL_RECYCLE_COURSE,
+        TOOL_COURSE_HOMEPAGE,
+        TOOL_COURSE_RIGHTS_OVERVIEW,
+        TOOL_UPLOAD,
+        TOOL_COURSE_MAINTENANCE,
+        TOOL_SURVEY,
+        TOOL_WIKI,
+        TOOL_GLOSSARY,
+        TOOL_GRADEBOOK,
+        TOOL_NOTEBOOK,
+        TOOL_ATTENDANCE,
+        TOOL_COURSE_PROGRESS,
     );
     if (empty($my_tool)) {
         return $tools_list;
@@ -6579,7 +6604,6 @@ function api_get_locked_settings() {
         'server_type',
         'permanently_remove_deleted_files',
         'account_valid_duration',
-        'service_visio',
         'service_ppt2lp',
         'wcag_anysurfer_public_pages',
         'upload_extensions_list_type',
@@ -6592,7 +6616,6 @@ function api_get_locked_settings() {
         'permissions_for_new_directories',
         'permissions_for_new_files',
         'platform_charset',
-        'service_visio',
         'ldap_description',
         'cas_activate',
         'cas_server',

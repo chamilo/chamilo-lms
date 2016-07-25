@@ -573,20 +573,6 @@ class AddCourse
             ) . "','0','squaregrey.gif',0,'_self','authoring','0')"
         );
 
-        if (api_get_setting('service_visio', 'active') == 'true') {
-            $mycheck = api_get_setting('service_visio', 'visio_host');
-            if (!empty($mycheck)) {
-                Database::query(
-                    "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-                     VALUES ($course_id, 21, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction','0')"
-                );
-                Database::query(
-                    "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-                     VALUES ($course_id, 22, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring','0')"
-                );
-            }
-        }
-
         if (api_get_setting('search_enabled') === 'true') {
             Database::query(
                 "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)

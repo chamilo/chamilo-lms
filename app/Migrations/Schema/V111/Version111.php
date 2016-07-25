@@ -302,6 +302,11 @@ class Version111 extends AbstractMigrationChamilo
         if (!$schema->hasTable('version')) {
             $this->addSql('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));');
         }
+
+        $this->addSql('DELETE FROM settings_current WHERE variable = "service_visio"');
+        $this->addSql('DELETE FROM settings_options WHERE variable = "visio_use_rtmpt"');
+
+
     }
 
     /**

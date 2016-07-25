@@ -363,18 +363,23 @@ class CourseHome
                 unset($lnk);
                 if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
                     if ($tool['visibility'] == '1' || $tool['name'] == TOOL_TRACKING) {
-                        $link['name'] = Display::return_icon('remove.gif', get_lang('Deactivate'));
+                        $link['name'] = Display::returnFontAwesomeIcon('minus');
+                        $link['title'] = get_lang('Deactivate');
                         $link['cmd'] = 'hide=yes';
                         $lnk[] = $link;
                     }
 
                     if ($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN) {
-                        $link['name'] = Display::return_icon('add.gif', get_lang('Activate'));
+                        //$link['name'] = Display::return_icon('add.gif', get_lang('Activate'));
+                        $link['name'] = Display::returnFontAwesomeIcon('plus');
+                        $link['title'] = get_lang('Activate');
                         $link['cmd'] = 'restore=yes';
                         $lnk[] = $link;
 
                         if ($tool['added_tool'] == 1) {
-                            $link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
+                            //$link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
+                            $link['name'] = Display::returnFontAwesomeIcon('trash');
+                            $link['title'] = get_lang('Remove');
                             $link['cmd'] = 'remove=yes';
                             $lnk[] = $link;
                         }
@@ -385,8 +390,8 @@ class CourseHome
                 }
                 if (api_is_platform_admin() && !api_is_coach()) {
                     if ($tool['visibility'] == 2) {
-                        $link['name'] = Display::return_icon('undelete.gif', get_lang('Activate'));
-
+                        $link['name'] = Display::returnFontAwesomeIcon('undo');
+                        $link['title'] = get_lang('Activate');
                         $link['cmd'] = 'hide=yes';
                         $lnk[] = $link;
 
@@ -397,17 +402,24 @@ class CourseHome
                         }
                     }
                     if ($tool['visibility'] == 0 && $tool['added_tool'] == 0) {
-                        $link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
+                        $link['name'] = Display::returnFontAwesomeIcon('trash');
+                        $link['title'] = get_lang('Remove');
                         $link['cmd'] = 'remove=yes';
                         $lnk[] = $link;
                     }
                 }
                 if (is_array($lnk)) {
+                    $html .= '<div class="pull-right">';
+                    $html .= '<div class="btn-options">';
+                    $html .= '<div class="btn-group btn-group-sm" role="group">';
                     foreach ($lnk as & $this_link) {
-                        if (!$tool['adminlink']) {
-                            $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
+                        if (!$tool['adminlink']) { 
+                            $html .= '<a class="btn btn-default" title='.$this_link['title'].' href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
                         }
                     }
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '</div>';
                 }
                 $html .= "</td>";
 

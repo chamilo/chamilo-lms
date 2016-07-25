@@ -4276,20 +4276,12 @@ ul.exercise-draggable-answer .touch-items:hover{
   display: inline-block;
   position: relative;
   overflow: hidden;
-  height: 28px;
+  height: 30px;
   width: 60px;
   text-align: center;
-  border: 1px solid;
+  border: 3px solid;
   border-color: white #f7f7f7 #f5f5f5;
   border-radius: 3px;
-  background: #444;
-  border-color: #111 #0a0a0a black;
-  background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-  background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-  background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-  background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4));
-  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 .drag_question .select-matching:before, .drag_question .select-matching:after {
   content: '';
@@ -4318,15 +4310,11 @@ ul.exercise-draggable-answer .touch-items:hover{
   position: relative;
   width: 130%;
   margin: 0;
-  padding: 6px 8px 6px 10px;
+  padding: 6px 6px 6px 6px;
   height: 28px;
   line-height: 14px;
-  font-size: 14px;
-  color: #ffffff;
-  text-shadow: 0 1px white;
-  /* Fallback for IE 8 */
-  background: #f2f2f2;
-  /* "transparent" doesn't work with Opera */
+  font-size: 13px;
+  color: #111;
   background: rgba(0, 0, 0, 0) !important;
   border: 0;
   border-radius: 0;
@@ -4336,10 +4324,10 @@ ul.exercise-draggable-answer .touch-items:hover{
   margin: 3px;
   padding: 6px 8px;
   text-shadow: none;
-  background: #444;
+  background: #fff;
   border-radius: 3px;
   cursor: pointer;
-  color: #ffffff;
+  color: #111;
 }
 .drag_question .window{
   border:1px solid #dddddd;
@@ -5782,7 +5770,13 @@ footer{
 }
 #toolnavbox ul li{
     height: 40px;
-    
+}
+.everybodyview{
+    padding-top: 20px;
+    margin-top: 10px;
+}
+.btn-options{
+    padding-right: 20px;
 }
 #toolnavbox ul li a {
 	display: inline-block;

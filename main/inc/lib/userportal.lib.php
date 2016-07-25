@@ -1558,7 +1558,7 @@ class IndexManager
             }
         }
 
-        $specialCourses = '';
+        $html = '';
         $loadDirs = $this->load_directories_preview;
 
         // If we're not in the history view...
@@ -1569,12 +1569,25 @@ class IndexManager
                 $user_id,
                 $loadDirs
             );
-            $specialCourses = $specialCoursesResult['html'];
+            $specialCourses = $specialCoursesResult;
+
+            if ($specialCourses) {
+                $specialCoursesTemplate = new Template(null, false, false, false, false, false, false);
+                $specialCoursesTemplate->assign('courses', $specialCourses);
+
+                $html = $specialCoursesTemplate->fetch(
+                    $this->tpl->get_template('/user_portal/classic_courses_without_category.tpl')
+                );
+            }
 
             // Display courses
             // [code=>xxx, real_id=>000]
             $listCourses = CourseManager::get_courses_list_by_user_id($user_id, false);
+
             foreach ($listCourses as $i => $listCourseCodeId) {
+                if (isset($listCourseCodeId['special_course'])) {
+                    continue;
+                }
                 list($userCategoryId, $userCatTitle) = CourseManager::getUserCourseCategoryForCourse(
                     $user_id,
                     $listCourseCodeId['real_id']
@@ -1605,7 +1618,7 @@ class IndexManager
         uasort($listUserCategories, "self::compareListUserCategory");
         $listUserCategories[0] = '';
 
-        $html = '<div class="session-view-block">';
+        $html .= '<div class="session-view-block">';
 
         foreach ($listUserCategories as $userCategoryId => $userCatTitle) {
             // add user category
@@ -1623,10 +1636,11 @@ class IndexManager
                     // add course
                     $listCoursesAlreadyDisplayed[$listCourse['courseId']] = 1;
                     if ($userCategoryId == 0) {
-                        $htmlCategory .= '<div class="session-view-well session-view-row well" >';
+                        $htmlCategory .= '<div class="panel panel-default">';
                     } else {
-                        $htmlCategory .= '<div class="session-view-row" >';
+                        $htmlCategory .= '<div class="panel panel-default">';
                     }
+                    $htmlCategory .= '<div class="panel-body">';
                     $coursesInfo =  $listCourse['course'];
 
                     $htmlCategory .= self::getHtmlForCourse(
@@ -1661,7 +1675,7 @@ class IndexManager
                         $htmlSessionCategory .= $htmlSession;
                     }
                     $htmlSessionCategory .= '</div>'; // end session cat block
-                    $htmlCategory .=  $htmlSessionCategory .'</div>' ;
+                    $htmlCategory .=  $htmlSessionCategory .'</div></div>' ;
                     $htmlCategory .= '';   // end course block
                 }
                 $userCategoryHtml .= $htmlCategory;
@@ -1673,17 +1687,19 @@ class IndexManager
             foreach ($listCoursesInfo as $i => $listCourse) {
                 if ($listCourse['userCatId'] == $userCategoryId && !isset($listCoursesAlreadyDisplayed[$listCourse['id']])) {
                     if ($userCategoryId != 0) {
-                        $htmlCategory .= '<div class="session-view-row" >';
+                        $htmlCategory .= '<div class="panel panel-default">';
                     } else {
-                        $htmlCategory .= '<div class="session-view-well well">';
+                        $htmlCategory .= '<div class="panel panel-default">';
                     }
+
+                    $htmlCategory .= '<div class="panel-body">';
                     $htmlCategory .= self::getHtmlForCourse(
                         $listCourse['course'],
                         $userCategoryId,
                         0,
                         $loadDirs
                     );
-                    $htmlCategory .= '</div>';
+                    $htmlCategory .= '</div></div>';
                 }
             }
             $htmlCategory .= '';
@@ -1696,7 +1712,7 @@ class IndexManager
         $html .= '</div>';
 
         return [
-            'html' => $html.$specialCourses,
+            'html' => $html,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

@@ -17,10 +17,12 @@ Feature: Users management as admin
   Scenario: Create a user with only basic info
     Given I am a platform administrator
     And I am on "/main/admin/user_add.php"
-    When I fill in "firstname" with "Sammy"
-    And I fill in "lastname" with "Marshall"
-    And I fill in "username" with "smarshall"
-    And I fill in "email" with "smarshall@example.com"
+    And I fill in the following:
+      | firstname | Sammy                 |
+      | lastname  | Marshall              |
+      | email     | smarshall@example.com |
+      | username  | smarshall             |
+      | password  | smarshall             |
     And I press "submit"
     Then I should see "The user has been added"
 

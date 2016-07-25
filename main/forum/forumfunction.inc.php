@@ -603,7 +603,7 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
     }
 
     if ($showMessage) {
-        Display:: addFlash(Display::return_message($return_message));
+        Display::display_confirmation_message($return_message, 'success');
     }
 
     return $last_id;

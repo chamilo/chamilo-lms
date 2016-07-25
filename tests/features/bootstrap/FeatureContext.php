@@ -35,6 +35,7 @@ class FeatureContext extends MinkContext
         $this->fillField('login', 'admin');
         $this->fillField('password', 'admin');
         $this->pressButton('submitAuth');
+        $this->getSession()->back();
     }
     /**
      * @Given /^I am a session administrator$/
@@ -119,11 +120,9 @@ class FeatureContext extends MinkContext
      */
     public function courseExists($argument)
     {
-        return array(
-            new Given('I am a platform administrator'),
-            new Given('I am on "/main/admin/course_list.php?keyword=' . $argument . '"'),
-            new Given('I should see "' . $argument . '"'),
-        );
+        $this->iAmAPlatformAdministrator();
+        $this->visit('/main/admin/course_list.php?keyword=' . $argument);
+        $this->assertPageContainsText($argument);
     }
     /**
      * @Given /^course "([^"]*)" is deleted$/
@@ -152,20 +151,16 @@ class FeatureContext extends MinkContext
      */
     public function iAmOnCourseXHomepage($argument)
     {
-        return array(
-            new Given('I am on "/main/course_home/course_home.php?cDir=' . $argument . '"'),
-            new Given('I should not see an ".alert-danger" element')
-        );
+        $this->visit('/main/course_home/course_home.php?cDir=' . $argument);
+        $this->assertElementNotOnPage('.alert-danger');
     }
     /**
      * @Given /^I am a "([^"]*)" user$/
      */
     public function iAmAXUser($argument)
     {
-        return array(
-            new Given('I am on "/main/auth/profile.php"'),
-            new Given('the "language" field should contain "' . $argument . '"')
-        );
+        $this->visit('/main/auth/profile.php');
+        $this->assertFieldContains('language', $argument);
     }
 
     /**
@@ -173,13 +168,13 @@ class FeatureContext extends MinkContext
      */
     public function iAmLoggedAs($username)
     {
-        return [
-            new Given('I am on "/index.php?logout=logout"'),
-            new Given('I am on homepage'),
-            new Given('I fill in "login" with "' . $username . '"'),
-            new Given('I fill in "password" with "' . $username . '"'),
-            new Given('I press "submitAuth"')
-        ];
+        $this->visit('/index.php?logout=logout');
+        $this->iAmOnHomepage();
+        $this->fillFields(new \Behat\Gherkin\Node\TableNode([
+            ['login', $username],
+            ['password', $username]
+        ]));
+        $this->pressButton('submitAuth');
     }
 
     /**
@@ -202,13 +197,11 @@ class FeatureContext extends MinkContext
             'is_my_friend' => 'friend'
         ]);
 
-        return array(
-            new Given('I am a platform administrator'),
-            new Given('I am on "' . $sendInvitationURL . '"'),
-            new Given('I am logged as "' . $friendUsername . '"'),
-            new Given('I am on "' . $acceptInvitationURL . '"'),
-            new Given('I am a platform administrator')
-        );
+        $this->iAmAPlatformAdministrator();
+        $this->visit($sendInvitationURL);
+        $this->iAmLoggedAs($friendUsername);
+        $this->visit($acceptInvitationURL);
+        $this->iAmAPlatformAdministrator();
     }
 
     /**
@@ -216,18 +209,18 @@ class FeatureContext extends MinkContext
      */
     public function iHaveAPublicPasswordProtectedCourse($code, $password)
     {
-        return [
-            new Given('I am on "/main/admin/course_add.php"'),
-            new Given('I fill in "title" with "Password Protected"'),
-            new Given('I fill in "visual_code" with "' . $code . '"'),
-            new Given('I fill in "visibility" with "3"'),
-            new Given('I press "submit"'),
-            new Given('I am on "/main/course_info/infocours.php?cidReq=' . $code . '"'),
-            new Given('I should see "Course registration password"'),
-            new Given('I fill in "course_registration_password" with "' . $password . '"'),
-            new Given('I press "submit_save"'),
-            new Given('the "course_registration_password" field should contain "' . $password . '"')
-        ];
+        $this->visit('/main/admin/course_add.php');
+        $this->fillFields(new \Behat\Gherkin\Node\TableNode([
+            ['title', 'Password Protected'],
+            ['visual_code', $code],
+            ['visibility', 3]
+        ]));
+        $this->pressButton('submit');
+        $this->visit('/main/course_info/infocours.php?cidReq=' . $code);
+        $this->assertPageContainsText('Course registration password');
+        $this->fillField('department_name', $password);
+        $this->pressButton('submit_save');
+        $this->assertFieldContains('department_name', $password);
     }
 
     /**
@@ -235,10 +228,8 @@ class FeatureContext extends MinkContext
      */
     public function iAmNotLogged()
     {
-        return [
-            new Given('I am on "/index.php?logout=logout"'),
-            new Given('I am on homepage')
-        ];
+        $this->visit('/index.php?logout=logout');
+        $this->visit('I am on homepage');
     }
 
     /**
@@ -246,11 +237,9 @@ class FeatureContext extends MinkContext
      */
     public function iInviteAFrienToASocialGroup($friendId, $groupId)
     {
-        return [
-            new Step\Given('I am on "/main/social/group_invitation.php?id=' . $groupId . '"'),
-            new Step\When('I fill in "invitation[]" with "' . $friendId . '"'),
-            new Step\When('I press "submit"')
-        ];
+        $this->visit('/main/social/group_invitation.php?id=' . $groupId);
+        $this->fillField('invitation[]', $friendId);
+        $this->pressButton('submit');
     }
 
     /**
@@ -261,14 +250,12 @@ class FeatureContext extends MinkContext
      */
     public function adminTopBarIsDisabled()
     {
-        return [
-            new Step\Given('I am a platform administrator'),
-            new Step\Given('I am on "/main/admin/settings.php"'),
-            new Step\When('I fill in "search_field" with "show_admin_toolbar"'),
-            new Step\When('I press "submit_button"'),
-            new Step\When('I select "do_not_show" from "show_admin_toolbar"'),
-            new Step\When('I press "submit"')
-        ];
+        $this->iAmAPlatformAdministrator();
+        $this->visit('/main/admin/settings.php');
+        $this->fillField('search_field', 'show_admin_toolbar');
+        $this->pressButton('submit_button');
+        $this->selectOption('show_admin_toolbar', 'do_not_show');
+        $this->pressButton('submit');
     }
     /**
      * @Given /^Admin top bar is enabled$/
@@ -300,10 +287,10 @@ class FeatureContext extends MinkContext
      */
     public function iTryDeleteAFriendFromSocialGroup($friendId, $groupId)
     {
-        return [
-            new Step\When(
-                'I am on "/main/social/group_members.php?id=' . $groupId . '&u=' . $friendId . '&action=delete"'
-            )
-        ];
+        $this->visit('/main/social/group_members.php?' . http_build_query([
+            'id' => $groupId,
+            'u' => $friendId,
+            'action' => 'delete'
+        ]));
     }
 }

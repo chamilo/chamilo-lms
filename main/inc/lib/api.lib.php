@@ -3257,7 +3257,8 @@ function api_not_allowed($print_headers = false, $message = null)
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
         $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
         $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
-        if (api_is_cas_activated()) {
+        $casEnabled = api_is_cas_activated();
+        if ($casEnabled) {
             $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
             $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
             $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
@@ -3267,7 +3268,7 @@ function api_not_allowed($print_headers = false, $message = null)
         $msg .= '<div class="well">';
         $msg .= $form->return_form();
         $msg .='</div>';
-        if (api_is_cas_activated()) {
+        if ($casEnabled) {
             $msg .= "</div>";
         }
 

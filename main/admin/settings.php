@@ -360,8 +360,9 @@ if (!empty($_GET['category']) &&
 }
 
 $htmlHeadXtra[] = '<script>
-    var hide_icon = "'.api_get_path(WEB_IMG_PATH).'shared_setting_na.png";
-    var show_icon = "'.api_get_path(WEB_IMG_PATH).'shared_setting.png";
+    
+    var hide_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting_na.png";
+    var show_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting.png";
     var url       = "'.api_get_path(WEB_AJAX_PATH).'admin.ajax.php?a=update_changeable_setting";
 
     $(function() {

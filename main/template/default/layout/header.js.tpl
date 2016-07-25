@@ -38,8 +38,8 @@
                 var templatesConfig = CKEDITOR.getTemplates("default");
 
                 var $templatesUL = $("<ul>");
-
-                $.each(templatesConfig.templates, function () {
+                if (templatesConfig) {
+                    $.each(templatesConfig.templates, function () {
                     var template = this;
                     var $templateLi = $("<li>");
 
@@ -47,25 +47,26 @@
                     templateHTML += "<b>" + template.title + "</b>";
 
                     if (template.description) {
-                        templateHTML += "<div class=description>" + template.description + "</div>";
+                    templateHTML += "<div class=description>" + template.description + "</div>";
                     }
 
                     templateHTML += "</div>";
 
                     $("<a>", {
-                        href: "#",
-                        html: templateHTML,
-                        click: function (e) {
-                            e.preventDefault();
-                            if (CKEDITOR.instances[editorName]) {
-                                CKEDITOR.instances[editorName].setData(template.html, function () {
-                                    this.checkDirty();
-                                });
-                            }
-                        }
+                    href: "#",
+                    html: templateHTML,
+                    click: function (e) {
+                    e.preventDefault();
+                    if (CKEDITOR.instances[editorName]) {
+                    CKEDITOR.instances[editorName].setData(template.html, function () {
+                    this.checkDirty();
+                    });
+                    }
+                    }
                     }).appendTo($templateLi);
                     $templatesUL.append($templateLi);
-                });
+                    });
+                }
                 $templatesUL.appendTo("#frmModel");
             });
         };

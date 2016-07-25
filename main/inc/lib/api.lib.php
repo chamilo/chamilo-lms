@@ -121,7 +121,6 @@ define('TOOL_USER', 'user');
 define('TOOL_GROUP', 'group');
 define('TOOL_BLOGS', 'blog_management');
 define('TOOL_CHAT', 'chat');
-define('TOOL_CONFERENCE', 'conference');
 define('TOOL_STUDENTPUBLICATION', 'student_publication');
 define('TOOL_TRACKING', 'tracking');
 define('TOOL_HOMEPAGE_LINK', 'homepage_link');

@@ -828,21 +828,12 @@ class CourseHome
                         'target' => $tool['target']
                     );
                 } else {
-                    if (count(explode('type=classroom', $tool['link'])) == 2 || count(explode('type=conference', $tool['link'])) == 2) {
-                        $tool_link_params = array(
-                            'id' => 'tooldesc_'.$toolId,
-                            'href' => $tool['link'],
-                            'class' => $class,
-                            'target' => '_blank'
-                        );
-                    } else {
-                        $tool_link_params = array(
-                            'id' => 'tooldesc_'.$toolId,
-                            'href' => $tool['link'],
-                            'class' => $class,
-                            'target' => $tool['target']
-                        );
-                    }
+                    $tool_link_params = array(
+                        'id' => 'tooldesc_'.$toolId,
+                        'href' => $tool['link'],
+                        'class' => $class,
+                        'target' => $tool['target']
+                    );
                 }
 
                 $tool_name = self::translate_tool_name($tool);

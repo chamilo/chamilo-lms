@@ -72,7 +72,6 @@ $tools['announcement'] = array('id' => 'announcement', 'name' => get_lang('Annou
 // $tools[]= array('id'=>'assignment','name'=>get_lang('Assignment'));
 $tools['calendar_event'] = array('id' => 'calendar_event', 'name' => get_lang('Calendar_event'));
 $tools['chat'] = array('id' => 'chat', 'name' => get_lang('Chat'));
-$tools['conference'] = array('id' => 'conference', 'name' => get_lang('Conference'));
 $tools['course_description'] = array('id' => 'course_description', 'name' => get_lang('Course_description'));
 $tools['document'] = array('id' => 'document', 'name' => get_lang('Document'));
 $tools['dropbox'] = array('id' => 'dropbox', 'name' => get_lang('Dropbox'));

@@ -304,9 +304,9 @@ class Version111 extends AbstractMigrationChamilo
         }
 
         $this->addSql('DELETE FROM settings_current WHERE variable = "service_visio"');
+        $this->addSql('DELETE FROM settings_current WHERE variable = "course_create_active_tools" AND subkey = "online_conference"');
         $this->addSql('DELETE FROM settings_options WHERE variable = "visio_use_rtmpt"');
-
-
+        $this->addSql('DELETE FROM course_module WHERE name = "conference"');
     }
 
     /**

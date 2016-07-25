@@ -29,10 +29,7 @@ $tool_rights[TOOL_ANNOUNCEMENT]=array("View","Add","Edit","Delete","Visibility",
 $tool_rights[TOOL_USER]=array("View","Add","Edit","Delete");
 //$tool_rights[TOOL_GROUP]=array("View","Add","Edit","Delete");
 //$tool_rights[TOOL_CHAT]=array("View","Delete");
-//$tool_rights[TOOL_CONFERENCE]=array("View","Add","Edit","Delete");
 //$tool_rights[TOOL_STUDENTPUBLICATION]=array("View","Add","Edit","Delete");
 
 // this value can be checkbox or image
 $setting_visualisation='image';
-
-?>

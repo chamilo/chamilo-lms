@@ -116,7 +116,6 @@ class TestsSuite extends TestSuite
        	$this->addFile(api_get_path(SYS_TEST_PATH).'/main/auth/lost_password.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/auth/openid/xrds.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/chat/chat_functions.lib.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/conference/get_translation.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercise/hotpotatoes.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/lp/scorm.lib.test.php');
         //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/survey/survey.lib.test.php');

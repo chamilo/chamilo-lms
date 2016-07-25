@@ -579,7 +579,6 @@ class Statistics
             'assignment',
             'calendar_event',
             'chat',
-            'conference',
             'course_description',
             'document',
             'dropbox',

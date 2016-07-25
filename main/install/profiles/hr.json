@@ -86,11 +86,6 @@
         },
         {
             "variable": "course_create_active_tools",
-            "subkey": "online_conference",
-            "selected_value": "false"
-        },
-        {
-            "variable": "course_create_active_tools",
             "subkey": "student_publications",
             "selected_value": "false"
         },

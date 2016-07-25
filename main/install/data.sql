@@ -49,7 +49,6 @@ VALUES
 ('course_create_active_tools','users','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Users', 0),
 ('course_create_active_tools','groups','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Groups', 0),
 ('course_create_active_tools','chat','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Chat', 0),
-('course_create_active_tools','online_conference','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'OnlineConference', 0),
 ('course_create_active_tools','student_publications','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'StudentPublications', 0),
 ('allow_personal_agenda',NULL,'radio','User','true','AllowPersonalAgendaTitle','AllowPersonalAgendaComment',NULL,NULL, 0),
 ('display_coursecode_in_courselist',NULL,'radio','Platform','false','DisplayCourseCodeInCourselistTitle','DisplayCourseCodeInCourselistComment',NULL,NULL, 0),
@@ -734,19 +733,17 @@ INSERT INTO course_module VALUES
 (15,'course_setting','course_info/infocours.php','reference.gif',1,1,'courseadmin'),
 (16,'External','','external.gif',0,0,'external'),
 (17,'AddedLearnpath','','scormbuilder.gif',0,0,'external'),
-(18,'conference','conference/index.php?type=conference','conf.gif',0,0,'external'),
-(19,'conference','conference/index.php?type=classroom','conf.gif',0,0,'external'),
-(20,'learnpath','lp/lp_controller.php','scorms.gif',5,1,'basic'),
-(21,'blog','blog/blog.php','blog.gif',1,2,'basic'),
-(22,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
-(23,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
-(24,'survey','survey/survey_list.php','survey.gif',2,1,'basic'),
-(25,'wiki','wiki/index.php','wiki.gif',2,3,'basic'),
-(26,'gradebook','gradebook/index.php','gradebook.gif',2,2,'basic'),
-(27,'glossary','glossary/index.php','glossary.gif',2,1,'basic'),
-(28,'notebook','notebook/index.php','notebook.gif',2,1,'basic'),
-(29,'attendance','attendance/index.php','attendance.gif',2,1,'basic'),
-(30,'course_progress','course_progress/index.php','course_progress.gif',2,1,'basic');
+(18,'learnpath','lp/lp_controller.php','scorms.gif',5,1,'basic'),
+(19,'blog','blog/blog.php','blog.gif',1,2,'basic'),
+(20,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
+(21,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
+(22,'survey','survey/survey_list.php','survey.gif',2,1,'basic'),
+(23,'wiki','wiki/index.php','wiki.gif',2,3,'basic'),
+(24,'gradebook','gradebook/index.php','gradebook.gif',2,2,'basic'),
+(25,'glossary','glossary/index.php','glossary.gif',2,1,'basic'),
+(26,'notebook','notebook/index.php','notebook.gif',2,1,'basic'),
+(27,'attendance','attendance/index.php','attendance.gif',2,1,'basic'),
+(28,'course_progress','course_progress/index.php','course_progress.gif',2,1,'basic');
 
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'legal_accept','Legal',0,0, NOW());
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (1, 1, 'already_logged_in','Already logged in',0,0, NOW());

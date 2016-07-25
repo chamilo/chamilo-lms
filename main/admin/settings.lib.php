@@ -1214,13 +1214,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
     );
 
     $url_id = api_get_current_access_url_id();
-
+    /* 
     if (!empty($_configuration['multiple_access_urls']) && api_is_global_platform_admin() && $url_id == 1) {
         $group = array();
         $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
         $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
         $form->addGroup($group, 'buttons_in_action_right');
-    }
+    }*/
 
     $default_values = array();
     $url_info = api_get_access_url($url_id);
@@ -1244,28 +1244,28 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         if ($row['access_url_changeable'] == '1') {
                             $form->addElement(
                                 'html',
-                                '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>'
+                                '<div class="pull-right"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting') , null, ICON_SIZE_MEDIUM).'</a></div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
-                                '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>'
+                                '<div class="pull-right"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM ).'</a></div>'
                             );
                         }
                     } else {
                         if ($row['access_url_changeable'] == '1') {
                             $form->addElement(
                                 'html',
-                                '<div style="float: right;">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</div>'
+                                '<div class="pull-right">'.
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM ).'</div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
-                                '<div style="float: right;">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</div>'
+                                '<div class="pull-right">'.
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM ).'</div>'
                             );
                         }
                     }

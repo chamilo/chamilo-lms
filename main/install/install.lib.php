@@ -2711,7 +2711,7 @@ function finishInstallation(
     UserManager::setPasswordEncryption($encryptPassForm);
 
     // Create admin user.
-    UserManager::create_user(
+    @UserManager::create_user(
         $adminFirstName,
         $adminLastName,
         1,
@@ -2733,7 +2733,7 @@ function finishInstallation(
     );
 
     // Create anonymous user.
-    UserManager::create_user(
+    @UserManager::create_user(
         'Joe',
         'Anonymous',
         6,

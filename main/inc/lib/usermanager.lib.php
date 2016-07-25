@@ -366,7 +366,7 @@ class UserManager
         }
 
         // Silence password_hash deprecated warning
-        @$userManager->updateUser($user);
+        $userManager->updateUser($user);
         $userId = $user->getId();
 
         if (!empty($userId)) {

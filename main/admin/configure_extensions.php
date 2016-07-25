@@ -31,7 +31,8 @@ if (isset($_POST['activeExtension'])) {
 				while($row = Database::fetch_array($rs)){
 					if(!empty($_POST['visio_host'])) {
 						$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-						$select = "SELECT id FROM $tool_table WHERE c_id =".$row['id']." AND name='".TOOL_VISIO_CONFERENCE."'";
+						$select = "SELECT id FROM $tool_table 
+						           WHERE c_id =".$row['id']." AND name='".TOOL_VISIO_CONFERENCE."'";
 						$selectres = Database::query($select);
 						if (Database::num_rows($selectres)<1) {
 							$sql = 'INSERT INTO '.$tool_table.' SET
@@ -46,23 +47,24 @@ if (isset($_POST['activeExtension'])) {
 									category="interaction"';
 							Database::query($sql);
 						}
-						$select = "SELECT id FROM $tool_table WHERE c_id =".$row['id']." AND name='".TOOL_VISIO_CLASSROOM."'";
-						$selectres = Database::query($select);
-						if(Database::num_rows($selectres)<1) {
-							$sql = 'INSERT INTO '.$tool_table.' SET
-							        c_id =  '.$row['id'].',
-									name="'.TOOL_VISIO_CLASSROOM.'",
-									link="conference/index.php?type=classroom",
-									image="visio.gif",
-									visibility="1",
-									admin="0",
-									address="squaregrey.gif",
-									target="_self",
-									category="authoring"';
-							Database::query($sql);
-						}
-					}
-				}
+						$select = "SELECT id FROM $tool_table 
+						           WHERE c_id =".$row['id']." AND name='".TOOL_VISIO_CLASSROOM."'";
+                        $selectres = Database::query($select);
+                        if (Database::num_rows($selectres) < 1) {
+                            $sql = 'INSERT INTO '.$tool_table.' SET
+                                    c_id =  '.$row['id'].',
+                                    name="'.TOOL_VISIO_CLASSROOM.'",
+                                    link="conference/index.php?type=classroom",
+                                    image="visio.gif",
+                                    visibility="1",
+                                    admin="0",
+                                    address="squaregrey.gif",
+                                    target="_self",
+                                    category="authoring"';
+                            Database::query($sql);
+                        }
+                    }
+                }
 				$message = get_lang('ServiceActivated');
 
 			}
@@ -90,12 +92,12 @@ if (isset($_POST['activeExtension'])) {
 					AND subkey="visio_use_rtmpt"';
 			$rs = Database::query($sql);
 
-			if(empty($message)) {
+			if (empty($message)) {
 				$message = get_lang('ServiceReconfigured');
 			}
 			break;
 
-		case 'ppt2lp' :
+		case 'ppt2lp':
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="true"
 					WHERE variable="service_ppt2lp"
@@ -142,12 +144,9 @@ if (isset($_POST['activeExtension'])) {
 					WHERE variable="service_ppt2lp"
 					AND subkey="size"';
 			Database::query($sql);
-
 			break;
 	}
-
 }
-
 
 $listActiveServices = array();
 
@@ -163,14 +162,11 @@ while($row = Database::fetch_array($rs)){
 // javascript to handle accordion behaviour
 $javascript_message = '';
 if(!empty($message)){
-	$javascript_message =
-	'
+	$javascript_message = '
 	document.getElementById("message").style.display = "block";
-	var timer = setTimeout(hideMessage,5000);
-	';
+	var timer = setTimeout(hideMessage, 5000);';
 }
-$htmlHeadXtra[]= '
-<script type="text/javascript">
+$htmlHeadXtra[]= '<script>
 var listeDiv;
 var extensionsHeader = new Array();
 var extensionsContent = new Array();
@@ -305,56 +301,50 @@ Display::display_header($nameTool);
                 <div class="col-md-7">
                     <form method="POST" class="form-horizontal" action="<?php echo api_get_self(); ?>">
 						<?php
+                        $form = new FormValidator('ppt2lp');
+                        $form->addElement('text', 'host', get_lang('Host'));
+                        //$form -> addElement('html','<br /><br />');
+                        $form->addElement('text', 'port', get_lang('Port'));
+                        //$form -> addElement('html','<br /><br />');
+                        $form->addElement('text', 'user', get_lang('UserOnHost'));
+                        //$form -> addElement('html','<br /><br />');
+                        $form->addElement('text', 'ftp_password', get_lang('FtpPassword'));
+                        //$form -> addElement('html','<br /><br />');
+                        $form->addElement('text', 'path_to_lzx', get_lang('PathToLzx'));
+                        //$form -> addElement('html','<br /><br />');
+                        $options = ChamiloApi::getDocumentConversionSizes();
+                        $form->addElement('select', 'size', get_lang('SlideSize'), $options);
+                        $form->addElement('hidden', 'extension_code', 'ppt2lp');
 
-						$form = new FormValidator('ppt2lp');
-						$form -> addElement('text', 'host', get_lang('Host'));
-						//$form -> addElement('html','<br /><br />');
-						$form -> addElement('text', 'port', get_lang('Port'));
-						//$form -> addElement('html','<br /><br />');
-						$form -> addElement('text', 'user', get_lang('UserOnHost'));
-						//$form -> addElement('html','<br /><br />');
-						$form -> addElement('text', 'ftp_password', get_lang('FtpPassword'));
-						//$form -> addElement('html','<br /><br />');
-						$form -> addElement('text', 'path_to_lzx', get_lang('PathToLzx'));
-						//$form -> addElement('html','<br /><br />');
-						$options = ChamiloApi::getDocumentConversionSizes();
-						$form -> addElement('select', 'size', get_lang('SlideSize'), $options);
-
-
-						$form -> addElement('hidden', 'extension_code', 'ppt2lp');
-
-						$defaults = array();
-						$renderer = $form -> defaultRenderer();
-						$renderer -> setElementTemplate('<div style="text-align:left">{label}</div><div style="text-align:left">{element}</div>');
-						//$form -> addElement('html','<br /><br />');
-						if(in_array('service_ppt2lp',$listActiveServices))
-						{
+                        $defaults = array();
+                        $renderer = $form->defaultRenderer();
+                        $renderer->setElementTemplate(
+                            '<div style="text-align:left">{label}</div><div style="text-align:left">{element}</div>'
+                        );
+                        if (in_array('service_ppt2lp', $listActiveServices)) {
 							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.'
 									WHERE variable = "service_ppt2lp"
 									AND subkey <> "active"';
-							$rs = Database::query($sql);
-							while($row = Database::fetch_array($rs,'ASSOC'))
-							{
-								$defaults[$row['subkey']] = $row['selected_value'];
-							}
-							$form->addButtonSave(get_lang('ReconfigureExtension'), 'activeExtension');
-						}
-						else {
-							$defaults['host'] = 'localhost';
+                            $rs = Database::query($sql);
+                            while ($row = Database::fetch_array($rs, 'ASSOC')) {
+                                $defaults[$row['subkey']] = $row['selected_value'];
+                            }
+                            $form->addButtonSave(get_lang('ReconfigureExtension'), 'activeExtension');
+                        } else {
+                            $defaults['host'] = 'localhost';
 							$defaults['port'] = '2002';
 							$defaults['size'] = '720x540';
 							$form->addButtonSave(get_lang('ActivateExtension'), 'activeExtension');
 						}
 
-						$form -> setDefaults($defaults);
-						$form -> display();
+                        $form->setDefaults($defaults);
+                        $form->display();
 						echo '<br />';
 						?>
 						</form>
                 </div>
             </div>
         </div>
-
 	<?php
 	/*
 	<!-- EPHORUS -->
@@ -496,7 +486,6 @@ Display::display_header($nameTool);
 	</div>
      */ ?>
 </div><!-- /content -->
-
 
 <?php
 Display::display_footer();

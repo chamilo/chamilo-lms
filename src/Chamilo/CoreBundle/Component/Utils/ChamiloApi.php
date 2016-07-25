@@ -9,25 +9,39 @@ namespace Chamilo\CoreBundle\Component\Utils;
  */
 class ChamiloApi
 {
-    private $configuration;
-    private static $instance = null;
+    private static $configuration;
 
-    protected function __construct($configuration)
+    /**
+     * ChamiloApi constructor.
+     * @param $configuration
+     */
+    public function __construct(array $configuration)
     {
-        $this->configuration = $configuration;
+        self::$configuration = $configuration;
     }
 
     /**
-     * @return ChamiloApi|null
+     * @return array
      */
-    public function getInstance($configuration = null)
+    public static function getConfigurationArray()
     {
-        if (is_null(self::$instance)) {
-            self::$instance = new ChamiloApi($configuration);
+        return self::$configuration;
+    }
+
+    /**
+     * @param string $variable
+     * @return bool|string
+     */
+    public static function getConfigurationValue($variable)
+    {
+        $configuration = self::getConfigurationArray();
+        if (array_key_exists($variable, $configuration)) {
+            return $configuration[$variable];
         }
 
-        return self::$instance;
+        return false;
     }
+
 
     /**
      * Returns an array of resolutions that can be used for the conversion of documents to images
@@ -48,6 +62,5 @@ class ChamiloApi
             '1600x900' => '1600x900 (16/9)',
         );
     }
-
 
 }

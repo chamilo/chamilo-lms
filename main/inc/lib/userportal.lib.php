@@ -1773,7 +1773,7 @@ class IndexManager
 
         $button = '';
         if ($displayButton) {
-            $button = '<input id="session-view-button-'.intval($id).'" class="session-view-button btn btn-default" type="button" onclick="hideUnhide(\'courseblock-'.intval($id).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
+            $button = '<input id="session-view-button-'.intval($id).'" class="btn btn-default btn-sm" type="button" onclick="hideUnhide(\'courseblock-'.intval($id).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
         }
 
         $icon = Display::return_icon(
@@ -1795,7 +1795,7 @@ class IndexManager
 
         // notification
         if (!empty($tabParams['right_actions'])) {
-            $rightActions = '<div class="view-by-session-right-actions">'.$tabParams['right_actions'].'</div>';
+            $rightActions = '<div class="pull-right">'.$tabParams['right_actions'].'</div>';
         }
 
         return "<div>

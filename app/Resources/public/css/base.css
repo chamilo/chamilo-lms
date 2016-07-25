@@ -5770,7 +5770,13 @@ footer{
 }
 #toolnavbox ul li{
     height: 40px;
-    
+}
+.everybodyview{
+    padding-top: 20px;
+    margin-top: 10px;
+}
+.btn-options{
+    padding-right: 20px;
 }
 #toolnavbox ul li a {
 	display: inline-block;

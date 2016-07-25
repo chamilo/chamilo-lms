@@ -954,10 +954,19 @@ class CourseHome
                         if ($i == 0) {
                             $html .= '<ul>';
                         }
+                        $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
+                        $original_image = Display::return_icon(
+                                $image,
+                                $item['name'],
+                                array('id' => 'toolimage_'.$item['tool']['id']),
+                                ICON_SIZE_SMALL,
+                                false
+                            );
                         $html .= '<li class="course-tool">';
                         $html .= $item['extra'];
                         $html .= $item['visibility'];
-                        $html .= $item['icon'];
+                        $url = Display::url($original_image, $item['url_params']['href'], $item['url_params']);
+                        $html .= $url;
                         $html .= $item['link'];
                         $html .= '</li>';
 

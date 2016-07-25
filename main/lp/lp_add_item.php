@@ -193,7 +193,23 @@ $(document).ready(function() {
             e.preventDefault();
         }
     });
+
+    // hide the current template list for new documment until it tab clicked
+    $('#frmModel').hide();
+
 });
+
+// document template for new document tab handler
+$(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+
+    var id = e.target.id;
+
+    if (id == 'subtab2') {
+        $('#frmModel').show();
+    } else {
+        $('#frmModel').hide();
+    }
+})
 </script>
 <?php
 
@@ -207,7 +223,7 @@ echo $learnPath->return_new_tree(null, true);
 $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 
 // Show the template list.
-if ($type == 'document' && !isset($_GET['file'])) {
+if (($type == 'document' || $type == 'step') && !isset($_GET['file'])) {
     // Show the template list.
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
     echo '</div>';

@@ -3244,7 +3244,8 @@ function api_not_allowed($print_headers = false, $message = null)
 
     // The session is over and we were not in a course,
     // or we try to get directly to a private course without being logged
-    if (!empty(api_get_course_int_id())) {
+    $courseId = api_get_course_int_id();
+    if (!empty($courseId)) {
         api_set_firstpage_parameter(api_get_course_id());
         $tpl->setLoginBodyClass();
         $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);

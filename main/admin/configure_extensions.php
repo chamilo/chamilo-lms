@@ -1,14 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Edition of extensions configuration
  * @package chamilo.admin
  */
-$cidReset=true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 // Database Table Definitions
 $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 $message = '';
@@ -314,7 +317,7 @@ Display::display_header($nameTool);
 						//$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'path_to_lzx', get_lang('PathToLzx'));
 						//$form -> addElement('html','<br /><br />');
-						$options = api_get_document_conversion_sizes();
+						$options = ChamiloApi::getDocumentConversionSizes();
 						$form -> addElement('select', 'size', get_lang('SlideSize'), $options);
 
 

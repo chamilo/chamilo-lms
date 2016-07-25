@@ -64,7 +64,7 @@ if (!isset($GLOBALS['_configuration'])) {
 require_once $_configuration['root_sys'].'main/inc/lib/api.lib.php';
 $passwordEncryption = api_get_configuration_value('password_encryption');
 
-if ($passwordEncryption == 'bcrypt') {
+if ($passwordEncryption === 'bcrypt') {
     require_once __DIR__.'/../../vendor/ircmaxell/password-compat/lib/password.php';
 }
 

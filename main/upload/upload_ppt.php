@@ -1,5 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Action controller for the upload process. The display scripts (web forms) redirect
  * the process here to do what needs to be done with each file.
@@ -77,9 +79,9 @@ $form->addElement('header', get_lang("WelcomeOogieSubtitle"));
 $form->addElement('html', Display::return_message($message, 'info', false));
 $form->addElement('file', 'user_file', array(Display::return_icon('powerpoint_big.gif'), $div_upload_limit));
 $form->addElement('checkbox', 'take_slide_name', '', get_lang('TakeSlideName'));
-$options = api_get_document_conversion_sizes();
+$options = ChamiloApi::getDocumentConversionSizes();
 $form->addElement('select', 'slide_size', get_lang('SlideSize'), $options);
-if (api_get_setting('search_enabled') == 'true') {
+if (api_get_setting('search_enabled') === 'true') {
     require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
     $specific_fields = get_specific_field_list();
     $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));

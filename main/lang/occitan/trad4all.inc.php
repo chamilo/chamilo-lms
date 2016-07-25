@@ -99,7 +99,6 @@ $NoArchive = "Ges de fiquier es estat seleccionat";
 $ArchiveNotFound = "Lo fiquier es pas estat trobat enluòc";
 $ArchiveUncompressed = "Lo fiquier es bèn estat descomprimit e installat.";
 $CsvPutIntoDocTool = "Lo fichier \"user.csv\" es estat plaçat dins aisina de documents.";
-$BackH = "Tornar a la pagina d'intrada";
 $AllowedToUnsubscribe = "Leis usanciers pòdon anullar son inscripcion au cors";
 $NotAllowedToUnsubscribe = "Leis usanciers pòdon pas anullar son inscripcion au cors";
 $CourseVisibilityClosed = "Clavat, lo cors es solament accessible a l'administrator dau cors";

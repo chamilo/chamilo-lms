@@ -124,7 +124,6 @@ $NoArchive = "백업파일을 선택하지 않았습니다";
 $ArchiveNotFound = "백업파일을 찾을 수 없습니다";
 $ArchiveUncompressed = "백업파일의 압축이 해제되고 설치되었습니다.";
 $CsvPutIntoDocTool = "\"users.csv\"파일을 문서도구에 넣었습니다.";
-$BackH = "홈페이지로 돌아가기";
 $OtherCategory = "다른 카테고리";
 $AllowedToUnsubscribe = "유저가 이 과정에 등록 취소를 수행할 수 있습니다";
 $NotAllowedToUnsubscribe = "유저가 이 과정등록신청을 취소하는 것이 허용되지 않았습니다";

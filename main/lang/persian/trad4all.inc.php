@@ -194,7 +194,6 @@ $NoArchive = "هیچ پروندۀ بایگانی شده ای انتخاب نشد
 $ArchiveNotFound = "پروندۀ بایگانی مورد نظر یافت نشد";
 $ArchiveUncompressed = "پروندۀ بایگانی مورد نظر نافشرده و نصب گردید.";
 $CsvPutIntoDocTool = "در قسمت مدارک قرار داده شد users.cvs";
-$BackH = "بازگشت به صفحه آغازین";
 $OtherCategory = "دسته های دیگر";
 $AllowedToUnsubscribe = "کاربران مجاز به ابطال ثبت نام این درس هستند";
 $NotAllowedToUnsubscribe = "کاربران مجاز به ابطال ثبت نام این درس نیستند";

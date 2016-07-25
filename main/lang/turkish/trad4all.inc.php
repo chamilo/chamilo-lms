@@ -183,7 +183,6 @@ $NoArchive = "Herhangi bir arşiv seçilmedi";
 $ArchiveNotFound = "Bu arşiv bulunmuyor.";
 $ArchiveUncompressed = "Arşiv yüklendi.";
 $CsvPutIntoDocTool = "\"users.csv\" dosyası Belgeler aracına konuldu.";
-$BackH = "AnaSayfaya dön";
 $OtherCategory = "Başka kategori";
 $AllowedToUnsubscribe = "Kullanıcılara bu dersten kayıt silebilir";
 $NotAllowedToUnsubscribe = "Kullanıcılar bu dersten kayıtlarını silemez";

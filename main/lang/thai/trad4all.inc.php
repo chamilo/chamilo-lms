@@ -131,7 +131,6 @@ $NoArchive = "ไม่มีการเลือกรายการสาร
 $ArchiveNotFound = "ค้นไม่พบเอกสารรวมในสารบบ";
 $ArchiveUncompressed = "เอกสารที่เก็บรวบรวมไว้ในสารบบได้ทำการกู้และคืนสภาพพร้อมใช้แล้ว";
 $CsvPutIntoDocTool = "ไฟล์ \"users.csv\"ได้จัดการเรียบร้อยแล้ว";
-$BackH = "กลับไปหน้าโฮมเพจ";
 $OtherCategory = "ประเภทอื่น";
 $AllowedToUnsubscribe = "ผู้ใช้สามารถถอนวิชาเองได้";
 $NotAllowedToUnsubscribe = "ผู้ใช้ไม่ได้รับอนุญาตให้ถอนวิชาด้วยตัวเอง";

@@ -100,7 +100,6 @@ $NoArchive = "Жодного архіву не вибрано";
 $ArchiveNotFound = "Архів не було знайдено";
 $ArchiveUncompressed = "Архів було розпаковано та інстальовано";
 $CsvPutIntoDocTool = "Файл \"users.csv\" було розміщено в розіділі Документи.";
-$BackH = "до головної сторінки";
 $OtherCategory = "Інша категорія";
 $AllowedToUnsubscribe = "Користувачам дозволено відраховуватися з цього курсу";
 $NotAllowedToUnsubscribe = "Користувачам заборонено відраховуватися з цього курсу";

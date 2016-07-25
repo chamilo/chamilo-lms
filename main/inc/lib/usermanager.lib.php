@@ -365,7 +365,8 @@ class UserManager
             $user->setExpirationDate($expirationDate);
         }
 
-        $userManager->updateUser($user);
+        // Silence password_hash deprecated warning
+        @$userManager->updateUser($user);
         $userId = $user->getId();
 
         if (!empty($userId)) {

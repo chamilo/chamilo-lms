@@ -1610,7 +1610,7 @@ function api_get_user_info_from_email($email = '')
  */
 function api_get_course_id()
 {
-    return isset($GLOBALS['_cid']) ? $GLOBALS['_cid'] : null;
+    return Session::read('_cid', null);
 }
 
 /**
@@ -1719,7 +1719,8 @@ function api_get_anonymous_id()
  */
 function api_get_cidreq($addSessionId = true, $addGroupId = true)
 {
-    $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
+    $courseCode = api_get_course_id();
+    $url = empty($courseCode) ? '' : 'cidReq='.htmlspecialchars($courseCode);
     $origin = api_get_origin();
 
     if ($addSessionId) {
@@ -1734,8 +1735,10 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true)
         }
     }
 
-    $url .= '&gradebook='.intval(api_is_in_gradebook());
-    $url .= '&origin='.$origin;
+    if (!empty($url)) {
+        $url .= '&gradebook='.intval(api_is_in_gradebook());
+        $url .= '&origin='.$origin;
+    }
 
     return $url;
 }

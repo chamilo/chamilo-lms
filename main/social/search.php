@@ -77,25 +77,25 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $buttonClass = 'btn btn-default btn-sm';
         foreach ($users as $user) {
             $user_info = api_get_user_info($user['id'], true);
-            $send_inv = '<button class="'.$buttonClass.' disabled "><em class="fa fa-user"></em> '.get_lang('SendInvitation').'</button>';
+            $sendInvitation = '<button class="'.$buttonClass.' disabled "><em class="fa fa-user"></em> '.get_lang('SendInvitation').'</button>';
             $relation_type = intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user_info['user_id']));
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_info['user_id'];
 
             // Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user_info['user_id'] != api_get_user_id()) {
-                $send_inv = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="' . $user_info['user_id'] . '">
+                $sendInvitation = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="' . $user_info['user_id'] . '">
                              <em class="fa fa-user"></em> '.get_lang('SendInvitation').'</a>';
             }
 
-            $sendMesssageUrl = api_get_path(WEB_AJAX_PATH)
+            $sendMessageUrl = api_get_path(WEB_AJAX_PATH)
                 . 'user_manager.ajax.php?'
                 . http_build_query([
                     'a' => 'get_user_popup',
                     'user_id' => $user_info['user_id']
                 ]);
-            $send_msg = Display::toolbarButton(
+            $sendMessage = Display::toolbarButton(
                 get_lang('SendMessage'),
-                $sendMesssageUrl,
+                $sendMessageUrl,
                 'envelope',
                 'default',
                 [
@@ -120,7 +120,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
 
             $tag = isset($user['tag']) ? ' <br /><br />'.$user['tag'] : null;
             $user_info['complete_name'] = Display::url($user_info['complete_name'], $url);
-            $invitations = $user['tag'].$send_inv.$send_msg;
+            $invitations = $user['tag'].$sendInvitation.$sendMessage;
 
             $results .= '<div class="col-md-3">
                             <div class="items-user">

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sonata.core.form.type.array" class="Sonata\CoreBundle\Form\Type\ImmutableArrayType">
+            <tag name="form.type" alias="sonata_type_immutable_array" />
+        </service>
+
+        <service id="sonata.core.form.type.boolean" class="Sonata\CoreBundle\Form\Type\BooleanType">
+            <tag name="form.type" alias="sonata_type_boolean" />
+        </service>
+
+        <service id="sonata.core.form.type.collection" class="Sonata\CoreBundle\Form\Type\CollectionType">
+            <tag name="form.type" alias="sonata_type_collection" />
+        </service>
+
+        <service id="sonata.core.form.type.translatable_choice" class="Sonata\CoreBundle\Form\Type\TranslatableChoiceType">
+            <tag name="form.type" alias="sonata_type_translatable_choice" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="sonata.core.form.type.date_range" class="Sonata\CoreBundle\Form\Type\DateRangeType">
+            <tag name="form.type" alias="sonata_type_date_range" />
+
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="sonata.core.form.type.datetime_range" class="Sonata\CoreBundle\Form\Type\DateTimeRangeType">
+            <tag name="form.type" alias="sonata_type_datetime_range" />
+
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="sonata.core.form.type.date_picker" class="Sonata\CoreBundle\Form\Type\DatePickerType">
+            <tag name="form.type" alias="sonata_type_date_picker" />
+
+            <argument type="service" id="sonata.core.date.moment_format_converter" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="sonata.core.form.type.datetime_picker" class="Sonata\CoreBundle\Form\Type\DateTimePickerType">
+            <tag name="form.type" alias="sonata_type_datetime_picker" />
+
+            <argument type="service" id="sonata.core.date.moment_format_converter" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="sonata.core.form.type.date_range_picker" class="Sonata\CoreBundle\Form\Type\DateRangePickerType">
+            <tag name="form.type" alias="sonata_type_date_range_picker" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="sonata.core.form.type.datetime_range_picker" class="Sonata\CoreBundle\Form\Type\DateTimeRangePickerType">
+            <tag name="form.type" alias="sonata_type_datetime_range_picker" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="sonata.core.form.type.equal" class="Sonata\CoreBundle\Form\Type\EqualType">
+            <tag name="form.type" alias="sonata_type_equal" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="sonata.core.form.type.color_selector" class="Sonata\CoreBundle\Form\Type\ColorSelectorType">
+            <tag name="form.type" alias="sonata_type_color_selector" />
+        </service>
+
+    </services>
+
+</container>

@@ -1,0 +1,12 @@
+default:
+  paths:
+    features:  features
+    bootstrap: features/bootstrap
+
+annotations:
+  paths:
+    features: features/annotations
+
+closures:
+  paths:
+    features: features/closures

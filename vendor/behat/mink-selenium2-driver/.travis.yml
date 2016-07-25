@@ -1,0 +1,25 @@
+language: php
+
+php: [5.3, 5.4, 5.5]
+
+before_script:
+  - export WEB_FIXTURES_HOST=http://localhost
+  - export WEB_FIXTURES_BROWSER=firefox
+
+  - sh -e /etc/init.d/xvfb start
+  - export DISPLAY=:99.0
+  - sleep 4
+
+  - curl http://selenium.googlecode.com/files/selenium-server-standalone-2.31.0.jar > selenium.jar
+  - java -jar selenium.jar > /dev/null &
+  - sleep 4
+
+  - curl http://getcomposer.org/installer | php
+  - php composer.phar install --prefer-source
+
+  - sudo apt-get update > /dev/null
+  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 > /dev/null
+  - sudo sed -i -e "s,/var/www,$(pwd)/vendor/behat/mink/tests/Behat/Mink/Driver/web-fixtures,g" /etc/apache2/sites-available/default
+  - sudo /etc/init.d/apache2 restart
+
+script: phpunit -v

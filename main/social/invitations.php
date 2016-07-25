@@ -19,11 +19,13 @@ $this_section = SECTION_SOCIAL;
 $interbreadcrumb[] = array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
 $interbreadcrumb[] = array ('url' =>'#','name' => get_lang('Invitations'));
 
+$userGroupModel = new UserGroup();
+
 if (is_array($_GET) && count($_GET) > 0) {
     foreach ($_GET as $key => $value) {
         switch ($key) {
             case 'accept':
-                $useRole = UserGroup::get_user_group_role(api_get_user_id(), $value);
+                $useRole = $userGroupModel->get_user_group_role(api_get_user_id(), $value);
 
                 if (in_array(
                     $useRole,
@@ -32,7 +34,7 @@ if (is_array($_GET) && count($_GET) > 0) {
                         GROUP_USER_PERMISSION_PENDING_INVITATION
                     )
                 )) {
-                    UserGroup::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
+                    $userGroupModel->update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
 
                     Display::addFlash(
                         Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'success')
@@ -66,7 +68,7 @@ if (is_array($_GET) && count($_GET) > 0) {
                 exit;
                 break;
             case 'deny':
-                UserGroup::delete_user_rel_group(api_get_user_id(), $value);
+                $userGroupModel->delete_user_rel_group(api_get_user_id(), $value);
 
                 Display::addFlash(
                     Display::return_message(get_lang('GroupInvitationWasDeny'))
@@ -78,8 +80,6 @@ if (is_array($_GET) && count($_GET) > 0) {
     }
 }
 
-$userGroup = new UserGroup();
-
 $content = null;
 
 // Block Menu Social
@@ -90,7 +90,7 @@ $socialInvitationsBlock = '<div id="id_response" align="center"></div>';
 $user_id = api_get_user_id();
 $list_get_invitation = SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
 $list_get_invitation_sent = SocialManager::get_list_invitation_sent_by_user_id($user_id);
-$pending_invitations = $userGroup->get_groups_by_user(
+$pending_invitations = $userGroupModel->get_groups_by_user(
     $user_id,
     GROUP_USER_PERMISSION_PENDING_INVITATION
 );
@@ -195,7 +195,7 @@ if (count($pending_invitations) > 0) {
     $new_invitation = array();
     $waitingInvitation = '';
     foreach ($pending_invitations as $invitation) {
-        $picture = $userGroup->get_picture_group(
+        $picture = $userGroupModel->get_picture_group(
             $invitation['id'],
             $invitation['picture'],
             80

@@ -1769,7 +1769,7 @@ function display_after_install_message($installType)
     echo '</div>';
     ?></form>
     <br />
-    <a class="btn btn-success btn-large btn-install" href="../../index.php">
+    <a class="btn btn-success btn-block" href="../../index.php">
         <?php echo get_lang('GoToYourNewlyCreatedPortal'); ?>
     </a>
     <?php

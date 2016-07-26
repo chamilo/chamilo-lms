@@ -17,7 +17,7 @@ class Basic extends Toolbar
      * @var array
      */
     public $defaultPlugins = array(
-       'adobeair',
+        'adobeair',
         'ajax',
         'audio',
         'bidi',
@@ -35,30 +35,30 @@ class Basic extends Toolbar
         'iframe',
         'iframedialog',
         'indentblock',
-       'justify',
-       'language',
-       'lineutils',
-       'liststyle',
-       'newpage',
-       'oembed',
-       'pagebreak',
-       'preview',
-       'print',
-       'save',
-       'selectall',
-       'sharedspace',
-       'showblocks',
-       'smiley',
-       'sourcedialog',
-       'stylesheetparser',
-       'tableresize',
-       'templates',
-       'uicolor',
-       'video',
-       'widget',
-       'wikilink',
-       'wordcount',
-       'xml'
+        'justify',
+        'language',
+        'lineutils',
+        'liststyle',
+        'newpage',
+        'oembed',
+        'pagebreak',
+        'preview',
+        'print',
+        'save',
+        'selectall',
+        'sharedspace',
+        'showblocks',
+        'smiley',
+        'sourcedialog',
+        'stylesheetparser',
+        'tableresize',
+        'templates',
+        'uicolor',
+        'video',
+        'widget',
+        'wikilink',
+        'wordcount',
+        'xml',
     );
 
     /**
@@ -139,13 +139,14 @@ class Basic extends Toolbar
     public function getConfig()
     {
         $config = array();
-        if (api_get_setting('more_buttons_maximized_mode') == 'true') {
+        if (api_get_setting('more_buttons_maximized_mode') === 'true') {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
 
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
         $config['customConfig'] = api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/config_js.php';
+        $config['flash_flvPlayer'] = api_get_path(REL_PATH).'web/assets/ckeditor/plugins/flash/swf/player.swf';
 
         /*filebrowserFlashBrowseUrl
         filebrowserFlashUploadUrl

@@ -639,7 +639,6 @@ $NoArchive = "Non se seleccionou ningún ficheiro";
 $ArchiveNotFound = "Non se encontrou ningún ficheiro";
 $ArchiveUncompressed = "Descomprimiuse e instalouse o ficheiro.";
 $CsvPutIntoDocTool = "O ficheiro \"usuarios.csv\" púxose dentro da ferramenta documentos.";
-$BackH = "volver á páxina de inicio";
 $OtherCategory = "Outra categoría";
 $AllowedToUnsubscribe = "Permítese ós ususarios que se desubscriban do curso";
 $NotAllowedToUnsubscribe = "Non se permite ós usuarios que se desubscriban do curso";

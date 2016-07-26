@@ -175,7 +175,6 @@ $NoArchive = "لم يتم اختيار ارشيف";
 $ArchiveNotFound = "لم يتم إيجاد الأرشيف";
 $ArchiveUncompressed = "الأرشيف غير مضغوط ومنصّب.";
 $CsvPutIntoDocTool = "ملف \"users.csv\" ضمن أداة المستندات.";
-$BackH = "عودة إلى الصفحة الرئيسية";
 $OtherCategory = " الصنف الآخر";
 $AllowedToUnsubscribe = "يسمح للأعضاء بحذف هذا المقرر";
 $NotAllowedToUnsubscribe = "لا يسمح للأعضاء بحذف هذا المقرر";

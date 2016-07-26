@@ -199,7 +199,6 @@ $NoArchive = "Ez duzu artxibo bat ere hautatu";
 $ArchiveNotFound = "Artxiboa ez da aurkitu";
 $ArchiveUncompressed = "Artxiboa deskonprimatu eta instalatu da.";
 $CsvPutIntoDocTool = "\"erabiltzaileak.csv\" artxiboa Dokumentuak tresnaren barruan jarri da.";
-$BackH = "itzuli orri nagusira";
 $OtherCategory = "Beste kategoria bat";
 $AllowedToUnsubscribe = "Erabiltzaileek emandako izena kendu ahal dute prestakuntza ikastaro honetatik";
 $NotAllowedToUnsubscribe = "Erabiltzaileek ezin dute emandako izena kendu prestakuntza ikastaro honetatik";

@@ -193,7 +193,6 @@ $NoArchive = "Nincs archív kiválasztva";
 $ArchiveNotFound = "Az archív nem található";
 $ArchiveUncompressed = "Az archív kicsomagolva és installálva.";
 $CsvPutIntoDocTool = "A \"users.csv\" file a Dokumentumok eszközbe került.";
-$BackH = "vissza a Főoldalra";
 $OtherCategory = "Egyéb kategória";
 $AllowedToUnsubscribe = "A hallgatók megtehetik, hogy leiratkozzanak erről a kurzusról.";
 $NotAllowedToUnsubscribe = "A hallgatók nem tehetik meg, hogy leiratkozzanak erről a kurzusról.";

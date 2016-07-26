@@ -505,7 +505,6 @@ $NoArchive = "Cap fitxer no ha estat seleccionat";
 $ArchiveNotFound = "El fitxer no ha estat trobat";
 $ArchiveUncompressed = "El fitxer ha estat descomprimit i instal·lat.";
 $CsvPutIntoDocTool = "El fitxer \"users.csv\" ha estat posat dins l'eina de documents.";
-$BackH = "Tornar a la pàgina d'inici";
 $OtherCategory = "Altre categoria";
 $AllowedToUnsubscribe = "Els usuaris poden anul·lar llur inscripció al curs";
 $NotAllowedToUnsubscribe = "Els usuaris no poden anul·lar llur inscripció al curs";

@@ -228,7 +228,6 @@ $NoArchive = "Geen archief geselecteerd.";
 $ArchiveNotFound = "Het archief is niet gevonden.";
 $ArchiveUncompressed = "Het archief is gedecomprimeerd en geïnstalleerd.";
 $CsvPutIntoDocTool = "Het bestand \"users.csv\" is in de documentenmodule geladen.";
-$BackH = "Terug naar startpagina";
 $OtherCategory = "Andere categorie";
 $AllowedToUnsubscribe = "Toegelaten";
 $NotAllowedToUnsubscribe = "Niet toegelaten";

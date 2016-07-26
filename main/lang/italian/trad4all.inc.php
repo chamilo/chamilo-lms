@@ -648,7 +648,6 @@ $NoArchive = "Non è stato selezionato alcun archivio";
 $ArchiveNotFound = "L'archivio non è stato trovato";
 $ArchiveUncompressed = "L'archivio è stato scompattato e installato.";
 $CsvPutIntoDocTool = "Il file \"users.csv\" è stato inserito nella sezione Documenti.";
-$BackH = "Ritorna alla pagina principale";
 $OtherCategory = "Altre Categorie";
 $AllowedToUnsubscribe = "Gli utenti possono cancellarsi dal corso";
 $NotAllowedToUnsubscribe = "Gli utenti non possono cancellarsi dal corso";

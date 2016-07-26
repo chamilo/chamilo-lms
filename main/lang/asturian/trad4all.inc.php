@@ -194,7 +194,6 @@ $NoArchive = "Nun escoyó nengún archivu";
 $ArchiveNotFound = "Nun s'atopó nengún archivu";
 $ArchiveUncompressed = "Descomprimióse y instalóse l'archivu.";
 $CsvPutIntoDocTool = "L'archivu 'usuarios.csv' allugóse dientro la ferramienta documentos.";
-$BackH = "tornar a la páxina d'entamu";
 $OtherCategory = "Otra categoría";
 $AllowedToUnsubscribe = "Los usuarios puen anular la so matrícula nesti cursu";
 $NotAllowedToUnsubscribe = "Los usuarios nun puen anular la so matrícula nesti cursu";

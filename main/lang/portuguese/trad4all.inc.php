@@ -409,7 +409,6 @@ $NoArchive = "Nenhum arquivo foi seleccionado";
 $ArchiveNotFound = "O arquivo não foi encontrado";
 $ArchiveUncompressed = "O arquivo foi descompactado e instalado.";
 $CsvPutIntoDocTool = "O ficheiro \"users.csv\" foi colocado na ferramenta Documentos.";
-$BackH = "voltar à página inicial";
 $OtherCategory = "Outra categoria";
 $AllowedToUnsubscribe = "Os utilizadores estão autorizados a anular/cancelar a inscrição neste curso";
 $NotAllowedToUnsubscribe = "Os utilizadores não estão autorizados a anular/cancelar a inscrição neste curso";

@@ -624,7 +624,6 @@ $NoArchive = "Arhiv ni bil izbran";
 $ArchiveNotFound = "Arhiva ne najdem";
 $ArchiveUncompressed = "Arhiv je bil dekomprimiran in nameščen.";
 $CsvPutIntoDocTool = "Datoteka \"users.csv\" je bila vstavljena v orodje Dokumenti.";
-$BackH = "nazaj na domačo stran";
 $OtherCategory = "Druga kategorija";
 $AllowedToUnsubscribe = "Uporabnikom je dovoljen izpis iz tega tečaja";
 $NotAllowedToUnsubscribe = "Uporabnikom ni dovoljen izpis iz tega tečaja";

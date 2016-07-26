@@ -161,7 +161,6 @@ $NoArchive = "Der er ikke valgt et arkiv";
 $ArchiveNotFound = "Arkivet kan ikke findes";
 $ArchiveUncompressed = "Arkivet er blevet installeret.";
 $CsvPutIntoDocTool = "Filen \"deltagerlisten.csv\" er lagt ind i værktøjet Dokuemnter.";
-$BackH = "tilbage til forsiden";
 $OtherCategory = "Anden kategori";
 $AllowedToUnsubscribe = "Brugere kan afmelde dette kursus";
 $NotAllowedToUnsubscribe = "Brugere kan ikke afmelde dette kursus";

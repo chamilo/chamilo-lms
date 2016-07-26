@@ -654,7 +654,6 @@ $NoArchive = "Nebola vybratá žiadna záloha";
 $ArchiveNotFound = "Záloha nebola nájdená";
 $ArchiveUncompressed = "Záloha bola rozbalená a nainštalovaná.";
 $CsvPutIntoDocTool = "Súbor \"users.csv\" bol uložený v nástroji Dokumenty.";
-$BackH = "späť na domovskú stránku";
 $OtherCategory = "Iná kategória";
 $AllowedToUnsubscribe = "Používatelia majú povolené zrušiť registráciu v kurze";
 $NotAllowedToUnsubscribe = "Používatelia nemajú povolené zrušiť registráciu v kurze";

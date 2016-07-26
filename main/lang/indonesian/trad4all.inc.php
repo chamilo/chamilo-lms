@@ -131,7 +131,6 @@ $NoArchive = "Tidak ada arsip yang dipilih";
 $ArchiveNotFound = "Arsip tersebut tidak ditemukan";
 $ArchiveUncompressed = "Arsip tersebut telah di-uncomprress dan di-install.";
 $CsvPutIntoDocTool = "File \"users.csv\" telah dimasukksn kedalam Documents tool.";
-$BackH = "kembali ke homepage";
 $OtherCategory = "Kategori Lain";
 $AllowedToUnsubscribe = "User diijikan untuk undur diri dari mata kuliah ini";
 $NotAllowedToUnsubscribe = "User tidak diijinkan untuk undur diri dari mata kuliah ini";

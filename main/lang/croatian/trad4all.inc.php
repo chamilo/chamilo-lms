@@ -180,7 +180,6 @@ $NoArchive = "Nije odabrana nijedna pohranjena datoteka";
 $ArchiveNotFound = "Pohranjena datoteka nije pronađena";
 $ArchiveUncompressed = "Pohranjena datoteka je dekomprimirana i postavljena.";
 $CsvPutIntoDocTool = "Datoteka \"korisnici.csv\" je smještena u alat Dokumenti.";
-$BackH = "natrag na početnu stranicu";
 $OtherCategory = "Druga kategorija";
 $AllowedToUnsubscribe = "Korisnicima je omogućeno ispisati se s kolegija";
 $NotAllowedToUnsubscribe = "Korisnicima nije omogućen ispis s kolegija";

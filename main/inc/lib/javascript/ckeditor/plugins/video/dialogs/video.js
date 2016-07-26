@@ -9,6 +9,10 @@ CKEDITOR.dialog.add( 'video', function ( editor )
 		if ( !value && this.id=='id' )
 			value = generateId();
 
+        if (value == '') {
+            return;
+        }
+
 		videoNode.setAttribute( this.id, value);
 
 		if ( !value )

@@ -233,11 +233,25 @@ function parse_csv_data($file)
 {
     $users = Import :: csvToArray($file);
     foreach ($users as $index => $user) {
-        if (isset ($user['Courses'])) {
+        if (isset($user['Courses'])) {
             $user['Courses'] = explode('|', trim($user['Courses']));
         }
+
+        // Lastname is needed.
+        if (!isset($user['LastName']) || (isset($user['LastName']) && empty($user['LastName']))) {
+            unset($users[$index]);
+            continue;
+        }
+
+        // FirstName is needed.
+        if (!isset($user['FirstName']) || (isset($user['FirstName']) && empty($user['FirstName']))) {
+            unset($users[$index]);
+            continue;
+        }
+
         $users[$index] = $user;
     }
+
     return $users;
 }
 /**

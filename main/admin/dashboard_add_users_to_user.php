@@ -291,7 +291,7 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
         case DRH:
             //no break;
         case PLATFORM_ADMIN:
-            $affected_rows = UserManager::suscribe_users_to_hr_manager($user_id, $user_list);
+            $affected_rows = UserManager::subscribeUsersToHRManager($user_id, $user_list);
             break;
         case STUDENT_BOSS:
             $affected_rows = UserManager::subscribeBossToUsers($user_id, $user_list);
@@ -419,7 +419,7 @@ if(!empty($msg)) {
 <div class="row">
     <div class="col-md-4">
         <?php echo get_lang('UserListInPlatform') ?>
-       
+
         <div class="form-group">
             <div class="col-sm-12">
                 <div id="ajax_list_users_multiple">
@@ -463,7 +463,7 @@ if(!empty($msg)) {
                 <em class="fa fa-chevron-left"></em>
                 </button>
             </div>
-            
+
           <?php
           }
           ?>

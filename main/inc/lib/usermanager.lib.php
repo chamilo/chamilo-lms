@@ -112,6 +112,7 @@ class UserManager
                 break;
             case 'bcrypt':
                 $defaultEncoder = new BCryptPasswordEncoder(4);
+                break;
         }
 
         $encoders = array(
@@ -188,22 +189,22 @@ class UserManager
      * Creates a new user for the platform
      * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
      * @author Roan Embrechts <roan_embrechts@yahoo.com>
-     * @param  string Firstname
-     * @param  string Lastname
-     * @param  int    Status (1 for course tutor, 5 for student, 6 for anonymous)
-     * @param  string e-mail address
-     * @param  string Login
-     * @param  string Password
-     * @param  string Any official code (optional)
-     * @param  string User language    (optional)
-     * @param  string Phone number    (optional)
-     * @param  string Picture URI        (optional)
-     * @param  string Authentication source    (optional, defaults to 'platform', dependind on constant)
-     * @param  string Account expiration date (optional, defaults to null)
-     * @param  int     Whether the account is enabled or disabled by default
-     * @param  int     The department of HR in which the user is registered (optional, defaults to 0)
-     * @param  array Extra fields
-     * @param  string Encrypt method used if password is given encrypted. Set to an empty string by default
+     * @param  string $firstName
+     * @param  string $lastName
+     * @param  int    $status (1 for course tutor, 5 for student, 6 for anonymous)
+     * @param  string $email
+     * @param  string $loginName
+     * @param  string $password
+     * @param  string $official_code Any official code (optional)
+     * @param  string $language User language    (optional)
+     * @param  string $phone Phone number    (optional)
+     * @param  string $picture_uri Picture URI        (optional)
+     * @param  string $auth_source Authentication source    (optional, defaults to 'platform', dependind on constant)
+     * @param  string $expirationDate Account expiration date (optional, defaults to null)
+     * @param  int    $active Whether the account is enabled or disabled by default
+     * @param  int    $hr_dept_id The department of HR in which the user is registered (optional, defaults to 0)
+     * @param  array  $extra    Extra fields
+     * @param  string $encrypt_method Encrypt method used if password is given encrypted. Set to an empty string by default
      * @param  bool $send_mail
      * @param  bool $isAdmin
      * @param  string $address
@@ -1118,6 +1119,7 @@ class UserManager
         $sql = "SELECT username FROM $table_user
                 WHERE username = '".Database::escape_string($username)."'";
         $res = Database::query($sql);
+
         return Database::num_rows($res) == 0;
     }
 
@@ -1125,17 +1127,16 @@ class UserManager
      * Creates a username using person's names, i.e. creates jmontoya from Julio Montoya.
      * @param string $firstname The first name of the user.
      * @param string $lastname The last name of the user.
-     * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
-     * @param string $encoding (optional)    The character encoding for the input names. If it is omitted, the platform character set will be used by default.
      * @return string Suggests a username that contains only ASCII-letters and digits, without check for uniqueness within the system.
      * @author Julio Montoya Armas
      * @author Ivan Tcholakov, 2009 - rework about internationalization.
      * @assert ('','') === false
      * @assert ('a','b') === 'ab'
      */
-    public static function create_username($firstname, $lastname, $language = null, $encoding = null)
+    public static function create_username($firstname, $lastname)
     {
         if (empty($firstname) && empty($lastname)) {
+
             return false;
         }
 
@@ -1164,13 +1165,11 @@ class UserManager
      * @param string $firstname                The first name of a given user. If the second parameter $lastname is NULL, then this
      * parameter is treated as username which is to be checked for uniqueness and to be modified when it is necessary.
      * @param string $lastname                The last name of the user.
-     * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
-     * @param string $encoding (optional)    The character encoding for the input names. If it is omitted, the platform character set will be used by default.
      * @return string                        Returns a username that contains only ASCII-letters and digits, and that is unique within the system.
      * Note: When the method is called several times with same parameters, its results look like the following sequence: ivan, ivan2, ivan3, ivan4, ...
      * @author Ivan Tcholakov, 2009
      */
-    public static function create_unique_username($firstname, $lastname = null, $language = null, $encoding = null)
+    public static function create_unique_username($firstname, $lastname = null)
     {
         if (is_null($lastname)) {
             // In this case the actual input parameter $firstname should contain ASCII-letters and digits only.
@@ -1178,7 +1177,7 @@ class UserManager
             // So, instead of the sentence $username = $firstname; we place the following:
             $username = strtolower(preg_replace(USERNAME_PURIFIER, '', $firstname));
         } else {
-            $username = self::create_username($firstname, $lastname, $language, $encoding);
+            $username = self::create_username($firstname, $lastname);
         }
         if (!self::is_username_available($username)) {
             $i = 2;
@@ -1197,21 +1196,24 @@ class UserManager
 
     /**
      * Modifies a given username accordingly to the specification for valid characters and length.
-     * @param $username string                The input username.
-     * @param bool $strict (optional)        When this flag is TRUE, the result is guaranteed for full compliance, otherwise compliance may be partial. The default value is FALSE.
-     * @param string $encoding (optional)    The character encoding for the input names. If it is omitted, the platform character set will be used by default.
-     * @return string                        The resulting purified username.
+     * @param $username string          The input username.
+     * @param bool $strict (optional)   When this flag is TRUE, the result is guaranteed for full compliance,
+     * otherwise compliance may be partial. The default value is FALSE.
+     * @return string                   The resulting purified username.
      */
-    public static function purify_username($username, $strict = false, $encoding = null)
+    public static function purify_username($username, $strict = false)
     {
         if ($strict) {
-            // 1. Conversion of unacceptable letters (latinian letters with accents for example) into ASCII letters in order they not to be totally removed.
+            // 1. Conversion of unacceptable letters (latinian letters with accents for example)
+            // into ASCII letters in order they not to be totally removed.
             // 2. Applying the strict purifier.
             // 3. Length limitation.
-            $return  = api_get_setting('login_is_email') == 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, USERNAME_MAX_LENGTH);
+            $return  = api_get_setting('login_is_email') === 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, USERNAME_MAX_LENGTH);
             $return = URLify::transliterate($return);
+
             return $return;
         }
+
         // 1. Applying the shallow purifier.
         // 2. Length limitation.
         return substr(preg_replace(USERNAME_PURIFIER_SHALLOW, '', $username), 0, USERNAME_MAX_LENGTH);
@@ -1245,10 +1247,9 @@ class UserManager
      * Checks whether a given username matches to the specification strictly. The empty username is assumed here as invalid.
      * Mostly this function is to be used in the user interface built-in validation routines for providing feedback while usernames are enterd manually.
      * @param string $username The input username.
-     * @param string $encoding (optional) The character encoding for the input names. If it is omitted, the platform character set will be used by default.
      * @return bool Returns TRUE if the username is valid, FALSE otherwise.
      */
-    public static function is_username_valid($username, $encoding = null)
+    public static function is_username_valid($username)
     {
         return !empty($username) && $username == self::purify_username($username, true);
     }
@@ -1285,6 +1286,7 @@ class UserManager
     public static function get_user_list_by_ids($ids = array(), $active = null, $order = null, $limit = null)
     {
         if (empty($ids)) {
+
             return array();
         }
 
@@ -1786,19 +1788,23 @@ class UserManager
      * productions on the filesystem before the removal request has been carried
      * out because they'll have to be re-read afterwards anyway.
      *
-     * @param    int $user_id    User id
-     * @param    $force    Optional parameter to force building after a removal request
+     * @param   int $user_id    User id
+     * @param   bool $force    Optional parameter to force building after a removal request
+     * @param   bool $showDelete
      *
-     * @return    A string containing the XHTML code to dipslay the production list, or FALSE
+     * @return  string A string containing the XHTML code to display the production list, or FALSE
      */
-    public static function build_production_list($user_id, $force = false, $showdelete = false)
+    public static function build_production_list($user_id, $force = false, $showDelete = false)
     {
         if (!$force && !empty($_POST['remove_production'])) {
+
             return true; // postpone reading from the filesystem
         }
+
         $productions = self::get_user_productions($user_id);
 
         if (empty($productions)) {
+
             return false;
         }
 
@@ -1811,7 +1817,7 @@ class UserManager
             $production_list = '<div class="files-production"><ul id="productions">';
             foreach ($productions as $file) {
                 $production_list .= '<li><img src="'.$add_image.'" /><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
-                if ($showdelete) {
+                if ($showDelete) {
                     $production_list .= '&nbsp;&nbsp;<input style="width:16px;" type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
                 }
             }
@@ -1888,6 +1894,7 @@ class UserManager
             'variable' => $variable,
             'value' => $value
         ];
+
         return $extraFieldValue->save($params);
     }
 
@@ -1981,10 +1988,10 @@ class UserManager
      * @param $user_id
      * @param $extra_field
      * @param bool $force
-     * @param bool $showdelete
+     * @param bool $showDelete
      * @return bool|string
      */
-    public static function build_user_extra_file_list($user_id, $extra_field, $force = false, $showdelete = false)
+    public static function build_user_extra_file_list($user_id, $extra_field, $force = false, $showDelete = false)
     {
         if (!$force && !empty($_POST['remove_'.$extra_field])) {
             return true; // postpone reading from the filesystem
@@ -2006,7 +2013,7 @@ class UserManager
             foreach ($extra_files as $file) {
                 $filename = substr($file,strlen($extra_field)+1);
                 $extra_file_list .= '<li>'.Display::return_icon('archive.png').'<a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">'.htmlentities($filename).'</a> ';
-                if ($showdelete) {
+                if ($showDelete) {
                     $extra_file_list .= '<input style="width:16px;" type="image" name="remove_extra_' . $extra_field . '['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($filename).'" onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
                 }
             }
@@ -2420,7 +2427,6 @@ class UserManager
     public static function get_extra_user_data_for_tags($field_variable)
     {
         $extra_information_by_variable = self::get_extra_field_tags_information_by_name($field_variable);
-
 
         return $extra_information_by_variable;
     }
@@ -2925,12 +2931,13 @@ class UserManager
 
     /**
      * Get user id from a username
-     * @param    string    Username
+     * @param    string    $username
      * @return    int        User ID (or false if not found)
      */
     public static function get_user_id_from_username($username)
     {
         if (empty($username)) {
+
             return false;
         }
         $username = trim($username);
@@ -2938,6 +2945,7 @@ class UserManager
         $t_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT id FROM $t_user WHERE username = '$username'";
         $res = Database::query($sql);
+
         if ($res === false) {
             return false;
         }
@@ -2945,14 +2953,15 @@ class UserManager
             return false;
         }
         $row = Database::fetch_array($res);
+
         return $row['id'];
     }
 
     /**
      * Get the users files upload from his share_folder
-     * @param    string    User ID
-     * @param   string  course directory
-     * @param   string  resourcetype: images, all
+     * @param    string  $user_id   User ID
+     * @param   string  $course course directory
+     * @param   string  $resourcetype resourcetype: images, all
      * @return    int        User ID (or false if not found)
      */
     public static function get_user_upload_files_by_course($user_id, $course, $resourcetype = 'all')
@@ -2994,6 +3003,7 @@ class UserManager
                 }
             }
         }
+
         return $return;
     }
 
@@ -3152,6 +3162,7 @@ class UserManager
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
         $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
         $res = Database::query($sql);
+
         return Database::num_rows($res) === 1;
     }
 
@@ -3624,8 +3635,7 @@ class UserManager
                         concat(u.lastname, ' ', u.firstname) LIKE '".Database::escape_string("%".$tag."%")."'
                      )
                      ".(!empty($where_extra_fields) ? $where_extra_fields : '')."
-                     AND
-                     url_rel_user.access_url_id=".api_get_current_access_url_id();
+                     AND url_rel_user.access_url_id=".api_get_current_access_url_id();
 
         $keyword_active = true;
         // only active users
@@ -4169,9 +4179,8 @@ class UserManager
                     )"
                 ;
                 break;
-            case STUDENT_BOSS :
-                $drhConditions = " AND friend_user_id = $userId AND "
-                . "relation_type = " . USER_RELATION_TYPE_BOSS;
+            case STUDENT_BOSS:
+                $drhConditions = " AND friend_user_id = $userId AND relation_type = " . USER_RELATION_TYPE_BOSS;
                 break;
         }
 
@@ -4232,11 +4241,11 @@ class UserManager
 
     /**
      * Subscribes users to human resource manager (Dashboard feature)
-     *    @param    int         hr dept id
-     * @param    array        Users id
-     * @param    int            affected rows
+     * @param   int    $hr_dept_id
+     * @param   array   $users_id
+     * @param   int     affected rows
      * */
-    public static function suscribe_users_to_hr_manager($hr_dept_id, $users_id)
+    public static function subscribeUsersToHRManager($hr_dept_id, $users_id)
     {
         return self::subscribeUsersToUser($hr_dept_id, $users_id, USER_RELATION_TYPE_RRHH);
     }
@@ -4245,7 +4254,8 @@ class UserManager
      * Add subscribed users to a user by relation type
      * @param int $userId The user id
      * @param array $subscribedUsersId The id of suscribed users
-     * @param action $relationType The relation type
+     * @param string $relationType The relation type
+     * @param bool $deleteUsersBeforeInsert
      */
     public static function subscribeUsersToUser($userId, $subscribedUsersId, $relationType, $deleteUsersBeforeInsert = false)
     {
@@ -4308,8 +4318,8 @@ class UserManager
 
     /**
      * This function check if an user is followed by human resources manager
-     * @param     int     User id
-     * @param    int        Human resources manager
+     * @param     int     $user_id
+     * @param    int      $hr_dept_id  Human resources manager
      * @return    bool
      */
     public static function is_user_followed_by_drh($user_id, $hr_dept_id)
@@ -4345,7 +4355,6 @@ class UserManager
         $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $courseId = $courseInfo['real_id'];
-        $courseCode = $courseInfo['code'];
 
         if ($session == 0 || is_null($session)) {
             $sql = 'SELECT u.id uid FROM '.$table_user.' u
@@ -4362,6 +4371,7 @@ class UserManager
             } else {
                 $my_num_rows = $num_rows;
                 $my_user_id = Database::result($rs, $my_num_rows - 1, 'uid');
+
                 return $my_user_id;
             }
         } elseif ($session > 0) {
@@ -4380,8 +4390,8 @@ class UserManager
 
     /**
      * Determines if a user is a gradebook certified
-     * @param int The category id of gradebook
-     * @param int The user id
+     * @param int $cat_id The category id of gradebook
+     * @param int $user_id The user id
      * @return boolean
      */
     public static function is_user_certified($cat_id, $user_id)
@@ -4402,8 +4412,8 @@ class UserManager
 
     /**
      * Gets the info about a gradebook certificate for a user by course
-     * @param string The course code
-     * @param int The user id
+     * @param string $course_code The course code
+     * @param int $user_id The user id
      * @return array  if there is not information return false
      */
     public static function get_info_gradebook_certificate($course_code, $user_id)
@@ -4436,8 +4446,10 @@ class UserManager
                 $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()));
             }
             $row['grade'] = $grade;
+
             return $row;
         }
+
         return false;
     }
 
@@ -4464,7 +4476,8 @@ class UserManager
         $sql = "SELECT tc.path_certificate,tc.cat_id,tgc.course_code,tgc.name
                 FROM $table_certificate tc, $table_gradebook_category tgc
                 WHERE tgc.id = tc.cat_id AND tc.user_id = $user_id
-                ORDER BY tc.date_certificate DESC limit 5";
+                ORDER BY tc.date_certificate DESC 
+                LIMIT 5";
 
         $rs = Database::query($sql);
         while ($row = Database::fetch_array($rs)) {
@@ -4475,9 +4488,9 @@ class UserManager
 
     /**
      * This function check if the user is a coach inside session course
-     * @param  int     User id
+     * @param  int  $user_id    User id
      * @param  int  $courseId
-     * @param  int     Session id
+     * @param  int  $session_id
      * @return bool    True if the user is a coach
      *
      */
@@ -4507,8 +4520,8 @@ class UserManager
     /**
      * This function returns an icon path that represents the favicon of the website of which the url given.
      * Defaults to the current Chamilo favicon
-     * @param    string    URL of website where to look for favicon.ico
-     * @param    string    Optional second URL of website where to look for favicon.ico
+     * @param    string    $url1 URL of website where to look for favicon.ico
+     * @param    string    $url2 Optional second URL of website where to look for favicon.ico
      * @return    string    Path of icon to load
      */
     public static function get_favicon_from_url($url1, $url2 = null)
@@ -4582,7 +4595,7 @@ class UserManager
      * @deprecated
      * @return array
      */
-    static function set_extra_fields_in_form(
+    public static function set_extra_fields_in_form(
         $form,
         $extra_data,
         $admin_permissions = false,
@@ -4643,8 +4656,9 @@ class UserManager
                     }
                     $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3]);
                     if (!$admin_permissions) {
-                        if ($field_details[7] == 0)
+                        if ($field_details[7] == 0) {
                             $form->freeze('extra_'.$field_details[1]);
+                        }
                     }
                     break;
                 case ExtraField::FIELD_TYPE_SELECT:
@@ -4869,7 +4883,7 @@ EOF;
     /**
      * @return array
      */
-    static function get_user_field_types()
+    public static function get_user_field_types()
     {
         $types = array();
         $types[self::USER_FIELD_TYPE_TEXT] = get_lang('FieldTypeText');
@@ -4960,11 +4974,9 @@ EOF;
      */
     public static function subscribeUserToBossList($studentId, $bossList)
     {
-        $count = 1;
         if ($bossList) {
             $studentId = (int) $studentId;
             $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-            $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $sql = "DELETE FROM $userRelUserTable 
                     WHERE user_id = $studentId AND relation_type = ".USER_RELATION_TYPE_BOSS;
             Database::query($sql);

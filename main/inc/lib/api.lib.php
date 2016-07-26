@@ -1824,7 +1824,7 @@ function api_format_course_array($course_data)
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic.png';
     } else {
-        $url_image = Display::return_icon('session_default.png', null, null, null, null, true);
+        $url_image = Display::returnIconPath('session_default.png');
     }
     $_course['course_image_large'] = $url_image;
 
@@ -3197,7 +3197,6 @@ function api_not_allowed($print_headers = false, $message = null)
         );
         $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'autocapitalize_off'));
         $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password')));
-
         $form->addButton('submitAuth', get_lang('LoginEnter'), '', 'primary');
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (above)
@@ -5889,7 +5888,6 @@ function api_get_tools_lists($my_tool = null) {
         TOOL_GROUP,
         TOOL_BLOGS,
         TOOL_CHAT,
-        TOOL_CONFERENCE,
         TOOL_STUDENTPUBLICATION,
         TOOL_TRACKING,
         TOOL_HOMEPAGE_LINK,
@@ -6517,8 +6515,8 @@ function api_get_home_path()
             return "{$home}{$clean_url}";
         }
     }
+
     return $home;
-    // /FIX
 }
 
 /**
@@ -7757,7 +7755,7 @@ function api_mail_html(
     $mail->WordWrap = 200;
 
     if ($platform_email['SMTP_AUTH']) {
-        $mail->SMTPAuth = true;
+        $mail->SMTPAuth = 1;
         $mail->Username = $platform_email['SMTP_USER'];
         $mail->Password = $platform_email['SMTP_PASS'];
         if (isset($platform_email['SMTP_SECURE'])) {

@@ -3408,9 +3408,6 @@ i.size-32.icon-new-note{
     select#question_type_hidden option[value="14"] {background-image: url(../../main/img/icons/32/mcmagl.png);}
     select#question_type_hidden option[value="16"] {background-image: url(../../main/img/icons/32/calculated_answer.png);}
 }
-.btn-success.btn-install{
-    float: right;
-}
 /*
  * work
  */
@@ -4628,6 +4625,9 @@ div#chat-remote-video video {
 #page-install .footer-install p{
     padding: 0;
     margin: 0;
+}
+#page-install .content{
+    display: inline-block;
 }
 #page-install .footer-install{
   color: #666666;
@@ -6091,6 +6091,9 @@ footer{
     }
     .navbar-nav{
         margin: -2.5px -15px;
+    }
+    .installer{
+        display: inline-table; 
     }
 }
 

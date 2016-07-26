@@ -211,7 +211,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                     to { background-position: 100% 0; }
                 }
                 .install-home{
-                    background-image: url("data:image/gif;base64,$bgImage");
+                    background-image: url("data:image/png;base64,$bgImage");
                     background-position: 0px 0px;
                     background-repeat: repeat;
                     animation: animatedBackground 40s linear infinite;
@@ -222,7 +222,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                     
                 }
                 .installer{
-                    background: url("data:image/gif;base64,$bgMoon") no-repeat center 390px;
+                    background: url("data:image/png;base64,$bgMoon") no-repeat center 390px;
                 }
                 .avatar{
                     text-align: center;

@@ -167,20 +167,20 @@ class BigBlueButtonBN {
         if ($xml) {
 			if($xml->meetingID)
 				return array(
-					'returncode' => $xml->returncode,
-					'message' => $xml->message,
-					'messageKey' => $xml->messageKey,
-					'meetingId' => $xml->meetingID,
-					'attendeePw' => $xml->attendeePW,
-					'moderatorPw' => $xml->moderatorPW,
-					'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded,
-					'createTime' => $xml->createTime
+					'returncode' => $xml->returncode->__toString(),
+					'message' => $xml->message->__toString(),
+					'messageKey' => $xml->messageKey->__toString(),
+					'meetingId' => $xml->meetingID->__toString(),
+					'attendeePw' => $xml->attendeePW->__toString(),
+					'moderatorPw' => $xml->moderatorPW->__toString(),
+					'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded->__toString(),
+					'createTime' => $xml->createTime->__toString()
 					);
 			else
 				return array(
-					'returncode' => $xml->returncode,
-					'message' => $xml->message,
-					'messageKey' => $xml->messageKey
+					'returncode' => $xml->returncode->__toString(),
+					'message' => $xml->message->__toString(),
+					'messageKey' => $xml->messageKey->__toString()
 					);
 		}
 		else {
@@ -249,9 +249,9 @@ class BigBlueButtonBN {
 		$xml = $this->_processXmlResponse($this->getEndMeetingURL($endParams));
 		if ($xml) {
 			return array(
-				'returncode' => $xml->returncode,
-				'message' => $xml->message,
-				'messageKey' => $xml->messageKey
+				'returncode' => $xml->returncode->__toString(),
+				'message' => $xml->message->__toString(),
+				'messageKey' => $xml->messageKey->__toString()
 				);
 		}
 		else {
@@ -285,9 +285,9 @@ class BigBlueButtonBN {
 		$xml = $this->_processXmlResponse($this->getIsMeetingRunningUrl($meetingId));
 		if($xml) {
 			return array(
-				'returncode' => $xml->returncode,
-				'running' => $xml->running 	// -- Returns true/false.
-				);
+				'returncode' => $xml->returncode->__toString(),
+				'running' => $xml->running->__toString() 	// -- Returns true/false.
+			);
 		}
 		else {
 			return null;
@@ -314,38 +314,38 @@ class BigBlueButtonBN {
 			// If we don't get a success code, stop processing and return just the returncode:
 			if ($xml->returncode != 'SUCCESS') {
 				$result = array(
-					'returncode' => $xml->returncode
+					'returncode' => $xml->returncode->__toString()
 				);
 				return $result;
 			}
 			elseif ($xml->messageKey == 'noMeetings') {
 				/* No meetings on server, so return just this info: */
 				$result = array(
-					'returncode' => $xml->returncode,
-					'messageKey' => $xml->messageKey,
-					'message' => $xml->message
+					'returncode' => $xml->returncode->__toString(),
+					'messageKey' => $xml->messageKey->__toString(),
+					'message' => $xml->message->__toString()
 				);
 				return $result;
 			}
 			else {
 				// In this case, we have success and meetings. First return general response:
 				$result = array(
-					'returncode' => $xml->returncode,
-					'messageKey' => $xml->messageKey,
-					'message' => $xml->message
+					'returncode' => $xml->returncode->__toString(),
+					'messageKey' => $xml->messageKey->__toString(),
+					'message' => $xml->message->__toString()
 				);
 				// Then interate through meeting results and return them as part of the array:
 				foreach ($xml->meetings->meeting as $m) {
 					$result[] = array(
-						'meetingId' => $m->meetingID,
-						'meetingName' => $m->meetingName,
-						'createTime' => $m->createTime,
-						'attendeePw' => $m->attendeePW,
-						'moderatorPw' => $m->moderatorPW,
-						'hasBeenForciblyEnded' => $m->hasBeenForciblyEnded,
-						'running' => $m->running
-						);
-					}
+						'meetingId' => $m->meetingID->__toString(),
+						'meetingName' => $m->meetingName->__toString(),
+						'createTime' => $m->createTime->__toString(),
+						'attendeePw' => $m->attendeePW->__toString(),
+						'moderatorPw' => $m->moderatorPW->__toString(),
+						'hasBeenForciblyEnded' => $m->hasBeenForciblyEnded->__toString(),
+						'running' => $m->running->__toString()
+					);
+				}
 				return $result;
 			}
 		}
@@ -383,39 +383,39 @@ class BigBlueButtonBN {
 			// If we don't get a success code or messageKey, find out why:
 			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
 				$result = array(
-					'returncode' => $xml->returncode,
-					'messageKey' => $xml->messageKey,
-					'message' => $xml->message
+					'returncode' => $xml->returncode->__toString(),
+					'messageKey' => $xml->messageKey->__toString(),
+					'message' => $xml->message->__toString()
 				);
 				return $result;
 			}
 			else {
 				// In this case, we have success and meeting info:
 				$result = array(
-					'returncode' => $xml->returncode,
-					'meetingName' => $xml->meetingName,
-					'meetingId' => $xml->meetingID,
-					'createTime' => $xml->createTime,
-					'voiceBridge' => $xml->voiceBridge,
-					'attendeePw' => $xml->attendeePW,
-					'moderatorPw' => $xml->moderatorPW,
-					'running' => $xml->running,
-					'recording' => $xml->recording,
-					'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded,
-					'startTime' => $xml->startTime,
-					'endTime' => $xml->endTime,
-					'participantCount' => $xml->participantCount,
-					'maxUsers' => $xml->maxUsers,
-					'moderatorCount' => $xml->moderatorCount,
+					'returncode' => $xml->returncode->__toString(),
+					'meetingName' => $xml->meetingName->__toString(),
+					'meetingId' => $xml->meetingID->__toString(),
+					'createTime' => $xml->createTime->__toString(),
+					'voiceBridge' => $xml->voiceBridge->__toString(),
+					'attendeePw' => $xml->attendeePW->__toString(),
+					'moderatorPw' => $xml->moderatorPW->__toString(),
+					'running' => $xml->running->__toString(),
+					'recording' => $xml->recording->__toString(),
+					'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded->__toString(),
+					'startTime' => $xml->startTime->__toString(),
+					'endTime' => $xml->endTime->__toString(),
+					'participantCount' => $xml->participantCount->__toString(),
+					'maxUsers' => $xml->maxUsers->__toString(),
+					'moderatorCount' => $xml->moderatorCount->__toString(),
 				);
 				// Then interate through attendee results and return them as part of the array:
 				foreach ($xml->attendees->attendee as $a) {
 					$result[] = array(
-						'userId' => $a->userID,
-						'fullName' => $a->fullName,
-						'role' => $a->role
-						);
-					}
+						'userId' => $a->userID->__toString(),
+						'fullName' => $a->fullName->__toString(),
+						'role' => $a->role->__toString()
+					);
+				}
 				return $result;
 			}
 		}
@@ -458,37 +458,37 @@ class BigBlueButtonBN {
 			// If we don't get a success code or messageKey, find out why:
 			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
 				$result = array(
-					'returncode' => $xml->returncode,
-					'messageKey' => $xml->messageKey,
-					'message' => $xml->message
+					'returncode' => $xml->returncode->__toString(),
+					'messageKey' => $xml->messageKey->__toString(),
+					'message' => $xml->message->__toString()
 				);
 				return $result;
 			}
 			else {
 				// In this case, we have success and recording info:
 				$result = array(
-					'returncode' => $xml->returncode,
-					'messageKey' => $xml->messageKey,
-					'message' => $xml->message
+					'returncode' => $xml->returncode->__toString(),
+					'messageKey' => $xml->messageKey->__toString(),
+					'message' => $xml->message->__toString()
 				);
 
 				foreach ($xml->recordings->recording as $r) {
 					$result[] = array(
-						'recordId' => $r->recordID,
-						'meetingId' => $r->meetingID,
-						'name' => $r->name,
-						'published' => $r->published,
-						'startTime' => $r->startTime,
-						'endTime' => $r->endTime,
-						'playbackFormatType' => $r->playback->format->type,
-						'playbackFormatUrl' => $r->playback->format->url,
-						'playbackFormatLength' => $r->playback->format->length,
-						'metadataTitle' => $r->metadata->title,
-						'metadataSubject' => $r->metadata->subject,
-						'metadataDescription' => $r->metadata->description,
-						'metadataCreator' => $r->metadata->creator,
-						'metadataContributor' => $r->metadata->contributor,
-						'metadataLanguage' => $r->metadata->language,
+						'recordId' => $r->recordID->__toString(),
+						'meetingId' => $r->meetingID->__toString(),
+						'name' => $r->name->__toString(),
+						'published' => $r->published->__toString(),
+						'startTime' => $r->startTime->__toString(),
+						'endTime' => $r->endTime->__toString(),
+						'playbackFormatType' => $r->playback->format->type->__toString(),
+						'playbackFormatUrl' => $r->playback->format->url->__toString(),
+						'playbackFormatLength' => $r->playback->format->length->__toString(),
+						'metadataTitle' => $r->metadata->title->__toString(),
+						'metadataSubject' => $r->metadata->subject->__toString(),
+						'metadataDescription' => $r->metadata->description->__toString(),
+						'metadataCreator' => $r->metadata->creator->__toString(),
+						'metadataContributor' => $r->metadata->contributor->__toString(),
+						'metadataLanguage' => $r->metadata->language->__toString(),
 						// Add more here as needed for your app depending on your
 						// use of metadata when creating recordings.
 						);
@@ -526,9 +526,9 @@ class BigBlueButtonBN {
 		$xml = $this->_processXmlResponse($this->getPublishRecordingsUrl($recordingParams));
 		if($xml) {
 			return array(
-				'returncode' => $xml->returncode,
-				'published' => $xml->published 	// -- Returns true/false.
-				);
+				'returncode' => $xml->returncode->__toString(),
+				'published' => $xml->published->__toString() 	// -- Returns true/false.
+			);
 		}
 		else {
 			return null;
@@ -559,9 +559,9 @@ class BigBlueButtonBN {
 		$xml = $this->_processXmlResponse($this->getDeleteRecordingsUrl($recordingParams));
 		if($xml) {
 			return array(
-				'returncode' => $xml->returncode,
-				'deleted' => $xml->deleted 	// -- Returns true/false.
-				);
+				'returncode' => $xml->returncode->__toString(),
+				'deleted' => $xml->deleted->__toString() 	// -- Returns true/false.
+			);
 		}
 		else {
 			return null;

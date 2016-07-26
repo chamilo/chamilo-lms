@@ -4982,6 +4982,7 @@ EOF;
             Database::query($sql);
 
             foreach ($bossList as $bossId) {
+                $bossId = (int) $bossId;
                 $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
                         VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
 
@@ -5255,8 +5256,6 @@ EOF;
         return $url;
     }
 
-
-
     /**
      * Displays the name of the user and makes the link to the user profile
      * @param array $userInfo
@@ -5300,14 +5299,14 @@ EOF;
         $sql = <<<SQL
             SELECT id, username, lastname, firstname
             FROM $userTable
-            WHERE firstname LIKE '$firstname%' AND
+            WHERE 
+                firstname LIKE '$firstname%' AND
                 lastname LIKE '$lastname%'
 SQL;
 
         $result = Database::query($sql);
 
         $users = [];
-
         while ($resultData = Database::fetch_object($result)) {
             $users[] = $resultData;
         }
@@ -5322,7 +5321,7 @@ SQL;
     public static function getUserSubscriptionTab($optionSelected = 1)
     {
         $allowAdmin = api_get_setting('allow_user_course_subscription_by_course_admin');
-        if (($allowAdmin == 'true' && api_is_allowed_to_edit()) ||
+        if (($allowAdmin === 'true' && api_is_allowed_to_edit()) ||
             api_is_platform_admin()
         ) {
             $userPath = api_get_path(WEB_CODE_PATH).'user/';
@@ -5357,5 +5356,4 @@ SQL;
             return Display::tabsOnlyLink($headers, $optionSelected);
         }
     }
-
 }

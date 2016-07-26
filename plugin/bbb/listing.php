@@ -37,8 +37,8 @@ if ($conferenceManager) {
             $agenda->type = 'course';
 
             $id = intval($_GET['id']);
-            $title = sprintf(get_lang('VideoConferenceXCourseX'), $id, $courseInfo['name']);
-            $content = Display::url(get_lang('GoToTheVideoConference'), $_GET['url']);
+            $title = sprintf($plugin->get_lang('VideoConferenceXCourseX'), $id, $courseInfo['name']);
+            $content = Display::url($plugin->get_lang('GoToTheVideoConference'), $_GET['url']);
 
             $eventId = $agenda->addEvent(
                 $_REQUEST['start'],
@@ -49,7 +49,7 @@ if ($conferenceManager) {
                 array('everyone')
             );
             if (!empty($eventId)) {
-                $message = Display::return_message(get_lang('VideoConferenceAddedToTheCalendar'), 'success');
+                $message = Display::return_message($plugin->get_lang('VideoConferenceAddedToTheCalendar'), 'success');
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
@@ -57,7 +57,7 @@ if ($conferenceManager) {
         case 'copy_record_to_link_tool':
             $result = $bbb->copyRecordToLinkTool($_GET['id']);
             if ($result) {
-                $message = Display::return_message(get_lang('VideoConferenceAddedToTheLinkTool'), 'success');
+                $message = Display::return_message($plugin->get_lang('VideoConferenceAddedToTheLinkTool'), 'success');
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
@@ -73,7 +73,7 @@ if ($conferenceManager) {
         case 'end':
             $bbb->endMeeting($_GET['id']);
             $message = Display::return_message(
-                get_lang('MeetingClosed') . '<br />' . get_lang(
+                $plugin->get_lang('MeetingClosed') . '<br />' . $plugin->get_lang(
                     'MeetingClosedComment'
                 ),
                 'success',

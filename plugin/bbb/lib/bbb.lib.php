@@ -32,6 +32,7 @@ class bbb
     public $userSupport = false;
     public $accessUrl = 1;
     public $userId = 0;
+    public $plugin;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -44,16 +45,16 @@ class bbb
     public function __construct($host = '', $salt = '', $isGlobalConference = false, $isGlobalPerUser = 0)
     {
         // Initialize video server settings from global settings
-        $plugin = BBBPlugin::create();
+        $this->plugin = BBBPlugin::create();
 
-        $bbbPluginEnabled = $plugin->get('tool_enable');
+        $bbbPluginEnabled = $this->plugin->get('tool_enable');
 
-        $bbb_host = !empty($host) ? $host : $plugin->get('host');
-        $bbb_salt = !empty($salt) ? $salt : $plugin->get('salt');
+        $bbb_host = !empty($host) ? $host : $this->plugin->get('host');
+        $bbb_salt = !empty($salt) ? $salt : $this->plugin->get('salt');
 
         $this->logoutUrl = $this->getListingUrl();
         $this->table = Database::get_main_table('plugin_bbb_meeting');
-        $this->enableGlobalConference = (bool) $plugin->get('enable_global_conference');
+        $this->enableGlobalConference = (bool) $this->plugin->get('enable_global_conference');
         $this->isGlobalConference = (bool) $isGlobalConference;
 
         $columns = Database::listTableColumns($this->table);
@@ -62,7 +63,7 @@ class bbb
         $this->accessUrl = api_get_current_access_url_id();
 
         if ($this->userSupport && !empty($isGlobalPerUser)) {
-            $this->enableGlobalConferencePerUser = (bool) $plugin->get('enable_global_conference_per_user');
+            $this->enableGlobalConferencePerUser = (bool) $this->plugin->get('enable_global_conference_per_user');
             $this->userId = $isGlobalPerUser;
         } else {
             $this->enableGlobalConferencePerUser = false;
@@ -70,7 +71,7 @@ class bbb
 
         if ($this->groupSupport) {
             // Plugin check
-            $this->groupSupport = (bool) $plugin->get('enable_conference_in_course_groups');
+            $this->groupSupport = (bool) $this->plugin->get('enable_conference_in_course_groups');
             if ($this->groupSupport) {
 
                 // Platform check
@@ -600,12 +601,12 @@ class bbb
                     $count = 1;
                     if (isset($records['message']) && !empty($records['message'])) {
                         if ($records['messageKey'] == 'noRecordings') {
-                            $recordArray[] = get_lang('NoRecording');
+                            $recordArray[] = $this->plugin->get_lang('NoRecording');
                             if ($meetingDB['visibility'] == 0) {
                                 $actionLinksArray[] = Display::url(
                                     Display::return_icon(
                                         'invisible.png',
-                                        get_lang('MakeVisible'),
+                                        $this->plugin->get_lang('MakeVisible'),
                                         array(),
                                         ICON_SIZE_MEDIUM
                                     ),
@@ -615,7 +616,7 @@ class bbb
                                 $actionLinksArray[] = Display::url(
                                     Display::return_icon(
                                         'visible.png',
-                                        get_lang('MakeInvisible'),
+                                        $this->plugin->get_lang('MakeInvisible'),
                                         array(),
                                         ICON_SIZE_MEDIUM
                                     ),
@@ -631,7 +632,7 @@ class bbb
                             // (see show_links after the end of this loop)
                             if (is_array($record) && isset($record['recordId'])) {
                                 $url = Display::url(
-                                    get_lang('ViewRecord')." [~".$record['playbackFormatLength']."']",
+                                    $this->plugin->get_lang('ViewRecord')." [~".$record['playbackFormatLength']."']",
                                     $record['playbackFormatUrl'],
                                     array('target' => '_blank')
                                 );
@@ -641,14 +642,14 @@ class bbb
                                         $actionLinks .= Display::url(
                                             Display::return_icon(
                                                 'link.gif',
-                                                get_lang('CopyToLinkTool')
+                                                $this->plugin->get_lang('CopyToLinkTool')
                                             ),
                                             $this->copyToRecordToLinkTool($meetingDB)
                                         );
                                         $actionLinks .= Display::url(
                                             Display::return_icon(
                                                 'agenda.png',
-                                                get_lang('AddToCalendar')
+                                                $this->plugin->get_lang('AddToCalendar')
                                             ),
                                             $this->addToCalendarUrl($meetingDB, $record)
                                         );
@@ -656,7 +657,7 @@ class bbb
                                     $actionLinks .= Display::url(
                                         Display::return_icon(
                                             'delete.png',
-                                            get_lang('Delete')
+                                            $this->plugin->get_lang('Delete')
                                         ),
                                         $this->deleteRecordUrl($meetingDB)
                                     );
@@ -665,7 +666,7 @@ class bbb
                                         $actionLinks .= Display::url(
                                             Display::return_icon(
                                                 'invisible.png',
-                                                get_lang('MakeVisible'),
+                                                $this->plugin->get_lang('MakeVisible'),
                                                 array(),
                                                 ICON_SIZE_MEDIUM
                                             ),
@@ -675,7 +676,7 @@ class bbb
                                         $actionLinks .= Display::url(
                                             Display::return_icon(
                                                 'visible.png',
-                                                get_lang('MakeInvisible'),
+                                                $this->plugin->get_lang('MakeInvisible'),
                                                 array(),
                                                 ICON_SIZE_MEDIUM
                                             ),
@@ -716,7 +717,7 @@ class bbb
                             $actionLinks .= Display::url(
                                 Display::return_icon(
                                     'invisible.png',
-                                    get_lang('MakeVisible'),
+                                    $this->plugin->get_lang('MakeVisible'),
                                     array(),
                                     ICON_SIZE_MEDIUM
                                 ),
@@ -726,7 +727,7 @@ class bbb
                             $actionLinks .= Display::url(
                                 Display::return_icon(
                                     'visible.png',
-                                    get_lang('MakeInvisible'),
+                                    $this->plugin->get_lang('MakeInvisible'),
                                     array(),
                                     ICON_SIZE_MEDIUM
                                 ),
@@ -1013,7 +1014,7 @@ class bbb
         if (!empty($records)) {
             if (isset($records['message']) && !empty($records['message'])) {
                 if ($records['messageKey'] == 'noRecordings') {
-                    $recordArray[] = get_lang('NoRecording');
+                    $recordArray[] = $this->plugin->get_lang('NoRecording');
                 } else {
                     //$recordArray[] = $records['message'];
                 }
@@ -1069,7 +1070,7 @@ class bbb
     {
         if (file_exists(__DIR__ . '/../config.vm.php')) {
             // Using VM
-            echo Display::url(get_lang('ClickToContinue'), $url);
+            echo Display::url($this->plugin->get_lang('ClickToContinue'), $url);
             exit;
         } else {
             // Classic

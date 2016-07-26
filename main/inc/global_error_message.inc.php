@@ -135,8 +135,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
             }
             $read_installation_guide = substr($InstallationDescription, $pos + 2);
             $InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
-            <div class="row"><div class="col-md-12">
-
+            <div class="row">
+                    <div class="col-md-12">
                     <div class="office">
                     <h2 class="title">Welcome to the Chamilo '.$new_version.' installation wizard</h2>
                     <p class="text">Let\'s start hunting skills down with Chamilo LMS! This wizard will guide you through the Chamilo installation and configuration process.</p>
@@ -145,6 +145,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                               <a class="btn btn-success btn-lg" href="'.$installation_guide_url.'" target="_blank"> <em class="fa fa-file-text-o"></em> '.$read_installation_guide.'</a>
                           </p>
                     </div>
+                </div>
+            </div>
             </form>';
             $global_error_message['description'] = $InstallationDescription;
             break;

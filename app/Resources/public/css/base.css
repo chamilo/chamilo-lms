@@ -4252,8 +4252,8 @@ ul.exercise-draggable-answer .touch-items:hover{
   min-height: 4em;
   width: 100%;
   padding: 20px;
+  position: relative;
   box-sizing: border-box;
-
 }
 .drag_question .indent{
   text-indent: -15px;

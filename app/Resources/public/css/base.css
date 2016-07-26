@@ -6092,6 +6092,9 @@ footer{
     .navbar-nav{
         margin: -2.5px -15px;
     }
+    .installer{
+        display: inline-table; 
+    }
 }
 
 

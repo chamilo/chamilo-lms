@@ -1062,24 +1062,25 @@ function display_requirements(
 
         $deprecated = [
             api_get_path(SYS_CODE_PATH) . 'exercice/',
-            api_get_path(SYS_CODE_PATH) . 'newscorm/'
+            api_get_path(SYS_CODE_PATH) . 'newscorm/',
+            api_get_path(SYS_PLUGIN_PATH) . 'ticket/'
         ];
-        $deprecatedToRemoved = [];
+        $deprecatedToRemove = [];
 
         foreach ($deprecated as $deprecatedDirectory) {
             if (!is_dir($deprecatedDirectory)) {
                 continue;
             }
 
-            $deprecatedToRemoved[] = $deprecatedDirectory;
+            $deprecatedToRemove[] = $deprecatedDirectory;
         }
 
-        if (count($deprecatedToRemoved) > 0) {
+        if (count($deprecatedToRemove) > 0) {
             $error = true;
             ?>
             <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade') ?></p>
             <ul>
-                <?php foreach ($deprecatedToRemoved as $deprecatedDirectory) { ?>
+                <?php foreach ($deprecatedToRemove as $deprecatedDirectory) { ?>
                     <li class="text-danger"><?php echo $deprecatedDirectory ?></li>
                 <?php } ?>
             </ul>

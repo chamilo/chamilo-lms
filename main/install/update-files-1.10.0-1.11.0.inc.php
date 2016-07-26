@@ -33,6 +33,10 @@ if (defined('SYSTEM_INSTALLATION')) {
     if (is_dir($lpPath)) {
         @rrmdir($lpPath);
     }
+    $ticketPluginPath = api_get_path(SYS_PLUGIN_PATH) . 'ticket';
+    if (is_dir($ticketPluginPath)) {
+        @rrmdir($ticketPluginPath);
+    }
 
     if ($debug) {
         error_log('Folders cleaned up');

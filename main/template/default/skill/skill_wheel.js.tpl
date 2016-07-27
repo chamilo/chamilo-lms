@@ -101,7 +101,7 @@ color_patterns[17] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOr
 
 //Too make the gray tones lighter
 col = 3;
-color_patterns[18] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greens[col]);
+color_patterns[18] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Blues[col]);
 
 //If you want to use the category10()
 //var normal_fill = d3.scale.category10().domain(my_domain);
@@ -259,7 +259,7 @@ function set_skill_style(d, attribute, searched_skill_id) {
     // New way (Only 1 ajax call)
     // 4. Blue - if user achieved that skill
     if (userSkills[d.id]) {
-        return_fill = '#3A87AD';
+        return_fill = '#A1D99B';
     }
 
     switch (attribute) {

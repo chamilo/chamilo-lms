@@ -2065,9 +2065,14 @@ function migrate($chamiloVersion, EntityManager $manager)
             foreach ($migratedSQL as $version => $sqlList) {
                 echo "VERSION: $version<br>";
                 echo "----------------------------------------------<br>";
-
+                $total = count($sqlList);
+                error_log("VERSION: $version");
+                error_log("# queries: ".$total);
+                $counter = 1;
                 foreach ($sqlList as $sql) {
                     echo "<code>$sql</code><br>";
+                    error_log("$counter/$total : $sql");
+                    $counter++;
                 }
             }
 

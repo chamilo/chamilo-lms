@@ -5927,7 +5927,7 @@ class DocumentManager
                 $tmp_folders_titles[$tmp_path] = $tmp_title;
             }
         }
-        
+
         return $path_displayed;
     }
 
@@ -6296,5 +6296,47 @@ class DocumentManager
         $sql = "DELETE FROM $itemPropertyTable
                 WHERE c_id = $courseId AND session_id = $sessionId AND tool = '".TOOL_DOCUMENT."'";
         Database::query($sql);
+    }
+
+    /**
+     * Update the file or directory path in the document db document table
+     *
+     * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
+     * @param  - action (string) - action type require : 'delete' or 'update'
+     * @param  - old_path (string) - old path info stored to change
+     * @param  - new_path (string) - new path info to substitute
+     * @desc Update the file or directory path in the document db document table
+     *
+     */
+    public static function updateDbInfo($action, $old_path, $new_path = '')
+    {
+        $dbTable = Database::get_course_table(TABLE_DOCUMENT);
+        $course_id = api_get_course_int_id();
+        switch ($action) {
+            case 'delete':
+                $old_path = Database::escape_string($old_path);
+                $query = "DELETE FROM $dbTable
+                          WHERE
+                            c_id = $course_id AND
+                            (
+                                path LIKE BINARY '".$old_path."' OR
+                                path LIKE BINARY '".$old_path."/%'
+                            )";
+                Database::query($query);
+                break;
+            case 'update':
+                if ($new_path[0] == '.') {
+                    $new_path = substr($new_path, 1);
+                }
+                $new_path = str_replace('//', '/', $new_path);
+
+                // Attempt to update	- tested & working for root	dir
+                $new_path = Database::escape_string($new_path);
+                $query = "UPDATE $dbTable SET
+                            path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
+                          WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
+                Database::query($query);
+                break;
+        }
     }
 }

@@ -690,7 +690,6 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 /**
  * creates a new directory trying to find a directory name
  * that doesn't already exist
- * (we could use unique_name() here...)
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @author Bert Vanderkimpen

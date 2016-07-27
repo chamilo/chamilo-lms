@@ -19,7 +19,8 @@
  * @param string $file_name Name of a file
  * @return string the filename phps'ized
  */
-function php2phps($file_name) {
+function php2phps($file_name)
+{
     return preg_replace('/\.(php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
 }
 
@@ -29,7 +30,8 @@ function php2phps($file_name) {
  * @param string $filename
  * @return string
  */
-function htaccess2txt($filename) {
+function htaccess2txt($filename)
+{
     return str_replace(array('.htaccess', '.HTACCESS'), array('htaccess.txt', 'htaccess.txt'), $filename);
 }
 
@@ -48,35 +50,13 @@ function disable_dangerous_file($filename)
 }
 
 /**
- * This function generates a unique name for a file on a given location
- * file names are changed to name_#.ext
- *
- * @param string $path
- * @param string $name
- *
- * @deprecated
- *
- * @return string new unique name
- */
-function unique_name($path, $name)
-{
-    $ext = substr(strrchr($name, '.'), 0);
-    $name_no_ext = substr($name, 0, strlen($name) - strlen(strstr($name, $ext)));
-    $n = 0;
-    $unique = '';
-    while (file_exists($path . $name_no_ext . $unique . $ext)) {
-        $unique = '_' . ++$n;
-    }
-    return $name_no_ext . $unique . $ext;
-}
-
-/**
  * Returns the name without extension, used for the title
  *
  * @param string $name
  * @return name without the extension
  */
-function get_document_title($name) {
+function get_document_title($name)
+{
     // If they upload .htaccess...
     $name = disable_dangerous_file($name);
     $ext = substr(strrchr($name, '.'), 0);
@@ -97,13 +77,16 @@ function process_uploaded_file($uploaded_file, $show_output = true)
             case 1:
                 // The uploaded file exceeds the upload_max_filesize directive in php.ini.
                 if ($show_output) {
-                    Display::display_error_message(get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'));
+                    Display::display_error_message(
+                        get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize')
+                    );
                 }
 
                 return false;
             case 2:
                 // The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
-                // Not used at the moment, but could be handy if we want to limit the size of an upload (e.g. image upload in html editor).
+                // Not used at the moment, but could be handy if we want to limit the size of an upload
+                // (e.g. image upload in html editor).
                 $max_file_size = intval($_POST['MAX_FILE_SIZE']);
                 if ($show_output) {
                     Display::display_error_message(get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size));
@@ -420,7 +403,8 @@ function handle_uploaded_document(
                                     $courseInfo
                                 );
                             } else {
-                                // There might be cases where the file exists on disk but there is no registration of that in the database
+                                // There might be cases where the file exists on disk but there is no registration of
+                                // that in the database
                                 // In this case, and if we are in overwrite mode, overwrite and create the db record
                                 $documentId = add_document(
                                     $courseInfo,
@@ -504,7 +488,10 @@ function handle_uploaded_document(
                             item_property_update_on_folder($courseInfo, $uploadPath, $userId);
                             // Display success message to user
                             if ($output) {
-                                Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br /> '.$documentTitle, false);
+                                Display::display_confirmation_message(
+                                    get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
+                                    false
+                                );
                             }
 
                             return $filePath;
@@ -517,9 +504,8 @@ function handle_uploaded_document(
                         return false;
                     }
                     break;
-                // Rename the file if it exists
                 case 'rename':
-
+                    // Rename the file if it exists
                     // Always rename.
                     $cleanName = DocumentManager::getUniqueFileName(
                         $uploadPath,
@@ -884,54 +870,6 @@ function add_ext_on_mime($file_name, $file_type)
     }
 
     return $file_name;
-}
-
-/**
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- *
- * @param  array $uploaded_file - follows the $_FILES Structure
- * @param  string $base_work_dir - base working directory of the module
- * @param  string $upload_path  - destination of the upload.
- *                               This path is to append to $base_work_dir
- * @param  int $max_filled_space - amount of bytes to not exceed in the base
- *                               working directory
- *
- * @return boolean true if it succeds, false otherwise
- */
-function treat_uploaded_file($uploaded_file, $base_work_dir, $upload_path, $max_filled_space, $uncompress = '')
-{
-    $uploaded_file['name'] = stripslashes($uploaded_file['name']);
-
-    if (!enough_size($uploaded_file['size'], $base_work_dir, $max_filled_space)) {
-        Display::addFlash(
-            Display::return_message(get_lang('NoSpace'))
-        );
-
-        return false;
-    }
-
-    if ($uncompress == 'unzip' && preg_match('/.zip$/', strtolower($uploaded_file['name']))) {
-        return unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_filled_space);
-    } else {
-        $file_name = trim($uploaded_file['name']);
-
-        // CHECK FOR NO DESIRED CHARACTERS
-        $file_name = api_replace_dangerous_char($file_name);
-
-        // TRY TO ADD AN EXTENSION TO FILES WITOUT EXTENSION
-        $file_name = add_ext_on_mime($file_name, $uploaded_file['type']);
-
-        // HANDLE PHP FILES
-        $file_name = ($file_name);
-
-        // COPY THE FILE TO THE DESIRED DESTINATION
-        if (move_uploaded_file($uploaded_file['tmp_name'], $base_work_dir.$upload_path.'/'.$file_name)) {
-            set_default_settings($upload_path, $file_name);
-        }
-
-        return true;
-    }
 }
 
 /**
@@ -1311,10 +1249,10 @@ function add_document(
 function update_existing_document($_course, $documentId, $filesize, $readonly = 0)
 {
     $document_table = Database::get_course_table(TABLE_DOCUMENT);
-    $documentId 	= intval($documentId);
-    $filesize 		= intval($filesize);
-    $readonly 		= intval($readonly);
-    $course_id 		= $_course['real_id'];
+    $documentId = intval($documentId);
+    $filesize = intval($filesize);
+    $readonly = intval($readonly);
+    $course_id = $_course['real_id'];
 
     $sql = "UPDATE $document_table SET
             size = '$filesize',
@@ -1397,7 +1335,6 @@ function get_levels($filename) {
 
 /**
  * Adds file to document table in database
- * deprecated: use file_set_default_settings instead
  *
  * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
  * @param	path,filename
@@ -1497,7 +1434,6 @@ function search_img_from_html($html_file) {
 /**
  * Creates a new directory trying to find a directory name
  * that doesn't already exist
- * (we could use unique_name() here...)
  *
  * @author  Hugues Peeters <hugues.peeters@claroline.net>
  * @author  Bert Vanderkimpen
@@ -2075,6 +2011,7 @@ function add_all_documents_in_folder_to_database(
     $parent = array()
 ) {
     if (empty($userInfo) || empty($courseInfo)) {
+
         return false;
     }
 
@@ -2082,7 +2019,6 @@ function add_all_documents_in_folder_to_database(
 
     // Open dir
     $handle = opendir($folderPath);
-    $files = array();
 
     if (is_dir($folderPath)) {
         // Run trough

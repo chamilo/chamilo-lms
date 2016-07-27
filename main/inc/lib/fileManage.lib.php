@@ -10,53 +10,14 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 
 /**
- * Update the file or directory path in the document db document table
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - action (string) - action type require : 'delete' or 'update'
- * @param  - old_path (string) - old path info stored to change
- * @param  - new_path (string) - new path info to substitute
- * @desc Update the file or directory path in the document db document table
- *
- */
-function update_db_info($action, $old_path, $new_path = '')
-{
-    $dbTable = Database::get_course_table(TABLE_DOCUMENT);
-    $course_id = api_get_course_int_id();
-    switch ($action) {
-        case 'delete':
-            $old_path = Database::escape_string($old_path);
-            $query = "DELETE FROM $dbTable
-                      WHERE
-                        c_id = $course_id AND
-                        (
-                            path LIKE BINARY '".$old_path."' OR
-                            path LIKE BINARY '".$old_path."/%'
-                        )";
-            Database::query($query);
-            break;
-        case 'update':
-            if ($new_path[0] == '.') $new_path = substr($new_path, 1);
-            $new_path = str_replace('//', '/', $new_path);
-
-            // Attempt to update	- tested & working for root	dir
-            $new_path = Database::escape_string($new_path);
-            $query = "UPDATE $dbTable SET
-                        path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
-                      WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
-            Database::query($query);
-            break;
-    }
-}
-
-/**
  * Cheks a file or a directory actually exist at this location
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param string $file_path Path of the presume existing file or dir
  * @return boolean TRUE if the file or the directory exists or FALSE otherwise.
  */
-function check_name_exist($file_path) {
+function check_name_exist($file_path)
+{
     clearstatcache();
     $save_dir = getcwd();
     if (!is_dir(dirname($file_path))) {
@@ -201,6 +162,7 @@ function my_rename($file_path, $new_file_name) {
 	chdir($path);
 	$res = rename($old_file_name, $new_file_name) ? $new_file_name : false;
 	chdir($save_dir);
+
 	return $res;
 }
 
@@ -271,14 +233,14 @@ function copyDirTo($orig_dir_path, $destination, $move = true)
     }
 }
 
-
 /**
- * Extracting extention of a filename
+ * Extracting extension of a filename
  *
  * @returns array
  * @param 	string	$filename 		filename
  */
-function getextension($filename) {
+function getextension($filename)
+{
 	$bouts = explode('.', $filename);
 	return array(array_pop($bouts), implode('.', $bouts));
 }
@@ -304,157 +266,4 @@ function dirsize($root, $recursive = true) {
 	}
 	@closedir($dir);
 	return $size;
-}
-
-/*	CLASS FileManager */
-
-/**
-	This class contains functions that you can access statically.
-
-	FileManager::list_all_directories($path)
-	FileManager::list_all_files($dir_array)
-	FileManager::compat_load_file($file_name)
-	FileManager::set_default_settings($upload_path, $filename, $filetype="file", $glued_table, $default_visibility='v')
-
-	@author Roan Embrechts
-	@version 1.1, July 2004
- *	@package chamilo.library
-*/
-class FileManager
-{
-	/**
-		Returns a list of all directories, except the base dir,
-		of the current course. This function uses recursion.
-
-		Convention: the parameter $path does not end with a slash.
-
-		@author Roan Embrechts
-		@version 1.0.1
-	*/
-	function list_all_directories($path)
-    {
-		$result_array = array();
-		if (is_dir($path)) {
-			$save_dir = getcwd();
-			chdir($path);
-			$handle = opendir($path);
-			while ($element = readdir($handle)) {
-				if ($element == '.' || $element == '..') continue;
-                // Skip the current and parent directories
-				if (is_dir($element)) {
-					$dir_array[] = $path.'/'.$element;
-				}
-			}
-			closedir($handle);
-			// Recursive operation if subdirectories exist
-			$dir_number = sizeof($dir_array);
-			if ($dir_number > 0) {
-				for ($i = 0 ; $i < $dir_number ; $i++) {
-					$sub_dir_array = FileManager::list_all_directories($dir_array[$i]); // Function recursivity
-					if (is_array($dir_array) && is_array($sub_dir_array)) {
-						$dir_array  =  array_merge($dir_array, $sub_dir_array); // Data merge
-					}
-				}
-			}
-			$result_array  =  $dir_array;
-			chdir($save_dir) ;
-		}
-		return $result_array ;
-	}
-
-	/**
-		This function receives a list of directories.
-		It returns a list of all files in these directories
-
-		@author Roan Embrechts
-		@version 1.0
-	*/
-	function list_all_files($dir_array)
-    {
-		$element_array = array();
-		if (is_dir($dir_array)) {
-
-			$save_dir = getcwd();
-			foreach ($dir_array as $directory) {
-				chdir($directory);
-				$handle = opendir($directory);
-			   	while ($element = readdir($handle)) {
-					if ($element == '.' || $element == '..' || $element == '.htaccess') continue;
-                    // Skip the current and parent directories
-					if (!is_dir($element)) {
-						$element_array[] = $directory.'/'.$element;
-					}
-				}
-				closedir($handle);
-				chdir('..');
-				chdir($save_dir);
-			}
-		}
-
-		return $element_array;
-	}
-
-	/**
-		Loads contents of file $filename into memory and returns them as a string.
-		Function kept for compatibility with older PHP versions.
-		Function is binary safe (is needed on Windows)
-	*/
-	function compat_load_file($file_name)
-    {
-		$buffer = '';
-		if (file_exists($file_name)) {
-			$fp = fopen($file_name, 'rb');
-			$buffer = fread ($fp, filesize($file_name));
-			fclose ($fp);
-		}
-		return $buffer;
-	}
-
-	/**
-	 * Adds file/folder to document table in database
-	 * improvement from set_default_settings (see below):
-	 * take all info from function parameters
-	 * no global variables needed
-	 *
-	 * NOTE $glued_table should already have backticks around it
-	 * (get it from the database library, and it is done automatically)
-	 *
-	 * @param	path, filename, filetype,
-				$glued_table, default_visibility
-
-	 * action:	Adds an entry to the document table with the default settings.
-	 * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
-	 * @author	Roan Embrechts
-	 * @version 1.2
-	 */
-	function set_default_settings($upload_path, $filename, $filetype = 'file', $glued_table, $default_visibility = 'v')
-    {
-		if (!$default_visibility) $default_visibility = 'v';
-
-		// Make sure path is not wrongly formed
-		$upload_path = !empty($upload_path) ? "/$upload_path" : '';
-
-		$endchar = substr($filename, strlen($filename) - 1, 1);
-		if ($endchar == "\\" || $endchar == '/') {
-			$filename = substr($filename, 0, strlen($filename) - 1);
-		}
-
-		$full_file_name = $upload_path.'/'.$filename;
-		$full_file_name = str_replace("//", '/', $full_file_name);
-
-		$sql_query = "SELECT count(*) as number_existing FROM $glued_table WHERE path='$full_file_name'";
-		$sql_result = Database::query($sql_query);
-		$result = Database::fetch_array($sql_result);
-		// Determine which query to execute
-		if ($result['number_existing'] > 0) {
-			// Entry exists, update
-			$query = "UPDATE $glued_table SET path='$full_file_name',visibility='$default_visibility', filetype='$filetype'
-			          WHERE path='$full_file_name'";
-		} else {
-			// No entry exists, create new one
-			$query = "INSERT INTO $glued_table (path,visibility,filetype)
-			          VALUES ('$full_file_name','$default_visibility','$filetype')";
-		}
-		Database::query($query);
-	}
 }

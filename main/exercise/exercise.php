@@ -311,15 +311,15 @@ if ($is_allowedToEdit) {
 
                 for ($i = 0; $i < $imgcount; $i++) {
                     my_delete($documentPath.$uploadPath."/".$fld."/".$imgparams[$i]);
-                    update_db_info("delete", $uploadPath."/".$fld."/".$imgparams[$i]);
+                    DocumentManager::updateDbInfo("delete", $uploadPath."/".$fld."/".$imgparams[$i]);
                 }
 
                 if (!is_dir($documentPath.$uploadPath."/".$fld."/")) {
                     my_delete($documentPath.$file);
-                    update_db_info("delete", $file);
+                    DocumentManager::updateDbInfo("delete", $file);
                 } else {
                     if (my_delete($documentPath.$file)) {
-                        update_db_info("delete", $file);
+                        DocumentManager::updateDbInfo("delete", $file);
                     }
                 }
 

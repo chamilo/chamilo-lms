@@ -42,7 +42,7 @@ class TestFileManager extends UnitTestCase {
 	public function testUpdatedbInfo(){
 		$action ='';
 		$oldPath ='';
-		$res = update_db_info($action, $oldPath, $newPath="");
+		$res = DocumentManager::updateDbInfo($action, $oldPath, $newPath="");
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
@@ -126,42 +126,4 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue($res ===0);
 		//var_dump($res);
 	}
-
-	public function testListAllDirectories(){
-		$path='/var/www/path/';
-		$res = $this->fmanager->list_all_directories($path);
-		$this->assertFalse($res);
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}
-
-	public function testListAllFiles(){
-		$dirArray='documents';
-		$res = $this->fmanager->list_all_files($dirArray);
-		$this->assertFalse($res);
-		$this->assertTrue(is_null($res));
-		$this->assertTrue($res ===null);
-		//var_dump($res);
-	}
-
-	public function testCompatLoadFile(){
-		$file_name='images';
-		$res = $this->fmanager->compat_load_file($file_name);
-		$this->assertFalse($res);
-		$this->assertTrue(is_bool($res));
-		//var_dump($res);
-	}
-
-	public function testSetDefaultSettings(){
-		$upload_path='/var/www/path/ruta';
-		$filename='doc';
-		$glued_table='xxx';
-		$res = $this->fmanager->set_default_settings($upload_path, $filename, $filetype="file", $glued_table, $default_visibility='v');
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}
-
 }
-
-
-?>

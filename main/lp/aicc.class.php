@@ -546,9 +546,13 @@ class aicc extends learnpath
                                 }
                             }
                             @rename($course_sys_dir.$new_dir.$file, $course_sys_dir.$new_dir.$safe_file);
-                            if ($this->debug == 1) { error_log('New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file, 0); }
+                            if ($this->debug == 1) {
+                                error_log(
+                                    'New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file,
+                                    0
+                                );
+                            }
                         }
-                        //set_default_settings($course_sys_dir, $safe_file, $filetype);
                     }
                 }
 

@@ -1051,7 +1051,7 @@ if ($is_allowed_to_edit ||
                 $fileExist = true;
             }
             if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$moveTo)) {
-                update_db_info(
+                DocumentManager::updateDbInfo(
                     'update',
                     $document_to_move['path'],
                     $moveTo . '/' . basename($document_to_move['path'])

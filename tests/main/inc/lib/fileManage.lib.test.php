@@ -36,7 +36,7 @@ class TestFileManager extends UnitTestCase {
 	public function testUpdatedbInfo(){
 		$action ='';
 		$oldPath ='';
-		$res = update_db_info($action, $oldPath, $newPath="");
+		$res = DocumentManager::updateDbInfo($action, $oldPath, $newPath="");
 		$this->assertNull($res);
 		//var_dump($res);
 	}
@@ -120,41 +120,4 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue($res ===0);
 		//var_dump($res);
 	}
-
-	public function testListAllDirectories(){
-		$path=api_get_path(SYS_COURSE_PATH).'document/';
-		$res = $this->fmanager->list_all_directories($path);
-		if(!is_null($res)) {
-			$this->assertTrue($res);
-			$this->assertTrue(is_array($res));
-		}
-		//var_dump($res);
-	}
-
-	public function testListAllFiles(){
-		$dirArray = array('COURSETEST, document, images');
-		$res = $this->fmanager->list_all_files($dirArray);
-		$this->assertFalse($res);
-		$this->assertTrue(is_array($res));
-		$this->assertTrue($res === array());
-		//var_dump($res);
-	}
-
-	public function testCompatLoadFile(){
-		$file_name='README.txt';
-		$res = $this->fmanager->compat_load_file($file_name);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
-	public function testSetDefaultSettings(){
-		global $_course, $_configuration;
-		$upload_path=api_get_path(SYS_COURSE_PATH);
-		$filename='index.html';
-		$glue_table = $_course['dbName'].'.document';
-		$res = $this->fmanager->set_default_settings($upload_path, $filename, $filetype="file", $glue_table, $default_visibility='v');
-		$this->assertNull($res);
-		//var_dump($res);
-	}
 }
-?>

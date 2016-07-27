@@ -198,15 +198,15 @@ if (count($pending_invitations) > 0) {
         $picture = $userGroupModel->get_picture_group(
             $invitation['id'],
             $invitation['picture'],
-            80
+            null,
+            GROUP_IMAGE_SIZE_BIG
         );
-        $img = '<img class="social-groups-image" src="'.$picture['file'].'" />';
+        $img = '<img class="img-responsive" src="'.$picture['file'].'" />';
         $invitation['picture_uri'] = '<a href="group_view.php?id='.$invitation['id'].'">'.$img.'</a>';
         $invitation['name'] = '<a href="group_view.php?id='.$invitation['id'].'">'.cut($invitation['name'],120,true).'</a>';
         $invitation['description'] = cut($invitation['description'],220,true);
         $new_invitation[]=$invitation;
-
-        $waitingInvitation .= '<div class="well"><div class="row">';
+        $waitingInvitation .= '<div class="panel-invitations"><div class="row">';
         $waitingInvitation .= '<div class="col-md-3">'.$invitation['picture_uri'].'</div>';
         $waitingInvitation .= '<div class="col-md-9">';
         $waitingInvitation .= '<h4 class="tittle-profile">'.$invitation['name'].'</h4>';

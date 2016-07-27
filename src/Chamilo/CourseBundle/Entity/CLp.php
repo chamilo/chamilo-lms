@@ -11,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_lp",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *     @ORM\Index(name="session", columns={"session_id})
  *  }
  * )
  * @ORM\Entity

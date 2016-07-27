@@ -346,18 +346,13 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
 
     // Forum image
     $form->add_progress_bar();
-    if (isset($inputvalues['forum_image']) && strlen($inputvalues['forum_image']) > 0) {
+    if (!empty($inputvalues['forum_image'])) {
+        $baseImagePath = api_get_course_path() . '/upload/forum/images/' . $inputvalues['forum_image'];
+        $image_path = api_get_path(WEB_COURSE_PATH) . $baseImagePath;
+        $sysImagePath = api_get_path(SYS_COURSE_PATH) . $baseImagePath;
 
-        $image_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$inputvalues['forum_image'];
-        $image_size = api_getimagesize($image_path);
-
-        $img_attributes = '';
-        if (!empty($image_size)) {
-            if ($image_size['width'] > 100 || $image_size['height'] > 100) {
-                //limit display width and height to 100px
-                $img_attributes = 'width="100" height="100"';
-            }
-            $show_preview_image = '<img src="'.$image_path.'" '.$img_attributes.'>';
+        if (file_exists($sysImagePath)) {
+            $show_preview_image = Display::img($image_path, null, ['class' => 'img-responsive']);
             $form->addElement('label', get_lang('PreviewImage'), $show_preview_image);
             $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
         }

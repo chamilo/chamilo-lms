@@ -2089,7 +2089,7 @@ class Agenda
             }
         }
 
-        $form->addDateRangePicker('date_range', get_lang('StartDate'), false, array('id' => 'date_range'));
+        $form->addDateRangePicker('date_range', get_lang('DateRange'), false, array('id' => 'date_range'));
         $form->addElement('checkbox', 'all_day', null, get_lang('AllDay'));
 
         if ($this->type == 'course') {

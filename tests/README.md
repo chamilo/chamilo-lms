@@ -12,7 +12,13 @@ which should include the vendor/behat/behat/bin/behat executable.
 Make sure you set the right base_url in behat.yml, then run (on the command
 line, from the tests/ directory): 
 ```
-../vendor/behat/behat/bin/behat -v
+../vendor/behat/behat/bin/behat features/login.feature
+../vendor/behat/behat/bin/behat features/createUser.feature
+../vendor/behat/behat/bin/behat features/createCourse.feature
+../vendor/behat/behat/bin/behat features/courseTools.feature
+../vendor/behat/behat/bin/behat features/forum.feature
+../vendor/behat/behat/bin/behat features/socialGroup.feature
+../vendor/behat/behat/bin/behat features/accessCompanyReports.feature
 ```
 
 This should run all tests and all of them should pass.

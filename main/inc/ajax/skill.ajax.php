@@ -140,7 +140,7 @@ switch ($action) {
         $userId = isset($_REQUEST['load_user']) && $_REQUEST['load_user'] == 1 ? api_get_user_id() : 0;
         $skill_id = isset($_REQUEST['skill_id']) ? intval($_REQUEST['skill_id']) : 0;
         $depth = isset($_REQUEST['main_depth']) ? intval($_REQUEST['main_depth']) : 2;
-        $all = $skill->get_skills_tree_json($userId, $skill_id, false, $depth);
+        $all = $skill->get_skills_tree_json($userId, $skill_id, false, $depth, true);
         echo $all;
         break;
     case 'get_user_skill':

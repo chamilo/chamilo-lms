@@ -153,7 +153,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     Session::destroy();
     if ($logout_redirect) {
         header("Location: ".api_get_path(WEB_PATH)."index.php");
-        return;
+        exit;
     }
 }
 

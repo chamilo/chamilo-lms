@@ -518,9 +518,9 @@ class Display
 
     /**
      * Returns a div html string with
-     * @param   string  The message
-     * @param   string  The message type (confirm,normal,warning,error)
-     * @param   bool    Whether to XSS-filter or not
+     * @param   string  $message
+     * @param   string  $type Example: confirm, normal, warning, error
+     * @param   bool    $filter Whether to XSS-filter or not
      * @return  string  Message wrapped into an HTML div
      */
     public static function return_message($message, $type = 'normal', $filter = true)
@@ -533,8 +533,8 @@ class Display
         	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
         }
 
-        $class = "";
-        switch($type) {
+        $class = '';
+        switch ($type) {
             case 'warning':
                $class .= 'alert alert-warning';
                break;
@@ -562,7 +562,7 @@ class Display
      * @param string  optional, class from stylesheet
      * @return string encrypted mailto hyperlink
      */
-    public static function encrypted_mailto_link ($email, $clickable_text = null, $style_class = '')
+    public static function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
     {
         if (is_null($clickable_text)) {
             $clickable_text = $email;

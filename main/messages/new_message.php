@@ -242,7 +242,9 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
                     if ($res) {
                         $userInfo = api_get_user_info($userId);
                         Display::addFlash(Display::return_message(
-                            get_lang('MessageSentTo') ."&nbsp;<b>" .$userInfo['complete_name'] ."</b>"
+                            get_lang('MessageSentTo') ."&nbsp;<b>" .$userInfo['complete_name'] ."</b>",
+                            'confirmation',
+                            false
                         ));
                     }
                 }

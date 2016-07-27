@@ -1882,3 +1882,7 @@ UPDATE settings_current SET selected_value = '1.11.0.6' WHERE variable = 'chamil
 INSERT INTO settings_current (variable, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('icons_mode_svg', NULL, 'radio', 'Tuning', 'false', 'IconsModeSVGTitle', 'IconsModeSVGComment', '', NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('icons_mode_svg', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('icons_mode_svg', 'false', 'No');
+
+INSERT INTO branch_sync (access_url_id, branch_name, unique_id, ssl_pub_key)
+VALUES
+(1, 'localhost', SHA1(UUID()), SHA1(UUID()));

@@ -204,6 +204,7 @@ class BranchSync
     public function __construct()
     {
         $this->uniqueId = sha1(uniqid());
+        $this->sslPubKey = sha1(uniqid());
         // $this->lastSyncTransDate = new \DateTime();
     }
 

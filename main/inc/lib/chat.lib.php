@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class Chat
  * @todo ChamiloSession instead of $_SESSION
@@ -20,7 +22,8 @@ class Chat extends Model
     {
         parent::__construct();
         $this->table = Database::get_main_table(TABLE_MAIN_CHAT);
-        $this->window_list = $_SESSION['window_list'] = isset($_SESSION['window_list']) ? $_SESSION['window_list'] : array();
+        $this->window_list = Session::read('window_list');
+        Session::write('window_list', $this->window_list);
     }
 
     /**
@@ -170,7 +173,7 @@ class Chat extends Model
     public function save_window($user_id)
     {
         $this->window_list[$user_id] = true;
-        $_SESSION['window_list'] = $this->window_list;
+        Session::write('window_list', $this->window_list);
     }
 
     /**

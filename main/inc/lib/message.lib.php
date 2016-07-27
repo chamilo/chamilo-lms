@@ -14,53 +14,6 @@ use ChamiloSession as Session;
 class MessageManager
 {
     /**
-     * @param int $current_user_id
-     * @return array
-     */
-    public static function get_online_user_list($current_user_id)
-    {
-        //@todo this is a bad idea to parse all users online
-        $count = who_is_online_count();
-        $userlist = who_is_online(0, $count, null, null, 30, true);
-        $online_user_list = array();
-        foreach ($userlist as $user_id) {
-            $online_user_list[$user_id] = GetFullUserName($user_id) . ($current_user_id == $user_id ? ("&nbsp;(" . get_lang('Myself') . ")") : (""));
-        }
-
-        return $online_user_list;
-    }
-
-    /**
-     * Displays info stating that the message is sent successfully.
-     * @deprecated
-     */
-    public static function display_success_message($uid)
-    {
-        if (isset($_SESSION['social_exist']) &&
-            $_SESSION['social_exist'] === true
-        ) {
-            if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-                $success = get_lang('MessageSentTo') .
-                    "&nbsp;<b>" .
-                    GetFullUserName($uid) .
-                    "</b>";
-            } else {
-                $success = get_lang('MessageSentTo') .
-                    "&nbsp;<b>" .
-                    GetFullUserName($uid) .
-                    "</b>";
-            }
-        } else {
-            $success = get_lang('MessageSentTo') .
-                "&nbsp;<b>" .
-                GetFullUserName($uid) .
-                "</b>";
-        }
-
-        return Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
-    }
-
-    /**
      * Get the new messages for the current user from the database.
      * @return int
      */
@@ -183,8 +136,10 @@ class MessageManager
             if (isset($_GET['f']) && $_GET['f'] == 'social') {
                 $link = '&f=social';
             }
-            $message[1] = '<a ' . $class . ' href="view_message.php?id=' . $result[0] . $link . '">' . $result[2] . '</a><br />' . GetFullUserName(($result[1]));
-            $message[3] = '<a href="new_message.php?re_id=' . $result[0] . $link . '">' . Display::return_icon('message_reply.png', get_lang('ReplyToMessage')) . '</a>' .
+            $userInfo = api_get_user_info($result[1]);
+            $message[1] = '<a ' . $class . ' href="view_message.php?id=' . $result[0] . $link . '">' . $result[2] . '</a><br />' . $userInfo['complete_name'];
+            $message[3] = '<a href="new_message.php?re_id=' . $result[0] . $link . '">' .
+                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')) . '</a>' .
                 '&nbsp;&nbsp;<a onclick="javascript:if(!confirm(' . "'" . addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage'))) . "'" . ')) return false;" href="inbox.php?action=deleteone&id=' . $result[0] . $link . '">' . Display::return_icon('delete.png', get_lang('DeleteMessage')) . '</a>';
 
             $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
@@ -929,22 +884,22 @@ class MessageManager
             }
             $class = 'class = "read"';
             $result[2] = Security::remove_XSS($result[2]);
-
+            $userInfo = api_get_user_info($result[4]);
             if ($request === true) {
-                $message[1] = '<a onclick="show_sent_message(' . $result[0] . ')" href="javascript:void(0)">' . GetFullUserName($result[4]) . '</a>';
+                $message[1] = '<a onclick="show_sent_message(' . $result[0] . ')" href="javascript:void(0)">' . $userInfo['complete_name'] . '</a>';
                 $message[2] = '<a onclick="show_sent_message(' . $result[0] . ')" href="javascript:void(0)">' . str_replace("\\", "", $result[2]) . '</a>';
                 $message[3] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
-
-                $message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox(' . $result[0] . ')" href="javascript:void(0)"  >' . Display::return_icon('delete.png', get_lang('DeleteMessage')) . '</a>';
+                $message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox(' . $result[0] . ')" href="javascript:void(0)"  >' .
+                    Display::return_icon('delete.png', get_lang('DeleteMessage')) . '</a>';
             } else {
                 $link = '';
                 if (isset($_GET['f']) && $_GET['f'] == 'social') {
                     $link = '&f=social';
                 }
-                $message[1] = '<a ' . $class . ' onclick="show_sent_message (' . $result[0] . ')" href="../messages/view_message.php?id_send=' . $result[0] . $link . '">' . $result[2] . '</a><br />' . GetFullUserName($result[4]);
-                //$message[2] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a>';
+                $message[1] = '<a ' . $class . ' onclick="show_sent_message (' . $result[0] . ')" href="../messages/view_message.php?id_send=' . $result[0] . $link . '">' . $result[2] . '</a><br />' . $userInfo['complete_name'];
                 $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
-                $message[3] = '<a href="outbox.php?action=deleteone&id=' . $result[0] . '&' . $link . '"  onclick="javascript:if(!confirm(' . "'" . addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage'))) . "'" . ')) return false;" >' . Display::return_icon('delete.png', get_lang('DeleteMessage')) . '</a>';
+                $message[3] = '<a href="outbox.php?action=deleteone&id=' . $result[0] . '&' . $link . '"  onclick="javascript:if(!confirm(' . "'" . addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage'))) . "'" . ')) return false;" >' .
+                    Display::return_icon('delete.png', get_lang('DeleteMessage')) . '</a>';
             }
 
             foreach ($message as $key => $value) {

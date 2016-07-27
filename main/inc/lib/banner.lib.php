@@ -45,7 +45,7 @@ function get_tabs($courseId = null)
     $navigation['mycourses']['title'] = get_lang('MyCourses');
     $navigation['mycourses']['key'] = 'my-course';
     $navigation['mycourses']['icon'] = 'my-course.png';
-    
+
 
     // My Profile
     $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
@@ -402,7 +402,7 @@ function return_navigation_array()
 
         // Custom tabs
         $customTabs = getCustomTabs();
-        
+
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
@@ -419,7 +419,7 @@ function return_navigation_array()
             }
         }
     }
-    
+
     return array(
         'menu_navigation' => $menu_navigation,
         'navigation' => $navigation,
@@ -441,25 +441,25 @@ function menuArray()
     $lang = api_get_setting('platformLanguage');
     if (!empty($_SESSION['user_language_choice'])) {
         $lang = $_SESSION['user_language_choice'];
-        
+
     } elseif (!empty($_SESSION['_user']['language'])) {
         $lang = $_SESSION['_user']['language'];
     }
-    
-    
+
+
     // Preparing home folder for multiple urls
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
             // If not a dead URL
             $urlInfo = api_get_access_url($access_url_id);
-           
+
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
             $cleanUrl = api_replace_dangerous_char($url);
             $cleanUrl = str_replace('/', '-', $cleanUrl);
             $cleanUrl .= '/';
             $homepath  = api_get_path(SYS_APP_PATH).'home/'.$cleanUrl; //homep for Home Path
-            
+
             //we create the new dir for the new sites
             if (!is_dir($homepath)) {
                 mkdir($homepath, api_get_permissions_for_new_directories());
@@ -493,7 +493,7 @@ function menuArray()
             $pageContent = @(string) file_get_contents($homepath . $menuTabsLoggedIn . $lang . $ext);
             $pageContent = str_replace('::private', '', $pageContent);
         }
-        
+
         $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
         $openMenuTabsLoggedIn = str_replace('{rel_path}',api_get_path(REL_PATH), $pageContent);
         $openMenuTabsLoggedIn = api_to_system_encoding($openMenuTabsLoggedIn, api_detect_encoding(strip_tags($openMenuTabsLoggedIn)));
@@ -518,11 +518,11 @@ function menuArray()
                         );
                     }
                 }
-               
+
             } else {
-                
+
                 $list = split("\n", $open);
-                foreach ($list as $link) {               
+                foreach ($list as $link) {
                     $matches = array();
                     $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
                     if ($match) {
@@ -537,14 +537,14 @@ function menuArray()
             }
         }
     }
-    
+
     if (count($mainNavigation['navigation']) > 0) {
         //$pre_lis = '';
         $activeSection = '';
         foreach ($mainNavigation['navigation'] as $section => $navigation_info) {
-            
+
             $key = (!empty($navigation_info['key'])?'tab-'.$navigation_info['key']:'');
-            
+
             if (isset($GLOBALS['this_section'])) {
                 $tempSection = $section;
                 if ($section == 'social') {
@@ -571,10 +571,10 @@ function menuArray()
         if (!empty($activeSection)) {
             $mainNavigation['navigation'][$activeSection]['current'] = 'active';
         }
-        
+
     }
     unset($mainNavigation['navigation']['myprofile']);
-    
+
     return $mainNavigation['navigation'];
 }
 
@@ -819,10 +819,17 @@ function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
         if ($cacheEnabled) {
             $apc = apcu_cache_info(true);
             $apc_end = $apc['start_time']+$apc['ttl'];
-            if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id']) AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0) {
+            if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id']) &&
+                (time() < $apc_end) &&
+                apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0
+            ) {
                 $numberOnlineInCourse = apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']);
             } else {
-                $numberOnlineInCourse = who_is_online_in_this_course_count($userId, api_get_setting('time_limit_whosonline'), $_course['id']);
+                $numberOnlineInCourse = who_is_online_in_this_course_count(
+                    $userId,
+                    api_get_setting('time_limit_whosonline'),
+                    $_course['id']
+                );
                 apcu_store('my_campus_whoisonline_count_simple_'.$_course['id'],$numberOnlineInCourse,15);
             }
         } else {
@@ -833,5 +840,6 @@ function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
             );
         }
     }
+
     return $numberOnlineInCourse;
 }

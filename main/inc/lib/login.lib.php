@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
-
 use Chamilo\UserBundle\Entity\User;
 
 /**

@@ -446,6 +446,8 @@ class Display
      * @param bool	$filter (true) or not (false)
      * @param bool $returnValue
      *
+     * @deprecated use Display::addFlash with Display::return_message($message, 'normal');
+     *
      * @return void
      */
     public static function display_normal_message($message, $filter = true, $returnValue = false)
@@ -462,6 +464,7 @@ class Display
      * Displays an warning message. Use this if you want to draw attention to something
      * This can also be used for instance with the hint in the exercises
      *
+     * @deprecated use Display::addFlash with Display::return_message
      */
     public static function display_warning_message($message, $filter = true, $returnValue = false)
     {
@@ -476,6 +479,7 @@ class Display
     /**
      * Displays an confirmation message. Use this if something has been done successfully
      * @param bool	Filter (true) or not (false)
+     * @deprecated use Display::addFlash with Display::return_message
      * @return void
      */
     public static function display_confirmation_message ($message, $filter = true, $returnValue = false)
@@ -493,6 +497,8 @@ class Display
      * @param string $message - include any additional html
      *                          tags if you need them
      * @param bool	Filter (true) or not (false)
+     * @deprecated use Display::addFlash with Display::return_message
+     *
      * @return void
      */
     public static function display_error_message ($message, $filter = true, $returnValue = false)

@@ -1375,7 +1375,7 @@ class UserGroup extends Model
     public function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM , $style = '')
     {
         $picture = array();
-        $picture['style'] = $style;
+        //$picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
             $picture['file'] = Display::returnIconPath($picture_file);
             return $picture;
@@ -1403,12 +1403,12 @@ class UserGroup extends Model
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
         if (file_exists($file)) {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
-            $picture['style'] = '';
+            //$picture['style'] = '';
             if ($height > 0) {
                 $dimension = api_getimagesize($picture['file']);
                 $margin = (($height - $dimension['width']) / 2);
                 //@ todo the padding-top should not be here
-                $picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension['width'].'px; height:'.$dimension['height'].';" ';
+                //$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension['width'].'px; height:'.$dimension['height'].';" ';
             }
         } else {
             $file = $image_array_sys['dir'].$picture_file;
@@ -1921,7 +1921,7 @@ class UserGroup extends Model
                 $where_relation_condition = "AND gu.relation_type IN ($relation_type) ";
         }
 
-        $sql = "SELECT picture_uri as image, u.id, u.firstname, u.lastname, relation_type
+        $sql = "SELECT picture_uri as image, u.id, CONCAT (u.firstname,' ', u.lastname) as fullname, relation_type
     		    FROM $tbl_user u
     		    INNER JOIN $table_group_rel_user gu
     			ON (gu.user_id = u.id)

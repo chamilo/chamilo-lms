@@ -994,35 +994,32 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 #inbox-menu ul li {
     padding:2px 0px;
 }
-.message-item {
-    -moz-background-clip:border;
-    -moz-background-inline-policy:continuous;
-    -moz-background-origin:padding;
-    -moz-border-radius-bottomleft:8px;
-    -moz-border-radius-bottomright:8px;
-    -moz-border-radius-topleft:8px;
-    -moz-border-radius-topright:8px;
-    background:#F5F5F5 none repeat scroll 0 0;
-    margin:0 0 5px;
-    padding:10px;
-}
 .message-topic {
     padding: 15px;
     border-radius: 5px;
     display: inline-block;
-    border: 1px solid #DDD;
+    border: 1px solid #ECF0F1;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+    width: 100%;
 }
-.message-topic .avatar-author{
-    float: right;
+.message-topic .avatar-author,
+.message-post .avatar-author{
+    text-align: center;
+}
+.message-topic .avatar-author .img-responsive,
+.message-post .avatar-author .img-responsive {
+    display: initial;
+}
+.message-topic h4{
+    font-weight: bold;
 }
 .thread-body{
     padding-bottom: 20px;
     padding-top: 20px;
 }
 .message-post{
-    border: 1px solid #DDD;
-    margin-bottom: 20px;
+    border: 1px solid #ECF0F1;
+    margin-bottom: 15px;
     border-radius: 5px;
     padding: 15px;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
@@ -1046,6 +1043,16 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
     position:absolute;
     margin-top:23px;
     margin-left:20px;
+}
+.message-content .date{
+    font-size: 12px;
+}
+.message-content .username{
+    font-size: 14px;
+    font-weight: bold;
+}
+.message-content .message{
+    line-height: 22px;
 }
 /* styles from the my.profile.php file */
 .message-content .message-delete {
@@ -1449,7 +1456,6 @@ div.admin_section h4 {
 
 .invitation_profile_grid_container { width:100%;}
 .invitation_profile_grid_item {
-    border:1px dotted #CCCCCC;
     float:left;
     height:110px;
     margin:5px;
@@ -1457,9 +1463,7 @@ div.admin_section h4 {
     width:100px;
 }
 .invitation_profile_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
-.invitation_profile_grid_element_0 img {width:50px;height:50px;border:3px solid #E6E6E6;}
-.invitation_profile_grid_element_2 { width:100px; float:left; text-align:center;}
-.invitation_profile_grid_element_3 { width:100px; float:left; text-align:center;}
+.invitation_profile_grid_element_2 { width:100px; float:left; text-align:center; font-size: 12px;}
 
 /* User boxes */
 .search_users_grid_container { width:100%;}
@@ -2094,20 +2098,17 @@ div.admin_section h4 {
     margin: 5px;
     padding: 15px;
 }
-
 .userportal-order-courses-link a {
     float:right;
 }
-
 .course_social_content {
     background : #EFEFEF;
     margin:10px 21px;
     padding:10px;
 }
-
 .topics_grid_item {
-    border-bottom: 1px solid #CCCCCC;
-    margin-bottom: 20px;
+    border-bottom: 1px solid #DDD;
+    margin-bottom: 10px;
 }
 #div_content_table {
     border-bottom:1px solid #EAEAEA;
@@ -2123,7 +2124,6 @@ div.row div.form_header {
     border: 1px solid #E5EDF9;
     font-size:20px;
 }
-
 span.form_required {
     color: #f00;
 }
@@ -2132,28 +2132,22 @@ span.form_error {
     font-size: x-small;
     margin: 2px;
 }
-
 form .row {
     margin-bottom: 18px;
 }
-
 form .formw .freeze {
     display: block;
     padding-top: 8px;
 }
-
 .course_activity_home {
     width:100%;
 }
-
-
 .course_activity_home td {
     line-height: normal;
     padding: 4px;
     text-align: left;
     vertical-align: middle;
 }
-
 .show_element {
     display: block !important;
 }
@@ -2244,7 +2238,6 @@ form .formw .freeze {
   padding-left: 10px;
   padding-right: 10px;
 }
-
 .data_table th {
   padding: 8px 10px;
   font-weight: normal;
@@ -2326,19 +2319,15 @@ form .formw .freeze {
     text-align: left;
     width: auto;
 }
-
 .form-stacked .row div.formw {
     margin-left: 0;
 }
-
 .form-stacked .row {
     margin-bottom: 9px;
 }
-
 #install_form blockquote {
     line-height: 16px;
 }
-
 #install_form .data_table_no_border td {
     width:30%;
 }
@@ -3814,9 +3803,8 @@ i.size-32.icon-new-work{
   margin-bottom: 5px;
 }
 #sm-groups .group-name a{
-  font-size: 14px;
+  font-size: 18px;
   font-weight: bold;
-  color: #4D4D4D;
 }
 #sm-groups .count-username{
   font-size: 12px;
@@ -3824,18 +3812,15 @@ i.size-32.icon-new-work{
 }
 #sm-groups .description p{
   color: #4D4D4D;
-  padding-top: 10px;
+  padding-top: 5px;
   padding-bottom: 0px;
-  font-size: 11px;
+  line-height: 22px;
 }
 .sm-groups .social-profile .img-responsive{
   display: inline-block;
 }
 .sm-groups-content .groups-messages{
-    padding-top: 10px;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding:20px;
 }
 .social-post .mediaPost{
   padding-top:10px;
@@ -3954,7 +3939,8 @@ i.size-32.icon-new-work{
   padding: 5px;
   font-size: 12px;
 }
-.social-network-menu .nav-pills li.active a{
+.social-network-menu .nav-pills li.active a,
+#groups-acordeon .nav li.active a{
   background: none;
   color: #1ABC9C;
 }
@@ -5346,14 +5332,23 @@ div#chat-remote-video video {
     padding-top: 20px;
 }
 .user-list{
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .items-user{
   text-align: center;
   padding: 10px;
   margin-bottom: 10px;
   min-height: 170px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.items-user .name{
+  margin-top: 10px;
+}
+.items-user .avatar{
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 #whoisonline .items-user{
   text-align: center;
@@ -5889,6 +5884,24 @@ footer{
 }
 .page-blank{
     padding: 20px 30px;
+}
+/* groups social */
+.group-tool{
+    padding: 10px;
+    display: inline-block;
+    width: 100%;
+}
+.muted{
+    padding: 10px;
+}
+.group-title{
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    font-size: 16px;
+    border-bottom: 1px solid #ECF0F1;
+}
+.panel-invitations{
+    padding: 10px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

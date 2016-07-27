@@ -1246,7 +1246,7 @@ class MessageManager
         $topic_page_nr = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : null;
 
         $links .= '<div class="pull-right">';
-        $links .= '<div class="btn-group">';
+        $links .= '<div class="btn-group btn-group-sm">';
 
         if (($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
                 $my_group_role == GROUP_USER_PERMISSION_MODERATOR) ||
@@ -1313,21 +1313,30 @@ class MessageManager
         $title = '<h4>' . Security::remove_XSS($main_message['title'], STUDENT, true) . $links . '</h4>';
 
         $userPicture = $user_sender_info['avatar'];
+        $main_content .= '<div class="row">';
+        $main_content .= '<div class="col-md-2">';
         $main_content .= '<div class="avatar-author">';
-        $main_content .= '<img src="' . $userPicture . '" alt="' . $name . '" class="img-responsive img-circle" width="64" height="64" title="' . $name . '" />';
-        $main_content .= '<a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $main_message['user_sender_id'] . '">' . $name . '</a>';
+        $main_content .= '<img width="60px" src="' . $userPicture . '" alt="' . $name . '" class="img-responsive img-circle" title="' . $name . '" />';
+        $main_content .= '</div>';
         $main_content .= '</div>';
 
         $date = '';
         if ($main_message['send_date'] != $main_message['update_date']) {
             if (!empty($main_message['update_date'])) {
-                $date = '<div class="message-date"> ' . get_lang('LastUpdate') . ' ' . date_to_str_ago($main_message['update_date']) . '</div>';
+                $date = '<div class="date"> '. Display::returnFontAwesomeIcon('calendar') .' ' . get_lang('LastUpdate') . ' ' . date_to_str_ago($main_message['update_date']) . '</div>';
             }
         } else {
-            $date = '<div class="message-date"> ' . get_lang('Created') . ' ' . date_to_str_ago($main_message['send_date']) . '</div>';
+            $date = '<div class="date"> ' . Display::returnFontAwesomeIcon('calendar') .' ' . get_lang('Created') . ' ' . date_to_str_ago($main_message['send_date']) . '</div>';
         }
         $attachment = '<div class="message-attach">' . (!empty($files_attachments) ? implode('<br />', $files_attachments) : '') . '</div>';
-        $main_content .= '<div class="message-content"> ' . $date . $main_message['content'] . $attachment . '</div>';
+        $main_content .= '<div class="col-md-10">';
+        $user_link = '<a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $main_message['user_sender_id'] . '">' . $name . '</a>';
+        $main_content .= '<div class="message-content"> ';
+        $main_content .= '<div class="username">' . $user_link . '</div>';
+        $main_content .= $date ;
+        $main_content .= '<div class="message">'. $main_message['content'] . $attachment . '</div></div>';
+        $main_content .= '</div>';
+        $main_content .= '</div>';
         //$main_content = Security::remove_XSS($main_content, STUDENT, true);
 
         $html .= Display::div(Display::div($title . $main_content, array('class' => 'message-topic')), array('class' => 'sm-groups-message'));
@@ -1349,7 +1358,7 @@ class MessageManager
                 $files_attachments = self::get_links_message_attachment_files($topic['id']);
                 $name = $user_sender_info['complete_name'];
 
-                $links .= '<div class="btn-group">';
+                $links .= '<div class="btn-group btn-group-sm">';
                 if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
                     $links .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'social/message_for_group_form.inc.php?height=400&width=800&&user_friend=' . $current_user_id . '&group_id=' . $group_id . '&message_id=' . $topic['id'] . '&action=edit_message_group&anchor_topic=topic_' . $topic_id . '&topics_page_nr=' . $topic_page_nr . '&items_page_nr=' . $items_page_nr . '&topic_id=' . $topic_id . '" class="ajax btn btn-default" data-size="lg" data-title="' . get_lang('Edit') . '" title="' . get_lang('Edit') . '">' .
                         Display::returnFontAwesomeIcon('pencil') . '</a>';
@@ -1361,20 +1370,29 @@ class MessageManager
 
                 $userPicture = $user_sender_info['avatar'];
                 $user_link = '<a href="' . api_get_path(WEB_PATH) . 'main/social/profile.php?u=' . $topic['user_sender_id'] . '">' . $name . '&nbsp</a>';
-                $html_items .= '<div class="avatar-author"><img src="' . $userPicture . '" alt="' . $name . '" class="img-responsive img-circle"  width="64" height="64" title="' . $name . '" />' . $user_link . '</div>';
-
+                $html_items .= '<div class="row">';
+                $html_items .= '<div class="col-md-2">';
+                $html_items .= '<div class="avatar-author"><img width="60px" src="' . $userPicture . '" alt="' . $name . '" class="img-responsive img-circle" title="' . $name . '" /></div>';
+                $html_items .= '</div>';
 
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
                     if (!empty($topic['update_date'])) {
-                        $date = '<div class="message-date"> ' . get_lang('LastUpdate') . ' ' . date_to_str_ago($topic['update_date']) . '</div>';
+                        $date = '<div class="date"> ' . Display::returnFontAwesomeIcon('calendar') .' '. get_lang('LastUpdate') . ' ' . date_to_str_ago($topic['update_date']) . '</div>';
                     }
                 } else {
-                    $date = '<div class="message-date"> ' . get_lang('Created') . ' ' . date_to_str_ago($topic['send_date']) . '</div>';
+                    $date = '<div class="date"> ' . Display::returnFontAwesomeIcon('calendar') . get_lang('Created') . ' ' . date_to_str_ago($topic['send_date']) . '</div>';
                 }
                 $attachment = '<div class="message-attach">' . (!empty($files_attachments) ? implode('<br />', $files_attachments) : '') . '</div>';
-                $html_items .= '<div class="message-content">' . $links . ' ' . $date . Security::remove_XSS($topic['content'], STUDENT, true) . $attachment . '</div>';
-
+                $html_items .= '<div class="col-md-10">';
+                $html_items .= '<div class="message-content">';
+                $html_items .= $links;
+                $html_items .= '<div class="username">' . $user_link . '</div>';
+                $html_items .= $date;
+                $html_items .=  '<div class="message">' . Security::remove_XSS($topic['content'], STUDENT, true) . '</div>' . $attachment . '</div>';
+                $html_items .= '</div>';
+                $html_items .= '</div>';
+                
                 $base_padding = 20;
 
                 if ($topic['indent_cnt'] == 0) {

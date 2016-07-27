@@ -262,12 +262,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if (count($grid_newest_groups) > 0) {
         $newest_content = Display::return_sortable_grid('mygroups', array(), $grid_newest_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
     } else {
-        $newest_content = '<span class="muted">'.get_lang('GroupNone').'</span>';
+        $newest_content = '<div class="muted">'.get_lang('GroupNone').'</div>';
     }
     if (count($grid_pop_groups) > 0) {
         $popular_content = Display::return_sortable_grid('mygroups', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
     } else {
-        $popular_content = '<span class="muted">'.get_lang('GroupNone').'</span>';
+        $popular_content = '<div class="muted">'.get_lang('GroupNone').'</div>';
     }
 }
 

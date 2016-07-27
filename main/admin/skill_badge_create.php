@@ -22,6 +22,19 @@ $skillId = intval($_GET['id']);
 $objSkill = new Skill();
 $skill = $objSkill->get($skillId);
 
+$htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/media/css/core.css" rel="stylesheet">';
+
+// Add badge studio paths
+
+$badgeStudio = [
+    'core' => api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/',
+    'media' => api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/media/',
+    'templates' => api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/media/images/templates/',
+    'masks' => api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/media/images/masks/',
+    'script_js' => '<script src="'. api_get_path(WEB_LIBRARY_JS_PATH) .'badge-studio/media/js/studio.js?"></script>'
+];
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $params = array(
         'name' => $_POST['name'],
@@ -98,6 +111,7 @@ $toolbar = Display::toolbarButton(
 $tpl = new Template(get_lang('CreateBadge'));
 $tpl->assign('platformAdminEmail', api_get_setting('emailAdministrator'));
 $tpl->assign('skill', $skill);
+$tpl->assign('badge_studio', $badgeStudio);
 
 $contentTemplate = $tpl->fetch('default/skill/badge_create.tpl');
 

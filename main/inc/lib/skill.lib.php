@@ -1089,28 +1089,18 @@ class Skill extends Model
      * @param int skill id
      * @param bool return a flat array or not
      * @param int depth of the skills
-     * @param bool filter status
-     * @return json
+     *
      */
-    public function get_skills_tree_json($user_id = null, $skill_id = null, $return_flat_array = false, $main_depth = 2, $filter_status = false)
+    public function get_skills_tree_json($user_id = null, $skill_id = null, $return_flat_array = false, $main_depth = 2)
     {
         $tree = $this->get_skills_tree($user_id, $skill_id, $return_flat_array, true);
         $simple_tree = array();
         if (!empty($tree['children'])) {
             foreach ($tree['children'] as $element) {
-                if ($filter_status) {
-                    if (intval($element['status'])) {
-                        $simple_tree[] = array(
-                            'name' => $element['name'],
-                            'children' => $this->get_skill_json($element['children'], 1, $main_depth, $filter_status)
-                        );
-                    }
-                } else {
-                    $simple_tree[] = array(
-                        'name' => $element['name'],
-                        'children' => $this->get_skill_json($element['children'], 1, $main_depth)
-                    );
-                }
+                $simple_tree[] = array(
+                    'name' => $element['name'],
+                    'children' => $this->get_skill_json($element['children'], 1, $main_depth)
+                );
             }
         }
 
@@ -1122,28 +1112,21 @@ class Skill extends Model
      * @param array $subtree
      * @param int $depth
      * @param int $max_depth
-     * @param bool $filter_status
      * @return array|null
      */
-    public function get_skill_json($subtree, $depth = 1, $max_depth = 2, $filter_status = false)
+    public function get_skill_json($subtree, $depth = 1, $max_depth = 2)
     {
         $simple_sub_tree = array();
         if (is_array($subtree)) {
             $counter = 1;
             foreach ($subtree as $elem) {
-                if ($filter_status) {
-                    if (!intval($elem['status'])) {
-                        break 1;
-                    }
-                }
-
                 $tmp = array();
                 $tmp['name'] = $elem['name'];
                 $tmp['id'] = $elem['id'];
                 $tmp['isSearched'] = self::isSearched($elem['id']);
 
                 if (isset($elem['children']) && is_array($elem['children'])) {
-                    $tmp['children'] = $this->get_skill_json($elem['children'], $depth + 1, $max_depth, $filter_status);
+                    $tmp['children'] = $this->get_skill_json($elem['children'], $depth + 1, $max_depth);
                 } else {
                     //$tmp['colour'] = $this->colours[$depth][rand(0,3)];
                 }

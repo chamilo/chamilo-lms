@@ -366,7 +366,6 @@ class UserManager
             $user->setExpirationDate($expirationDate);
         }
 
-        // Silence password_hash deprecated warning
         $userManager->updateUser($user);
         $userId = $user->getId();
 
@@ -735,10 +734,14 @@ class UserManager
     {
         $result = false;
         $ids = is_array($ids) ? $ids : func_get_args();
-        if (!is_array($ids) or count($ids) == 0) { return false; }
+        if (!is_array($ids) || count($ids) == 0) {
+            return false;
+        }
         $ids = array_map('intval', $ids);
         foreach ($ids as $id) {
-            if (empty($id) or $id < 1) { continue; }
+            if (empty($id) || $id < 1) {
+                continue;
+            }
             $deleted = self::delete_user($id);
             $result = $deleted || $result;
         }
@@ -759,6 +762,7 @@ class UserManager
     public static function deactivate_users($ids = array())
     {
         if (empty($ids)) {
+
             return false;
         }
 
@@ -789,6 +793,7 @@ class UserManager
     public static function activate_users($ids = array())
     {
         if (empty($ids)) {
+
             return false;
         }
 
@@ -801,7 +806,7 @@ class UserManager
         $sql = "UPDATE $table_user SET active = 1 WHERE id IN ($ids)";
         $r = Database::query($sql);
         if ($r !== false) {
-            Event::addEvent(LOG_USER_ENABLE,LOG_USER_ID,$ids);
+            Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $ids);
         }
         return $r;
     }
@@ -816,14 +821,17 @@ class UserManager
      */
     public static function update_openid($user_id, $openid)
     {
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-        if ($user_id != strval(intval($user_id)))
+        $table_user = Database:: get_main_table(TABLE_MAIN_USER);
+        if ($user_id != strval(intval($user_id))) {
             return false;
-        if ($user_id === false)
+        }
+        if ($user_id === false) {
             return false;
+        }
         $sql = "UPDATE $table_user SET
                 openid='".Database::escape_string($openid)."'";
         $sql .= " WHERE id= $user_id";
+
         return Database::query($sql);
     }
 
@@ -984,10 +992,28 @@ class UserManager
                 $access_url_id = api_get_current_access_url_id();
                 if ($access_url_id != -1) {
                     $url = api_get_access_url($access_url_id);
-                    $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$url['url']."\n\n".get_lang('Problem')."\n\n".get_lang('SignatureFormula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
+                    $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".
+                        get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
+                        get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".
+                        get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
+                        get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$url['url']."\n\n".
+                        get_lang('Problem')."\n\n".
+                        get_lang('SignatureFormula').",\n\n".
+                        api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
+                        get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
+                        get_lang('Email')." : ".api_get_setting('emailAdministrator');
                 }
             } else {
-                $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$_configuration['root_web']."\n\n".get_lang('Problem')."\n\n".get_lang('SignatureFormula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
+                $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".
+                    get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
+                    get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".
+                    get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
+                    get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$_configuration['root_web']."\n\n".
+                    get_lang('Problem')."\n\n".
+                    get_lang('SignatureFormula').",\n\n".
+                    api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
+                    get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
+                    get_lang('Email')." : ".api_get_setting('emailAdministrator');
             }
 
             $emailbody = nl2br($emailbody);
@@ -1010,8 +1036,8 @@ class UserManager
 
     /**
      * Disables or enables a user
-     * @param int user_id
-     * @param int Enable or disable
+     * @param int $user_id
+     * @param int $active Enable or disable
      * @return void
      * @assert (-1,0) === false
      * @assert (1,1) === true
@@ -1127,7 +1153,8 @@ class UserManager
      * Creates a username using person's names, i.e. creates jmontoya from Julio Montoya.
      * @param string $firstname The first name of the user.
      * @param string $lastname The last name of the user.
-     * @return string Suggests a username that contains only ASCII-letters and digits, without check for uniqueness within the system.
+     * @return string Suggests a username that contains only ASCII-letters and digits,
+     * without check for uniqueness within the system.
      * @author Julio Montoya Armas
      * @author Ivan Tcholakov, 2009 - rework about internationalization.
      * @assert ('','') === false
@@ -1406,6 +1433,7 @@ class UserManager
             );
             $return_array[] = $result;
         }
+
         return $return_array;
     }
 
@@ -1439,7 +1467,7 @@ class UserManager
         $anonymousPath = array(
             'dir' => $base.'img/',
             'file' => 'unknown.jpg',
-            'email' => '',
+            'email' => ''
         );
 
         if (empty($id) || empty($type)) {
@@ -1471,7 +1499,7 @@ class UserManager
         return array(
             'dir' => $dir,
             'file' => $pictureFilename,
-            'email' => $user['email'],
+            'email' => $user['email']
         );
     }
 
@@ -1755,7 +1783,7 @@ class UserManager
         }
 
         if (filter_extension($file)) {
-            if (@move_uploaded_file($source_file,$path.$file)) {
+            if (@move_uploaded_file($source_file, $path.$file)) {
                 if ($extra_field) {
                     return $extra_field.'/'.$file;
                 } else {

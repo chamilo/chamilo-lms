@@ -7853,4 +7853,16 @@ $EnableRecordAudioComment = "Activa el grabador audio WebRTC (sin flash) en dist
 $EnableRecordAudioTitle = "Activar grabador audio";
 $ShowOfficialCodeInWhoIsOnlinePageComment = "Mostrar el código oficial en la página 'Usuarios en línea', de bajo del nombre del usuario.";
 $ShowOfficialCodeInWhoIsOnlinePage = "Código oficial en 'Usuarios en línea'";
+$JobPublic = "Empleo público";
+$ApplyJob = "Postular al empleo";
+$PublicCompany = "Empresa pública";
+$PrivateCompany = "Empresa privada";
+$NonForProfitCompany = "Sin fines de lucro";
+$Government = "Gobernamental";
+$Template = "Plantilla";
+$Palette = "Paleta";
+$Colors = "Colores";
+$Mask = "Máscara";
+$Icon = "Icono";
+$DesignWithBadgeStudio = "Diseñar con Badge Studio";
 ?>

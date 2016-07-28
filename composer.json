@@ -47,7 +47,7 @@
         "aferrandini/phpqrcode": "1.0.1",
         "mpdf/mpdf": "5.7.4",
         "barryvdh/elfinder-builds": "2.1.0.3",
-        "jbroadway/urlify": "1.0.3-stable",
+        "jbroadway/urlify": "dev-master",
         "monolog/monolog": "~1.0",
         "doctrine/orm": "~2.2,>=2.2.3,<2.5",
         "doctrine/migrations": "1.0.*@dev",

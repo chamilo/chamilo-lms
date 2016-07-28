@@ -304,23 +304,6 @@ function set_file_folder_permissions()
 }
 
 /**
- * Add's a .htaccess file to the courses directory
- * @param string $url_append The path from your webroot to your chamilo root
- * @return bool Result of writing the file
- */
-/*function write_courses_htaccess_file($url_append)
-{
-    $content = file_get_contents(dirname(__FILE__).'/'.COURSES_HTACCESS_FILENAME);
-    $content = str_replace('{CHAMILO_URL_APPEND_PATH}', $url_append, $content);
-    $fp = @fopen(api_get_path(SYS_COURSE_PATH).'.htaccess', 'w');
-    if ($fp) {
-        fwrite($fp, $content);
-        return fclose($fp);
-    }
-    return false;
-}*/
-
-/**
  * Write the main system config file
  * @param string $path Path to the config file
  */

@@ -37,15 +37,23 @@ class Version20150528103216 extends AbstractMigrationChamilo
         $this->addSql('UPDATE session SET display_end_date = access_end_date');
 
         // Set dates to NULL
-
         $this->addSql('UPDATE session SET access_start_date = NULL WHERE access_start_date = "0000-00-00 00:00:00"');
         $this->addSql('UPDATE session SET access_end_date = NULL WHERE access_end_date = "0000-00-00 00:00:00"');
+
+        $this->addSql('UPDATE session SET access_start_date = NULL WHERE access_start_date = "0000-00-00 23:59:59"');
+        $this->addSql('UPDATE session SET access_end_date = NULL WHERE access_end_date = "0000-00-00 23:59:59"');
 
         $this->addSql('UPDATE session SET coach_access_start_date = NULL WHERE coach_access_start_date = "0000-00-00 00:00:00"');
         $this->addSql('UPDATE session SET coach_access_end_date = NULL WHERE coach_access_end_date = "0000-00-00 00:00:00"');
 
+        $this->addSql('UPDATE session SET coach_access_start_date = NULL WHERE coach_access_start_date = "0000-00-00 23:59:59"');
+        $this->addSql('UPDATE session SET coach_access_end_date = NULL WHERE coach_access_end_date = "0000-00-00 23:59:59"');
+
         $this->addSql('UPDATE session SET display_start_date = NULL WHERE display_start_date = "0000-00-00 00:00:00"');
         $this->addSql('UPDATE session SET display_end_date = NULL WHERE display_end_date = "0000-00-00 00:00:00"');
+
+        $this->addSql('UPDATE session SET display_start_date = NULL WHERE display_start_date = "0000-00-00 23:59:59"');
+        $this->addSql('UPDATE session SET display_end_date = NULL WHERE display_end_date = "0000-00-00 23:59:59"');
     }
 
     /**

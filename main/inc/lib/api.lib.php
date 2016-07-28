@@ -3195,8 +3195,18 @@ function api_not_allowed($print_headers = false, $message = null)
             array(),
             FormValidator::LAYOUT_BOX_NO_LABEL
         );
-        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'autocapitalize_off'));
-        $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password')));
+        $form->addElement(
+            'text',
+            'login',
+            null,
+            array('placeholder' => get_lang('UserName'), 'autocapitalize' => 'none')
+        );
+        $form->addElement(
+            'password',
+            'password',
+            null,
+            array('placeholder' => get_lang('Password'), 'autocapitalize' => 'none')
+        );
         $form->addButton('submitAuth', get_lang('LoginEnter'), '', 'primary');
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (above)
@@ -3250,7 +3260,7 @@ function api_not_allowed($print_headers = false, $message = null)
         $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
         $action = str_replace('&amp;', '&', $action);
         $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
-        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'col-md-3 autocapitalize_off')); //new
+        $form->addElement('text', 'login', null, array('autocapitalize' => 'none', 'placeholder' => get_lang('UserName'), 'class' => 'col-md-3'));
         $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'col-md-3')); //new
         $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
 

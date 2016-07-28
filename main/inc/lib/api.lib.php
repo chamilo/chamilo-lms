@@ -5606,7 +5606,7 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
  */
 function api_replace_dangerous_char($filename)
 {
-    return URLify::filter($filename, 250, '', true);
+    return URLify::filter($filename, 250, '', true, true, false, false);
 }
 
 /**

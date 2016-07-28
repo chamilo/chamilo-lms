@@ -1115,7 +1115,7 @@ class Template
         $tpl = $this->get_template('layout/show_footer.tpl');
         $this->display($tpl);
     }
-    
+
     /**
      * Show footer js template.
      */
@@ -1288,18 +1288,30 @@ class Template
             'login',
             get_lang('UserName'),
             true,
-            array('id' => 'login', 'autofocus' => 'autofocus', 'icon' => 'user fa-fw', 'placeholder' => get_lang('UserName')));
+            array(
+                'id' => 'login',
+                'autofocus' => 'autofocus',
+                'icon' => 'user fa-fw',
+                'placeholder' => get_lang('UserName'),
+                'autocapitalize' => 'none'
+            )
+        );
 
         $form->addElement(
             'password',
             'password',
             get_lang('Pass'),
-            array('id' => 'password', 'icon' => 'lock fa-fw', 'placeholder' => get_lang('Pass'))
+            array(
+                'id' => 'password',
+                'icon' => 'lock fa-fw',
+                'placeholder' => get_lang('Pass'),
+                'autocapitalize' => 'none',
+            )
         );
 
         // Captcha
         $captcha = api_get_setting('allow_captcha');
-        $allowCaptcha = $captcha == 'true';
+        $allowCaptcha = $captcha === 'true';
 
         if ($allowCaptcha) {
             $useCaptcha = isset($_SESSION['loginFailed']) ? $_SESSION['loginFailed'] : null;

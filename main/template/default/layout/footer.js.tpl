@@ -1,14 +1,4 @@
 <script>
-    $("form").on("click", ' .advanced_parameters', function() {
-        /*var id = $(this).attr('id') + '_options';
-         console.log(id);
-         $("#"+id).toggleClass('active');
-         var button = $(this);
-         $("#"+id).toggle(function() {
-         $("#"+id).toggleClass('active');
-         });*/
-    });
-
     /* Makes row highlighting possible */
     $(document).ready( function() {
         // Date time settings.
@@ -87,7 +77,6 @@
         $("form .data_table input:checkbox").click(function () {
             if ($(this).is(":checked")) {
                 $(this).parentsUntil("tr").parent().addClass("row_selected");
-
             } else {
                 $(this).parentsUntil("tr").parent().removeClass("row_selected");
             }
@@ -98,16 +87,10 @@
             $("input[name=login]").focus();
         }
 
-        /* For IOS users */
-        $('.autocapitalize_off').attr('autocapitalize', 'off');
-
         // Tool tip (in exercises)
         var tip_options = {
             placement: 'right'
         };
         $('.boot-tooltip').tooltip(tip_options);
     });
-
-
-
 </script>

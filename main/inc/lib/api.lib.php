@@ -7981,7 +7981,7 @@ function api_mail_html(
     // Attachment ...
     if (!empty($data_file)) {
         $o = 0;
-        foreach ($data_file as $file_attach) {
+        foreach ($data_file as $file_attach) {  
             if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
                 $mail->AddAttachment($file_attach['path'], $file_attach['filename']);
             }

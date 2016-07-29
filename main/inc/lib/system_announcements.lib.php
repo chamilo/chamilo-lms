@@ -667,10 +667,7 @@ class SystemAnnouncementManager
 	 */
 	public static function send_system_announcement_by_email($title, $content, $teacher, $student, $language = null, $sendEmailTest = false)
     {
-		global $charset;
-
-        $title = api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset);
-        $content = api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'', $content)), ENT_QUOTES, $charset);
+        $content = str_replace(array('\r\n', '\n', '\r'),'', $content);
         $now = api_get_utc_datetime();
 
         if ($sendEmailTest) {
@@ -685,19 +682,23 @@ class SystemAnnouncementManager
             $url_condition = " INNER JOIN $url_rel_user uu ON uu.user_id = u.user_id ";
         }
 
-        if ($teacher <> 0 AND $student == 0) {
-			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition WHERE status = '1' ";
+        if ($teacher <> 0 && $student == 0) {
+			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
+					WHERE status = '1' ";
 		}
 
-		if ($teacher == 0 AND $student <> 0) {
-			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition WHERE status = '5' ";
+		if ($teacher == 0 && $student <> 0) {
+			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
+					WHERE status = '5' ";
 		}
 
-		if ($teacher<> 0 AND $student <> 0) {
-			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition WHERE 1 = 1 ";
+		if ($teacher<> 0 && $student <> 0) {
+			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
+					WHERE 1 = 1 ";
 		}
 
-		if (!empty($language)) { //special condition because language was already treated for SQL insert before
+		if (!empty($language)) {
+			//special condition because language was already treated for SQL insert before
 			$sql .= " AND language = '".Database::escape_string($language)."' ";
 		}
 
@@ -711,7 +712,7 @@ class SystemAnnouncementManager
         // Expiration date
         $sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
 
-		if ((empty($teacher) or $teacher == '0') AND  (empty($student) or $student == '0')) {
+		if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
 			return true;
 		}
 
@@ -726,6 +727,7 @@ class SystemAnnouncementManager
             MessageManager::send_message_simple($row['user_id'], $title, $content);
             $message_sent = true;
 		}
+
 		return $message_sent; //true if at least one e-mail was sent
 	}
 

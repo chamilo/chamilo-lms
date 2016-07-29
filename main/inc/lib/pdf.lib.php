@@ -333,7 +333,7 @@ class PDF
                                             );
 
                                             // Try with the dirname if exists
-                                            if ($old_src_fixed === $old_src_fixed) {
+                                            if ($old_src_fixed == $old_src) {
                                                 if (file_exists($dirName.'/'.$old_src)) {
                                                     $document_path = '';
                                                     $old_src_fixed = $dirName.'/'.$old_src;
@@ -343,8 +343,15 @@ class PDF
                                             if (strpos($old_src, 'courses/'.$course_data['path'].'/document/') !== false) {
                                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
                                             } else {
-                                                $document_path = '';
-                                                $old_src_fixed = $old_src;
+
+                                                // Try with the dirname if exists
+                                                if (file_exists($dirName.'/'.$old_src)) {
+                                                    $document_path = '';
+                                                    $old_src_fixed = $dirName.'/'.$old_src;
+                                                } else {
+                                                    $document_path = '';
+                                                    $old_src_fixed = $old_src;
+                                                }
                                             }
                                         }
 

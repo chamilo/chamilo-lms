@@ -291,6 +291,7 @@ class PDF
             $extension = $file_info['extension'];
 
             if (in_array($extension, array('html', 'htm'))) {
+                $dirName = $file_info['dirname'];
                 $filename = $file_info['basename'];
                 $filename = str_replace('_',' ',$filename);
 
@@ -325,7 +326,19 @@ class PDF
 
                                     if (strpos($old_src, '/main/img') === false) {
                                         if (api_get_path(REL_PATH) != '/') {
-                                            $old_src_fixed = str_replace(api_get_path(REL_PATH).'courses/'.$course_data['path'].'/document/', '', $old_src);
+                                            $old_src_fixed = str_replace(
+                                                api_get_path(REL_PATH).'courses/'.$course_data['path'].'/document/',
+                                                '',
+                                                $old_src
+                                            );
+
+                                            // Try with the dirname if exists
+                                            if ($old_src_fixed === $old_src_fixed) {
+                                                if (file_exists($dirName.'/'.$old_src)) {
+                                                    $document_path = '';
+                                                    $old_src_fixed = $dirName.'/'.$old_src;
+                                                }
+                                            }
                                         } else {
                                             if (strpos($old_src, 'courses/'.$course_data['path'].'/document/') !== false) {
                                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
@@ -339,8 +352,7 @@ class PDF
                                     } else {
                                         $new_path = $old_src;
                                     }
-
-                                    $document_html= str_replace($old_src, $new_path, $document_html);
+                                    $document_html = str_replace($old_src, $new_path, $document_html);
                                 }
                             } else {
                                 //Check if this is a complete URL

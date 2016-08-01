@@ -7865,4 +7865,5 @@ $Colors = "Colores";
 $Mask = "Máscara";
 $Icon = "Icono";
 $DesignWithBadgeStudio = "Diseñar con Badge Studio";
+$UseThisBadge = "Usar esta insignia";
 ?>

@@ -7846,4 +7846,5 @@ $Colors = "Colors";
 $Mask = "Mask";
 $Icon = "Icon";
 $DesignWithBadgeStudio = "Design with Badge Studio";
+$UseThisBadge = "Use this badge";
 ?>

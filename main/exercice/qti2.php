@@ -6,9 +6,7 @@
  * 	@author Ronny Velasquez
  * 	@version $Id: qti2.php  2010-03-12 12:14:25Z $
  */
-/**
- * Code
- */
+
 // including the global Chamilo file
 require_once '../inc/global.inc.php';
 

@@ -94,7 +94,7 @@
                                     <div class="col-sm-10">
                                         <h1 class="title">Badge Studio</h1>
                                         <div class="" id="studio">
-                                            <form id="input">
+                                            <div id="input">
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <h3 class="label"><label for="studio-mask">{{ "Templates" | get_lang }}</label></h3>
@@ -654,31 +654,13 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-md-12 text-center">
-                                                        <a id="download-custom-badge" class="btn btn-primary"><em class="fa fa-download"></em> {{ 'DownloadBadge' | get_lang }}</a>
+                                                        <a id="set-custom-badge" class="btn btn-primary"><em class="fa fa-check"></em> {{ 'SelectBadge' | get_lang }}</a>
+                                                        <input type="hidden" id="badge_studio_image" name="badge_studio_image" >
                                                     </div>
                                                 </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <template id="settings-template">
-                                        <div id="settings" role="dialog" class="overlay hidden" arial-labelledby="settings-title">
-                                            <header class="header">
-                                                <h2 class="title" id="settings-title">{{ "Settings" | get_lang }}</h2>
-                                            </header>
-                                            <div class="panel">
-                                                <select name="display">
-                                                    <option value="light">Light</option>
-                                                    <option value="dark">Dark</option>
-                                                </select>
-                                                <select name="badge-size">
-                                                    <option value="1">Normal</option>
-                                                    <option value="0.75">Large</option>
-                                                    <option value="0.5">Medium</option>
-                                                    <option value="0.25">Small</option>
-                                                </select>
                                             </div>
                                         </div>
-                                    </template>
+                                    </div>
 
                                     <template id="glyph-selector-template">
                                         <div id="glyph-selector" role="dialog" class="overlay hidden" aria-label="Select a glyph" tabIndex="0">
@@ -744,7 +726,7 @@
                         </div>
                         <p class="openbadges-text">{{'BadgePreview' | get_lang }}</p>
                         <div class="openbadges-img {{ skill.icon ? '' : 'hide' }}" id="badge-container">
-                            <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? skill.web_icon_path : '' }}">
+                            <img id="badge-preview" class="img-responsive" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? skill.web_icon_path : '' }}">
                         </div>
                     </div>
                 </div>
@@ -755,10 +737,11 @@
 {{ badge_studio.script_js }}
 <script>
     $(document).ready(function() {
-      $('#download-custom-badge').click(function (){
-          var img = $('#raster').attr('src');
-          var url = img.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-          window.open(url);
+      $('#set-custom-badge').click(function () {
+          var data = $('#raster').attr('src');
+          $('#badge_studio_image').val(data);
+          $('#badge-preview').attr('src', data);
+          $('#badge-container').removeClass('hide');
       });
     })
 </script>

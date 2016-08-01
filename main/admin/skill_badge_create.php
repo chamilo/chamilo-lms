@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'id' => $skillId
     );
 
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+    if ((isset($_FILES['image']) && $_FILES['image']['error'] == 0) || !empty($_POST['badge_studio_image'])) {
         $dirPermissions = api_get_permissions_for_new_directories();
 
         $fileName = sha1($_POST['name']);
@@ -68,13 +68,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $skillImagePath = sprintf("%s%s.png", $badgePath, $fileName);
 
-            $skillImage = new Image($_FILES['image']['tmp_name']);
+            if (!empty($_POST['badge_studio_image'])) {
+                $badgeImage = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $_POST['badge_studio_image']));
+                file_put_contents($skillImagePath, $badgeImage);
+                $skillImage = new Image($skillImagePath);
+            } else {
+                $skillImage = new Image($_FILES['image']['tmp_name']);
+            }
+
             $skillImage->send_image($skillImagePath, -1, 'png');
 
             $skillThumbPath = sprintf("%s%s-small.png", $badgePath, $fileName);
 
             $skillImageThumb = new Image($skillImagePath);
-            $skillImageThumb->resize(ICON_SIZE_BIG, ICON_SIZE_BIG);
+            $skillImageThumb->resize(ICON_SIZE_BIG);
             $skillImageThumb->send_image($skillThumbPath);
 
             $params['icon'] = sprintf("%s.png", $fileName);

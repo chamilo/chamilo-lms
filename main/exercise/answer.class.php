@@ -650,7 +650,14 @@ class Answer
                         $answer->read();
 
                         $correctAnswerId = $answer->selectAnswerIdByPosition($correct);
-                        $correctAnswerAutoId = $answer->selectAutoId($correctAnswerId);
+
+						// Continue to avoid matching question bug if $correctAnswerId returns false
+						// See : https://support.chamilo.org/issues/8334
+						if ($questionType == MATCHING && !$correctAnswerId) {
+							continue;
+						}
+
+                        $correctAnswerAutoId = $answer->selectAutoId($correct);
 
                         Database::update(
                             $answerTable,

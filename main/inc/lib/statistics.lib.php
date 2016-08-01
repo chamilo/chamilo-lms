@@ -116,7 +116,7 @@ class Statistics
                         u.user_id = url.user_id AND
                         access_url_id = '".$current_url_id."'
                         $status_filter $active_filter";
-            if (isset ($categoryCode)) {
+            if (isset($categoryCode)) {
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
                         FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url
                         WHERE
@@ -130,7 +130,7 @@ class Statistics
             $sql = "SELECT COUNT(DISTINCT(user_id)) AS number
                     FROM $user_table
                     WHERE 1=1 $status_filter $active_filter";
-            if (isset ($categoryCode)) {
+            if (isset($categoryCode)) {
                 $status_filter = isset($status)?' AND status = '.intval($status):'';
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
                         FROM $course_user_table cu, $course_table c
@@ -198,7 +198,11 @@ class Statistics
 
         if (isset($_GET['keyword'])) {
             $keyword = Database::escape_string(trim($_GET['keyword']));
-            $sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
+            $sql .= " AND (
+                        user.username LIKE '%".$keyword."%' OR 
+                        default_event_type LIKE '%".$keyword."%' OR 
+                        default_value_type LIKE '%".$keyword."%' OR 
+                        default_value LIKE '%".$keyword."%') ";
         }
 
         $res = Database::query($sql);
@@ -453,14 +457,26 @@ class Statistics
         switch ($type) {
             case 'hour':
                 $period = get_lang('PeriodHour');
-                $sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY stat_date ";
-                $sql_last_x = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'DAY')." GROUP BY stat_date ORDER BY stat_date ";
+                $sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins 
+                        FROM $table.$table_url $where_url 
+                        GROUP BY stat_date 
+                        ORDER BY stat_date ";
+                $sql_last_x = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins 
+                               FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'DAY')." 
+                               GROUP BY stat_date 
+                               ORDER BY stat_date ";
                 break;
             case 'day':
                 $periodCollection = api_get_week_days_long();
                 $period = get_lang('PeriodDay');
-                $sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
-                $sql_last_x = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'WEEK')." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
+                $sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins 
+                        FROM ".$table.$table_url.$where_url." 
+                        GROUP BY stat_date 
+                        ORDER BY DATE_FORMAT( login_date, '%w' ) ";
+                $sql_last_x = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date, count( login_id ) AS number_of_logins 
+                               FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'WEEK')." 
+                               GROUP BY stat_date 
+                               ORDER BY DATE_FORMAT( login_date, '%w' ) ";
                 break;
         }
         if ($sql_last_x) {
@@ -516,10 +532,10 @@ class Statistics
         if ($distinct) {
             $field = 'DISTINCT(login_user_id)';
         }
-        $sql[get_lang('ThisDay')]    = "SELECT count($field) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
-        $sql[get_lang('Last7days')]  = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
+        $sql[get_lang('ThisDay')] = "SELECT count($field) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
+        $sql[get_lang('Last7days')] = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
         $sql[get_lang('Last31days')] = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
-        $sql[get_lang('Total')]      = "SELECT count($field) AS number  FROM $table $table_url WHERE 1=1 $where_url";
+        $sql[get_lang('Total')] = "SELECT count($field) AS number  FROM $table $table_url WHERE 1=1 $where_url";
         foreach ($sql as $index => $query) {
             $res = Database::query($query);
             $obj = Database::fetch_object($res);
@@ -558,7 +574,7 @@ class Statistics
         $sql = "SELECT count($field) AS number, date(login_date) as login_date FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 15 DAY) >= '$now' $where_url GROUP BY date(login_date)";
 
         $res = Database::query($sql);
-        while($row = Database::fetch_array($res,'ASSOC')){
+        while ($row = Database::fetch_array($res,'ASSOC')){
             $totalLogin[$row['login_date']] = $row['number'];
         }
 
@@ -744,7 +760,6 @@ class Statistics
         $page_nr = isset($_GET['page_nr'])?intval($_GET['page_nr']) : 1;
         $column = isset($_GET['column'])?intval($_GET['column']) : 0;
         $date_diff = isset($_GET['date_diff'])?intval($_GET['date_diff']) : 60;
-
         $direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
 
         if (!in_array($direction, array(SORT_ASC, SORT_DESC))) {
@@ -813,7 +828,7 @@ class Statistics
 
     /**
      * Displays the statistics of the messages sent and received by each user in the social network
-     * @param string    Type of message: 'sent' or 'received'
+     * @param string    $messageType Type of message: 'sent' or 'received'
      * @return array    Message list
      */
     public static function getMessages($messageType)
@@ -833,16 +848,16 @@ class Statistics
                 break;
         }
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message ".
-                "FROM ".$access_url_rel_user_table." as url, ".$message_table." m ".
-                "LEFT JOIN ".$user_table." u ON m.$field = u.user_id ".
-                "WHERE  url.user_id = m.$field AND  access_url_id='".$current_url_id."' ".
-                "GROUP BY m.$field ORDER BY count_message DESC ";
+            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message 
+                FROM ".$access_url_rel_user_table." as url, ".$message_table." m 
+                LEFT JOIN ".$user_table." u ON m.$field = u.user_id 
+                WHERE  url.user_id = m.$field AND  access_url_id='".$current_url_id."' 
+                GROUP BY m.$field ORDER BY count_message DESC ";
         } else {
-            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message ".
-                "FROM ".$message_table." m ".
-                "LEFT JOIN ".$user_table." u ON m.$field = u.user_id ".
-                "GROUP BY m.$field ORDER BY count_message DESC ";
+            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message 
+                FROM ".$message_table." m 
+                LEFT JOIN ".$user_table." u ON m.$field = u.user_id 
+                GROUP BY m.$field ORDER BY count_message DESC ";
         }
         $res = Database::query($sql);
         $messages_sent = array();
@@ -850,7 +865,10 @@ class Statistics
             if (empty($messages['username'])) {
                 $messages['username'] = get_lang('Unknown');
             }
-            $users = api_get_person_name($messages['firstname'], $messages['lastname']).'<br />('.$messages['username'].')';
+            $users = api_get_person_name(
+                $messages['firstname'],
+                $messages['lastname']
+            ).'<br />('.$messages['username'].')';
             $messages_sent[$users] = $messages['count_message'];
         }
         return $messages_sent;

@@ -35,7 +35,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 */
 
 $safe_post_file_comment = isset($_POST['post_file_comment']) ? Security::remove_XSS($_POST['post_file_comment']) : null;
-$safe_comment_text      = isset($_POST['comment_text']) ? Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['comment_text'])), COURSEMANAGERLOWSECURITY) : null;
+$safe_comment_text      = isset($_POST['comment_text']) ? Security::remove_XSS($_POST['comment_text']) : null;
 $safe_comment_title     = isset($_POST['comment_title']) ? Security::remove_XSS($_POST['comment_title']) : null;
 $safe_task_name         = isset($_POST['task_name']) ? Security::remove_XSS($_POST['task_name']) : null;
 $safe_task_description  = isset($_POST['task_description']) ? Security::remove_XSS($_POST['task_description']) : null;
@@ -311,7 +311,7 @@ Display::display_introduction_section(TOOL_BLOGS);
 
 <div class="row">
 	<div class="col-md-3">
-            
+
             <div class="panel panel-default">
                 <div class="panel-heading"><?php echo get_lang('Calendar') ?></div>
                 <div class="panel-body">
@@ -322,7 +322,7 @@ Display::display_introduction_section(TOOL_BLOGS);
                     ?>
                 </div>
             </div>
-		
+
             <div class="panel panel-default">
                 <div class="panel-heading"><?php echo get_lang('Search') ?></div>
                 <div class="panel-body">
@@ -336,14 +336,14 @@ Display::display_introduction_section(TOOL_BLOGS);
                     </form>
                 </div>
             </div>
-		
+
             <div class="panel panel-default">
                 <div class="panel-heading"><?php echo get_lang('MyTasks') ?></div>
                 <div class="panel-body">
                     <?php Blog::get_personal_task_list(); ?>
                 </div>
             </div>
-		
+
 	</div>
 	<div class="col-md-9">
 		<?php

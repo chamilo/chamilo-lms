@@ -424,7 +424,6 @@ define('GROUP_IMAGE_SIZE_ORIGINAL', 1);
 define('GROUP_IMAGE_SIZE_BIG', 2);
 define('GROUP_IMAGE_SIZE_MEDIUM', 3);
 define('GROUP_IMAGE_SIZE_SMALL', 4);
-
 define('GROUP_TITLE_LENGTH', 50);
 
 // Exercise
@@ -603,6 +602,7 @@ define('RESOURCE_WORK', 'work');
 define('RESOURCE_SESSION_COURSE', 'session_course');
 define('RESOURCE_GRADEBOOK', 'gradebook');
 
+define('ADD_THEMATIC_PLAN', 6);
 
 // Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
 // To remove CKeditor libs from HTML, set this constant to true before loading
@@ -7860,7 +7860,7 @@ function api_mail_html(
     // Attachment ...
     if (!empty($data_file)) {
         $o = 0;
-        foreach ($data_file as $file_attach) {  
+        foreach ($data_file as $file_attach) {
             if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
                 $mail->AddAttachment($file_attach['path'], $file_attach['filename']);
             }

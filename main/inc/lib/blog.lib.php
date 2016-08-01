@@ -412,8 +412,15 @@ class Blog
      * @param Integer $post_id
      * @param Integer $parent_id
      */
-    public static function create_comment($title, $full_text, $file_comment, $blog_id, $post_id, $parent_id, $task_id = 'NULL')
-    {
+    public static function create_comment(
+        $title,
+        $full_text,
+        $file_comment,
+        $blog_id,
+        $post_id,
+        $parent_id,
+        $task_id = 'NULL'
+    ) {
         $_user = api_get_user_info();
         $_course = api_get_course_info();
         $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);

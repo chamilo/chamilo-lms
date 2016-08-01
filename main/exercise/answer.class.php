@@ -611,13 +611,13 @@ class Answer
 
 		for ($i=1; $i <= $this->new_nbrAnswers; $i++) {
 			$answer = $this->new_answer[$i];
-			$correct = $this->new_correct[$i];
-			$comment = $this->new_comment[$i];
-			$weighting = $this->new_weighting[$i];
-			$position = $this->new_position[$i];
-			$hotspot_coordinates = $this->new_hotspot_coordinates[$i];
-			$hotspot_type = $this->new_hotspot_type[$i];
-			$destination = $this->new_destination[$i];
+			$correct = isset($this->new_correct[$i]) ? $this->new_correct[$i] : '';
+			$comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : '';
+			$weighting = isset($this->new_weighting[$i]) ? $this->new_weighting[$i] : '';
+			$position = isset($this->new_position[$i]) ? $this->new_position[$i] : '';
+			$hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : '';
+			$hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : '';
+			$destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : '';
             $autoId = $this->selectAutoId($i);
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
 
@@ -724,10 +724,8 @@ class Answer
 		$this->position = $this->new_position;
 		$this->hotspot_coordinates = $this->new_hotspot_coordinates;
 		$this->hotspot_type = $this->new_hotspot_type;
-
 		$this->nbrAnswers = $this->new_nbrAnswers;
 		$this->destination = $this->new_destination;
-		// clears $new_* arrays
 
 		$this->cancel();
 	}

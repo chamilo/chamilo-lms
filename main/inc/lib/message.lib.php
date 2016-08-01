@@ -236,14 +236,11 @@ class MessageManager
         if (!empty($receiver_user_id) || !empty($group_id)) {
 
             // message for user friend
-            $clean_content = Database::escape_string($content);
-
-            //message in inbox for user friend
             //@todo it's possible to edit a message? yes, only for groups
             if ($edit_message_id) {
                 $query = " UPDATE $table_message SET
                                 update_date = '" . $now . "',
-                                content = '$clean_content'
+                                content = '".Database::escape_string($content)."'
                            WHERE id = '$edit_message_id' ";
                 Database::query($query);
                 $inbox_last_id = $edit_message_id;
@@ -405,7 +402,6 @@ class MessageManager
         );
 
         if ($sendCopyToDrhUsers) {
-
             $userInfo = api_get_user_info($receiver_user_id);
             $drhList = UserManager::getDrhListFromUser($receiver_user_id);
             if (!empty($drhList)) {

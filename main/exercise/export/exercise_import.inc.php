@@ -21,7 +21,7 @@ function tempdir($dir, $prefix = 'tmp', $mode = 0777)
     }
 
     do {
-        $path = $dir . $prefix . mt_rand(0, 9999999);
+        $path = $dir.$prefix.mt_rand(0, 9999999);
     } while (!mkdir($path, $mode));
 
     return $path;
@@ -120,9 +120,7 @@ function import_exercise($file)
 
     // parse every subdirectory to search xml question files
     while (false !== ($file = readdir($exerciseHandle))) {
-
         if (is_dir($baseWorkDir . '/' . $file) && $file != "." && $file != "..") {
-
             // Find each manifest for each question repository found
             $questionHandle = opendir($baseWorkDir . '/' . $file);
             while (false !== ($questionFile = readdir($questionHandle))) {
@@ -147,12 +145,12 @@ function import_exercise($file)
     }
 
     if ($result == false) {
+
         return false;
     }
 
     $doc = new DOMDocument();
     $doc->load($filePath);
-    $encoding = $doc->encoding;
 
     // 1. Create exercise.
     $exercise = new Exercise();
@@ -235,7 +233,8 @@ function parse_file($exercisePath, $file, $questionFile)
     $questionFilePath = $questionTempDir . $questionFile;
 
     if (!($fp = fopen($questionFilePath, 'r'))) {
-        Display:: display_error_message(get_lang('Error opening question\'s XML file'));
+        Display::addFlash(Display::return_message(get_lang('Error opening question\'s XML file'), 'error'));
+
         return false;
     } else {
         $data = fread($fp, filesize($questionFilePath));
@@ -278,12 +277,15 @@ function parse_file($exercisePath, $file, $questionFile)
     //close file
     fclose($fp);
     if (!$question_format_supported) {
-        Display:: display_error_message(
-            get_lang(
-                'Unknown question format in file %file',
-                array(
-                '%file' => $questionFile
-                )
+        Display::addFlash(
+            Display::return_message(
+                get_lang(
+                    'Unknown question format in file %file',
+                    array(
+                        '%file' => $questionFile,
+                    )
+                ),
+                'error'
             )
         );
         return false;
@@ -330,7 +332,6 @@ function startElement($parser, $name, $attributes)
 
         if ((!in_array($current_element, $non_HTML_tag_to_avoid))) {
             $current_question_item_body .= "<" . $name;
-
             foreach ($attributes as $attribute_name => $attribute_value) {
                 $current_question_item_body .= " " . $attribute_name . "=\"" . $attribute_value . "\"";
             }
@@ -365,7 +366,9 @@ function startElement($parser, $name, $attributes)
             break;
         case 'SECTION':
             //retrieve exercise name
-            $exercise_info['name'] = $attributes['TITLE'];
+            if (isset($attributes['TITLE']) && !empty($attributes['TITLE'])) {
+                $exercise_info['name'] = $attributes['TITLE'];
+            }
             break;
         case 'RESPONSEDECLARATION':
             // Retrieve question type
@@ -398,7 +401,7 @@ function startElement($parser, $name, $attributes)
             $exercise_info['question'][$current_question_ident]['type'] = 'MATCHING';
             break;
         case 'SIMPLEMATCHSET':
-            if (!isset ($current_match_set)) {
+            if (!isset($current_match_set)) {
                 $current_match_set = 1;
             } else {
                 $current_match_set++;
@@ -418,7 +421,6 @@ function startElement($parser, $name, $attributes)
         case 'MAPENTRY':
             if ($parent_element == "MAPPING") {
                 $answer_id = $attributes['MAPKEY'];
-
                 if (!isset ($exercise_info['question'][$current_question_ident]['weighting'])) {
                     $exercise_info['question'][$current_question_ident]['weighting'] = array();
                 }
@@ -474,7 +476,6 @@ function endElement($parser, $name)
             break;
     }
     array_pop($element_pile);
-
 }
 
 /**
@@ -540,7 +541,6 @@ function elementData($parser, $data)
                 }
             }
             break;
-
         case 'ITEMBODY':
             $current_question_item_body .= $data;
             break;

@@ -347,8 +347,10 @@ class SystemAnnouncementManager
             Display :: display_normal_message(get_lang('InvalidEndDate'));
             return false;
         }
+
         if (strlen(trim($title)) == 0) {
             Display::display_normal_message(get_lang('InvalidTitle'));
+
             return false;
         }
 
@@ -382,7 +384,6 @@ class SystemAnnouncementManager
         $resultId = Database::insert($db_table, $params);
 
         if ($resultId) {
-
             if ($sendEmailTest) {
                 SystemAnnouncementManager::send_system_announcement_by_email(
                     $title,
@@ -506,6 +507,12 @@ class SystemAnnouncementManager
         $sendEmailTest = false
     ) {
         $em = Database::getManager();
+		$announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
+
+		if (!$announcement) {
+
+			return false;
+		}
 
         $a_dateS = explode(' ', $date_start);
         $a_arraySD = explode('-', $a_dateS[0]);
@@ -531,11 +538,13 @@ class SystemAnnouncementManager
             !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
         ) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
+
 			return false;
 		}
 
 		if (strlen(trim($title)) == 0) {
 			Display::display_normal_message(get_lang('InvalidTitle'));
+
 			return false;
 		}
 
@@ -547,8 +556,6 @@ class SystemAnnouncementManager
 		//$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
         $content = str_replace('src=\"'.api_get_path(REL_HOME_PATH), 'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
         $content = str_replace('file='.api_get_path(REL_HOME_PATH), 'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
-
-        $id = intval($id);
 
         if ($sendEmailTest) {
             SystemAnnouncementManager::send_system_announcement_by_email(
@@ -569,13 +576,7 @@ class SystemAnnouncementManager
                     $lang
                 );
             }
-        }
-
-        $announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
-
-        if (!$announcement) {
-            return false;
-        }
+        }  
 
         $dateStart = new DateTime($start, new DateTimeZone('UTC'));
         $dateEnd = new DateTime($end, new DateTimeZone('UTC'));
@@ -662,11 +663,12 @@ class SystemAnnouncementManager
 
 	/**
 	 * Send a system announcement by e-mail to all teachers/students depending on parameters
-	 * @param	string	Title
-	 * @param	string	Content
-	 * @param	int		Whether to send to all teachers (1) or not (0)
-	 * @param	int		Whether to send to all students (1) or not (0)
-	 * @param	string	Language (optional, considered for all languages if left empty)
+	 * @param	string	$title
+	 * @param	string	$content
+	 * @param	int		$teacher Whether to send to all teachers (1) or not (0)
+	 * @param	int		$student Whether to send to all students (1) or not (0)
+	 * @param	string	$language Language (optional, considered for all languages if left empty)
+     * @param	bool	$sendEmailTest
      * @return  bool    True if the message was sent or there was no destination matching. False on database or e-mail sending error.
 	 */
     public static function send_system_announcement_by_email(
@@ -677,14 +679,12 @@ class SystemAnnouncementManager
         $language = null,
         $sendEmailTest = false
     ) {
-		global $charset;
-
-        $title = api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset);
-        $content = api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'', $content)), ENT_QUOTES, $charset);
+        $content = str_replace(array('\r\n', '\n', '\r'),'', $content);
         $now = api_get_utc_datetime();
 
         if ($sendEmailTest) {
             MessageManager::send_message_simple(api_get_user_id(), $title, $content);
+
             return true;
         }
 
@@ -695,19 +695,23 @@ class SystemAnnouncementManager
             $url_condition = " INNER JOIN $url_rel_user uu ON uu.user_id = u.user_id ";
         }
 
-        if ($teacher <> 0 AND $student == 0) {
-			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition WHERE status = '1' ";
+        if ($teacher <> 0 && $student == 0) {
+			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
+					WHERE status = '1' ";
 		}
 
-		if ($teacher == 0 AND $student <> 0) {
-			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition WHERE status = '5' ";
+		if ($teacher == 0 && $student <> 0) {
+			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
+					WHERE status = '5' ";
 		}
 
-		if ($teacher<> 0 AND $student <> 0) {
-			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition WHERE 1 = 1 ";
+		if ($teacher<> 0 && $student <> 0) {
+			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition 
+					WHERE 1 = 1 ";
 		}
 
-		if (!empty($language)) { //special condition because language was already treated for SQL insert before
+		if (!empty($language)) {
+			//special condition because language was already treated for SQL insert before
 			$sql .= " AND language = '".Database::escape_string($language)."' ";
 		}
 
@@ -721,12 +725,14 @@ class SystemAnnouncementManager
         // Expiration date
         $sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
 
-		if ((empty($teacher) or $teacher == '0') AND  (empty($student) or $student == '0')) {
+		if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
+
 			return true;
 		}
 
 		$result = Database::query($sql);
 		if ($result === false) {
+
 			return false;
 		}
 
@@ -736,6 +742,7 @@ class SystemAnnouncementManager
             MessageManager::send_message_simple($row['user_id'], $title, $content);
             $message_sent = true;
 		}
+
 		return $message_sent; //true if at least one e-mail was sent
 	}
 

@@ -17,9 +17,6 @@
   var $glyphSelector;
   var $glyphSelectorButton;
 
-  var $settings;
-  var $settingsButton;
-
   window.addEventListener('load', function init () {
     $badgeRaster = new Image();
     $badgeRaster.id = 'raster';
@@ -57,109 +54,23 @@
    *
    */
   function initStudio () {
-    initSettings();
     initGlyphSelector();
 
     document.addEventListener('keydown', function(event) {
       if (event.keyCode === 27) { // Escape
-        if ($settings && $settings.offsetWidth)
-          closeSettings();
-        else if ($glyphSelector && $glyphSelector.offsetWidth)
-          closeGlyphSelector();
-      }
+        if ($glyphSelector && $glyphSelector.offsetWidth)
+            closeGlyphSelector();
+        }
     }, true);
 
     document.addEventListener('focus', function(event) {
-      [$settings, $glyphSelector].forEach(function ($overlay) {
+      [$glyphSelector].forEach(function ($overlay) {
         if ($overlay && $overlay.offsetWidth && !$overlay.contains(event.target)) {
           event.stopPropagation();
           $overlay.focus();
         }
       });
     }, true);
-  }
-
-  // ==[ Settings ]=============================================================
-
-  /**
-   *
-   */
-  function initSettings () {
-    if ($settings)
-      return false;
-
-    /**$settingsButton = document.createElement('button');
-    $settingsButton.className = 'settings fa fa-cog';
-    $settingsButton.title = 'Settings';
-    $settingsButton.addEventListener('click', openSettings);
-    $studio.appendChild($settingsButton);*/
-
-    $settings = importTemplate('settings').querySelector('#settings');
-    $settings.querySelector('.header').appendChild(makeCloseButton(closeSettings));
-    $studio.appendChild($settings);
-
-    $settings.addEventListener('change', function (event) {
-      var $target = event.target;
-      handleUpdate($target.name, $target.value);
-    });
-
-    if (!window.localStorage)
-      return;
-
-    var $$options = $settings.querySelectorAll('select');
-    for (var i = 0, l = $$options.length; i < l; i++) {
-      var $option = $$options[i];
-      var name = $option.name;
-      var value = localStorage.getItem($option.name);
-      for (var j = 0; j < $option.length; j++) {
-        if ($option[j].value === value) {
-          $option.selectedIndex = j;
-          handleUpdate(name, value);
-          break;
-        }
-      }
-    }
-
-    function handleUpdate (name, value) {
-      switch (name) {
-        case 'display':
-          document.body.className = value;
-          break;
-        case 'badge-size':
-          var scale = parseFloat(value);
-          ['WebkitTransform', 'MozTransform', 'transform'].forEach(function(transform) {
-            $badgeRaster.style[transform] = 'scale(' + scale + ')';
-          });
-          break;
-        default:
-          name = null;
-      }
-
-      if (name && window.localStorage)
-        localStorage.setItem(name, value);
-    }
-  }
-
-  /**
-   *
-   */
-  function openSettings () {
-    if (!$settings)
-      initSettings();
-
-    $settings.classList.remove('hidden');
-    $settings.focus();
-  }
-
-  /**
-   *
-   */
-  function closeSettings () {
-    if (!$settings)
-      return;
-
-    $settings.classList.add('hidden');
-    $settingsButton.focus();
   }
 
   // ==[ Glyph Selector ]=======================================================

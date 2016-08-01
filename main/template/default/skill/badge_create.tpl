@@ -654,7 +654,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-md-12 text-center">
-                                                        <a id="set-custom-badge" class="btn btn-primary"><em class="fa fa-check"></em> {{ 'SelectBadge' | get_lang }}</a>
+                                                        <a id="set-custom-badge" class="btn btn-primary"><em class="fa fa-check"></em> {{ 'UseThisBadge' | get_lang }}</a>
                                                         <input type="hidden" id="badge_studio_image" name="badge_studio_image" >
                                                     </div>
                                                 </div>

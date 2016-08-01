@@ -279,7 +279,7 @@ $total = '0';
 $sumHours = '0';
 $numHours = '0';
 
-$field = 'heures-disponibilite-par-semaine';
+$field = 'heures_disponibilite_par_semaine';
 $extraField = new ExtraFieldValue('user');
 $data = $extraField->get_values_by_handler_and_field_variable($userToLoad, $field);
 $availableHoursPerWeek = 0;

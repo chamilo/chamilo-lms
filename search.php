@@ -27,7 +27,7 @@ $extraFieldSession = new ExtraField('session');
 $extraFieldValueSession = new ExtraFieldValue('session');
 //$extra = $extraField->addElements($form, '', [], true, true);
 
-/*$extra = $extraField->addElements($form, '', [], true, true, array('heures-disponibilite-par-semaine'));
+/*$extra = $extraField->addElements($form, '', [], true, true, array('heures_disponibilite_par_semaine'));
 $elements = $form->getElements();
 $variables = ['theme', 'domaine', 'competenceniveau', 'filiere'];
 foreach ($elements as $element) {
@@ -313,7 +313,7 @@ foreach ($elements as $element) {
 }
 
 $fieldsToShow = [
-    'heures-disponibilite-par-semaine',
+    'heures_disponibilite_par_semaine',
 ];
 
 $extra = $extraField->addElements(
@@ -335,7 +335,7 @@ $fieldsToShow = [
     'datedebutstage',
     'datefinstage',
     'poursuiteapprentissagestage',
-    'heures-disponibilite-par-semaine-stage'
+    'heures_disponibilite_par_semaine_stage'
 ];
 
 $extra = $extraField->addElements(
@@ -406,7 +406,7 @@ $panel = Display::panel(get_lang('ObjectifsApprentissageExplanation'), '', '', '
 $userForm->addHeader(Display::url(get_lang('ObjectifsApprentissage'), '#', ['id'=> 'objectifs']).''.$panel);
 
 $fieldsToShow = [
-    'objectif-apprentissage'
+    'objectif_apprentissage'
 ];
 
 $extra = $extraField->addElements(
@@ -425,7 +425,7 @@ $panel = Display::panel(get_lang('MethodeTravailExplanation'), '', '', '',  '', 
 $userForm->addHeader(Display::url(get_lang('MethodeTravail'), '#', ['id'=> 'methode']).''.$panel);
 
 $fieldsToShow = [
-    'methode-de-travaille'
+    'methode_de_travaille'
 ];
 
 $extra = $extraField->addElements(

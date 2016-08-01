@@ -1002,6 +1002,8 @@ class Skill extends Model
 
                 $skill['data']['name'] = $skill['name'];
 
+                $skill['data']['status'] = $skill['status'];
+
                 // In order to paint all members of a family with the same color
                 if (empty($skill_id)) {
                     if ($skill['parent_id'] == 1) {
@@ -1089,7 +1091,7 @@ class Skill extends Model
      * @param int skill id
      * @param bool return a flat array or not
      * @param int depth of the skills
-     *
+     * @return json
      */
     public function get_skills_tree_json($user_id = null, $skill_id = null, $return_flat_array = false, $main_depth = 2)
     {

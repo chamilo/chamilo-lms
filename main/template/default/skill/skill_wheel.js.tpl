@@ -262,6 +262,11 @@ function set_skill_style(d, attribute, searched_skill_id) {
         return_fill = '#A1D99B';
     }
 
+    // 5. Grey / Black if the skill is disabled
+    if (d.status < 1) {
+        return_fill = '#48616C';
+    }
+
     switch (attribute) {
         case 'fill':
             //In order to identify the color of the text (white, black) used in other function

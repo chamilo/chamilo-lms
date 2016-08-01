@@ -232,7 +232,7 @@ function handle_uploaded_document(
     // Check if there is enough space to save the file
     if (!DocumentManager::enough_space($uploadedFile['size'], $maxSpace)) {
         if ($output) {
-            Display::display_error_message(get_lang('UplNotEnoughSpace'));
+            Display::addFlash(Display::return_message(get_lang('UplNotEnoughSpace'), 'error'));
         }
 
         return false;
@@ -254,8 +254,8 @@ function handle_uploaded_document(
     } elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         // We can only unzip ZIP files (no gz, tar,...)
         if ($output) {
-            Display::display_error_message(
-                get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain')
+            Display::addFlash(
+                Display::return_message(get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain'), 'error')
             );
         }
 
@@ -270,8 +270,8 @@ function handle_uploaded_document(
         // Checking file extension
         if (!filter_extension($cleanName)) {
             if ($output) {
-                Display::display_error_message(
-                    get_lang('UplUnableToSaveFileFilteredExtension')
+                Display::addFlash(
+                    Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error')
                 );
             }
 
@@ -290,8 +290,8 @@ function handle_uploaded_document(
             if (!is_dir($whereToSave)) {
                 if (!mkdir($whereToSave, api_get_permissions_for_new_directories())) {
                     if ($output) {
-                        Display::display_error_message(
-                            get_lang('DestDirectoryDoesntExist').' ('.$uploadPath.')'
+                        Display::addFlash(
+                            Display::return_message(get_lang('DestDirectoryDoesntExist').' ('.$uploadPath.')', 'error')
                         );
                     }
 
@@ -458,9 +458,12 @@ function handle_uploaded_document(
                             item_property_update_on_folder($courseInfo, $uploadPath, $userId);
                             // Display success message with extra info to user
                             if ($output) {
-                                Display::display_confirmation_message(
-                                    get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle . ' ' . get_lang('UplFileOverwritten'),
-                                    false
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle . ' ' . get_lang('UplFileOverwritten'),
+                                        'confirmation',
+                                        false
+                                    )
                                 );
                             }
 
@@ -503,21 +506,33 @@ function handle_uploaded_document(
                             item_property_update_on_folder($courseInfo, $uploadPath, $userId);
                             // Display success message to user
                             if ($output) {
-                                Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br /> '.$documentTitle, false);
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
+                                        'confirmation',
+                                        false
+                                    )
+                                );
                             }
 
                             return $filePath;
                         }
                     } else {
                         if ($output) {
-                            Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang('UplUnableToSaveFile'),
+                                    'error',
+                                    false
+                                )
+                            );
                         }
 
                         return false;
                     }
                     break;
-                // Rename the file if it exists
                 case 'rename':
+                    // Rename the file if it exists
 
                     // Always rename.
                     $cleanName = DocumentManager::getUniqueFileName(
@@ -582,16 +597,26 @@ function handle_uploaded_document(
 
                         // Display success message to user
                         if ($output) {
-                            Display::display_confirmation_message(
-                                get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') .' '.$documentTitle,
-                                false
+
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') .' '.$documentTitle,
+                                    'confirmation',
+                                    false
+                                )
                             );
                         }
 
                         return $filePath;
                     } else {
                         if ($output) {
-                            Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang('UplUnableToSaveFile'),
+                                    'error',
+                                    false
+                                )
+                            );
                         }
 
                         return false;
@@ -601,7 +626,13 @@ function handle_uploaded_document(
                     // Only save the file if it doesn't exist or warn user if it does exist
                     if (file_exists($fullPath) && $docId) {
                         if ($output) {
-                            Display::display_error_message($cleanName.' '.get_lang('UplAlreadyExists'));
+                            Display::addFlash(
+                                Display::return_message(
+                                    $cleanName.' '.get_lang('UplAlreadyExists'),
+                                    'error',
+                                    false
+                                )
+                            );
                         }
                     } else {
                         if (moveUploadedFile($uploadedFile, $fullPath)) {
@@ -648,16 +679,25 @@ function handle_uploaded_document(
 
                             // Display success message to user
                             if ($output) {
-                                Display::display_confirmation_message(
-                                    get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
-                                    false
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
+                                        'confirmation',
+                                        false
+                                    )
                                 );
                             }
 
                             return $filePath;
                         } else {
                             if ($output) {
-                                Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('UplUnableToSaveFile'),
+                                        'error',
+                                        false
+                                    )
+                                );
                             }
 
                             return false;

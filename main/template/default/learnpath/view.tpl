@@ -132,11 +132,13 @@
 
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="lp-view-content">
+                                <div id="wrapper-iframe" style="width:100%; height:100%">
                                 {% if lp_mode == 'fullscreen' %}
-                                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                                 {% else %}
-                                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                                 {% endif %}
+                                </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="lp-view-forum">
 
@@ -161,6 +163,13 @@
         };
 
         $(document).on('ready', function () {
+            if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
+              $('#wrapper-iframe').css({
+                'overflow' : 'auto',
+                'position' : 'relative',
+                '-webkit-overflow-scrolling': 'touch'
+              });
+            }
 
             {% if lp_mode == 'embedframe' %}
                 //$('#learning_path_main').addClass('lp-view-collapsed');

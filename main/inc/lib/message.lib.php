@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class MessageManager
@@ -1388,7 +1389,7 @@ class MessageManager
                 $html_items .=  '<div class="message">' . Security::remove_XSS($topic['content'], STUDENT, true) . '</div>' . $attachment . '</div>';
                 $html_items .= '</div>';
                 $html_items .= '</div>';
-                
+
                 $base_padding = 20;
 
                 if ($topic['indent_cnt'] == 0) {
@@ -1824,10 +1825,10 @@ class MessageManager
     }
 
     /**
-     * Send a notification to all amdinistrators when a new user is registered
-     * @param \Chamilo\UserBundle\Entity\User $user
+     * Send a notification to all admins when a new user is registered
+     * @param User $user
      */
-    public static function sendNotificationByRegisteredUser(\Chamilo\UserBundle\Entity\User $user)
+    public static function sendNotificationByRegisteredUser(User $user)
     {
         $tplMailBody = new Template(null, false, false, false, false, false, false);
         $tplMailBody->assign('user', $user);

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
+
 /**
  * Class SkillProfile
  * @package chamilo.library
@@ -1097,9 +1099,13 @@ class Skill extends Model
         $simple_tree = array();
         if (!empty($tree['children'])) {
             foreach ($tree['children'] as $element) {
+                $children = [];
+                if (isset($element['children'])) {
+                    $children = $this->get_skill_json($element['children'], 1, $main_depth);
+                }
                 $simple_tree[] = array(
                     'name' => $element['name'],
-                    'children' => $this->get_skill_json($element['children'], 1, $main_depth)
+                    'children' => $children
                 );
             }
         }
@@ -1130,6 +1136,7 @@ class Skill extends Model
                 } else {
                     //$tmp['colour'] = $this->colours[$depth][rand(0,3)];
                 }
+
                 if ($depth > $max_depth) {
                     continue;
                 }
@@ -1218,6 +1225,7 @@ class Skill extends Model
 
             return $result[0];
         }
+
         return 0;
     }
 
@@ -1294,6 +1302,7 @@ class Skill extends Model
 
         if ($result != false) {
             if ($result['qty'] > 0) {
+
                 return true;
             }
         }
@@ -1311,6 +1320,7 @@ class Skill extends Model
         $id = intval($id);
 
         if (empty($id)) {
+
             return false;
         }
 
@@ -1393,6 +1403,7 @@ class Skill extends Model
         $skillId = intval($skillId);
 
         if ($skillId == 0) {
+
             return array();
         }
 
@@ -1450,8 +1461,8 @@ class Skill extends Model
 
     /**
      * Check if the $fromUser can comment the $toUser skill issue
-     * @param Chamilo\UserBundle\Entity\User $fromUser
-     * @param Chamilo\UserBundle\Entity\User $toUser
+     * @param User $fromUser
+     * @param User $toUser
      * @return boolean
      */
     public static function userCanAddFeedbackToUser($fromUser, $toUser)

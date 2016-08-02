@@ -52,6 +52,7 @@ function ch_qti2_display_form()
 /**
  * This function will import the zip file with the respective qti2
  * @param array $array_file ($_FILES)
+ * @return string|array
  */
 function ch_qti2_import_file($array_file)
 {

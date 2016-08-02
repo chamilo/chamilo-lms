@@ -124,7 +124,7 @@ function import_exercise($file)
             $questionHandle = opendir($baseWorkDir . '/' . $file);
             while (false !== ($questionFile = readdir($questionHandle))) {
                 if (preg_match('/.xml$/i', $questionFile)) {
-                    $result = parse_file($baseWorkDir, $file, $questionFile);
+                    $result = qti_parse_file($baseWorkDir, $file, $questionFile);
                     $filePath = $baseWorkDir . $file;
                     $file_found = true;
                 }
@@ -132,7 +132,7 @@ function import_exercise($file)
         } elseif (preg_match('/.xml$/i', $file)) {
 
             // Else ignore file
-            $result = parse_file($baseWorkDir, '', $file);
+            $result = qti_parse_file($baseWorkDir, '', $file);
             $filePath = $baseWorkDir . '/' . $file;
             $file_found = true;
         }
@@ -222,7 +222,7 @@ function formatText($text)
  * @param string $questionFile
  * @return bool
  */
-function parse_file($exercisePath, $file, $questionFile)
+function qti_parse_file($exercisePath, $file, $questionFile)
 {
     global $non_HTML_tag_to_avoid;
     global $record_item_body;

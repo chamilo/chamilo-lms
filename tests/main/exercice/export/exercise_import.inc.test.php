@@ -67,7 +67,7 @@ class TestExerciseImport extends UnitTestCase {
 		$file = '';
 		$exercisePath = '';
 		$questionFile = '';
-		$res = parse_file($exercisePath, $file, $questionFile);
+		$res = qti_parse_file($exercisePath, $file, $questionFile);
 		$this->assertTrue(is_array($res));
 		if(!is_null){
 			$this->assertTrue($res);

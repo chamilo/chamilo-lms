@@ -26,7 +26,7 @@ $interbreadcrumb[]= array (
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 /**
- * This function displays the form for import of the zip file with qti2
+ * This function displays the form to import the zip file with qti2
  */
 function ch_qti2_display_form()
 {

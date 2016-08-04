@@ -124,17 +124,22 @@ function import_exercise($file)
             $questionHandle = opendir($baseWorkDir . '/' . $file);
             while (false !== ($questionFile = readdir($questionHandle))) {
                 if (preg_match('/.xml$/i', $questionFile)) {
-                    $result = qti_parse_file($baseWorkDir, $file, $questionFile);
-                    $filePath = $baseWorkDir . $file;
-                    $file_found = true;
+                    $isQti = isQtiQuestionBank($baseWorkDir . '/' . $file . '/' . $questionFile);
+                    if ($isQti) {
+                        $result = qti_parse_file($baseWorkDir, $file, $questionFile);
+                        $filePath = $baseWorkDir . $file;
+                        $file_found = true;
+                    }
                 }
             }
         } elseif (preg_match('/.xml$/i', $file)) {
-
-            // Else ignore file
-            $result = qti_parse_file($baseWorkDir, '', $file);
-            $filePath = $baseWorkDir . '/' . $file;
-            $file_found = true;
+            $isQti = isQtiQuestionBank($baseWorkDir . '/' . $file);
+            //$isManifest = isQtiManifest($baseWorkDir . '/' . $file);
+            if ($isQti) {
+                $result = qti_parse_file($baseWorkDir, '', $file);
+                $filePath = $baseWorkDir . '/' . $file;
+                $file_found = true;
+            }
         }
     }
 
@@ -898,4 +903,25 @@ function elementDataQti1($parser, $data)
             break;
 
     }
+}
+
+function isQtiQuestionBank($filePath) {
+    $data = file_get_contents($filePath);
+    if (!empty($data)) {
+        $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data);
+        if ($match) {
+            return true;
+        }
+    }
+    return false;
+}
+function isQtiManifest($filePath) {
+    $data = file_get_contents($filePath);
+    if (!empty($data)) {
+        $match = preg_match('/imsccv(\d)p(\d)/', $data);
+        if ($match) {
+            return true;
+        }
+    }
+    return false;
 }

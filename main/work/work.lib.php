@@ -3639,6 +3639,23 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
 }
 
 /**
+ * Check if the current uploaded work filename already exists in the current assement
+ *
+ * @param $filename
+ * @param $workId
+ * @return mixed
+ */
+function checkExistingWorkFileName($filename, $workId)
+{
+    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $filename = Database::escape_string($filename);
+    $sql = "SELECT title FROM $work_table
+                        WHERE parent_id = $workId AND title = '$filename'";
+    $result = Database::query($sql);
+    return Database::fetch_assoc($result);
+}
+
+/**
  * @param array $workInfo
  * @param array $values
  * @param array $courseInfo
@@ -3646,10 +3663,11 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
  * @param int $groupId
  * @param int $userId
  * @param array $file
+ * @param bool  $checkDuplicated
  *
  * @return null|string
  */
-function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, $userId, $file = [])
+function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, $userId, $file = [], $checkDuplicated = false)
 {
     $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -3667,9 +3685,20 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
     $filename = null;
     $url = null;
     $filesize = null;
+    $workData = [];
 
     if ($values['contains_file']) {
-        $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+        if ($checkDuplicated) {
+            if (checkExistingWorkFileName($file['name'], $workInfo['id'])) {
+                $saveWork = false;
+                $workData['error'] = get_lang('YouAlreadySentThisFile');
+            } else {
+                $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+            }
+        } else {
+            $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+        }
+
         if (isset($result['error'])) {
             $message = $result['error'];
             $saveWork = false;
@@ -3680,14 +3709,12 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
         }
 
         $filesize = isset($result['filesize']) ? $result['filesize'] : null;
-        $url = $result['url'];
+        $url = isset($result['url']) ? $result['url'] : null;
     }
 
     if (empty($title)) {
         $title = get_lang('Untitled');
     }
-
-    $workData = [];
 
     if ($saveWork) {
         $active = '1';

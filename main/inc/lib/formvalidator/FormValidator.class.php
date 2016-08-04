@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class FormValidator
  * create/manipulate/validate user input.
@@ -1419,7 +1421,8 @@ EOT;
                 });
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
-                    var error = $('<span class=\"text-danger\"/>').text('".get_lang('Failed')."');
+                    var failedMessage = '" . get_lang('UplUploadFailed') . "';
+                    var error = $('<span class=\"text-danger\"/>').text(failedMessage);
                     $(data.context.children()[index])
                         .append('<br>')
                         .append(error);

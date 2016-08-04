@@ -259,10 +259,7 @@ class PDF
             if (empty($file) && !empty($html_title)) {
                 //this is a chapter, print title & skip the rest
                 if ($print_title) {
-                    $this->pdf->WriteHTML(
-                        '<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break,
-                        2
-                    );
+                    $this->pdf->WriteHTML('<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break);
                 }
                 continue;
             }
@@ -281,10 +278,7 @@ class PDF
 
             //it's not a chapter but the file exists, print its title
             if ($print_title) {
-                $this->pdf->WriteHTML(
-                    '<html><body><h3>' . $html_title . '</h3></body></html>',
-                    2
-                );
+                $this->pdf->WriteHTML('<html><body><h3>' . $html_title . '</h3></body></html>');
             }
 
             $file_info = pathinfo($file);
@@ -385,12 +379,12 @@ class PDF
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
                 }
                 if (!empty($document_html)) {
-                    $this->pdf->WriteHTML($document_html.$page_break, 2);
+                    $this->pdf->WriteHTML($document_html.$page_break);
                 }
             } elseif (in_array($extension, array('jpg','jpeg','png','gif'))) {
                 //Images
                 $image = Display::img($file);
-                $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break, 2);
+                $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
             }
         }
 

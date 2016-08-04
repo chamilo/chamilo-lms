@@ -361,60 +361,75 @@ class Certificate extends Model
     }
 
     /**
-    * Shows the student's certificate (HTML file). If the global setting
-    * allow_public_certificates is set to 'false', no certificate can be printed.
-    * If the global allow_public_certificates is set to 'true' and the course
-    * setting allow_public_certificates is set to 0, no certificate *in this
-    * course* can be printed (for anonymous users). Connected users can always
-    * print them.
+     * Check if the certificate is visible for the current user
+     * If the global setting allow_public_certificates is set to 'false', no certificate can be printed.
+     * If the global allow_public_certificates is set to 'true' and the course setting allow_public_certificates
+     * is set to 0, no certificate *in this course* can be printed (for anonymous users).
+     * Connected users can always print them.
+     * @return bool
+     */
+    public function isVisible()
+    {
+        if (!api_is_anonymous()) {
+            return true;
+        }
+
+        if (api_get_setting('allow_public_certificates') != 'true') {
+            // The "non-public" setting is set, so do not print
+            return false;
+        }
+
+        if (!isset($this->certificate_data, $this->certificate_data['cat_id'])) {
+            return false;
+        }
+
+        $gradebook = new Gradebook();
+        $gradebook_info = $gradebook->get($this->certificate_data['cat_id']);
+
+        if (empty($gradebook_info['course_code'])) {
+            return false;
+        }
+
+        if (api_get_course_setting('allow_public_certificates', $gradebook_info['course_code']) == 0) {
+            // Printing not allowed
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if the certificate is available
+     * @return bool
+     */
+    public function isAvailable()
+    {
+        if (empty($this->certificate_data['path_certificate'])) {
+            return false;
+        }
+
+        $user_certificate = $this->certification_user_path . basename($this->certificate_data['path_certificate']);
+
+        if (!file_exists($user_certificate)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+    * Shows the student's certificate (HTML file)
     */
     public function show()
     {
-        // Special rules for anonymous users
-        $failed = false;
-        if (api_is_anonymous()) {
-            if (api_get_setting('allow_public_certificates') != 'true') {
-                // The "non-public" setting is set, so do not print
-                $failed = true;
-            } else {
-                // Check the course-level setting to make sure the certificate
-                //  can be printed publicly
-                if (isset($this->certificate_data) &&
-                    isset($this->certificate_data['cat_id'])
-                ) {
-                    $gradebook = new Gradebook();
-                    $gradebook_info = $gradebook->get($this->certificate_data['cat_id']);
-                    if (!empty($gradebook_info['course_code'])) {
-                        $allow_public_certificates = api_get_course_setting('allow_public_certificates', $gradebook_info['course_code']);
-                        if ($allow_public_certificates == 0) {
-                            // Printing not allowed
-                            $failed = true;
-                        }
-                    } else {
-                        // No course ID defined (should never get here)
-                        Display :: display_reduced_header();
-                        Display :: display_warning_message(get_lang('NoCertificateAvailable'));
-                        exit;
-                    }
-                }
-            }
-        }
-        if ($failed) {
-            Display :: display_reduced_header();
-            Display :: display_warning_message(get_lang('CertificateExistsButNotPublic'));
-            exit;
-        }
-        //Read file or preview file
-        if (!empty($this->certificate_data['path_certificate'])) {
-            $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
-            if (file_exists($user_certificate)) {
-                header('Content-Type: text/html; charset='. api_get_system_encoding());
-                echo @file_get_contents($user_certificate);
-            }
-        } else {
-            Display :: display_reduced_header();
-            Display :: display_warning_message(get_lang('NoCertificateAvailable'));
-        }
-        exit;
+        header('Content-Type: text/html; charset='. api_get_system_encoding());
+
+        $user_certificate = $this->certification_user_path . basename($this->certificate_data['path_certificate']);
+        $certificateContent = file_get_contents($user_certificate);
+
+        $certificate = new DOMDocument();
+        $certificate->loadHTML($certificateContent);
+
+        echo $certificate->saveHTML();
     }
 }

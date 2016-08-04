@@ -1386,6 +1386,9 @@ EOT;
                     node
                         .prepend('<br>')
                         .prepend(file.preview);
+                    node
+                        .append('<br>')
+                        .append($('<span class=\"text-success\"/>').text('" . get_lang('UplUploadSucceeded') . "'));
                 }
                 if (file.error) {
                     node
@@ -1404,7 +1407,6 @@ EOT;
                     progress + '%'
                 );
             }).on('fileuploaddone', function (e, data) {
-
                 $.each(data.result.files, function (index, file) {
                     if (file.url) {
                         var link = $('<a>')

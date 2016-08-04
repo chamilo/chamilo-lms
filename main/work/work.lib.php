@@ -1423,7 +1423,7 @@ function getWorkListStudent(
         $lastWork = getLastWorkStudentFromParentByUser($userId, $work['id'], $courseInfo);
 
         if (!empty($lastWork)) {
-            $work['last_upload'] = Display::label($lastWork['qualification'], 'warning').' - ';
+            $work['last_upload'] = (!empty($lastWork['qualification'])) ? Display::label($lastWork['qualification'], 'warning').' - ' : '';
             $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
         }
 

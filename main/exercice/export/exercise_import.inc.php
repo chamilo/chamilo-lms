@@ -256,7 +256,8 @@ function qti_parse_file($exercisePath, $file, $questionFile)
     }
 
     //parse XML question file
-    $data = str_replace(array('<p>', '</p>', '<front>', '</front>'), '', $data);
+    //$data = str_replace(array('<p>', '</p>', '<front>', '</front>'), '', $data);
+    $data = stripGivenTags($data, array('p', 'front'));
     $qtiVersion = array();
     $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data, $qtiVersion);
     $qtiMainVersion = 2; //by default, assume QTI version 2
@@ -296,7 +297,14 @@ function qti_parse_file($exercisePath, $file, $questionFile)
     if (!xml_parse($xml_parser, $data, feof($fp))) {
         // if reading of the xml file in not successful :
         // set errorFound, set error msg, break while statement
-        Display:: display_error_message(get_lang('Error reading XML file'));
+        $error = xml_get_error_code();
+        Display::addFlash(
+            Display::return_message(
+                get_lang('Error reading XML file') . sprintf('[%d:%d]', xml_get_current_line_number($xml_parser), xml_get_current_column_number($xml_parser)),
+                'error'
+            )
+        );
+
         return false;
     }
 
@@ -314,6 +322,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
                 'error'
             )
         );
+
         return false;
     }
     return true;

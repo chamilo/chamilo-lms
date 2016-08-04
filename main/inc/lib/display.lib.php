@@ -142,6 +142,7 @@ class Display
     public static function display_reduced_footer()
     {
         echo self::$global_template->show_footer_js_template();
+        echo '</body></html>';
     }
 
     public static function page()

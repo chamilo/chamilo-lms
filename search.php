@@ -425,7 +425,8 @@ $panel = Display::panel(get_lang('MethodeTravailExplanation'), '', '', '',  '', 
 $userForm->addHeader(Display::url(get_lang('MethodeTravail'), '#', ['id'=> 'methode']).''.$panel);
 
 $fieldsToShow = [
-    'methode_de_travaille'
+    'methode_de_travaille',
+    'accompagnement'
 ];
 
 $extra = $extraField->addElements(

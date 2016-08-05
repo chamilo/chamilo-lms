@@ -1,30 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
  * @package chamilo.exercise
- *
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-
-/**
- * function to create a temporary directory (SAME AS IN MODULE ADMIN)
- */
-function tempdir($dir, $prefix = 'tmp', $mode = 0777)
-{
-    if (substr($dir, -1) != '/') {
-        $dir .= '/';
-    }
-
-    do {
-        $path = $dir.$prefix.mt_rand(0, 9999999);
-    } while (!mkdir($path, $mode));
-
-    return $path;
-}
 
 /**
  * Unzip the exercise in the temp folder
@@ -75,9 +57,9 @@ function import_exercise($file)
     global $record_item_body;
     // used to specify the question directory where files could be found in relation in any question
     global $questionTempDir;
+    global $resourcesLinks;
 
-    $archive_path = api_get_path(SYS_ARCHIVE_PATH) . 'qti2';
-    $baseWorkDir = $archive_path;
+    $baseWorkDir = api_get_path(SYS_ARCHIVE_PATH) . 'qti2';
 
     if (!is_dir($baseWorkDir)) {
         mkdir($baseWorkDir, api_get_permissions_for_new_directories(), true);
@@ -109,19 +91,20 @@ function import_exercise($file)
     }
 
     // find the different manifests for each question and parse them.
-
     $exerciseHandle = opendir($baseWorkDir);
     //$question_number = 0;
     $file_found = false;
     $operation = false;
     $result = false;
     $filePath = null;
+    $resourcesLinks = array();
 
     // parse every subdirectory to search xml question files
     while (false !== ($file = readdir($exerciseHandle))) {
         if (is_dir($baseWorkDir . '/' . $file) && $file != "." && $file != "..") {
             // Find each manifest for each question repository found
             $questionHandle = opendir($baseWorkDir . '/' . $file);
+            // Only analyse one level of subdirectory - no recursivity here
             while (false !== ($questionFile = readdir($questionHandle))) {
                 if (preg_match('/.xml$/i', $questionFile)) {
                     $isQti = isQtiQuestionBank($baseWorkDir . '/' . $file . '/' . $questionFile);
@@ -129,17 +112,27 @@ function import_exercise($file)
                         $result = qti_parse_file($baseWorkDir, $file, $questionFile);
                         $filePath = $baseWorkDir . $file;
                         $file_found = true;
+                    } else {
+                        $isManifest = isQtiManifest($baseWorkDir . '/' . $file . '/' . $questionFile);
+                        if ($isManifest) {
+                            $resourcesLinks = qtiProcessManifest($baseWorkDir . '/' . $file . '/' . $questionFile);
+                        }
                     }
                 }
             }
         } elseif (preg_match('/.xml$/i', $file)) {
             $isQti = isQtiQuestionBank($baseWorkDir . '/' . $file);
-            //$isManifest = isQtiManifest($baseWorkDir . '/' . $file);
             if ($isQti) {
                 $result = qti_parse_file($baseWorkDir, '', $file);
                 $filePath = $baseWorkDir . '/' . $file;
                 $file_found = true;
+            } else {
+                $isManifest = isQtiManifest($baseWorkDir . '/' . $file);
+                if ($isManifest) {
+                    $resourcesLinks = qtiProcessManifest($baseWorkDir . '/' . $file);
+                }
             }
+
         }
     }
 
@@ -530,6 +523,7 @@ function elementDataQti2($parser, $data)
     global $non_HTML_tag_to_avoid;
     global $current_inlinechoice_id;
     global $cardinality;
+    global $resourcesLinks;
 
     $current_element = end($element_pile);
     if (sizeof($element_pile) >= 2) {
@@ -577,6 +571,9 @@ function elementDataQti2($parser, $data)
             }
             break;
         case 'ITEMBODY':
+            foreach ($resourcesLinks['manifest'] as $key=>$value) {
+                $data = preg_replace('|' . $value . '|', $resourcesLinks['web'][$key], $data);
+            }
             $current_question_item_body .= $data;
             break;
         case 'INLINECHOICE':
@@ -680,14 +677,9 @@ function startElementQti1($parser, $name, $attributes)
             $exercise_info['question'][$current_question_ident] = array();
             $exercise_info['question'][$current_question_ident]['answer'] = array();
             $exercise_info['question'][$current_question_ident]['correct_answers'] = array();
-            //$exercise_info['question'][$current_question_ident]['title'] = $attributes['TITLE'];
             $exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
             break;
         case 'SECTION':
-            //retrieve exercise name
-            //if (isset($attributes['TITLE']) && !empty($attributes['TITLE'])) {
-            //    $exercise_info['name'] = $attributes['TITLE'];
-            //}
             break;
         case 'RESPONSE_LID':
             // Retrieve question type
@@ -732,7 +724,6 @@ function startElementQti1($parser, $name, $attributes)
             }
             break;
         case 'IMG':
-            //$exercise_info['question'][$current_question_ident]['attached_file_url'] = $attributes['SRC'];
             break;
         case 'MATTEXT':
             if ($parent_element == 'MATERIAL') {
@@ -761,6 +752,7 @@ function endElementQti1($parser, $name, $attributes)
     global $cardinality;
     global $lastLabelFieldName;
     global $lastLabelFieldValue;
+    global $resourcesLinks;
 
     $current_element = end($element_pile);
     if (sizeof($element_pile) >= 2) {
@@ -788,7 +780,7 @@ function endElementQti1($parser, $name, $attributes)
     switch ($name) {
         case 'MATTEXT':
             if ($parent_element == 'MATERIAL') {
-                if ($grand_parent_element == 'PRESENTATION') {
+                if ($grand_parent_element == 'PRESENTATION' OR $grand_parent_element == 'ITEM') {
                     $exercise_info['question'][$current_question_ident]['title'] = $current_question_item_body;
                     $current_question_item_body = '';
                 } elseif ($grand_parent_element == 'RESPONSE_LABEL') {
@@ -841,6 +833,7 @@ function elementDataQti1($parser, $data)
     global $cardinality;
     global $lastLabelFieldName;
     global $lastLabelFieldValue;
+    global $resourcesLinks;
 
     $current_element = end($element_pile);
     if (sizeof($element_pile) >= 2) {
@@ -892,6 +885,9 @@ function elementDataQti1($parser, $data)
             }
             break;
         case 'MATTEXT':
+            foreach ($resourcesLinks['manifest'] as $key=>$value) {
+                $data = preg_replace('|' . $value . '|', $resourcesLinks['web'][$key], $data);
+            }
             if (!empty($current_question_item_body)) {
                 $current_question_item_body .= $data;
             } else {
@@ -914,7 +910,13 @@ function elementDataQti1($parser, $data)
     }
 }
 
-function isQtiQuestionBank($filePath) {
+/**
+ * Check if a given file is an IMS/QTI question bank file
+ * @param string $filePath The absolute filepath
+ * @return bool Whether it is an IMS/QTI question bank or not
+ */
+function isQtiQuestionBank($filePath)
+{
     $data = file_get_contents($filePath);
     if (!empty($data)) {
         $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data);
@@ -922,9 +924,17 @@ function isQtiQuestionBank($filePath) {
             return true;
         }
     }
+
     return false;
 }
-function isQtiManifest($filePath) {
+
+/**
+ * Check if a given file is an IMS/QTI manifest file (listing of extra files)
+ * @param string $filePath The absolute filepath
+ * @return bool Whether it is an IMS/QTI manifest file or not
+ */
+function isQtiManifest($filePath)
+{
     $data = file_get_contents($filePath);
     if (!empty($data)) {
         $match = preg_match('/imsccv(\d)p(\d)/', $data);
@@ -932,5 +942,57 @@ function isQtiManifest($filePath) {
             return true;
         }
     }
+
     return false;
+}
+
+/**
+ * Processes an IMS/QTI manifest file: store links to new files to be able to transform them into questions text
+ * @param string $filePath The absolute filepath
+ * @param array $links List of filepaths changes
+ * @return bool
+ */
+function qtiProcessManifest($filePath)
+{
+    $xml = simplexml_load_file($filePath);
+    $course = api_get_course_info();
+    $sessionId = api_get_session_id();
+    $courseDir = $course['path'];
+    $sysPath = api_get_path(SYS_COURSE_PATH);
+    $exercisesSysPath = $sysPath . $courseDir . '/document/';
+    $webPath = api_get_path(WEB_CODE_PATH);
+    $exercisesWebPath = $webPath . 'document/document.php?' . api_get_cidreq() . '&action=download&id=';
+    $links = array(
+        'manifest' => array(),
+        'system' => array(),
+        'web' => array(),
+    );
+    $tableDocuments = Database::get_course_table(TABLE_DOCUMENT);
+    $countResources = count($xml->resources->resource->file);
+    for ($i=0; $i < $countResources; $i++) {
+        $file = $xml->resources->resource->file[$i];
+        $href = '';
+        foreach ($file->attributes() as $key => $value) {
+            if ($key == 'href') {
+                if (substr($value, -3, 3) != 'xml') {
+                    $href = $value;
+                }
+            }
+        }
+        if (!empty($href)) {
+            $links['manifest'][] = (string) $href;
+            $links['system'][] = $exercisesSysPath . strtolower($href);
+            $specialHref = Database::escape_string(preg_replace('/_/', '-', strtolower($href)));
+            $specialHref = preg_replace('/(-){2,8}/', '-', $specialHref);
+
+            $sql = "SELECT iid FROM " . $tableDocuments . " WHERE c_id = " . $course['real_id'] . " AND session_id = $sessionId AND path = '/" . $specialHref . "'";
+            $result = Database::query($sql);
+            $documentId = 0;
+            while ($row = Database::fetch_assoc($result)) {
+                $documentId = $row['iid'];
+            }
+            $links['web'][] = $exercisesWebPath . $documentId;
+        }
+    }
+    return $links;
 }

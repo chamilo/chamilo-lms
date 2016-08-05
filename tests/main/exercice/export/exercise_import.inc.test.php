@@ -86,15 +86,5 @@ class TestExerciseImport extends UnitTestCase {
 		}
 		//var_dump($res);
 	}
-	
-	function testtempdir() {
-		$dir = '/tmp';
-		$res = tempdir($dir, $prefix='tmp', $mode=0777);
-		$this->assertFalse(is_array($res));
-		if(!is_null){
-			$this->assertTrue(is_string($res));
-		}
-		//var_dump($res);
-	}
 }
 ?>

@@ -39,6 +39,7 @@ class Session implements \ArrayAccess
      * Returns true if session has variable set up, false otherwise.
      *
      * @param string $variable
+     * @return mixed value
      */
     static function has($variable)
     {

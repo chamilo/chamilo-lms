@@ -99,7 +99,9 @@ function import_exercise($file)
     $filePath = null;
     $resourcesLinks = array();
 
-    // parse every subdirectory to search xml question files
+    // parse every subdirectory to search xml question files and other assets to be imported
+    // The assets-related code is a bit fragile as it has to deal with files renamed by Chamilo and it only works if
+    // the imsmanifest.xml file is read.
     while (false !== ($file = readdir($exerciseHandle))) {
         if (is_dir($baseWorkDir . '/' . $file) && $file != "." && $file != "..") {
             // Find each manifest for each question repository found
@@ -571,8 +573,12 @@ function elementDataQti2($parser, $data)
             }
             break;
         case 'ITEMBODY':
-            foreach ($resourcesLinks['manifest'] as $key=>$value) {
-                $data = preg_replace('|' . $value . '|', $resourcesLinks['web'][$key], $data);
+            // Replace relative links by links to the documents in the course
+            // $resourcesLinks is only defined by qtiProcessManifest()
+            if (isset($resourcesLinks) && isset($resourcesLinks['manifest']) && isset($resourcesLinks['web'])) {
+                foreach ($resourcesLinks['manifest'] as $key => $value) {
+                    $data = preg_replace('|' . $value . '|', $resourcesLinks['web'][$key], $data);
+                }
             }
             $current_question_item_body .= $data;
             break;
@@ -780,6 +786,8 @@ function endElementQti1($parser, $name, $attributes)
     switch ($name) {
         case 'MATTEXT':
             if ($parent_element == 'MATERIAL') {
+                // For some reason an item in a hierarchy <item><presentation><material><mattext> doesn't seem to
+                // catch the grandfather 'presentation', so we check for 'item' as a patch (great-grand-father)
                 if ($grand_parent_element == 'PRESENTATION' OR $grand_parent_element == 'ITEM') {
                     $exercise_info['question'][$current_question_ident]['title'] = $current_question_item_body;
                     $current_question_item_body = '';
@@ -885,8 +893,12 @@ function elementDataQti1($parser, $data)
             }
             break;
         case 'MATTEXT':
-            foreach ($resourcesLinks['manifest'] as $key=>$value) {
-                $data = preg_replace('|' . $value . '|', $resourcesLinks['web'][$key], $data);
+            // Replace relative links by links to the documents in the course
+            // $resourcesLinks is only defined by qtiProcessManifest()
+            if (isset($resourcesLinks) && isset($resourcesLinks['manifest']) && isset($resourcesLinks['web'])) {
+                foreach ($resourcesLinks['manifest'] as $key=>$value) {
+                    $data = preg_replace('|' . $value . '|', $resourcesLinks['web'][$key], $data);
+                }
             }
             if (!empty($current_question_item_body)) {
                 $current_question_item_body .= $data;
@@ -947,7 +959,7 @@ function isQtiManifest($filePath)
 }
 
 /**
- * Processes an IMS/QTI manifest file: store links to new files to be able to transform them into questions text
+ * Processes an IMS/QTI manifest file: store links to new files to be able to transform them into the questions text
  * @param string $filePath The absolute filepath
  * @param array $links List of filepaths changes
  * @return bool

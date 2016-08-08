@@ -7797,4 +7797,5 @@ $UseThisBadge = "Utiliser ce badge";
 $Palettes = "Palettes";
 $DesignWithBadgeStudioComment = "Utilisez le designer de badges intégré pour créer votre propre badge.";
 $YouAlreadySentThisFile = "Vous avez déjà envoyé ce fichier ou un autre fichier du même nom. Veuillez vous assurer de n'envoyer qu'une seule fois chaque fichier.";
+$DocumentsDefaultVisibility = "Visibilité par défaut des nouveaux documents";
 ?>

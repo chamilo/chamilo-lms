@@ -7869,4 +7869,5 @@ $UseThisBadge = "Usar esta insignia";
 $Palettes = "Paletas";
 $DesignWithBadgeStudioComment = "Use the Badge Studio to create your own badge from within your platform";
 $YouAlreadySentThisFile = "Ya envió este archivo u otro archivo con el mismo nombre. Por favor asegúrese de enviar cada archivo una sola vez.";
+$DocumentsDefaultVisibility = "Visibilidad por defecto de los documentos";
 ?>

@@ -7850,4 +7850,5 @@ $UseThisBadge = "Use this badge";
 $Palettes = "Palettes";
 $DesignWithBadgeStudioComment = "Usa Badge Studio para crear tu propia insignia dentro de tu plataforma";
 $YouAlreadySentThisFile = "You have already sent this file or another file with the same name. Please make sure you only upload each file once.";
+$DocumentsDefaultVisibility = "Default visibility of new documents";
 ?>

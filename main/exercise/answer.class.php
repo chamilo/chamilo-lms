@@ -579,20 +579,22 @@ class Answer
         $hotspot_coordinates,
         $hotspot_type
     ) {
-        $answerTable = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+        $em = Database::getManager();
 
-        $params = [
-            'answer' => $answer,
-            'comment' => $comment,
-            'correct' => intval($correct),
-            'ponderation' => $weighting,
-            'position' => $position,
-            'destination' => $destination,
-            'hotspot_coordinates' => $hotspot_coordinates,
-            'hotspot_type' => $hotspot_type
-        ];
+        /** @var \Chamilo\CourseBundle\Entity\CQuizAnswer $quizAnswer */
+        $quizAnswer = $em->find('ChamiloCourseBundle:CQuizAnswer', $iid);
+        $quizAnswer
+            ->setAnswer($answer)
+            ->setComment($comment)
+            ->setCorrect($correct)
+            ->setPonderation($weighting)
+            ->setPosition($position)
+            ->setDestination($destination)
+            ->setHotspotCoordinates($hotspot_coordinates)
+            ->setHotspotType($hotspot_type);
 
-        Database::update($answerTable, $params, ['iid = ?' => intval($iid)]);
+        $em->merge($quizAnswer);
+        $em->flush();
 	}
 
 	/**
@@ -603,6 +605,7 @@ class Answer
     public function save()
     {
 		$answerTable = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $em = Database::getManager();
 		$questionId = intval($this->questionId);
 
 		$c_id = $this->course['real_id'];
@@ -622,23 +625,32 @@ class Answer
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
 
             if (!isset($this->position[$i])) {
-                $params = [
-                    'id_auto' => $autoId,
-                    'c_id' => $c_id,
-                    'question_id' => $questionId,
-                    'answer' => $answer,
-                    'correct' => intval($correct),
-                    'comment' => $comment,
-                    'ponderation' => $weighting,
-                    'position' => $position,
-                    'hotspot_coordinates' => $hotspot_coordinates,
-                    'hotspot_type' => $hotspot_type,
-                    'destination' => $destination
-                ];
-                $iid = Database::insert($answerTable, $params);
+                $quizAnswer = new \Chamilo\CourseBundle\Entity\CQuizAnswer();
+                $quizAnswer
+                    ->setIdAuto($autoId)
+                    ->setCId($c_id)
+                    ->setQuestionId($questionId)
+                    ->setAnswer($answer)
+                    ->setCorrect($correct)
+                    ->setComment($comment)
+                    ->setPonderation($weighting)
+                    ->setPosition($position)
+                    ->setHotspotCoordinates($hotspot_coordinates)
+                    ->setHotspotType($hotspot_type)
+                    ->setDestination($destination);
+
+                $em->persist($quizAnswer);
+                $em->flush();
+
+                $iid = $quizAnswer->getIid();
+
                 if ($iid) {
-                    $sql = "UPDATE $answerTable SET id = iid, id_auto = iid WHERE iid = $iid";
-                    Database::query($sql);
+                    $quizAnswer
+                        ->setId($iid)
+                        ->setIdAuto($iid);
+
+                    $em->merge($quizAnswer);
+                    $em->flush();
 
                     $questionType = $this->getQuestionType();
 
@@ -659,11 +671,10 @@ class Answer
 
                         $correctAnswerAutoId = $answer->selectAutoId($correct);
 
-                        Database::update(
-                            $answerTable,
-                            ['correct' => $correctAnswerAutoId ? $correctAnswerAutoId : 0],
-                            ['iid = ?' => $iid]
-                        );
+                        $quizAnswer->setCorrect($correctAnswerAutoId ? $correctAnswerAutoId : 0);
+
+                        $em->merge($quizAnswer);
+                        $em->flush();
                     }
                 }
             } else {
@@ -751,7 +762,6 @@ class Answer
             $course_info = $this->course;
         }
 
-		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         $fixed_list = array();
 
         if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
@@ -798,7 +808,6 @@ class Answer
                     );
                 }
 
-				$answer = $this->answer[$i];
 				$correct = $this->correct[$i];
 
                 if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
@@ -807,31 +816,30 @@ class Answer
                     $correct = $fixed_list[intval($correct)];
                 }
 
-				$comment = $this->comment[$i];
-				$weighting = $this->weighting[$i];
-				$position = $this->position[$i];
-				$hotspot_coordinates = $this->hotspot_coordinates[$i];
-				$hotspot_type = $this->hotspot_type[$i];
-				$destination = $this->destination[$i];
+                $quizAnswer = new \Chamilo\CourseBundle\Entity\CQuizAnswer();
+                $quizAnswer
+                    ->setCId($c_id)
+                    ->setQuestionId($newQuestionId)
+                    ->setAnswer($this->answer[$i])
+                    ->setCorrect($correct)
+                    ->setComment($this->comment[$i])
+                    ->setPonderation($this->weighting[$i])
+                    ->setPosition($this->position[$i])
+                    ->setHotspotCoordinates($this->hotspot_coordinates[$i])
+                    ->setHotspotType($this->hotspot_type[$i])
+                    ->setDestination($this->destination[$i]);
 
-                $params = [
-                    'c_id' => $c_id,
-                    'question_id' => $newQuestionId,
-                    'answer' => $answer,
-                    'correct' => $correct,
-                    'comment' => $comment,
-                    'ponderation' => $weighting,
-                    'position' => $position,
-                    'hotspot_coordinates' => $hotspot_coordinates,
-                    'hotspot_type' => $hotspot_type,
-                    'destination' => $destination
-                ];
-                $id = Database::insert($TBL_REPONSES, $params);
+                $em = Database::getManager();
 
-                if ($id) {
-                    $sql = "UPDATE $TBL_REPONSES SET id = iid, id_auto = iid WHERE iid = $id";
-                    Database::query($sql);
-                }
+                $em->persist($quizAnswer);
+                $em->flush();
+
+                $quizAnswer
+                    ->setId($quizAnswer->getIid())
+                    ->setIdAuto($quizAnswer->getIid());
+
+                $em->merge($quizAnswer);
+                $em->flush();
 			}
         }
 	}

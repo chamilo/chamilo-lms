@@ -429,6 +429,7 @@ class UniqueAnswer extends Question
         $score = 0.0,
         $correct = 0
     ) {
+        $em = Database::getManager();
         $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $course_id = api_get_course_int_id();
@@ -448,23 +449,29 @@ class UniqueAnswer extends Question
         $position = $row_max->max_position + 1;
 
         // Insert a new answer
-       $params = [
-            'c_id' => $course_id,
-            'id' => $id,
-            'question_id' => $question_id,
-            'answer' => $title,
-            'correct' => $correct,
-            'comment' => $comment,
-            'ponderation' => $score,
-            'position' => $position,
-            'destination' => '0@@0@@0@@0',
-        ];
+        $quizAnswer = new \Chamilo\CourseBundle\Entity\CQuizAnswer();
+        $quizAnswer
+            ->setCId($course_id)
+            ->setId($id)
+            ->setQuestionId($question_id)
+            ->setAnswer($title)
+            ->setCorrect($correct)
+            ->setComment($comment)
+            ->setPonderation($score)
+            ->setPosition($position)
+            ->setDestination('0@@0@@0@@0');
 
-        $id = Database::insert($tbl_quiz_answer, $params);
+        $em->persist($quizAnswer);
+        $em->flush();
+
+        $id = $quizAnswer->getIid();
 
         if ($id) {
-            $sql = "UPDATE $tbl_quiz_answer SET id = iid WHERE iid = $id";
-            Database::query($sql);
+            $quizAnswer
+                ->setId($id);
+
+            $em->merge($quizAnswer);
+            $em->flush();
         }
 
         if ($correct) {

@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use DocumentManager;
 use Database;
 use CourseManager;
@@ -1791,6 +1792,7 @@ class CourseRestorer
 	 */
     public function restore_quiz_question($id)
     {
+        $em = Database::getManager();
 		$resources = $this->course->resources;
         $question = isset($resources[RESOURCE_QUIZQUESTION][$id]) ? $resources[RESOURCE_QUIZQUESTION][$id] : null;
 
@@ -1866,24 +1868,31 @@ class CourseRestorer
 
                 foreach ($temp as $index => $answer) {
                     //id = '".$index."',
-					$params = [
-                        'c_id' => $this->destination_course_id,
-                        'question_id' => $new_id,
-                        'answer' => self::DBUTF8($answer['answer']),
-                        'correct' => $answer['correct'],
-                        'comment' => self::DBUTF8($answer['comment']),
-                        'ponderation' => $answer['ponderation'],
-                        'position' => $answer['position'],
-                        'hotspot_coordinates' => $answer['hotspot_coordinates'],
-                        'hotspot_type' => $answer['hotspot_type'],
-                        'id_auto' => 0,
-                        'destination' => ''
-                    ];
-                    $answerId = Database::insert($table_ans, $params);
+                    $quizAnswer = new CQuizAnswer();
+                    $quizAnswer
+                        ->setCId($this->destination_course_id)
+                        ->setQuestionId($new_id)
+                        ->setAnswer(self::DBUTF8($answer['answer']))
+                        ->setCorrect($answer['correct'])
+                        ->setComment(self::DBUTF8($answer['comment']))
+                        ->setPonderation($answer['ponderation'])
+                        ->setPosition($answer['position'])
+                        ->setHotspotCoordinates($answer['hotspot_coordinates'])
+                        ->setHotspotType($answer['hotspot_type'])
+                        ->setIdAuto(0);
+
+                    $em->persist($quizAnswer);
+                    $em->flush();
+
+                    $answerId = $quizAnswer->getIid();
 
                     if ($answerId) {
-                        $sql = "UPDATE $table_ans SET id = iid, id_auto = iid WHERE iid = $answerId";
-                        Database::query($sql);
+                        $quizAnswer
+                            ->setId($answerId)
+                            ->setIdAuto($answerId);
+
+                        $em->merge($quizAnswer);
+                        $em->flush();
                     }
 				}
 			} else {

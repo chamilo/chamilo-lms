@@ -121,8 +121,14 @@ class CQuizAnswer
 
     public function __construct()
     {
+        $this->id = null;
+        $this->correct = null;
+        $this->comment = null;
         $this->ponderation = 0;
+        $this->hotspotCoordinates = null;
+        $this->hotspotType = null;
         $this->destination = null;
+        $this->answerCode = null;
     }
 
     /**
@@ -248,7 +254,7 @@ class CQuizAnswer
      */
     public function setPonderation($ponderation)
     {
-        $this->ponderation = $ponderation;
+        $this->ponderation = empty($ponderation) ? 0 : $ponderation;
 
         return $this;
     }
@@ -340,7 +346,7 @@ class CQuizAnswer
      */
     public function setDestination($destination)
     {
-        $this->destination = $destination;
+        $this->destination = empty($destination) ? null : $destination;
 
         return $this;
     }
@@ -422,5 +428,14 @@ class CQuizAnswer
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 }

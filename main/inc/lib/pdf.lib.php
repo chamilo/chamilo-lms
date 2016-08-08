@@ -95,7 +95,7 @@ class PDF
 
         $organization = api_get_setting('Institution');
         $img = api_get_path(SYS_CSS_PATH).'themes/' . $theme . '/images/header-logo.png';
-        $customImg = api_get_path(WEB_CSS_PATH).'themes/' . $theme . '/images/header-logo-custom.png';
+        $customImg = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $theme . '/images/header-logo-custom.png';
 
         // Search for classic logo
         if (file_exists($customImg)) {

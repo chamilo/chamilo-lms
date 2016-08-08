@@ -34,7 +34,7 @@ class ImsAssessmentItem
      *
      * @param Ims2Question $question Ims2Question object we want to export.
      */
-     function ImsAssessmentItem($question)
+     function __construct($question)
      {
         $this->question = $question;
         $this->answer = $this->question->setAnswer();
@@ -155,9 +155,10 @@ class ImsSection
     /**
      * Constructor.
      * @param Exercise $exe The Exercise instance to export
+     * @return ImsSection
      * @author Amand Tihon <amand@alrj.org>
      */
-    function ImsSection($exe)
+    function __construct($exe)
     {
         $this->exercise = $exe;
     }
@@ -302,9 +303,10 @@ class ImsItem
      * Constructor.
      *
      * @param $question The Question object we want to export.
+     * @return ImsItem
      * @author Anamd Tihon
      */
-     function ImsItem($question)
+     function __construct($question)
      {
         $this->question = $question;
         $this->answer = $question->answer;
@@ -435,6 +437,7 @@ function export_exercise_to_qti($exerciseId, $standalone = true)
  *
  * @param int $questionId
  * @param bool $standalone (ie including XML tag, DTD declaration, etc)
+ * @return string
  */
 function export_question_qti($questionId, $standalone = true)
 {

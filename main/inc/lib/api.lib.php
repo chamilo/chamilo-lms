@@ -8029,3 +8029,19 @@ function api_protect_limit_for_session_admin()
 function api_is_student_view_active() {
     return (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview");
 }
+
+/**
+ * Like strip_tags(), but leaves an additional space and removes only the given tags
+ * @param string $string
+ * @param array $tags Tags to be removed
+ * @return  string The original string without the given tags
+ */
+function stripGivenTags($string, $tags) {
+    foreach ($tags as $tag) {
+        $string2 = preg_replace('#</' . $tag . '[^>]*>#i', ' ', $string);
+        if ($string2 != $string) {
+            $string = preg_replace('/<' . $tag . '[^>]*>/i', ' ', $string2);
+        }
+    }
+    return $string;
+}

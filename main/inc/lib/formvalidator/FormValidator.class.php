@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class FormValidator
  * create/manipulate/validate user input.
@@ -1442,6 +1444,9 @@ EOT;
                     node
                         .prepend('<br>')
                         .prepend(file.preview);
+                    node
+                        .append('<br>')
+                        .append($('<span class=\"text-success\"/>').text('" . get_lang('UplUploadSucceeded') . "'));
                 }
                 if (file.error) {
                     node
@@ -1460,7 +1465,6 @@ EOT;
                     progress + '%'
                 );
             }).on('fileuploaddone', function (e, data) {
-
                 $.each(data.result.files, function (index, file) {
                     if (file.url) {
                         var link = $('<a>')
@@ -1477,7 +1481,8 @@ EOT;
                 });
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
-                    var error = $('<span class=\"text-danger\"/>').text('".get_lang('UploadError')."');
+                    var failedMessage = '" . get_lang('UplUploadFailed') . "';
+                    var error = $('<span class=\"text-danger\"/>').text(failedMessage);
                     $(data.context.children()[index])
                         .append('<br>')
                         .append(error);

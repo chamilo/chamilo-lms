@@ -80,7 +80,7 @@ class CQuizAnswer
     /**
      * @var float
      *
-     * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false)
+     * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
     private $ponderation;
 
@@ -108,7 +108,7 @@ class CQuizAnswer
     /**
      * @var string
      *
-     * @ORM\Column(name="destination", type="text", nullable=false)
+     * @ORM\Column(name="destination", type="text", nullable=true)
      */
     private $destination;
 
@@ -119,6 +119,11 @@ class CQuizAnswer
      */
     private $answerCode;
 
+    public function __construct()
+    {
+        $this->ponderation = 0;
+        $this->destination = null;
+    }
 
     /**
      * Set id

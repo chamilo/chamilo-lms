@@ -87,16 +87,22 @@ class PDF
         } else {
             $tpl = $this->template;
         }
-        // Assignments
+
+        $theme = api_get_visual_theme();
+
         // Assignments
         $tpl->assign('pdf_content', $content);
 
         $organization = api_get_setting('Institution');
-        $img = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
+        $img = api_get_path(SYS_CSS_PATH).'themes/' . $theme . '/images/header-logo.png';
+        $customImg = api_get_path(WEB_CSS_PATH).'themes/' . $theme . '/images/header-logo-custom.png';
 
         // Search for classic logo
-        if (file_exists($img)) {
-            $img = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
+        if (file_exists($customImg)) {
+            $img = api_get_path(WEB_CSS_PATH).'themes/' . $theme . '/images/header-logo-custom.png';
+            $organization = "<img src='$img'>";
+        } else if (file_exists($img)) {
+            $img = api_get_path(WEB_CSS_PATH).'themes/' . $theme . '/images/header-logo.png';
             $organization = "<img src='$img'>";
         } else {
             // Just use the platform title.

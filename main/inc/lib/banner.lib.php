@@ -174,9 +174,10 @@ function getCustomTabs()
 function return_logo($theme)
 {
     $_course = api_get_course_info();
+    $accessUrlId = api_get_current_access_url_id();
     $html = '';
     $logoBase = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/header-logo.';
-    $customLogoBase = api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme.'/images/header-logo-custom.';
+    $customLogoBase = api_get_path(SYS_PUBLIC_PATH) . "css/themes/$theme/images/header-logo-custom$accessUrlId.";
     $customLogo = '';
     $siteName = api_get_setting('siteName');
     $attributes = array(
@@ -194,7 +195,7 @@ function return_logo($theme)
         $logo = $logoBase . 'png';
         $customLogo = $customLogoBase . 'png';
         $imageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.png';
-        $customImageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo-custom.png';
+        $customImageUrl = api_get_path(WEB_CSS_PATH) . "themes/$theme/images/header-logo-custom$accessUrlId.png";
     }
     if (file_exists($customLogo)) {
         $siteName = api_get_setting('Institution').' - '.$siteName;

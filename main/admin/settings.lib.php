@@ -372,12 +372,14 @@ function handleStylesheets()
         'settings.php?category=Stylesheets#tabs-2'
     );
 
-    $logoForm->addHtml(Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info'));
+    $logoForm->addHtml(
+        Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info')
+    );
 
     $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
     $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
     $logoFileName = 'header-logo.png';
-    $newLogoFileName = 'header-logo-custom.png';
+    $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
 
     if (is_file($dir.$newLogoFileName)) {
         $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $newLogoFileName .'?'. time() . '">');

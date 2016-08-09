@@ -4123,11 +4123,16 @@ ul.holder li.bit-box{
   height: auto !important;
 }
 /***    Draggable answer    ***/
+.exercise-draggable-answer.ui-helper-reset.ui-helper-clearfix.list-inline.ui-droppable{
+    
+}
 .question_options ul.exercise-draggable-answer{
   float: left;
-  margin-bottom: 20px;
+  margin: 0;
   min-height: 2em;
   min-width: 100%;
+  padding-top: 5px;
+  padding-left: 15px;
 }
 ul.exercise-draggable-answer li {
   cursor: move;

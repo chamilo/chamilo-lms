@@ -220,7 +220,7 @@ class ExerciseLib
                             $header .= Display::tag('th', $item);
                         }
                     } else {
-                        $header .= Display::tag('th', $item);
+                        $header .= Display::tag('th', $item, array('class'=>'text-center'));
                     }
 
                 }
@@ -548,7 +548,8 @@ class ExerciseLib
                                     'choice[' . $questionId . '][' . $numAnswer . ']',
                                     $key,
                                     $attributes
-                                )
+                                ),
+                                array('class'=>'text-center')
                             );
                         }
 

@@ -1696,16 +1696,11 @@ div.admin_section h4 {
 }
 
 /* Fixes questions list */
-.question_options {
-    min-height:150px;
-}
-
 .question_options label {
     margin-bottom: 14px;
     display:block;
     font-weight: normal;
 }
-
 .question_options .radio{
     min-height: 18px;
     margin-left: 65px;
@@ -1713,12 +1708,10 @@ div.admin_section h4 {
 .question_options .checkbox{
   margin-left: 65px;
 }
-
 .question_options .radio input[type="radio"], .question_options .checkbox input[type="checkbox"] {
     float: left;
     margin-left: -25px;
 }
-
 .question_options input[type="text"] {
     padding: 6px 12px;
     margin:2px 2px 2px 0px;
@@ -2267,6 +2260,9 @@ form .formw .freeze {
 }
 .table{
     font-size: 12px;
+}
+.table .header-options{
+    background-color: #F5F5F5;
 }
 .table-well{
   background:#ffffff;
@@ -4127,11 +4123,16 @@ ul.holder li.bit-box{
   height: auto !important;
 }
 /***    Draggable answer    ***/
+.exercise-draggable-answer.ui-helper-reset.ui-helper-clearfix.list-inline.ui-droppable{
+    
+}
 .question_options ul.exercise-draggable-answer{
   float: left;
-  margin-bottom: 20px;
+  margin: 0;
   min-height: 2em;
   min-width: 100%;
+  padding-top: 5px;
+  padding-left: 15px;
 }
 ul.exercise-draggable-answer li {
   cursor: move;

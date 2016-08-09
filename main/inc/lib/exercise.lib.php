@@ -90,7 +90,7 @@ class ExerciseLib
                 return '';
             }
 
-            echo '<div class="question_options row">';
+            echo '<div class="question_options">';
 
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId);
@@ -215,7 +215,7 @@ class ExerciseLib
                 foreach ($objQuestionTmp->options as $item) {
                     if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                         if (in_array($item, $objQuestionTmp->options)) {
-                            $header .= Display::tag('th', get_lang($item));
+                            $header .= Display::tag('th', get_lang($item), array('class'=>'text-center'));
                         } else {
                             $header .= Display::tag('th', $item);
                         }
@@ -227,11 +227,11 @@ class ExerciseLib
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
-                $s .= '<table class="table table-hover table-striped">';
+                $s .= '<table class="table table-hover">';
                 $s .= Display::tag(
                     'tr',
                     $header,
-                    array('style' => 'text-align:left;')
+                    array('class' => 'header-options')
                 );
             }
 
@@ -253,11 +253,11 @@ class ExerciseLib
                     if ($exercise_feedback == EXERCISE_FEEDBACK_TYPE_END) {
                         $header .= Display::tag('th', get_lang('Feedback'));
                     }
-                    $s .= '<table class="table table-hover table-striped">';
+                    $s .= '<table class="table table-hover">';
                     $s .= Display::tag(
                         'tr',
                         $header,
-                        array('style' => 'text-align:left;')
+                        array('style' => 'text-align:center;')
                     );
                 }
             }
@@ -422,7 +422,7 @@ class ExerciseLib
                             }
 
                             $s .= '<tr>';
-                            $s .= Display::tag('td', $answer);
+                            $s .= Display::tag('td', $answer, array('class'=>'options'));
 
                             if (!empty($quiz_question_options)) {
                                 foreach ($quiz_question_options as $id => $item) {
@@ -450,7 +450,7 @@ class ExerciseLib
                                             $id,
                                             $attributes
                                         ),
-                                        array('style' => '')
+                                        array('class' => 'text-center')
                                     );
                                 }
                             }

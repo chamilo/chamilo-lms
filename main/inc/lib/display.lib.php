@@ -2497,4 +2497,68 @@ HTML;
         }
         return $html;
     }
+    public static function iconAnswer($typeAnswer){
+        $valor = null;
+        switch ($typeAnswer){
+            case 1:
+                $valor = self::return_icon('mcua.png', get_lang('UniqueAnswer'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 2:
+                $valor = self::return_icon('mcma.png', get_lang('MultipleAnswer'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 3:
+                $valor = self::return_icon('fill_in_blanks.png', get_lang('FillBlanks'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 4:
+                $valor = self::return_icon('matching.png', get_lang('Matching'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 5:
+                $valor = self::return_icon('open_answer.png', get_lang('FreeAnswer'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 6:
+                $valor = self::return_icon('hotspot.png', get_lang('HotSpot'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 7:
+               $valor = '';
+                break;
+            case 8:
+                $valor = self::return_icon('hotspot-delineation.png', get_lang('HotspotDelineation'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 9:
+                $valor = self::return_icon('mcmac.png', get_lang('MultipleSelectCombination'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 10:
+                $valor = self::return_icon('mcuao.png', get_lang('UniqueAnswerNoOption'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 11:
+                $valor = self::return_icon('mcmao.png', get_lang('MultipleAnswerTrueFalse'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 12:
+                $valor = self::return_icon('mcmaco.png', get_lang('MultipleAnswerCombinationTrueFalse'), null, ICON_SIZE_MEDIUM);
+                break;
+            case 13:
+                $valor = self::return_icon('audio_question.png', get_lang('OralExpression'), null, ICON_SIZE_MEDIUM);
+                break;
+             case 14:
+                $valor = self::return_icon('mcmagl.png', get_lang('GlobalMultipleAnswer'), null, ICON_SIZE_MEDIUM);
+                break;
+             case 15:
+                $valor = '';
+                break;
+             case 16:
+                $valor = self::return_icon('calculated_answer.png', get_lang('CalculatedAnswer'), null, ICON_SIZE_MEDIUM);
+                break;
+             case 17:
+                $valor = self::return_icon('uaimg.png', get_lang('UniqueAnswerImage'), null, ICON_SIZE_MEDIUM);
+                break;
+             case 18:
+                $valor = self::return_icon('ordering.png', get_lang('Draggable'), null, ICON_SIZE_MEDIUM);
+                break;
+             case 19:
+                $valor = self::return_icon('matchingdrag.png', get_lang('MatchingDraggable'), null, ICON_SIZE_MEDIUM);
+                break;
+        }
+        return $valor;
+
+    }
 }

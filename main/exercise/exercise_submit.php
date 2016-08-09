@@ -1188,7 +1188,10 @@ if (!empty($error)) {
             true,
             false,
             $user_choice,
-            false
+            false,
+            null,
+            false,
+            true
         );
 
         // Button save and continue

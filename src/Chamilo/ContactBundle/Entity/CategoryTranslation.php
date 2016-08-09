@@ -19,7 +19,15 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 class CategoryTranslation
 {
     use ORMBehaviors\Translatable\Translation;
-
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue()
+     */
+    protected $id;
+    
     /**
      *
      * @ORM\Column(type="string", length=255, nullable=false)

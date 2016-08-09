@@ -38,7 +38,8 @@ class ExerciseLib
         $user_choice = array(),
         $show_comment = false,
         $exercise_feedback = null,
-        $show_answers = false
+        $show_answers = false,
+        $show_icon = false
     )
     {
         $course_id = api_get_course_int_id();
@@ -65,9 +66,13 @@ class ExerciseLib
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
+                    $icon = '';
+                    if($show_icon){
+                        $icon = Display::iconAnswer($answerType);
+                    }
                     TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     echo Display::div(
-                        $current_item . '. ' . $objQuestionTmp->selectTitle(),
+                        $icon . $current_item . '. ' . $objQuestionTmp->selectTitle(),
                         array('class' => 'question_title')
                     );
                 }

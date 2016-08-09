@@ -7795,4 +7795,5 @@ $ObjectifsApprentissage = "Mes objectifs d’apprentissage";
 $MethodeTravailExplanation = "";
 $MethodeTravail = "Ma méthode de travail";
 
+$SearchTCC = "Déjà inscrit dans TCC?";
 ?>

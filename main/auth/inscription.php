@@ -89,7 +89,7 @@ $(document).ready(function() {
                     $("input[name=\'extra_terms_codepostal\']").val(monU.CP);
                     $("input[name=\'extra_terms_ville\']").val(monU.Ville);													
                 } else {
-                    alert(\'User inconnu.\');
+                    alert("'.get_lang("UnknownUser").'");
                 }
                 
             },
@@ -244,7 +244,7 @@ if ($user_already_registered_show_terms === false) {
         $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
     }
 
-    $form->addButtonSearch(get_lang('Search'), 'search', ['id' => 'search_user']);
+    $form->addButtonSearch(get_lang('SearchTCC'), 'search', ['id' => 'search_user']);
 
     if (api_is_western_name_order()) {
         // FIRST NAME and LAST NAME

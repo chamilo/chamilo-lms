@@ -6878,4 +6878,6 @@ $DisplayColumn = "Spalte anzeigen";
 $LegalAgreementAccepted = "Nutzungsbedingungen akzeptiert";
 $ForMoreDetailsVisitX = "Damit wir dich besser kennenlernen und dir einen maßgeschneiderten Lernpfad anbieten, musst du zuerst diesen Fragebogen %s ausfüllen.
 Wenn du es noch nicht getan hast, vergiss auch nicht, dein Profil zu vervollständigen, damit du für die Aktivitäten auf der Plattform eingeschrieben werden kannst.";
+
+$SearchTCC = "Schon in TCC eingetragen?";
 ?>

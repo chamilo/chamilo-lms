@@ -1149,7 +1149,7 @@ class IndexManager
                 );
             }
 
-            if ($courses) {
+            if ($courses['in_category'] || $courses['not_category']) {
                 $template->assign('courses', $courses['not_category']);
                 $template->assign('categories', $courses['in_category']);
 

@@ -131,6 +131,7 @@ $update_from_version_8 = array(
     '1.10.2',
     '1.10.4',
     '1.10.6',
+    '1.10.8',
 );
 
 $my_old_version = '';

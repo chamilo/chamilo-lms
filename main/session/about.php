@@ -149,7 +149,8 @@ $template->assign(
 );
 
 $template->assign('courses', $courses);
-$template->assign('essence', \Essence\Essence::instance());
+$essence = new Essence\Essence();
+$template->assign('essence', $essence);
 $template->assign(
     'session_extra_fields',
     $sessionValues->getAllValuesForAnItem($session->getId(), true)

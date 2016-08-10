@@ -351,9 +351,10 @@ alter table c_quiz_rel_question ADD INDEX idx_cqrq_qid (question_id);
 alter table c_quiz_rel_question ADD INDEX idx_cqrq_cid (c_id);
 alter table c_quiz_answer add index idx_qa_cidqid (c_id, question_id);
 </pre>
-In Chamilo 1.10.6, an additional query was confirmed to still have effect a considerable effect:
+In Chamilo 1.10.6, two additional queries were confirmed to still have effect a considerable effect:
 <pre>
-alter table c_quiz_question_rel_category add index idx_qqrc_qid (question_id);
+ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_qqrc_qid (question_id);
+ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
 </pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>

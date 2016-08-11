@@ -2,8 +2,11 @@ define( [
 	"../core",
 	"../var/document",
 	"./var/rsingleTag",
-	"../manipulation/buildFragment"
-], function( jQuery, document, rsingleTag, buildFragment ) {
+	"../manipulation/buildFragment",
+
+	// This is the only module that needs core/support
+	"./support"
+], function( jQuery, document, rsingleTag, buildFragment, support ) {
 
 // Argument "data" should be string of html
 // context (optional): If specified, the fragment will be created in this context,
@@ -17,7 +20,12 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 		keepScripts = context;
 		context = false;
 	}
-	context = context || document;
+
+	// Stop scripts or inline event handlers from being executed immediately
+	// by using document.implementation
+	context = context || ( support.createHTMLDocument ?
+		document.implementation.createHTMLDocument( "" ) :
+		document );
 
 	var parsed = rsingleTag.exec( data ),
 		scripts = !keepScripts && [];

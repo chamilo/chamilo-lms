@@ -71,7 +71,7 @@ function on( elem, types, selector, data, fn, one ) {
 	if ( fn === false ) {
 		fn = returnFalse;
 	} else if ( !fn ) {
-		return elem;
+		return this;
 	}
 
 	if ( one === 1 ) {
@@ -593,14 +593,13 @@ jQuery.Event.prototype = {
 	isDefaultPrevented: returnFalse,
 	isPropagationStopped: returnFalse,
 	isImmediatePropagationStopped: returnFalse,
-	isSimulated: false,
 
 	preventDefault: function() {
 		var e = this.originalEvent;
 
 		this.isDefaultPrevented = returnTrue;
 
-		if ( e && !this.isSimulated ) {
+		if ( e ) {
 			e.preventDefault();
 		}
 	},
@@ -609,7 +608,7 @@ jQuery.Event.prototype = {
 
 		this.isPropagationStopped = returnTrue;
 
-		if ( e && !this.isSimulated ) {
+		if ( e ) {
 			e.stopPropagation();
 		}
 	},
@@ -618,7 +617,7 @@ jQuery.Event.prototype = {
 
 		this.isImmediatePropagationStopped = returnTrue;
 
-		if ( e && !this.isSimulated ) {
+		if ( e ) {
 			e.stopImmediatePropagation();
 		}
 

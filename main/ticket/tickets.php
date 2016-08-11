@@ -227,7 +227,12 @@ if ($isAdmin ) {
                 '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '&project_id='.$projectId.'">' .
                     Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_MEDIUM) . '</a>';
 
-        if (api_get_setting('ticket_allow_category_edition')) {
+        echo Display::url(
+            Display::return_icon('settings.png', get_lang('Categories')),
+            api_get_path(WEB_CODE_PATH) . 'ticket/settings.php'
+        );
+
+        /*if (api_get_setting('ticket_allow_category_edition')) {
             echo Display::url(
                 Display::return_icon('folder_document.gif', get_lang('Categories')),
                 api_get_path(WEB_CODE_PATH) . 'ticket/categories.php?project_id='.$projectId
@@ -237,7 +242,7 @@ if ($isAdmin ) {
                 Display::return_icon('folder_document.gif', get_lang('Projects')),
                 api_get_path(WEB_CODE_PATH) . 'ticket/projects.php'
             );
-        }
+        }*/
         echo '</span>';
     }
     $form->display();

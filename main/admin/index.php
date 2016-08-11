@@ -341,6 +341,8 @@ if (api_is_platform_admin()) {
         $items[] = ['url' => 'email_tester.php', 'label' => get_lang('EMailTester')];
     }
 
+    $items[] = ['url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php', 'label' => get_lang('TicketSystem')];
+
     if (api_get_configuration_value('db_manager_enabled') == true && api_is_global_platform_admin()) {
         $host = $_configuration['db_host'];
         $username = $_configuration['db_user'];

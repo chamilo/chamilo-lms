@@ -1,33 +1,27 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * This script is the Tickets plugin main entry point
  * @package chamilo.plugin.ticket
  */
 
-// needed in order to load the plugin lang variables
-$course_plugin = 'ticket';
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
 
-$toolName = get_lang('Categories');
+$toolName = get_lang('Priorities');
 
 $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
-$user_id = api_get_user_id();
-$isAdmin = api_is_platform_admin();
 
 $this_section = 'tickets';
 unset($_SESSION['this_section']);
 
 $table = new SortableTable(
-    'TicketCategories',
-    array('TicketManager', 'getCategoriesCount'),
-    array('TicketManager', 'getCategories'),
+    'TicketProject',
+    array('TicketManager', 'getPriorityCount'),
+    array('TicketManager', 'getPriorityAdminList'),
     1
 );
 
@@ -37,13 +31,10 @@ if ($table->per_page == 0) {
 
 $formToString = '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
-
-Session::write('project_id', $projectId);
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId,
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
 );
 
@@ -52,71 +43,70 @@ $interbreadcrumb[] = array(
     'name' => get_lang('Settings')
 );
 
+
 switch ($action) {
     case 'delete':
-        TicketManager::deleteCategory($id);
+        TicketManager::deletePriority($id);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
         header("Location: ".api_get_self());
         break;
     case 'add':
         $toolName = get_lang('Add');
         $interbreadcrumb[] = array(
-            'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
-            'name' => get_lang('Categories')
+            'url' => api_get_path(WEB_CODE_PATH).'ticket/priorities.php',
+            'name' => get_lang('Priorities')
         );
-        $url = api_get_self().'?action=add&project_id='.$projectId;
-        $form = TicketManager::getCategoryForm($url, $projectId);
+        $url = api_get_self().'?action=add';
+        $form = TicketManager::getPriorityForm($url);
         $formToString = $form->returnForm();
         if ($form->validate()) {
             $values =$form->getSubmitValues();
 
             $params = [
                 'name' => $values['name'],
-                'description' => $values['description'],
-                'total_tickets' => 0,
-                'sys_insert_user_id' => api_get_user_id(),
-                'sys_insert_datetime' => api_get_utc_datetime(),
-                'course_required' => '',
-                'project_id' => $projectId
+                'description' => $values['description']
             ];
-            TicketManager::addCategory($params);
-
+            TicketManager::addPriority($params);
             Display::addFlash(Display::return_message(get_lang('Added')));
 
-            header("Location: ".api_get_self().'?project_id='.$projectId);
+            header("Location: ".api_get_self());
             exit;
         }
         break;
     case 'edit':
         $toolName = get_lang('Edit');
         $interbreadcrumb[] = array(
-            'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php?project_id='.$projectId,
-            'name' => get_lang('Categories')
+            'url' => api_get_path(WEB_CODE_PATH).'ticket/priorities.php',
+            'name' => get_lang('Priorities')
         );
-        $url = api_get_self().'?action=edit&project_id='.$projectId.'&id='.$id;
-        $form = TicketManager::getCategoryForm($url, $projectId);
+        $url = api_get_self().'?action=edit&id='.$id;
+        $form = TicketManager::getPriorityForm($url);
 
-        $cat = TicketManager::getCategory($_GET['id']);
-        $form->setDefaults($cat);
+        $item = TicketManager::getPriority($_GET['id']);
+        $form->setDefaults([
+            'name' => $item->getName(),
+            'description' => $item->getDescription()]
+        );
         $formToString = $form->returnForm();
         if ($form->validate()) {
             $values =$form->getSubmitValues();
 
             $params = [
                 'name' => $values['name'],
-                'description' => $values['description'],
-                'sys_lastedit_datetime' => api_get_utc_datetime(),
-                'sys_lastedit_user_id' => api_get_user_id()
+                'description' => $values['description']
             ];
-            $cat = TicketManager::updateCategory($_GET['id'], $params);
+            $cat = TicketManager::updatePriority($_GET['id'], $params);
             Display::addFlash(Display::return_message(get_lang('Updated')));
-            header("Location: ".api_get_self().'?project_id='.$projectId);
+            header("Location: ".api_get_self());
             exit;
         }
         break;
     default:
         break;
 }
+
+$user_id = api_get_user_id();
+$isAdmin = api_is_platform_admin();
 
 /**
  * Build the modify-column of the table
@@ -127,20 +117,14 @@ switch ($action) {
  */
 function modify_filter($id, $params, $row)
 {
-    $projectId = Session::read('project_id');
     $result = Display::url(
         Display::return_icon('edit.png', get_lang('Edit')),
-        "categories.php?action=edit&id={$row['id']}&project_id=".$projectId
-    );
-
-    $result .= Display::url(
-        Display::return_icon('user.png', get_lang('AssignUser')),
-        "categories_add_user.php?id={$row['id']}&project_id=".$projectId
+        api_get_self()."?action=edit&id={$row['id']}"
     );
 
     $result .= Display::url(
         Display::return_icon('delete.png', get_lang('Delete')),
-        "categories.php?action=delete&id={$row['id']}&project_id=".$projectId
+        api_get_self()."?action=delete&id={$row['id']}"
     );
 
 	return $result;
@@ -149,15 +133,14 @@ function modify_filter($id, $params, $row)
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Title'), false);
 $table->set_header(2, get_lang('Description'), true, array("style" => "width:200px"));
-$table->set_header(3, get_lang('TotalTickets'), false);
-$table->set_header(4, get_lang('Actions'), true);
-$table->set_column_filter(4, 'modify_filter');
+$table->set_header(3, get_lang('Actions'), true);
+$table->set_column_filter('3', 'modify_filter');
 
 Display::display_header($toolName);
 
 $items = [
     [
-        'url' => 'categories.php?action=add&project_id='.$projectId,
+        'url' => 'priorities.php?action=add',
         'content' => Display::return_icon('new_folder.png', null, null, ICON_SIZE_MEDIUM)
     ]
 ];

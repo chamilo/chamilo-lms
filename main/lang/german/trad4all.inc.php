@@ -6880,4 +6880,5 @@ $ForMoreDetailsVisitX = "Damit wir dich besser kennenlernen und dir einen maßge
 Wenn du es noch nicht getan hast, vergiss auch nicht, dein Profil zu vervollständigen, damit du für die Aktivitäten auf der Plattform eingeschrieben werden kannst.";
 
 $SearchTCC = "Schon in TCC eingetragen?";
+$DateFormatLongNoDayJS = "dd MM yy";
 ?>

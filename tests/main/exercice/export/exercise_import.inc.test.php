@@ -67,7 +67,7 @@ class TestExerciseImport extends UnitTestCase {
 		$file = '';
 		$exercisePath = '';
 		$questionFile = '';
-		$res = parse_file($exercisePath, $file, $questionFile);
+		$res = qti_parse_file($exercisePath, $file, $questionFile);
 		$this->assertTrue(is_array($res));
 		if(!is_null){
 			$this->assertTrue($res);
@@ -83,16 +83,6 @@ class TestExerciseImport extends UnitTestCase {
 		$this->assertFalse(is_array($res));
 		if(!is_null){
 			$this->assertTrue($res);
-		}
-		//var_dump($res);
-	}
-	
-	function testtempdir() {
-		$dir = '/tmp';
-		$res = tempdir($dir, $prefix='tmp', $mode=0777);
-		$this->assertFalse(is_array($res));
-		if(!is_null){
-			$this->assertTrue(is_string($res));
 		}
 		//var_dump($res);
 	}

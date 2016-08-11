@@ -6,6 +6,8 @@
  * @package chamilo.include
  */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Determines the possible tabs (=sections) that are available.
  * This function is used when creating the tabs in the third header line and
@@ -173,68 +175,13 @@ function getCustomTabs()
  */
 function return_logo($theme)
 {
-    $_course = api_get_course_info();
-    $html = '';
-    $logoBase = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/header-logo.';
-    $customLogoBase = api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme.'/images/header-logo-custom.';
-    $customLogo = '';
     $siteName = api_get_setting('siteName');
-    $attributes = array(
+
+    return ChamiloApi::getPlatformLogo([
         'title' => $siteName,
         'class' => 'img-responsive',
         'id' => 'header-logo'
-    );
-    $testServer = api_get_setting('server_type');
-    if ($testServer == 'test' && is_file($logoBase . 'svg')) {
-        $logo = $logoBase . 'svg';
-        $attributes['width'] = '245';
-        $attributes['height'] = '68';
-        $imageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.svg';
-    } else {
-        $logo = $logoBase . 'png';
-        $customLogo = $customLogoBase . 'png';
-        $imageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.png';
-        $customImageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo-custom.png';
-    }
-    if (file_exists($customLogo)) {
-        $siteName = api_get_setting('Institution').' - '.$siteName;
-        $customLogo = Display::img(
-            $customImageUrl,
-            $siteName,
-            $attributes
-        );
-        $html .= Display::url($customLogo, api_get_path(WEB_PATH).'index.php');
-    } elseif (file_exists($logo)) {
-        $siteName = api_get_setting('Institution').' - '.$siteName;
-        $logo = Display::img(
-            $imageUrl,
-            $siteName,
-            $attributes
-        );
-        $html .= Display::url($logo, api_get_path(WEB_PATH).'index.php');
-    } else {
-        $html .= '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$siteName.'</a>';
-        $iurl = api_get_setting('InstitutionUrl');
-        $iname = api_get_setting('Institution');
-
-        if (!empty($iname)) {
-            $html .= '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
-        }
-
-        // External link section a.k.a Department - Department URL
-        if (isset($_course['extLink']) && $_course['extLink']['name'] != '') {
-            $html .= '<span class="extLinkSeparator"> - </span>';
-            if ($_course['extLink']['url'] != '') {
-                $html .= '<a class="extLink" href="'.$_course['extLink']['url'].'" target="_top">';
-                $html .= $_course['extLink']['name'];
-                $html .= '</a>';
-            } else {
-                $html .= $_course['extLink']['name'];
-            }
-        }
-    }
-
-    return $html;
+    ]);
 }
 
 /**

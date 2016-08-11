@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="position", columns={"position"})
  *  }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="CQuizQuestionRepository")
  */
 class CQuizQuestion
 {
@@ -59,7 +59,7 @@ class CQuizQuestion
     /**
      * @var float
      *
-     * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false)
+     * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
     private $ponderation;
 
@@ -104,6 +104,14 @@ class CQuizQuestion
      * @ORM\Column(name="question_code", type="string", length=10, nullable=true)
      */
     private $questionCode;
+
+    /**
+     * CQuizQuestion constructor.
+     */
+    public function __construct()
+    {
+        $this->ponderation = 0;
+    }
 
     /**
      * Set question

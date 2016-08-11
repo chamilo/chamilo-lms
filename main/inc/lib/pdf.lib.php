@@ -1,6 +1,8 @@
 <?php
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Class PDF
  * @package chamilo.library
@@ -87,24 +89,13 @@ class PDF
         } else {
             $tpl = $this->template;
         }
-        // Assignments
+
+        $theme = api_get_visual_theme();
+
         // Assignments
         $tpl->assign('pdf_content', $content);
 
-        $organization = api_get_setting('Institution');
-        $img = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
-
-        // Search for classic logo
-        if (file_exists($img)) {
-            $img = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
-            $organization = "<img src='$img'>";
-        } else {
-            // Just use the platform title.
-            if (!empty($organization)) {
-                $organization = '<h2 align="left">'.$organization.'</h2>';
-            }
-        }
-
+        $organization = ChamiloApi::getPlatformLogo();
         // Use custom logo image.
         $pdfLogo = api_get_setting('pdf_logo_header');
         if ($pdfLogo === 'true') {

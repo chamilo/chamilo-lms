@@ -80,7 +80,7 @@ class CQuizAnswer
     /**
      * @var float
      *
-     * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false)
+     * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
     private $ponderation;
 
@@ -108,7 +108,7 @@ class CQuizAnswer
     /**
      * @var string
      *
-     * @ORM\Column(name="destination", type="text", nullable=false)
+     * @ORM\Column(name="destination", type="text", nullable=true)
      */
     private $destination;
 
@@ -119,6 +119,17 @@ class CQuizAnswer
      */
     private $answerCode;
 
+    public function __construct()
+    {
+        $this->id = null;
+        $this->correct = null;
+        $this->comment = null;
+        $this->ponderation = 0;
+        $this->hotspotCoordinates = null;
+        $this->hotspotType = null;
+        $this->destination = null;
+        $this->answerCode = null;
+    }
 
     /**
      * Set id
@@ -243,7 +254,7 @@ class CQuizAnswer
      */
     public function setPonderation($ponderation)
     {
-        $this->ponderation = $ponderation;
+        $this->ponderation = empty($ponderation) ? 0 : $ponderation;
 
         return $this;
     }
@@ -335,7 +346,7 @@ class CQuizAnswer
      */
     public function setDestination($destination)
     {
-        $this->destination = $destination;
+        $this->destination = empty($destination) ? null : $destination;
 
         return $this;
     }
@@ -417,5 +428,14 @@ class CQuizAnswer
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 }

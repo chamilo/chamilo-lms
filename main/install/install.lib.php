@@ -2987,6 +2987,8 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
         case '1.10.4':
             // no break
         case '1.10.6':
+            // no break
+        case '1.10.8':
             // Migrate using the migration files located in:
             // src/Chamilo/CoreBundle/Migrations/Schema/V111
             $result = migrate(

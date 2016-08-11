@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Symfony\Component\Filesystem\Filesystem;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Library of the settings.php file
@@ -372,17 +373,21 @@ function handleStylesheets()
         'settings.php?category=Stylesheets#tabs-2'
     );
 
-    $logoForm->addHtml(Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info'));
+    $logoForm->addHtml(
+        Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info')
+    );
 
     $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
     $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
     $logoFileName = 'header-logo.png';
-    $newLogoFileName = 'header-logo-custom.png';
+    $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
+    $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath();
 
-    if (is_file($dir.$newLogoFileName)) {
-        $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $newLogoFileName .'?'. time() . '">');
-    } else {
-        $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $logoFileName .'?'. time() . '">');
+    if ($webPlatformLogoPath !== null) {
+        $logoForm->addLabel(
+            get_lang('CurrentLogo'),
+            '<img id="header-logo-custom" src="' . $webPlatformLogoPath . '?' . time() . '">'
+        );
     }
 
     $logoForm->addFile('new_logo', get_lang('UpdateLogo'));
@@ -391,7 +396,7 @@ function handleStylesheets()
     if (isset($_POST['logo_reset'])) {
         if (is_file($dir.$newLogoFileName)) {
             unlink($dir.$newLogoFileName);
-            Display::display_normal_message(get_lang('ResetToTheOriginalLogo'));
+            echo Display::return_message(get_lang('ResetToTheOriginalLogo'));
             echo '<script>'
                 . '$("#header-logo").attr("src","'.$url.$logoFileName.'");'
             . '</script>';
@@ -414,15 +419,15 @@ function handleStylesheets()
                 $status = move_uploaded_file($_FILES['new_logo']['tmp_name'], $dir.$newLogoFileName);
 
                 if ($status) {
-                    Display::display_normal_message(get_lang('NewLogoUpdated'));
+                    echo Display::return_message(get_lang('NewLogoUpdated'));
                     echo '<script>'
                             . '$("#header-logo").attr("src","'.$url.$newLogoFileName.'");'
                         . '</script>';
                 } else {
-                    Display::display_error_message('Error - '.get_lang('UplNoFileUploaded'));
+                    echo Display::return_message('Error - '.get_lang('UplNoFileUploaded'), 'error');
                 }
             } else {
-                Display::display_error_message('Error - '.get_lang('InvalidImageDimensions'));
+                Display::return_message('Error - '.get_lang('InvalidImageDimensions'), 'error');
             }
         }
     }
@@ -451,7 +456,7 @@ function handleStylesheets()
             </script>';
             echo Display::tabs(
                 array(get_lang('Update'),get_lang('UpdateLogo'), get_lang('UploadNewStylesheet')),
-                array($form_change->return_form(), $logoForm->return_form(), $form->return_form())
+                array($form_change->return_form(), $logoForm->returnForm(), $form->returnForm())
             );
         } else {
             $form_change->display();

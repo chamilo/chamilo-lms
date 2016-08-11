@@ -91,13 +91,13 @@
         "media-alchemyst/media-alchemyst": "~0.5",
         "php-ffmpeg/php-ffmpeg": "0.5.1",
         "imagine/imagine": "0.6.2",
-        "essence/essence": "^2.5",
         "jeroendesloovere/vcard": "^1.2",
         "knplabs/doctrine-behaviors": "~1.1",
         "jimmiw/php-time-ago": "^0.4.11",
         "phpoffice/phpword": "^0.12.1",
         "facebook/php-sdk-v4" : "~5.0",
-        "kigkonsult/icalcreator" : "dev-master"
+        "kigkonsult/icalcreator" : "dev-master",
+        "essence/essence": "^3.2"
     },
     "require-dev": {
         "behat/behat": "@stable",

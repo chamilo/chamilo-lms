@@ -41,7 +41,7 @@ switch ($action) {
                     'title' => $file['name'],
                     'description' => ''
                 ];
-                $result = processWorkForm($workInfo, $values, $courseInfo, $sessionId, 0, $userId, $file);
+                $result = processWorkForm($workInfo, $values, $courseInfo, $sessionId, 0, $userId, $file, true);
 
                 $json = array();
                 if (!empty($result) && is_array($result) && empty($result['error'])) {
@@ -60,7 +60,7 @@ switch ($action) {
                     );
                 } else {
                     $json['url'] = '';
-                    $json['error'] = get_lang('Error');
+                    $json['error'] = isset($result['error']) ? $result['error'] : get_lang('Error');
                 }
                 $resultList[] = $json;
             }

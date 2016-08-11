@@ -460,6 +460,8 @@ function get_config_param($param, $updatePath = '')
         // try to recover config file from Chamilo 1.9.x
         if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
             $updateFromConfigFile = 'main/inc/conf/configuration.php';
+        } elseif (file_exists($updatePath . 'app/config/configuration.php')) {
+            $updateFromConfigFile = 'app/config/configuration.php';
         } else {
             // Give up recovering.
             //error_log('Chamilo Notice: Could not find previous config file at '.$updatePath.'main/inc/conf/configuration.php nor at '.$updatePath.'claroline/inc/conf/claro_main.conf.php in get_config_param(). Will start new config (in '.__FILE__.', line '.__LINE__.')', 0);

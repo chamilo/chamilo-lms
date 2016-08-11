@@ -37,7 +37,7 @@ class MoodleImport
 
             $folder = api_get_unique_id();
             $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
-            $coursePath = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/';
+            $coursePath = api_get_course_path();
             $courseInfo = api_get_course_info();
 
             mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
@@ -75,12 +75,13 @@ class MoodleImport
                                 // Create a Forum category based on Moodle forum type.
                                 $catForumValues['forum_category_title'] = $moduleValues['type'];
                                 $catForumValues['forum_category_comment'] = '';
-                                $catId = store_forumcategory($catForumValues);
+                                $catId = store_forumcategory($catForumValues, [], false);
                                 $forumValues = [];
                                 $forumValues['forum_title'] = $moduleValues['name'];
                                 $forumValues['forum_image'] = '';
                                 $forumValues['forum_comment'] = $moduleValues['intro'];
                                 $forumValues['forum_category'] = $catId;
+                                $forumValues['moderated'] = 0;
 
                                 store_forum($forumValues);
                                 break;
@@ -142,6 +143,9 @@ class MoodleImport
                                     $questionInstance = Question::getInstance($moduleValues['question_instances'][$index]['chamilo_qtype']);
                                     if ($questionInstance) {
                                         $questionInstance->updateTitle($moduleValues['question_instances'][$index]['name']);
+
+                                        // Replace the path from @@PLUGINFILE@@ to a correct chamilo path
+                                        $moduleValues['question_instances'][$index]['questiontext'] = str_replace('@@PLUGINFILE@@', '/courses/' . $coursePath . '/document', $moduleValues['question_instances'][$index]['questiontext']);
                                         $questionInstance->updateDescription($moduleValues['question_instances'][$index]['questiontext']);
                                         $questionInstance->updateLevel(1);
                                         $questionInstance->updateCategory(0);
@@ -171,7 +175,6 @@ class MoodleImport
                                 $moduleValues = $this->readResourceModule($moduleXml);
                                 $mainFileModuleValues = $this->readMainFilesXml($filesXml, $moduleValues['contextid']);
                                 $fileInfo = array_merge($moduleValues, $mainFileModuleValues, $currentItem);
-                                $documentPath = $coursePath.'document/';
                                 $currentResourceFilePath = $destinationDir.'/files/';
                                 $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
                                 foreach (new RecursiveIteratorIterator($dirs) as $file) {
@@ -217,6 +220,41 @@ class MoodleImport
                         }
                     }
                 }
+
+                // This process will upload all question resource files
+                $filesXml = @file_get_contents($destinationDir.'/files.xml');
+                $mainFileModuleValues = $this->getAllQuestionFiles($filesXml);
+                $currentResourceFilePath = $destinationDir.'/files/';
+
+                foreach ($mainFileModuleValues as $fileInfo) {
+                    $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
+                    foreach (new RecursiveIteratorIterator($dirs) as $file) {
+                        if (is_file($file) && strpos($file, $fileInfo['contenthash']) !== false) {
+                            $files = [];
+                            $files['file']['name'] = $fileInfo['filename'];
+                            $files['file']['tmp_name'] = $file->getPathname();
+                            $files['file']['type'] = $fileInfo['mimetype'];
+                            $files['file']['error'] = 0;
+                            $files['file']['size'] = $fileInfo['filesize'];
+                            $files['file']['from_file'] = true;
+                            $files['file']['move_file'] = true;
+                            $_POST['language'] = $courseInfo['language'];
+                            $_POST['moodle_import'] = true;
+
+                            DocumentManager::upload_document(
+                                $files,
+                                '/',
+                                isset($fileInfo['title']) ? $fileInfo['title'] : pathinfo($fileInfo['filename'], PATHINFO_FILENAME),
+                                '',
+                                null,
+                                null,
+                                true,
+                                true
+                            );
+                        }
+                    }
+                }
+
             } else {
                 removeDir($destinationDir);
                 return false;
@@ -225,7 +263,7 @@ class MoodleImport
             return false;
         }
 
-        removeDir($destinationDir);
+
         return $packageContent[$mainFileKey];
     }
 
@@ -562,7 +600,9 @@ class MoodleImport
             case 'multianswer':
                 $objAnswer = new Answer($questionInstance->id);
 
-                $placeholder = $currentQuestion['questiontext'];
+                $coursePath = api_get_course_path();
+
+                $placeholder = str_replace('@@PLUGINFILE@@', '/courses/' . $coursePath . '/document', $currentQuestion['questiontext']);
 
                 $optionsValues = [];
 
@@ -740,6 +780,9 @@ class MoodleImport
      */
     public function processFillBlanks($objAnswer, $questionType, $answerValues, &$placeholder, $position)
     {
+
+        $coursePath = api_get_course_path();
+
         switch ($questionType) {
             case 'multichoice':
                 $optionsValues = [];
@@ -808,6 +851,7 @@ class MoodleImport
 
                     $currentAnswers = $correctAnswer.$othersAnswers;
                     $currentAnswers = '['.substr($currentAnswers, 0, -1).'] ';
+                    $answer['questiontext'] = str_replace('@@PLUGINFILE@@', '/courses/' . $coursePath . '/document', $answer['questiontext']);
 
                     $placeholder .= '<p> ' . strip_tags($answer['questiontext']).' '.$currentAnswers . ' </p>';
                 }
@@ -819,6 +863,62 @@ class MoodleImport
                 return false;
                 break;
         }
+    }
+
+    /**
+     * get All files associated with a question
+     *
+     * @param $filesXml
+     * @return array
+     */
+    public function getAllQuestionFiles($filesXml)
+    {
+        $moduleDoc = new DOMDocument();
+        $moduleRes = @$moduleDoc->loadXML($filesXml);
+        $allFiles = [];
+        if ($moduleRes) {
+            $activities = $moduleDoc->getElementsByTagName('file');
+            foreach ($activities as $activity) {
+
+                $currentItem = [];
+
+                $thisIsAnInvalidItem = false;
+
+                if ($activity->childNodes->length) {
+                    foreach ($activity->childNodes as $item ) {
+                        if ($item->nodeName == 'component' && $item->nodeValue == 'mod_resource') {
+                            $thisIsAnInvalidItem = true;
+                        }
+
+                        if ($item->nodeName == 'contenthash') {
+                            $currentItem['contenthash'] = $item->nodeValue;
+                        }
+
+                        if ($item->nodeName == 'filename') {
+                            $currentItem['filename'] = $item->nodeValue;
+                        }
+
+                        if ($item->nodeName == 'filesize') {
+                            $currentItem['filesize'] = $item->nodeValue;
+                        }
+
+                        if ($item->nodeName == 'mimetype' && $item->nodeValue == 'document/unknown') {
+                            $thisIsAnInvalidItem = true;
+                        }
+
+                        if ($item->nodeName == 'mimetype' && $item->nodeValue !== 'document/unknown') {
+                            $currentItem['mimetype'] = $item->nodeValue;
+                        }
+                    }
+                }
+
+                if (!$thisIsAnInvalidItem) {
+                    $allFiles[] = $currentItem;
+                }
+            }
+        }
+
+        return $allFiles;
     }
 
 

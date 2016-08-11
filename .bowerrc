@@ -1,1 +1,3 @@
-{ "directory": "app/Resources/public/assets" }
+{
+  "directory": "app/Resources/public/assets"
+}

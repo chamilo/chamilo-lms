@@ -21,7 +21,7 @@
     "tag": "0.2.10",
     "commit": "058c143d6623f8d39cd45becc1205b9aee325246"
   },
-  "_source": "git://github.com/gromo/jquery.scrollbar.git",
+  "_source": "https://github.com/gromo/jquery.scrollbar.git",
   "_target": "0.2.*",
   "_originalSource": "jquery.scrollbar"
 }

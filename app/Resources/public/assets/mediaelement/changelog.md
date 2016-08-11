@@ -1,5 +1,19 @@
 ### Version History
 
+*2.22.0 (2016/07/17)*
+
+* Introduce new stretching models (stretching: 'fill','responsive') (https://github.com/johndyer/mediaelement/pull/1760) @ron666
+* Fix for IE9-10 fullscreen control hover issues (https://github.com/johndyer/mediaelement/pull/1760) @ron666
+* Update Flash HLS to v0.4.4.21 (https://github.com/johndyer/mediaelement/pull/1762) @ale-grosselle
+* Update Flash HLS to accept audio (https://github.com/johndyer/mediaelement/pull/1763) @ale-grosselle
+* Updated Korean translation (#1743) @Jinkwon 
+* Improve video ID parsing for YouTube URLs (https://github.com/johndyer/mediaelement/pull/1774) @ocean90
+* Removed extrainous call to removePlugin @johndyer 
+
+*2.21.2 (2016/05/08)*
+
+* Fixed IE8 compatibility with new security update
+
 *2.21.1 (2016/05/06)*
 
 * Fix YouTube embed functionality from 2.21.0 plugin handling updates @johndyer
@@ -8,6 +22,7 @@
 
 *2.21.0 (2016/05/05)*
 
+* Simplified plugin callback functions and querystring checking (security update) @johndyer
 * Removed Chrome iframe fullscreen fix (https://github.com/johndyer/mediaelement/pull/1736) @13twelve
 * Detect YouTube scheme (https://github.com/johndyer/mediaelement/pull/1730) @silkentrance 
 * Handle keydown events only for focused mediaelement (https://github.com/johndyer/mediaelement/pull/1732) @lucash
@@ -18,7 +33,6 @@
 * Support for VAST3 adpods (https://github.com/johndyer/mediaelement/pull/1702) @cherylquirion
 * Allow progress to follow configuration (https://github.com/johndyer/mediaelement/pull/1703) @tennety
 * YouTube: poster hiding and multi-pause issues (https://github.com/johndyer/mediaelement/pull/1719) @msant7
-* Simplified plugin callback functions and querystring checking @johdneyr
 * Fix for timerail when duration is over 1 hour  #1727 @johndyer
 
 *2.19.1 (2016/02/26)*

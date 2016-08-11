@@ -7199,14 +7199,14 @@ function api_get_user_info_from_official_code($official_code = '')
 }
 
 /**
- *
- *
- * @return string
+ * @param string $usernameInputId
+ * @param string $passwordInputId
+ * @return null|string
  */
-function api_get_password_checker_js($usernameInputId, $passwordInputid)
+function api_get_password_checker_js($usernameInputId, $passwordInputId)
 {
     $checkPass = api_get_setting('allow_strength_pass_checker');
-    $useStrengthPassChecker = $checkPass == 'true';
+    $useStrengthPassChecker = $checkPass === 'true';
 
     if ($useStrengthPassChecker == false) {
         return null;
@@ -7217,11 +7217,11 @@ function api_get_password_checker_js($usernameInputId, $passwordInputid)
         get_lang('PasswordNormal'),
         get_lang('PasswordMedium'),
         get_lang('PasswordStrong'),
-        get_lang('PasswordVeryStrong'),
+        get_lang('PasswordVeryStrong')
     );
-    $js = api_get_js('strength/strength.js');
-    $js .=  "<script>
 
+    $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
+    $js .=  "<script>
     var verdicts = ['".implode("','", $verdicts)."'];
     var errorMessages = {
         password_to_short : \"" . get_lang('PasswordIsTooShort')."\",
@@ -7245,9 +7245,10 @@ function api_get_password_checker_js($usernameInputId, $passwordInputid)
             },
             usernameField: '$usernameInputId'
         };
-        $('".$passwordInputid."').pwstrength(options);
+        $('".$passwordInputId."').pwstrength(options);
     });
     </script>";
+
     return $js;
 }
 

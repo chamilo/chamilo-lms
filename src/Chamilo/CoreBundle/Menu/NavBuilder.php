@@ -126,7 +126,7 @@ class NavBuilder extends ContainerAware
             )->setAttribute('class', 'item-menu menu-5');
 
             /** @var Category $category */
-            foreach ($categories as $category) {
+            /*foreach ($categories as $category) {
                  $faq->addChild(
                     $category->getHeadline(),
                     array(
@@ -137,7 +137,7 @@ class NavBuilder extends ContainerAware
                         ),
                     )
                 )->setAttribute('divider_append', true);
-            }
+            }*/
         }
 
         if (!$checker->isGranted('IS_AUTHENTICATED_FULLY')) {

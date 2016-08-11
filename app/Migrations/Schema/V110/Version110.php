@@ -47,7 +47,6 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_comment (iid INT NOT NULL PRIMARY KEY, id INT NULL, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL)");
         $this->addSql("CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (iid int NOT NULL auto_increment PRIMARY KEY, id INT, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL)");
 
-        $this->addSql("ALTER TABLE session MODIFY COLUMN date_start date default NULL, MODIFY COLUMN date_end date default NULL");
         $this->addSql("ALTER TABLE skill_rel_user MODIFY COLUMN acquired_skill_at datetime default NULL");
         $this->addSql("ALTER TABLE track_e_access MODIFY COLUMN access_date datetime DEFAULT NULL");
         $this->addSql("ALTER TABLE track_e_lastaccess MODIFY COLUMN access_date datetime DEFAULT NULL");

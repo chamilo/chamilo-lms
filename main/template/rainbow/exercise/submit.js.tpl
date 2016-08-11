@@ -106,10 +106,10 @@ var MatchingDraggable = {
         };
 
         var destinationEndPoint = {
-            endpoint: ["Dot", {radius: 15}],
+            endpoint: ["Dot", {radius: 10}],
             paintStyle: {fillStyle: MatchingDraggable.colorDestination},
             isSource: false,
-            connectorStyle: {strokeStyle: MatchingDraggable.colorDestination, lineWidth: 8},
+            connectorStyle: {strokeStyle: MatchingDraggable.colorDestination, lineWidth: 4},
             connector: [
                 MatchingDraggable.connectorType,
                 {curviness: MatchingDraggable.curviness}
@@ -147,15 +147,15 @@ var MatchingDraggable = {
             var sourceEndPoint = {
                 endpoint: [
                     "Dot",
-                    {radius: 15}
+                    {radius: 10}
                 ],
                 paintStyle: {
                     fillStyle: destinationColor
                 },
                 isSource: true,
                 connectorStyle: {
-                    strokeStyle: "#8a8888",
-                    lineWidth: 8
+                    strokeStyle: "#CCC",
+                    lineWidth: 4
                 },
                 connector: [
                     MatchingDraggable.connectorType,

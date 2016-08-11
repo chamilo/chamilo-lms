@@ -7286,7 +7286,7 @@ class Exercise
                         $windowId = $questionId.'_'.$lines_count;
                         //left part questions
                         $s .= ' <div id="window_'.$windowId.'" class="window window_left_question window'.$questionId.'_question">
-                                    <b>'.$lines_count.'</b>.&nbsp'.$parsed_answer.'
+                                    <div class="text-options"><b>'.$lines_count.'</b>.&nbsp'.$parsed_answer.'</div>
                                 </div>
                                 </td>';
 
@@ -7338,7 +7338,7 @@ class Exercise
 
                         if (isset($select_items[$lines_count])) {
                             $s.= '<div id="window_'.$windowId.'_answer" class="window window_right_question">
-                                    <b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'].'
+                                    <div class="text-options"><b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'].'</div>
                                   </div>';
                         } else {
                             $s.='&nbsp;';

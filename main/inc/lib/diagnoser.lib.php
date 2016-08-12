@@ -25,10 +25,13 @@ class Diagnoser
     {
     }
 
+    /**
+     * Show html table
+     */
     public function show_html()
     {
         $sections = array('chamilo', 'php', 'database', 'webserver');
-
+        $currentSection = isset($_GET['section']) ? $_GET['section'] : '';
         if (!in_array(trim($currentSection), $sections)) {
             $currentSection = 'chamilo';
         }

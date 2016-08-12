@@ -100,6 +100,8 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
         }
         if (isset($separator)) {
             $this->_separator = $separator;
+        } else {
+            $this->_separator = '';
         }
         if (isset($appendName)) {
             $this->_appendName = $appendName;

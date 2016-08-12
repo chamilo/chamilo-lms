@@ -14,12 +14,14 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH) . 'work/work.lib.php';
 
-api_protect_admin_script();
+if (!api_is_platform_admin(true) && !api_is_teacher()) {
+    api_not_allowed(true);
+}
 
 $toolName = get_lang('TeacherTimeReportBySession');
 
 $em = Database::getManager();
-$sessionsInfo = SessionManager::get_sessions_list([], ['name']);
+$sessionsInfo = Tracking::get_sessions_coached_by_user(api_get_user_id());
 $session = null;
 
 $form = new FormValidator('teacher_time_report_by_session', 'GET');
@@ -79,7 +81,7 @@ if ($session) {
 
             $works = $em
                 ->getRepository('ChamiloCourseBundle:CStudentPublication')
-                ->findByTeacher($user, $course, $session->getId());
+                ->findWorksByTeacher($user, $course, $session);
 
             $usersInfo[$user->getId()][$course->getId() . '_number_of_students'] = $sessionCourse->getNbrUsers();
             $usersInfo[$user->getId()][$course->getId() . '_number_of_works'] = count($works);
@@ -165,10 +167,10 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH) . 'mySpace/', 'name' => get_lang('Reporting')];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH) . 'admin/teacher_time_report.php',
-    'name' => get_lang('TeacherTimeReport')
+    'url' => api_get_path(WEB_CODE_PATH) . 'mySpace/session.php',
+    'name' => get_lang('FollowedSessions')
 ];
 
 $actions = [];

@@ -19,7 +19,8 @@
  * @param string $file_name Name of a file
  * @return string the filename phps'ized
  */
-function php2phps($file_name) {
+function php2phps($file_name)
+{
     return preg_replace('/\.(php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
 }
 
@@ -29,7 +30,8 @@ function php2phps($file_name) {
  * @param string $filename
  * @return string
  */
-function htaccess2txt($filename) {
+function htaccess2txt($filename)
+{
     return str_replace(array('.htaccess', '.HTACCESS'), array('htaccess.txt', 'htaccess.txt'), $filename);
 }
 
@@ -42,31 +44,9 @@ function htaccess2txt($filename) {
  * @see php2phps()
  * @see htaccess2txt()
  */
-function disable_dangerous_file($filename) {
-    return htaccess2txt(php2phps($filename));
-}
-
-/**
- * This function generates a unique name for a file on a given location
- * file names are changed to name_#.ext
- *
- * @param string $path
- * @param string $name
- *
- * @deprecated
- *
- * @return string new unique name
- */
-function unique_name($path, $name)
+function disable_dangerous_file($filename)
 {
-    $ext = substr(strrchr($name, '.'), 0);
-    $name_no_ext = substr($name, 0, strlen($name) - strlen(strstr($name, $ext)));
-    $n = 0;
-    $unique = '';
-    while (file_exists($path . $name_no_ext . $unique . $ext)) {
-        $unique = '_' . ++$n;
-    }
-    return $name_no_ext . $unique . $ext;
+    return htaccess2txt(php2phps($filename));
 }
 
 /**
@@ -75,7 +55,8 @@ function unique_name($path, $name)
  * @param string $name
  * @return name without the extension
  */
-function get_document_title($name) {
+function get_document_title($name)
+{
     // If they upload .htaccess...
     $name = disable_dangerous_file($name);
     $ext = substr(strrchr($name, '.'), 0);
@@ -96,13 +77,16 @@ function process_uploaded_file($uploaded_file, $show_output = true)
             case 1:
                 // The uploaded file exceeds the upload_max_filesize directive in php.ini.
                 if ($show_output) {
-                    Display::display_error_message(get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'));
+                    Display::display_error_message(
+                        get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize')
+                    );
                 }
 
                 return false;
             case 2:
                 // The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
-                // Not used at the moment, but could be handy if we want to limit the size of an upload (e.g. image upload in html editor).
+                // Not used at the moment, but could be handy if we want to limit the size of an upload
+                // (e.g. image upload in html editor).
                 $max_file_size = intval($_POST['MAX_FILE_SIZE']);
                 if ($show_output) {
                     Display::display_error_message(get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size));
@@ -189,6 +173,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param bool $onlyUploadFile
  * @param string $comment
  * @param int $sessionId
+ * @param bool $treat_spaces_as_hyphens
  *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
@@ -208,7 +193,8 @@ function handle_uploaded_document(
     $output = true,
     $onlyUploadFile = false,
     $comment = null,
-    $sessionId = null
+    $sessionId = null,
+    $treat_spaces_as_hyphens = true
 ) {
     if (!$userId) {
         return false;
@@ -232,7 +218,7 @@ function handle_uploaded_document(
     // Check if there is enough space to save the file
     if (!DocumentManager::enough_space($uploadedFile['size'], $maxSpace)) {
         if ($output) {
-            Display::display_error_message(get_lang('UplNotEnoughSpace'));
+            Display::addFlash(Display::return_message(get_lang('UplNotEnoughSpace'), 'error'));
         }
 
         return false;
@@ -254,15 +240,15 @@ function handle_uploaded_document(
     } elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         // We can only unzip ZIP files (no gz, tar,...)
         if ($output) {
-            Display::display_error_message(
-                get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain')
+            Display::addFlash(
+                Display::return_message(get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain'), 'error')
             );
         }
 
         return false;
     } else {
         // Clean up the name, only ASCII characters should stay. (and strict)
-        $cleanName = api_replace_dangerous_char($uploadedFile['name'], 'strict');
+        $cleanName = api_replace_dangerous_char($uploadedFile['name'], $treat_spaces_as_hyphens);
 
         // No "dangerous" files
         $cleanName = disable_dangerous_file($cleanName);
@@ -270,8 +256,8 @@ function handle_uploaded_document(
         // Checking file extension
         if (!filter_extension($cleanName)) {
             if ($output) {
-                Display::display_error_message(
-                    get_lang('UplUnableToSaveFileFilteredExtension')
+                Display::addFlash(
+                    Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error')
                 );
             }
 
@@ -290,8 +276,8 @@ function handle_uploaded_document(
             if (!is_dir($whereToSave)) {
                 if (!mkdir($whereToSave, api_get_permissions_for_new_directories())) {
                     if ($output) {
-                        Display::display_error_message(
-                            get_lang('DestDirectoryDoesntExist').' ('.$uploadPath.')'
+                        Display::addFlash(
+                            Display::return_message(get_lang('DestDirectoryDoesntExist').' ('.$uploadPath.')', 'error')
                         );
                     }
 
@@ -419,7 +405,8 @@ function handle_uploaded_document(
                                     $courseInfo
                                 );
                             } else {
-                                // There might be cases where the file exists on disk but there is no registration of that in the database
+                                // There might be cases where the file exists on disk but there is no registration of
+                                // that in the database
                                 // In this case, and if we are in overwrite mode, overwrite and create the db record
                                 $documentId = add_document(
                                     $courseInfo,
@@ -458,9 +445,12 @@ function handle_uploaded_document(
                             item_property_update_on_folder($courseInfo, $uploadPath, $userId);
                             // Display success message with extra info to user
                             if ($output) {
-                                Display::display_confirmation_message(
-                                    get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle . ' ' . get_lang('UplFileOverwritten'),
-                                    false
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle . ' ' . get_lang('UplFileOverwritten'),
+                                        'confirmation',
+                                        false
+                                    )
                                 );
                             }
 
@@ -503,22 +493,33 @@ function handle_uploaded_document(
                             item_property_update_on_folder($courseInfo, $uploadPath, $userId);
                             // Display success message to user
                             if ($output) {
-                                Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br /> '.$documentTitle, false);
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
+                                        'confirmation',
+                                        false
+                                    )
+                                );
                             }
 
                             return $filePath;
                         }
                     } else {
                         if ($output) {
-                            Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang('UplUnableToSaveFile'),
+                                    'error',
+                                    false
+                                )
+                            );
                         }
 
                         return false;
                     }
                     break;
-                // Rename the file if it exists
                 case 'rename':
-
+                    // Rename the file if it exists
                     // Always rename.
                     $cleanName = DocumentManager::getUniqueFileName(
                         $uploadPath,
@@ -582,16 +583,30 @@ function handle_uploaded_document(
 
                         // Display success message to user
                         if ($output) {
-                            Display::display_confirmation_message(
-                                get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') .' '.$documentTitle,
-                                false
-                            );
+                            if (isset($_POST['moodle_import'])) {
+                                Display::addFlash(
+                                    Display::display_confirmation_message(
+                                        get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') . ' ' . $documentTitle,
+                                        false,
+                                        true
+                                    )
+                                );
+                            } else {
+                                Display::display_confirmation_message(
+                                    get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') . ' ' . $documentTitle,
+                                    false
+                                );
+                            }
                         }
 
                         return $filePath;
                     } else {
                         if ($output) {
-                            Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                            if (isset($_POST['moodle_import'])) {
+                                Display::addFlash(Display::display_error_message(get_lang('UplUnableToSaveFile'), false, true));
+                            } else {
+                                Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                            }
                         }
 
                         return false;
@@ -601,7 +616,11 @@ function handle_uploaded_document(
                     // Only save the file if it doesn't exist or warn user if it does exist
                     if (file_exists($fullPath) && $docId) {
                         if ($output) {
-                            Display::display_error_message($cleanName.' '.get_lang('UplAlreadyExists'));
+                            if (isset($_POST['moodle_import'])) {
+                                Display::addFlash(Display::display_error_message($cleanName.' '.get_lang('UplAlreadyExists'), false, true));
+                            } else {
+                                Display::display_error_message($cleanName.' '.get_lang('UplAlreadyExists'));
+                            }
                         }
                     } else {
                         if (moveUploadedFile($uploadedFile, $fullPath)) {
@@ -648,16 +667,35 @@ function handle_uploaded_document(
 
                             // Display success message to user
                             if ($output) {
-                                Display::display_confirmation_message(
-                                    get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
-                                    false
-                                );
+                                if (isset($_POST['moodle_import'])) {
+                                    Display::addFlash(
+                                        Display::display_confirmation_message(
+                                            get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle,
+                                            false,
+                                            true
+                                        )
+                                    );
+                                } else {
+                                    Display::addFlash(
+                                        Display::return_message(
+                                            get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
+                                            'confirmation',
+                                            false
+                                        )
+                                    );
+                                }
                             }
 
                             return $filePath;
                         } else {
                             if ($output) {
-                                Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('UplUnableToSaveFile'),
+                                        'error',
+                                        false
+                                    )
+                                );
                             }
 
                             return false;
@@ -858,50 +896,6 @@ function add_ext_on_mime($file_name, $file_type)
 }
 
 /**
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- *
- * @param  array $uploaded_file - follows the $_FILES Structure
- * @param  string $base_work_dir - base working directory of the module
- * @param  string $upload_path  - destination of the upload.
- *                               This path is to append to $base_work_dir
- * @param  int $max_filled_space - amount of bytes to not exceed in the base
- *                               working directory
- *
- * @return boolean true if it succeds, false otherwise
- */
-function treat_uploaded_file($uploaded_file, $base_work_dir, $upload_path, $max_filled_space, $uncompress = '')
-{
-    $uploaded_file['name'] = stripslashes($uploaded_file['name']);
-
-    if (!enough_size($uploaded_file['size'], $base_work_dir, $max_filled_space)) {
-        return api_failure::set_failure('not_enough_space');
-    }
-
-    if ($uncompress == 'unzip' && preg_match('/.zip$/', strtolower($uploaded_file['name']))) {
-        return unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_filled_space);
-    } else {
-        $file_name = trim($uploaded_file['name']);
-
-        // CHECK FOR NO DESIRED CHARACTERS
-        $file_name = api_replace_dangerous_char($file_name, 'strict');
-
-        // TRY TO ADD AN EXTENSION TO FILES WITOUT EXTENSION
-        $file_name = add_ext_on_mime($file_name, $uploaded_file['type']);
-
-        // HANDLE PHP FILES
-        $file_name = ($file_name);
-
-        // COPY THE FILE TO THE DESIRED DESTINATION
-        if (move_uploaded_file($uploaded_file['tmp_name'], $base_work_dir.$upload_path.'/'.$file_name)) {
-            set_default_settings($upload_path, $file_name);
-        }
-
-        return true;
-    }
-}
-
-/**
  * Manages all the unzipping process of an uploaded file
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
@@ -926,7 +920,11 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         $realFileSize = 0;
         foreach ($zip_content_array as & $this_content) {
             if (preg_match('~.(php.*|phtml)$~i', $this_content['filename'])) {
-                return api_failure::set_failure('php_file_in_zip_file');
+                Display::addFlash(
+                    Display::return_message(get_lang('ZipNoPhp'))
+                );
+
+                return false;
             } elseif (stristr($this_content['filename'], 'imsmanifest.xml')) {
                 $ok_scorm = true;
             } elseif (stristr($this_content['filename'], 'LMS')) {
@@ -946,11 +944,19 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         }
 
         if (!$ok_scorm && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM) {
-            return api_failure::set_failure('not_scorm_content');
+            Display::addFlash(
+                Display::return_message(get_lang('NotScormContent'))
+            );
+
+            return false;
         }
 
         if (!enough_size($realFileSize, $base_work_dir, $max_filled_space)) {
-            return api_failure::set_failure('not_enough_space');
+            Display::addFlash(
+                Display::return_message(get_lang('NoSpace'))
+            );
+
+            return false;
         }
 
         // It happens on Linux that $upload_path sometimes doesn't start with '/'
@@ -992,7 +998,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
                         $filetype = 'file';
                         if (is_dir($base_work_dir.$upload_path.'/'.$file)) $filetype = 'folder';
 
-                        $safe_file = api_replace_dangerous_char($file, 'strict');
+                        $safe_file = api_replace_dangerous_char($file);
                         @rename($base_work_dir.$upload_path.'/'.$file,$base_work_dir.$upload_path.'/'.$safe_file);
                         set_default_settings($upload_path, $safe_file,$filetype);
                     }
@@ -1093,17 +1099,16 @@ function unzip_uploaded_document(
  * This function is a callback function that is used while extracting a zipfile
  * http://www.phpconcept.net/pclzip/man/en/index.php?options-pclzip_cb_pre_extract
  *
- * @param object $p_event
- * @param object $p_header
+ * @param array $p_event
+ * @param array $p_header
  * @return int (If the function returns 1, then the extraction is resumed, if 0 the path was skipped)
  */
 function clean_up_files_in_zip($p_event, &$p_header)
 {
-    $originalFilePath = $p_header['filename'];
-    $originalFileName = basename($p_header['filename']);
-    $modifiedFileName = clean_up_path($originalFileName);
-    $p_header['filename'] = str_replace($originalFileName, $modifiedFileName, $originalFilePath);
-    
+    $originalStoredFileName = $p_header['stored_filename'];
+    $modifiedStoredFileName = clean_up_path($originalStoredFileName);
+    $p_header['filename'] = str_replace($originalStoredFileName, $modifiedStoredFileName, $p_header['filename']);
+
     return 1;
 }
 
@@ -1112,7 +1117,9 @@ function clean_up_files_in_zip($p_event, &$p_header)
  * by eliminating dangerous file names and cleaning them
  *
  * @param string $path
+ *
  * @return string
+ *
  * @see disable_dangerous_file()
  * @see api_replace_dangerous_char()
  */
@@ -1120,7 +1127,7 @@ function clean_up_path($path)
 {
     // Split the path in folders and files
     $path_array = explode('/', $path);
-    // Clean up every foler and filename in the path
+    // Clean up every folder and filename in the path
     foreach ($path_array as $key => & $val) {
         // We don't want to lose the dots in ././folder/file (cfr. zipfile)
         if ($val != '.') {
@@ -1129,7 +1136,7 @@ function clean_up_path($path)
     }
     // Join the "cleaned" path (modified in-place as passed by reference)
     $path = implode('/', $path_array);
-    $res = filter_extension($path);
+    filter_extension($path);
 
     return $path;
 }
@@ -1265,10 +1272,10 @@ function add_document(
 function update_existing_document($_course, $documentId, $filesize, $readonly = 0)
 {
     $document_table = Database::get_course_table(TABLE_DOCUMENT);
-    $documentId 	= intval($documentId);
-    $filesize 		= intval($filesize);
-    $readonly 		= intval($readonly);
-    $course_id 		= $_course['real_id'];
+    $documentId = intval($documentId);
+    $filesize = intval($filesize);
+    $readonly = intval($readonly);
+    $course_id = $_course['real_id'];
 
     $sql = "UPDATE $document_table SET
             size = '$filesize',
@@ -1351,7 +1358,6 @@ function get_levels($filename) {
 
 /**
  * Adds file to document table in database
- * deprecated: use file_set_default_settings instead
  *
  * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
  * @param	path,filename
@@ -1451,7 +1457,6 @@ function search_img_from_html($html_file) {
 /**
  * Creates a new directory trying to find a directory name
  * that doesn't already exist
- * (we could use unique_name() here...)
  *
  * @author  Hugues Peeters <hugues.peeters@claroline.net>
  * @author  Bert Vanderkimpen
@@ -1544,13 +1549,12 @@ function create_unexisting_directory(
                     WHERE
                         c_id = $course_id AND
                         (
-                            path = '" . $systemFolderName . "'
+                            path = '" . Database::escape_string($systemFolderName). "'
                         )
             ";
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
-
                 $document_id = add_document(
                     $_course,
                     $systemFolderName,
@@ -1568,7 +1572,6 @@ function create_unexisting_directory(
                 if ($document_id) {
                     // Update document item_property
                     if (!empty($visibility)) {
-
                         $visibilities = array(
                             0 => 'invisible',
                             1 => 'visible',
@@ -2031,6 +2034,7 @@ function add_all_documents_in_folder_to_database(
     $parent = array()
 ) {
     if (empty($userInfo) || empty($courseInfo)) {
+
         return false;
     }
 
@@ -2038,7 +2042,6 @@ function add_all_documents_in_folder_to_database(
 
     // Open dir
     $handle = opendir($folderPath);
-    $files = array();
 
     if (is_dir($folderPath)) {
         // Run trough

@@ -235,7 +235,6 @@ $NoArchive = "Nie wskazano archiwum";
 $ArchiveNotFound = "Archiwum nie zostało znalezione";
 $ArchiveUncompressed = "Archiwum zostało rozpakowane i zainstalowane.";
 $CsvPutIntoDocTool = "Plik \"users.csv\" został umieszczony w obszarze Dokumentów.";
-$BackH = "powrót do strony domowej";
 $OtherCategory = "Inna kategoria";
 $AllowedToUnsubscribe = "Użytkownicy mogą wypisać się z kursu";
 $NotAllowedToUnsubscribe = "Użytkownikom nie wolno wypisać się z kursu";

@@ -262,12 +262,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if (count($grid_newest_groups) > 0) {
         $newest_content = Display::return_sortable_grid('mygroups', array(), $grid_newest_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
     } else {
-        $newest_content = '<span class="muted">'.get_lang('GroupNone').'</span>';
+        $newest_content = '<div class="muted">'.get_lang('GroupNone').'</div>';
     }
     if (count($grid_pop_groups) > 0) {
         $popular_content = Display::return_sortable_grid('mygroups', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
     } else {
-        $popular_content = '<span class="muted">'.get_lang('GroupNone').'</span>';
+        $popular_content = '<div class="muted">'.get_lang('GroupNone').'</div>';
     }
 }
 
@@ -276,11 +276,6 @@ if (!empty($create_group_item)) {
 }
 $headers = array(get_lang('Newest'), get_lang('Popular'), get_lang('MyGroups'));
 $social_right_content .= Display::tabs($headers, array($newest_content, $popular_content, $my_group_content),'tab_browse');
-
-$show_message = null;
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && isset($_REQUEST['msg']) && $_REQUEST['msg'] == 'topic_deleted') {
-    $show_message = Display::return_message(get_lang('Deleted'), 'success');
-}
 
 $tpl = new Template(null);
 
@@ -295,7 +290,6 @@ $social_menu_block = SocialManager::show_social_menu($show_menu);
 $templateName = 'social/groups.tpl';
 
 $tpl->setHelp('Groups');
-$tpl->assign('message', $show_message);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 $social_layout = $tpl->get_template($templateName);

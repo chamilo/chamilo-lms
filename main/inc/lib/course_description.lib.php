@@ -94,10 +94,10 @@ class CourseDescription
     /**
      * Get all data by description and session id,
      * first you must set session_id property with the object CourseDescription
-     * @param    int  $description_type Description type
+     * @param   int  $description_type Description type
      * @param   string $courseId Course code (optional)
-     * @param    int $session_id Session id (optional)
-     * @return array    List of fields from the descriptions found of the given type
+     * @param   int $session_id Session id (optional)
+     * @return  array    List of fields from the descriptions found of the given type
      */
     public function get_data_by_description_type(
         $description_type,
@@ -227,14 +227,14 @@ class CourseDescription
             );
         }
 
-        return ($last_id > 0)?1:0;
+        return ($last_id > 0) ? 1 : 0;
     }
 
     /**
      * Insert a row like history inside track_e_item_property table
      * first you must set description_type, title, content, progress and
      * session_id properties with the object CourseDescription
-     * @param    int    description type
+     * @param   int    $description_type
      * @return  int        affected rows
      */
     public function insert_stats($description_type)
@@ -449,7 +449,7 @@ class CourseDescription
         $information[6] = get_lang('HumanAndTechnicalResourcesInformation');
         $information[7] = get_lang('AssessmentInformation');
         //$information[8]= get_lang('ThematicAdvanceInformation');
-        
+
         return $information;
     }
 
@@ -464,7 +464,7 @@ class CourseDescription
 
     /**
      * Set description's course id
-     * @param int Course ID
+     * @param int $id Course ID
      * @return void
      */
     public function set_course_id($id)
@@ -474,7 +474,7 @@ class CourseDescription
 
     /**
      * Set description title
-     * @return void
+     * @param string $title
      */
     public function set_title($title)
     {
@@ -483,7 +483,8 @@ class CourseDescription
 
     /**
      * Set description content
-     * @return void
+     *
+     * @param string $content
      */
     public function set_content($content)
     {
@@ -491,8 +492,10 @@ class CourseDescription
     }
 
     /**
+     *
      * Set description session id
-     * @return void
+     *
+     * @param int $session_id
      */
     public function set_session_id($session_id)
     {
@@ -509,8 +512,10 @@ class CourseDescription
     }
 
     /**
+     *
      * Set progress of a description
-     * @return void
+     *
+     * @param string $progress
      */
     public function set_progress($progress)
     {
@@ -519,6 +524,7 @@ class CourseDescription
 
     /**
      * get description id
+     *
      * @return int
      */
     public function get_id()
@@ -528,6 +534,7 @@ class CourseDescription
 
     /**
      * get description title
+     *
      * @return string
      */
     public function get_title()
@@ -546,6 +553,7 @@ class CourseDescription
 
     /**
      * get session id
+     *
      * @return int
      */
     public function get_session_id()
@@ -555,6 +563,7 @@ class CourseDescription
 
     /**
      * get description type
+     *
      * @return int
      */
     public function get_description_type()
@@ -564,6 +573,7 @@ class CourseDescription
 
     /**
      * get progress of a description
+     *
      * @return int
      */
     public function get_progress()

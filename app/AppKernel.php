@@ -3,6 +3,7 @@
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Class AppKernel
@@ -204,6 +205,14 @@ class AppKernel extends Kernel
     public function getConfigurationFile()
     {
         return $this->getRealRootDir().'app/config/configuration.php';
+    }
+
+    /**
+     * @param array $configuration
+     */
+    public function setApi(array $configuration)
+    {
+        new ChamiloApi($configuration);
     }
 }
 

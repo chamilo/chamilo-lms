@@ -41,8 +41,7 @@ $actionsLeft = '';
 $actionsRight = '';
 $usergroup = new UserGroup();
 if (api_is_allowed_to_edit()) {
-    
-    if ($type == 'registered') {
+    if ($type === 'registered') {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
             Display::return_icon('add-class.png', get_lang("AddClassesToACourse"), array(), ICON_SIZE_MEDIUM).'</a>';
     } else {
@@ -53,15 +52,13 @@ if (api_is_allowed_to_edit()) {
         $options = [
             -1 => get_lang('All'),
             1 => get_lang('SocialGroups'),
-            0 => get_lang('Classes'),
+            0 => get_lang('Classes')
         ];
         $form->addSelect('group_filter', get_lang('Groups'), $options, ['id' => 'group_filter']);
         $form->setDefaults(['group_filter' => $groupFilter]);
         $actionsRight = $form->returnForm();
     }
-    
-    
-    $actions = Display::toolbarAction('actions-class', array(0=>$actionsLeft, 1=> $actionsRight));
+    $actions = Display::toolbarAction('actions-class', [$actionsLeft, $actionsRight]);
 }
 
 if (api_is_allowed_to_edit()) {

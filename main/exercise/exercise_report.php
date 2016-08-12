@@ -464,7 +464,7 @@ if ($is_allowedToEdit || $is_tutor) {
         array('name' => 'duration', 'index' => 'exe_duration', 'width' => '30', 'align' => 'left', 'search' => 'true'),
         array('name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'),
         array('name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'),
-        array('name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'left', 'search' => 'true'),
+        array('name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'center', 'search' => 'true'),
         array('name' => 'ip', 'index' => 'user_ip', 'width' => '40', 'align' => 'center', 'search' => 'true'),
         array('name' => 'status', 'index' => 'revised', 'width' => '40', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
             //for the bottom bar
@@ -588,6 +588,21 @@ $extra_params['height'] = 'auto';
                 var sgrid = $("#results")[0];
                 sgrid.triggerToolbar();
 
+                $('#results').on('click', 'a.exercise-recalculate', function (e) {
+                    e.preventDefault();
+
+                    if (!$(this).data('user') || !$(this).data('exercise') || !$(this).data('id')) {
+                        return;
+                    }
+
+                    var url = '<?php echo api_get_path(WEB_CODE_PATH) ?>exercise/recalculate.php?<?php echo api_get_cidreq() ?>';
+
+                    var recalculateXhr = $.post(url, $(this).data());
+
+                    $.when(recalculateXhr).done(function (response) {
+                        $('#results').trigger('reloadGrid');
+                    });
+                });
         <?php } ?>
         });
 

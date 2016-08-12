@@ -44,56 +44,6 @@ if ($checkPass == 'true') {
 }
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
-$htmlHeadXtra[] = '<script>
-$(document).ready(function() {
-    var $image = $("#previewImage");
-    var $input = $("[name=\'cropResult\']");
-    var $cropButton = $("#cropButton");
-    var canvas = "";
-    var imageWidth = "";
-    var imageHeight = "";
-    
-    $("input:file").change(function() {
-        var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("picture").files[0]);
-
-        oFReader.onload = function (oFREvent) {
-            $image.attr("src", this.result);
-            $("#labelCropImage").html("'.get_lang('Preview').'");
-            $("#cropImage").addClass("thumbnail");
-            $cropButton.removeClass("hidden");
-            // Destroy cropper
-            $image.cropper("destroy");
-
-            $image.cropper({
-                aspectRatio: 1 / 1,
-                responsive : true,
-                center : false,
-                guides : false,
-                movable: false,
-                zoomable: false,
-                rotatable: false,
-                scalable: false,
-                crop: function(e) {
-                    // Output the result data for cropping image.
-                    $input.val(e.x+","+e.y+","+e.width+","+e.height);
-                }
-            });
-        };
-    });
-    
-    $("#cropButton").on("click", function() {
-        var canvas = $image.cropper("getCroppedCanvas");
-        var dataUrl = canvas.toDataURL();
-        $image.attr("src", dataUrl);
-        $image.cropper("destroy");
-        $cropButton.addClass("hidden");
-        return false;
-    });
-});
-</script>';
-
-
 $htmlHeadXtra[] = '
 <script>
 $("#status_select").ready(function() {
@@ -190,23 +140,12 @@ if (api_get_setting('login_is_email') == 'true') {
 // Phone
 $form->addElement('text', 'phone', get_lang('PhoneNumber'));
 // Picture
-$form->addElement('file', 'picture', get_lang('AddImage'), array('id' => 'picture', 'class' => 'picture-form'));
-$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-
-$form->addHtml(''
-            . '<div class="form-group">'
-                . '<label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>'
-                    . '<div class="col-sm-8">'
-                        . '<div id="cropImage" class="cropCanvas">'
-                            . '<img id="previewImage" >'
-                        . '</div>'
-                        . '<div>'
-                            . '<button class="btn btn-primary hidden" name="cropButton" id="cropButton" type="submit"><em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>'
-                        . '</div>'
-                    . '</div>'
-            . '</div>'
-. '');
-$form->addHidden('cropResult', '');
+$form->addFile(
+    'picture',
+    get_lang('AddImage'),
+    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1')
+);
+$allowed_picture_types = api_get_supported_image_extensions(false);
 
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
@@ -268,7 +207,7 @@ $group[] = $form->createElement(
     )
 );
 
-$form->addGroup($group, 'password', get_lang('Password'), '');
+$form->addGroup($group, 'password', get_lang('Password'));
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
 if ($checkPass) {
@@ -322,7 +261,7 @@ if (api_is_platform_admin()) {
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
     $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
-    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
+    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'));
     $form->addElement('html', '</div>');
 }
 
@@ -332,7 +271,7 @@ $form->addElement('select_language', 'language', get_lang('Language'), null);
 $group = array();
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
-$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
+$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 // Expiration Date
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 $group = array ();
@@ -345,7 +284,7 @@ $group[] = $form->createElement(
         'onchange' => 'javascript: enable_expiration_date();'
     )
 );
-$form->addGroup($group, 'max_member_group', null, '', false);
+$form->addGroup($group, 'max_member_group', null, null, false);
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
 $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
@@ -454,21 +393,13 @@ if ($form->validate()) {
 
 		Security::clear_token();
 		$tok = Security::get_token();
-		if ($user_id === false) {
-			//If any error ocurred during user creation, print it (api_failureList
-			// stores values as separate words, so rework it
-			$message = '';
-			$message_bits = explode(' ',api_get_last_failure());
-			foreach ($message_bits as $bit) {
-				$message .= ucfirst($bit);
-			}
-		} else {
- 			if (!empty($picture['name'])) {
+		if (!empty($user_id)) {
+            if (!empty($picture['name'])) {
                 $picture_uri = UserManager::update_user_picture(
                     $user_id,
                     $_FILES['picture']['name'],
                     $_FILES['picture']['tmp_name'],
-                    $user['cropResult']
+                    $user['picture_crop_result']
                 );
                 UserManager::update_user(
                     $user_id,
@@ -494,17 +425,19 @@ if ($form->validate()) {
             $extraFieldValues = new ExtraFieldValue('user');
             $user['item_id'] = $user_id;
             $extraFieldValues->saveFieldValues($user);
-
 			$message = get_lang('UserAdded');
 		}
+
 		if (isset($user['submit_plus'])) {
 			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
-			header('Location: user_add.php?message='.urlencode($message).'&sec_token='.$tok);
-			exit ();
+            Display::addFlash(Display::return_message($message));
+			header('Location: user_add.php?sec_token='.$tok);
+			exit;
 		} else {
 			$tok = Security::get_token();
-			header('Location: user_list.php?action=show_message&message='.urlencode($message).'&sec_token='.$tok);
-			exit ();
+            Display::addFlash(Display::return_message($message));
+			header('Location: user_list.php?sec_token='.$tok);
+			exit;
 		}
 	}
 } else {

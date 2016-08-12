@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -170,11 +171,11 @@ class CStudentPublication
     private $weight;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     * @var Session
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="studentPublications")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    private $sessionId;
+    private $session;
 
     /**
      * @var integer
@@ -574,26 +575,24 @@ class CStudentPublication
     }
 
     /**
-     * Set sessionId
-     *
-     * @param integer $sessionId
+     * Set session
+     * @param Session $session
      * @return CStudentPublication
      */
-    public function setSessionId($sessionId)
+    public function setSession(Session $session = null)
     {
-        $this->sessionId = $sessionId;
+        $this->session = $session;
 
         return $this;
     }
 
     /**
-     * Get sessionId
-     *
-     * @return integer
+     * Get session
+     * @return Session
      */
-    public function getSessionId()
+    public function getSession()
     {
-        return $this->sessionId;
+        return $this->session;
     }
 
     /**
@@ -757,5 +756,14 @@ class CStudentPublication
     public function setDocumentId($documentId)
     {
         $this->documentId = $documentId;
+    }
+
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 }

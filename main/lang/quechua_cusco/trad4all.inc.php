@@ -192,7 +192,6 @@ $NoArchive = "Manan ajllankichu mayqen khiputapas";
 $ArchiveNotFound = "Mana tarikunchu ni hoq khiputapas";
 $ArchiveUncompressed = "Kichakuspa khipuqa churakunña.";
 $CsvPutIntoDocTool = "Khipu \"usuarios.csv\" churachikun llank'ana qelqa khipu sutiyuq ukhunpi.";
-$BackH = "kutiy raphi qallariyman";
 $OtherCategory = "Hoq mita";
 $AllowedToUnsubscribe = "Haykuqmasikunaqa atillankun yachachinapi qelqachikusqanta horqochikuyta";
 $NotAllowedToUnsubscribe = "Haykuqmasikunaqa manan atinkumanchu yachachinapi qelqachikusqankuta horqochikuyta";

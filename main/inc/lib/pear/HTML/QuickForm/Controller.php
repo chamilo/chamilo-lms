@@ -175,8 +175,9 @@ class HTML_QuickForm_Controller
     function &getPage($pageName)
     {
         if (!isset($this->_pages[$pageName])) {
-            return PEAR::raiseError('HTML_QuickForm_Controller: Unknown page "' . $pageName . '"');
+            throw new \Exception('HTML_QuickForm_Controller: Unknown page "' . $pageName . '"');
         }
+
         return $this->_pages[$pageName];
     }
 
@@ -210,7 +211,8 @@ class HTML_QuickForm_Controller
                 return $this->_actions[$actionName]->perform($page, $actionName);
                 break;
             default:
-                return PEAR::raiseError('HTML_QuickForm_Controller: Unhandled action "' . $actionName . '" in page "' . $page->getAttribute('id') . '"');
+                throw new \Exception('HTML_QuickForm_Controller: Unhandled action "' . $actionName . '" in page "' . $page->getAttribute('id') . '"');
+
         } // switch
     }
 
@@ -410,13 +412,13 @@ class HTML_QuickForm_Controller
             if (is_array($filter) && (2 != count($filter) || !is_callable($filter))) {
                 foreach ($filter as $val) {
                     if (!is_callable($val)) {
-                        return PEAR::raiseError(null, QUICKFORM_INVALID_FILTER, null, E_USER_WARNING, "Callback function does not exist in QuickForm_Controller::_setDefaultsOrConstants()", 'HTML_QuickForm_Error', true);
+                        throw new \Exception("Callback function does not exist in QuickForm_Controller::_setDefaultsOrConstants()");
                     } else {
                         $newValues = $this->_arrayMapRecursive($val, $newValues);
                     }
                 }
             } elseif (!is_callable($filter)) {
-                return PEAR::raiseError(null, QUICKFORM_INVALID_FILTER, null, E_USER_WARNING, "Callback function does not exist in QuickForm_Controller::_setDefaultsOrConstants()", 'HTML_QuickForm_Error', true);
+                throw new \Exception("Callback function does not exist in QuickForm_Controller::_setDefaultsOrConstants()");
             } else {
                 $newValues = $this->_arrayMapRecursive($val, $newValues);
             }

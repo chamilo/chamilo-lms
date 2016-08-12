@@ -363,18 +363,23 @@ class CourseHome
                 unset($lnk);
                 if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
                     if ($tool['visibility'] == '1' || $tool['name'] == TOOL_TRACKING) {
-                        $link['name'] = Display::return_icon('remove.gif', get_lang('Deactivate'));
+                        $link['name'] = Display::returnFontAwesomeIcon('minus');
+                        $link['title'] = get_lang('Deactivate');
                         $link['cmd'] = 'hide=yes';
                         $lnk[] = $link;
                     }
 
                     if ($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN) {
-                        $link['name'] = Display::return_icon('add.gif', get_lang('Activate'));
+                        //$link['name'] = Display::return_icon('add.gif', get_lang('Activate'));
+                        $link['name'] = Display::returnFontAwesomeIcon('plus');
+                        $link['title'] = get_lang('Activate');
                         $link['cmd'] = 'restore=yes';
                         $lnk[] = $link;
 
                         if ($tool['added_tool'] == 1) {
-                            $link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
+                            //$link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
+                            $link['name'] = Display::returnFontAwesomeIcon('trash');
+                            $link['title'] = get_lang('Remove');
                             $link['cmd'] = 'remove=yes';
                             $lnk[] = $link;
                         }
@@ -385,8 +390,8 @@ class CourseHome
                 }
                 if (api_is_platform_admin() && !api_is_coach()) {
                     if ($tool['visibility'] == 2) {
-                        $link['name'] = Display::return_icon('undelete.gif', get_lang('Activate'));
-
+                        $link['name'] = Display::returnFontAwesomeIcon('undo');
+                        $link['title'] = get_lang('Activate');
                         $link['cmd'] = 'hide=yes';
                         $lnk[] = $link;
 
@@ -397,17 +402,24 @@ class CourseHome
                         }
                     }
                     if ($tool['visibility'] == 0 && $tool['added_tool'] == 0) {
-                        $link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
+                        $link['name'] = Display::returnFontAwesomeIcon('trash');
+                        $link['title'] = get_lang('Remove');
                         $link['cmd'] = 'remove=yes';
                         $lnk[] = $link;
                     }
                 }
                 if (is_array($lnk)) {
+                    $html .= '<div class="pull-right">';
+                    $html .= '<div class="btn-options">';
+                    $html .= '<div class="btn-group btn-group-sm" role="group">';
                     foreach ($lnk as & $this_link) {
-                        if (!$tool['adminlink']) {
-                            $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
+                        if (!$tool['adminlink']) { 
+                            $html .= '<a class="btn btn-default" title='.$this_link['title'].' href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
                         }
                     }
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '</div>';
                 }
                 $html .= "</td>";
 
@@ -654,7 +666,7 @@ class CourseHome
      * @param array $all_tools_list List of tools as returned by get_tools_category()
      * @param bool  $rows
      *
-     * @return void
+     * @return string
      */
     public static function show_tools_category($all_tools_list, $rows = false)
     {
@@ -828,21 +840,12 @@ class CourseHome
                         'target' => $tool['target']
                     );
                 } else {
-                    if (count(explode('type=classroom', $tool['link'])) == 2 || count(explode('type=conference', $tool['link'])) == 2) {
-                        $tool_link_params = array(
-                            'id' => 'tooldesc_'.$toolId,
-                            'href' => $tool['link'],
-                            'class' => $class,
-                            'target' => '_blank'
-                        );
-                    } else {
-                        $tool_link_params = array(
-                            'id' => 'tooldesc_'.$toolId,
-                            'href' => $tool['link'],
-                            'class' => $class,
-                            'target' => $tool['target']
-                        );
-                    }
+                    $tool_link_params = array(
+                        'id' => 'tooldesc_'.$toolId,
+                        'href' => $tool['link'],
+                        'class' => $class,
+                        'target' => $tool['target']
+                    );
                 }
 
                 $tool_name = self::translate_tool_name($tool);
@@ -963,10 +966,19 @@ class CourseHome
                         if ($i == 0) {
                             $html .= '<ul>';
                         }
+                        $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
+                        $original_image = Display::return_icon(
+                                $image,
+                                $item['name'],
+                                array('id' => 'toolimage_'.$item['tool']['id']),
+                                ICON_SIZE_SMALL,
+                                false
+                            );
                         $html .= '<li class="course-tool">';
                         $html .= $item['extra'];
                         $html .= $item['visibility'];
-                        $html .= $item['icon'];
+                        $url = Display::url($original_image, $item['url_params']['href'], $item['url_params']);
+                        $html .= $url;
                         $html .= $item['link'];
                         $html .= '</li>';
 
@@ -1159,45 +1171,49 @@ class CourseHome
         $navigation_items = self::get_navigation_items(true);
         $course_id = api_get_course_id();
 
-        $html = '<div id="toolnav"> <!-- start of #toolnav -->';
+        $html = '<div id="toolnav">'
+                . '<div class="btn-tool">'
+                . '<a class="btn btn-default" href="javascript: void(0);" id="swap_menu_link" onclick="javascript: swap_menu();">'.Display::returnFontAwesomeIcon('bars').'</a></div>';
         if (api_get_setting('show_navigation_menu') == 'icons') {
             $html .= self::show_navigation_tool_shortcuts($orientation = SHORTCUTS_VERTICAL);
         } else {
             $html .= '<div id="toolnavbox">';
-            $html .= '<div id="toolnavlist"><dl>';
+            $html .= '<ul>';
+            $count = 0;
             foreach ($navigation_items as $key => $navigation_item) {
                 //students can't see the course settings option
+                $count++;
                 if (!api_is_allowed_to_edit() && $key == 'course_settings') {
                     continue;
                 }
-                $html .= '<dd>';
+                $html .= '<li>';
                 $url_item = parse_url($navigation_item['link']);
                 $url_current = parse_url($_SERVER['REQUEST_URI']);
 
                 if (strpos($navigation_item['link'], 'chat') !== false &&
                     api_get_course_setting('allow_open_chat_window', $course_id)
                 ) {
-                    $html .= '<a href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$navigation_item['target'].'"';
+                    $html .= '<a class="btn btn-default" href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$navigation_item['target'].'"';
                 } else {
-                    $html .= '<a href="'.$navigation_item['link'].'" target="_top" ';
+                    $html .= '<a class="btn btn-default" href="'.$navigation_item['link'].'" target="_top" ';
                 }
 
                 if (stristr($url_item['path'], $url_current['path'])) {
-                    if (!isset($_GET['learnpath_id']) || strpos($url_item['query'], 'learnpath_id='.$_GET['learnpath_id']) === 0) {
+                    if (!isset($_GET['learnpath_id']) || strpos($url_item['query'], 'learnpath_id='.intval($_GET['learnpath_id'])) === 0) {
                         $html .= ' id="here"';
                     }
                 }
                 $html .= ' title="'.$navigation_item['name'].'">';
                 if (api_get_setting('show_navigation_menu') != 'text') {
-                    $html .= '<div align="left"><img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/></div>';
+                    $html .= '<div class="pull-left">'.Display::return_icon(substr($navigation_item['image'],0,-3)."png", $navigation_item['name'], array('class'=>'tool-img'), ICON_SIZE_SMALL).'</div>';
                 }
                 if (api_get_setting('show_navigation_menu') != 'icons') {
-                    $html .= $navigation_item['name'];
+                    $html .= '<span class="tool-text-'.$count.'">'.$navigation_item['name'].'</span>';
                 }
                 $html .= '</a>';
-                $html .= '</dd>';
+                $html .= '</li>';
             }
-            $html .= '</dl></div></div>';
+            $html .= '</ul></div>';
         }
         $html .= '</div><!-- end "#toolnav" -->';
 
@@ -1238,7 +1254,7 @@ class CourseHome
                 }
             }
             $html .= '</div>';
-            
+
         }
 
         return $html;

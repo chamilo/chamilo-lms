@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Homepage script for the documents tool
  *
@@ -162,9 +164,10 @@ if (!empty($groupId)) {
             $group_member_with_upload_rights = true;
         }
     }
-    $_SESSION['group_member_with_upload_rights'] = $group_member_with_upload_rights;
+
+    Session::write('group_member_with_upload_rights', $group_member_with_upload_rights);
 } else {
-    $_SESSION['group_member_with_upload_rights'] = false;
+    Session::write('group_member_with_upload_rights', false);
 }
 
 // Actions.
@@ -1048,7 +1051,7 @@ if ($is_allowed_to_edit ||
                 $fileExist = true;
             }
             if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$moveTo)) {
-                update_db_info(
+                DocumentManager::updateDbInfo(
                     'update',
                     $document_to_move['path'],
                     $moveTo . '/' . basename($document_to_move['path'])

@@ -183,13 +183,21 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
         if (!in_array($role,
             array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))
         ) {
-            $social_right_content .=  '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
+            $social_right_content .= '<div class="group-tool">';
+            $social_right_content .= '<div class="pull-right">';
+            $social_right_content .=  '<a class="btn btn-default btn-sm" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
                 get_lang('JoinGroup').'</a>';
+            $social_right_content .=  '</div>';
+            $social_right_content .=  '</div>';
         } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-            $social_right_content .=  '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
+            $social_right_content .= '<div class="group-tool">';
+            $social_right_content .= '<div class="pull-right">';
+            $social_right_content .=  '<a class="btn btn-default btn-sm" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
+                    Display::returnFontAwesomeIcon('envelope').' '.
                 get_lang('YouHaveBeenInvitedJoinNow').'</a>';
         }
-        $social_right_content .=  '<br />';
+        $social_right_content .=  '</div>';
+        $social_right_content .=  '</div>';
     }
     $content = MessageManager::display_messages_for_group($group_id);
     if ($is_group_member) {
@@ -203,10 +211,11 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                     'action' => 'add_message_group'
                 ]);
             $create_thread_link = Display::url(
+                Display::returnFontAwesomeIcon('commenting') . ' ' .
                 get_lang('YouShouldCreateATopic'),
                 $createThreadUrl,
                 [
-                    'class' => 'ajax btn btn-default',
+                    'class' => 'ajax btn btn-primary',
                     'title' => get_lang('ComposeMessage'),
                     'data-title' => get_lang('ComposeMessage'),
                     'data-size' => 'lg'
@@ -222,6 +231,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                     'action' => 'add_message_group',
                 ]);
             $create_thread_link = Display::url(
+                Display::returnFontAwesomeIcon('commenting') . ' ' .
                 get_lang('NewTopic'),
                 $createThreadUrl,
                 [
@@ -246,10 +256,15 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     // Members
     if (count($members) > 0) {
         if ($role == GROUP_USER_PERMISSION_ADMIN) {
+            $member_content .= '<div class="group-tool">';
+            $member_content .= '<div class="pull-right">';
             $member_content .= Display::url(
-                Display::return_icon('edit.gif', get_lang('EditMembersList')).' '.get_lang('EditMembersList'),
-                'group_members.php?id='.$group_id
+                Display::returnFontAwesomeIcon('pencil').' '.get_lang('EditMembersList'),
+                'group_members.php?id='.$group_id,
+                    array('class'=>'btn btn-default btn-sm', 'title' => get_lang('EditMembersList'))
             );
+            $member_content .= '</div>';
+            $member_content .= '</div>';
         }
         $member_content .= '<div class="user-list">';
         $member_content .= '<div class="row">';
@@ -268,10 +283,9 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                 }
 
                 $userPicture = UserManager::getUserPicture($member['id']);
-
-                $member_content .= '<div class="col-md-2">';
+                $member_content .= '<div class="col-md-3">';
                 $member_content .= '<div class="items-user">';
-                $member_name = Display::url(api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon, $member['user_info']['profile_url']);
+                $member_name = Display::url(api_get_person_name(cut($member['user_info']['firstname'],15),cut($member['user_info']['lastname'],15)).'&nbsp;'.$icon, $member['user_info']['profile_url']);
                 $member_content .= Display::div('<img class="img-circle" src="'.$userPicture.'"/>', array('class' => 'avatar'));
                 $member_content .= Display::div($member_name, array('class' => 'name'));
                 $member_content .= '</div>';

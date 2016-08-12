@@ -15,7 +15,7 @@ switch ($action) {
     case 'export':
         $hideExportLink = api_get_setting('hide_certificate_export_link');
         $hideExportLinkStudent = api_get_setting('hide_certificate_export_link_students');
-        if ($hideExportLink === 'true' || (api_is_student() && $hideExportLinkStudent === 'true') ) {
+        if ($hideExportLink === 'true' || (api_is_student() && $hideExportLinkStudent === 'true')) {
             api_not_allowed(true);
         }
 
@@ -33,8 +33,7 @@ switch ($action) {
             );
 
             $pdfParams['orientation'] = 'landscape';
-            $pageFormat = $pdfParams['orientation'] == 'landscape' ? 'A4-L' : 'A4';
-
+            $pageFormat = $pdfParams['orientation'] === 'landscape' ? 'A4-L' : 'A4';
             $userInfo = api_get_user_info($certificate->user_id);
             $pdfName = api_replace_dangerous_char(get_lang('Certificate') . ' ' . $userInfo['username']);
 
@@ -43,6 +42,22 @@ switch ($action) {
         }
         break;
     default:
+        // Special rules for anonymous users
+        if (!$certificate->isVisible()) {
+            Display::display_reduced_header();
+            echo Display::return_message(get_lang('CertificateExistsButNotPublic'), 'warning');
+            Display::display_reduced_footer();
+            break;
+        }
+
+        if (!$certificate->isAvailable()) {
+            Display::display_reduced_header();
+            echo Display::return_message(get_lang('NoCertificateAvailable'), 'error');
+            Display::display_reduced_footer();
+            break;
+        }
+
         // Show certificate HTML
         $certificate->show();
+        break;
 }

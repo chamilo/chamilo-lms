@@ -47,7 +47,6 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_comment (iid INT NOT NULL PRIMARY KEY, id INT NULL, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL)");
         $this->addSql("CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (iid int NOT NULL auto_increment PRIMARY KEY, id INT, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL)");
 
-        $this->addSql("ALTER TABLE session MODIFY COLUMN date_start date default NULL, MODIFY COLUMN date_end date default NULL");
         $this->addSql("ALTER TABLE skill_rel_user MODIFY COLUMN acquired_skill_at datetime default NULL");
         $this->addSql("ALTER TABLE track_e_access MODIFY COLUMN access_date datetime DEFAULT NULL");
         $this->addSql("ALTER TABLE track_e_lastaccess MODIFY COLUMN access_date datetime DEFAULT NULL");
@@ -86,7 +85,6 @@ class Version110 extends AbstractMigrationChamilo
                 array('default' => 0, 'unsigned' => true)
             );
         }
-
         $sessionTable = $schema->getTable('session');
         if (!$sessionTable->hasColumn('duration')) {
             $this->addSql("ALTER TABLE session ADD COLUMN duration int");
@@ -155,7 +153,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session_rel_course CHANGE id_session session_id int");
         $this->addSql('DELETE FROM session_rel_course WHERE session_id NOT IN (SELECT id FROM session)');
 
-        $this->addSql("DELETE course_rel_user WHERE course_code NOT IN (SELECT code FROM course)");
+        $this->addSql("DELETE FROM course_rel_user WHERE course_code NOT IN (SELECT code FROM course)");
         $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
         // Add iid
@@ -517,7 +515,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM session_rel_course WHERE course_code NOT IN (SELECT code FROM course)');
         $this->addSql("UPDATE session_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
-        $this->addSql("DELETE access_url_rel_course WHERE course_code NOT IN (SELECT code FROM course)");
+        $this->addSql("DELETE FROM access_url_rel_course WHERE course_code NOT IN (SELECT code FROM course)");
         $this->addSql("UPDATE access_url_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
         $this->addSql("ALTER TABLE settings_current DROP INDEX unique_setting");

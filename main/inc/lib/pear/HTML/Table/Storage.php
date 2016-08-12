@@ -342,10 +342,8 @@ class HTML_Table_Storage extends HTML_Common
         ) {
             return $this->_structure[$row][$col]['attr'];
         } elseif (!isset($this->_structure[$row][$col])) {
-            return PEAR::raiseError('Invalid table cell reference[' .
-                $row . '][' . $col . '] in HTML_Table::getCellAttributes');
+            throw new \Exception('Invalid table cell reference[' .$row . '][' . $col . '] in HTML_Table::getCellAttributes');
         }
-        return;
     }
 
     /**
@@ -433,8 +431,7 @@ class HTML_Table_Storage extends HTML_Common
             return;
         }
         if (!isset($this->_structure[$row][$col])) {
-            return PEAR::raiseError('Invalid table cell reference[' .
-                $row . '][' . $col . '] in HTML_Table::getCellContents');
+            throw new \Exception('Invalid table cell reference[' .$row . '][' . $col . '] in HTML_Table::getCellContents');
         }
         return $this->_structure[$row][$col]['contents'];
     }
@@ -477,8 +474,7 @@ class HTML_Table_Storage extends HTML_Common
         $inTR = false)
     {
         if (isset($contents) && !is_array($contents)) {
-            return PEAR::raiseError('First parameter to HTML_Table::addRow ' .
-                'must be an array');
+            throw new \Exception('First parameter to HTML_Table::addRow must be an array');
         }
         if (is_null($contents)) {
             $contents = array();
@@ -620,8 +616,7 @@ class HTML_Table_Storage extends HTML_Common
     function addCol($contents = null, $attributes = null, $type = 'td')
     {
         if (isset($contents) && !is_array($contents)) {
-            return PEAR::raiseError('First parameter to HTML_Table::addCol ' .
-                'must be an array');
+            throw new \Exception('First parameter to HTML_Table::addCol must be an array');
         }
         if (is_null($contents)) {
             $contents = array();

@@ -46,7 +46,18 @@ if ($skillParentId > 0) {
 $allSkills = $objSkill->get_all();
 $allGradebooks = $objGradebook->find('all');
 
-$skillList = [0 => get_lang('None')];
+// This procedure is for check if there is already a Skill with no Parent (Root by default)
+
+$isAlreadyRootSkill = false;
+
+foreach ($allSkills as $checkedSkill) {
+    if (intval($checkedSkill['parent_id']) > 0) {
+        $isAlreadyRootSkill = true;
+        break;
+    }
+}
+
+$skillList = $isAlreadyRootSkill ? [] : [0 => get_lang('None')];
 $gradebookList = [];
 
 foreach ($allSkills as $skill) {

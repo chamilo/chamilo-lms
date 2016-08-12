@@ -125,13 +125,20 @@ class Database
      * @param array  $params
      * @param string $sysPath
      * @param string $entityRootPath
+     * @param bool $returnConnection
+     * @param bool $returnManager
      *
      * @throws \Doctrine\ORM\ORMException
      *
      * @return
      */
-    public function connect($params = array(), $sysPath = '', $entityRootPath = '', $returnConnection = false)
-    {
+    public function connect(
+        $params = array(),
+        $sysPath = '',
+        $entityRootPath = '',
+        $returnConnection = false,
+        $returnManager = false
+    ) {
         $config = self::getDoctrineConfig($entityRootPath);
         $config->setAutoGenerateProxyClasses(true);
 
@@ -153,11 +160,11 @@ class Database
         // Registering Constraints
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
-            $sysPath."vendor/symfony/symfony/src"
+            $sysPath."vendor/symfony/validator"
         );
 
         AnnotationRegistry::registerFile(
-            $sysPath."vendor/symfony/symfony/src/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
+            $sysPath."vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php"
         );
 
         // Registering gedmo extensions
@@ -183,7 +190,13 @@ class Database
         $connection->executeQuery('SET sql_mode = "";');
 
         if ($returnConnection) {
+
             return $connection;
+        }
+
+        if ($returnManager) {
+
+            return $entityManager;
         }
 
         $this->setConnection($connection);

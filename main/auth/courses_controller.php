@@ -163,15 +163,22 @@ class CoursesController
      * @param string $error
      * @param string $content
      * @param $limit
+     * @param boolean $justVisible Whether to search only in courses visibles in the catalogue
      */
-    public function search_courses($search_term, $message = '', $error = '', $content = null, $limit = array())
-    {
+    public function search_courses(
+        $search_term,
+        $message = '',
+        $error = '',
+        $content = null,
+        $limit = array(),
+        $justVisible = false
+    ) {
         $data = array();
         $limit = !empty($limit) ? $limit : CourseCategory::getLimitArray();
 
         $browse_course_categories = $this->model->browse_course_categories();
         $data['countCoursesInCategory'] = $this->model->count_courses_in_category('ALL', $search_term);
-        $data['browse_courses_in_category'] = $this->model->search_courses($search_term, $limit);
+        $data['browse_courses_in_category'] = $this->model->search_courses($search_term, $limit, $justVisible);
         $data['browse_course_categories']   = $browse_course_categories;
 
         $data['search_term'] = Security::remove_XSS($search_term); //filter before showing in template
@@ -263,8 +270,8 @@ class CoursesController
     /**
      * Change course category
      * render to listing view
-     * @param string    Course code
-     * @param int    Category id
+     * @param string    $course_code
+     * @param int    $category_id
      */
     public function change_course_category($course_code, $category_id)
     {
@@ -282,9 +289,9 @@ class CoursesController
     /**
      * Move up/down courses inside a category
      * render to listing view
-     * @param string    move to up or down
-     * @param string    Course code
-     * @param int    Category id
+     * @param string    $move move to up or down
+     * @param string    $course_code
+     * @param int    $category_id Category id
      */
     public function move_course($move, $course_code, $category_id)
     {
@@ -299,8 +306,8 @@ class CoursesController
     /**
      * Move up/down categories
      * render to listing view
-     * @param string    move to up or down
-     * @param int    Category id
+     * @param string    $move move to up or down
+     * @param int    $category_id Category id
      */
     public function move_category($move, $category_id)
     {
@@ -315,8 +322,8 @@ class CoursesController
     /**
      * Edit course category
      * render to listing view
-     * @param string Category title
-     * @param int    Category id
+     * @param string $title Category title
+     * @param int    $category Category id
      */
     public function edit_course_category($title, $category)
     {

@@ -13,7 +13,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-//$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Setting the name of the tool

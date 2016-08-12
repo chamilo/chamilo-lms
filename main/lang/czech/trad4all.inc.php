@@ -131,7 +131,6 @@ $NoArchive = "Nebyl vybrán žádný archiv";
 $ArchiveNotFound = "Archiv nebyl nalezen";
 $ArchiveUncompressed = "Archiv byl rozbalen a nainstalován.";
 $CsvPutIntoDocTool = "Soubor \"users.csv\" byl vložen do Nástroje dokumentů.";
-$BackH = "zpět na domácí stránku";
 $OtherCategory = "Jiná kategorie";
 $AllowedToUnsubscribe = "Uživatelé mají povoleno se odepsat z tohoto kurzu";
 $NotAllowedToUnsubscribe = "Uživatelé nemají dovoleno se odepsat z tohoto kurzu";

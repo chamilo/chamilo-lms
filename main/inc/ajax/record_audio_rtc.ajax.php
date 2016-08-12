@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 require_once '../global.inc.php';
 
 // Add security from Chamilo
@@ -54,9 +56,8 @@ if (!empty($result) && is_array($result)) {
     $courseId = $result['c_id'];
 
     /** @var learnpath $lp */
-    $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
+    $lp = Session::read('oLP');
     $lpItemId = isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id']) ? $_REQUEST['lp_item_id'] : null;
-
     if (!empty($lp) && empty($lpItemId)) {
         $lp->set_modified_on();
 

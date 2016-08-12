@@ -79,7 +79,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * @var string
      *
-     * @ORM\Column(name="username_canonical", type="string", length=100, nullable=false, unique=true)
+     * @ORM\Column(name="username_canonical", type="string", length=100, nullable=false)
      */
     protected $usernameCanonical;
 

@@ -7,7 +7,6 @@
  * @package chamilo.badge
  */
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/baker.lib.php';
 
 $issue = isset($_REQUEST['issue']) ? intval($_REQUEST['issue']) : 0;
 

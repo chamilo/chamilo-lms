@@ -169,7 +169,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     } else {
                         $dialogBox .= $filename.' '.get_lang('NameNotEqual');
                         my_delete($document_sys_path.$uploadPath.'/'.$fld.'/'.$filename);
-                        update_db_info('delete', $uploadPath.'/'.$fld.'/'.$filename);
+                        DocumentManager::updateDbInfo('delete', $uploadPath.'/'.$fld.'/'.$filename);
                     }
                     if ($imgcount == 0) { // all image uploaded
                         $finish = 1;
@@ -209,19 +209,8 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     'QuizAdded',
                     api_get_user_id()
                 );
-
             } else {
-                if ($finish == 2) {
-                    // delete?
-                    //$dialogBox .= get_lang('NoImg');
-                }
                 $finish = 0;
-                // error
-                if (api_failure::get_last_failure() == 'not_enough_space') {
-                    $dialogBox .= get_lang('NoSpace');
-                } elseif (api_failure::get_last_failure() == 'php_file_in_zip_file') {
-                    $dialogBox .= get_lang('ZipNoPhp');
-                }
             }
         }
     }

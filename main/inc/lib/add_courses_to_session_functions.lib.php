@@ -47,7 +47,7 @@ class AddCourseToSession
             if ($type == 'single') {
 				// search users where username or firstname or lastname begins likes $needle
 				$sql = 'SELECT
-							course.code,
+                            course.id,
 						 	course.visual_code,
 						 	course.title,
 						 	session_rel_course.session_id
@@ -59,7 +59,7 @@ class AddCourseToSession
 							course.visual_code LIKE "'.$needle.'%" OR
 							course.title LIKE "'.$needle.'%"';
 			} else {
-				$sql = 'SELECT course.code, course.visual_code, course.title
+                $sql = 'SELECT course.id, course.visual_code, course.title
 						FROM '.$tbl_course.' course
 						WHERE
 							course.visual_code LIKE "'.$needle.'%" '.$cond_course_code.'
@@ -73,7 +73,7 @@ class AddCourseToSession
 
 					if ($type=='single') {
 						$sql = 'SELECT
-						            course.code,
+                                    course.id,
 						            course.visual_code,
 						            course.title,
 						            session_rel_course.session_id
@@ -88,7 +88,7 @@ class AddCourseToSession
 									(course.visual_code LIKE "'.$needle.'%" OR
 									course.title LIKE "'.$needle.'%" )';
 					} else {
-						$sql = 'SELECT course.code, course.visual_code, course.title
+                        $sql = 'SELECT course.id, course.visual_code, course.title
 								FROM '.$tbl_course.' course, '.$tbl_course_rel_access_url.' url_course
 								WHERE
 									url_course.c_id = course.id AND
@@ -105,7 +105,7 @@ class AddCourseToSession
 				while ($course = Database :: fetch_array($rs)) {
 					$course_list[] = $course['code'];
 					$course_title=str_replace("'","\'",$course_title);
-					$return .= '<a href="javascript: void(0);" onclick="javascript: add_course_to_session(\''.$course['code'].'\',\''.$course_title.' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
+                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_course_to_session(\''.$course['id'].'\',\''.$course_title.' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
 				}
 				$xajax_response -> addAssign('ajax_list_courses_single','innerHTML',api_utf8_encode($return));
 			} else {
@@ -113,10 +113,9 @@ class AddCourseToSession
 				while($course = Database :: fetch_array($rs)) {
 					$course_list[] = $course['code'];
 					$course_title=str_replace("'","\'",$course_title);
-					$return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'].' ('.$course['visual_code'].')',ENT_QUOTES).'">'.$course['title'].' ('.$course['visual_code'].')</option>';
+                    $return .= '<option value="'.$course['id'].'" title="'.htmlspecialchars($course['title'].' ('.$course['visual_code'].')',ENT_QUOTES).'">'.$course['title'].' ('.$course['visual_code'].')</option>';
 				}
 				$return .= '</select>';
-
 				$xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));
 			}
 		}

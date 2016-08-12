@@ -20,7 +20,6 @@
  */
 define('CLI_SCRIPT', true); // for chamilo imported code
 require_once dirname(dirname(dirname(__FILE__))).'/main/inc/global.inc.php';
-require_once dirname(dirname(dirname(__FILE__))).'/local/classes/database.class.php';
 
 global $DB;
 $DB = new DatabaseManager();

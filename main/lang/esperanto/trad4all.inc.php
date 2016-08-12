@@ -132,7 +132,6 @@ $NoArchive = "Neniu arkivo elektita";
 $ArchiveNotFound = "La arkivo ne estas trovita";
 $ArchiveUncompressed = "La arkivo estas malkunpremita kaj instalita.";
 $CsvPutIntoDocTool = "La dosiero \"users.csv\" ne estas ŝargita en la Dokumentan ilaron.";
-$BackH = "Reiri al startpaĝo";
 $OtherCategory = "Alia kategorio";
 $AllowedToUnsubscribe = "Permesita";
 $NotAllowedToUnsubscribe = "Ne permesita";

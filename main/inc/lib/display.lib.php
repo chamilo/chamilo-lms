@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\ExtraField;
 
 /**
  * Class Display
@@ -65,6 +66,7 @@ class Display
 
         self::$global_template = new Template($tool_name, $showHeader, $showHeader);
 
+
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
         if (empty($help)) {
             $currentURL = api_get_self();
@@ -83,13 +85,13 @@ class Display
         }
 
         self::$global_template->setHelp($help);
-
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->setCssFiles();
             self::$global_template->set_js_files();
             self::$global_template->setCssCustomFiles();
         }
+
         if (!empty($page_header)) {
             self::$global_template->assign('header', $page_header);
         }
@@ -140,6 +142,7 @@ class Display
     public static function display_reduced_footer()
     {
         echo self::$global_template->show_footer_js_template();
+        echo '</body></html>';
     }
 
     public static function page()
@@ -444,6 +447,8 @@ class Display
      * @param bool	$filter (true) or not (false)
      * @param bool $returnValue
      *
+     * @deprecated use Display::addFlash with Display::return_message($message, 'normal');
+     *
      * @return void
      */
     public static function display_normal_message($message, $filter = true, $returnValue = false)
@@ -460,6 +465,7 @@ class Display
      * Displays an warning message. Use this if you want to draw attention to something
      * This can also be used for instance with the hint in the exercises
      *
+     * @deprecated use Display::addFlash with Display::return_message
      */
     public static function display_warning_message($message, $filter = true, $returnValue = false)
     {
@@ -474,6 +480,7 @@ class Display
     /**
      * Displays an confirmation message. Use this if something has been done successfully
      * @param bool	Filter (true) or not (false)
+     * @deprecated use Display::addFlash with Display::return_message
      * @return void
      */
     public static function display_confirmation_message ($message, $filter = true, $returnValue = false)
@@ -491,6 +498,8 @@ class Display
      * @param string $message - include any additional html
      *                          tags if you need them
      * @param bool	Filter (true) or not (false)
+     * @deprecated use Display::addFlash with Display::return_message
+     *
      * @return void
      */
     public static function display_error_message ($message, $filter = true, $returnValue = false)
@@ -516,9 +525,9 @@ class Display
 
     /**
      * Returns a div html string with
-     * @param   string  The message
-     * @param   string  The message type (confirm,normal,warning,error)
-     * @param   bool    Whether to XSS-filter or not
+     * @param   string  $message
+     * @param   string  $type Example: confirm, normal, warning, error
+     * @param   bool    $filter Whether to XSS-filter or not
      * @return  string  Message wrapped into an HTML div
      */
     public static function return_message($message, $type = 'normal', $filter = true)
@@ -531,8 +540,8 @@ class Display
         	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
         }
 
-        $class = "";
-        switch($type) {
+        $class = '';
+        switch ($type) {
             case 'warning':
                $class .= 'alert alert-warning';
                break;
@@ -560,7 +569,7 @@ class Display
      * @param string  optional, class from stylesheet
      * @return string encrypted mailto hyperlink
      */
-    public static function encrypted_mailto_link ($email, $clickable_text = null, $style_class = '')
+    public static function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
     {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
@@ -777,10 +786,9 @@ class Display
         // it checks if there is an SVG version. If so, it uses it.
         // When moving this to production, the return_icon() calls should
         // ask for the SVG version directly
-        $testServer = api_get_setting('server_type');
-        if ($testServer == 'test' && $return_only_path == false) {
-            // if you want to uncomment this add a setting
-            /*$svgImage = substr($image, 0, -3) . 'svg';
+        $svgIcons = api_get_setting('icons_mode_svg');
+        if ($svgIcons == 'true' && $return_only_path == false) {
+            $svgImage = substr($image, 0, -3) . 'svg';
             if (is_file($code_path . $theme . 'svg/' . $svgImage)) {
                 $icon = $w_code_path . $theme . 'svg/' . $svgImage;
             } elseif (is_file($code_path . 'img/icons/svg/' . $svgImage)) {
@@ -792,7 +800,7 @@ class Display
             }
             if (empty($additional_attributes['width'])) {
                 $additional_attributes['width'] = $size;
-            }*/
+            }
         }
 
         $icon = api_get_cdn_path($icon);
@@ -1041,7 +1049,7 @@ class Display
             if ($i == 1) {
                 $active = ' active';
             }
-            $item = self::tag('a', $item, array('href'=>'#'.$id.'-'.$i, 'role'=> 'tab', 'data-toggle' => 'tab'));
+            $item = self::tag('a', $item, array('href'=>'#'.$id.'-'.$i, 'role'=> 'tab', 'data-toggle' => 'tab', 'id' => $id . $i));
             $ul_attributes['role'] = 'presentation';
             $ul_attributes['class'] = $active;
             $lis .= self::tag('li', $item, $ul_attributes);
@@ -1496,8 +1504,9 @@ class Display
             } else {
                 $notification['link'] = $notification['link'].'&notification=1';
             }
+            $imagen = substr($notification['image'], 0, -4).'.png';
             $return .= Display::url(
-                Display::return_icon($notification['image'], $label),
+                Display::return_icon($imagen, $label),
                 api_get_path(WEB_CODE_PATH).
                 $notification['link'].'&cidReq='.$course_code.
                 '&ref='.$notification['ref'].
@@ -1639,7 +1648,7 @@ class Display
             $entityManager = Database::getManager();
             $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
             $extraFieldValues = $fieldValuesRepo->getVisibleValues(
-                Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE,
+                ExtraField::SESSION_FIELD_TYPE,
                 $session_id
             );
 
@@ -2043,7 +2052,7 @@ class Display
                 //no break;
             case 'ogg':
                 $html = '<audio width="300px" controls src="'.$params['url'].'" >';
-                
+
                 return $html;
                 break;
         }
@@ -2371,11 +2380,13 @@ class Display
         $html .= '<div id="' . $id . '" class="actions">';
         $html .= '<div class="row">';
         if ($col > 4) {
-            $html = '<div class="alert alert-warning" role="alert">Action toolbar design does not work when exceeding four columns - check Display::toolbarAction()</div>';
+            $html = '<div class="alert alert-warning" role="alert">
+                Action toolbar design does not work when exceeding four columns - check Display::toolbarAction()
+            </div>';
         } else {
-            for ( $i = 0; $i < $col; $i++ ) {
+            for ($i = 0; $i < $col; $i++) {
                 $html .= '<div class="col-md-' . $columns . '">';
-                if ( $col == 2 && $i == 1 ) {
+                if ($col == 2 && $i == 1) {
                     if ($right === true) {
                         $html .= '<div class="pull-right">';
                         $html .= (isset($content[$i]) ? $content[$i] : '');
@@ -2398,17 +2409,17 @@ class Display
     /**
      * Get a HTML code for a icon by Font Awesome
      * @param string $name The icon name
+     * @param int|string $size Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
      * @param boolean $fixWidth Optional. Whether add the fw class
-     * @param int|string $size Optional. The size for the icon.
      * @param string $additionalClass Optional. Additional class
      *
      * @return string
      */
     public static function returnFontAwesomeIcon(
         $name,
+        $size = '',
         $fixWidth = false,
-        $size = null,
-        $additionalClass = null
+        $additionalClass = ''
     ) {
         $className = "fa fa-$name";
 

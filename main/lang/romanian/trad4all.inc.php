@@ -569,7 +569,6 @@ $NoArchive = "Nu ati selectat nici un fișier";
 $ArchiveNotFound = "Nu a fost găsit niciun fisier";
 $ArchiveUncompressed = "Acesta este decomprimat și fișierul este instalat.";
 $CsvPutIntoDocTool = " a fost mutate în instrumentul documente.";
-$BackH = "a reveni la pagina principala";
 $OtherCategory = "Altă categorie";
 $AllowedToUnsubscribe = "Utilizatorii se pot dezabona de la acest curs";
 $NotAllowedToUnsubscribe = "Utilizatorii nu se pot dezabona de la acest curs";

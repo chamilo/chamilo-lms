@@ -1,6 +1,8 @@
 <?php
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Class PDF
  * @package chamilo.library
@@ -87,24 +89,13 @@ class PDF
         } else {
             $tpl = $this->template;
         }
-        // Assignments
+
+        $theme = api_get_visual_theme();
+
         // Assignments
         $tpl->assign('pdf_content', $content);
 
-        $organization = api_get_setting('Institution');
-        $img = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
-
-        // Search for classic logo
-        if (file_exists($img)) {
-            $img = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
-            $organization = "<img src='$img'>";
-        } else {
-            // Just use the platform title.
-            if (!empty($organization)) {
-                $organization = '<h2 align="left">'.$organization.'</h2>';
-            }
-        }
-
+        $organization = ChamiloApi::getPlatformLogo();
         // Use custom logo image.
         $pdfLogo = api_get_setting('pdf_logo_header');
         if ($pdfLogo === 'true') {
@@ -291,6 +282,7 @@ class PDF
             $extension = $file_info['extension'];
 
             if (in_array($extension, array('html', 'htm'))) {
+                $dirName = $file_info['dirname'];
                 $filename = $file_info['basename'];
                 $filename = str_replace('_',' ',$filename);
 
@@ -325,13 +317,32 @@ class PDF
 
                                     if (strpos($old_src, '/main/img') === false) {
                                         if (api_get_path(REL_PATH) != '/') {
-                                            $old_src_fixed = str_replace(api_get_path(REL_PATH).'courses/'.$course_data['path'].'/document/', '', $old_src);
+                                            $old_src_fixed = str_replace(
+                                                api_get_path(REL_PATH).'courses/'.$course_data['path'].'/document/',
+                                                '',
+                                                $old_src
+                                            );
+
+                                            // Try with the dirname if exists
+                                            if ($old_src_fixed == $old_src) {
+                                                if (file_exists($dirName.'/'.$old_src)) {
+                                                    $document_path = '';
+                                                    $old_src_fixed = $dirName.'/'.$old_src;
+                                                }
+                                            }
                                         } else {
                                             if (strpos($old_src, 'courses/'.$course_data['path'].'/document/') !== false) {
                                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
                                             } else {
-                                                $document_path = '';
-                                                $old_src_fixed = $old_src;
+
+                                                // Try with the dirname if exists
+                                                if (file_exists($dirName.'/'.$old_src)) {
+                                                    $document_path = '';
+                                                    $old_src_fixed = $dirName.'/'.$old_src;
+                                                } else {
+                                                    $document_path = '';
+                                                    $old_src_fixed = $old_src;
+                                                }
                                             }
                                         }
 
@@ -339,8 +350,7 @@ class PDF
                                     } else {
                                         $new_path = $old_src;
                                     }
-
-                                    $document_html= str_replace($old_src, $new_path, $document_html);
+                                    $document_html = str_replace($old_src, $new_path, $document_html);
                                 }
                             } else {
                                 //Check if this is a complete URL

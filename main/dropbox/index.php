@@ -32,7 +32,7 @@ Display::display_introduction_section(TOOL_DROPBOX);
 // Build URL-parameters for table-sorting
 $sort_params = array();
 if (isset($_GET['dropbox_column'])) {
-    $sort_params[] = 'dropbox_column='.$_GET['dropbox_column'];
+    $sort_params[] = 'dropbox_column='.intval($_GET['dropbox_column']);
 }
 if (isset($_GET['dropbox_page_nr'])) {
     $sort_params[] = 'page_nr='.intval($_GET['page_nr']);
@@ -40,7 +40,7 @@ if (isset($_GET['dropbox_page_nr'])) {
 if (isset($_GET['dropbox_per_page'])) {
     $sort_params[] = 'dropbox_per_page='.intval($_GET['dropbox_per_page']);
 }
-if (isset($_GET['dropbox_direction'])) {
+if (isset($_GET['dropbox_direction']) && in_array($_GET['dropbox_direction'], ['ASC', 'DESC'])) {
     $sort_params[] = 'dropbox_direction='.$_GET['dropbox_direction'];
 }
 

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class MultipleAnswerCombination
  *
@@ -13,8 +15,8 @@
  **/
 class MultipleAnswerCombination extends Question
 {
-    static $typePicture = 'mcmac.png';
-    static $explanationLangVar = 'MultipleSelectCombination';
+    public static $typePicture = 'mcmac.png';
+    public static $explanationLangVar = 'MultipleSelectCombination';
 
     /**
      * Constructor
@@ -34,7 +36,7 @@ class MultipleAnswerCombination extends Question
     {
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
-        $obj_ex = $_SESSION['objExercise'];
+        $obj_ex = Session::read('objExercise');
 
         $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';

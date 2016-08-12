@@ -1,5 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Action controller for the upload process. The display scripts (web forms) redirect
  * the process here to do what needs to be done with each file.
@@ -72,12 +74,14 @@ if (!empty($errorMessage)) {
 
 $div_upload_limit = get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
 
-$form = new FormValidator('upload_ppt', 'POST', '', '');
+$form = new FormValidator('upload_ppt', 'POST', '?' . api_get_cidreq(), '');
 $form->addElement('header', get_lang("WelcomeOogieSubtitle"));
 $form->addElement('html', Display::return_message($message, 'info', false));
 $form->addElement('file', 'user_file', array(Display::return_icon('powerpoint_big.gif'), $div_upload_limit));
 $form->addElement('checkbox', 'take_slide_name', '', get_lang('TakeSlideName'));
-if (api_get_setting('search_enabled') == 'true') {
+$options = ChamiloApi::getDocumentConversionSizes();
+$form->addElement('select', 'slide_size', get_lang('SlideSize'), $options);
+if (api_get_setting('search_enabled') === 'true') {
     require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
     $specific_fields = get_specific_field_list();
     $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));
@@ -90,7 +94,12 @@ if (api_get_setting('search_enabled') == 'true') {
 $form->addButtonUpload(get_lang('ConvertToLP'), 'convert');
 $form->addElement('hidden', 'ppt2lp', 'true');
 $form->add_real_progress_bar(md5(rand(0, 10000)), 'user_file', 1, true);
-$defaults = array('take_slide_name'=>'checked="checked"','index_document'=>'checked="checked"');
+$size = api_get_setting('service_ppt2lp', 'size');
+$defaults = array(
+    'take_slide_name'=>'checked="checked"',
+    'index_document'=>'checked="checked"',
+    'slide_size'=>$size,
+);
 $form->setDefaults($defaults);
 
 // display the form

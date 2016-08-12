@@ -159,7 +159,6 @@ $NoArchive = "沒有選擇備份檔案";
 $ArchiveNotFound = "找不到該備份";
 $ArchiveUncompressed = "該備份已經解壓縮並且安裝。";
 $CsvPutIntoDocTool = "檔案 \"users.csv\" 已經放入文檔工具中。";
-$BackH = "返回主頁";
 $OtherCategory = "其它分類";
 $AllowedToUnsubscribe = "允許";
 $NotAllowedToUnsubscribe = "拒絕";

@@ -244,7 +244,7 @@ class GradebookDataGenerator
         );
 
         $scoreDisplay = ScoreDisplay :: instance();
-        $display = $scoreDisplay->display_score($score, SCORE_DIV, SCORE_BOTH, true);
+        $display = $scoreDisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM, SCORE_BOTH, true);
         $type = $item->get_item_type();
         if ($type == 'L' && get_class($item) == 'ExerciseLink') {
             $display  = ExerciseLib::show_score($score[0], $score[1], false);
@@ -265,7 +265,7 @@ class GradebookDataGenerator
     {
         $score = $item->calc_score(null, 'average');
         $scoreDisplay = ScoreDisplay :: instance();
-        $display = $scoreDisplay->display_score($score, SCORE_DIV, SCORE_BOTH, true);
+        $display = $scoreDisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM, SCORE_BOTH, true);
         $type = $item->get_item_type();
 
         if ($type == 'L' && get_class($item) == 'ExerciseLink') {
@@ -293,7 +293,7 @@ class GradebookDataGenerator
         $scoreDisplay = null;
         if (isset($score[0])) {
             $scoreDisplay = ScoreDisplay::instance();
-            $scoreDisplay = $scoreDisplay->display_score($score, SCORE_DIV, SCORE_BOTH, true);
+            $scoreDisplay = $scoreDisplay->display_score($score, SCORE_DIV, SCORE_BOTH);
         }
 
         return array(
@@ -358,7 +358,7 @@ class GradebookDataGenerator
                         ];
                     //}
 
-                $display = $scoredisplay->display_score($score, SCORE_DIV);
+                $display = $scoredisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM);
 
                 $type = $item->get_item_type();
                 if ($type == 'L' && get_class($item) == 'ExerciseLink') {

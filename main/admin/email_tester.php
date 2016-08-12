@@ -17,12 +17,12 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $toolName = get_lang('EMailTester');
 
 $form = new FormValidator('email_tester');
-$form->addText('smtp_host', get_lang('Host'), false, ['cols-size' => [3, 8, 1]]);
-$form->addText('smtp_port', get_lang('Port'), false, ['cols-size' => [3, 8, 1]]);
-$form->addText('destination', get_lang('Destination'), true, ['cols-size' => [3, 8, 1]]);
-$form->addText('subject', get_lang('Subject'), true, ['cols-size' => [3, 8, 1]]);
-$form->addHtmlEditor('content', get_lang('Message'), true, false, ['ToolbarSet' => 'Minimal', 'cols-size' => [3, 8, 1]]);
-$form->addButtonSend(get_lang('SendMessage'), 'submit', false, ['cols-size' => [3, 8, 1]]);
+$form->addText('smtp_host', get_lang('Host'), false, ['cols-size' => [2, 8, 2]]);
+$form->addText('smtp_port', get_lang('Port'), false, ['cols-size' => [2, 8, 2]]);
+$form->addText('destination', get_lang('Destination'), true, ['cols-size' => [2, 8, 2]]);
+$form->addText('subject', get_lang('Subject'), true, ['cols-size' => [2, 8, 2]]);
+$form->addHtmlEditor('content', get_lang('Message'), true, false, ['ToolbarSet' => 'Minimal', 'cols-size' => [2, 8, 2]]);
+$form->addButtonSend(get_lang('SendMessage'), 'submit', false, ['cols-size' => [2, 8, 2]]);
 $form->setDefaults([
     'smtp_host' => $platform_email['SMTP_HOST'],
     'smtp_port' => $platform_email['SMTP_PORT']

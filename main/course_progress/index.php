@@ -17,13 +17,10 @@ require_once 'thematic_controller.php';
 // current section
 $this_section = SECTION_COURSES;
 
-$current_course_tool  = TOOL_COURSE_PROGRESS;
+$current_course_tool = TOOL_COURSE_PROGRESS;
 
 // protect a course script
 api_protect_course_script(true);
-
-// defining constants
-define('ADD_THEMATIC_PLAN', 6);
 
 // get actions
 $actions = array(
@@ -92,7 +89,7 @@ $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 
 // Only when I see the 3 columns. Avoids double or triple click binding for onclick event
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     $(".thematic_advance_actions, .thematic_tools ").hide();
 	$(".thematic_content").mouseover(function() {
@@ -117,7 +114,7 @@ $(document).ready(function() {
 });
 </script>';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 
 function datetime_by_attendance(attendance_id, thematic_advance_id) {
 	$.ajax({
@@ -190,18 +187,27 @@ if ($action == 'thematic_list') {
     $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));
 }
 if ($action == 'thematic_add') {
-    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
-    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicSection'));
+    $interbreadcrumb[] = array(
+        'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
+        'name' => get_lang('ThematicControl')
+    );
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewThematicSection'));
 }
 if ($action == 'thematic_edit') {
-    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = array(
+        'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
+        'name' => get_lang('ThematicControl')
+    );
     $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditThematicSection'));
 }
 if ($action == 'thematic_details') {
     $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));
 }
 if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
-    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = array(
+        'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
+        'name' => get_lang('ThematicControl')
+    );
     if (!empty($thematic_data)) {
         $interbreadcrumb[] = array(
             'url' => '#',

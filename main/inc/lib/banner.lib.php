@@ -6,6 +6,8 @@
  * @package chamilo.include
  */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Determines the possible tabs (=sections) that are available.
  * This function is used when creating the tabs in the third header line and
@@ -25,10 +27,12 @@ function get_tabs($courseId = null)
     $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
     $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
     $navigation[SECTION_CAMPUS]['key'] = 'homepage';
+    $navigation[SECTION_CAMPUS]['icon'] = 'homepage.png';
 
     $navigation[SECTION_CATALOG]['url'] = api_get_path(WEB_PATH).'main/auth/courses.php';
     $navigation[SECTION_CATALOG]['title'] = get_lang('Courses');
     $navigation[SECTION_CATALOG]['key'] = 'catalog';
+    $navigation[SECTION_CATALOG]['icon'] = 'catalog.png';
 
 
     // My Courses
@@ -42,21 +46,26 @@ function get_tabs($courseId = null)
     }
     $navigation['mycourses']['title'] = get_lang('MyCourses');
     $navigation['mycourses']['key'] = 'my-course';
+    $navigation['mycourses']['icon'] = 'my-course.png';
+
 
     // My Profile
     $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
     $navigation['myprofile']['title'] = get_lang('ModifyProfile');
     $navigation['myprofile']['key'] = 'profile';
+    $navigation['myprofile']['icon'] = 'profile.png';
 	// Link to my agenda
     $navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal';
     $navigation['myagenda']['title'] = get_lang('MyAgenda');
     $navigation['myagenda']['key'] = 'agenda';
+    $navigation['myagenda']['icon'] = 'agenda.png';
 
 	// Gradebook
 	if (api_get_setting('gradebook_enable') == 'true') {
         $navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
         $navigation['mygradebook']['title'] = get_lang('MyGradebook');
         $navigation['mygradebook']['key'] = 'gradebook';
+        $navigation['mygradebook']['icon'] = 'gradebook.png';
 	}
 
 	// Reporting
@@ -65,10 +74,12 @@ function get_tabs($courseId = null)
         $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/'.(api_is_drh()?'session.php':'');
         $navigation['session_my_space']['title'] = get_lang('MySpace');
         $navigation['session_my_space']['key'] = 'my-space';
+        $navigation['session_my_space']['icon'] = 'my-space.png';
     } else if (api_is_student_boss()) {
         $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH) . 'mySpace/student.php';
         $navigation['session_my_space']['title'] = get_lang('MySpace');
         $navigation['session_my_space']['key'] = 'my-space';
+        $navigation['session_my_space']['icon'] = 'my-space.png';
     } else {
         $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH);
             // Link to my progress
@@ -82,6 +93,7 @@ function get_tabs($courseId = null)
 
         $navigation['session_my_progress']['title'] = get_lang('MyProgress');
         $navigation['session_my_progress']['key'] = 'my-progress';
+        $navigation['session_my_progress']['icon'] = 'my-progress.png';
     }
 
 	// Social
@@ -89,6 +101,7 @@ function get_tabs($courseId = null)
         $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
         $navigation['social']['title'] = get_lang('SocialNetwork');
         $navigation['social']['key'] = 'social-network';
+        $navigation['social']['icon'] = 'social-network.png';
 	}
 
 	// Dashboard
@@ -96,6 +109,7 @@ function get_tabs($courseId = null)
         $navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
         $navigation['dashboard']['title'] = get_lang('Dashboard');
         $navigation['dashboard']['key'] = 'dashboard';
+        $navigation['dashboard']['icon'] = 'dashboard.png';
 	}
 
 	// Reports
@@ -126,6 +140,7 @@ function get_tabs($courseId = null)
         $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
         $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
         $navigation['platform_admin']['key'] = 'admin';
+        $navigation['platform_admin']['icon'] = 'admin.png';
 	}
 
 	return $navigation;
@@ -160,68 +175,13 @@ function getCustomTabs()
  */
 function return_logo($theme)
 {
-    $_course = api_get_course_info();
-    $html = '';
-    $logoBase = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/header-logo.';
-    $customLogoBase = api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme.'/images/header-logo-custom.';
-    $customLogo = '';
     $siteName = api_get_setting('siteName');
-    $attributes = array(
+
+    return ChamiloApi::getPlatformLogo([
         'title' => $siteName,
         'class' => 'img-responsive',
         'id' => 'header-logo'
-    );
-    $testServer = api_get_setting('server_type');
-    if ($testServer == 'test' && is_file($logoBase . 'svg')) {
-        $logo = $logoBase . 'svg';
-        $attributes['width'] = '245';
-        $attributes['height'] = '68';
-        $imageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.svg';
-    } else {
-        $logo = $logoBase . 'png';
-        $customLogo = $customLogoBase . 'png';
-        $imageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.png';
-        $customImageUrl = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo-custom.png';
-    }
-    if (file_exists($customLogo)) {
-        $siteName = api_get_setting('Institution').' - '.$siteName;
-        $customLogo = Display::img(
-            $customImageUrl,
-            $siteName,
-            $attributes
-        );
-        $html .= Display::url($customLogo, api_get_path(WEB_PATH).'index.php');
-    } elseif (file_exists($logo)) {
-        $siteName = api_get_setting('Institution').' - '.$siteName;
-        $logo = Display::img(
-            $imageUrl,
-            $siteName,
-            $attributes
-        );
-        $html .= Display::url($logo, api_get_path(WEB_PATH).'index.php');
-    } else {
-        $html .= '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$siteName.'</a>';
-        $iurl = api_get_setting('InstitutionUrl');
-        $iname = api_get_setting('Institution');
-
-        if (!empty($iname)) {
-            $html .= '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
-        }
-
-        // External link section a.k.a Department - Department URL
-        if (isset($_course['extLink']) && $_course['extLink']['name'] != '') {
-            $html .= '<span class="extLinkSeparator"> - </span>';
-            if ($_course['extLink']['url'] != '') {
-                $html .= '<a class="extLink" href="'.$_course['extLink']['url'].'" target="_top">';
-                $html .= $_course['extLink']['name'];
-                $html .= '</a>';
-            } else {
-                $html .= $_course['extLink']['name'];
-            }
-        }
-    }
-
-    return $html;
+    ]);
 }
 
 /**
@@ -717,7 +677,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
     $view_as_student_link = null;
     if ($user_id && isset($course_id)) {
-        if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true') {
+        if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true' && api_get_course_info()) {
             $view_as_student_link = api_display_tool_view_option();
         }
     }
@@ -807,10 +767,17 @@ function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
         if ($cacheEnabled) {
             $apc = apcu_cache_info(true);
             $apc_end = $apc['start_time']+$apc['ttl'];
-            if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id']) AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0) {
+            if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id']) &&
+                (time() < $apc_end) &&
+                apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0
+            ) {
                 $numberOnlineInCourse = apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']);
             } else {
-                $numberOnlineInCourse = who_is_online_in_this_course_count($userId, api_get_setting('time_limit_whosonline'), $_course['id']);
+                $numberOnlineInCourse = who_is_online_in_this_course_count(
+                    $userId,
+                    api_get_setting('time_limit_whosonline'),
+                    $_course['id']
+                );
                 apcu_store('my_campus_whoisonline_count_simple_'.$_course['id'],$numberOnlineInCourse,15);
             }
         } else {
@@ -821,5 +788,6 @@ function getOnlineUsersInCourseCount($userId, $_course, $cacheEnabled = false)
             );
         }
     }
+
     return $numberOnlineInCourse;
 }

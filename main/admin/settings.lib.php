@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\Filesystem\Filesystem;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Library of the settings.php file
  *
@@ -12,8 +15,6 @@
  */
 
 define('CSS_UPLOAD_PATH', api_get_path(SYS_APP_PATH).'Resources/public/css/themes/');
-
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * This function allows easy activating and inactivating of regions
@@ -62,13 +63,13 @@ function handleRegions()
     // Removing course tool
     unset($plugin_region_list['course_tool_plugin']);
 
-    foreach ($installed_plugins as $plugin) {
-        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/plugin.php';
+    foreach ($installed_plugins as $pluginName) {
+        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
 
         if (file_exists($plugin_info_file)) {
             $plugin_info = array();
             require $plugin_info_file;
-            if (isset($_GET['name']) && $_GET['name'] == $plugin) {
+            if (isset($_GET['name']) && $_GET['name'] === $pluginName) {
                 echo '<tr class="row_selected">';
             } else {
                 echo '<tr>';
@@ -77,14 +78,21 @@ function handleRegions()
             echo '<h4>'.$plugin_info['title'].' <small>v'.$plugin_info['version'].'</small></h4>';
             echo '<p>'.$plugin_info['comment'].'</p>';
             echo '</td><td>';
-            $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);
+            $selected_plugins = $plugin_obj->get_areas_by_plugin($pluginName);
 
             if (isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin']) {
                 $region_list = array('course_tool_plugin' => 'course_tool_plugin');
             } else {
                 $region_list = $plugin_region_list;
             }
-            echo Display::select('plugin_'.$plugin.'[]', $region_list, $selected_plugins, array('multiple' => 'multiple', 'style' => 'width:500px'), true, get_lang('None'));
+            echo Display::select(
+                'plugin_'.$pluginName.'[]',
+                $region_list,
+                $selected_plugins,
+                array('multiple' => 'multiple', 'style' => 'width:500px'),
+                true,
+                get_lang('None')
+            );
             echo '</td></tr>';
         }
     }
@@ -128,7 +136,7 @@ function handlePlugins()
     $all_plugins = $plugin_obj->read_plugins_from_path();
     $installed_plugins = $plugin_obj->get_installed_plugins();
 
-    //Plugins NOT installed
+    // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
     echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token=' . $token . '">';
     echo '<table class="data_table">';
@@ -140,31 +148,30 @@ function handlePlugins()
     echo '</th>';
     echo '</tr>';
 
-    $plugin_list = array();
+    /*$plugin_list = array();
     $my_plugin_list = $plugin_obj->get_plugin_regions();
     foreach($my_plugin_list as $plugin_item) {
         $plugin_list[$plugin_item] = $plugin_item;
-    }
+    }*/
 
-    foreach ($all_plugins as $plugin) {
-        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/plugin.php';
-
+    foreach ($all_plugins as $pluginName) {
+        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
             $plugin_info = array();
             require $plugin_info_file;
 
-            if (in_array($plugin, $installed_plugins)) {
+            if (in_array($pluginName, $installed_plugins)) {
                 echo '<tr class="row_selected">';
             } else {
                 echo '<tr>';
             }
             echo '<td>';
             //Checkbox
-            if (in_array($plugin, $installed_plugins)) {
-                echo '<input type="checkbox" name="plugin_'.$plugin.'[]" checked="checked">';
+            if (in_array($pluginName, $installed_plugins)) {
+                echo '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
 
             } else {
-                echo '<input type="checkbox" name="plugin_'.$plugin.'[]">';
+                echo '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
             }
             echo '</td><td>';
             echo '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
@@ -172,15 +179,15 @@ function handlePlugins()
             echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
 
             echo '<div class="btn-group">';
-            if (in_array($plugin, $installed_plugins)) {
-                echo Display::url('<em class="fa fa-cogs"></em> '.get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn btn-default'));
-                echo Display::url('<em class="fa fa-th-large"></em> '.get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn btn-default'));
+            if (in_array($pluginName, $installed_plugins)) {
+                echo Display::url('<em class="fa fa-cogs"></em> '.get_lang('Configure'), 'configure_plugin.php?name='.$pluginName, array('class' => 'btn btn-default'));
+                echo Display::url('<em class="fa fa-th-large"></em> '.get_lang('Regions'), 'settings.php?category=Regions&name='.$pluginName, array('class' => 'btn btn-default'));
             }
 
-            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
+            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$pluginName.'/readme.txt')) {
                 echo Display::url(
                     "<em class='fa fa-file-text-o'></em> readme.txt",
-                    api_get_path(WEB_PLUGIN_PATH) . $plugin . "/readme.txt",
+                    api_get_path(WEB_PLUGIN_PATH) . $pluginName . "/readme.txt",
                     [
                         'class' => 'btn btn-default ajax',
                         'data-title' => $plugin_info['title'],
@@ -190,11 +197,11 @@ function handlePlugins()
                 );
             }
 
-            $readmeFile = api_get_path(SYS_PLUGIN_PATH).$plugin.'/README.md';
+            $readmeFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/README.md';
             if (file_exists($readmeFile)) {
                 echo Display::url(
                     "<em class='fa fa-file-text-o'></em> README.md",
-                    api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$plugin,
+                    api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$pluginName,
                     [
                         'class' => 'btn btn-default ajax',
                         'data-title' => $plugin_info['title'],
@@ -207,6 +214,7 @@ function handlePlugins()
             echo '</div>';
             echo '</td></tr>';
         }
+
     }
     echo '</table>';
 
@@ -365,17 +373,21 @@ function handleStylesheets()
         'settings.php?category=Stylesheets#tabs-2'
     );
 
-    $logoForm->addHtml(Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info'));
+    $logoForm->addHtml(
+        Display::return_message(sprintf(get_lang('TheLogoMustBeSizeXAndFormatY'), '250 x 70', 'PNG'), 'info')
+    );
 
     $dir = api_get_path(SYS_PUBLIC_PATH).'css/themes/' . $selected . '/images/';
     $url = api_get_path(WEB_CSS_PATH).'themes/' . $selected . '/images/';
     $logoFileName = 'header-logo.png';
-    $newLogoFileName = 'header-logo-custom.png';
+    $newLogoFileName = 'header-logo-custom' . api_get_current_access_url_id() . '.png';
+    $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath();
 
-    if (is_file($dir.$newLogoFileName)) {
-        $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $newLogoFileName .'?'. time() . '">');
-    } else {
-        $logoForm->addLabel(get_lang('CurrentLogo'), '<img id="header-logo-custom" src="'. $url . $logoFileName .'?'. time() . '">');
+    if ($webPlatformLogoPath !== null) {
+        $logoForm->addLabel(
+            get_lang('CurrentLogo'),
+            '<img id="header-logo-custom" src="' . $webPlatformLogoPath . '?' . time() . '">'
+        );
     }
 
     $logoForm->addFile('new_logo', get_lang('UpdateLogo'));
@@ -384,7 +396,7 @@ function handleStylesheets()
     if (isset($_POST['logo_reset'])) {
         if (is_file($dir.$newLogoFileName)) {
             unlink($dir.$newLogoFileName);
-            Display::display_normal_message(get_lang('ResetToTheOriginalLogo'));
+            echo Display::return_message(get_lang('ResetToTheOriginalLogo'));
             echo '<script>'
                 . '$("#header-logo").attr("src","'.$url.$logoFileName.'");'
             . '</script>';
@@ -407,15 +419,15 @@ function handleStylesheets()
                 $status = move_uploaded_file($_FILES['new_logo']['tmp_name'], $dir.$newLogoFileName);
 
                 if ($status) {
-                    Display::display_normal_message(get_lang('NewLogoUpdated'));
+                    echo Display::return_message(get_lang('NewLogoUpdated'));
                     echo '<script>'
                             . '$("#header-logo").attr("src","'.$url.$newLogoFileName.'");'
                         . '</script>';
                 } else {
-                    Display::display_error_message('Error - '.get_lang('UplNoFileUploaded'));
+                    echo Display::return_message('Error - '.get_lang('UplNoFileUploaded'), 'error');
                 }
             } else {
-                Display::display_error_message('Error - '.get_lang('InvalidImageDimensions'));
+                Display::return_message('Error - '.get_lang('InvalidImageDimensions'), 'error');
             }
         }
     }
@@ -444,7 +456,7 @@ function handleStylesheets()
             </script>';
             echo Display::tabs(
                 array(get_lang('Update'),get_lang('UpdateLogo'), get_lang('UploadNewStylesheet')),
-                array($form_change->return_form(), $logoForm->return_form(), $form->return_form())
+                array($form_change->return_form(), $logoForm->returnForm(), $form->returnForm())
             );
         } else {
             $form_change->display();
@@ -703,7 +715,7 @@ function handleSearch()
     $group = formGenerateElementsGroup($form, $values, 'search_enabled');
 
     //SearchEnabledComment
-    $form->addGroup($group, 'search_enabled', array(get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')), '<br />', false);
+    $form->addGroup($group, 'search_enabled', array(get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')), null, false);
 
     $search_enabled = api_get_setting('search_enabled');
 
@@ -719,7 +731,7 @@ function handleSearch()
         $values = api_get_settings_options('search_show_unlinked_results');
 
         $group = formGenerateElementsGroup($form, $values, 'search_show_unlinked_results');
-        $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), '', false);
+        $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), null, false);
         $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
 
         $sf_values = array();
@@ -1207,13 +1219,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
     );
 
     $url_id = api_get_current_access_url_id();
-
+    /* 
     if (!empty($_configuration['multiple_access_urls']) && api_is_global_platform_admin() && $url_id == 1) {
         $group = array();
         $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
         $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
         $form->addGroup($group, 'buttons_in_action_right');
-    }
+    }*/
 
     $default_values = array();
     $url_info = api_get_access_url($url_id);
@@ -1237,28 +1249,28 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         if ($row['access_url_changeable'] == '1') {
                             $form->addElement(
                                 'html',
-                                '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>'
+                                '<div class="pull-right"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting') , null, ICON_SIZE_MEDIUM).'</a></div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
-                                '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>'
+                                '<div class="pull-right"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM ).'</a></div>'
                             );
                         }
                     } else {
                         if ($row['access_url_changeable'] == '1') {
                             $form->addElement(
                                 'html',
-                                '<div style="float: right;">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</div>'
+                                '<div class="pull-right">'.
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM ).'</div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
-                                '<div style="float: right;">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</div>'
+                                '<div class="pull-right">'.
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting'), null, ICON_SIZE_MEDIUM ).'</div>'
                             );
                         }
                     }
@@ -1386,7 +1398,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $group,
                     $row['variable'],
                     array(get_lang($row['title']), get_lang($row['comment'])),
-                    '',
+                    null,
                     false
                 );
                 $default_values[$row['variable']] = $row['selected_value'];
@@ -1448,8 +1460,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $form->addGroup(
                     $group,
                     $row['variable'],
-                    array(get_lang($row['title']), get_lang($row['comment']) . 'aaaaaa'),
-                    ''
+                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    null
                 );
                 break;
             case 'link':

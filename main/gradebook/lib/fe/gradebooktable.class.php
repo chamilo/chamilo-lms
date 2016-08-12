@@ -354,8 +354,8 @@ class GradebookTable extends SortableTable
                     $ranking = isset($data['ranking']) ? $data['ranking'] : null;
 
                     $totalResult = [
-                        $totalResult[0] + $data['result_score_weight'][0],
-                        $totalResult[1] + $data['result_score_weight'][1],
+                        $data['result_score'][0],
+                        $data['result_score'][1],
                     ];
 
                     $totalBest = [
@@ -364,16 +364,16 @@ class GradebookTable extends SortableTable
                     ];
 
                     $totalAverage = [
-                        $totalAverage[0] + $data['average_score'][0],
-                        $totalAverage[1] + $data['average_score'][1],
+                        $data['average_score'][0],
+                        $data['average_score'][1],
                     ];
 
                     // Student result
                     $row[] = $value_data;
                     $totalResultAverageValue = strip_tags($scoredisplay->display_score($totalResult, SCORE_AVERAGE));
-                    $this->dataForGraph['my_result'][] = (float) str_replace('%', '', $totalResultAverageValue);
+                    $this->dataForGraph['my_result'][] = str_replace('%', '', $totalResultAverageValue);
                     $totalAverageValue = strip_tags($scoredisplay->display_score($totalAverage, SCORE_AVERAGE));
-                    $this->dataForGraph['average'][] =  (float) str_replace('%', '', $totalAverageValue);
+                    $this->dataForGraph['average'][] =  str_replace('%', '', $totalAverageValue);
                     // Ranking
                     $row[] = $ranking;
                     // Best
@@ -814,7 +814,7 @@ class GradebookTable extends SortableTable
             /* Add a border to the picture */
             $pChart->drawRectangle(0,0,$xSize-10,$ySize-10,array("R"=>0,"G"=>0,"B"=>0));
 
-            $pChart->drawText(10,16,get_lang('Results'),array("FontSize"=>11,"Align"=>TEXT_ALIGN_BOTTOMLEFT));
+            $pChart->drawText(10,16,get_lang('Results'),array("FontSize"=>11,"Align"=> TEXT_ALIGN_BOTTOMMIDDLE));
 
             $pChart->setGraphArea(50, 30, $xSize-50, $ySize-50);
 

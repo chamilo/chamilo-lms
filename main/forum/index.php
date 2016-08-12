@@ -499,7 +499,7 @@ if (is_array($forumCategories)) {
                         );
 
                         if (!empty($forum['start_time']) && !empty($forum['end_time'])) {
-                            $res = apiIsDateInDateRange($forum['start_time'], $forum['end_time']);
+                            $res = api_is_date_in_date_range($forum['start_time'], $forum['end_time']);
                             if (!$res) {
                                 $linkForum = $forum['forum_title'];
                             }

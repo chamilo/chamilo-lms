@@ -54,7 +54,6 @@ $LastVisit = "Sist besøkt";
 $Subscription = "Abonnement";
 $CourseAccess = "Kurs tilgang";
 $CreateSite = "Opprett ett kursområde";
-$BackH = "tilbake til hjemmesiden";
 $OtherCategory = "Annen kategori";
 $AllowedToUnsubscribe = "Deltagere kan avmelde seg fra dette kurset";
 $NotAllowedToUnsubscribe = "Deltagere kan ikke avmelde seg fra dette kurset";

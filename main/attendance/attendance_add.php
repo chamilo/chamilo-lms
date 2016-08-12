@@ -37,24 +37,34 @@ $form->addHtmlEditor(
     array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150')
 );
 
-// Adavanced Parameters
+// Advanced Parameters
 if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {
     $form->addButtonAdvancedSettings('id_qualify');
 
     $form->addElement('html','<div id="id_qualify_options" style="display:none">');
 
     // Qualify Attendance for gradebook option
-    $form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+    $form->addElement(
+        'checkbox',
+        'attendance_qualify_gradebook',
+        '',
+        get_lang('QualifyAttendanceGradebook'),
+        'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
+    );
     $form->addElement('html','<div id="options_field" style="display:none">');
 
     GradebookUtils::load_gradebook_select_in_tool($form);
 
     $form->addElement('text', 'attendance_qualify_title', get_lang('TitleColumnGradebook'));
     $form->applyFilter('attendance_qualify_title', 'html_filter');
-    $form->addElement('text', 'attendance_weight', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="javascript: this.select();"');
+    $form->addElement(
+        'text',
+        'attendance_weight',
+        get_lang('QualifyWeight'),
+        'value="0.00" Style="width:40px" onfocus="javascript: this.select();"'
+    );
     $form->applyFilter('attendance_weight', 'html_filter');
     $form->addElement('html','</div>');
-
     $form->addElement('html','</div>');
 }
 $form->addButtonCreate(get_lang('Save'));

@@ -78,6 +78,13 @@ class Message
     /**
      * @var integer
      *
+     * @ORM\Column(name="votes", type="integer", nullable=true)
+     */
+    private $votes;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -301,5 +308,28 @@ class Message
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set votes
+     *
+     * @param integer $votes
+     * @return integer
+     */
+    public function setVotes($votes)
+    {
+        $this->votes = $votes;
+
+        return $this;
+    }
+
+    /**
+     * Get votes
+     *
+     * @return integer
+     */
+    public function getVotes()
+    {
+        return $this->votes;
     }
 }

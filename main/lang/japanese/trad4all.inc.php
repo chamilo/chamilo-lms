@@ -59,7 +59,6 @@ $ByDel = "このコ〖スのウエブサイトを猴近すると、そこに崔�
 $Y = "はい";
 $N = "いいえ";
 $Subscription = "登録";
-$BackH = "コ〖スのホ〖ムペ〖ジ";
 $CourseVisibilityClosed = "非公開 - コースを教員のみにアクセス可能にする";
 $WorkEmailAlert = "レポートの送信を電子メールで通知";
 $WorkEmailAlertActivate = "新しいレポートの送信についての電子メール通知をアクティブにする";

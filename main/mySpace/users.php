@@ -56,7 +56,8 @@ function get_users($from, $limit, $column, $direction)
     $active = isset($_GET['active']) ? $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
-    $status = isset($_GET['status']) ? Security::remove_XSS($_GET['status']) : '';
+    $status = isset($_GET['status']) ? Security::remove_XSS($_GET['status']) : null;
+    $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
@@ -159,7 +160,7 @@ function get_users($from, $limit, $column, $direction)
         $row[] = $string_date;
 
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$_GET['id_session'].'">
+            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
 				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         } else {
             $detailsLink =  '<a href="myStudents.php?student='.$student_id.'">
@@ -197,9 +198,16 @@ if (api_is_drh()) {
     }
 }
 
-$actionsRight = Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
-$actionsRight .= Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=csv&keyword='.$keyword);
-$toolbar = Display::toolbarAction('toolbar-user', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
+$actionsRight = Display::url(
+    Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM),
+    'javascript: void(0);',
+    array('onclick'=>'javascript: window.print();')
+);
+$actionsRight .= Display::url(
+    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
+    api_get_self().'?export=csv&keyword='.$keyword
+);
+$toolbar = Display::toolbarAction('toolbar-user', [$actionsLeft, $actionsRight]);
 
 $table = new SortableTable(
     'tracking_student',

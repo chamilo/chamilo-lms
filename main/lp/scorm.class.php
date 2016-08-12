@@ -341,7 +341,7 @@ class scorm extends learnpath
                 'modified_on' => $now,
                 'publicated_on' => $now
             ];
-            
+
             $lp_id = Database::insert($new_lp, $params);
 
             if ($lp_id) {
@@ -628,12 +628,21 @@ class scorm extends learnpath
         if ($package_type== '') {
             // && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM)
             if ($this->debug > 1) { error_log('New LP - Package type is empty', 0); }
-            return api_failure::set_failure('not_scorm_content');
+
+            Display::addFlash(
+                Display::return_message(get_lang('NotScormContent'))
+            );
+
+            return false;
         }
 
         if (!enough_size($realFileSize, $course_sys_dir, $maxFilledSpace)) {
             if ($this->debug > 1) { error_log('New LP - Not enough space to store package', 0); }
-            return api_failure::set_failure('not_enough_space');
+            Display::addFlash(
+                Display::return_message(get_lang('NoSpace'))
+            );
+
+            return false;
         }
 
         // It happens on Linux that $new_dir sometimes doesn't start with '/'

@@ -179,7 +179,6 @@ $NoArchive = "Nijedan arhiv nije selektovan";
 $ArchiveNotFound = "Arhiv nije pronađen";
 $ArchiveUncompressed = "Arhiv je raspakovan i instaliran";
 $CsvPutIntoDocTool = "Fajl „users.csv“ je stavljen u alatku Dokumenta";
-$BackH = "nazad na početnu stranicu";
 $OtherCategory = "Druga kategorija";
 $AllowedToUnsubscribe = "Korisnicima je dozvoljeno da se odjave sa ovog kursa";
 $NotAllowedToUnsubscribe = "Korisnicima nije dozvoljeno da se odjave sa ovog kursa";

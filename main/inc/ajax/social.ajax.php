@@ -25,7 +25,9 @@ switch ($action) {
             UserManager::relate_users($current_user_id, $my_current_friend, $relation_type);
             UserManager::relate_users($my_current_friend, $current_user_id, $relation_type);
             SocialManager::invitation_accepted($my_current_friend, $current_user_id);
-            Display::display_normal_message(api_xml_http_response_encode(get_lang('AddedContactToList')));
+            Display::addFlash(
+                Display::return_message(get_lang('AddedContactToList'), 'success')
+            );
 
             header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
         }
@@ -225,14 +227,17 @@ switch ($action) {
         // Read the Url using OpenGraph and returns the hyperlinks content
     case 'readUrlWithOpenGraph':
         $url = isset($_POST['social_wall_new_msg_main']) ? $_POST['social_wall_new_msg_main'] : '';
+        $url = trim($url);
         $html = '';
-        if (SocialManager::verifyUrl($url) == true){
+        if (SocialManager::verifyUrl($url) == true) {
             $html = Security::remove_XSS(
                 SocialManager::readContentWithOpenGraph($url)
             );
         }
-        echo utf8_decode($html);
+        echo $html;
         break;
+    case 'voteMsg':
+
     default:
         echo '';
 }

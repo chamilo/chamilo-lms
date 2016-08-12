@@ -41,7 +41,7 @@ class IndexManager
             }
         }*/
 
-        if (api_get_setting('show_documents_preview') == 'true') {
+        if (api_get_setting('show_documents_preview') === 'true') {
             $this->load_directories_preview = true;
         }
     }
@@ -49,17 +49,20 @@ class IndexManager
     /**
      * @param bool $setLoginForm
      */
-    function set_login_form($setLoginForm = true)
+    public function set_login_form($setLoginForm = true)
     {
         global $loginFailed;
         $this->tpl->setLoginForm($setLoginForm);
     }
 
-    function return_exercise_block($personal_course_list)
+    /**
+     * @param array $personal_course_list
+     */
+    public function return_exercise_block($personal_course_list)
     {
         $exercise_list = array();
         if (!empty($personal_course_list)) {
-            foreach($personal_course_list as  $course_item) {
+            foreach ($personal_course_list as  $course_item) {
                 $course_code = $course_item['c'];
                 $session_id = $course_item['id_session'];
 
@@ -68,7 +71,7 @@ class IndexManager
                     $session_id
                 );
 
-                foreach($exercises as $exercise_item) {
+                foreach ($exercises as $exercise_item) {
                     $exercise_item['course_code']     = $course_code;
                     $exercise_item['session_id']     = $session_id;
                     $exercise_item['tms']     = api_strtotime($exercise_item['end_time'], 'UTC');
@@ -79,14 +82,21 @@ class IndexManager
             if (!empty($exercise_list)) {
                 $exercise_list = msort($exercise_list, 'tms');
                 $my_exercise = $exercise_list[0];
-                $url = Display::url($my_exercise['title'], api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']);
+                $url = Display::url(
+                    $my_exercise['title'],
+                    api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']
+                );
                 $this->tpl->assign('exercise_url', $url);
                 $this->tpl->assign('exercise_end_date', api_convert_and_format_date($my_exercise['end_time'], DATE_FORMAT_SHORT));
             }
         }
     }
 
-    function return_announcements($show_slide = true)
+    /**
+     * @param bool $show_slide
+     * @return null|string
+     */
+    public function return_announcements($show_slide = true)
     {
         //// Display System announcements
         $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
@@ -131,7 +141,7 @@ class IndexManager
      * Alias for the online_logout() function
      * @param   bool    $redirect   Whether to ask online_logout to redirect to index.php or not
      */
-    function logout($redirect = true)
+    public function logout($redirect = true)
     {
         online_logout($this->user_id, true);
     }
@@ -142,7 +152,7 @@ class IndexManager
      * @param string $category
      * @return boolean
      */
-    function category_has_open_courses($category)
+    public function category_has_open_courses($category)
     {
         $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
         $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -164,7 +174,7 @@ class IndexManager
         return false;
     }
 
-    function return_teacher_link()
+    public function return_teacher_link()
     {
         $html = '';
         $show_menu = false;
@@ -276,7 +286,7 @@ class IndexManager
 		return $html;
 	}
 
-    function return_notice()
+    public function return_notice()
     {
         $user_selected_language = api_get_interface_language();
 
@@ -302,7 +312,7 @@ class IndexManager
         return $html;
     }
 
-    function return_help()
+    public function return_help()
     {
         $user_selected_language = api_get_interface_language();
         $platformLanguage       = api_get_setting('platformLanguage');
@@ -332,7 +342,10 @@ class IndexManager
         return $html;
     }
 
-    function return_skills_links()
+    /**
+     * @return null|string
+     */
+    public function return_skills_links()
     {
         $content = '';
         $content .= '<ul class="nav nav-pills nav-stacked">';
@@ -427,7 +440,7 @@ class IndexManager
      *
      * @version 1.0.1
      */
-    function handle_login_failed()
+    public function handle_login_failed()
     {
         return $this->tpl->handleLoginFailed();
     }
@@ -440,7 +453,7 @@ class IndexManager
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University - refactoring and code cleaning
      * @author Julio Montoya <gugli100@gmail.com>, Beeznest template modifs
      */
-    function return_courses_in_categories()
+    public function return_courses_in_categories()
     {
         $result = '';
         $stok = Security::get_token();
@@ -505,7 +518,8 @@ class IndexManager
                     LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
                     LEFT JOIN $main_course_table t3 ON (t3.category_code = t1.code $platform_visible_courses)
                     WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
-                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
+                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count 
+                    ORDER BY t1.tree_pos, t1.name";
 
         // Showing only the category of courses of the current access_url_id
         if (api_is_multiple_url_enabled()) {
@@ -821,7 +835,7 @@ class IndexManager
     public function return_classes_block()
     {
         $html = '';
-        if (api_get_setting('show_groups_to_users') == 'true') {
+        if (api_get_setting('show_groups_to_users') === 'true') {
             $usergroup = new UserGroup();
             $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
             $classes = '';
@@ -987,6 +1001,9 @@ class IndexManager
         return $html;
     }
 
+    /**
+     * @return null|string
+     */
     public function return_navigation_links()
     {
         $html = '';
@@ -1007,8 +1024,10 @@ class IndexManager
                 $content .= '</li>';
             }
             $content .= '</ul>';
+
             $html = self::show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
         }
+
         return $html;
     }
 
@@ -1099,6 +1118,7 @@ class IndexManager
                 'courseCollapse'
             );
         }
+
         return $html;
     }
 
@@ -1113,7 +1133,14 @@ class IndexManager
 
         $gamificationModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
+        $specialCourseList = '';
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
+
+        $viewGridCourses = api_get_configuration_value('view_grid_courses');
+
+        $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
+        $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
+
         if ($load_history) {
             // Load sessions in category in *history*
             $session_categories = UserManager::get_sessions_by_category($user_id, true);
@@ -1135,6 +1162,8 @@ class IndexManager
         $sessionCount = 0;
         $courseCount = 0;
 
+        $template = new Template(null, false, false, false, false, false, false);
+
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             // Display special courses.
@@ -1149,15 +1178,30 @@ class IndexManager
                 $this->load_directories_preview
             );
 
-            $this->tpl->assign('special_courses', $specialCourses);
-            $this->tpl->assign('courses', $courses);
 
-            if (api_get_configuration_value('view_grid_courses') && ($courses || $specialCourses)) {
-                $listCourse = $this->tpl->fetch(
-                $this->tpl->get_template('/user_portal/grid_courses.tpl'));
-            } else if ($courses || $specialCourses) {
-                $listCourse = $this->tpl->fetch(
-                $this->tpl->get_template('/user_portal/classic_courses.tpl'));
+            if ($viewGridCourses) {
+                $coursesWithoutCategoryTemplate = '/user_portal/grid_courses_without_category.tpl';
+                $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';
+            }
+
+            if ($specialCourses) {
+                $template->assign('courses', $specialCourses);
+
+                $specialCourseList = $template->fetch(
+                    $this->tpl->get_template($coursesWithoutCategoryTemplate)
+                );
+            }
+
+            if ($courses['in_category'] || $courses['not_category']) {
+                $template->assign('courses', $courses['not_category']);
+                $template->assign('categories', $courses['in_category']);
+
+                $listCourse = $template->fetch(
+                    $this->tpl->get_template($coursesWithCategoryTemplate)
+                );
+                $listCourse .= $template->fetch(
+                    $this->tpl->get_template($coursesWithoutCategoryTemplate)
+                );
             }
             if (!empty($specialCourses['course_count']) && !empty($courses['course_count'])) {
                 $courseCount = intval($specialCourses['course_count']) + intval($courses['course_count']);
@@ -1495,7 +1539,7 @@ class IndexManager
         }
 
         return [
-            'html' => $sessions_with_category.$sessions_with_no_category.$listCourse,
+            'html' => $specialCourseList . $sessions_with_category.$sessions_with_no_category.$listCourse,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];
@@ -1559,7 +1603,7 @@ class IndexManager
             }
         }
 
-        $specialCourses = '';
+        $html = '';
         $loadDirs = $this->load_directories_preview;
 
         // If we're not in the history view...
@@ -1570,12 +1614,25 @@ class IndexManager
                 $user_id,
                 $loadDirs
             );
-            $specialCourses = $specialCoursesResult['html'];
+            $specialCourses = $specialCoursesResult;
+
+            if ($specialCourses) {
+                $specialCoursesTemplate = new Template(null, false, false, false, false, false, false);
+                $specialCoursesTemplate->assign('courses', $specialCourses);
+
+                $html = $specialCoursesTemplate->fetch(
+                    $this->tpl->get_template('/user_portal/classic_courses_without_category.tpl')
+                );
+            }
 
             // Display courses
             // [code=>xxx, real_id=>000]
             $listCourses = CourseManager::get_courses_list_by_user_id($user_id, false);
+
             foreach ($listCourses as $i => $listCourseCodeId) {
+                if (isset($listCourseCodeId['special_course'])) {
+                    continue;
+                }
                 list($userCategoryId, $userCatTitle) = CourseManager::getUserCourseCategoryForCourse(
                     $user_id,
                     $listCourseCodeId['real_id']
@@ -1606,7 +1663,7 @@ class IndexManager
         uasort($listUserCategories, "self::compareListUserCategory");
         $listUserCategories[0] = '';
 
-        $html = '<div class="session-view-block">';
+        $html .= '<div class="session-view-block">';
 
         foreach ($listUserCategories as $userCategoryId => $userCatTitle) {
             // add user category
@@ -1624,10 +1681,11 @@ class IndexManager
                     // add course
                     $listCoursesAlreadyDisplayed[$listCourse['courseId']] = 1;
                     if ($userCategoryId == 0) {
-                        $htmlCategory .= '<div class="session-view-well session-view-row well" >';
+                        $htmlCategory .= '<div class="panel panel-default">';
                     } else {
-                        $htmlCategory .= '<div class="session-view-row" >';
+                        $htmlCategory .= '<div class="panel panel-default">';
                     }
+                    $htmlCategory .= '<div class="panel-body">';
                     $coursesInfo =  $listCourse['course'];
 
                     $htmlCategory .= self::getHtmlForCourse(
@@ -1662,7 +1720,7 @@ class IndexManager
                         $htmlSessionCategory .= $htmlSession;
                     }
                     $htmlSessionCategory .= '</div>'; // end session cat block
-                    $htmlCategory .=  $htmlSessionCategory .'</div>' ;
+                    $htmlCategory .=  $htmlSessionCategory .'</div></div>' ;
                     $htmlCategory .= '';   // end course block
                 }
                 $userCategoryHtml .= $htmlCategory;
@@ -1674,17 +1732,19 @@ class IndexManager
             foreach ($listCoursesInfo as $i => $listCourse) {
                 if ($listCourse['userCatId'] == $userCategoryId && !isset($listCoursesAlreadyDisplayed[$listCourse['id']])) {
                     if ($userCategoryId != 0) {
-                        $htmlCategory .= '<div class="session-view-row" >';
+                        $htmlCategory .= '<div class="panel panel-default">';
                     } else {
-                        $htmlCategory .= '<div class="session-view-well well">';
+                        $htmlCategory .= '<div class="panel panel-default">';
                     }
+
+                    $htmlCategory .= '<div class="panel-body">';
                     $htmlCategory .= self::getHtmlForCourse(
                         $listCourse['course'],
                         $userCategoryId,
                         0,
                         $loadDirs
                     );
-                    $htmlCategory .= '</div>';
+                    $htmlCategory .= '</div></div>';
                 }
             }
             $htmlCategory .= '';
@@ -1697,7 +1757,7 @@ class IndexManager
         $html .= '</div>';
 
         return [
-            'html' => $html.$specialCourses,
+            'html' => $html,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];
@@ -1758,7 +1818,7 @@ class IndexManager
 
         $button = '';
         if ($displayButton) {
-            $button = '<input id="session-view-button-'.intval($id).'" class="session-view-button btn btn-default" type="button" onclick="hideUnhide(\'courseblock-'.intval($id).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
+            $button = '<input id="session-view-button-'.intval($id).'" class="btn btn-default btn-sm" type="button" onclick="hideUnhide(\'courseblock-'.intval($id).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
         }
 
         $icon = Display::return_icon(
@@ -1780,7 +1840,7 @@ class IndexManager
 
         // notification
         if (!empty($tabParams['right_actions'])) {
-            $rightActions = '<div class="view-by-session-right-actions">'.$tabParams['right_actions'].'</div>';
+            $rightActions = '<div class="pull-right">'.$tabParams['right_actions'].'</div>';
         }
 
         return "<div>

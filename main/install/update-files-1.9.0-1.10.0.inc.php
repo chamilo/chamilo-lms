@@ -172,26 +172,33 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     // Move dirs into new structures.
     $movePathList = [
-        api_get_path(SYS_CODE_PATH).'upload/users/groups' => api_get_path(SYS_UPLOAD_PATH),
-        api_get_path(SYS_CODE_PATH).'upload/users' => api_get_path(SYS_UPLOAD_PATH),
-        api_get_path(SYS_CODE_PATH).'upload/badges' => api_get_path(SYS_UPLOAD_PATH),
-        api_get_path(SYS_PATH).'courses' => api_get_path(SYS_APP_PATH),
+        api_get_path(SYS_CODE_PATH).'upload/users/groups' => api_get_path(SYS_UPLOAD_PATH) . 'groups',
+        api_get_path(SYS_CODE_PATH).'upload/users' => api_get_path(SYS_UPLOAD_PATH) . 'users',
+        api_get_path(SYS_CODE_PATH).'upload/badges' => api_get_path(SYS_UPLOAD_PATH) . 'badges',
+        api_get_path(SYS_PATH).'courses' => api_get_path(SYS_APP_PATH) . 'courses',
         api_get_path(SYS_PATH).'searchdb' => api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/',
-        api_get_path(SYS_PATH).'home' => api_get_path(SYS_APP_PATH)
+        api_get_path(SYS_PATH).'home' => api_get_path(SYS_APP_PATH) . 'home'
     ];
 
     if ($debug) {
         error_log('Moving folders');
     }
 
+    $fs = new Filesystem();
+
     foreach ($movePathList as $origin => $destination) {
         if (is_dir($origin)) {
-            move($origin, $destination, true, true);
+            $fs->mirror($origin, $destination);
+
+            if ($debug) {
+                error_log("Renaming: '$origin' to '$destination'");
+            }
+
+            $fs->remove($origin);
         }
     }
 
     // Delete all "courses/ABC/index.php" files.
-
     if ($debug) {
         error_log('Deleting old courses/ABC/index.php files');
     }
@@ -200,12 +207,11 @@ if (defined('SYSTEM_INSTALLATION')) {
     $courseDir = api_get_path(SYS_APP_PATH).'courses';
     if (is_dir($courseDir)) {
         $dirs = $finder->directories()->in($courseDir);
-        $fs = new Filesystem();
         /** @var Symfony\Component\Finder\SplFileInfo $dir */
         foreach ($dirs as $dir) {
             $indexFile = $dir->getPath().'/index.php';
             if ($debug) {
-                error_log('Deleting '.$indexFile);
+                error_log('Deleting: '.$indexFile);
             }
             if ($fs->exists($indexFile)) {
                 $fs->remove($indexFile);

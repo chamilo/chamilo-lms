@@ -524,19 +524,24 @@ class AnnouncementManager
                     }
                 }
             } else {
-                // the message is sent to everyone, so we set the group to 0
+                $send_to_groups = CourseManager::separateUsersGroups($to);
+                $send_to_users = CourseManager::separateUsersGroups($to_users);
+                $to_groups = $send_to_groups['groups'];
+                $to_users = $send_to_users['users'];
                 // storing the selected users
-                if (is_array($to_users)) {
-                    foreach ($to_users as $user) {
-                        api_item_property_update(
-                            $_course,
-                            TOOL_ANNOUNCEMENT,
-                            $last_id,
-                            "AnnouncementAdded",
-                            api_get_user_id(),
-                            '',
-                            $user
-                        );
+                if (is_array($to_users) && is_array($to_groups)) {
+                    foreach ($to_groups as $group) {
+                        foreach ($to_users as $user) {
+                            api_item_property_update(
+                                $_course,
+                                TOOL_ANNOUNCEMENT,
+                                $last_id,
+                                "AnnouncementAdded",
+                                api_get_user_id(),
+                                $group,
+                                $user
+                            );
+                        }
                     }
                 }
             }
@@ -1643,8 +1648,8 @@ class AnnouncementManager
                 if ($myrow['email_sent'] == '1') {
                     $sent_to_icon = ' '.Display::return_icon('email.gif', get_lang('AnnounceSentByEmail'));
                 }
-
-                $title = $myrow['title'].$sent_to_icon;
+                $groupReference = ($myrow['to_group_id'] > 0) ? ' <span class="label label-info">' . get_lang('Group') . '</span> ' : '' ;
+                $title = $myrow['title'] . $groupReference . $sent_to_icon;
                 $item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $myrow['id'], $session_id);
                 $myrow['visibility'] = $item_visibility;
 

@@ -51,7 +51,7 @@ $(document).ready(function() {
                     {{ block_item.icon }} {{ block_item.label }}
                     {% if block_item.editable and _u.is_admin %}
                         <a class="admin-edit-block pull-right" href="#" data-label="{{ block_item.label }}" title="{{ 'Edit' | get_lang }}" data-id="{{ block_item.class }}">
-                            <img src="{{ _p.web_img }}icons/22/edit.png" alt="{{ 'Edit' | get_lang }}">
+                            <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}" title="{{ "Edit"|get_lang }}" />
                         </a>
                     {% endif %}
                 </div>

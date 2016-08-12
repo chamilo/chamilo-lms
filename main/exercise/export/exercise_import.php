@@ -4,6 +4,7 @@
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
  * @package chamilo.exercise
  * @author claro team <cvs@claroline.net>
+ * @deprecated
  */
 require '../../inc/global.inc.php';
 
@@ -32,8 +33,8 @@ $interbredcrump[] = array('url' => '../exercise.php', 'name' => get_lang('Exerci
 $cmd = (isset($_REQUEST['cmd'])? $_REQUEST['cmd'] : 'show_import');
 
 switch ($cmd) {
-    case 'show_import' :
-    {
+    case 'show_import':
+
         $display = '<p>'
         .            get_lang('Imported exercises must consist of a zip or an XML file (IMS-QTI) and be compatible with your Claroline version.') . '<br>'
         .            '</p>'
@@ -46,22 +47,16 @@ switch ($cmd) {
         .            '<br><br>'
         .            '<small>' . get_lang('Max file size') . ' :  2&nbsp;MB</small>'
         .            '</form>';
-    }
-    break;
 
-    case 'import': {
+        break;
+    case 'import':
         //include needed librabries for treatment
-
         $result_log = import_exercise($_FILES['uploadedExercise']['name']);
-
         //display the result message (fail or success)
         $dialogBox = '';
-
         foreach ($result_log as $log) {
             $dialogBox .= $log.'<br>';
         }
-
-    }
         break;
 }
 
@@ -84,8 +79,6 @@ Display::display_introduction_section(
 if (isset($dialogBox)) {
     echo Display::display_normal_message($dialogBox, false);
 }
-
-//display content
 
 if (isset($display)) {
     echo $display;

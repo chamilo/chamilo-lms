@@ -206,17 +206,17 @@ $group[]= $form->createElement('radio', 'visibility', null, get_lang('OpenToTheP
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
-$form->addGroup($group, '', get_lang('CourseAccess'), '<br />');
+$form->addGroup($group, '', get_lang('CourseAccess'));
 
 $group = array();
 $group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
 $group[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
-$form->addGroup($group, '', get_lang('Subscription'), '<br />');
+$form->addGroup($group, '', get_lang('Subscription'));
 
 $group = array();
 $group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
 $group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
-$form->addGroup($group, '', get_lang('Unsubscription'), '<br />');
+$form->addGroup($group, '', get_lang('Unsubscription'));
 
 $form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')));
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'), 'required');
@@ -262,9 +262,11 @@ if ($form->validate()) {
             if ($num >= $_configuration[$urlId]['hosting_limit_active_courses']) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
 
-                api_set_failure(get_lang('PortalActiveCoursesLimitReached'));
+                Display::addFlash(
+                    Display::return_message(get_lang('PortalActiveCoursesLimitReached'))
+                );
 
-                header('Location: course_list.php?action=show_msg&warn=' . urlencode(get_lang('PortalActiveCoursesLimitReached')));
+                header('Location: course_list.php');
                 exit;
             }
         }
@@ -373,9 +375,9 @@ if ($form->validate()) {
     $course_id = $courseInfo['real_id'];
 
     Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
-
     if ($visual_code_is_used) {
-        header('Location: course_list.php?action=show_msg&warn=' . urlencode($warn));
+        Display::addFlash(Display::return_message($warn));
+        header('Location: course_list.php');
     } else {
         header('Location: course_list.php');
     }

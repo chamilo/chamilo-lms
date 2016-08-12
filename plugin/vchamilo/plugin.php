@@ -6,10 +6,6 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
-require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
-require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
-
 global $_configuration;
 
 /**
@@ -27,7 +23,6 @@ $plugin_info['version'] = '1.0';
 //the plugin author
 $plugin_info['author'] = 'Valery Fremaux, Julio Montoya';
 
-
 /* Plugin optional settings */
 
 /*
@@ -37,20 +32,20 @@ $plugin_info['author'] = 'Valery Fremaux, Julio Montoya';
 
 $form = new FormValidator('vchamilo_form');
 
-$plugininstance = VChamiloPlugin::create();
+$plugin = VChamiloPlugin::create();
 
 $form_settings = array(
-    'enable_virtualisation' => vchamilo_get_config('vchamilo', 'enable_virtualisation', true),
-    'httpproxyhost' => vchamilo_get_config('vchamilo', 'httpproxyhost', true),
-    'httpproxyport' => vchamilo_get_config('vchamilo', 'httpproxyport', true),
-    'httpproxybypass' => vchamilo_get_config('vchamilo', 'httpproxybypass', true),
-    'httpproxyuser' => vchamilo_get_config('vchamilo', 'httpproxyuser', true),
-    'httpproxypassword' => vchamilo_get_config('vchamilo', 'httpproxypassword', true),
-    'cmd_mysql' => vchamilo_get_config('vchamilo', 'cmd_mysql', true),
-    'cmd_mysqldump' => vchamilo_get_config('vchamilo', 'cmd_mysqldump', true),
-    'course_real_root' => vchamilo_get_config('vchamilo', 'course_real_root', true),
-    'archive_real_root' => vchamilo_get_config('vchamilo', 'archive_real_root', true),
-    'home_real_root' => vchamilo_get_config('vchamilo', 'home_real_root', true),
+    'enable_virtualisation' => Virtual::getConfig('vchamilo', 'enable_virtualisation', true),
+    'httpproxyhost' => Virtual::getConfig('vchamilo', 'httpproxyhost', true),
+    'httpproxyport' => Virtual::getConfig('vchamilo', 'httpproxyport', true),
+    'httpproxybypass' => Virtual::getConfig('vchamilo', 'httpproxybypass', true),
+    'httpproxyuser' => Virtual::getConfig('vchamilo', 'httpproxyuser', true),
+    'httpproxypassword' => Virtual::getConfig('vchamilo', 'httpproxypassword', true),
+    'cmd_mysql' => Virtual::getConfig('vchamilo', 'cmd_mysql', true),
+    'cmd_mysqldump' => Virtual::getConfig('vchamilo', 'cmd_mysqldump', true),
+    'course_real_root' => Virtual::getConfig('vchamilo', 'course_real_root', true),
+    'archive_real_root' => Virtual::getConfig('vchamilo', 'archive_real_root', true),
+    'home_real_root' => Virtual::getConfig('vchamilo', 'home_real_root', true),
 );
 
 $form->setDefaults($form_settings);
@@ -58,37 +53,40 @@ $form->setDefaults($form_settings);
 $wwwroot = $_configuration['root_web'];
 
 //A simple select
-$options = array(0 => $plugininstance->get_lang('no'), 1 => $plugininstance->get_lang('yes'));
-$form->addLabel('', '<a class="btn btn-primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.
-    $plugininstance->get_lang('manage_instances').'</a>');
-$form->addElement('header', $plugininstance->get_lang('enabling'));
-$form->addElement('select', 'enable_virtualisation', $plugininstance->get_lang('enable_virtualisation'), $options);
+$options = array(0 => $plugin->get_lang('no'), 1 => $plugin->get_lang('yes'));
+$form->addLabel(
+    '',
+    '<a class="btn btn-primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.
+    $plugin->get_lang('manage_instances').'</a>'
+);
+$form->addElement('header', $plugin->get_lang('enabling'));
+$form->addElement('select', 'enable_virtualisation', $plugin->get_lang('enable_virtualisation'), $options);
 $form->addElement(
     'text',
     'course_real_root',
-    [$plugininstance->get_lang('courserealroot'), 'Example: '.api_get_path(SYS_PATH).'var/courses/']
+    [$plugin->get_lang('courserealroot'), 'Example: '.api_get_path(SYS_PATH).'var/courses/']
 );
 $form->addElement(
     'text',
     'archive_real_root',
-    [$plugininstance->get_lang('archiverealroot'), 'Example: '.api_get_path(SYS_PATH).'var/archive/']
+    [$plugin->get_lang('archiverealroot'), 'Example: '.api_get_path(SYS_PATH).'var/archive/']
 );
 $form->addElement(
     'text',
     'home_real_root',
-    [$plugininstance->get_lang('homerealroot'), 'Example: '.api_get_path(SYS_PATH).'var/home/']
+    [$plugin->get_lang('homerealroot'), 'Example: '.api_get_path(SYS_PATH).'var/home/']
 );
 
-$form->addElement('header', $plugininstance->get_lang('mysqlcmds'));
-$form->addElement('text', 'cmd_mysql', [$plugininstance->get_lang('mysqlcmd'), 'Example: /usr/bin/mysql']);
-$form->addElement('text', 'cmd_mysqldump', [$plugininstance->get_lang('mysqldumpcmd'), 'Example: /usr/bin/mysqldump']);
-$form->addElement('header', $plugininstance->get_lang('proxysettings'));
-$form->addElement('text', 'httpproxyhost', $plugininstance->get_lang('httpproxyhost'));
-$form->addElement('text', 'httpproxyport', $plugininstance->get_lang('httpproxyport'));
-$form->addElement('text', 'httpproxybypass', $plugininstance->get_lang('httpproxybypass'));
-$form->addElement('text', 'httpproxyuser', $plugininstance->get_lang('httpproxyuser'));
-$form->addElement('text', 'httpproxypassword', $plugininstance->get_lang('httpproxypassword'));
-$form->addButtonSave($plugininstance->get_lang('Save'));
+$form->addElement('header', $plugin->get_lang('mysqlcmds'));
+$form->addElement('text', 'cmd_mysql', [$plugin->get_lang('mysqlcmd'), 'Example: /usr/bin/mysql']);
+$form->addElement('text', 'cmd_mysqldump', [$plugin->get_lang('mysqldumpcmd'), 'Example: /usr/bin/mysqldump']);
+$form->addElement('header', $plugin->get_lang('proxysettings'));
+$form->addElement('text', 'httpproxyhost', $plugin->get_lang('httpproxyhost'));
+$form->addElement('text', 'httpproxyport', $plugin->get_lang('httpproxyport'));
+$form->addElement('text', 'httpproxybypass', $plugin->get_lang('httpproxybypass'));
+$form->addElement('text', 'httpproxyuser', $plugin->get_lang('httpproxyuser'));
+$form->addElement('text', 'httpproxypassword', $plugin->get_lang('httpproxypassword'));
+$form->addButtonSave($plugin->get_lang('Save'));
 
 $plugin_info['settings_form'] = $form;
 

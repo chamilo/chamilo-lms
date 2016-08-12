@@ -44,7 +44,7 @@ class learnpath
     public $path = ''; // Path inside the scorm directory (if scorm).
     public $theme; // The current theme of the learning path.
     public $preview_image; // The current image of the learning path.
-    public $accumulate_scorm_time; // Flag to accumulate scorm time
+    public $accumulateScormTime; // Flag to decide whether to accumulate SCORM time or not
 
     // Tells if all the items of the learnpath can be tried again. Defaults to "no" (=1).
     public $prevent_reinit = 1;
@@ -84,10 +84,10 @@ class learnpath
      * Constructor.
      * Needs a database handler, a course code and a learnpath id from the database.
      * Also builds the list of items into $this->items.
-     * @param	string	$course Course code
-     * @param	integer	$lp_id
-     * @param	integer	$user_id
-     * @return mixed True on success, false on error
+     * @param   string $course Course code
+     * @param   integer $lp_id
+     * @param   integer $user_id
+     * @return  mixed True on success, false on error
      */
     public function __construct($course, $lp_id, $user_id)
     {
@@ -151,7 +151,7 @@ class learnpath
                 $this->modified_on = $row['modified_on'];
                 $this->ref = $row['ref'];
                 $this->categoryId = $row['category_id'];
-                $this->accumulate_scorm_time = isset($row['accumulate_scorm_time']) ? $row['accumulate_scorm_time'] : 'false';
+                $this->accumulateScormTime = isset($row['accumulate_scorm_time']) ? $row['accumulate_scorm_time'] : 'true';
 
                 if (!empty($row['publicated_on'])) {
                     $this->publicated_on = $row['publicated_on'];
@@ -864,7 +864,8 @@ class learnpath
                     'seriousgame_mode' => 0,
                     'autolaunch' => 0,
                     'max_attempts' => 0,
-                    'subscribe_users' => 0
+                    'subscribe_users' => 0,
+                    'accumulate_scorm_time' => 1
                 ];
 
                 $id = Database::insert($tbl_lp, $params);
@@ -5904,33 +5905,91 @@ class learnpath
 
     /**
      * This function builds the action menu
-     * @param bool $returnContent
-     * @return void
+     * @param bool $returnContent Optional
+     * @param bool $showRequirementButtons Optional. Allow show the requirements button
+     * @param bool $isConfigPage Optional. If is the config page, show the edit button
+     * @param bool $allowExpand Optional. Allow show the expand/contract button
+     * @return string
      */
-    public function build_action_menu($returnContent = false)
+    public function build_action_menu($returnContent = false, $showRequirementButtons = true, $isConfigPage = false, $allowExpand = true)
     {
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
-        $return = '<div class="actions">';
-        $return .=  '<a href="lp_controller.php?'.api_get_cidreq().'&gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '&isStudentView=true" target="_self">' . Display :: return_icon('preview_view.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a> ';
-        $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=admin_view&lp_id=' . $_SESSION['oLP']->lp_id . '&updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'',ICON_SIZE_MEDIUM).'</a>';
-        $return .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM).'</a>';
-        $buttons = array(
-            array(
-                'title' => get_lang('SetPrerequisiteForEachItem'),
-                'href' => 'lp_controller.php?'.api_get_cidreq().'&action=set_previous_step_as_prerequisite&lp_id=' . $_SESSION['oLP']->lp_id,
-            ),
-            array(
-                'title' => get_lang('ClearAllPrerequisites'),
-                'href' => 'lp_controller.php?'.api_get_cidreq().'&action=clear_prerequisites&lp_id=' . $_SESSION['oLP']->lp_id,
-            ),
+        $actionsLeft = '';
+        $actionsRight = '';
+
+        $actionsLeft .= Display::url(
+            Display:: return_icon('preview_view.png', get_lang('Display'), '', ICON_SIZE_MEDIUM),
+            'lp_controller.php?'.api_get_cidreq().'&' . http_build_query([
+                'gradebook' => $gradebook,
+                'action' => 'view',
+                'lp_id' => $_SESSION['oLP']->lp_id,
+                'isStudentView' => 'true'
+            ])
         );
-        $return .= Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
-        $return .= '</div>';
+        $actionsLeft .= Display::url(
+            Display:: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'), '', ICON_SIZE_MEDIUM),
+            'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                'action' => 'admin_view',
+                'lp_id' => $_SESSION['oLP']->lp_id,
+                'updateaudio' => 'true'
+            ])
+        );
+
+        if (!$isConfigPage) {
+            $actionsLeft .= Display::url(
+                Display :: return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM),
+                'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                    'action' => 'edit',
+                    'lp_id' => $_SESSION['oLP']->lp_id
+                ])
+            );
+        } else {
+            $actionsLeft .= Display::url(
+                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM),
+                'lp_controller.php?' . http_build_query([
+                    'action' => 'build',
+                    'lp_id' => $_SESSION['oLP']->lp_id
+                ]) . '&' . api_get_cidreq()
+            );
+        }
+
+        if ($allowExpand) {
+            $actionsLeft .= Display::url(
+                Display::return_icon('expand.png', get_lang('Expand'), array('id' => 'expand'), ICON_SIZE_MEDIUM) .
+                Display::return_icon('contract.png', get_lang('Collapse'), array('id' => 'contract', 'class' => 'hide'), ICON_SIZE_MEDIUM),
+                '#',
+                ['role' => 'button', 'id' => 'hide_bar_template']
+            );
+        }
+
+        if ($showRequirementButtons) {
+            $buttons = array(
+                array(
+                    'title' => get_lang('SetPrerequisiteForEachItem'),
+                    'href' => 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                        'action' => 'set_previous_step_as_prerequisite',
+                        'lp_id' => $_SESSION['oLP']->lp_id
+                    ])
+                ),
+                array(
+                    'title' => get_lang('ClearAllPrerequisites'),
+                    'href' => 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                        'action' => 'clear_prerequisites',
+                        'lp_id' => $_SESSION['oLP']->lp_id
+                    ])
+                ),
+            );
+            $actionsRight = Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
+        }
+
+        $toolbar = Display::toolbarAction('actions-lp-controller', array($actionsLeft, $actionsRight));
 
         if ($returnContent) {
-            return $return;
+
+            return $toolbar;
         }
-        echo $return;
+
+        echo $toolbar;
     }
 
     /**
@@ -9276,7 +9335,7 @@ class learnpath
                 // Attach this item to the organization element or hits parent if there is one.
                 if (!empty($item->parent) && $item->parent != 0) {
                     $children = $organization->childNodes;
-                    $possible_parent = &$this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
+                    $possible_parent = $this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
                     if (is_object($possible_parent)) {
                         $possible_parent->appendChild($my_item);
                     } else {
@@ -9959,7 +10018,7 @@ EOD;
 
         $fs = new \Symfony\Component\Filesystem\Filesystem;
         $fs->mirror($main_code_path, $archive_path.$temp_dir_short);
-       
+
 
         // Finalize the imsmanifest structure, add to the zip, then return the zip.
 
@@ -10817,8 +10876,8 @@ EOD;
                 $headers = substr($response, 0, $httpCode['header_size']);
 
                 $error = false;
-                if (stripos($headers, 'X-Frame-Options: DENY') > -1 ||
-                    stripos($headers, 'X-Frame-Options: SAMEORIGIN') > -1
+                if (stripos($headers, 'X-Frame-Options: DENY') > -1
+                    //|| stripos($headers, 'X-Frame-Options: SAMEORIGIN') > -1
                 ) {
                     $error = true;
                 }
@@ -10971,7 +11030,7 @@ EOD;
     /**
      * Get the LP Final Item Template
      *
-     * @return html
+     * @return string
      */
     private function getFinalItemTemplate()
     {
@@ -10981,7 +11040,7 @@ EOD;
     /**
      * Get the LP Final Item Url
      *
-     * @return String
+     * @return string
      */
     private function getSavedFinalItem()
     {
@@ -11119,6 +11178,34 @@ EOD;
         return $answer;
     }
 
+    /**
+     * Get whether this is a learning path with the accumulated SCORM time or not
+     * @return int
+     */
+    public function getAccumulateScormTime()
+    {
+        return $this->accumulateScormTime;
+    }
+
+    /**
+     * Set whether this is a learning path with the accumulated SCORM time or not
+     * @param int $value (0 = false, 1 = true)
+     * @return bool Always returns true
+     */
+    public function setAccumulateScormTime($value)
+    {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::setAccumulateScormTime()', 0);
+        }
+        $this->accumulateScormTime = intval($value);
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET accumulate_scorm_time = ".$this->accumulateScormTime."
+                WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
+        Database::query($sql);
+
+        return true;
+    }
 }
 
 if (!function_exists('trim_value')) {

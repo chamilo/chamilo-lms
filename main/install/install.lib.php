@@ -304,23 +304,6 @@ function set_file_folder_permissions()
 }
 
 /**
- * Add's a .htaccess file to the courses directory
- * @param string $url_append The path from your webroot to your chamilo root
- * @return bool Result of writing the file
- */
-/*function write_courses_htaccess_file($url_append)
-{
-    $content = file_get_contents(dirname(__FILE__).'/'.COURSES_HTACCESS_FILENAME);
-    $content = str_replace('{CHAMILO_URL_APPEND_PATH}', $url_append, $content);
-    $fp = @fopen(api_get_path(SYS_COURSE_PATH).'.htaccess', 'w');
-    if ($fp) {
-        fwrite($fp, $content);
-        return fclose($fp);
-    }
-    return false;
-}*/
-
-/**
  * Write the main system config file
  * @param string $path Path to the config file
  */
@@ -722,6 +705,10 @@ function display_requirements(
                 <td class="requirements-value">'.checkExtension('pdo_mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable')).'</td>
             </tr>
             <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.zip.php" target="_blank">Zip</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.checkExtension('zip', get_lang('Yes'), get_lang('ExtensionNotAvailable')).'</td>
+            </tr>
+            <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('support').'</td>
                 <td class="requirements-value">'.checkExtension('zlib', get_lang('Yes'), get_lang('ExtensionZlibNotAvailable')).'</td>
             </tr>
@@ -962,8 +949,7 @@ function display_requirements(
                 <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
-            ';
-    echo '    </table>';
+        </table>';
     echo '  </div>';
     echo '</div>';
 
@@ -1037,14 +1023,17 @@ function display_requirements(
         //--> The user would have to adjust the permissions manually
         if (count($notWritable) > 0) {
             $error = true;
-            echo '<div class="error-message">';
-                echo '<center><h3>'.get_lang('Warning').'</h3></center>';
-                printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '</font>
-                <a href="../../documentation/installation_guide.html" target="blank">', '</a> <font color="red">');
-            echo '</div>';
+            ?>
+            <div class="text-danger">
+                <h3 class="text-center"><?php echo get_lang('Warning') ?></h3>
+                <p>
+                    <?php printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '<a href="../../documentation/installation_guide.html" target="blank">', '</a>'); ?>
+                </p>
+            </div>
+            <?php
             echo '<ul>';
             foreach ($notWritable as $value) {
-                echo '<li>'.$value.'</li>';
+                echo '<li class="text-danger">'.$value.'</li>';
             }
             echo '</ul>';
         } elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
@@ -1052,6 +1041,33 @@ function display_requirements(
             echo '<div class="alert alert-warning"><h4><center>';
             echo get_lang('WarningExistingLMSInstallationDetected');
             echo '</center></h4></div>';
+        }
+
+        $deprecated = [
+            api_get_path(SYS_CODE_PATH) . 'exercice/',
+            api_get_path(SYS_CODE_PATH) . 'newscorm/',
+            api_get_path(SYS_PLUGIN_PATH) . 'ticket/'
+        ];
+        $deprecatedToRemove = [];
+
+        foreach ($deprecated as $deprecatedDirectory) {
+            if (!is_dir($deprecatedDirectory)) {
+                continue;
+            }
+
+            $deprecatedToRemove[] = $deprecatedDirectory;
+        }
+
+        if (count($deprecatedToRemove) > 0) {
+            $error = true;
+            ?>
+            <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade') ?></p>
+            <ul>
+                <?php foreach ($deprecatedToRemove as $deprecatedDirectory) { ?>
+                    <li class="text-danger"><?php echo $deprecatedDirectory ?></li>
+                <?php } ?>
+            </ul>
+            <?php
         }
 
         // And now display the choice buttons (go back or install)
@@ -1064,13 +1080,11 @@ function display_requirements(
             <em class="fa fa-forward"> </em> <?php echo get_lang('NewInstallation'); ?>
         </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
+            <button type="submit" class="btn btn-default" <?php echo !$error ?: 'disabled="disabled"' ?> name="step2_update_8" value="Upgrade from Chamilo 1.9.x">
+                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeFromLMS19x') ?>
+            </button>
+            </p>
         <?php
-        // Real code
-        echo '<button type="submit" class="btn btn-default" name="step2_update_8" value="Upgrade from Chamilo 1.9.x"';
-        if ($error) echo ' disabled="disabled"';
-        echo ' ><em class="fa fa-forward"> </em> '.get_lang('UpgradeFromLMS19x').'</button>';
-
-        echo '</p>';
     }
 }
 
@@ -1671,13 +1685,13 @@ function display_configuration_settings_form(
     } else {
         $html .= '<div class="control-group">';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" '. ($allowSelfReg == 'true' ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
+                        <input type="radio" name="allowSelfReg" value="true" id="allowSelfReg1" '. ($allowSelfReg == 'true' ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
                     </label>';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg == 'false' ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
+                        <input type="radio" name="allowSelfReg" value="false" id="allowSelfReg0" '. ($allowSelfReg == 'false' ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
                     </label>';
          $html .= '<label class="checkbox-inline">
-                    <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg == 'approval' ? '' : 'checked="checked" ') .' /> '. get_lang('AfterApproval') .'
+                    <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '. ($allowSelfReg == 'approval' ? '' : 'checked="checked" ') .' /> '. get_lang('AfterApproval') .'
                 </label>';
         $html .= '</div>';
     }
@@ -1738,7 +1752,7 @@ function display_after_install_message($installType)
     echo '</div>';
     ?></form>
     <br />
-    <a class="btn btn-success btn-large btn-install" href="../../index.php">
+    <a class="btn btn-success btn-block" href="../../index.php">
         <?php echo get_lang('GoToYourNewlyCreatedPortal'); ?>
     </a>
     <?php
@@ -1965,7 +1979,6 @@ function installSettings(
     $allowTeacherSelfRegistration,
     $installationProfile = ''
 ) {
-    $allowRegistration = $allowRegistration ? 'true' : 'false';
     $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
 
     // Use PHP 5.3 to avoid issue with weird peripherical auto-installers like travis-ci
@@ -2035,9 +2048,14 @@ function migrate($chamiloVersion, EntityManager $manager)
             foreach ($migratedSQL as $version => $sqlList) {
                 echo "VERSION: $version<br>";
                 echo "----------------------------------------------<br>";
-
+                $total = count($sqlList);
+                error_log("VERSION: $version");
+                error_log("# queries: ".$total);
+                $counter = 1;
                 foreach ($sqlList as $sql) {
                     echo "<code>$sql</code><br>";
+                    error_log("$counter/$total : $sql");
+                    $counter++;
                 }
             }
 
@@ -2070,6 +2088,561 @@ function fixIds(EntityManager $em)
     if ($debug) {
         error_log('fixIds');
     }
+
+    // Create temporary indexes to increase speed of the following operations
+    // Adding and removing indexes will usually take much less time than
+    // the execution without indexes of the queries in this function, particularly
+    // for large tables
+    $sql = "ALTER TABLE c_document ADD INDEX tmpidx_doc(c_id, id)";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_student_publication ADD INDEX tmpidx_stud (c_id, id)";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_quiz ADD INDEX tmpidx_quiz (c_id, id)";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_item_property ADD INDEX tmpidx_ip (to_group_id)";
+    $connection->executeQuery($sql);
+
+    $sql = "SELECT * FROM c_lp_item";
+    $result = $connection->fetchAll($sql);
+    foreach ($result as $item) {
+        $courseId = $item['c_id'];
+        $iid = isset($item['iid']) ? intval($item['iid']) : 0;
+        $ref = isset($item['ref']) ? intval($item['ref']) : 0;
+        $sql = null;
+
+        $newId = '';
+
+        switch ($item['item_type']) {
+            case TOOL_LINK:
+                $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+            case TOOL_STUDENTPUBLICATION:
+                $sql = "SELECT * FROM c_student_publication WHERE c_id = $courseId AND id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+            case TOOL_QUIZ:
+                $sql = "SELECT * FROM c_quiz WHERE c_id = $courseId AND id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+            case TOOL_DOCUMENT:
+                $sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+            case TOOL_FORUM:
+                $sql = "SELECT * FROM c_forum_forum WHERE c_id = $courseId AND forum_id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+            case 'thread':
+                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND thread_id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+        }
+
+        if (!empty($sql) && !empty($newId) && !empty($iid)) {
+            $sql = "UPDATE c_lp_item SET ref = $newId WHERE iid = $iid";
+
+            $connection->executeQuery($sql);
+        }
+    }
+
+    // Set NULL if session = 0
+    $sql = "UPDATE c_item_property SET session_id = NULL WHERE session_id = 0";
+    $connection->executeQuery($sql);
+
+    // Set NULL if group = 0
+    $sql = "UPDATE c_item_property SET to_group_id = NULL WHERE to_group_id = 0";
+    $connection->executeQuery($sql);
+
+    // Set NULL if insert_user_id = 0
+    $sql = "UPDATE c_item_property SET insert_user_id = NULL WHERE insert_user_id = 0";
+    $connection->executeQuery($sql);
+
+    // Delete session data of sessions that don't exist.
+    $sql = "DELETE FROM c_item_property
+            WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)";
+    $connection->executeQuery($sql);
+
+    // Delete group data of groups that don't exist.
+    $sql = "DELETE FROM c_item_property
+            WHERE to_group_id IS NOT NULL AND to_group_id NOT IN (SELECT DISTINCT id FROM c_group_info)";
+    $connection->executeQuery($sql);
+
+    // This updates the group_id with c_group_info.iid instead of c_group_info.id
+
+    if ($debug) {
+        error_log('update iids');
+    }
+
+    $groupTableToFix = [
+        'c_group_rel_user',
+        'c_group_rel_tutor',
+        'c_permission_group',
+        'c_role_group',
+        'c_survey_invitation',
+        'c_attendance_calendar_rel_group'
+    ];
+
+    foreach ($groupTableToFix as $table) {
+        $sql = "SELECT * FROM $table";
+        $result = $connection->fetchAll($sql);
+        foreach ($result as $item) {
+            $iid = $item['iid'];
+            $courseId = $item['c_id'];
+            $groupId = intval($item['group_id']);
+
+            // Fix group id
+            if (!empty($groupId)) {
+                $sql = "SELECT * FROM c_group_info
+                        WHERE c_id = $courseId AND id = $groupId
+                        LIMIT 1";
+                $data = $connection->fetchAssoc($sql);
+                if (!empty($data)) {
+                    $newGroupId = $data['iid'];
+                    $sql = "UPDATE $table SET group_id = $newGroupId
+                            WHERE iid = $iid";
+                    $connection->executeQuery($sql);
+                } else {
+                    // The group does not exists clean this record
+                    $sql = "DELETE FROM $table WHERE iid = $iid";
+                    $connection->executeQuery($sql);
+                }
+            }
+        }
+    }
+
+    // Fix c_item_property
+    if ($debug) {
+        error_log('update c_item_property');
+    }
+
+    $sql = "SELECT * FROM course";
+    $courseList = $connection->fetchAll($sql);
+    if ($debug) {
+        error_log('Getting course list');
+    }
+
+    $totalCourse = count($courseList);
+    $counter = 0;
+
+    foreach ($courseList as $courseData) {
+        $courseId = $courseData['id'];
+        if ($debug) {
+            error_log('Updating course: '.$courseData['code']);
+        }
+
+        $sql = "SELECT * FROM c_item_property WHERE c_id = $courseId";
+        $result = $connection->fetchAll($sql);
+
+        foreach ($result as $item) {
+            //$courseId = $item['c_id'];
+            $sessionId = intval($item['session_id']);
+            $groupId = intval($item['to_group_id']);
+            $iid = $item['iid'];
+            $ref = $item['ref'];
+
+            // Fix group id
+            if (!empty($groupId)) {
+                $sql = "SELECT * FROM c_group_info
+                        WHERE c_id = $courseId AND id = $groupId";
+                $data = $connection->fetchAssoc($sql);
+                if (!empty($data)) {
+                    $newGroupId = $data['iid'];
+                    $sql = "UPDATE c_item_property SET to_group_id = $newGroupId
+                            WHERE iid = $iid";
+                    $connection->executeQuery($sql);
+                } else {
+                    // The group does not exists clean this record
+                    $sql = "DELETE FROM c_item_property WHERE iid = $iid";
+                    $connection->executeQuery($sql);
+                }
+            }
+
+            $sql = '';
+            $newId = '';
+            switch ($item['tool']) {
+                case TOOL_LINK:
+                    $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref ";
+                    break;
+                case TOOL_STUDENTPUBLICATION:
+                    $sql = "SELECT * FROM c_student_publication WHERE c_id = $courseId AND id = $ref";
+                    break;
+                case TOOL_QUIZ:
+                    $sql = "SELECT * FROM c_quiz WHERE c_id = $courseId AND id = $ref";
+                    break;
+                case TOOL_DOCUMENT:
+                    $sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $ref";
+                    break;
+                case TOOL_FORUM:
+                    $sql = "SELECT * FROM c_forum_forum WHERE c_id = $courseId AND id = $ref";
+                    break;
+                case 'thread':
+                    $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND id = $ref";
+                    break;
+            }
+
+            if (!empty($sql) && !empty($newId)) {
+                $data = $connection->fetchAssoc($sql);
+                if (isset($data['iid'])) {
+                    $newId = $data['iid'];
+                }
+                $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
+                error_log($sql);
+                $connection->executeQuery($sql);
+            }
+
+            if ($debug) {
+                // Print a status in the log once in a while
+                error_log("Process item #$counter/$totalCourse");
+            }
+            $counter++;
+        }
+    }
+
+    if ($debug) {
+        error_log('update gradebook_link');
+    }
+
+    // Fix gradebook_link
+    $sql = "SELECT * FROM gradebook_link";
+    $result = $connection->fetchAll($sql);
+    foreach ($result as $item) {
+        $courseCode = $item['course_code'];
+        $courseInfo = api_get_course_info($courseCode);
+
+        if (empty($courseInfo)) {
+            continue;
+        }
+        $courseId = $courseInfo['real_id'];
+        $ref = $item['ref_id'];
+        $iid = $item['id'];
+        $sql = '';
+
+        switch ($item['type']) {
+            case LINK_LEARNPATH:
+                $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref ";
+                break;
+            case LINK_STUDENTPUBLICATION:
+                $sql = "SELECT * FROM c_student_publication WHERE c_id = $courseId AND id = $ref";
+                break;
+            case LINK_EXERCISE:
+                $sql = "SELECT * FROM c_quiz WHERE c_id = $courseId AND id = $ref";
+                break;
+            case LINK_ATTENDANCE:
+                //$sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $ref";
+                break;
+            case LINK_FORUM_THREAD:
+                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND thread_id = $ref";
+                break;
+        }
+
+        if (!empty($sql)) {
+            $data = $connection->fetchAssoc($sql);
+            if (isset($data) && isset($data['iid'])) {
+                $newId = $data['iid'];
+                $sql = "UPDATE gradebook_link SET ref_id = $newId
+                        WHERE id = $iid";
+                $connection->executeQuery($sql);
+            }
+        }
+    }
+
+    if ($debug) {
+        error_log('update groups');
+    }
+
+    $sql = "SELECT * FROM groups";
+    $result = $connection->executeQuery($sql);
+    $groups = $result->fetchAll();
+
+    $oldGroups = array();
+
+    if (!empty($groups)) {
+        foreach ($groups as $group) {
+            if (empty($group['name'])) {
+                continue;
+            }
+
+            /*$group['description'] = Database::escape_string($group['description']);
+            $group['name'] = Database::escape_string($group['name']);
+            $sql = "INSERT INTO usergroup (name, group_type, description, picture, url, visibility, updated_at, created_at)
+                    VALUES ('{$group['name']}', '1', '{$group['description']}', '{$group['picture_uri']}', '{$group['url']}', '{$group['visibility']}', '{$group['updated_on']}', '{$group['created_on']}')";
+            */
+            $params = [
+                'name' => $group['name'],
+                'description' => $group['description'],
+                'group_type' => 1,
+                'picture' => $group['picture_uri'],
+                'url' => $group['url'],
+                'visibility' => $group['visibility'],
+                'updated_at' => $group['updated_on'],
+                'created_at' => $group['created_on']
+            ];
+            $connection->insert('usergroup', $params);
+            //$connection->executeQuery($sql);
+            $id = $connection->lastInsertId('id');
+            $oldGroups[$group['id']] = $id;
+        }
+    }
+
+    if (!empty($oldGroups)) {
+        foreach ($oldGroups as $oldId => $newId) {
+            $path = get_group_picture_path_by_id(
+                $oldId,
+                'system'
+            );
+
+            if (!empty($path)) {
+                $newPath = str_replace(
+                    "groups/$oldId/",
+                    "groups/$newId/",
+                    $path['dir']
+                );
+                $command = "mv {$path['dir']} $newPath ";
+                system($command);
+            }
+        }
+
+        $sql = "SELECT * FROM group_rel_user";
+        $result = $connection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
+                if (isset($oldGroups[$data['group_id']])) {
+                    $data['group_id'] = $oldGroups[$data['group_id']];
+
+                    $userId = $data['user_id'];
+
+                    $sql = "SELECT id FROM user WHERE user_id = $userId";
+                    $userResult = $connection->executeQuery($sql);
+                    $userInfo = $userResult->fetch();
+                    if (empty($userInfo)) {
+                        continue;
+                    }
+
+                    $sql = "INSERT INTO usergroup_rel_user (usergroup_id, user_id, relation_type)
+                            VALUES ('{$data['group_id']}', '{$userId}', '{$data['relation_type']}')";
+                    $connection->executeQuery($sql);
+                }
+            }
+        }
+
+        $sql = "SELECT * FROM group_rel_group";
+        $result = $connection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
+                if (isset($oldGroups[$data['group_id']]) && isset($oldGroups[$data['subgroup_id']])) {
+                    $data['group_id'] = $oldGroups[$data['group_id']];
+                    $data['subgroup_id'] = $oldGroups[$data['subgroup_id']];
+                    $sql = "INSERT INTO usergroup_rel_usergroup (group_id, subgroup_id, relation_type)
+                            VALUES ('{$data['group_id']}', '{$data['subgroup_id']}', '{$data['relation_type']}')";
+                    $connection->executeQuery($sql);
+                }
+            }
+        }
+
+        $sql = "SELECT * FROM announcement_rel_group";
+        $result = $connection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
+                if (isset($oldGroups[$data['group_id']])) {
+                    // Deleting relation
+                    $sql = "DELETE FROM announcement_rel_group WHERE group_id = {$data['group_id']}";
+                    $connection->executeQuery($sql);
+
+                    // Add new relation
+                    $data['group_id'] = $oldGroups[$data['group_id']];
+                    $sql = "INSERT INTO announcement_rel_group(group_id, announcement_id)
+                            VALUES ('{$data['group_id']}', '{$data['announcement_id']}')";
+                    $connection->executeQuery($sql);
+                }
+            }
+        }
+
+        $sql = "SELECT * FROM group_rel_tag";
+        $result = $connection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
+                if (isset($oldGroups[$data['group_id']])) {
+                    $data['group_id'] = $oldGroups[$data['group_id']];
+                    $sql = "INSERT INTO usergroup_rel_tag (tag_id, usergroup_id)
+                            VALUES ('{$data['tag_id']}', '{$data['group_id']}')";
+                    $connection->executeQuery($sql);
+                }
+            }
+        }
+    }
+
+    if ($debug) {
+        error_log('update extra fields');
+    }
+
+    // Extra fields
+    $extraFieldTables = [
+        ExtraField::USER_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_USER_FIELD),
+        ExtraField::COURSE_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_COURSE_FIELD),
+        //ExtraField::LP_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_LP_FIELD),
+        ExtraField::SESSION_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_SESSION_FIELD),
+        //ExtraField::CALENDAR_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_FIELD),
+        //ExtraField::QUESTION_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_FIELD),
+        //ExtraField::USER_FIELD_TYPE => //Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD),
+    ];
+
+    foreach ($extraFieldTables as $type => $table) {
+        $sql = "SELECT * FROM $table ";
+        if ($debug) {
+            error_log($sql);
+        }
+        $result = $connection->query($sql);
+        $fields = $result->fetchAll();
+
+        foreach ($fields as $field) {
+            if ($debug) {
+                error_log("Loading field: ".$field['field_variable']);
+            }
+            $originalId = $field['id'];
+            $extraField = new ExtraField();
+            $extraField
+                ->setExtraFieldType($type)
+                ->setVariable($field['field_variable'])
+                ->setFieldType($field['field_type'])
+                ->setDisplayText($field['field_display_text'])
+                ->setDefaultValue($field['field_default_value'])
+                ->setFieldOrder($field['field_order'])
+                ->setVisible($field['field_visible'])
+                ->setChangeable($field['field_changeable'])
+                ->setFilter($field['field_filter']);
+
+            $em->persist($extraField);
+            $em->flush();
+
+            $values = array();
+            $handlerId = null;
+            switch ($type) {
+                case ExtraField::USER_FIELD_TYPE:
+                    $optionTable = Database::get_main_table(
+                        TABLE_MAIN_USER_FIELD_OPTIONS
+                    );
+                    $valueTable = Database::get_main_table(
+                        TABLE_MAIN_USER_FIELD_VALUES
+                    );
+                    $handlerId = 'user_id';
+                    break;
+                case ExtraField::COURSE_FIELD_TYPE:
+                    $optionTable = Database::get_main_table(
+                        TABLE_MAIN_COURSE_FIELD_OPTIONS
+                    );
+                    $valueTable = Database::get_main_table(
+                        TABLE_MAIN_COURSE_FIELD_VALUES
+                    );
+                    $handlerId = 'c_id';
+                    break;
+                case ExtraField::SESSION_FIELD_TYPE:
+                    $optionTable = Database::get_main_table(
+                        TABLE_MAIN_SESSION_FIELD_OPTIONS
+                    );
+                    $valueTable = Database::get_main_table(
+                        TABLE_MAIN_SESSION_FIELD_VALUES
+                    );
+                    $handlerId = 'session_id';
+                    break;
+            }
+
+            if (!empty($optionTable)) {
+                $sql = "SELECT * FROM $optionTable WHERE field_id = $originalId ";
+                $result = $connection->query($sql);
+                $options = $result->fetchAll();
+
+                foreach ($options as $option) {
+                    $extraFieldOption = new ExtraFieldOptions();
+                    $extraFieldOption
+                        ->setDisplayText($option['option_display_text'])
+                        ->setField($extraField)
+                        ->setOptionOrder($option['option_order'])
+                        ->setValue($option['option_value']);
+                    $em->persist($extraFieldOption);
+                    $em->flush();
+                }
+
+                $sql = "SELECT * FROM $valueTable WHERE field_id = $originalId ";
+                $result = $connection->query($sql);
+                $values = $result->fetchAll();
+                if ($debug) {
+                    error_log("Fetch all values for field");
+                }
+            }
+
+            if (!empty($values)) {
+                if ($debug) {
+                    error_log("Saving field value in new table");
+                }
+                $k = 0;
+                foreach ($values as $value) {
+                    if (isset($value[$handlerId])) {
+                        /*
+                        $extraFieldValue = new ExtraFieldValues();
+                        $extraFieldValue
+                            ->setValue($value['field_value'])
+                            ->setField($extraField)
+                            ->setItemId($value[$handlerId]);
+                        $em->persist($extraFieldValue);
+                        $em->flush();
+                        */
+                        // Insert without the use of the entity as it reduces
+                        // speed to 2 records per second (much too slow)
+                        $params = [
+                            'field_id' => $extraField->getId(),
+                            'value' => $value['field_value'],
+                            'item_id' => $value[$handlerId]
+                        ];
+                        $connection->insert('extra_field_values', $params);
+                        if ($debug && ($k % 10000 == 0)) {
+                            error_log("Saving field $k");
+                        }
+                        $k++;
+                    }
+                }
+            }
+        }
+    }
+
+    if ($debug) {
+        error_log('Remove index');
+    }
+
+    // Drop temporary indexes added to increase speed of this function's queries
+    $sql = "ALTER TABLE c_document DROP INDEX tmpidx_doc";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_student_publication DROP INDEX tmpidx_stud";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_quiz DROP INDEX tmpidx_quiz";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_item_property DROP INDEX tmpidx_ip";
+    $connection->executeQuery($sql);
 
     if ($debug) {
         error_log('Finish fixId function');
@@ -2127,7 +2700,7 @@ function finishInstallation(
     UserManager::setPasswordEncryption($encryptPassForm);
 
     // Create admin user.
-    UserManager::create_user(
+    @UserManager::create_user(
         $adminFirstName,
         $adminLastName,
         1,
@@ -2149,7 +2722,7 @@ function finishInstallation(
     );
 
     // Create anonymous user.
-    UserManager::create_user(
+    @UserManager::create_user(
         'Joe',
         'Anonymous',
         6,
@@ -2197,7 +2770,7 @@ function finishInstallation(
     $files = $finder->files()->in($path);
     foreach ($files as $version) {
         $version = str_replace(['Version',  '.php' ], '', $version->getFilename());
-        $sql = "INSERT INTO version VALUES ('$version')";
+        $sql = "INSERT INTO version (version) VALUES ('$version')";
         Database::query($sql);
     }
 }
@@ -2270,4 +2843,176 @@ function rrmdir($dir)
         reset($objects);
         rmdir($dir);
     }
+}
+
+function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $anonymous = false)
+{
+    switch ($type) {
+        case 'system': // Base: absolute system path.
+            $base = api_get_path(SYS_UPLOAD_PATH);
+            break;
+        case 'web': // Base: absolute web path.
+        default:
+            $base = api_get_path(WEB_UPLOAD_PATH);
+            break;
+    }
+
+    $noPicturePath = array('dir' => $base.'img/', 'file' => 'unknown.jpg');
+
+    if (empty($id) || empty($type)) {
+        return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
+    }
+
+    $id = intval($id);
+
+    //$group_table = Database :: get_main_table(TABLE_MAIN_GROUP);
+    $group_table = 'groups';
+    $sql = "SELECT picture_uri FROM $group_table WHERE id=".$id;
+    $res = Database::query($sql);
+
+    if (!Database::num_rows($res)) {
+        return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
+    }
+
+    $user = Database::fetch_array($res);
+    $picture_filename = trim($user['picture_uri']);
+
+    if (api_get_setting('split_users_upload_directory') === 'true') {
+        if (!empty($picture_filename)) {
+            $dir = $base.'groups/'.substr($picture_filename, 0, 1).'/'.$id.'/';
+        } elseif ($preview) {
+            $dir = $base.'groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
+        } else {
+            $dir = $base.'groups/'.$id.'/';
+        }
+    } else {
+        $dir = $base.'groups/'.$id.'/';
+    }
+
+    if (empty($picture_filename) && $anonymous) {
+        return $noPicturePath;
+    }
+
+    return array('dir' => $dir, 'file' => $picture_filename);
+}
+
+/**
+ * @param string $fromVersion
+ * @param EntityManager $manager
+ * @param bool $processFiles
+ */
+function migrateSwitch($fromVersion, $manager, $processFiles = true)
+{
+    error_log('Starting migration process from '.$fromVersion.' ('.date('Y-m-d H:i:s').')');
+
+    echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
+    echo '<div id="details" style="display:none">';
+
+    $connection = $manager->getConnection();
+
+    switch ($fromVersion) {
+        case '1.9.0':
+        case '1.9.2':
+        case '1.9.4':
+        case '1.9.6':
+        case '1.9.6.1':
+        case '1.9.8':
+        case '1.9.8.1':
+        case '1.9.8.2':
+        case '1.9.10':
+        case '1.9.10.2':
+        case '1.9.10.4':
+            // Fix type "enum" before running the migration with Doctrine
+            $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
+            $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
+            $connection->executeQuery("ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL");
+            $connection->executeQuery("ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self'");
+            $connection->executeQuery("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
+            $connection->executeQuery("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
+            $connection->executeQuery("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
+            $connection->executeQuery("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
+            $connection->executeQuery("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
+
+            // Migrate using the migration files located in:
+            // src/Chamilo/CoreBundle/Migrations/Schema/V110
+            $result = migrate(
+                110,
+                $manager
+            );
+
+            if ($result) {
+                error_log('Migrations files were executed.');
+
+                fixIds($manager);
+
+                $connection->executeQuery("UPDATE settings_current SET selected_value = '1.10.0' WHERE variable = 'chamilo_database_version'");
+
+                if ($processFiles) {
+
+                    include __DIR__.'/update-files-1.9.0-1.10.0.inc.php';
+                    // Only updates the configuration.inc.php with the new version
+                    include __DIR__.'/update-configuration.inc.php';
+
+                    $configurationFiles = array(
+                        'mail.conf.php',
+                        'profile.conf.php',
+                        'course_info.conf.php',
+                        'add_course.conf.php',
+                        'events.conf.php',
+                        'auth.conf.php',
+                        'portfolio.conf.php'
+                    );
+
+                    error_log('Copy conf files');
+
+                    foreach ($configurationFiles as $file) {
+                        if (file_exists(api_get_path(SYS_CODE_PATH).'inc/conf/'.$file)) {
+                            copy(
+                                api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
+                                api_get_path(CONFIGURATION_PATH).$file
+                            );
+                        }
+                    }
+                }
+
+                error_log('Upgrade 1.10.x process concluded! ('.date('Y-m-d H:i:s').')');
+            } else {
+                error_log('There was an error during running migrations. Check error.log');
+                break;
+            }
+        case '1.10.0':
+            // no break
+        case '1.10.2':
+            // no break
+        case '1.10.4':
+            // no break
+        case '1.10.6':
+            // no break
+        case '1.10.8':
+            // Migrate using the migration files located in:
+            // src/Chamilo/CoreBundle/Migrations/Schema/V111
+            $result = migrate(
+                111,
+                $manager
+            );
+
+            if ($result) {
+                $connection->executeQuery("UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'");
+
+                error_log('Migrations files were executed.');
+                if ($processFiles) {
+                    include __DIR__.'/update-files-1.10.0-1.11.0.inc.php';
+                }
+                error_log('Upgrade 1.11.x process concluded!  ('.date('Y-m-d H:i:s').')');
+            } else {
+                error_log('There was an error during running migrations. Check error.log');
+            }
+            break;
+        default:
+            break;
+    }
+
+    echo '</div>';
+
+    return true;
 }

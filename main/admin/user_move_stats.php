@@ -74,6 +74,7 @@ if (isset($_REQUEST['load_ajax'])) {
             $origin_course_code     = $combination_result['course_code'];
             $origin_session_id      = intval($combination_result['session_id']);
             $new_session_id         = intval($_REQUEST['session_id']);
+            $session = $em->find('ChamiloCoreBundle:Session', $new_session_id);
 
             //if (!isset($_REQUEST['view_stat'])) {
             if ($origin_session_id == $new_session_id ) {
@@ -359,30 +360,28 @@ if (isset($_REQUEST['load_ajax'])) {
                                     $dir_name = substr($parent_data['url'], 1);
                                     $created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
                                     $created_dir = '/'.$created_dir;
-                                    $now = api_get_utc_datetime();
+                                    $now = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
                                     //Creating directory
-                                    $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION . " SET
-                                           url         = '".$created_dir."',
-	                                       c_id        = $course_id,
-	                                       title        = '".$parent_data['title']."',
-	                                       description  = '".$parent_data['description']." folder_moved_from_session_id_$origin_session_id ',
-	                                       author       = '',
-	                                       active       = '0',
-	                                       accepted     = '1',
-	                                       filetype     = 'folder',
-	                                       sent_date    = '".$now."',
-	                                       qualification    = '".$parent_data['qualification'] ."',
-	                                       parent_id    = '',
-	                                       qualificator_id  = '',
-	                                       date_of_qualification    = '',
-	                                       session_id   = ".$new_session_id;
-                                    $rest_insert     = Database::query($sql_add_publication);
-                                    if ($debug) echo ($sql_add_publication);
-                                    // add the directory
-                                    $id = Database::insert_id();
+                                    $publication = new \Chamilo\CourseBundle\Entity\CStudentPublication();
+                                    $publication
+                                            ->setUrl($created_dir)
+                                            ->setCId($course_id)
+                                            ->setTitle($parent_data['title'])
+                                            ->setDescription(
+                                                $parent_data['description'] . "folder_moved_from_session_id_$origin_session_id"
+                                            )
+                                            ->setActive(false)
+                                            ->setAccepted(true)
+                                            ->setFiletype('folder')
+                                            ->setSentDate($now)
+                                            ->setQualification($parent_data['qualification'])
+                                            ->setParentId(0)
+                                            ->setQualificatorId(0)
+                                            ->setSession($session);
+
+                                    $id = $publication->getIid();
                                     //Folder created
                                     api_item_property_update($course_info, 'work', $id, 'DirectoryCreated', api_get_user_id());
-                                    if ($debug) var_dump($rest_insert);
                                     $new_parent_id = $id;
                                     $result_message[$TBL_STUDENT_PUBLICATION.' - new folder created called: '.$created_dir]++;
                                 }
@@ -424,23 +423,25 @@ if (isset($_REQUEST['load_ajax'])) {
 
                             if ($update_database) {
                                 //Creating a new work
-                                $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION . " SET " .
-                                    "url         = '" . $new_url . "',
-                                               c_id        = $course_id,
-                                               title       = '" . $data['title']. "',
-                                               description = '" . $data['description'] . " file moved',
-                                               author      = '" . $data['author'] . "',
-                                               active       = '" . $data['active']. "',
-                                               accepted     = '" . $data['accepted']. "',
-                                               post_group_id = " . $data['post_group_id'] . ",
-                                               sent_date    =  '".$data['sent_date'] ."',
-                                               parent_id    =  ".$new_parent_id ." ,
-                                               session_id = ".$new_session_id;
+                                $data['sent_date'] = new DateTime($data['sent_date'], new DateTimeZone('UTC'));
 
-                                if ($debug) echo $sql_add_publication;
-                                $rest_insert     = Database::query($sql_add_publication);
-                                if ($debug) var_dump($rest_insert);
-                                $id = Database::insert_id();
+                                $publication = new \Chamilo\CourseBundle\Entity\CStudentPublication();
+                                $publication
+                                    ->setUrl($new_url)
+                                    ->setCId($course_id)
+                                    ->setTitle($data['title'])
+                                    ->setDescription($data['description'] . ' file moved')
+                                    ->setActive($data['active'])
+                                    ->setAccepted($data['accepted'])
+                                    ->setPostGroupId($data['post_group_id'])
+                                    ->setSentDate($data['sent_date'])
+                                    ->setParentId($new_parent_id)
+                                    ->setSession($session);
+
+                                $em->persist($publication);
+                                $em->flush();
+
+                                $id = $publication->getIid();
                                 api_item_property_update($course_info, 'work', $id, 'DocumentAdded', $user_id);
                                 $result_message[$TBL_STUDENT_PUBLICATION]++;
 
@@ -564,8 +565,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
     }
     function view_stat (unique_id, user_id) {
         var session_id = document.getElementById(unique_id).options[document.getElementById(unique_id).selectedIndex].value;
-        load_thick("user_move_stats.php?load_ajax=1&view_stat=1"+"&unique_id="+unique_id+"&user_id="+user_id+"&session_id="+session_id,"");
-/*
+
          $.ajax({
             contentType: "application/x-www-form-urlencoded",
             beforeSend: function(objeto) {
@@ -576,7 +576,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
             success: function(datos) {
              $("div#reponse_"+unique_id).html(datos);
             }
-        });*/
+        });
     }
 
 

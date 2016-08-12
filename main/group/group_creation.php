@@ -264,7 +264,7 @@ EOT;
 			$group_el[] = $create_subgroups_form->createElement('static', null, null, get_lang('WithUsersFrom'));
 			$group_el[] = $create_subgroups_form->createElement('select', 'base_group', null, $base_group_options);
 			$group_el[] = $create_subgroups_form->createElement('button', 'submit', get_lang('Ok'));
-			$create_subgroups_form->addGroup($group_el, 'create_groups', null, ' ', false);
+			$create_subgroups_form->addGroup($group_el, 'create_groups', null, null, false);
 			$defaults = array();
 			$defaults['action'] = 'create_subgroups';
 			$create_subgroups_form->setDefaults($defaults);

@@ -40,8 +40,7 @@ class ExerciseLib
         $exercise_feedback = null,
         $show_answers = false,
         $show_icon = false
-    )
-    {
+    ) {
         $course_id = api_get_course_int_id();
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
@@ -67,7 +66,7 @@ class ExerciseLib
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
                     $icon = '';
-                    if($show_icon){
+                    if ($show_icon) {
                         $icon = Display::iconAnswer($answerType);
                     }
                     TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
@@ -90,7 +89,7 @@ class ExerciseLib
                 return '';
             }
 
-            echo '<div class="question_options">';
+            echo '<div class="question_options row">';
 
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId);
@@ -215,23 +214,23 @@ class ExerciseLib
                 foreach ($objQuestionTmp->options as $item) {
                     if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                         if (in_array($item, $objQuestionTmp->options)) {
-                            $header .= Display::tag('th', get_lang($item), array('class'=>'text-center'));
+                            $header .= Display::tag('th', get_lang($item));
                         } else {
                             $header .= Display::tag('th', $item);
                         }
                     } else {
-                        $header .= Display::tag('th', $item, array('class'=>'text-center'));
+                        $header .= Display::tag('th', $item);
                     }
 
                 }
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
-                $s .= '<table class="table table-hover">';
+                $s .= '<table class="table table-hover table-striped">';
                 $s .= Display::tag(
                     'tr',
                     $header,
-                    array('class' => 'header-options')
+                    array('style' => 'text-align:left;')
                 );
             }
 
@@ -253,11 +252,11 @@ class ExerciseLib
                     if ($exercise_feedback == EXERCISE_FEEDBACK_TYPE_END) {
                         $header .= Display::tag('th', get_lang('Feedback'));
                     }
-                    $s .= '<table class="table table-hover">';
+                    $s .= '<table class="table table-hover table-striped">';
                     $s .= Display::tag(
                         'tr',
                         $header,
-                        array('style' => 'text-align:center;')
+                        array('style' => 'text-align:left;')
                     );
                 }
             }
@@ -422,7 +421,7 @@ class ExerciseLib
                             }
 
                             $s .= '<tr>';
-                            $s .= Display::tag('td', $answer, array('class'=>'options'));
+                            $s .= Display::tag('td', $answer);
 
                             if (!empty($quiz_question_options)) {
                                 foreach ($quiz_question_options as $id => $item) {
@@ -450,7 +449,7 @@ class ExerciseLib
                                             $id,
                                             $attributes
                                         ),
-                                        array('class' => 'text-center')
+                                        array('style' => '')
                                     );
                                 }
                             }
@@ -548,8 +547,7 @@ class ExerciseLib
                                     'choice[' . $questionId . '][' . $numAnswer . ']',
                                     $key,
                                     $attributes
-                                ),
-                                array('class'=>'text-center')
+                                )
                             );
                         }
 
@@ -1929,7 +1927,7 @@ HOTSPOT;
                                     $teacher_id_list
                                 )) {
                                     $actions .= Display::return_icon(
-                                        'teachers.gif',
+                                        'teacher.png',
                                         get_lang('Teacher')
                                     );
                                 }
@@ -1946,7 +1944,7 @@ HOTSPOT;
                             } else {
                                 $actions .= "<a href='exercise_show.php?" . api_get_cidreq() . "&action=qualify&id=$id'>" .
                                     Display:: return_icon(
-                                        'quiz.gif',
+                                        'quiz.png',
                                         get_lang('Qualify')
                                     );
                                 $actions .= '&nbsp;';
@@ -1956,14 +1954,13 @@ HOTSPOT;
                             if ($filter == 2) {
                                 $actions .= ' <a href="exercise_history.php?' . api_get_cidreq() . '&exe_id=' . $id . '">' .
                                     Display:: return_icon(
-                                        'history.gif',
+                                        'history.png',
                                         get_lang('ViewHistoryChange')
                                     ) . '</a>';
                             }
 
                             //Admin can always delete the attempt
-                            if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()
-                            ) {
+                            if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
                                 $ip = TrackingUserLog::get_ip_from_user_event(
                                     $results[$i]['exe_user_id'],
                                     date('Y-m-d h:i:s'),
@@ -1972,6 +1969,25 @@ HOTSPOT;
                                 $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip=' . $ip . '" target="_blank">
                                 ' . Display::return_icon('info.png', $ip) . '
                                 </a>';
+
+
+                                $recalculateUrl = api_get_path(WEB_CODE_PATH) . 'exercise/recalculate.php?' .
+                                    api_get_cidreq() . '&' .
+                                    http_build_query([
+                                        'id' => $id,
+                                        'exercise' => $exercise_id,
+                                        'user' => $results[$i]['exe_user_id']
+                                    ]);
+                                $actions .= Display::url(
+                                    Display::return_icon('reload.png', get_lang('RecalculateResults')),
+                                    $recalculateUrl,
+                                    [
+                                        'data-exercise' => $exercise_id,
+                                        'data-user' => $results[$i]['exe_user_id'],
+                                        'data-id' => $id,
+                                        'class' => 'exercise-recalculate'
+                                    ]
+                                );
 
                                 $delete_link = '<a href="exercise_report.php?' . api_get_cidreq() . '&filter_by_user=' . intval($_GET['filter_by_user']) . '&filter=' . $filter . '&exerciseId=' . $exercise_id . '&delete=delete&did=' . $id . '"
                                 onclick="javascript:if(!confirm(\'' . sprintf(
@@ -2016,6 +2032,8 @@ HOTSPOT;
                                 'info'
                             );
                         }
+
+                        $results[$i]['id'] = $results[$i]['exe_id'];
 
                         if ($is_allowedToEdit) {
                             $results[$i]['status'] = $revised;

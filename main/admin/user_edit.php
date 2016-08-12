@@ -73,51 +73,6 @@ $userGeolocalization = api_get_setting('enable_profile_user_address_geolocalizat
 $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
-$htmlHeadXtra[] = '<script>
-$(document).ready(function() {
-    var $image = $("#previewImage");
-    var $input = $("[name=\'cropResult\']");
-    var $cropButton = $("#cropButton");
-    
-    $("input:file").change(function() {
-        var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("picture").files[0]);
-
-        oFReader.onload = function (oFREvent) {
-            $image.attr("src", this.result);
-            $("#labelCropImage").html("'.get_lang('Preview').'");
-            $("#cropImage").addClass("thumbnail");
-            $cropButton.removeClass("hidden");
-            // Destroy cropper
-            $image.cropper("destroy");
-
-            $image.cropper({
-                aspectRatio: 1 / 1,
-                responsive : true,
-                center : false,
-                guides : false,
-                movable: false,
-                zoomable: false,
-                rotatable: false,
-                scalable: false,
-                crop: function(e) {
-                    // Output the result data for cropping image.
-                    $input.val(e.x+","+e.y+","+e.width+","+e.height);
-                }
-            });
-        };
-    });
-    
-    $("#cropButton").on("click", function() {
-        var canvas = $image.cropper("getCroppedCanvas");
-        var dataUrl = canvas.toDataURL();
-        $image.attr("src", dataUrl);
-        $image.cropper("destroy");
-        $cropButton.addClass("hidden");
-        return false;
-    });
-});
-</script>';
 
 $libpath = api_get_path(LIBRARY_PATH);
 $noPHP_SELF = true;
@@ -332,23 +287,12 @@ if ($userGeolocalization) {
 }
 
 // Picture
-$form->addElement('file', 'picture', get_lang('AddPicture'), array('id' => 'picture', 'class' => 'picture-form'));
-$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-
-$form->addHtml('<div class="form-group">
-    <label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>
-    <div class="col-sm-8">
-        <div id="cropImage" class="cropCanvas">
-            <img id="previewImage" >
-        </div>
-        <div>
-        <button class="btn btn-primary hidden" name="cropButton" id="cropButton">
-        <em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>
-        </div>
-    </div>
-</div>');
-
-$form->addHidden('cropResult', '');
+$form->addFile(
+    'picture',
+    get_lang('AddImage'),
+    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1')
+);
+$allowed_picture_types = api_get_supported_image_extensions(false);
 
 $form->addRule(
 	'picture',
@@ -396,7 +340,7 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
         $group[] = $form->createElement('radio', 'reset_password', null, get_lang('ExternalAuthentication').' ', 3);
         $group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
         $group[] = $form->createElement('static', '', '', '<br />');
-        $form->addGroup($group, 'password', null, '', false);
+        $form->addGroup($group, 'password', null, null, false);
     }
 }
 $form->addElement('radio', 'reset_password', null, get_lang('AutoGeneratePassword'), 1);
@@ -408,7 +352,7 @@ $group[] = $form->createElement(
     null,
     array('onkeydown' => 'javascript: password_switch_radio_button();')
 );
-$form->addGroup($group, 'password', null, '', false);
+$form->addGroup($group, 'password', null, null, false);
 
 // Status
 $status = array();
@@ -452,7 +396,7 @@ $form->addElement('select_language', 'language', get_lang('Language'));
 $group = array();
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
-$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;', false);
+$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), null, false);
 
 // Registration User and Date
 $creatorInfo = api_get_user_info($user_data['creator_id']);
@@ -465,7 +409,7 @@ if (!$user_data['platform_admin']) {
 	$group = array ();
 	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
 	$group[] = $form->createElement('DateTimePicker', 'expiration_date', null, array('onchange' => 'javascript: enable_expiration_date();'));
-	$form->addGroup($group, 'max_member_group', null, '', false);
+	$form->addGroup($group, 'max_member_group', null, null, false);
 
 	// Active account or inactive account
 	$form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
@@ -546,7 +490,7 @@ if ($form->validate()) {
                 $user_id,
                 $_FILES['picture']['name'],
                 $_FILES['picture']['tmp_name'],
-                $user['cropResult']
+                $user['picture_crop_result']
 
             );
 		}
@@ -617,7 +561,7 @@ if ($form->validate()) {
         $currentUserId = api_get_user_id();
 
         $userObj = api_get_user_entity($user_id);
-		
+
         UserManager::add_user_as_admin($userObj);
 
 		if ($user_id != $currentUserId) {
@@ -633,15 +577,15 @@ if ($form->validate()) {
         $extraFieldValue->saveFieldValues($user);
 
 		$tok = Security::get_token();
-		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);
+
+        Display::addFlash(Display::return_message(get_lang('UserUpdated')));
+		header('Location: user_list.php?sec_token='.$tok);
 		exit();
 	}
 }
 
-$message = null;
 if ($error_drh) {
-	$err_msg = get_lang('StatusCanNotBeChangedToHumanResourcesManager');
-	$message = Display::return_message($err_msg, 'error');
+    Display::addFlash(Display::return_message(get_lang('StatusCanNotBeChangedToHumanResourcesManager'), 'error'));
 }
 
 $content = null;
@@ -658,6 +602,5 @@ $content .= '<a class="thumbnail expand-image" href="'.$bigImage.'" /><img src="
 $content .= '</div>';
 
 $tpl = new Template($tool_name);
-$tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

@@ -1,11 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * Skill list for management
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.admin
  */
-use ChamiloSession as Session;
 
 $cidReset = true;
 
@@ -27,7 +29,7 @@ $entityManager = Database::getManager();
 switch ($action) {
     case 'enable':
         $skill = $entityManager->find('ChamiloCoreBundle:Skill', $skillId);
-        
+
         if (is_null($skill)) {
             Display::addFlash(
                 Display::return_message(
@@ -60,7 +62,7 @@ switch ($action) {
         break;
     case 'disable':
         $skill = $entityManager->find('ChamiloCoreBundle:Skill', $skillId);
-        
+
         if (is_null($skill)) {
             Display::addFlash(
                 Display::return_message(
@@ -81,7 +83,7 @@ switch ($action) {
 
             $skillObj = new Skill();
             $childrens = $skillObj->get_children($skill->getId());
-            
+
             foreach ($childrens as $children) {
                 $skill = $entityManager->find(
                     'ChamiloCoreBundle:Skill',
@@ -116,8 +118,6 @@ switch ($action) {
     default:
         $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
-        $message = Session::has('message') ? Session::read('message') : null;
-
         $toolbar = Display::toolbarButton(
             get_lang('CreateSkill'),
             api_get_path(WEB_CODE_PATH) . 'admin/skill_create.php',
@@ -139,18 +139,27 @@ switch ($action) {
             'warning',
             ['title' => get_lang('BadgesManagement')]
         );
+        $toolbar .= Display::toolbarButton(
+            get_lang('ImportSkillsListCSV'),
+            api_get_path(WEB_CODE_PATH) . 'admin/skills_import.php',
+            'arrow-up',
+            'info',
+            ['title' => get_lang('BadgesManagement')]
+        );
 
         $extraField = new ExtraField('skill');
         $arrayVals = $extraField->get_handler_field_info_by_tags('tags');
         $tags = [];
-        foreach ($arrayVals['options'] as $value) {
-            $tags[] = $value;
+
+        if (isset($arrayVals['options'])) {
+            foreach ($arrayVals['options'] as $value) {
+                $tags[] = $value;
+            }
         }
 
         /* View */
         $skill = new Skill();
         $skillList = $skill->get_all();
-
         $extraFieldSearchTagId = isset($_REQUEST['tag_id']) ? $_REQUEST['tag_id'] : 0;
 
         if ($extraFieldSearchTagId) {
@@ -166,7 +175,6 @@ switch ($action) {
         }
 
         $tpl = new Template(get_lang('ManageSkills'));
-        $tpl->assign('message', $message);
         $tpl->assign('skills', $skillList);
         $tpl->assign('current_tag_id', $extraFieldSearchTagId);
         $tpl->assign('tags', $tags);
@@ -177,6 +185,5 @@ switch ($action) {
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
 
-        Session::erase('message');
         break;
 }

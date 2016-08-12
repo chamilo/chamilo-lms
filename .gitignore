@@ -43,7 +43,7 @@ plugin/bbb/config.vm.php
 # Cron temp files
 main/cron/incoming/*
 
-# Stuff updated through composer
+# Stuff updated through composer - Remove just before release
 composer.lock
 vendor
 web/assets/*

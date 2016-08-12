@@ -81,11 +81,13 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
             $usersInCourse = CourseManager::get_user_list_from_course_code($course['code']);
 
-            foreach ($usersInCourse as $user) {
-                if ($user['status_rel'] == COURSEMANAGER) {
-                    $dataToExport['teachers'] .= $user['username'].'|';
-                } else {
-                    $dataToExport['students'] .= $user['username'].'|';
+            if (is_array($usersInCourse) && !empty($usersInCourse)) {
+                foreach ($usersInCourse as $user) {
+                    if ($user['status_rel'] == COURSEMANAGER) {
+                        $dataToExport['teachers'] .= $user['username'] . '|';
+                    } else {
+                        $dataToExport['students'] .= $user['username'] . '|';
+                    }
                 }
             }
             $dataToExport['students'] = substr($dataToExport['students'], 0, -1);

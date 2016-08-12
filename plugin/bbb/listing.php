@@ -1,7 +1,4 @@
 <?php
-
-use ChamiloSession as Session;
-
 /**
  * This script initiates a video conference session, calling the BigBlueButton API
  * @package chamilo.plugin.bigbluebutton
@@ -10,17 +7,13 @@ use ChamiloSession as Session;
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
 
-if (isset($_REQUEST['gidReq'])) {
-    Session::write('_gid', (int) $_REQUEST['gidReq']);
-}
-
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 
 $isGlobal = isset($_GET['global']) ? true : false;
+$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id']: false;
 
-$bbb = new bbb('', '', $isGlobal);
-
+$bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $conferenceManager = $bbb->isConferenceManager();
@@ -44,8 +37,8 @@ if ($conferenceManager) {
             $agenda->type = 'course';
 
             $id = intval($_GET['id']);
-            $title = sprintf(get_lang('VideoConferenceXCourseX'), $id, $courseInfo['name']);
-            $content = Display::url(get_lang('GoToTheVideoConference'), $_GET['url']);
+            $title = sprintf($plugin->get_lang('VideoConferenceXCourseX'), $id, $courseInfo['name']);
+            $content = Display::url($plugin->get_lang('GoToTheVideoConference'), $_GET['url']);
 
             $eventId = $agenda->addEvent(
                 $_REQUEST['start'],
@@ -56,7 +49,7 @@ if ($conferenceManager) {
                 array('everyone')
             );
             if (!empty($eventId)) {
-                $message = Display::return_message(get_lang('VideoConferenceAddedToTheCalendar'), 'success');
+                $message = Display::return_message($plugin->get_lang('VideoConferenceAddedToTheCalendar'), 'success');
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
@@ -64,7 +57,7 @@ if ($conferenceManager) {
         case 'copy_record_to_link_tool':
             $result = $bbb->copyRecordToLinkTool($_GET['id']);
             if ($result) {
-                $message = Display::return_message(get_lang('VideoConferenceAddedToTheLinkTool'), 'success');
+                $message = Display::return_message($plugin->get_lang('VideoConferenceAddedToTheLinkTool'), 'success');
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
@@ -80,7 +73,7 @@ if ($conferenceManager) {
         case 'end':
             $bbb->endMeeting($_GET['id']);
             $message = Display::return_message(
-                get_lang('MeetingClosed') . '<br />' . get_lang(
+                $plugin->get_lang('MeetingClosed') . '<br />' . $plugin->get_lang(
                     'MeetingClosedComment'
                 ),
                 'success',
@@ -112,6 +105,7 @@ if ($conferenceManager) {
             break;
     }
 }
+
 $meetings = $bbb->getMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
@@ -146,7 +140,6 @@ if ($bbb->isGlobalConference() === false &&
 
     $form = new FormValidator(api_get_self().'?'.api_get_cidreq());
     $groupId = api_get_group_id();
-
     $groups = GroupManager::get_groups();
     if ($groups) {
         $meetingsInGroup = $bbb->getAllMeetingsInCourse(api_get_course_int_id(), api_get_session_id(), 1);
@@ -159,7 +152,7 @@ if ($bbb->isGlobalConference() === false &&
             }
         }
 
-        $groupList[0] = $plugin->get_lang('NoGroup');
+        $groupList[0] = get_lang('Select');
         $groupList = array_merge($groupList, array_column($groups, 'name', 'iid'));
 
         $form->addSelect('group_id', get_lang('Groups'), $groupList, ['id' => 'group_select']);
@@ -171,6 +164,7 @@ if ($bbb->isGlobalConference() === false &&
 $tpl = new Template($tool_name);
 $tpl->assign('allow_to_edit', $conferenceManager);
 $tpl->assign('meetings', $meetings);
+
 $tpl->assign('conference_url', $conferenceUrl);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);

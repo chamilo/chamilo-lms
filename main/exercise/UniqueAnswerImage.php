@@ -1,6 +1,7 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
 
 /**
  * UniqueAnswerImage
@@ -9,21 +10,26 @@
  */
 class UniqueAnswerImage extends UniqueAnswer
 {
+    public static $typePicture = 'uaimg.png';
+    public static $explanationLangVar = 'UniqueAnswerImage';
 
-    static $typePicture = 'uaimg.png';
-    static $explanationLangVar = 'UniqueAnswerImage';
-
+    /**
+     * UniqueAnswerImage constructor.
+     */
     public function __construct()
     {
-        //this is highly important
         parent::__construct();
         $this->type = UNIQUE_ANSWER_IMAGE;
         $this->isContent = $this->getIsContent();
     }
 
+    /**
+     * @param FormValidator $form
+     * @throws Exception
+     */
     public function createAnswersForm($form)
     {
-        $objExercise = $_SESSION['objExercise'];
+        $objExercise = Session::read('objExercise');
 
         $editorConfig = array(
             'ToolbarSet' => 'TestFreeAnswer',

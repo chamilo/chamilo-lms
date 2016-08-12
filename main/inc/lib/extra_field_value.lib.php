@@ -149,7 +149,7 @@ class ExtraFieldValue extends Model
                         ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                         ->findBy([
                             'fieldId' => $extraFieldInfo['id'],
-                            'itemId' => $params['item_id'],
+                            'itemId' => $params['item_id']
                         ]);
 
                     foreach ($currentTags as $extraFieldtag) {
@@ -184,7 +184,7 @@ class ExtraFieldValue extends Model
                         $tagUses = $em
                             ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                             ->findBy([
-                                'tagId' => $tag->getId(),
+                                'tagId' => $tag->getId()
                             ]);
 
                         $tag->setCount(count($tagUses) + 1);
@@ -240,7 +240,7 @@ class ExtraFieldValue extends Model
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
                             'value' => $fileDirStored . $fileName,
-                            'comment' => $comment,
+                            'comment' => $comment
                         );
 
                         self::save($newParams);
@@ -276,7 +276,7 @@ class ExtraFieldValue extends Model
                         $new_params = array(
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
-                            'value' => $fileDirStored . $fileName,
+                            'value' => $fileDirStored . $fileName
                         );
 
                         if ($this->type !== 'session' && $this->type !== 'course') {
@@ -309,7 +309,7 @@ class ExtraFieldValue extends Model
                         'item_id' => $params['item_id'],
                         'field_id' => $extraFieldInfo['id'],
                         'value' => $value,
-                        'comment' => $comment,
+                        'comment' => $comment
                     );
 
                     self::save($newParams);
@@ -479,7 +479,7 @@ class ExtraFieldValue extends Model
                         if (empty($optionExists)) {
                             $optionParams = array(
                                 'field_id' => $params['field_id'],
-                                'option_value' => $params['value'],
+                                'option_value' => $params['value']
                             );
                             $optionId = $option->saveOptions($optionParams);
                         } else {
@@ -1053,14 +1053,14 @@ class ExtraFieldValue extends Model
 
         foreach ($fieldValues as $fieldValue) {
             $item = [
-                'value' => $fieldValue,
+                'value' => $fieldValue
             ];
 
             switch ($fieldValue->getField()->getFieldType()) {
                 case ExtraField::FIELD_TYPE_SELECT:
                     $item['option'] = $fieldOptionsRepo->findOneBy([
                         'field' => $fieldValue->getField(),
-                        'value' => $fieldValue->getValue(),
+                        'value' => $fieldValue->getValue()
                     ]);
                     break;
             }

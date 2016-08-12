@@ -10,8 +10,8 @@
  */
 class FreeAnswer extends Question
 {
-    static $typePicture = 'open_answer.png';
-    static $explanationLangVar = 'FreeAnswer';
+    public static $typePicture = 'open_answer.png';
+    public static $explanationLangVar = 'FreeAnswer';
 
     /**
      * Constructor

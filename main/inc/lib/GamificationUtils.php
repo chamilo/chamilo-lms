@@ -9,7 +9,6 @@
  */
 class GamificationUtils
 {
-
     /**
      * Get the calculated points on session with gamification mode
      * @param int $userId The user ID
@@ -26,6 +25,7 @@ class GamificationUtils
         );
 
         if (empty($sessions)) {
+
             return 0;
         }
 
@@ -222,5 +222,4 @@ class GamificationUtils
 
         return round($progress / count($sessions), 2);
     }
-
 }

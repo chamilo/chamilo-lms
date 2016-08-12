@@ -1,6 +1,7 @@
 <?php
-
 /* For license terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\Skill;
 
 /**
  * This script manages the skills, levels and profiles assignments.
@@ -26,7 +27,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
 
 $item = null;
 if (!empty($id)) {
-    /** @var \Chamilo\CoreBundle\Entity\Skill $item */
+    /** @var Skill $item */
     $item = $em->getRepository('ChamiloCoreBundle:Skill')->find($id);
     if (!$item) {
         api_not_allowed();

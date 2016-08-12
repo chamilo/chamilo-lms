@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CourseRequest
  *
+ * @todo fix objetives variable
+ *
  * @ORM\Table(name="course_request", uniqueConstraints={@ORM\UniqueConstraint(name="code", columns={"code"})})
  * @ORM\Entity
  */

@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use \ExtraField as ExtraFieldModel;
+use Chamilo\CoreBundle\Entity\ExtraField;
 
 /**
  * Class SessionManager
@@ -410,7 +412,7 @@ class SessionManager
             $where .=" AND s.id_coach = $user_id ";
         }
 
-        $extra_field = new \ExtraField('session');
+        $extra_field = new ExtraFieldModel('session');
         $conditions = $extra_field->parseConditions($options);
         $inject_joins = $conditions['inject_joins'];
         $where .= $conditions['where'];
@@ -582,7 +584,6 @@ class SessionManager
                         }
                     }
                 }
-
 
                 $formatted_sessions[$session_id] = $session;
                 $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
@@ -953,6 +954,7 @@ class SessionManager
          *  Assignments
          */
         //total
+        $params = [$course['real_id']];
         if ($getAllSessions) {
             $sql = "SELECT count(w.id) as count
                     FROM $workTable w
@@ -968,11 +970,17 @@ class SessionManager
                     ON (a.publication_id = w.id AND a.c_id = w.c_id)
                     WHERE w.c_id = %s
                     AND parent_id = 0
-                    AND active IN (1, 0)
-                    AND  session_id = %s";
+                    AND active IN (1, 0)";
+
+            if (empty($sessionId)) {
+                $sql .= ' AND w.session_id = NULL ';
+            } else {
+                $sql .= ' AND w.session_id = %s ';
+                $params[] = $sessionId;
+            }
         }
 
-        $sql_query = sprintf($sql, $course['real_id'], $sessionId);
+        $sql_query = vsprintf($sql, $params);
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $assignments_total = $row['count'];
@@ -2121,6 +2129,7 @@ class SessionManager
                 }
             }
         }
+
         return true;
     }
 
@@ -2388,7 +2397,7 @@ class SessionManager
      */
     public static function create_session_extra_field($variable, $fieldType, $displayText)
     {
-        $extraField = new ExtraField('session');
+        $extraField = new ExtraFieldModel('session');
         $params = [
             'variable' => $variable,
             'field_type' => $fieldType,
@@ -2675,7 +2684,7 @@ class SessionManager
         $return_array = array();
 
         $sql_query = " SELECT
-                    s.id,
+                    DISTINCT(s.id),
                     s.name,
                     s.nbr_courses,
                     s.access_start_date,
@@ -3900,6 +3909,7 @@ class SessionManager
      * Protect a session to be edited.
      * @param int $id
      * @param bool $checkSession
+     * @return mixed | bool true if pass the check, api_not_allowed otherwise
      */
     public static function protectSession($id, $checkSession = true)
     {
@@ -3998,7 +4008,7 @@ class SessionManager
      */
     public static function allowManageAllSessions()
     {
-        if (api_is_platform_admin()) {
+        if (api_is_platform_admin() || api_is_session_admin()) {
             return true;
         }
 
@@ -6144,7 +6154,7 @@ class SessionManager
             foreach ($extraFields as $field) {
                 $fieldsArray[] = Database::escape_string($field);
             }
-            $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
+            $extraFieldType = ExtraField::SESSION_FIELD_TYPE;
             if (isset ($publicationDate)) {
                 $publicationDateString = $publicationDate->format('Y-m-d H:i:s');
                 $wherePublication = " AND id NOT IN (
@@ -6186,7 +6196,7 @@ class SessionManager
                 $whereFieldIds = 'field_id IN ( ' . $whereParams .  ' )';
             }
             // Get session fields
-            $extraField = new ExtraField('session');
+            $extraField = new ExtraFieldModel('session');
             $questionMarks = substr(str_repeat('?, ', count($fieldsArray)), 0, -2);
             $fieldsList = $extraField->get_all(array(
                 ' variable IN ( ' . $questionMarks . ' )' => $fieldsArray,
@@ -6305,7 +6315,7 @@ class SessionManager
                 )
             );
 
-            $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
+            $extraFieldType = ExtraField::SESSION_FIELD_TYPE;
 
             // Check if session list query had result
             if (!empty($sessionList)) {
@@ -6450,7 +6460,7 @@ class SessionManager
         $sfvTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
         $term = Database::escape_string($term);
-        $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
+        $extraFieldType = ExtraField::SESSION_FIELD_TYPE;
         if (is_array($extraFieldsToInclude) && count($extraFieldsToInclude) > 0) {
             $resultData = Database::select('*', $sTable, array(
                 'where' => array(
@@ -6499,7 +6509,7 @@ class SessionManager
             $variables[] = Database::escape_string($sessionExtraField);
         }
 
-        $sessionExtraField = new ExtraField('session');
+        $sessionExtraField = new ExtraFieldModel('session');
         $fieldList = $sessionExtraField->get_all(array(
             "variable IN ( " . implode(", ", $variablePlaceHolders) . " ) " => $variables,
         ));
@@ -6959,7 +6969,7 @@ class SessionManager
         );
 
         // Extra fields
-        $extra_field = new ExtraField('session');
+        $extra_field = new ExtraFieldModel('session');
         $extra = $extra_field->addElements($form, $sessionId);
 
         $form->addElement('html','</div>');
@@ -7142,8 +7152,7 @@ class SessionManager
             }
         }
 
-        // Inject extra session fields
-        $session_field = new ExtraField('session');
+        $session_field = new ExtraFieldModel('session');
         $rules = $session_field->getRules($columns, $column_model);
 
         $column_model[] = array(
@@ -7265,7 +7274,7 @@ class SessionManager
         $extra_fields_info = array();
 
         //for now only sessions
-        $extra_field = new ExtraField('session');
+        $extra_field = new ExtraFieldModel('session');
         $double_fields = array();
 
         $extra_field_option = new ExtraFieldOption('session');

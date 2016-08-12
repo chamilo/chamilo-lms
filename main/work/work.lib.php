@@ -207,6 +207,7 @@ function get_work_count_by_student($user_id, $work_id)
     $work_id = intval($work_id);
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
+    $sessionCondition = api_get_session_condition($session_id);
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $sql = "SELECT COUNT(*) as count
@@ -215,8 +216,8 @@ function get_work_count_by_student($user_id, $work_id)
                 c_id = $course_id AND
                 parent_id = $work_id AND
                 user_id = $user_id AND
-                active IN (0, 1) AND
-                session_id = $session_id ";
+                active IN (0, 1)
+                $sessionCondition";
     $result = Database::query($sql);
     $return = 0;
     if (Database::num_rows($result)) {
@@ -381,14 +382,15 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
     $workId = intval($workId);
     $sessionId = intval($sessionId);
     $groupId = intval($groupId);
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'w.session_id');
 
     $sql = "SELECT count(DISTINCT u.user_id)
             FROM $work_table w
             INNER JOIN $user_table u
                 ON w.user_id = u.user_id
             WHERE
-                w.c_id = $course_id AND
-                w.session_id = $sessionId AND
+                w.c_id = $course_id
+                $sessionCondition AND
                 w.parent_id = ".$workId." AND
                 w.post_group_id = ".$groupId." AND
                 w.active IN (0, 1)
@@ -445,6 +447,8 @@ function getUniqueStudentAttempts(
         }
     }
 
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'w.session_id');
+
     $sql = "SELECT count(*) FROM (
                 SELECT count(*), w.parent_id
                 FROM $work_table w
@@ -452,8 +456,8 @@ function getUniqueStudentAttempts(
                     ON w.user_id = u.user_id
                 WHERE
                     w.filetype = 'file' AND
-                    w.c_id = $course_id AND
-                    w.session_id = $sessionId AND
+                    w.c_id = $course_id
+                    $sessionCondition AND
                     $workCondition
                     w.post_group_id = ".$groupId." AND
                     w.active IN (0, 1) $studentCondition
@@ -686,7 +690,6 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 /**
  * creates a new directory trying to find a directory name
  * that doesn't already exist
- * (we could use unique_name() here...)
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @author Bert Vanderkimpen
@@ -881,8 +884,7 @@ function updateDirName($work_data, $newPath)
                 WHERE
                     c_id = $course_id AND
                     id = $work_id AND
-                    session_id = $sessionId
-                ";
+                    session_id = " . ($sessionId ? $sessionId : 'NULL');
         Database::query($sql);
     }
 }
@@ -898,16 +900,21 @@ function updateDirName($work_data, $newPath)
 function get_parent_directories($id)
 {
     $course_id = api_get_course_int_id();
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $id = intval($id);
-    $sql = "SELECT id FROM $work_table WHERE c_id = $course_id AND parent_id = $id";
-    $result = Database::query($sql);
+    $em = Database::getManager();
+
+    $directories = $em
+        ->getRepository('ChamiloCourseBundle:CStudentPublication')
+        ->findBy([
+            'cId' => $course_id,
+            'parentId' => $id
+        ]);
+
     $list_id = array();
-    if (Database::num_rows($result)) {
-        while ($row = Database::fetch_array($result)) {
-            $list_id[] = $row['id'];
-        }
+
+    foreach ($directories as $directory) {
+        $list_id[] = $directory->getId();
     }
+
     return $list_id;
 }
 
@@ -1363,7 +1370,7 @@ function getWorkListStudent(
         $lastWork = getLastWorkStudentFromParentByUser($userId, $work['id'], $courseInfo);
 
         if (!empty($lastWork)) {
-            $work['last_upload'] = Display::label($lastWork['qualification'], 'warning').' - ';
+            $work['last_upload'] = (!empty($lastWork['qualification'])) ? Display::label($lastWork['qualification'], 'warning').' - ' : '';
             $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
         }
 
@@ -1600,7 +1607,7 @@ function get_work_user_list_from_documents(
     $workId = intval($workId);
 
     $userCondition = " AND u.user_id = $studentId ";
-    $sessionCondition = " AND w.session_id = $sessionId ";
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'w.session_id');
     $workCondition = " AND w_rel.work_id = $workId";
     $workParentCondition  = " AND w.parent_id = $workId";
 
@@ -1840,8 +1847,7 @@ function get_work_user_list(
                         qualification,
                         weight,
                         allow_text_assignment,
-                        u.firstname,
-                        u.lastname,
+                        CONCAT (u.firstname," ",u.lastname) as fullname,
                         u.username,
                         parent_id,
                         accepted,
@@ -1956,16 +1962,18 @@ function get_work_user_list(
                 ($is_allowed_to_edit || api_is_drh())
             ) {
                 // Firstname, lastname, username
-                $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
-                $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
+                $work['fullname'] = Display::div($work['fullname'], array('class' => 'work-name'));
+
+                //$work['firstname'] = Display::div($work['firstname'], array('class' => $class));
+                //$work['lastname'] = Display::div($work['lastname'], array('class' => $class));
 
                 $work['title_clean'] = $work['title'];
 
                 if (strlen($work['title']) > 30) {
                     $short_title = substr($work['title'], 0, 27).'...';
-                    $work['title'] = Display::span($short_title, array('class' => $class, 'title' => $work['title']));
+                    $work['title'] = Display::span($short_title, array('class' => 'work-title', 'title' => $work['title']));
                 } else {
-                    $work['title'] = Display::div($work['title'], array('class' => $class));
+                    $work['title'] = Display::div($work['title'], array('class' => 'work-title'));
                 }
 
                 // Type.
@@ -2000,7 +2008,7 @@ function get_work_user_list(
                 $date = date_to_str_ago($work['sent_date']). ' ' . $add_string . ' ' . $work_date;
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="text-center" title="'.$date.'">' . $work['sent_date'] . '</div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">' . $work['sent_date'] . '</div>';
 
                 // Actions.
                 $correction = '';
@@ -2126,7 +2134,7 @@ function get_work_user_list(
                     $qualificator_id = Display::label(get_lang('Revised'), 'success');
                 }
                 $work['qualificator_id'] = $qualificator_id;
-                $work['actions'] = $send_to.$link_to_download.$action;
+                $work['actions'] = '<div class="work-action">'.$send_to.$link_to_download.$action.'</div>';
                 $work['correction'] = $correction;
 
                 $works[] = $work;
@@ -2330,6 +2338,7 @@ function get_list_users_without_publication($task_id, $studentId = null)
     $session_id = api_get_session_id();
     $course_id = api_get_course_int_id();
     $task_id = intval($task_id);
+    $sessionCondition = api_get_session_condition($session_id);
 
     if ($session_id == 0) {
         $sql = "SELECT user_id as id FROM $work_table
@@ -2341,8 +2350,7 @@ function get_list_users_without_publication($task_id, $studentId = null)
         $sql = "SELECT user_id as id FROM $work_table
                 WHERE
                     c_id = $course_id AND
-                    parent_id = '$task_id' AND
-                    session_id = '".$session_id."' AND
+                    parent_id = '$task_id' $sessionCondition AND
                     active IN (0, 1)";
     }
 
@@ -2510,13 +2518,14 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     $userId = intval($userId);
     $sessionId = intval($sessionId);
     $active = intval($active);
+    $sessionCondition = api_get_session_condition($sessionId);
 
     $sql = "SELECT w.* FROM $work w INNER JOIN $workRel rel ON (w.parent_id = rel.work_id)
             WHERE
                 w.document_id = $documentId AND
                 w.parent_id = $workId AND
-                w.c_id = $courseId AND
-                w.session_id = $sessionId AND
+                w.c_id = $courseId
+                $sessionCondition AND
                 user_id = $userId AND
                 active = $active
             ";
@@ -2916,12 +2925,13 @@ function getWorkCommentCountFromParent(
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $parentId = intval($parentId);
+    $sessionCondition = api_get_session_condition($sessionId, false, false, 'w.session_id');
 
     $sql = "SELECT count(*) as count
             FROM $commentTable c INNER JOIN $work w
             ON c.c_id = w.c_id AND w.id = c.work_id
             WHERE
-                session_id = $sessionId AND
+                $sessionCondition AND
                 parent_id = $parentId AND
                 w.c_id = ".$courseInfo['real_id'];
 
@@ -2957,6 +2967,7 @@ function getLastWorkStudentFromParent(
     }
 
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $sessionCondition = api_get_session_condition($sessionId, false);
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $parentId = intval($parentId);
 
@@ -2964,7 +2975,7 @@ function getLastWorkStudentFromParent(
             FROM $commentTable c INNER JOIN $work w
             ON c.c_id = w.c_id AND w.id = c.work_id
             WHERE
-                session_id = $sessionId AND
+                $sessionCondition AND
                 parent_id = $parentId AND
                 w.c_id = ".$courseInfo['real_id']."
             ORDER BY w.sent_date
@@ -3007,12 +3018,13 @@ function getLastWorkStudentFromParentByUser(
     $userId = intval($userId);
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $parentId = intval($parentId);
+    $sessionCondition = api_get_session_condition($sessionId);
 
     $sql = "SELECT *
             FROM  $work
             WHERE
-                user_id = $userId AND
-                session_id = $sessionId AND
+                user_id = $userId
+                $sessionCondition AND
                 parent_id = $parentId AND
                 c_id = ".$courseInfo['real_id']."
             ORDER BY sent_date DESC
@@ -3340,7 +3352,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
             'error' => Display:: return_message(
                 get_lang('UplUploadFailedSizeIsZero'),
                 'error'
-            ),
+            )
         );
     } elseif (!filter_extension($new_file_name)) {
         return array(
@@ -3498,6 +3510,23 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
 }
 
 /**
+ * Check if the current uploaded work filename already exists in the current assement
+ *
+ * @param $filename
+ * @param $workId
+ * @return mixed
+ */
+function checkExistingWorkFileName($filename, $workId)
+{
+    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $filename = Database::escape_string($filename);
+    $sql = "SELECT title FROM $work_table
+                        WHERE parent_id = $workId AND title = '$filename'";
+    $result = Database::query($sql);
+    return Database::fetch_assoc($result);
+}
+
+/**
  * @param array $workInfo
  * @param array $values
  * @param array $courseInfo
@@ -3505,10 +3534,11 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
  * @param int $groupId
  * @param int $userId
  * @param array $file
+ * @param bool  $checkDuplicated
  *
  * @return null|string
  */
-function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, $userId, $file = [])
+function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, $userId, $file = [], $checkDuplicated = false)
 {
     $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -3522,34 +3552,45 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
     $contains_file = isset($values['contains_file']) && !empty($values['contains_file']) ? intval($values['contains_file']): 0;
 
     $saveWork = true;
-    $message = null;
     $filename = null;
     $url = null;
     $filesize = null;
+    $workData = [];
 
     if ($values['contains_file']) {
-        $result = uploadWork($workInfo, $courseInfo, false, [], $file);
-        if (!$result) {
-            return false;
+        if ($checkDuplicated) {
+            if (checkExistingWorkFileName($file['name'], $workInfo['id'])) {
+                $saveWork = false;
+                $workData['error'] = get_lang('YouAlreadySentThisFile');
+            } else {
+                $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+            }
+        } else {
+            $result = uploadWork($workInfo, $courseInfo, false, [], $file);
         }
+
         if (isset($result['error'])) {
             $message = $result['error'];
+            Display::addFlash($message);
+
             $saveWork = false;
         }
+    }
+
+    $workData = [];
+
+    if ($saveWork) {
         $filename = isset($result['filename']) ? $result['filename'] : null;
         if (empty($title)) {
             $title = isset($result['title']) && !empty($result['title']) ? $result['title'] : get_lang('Untitled');
         }
-
         $filesize = isset($result['filesize']) ? $result['filesize'] : null;
-        $url = $result['url'];
+        $url = isset($result['url']) ? $result['url'] : null;
     }
 
     if (empty($title)) {
         $title = get_lang('Untitled');
     }
-
-    $workData = [];
 
     if ($saveWork) {
         $active = '1';
@@ -3569,7 +3610,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
             'post_group_id' => $groupId,
             'sent_date' => api_get_utc_datetime(),
             'parent_id' => $workInfo['id'],
-            'session_id' => $sessionId,
+            'session_id' => $sessionId ? $sessionId : null,
             'user_id' => $userId,
             'has_properties' => 0,
             'qualification' => 0
@@ -3619,7 +3660,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
 
 /**
  * Creates a new task (directory) in the assignment tool
- * @param array $params
+ * @param array $formValues
  * @param int $user_id
  * @param array $courseInfo
  * @param int $group_id
@@ -3635,11 +3676,11 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
  */
 function addDir($formValues, $user_id, $courseInfo, $group_id, $session_id)
 {
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $em = Database::getManager();
 
     $user_id = intval($user_id);
     $group_id = intval($group_id);
-    $session_id = intval($session_id);
+    $session = $em->find('ChamiloCoreBundle:Session', $session_id);
 
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
     $course_id = $courseInfo['real_id'];
@@ -3648,59 +3689,63 @@ function addDir($formValues, $user_id, $courseInfo, $group_id, $session_id)
     $directory = disable_dangerous_file($directory);
     $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
 
-    if (!empty($created_dir)) {
-        $dirName = '/'.$created_dir;
-        $today = api_get_utc_datetime();
-
-        $params = [
-            'c_id' => $course_id,
-            'url' => $dirName,
-            'title' => $formValues['new_dir'],
-            'description' => $formValues['description'],
-            'author' => '',
-            'active' => '1',
-            'accepted' => '1',
-            'filetype' => 'folder',
-            'post_group_id' => $group_id,
-            'sent_date' => $today,
-            'qualification' => $formValues['qualification'] != '' ? $formValues['qualification'] : 0,
-            'parent_id' => 0,
-            'qualificator_id' => 0,
-            'weight' => !empty($formValues['weight']) ? $formValues['weight'] : 0,
-            'session_id' => $session_id,
-            'allow_text_assignment' => $formValues['allow_text_assignment'],
-            'contains_file' => 0,
-            'user_id' => $user_id,
-            'has_properties' => 0,
-            'document_id' => 0
-        ];
-        $id = Database::insert($work_table, $params);
-
-        if ($id) {
-
-            $sql = "UPDATE $work_table SET id = iid WHERE iid = $id";
-            Database::query($sql);
-
-            // Folder created
-            api_item_property_update(
-                $courseInfo,
-                'work',
-                $id,
-                'DirectoryCreated',
-                $user_id,
-                $group_id
-            );
-
-            updatePublicationAssignment($id, $formValues, $courseInfo, $group_id);
-
-            if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
-                send_email_on_homework_creation($course_id, $session_id, $id);
-            }
-
-            return $id;
-        }
+    if (empty($created_dir)) {
+        return false;
     }
-    return false;
+
+    $dirName = '/'.$created_dir;
+    $today = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
+
+    $workTable = new \Chamilo\CourseBundle\Entity\CStudentPublication();
+    $workTable
+        ->setCId($course_id)
+        ->setUrl($dirName)
+        ->setTitle($formValues['new_dir'])
+        ->setDescription($formValues['description'])
+        ->setActive(true)
+        ->setAccepted(true)
+        ->setFiletype('folder')
+        ->setPostGroupId($group_id)
+        ->setSentDate($today)
+        ->setQualification($formValues['qualification'] != '' ? $formValues['qualification'] : 0)
+        ->setParentId(0)
+        ->setQualificatorId(0)
+        ->setWeight(!empty($formValues['weight']) ? $formValues['weight'] : 0)
+        ->setSession($session)
+        ->setAllowTextAssignment($formValues['allow_text_assignment'])
+        ->setContainsFile(0)
+        ->setUserId($user_id)
+        ->setHasProperties(0)
+        ->setDocumentId(0);
+
+    $em->persist($workTable);
+    $em->flush();
+
+    $workTable->setId($workTable->getIid());
+    $em->merge($workTable);
+    $em->flush();
+
+    // Folder created
+    api_item_property_update(
+        $courseInfo,
+        'work',
+        $workTable->getIid(),
+        'DirectoryCreated',
+        $user_id,
+        $group_id
+    );
+
+    updatePublicationAssignment($workTable->getIid(), $formValues, $courseInfo, $group_id);
+
+    if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
+        send_email_on_homework_creation(
+            $course_id,
+            $session ? $session->getId() : 0,
+            $workTable->getIid()
+        );
+    }
+
+    return $workTable->getIid();
 }
 
 /**
@@ -3748,7 +3793,9 @@ function updateWork($workId, $params, $courseInfo, $sessionId = 0)
         $filteredParams,
         array(
             'id = ? AND c_id = ? AND session_id = ? ' => array(
-                $workId, $courseInfo['real_id'], $sessionId
+                $workId,
+                $courseInfo['real_id'],
+                $sessionId ? $sessionId : null
             )
         )
     );

@@ -38,6 +38,11 @@ $interbreadcrumb[] = array(
     'name' => get_lang('MyTickets')
 );
 
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/settings.php',
+    'name' => get_lang('Settings')
+);
+
 switch ($action) {
     case 'delete':
         TicketManager::deleteProject($id);

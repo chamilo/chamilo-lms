@@ -21,7 +21,17 @@ class Version20160705192000 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $this->addSql("UPDATE c_lp SET accumulate_scorm_time = (SELECT selected_value FROM settings_current WHERE variable = 'scorm_cumulative_session_time'");
+        $em = $this->getEntityManager();
+
+        $result = $em
+            ->getRepository('ChamiloCoreBundle:SettingsCurrent')
+            ->findOneBy(['variable' => 'scorm_cumulative_session_time']);
+
+        $cumulativeScormTime = 1;
+        if ($result->getSelectedValue() === 'false') {
+            $cumulativeScormTime = 0;
+        }
+        $this->addSql("UPDATE c_lp SET accumulate_scorm_time = $cumulativeScormTime");
     }
 
     /**

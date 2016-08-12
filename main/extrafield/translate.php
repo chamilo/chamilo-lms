@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \Chamilo\CoreBundle\Entity\ExtraField;
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -73,19 +75,19 @@ $form->freeze(['variable_language', 'original_name']);
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH) . 'admin', 'name' => get_lang('Administration')];
 
 switch ($extraField->getExtraFieldType()) {
-    case \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE:
+    case ExtraField::USER_FIELD_TYPE:
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH) . 'admin/extra_fields.php?type=user',
             'name' => get_lang('UserFields')
         ];
         break;
-    case \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE:
+    case ExtraField::COURSE_FIELD_TYPE:
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH) . 'admin/extra_fields.php?type=course',
             'name' => get_lang('CourseFields')
         ];
         break;
-    case \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE:
+    case ExtraField::SESSION_FIELD_TYPE:
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH) . 'admin/extra_fields.php?type=session',
             'name' => get_lang('SessionFields')

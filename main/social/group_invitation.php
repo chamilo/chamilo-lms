@@ -143,18 +143,19 @@ if (is_array($Users) && count($Users) > 0 ) {
 }
 
 $social_left_content = SocialManager::show_social_menu('invite_friends', $group_id);
-$social_right_content =  '<h2>'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h2>';
+$social_right_content =  '<h3 class="group-title">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h3>';
 
 if (count($nosessionUsersList) == 0) {
     $friends = SocialManager::get_friends(api_get_user_id());
     if ($friends == 0) {
-        $social_right_content .= get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
+        $social_right_content .= Display::return_message(get_lang('YouNeedToHaveFriendsInYourSocialNetwork'), 'warning');
     } else {
-        $social_right_content .= get_lang('YouAlreadyInviteAllYourContacts');
+        $social_right_content .= Display::return_message(get_lang('YouAlreadyInviteAllYourContacts'), 'info');
     }
     $social_right_content .= '<div>';
-    $social_right_content .= '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
+    $social_right_content .= '<a href="search.php" class="btn btn-default btn-sm">'.Display::returnFontAwesomeIcon('search').' '.get_lang('TryAndFindSomeFriends').'</a>';
     $social_right_content .= '</div>';
+    $social_right_content .= '<br />';
 }
 
 $form = new FormValidator('invitation', 'post', api_get_self().'?id='.$group_id);
@@ -165,8 +166,7 @@ $group_members_element = $form->addElement(
     'advmultiselect',
     'invitation',
     get_lang('Friends'),
-    $nosessionUsersList,
-    'style="width: 280px;"'
+    $nosessionUsersList
 );
 
 $form->addButtonSave(get_lang('InviteUsersToGroup'));
@@ -182,18 +182,20 @@ $members = $usergroup->get_users_by_group(
 if (is_array($members) && count($members)>0) {
     foreach ($members as &$member) {
         $image = UserManager::getUserPicture($member['id']);
-        $member['image'] = '<img src="'.$image.'"  width="50px" height="50px"  />';
+        $member['image'] = '<img class="img-circle" src="'.$image.'"  width="50px" height="50px"  />';
     }
-    $social_right_content .= '<h3>'.get_lang('UsersAlreadyInvited').'</h3>';
-    $social_right_content .= Display::return_sortable_grid(
+    
+    $userList .= Display::return_sortable_grid(
         'invitation_profile',
         array(),
         $members,
         array('hide_navigation' => true, 'per_page' => 100),
         array(),
         false,
-        array(true, false, true, true)
+        array(true, false, true, false)
     );
+    
+    $social_right_content .= Display::panel($userList, get_lang('UsersAlreadyInvited'));
 }
 
 $tpl = new Template(null);

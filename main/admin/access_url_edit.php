@@ -44,7 +44,8 @@ if ($form->validate()) {
             foreach ($image_fields as $image_field) {
                 if ($_FILES[$image_field]['error'] == 0) {
                     // Hardcoded: only PNG files allowed
-                    if (end(explode('.', $_FILES[$image_field]['name'])) == 'png') {
+                    $fileFields = explode('.', $_FILES[$image_field]['name']);
+                    if (end($fileFields) == 'png') {
                         if (file_exists($url_images_dir . $url_id . '_' . $image_field . '.png')) {
                             // if the file exists, we have to remove it before move_uploaded_file
                             unlink($url_images_dir . $url_id . '_' . $image_field . '.png');
@@ -83,7 +84,8 @@ if ($form->validate()) {
             foreach ($image_fields as $image_field) {
                 if ($_FILES[$image_field]['error'] == 0) {
                     // Hardcoded: only PNG files allowed
-                    if (end(explode('.', $_FILES[$image_field]['name'])) == 'png') {
+                    $fileFields = explode('.', $_FILES[$image_field]['name']);
+                    if (end($fileFields) == 'png') {
                         move_uploaded_file($_FILES[$image_field]['tmp_name'], $url_images_dir . $url_id . '_' . $image_field . '.png');
                     }
                     // else fail silently
@@ -93,7 +95,8 @@ if ($form->validate()) {
         }
         Security::clear_token();
         $tok = Security::get_token();
-        header('Location: ' . $url_to_go . '?action=show_message&message=' . urlencode($message) . '&sec_token=' . $tok);
+        Display::addFlash(Display::return_message($message));
+        header('Location: ' . $url_to_go . '?sec_token=' . $tok);
         exit();
     }
 } else {
@@ -142,14 +145,6 @@ $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdm
 $interbreadcrumb[] = array("url" => 'access_urls.php', "name" => get_lang('MultipleAccessURLs'));
 
 Display :: display_header($tool_name);
-
-if (isset($_GET['action'])) {
-    switch ($_GET['action']) {
-        case 'show_message' :
-            Display :: display_normal_message(stripslashes($_GET['message']));
-            break;
-    }
-}
 
 // URL Images
 $form->addElement('file', 'url_image_1', 'URL Image 1 (PNG)');

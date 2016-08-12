@@ -75,7 +75,7 @@ if (isset($_POST['formSent'])) {
 				FROM $tbl_session s
 				INNER JOIN $tbl_user
 					ON $tbl_user.user_id = s.id_coach
-				WHERE id='$session_id'";
+				WHERE s.id='$session_id'";
 		$result = Database::query($sql);
 	}
 
@@ -234,8 +234,7 @@ if (isset($_POST['formSent'])) {
 			if (!empty($courses) && $cvs) {
 				$courses = api_substr($courses, 0, api_strlen($courses) - 1);
 			}
-			$add .= $courses;
-
+			$add = $courses;
 
 			if (in_array($file_type, ['csv', 'xls'])) {
 				$sessionListToExport[] = [

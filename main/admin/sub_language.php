@@ -11,7 +11,7 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-$htmlHeadXtra[] ='<script type="text/javascript">
+$htmlHeadXtra[] ='<script>
  $(document).ready(function() {
 	$(".save").click(function() {
 		var button_name=$(this).attr("name");
@@ -99,15 +99,7 @@ echo $intro;
 echo '<br />';
 printf(get_lang('ParentLanguageX'), $language_name);
 echo '</div>';
-
-if (!empty($_SESSION['msg'])) {
-	echo $_SESSION['msg'];
-	unset($_SESSION['msg']);
-} else {
-	echo '<br />';
-}
-
-
+echo '<br />';
 $txt_search_word = (!empty($_REQUEST['txt_search_word']) ? Security::remove_XSS($_REQUEST['txt_search_word']) : '');
 $html ='<div style="float:left" class="actions">';
 $html.='<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="GET" action="sub_language.php">';

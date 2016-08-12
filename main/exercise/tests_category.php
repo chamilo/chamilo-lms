@@ -250,12 +250,12 @@ function displayActionBar()
         Display::return_icon('question_category.gif', get_lang('AddACategory')) . '</a>';
 
     echo Display::url(
-        Display::return_icon('export_csv.png', get_lang('ExportAsCSV')),
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
         api_get_self() . '?action=export_category&'.api_get_cidreq()
     );
 
     echo Display::url(
-        Display::return_icon('import_csv.png', get_lang('ImportAsCSV')),
+        Display::return_icon('import_csv.png', get_lang('ImportAsCSV'), [], ICON_SIZE_MEDIUM),
         api_get_self() . '?action=import_category&'.api_get_cidreq()
     );
 

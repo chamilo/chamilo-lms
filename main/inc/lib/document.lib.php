@@ -1387,18 +1387,17 @@ class DocumentManager
             return false;
         }
 
-        if (isset($session_id)) {
-            $session_id = intval($session_id);
-        } else {
-            $session_id = api_get_session_id();
-        }
+        $session_id = empty($session_id) ? api_get_session_id() : intval($session_id);
 
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
 
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $id = intval($id);
+
+        $sessionCondition = api_get_session_condition($session_id, true, true);
+
         $sql = "SELECT * FROM $TABLE_DOCUMENT
-                WHERE c_id = $course_id AND session_id = $session_id AND id = $id";
+                WHERE c_id = $course_id $sessionCondition AND id = $id";
 
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
@@ -1575,6 +1574,7 @@ class DocumentManager
         if (!in_array($file_type, array('file', 'folder'))) {
             $file_type = 'file';
         }
+        $doc_path = Database::escape_string($doc_path).'/';
 
         $sql = "SELECT visibility
                 FROM $docTable d
@@ -1583,7 +1583,7 @@ class DocumentManager
         		WHERE
         		    ip.tool = '" . TOOL_DOCUMENT . "' $condition AND
         			filetype = '$file_type' AND
-        			locate(concat(path,'/'), '" . Database::escape_string($doc_path.'/'). "')=1
+        			locate(concat(path,'/'), '$doc_path')=1
                 ";
 
         $result = Database::query($sql);
@@ -2802,6 +2802,7 @@ class DocumentManager
      * @param bool $index_document index document (search xapian module)
      * @param bool $show_output print html messages
      * @param string $fileKey
+     * @param bool $treat_spaces_as_hyphens
      *
      * @return array|bool
      */
@@ -2814,7 +2815,8 @@ class DocumentManager
         $if_exists = null,
         $index_document = false,
         $show_output = false,
-        $fileKey = 'file'
+        $fileKey = 'file',
+        $treat_spaces_as_hyphens = true
     ) {
         $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
@@ -2845,7 +2847,8 @@ class DocumentManager
                     $show_output,
                     false,
                     null,
-                    $sessionId
+                    $sessionId,
+                    $treat_spaces_as_hyphens
                 );
 
                 // Showing message when sending zip files
@@ -3382,7 +3385,7 @@ class DocumentManager
 
         $parentData = [];
         if ($folderId !== false) {
-            $parentData = self::get_document_data_by_id($folderId, $course_info['code']);
+            $parentData = self::get_document_data_by_id($folderId, $course_info['code'], false, $session_id);
             if (!empty($parentData)) {
                 $cleanedPath = $parentData['path'];
                 $num = substr_count($cleanedPath, '/');
@@ -3478,7 +3481,7 @@ class DocumentManager
                 'files' => $newResources
             );
         } else {
-            if (!empty($parentData)) {
+            if (is_array($parentData)) {
                 $documents[$parentData['title']] = array(
                     'id' => intval($folderId),
                     'files' => $newResources
@@ -5927,7 +5930,7 @@ class DocumentManager
                 $tmp_folders_titles[$tmp_path] = $tmp_title;
             }
         }
-        
+
         return $path_displayed;
     }
 
@@ -6296,5 +6299,47 @@ class DocumentManager
         $sql = "DELETE FROM $itemPropertyTable
                 WHERE c_id = $courseId AND session_id = $sessionId AND tool = '".TOOL_DOCUMENT."'";
         Database::query($sql);
+    }
+
+    /**
+     * Update the file or directory path in the document db document table
+     *
+     * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
+     * @param  - action (string) - action type require : 'delete' or 'update'
+     * @param  - old_path (string) - old path info stored to change
+     * @param  - new_path (string) - new path info to substitute
+     * @desc Update the file or directory path in the document db document table
+     *
+     */
+    public static function updateDbInfo($action, $old_path, $new_path = '')
+    {
+        $dbTable = Database::get_course_table(TABLE_DOCUMENT);
+        $course_id = api_get_course_int_id();
+        switch ($action) {
+            case 'delete':
+                $old_path = Database::escape_string($old_path);
+                $query = "DELETE FROM $dbTable
+                          WHERE
+                            c_id = $course_id AND
+                            (
+                                path LIKE BINARY '".$old_path."' OR
+                                path LIKE BINARY '".$old_path."/%'
+                            )";
+                Database::query($query);
+                break;
+            case 'update':
+                if ($new_path[0] == '.') {
+                    $new_path = substr($new_path, 1);
+                }
+                $new_path = str_replace('//', '/', $new_path);
+
+                // Attempt to update	- tested & working for root	dir
+                $new_path = Database::escape_string($new_path);
+                $query = "UPDATE $dbTable SET
+                            path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
+                          WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
+                Database::query($query);
+                break;
+        }
     }
 }

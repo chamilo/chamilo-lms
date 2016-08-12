@@ -126,7 +126,12 @@ $update_from_version_8 = array(
     '1.9.10',
     '1.9.10.2',
     '1.9.10.4',
-    '1.9.10.6'
+    '1.9.10.6',
+    '1.10.0',
+    '1.10.2',
+    '1.10.4',
+    '1.10.6',
+    '1.10.8',
 );
 
 $my_old_version = '';
@@ -254,8 +259,8 @@ if (!isset($_GET['running'])) {
     $checkEmailByHashSent = 0;
     $ShowEmailNotCheckedToStudent = 1;
     $userMailCanBeEmpty = 1;
-    $allowSelfReg = 1;
-    $allowSelfRegProf = 1;
+    $allowSelfReg = 'approval';
+    $allowSelfRegProf = 1; //by default, a user can register as teacher (but moderation might be in place)
     $encryptPassForm = 'bcrypt';
     if (!empty($_GET['profile'])) {
         $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
@@ -398,43 +403,12 @@ if ($encryptPassForm == '1') {
 
 <div id="page-install">
 <div id="main" class="container">
-    <header class="row">
-        <div class="col-md-12">
-            <div class="logo">
-                <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
-            </div>
-        </div>
-    </header>
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <?php
-            echo '<h4>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h4>';
-            ?>
-        </div>
     <div class="panel-body">
     <div class="row">
-        <div class="col-md-4">
-            <div class="well install-steps-menu">
-                <ol>
-                    <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
-                    <li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
-                    <li <?php step_active('3'); ?>><?php echo get_lang('Licence'); ?></li>
-                    <li <?php step_active('4'); ?>><?php echo get_lang('DBSetting'); ?></li>
-                    <li <?php step_active('5'); ?>><?php echo get_lang('CfgSetting'); ?></li>
-                    <li <?php step_active('6'); ?>><?php echo get_lang('PrintOverview'); ?></li>
-                    <li <?php step_active('7'); ?>><?php echo get_lang('Installing'); ?></li>
-                </ol>
-            </div>
-            <div id="note">
-                <a class="btn btn-default" href="<?php echo $installationGuideLink; ?>" target="_blank">
-                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('ReadTheInstallationGuide'); ?>
-                </a>
-            </div>
-        </div>
-
         <div class="col-md-8">
-
-<form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+            <div class="content">
+        <form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
 
 $instalation_type_label = '';
@@ -566,7 +540,7 @@ if (@$_POST['step2']) {
             $encryptPassForm = 'none';
         }
 
-        $allowSelfReg = false;
+        $allowSelfReg = 'approval';
         $tmp = get_config_param_from_db('allow_registration');
         if (!empty($tmp)) {
             $allowSelfReg = $tmp;
@@ -612,7 +586,7 @@ if (@$_POST['step2']) {
         echo get_lang('AdminLogin') . ' : <strong>' . $loginForm . '</strong><br />';
         echo get_lang('AdminPass') . ' : <strong>' . $passForm . '</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
     }
-
+    $allowSelfRegistrationLiteral = ($allowSelfReg == 'true') ? get_lang('Yes') : ($allowSelfReg == 'approval' ? get_lang('Approval') : get_lang('No'));
     echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
     echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
     <?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
@@ -622,7 +596,7 @@ if (@$_POST['step2']) {
     <?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
     <?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
     <?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
-    <?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
+    <?php echo get_lang('AllowSelfReg').' : '. $allowSelfRegistrationLiteral; ?><br />
     <?php echo get_lang('EncryptMethodUserPass').' : ';
     echo $encryptPassForm;
     ?>
@@ -707,105 +681,7 @@ if (@$_POST['step2']) {
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
 
-        error_log('Starting migration process from '.$my_old_version.' ('.date('Y-m-d H:i:s').')');
-
-        switch ($my_old_version) {
-            case '1.9.0':
-            case '1.9.2':
-            case '1.9.4':
-            case '1.9.6':
-            case '1.9.6.1':
-            case '1.9.8':
-            case '1.9.8.1':
-            case '1.9.8.2':
-            case '1.9.10':
-            case '1.9.10.2':
-            case '1.9.10.4':
-                // Fix type "enum" before running the migration with Doctrine
-                Database::query("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
-                Database::query("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
-                Database::query("ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL");
-                Database::query("ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self'");
-                Database::query("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
-                Database::query("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
-                Database::query("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
-                Database::query("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
-                Database::query("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
-
-                echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
-                echo '<div id="details" style="display:none">';
-                // Migrate using the migration files located in:
-                // src/Chamilo/CoreBundle/Migrations/Schema/V110
-                $result = migrate(
-                    110,
-                    $manager
-                );
-
-                echo '</div>';
-
-                if ($result) {
-                    error_log('Migrations files were executed.');
-
-                    fixIds($manager);
-
-                    include 'update-files-1.9.0-1.10.0.inc.php';
-                    // Only updates the configuration.inc.php with the new version
-                    include 'update-configuration.inc.php';
-
-                    $configurationFiles = array(
-                        'mail.conf.php',
-                        'profile.conf.php',
-                        'course_info.conf.php',
-                        'add_course.conf.php',
-                        'events.conf.php',
-                        'auth.conf.php',
-                        'portfolio.conf.php'
-                    );
-
-                    error_log('Copy conf files');
-
-                    foreach ($configurationFiles as $file) {
-                        if (file_exists(api_get_path(SYS_CODE_PATH) . 'inc/conf/'.$file)) {
-                            copy(
-                                api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
-                                api_get_path(CONFIGURATION_PATH).$file
-                            );
-                        }
-                    }
-
-                    error_log('Upgrade process concluded! ('.date('Y-m-d H:i:s').')');
-                } else {
-                    error_log('There was an error during running migrations. Check error.log');
-                }
-                //TODO: check if this can be used to migrate directly from 1.9 to 1.11
-                break;
-            case '1.10.0':
-                // no break
-            case '1.10.2':
-            // no break
-            case '1.10.4':
-            // no break
-            case '1.10.6':
-                // Migrate using the migration files located in:
-                // src/Chamilo/CoreBundle/Migrations/Schema/V111
-                $result = migrate(
-                    111,
-                    $manager
-                );
-
-                echo '</div>';
-
-                if ($result) {
-                    error_log('Migrations files were executed.');
-                    include 'update-files-1.10.0-1.11.0.inc.php';
-                    error_log('Upgrade process concluded!  ('.date('Y-m-d H:i:s').')');
-                } else {
-                    error_log('There was an error during running migrations. Check error.log');
-                }
-                break;
-            default:
-                break;
-        }
+        migrateSwitch($my_old_version, $manager);
     } else {
         set_file_folder_permissions();
 
@@ -838,7 +714,7 @@ if (@$_POST['step2']) {
         $tool->createSchema($metadataList);
 
         $connection = $manager->getConnection();
-
+        /*
         $connection->executeQuery(
             'CREATE TABLE page__site (id INT AUTO_INCREMENT NOT NULL, enabled TINYINT(1) NOT NULL, name VARCHAR(255) NOT NULL, relative_path VARCHAR(255) DEFAULT NULL, host VARCHAR(255) NOT NULL, enabled_from DATETIME DEFAULT NULL, enabled_to DATETIME DEFAULT NULL, is_default TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, locale VARCHAR(6) DEFAULT NULL, title VARCHAR(64) DEFAULT NULL, meta_keywords VARCHAR(255) DEFAULT NULL, meta_description VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB'
         );
@@ -940,9 +816,9 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_question_translation ADD CONSTRAINT FK_C2D1A2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_question (id) ON DELETE CASCADE;");
         $connection->executeQuery("ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;");
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
-
+        */
         // Add version table
-        $connection->executeQuery('CREATE TABLE version (version varchar(255), PRIMARY KEY(version));');
+        $connection->executeQuery('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version))');
 
         // Tickets
         $table = Database::get_main_table(TABLE_TICKET_PROJECT);
@@ -1080,14 +956,35 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 ?>
           </form>
         </div>
+        </div>
+        <div class="col-md-4">
+            <div class="logo-install">
+                <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
+            </div>
+            <div class="well install-steps-menu">
+                <ol>
+                    <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
+                    <li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
+                    <li <?php step_active('3'); ?>><?php echo get_lang('Licence'); ?></li>
+                    <li <?php step_active('4'); ?>><?php echo get_lang('DBSetting'); ?></li>
+                    <li <?php step_active('5'); ?>><?php echo get_lang('CfgSetting'); ?></li>
+                    <li <?php step_active('6'); ?>><?php echo get_lang('PrintOverview'); ?></li>
+                    <li <?php step_active('7'); ?>><?php echo get_lang('Installing'); ?></li>
+                </ol>
+            </div>
+            <div id="note">
+                <a class="btn btn-primary btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
+                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('ReadTheInstallationGuide'); ?>
+                </a>
+            </div>
+        </div>
+
       </div>
     </div>
     </div>
-        <footer class="panel panel-default">
-            <div class="panel-body">
-                <div style="text-align: center;">
-                    <?php echo $poweredBy; ?>
-                </div>
+        <footer class="footer-install">
+            <div style="text-align: center;">
+                <?php echo $poweredBy; ?>
             </div>
         </footer>
   </body>

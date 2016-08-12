@@ -1093,9 +1093,7 @@ class Wiki
                 );
             }
 
-            echo Display::toolbarAction('toolbar-wikistudent', array(0 => $actionsLeft, 1 => $actionsRight));
-
-
+            echo Display::toolbarAction('toolbar-wikistudent', [$actionsLeft, $actionsRight]);
 
             if (empty($title)) {
                 $pageTitle = get_lang('DefaultTitle');
@@ -1106,7 +1104,6 @@ class Wiki
             } else {
                 $pageTitle = api_htmlentities($title);
             }
-
 
             $pageWiki = self::make_wiki_link_clickable(
                     self::detect_external_link(
@@ -2138,7 +2135,9 @@ class Wiki
             <tr><td>'.$photo.'<br />'.Display::tag('span', api_get_person_name($userinfo['firstname'], $userinfo['lastname']), array('title'=>$username)).'</td></tr>
         </table></div>';
 
-        $content_orig_B = '<br/><div align="center" style="font-size:24px">'.get_lang('AssignmentDescription').': '.$title_orig.'</div><br/>'.$_POST['content'];
+        $content_orig_B = '<br/><div align="center" style="font-size:24px">'.
+            get_lang('AssignmentDescription').': '.
+            $title_orig.'</div><br/>'.Security::remove_XSS($_POST['content']);
 
         //Second: student list (names, photo and links to their works).
         //Third: Create Students work pages.
@@ -2182,7 +2181,7 @@ class Wiki
                             'span',
                             strtoupper($o_user_to_add['lastname']).', '.$o_user_to_add['firstname'], array('title'=>$username)
                         ).
-                        ' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
+                        ' [['.Security::remove_XSS($_POST['title'])."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
                     //don't change this line without guaranteeing that users will be ordered by last names in the following format (surname, name)
                     $values['assignment']=2;
                 }
@@ -4747,9 +4746,7 @@ class Wiki
         // menu recent changes
         $actionsLeft .= '<a class="btn btn-default" href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.
             get_lang('RecentChanges').'</a>';
-
-
-        echo Display::toolbarAction('toolbar-wiki', array( 0 => $actionsLeft));
+        echo Display::toolbarAction('toolbar-wiki', [$actionsLeft]);
     }
 
     /**

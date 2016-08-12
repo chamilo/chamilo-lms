@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
+
 /**
  * Class for manage the messages web service
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
@@ -149,11 +151,12 @@ class MessagesWebService extends WebService
 
     /**
      * Register the Registration ID (token) obtained from Google Cloud Messaging for a user
-     * @param Chamilo\UserBundle\Entity\User $user The user
+     * @param User $user The user
      * @param string $registrationId The token registration id from Google Cloud Messaging
+     *
      * @return int The id after insert or the number of affected rows after update. Otherwhise return false
      */
-    public static function setGcmRegistrationId(Chamilo\UserBundle\Entity\User $user, $registrationId)
+    public static function setGcmRegistrationId(User $user, $registrationId)
     {
         $registrationId = Security::remove_XSS($registrationId);
         $extraFieldValue = new ExtraFieldValue('user');

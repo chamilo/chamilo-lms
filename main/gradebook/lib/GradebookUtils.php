@@ -692,19 +692,9 @@ class GradebookUtils
     {
         // Generate document HTML
         $content_html = DocumentManager::replace_user_info_into_html($user_id, $course_code, $sessionId, $is_preview);
-        $new_content_html = null;
-        $variables = null;
+        $new_content_html = isset($content_html['content']) ? $content_html['content'] : null;
+        $variables = isset($content_html['variables']) ? $content_html['variables'] : null;
         $contentHead = null;
-
-        if (isset($content_html['content'])) {
-            $new_content = explode('</head>', $content_html['content']);
-            $new_content_html = $new_content[1];
-            $contentHead = $new_content[0];
-        }
-
-        if (isset($content_html['variables'])) {
-            $variables = $content_html['variables'];
-        }
 
         $path_image = api_get_path(WEB_COURSE_PATH) . api_get_course_path($course_code) . '/document/images/gallery';
         $new_content_html = str_replace('../images/gallery', $path_image, $new_content_html);
@@ -712,21 +702,36 @@ class GradebookUtils
         $path_image_in_default_course = api_get_path(WEB_CODE_PATH) . 'default_course_document';
         $new_content_html = str_replace('/main/default_course_document', $path_image_in_default_course, $new_content_html);
         $new_content_html = str_replace(SYS_CODE_PATH . 'img/', api_get_path(WEB_IMG_PATH), $new_content_html);
-        $print = '';
+
+        $dom = new DOMDocument();
+        $dom->loadHTML($new_content_html);
 
         //add print header
-        if ($hide_print_button == false) {
-            $print .= '<style media="print" type="text/css">#print_div {visibility:hidden;}</style>';
-            $print .= '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div">';
-            $print .= Display::return_icon('printmgr.gif', get_lang('Print'));
-            $print .= '</a>';
+        if (!$hide_print_button) {
+            $head = $dom->getElementsByTagName('head');
+            $body = $dom->getElementsByTagName('body');
+
+            $printStyle = $dom->createElement('style');
+            $printStyle->setAttribute('media', 'print');
+            $printStyle->setAttribute('type', 'text/css');
+            $printStyle->textContent = '#print_div {visibility:hidden;}';
+
+            $head->item(0)->appendChild($printStyle);
+
+            $printIcon = $dom->createDocumentFragment();
+            $printIcon->appendXML(Display::return_icon('printmgr.gif', get_lang('Print')));
+
+            $printA = $dom->createElement('button');
+            $printA->setAttribute('onclick', 'window.print();');
+            $printA->setAttribute('id', 'print_div');
+            $printA->setAttribute('style', 'float:right; padding:4px; border: 0 none;');
+            $printA->appendChild($printIcon);
+
+            $body->item(0)->insertBefore($printA, $body->item(0)->firstChild);
         }
 
-        // Add header
-        $new_content_html =  $contentHead. $print . '</head>' . $new_content_html;
-
         return array(
-            'content' => $new_content_html,
+            'content' => $dom->saveHTML(),
             'variables' => $variables
         );
     }
@@ -1157,6 +1162,7 @@ class GradebookUtils
         AbstractLink::add_link_log($linkId, $name);
         $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
+        $em = Database::getManager();
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $tbl_forum_thread = Database:: get_course_table(TABLE_FORUM_THREAD);
         $tbl_work = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -1189,13 +1195,22 @@ class GradebookUtils
                 ';
         Database::query($sql);
         //Update weight into student publication(work)
-        $sql = 'UPDATE '.$tbl_work.' SET weight='.$weight.'
-                WHERE
-                    c_id = '.$course_id.' AND id = (
-                    SELECT ref_id FROM '.$table_link.'
-                    WHERE id='.$linkId.' AND type = '.LINK_STUDENTPUBLICATION.'
-                ) ';
-        Database::query($sql);
+        $em
+            ->createQuery('
+                UPDATE ChamiloCourseBundle:CStudentPublication w
+                SET w.weight = :final_weight
+                WHERE w.cId = :course
+                    AND w.id = (
+                        SELECT l.refId FROM ChamiloCoreBundle:GradebookLink l
+                        WHERE l.id = :link AND l.type = :type
+                    )
+            ')
+            ->execute([
+                'final_weight' => $weight,
+                'course' => $course_id,
+                'link' => $linkId,
+                'type' => LINK_STUDENTPUBLICATION
+            ]);
     }
 
     /**

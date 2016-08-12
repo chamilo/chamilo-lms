@@ -194,7 +194,6 @@ $NoArchive = "Neviens arhīvs netika iezīmēts";
 $ArchiveNotFound = "Arhīvs netika atrasts";
 $ArchiveUncompressed = "Arhīvs tika atarhivēts un dati pievienoti kopējai datubāzei.";
 $CsvPutIntoDocTool = "Fails \"users.csv\" tika novietots <i>Dokumentu</i> rīkā.";
-$BackH = "atpakaļ uz sākumlapu";
 $OtherCategory = "Cita kategorija";
 $AllowedToUnsubscribe = "Lietotājiem ir iespēja atteikties no šī kursa";
 $NotAllowedToUnsubscribe = "Lietotājiem ir liegta iespēja atteikties no šī kursa";

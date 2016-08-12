@@ -481,6 +481,9 @@
                 $('#frm-save-profile').modal('hide');
             });
         });
+        $(".facebook-auto").css("width","100%");
+        $(".facebook-auto ul").css("width","100%");
+        $("ul.holder").css("width","100%");
     });
 </script>
 <div id="page-back" class="page-skill">

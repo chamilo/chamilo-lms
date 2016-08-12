@@ -70,7 +70,7 @@ Event::event_access_tool(TOOL_UPLOAD);
  *	Prepare the header
  */
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 	var myUpload = new upload(0);
 </script>';
 
@@ -85,7 +85,7 @@ switch ($my_tool) {
     case TOOL_DROPBOX:
     case TOOL_STUDENTPUBLICATION:
     case TOOL_DOCUMENT:
-    default :
+    default:
         require 'form.document.php';
         break;
 }

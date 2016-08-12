@@ -6,9 +6,7 @@
  * 	@author Ronny Velasquez
  * 	@version $Id: qti2.php  2010-03-12 12:14:25Z $
  */
-/**
- * Code
- */
+
 // including the global Chamilo file
 require_once '../inc/global.inc.php';
 
@@ -28,7 +26,7 @@ $interbreadcrumb[]= array (
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 /**
- * This function displays the form for import of the zip file with qti2
+ * This function displays the form to import the zip file with qti2
  */
 function ch_qti2_display_form()
 {
@@ -54,6 +52,7 @@ function ch_qti2_display_form()
 /**
  * This function will import the zip file with the respective qti2
  * @param array $array_file ($_FILES)
+ * @return string|array
  */
 function ch_qti2_import_file($array_file)
 {

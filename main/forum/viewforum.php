@@ -60,7 +60,7 @@ $isTutor = GroupManager::is_tutor_of_group($userId, $groupId, $courseId);
 $my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
 // Note: This has to be validated that it is an existing forum.
 $current_forum = get_forum_information($my_forum);
-$isForumOpenByDateAccess = apiIsDateInDateRange($current_forum['start_time'], $current_forum['end_time']);
+$isForumOpenByDateAccess = api_is_date_in_date_range($current_forum['start_time'], $current_forum['end_time']);
 
 if (!$isForumOpenByDateAccess) {
     if ($origin) {
@@ -274,7 +274,7 @@ if (
         );
         $table_list .= Display::tabsOnlyLink($tabs, $active);
 
-        $icon_qualify = 'blog_new.gif';
+        $icon_qualify = 'quiz.png';
         $table_list .= '<center><br /><table class="data_table" style="width:50%">';
         // The column headers (TODO: Make this sortable).
         $table_list .= '<tr >';
@@ -431,9 +431,7 @@ echo $html;
 
 // Getting al the threads
 $threads = get_threads($my_forum);
-
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
-
 $course_id = api_get_course_int_id();
 
 echo '<div class="forum_display">';

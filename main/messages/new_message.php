@@ -41,7 +41,7 @@ $htmlHeadXtra[] = '<script>
 var counter_image = 1;
 function add_image_form() {
 	// Multiple filepaths for image form
-	var filepaths = document.getElementById("filepaths");
+	var filepaths = document.getElementById("file_uploads");
 	if (document.getElementById("filepath_"+counter_image)) {
 		counter_image = counter_image + 1;
 	}  else {
@@ -52,7 +52,7 @@ function add_image_form() {
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\" />&nbsp; <br />'.get_lang('Description').'&nbsp;&nbsp;<input type=\"text\" name=\"legend[]\"  /><br /><br />";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<div class=\"form-group\" ><label class=\"col-sm-4\">'.get_lang('FilesAttachment').'</label><input class=\"col-sm-8\" type=\"file\" name=\"attach_"+counter_image+"\" /></div><div class=\"form-group\" ><label class=\"col-sm-4\">'.get_lang('Description').'</label><div class=\"col-sm-8\"><input style=\"width:100%\" type=\"text\" name=\"legend[]\" /></div></div>";
 	if (filepaths.childNodes.length == 6) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
@@ -67,10 +67,10 @@ $nameTools = get_lang('ComposeMessage');
 * Shows the compose area + a list of users to select from.
 */
 function show_compose_to_any($user_id) {
-	$online_user_list = MessageManager::get_online_user_list($user_id);
-	$default['user_list'] = 0;
-	$online_user_list=null;
-	$html = manage_form($default, $online_user_list);
+    $default['user_list'] = 0;
+    $online_user_list = null;
+    $html = manage_form($default, $online_user_list);
+
     return $html;
 }
 
@@ -93,8 +93,10 @@ function show_compose_reply_to_message($message_id, $receiver_id)
     return $html;
 }
 
-function show_compose_to_user ($receiver_id) {
-	$html = get_lang('To').':&nbsp;<strong>'.GetFullUserName($receiver_id).'</strong>';
+function show_compose_to_user ($receiver_id)
+{
+    $userInfo = api_get_user_info($receiver_id);
+	$html = get_lang('To').':&nbsp;<strong>'.$userInfo['complete_name'].'</strong>';
 	$default['title'] = api_xml_http_response_encode(get_lang('EnterTitle'));
 	$default['users'] = array($receiver_id);
 	$html .= manage_form($default);
@@ -127,7 +129,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
                 )
             );
             $form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
-            $form->addElement('html','<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
+            $form->addElement('html', '<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
             $form->addElement('hidden','user_list', 0, array('id'=>'user_list'));
         } else {
             if (!empty($sent_to)) {
@@ -170,10 +172,10 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
     if (isset($_GET['re_id'])) {
         $message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
         $default['title'] = get_lang('MailSubjectReplyShort')." ".$message_reply_info['title'];
-        $form->addElement('hidden','re_id', intval($_GET['re_id']));
-        $form->addElement('hidden','save_form','save_form');
+        $form->addElement('hidden', 're_id', intval($_GET['re_id']));
+        $form->addElement('hidden','save_form', 'save_form');
 
-        //adding reply mail
+        // Adding reply mail
         $user_reply_info = api_get_user_info($message_reply_info['user_sender_id']);
         $default['content'] = '<p><br/></p>'.sprintf(
             get_lang('XWroteY'),
@@ -186,14 +188,22 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
         $form->addElement(
             'label',
             '',
-            '<div id="filepaths" class="form-group">
-                <div id="filepath_1">
-                <label>'.get_lang('FilesAttachment').'</label>
-                <input type="file" name="attach_1"/>
-                <label>'.get_lang('Description').'</label>
-                <input id="file-descrtiption" type="text" name="legend[]" />
+            '<div id="file_uploads"><div id="filepath_1">
+                <div id="filepaths" class="form-horizontal">
+                    <div id="paths-file" class="form-group">
+                    <label class="col-sm-4">'.get_lang('FilesAttachment').'</label>
+                    <input class="col-sm-8" type="file" name="attach_1"/>
+                    </div>
                 </div>
-            </div>'
+                <div id="paths-description" class="form-group">
+                    <label class="col-sm-4">'.get_lang('Description').'</label>
+                    <div class="col-sm-8">
+                    <input id="file-descrtiption" style="width:100%;" type="text" name="legend[]" />
+                    </div>
+                </div>
+            </div>
+            </div>
+            '
         );
 
         $form->addLabel('', '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
@@ -229,9 +239,9 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
             $parent_id = isset($default['parent_id']) ? $default['parent_id'] : null;
             if (is_array($user_list) && count($user_list)> 0) {
                 //all is well, send the message
-                foreach ($user_list as $user) {
+                foreach ($user_list as $userId) {
                     $res = MessageManager::send_message(
-                        $user,
+                        $userId,
                         $title,
                         $content,
                         $_FILES,
@@ -240,17 +250,22 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
                         $parent_id
                     );
                     if ($res) {
-                        $html .= MessageManager::display_success_message($user);
+                        $userInfo = api_get_user_info($userId);
+                        Display::addFlash(Display::return_message(
+                            get_lang('MessageSentTo') ."&nbsp;<b>" .$userInfo['complete_name'] ."</b>",
+                            'confirmation',
+                            false
+                        ));
                     }
                 }
             } else {
-                Display::display_error_message('ErrorSendingMessage');
+                Display::addFlash(Display::return_message('ErrorSendingMessage', 'error'));
             }
         }
         Security::clear_token();
     } else {
         $token = Security::get_token();
-        $form->addElement('hidden','sec_token');
+        $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
         $html .= $form->returnForm();
     }

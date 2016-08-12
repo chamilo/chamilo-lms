@@ -2089,7 +2089,7 @@ class Agenda
             }
         }
 
-        $form->addDateRangePicker('date_range', get_lang('StartDate'), false, array('id' => 'date_range'));
+        $form->addDateRangePicker('date_range', get_lang('DateRange'), false, array('id' => 'date_range'));
         $form->addElement('checkbox', 'all_day', null, get_lang('AllDay'));
 
         if ($this->type == 'course') {
@@ -2687,7 +2687,7 @@ class Agenda
         $form = new FormValidator(
             'frm_import_ical',
             'post',
-            api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&type='.$this->type,
+            api_get_self().'?action=importical&type='.$this->type,
             array('enctype' => 'multipart/form-data')
         );
         $form->addElement('header', get_lang('ICalFileImport'));

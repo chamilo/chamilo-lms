@@ -57,7 +57,7 @@ $group = array(
     $form->createElement('text', 'max_member', null, array('class' => 'span1', 'id' => 'max_member')),
     $form->createElement('static', null, null, ' '.get_lang('GroupPlacesThis'))
 );
-$form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), '', false);
+$form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), null, false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
 
 $form->addElement('html', '</div>');
@@ -78,7 +78,13 @@ $group = array(
     $form->createElement('checkbox', 'self_registration_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1),
     $form->createElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1)
 );
-$form->addGroup($group, '', Display::return_icon('user.png', get_lang('GroupSelfRegistration'), array(), ICON_SIZE_SMALL).'<span>'.get_lang('GroupSelfRegistration').'</span>', '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('user.png', get_lang('GroupSelfRegistration')) . '<span>' . get_lang('GroupSelfRegistration') . '</span>',
+    null,
+    false
+);
 
 // Documents settings
 $group = array(
@@ -86,7 +92,13 @@ $group = array(
     $form->createElement('radio', 'doc_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'doc_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
 );
-$form->addGroup($group, '', Display::return_icon('folder.png', get_lang('GroupDocument'), array(), ICON_SIZE_SMALL).'<span>'.get_lang('GroupDocument').'</span>', '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('folder.png', get_lang('GroupDocument')) . '<span>' . get_lang('GroupDocument') . '</span>',
+    null,
+    false
+);
 
 // Work settings
 $group = array(
@@ -94,7 +106,13 @@ $group = array(
     $form->createElement('radio', 'work_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'work_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
 );
-$form->addGroup($group, '', Display::return_icon('works.png', get_lang('GroupWork'), array(), ICON_SIZE_SMALL).'<span>'.get_lang('GroupWork').'</span>', '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('works.png', get_lang('GroupWork')) . '<span>' . get_lang('GroupWork') . '</span>',
+    null,
+    false
+);
 
 // Calendar settings
 $group = array(
@@ -102,7 +120,13 @@ $group = array(
     $form->createElement('radio', 'calendar_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'calendar_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
 );
-$form->addGroup($group, '', Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), ICON_SIZE_SMALL).'<span>'.get_lang('GroupCalendar').'</span>', '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('agenda.png', get_lang('GroupCalendar')) . '<span>' . get_lang('GroupCalendar') . '</span>',
+    null,
+    false
+);
 
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-6">');
@@ -113,7 +137,13 @@ $group = array(
     $form->createElement('radio', 'announcements_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'announcements_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
 );
-$form->addGroup($group, '', Display::return_icon('announce.png', get_lang('GroupAnnouncements'), array(), ICON_SIZE_SMALL).'<span>'.get_lang('GroupAnnouncements').'</span>', '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('announce.png', get_lang('GroupAnnouncements')) . '<span>' . get_lang('GroupAnnouncements') . '</span>',
+    null,
+    false
+);
 
 // Forum settings
 $group = array(
@@ -121,7 +151,13 @@ $group = array(
     $form->createElement('radio', 'forum_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'forum_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
 );
-$form->addGroup($group, '', Display::return_icon('forum.png', get_lang('GroupForum'), array(), ICON_SIZE_SMALL).'<span>'.get_lang('GroupForum').'</span>', '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('forum.png', get_lang('GroupForum')) . '<span>' . get_lang('GroupForum') . '</span>',
+    null,
+    false
+);
 
 // Wiki settings
 $group = array(
@@ -129,7 +165,12 @@ $group = array(
     $form->createElement('radio', 'wiki_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'wiki_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
 );
-$form->addGroup($group, '', Display::return_icon('wiki.png', get_lang('GroupWiki'), array(), ICON_SIZE_SMALL).'<span>'.get_lang('GroupWiki').'</span>', '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('wiki.png', get_lang('GroupWiki')).'<span>'.get_lang('GroupWiki').'</span>', '',
+    false
+);
 
 // Chat settings
 $group = array(
@@ -137,7 +178,13 @@ $group = array(
     $form->createElement('radio', 'chat_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'chat_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
 );
-$form->addGroup($group, '', Display::return_icon('chat.png', get_lang('Chat'), array(), ICON_SIZE_SMALL).'<span>'.get_lang('Chat').'</span>', '', false);
+$form->addGroup(
+    $group,
+    '',
+    Display::return_icon('chat.png', get_lang('Chat')) . '<span>' . get_lang('Chat') . '</span>',
+    null,
+    false
+);
 
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-12">');

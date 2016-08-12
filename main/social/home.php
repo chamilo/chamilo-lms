@@ -109,10 +109,11 @@ if (!empty($results)) {
         $picture = $userGroup->get_picture_group(
             $id,
             $result['picture'],
-            80
+            null,
+            GROUP_IMAGE_SIZE_BIG
         );
 
-        $result['picture'] = '<img class="group-image" src="' . $picture['file'] . '" />';
+        $result['picture'] = '<img class="img-responsive" src="' . $picture['file'] . '" />';
         $group_actions = '<div class="group-more"><a href="groups.php?#tab_browse-2">' . get_lang('SeeMore') . '</a></div>';
         $group_info= '<div class="description"><p>' . cut($result['description'], 120, true) . "</p></div>";
         $groups_newest[] = array(
@@ -152,9 +153,10 @@ foreach ($results as $result) {
     $picture = $userGroup->get_picture_group(
         $id,
         $result['picture'],
-        80
+        null,
+        GROUP_IMAGE_SIZE_BIG
     );
-    $result['picture_uri'] = '<img class="group-image" src="' . $picture['file'] . '" />';
+    $result['picture_uri'] = '<img class="img-responsive" src="' . $picture['file'] . '" />';
     $group_actions = '<div class="group-more" ><a href="groups.php?#tab_browse-3">' . get_lang('SeeMore') . '</a></div>';
     $group_info= '<div class="description"><p>' . cut($result['description'], 120, true) . "</p></div>";
     $groups_pop[] = array(
@@ -170,8 +172,8 @@ if ($list > 0) {
     $social_group_block .= '<div class="group-title">' . get_lang('Newest') . '</div>';
     for($i = 0;$i < $list; $i++){
         $social_group_block.='<div class="row">';
-        $social_group_block.='<div class="col-md-2">' . $groups_newest[$i][0] . '</div>';
-        $social_group_block.='<div class="col-md-10">' . $groups_newest[$i][1];
+        $social_group_block.='<div class="col-md-3">' . $groups_newest[$i][0] . '</div>';
+        $social_group_block.='<div class="col-md-9">' . $groups_newest[$i][1];
         $social_group_block.= $groups_newest[$i][2] . '</div>';
         $social_group_block.="</div>";
     }
@@ -184,8 +186,8 @@ if ($list > 0) {
 
     for($i = 0;$i < $list; $i++){
         $social_group_block.='<div class="row">';
-        $social_group_block.='<div class="col-md-2">' . $groups_pop[$i][0] . '</div>';
-        $social_group_block.='<div class="col-md-10">' . $groups_pop[$i][1];
+        $social_group_block.='<div class="col-md-3">' . $groups_pop[$i][0] . '</div>';
+        $social_group_block.='<div class="col-md-9">' . $groups_pop[$i][1];
         $social_group_block.= $groups_pop[$i][2] . '</div>';
         $social_group_block.="</div>";
     }

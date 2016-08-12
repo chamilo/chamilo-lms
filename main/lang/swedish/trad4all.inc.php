@@ -177,7 +177,6 @@ $NoArchive = "Inget arkiv har valts";
 $ArchiveNotFound = "Arkivet kan inte hittas";
 $ArchiveUncompressed = "Arkivet har dekomprimerats och installerats.";
 $CsvPutIntoDocTool = "Filen \"users.csv\" has lagts till i Dokumentverktyget.";
-$BackH = "tillbaka till hemsidan";
 $OtherCategory = "Annan kategori";
 $AllowedToUnsubscribe = "Användare är tillåtna att avsluta prenumeration från denna kurs.";
 $NotAllowedToUnsubscribe = "Användare är inte tillåtna att avsluta prenumeration från denna kurs.";

@@ -38,8 +38,8 @@
                 var templatesConfig = CKEDITOR.getTemplates("default");
 
                 var $templatesUL = $("<ul>");
-
-                $.each(templatesConfig.templates, function () {
+                if (templatesConfig) {
+                    $.each(templatesConfig.templates, function () {
                     var template = this;
                     var $templateLi = $("<li>");
 
@@ -47,25 +47,26 @@
                     templateHTML += "<b>" + template.title + "</b>";
 
                     if (template.description) {
-                        templateHTML += "<div class=description>" + template.description + "</div>";
+                    templateHTML += "<div class=description>" + template.description + "</div>";
                     }
 
                     templateHTML += "</div>";
 
                     $("<a>", {
-                        href: "#",
-                        html: templateHTML,
-                        click: function (e) {
-                            e.preventDefault();
-                            if (CKEDITOR.instances[editorName]) {
-                                CKEDITOR.instances[editorName].setData(template.html, function () {
-                                    this.checkDirty();
-                                });
-                            }
-                        }
+                    href: "#",
+                    html: templateHTML,
+                    click: function (e) {
+                    e.preventDefault();
+                    if (CKEDITOR.instances[editorName]) {
+                    CKEDITOR.instances[editorName].setData(template.html, function () {
+                    this.checkDirty();
+                    });
+                    }
+                    }
                     }).appendTo($templateLi);
                     $templatesUL.append($templateLi);
-                });
+                    });
+                }
                 $templatesUL.appendTo("#frmModel");
             });
         };
@@ -243,13 +244,13 @@ $(window).resize(function() {
 $(document).scroll(function() {
 
     var valor = $('body').outerHeight() - 700;
-      
+
     if ($(this).scrollTop() > 100) {
         $('.bottom_actions').addClass('bottom_actions_fixed');
     } else {
         $('.bottom_actions').removeClass('bottom_actions_fixed');
     }
-      
+
     if ($(this).scrollTop() > valor) {
         $('.bottom_actions').removeClass('bottom_actions_fixed');
     } else {
@@ -432,5 +433,41 @@ function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide)
         $('#'+inId).hide(400);
         $('#'+inIdTxt).attr("value", inTxtHide);
     }
+}
+
+function expandColumnToogle(buttonSelector, col1Info, col2Info)
+{
+    $(buttonSelector).on('click', function (e) {
+        e.preventDefault();
+
+        col1Info = $.extend({
+            selector: '',
+            width: 4
+        }, col1Info);
+        col2Info = $.extend({
+            selector: '',
+            width: 8
+        }, col2Info);
+
+        if (!col1Info.selector || !col2Info.selector) {
+            return;
+        }
+
+        var col1 = $(col1Info.selector),
+            col2 = $(col2Info.selector);
+
+        $('#expand').toggleClass('hide');
+        $('#contract').toggleClass('hide');
+
+        if (col2.is('.col-md-' + col2Info.width)) {
+            col2.removeClass('col-md-' + col2Info.width).addClass('col-md-12');
+            col1.removeClass('col-md-' + col1Info.width).addClass('hide');
+
+            return;
+        }
+
+        col2.removeClass('col-md-12').addClass('col-md-' + col2Info.width);
+        col1.removeClass('hide').addClass('col-md-' + col1Info.width);
+    });
 }
 </script>

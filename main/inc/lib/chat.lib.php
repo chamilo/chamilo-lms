@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class Chat
- *
+ * @todo ChamiloSession instead of $_SESSION
  * @package chamilo.library.chat
  */
 class Chat extends Model
@@ -18,15 +20,17 @@ class Chat extends Model
      */
     public function __construct()
     {
+        parent::__construct();
         $this->table = Database::get_main_table(TABLE_MAIN_CHAT);
-        $this->window_list = $_SESSION['window_list'] = isset($_SESSION['window_list']) ? $_SESSION['window_list'] : array();
+        $this->window_list = Session::read('window_list');
+        Session::write('window_list', $this->window_list);
     }
 
     /**
      * Get user chat status
      * @return int 0 if disconnected, 1 if connected
      */
-    function get_user_status()
+    public function get_user_status()
     {
         $status = UserManager::get_extra_user_data_by_field(
             api_get_user_id(),
@@ -100,7 +104,8 @@ class Chat extends Model
             foreach ($rows as $chat) {
                 $chat['message'] = Security::remove_XSS($chat['message']);
 
-                $item = array('s' => '0',
+                $item = array(
+                    's' => '0',
                     'f' => $from_user_id,
                     'm' => $chat['message'],
                     'username' => $user_info['complete_name'],
@@ -141,9 +146,6 @@ class Chat extends Model
                 WHERE to_user = '".$to_user_id."' AND recd = 0";
         Database::query($sql);
 
-        if ($items != '') {
-            //$items = substr($items, 0, -1);
-        }
         echo json_encode(array('items' => $items));
     }
 
@@ -171,7 +173,7 @@ class Chat extends Model
     public function save_window($user_id)
     {
         $this->window_list[$user_id] = true;
-        $_SESSION['window_list'] = $this->window_list;
+        Session::write('window_list', $this->window_list);
     }
 
     /**
@@ -181,6 +183,7 @@ class Chat extends Model
      * @param string $message Message
      * @param boolean $printResult Optional. Whether print the result
      * @param boolean $sanitize Optional. Whether sanitize the message
+     *
      * @return void Prints "1"
      */
     public function send(
@@ -189,8 +192,7 @@ class Chat extends Model
         $message,
         $printResult = true,
         $sanitize =  true
-    )
-    {
+    ) {
         $user_friend_relation = SocialManager::get_relation_between_contacts(
             $from_user_id,
             $to_user_id
@@ -208,12 +210,11 @@ class Chat extends Model
                 $messagesan = $message;
             }
 
-            error_log(print_r($sanitize) . '----' . $messagesan);
-
             if (!isset($_SESSION['chatHistory'][$to_user_id])) {
                 $_SESSION['chatHistory'][$to_user_id] = array();
             }
-            $item = array("s" => "1",
+            $item = array(
+                "s" => "1",
                 "f" => $from_user_id,
                 "m" => $messagesan,
                 "username" => get_lang('Me')
@@ -274,7 +275,7 @@ class Chat extends Model
 
         return $text;
     }
-    
+
     /**
      * SET Disable Chat
      * @param boolean status to disable chat
@@ -284,7 +285,7 @@ class Chat extends Model
     {
         $_SESSION['disable_chat'] = $status;
     }
-    
+
     /**
      * Disable Chat - disable the chat
      * @return boolean - return true if setDisableChat status is true
@@ -298,10 +299,10 @@ class Chat extends Model
                 return true;
             }
         }
-         
+
          return false;
     }
-    
+
     public function is_chat_blocked_by_exercises()
     {
         if (isset($_SESSION['current_exercises'])) {

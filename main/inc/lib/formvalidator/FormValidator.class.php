@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class FormValidator
  * create/manipulate/validate user input.
@@ -805,10 +807,34 @@ EOT;
      * @param string $name
      * @param string $label
      * @param array  $attributes
+     * @throws Exception if the file doesn't have an id
      */
     public function addFile($name, $label, $attributes = array())
     {
-        $this->addElement('file', $name, $label, $attributes);
+        $element = $this->addElement('file', $name, $label, $attributes);
+        if (isset($attributes['crop_image'])) {
+            $id = $element->getAttribute('id');
+            if (empty($id)) {
+                throw new Exception('If you use the crop functionality the element must have an id');
+            }
+            $this->addHtml('
+                <div class="form-group">
+                <label for="cropImage" id="'.$id.'_label_crop_image" class="col-sm-2 control-label"></label>
+                <div class="col-sm-8">
+                <div id="'.$id.'_crop_image" class="cropCanvas">
+                <img id="'.$id.'_preview_image">
+                </div>
+                <div>
+                <button class="btn btn-primary hidden" name="cropButton" id="'.$id.'_crop_button" >
+                    <em class="fa fa-crop"></em> '.
+                    get_lang('CropYourPicture').'
+                </button>
+                </div>
+                </div>
+                </div>'
+            );
+            $this->addHidden($id.'_crop_result', '');
+        }
     }
 
     /**
@@ -1418,6 +1444,9 @@ EOT;
                     node
                         .prepend('<br>')
                         .prepend(file.preview);
+                    node
+                        .append('<br>')
+                        .append($('<span class=\"text-success\"/>').text('" . get_lang('UplUploadSucceeded') . "'));
                 }
                 if (file.error) {
                     node
@@ -1436,7 +1465,6 @@ EOT;
                     progress + '%'
                 );
             }).on('fileuploaddone', function (e, data) {
-
                 $.each(data.result.files, function (index, file) {
                     if (file.url) {
                         var link = $('<a>')
@@ -1453,7 +1481,8 @@ EOT;
                 });
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
-                    var error = $('<span class=\"text-danger\"/>').text('".get_lang('UploadError')."');
+                    var failedMessage = '" . get_lang('UplUploadFailed') . "';
+                    var error = $('<span class=\"text-danger\"/>').text(failedMessage);
                     $(data.context.children()[index])
                         .append('<br>')
                         .append(error);

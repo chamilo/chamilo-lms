@@ -276,8 +276,7 @@ class HTML_Table extends HTML_Common
                 $this->addBody();
             }
         } else {
-            return PEAR::raiseError('Invalid body reference[' .
-                $body . '] in HTML_Table::' . $method);
+            throw new \Exception('Invalid body reference[' .$body . '] in HTML_Table::' . $method);
         }
     }
 

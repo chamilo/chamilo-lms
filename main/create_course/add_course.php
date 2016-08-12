@@ -29,7 +29,7 @@ if (api_get_setting('course_validation') === 'true' && !api_is_platform_admin())
     $course_validation_feature = true;
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
     function setFocus(){
         $("#title").focus();
     }
@@ -292,6 +292,14 @@ if ($form->validate()) {
             $params['course_category'] = $category_code;
             $params['course_language'] = $course_language;
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
+            $params['course_template'] = $course_values['course_template'];
+
+            include_once api_get_path(SYS_CODE_PATH) . 'lang/english/trad4all.inc.php';
+            $file_to_include = api_get_path(SYS_CODE_PATH) . 'lang/' . $course_language . '/trad4all.inc.php';
+
+            if (file_exists($file_to_include)) {
+                include $file_to_include;
+            }
 
             $course_info = CourseManager::create_course($params);
 

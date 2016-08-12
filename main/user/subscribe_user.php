@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt*/
 
+use \ExtraField as ExtraFieldModel;
+use Chamilo\CoreBundle\Entity\ExtraField;
+
 /**
 * This script allows teachers to subscribe existing users
 * to their course.
@@ -255,14 +258,13 @@ $form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAY
 $form->addText('keyword', '', false);
 $form->addElement('hidden', 'type', $type);
 $form->addButtonSearch(get_lang('Search'));
-echo Display::toolbarAction('toolbar-subscriber', array(0 => $actionsLeft, 1 => $form->returnForm()));
+echo Display::toolbarAction('toolbar-subscriber', [$actionsLeft, $form->returnForm()]);
 
 $option = $type == COURSEMANAGER ? 2 : 1;
 echo UserManager::getUserSubscriptionTab($option);
 
 // Display table
 $table->display();
-
 Display::display_footer();
 
 /*		SHOW LIST OF USERS  */
@@ -281,10 +283,8 @@ function get_number_of_users()
     $courseCode = api_get_course_id();
     $sessionId = api_get_session_id();
 
-	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
-
+	if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'teacher') {
 		if (api_get_session_id() != 0) {
-
 			$sql = "SELECT COUNT(u.user_id)
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu
@@ -843,7 +843,7 @@ function search_additional_profile_fields($keyword)
 		$profiling_field_options_exact_values_sql .= " OR (field_id = '".$profilingvalue['field_id']."' AND value='".$profilingvalue['option_value']."') ";
 	}
 
-    $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE;
+    $extraFieldType = ExtraField::USER_FIELD_TYPE;
 
 	// getting all the user ids of the users who have chosen on of the predefined fields that contain the keyword
 	// or all the users who have entered the keyword in a free-form field
@@ -889,14 +889,14 @@ function display_extra_profile_fields_filter()
 		// $field_details[2] contains the type of the additional user profile field
 		switch ($field_details[2]) {
 			// text fields cannot be used as a filter
-			case ExtraField::FIELD_TYPE_TEXT:
+			case ExtraFieldModel::FIELD_TYPE_TEXT:
 				break;
 			// text area fields cannot be used as a filter
-			case ExtraField::FIELD_TYPE_TEXTAREA:
+			case ExtraFieldModel::FIELD_TYPE_TEXTAREA:
 				break;
-			case ExtraField::FIELD_TYPE_RADIO:
-			case ExtraField::FIELD_TYPE_SELECT:
-			case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
+			case ExtraFieldModel::FIELD_TYPE_RADIO:
+			case ExtraFieldModel::FIELD_TYPE_SELECT:
+			case ExtraFieldModel::FIELD_TYPE_SELECT_MULTIPLE:
 				$return .= '<optgroup label="'.$field_details[3].'">';
 				foreach($field_details[9] as $option_id => $option_details) {
 					if ($_GET['subscribe_user_filter_value'] == $field_details[0].'*'.$option_details[1]) {

@@ -113,6 +113,10 @@ $extra_fields = array();
 $accessStartDate = '';
 $accessEndDate = '';
 
+if (!empty($searchString)) {
+    $search = 'true';
+}
+
 if ((isset($_REQUEST['filters2']) && $forceSearch) || ($search || $forceSearch) && ($search !== 'false')) {
     $whereCondition = ' 1 = 1 ';
     $whereConditionInForm = getWhereClause($searchField, $searchOperator, $searchString);
@@ -220,7 +224,6 @@ switch ($action) {
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
         $userId = api_get_user_id();
-
         $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
         $courseCodeList = array();
         $userIdList  = array();
@@ -488,8 +491,7 @@ switch ($action) {
             }
         }
 
-        if ($list_type == 'simple') {
-
+        if ($list_type === 'simple') {
 
             $count = SessionManager::get_sessions_admin(
                 array('where' => $whereCondition, 'extra' => $extra_fields),
@@ -876,8 +878,7 @@ switch ($action) {
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = array(
                 //'type',
-                'firstname',
-                'lastname',
+                'fullname',
                 'title',
                 'qualification',
                 'sent_date',
@@ -888,8 +889,7 @@ switch ($action) {
         } else {
             $columns = array(
                 //'type',
-                'firstname',
-                'lastname',
+                'fullname',               
                 'title',
                 'qualification',
                 'sent_date',
@@ -1145,9 +1145,6 @@ switch ($action) {
             $whereCondition = str_replace(
                 'category_name',
                 'sc.name',
-
-
-
                 $whereCondition
             );
 
@@ -1791,7 +1788,7 @@ if (in_array($action, $allowed_actions)) {
             }
             $array = array();
             foreach ($columns as $col) {
-                if ($col == 'correction') {
+                if (in_array($col, ['correction', 'actions'])) {
                     $array[] = isset($row[$col]) ? $row[$col] : '';
                 } else {
                     $array[] = isset($row[$col]) ? Security::remove_XSS($row[$col]) : '';

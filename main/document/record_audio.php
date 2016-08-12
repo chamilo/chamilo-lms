@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This file allows record audio files.
  * @package chamilo.document
@@ -10,6 +12,8 @@ require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/voicerecord';
 $this_section = SECTION_COURSES;
+
+$groupRights = Session::read('group_member_with_upload_rights');
 
 $nameTools = get_lang('VoiceRecord');
 
@@ -80,7 +84,7 @@ if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
 
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] ||
+if (!($is_allowed_to_edit || $groupRights ||
 	DocumentManager::is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir),api_get_session_id()))) {
 	api_not_allowed(true);
 }

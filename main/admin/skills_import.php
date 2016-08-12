@@ -237,6 +237,9 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
 	}
 }
+
+$interbreadcrumb[] = array ("url" => 'skill_list.php', "name" => get_lang('ManageSkills'));
+
 Display :: display_header($tool_name);
 
 if (!empty($error_message)) {
@@ -246,13 +249,40 @@ if (!empty($see_message_import)) {
 	Display::display_normal_message($see_message_import);
 }
 
+$toolbar = Display::toolbarButton(
+	get_lang('ManageSkills'),
+	api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php',
+	'list',
+	'success',
+	['title' => get_lang('CreateSkill')]
+);
+$toolbar .= '&nbsp;&nbsp;';
+$toolbar .= Display::toolbarButton(
+	get_lang('SkillsWheel'),
+	api_get_path(WEB_CODE_PATH) . 'admin/skills_wheel.php',
+	'bullseye',
+	'primary',
+	['title' => get_lang('CreateSkill')]
+);
+$toolbar .= '&nbsp;&nbsp;';
+$toolbar .= Display::toolbarButton(
+	get_lang('BadgesManagement'),
+	api_get_path(WEB_CODE_PATH) . 'admin/skill_badge_list.php',
+	'shield',
+	'warning',
+	['title' => get_lang('BadgesManagement')]
+);
+$toolbar .= '<br /><br />';
+
+echo $toolbar;
+
 $form = new FormValidator('user_import','post','skills_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $group = array();
 $group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="skill_example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
-$form->addGroup($group, '', get_lang('FileType'), '<br/>');
+$form->addGroup($group, '', get_lang('FileType'));
 $form->addButtonImport(get_lang('Import'));
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;

@@ -1547,11 +1547,13 @@ class Pager_Common
      */
     function raiseError($msg, $code)
     {
+        throw new Exception($msg);
+        /*
         include_once 'PEAR.php';
         if (empty($this->_pearErrorMode)) {
             $this->_pearErrorMode = PEAR_ERROR_RETURN;
         }
-        return PEAR::raiseError($msg, $code, $this->_pearErrorMode);
+        return PEAR::raiseError($msg, $code, $this->_pearErrorMode);*/
     }
 
     // }}}

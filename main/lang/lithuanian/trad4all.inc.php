@@ -160,7 +160,6 @@ $NoArchive = "Joks archyvas neparinktas";
 $ArchiveNotFound = "Archyvas nerastas";
 $ArchiveUncompressed = "Archyvas buvo išskleistas ir įdiegtas.";
 $CsvPutIntoDocTool = "Failas \"users.csv\" įkeltas į dokumentus.";
-$BackH = "atgal į titulinį";
 $OtherCategory = "Kita kategorija";
 $AllowedToUnsubscribe = "Vartotojams leidžiama išsiprenumeruoti iš šio kurso";
 $NotAllowedToUnsubscribe = "Vartotojams neleidžiama išsiprenumeruoti iš šio kurso";

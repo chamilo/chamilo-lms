@@ -11,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_lp",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *     @ORM\Index(name="session", columns={"session_id"})
  *  }
  * )
  * @ORM\Entity
@@ -261,7 +262,7 @@ class CLp
     /**
      * @var string
      *
-     * @ORM\Column(name="accumulate_scorm_time", type="string", length=5, nullable=false)
+     * @ORM\Column(name="accumulate_scorm_time", type="integer", nullable=false, options={"default":1})
      */
     private $accumulateScormTime;
 

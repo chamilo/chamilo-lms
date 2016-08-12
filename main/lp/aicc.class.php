@@ -392,7 +392,10 @@ class aicc extends learnpath
             if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
                 // If a php file is found, do not authorize (security risk).
                 if ($this->debug > 1) {error_log('New LP - aicc::import_package() - Found unauthorized file: '.$thisContent['filename'], 0); }
-                return api_failure::set_failure('php_file_in_zip_file');
+                Display::addFlash(
+                    Display::return_message(get_lang('ZipNoPhp'))
+                );
+                return false;
             } elseif (preg_match('?.*/aicc/$?', $thisContent['filename'])) {
                 // If a directory named 'aicc' is found, package type = aicc, but continue,
                 // because we need to find the right AICC files;
@@ -460,13 +463,20 @@ class aicc extends learnpath
         }
 
         if ($package_type == '' || !$mandatory)
-        // && defined('CHECK_FOR_AICC') && CHECK_FOR_AICC)
         {
-            return api_failure::set_failure('not_aicc_content');
+            Display::addFlash(
+                Display::return_message(get_lang('FileError'))
+            );
+
+            return false;
         }
 
         if (!enough_size($realFileSize, $course_sys_dir, $maxFilledSpace)) {
-            return api_failure::set_failure('not_enough_space');
+            Display::addFlash(
+                Display::return_message(get_lang('NoSpace'))
+            );
+
+            return false;
         }
 
         // It happens on Linux that $new_dir sometimes doesn't start with '/'
@@ -536,9 +546,13 @@ class aicc extends learnpath
                                 }
                             }
                             @rename($course_sys_dir.$new_dir.$file, $course_sys_dir.$new_dir.$safe_file);
-                            if ($this->debug == 1) { error_log('New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file, 0); }
+                            if ($this->debug == 1) {
+                                error_log(
+                                    'New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file,
+                                    0
+                                );
+                            }
                         }
-                        //set_default_settings($course_sys_dir, $safe_file, $filetype);
                     }
                 }
 

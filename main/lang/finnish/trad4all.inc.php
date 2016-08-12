@@ -209,7 +209,6 @@ $NoArchive = "Varmuuskopiota ei ole valittu";
 $ArchiveNotFound = "Varmistusta ei löytynyt";
 $ArchiveUncompressed = "Varmuuskopio on purettu ja asennettu.";
 $CsvPutIntoDocTool = "Tiedosto \"users.csv\" on ladatavissa Tiedostot työkalulla";
-$BackH = "Kurssin oma sivu";
 $OtherCategory = "Muut";
 $AllowedToUnsubscribe = "Käyttäjä voi peruuttaa osallistumisensa tältä kurssilta";
 $NotAllowedToUnsubscribe = "Käyttäjät eivät itse voi peruuttaa osallistumistaan tältä kurssilta";

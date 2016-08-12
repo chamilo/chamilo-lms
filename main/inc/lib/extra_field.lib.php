@@ -913,8 +913,7 @@ class ExtraField extends Model
                         $form->addGroup(
                             $group,
                             'extra_'.$field_details['variable'],
-                            $field_details['display_text'],
-                            ''
+                            $field_details['display_text']
                         );
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {
@@ -960,8 +959,7 @@ class ExtraField extends Model
                         $form->addGroup(
                             $group,
                             'extra_'.$field_details['variable'],
-                            $field_details['display_text'],
-                            ''
+                            $field_details['display_text']
                         );
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {
@@ -1272,8 +1270,7 @@ class ExtraField extends Model
                         $form->addGroup(
                             $group,
                             'extra_'.$field_details['variable'],
-                            $field_details['display_text'],
-                            '&nbsp;'
+                            $field_details['display_text']
                         );
 
                         if (!$admin_permissions) {
@@ -1518,11 +1515,10 @@ EOF;
                             $fieldTexts[0] = get_lang($fieldTexts[0]);
                         }
 
-                        $form->addElement(
-                            'file',
+                        $form->addFile(
                             $fieldVariable,
                             $fieldTexts,
-                            ['accept' => 'image/*', 'id' => 'extra_image']
+                            ['accept' => 'image/*', 'id' => 'extra_image', 'crop_image' => 'true']
                         );
 
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
@@ -2043,17 +2039,17 @@ EOF;
         $group   = array();
         $group[] = $form->createElement('radio', 'visible', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'visible', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('Visible'), '', false);
+        $form->addGroup($group, '', get_lang('Visible'), null, false);
 
         $group   = array();
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('FieldChangeability'), '', false);
+        $form->addGroup($group, '', get_lang('FieldChangeability'), null, false);
 
         $group   = array();
         $group[] = $form->createElement('radio', 'filter', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'filter', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('FieldFilter'), '', false);
+        $form->addGroup($group, '', get_lang('FieldFilter'), null, false);
 
         /* Enable this when field_loggeable is introduced as a table field (2.0)
         $group   = array();

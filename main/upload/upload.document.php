@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Process part of the document sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.
@@ -9,6 +10,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
+$_course = api_get_course_info();
 $courseDir = $_course['path'] . "/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path . $courseDir;
@@ -17,7 +19,7 @@ $max_filled_space = DocumentManager::get_course_quota();
 
 //what's the current path?
 if (isset($_POST['curdirpath'])) {
-    $path = $_POST['curdirpath'];
+    $path = Security::remove_XSS($_POST['curdirpath']);
 } else {
     $path = '/';
 }
@@ -31,12 +33,9 @@ if (!DocumentManager::get_document_id($_course, $path)) {
 /**
  *	Header
  */
-
 $nameTools = get_lang('UplUploadDocument');
 $interbreadcrumb[] = array(
-    "url" => "./document.php?curdirpath=" . urlencode(
-            $path
-        ) . $req_gid,
+    "url" => api_get_path(WEB_CODE_PATH)."document/document.php?curdirpath=" . urlencode($path) . '&'.api_get_cidreq(),
     "name" => $langDocuments
 );
 Display::display_header($nameTools, "Doc");
@@ -56,26 +55,30 @@ if (isset($_FILES['user_upload'])) {
             $_FILES['user_upload'],
             $base_work_dir,
             $_POST['curdirpath'],
-            $_user['user_id'],
+            api_get_user_id(),
             $to_group_id,
             $to_user_id,
             $_POST['unzip'],
             $_POST['if_exists']
         );
-    	$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
-    	$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
+    	$new_comment = isset($_POST['comment']) ? Database::escape_string(trim($_POST['comment'])) : '';
+    	$new_title = isset($_POST['title']) ? Database::escape_string(trim($_POST['title'])) : '';
 
     	if ($new_path && ($new_comment || $new_title))
     	if (($docid = DocumentManager::get_document_id($_course, $new_path))) {
         	$table_document = Database::get_course_table(TABLE_DOCUMENT);
         	$ct = '';
-        	if ($new_comment) $ct .= ", comment='$new_comment'";
-        	if ($new_title)   $ct .= ", title='$new_title'";
+            if ($new_comment) {
+                $ct .= ", comment='$new_comment'";
+            }
+            if ($new_title) {
+                $ct .= ", title='$new_title'";
+            }
         	Database::query("UPDATE $table_document SET" . substr($ct, 1) ." WHERE id = '$docid'");
     	}
         //check for missing images in html files
         $missing_files = check_for_missing_files($base_work_dir.$_POST['curdirpath'].$new_path);
-        if ($missing_files)  {
+        if ($missing_files) {
             //show a form to upload the missing files
             Display::display_normal_message(
                 build_missing_files_form(
@@ -94,10 +97,10 @@ if (isset($_POST['submit_image'])) {
     if ($number_of_uploaded_images > 0) {
         //we could also create a function for this, I'm not sure...
         //create a directory for the missing files
-        $img_directory = str_replace('.','_',$_POST['related_file']."_files");
+        $img_directory = str_replace('.', '_', $_POST['related_file']."_files");
         $folderData = create_unexisting_directory(
             $_course,
-            $_user['user_id'],
+            api_get_user_id(),
             api_get_session_id(),
             $to_group_id,
             $to_user_id,
@@ -116,6 +119,7 @@ if (isset($_POST['submit_image'])) {
             $to_user_id,
             $max_filled_space
         );
+
         //open the html file and replace the paths
         replace_img_path_in_html_file(
             $_POST['img_file_path'],
@@ -123,16 +127,16 @@ if (isset($_POST['submit_image'])) {
             $base_work_dir . $_POST['related_file']
         );
         //update parent folders
-        item_property_update_on_folder($_course,$_POST['curdirpath'],$_user['user_id']);
+        item_property_update_on_folder($_course, $_POST['curdirpath'], $_user['user_id']);
     }
 }
 //they want to create a directory
 if (isset($_POST['create_dir']) && $_POST['dirname']!='') {
-	$added_slash = ($path=='/')?'':'/';
+    $added_slash = $path == '/' ? '' : '/';
 	$dir_name = $path.$added_slash.api_replace_dangerous_char($_POST['dirname']);
     $created_dir = create_unexisting_directory(
         $_course,
-        $_user['user_id'],
+        api_get_user_id(),
         api_get_session_id(),
         $to_group_id,
         $to_user_id,
@@ -144,7 +148,7 @@ if (isset($_POST['create_dir']) && $_POST['dirname']!='') {
         Display::display_normal_message(get_lang('DirCr'));
         $path = $created_dir;
     } else {
-        display_error(get_lang('CannotCreateDir'));
+        Display::addFlash(Display::return_message(get_lang('CannotCreateDir')));
     }
 }
 
@@ -203,7 +207,6 @@ if (isset($_GET['createdir'])) {
 &nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="nothing" title="<?php echo (get_lang('UplDoNothingLong'));?>" checked="checked"/>  <?php echo (get_lang('UplDoNothing'));?><br/>
 &nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="overwrite" title="<?php echo (get_lang('UplOverwriteLong'));?>"/> <?php echo (get_lang('UplOverwrite'));?><br/>
 &nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="rename" title="<?php echo (get_lang('UplRenameLong'));?>"/> <?php echo (get_lang('UplRename'));?>
-
 </td>
 </tr>
 </table>

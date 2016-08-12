@@ -61,6 +61,8 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     {
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('file');
+
+
     } //end constructor
 
     // }}}
@@ -161,7 +163,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         switch ($event) {
             case 'updateValue':
                 if ($caller->getAttribute('method') == 'get') {
-                    return PEAR::raiseError('Cannot add a file upload field to a GET method form');
+                    throw new \Exception('Cannot add a file upload field to a GET method form');
                 }
                 $this->_value = $this->_findValue();
                 $caller->updateAttributes(array('enctype' => 'multipart/form-data'));
@@ -266,4 +268,83 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             return null;
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getElementJS($param)
+    {
+        $id = $this->getAttribute('id');
+        $ratio = '16 / 9';
+        if (!empty($param['ratio'])) {
+            $ratio = $param['ratio'];
+        }
+        return '<script>
+        $(document).ready(function() {
+            var $image = $("#'.$id.'_preview_image");
+            var $input = $("[name=\''.$id.'_crop_result\']");
+            var $cropButton = $("#'.$id.'_crop_button");
+            var canvas = "";
+            var imageWidth = "";
+            var imageHeight = "";
+            
+            $("#'.$id.'").change(function() {
+                var oFReader = new FileReader();
+                oFReader.readAsDataURL(document.getElementById("'.$id.'").files[0]);
+        
+                oFReader.onload = function (oFREvent) {
+                    $image.attr("src", this.result);
+                    $("#'.$id.'_label_crop_image").html("'.get_lang('Preview').'");
+                    $("#'.$id.'_crop_image").addClass("thumbnail");
+                    $cropButton.removeClass("hidden");
+                    // Destroy cropper
+                    $image.cropper("destroy");
+        
+                    $image.cropper({
+                        aspectRatio: ' . $ratio . ',
+                        responsive : true,
+                        center : false,
+                        guides : false,
+                        movable: false,
+                        zoomable: false,
+                        rotatable: false,
+                        scalable: false,
+                        crop: function(e) {
+                            // Output the result data for cropping image.
+                            $input.val(e.x+","+e.y+","+e.width+","+e.height);
+                        }
+                    });
+                };
+            });
+            
+            $("#'.$id.'_crop_button").on("click", function() {
+                var canvas = $image.cropper("getCroppedCanvas");
+                var dataUrl = canvas.toDataURL();
+                $image.attr("src", dataUrl);
+                $image.cropper("destroy");
+                $cropButton.addClass("hidden");
+                return false;
+            });
+        });
+        </script>';
+    }
+
+    public function toHtml()
+    {
+        $js = '';
+        if (isset($this->_attributes['crop_image'])) {
+            $ratio = '16 / 9';
+            if (!empty($this->_attributes['crop_ratio'])) {
+                $ratio = $this->_attributes['crop_ratio'];
+            }
+            $js = $this->getElementJS(array('ratio' => $ratio));
+        }
+
+        if ($this->_flagFrozen) {
+            return $this->getFrozenHtml();
+        } else {
+            return $js.$this->_getTabs() . '<input' . $this->_getAttrString($this->_attributes) . ' />';
+        }
+    } //end func toHtml
+
 }

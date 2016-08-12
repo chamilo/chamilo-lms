@@ -6,16 +6,6 @@ See https://support.chamilo.org/issues/6976
 /* LP SCORM */
 /* Default LP left column values */
 
-#learning_path_left_zone {
-
-}
-
-#learning_path_left_zone #header {
-
-}
-#scorm-info.panel-default{
-
-}
 .audio-scorm #container{
     min-height: 45px;
     margin-bottom: 5px;
@@ -58,7 +48,6 @@ See https://support.chamilo.org/issues/6976
 #learning_path_left_zone .description-autor{
 
 }
-
 .inner_lp_toc .scorm_item a {
     font-weight: bold;
     font-size: 14px;
@@ -67,7 +56,6 @@ See https://support.chamilo.org/issues/6976
     text-decoration: none;
     color: #2F3E46;
 }
-
 .inner_lp_toc .scorm_item a.chapter_module {
     font-weight: normal;
     margin-right: 10px;
@@ -87,14 +75,12 @@ See https://support.chamilo.org/issues/6976
     padding: 10px 0px 10px 0px;
     text-decoration: none;
 }
-
 .inner_lp_toc .scorm_item_highlight a {
     color:#fff;
     margin-right: 1px;
     text-decoration: none;
     font-weight: bold;
 }
-
 .inner_lp_toc .scorm_item_section {
     background:#E8ECEF;
     color:#666;
@@ -102,7 +88,6 @@ See https://support.chamilo.org/issues/6976
     font-size: 12px;
     font-weight: bold;
 }
-
 .inner_lp_toc .scorm_item {
     font-size: 16px;
     margin-left: 10px;
@@ -110,65 +95,47 @@ See https://support.chamilo.org/issues/6976
     text-decoration: none;
     border-color: rgba(255, 255, 255, 0.3);
 }
-
 .inner_lp_toc .scorm_item_section .scorm_item:before {
     content : url('../../main/img/lp_section.png');  /* path from main/lp/lp_controller.php file */
     vertical-align: text-top;
     margin-right : 5px;
 }
-
 /* learning path's classes for section and item for 5 levels of depth */
-
 .scorm_section_level_0 {
     padding : 0 0 0 0;
 }
-
 .scorm_section_level_1 {
     padding : 0 0.5em 0 2em;
 }
-
 .scorm_section_level_2 {
     padding : 0 0.5em 0 4em;
 }
-
 .scorm_section_level_3 {
     padding : 0 0.5em 0 6em;
 }
-
 .scorm_section_level_4 {
     padding : 0 0.5em 0 8em;
 }
-
 .scorm_section_level_5 {
     padding : 0 0.5em 0 10em;
 }
-
 .scorm_item_level_0 {
     padding : 0 0 0 0;
 }
-
 .scorm_item_level_1 {
     padding : 0 0.5em 0 1.5em;
 }
-
 .scorm_item_level_2 {
     padding : 0 0.5em 0 3em;
 }
-
 .scorm_item_level_3 {
     padding : 0 0.5em 0 4.5em;
 }
-
 .scorm_item_level_4 {
     padding : 0 0.5em 0 6em;
 }
-
 .scorm_item_level_5 {
     padding : 0 0.5em 0 7.5em;
-}
-
-#learning_path_right_zone{
-
 }
 #learning_path_breadcrumb_zone .breadcrumb{
   background-color: #2b3d53;
@@ -186,15 +153,7 @@ See https://support.chamilo.org/issues/6976
   color: #dddddd;
 }
 #view_as_link{
-  margin-top: 5px;
   margin-right: 10px;
-}
-#learning_path_left_zone #ui-option{
-
-}
-.sidebar-scorm,
-.content-scorm{
-
 }
 .total{
   width: 100%;
@@ -205,7 +164,6 @@ See https://support.chamilo.org/issues/6976
 .panel-default .panel-heading .dropdown-menu{
   top: 30%;
 }
-
 .scorm-heading{
   font-size: 14px;
   padding-top: 5px;

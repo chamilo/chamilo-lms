@@ -1902,11 +1902,11 @@ class TicketManager
      */
     public static function getStatusList()
     {
-        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Status')->findAll();
+        $items = Database::getManager()->getRepository('ChamiloTicketBundle:Status')->findAll();
 
         $list = [];
         /** @var \Chamilo\TicketBundle\Entity\Status $row */
-        foreach ($projects as $row) {
+        foreach ($items as $row) {
             $list[$row->getId()] = $row->getName();
         }
 
@@ -1977,9 +1977,6 @@ class TicketManager
 
         return $list;
     }
-
-
-
 
     /**
      * @return int
@@ -2056,5 +2053,270 @@ class TicketManager
         $form->addButtonUpdate(get_lang('Save'));
 
         return $form;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatusAdminList()
+    {
+        $items = Database::getManager()->getRepository('ChamiloTicketBundle:Status')->findAll();
+
+        $list = [];
+        /** @var Status $row */
+        foreach ($items as $row) {
+            $list[] = [
+                'id' => $row->getId(),
+                '0' => $row->getId(),
+                '1' => $row->getName(),
+                '2' => $row->getDescription(),
+                '3' => $row->getId()
+            ];
+        }
+
+        return $list;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatusSimple()
+    {
+        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Status')->findAll();
+
+        $list = [];
+        /** @var Project $row */
+        foreach ($projects as $row) {
+            $list[] = [
+                'id' => $row->getId(),
+                '0' => $row->getId(),
+                '1' => Display::url($row->getName()),
+                '2' => $row->getDescription()
+            ];
+        }
+
+        return $list;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getStatusCount()
+    {
+        $count = Database::getManager()->getRepository('ChamiloTicketBundle:Status')->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $count;
+    }
+
+    /**
+     * @param array $params
+     */
+    public static function addStatus($params)
+    {
+        $item = new Status();
+        $item->setCode(URLify::filter($params['name']));
+        $item->setName($params['name']);
+        $item->setDescription($params['description']);
+
+        Database::getManager()->persist($item);
+        Database::getManager()->flush();
+    }
+
+    /**
+     * @param $id
+     * @return Project
+     */
+    public static function getStatus($id)
+    {
+        return Database::getManager()->getRepository('ChamiloTicketBundle:Status')->find($id);
+    }
+
+    /**
+     * @param int $id
+     * @param array $params
+     */
+    public static function updateStatus($id, $params)
+    {
+        $item = self::getStatus($id);
+        $item->setName($params['name']);
+        $item->setDescription($params['description']);
+
+        Database::getManager()->merge($item);
+        Database::getManager()->flush();
+    }
+
+    /**
+     * @param int $id
+     */
+    public static function deleteStatus($id)
+    {
+        $item = self::getStatus($id);
+        Database::getManager()->remove($item);
+        Database::getManager()->flush();
+    }
+
+    /**
+     * @param string $url
+     * @return FormValidator
+     */
+    public static function getStatusForm($url)
+    {
+        $form = new FormValidator('status', 'post', $url);
+        $form->addText('name', get_lang('Name'));
+        $form->addHtmlEditor('description', get_lang('Description'));
+        $form->addButtonUpdate(get_lang('Save'));
+
+        return $form;
+    }
+
+    //
+
+    /**
+     * @return array
+     */
+    public static function getPriorityAdminList()
+    {
+        $items = Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->findAll();
+
+        $list = [];
+        /** @var Status $row */
+        foreach ($items as $row) {
+            $list[] = [
+                'id' => $row->getId(),
+                '0' => $row->getId(),
+                '1' => $row->getName(),
+                '2' => $row->getDescription(),
+                '3' => $row->getId()
+            ];
+        }
+
+        return $list;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPrioritySimple()
+    {
+        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->findAll();
+
+        $list = [];
+        /** @var Priority $row */
+        foreach ($projects as $row) {
+            $list[] = [
+                'id' => $row->getId(),
+                '0' => $row->getId(),
+                '1' => Display::url($row->getName()),
+                '2' => $row->getDescription()
+            ];
+        }
+
+        return $list;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getPriorityCount()
+    {
+        $count = Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $count;
+    }
+
+    /**
+     * @param array $params
+     */
+    public static function addPriority($params)
+    {
+        $item = new Priority();
+        $item
+            ->setCode(URLify::filter($params['name']))
+            ->setName($params['name'])
+            ->setDescription($params['description'])
+            ->setColor('')
+            ->setInsertUserId(api_get_user_id())
+            ->setUrgency('')
+        ;
+
+        Database::getManager()->persist($item);
+        Database::getManager()->flush();
+    }
+
+    /**
+     * @param $id
+     * @return Priority
+     */
+    public static function getPriority($id)
+    {
+        return Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->find($id);
+    }
+
+    /**
+     * @param int $id
+     * @param array $params
+     */
+    public static function updatePriority($id, $params)
+    {
+        $item = self::getPriority($id);
+        $item->setName($params['name']);
+        $item->setDescription($params['description']);
+
+        Database::getManager()->merge($item);
+        Database::getManager()->flush();
+    }
+
+    /**
+     * @param int $id
+     */
+    public static function deletePriority($id)
+    {
+        $item = self::getStatus($id);
+        Database::getManager()->remove($item);
+        Database::getManager()->flush();
+    }
+
+    /**
+     * @param string $url
+     * @return FormValidator
+     */
+    public static function getPriorityForm($url)
+    {
+        $form = new FormValidator('priority', 'post', $url);
+        $form->addText('name', get_lang('Name'));
+        $form->addHtmlEditor('description', get_lang('Description'));
+        $form->addButtonUpdate(get_lang('Save'));
+
+        return $form;
+    }
+
+    public static function getSettingsMenu()
+    {
+        $items = [
+            [
+                'url' => 'projects.php',
+                'content' => get_lang('Projects')
+            ],
+            [
+                'url' => 'categories.php',
+                'content' => get_lang('Categories')
+            ],
+            [
+                'url' => 'status.php',
+                'content' => get_lang('Status')
+            ],
+            [
+                'url' => 'priorities.php',
+                'content' => get_lang('Priority')
+            ]
+        ];
+
+        echo Display::actions($items);
     }
 }

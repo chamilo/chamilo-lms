@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
+use ChamiloSession as Session;
+
 /**
 * This file displays the user's profile,
 * optionally it allows users to modify their profile as well.
@@ -9,9 +12,6 @@
 *
 * @package chamilo.auth
 */
-
-use Chamilo\UserBundle\Entity\User;
-use ChamiloSession as Session;
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
@@ -38,48 +38,6 @@ $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/d
 $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true" ></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
-    var $image = $("#previewImage");
-    var $input = $("[name=\'cropResult\']");
-    var $cropButton = $("#cropButton");
-    
-    $("input:file").change(function() {
-        var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("picture_form").files[0]);
-
-        oFReader.onload = function (oFREvent) {
-            $image.attr("src", this.result);
-            $("#labelCropImage").html("'.get_lang('Preview').'");
-            $("#cropImage").addClass("thumbnail");
-            $cropButton.removeClass("hidden");
-            // Destroy cropper
-            $image.cropper("destroy");
-
-            $image.cropper({
-                aspectRatio: 1 / 1,
-                responsive : true,
-                center : false,
-                guides : false,
-                movable: false,
-                zoomable: false,
-                rotatable: false,
-                scalable: false,
-                crop: function(e) {
-                    // Output the result data for cropping image.
-                    $input.val(e.x+","+e.y+","+e.width+","+e.height);
-                }
-            });
-        };
-    });
-
-    $("#cropButton").on("click", function() {
-        var canvas = $image.cropper("getCroppedCanvas");
-        var dataUrl = canvas.toDataURL();
-        $image.attr("src", dataUrl);
-        $image.cropper("destroy");
-        $cropButton.addClass("hidden");
-        return false;
-    });
-
     $("id_generate_api_key").on("click", function (e) {
         e.preventDefault();
 
@@ -107,7 +65,6 @@ function show_image(image,width,height) {
     width = parseInt(width) + 20;
     height = parseInt(height) + 20;
     window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
-
 }
 
 function hide_icon_edit(element_html)  {
@@ -119,12 +76,6 @@ function show_icon_edit(element_html) {
     $(ident).show();
 }
 </script>';
-
-$warning_msg = '';
-if (!empty($_GET['fe'])) {
-    $warning_msg .= get_lang('UplUnableToSaveFileFilteredExtension');
-    $_GET['fe'] = null;
-}
 
 $jquery_ready_content = '';
 if (api_get_setting('allow_message_tool') == 'true') {
@@ -259,12 +210,7 @@ if ($user_data !== false) {
 /*
  * Initialize the form.
  */
-$form = new FormValidator(
-    'profile',
-    'post',
-    api_get_self()."?".str_replace('&fe=1', '', Security::remove_XSS($_SERVER['QUERY_STRING'])),
-    null
-);
+$form = new FormValidator('profile');
 
 if (api_is_western_name_order()) {
     //    FIRST NAME and LAST NAME
@@ -305,7 +251,7 @@ $form->addRule('username', get_lang('UsernameWrong'), 'username');
 $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 
 //    OFFICIAL CODE
-if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
+if (defined('CONFVAL_ASK_FOR_OFFICIAL_CODE') && CONFVAL_ASK_FOR_OFFICIAL_CODE === true) {
     $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
     if (api_get_setting('profile', 'officialcode') !== 'true') {
         $form->freeze('official_code');
@@ -313,7 +259,9 @@ if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
     $form->applyFilter('official_code', 'stripslashes');
     $form->applyFilter('official_code', 'trim');
     $form->applyFilter('official_code', 'html_filter');
-    if (api_get_setting('registration', 'officialcode') == 'true' && api_get_setting('profile', 'officialcode') == 'true') {
+    if (api_get_setting('registration', 'officialcode') == 'true' && api_get_setting('profile',
+            'officialcode') == 'true'
+    ) {
         $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
     }
 }
@@ -378,33 +326,19 @@ if ($userGeolocalization) {
 
 //  PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
-    $form->addElement(
-        'file',
+    $form->addFile(
         'picture',
         ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang(
             'AddImage'
         )),
-        array('id' => 'picture_form', 'class' => 'picture-form')
+        array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1')
     );
-    $form->addHtml(''
-                . '<div class="form-group">'
-                    . '<label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>'
-                        . '<div class="col-sm-8">'
-                            . '<div id="cropImage" class="cropCanvas">'
-                                . '<img id="previewImage" >'
-                            . '</div>'
-                            . '<div>'
-                                . '<button class="btn btn-primary hidden" name="cropButton" id="cropButton"><em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>'
-                            . '</div>'
-                        . '</div>'
-                . '</div>'
-    . '');
-    $form->addHidden('cropResult', '');
+
     $form->add_progress_bar();
     if (!empty($user_data['picture_uri'])) {
         $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
     }
-    $allowed_picture_types = api_get_supported_image_extensions();
+    $allowed_picture_types = api_get_supported_image_extensions(false);
     $form->addRule(
         'picture',
         get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowed_picture_types).')',
@@ -566,7 +500,7 @@ function is_platform_authentication() {
  * @return    boolean    Editability of the profile
  */
 function is_profile_editable() {
-    return $GLOBALS['profileIsEditable'];
+    return (empty($GLOBALS['profileIsEditable']) ? false : $GLOBALS['profileIsEditable']);
 }
 
 /*
@@ -691,7 +625,7 @@ if ($form->validate()) {
             api_get_user_id(),
             $_FILES['picture']['name'],
             $_FILES['picture']['tmp_name'],
-            $user_data['cropResult']
+            $user_data['picture_crop_result']
         );
 
         if ($new_picture) {

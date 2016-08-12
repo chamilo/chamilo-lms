@@ -24,16 +24,6 @@ Display::display_header($tool_name);
 
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 if ($allowTutors == 'true') {
-
-    $error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
-    if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
-        $error_message = Security::remove_XSS($_GET['message']);
-    }
-
-    if (!empty($error_message)) {
-        Display::display_normal_message($error_message, false);
-    }
-
     //jqgrid will use this URL to do the selects
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&from_course_session=1';
     if (isset($_REQUEST['keyword'])) {

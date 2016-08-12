@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This is a code library for Chamilo.
  * It is included by default in every Chamilo file (through including the global.inc.php)
  *
  * @package chamilo.library
  */
-
-use ChamiloSession as Session;
 
 /**
  * Constants declaration
@@ -121,7 +121,6 @@ define('TOOL_USER', 'user');
 define('TOOL_GROUP', 'group');
 define('TOOL_BLOGS', 'blog_management');
 define('TOOL_CHAT', 'chat');
-define('TOOL_CONFERENCE', 'conference');
 define('TOOL_STUDENTPUBLICATION', 'student_publication');
 define('TOOL_TRACKING', 'tracking');
 define('TOOL_HOMEPAGE_LINK', 'homepage_link');
@@ -133,9 +132,6 @@ define('TOOL_COURSE_HOMEPAGE', 'course_homepage');
 define('TOOL_COURSE_RIGHTS_OVERVIEW', 'course_rights');
 define('TOOL_UPLOAD', 'file_upload');
 define('TOOL_COURSE_MAINTENANCE', 'course_maintenance');
-define('TOOL_VISIO', 'visio');
-define('TOOL_VISIO_CONFERENCE', 'visio_conference');
-define('TOOL_VISIO_CLASSROOM', 'visio_classroom');
 define('TOOL_SURVEY', 'survey');
 define('TOOL_WIKI', 'wiki');
 define('TOOL_GLOSSARY', 'glossary');
@@ -428,7 +424,6 @@ define('GROUP_IMAGE_SIZE_ORIGINAL', 1);
 define('GROUP_IMAGE_SIZE_BIG', 2);
 define('GROUP_IMAGE_SIZE_MEDIUM', 3);
 define('GROUP_IMAGE_SIZE_SMALL', 4);
-
 define('GROUP_TITLE_LENGTH', 50);
 
 // Exercise
@@ -607,6 +602,7 @@ define('RESOURCE_WORK', 'work');
 define('RESOURCE_SESSION_COURSE', 'session_course');
 define('RESOURCE_GRADEBOOK', 'gradebook');
 
+define('ADD_THEMATIC_PLAN', 6);
 
 // Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
 // To remove CKeditor libs from HTML, set this constant to true before loading
@@ -1656,16 +1652,25 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true)
     return $url;
 }
 
+/**
+ * get gradebook in session
+ */
 function api_is_in_gradebook()
 {
     return Session::read('in_gradebook', false);
 }
 
+/**
+ * set gradebook session
+ */
 function api_set_in_gradebook()
 {
     Session::write('in_gradebook', true);
 }
 
+/**
+ * remove gradebook session
+ */
 function api_remove_in_gradebook()
 {
     Session::erase('in_gradebook');
@@ -1820,7 +1825,7 @@ function api_format_course_array($course_data)
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic.png';
     } else {
-        $url_image = Display::return_icon('session_default.png', null, null, null, null, true);
+        $url_image = Display::returnIconPath('session_default.png');
     }
     $_course['course_image_large'] = $url_image;
 
@@ -1969,35 +1974,6 @@ function get_status_from_code($status_code) {
     }
 }
 
-/* FAILURE MANAGEMENT */
-
-/**
- * The Failure Management module is here to compensate
- * the absence of an 'exception' device in PHP 4.
- */
-
-/**
- * $api_failureList - array containing all the failure recorded in order of arrival.
- */
-$api_failureList = array();
-
-/**
- * Fills a global array called $api_failureList
- * This array collects all the failure occuring during the script runs
- * The main purpose is allowing to manage the display messages externaly
- * from the functions or objects. This strengthens encupsalation principle
- *
- * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  string $failure_type - the type of failure
- * global: array $api_failureList
- * @return boolean false to stay consistent with the main script
- */
-function api_set_failure($failure_type) {
-    global $api_failureList;
-    $api_failureList[] = $failure_type;
-    return false;
-}
-
 /**
  * Sets the current user as anonymous if it hasn't been identified yet. This
  * function should be used inside a tool only. The function api_clear_anonymous()
@@ -2022,67 +1998,6 @@ function api_set_anonymous() {
     Session::write('_user', $_user);
     return true;
 }
-
-/**
- * Gets the last failure stored in $api_failureList;
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- * @param void
- * @return string - the last failure stored
- */
-function api_get_last_failure() {
-    global $api_failureList;
-    return $api_failureList[count($api_failureList) - 1];
-}
-
-/**
- * Collects and manages failures occurring during script execution
- * The main purpose is allowing to manage the display messages externally
- * from functions or objects. This strengthens encapsulation principle
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- * @package chamilo.library
- */
-class api_failure {
-
-    // TODO: $api_failureList to be hidden from global scope and to be renamed according to our coding conventions.
-    /**
-     * IMPLEMENTATION NOTE : For now the $api_failureList list is set to the
-     * global scope, as PHP 4 is unable to manage static variable in class. But
-     * this feature is awaited in PHP 5. The class is already written to minize
-     * the change when static class variable will be possible. And the API won't
-     * change.
-     */
-    public $api_failureList = array();
-
-    /**
-     * Piles the last failure in the failure list
-     *
-     * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
-     * @param  string $failure_type - the type of failure
-     * @global array  $api_failureList
-     * @return boolean false to stay consistent with the main script
-     */
-    static function set_failure($failure_type) {
-        global $api_failureList;
-        $api_failureList[] = $failure_type;
-        return false;
-    }
-
-    /**
-     * Gets the last failure stored
-     *
-     * @author Hugues Peeters <hugues.peeters@claroline.net>
-     * @param void
-     * @return string - the last failure stored
-     */
-    static function get_last_failure() {
-        global $api_failureList;
-        if (count($api_failureList) == 0) { return ''; }
-        return $api_failureList[count($api_failureList) - 1];
-    }
-}
-
 
 /* CONFIGURATION SETTINGS */
 
@@ -2913,7 +2828,6 @@ function api_display_tool_view_option() {
             $sourceurl = api_get_self().'?'.api_get_cidreq();
         } else {
             $sourceurl = $_SERVER['REQUEST_URI'];
-            //$sourceurl = str_replace('&', '&amp;', $sourceurl);
         }
     }
 
@@ -2923,17 +2837,18 @@ function api_display_tool_view_option() {
             // We have to remove the isStudentView=true from the $sourceurl
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a class="btn btn-success btn-xs" href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('SwitchToTeacherView').'</a>';
+            $output_string .= '<a class="btn btn-primary btn-sm" href="'.$sourceurl.'&isStudentView=false" target="_self">'.Display::returnFontAwesomeIcon('eye').' '.get_lang('SwitchToTeacherView').'</a>';
         } elseif ($_SESSION['studentview'] == 'teacherview') {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a class="btn btn-primary btn-xs" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('SwitchToStudentView').'</a>';
+            $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.Display::returnFontAwesomeIcon('eye').' '.get_lang('SwitchToStudentView').'</a>';
         }
     } else {
-        $output_string .= '<a class="btn btn-primary btn-xs" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('SwitchToStudentView').'</a>';
+        $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.Display::returnFontAwesomeIcon('eye').' '.get_lang('SwitchToStudentView').'</a>';
     }
-    return $output_string;
+    $html = Display::tag('div', $output_string, array('class'=>'view-options'));
+    return $html;
 }
 
 // TODO: This is for the permission section.
@@ -3281,8 +3196,18 @@ function api_not_allowed($print_headers = false, $message = null)
             array(),
             FormValidator::LAYOUT_BOX_NO_LABEL
         );
-        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'autocapitalize_off'));
-        $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password')));
+        $form->addElement(
+            'text',
+            'login',
+            null,
+            array('placeholder' => get_lang('UserName'), 'autocapitalize' => 'none')
+        );
+        $form->addElement(
+            'password',
+            'password',
+            null,
+            array('placeholder' => get_lang('Password'), 'autocapitalize' => 'none')
+        );
         $form->addButton('submitAuth', get_lang('LoginEnter'), '', 'primary');
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (above)
@@ -3299,8 +3224,8 @@ function api_not_allowed($print_headers = false, $message = null)
             $content .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
             $content .= "<div style='display:none;'>";
         }
-        $content .= '<div class="well_login">';
-        $content .= $form->return_form();
+        $content .= '<div class="well">';
+        $content .= $form->returnForm();
         $content .='</div>';
         if (api_is_cas_activated()) {
             $content .= "</div>";
@@ -3311,7 +3236,7 @@ function api_not_allowed($print_headers = false, $message = null)
                 get_lang('ReturnToCourseHomepage').'</a></p>';
         } else {
             $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.
-                get_lang('CampusHomepage').'</a></p>';
+                get_lang('BackHome').'</a></p>';
         }
 
         $tpl->setLoginBodyClass();
@@ -3320,7 +3245,7 @@ function api_not_allowed($print_headers = false, $message = null)
         exit;
     }
 
-    if ($user_id !=0 && !api_is_anonymous()) {
+    if ($user_id != 0 && !api_is_anonymous()) {
         $tpl->display_one_col_template();
         exit;
     }
@@ -3329,20 +3254,22 @@ function api_not_allowed($print_headers = false, $message = null)
 
     // The session is over and we were not in a course,
     // or we try to get directly to a private course without being logged
-    if (!is_null(api_get_course_int_id())) {
+    $courseId = api_get_course_int_id();
+    if (!empty($courseId)) {
         api_set_firstpage_parameter(api_get_course_id());
         $tpl->setLoginBodyClass();
         $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
         $action = str_replace('&amp;', '&', $action);
         $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
-        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'col-md-3 autocapitalize_off')); //new
+        $form->addElement('text', 'login', null, array('autocapitalize' => 'none', 'placeholder' => get_lang('UserName'), 'class' => 'col-md-3'));
         $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'col-md-3')); //new
         $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
         $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
         $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
-        if (api_is_cas_activated()) {
+        $casEnabled = api_is_cas_activated();
+        if ($casEnabled) {
             $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
             $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
             $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
@@ -3352,14 +3279,15 @@ function api_not_allowed($print_headers = false, $message = null)
         $msg .= '<div class="well">';
         $msg .= $form->return_form();
         $msg .='</div>';
-        if (api_is_cas_activated()) {
+        if ($casEnabled) {
             $msg .= "</div>";
         }
-        $msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
+
+        //$msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
     } else {
         // we were not in a course, return to home page
         $msg = Display::return_message(
-            get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a><br />',
+            get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('BackHome').'</a><br />',
             'error',
             false
         );
@@ -3574,6 +3502,8 @@ function api_item_property_update(
     if (empty($course_id)) {
         return false;
     }
+
+    $em = Database::getManager();
 
     // Definition of variables.
     $tool = Database::escape_string($tool);
@@ -3794,14 +3724,41 @@ function api_item_property_update(
 
     // Insert if no entries are found (can only happen in case of $last_edit_type switch is 'default').
     if ($result == false || Database::affected_rows($result) == 0) {
-        $sessionCondition = empty($session_id) ? "NULL" : "'$session_id'";
-        $sql = "INSERT INTO $tableItemProperty (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
-                VALUES ($course_id, '$tool', $item_id, '$time', $user_id, '$time', '$last_edit_type', $user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $sessionCondition)";
-        Database::query($sql);
-        $id = Database::insert_id();
+        $objCourse = $em->find('ChamiloCoreBundle:Course', intval($course_id));
+        $objTime = new DateTime('now', new DateTimeZone('UTC'));
+        $objUser = $em->find('ChamiloUserBundle:User', intval($user_id));
+        $objGroup = $em->find('ChamiloCourseBundle:CGroupInfo', intval($to_group_id));
+        $objToUser = $em->find('ChamiloUserBundle:User', intval($to_user_id));
+        $objSession = $em->find('ChamiloCoreBundle:Session', intval($session_id));
+
+        $startVisibleDate = !empty($start_visible) ? new DateTime($start_visible, new DateTimeZone('UTC')) : null;
+        $endVisibleDate = !empty($endVisibleDate) ? new DateTime($endVisibleDate, new DateTimeZone('UTC')) : null;
+
+        $cItemProperty = new \Chamilo\CourseBundle\Entity\CItemProperty($objCourse);
+        $cItemProperty
+            ->setTool($tool)
+            ->setRef($item_id)
+            ->setInsertDate($objTime)
+            ->setInsertUser($objUser)
+            ->setLasteditDate($objTime)
+            ->setLasteditType($last_edit_type)
+            ->setGroup($objGroup)
+            ->setToUser($objToUser)
+            ->setVisibility($visibility)
+            ->setStartVisible($startVisibleDate)
+            ->setEndVisible($endVisibleDate)
+            ->setSession($objSession);
+
+        $em->persist($cItemProperty);
+        $em->flush();
+
+        $id = $cItemProperty->getIid();
+
         if ($id) {
-            $sql = "UPDATE $tableItemProperty SET id = iid WHERE iid = $id";
-            Database::query($sql);
+            $cItemProperty->setId($id);
+            $em->merge($cItemProperty);
+            $em->flush();
+
             return false;
         }
     }
@@ -5655,48 +5612,13 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
  * Replaces "forbidden" characters in a filename string.
  *
  * @param string $filename
+ * @param bool $treat_spaces_as_hyphens
  *
  * @return string
  */
-function api_replace_dangerous_char($filename)
+function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
 {
-    return URLify::filter($filename, 250, '', true);
-
-    /*
-    // Safe replacements for some non-letter characters.
-    static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
-    static $replace = array('_', '', '_', '_', '_', '_', '_', '-', '-', '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
-
-    // Encoding detection.
-    $encoding = api_detect_encoding($filename);
-    // Converting html-entities into encoded characters.
-    $filename = api_html_entity_decode($filename, ENT_QUOTES, $encoding);
-    // Transliteration to ASCII letters, they are not dangerous for filesystems.
-    $filename = api_transliterate($filename, 'x', $encoding);
-
-    // Trimming leading/trailing whitespace.
-    $filename = trim($filename);
-    // Trimming any leading/trailing dots.
-    $filename = trim($filename, '.');
-    $filename = trim($filename);
-
-    // Replacing remaining dangerous non-letter characters.
-    $filename = str_replace($search, $replace, $filename);
-    if ($strict == 'strict') {
-        //$filename = str_replace('-', '_', $filename); // See task #1848.
-        //$filename = preg_replace('/[^0-9A-Za-z_.\-]/', '', $filename);
-        //Removing "_" character see BT#3628
-        $filename = preg_replace('/[^0-9A-Za-z.\-_]/', '', $filename);
-    }
-
-    // Length is to be limited, so the file name to be acceptable by some operating systems.
-    $extension = (string)strrchr($filename, '.');
-    $extension_len = strlen($extension);
-    if ($extension_len > 0 && $extension_len < 250) {
-        $filename = substr($filename, 0, -$extension_len);
-        return substr($filename, 0, 250 - $extension_len).$extension;
-    }
-    return substr($filename, 0, 250);*/
+    return URLify::filter($filename, 250, '', true, true, false, false, $treat_spaces_as_hyphens);
 }
 
 /**
@@ -5960,15 +5882,42 @@ function api_calculate_image_size($image_width, $image_height, $target_width, $t
  */
 function api_get_tools_lists($my_tool = null) {
     $tools_list = array(
-        TOOL_DOCUMENT, TOOL_THUMBNAIL, TOOL_HOTPOTATOES,
-        TOOL_CALENDAR_EVENT, TOOL_LINK, TOOL_COURSE_DESCRIPTION, TOOL_SEARCH,
-        TOOL_LEARNPATH, TOOL_ANNOUNCEMENT, TOOL_FORUM, TOOL_THREAD, TOOL_POST,
-        TOOL_DROPBOX, TOOL_QUIZ, TOOL_USER, TOOL_GROUP, TOOL_BLOGS, TOOL_CHAT,
-        TOOL_CONFERENCE, TOOL_STUDENTPUBLICATION, TOOL_TRACKING, TOOL_HOMEPAGE_LINK,
-        TOOL_COURSE_SETTING, TOOL_BACKUP, TOOL_COPY_COURSE_CONTENT, TOOL_RECYCLE_COURSE,
-        TOOL_COURSE_HOMEPAGE, TOOL_COURSE_RIGHTS_OVERVIEW, TOOL_UPLOAD, TOOL_COURSE_MAINTENANCE,
-        TOOL_VISIO, TOOL_VISIO_CONFERENCE, TOOL_VISIO_CLASSROOM, TOOL_SURVEY, TOOL_WIKI,
-        TOOL_GLOSSARY, TOOL_GRADEBOOK, TOOL_NOTEBOOK, TOOL_ATTENDANCE, TOOL_COURSE_PROGRESS
+        TOOL_DOCUMENT,
+        TOOL_THUMBNAIL,
+        TOOL_HOTPOTATOES,
+        TOOL_CALENDAR_EVENT,
+        TOOL_LINK,
+        TOOL_COURSE_DESCRIPTION,
+        TOOL_SEARCH,
+        TOOL_LEARNPATH,
+        TOOL_ANNOUNCEMENT,
+        TOOL_FORUM,
+        TOOL_THREAD,
+        TOOL_POST,
+        TOOL_DROPBOX,
+        TOOL_QUIZ,
+        TOOL_USER,
+        TOOL_GROUP,
+        TOOL_BLOGS,
+        TOOL_CHAT,
+        TOOL_STUDENTPUBLICATION,
+        TOOL_TRACKING,
+        TOOL_HOMEPAGE_LINK,
+        TOOL_COURSE_SETTING,
+        TOOL_BACKUP,
+        TOOL_COPY_COURSE_CONTENT,
+        TOOL_RECYCLE_COURSE,
+        TOOL_COURSE_HOMEPAGE,
+        TOOL_COURSE_RIGHTS_OVERVIEW,
+        TOOL_UPLOAD,
+        TOOL_COURSE_MAINTENANCE,
+        TOOL_SURVEY,
+        TOOL_WIKI,
+        TOOL_GLOSSARY,
+        TOOL_GRADEBOOK,
+        TOOL_NOTEBOOK,
+        TOOL_ATTENDANCE,
+        TOOL_COURSE_PROGRESS,
     );
     if (empty($my_tool)) {
         return $tools_list;
@@ -6578,8 +6527,8 @@ function api_get_home_path()
             return "{$home}{$clean_url}";
         }
     }
+
     return $home;
-    // /FIX
 }
 
 /**
@@ -6666,7 +6615,6 @@ function api_get_locked_settings() {
         'server_type',
         'permanently_remove_deleted_files',
         'account_valid_duration',
-        'service_visio',
         'service_ppt2lp',
         'wcag_anysurfer_public_pages',
         'upload_extensions_list_type',
@@ -6679,7 +6627,6 @@ function api_get_locked_settings() {
         'permissions_for_new_directories',
         'permissions_for_new_files',
         'platform_charset',
-        'service_visio',
         'ldap_description',
         'cas_activate',
         'cas_server',
@@ -7600,12 +7547,16 @@ function api_get_configuration_value($variable)
 
 /**
  * Returns supported image extensions in the portal
+ * @param   bool    $supportVectors Whether vector images should also be accepted or not
  * @return  array   Supported image extensions in the portal
  */
-function api_get_supported_image_extensions()
+function api_get_supported_image_extensions($supportVectors = true)
 {
     // jpg can also be called jpeg, jpe, jfif and jif. See https://en.wikipedia.org/wiki/JPEG#JPEG_filename_extensions
-    $supportedImageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'svg', 'jpe', 'jfif', 'jif');
+    $supportedImageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'jpe', 'jfif', 'jif');
+    if ($supportVectors) {
+        array_push($supportedImageExtensions, 'svg');
+    }
     if (version_compare(PHP_VERSION, '5.5.0', '>=')) {
         array_push($supportedImageExtensions, 'webp');
     }
@@ -7816,7 +7767,7 @@ function api_mail_html(
     $mail->WordWrap = 200;
 
     if ($platform_email['SMTP_AUTH']) {
-        $mail->SMTPAuth = true;
+        $mail->SMTPAuth = 1;
         $mail->Username = $platform_email['SMTP_USER'];
         $mail->Password = $platform_email['SMTP_PASS'];
         if (isset($platform_email['SMTP_SECURE'])) {
@@ -8029,7 +7980,7 @@ function api_protect_course_group($tool, $showHeader = true)
  * @param datetime $currentDate
  * @return bool true if date is in rage, false otherwise
  */
-function apiIsDateInDateRange ($startDate, $endDate, $currentDate = null)
+function api_is_date_in_date_range($startDate, $endDate, $currentDate = null)
 {
     $startDate = strtotime(api_get_local_time($startDate));
     $endDate = strtotime(api_get_local_time($endDate));
@@ -8079,4 +8030,20 @@ function api_protect_limit_for_session_admin()
 
 function api_is_student_view_active() {
     return (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview");
+}
+
+/**
+ * Like strip_tags(), but leaves an additional space and removes only the given tags
+ * @param string $string
+ * @param array $tags Tags to be removed
+ * @return  string The original string without the given tags
+ */
+function stripGivenTags($string, $tags) {
+    foreach ($tags as $tag) {
+        $string2 = preg_replace('#</' . $tag . '[^>]*>#i', ' ', $string);
+        if ($string2 != $string) {
+            $string = preg_replace('/<' . $tag . '[^>]*>/i', ' ', $string2);
+        }
+    }
+    return $string;
 }

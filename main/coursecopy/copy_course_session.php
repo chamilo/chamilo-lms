@@ -95,7 +95,7 @@ function display_form()
         Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).
         '</a>';
 
-    $html .= Display::toolbarAction('toolbar-copysession', array(0 => $actionsLeft));
+    $html .= Display::toolbarAction('toolbar-copysession', array($actionsLeft));
 
     $html .= Display::return_message(get_lang('CopyCourseFromSessionToSessionExplanation'), 'warning');
 

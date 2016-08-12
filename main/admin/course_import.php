@@ -13,7 +13,7 @@
  * @param array $courses
  * @return array $errors
  */
-function validate_data($courses)
+function validate_courses_data($courses)
 {
     $errors = array ();
     $coursecodes = array ();
@@ -92,7 +92,7 @@ function getTeacherListInArray($teachers)
  * Saves imported data.
  * @param array $courses List of courses
  */
-function save_data($courses)
+function save_courses_data($courses)
 {
     $msg = '';
     foreach ($courses as $course) {
@@ -148,7 +148,7 @@ function save_data($courses)
  * @param string $file Path to the CSV-file
  * @return array All course-information read from the file
  */
-function parse_csv_data($file)
+function parse_csv_courses_data($file)
 {
     $courses = Import::csv_reader($file);
     return $courses;
@@ -186,11 +186,11 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
             Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
         } else {
-            $courses = parse_csv_data($_FILES['import_file']['tmp_name']);
+            $courses = parse_csv_courses_data($_FILES['import_file']['tmp_name']);
 
-            $errors = validate_data($courses);
+            $errors = validate_courses_data($courses);
             if (count($errors) == 0) {
-                save_data($courses);
+                save_courses_data($courses);
             }
         }
     }

@@ -46,6 +46,7 @@ $strings['tool_enable_help'] = "Choose whether you want to enable the BigBlueBut
 
 $strings['big_blue_button_welcome_message'] = 'Welcome message';
 $strings['enable_global_conference'] = 'Enable global conference';
+$strings['enable_global_conference_per_user'] = 'Enable global conference per user';
 $strings['enable_conference_in_course_groups'] = 'Enable conference in course groups';
 $strings['enable_global_conference_link'] = 'Enable the link to the global conference in the homepage';
 

@@ -4,20 +4,14 @@
 /**
  * It is recommended that ALL Chamilo scripts include this important file.
  * This script manages
- * - http get, post, post_files, session, server-vars extraction into global namespace;
- *   (which doesn't occur anymore when servertype config setting is set to test,
- *    and which will disappear completely in Dokeos 1.6.1)
- * - include of /conf/configuration.php;
- * - include of several libraries: main_api, database, display, text, security;
+ * - include of /app/config/configuration.php;
+ * - include of several libraries: api, database, display, text, security;
  * - selecting the main database;
  * - include of language files.
  *
  * @package chamilo.include
- * @todo isn't configuration.php renamed to configuration.inc.php yet?
- * @todo use the $_configuration array for all the needed variables
  * @todo remove the code that displays the button that links to the install page
  * 		but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
- * @todo make it possible to enable / disable the tracking through the Chamilo config page.
  *
  */
 
@@ -53,6 +47,8 @@ if (file_exists($kernel->getConfigurationFile())) {
     }
 }
 
+$kernel->setApi($_configuration);
+
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
 if (!isset($GLOBALS['_configuration'])) {
@@ -64,7 +60,7 @@ if (!isset($GLOBALS['_configuration'])) {
 require_once $_configuration['root_sys'].'main/inc/lib/api.lib.php';
 $passwordEncryption = api_get_configuration_value('password_encryption');
 
-if ($passwordEncryption == 'bcrypt') {
+if ($passwordEncryption === 'bcrypt') {
     require_once __DIR__.'/../../vendor/ircmaxell/password-compat/lib/password.php';
 }
 

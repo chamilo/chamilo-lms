@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Tests database connection.
  *
@@ -9,14 +11,12 @@
 
 // Loading configuration.
 require_once '../../../main/inc/global.inc.php';
-require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib/vchamilo_plugin.class.php';
-require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/lib.php';
 
 api_protect_admin_script();
 
 global $_configuration;
 
-$plugininstance = VChamiloPlugin::create();
+$plugin = VChamiloPlugin::create();
 
 // Retrieve parameters for database connection test.
 $dbParams = array();
@@ -47,9 +47,9 @@ try {
     );
 
     $list = $connection->getSchemaManager()->listDatabases();
-    echo $plugininstance->get_lang('connectionok');
+    echo $plugin->get_lang('connectionok');
 
 } catch (Exception $e) {
-    echo $plugininstance->get_lang('badconnection');
+    echo $plugin->get_lang('badconnection');
     die();
 }

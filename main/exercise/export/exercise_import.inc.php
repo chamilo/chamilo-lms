@@ -36,7 +36,13 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
             $_user['user_id'],
             0,
             null,
-            1
+            1,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false
         )
     ) {
         return true;

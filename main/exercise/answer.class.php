@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+
 /**
  * Class Answer
  * Allows to instantiate an object of type Answer
@@ -581,7 +583,7 @@ class Answer
     ) {
         $em = Database::getManager();
 
-        /** @var \Chamilo\CourseBundle\Entity\CQuizAnswer $quizAnswer */
+        /** @var CQuizAnswer $quizAnswer */
         $quizAnswer = $em->find('ChamiloCourseBundle:CQuizAnswer', $iid);
         $quizAnswer
             ->setAnswer($answer)
@@ -625,7 +627,7 @@ class Answer
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
 
             if (!isset($this->position[$i])) {
-                $quizAnswer = new \Chamilo\CourseBundle\Entity\CQuizAnswer();
+                $quizAnswer = new CQuizAnswer();
                 $quizAnswer
                     ->setIdAuto($autoId)
                     ->setCId($c_id)
@@ -816,7 +818,7 @@ class Answer
                     $correct = $fixed_list[intval($correct)];
                 }
 
-                $quizAnswer = new \Chamilo\CourseBundle\Entity\CQuizAnswer();
+                $quizAnswer = new CQuizAnswer();
                 $quizAnswer
                     ->setCId($c_id)
                     ->setQuestionId($newQuestionId)

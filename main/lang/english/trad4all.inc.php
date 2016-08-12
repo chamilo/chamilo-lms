@@ -7852,4 +7852,5 @@ $DesignWithBadgeStudioComment = "Usa Badge Studio para crear tu propia insignia 
 $YouAlreadySentThisFile = "You have already sent this file or another file with the same name. Please make sure you only upload each file once.";
 $DocumentsDefaultVisibility = "Default visibility of new documents";
 $MoodleFileImportedSuccessfully = "The Moodle course file has been imported successfully.";
+$ExtensionInstalledButNotEnabled = "Extension installed but not enabled";
 ?>

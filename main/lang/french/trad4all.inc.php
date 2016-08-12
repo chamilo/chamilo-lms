@@ -7799,4 +7799,5 @@ $DesignWithBadgeStudioComment = "Utilisez le designer de badges intégré pour c
 $YouAlreadySentThisFile = "Vous avez déjà envoyé ce fichier ou un autre fichier du même nom. Veuillez vous assurer de n'envoyer qu'une seule fois chaque fichier.";
 $DocumentsDefaultVisibility = "Visibilité par défaut des nouveaux documents";
 $MoodleFileImportedSuccessfully = "Le fichier de cours Moodle a été importé avec succès.";
+$ExtensionInstalledButNotEnabled = "Extension installée mais pas activée";
 ?>

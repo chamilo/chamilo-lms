@@ -173,6 +173,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param bool $onlyUploadFile
  * @param string $comment
  * @param int $sessionId
+ * @param bool $treat_spaces_as_hyphens
  *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
@@ -192,7 +193,8 @@ function handle_uploaded_document(
     $output = true,
     $onlyUploadFile = false,
     $comment = null,
-    $sessionId = null
+    $sessionId = null,
+    $treat_spaces_as_hyphens = true
 ) {
     if (!$userId) {
         return false;
@@ -246,7 +248,7 @@ function handle_uploaded_document(
         return false;
     } else {
         // Clean up the name, only ASCII characters should stay. (and strict)
-        $cleanName = api_replace_dangerous_char($uploadedFile['name']);
+        $cleanName = api_replace_dangerous_char($uploadedFile['name'], $treat_spaces_as_hyphens);
 
         // No "dangerous" files
         $cleanName = disable_dangerous_file($cleanName);

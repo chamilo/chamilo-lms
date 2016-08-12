@@ -13,7 +13,7 @@ class SubLanguageManager
     public function __construct()
     {
     }
-    
+
     /**
      * Get all the languages
      * @param bool $onlyActive Whether to return only active languages (default false)
@@ -31,10 +31,10 @@ class SubLanguageManager
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $all_languages[$row['dokeos_folder']] = $row;
         }
-        
+
         return $all_languages;
     }
-    
+
 
     /**
      * Get all files of lang folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)
@@ -122,7 +122,7 @@ class SubLanguageManager
             if (substr($line, 0, 1) != '$') {
                 continue;
             }
-            list($var, $val) = split('=', $line, 2);
+            list($var, $val) = explode('=', $line, 2);
             $var = trim($var);
             $val = trim($val);
             if ($get_as_string_index) { //remove the prefix $

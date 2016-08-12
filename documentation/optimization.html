@@ -62,286 +62,46 @@
 <h2><a name="1.Using-XCache"></a>1. Using opcaches</h2>
     <h3>Zend OpCode (Zend Optimizer+)</h3>
     From version 5.5, PHP includes the Zend OpCache Optimizer, which can
-    produce considerable efficiency boosts and is very reliable.
+    bring considerable efficiency improvements and is very reliable.
 
     Using OpCache should come by default, but if you want to make sure it's
     running, just check that your opcache.ini config file says
     <pre>opcache.enable = 1</pre>
     Some websites will recommend the addition of additional settings, and this
-    is really up to you. Check <a href="http://php.net/manual/en/opcache.configuration.php">the official OpCache config page for more information</a>.
+    is really up to you. Check
+    <a href="http://php.net/manual/en/opcache.configuration.php">the official OpCache config page for more information</a>.
+
+    To check if OpCache is effectively running, you can check the
+    <a href="/main/admin/system_status.php?section=php">Chamilo systems status page</a>
+    on the administration page, or you can check it in phpinfo, if you have any script with it.
 
     Zend OpCache is an "opcode" cache, meaning it will compile static code to make their processing faster.
     However, this will not allow you to "store" shared variables in memory between all users. To do that, we suggest
     you complement Zend OpCache (opcode) with a user-land cache like APCu.
 
-    <h3>xCache</h3>
-
-See <a href="http://xcache.lighttpd.net/">xCache's website</a> for summary documentation.<br />
-<ul>
-<li>On Debian/Ubuntu<=14.04: sudo apt-get install php5-xcache</li>
-</ul>
-Set your xcache.ini configuration (/etc/php5/conf.d/xcache.ini) to match your
-    system. For example, you *could* have something like this (intentionally
-    hiding comments here):
-<pre>
-xcache.shm_scheme =        "mmap"
-xcache.size  =                32M
-xcache.count =                 2
-xcache.slots =                8K
-xcache.ttl   =                 0
-xcache.gc_interval =           0
-xcache.var_size  =           16M
-xcache.var_count =            16
-xcache.var_slots =            8K
-xcache.var_ttl   =            60
-xcache.var_maxttl   =        300
-xcache.var_gc_interval =     300
-xcache.test =                Off
-</pre>
-xCache will feel useless until you actually start to put some variables in
-    cache. If you're showing the "Who is online" counter, that's one of the
-    best item there is to implement xCache.<br />
-For example, you could implement it this way (in main/inc/lib/banner.lib.php):<br />
-<pre>
-$xc = function_exists('xcache_isset');
-$number = 0;
-if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
-  if ($xc &amp;&amp; xcache_isset('campus_chamilo_org_whoisonline_count_simple')) {
-    $number = xcache_get('campus_chamilo_org_whoisonline_count_simple');
-  } else {
-    $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-    xcache_set('campus_chamilo_org_whoisonline_count_simple',$number);
-  }
-}
-$number_online_in_course = 0;
-if(!empty($_course['id'])) {
-  if ($xc &amp;&amp; xcache_isset('campus_chamilo_org_whoisonline_count_simple_'.$_course['id'])) {
-    $number_online_in_course = xcache_get('campus_chamilo_org_whoisonline_count_simple_'.$_course['id']);
-  } else {
-    $number_online_in_course = who_is_online_in_this_course_count(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_course['id']);
-    xcache_set('campus_chamilo_org_whoisonline_count_simple_'.$_course['id'],$number_online_in_course);
-  }
-}
-</pre>
-Note that, as xCache is a shared caching system, it is very important to prefix
-    your variables with a domain name or some kind of identifier, otherwise it
-    would end up in disaster if you use a shared server for several portals.<br />
-If you use php5-memcache, then this piece of code would look like this
-    (you need to adjust depending on your settings):
-<pre>
-    global $_configuration;
-    $_course    = api_get_course_info();
-    $course_id  = api_get_course_id();
-    $user_id    = api_get_user_id();
-
-    $html = '';
-    $xc = method_exists('Memcache','add');
-    if ($xc) {
-        // Make sure the server is available
-        $xm = new Memcache;
-        $xm->addServer('localhost', 11211);
-        $xc = $xc && ($xm->getServerStatus('localhost',11211)!=0);
-        // The following concatenates the name of the database + the id of the
-        // access url to make it a unique variable prefix for the variables to
-        // be stored
-        $xs = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
-    }
-    $number = 0;
-    if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
-        if ($xc && $xm->get($xs.'wio_count_simple')) {
-            $number = $xm->get($xs.'wio_count_simple');
-        } else {
-            $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-            $xm->set($xs.'wio_count_simple',$number,0,30);
-        }
-
-        $number_online_in_course = 0;
-        if(!empty($_course['id'])) {
-            if ($xc && $xm->get($xs.'wio_count_simple_'.$_course['id'])) {
-                $number_online_in_course = $xm->get($xs.'wio_count_simple_'.$_course['id']);
-            } else {
-                $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
-                $xm->set($xs.'wio_count_simple_'.$_course['id'],$number_online_in_course,0,30);
-            }
-        }
-</pre>
-<br />
-An optional additional caching mechanism you may use is the realpath_cache_size
-    and realpath_cache_ttl php.ini parameters.
-    See <a href="http://php.net/manual/en/ini.core.php">the PHP documentation</a>
-    for more details.
-<br />
-    <br />
-    <h3>APC</h3>
-    If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>,
-    you can use the same kind of trick as above, just changing the code a little:
-<pre>
-    $xc = function_exists('apc_exists');
-    $number = 0;
-    if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
-        if ($xc) {
-            $apc = apc_cache_info(null,true);
-            $apc_end = $apc['start_time']+$apc['ttl'];
-            if (apc_exists('my_campus_whoisonline_count_simple') AND (time() < $apc_end) AND apc_fetch('my_campus_whoisonline_count_simple') > 0 ) {
-                $number = apc_fetch('my_campus_whoisonline_count_simple');
-            } else {
-                $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-                apc_clear_cache();
-                apc_store('my_campus_whoisonline_count_simple',$number,15);
-            }
-        } else {
-                $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-        }
-        $number_online_in_course = 0;
-        if (!empty($_course['id'])) {
-            if ($xc) {
-                $apc = apc_cache_info(null,true);
-                $apc_end = $apc['start_time']+$apc['ttl'];
-                if (apc_exists('my_campus_whoisonline_count_simple_'.$_course['id']) AND (time() < $apc_end) AND apc_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0) {
-                    $number_online_in_course = apc_fetch('my_campus_whoisonline_count_simple_'.$_course['id']);
-                } else {
-                    $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
-                    apc_store('my_campus_whoisonline_count_simple_'.$_course['id'],$number_online_in_course,15);
-                }
-            } else {
-                $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
-            }
-        }
-     ...
-</pre>
-<br />
-<br />
     <h3>APCu</h3>
-In PHP 5.5 and above, APC is rendered practically obsolete by the presence of ZendOPCache by default.
-    However, APC does not cover the "user cache", like the caching of specific variables in memory.
-    Considering this, you can <a href="http://php.net/manual/en/book.apcu.php">APCu</a> to add the same level of variable caching as described above, just changing the code a little:
-    On a local computer, this lead to an increase of RAM consumption and a decrease of 20% of CPU time (for just one user). This has been included in 1.11.x, so this section is only there for historical purposes.
-<pre>
-function return_notification_menu()
-{
-    $_course = api_get_course_info();
-    $course_id = 0;
-    if (!empty($_course)) {
-        $course_id  = $_course['code'];
-    }
+    You can also check whether APCu is working or not from the systems status page. Check
+    <a href="http://php.net/manual/en/apcu.configuration.php">the official APCu config page</a>
+    for configuration options.
 
-    $user_id = api_get_user_id();
+    In previous versions, this optimization guide contained information about how to use xCache, APC or Memcache to
+    boost the number of online users. However, starting from version 1.11, code has been added to Chamilo to use
+    APCu by default from the banner.lib.php library, so as long as APCu is installed and running, you'll benefit from
+    this optimization naturally.
 
-    $html = '';
-    $cacheEnabled = function_exists('apcu_exists');
+    <h3>Other items</h3>
 
-    if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
-        (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
-        (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
-    ) {
-
-        if ($cacheEnabled) {
-            $apc = apcu_cache_info(null,true);
-            $apc_end = $apc['start_time']+$apc['ttl'];
-            if (apcu_exists('my_campus_whoisonline_count_simple') AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple') > 0 ) {
-                $number = apcu_fetch('my_campus_whoisonline_count_simple');
-            } else {
-                $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-                apcu_clear_cache();
-                apcu_store('my_campus_whoisonline_count_simple',$number,15);
-            }
-        } else {
-            $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-        }
-
-        $number_online_in_course = 0;
-        if (!empty($_course['id'])) {
-            if ($cacheEnabled) {
-                $apc = apcu_cache_info(null,true);
-                $apc_end = $apc['start_time']+$apc['ttl'];
-                if (apcu_exists('my_campus_whoisonline_count_simple_'.$_course['id']) AND (time() < $apc_end) AND apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0) {
-                    $number_online_in_course = apcu_fetch('my_campus_whoisonline_count_simple_'.$_course['id']);
-                } else {
-                    $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
-                    apcu_store('my_campus_whoisonline_count_simple_'.$_course['id'],$number_online_in_course,15);
-                }
-            } else {
-                $number_online_in_course = who_is_online_in_this_course_count(
-                    $user_id,
-                    api_get_setting('time_limit_whosonline'),
-                    $_course['id']
-                );
-            }
-        }
-
-        // Display the who's online of the platform
-        if ($number) {
-            if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
-                (api_get_setting('showonline', 'users') == 'true' && $user_id)
-            ) {
-                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'.get_lang('UsersOnline').'" >'.
-                            Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY).' '.$number.'</a></li>';
-            }
-        }
-     ...
-</pre>
-<br />
-    <h3>Memcached</h3>
-If you use php5-memcached (different set of functions than php5-memcache!),
-    then this piece of code would look like this (you need to adjust
-    depending on your settings):
-<pre>
-    global $_configuration;
-    $_course    = api_get_course_info();
-    $course_id  = api_get_course_id();
-    $user_id    = api_get_user_id();
-
-    $html = '';
-    $xc = method_exists('Memcached', 'add');
-    if ($xc) {
-        // Make sure the server is available
-        $xm = new Memcached;
-        $xm->addServer('localhost', 11211);
-        // The following concatenates the name of the database + the id of the
-        // access url to make it a unique variable prefix for the variables to
-        // be stored
-        $xs = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
-    }
-    $number = 0;
-    if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
-        if ($xc) {
-            if ($xm->get($xs.'wio_count_simple')) {
-                $number = $xm->get($xs.'wio_count_simple');
-            } else {
-                $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-                $xm->set($xs.'wio_count_simple',$number,120);
-            }
-        } else {
-              $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-        }
-        $number_online_in_course = 0;
-        if (!empty($_course['id'])) {
-            if ($xc) {
-                if ($xm->get($xs.'wio_count_simple_'.$_course['id'])) {
-                    $number_online_in_course = $xm->get($xs.'wio_count_simple_'.$_course['id']);
-                } else {
-                    $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
-                    $xm->set($xs.'wio_count_simple_'.$_course['id'],$number_online_in_course,120);
-                }
-            } else {
-                $number_online_in_course = who_is_online_in_this_course_count(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_course['id']);
-            }
-        }
-        // ...
-</pre>
-
-
-
-<p>It is also worth noting that the Université de Genève, Switzerland, observed
+    <p>It is also worth noting that the Université de Genève, Switzerland, observed
     that the calculation of the total size used by course documents is one of
     the heaviest queries in Chamilo, so you might want to cache the results of
     this one as well, using the same technique.</p>
-<p>Finally, if your portal is highly public *and* you are showing the popular
+
+    <p>Finally, if your portal is highly public *and* you are showing the popular
     courses on the homepage, you might want to also reduce the amount of
     queries this generates, using the same technique as above, but for the
     main/inc/lib/auth.lib.php library, looking for the
     "Tracking::get_course_connections_count()" call:</p>
-<pre>
+    <pre>
         while ($row = Database::fetch_array($result)) {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = CourseManager::get_users_count_in_course($row['code']);
@@ -360,18 +120,19 @@ If you use php5-memcached (different set of functions than php5-memcache!),
             }
             ...
         }
-</pre>
-Finally, the Free Campus of Chamilo has a very specific case of slow query:
+    </pre>
+
+    Finally, the Free Campus of Chamilo has a very specific case of slow query:
     the courses catalog! Because there might be more than 32,000 courses in
     there, getting the number of "Connections last month" can be a disastrous
     query in terms of performances. This is why you should try to cache the
     results as well.<br />
-Obviously, as we are speaking about showing the number of visits this month,
+    Obviously, as we are speaking about showing the number of visits this month,
     it doesn't really matter if the number doesn't refresh for an hour or so...<br />
-Locate the main/inc/lib/course_category.lib.php file, open it and go to the
+    Locate the main/inc/lib/course_category.lib.php file, open it and go to the
     browseCoursesInCategory() function.<br />
-Locate the $count_connections_last_month = Tracking::get_course_connections_count(...)
-    call, and wrap in into something like this:
+    Locate the $count_connections_last_month = Tracking::get_course_connections_count(...)
+    call, and wrap in into something like this (you'll have to update this to use APCu):
 <pre>
     $xc = method_exists('Memcached', 'add');
     if ($xc) {
@@ -401,6 +162,7 @@ Locate the $count_connections_last_month = Tracking::get_course_connections_coun
    ...
 </pre>
 <hr />
+
 <h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log
 <br /><br />
@@ -427,21 +189,42 @@ In Chamilo 1.10.6, two additional queries were confirmed to still have effect a 
 ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_qqrc_qid (question_id);
 ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
 </pre>
+
+    Note that, because these situations only occur when a portal is under real-world high-load stress, we only get to
+    find out about these possible bottlenecks after we release stable versions of Chamilo. This is why we list those
+    queries here. However, as soon as we confirm them with a few real life scenarios, we add them into the core of
+    Chamilo so you can benefit from them immediately by installing a new version.
+
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>
 One good reference: <a href="http://dev.mysql.com/doc/refman/5.1/en/multiple-key-caches.html">MySQL documentation on multiple key caches</a><br />
 <hr />
 
 <h2><a name="4.Sessions-directories"></a>4. Sessions directories</h2>
-php_admin_value session.save_path 1;/var/www/test.chamilo.org/sessions/
+
+    <p>On large implementations, the users sessions might be stored in numbers too large (hundreds of thousands) to be
+    efficiently managed by the filesystem is stored in one single folder. In order to avoid that, you can either store
+    your sessions in another key-value storage (memcache, redis, etc) or you can instruct PHP to store your session
+    files in a directory with a certain level of subdirectories (so sessions are spread across multiple directories
+    instead of inside just one.</p>
+
+    <p>This is done by adding the following setting to your php.ini or your Apache's Virtual Host</p>
+    <pre>php_admin_value session.save_path 1;/var/www/test.chamilo.org/sessions/</pre>
+    <p>Please note that, by defining a different directory than your system's default, you will need to reconfigure
+    your system's session cleaning procedure, which is usually defined under /etc/cron.d/php, so that it cleans
+    this specific directory as well.</p>
 <hr />
 <h2><a name="5.Users-upload-directories"></a>5. Users upload directories</h2>
-Create 10 directories inside the app/upload/users directory (from 0 to 9) and update your admin settings. This has to be done at install &amp; configuration time, otherwise you might loose user data (or have to write a script for data distribution).
+The default in Chamilo is now to spread user accounts in 10 different directories inside app/upload/users/ to avoid
+    overloading that specific directory. Nothing to be done here. Please move on.
 <hr />
 <h2><a name="6.Zlib-compression"></a>6. Zlib compressed output</h2>
-Although this will not make your server faster, compressing the pages you are sending to the users will definitely make them feel like your website's responses are a lot faster, and thus increase their well-being when using Chamilo.<br /><br />
+Although this will not make your server faster, compressing the pages you are sending to the users will definitely
+    make them feel like your website's responses are a lot faster, and thus increase their well-being when using Chamilo.<br /><br />
 Zlib output compression has to be set at two levels: PHP configuration for PHP pages and Apache for images and CSS.<br /><br />
-To update the PHP configuration (either in php.ini or in your VirtualHost), use the <a href="http://php.net/manual/en/zlib.configuration.php">zlib.output_compression</a>. If you set this inside your Apache's VirtualHost, you should use the following syntax.
+To update the PHP configuration (either in php.ini or in your VirtualHost), use the
+    <a href="http://php.net/manual/en/zlib.configuration.php">zlib.output_compression</a>. If you set this inside your
+    Apache's VirtualHost, you should use the following syntax.
 <pre>
 php_value zlib.output_compression 1
 </pre>
@@ -705,7 +488,7 @@ This should have an immediate effect on the load average on your server.
 <hr />
 <h2>Authors</h2>
 <ul>
-<li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:ywarnier@beeznest.net">ywarnier@beeznest.net</a></li>
+<li>Document redacted and maintained by Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:yannick.warnier@beeznest.com">yannick.warnier@beeznest.com</a>.</li>
 </ul>
 <hr />
 Don't have time or resources to optimize your Chamilo installation

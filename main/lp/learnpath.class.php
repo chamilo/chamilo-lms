@@ -9335,7 +9335,7 @@ class learnpath
                 // Attach this item to the organization element or hits parent if there is one.
                 if (!empty($item->parent) && $item->parent != 0) {
                     $children = $organization->childNodes;
-                    $possible_parent = &$this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
+                    $possible_parent = $this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
                     if (is_object($possible_parent)) {
                         $possible_parent->appendChild($my_item);
                     } else {

@@ -5611,12 +5611,13 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
  * Replaces "forbidden" characters in a filename string.
  *
  * @param string $filename
+ * @param bool $treat_spaces_as_hyphens
  *
  * @return string
  */
-function api_replace_dangerous_char($filename)
+function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
 {
-    return URLify::filter($filename, 250, '', true, true, false, false);
+    return URLify::filter($filename, 250, '', true, true, false, false, $treat_spaces_as_hyphens);
 }
 
 /**

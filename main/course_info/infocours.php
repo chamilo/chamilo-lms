@@ -658,12 +658,12 @@ $form->addHtml('
 ');
 $form->addHtml('</div>');
 
-$form->addHtml('</div>');
-
 
 // Plugin course settings
 $appPlugin = new AppPlugin();
 $appPlugin->add_course_settings_form($form);
+
+$form->addHtml('</div>');
 
 // Get all the course information
 $all_course_information = CourseManager::get_course_information($_course['sysCode']);

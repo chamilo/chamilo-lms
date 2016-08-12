@@ -6892,5 +6892,6 @@ $DataTableSearch = "Suche";
 $HideColumn = "Spalte verstecken";
 $DisplayColumn = "Spalte anzeigen";
 $LegalAgreementAccepted = "Nutzungsbedingungen akzeptiert";
+$DateFormatLongNoDayJS = "dd MM yy";
 $Contact = "Kontakt";
 ?>

@@ -57,6 +57,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/getid3/',
             __DIR__.'/../../../../main/inc/lib/tools/',
             __DIR__.'/../../../../main/inc/lib/pchart/',
+            __DIR__.'/../../../../main/inc/lib/pclzip/',
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',
             __DIR__.'/../../../../main/announcements/resources',
             __DIR__.'/../../../../main/plugin/ticket',

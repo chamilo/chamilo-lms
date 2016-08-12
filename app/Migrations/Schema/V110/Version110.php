@@ -85,7 +85,6 @@ class Version110 extends AbstractMigrationChamilo
                 array('default' => 0, 'unsigned' => true)
             );
         }
-
         $sessionTable = $schema->getTable('session');
         if (!$sessionTable->hasColumn('duration')) {
             $this->addSql("ALTER TABLE session ADD COLUMN duration int");

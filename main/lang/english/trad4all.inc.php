@@ -4519,7 +4519,7 @@ $UplRenameLong = "Rename the uploaded file if it exists";
 $DocumentQuota = "Space Available";
 $NoDocsInFolder = "There are no documents to be displayed.";
 $UploadTo = "Upload to";
-$fileModified = "The file is modified";
+$fileModified = "The file has been modified";
 $DocumentsOverview = "Documents overview";
 $Options = "Options";
 $WelcomeOogieConverter = "Welcome to Chamilo RAPID<ul type=\"1\"><li>Browse your hard disk to find any .ppt or .odp file<li>Upload it to Oogie. It will tranform it into a Scorm course.<li>You will then be allowed to add audio comments on each slide and insert test and activities between the slides.";
@@ -7851,4 +7851,5 @@ $Palettes = "Palettes";
 $DesignWithBadgeStudioComment = "Usa Badge Studio para crear tu propia insignia dentro de tu plataforma";
 $YouAlreadySentThisFile = "You have already sent this file or another file with the same name. Please make sure you only upload each file once.";
 $DocumentsDefaultVisibility = "Default visibility of new documents";
+$MoodleFileImportedSuccessfully = "The Moodle course file has been imported successfully.";
 ?>

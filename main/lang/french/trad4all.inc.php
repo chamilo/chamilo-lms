@@ -835,7 +835,7 @@ $PreventSessionAdminsToManageAllUsersTitle = "Empêcher les administrateurs de s
 $IsOpenSession = "Session ouverte";
 $AllowVisitors = "Permettre des visiteurs externes";
 $EnableIframeInclusionComment = "Autoriser les balises iframe dans l'éditeur HTML améliore l'édition de documents mais peut représenter un risque pour la sécurité.";
-$AddedToLPCannotBeAccessed = "Cet exercice fait partie d'un parcour d'apprentissage, il n'est donc pas accessible par les étudiants depuis cette page. Si vous voulez rendre cet exercice disponible depuis l'outil exercice vous devez en faire une copie en utilisant l'icône \"copie\"";
+$AddedToLPCannotBeAccessed = "Cet exercice fait partie d'un parcours d'apprentissage, il n'est donc pas accessible par les étudiants depuis cette page. Si vous voulez rendre cet exercice disponible depuis l'outil exercice vous devez en faire une copie en utilisant l'icône \"copie\"";
 $EnableIframeInclusionTitle = "Autoriser les balises iframe dans l'éditeur HTML.";
 $MailTemplateRegistrationMessage = "Cher(ère) ((firstname)) ((lastname)), Vous êtes inscrit(e) sur
 ((sitename) avec les paramètres suivants: Nom d'utilisateur :
@@ -4510,7 +4510,7 @@ $UplRenameLong = "Renommer le fichier envoyé s'il existe déjà";
 $DocumentQuota = "Quota de documents autorisé";
 $NoDocsInFolder = "Pas de document dans ce répertoire !";
 $UploadTo = "Télécharger vers";
-$fileModified = "Le fichier est modifié";
+$fileModified = "Le fichier a été modifié";
 $DocumentsOverview = "l'outil Documents";
 $Options = "Options";
 $WelcomeOogieConverter = "Bienvenue dans le convertisseur de Power Point Oogie<ul type=\"1\"><li>Choisissez un fichier .ppt ou .odp<li>Envoyez ce fichier à Oogie. Il sera converti en parcours SCORM<li>Vous pourrez ensuite ajouter des commentaires audio sur chaque diapo et insérer tests et activités entres les dias</ul>";
@@ -7462,7 +7462,7 @@ $SelectFillTheBlankSeparator = "Marqueur pour les trous";
 $RefreshBlanks = "Rafraîchir les termes";
 $WordTofind = "Mot à trouver";
 $BlankInputSize = "Taille de la zone à remplir";
-$DateFormatLongNoDayJS = "dd 'du' MM yy";
+$DateFormatLongNoDayJS = "dd MM yy";
 $TimeFormatNoSecJS = "HH:mm";
 $AtTime = "à";
 $SendSubscriptionNotification = "Envoyer un avis d'inscription par e-mail aux apprenants";
@@ -7798,4 +7798,5 @@ $Palettes = "Palettes";
 $DesignWithBadgeStudioComment = "Utilisez le designer de badges intégré pour créer votre propre badge.";
 $YouAlreadySentThisFile = "Vous avez déjà envoyé ce fichier ou un autre fichier du même nom. Veuillez vous assurer de n'envoyer qu'une seule fois chaque fichier.";
 $DocumentsDefaultVisibility = "Visibilité par défaut des nouveaux documents";
+$MoodleFileImportedSuccessfully = "Le fichier de cours Moodle a été importé avec succès.";
 ?>

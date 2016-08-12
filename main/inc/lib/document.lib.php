@@ -2802,6 +2802,7 @@ class DocumentManager
      * @param bool $index_document index document (search xapian module)
      * @param bool $show_output print html messages
      * @param string $fileKey
+     * @param bool $treat_spaces_as_hyphens
      *
      * @return array|bool
      */
@@ -2814,7 +2815,8 @@ class DocumentManager
         $if_exists = null,
         $index_document = false,
         $show_output = false,
-        $fileKey = 'file'
+        $fileKey = 'file',
+        $treat_spaces_as_hyphens = true
     ) {
         $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
@@ -2845,7 +2847,8 @@ class DocumentManager
                     $show_output,
                     false,
                     null,
-                    $sessionId
+                    $sessionId,
+                    $treat_spaces_as_hyphens
                 );
 
                 // Showing message when sending zip files

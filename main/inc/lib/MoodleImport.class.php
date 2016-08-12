@@ -249,7 +249,10 @@ class MoodleImport
                                 null,
                                 null,
                                 true,
-                                true
+                                true,
+                                'file',
+                                // This is to validate spaces as hyphens
+                                false
                             );
                         }
                     }
@@ -263,7 +266,7 @@ class MoodleImport
             return false;
         }
 
-
+        removeDir($destinationDir);
         return $packageContent[$mainFileKey];
     }
 

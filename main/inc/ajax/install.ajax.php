@@ -38,7 +38,7 @@ switch ($action) {
 
                 // save contact information with web service
                 // create a client
-                $client = new nusoap_client('http://version.chamilo.org/contact.php?wsdl', true);
+                $client = new SoapClient('https://version.chamilo.org/contact.php?wsdl');
 
                 // call method ws_add_contact_information
                 $contact_params = array(
@@ -53,7 +53,7 @@ switch ($action) {
                                         'company_city' => $company_city
                                     );
 
-                $result = $client->call('ws_add_contact_information', array('contact_params' => $contact_params));
+                $result = $client->__soapCall('ws_add_contact_information', array('contact_params' => $contact_params));
 
                 echo $result;
             }

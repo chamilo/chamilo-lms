@@ -370,34 +370,44 @@ if ($encryptPassForm == '1') {
         });
 
         function send_contact_information() {
-            var data_post = "";
-            data_post += "person_name="+$("#person_name").val()+"&";
-            data_post += "person_email="+$("#person_email").val()+"&";
-            data_post += "company_name="+$("#company_name").val()+"&";
-            data_post += "company_activity="+$("#company_activity option:selected").val()+"&";
-            data_post += "person_role="+$("#person_role option:selected").val()+"&";
-            data_post += "company_country="+$("#country option:selected").val()+"&";
-            data_post += "company_city="+$("#company_city").val()+"&";
-            data_post += "language="+$("#language option:selected").val()+"&";
-            data_post += "financial_decision="+$("input[@name='financial_decision']:checked").val();
+            if (!document.getElementById('accept_licence').checked) {
+                alert('Debe aceptar la licencia para poder usar este software')
+                ;return false;
+            } else {
+                var data_post = "";
+                data_post += "person_name="+$("#person_name").val()+"&";
+                data_post += "person_email="+$("#person_email").val()+"&";
+                data_post += "company_name="+$("#company_name").val()+"&";
+                data_post += "company_activity="+$("#company_activity option:selected").val()+"&";
+                data_post += "person_role="+$("#person_role option:selected").val()+"&";
+                data_post += "company_country="+$("#country option:selected").val()+"&";
+                data_post += "company_city="+$("#company_city").val()+"&";
+                data_post += "language="+$("#language option:selected").val()+"&";
+                data_post += "financial_decision="+$("input[name='financial_decision']:checked").val();
 
-            $.ajax({
-                contentType: "application/x-www-form-urlencoded",
-                beforeSend: function(objeto) {},
-                type: "POST",
-                url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
-                data: data_post,
-                success: function(datos) {
-                    if (datos == 'required_field_error') {
-                        message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";
-                    } else if (datos == '1') {
-                        message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
-                    } else {
-                        message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
+                $.ajax({
+                    contentType: "application/x-www-form-urlencoded",
+                    beforeSend: function(objeto) {},
+                    type: "POST",
+                    url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
+                    beforeSend : function() {
+                        $('#loader-button').append('  <em class="fa fa-spinner fa-pulse fa-fw"></em>');
+                    },
+                    data: data_post,
+                    success: function(datos) {
+                        if (datos == 'required_field_error') {
+                            message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";
+                        } else if (datos == '1') {
+                            message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
+                        } else {
+                            message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
+                        }
+                        alert(message);
+                        $('#license-next').trigger('click');
+                        $('#loader-button').html('');
                     }
-                    alert(message);
-                }
-            });
+                });
+            }
         }
     </script>
     <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />

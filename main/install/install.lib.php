@@ -1114,14 +1114,6 @@ function display_license_agreement()
                     <?php echo get_lang('IAccept'); ?>
                 </label>
             </div>
-            <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" >
-                <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
-            </button>
-            <input type="hidden" name="is_executable" id="is_executable" value="-" />
-            <button type="submit" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
-                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
-            </button>
-
         </div>
     </div>
     <div class="row">
@@ -1143,6 +1135,15 @@ function display_license_agreement()
             <p><?php echo get_contact_registration_form() ?></p><br />
         </div>
     </div>
+
+    <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" >
+        <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
+    </button>
+    <input type="hidden" name="is_executable" id="is_executable" value="-" />
+    <button type="submit" id="license-next" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
+        <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
+    </button>
+
     <?php
 }
 
@@ -1154,7 +1155,7 @@ function get_contact_registration_form()
 {
 
     $html ='
-   <form class="form-horizontal">
+   <div class="form-horizontal">
     <div class="panel panel-default">
     <div class="panel-body">
     <div id="div_sent_information"></div>
@@ -1263,13 +1264,13 @@ function get_contact_registration_form()
     <div class="clear"></div>
     <div class="form-group">
             <div class="col-sm-3">&nbsp;</div>
-            <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" ><em class="fa fa-floppy-o"></em> '.get_lang('SendInformation').'</button></div>
+            <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" ><em class="fa fa-floppy-o"></em> '.get_lang('SendInformation').'</button> <span id="loader-button"></span></div>
     </div>
     <div class="form-group">
             <div class="col-sm-3">&nbsp;</div>
             <div class="col-sm-9"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
     </div></div></div>
-    </form>';
+    </div>';
 
     return $html;
 }

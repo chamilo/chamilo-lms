@@ -93,7 +93,7 @@ if (api_get_setting('search_enabled') === 'true') {
 
 $form->addButtonUpload(get_lang('ConvertToLP'), 'convert');
 $form->addElement('hidden', 'ppt2lp', 'true');
-$form->add_real_progress_bar(md5(rand(0, 10000)), 'user_file', 1, true);
+$form->addProgress();
 $size = api_get_setting('service_ppt2lp', 'size');
 $defaults = array(
     'take_slide_name'=>'checked="checked"',

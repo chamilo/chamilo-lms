@@ -274,7 +274,7 @@ $form->addElement('html', '</div>');
 
 // Button upload document
 $form->addButtonSend(get_lang('SendDocument'), 'submitDocument');
-$form->add_real_progress_bar('DocumentUpload', 'file');
+$form->addProgress('DocumentUpload', 'file');
 
 $fileExistsOption = api_get_setting('document_if_file_exists_option');
 

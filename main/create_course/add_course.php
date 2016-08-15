@@ -242,7 +242,7 @@ $form->addElement('html', '</div>');
 $form->addButtonCreate($course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'));
 
 // The progress bar of this form.
-$form->add_progress_bar();
+$form->addProgress();
 
 // Set default values.
 if (isset($_user['language']) && $_user['language'] != '') {

@@ -148,8 +148,8 @@ $user_file_template =
 EOT;
 $renderer->setCustomElementTemplate($user_file_template);
 
-$form -> addElement ('file', 'user_file', Display::return_icon('word_big.gif'));
-if (api_get_setting('search_enabled') == 'true') {
+$form->addElement('file', 'user_file', Display::return_icon('word_big.gif'));
+if (api_get_setting('search_enabled') === 'true') {
     $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));
     $form->addElement('html', '<br />');
     $form->addElement(
@@ -162,7 +162,7 @@ if (api_get_setting('search_enabled') == 'true') {
     foreach ($specific_fields as $specific_field) {
         $form->addElement('text', $specific_field['code'], $specific_field['name'].' : ');
     }
-    $form -> addElement ('html','</div>');
+    $form->addElement('html', '</div>');
 }
 
 /*
@@ -170,10 +170,10 @@ if (api_get_setting('search_enabled') == 'true') {
  * $form -> addElement ('radio', 'split_steps',null, get_lang('SplitStepsPerPage'),'per_page');
  * $form -> addElement ('radio', 'split_steps',null, get_lang('SplitStepsPerChapter'),'per_chapter');
  */
-$form -> addElement ('hidden', 'split_steps','per_page');
-$form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
-$form -> addElement ('hidden', 'woogie', 'true');
-$form -> add_real_progress_bar(md5(rand(0,10000)), 'user_file', 1, true);
+$form->addElement('hidden', 'split_steps', 'per_page');
+$form->addElement('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
+$form->addElement('hidden', 'woogie', 'true');
+$form->addProgress();
 $defaults = array('split_steps'=>'per_page','index_document'=>'checked="checked"');
 $form -> setDefaults($defaults);
 

@@ -168,7 +168,7 @@ $(function() {
 });
 </script>';
 
-$form->add_progress_bar();
+$form->addProgress();
 $form->addButtonCreate(get_lang('CreateCourse'));
 
 // Set some default values.

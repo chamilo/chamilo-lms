@@ -67,7 +67,7 @@ $form->addLabel(null, Display::return_icon('scorm_logo.jpg', null, ['style' => '
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('hidden', 'tool', $my_tool);
 $form->addElement('file', 'user_file', get_lang('FileToUpload'));
-$form->add_real_progress_bar('uploadScorm', 'user_file');
+$form->addProgress();
 $form->addRule('user_file', get_lang('ThisFieldIsRequired'), 'required');
 
 unset($content_origins[0]);

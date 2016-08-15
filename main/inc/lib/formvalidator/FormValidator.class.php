@@ -893,88 +893,19 @@ EOT;
     }
 
     /**
-     * Adds a progress bar to the form.
+     * Adds a progress loading image to the form.
      *
-     * Once the user submits the form, a progress bar (animated gif) is
-     * displayed. The progress bar will disappear once the page has been
-     * reloaded.
-     *
-     * @param int $delay (optional)	 The number of seconds between the moment the user
-     * @param string $label (optional)	Custom label to be shown
-     *
-     * submits the form and the start of the progress bar.
-     * @deprecated ?
      */
-    public function add_progress_bar($delay = 2, $label = '')
+    public function addProgress($delay = 2, $label = '')
     {
         if (empty($label)) {
             $label = get_lang('PleaseStandBy');
         }
         $this->with_progress_bar = true;
-        $this->updateAttributes("onsubmit=\"javascript: myUpload.start('dynamic_div','".Display::returnIconPath('progress_bar.gif')."','" . $label . "','" . $this->getAttribute('id') . "')\"");
-        $this->addElement('html', '<script language="javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/upload.js" type="text/javascript"></script>');
-        $this->addElement('html', '<script type="text/javascript">var myUpload = new upload(' . (abs(intval($delay)) * 1000) . ');</script>');
-    }
+        $id = $this->getAttribute('id');
 
-    /**
-     * Uses new functions (php 5.2) for displaying real upload progress.
-     * @param string $upload_id							The value of the field UPLOAD_IDENTIFIER, the second parameter (XXX) of the $form->addElement('file', XXX) sentence
-     * @param string $element_after						The first element of the form (to place at first UPLOAD_IDENTIFIER)
-     * @param int $delay (optional)						The frequency of the xajax call
-     * @param bool $wait_after_upload (optional)
-     */
-    public function add_real_progress_bar($upload_id, $element_after, $delay = 2, $wait_after_upload = false)
-    {
-        if (!function_exists('uploadprogress_get_info')) {
-            $this->add_progress_bar($delay);
-            return;
-        }
-
-        $xajax_upload = new xajax(api_get_path(WEB_LIBRARY_PATH) . 'upload.xajax.php');
-
-        $xajax_upload->registerFunction('updateProgress');
-        // IMPORTANT : must be the first element of the form
-        $el = $this->insertElementBefore(FormValidator::createElement('html', '<input type="hidden" name="UPLOAD_IDENTIFIER" value="' . $upload_id . '" />'), $element_after);
-
-        $this->addElement('html', '<br />');
-
-        // Add div-element where the progress bar is to be displayed
-        $this->addElement(
-            'html',
-            '<div id="dynamic_div_container" style="display:none">
-                <div id="dynamic_div_label">' . get_lang('UploadFile') . '</div>
-                <div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url(' . Display::returnIconPath('real_upload_frame.gif').');">
-                    <div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url(' . Display::returnIconPath('real_upload_step.gif').');background-repeat:repeat-x;background-position:center;"></div>
-                </div>
-            </div>'
-        );
-
-        if ($wait_after_upload) {
-            $this->addElement('html', '
-			<div id="dynamic_div_waiter_container" style="display:none">
-				<div id="dynamic_div_waiter_label">
-					' . get_lang('SlideshowConversion') . '
-				</div>
-				<div id="dynamic_div_waiter_frame">
-					'.Display::return_icon('real_upload_frame.gif').'
-				</div>
-			</div>
-		');
-        }
-
-        // Get the xajax code
-        $this->addElement('html', $xajax_upload->getJavascript(api_get_path(WEB_LIBRARY_PATH) . 'xajax'));
-
-        // Get the upload code
-        $this->addElement('html', '<script language="javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/upload.js" type="text/javascript"></script>');
-        $this->addElement('html', '<script type="text/javascript">var myUpload = new upload(' . (abs(intval($delay)) * 1000) . ');</script>');
-
-        if (!$wait_after_upload) {
-            $wait_after_upload = 0;
-        }
-
-        // Add the upload event
-        $this->updateAttributes("onsubmit=\"javascript: myUpload.startRealUpload('dynamic_div','" . $upload_id . "','" . $this->getAttribute('id') . "'," . $wait_after_upload . ")\"");
+        $this->updateAttributes("onsubmit=\"javascript: addProgress('" . $id . "')\"");
+        $this->addHtml('<script language="javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/upload.js" type="text/javascript"></script>');
     }
 
     /**
@@ -1018,8 +949,10 @@ EOT;
 
         $returnValue .= parent::toHtml();
         // Add div-element which is to hold the progress bar
+        $id = $this->getAttribute('id');
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
-            $returnValue .= '<div id="dynamic_div" style="display:block; margin-left:40%; margin-top:10px; height:50px;"></div>';
+            // @todo improve UI
+            $returnValue .= '<br /><div id="loading_div_'.$id.'" class="loading_div"><i class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom"></i></div>';
         }
 
         return $returnValue;

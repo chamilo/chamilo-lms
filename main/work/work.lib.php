@@ -3298,7 +3298,7 @@ function setWorkUploadForm($form, $uploadFormType = 0)
         case 0:
             // File and text.
             $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
-            $form->add_real_progress_bar('uploadWork', 'file');
+            $form->addProgress();
             $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
             break;
         case 1:
@@ -3309,7 +3309,7 @@ function setWorkUploadForm($form, $uploadFormType = 0)
         case 2:
             // Only file.
             $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
-            $form->add_real_progress_bar('uploadWork', 'file');
+            $form->addProgress();
             $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
             break;
     }

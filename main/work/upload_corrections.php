@@ -57,7 +57,7 @@ $form = new FormValidator(
 );
 $form->addElement('header', get_lang('UploadCorrections'));
 $form->addElement('file', 'file', get_lang('UploadADocument'));
-$form->add_real_progress_bar('uploadWork', 'file');
+$form->addProgress();
 $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('hidden', 'id', $workId);
 $form->addButtonUpload(get_lang('Upload'));

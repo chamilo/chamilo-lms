@@ -334,7 +334,7 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
         array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1')
     );
 
-    $form->add_progress_bar();
+    $form->addProgress();
     if (!empty($user_data['picture_uri'])) {
         $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
     }

@@ -44,6 +44,7 @@ abstract class WebService
             return false;
         }
 
+        /** @var \Chamilo\UserBundle\Entity\User $user */
         $user = UserManager::getRepository()->findOneBy([
             'username' => $username
         ]);
@@ -52,7 +53,9 @@ abstract class WebService
             return false;
         }
 
-        return UserManager::isPasswordValid($password, $user);
+        $passwordEncoded = UserManager::encryptPassword($password, $user);
+
+        return UserManager::isPasswordValid($passwordEncoded, $password, $user->getSalt());
     }
 
 }

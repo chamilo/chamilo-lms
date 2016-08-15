@@ -251,13 +251,14 @@ class TicketManager
 
     /**
      * Inserts a new ticket in the corresponding tables
-     * @param $category_id
-     * @param $course_id
-     * @param $project_id
-     * @param $other_area
-     * @param $email
-     * @param $subject
-     * @param $content
+     * @param int $category_id
+     * @param int $course_id
+     * @param int $sessionId
+     * @param int $project_id
+     * @param string $other_area
+     * @param string $email
+     * @param string $subject
+     * @param string $content
      * @param string $personalEmail
      * @param $file_attachments
      * @param string $source
@@ -433,8 +434,7 @@ class TicketManager
                     </table>';
 
             if (empty($category_id)) {
-
-                if (api_get_setting('ticket_send_warning_to_all_admins') == 'true') {
+                if (api_get_setting('ticket_send_warning_to_all_admins') === 'true') {
                     $warningSubject = sprintf(
                         get_lang('TicketXCreatedWithNoCategory'),
                         $ticket_code
@@ -458,7 +458,7 @@ class TicketManager
 
                 $message = '<h2>'.get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
 
-                if (api_get_setting('ticket_warn_admin_no_user_in_category') == 'true') {
+                if (api_get_setting('ticket_warn_admin_no_user_in_category') === 'true') {
                     $usersInCategory = TicketManager::getUsersInCategory($category_id);
                     if (empty($usersInCategory)) {
                         $subject = sprintf(
@@ -466,7 +466,7 @@ class TicketManager
                             $categoryInfo['name']
                         );
 
-                        if (api_get_setting('ticket_send_warning_to_all_admins') == 'true') {
+                        if (api_get_setting('ticket_send_warning_to_all_admins') === 'true') {
                             Display::addFlash(Display::return_message(
                                 sprintf(
                                     get_lang('CategoryWithNoUserNotificationSentToAdmins'),
@@ -535,7 +535,11 @@ class TicketManager
                 $studentMessage = sprintf(get_lang('YourQuestionWasSentToTheResponableAreaX'), $email, $email);
                 $studentMessage .= sprintf(get_lang('YourAnswerToTheQuestionWillBeSentToX'), $personalEmail);
                 self::insert_message(
-                    $ticket_id, get_lang('MessageResent'), $studentMessage, null, 1
+                    $ticket_id,
+                    get_lang('MessageResent'),
+                    $studentMessage,
+                    null,
+                    1
                 );
             }
 
@@ -565,8 +569,7 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_assigned_log = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
         $now = api_get_utc_datetime();
-
-        $ticket = self::get_ticket_detail_by_id($ticket_id, $user_id);
+        $ticket = self::get_ticket_detail_by_id($ticket_id);
 
         if ($ticket) {
             $ticket = $ticket['ticket'];
@@ -656,7 +659,7 @@ class TicketManager
         $status = 'NOL',
         $sendConfirmation = false
     ) {
-        global $data_files, $plugin;
+        global $data_files;
         $ticket_id = intval($ticket_id);
         $user_id = intval($user_id);
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
@@ -829,9 +832,6 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
-        $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
-        $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
         $direction = !empty($direction) ? $direction : 'DESC';
         $user_id = !empty($user_id) ? $user_id : api_get_user_id();
         $isAdmin = UserManager::is_admin($user_id);
@@ -1047,8 +1047,10 @@ class TicketManager
                     $actions .= '<img src="' . $webCodePath . 'img/exclamation.png" border="0" />';
                 }
                 $row['col0'] = Display::return_icon(
-                                $img_source, get_lang('Info')
-                        ) . '<a href="ticket_details.php?ticket_id=' . $row['col0'] . '">' . $row['code'] . '</a>';
+                        $img_source,
+                        get_lang('Info')
+                        ).
+                    '<a href="ticket_details.php?ticket_id=' . $row['col0'] . '">' . $row['code'] . '</a>';
                 // @todo fix
                 /*if ($row['col7'] == 'PENDIENTE') {
                     $row['col7'] = '<span style="color: #f00; font-weight:bold;">' . $row['col7'] . '</span>';
@@ -1062,14 +1064,14 @@ class TicketManager
                     $name,
                     $row['assigned_last_user'],
                     $row['col7'],
-                    $row['col8'],
+                    $row['col8']
                 );
             } else {
                 $actions = '';
                 $row['col0'] = Display::return_icon(
-                        $img_source,
-                        get_lang('Info')
-                    ) . '<a href="ticket_details.php?ticket_id=' . $row['col0'] . '">' . $row['code'] . '</a>';
+                    $img_source,
+                    get_lang('Info')
+                ) . '<a href="ticket_details.php?ticket_id=' . $row['col0'] . '">' . $row['code'] . '</a>';
                 $now = api_strtotime(api_get_utc_datetime());
                 $last_edit_date = api_strtotime($row['sys_lastedit_datetime']);
                 $dif = $now - $last_edit_date;
@@ -1267,14 +1269,11 @@ class TicketManager
 
     /**
      * @param int $ticket_id
-     * @param int $user_id
      * @return array
      */
-    public static function get_ticket_detail_by_id($ticket_id, $user_id)
+    public static function get_ticket_detail_by_id($ticket_id)
     {
         $ticket_id = intval($ticket_id);
-        $user_id = intval($user_id);
-
         $table_support_category = Database::get_main_table(
             TABLE_TICKET_CATEGORY
         );
@@ -1296,7 +1295,7 @@ class TicketManager
                     cat.name,
                     status.name as status, 
                     priority.name priority
-                    FROM $table_support_tickets ticket,
+                FROM $table_support_tickets ticket,
                     $table_support_category cat ,
                     $table_support_priority priority,
                     $table_support_status status
@@ -1431,7 +1430,7 @@ class TicketManager
     public static function sendNotification($ticketId, $userId, $title, $message)
     {
         $userInfo = api_get_user_info($userId);
-        $ticketInfo = self::get_ticket_detail_by_id($ticketId, $userId);
+        $ticketInfo = self::get_ticket_detail_by_id($ticketId);
         $requestUserInfo = $ticketInfo['usuario'];
         $ticketCode = $ticketInfo['ticket']['code'];
         $status = $ticketInfo['ticket']['status'];

@@ -177,7 +177,7 @@ div.row div.formw2 {
 </style>';
 
 $ticket_id = $_GET['ticket_id'];
-$ticket = TicketManager::get_ticket_detail_by_id($ticket_id, $user_id);
+$ticket = TicketManager::get_ticket_detail_by_id($ticket_id);
 if (!isset($ticket['ticket'])) {
     api_not_allowed();
 }

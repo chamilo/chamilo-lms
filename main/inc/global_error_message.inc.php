@@ -58,16 +58,15 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
     $root_rel = '';
     $installation_guide_url = $root_rel.'documentation/installation_guide.html';
-
+    
     $css_path = 'app/Resources/public/css/';
     $css_web_assets = 'web/assets/';
     $css_web_path = 'web/css/';
     $themePath = $css_path.'themes/'.$theme.'/default.css';
-    $css_web_fontawesome = $css_web_assets.'fontawesome/css/font-awesome.css';
     $bootstrap_file = $css_web_assets.'bootstrap/dist/css/bootstrap.min.css';
     $css_base_file = $css_web_path.'base.css';
 
-    $css_list = array($bootstrap_file, $css_web_fontawesome, $css_base_file, $themePath);
+    $css_list = array($bootstrap_file, $css_base_file, $themePath);
 
     $web_img = 'main/img';
     $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../')).'/';
@@ -115,7 +114,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                     <p class="text">Let\'s start hunting skills down with Chamilo LMS! This wizard will guide you through the Chamilo installation and configuration process.</p>
                           <p class="download-info">
                               <button class="btn btn-primary btn-lg" type="submit" value="INSTALL Chamilo" ><i class="fa fa-download" aria-hidden="true"></i> Install Chamilo</button>
-                              <a class="btn btn-success btn-lg" href="'.$installation_guide_url.'" target="_blank"> <em class="fa fa-file-text-o"></em> '.$read_installation_guide.'</a>
+                              <a class="btn btn-success btn-lg" href="'.$installation_guide_url.'" target="_blank"> '.$read_installation_guide.'</a>
                           </p>
                     </div>
                 </div>

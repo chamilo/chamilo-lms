@@ -5746,20 +5746,6 @@ footer{
     box-shadow: 0 1px 3px #C8C8C8;
     border: 1px solid #e6e6e6;
 }
-#toolnav{
-    position: fixed;
-    left: 0;
-    top: 50px;
-    z-index: 2000;
-}
-#toolnavbox ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-#toolnavbox ul li{
-    height: 40px;
-}
 .everybodyview{
     padding-top: 20px;
     margin-top: 10px;
@@ -5767,22 +5753,61 @@ footer{
 .btn-options{
     padding-right: 20px;
 }
-#toolnavbox ul li a {
-	display: inline-block;
-    margin: 0;
-	color:#fff;
-	padding: 7px;
-	text-decoration: none;
-	-webkit-transition:all 500ms ease;
-	-o-transition:all 500ms ease;
-    transition:all 500ms ease;
-    width: 38px
-}
-#toolnavbox ul li a:hover {
-	padding: 5px 10px;
-}
 .btn-tool{
     margin-bottom: 2px;
+}
+ul#toolnavbox {
+    position: fixed;
+    margin: 0px;
+    padding: 0px;
+    top: 10px;
+    left: 0px;
+    list-style: none;
+    z-index:9999;
+}
+ul#toolnavbox li {
+    width: 200px;
+}
+ul#toolnavbox li a {
+    display: block;
+    margin-left: -2px;
+    font-size: 12px;
+    width: 200px;
+    height: 35px;
+}
+ul#toolnavbox .tool-img{
+    float: left;
+    margin-right: 5px;
+}
+ul#toolnavbox li a.btn{
+    text-align: left !important;
+}
+
+ul#toolnavbox-two {
+    position: fixed;
+    margin: 0px;
+    padding: 0px;
+    top: 10px;
+    left: 0px;
+    list-style: none;
+    z-index:9999;
+}
+ul#toolnavbox-two li {
+    width: 50px;
+}
+ul#toolnavbox-two li a {
+    display: block;
+    margin-left: -2px;
+    font-size: 12px;
+    width: 50px;
+    
+}
+ul#toolnavbox-two .tool-img{
+    float: left;
+    margin-right: 5px;
+}
+ul#toolnavbox-two li a.btn{
+    text-align: left !important;
 }
 /* CSS BACKUP *****/
 .elfinder-cwd-filename {

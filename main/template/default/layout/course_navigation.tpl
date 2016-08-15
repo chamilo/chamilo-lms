@@ -9,13 +9,6 @@
 
     {% if show_course_navigation_menu is not null %}
         <script>
-            $(document).ready( function() {
-                if (readCookie('menu_state') == 0) {
-                    swap_menu();
-                }
-
-              
-            });
             function createCookie(name, value, days) {
                 if (days) {
                     var date = new Date();
@@ -36,27 +29,7 @@
                 }
                 return null;
             }
-            function swap_menu() {
-                toolnavlist_el = document.getElementById('toolnavbox');
-                center_el = document.getElementById('center');
-                swap_menu_link_el = document.getElementById('swap_menu_link');
-
-                if (toolnavlist_el.style.display == 'none') {
-                    toolnavlist_el.style.display = '';
-                    if (center_el) {
-                        center_el.style.margin = '0 190px 0 0';
-                    }
-                    swap_menu_link_el.innerHTML = '<i class="fa fa-bars" aria-hidden="true"></i>';
-                    createCookie('menu_state',1,10);
-                } else {
-                    toolnavlist_el.style.display = 'none';
-                    if (center_el) {
-                        center_el.style.margin = '0 0 0 0';
-                    }
-                    swap_menu_link_el.innerHTML = '<i class="fa fa-bars" aria-hidden="true"></i>';
-                    createCookie('menu_state',0,10);
-                }
-            }
+            
         </script>
     {{ show_course_navigation_menu }}
     {% endif %}

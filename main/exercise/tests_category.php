@@ -49,7 +49,7 @@ switch ($action) {
         $content = edit_category_form('editcategory');
         break;
     case 'deletecategory':
-        delete_category_form('deletecategory');
+        delete_category_form();
         break;
     case 'export_category':
         $archiveFile = 'export_exercise_categoroes_'.api_get_course_id().'_'.api_get_local_time();
@@ -174,7 +174,7 @@ function edit_category_form($action)
 }
 
 // process to delete a category
-function delete_category_form($action)
+function delete_category_form()
 {
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category = new TestCategory($_GET['category_id']);

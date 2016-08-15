@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 use ChamiloSession as Session;
 
 /**
@@ -31,7 +32,7 @@ $this_section = SECTION_COURSES;
 
 // Breadcrumbs
 $interbreadcrumb[] = array(
-    'url' => '../course_info/maintenance.php',
+    'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq(),
     'name' => get_lang('Maintenance')
 );
 

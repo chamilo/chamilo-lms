@@ -26,9 +26,9 @@ class TestCategory
      *
      * @author - Hubert Borderiou
      */
-    public function __construct($id = 0, $name = '', $description = "")
+    public function __construct($id = 0, $name = '', $description = '')
     {
-        if ($id != 0 && $name == "") {
+        if ($id != 0 && $name == '') {
             $obj = new TestCategory();
             $obj->getCategory($id);
             $this->id = $obj->id;
@@ -108,12 +108,12 @@ class TestCategory
 
             return false;
         }
-	}
+    }
 
-	/**
+    /**
      * Removes the category from the database
      * if there were question in this category, the link between question and category is removed
-	 */
+     */
     public function removeCategory()
     {
         $table = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
@@ -233,8 +233,8 @@ class TestCategory
             }
         }
 
-		return $categories;
-	}
+        return $categories;
+    }
 
     /**
      * Return the TestCategory id for question with question_id = $questionId
@@ -247,7 +247,6 @@ class TestCategory
      */
     public static function getCategoryForQuestion($questionId, $courseId = 0)
     {
-        $result = 0;
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -257,6 +256,7 @@ class TestCategory
                 FROM $table
                 WHERE question_id = $questionId AND c_id = $courseId";
         $res = Database::query($sql);
+        $result = 0;
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);
             $result = $data['category_id'];
@@ -293,12 +293,12 @@ class TestCategory
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
-        $catid = TestCategory::getCategoryForQuestion($questionId, $courseId);
-        $result = '';	// result
+        $categoryId = TestCategory::getCategoryForQuestion($questionId, $courseId);
+        $result = '';
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $catid = intval($catid);
+        $categoryId = intval($categoryId);
         $sql = "SELECT title FROM $table
-                WHERE id = $catid  AND c_id = $courseId";
+                WHERE id = $categoryId  AND c_id = $courseId";
         $res = Database::query($sql);
         $data = Database::fetch_array($res);
         if (Database::num_rows($res) > 0) {
@@ -314,6 +314,8 @@ class TestCategory
      * return : array of category id (integer)
      * hubert.borderiou 07-04-2011
      * @param int $exerciseId
+     *
+     * @return array
      */
     public static function getListOfCategoriesIDForTest($exerciseId)
     {
@@ -325,7 +327,6 @@ class TestCategory
         $categories = array();
         if (!empty($categoriesInExercise)) {
             foreach ($categoriesInExercise as $category) {
-                //$category['id'] = $category['iid'];
                 $categories[$category['id']] = $category;
             }
         }
@@ -406,6 +407,7 @@ class TestCategory
             $cat['title'] = $cat['name'];
             $result[$cat['id']] = $cat;
         }
+
         return $result;
     }
 

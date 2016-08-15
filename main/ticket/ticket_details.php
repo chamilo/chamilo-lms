@@ -68,8 +68,8 @@ $(document).ready(function() {
 function validate() {
     fckEditor1val = CKEDITOR.instances["content"].getData();
     document.getElementById("content").value= fckEditor1val;
-    if(fckEditor1val == ""){
-        alert("' . get_lang('YouMustWriteAMessage') . '");
+    if (fckEditor1val == ""){
+        alert("' . get_lang('Filled') . '");
         return false;
     }
 }
@@ -463,7 +463,6 @@ function show_form_send_message($ticket)
 {
     global $isAdmin;
     global $subject;
-    global $plugin;
 
     $form = new FormValidator(
         'send_ticket',

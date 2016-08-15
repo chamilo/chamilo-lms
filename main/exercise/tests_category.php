@@ -19,7 +19,7 @@ $htmlHeadXtra[] = '
 	}
 </script>';
 
-$nameTools = "";
+$nameTools = '';
 
 require_once '../inc/global.inc.php';
 
@@ -94,10 +94,8 @@ Display::display_footer();
 function importCategoryForm()
 {
     $form = new FormValidator('import', 'post', api_get_self().'?action=import_category&'.api_get_cidreq());
-    //$form->addElement('header', get_lang('ImportGroups'));
     $form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
     $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
-    //$form->addElement('label', null, Display::url(get_lang('ExampleCSVFile'), api_get_path(WEB_CODE_PATH).'group/example.csv'));
     $form->addButtonImport(get_lang('Import'));
 
     return $form;
@@ -149,19 +147,19 @@ function edit_category_form($action)
             $check = Security::check_token('post');
             if ($check) {
                 $values = $form->exportValues();
-                $v_id = Security::remove_XSS($values['category_id']);
-                $v_name = Security::remove_XSS($values['category_name'], COURSEMANAGER);
-                $v_description = Security::remove_XSS($values['category_description'], COURSEMANAGER);
-                $objcat = new TestCategory($v_id, $v_name, $v_description);
-                if ($objcat->modifyCategory()) {
-                    Display::addFlash(Display::return_message(get_lang('MofidfyCategoryDone')));
+                $category = new TestCategory(
+                    $values['category_id'],
+                    $values['category_name'],
+                    $values['category_description']
+                );
+                if ($category->modifyCategory()) {
+                    Display::addFlash(Display::return_message(get_lang('Updated')));
                 } else {
-                    Display::addFlash(Display::return_message(get_lang('ModifyCategoryError')));
+                    Display::addFlash(Display::return_message(get_lang('ModifyCategoryError'), 'error'));
                 }
             }
             Security::clear_token();
         } else {
-            display_goback();
             $token = Security::get_token();
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
@@ -179,15 +177,14 @@ function edit_category_form($action)
 function delete_category_form($action)
 {
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
-        $category_id = Security::remove_XSS($_GET['category_id']);
-        $catobject = new TestCategory($category_id);
-        if ($catobject->removeCategory()) {
-            Display::display_confirmation_message(get_lang('DeleteCategoryDone'));
+        $category = new TestCategory($_GET['category_id']);
+        if ($category->removeCategory()) {
+            Display::addFlash(Display::return_message(get_lang('DeleteCategoryDone')));
         } else {
-            Display::display_error_message(get_lang('CannotDeleteCategoryError'));
+            Display::addFlash(Display::return_message(get_lang('CannotDeleteCategoryError'), 'error'));
         }
     } else {
-        Display::display_error_message(get_lang('CannotDeleteCategoryError'));
+        Display::addFlash(Display::return_message(get_lang('CannotDeleteCategoryError'), 'error'));
     }
 }
 
@@ -219,18 +216,15 @@ function add_category_form($action)
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->exportValues();
-            $v_name = Security::remove_XSS($values['category_name'], COURSEMANAGER);
-            $v_description = Security::remove_XSS($values['category_description'], COURSEMANAGER);
-            $objcat = new TestCategory(0, $v_name, $v_description);
-            if ($objcat->addCategoryInBDD()) {
-                Display::display_confirmation_message(get_lang('AddCategoryDone'));
+            $category = new TestCategory(0, $values['category_name'], $values['category_description']);
+            if ($category->addCategoryInBDD()) {
+                Display::addFlash(Display::return_message(get_lang('AddCategoryDone')));
             } else {
-                Display::display_confirmation_message(get_lang('AddCategoryNameAlreadyExists'));
+                Display::addFlash(Display::return_message(get_lang('AddCategoryNameAlreadyExists'), 'warning'));
             }
         }
         Security::clear_token();
     } else {
-        //display_goback();
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
@@ -262,13 +256,4 @@ function displayActionBar()
     echo '</div>';
     echo "<br/>";
     echo "<fieldset><legend>" . get_lang('QuestionCategory') . "</legend></fieldset>";
-}
-
-// display goback to category list page link
-function display_goback()
-{
-    echo '<div class="actions">';
-    echo '<a href="' . api_get_self() . '?'.api_get_cidreq().'">' .
-        Display::return_icon('back.png', get_lang('BackToCategoryList'), array(), 32) . '</a>';
-    echo '</div>';
 }

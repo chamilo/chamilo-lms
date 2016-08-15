@@ -353,7 +353,8 @@ function lp_upload_quiz_action_handling()
                     $categoryName = $categoryList[$i];
                     $categoryId = TestCategory::get_category_id_for_title($categoryName, $courseId);
                     if (empty($categoryId)) {
-                        $category = new TestCategory(null, $categoryName, '');
+                        $category = new TestCategory();
+                        $category->name = $categoryName;
                         $categoryId = $category->addCategoryInBDD();
                     }
                 }

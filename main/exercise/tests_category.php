@@ -72,7 +72,9 @@ switch ($action) {
             $categories = Import::csv_reader($_FILES['file']['tmp_name']);
             if (!empty($categories)) {
                 foreach ($categories as $item) {
-                    $cat = new TestCategory(0, $item['title'], $item['description']);
+                    $cat = new TestCategory();
+                    $cat->name = $item['title'];
+                    $cat->description = $item['description'];
                     $cat->addCategoryInBDD();
                 }
                 Display::addFlash(Display::return_message(get_lang('Imported')));
@@ -111,8 +113,8 @@ function edit_category_form($action)
     $action = Security::remove_XSS($action);
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category_id = intval($_GET['category_id']);
-        $objcat = new TestCategory($category_id);
-
+        $objcat = new TestCategory();
+        $objcat = $objcat->getCategory($category_id);
         $form = new FormValidator(
             'note',
             'post',
@@ -147,12 +149,13 @@ function edit_category_form($action)
             $check = Security::check_token('post');
             if ($check) {
                 $values = $form->exportValues();
-                $category = new TestCategory(
-                    $values['category_id'],
-                    $values['category_name'],
-                    $values['category_description']
-                );
-                if ($category->modifyCategory()) {
+                $category = new TestCategory();
+                $category = $category->getCategory($values['category_id']);
+
+                if ($category) {
+                    $category->name = $values['category_name'];
+                    $category->description = $values['category_description'];
+                    $category->modifyCategory();
                     Display::addFlash(Display::return_message(get_lang('Updated')));
                 } else {
                     Display::addFlash(Display::return_message(get_lang('ModifyCategoryError'), 'error'));
@@ -177,8 +180,8 @@ function edit_category_form($action)
 function delete_category_form()
 {
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
-        $category = new TestCategory($_GET['category_id']);
-        if ($category->removeCategory()) {
+        $category = new TestCategory();
+        if ($category->removeCategory($_GET['category_id'])) {
             Display::addFlash(Display::return_message(get_lang('DeleteCategoryDone')));
         } else {
             Display::addFlash(Display::return_message(get_lang('CannotDeleteCategoryError'), 'error'));
@@ -216,7 +219,9 @@ function add_category_form($action)
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->exportValues();
-            $category = new TestCategory(0, $values['category_name'], $values['category_description']);
+            $category = new TestCategory();
+            $category->name = $values['category_name'];
+            $category->description = $values['category_description'];
             if ($category->addCategoryInBDD()) {
                 Display::addFlash(Display::return_message(get_lang('AddCategoryDone')));
             } else {

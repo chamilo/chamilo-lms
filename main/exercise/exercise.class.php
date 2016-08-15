@@ -1019,7 +1019,9 @@ class Exercise
             $newCategoryList = array();
 
             foreach ($questions_by_category as $categoryId => $questionList) {
-                $cat = new TestCategory($categoryId);
+                $cat = new TestCategory();
+                $cat = $cat->getCategory($categoryId);
+
                 $cat = (array)$cat;
                 $cat['iid'] = $cat['id'];
                 //*$cat['name'] = $cat['name'];

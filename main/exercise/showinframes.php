@@ -78,12 +78,9 @@ $noPHP_SELF = true;
 $htmlHeadXtra[] = '
 <script>
     $(document).ready( function(){
-        var height = $(this).innerHeight( - 20;
-        if (height < 0) {
-            height  = "95%";
-        }
-        $("#hotpotatoe").css("height", height);
-    });
+var height = $(this).innerHeight() - 20;
+$("#hotpotatoe").css("height", height)
+});
 </script>';
 
 $interbreadcrumb[]= array ("url"=>"./exercise.php", "name"=> get_lang('Exercises'));

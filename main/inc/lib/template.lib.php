@@ -894,7 +894,7 @@ class Template
         $iconBug = Display::return_icon('bug.png', get_lang('ReportABug'), null, ICON_SIZE_LARGE);
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
             $rightFloatMenu = '<div class="report">
-		<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
+		<a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
                     '. $iconBug . '
                 </a>
 		</div>';

@@ -267,6 +267,7 @@ class MoodleImport
         }
 
         removeDir($destinationDir);
+
         return $packageContent[$mainFileKey];
     }
 
@@ -625,9 +626,7 @@ class MoodleImport
 
                 $answerOptionsWeight = substr($answerOptionsWeight, 0, -1);
                 $answerOptionsSize = substr($answerOptionsSize, 0, -1);
-
                 $answerOptions = $answerOptionsWeight.':'.$answerOptionsSize.':0@';
-
                 $placeholder = $placeholder.PHP_EOL.$answerOptions;
 
                 // This is a minor trick to clean the question description that in a multianswer is the main placeholder
@@ -657,9 +656,7 @@ class MoodleImport
 
                 $answerOptionsWeight = substr($answerOptionsWeight, 0, -1);
                 $answerOptionsSize = substr($answerOptionsSize, 0, -1);
-
                 $answerOptions = $answerOptionsWeight.':'.$answerOptionsSize.':0@';
-
                 $placeholder = $placeholder.PHP_EOL.$answerOptions;
 
                 // sets the total weighting of the question
@@ -884,11 +881,10 @@ class MoodleImport
             foreach ($activities as $activity) {
 
                 $currentItem = [];
-
                 $thisIsAnInvalidItem = false;
 
                 if ($activity->childNodes->length) {
-                    foreach ($activity->childNodes as $item ) {
+                    foreach ($activity->childNodes as $item) {
                         if ($item->nodeName == 'component' && $item->nodeValue == 'mod_resource') {
                             $thisIsAnInvalidItem = true;
                         }
@@ -937,7 +933,7 @@ class MoodleImport
             if (is_array($value)) {
                 $this->traverseArray($value, $keys);
             } else {
-                if (in_array($key, $keys)){
+                if (in_array($key, $keys)) {
                     unset($array[$key]);
                 }
             }

@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="nelmio_api_doc.extractor.api_doc_extractor.class">Nelmio\ApiDocBundle\Extractor\ApiDocExtractor</parameter>
+        <parameter key="nelmio_api_doc.form.extension.description_form_type_extension.class">Nelmio\ApiDocBundle\Form\Extension\DescriptionFormTypeExtension</parameter>
+        <parameter key="nelmio_api_doc.twig.extension.extra_markdown.class">Nelmio\ApiDocBundle\Twig\Extension\MarkdownExtension</parameter>
+        <parameter key="nelmio_api_doc.doc_comment_extractor.class">Nelmio\ApiDocBundle\Util\DocCommentExtractor</parameter>
+
+        <parameter key="nelmio_api_doc.extractor.handler.fos_rest.class">Nelmio\ApiDocBundle\Extractor\Handler\FosRestHandler</parameter>
+        <parameter key="nelmio_api_doc.extractor.handler.jms_security.class">Nelmio\ApiDocBundle\Extractor\Handler\JmsSecurityExtraHandler</parameter>
+        <parameter key="nelmio_api_doc.extractor.handler.sensio_framework_extra.class">Nelmio\ApiDocBundle\Extractor\Handler\SensioFrameworkExtraHandler</parameter>
+        <parameter key="nelmio_api_doc.extractor.handler.phpdoc.class">Nelmio\ApiDocBundle\Extractor\Handler\PhpDocHandler</parameter>
+
+        <parameter key="nelmio_api_doc.parser.collection_parser.class">Nelmio\ApiDocBundle\Parser\CollectionParser</parameter>
+        <parameter key="nelmio_api_doc.parser.form_errors_parser.class">Nelmio\ApiDocBundle\Parser\FormErrorsParser</parameter>
+        <parameter key="nelmio_api_doc.parser.json_serializable_parser.class">Nelmio\ApiDocBundle\Parser\JsonSerializableParser</parameter>
+    </parameters>
+
+    <services>
+        <service id="nelmio_api_doc.doc_comment_extractor" class="%nelmio_api_doc.doc_comment_extractor.class%" />
+
+        <service id="nelmio_api_doc.controller_name_parser" class="Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser" public="false">
+            <argument type="service" id="kernel" />
+        </service>
+
+        <service id="nelmio_api_doc.extractor.api_doc_extractor" class="%nelmio_api_doc.extractor.api_doc_extractor.class%">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="router" />
+            <argument type="service" id="annotation_reader" />
+            <argument type="service" id="nelmio_api_doc.doc_comment_extractor" />
+            <argument type="service" id="nelmio_api_doc.controller_name_parser" />
+            <argument type="collection" />
+            <argument type="collection" />
+        </service>
+
+        <service id="nelmio_api_doc.form.extension.description_form_type_extension" class="%nelmio_api_doc.form.extension.description_form_type_extension.class%">
+            <tag name="form.type_extension" alias="form" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType" />
+        </service>
+
+        <service id="nelmio_api_doc.twig.extension.extra_markdown" class="%nelmio_api_doc.twig.extension.extra_markdown.class%">
+            <tag name="twig.extension" />
+        </service>
+
+        <!-- Extractor Annotation Handlers -->
+
+        <service id="nelmio_api_doc.extractor.handler.fos_rest" class="%nelmio_api_doc.extractor.handler.fos_rest.class%" public="false">
+            <tag name="nelmio_api_doc.extractor.handler"/>
+        </service>
+
+        <service id="nelmio_api_doc.extractor.handler.jms_security" class="%nelmio_api_doc.extractor.handler.jms_security.class%" public="false">
+            <tag name="nelmio_api_doc.extractor.handler"/>
+        </service>
+
+        <service id="nelmio_api_doc.extractor.handler.sensio_framework_extra" class="%nelmio_api_doc.extractor.handler.sensio_framework_extra.class%" public="false">
+            <tag name="nelmio_api_doc.extractor.handler"/>
+        </service>
+
+        <service id="nelmio_api_doc.extractor.handler.phpdoc" class="%nelmio_api_doc.extractor.handler.phpdoc.class%" public="false">
+            <argument type="service" id="nelmio_api_doc.doc_comment_extractor" />
+            <tag name="nelmio_api_doc.extractor.handler"/>
+        </service>
+
+        <service id="nelmio_api_doc.parser.collection_parser" class="%nelmio_api_doc.parser.collection_parser.class%">
+            <tag name="nelmio_api_doc.extractor.parser" />
+        </service>
+        <service id="nelmio_api_doc.parser.form_errors_parser" class="%nelmio_api_doc.parser.form_errors_parser.class%">
+            <tag name="nelmio_api_doc.extractor.parser" />
+        </service>
+
+        <!-- priority=1 means it comes before the validation parser, which can often add better type information -->
+        <service id="nelmio_api_doc.parser.json_serializable_parser" class="%nelmio_api_doc.parser.json_serializable_parser.class%">
+            <tag name="nelmio_api_doc.extractor.parser" priority="1" />
+        </service>
+    </services>
+
+</container>

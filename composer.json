@@ -32,6 +32,12 @@
             "main/inc/lib/hook"
         ]
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/jmontoyaa/essence"
+        }
+    ],
     "require": {
         "php": ">=5.4",
         "ext-intl": "*",
@@ -97,7 +103,7 @@
         "phpoffice/phpword": "^0.12.1",
         "facebook/php-sdk-v4" : "~5.0",
         "kigkonsult/icalcreator" : "dev-master",
-        "essence/essence": "^3.2",
+        "essence/essence": "dev-jmontoyaa-patch-1",
         "pclzip/pclzip": "2.8.2"
     },
     "require-dev": {

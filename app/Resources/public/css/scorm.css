@@ -152,17 +152,21 @@ See https://support.chamilo.org/issues/6976
 #learning_path_breadcrumb_zone .breadcrumb a:hover{
   color: #dddddd;
 }
-#view_as_link{
-  margin-right: 10px;
-}
 .total{
   width: 100%;
+}
+.view-options{
+    padding-top: 3px;
+    margin-right: 5px;
 }
 .panel-default .panel-heading .btn{
   top: -25px;
 }
 .panel-default .panel-heading .dropdown-menu{
   top: 30%;
+}
+#content-scorm .breadcrumb{
+  padding: 5px;
 }
 .scorm-heading{
   font-size: 14px;
@@ -401,14 +405,25 @@ See https://support.chamilo.org/issues/6976
 }
 #lp-view-expand-button{
     border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
 }
-.icon-toolbar{
-    border-radius: 100%;
-    width: 35px;
-    display: inline-block;
-    margin: 0px 5px 5px 0px;
-    color: #fff;
-    
+.movil-toolbar{
+    width: 100%;
+    height: 40px;
+    padding-top: 5px;
+}
+.btn-movil{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.btn-movil li{
+    display: block;
+    float: left;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 .icon-toolbar .fa{
     width: 35px;
@@ -418,6 +433,7 @@ See https://support.chamilo.org/issues/6976
     border-radius: 100%;
     background-color: #34495E;
     font-size: 20px;
+    color: #FFF;
 }
 .icon-toolbar .fa:hover{
     background-color: #000;
@@ -508,10 +524,10 @@ See https://support.chamilo.org/issues/6976
     #home-course{
         display: none !important;
     }
-    .movil-toolbar{
-        text-align: center;
-    }
     .scorm-title{
         font-size: 14px;
+    }
+    .movil-toolbar{
+        padding-left: 35%;
     }
 }

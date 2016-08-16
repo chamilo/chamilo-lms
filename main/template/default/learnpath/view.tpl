@@ -7,7 +7,7 @@
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 <div class="lp-view-zone-container">
                     <div id="scorm-info">
-                        <div id="panel-scorm" class="panel-bsody">
+                        <div id="panel-scorm" class="panel-body">
                             <div class="image-avatar">
                                     {% if lp_author == '' %}
                                        <div class="text-center">
@@ -30,10 +30,7 @@
                                         {{ media_player }}
                                     </div>
                                 {% endif %}
-                                
-
                                 {% if gamification_mode == 1 %}
-                                    <hr>
                                     <!--- gamification -->    
                                     <div id="scorm-gamification">
                                         <div class="row">
@@ -68,19 +65,21 @@
                                         {{ progress_bar }}
                                     </div>
                                 {% endif %}
-
+                                <div class="visible-xs-block movil-toolbar">
+                                    <ul class="btn-movil">
+                                        <li>
+                                            <a href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                                                <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <button type="button" id="lp-view-expand-button" class="icon-toolbar expand visible-xs-block">
+                                                <span class="fa fa-expand" aria-hidden="true"></span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                                 {{ teacher_toc_buttons }}
-
-                            <hr class="visible-xs-block">
-                            <div class="visible-xs-block movil-toolbar">
-                                <button type="button" id="lp-view-expand-button" class="icon-toolbar expand visible-xs-block">
-                                <span class="fa fa-expand" aria-hidden="true"></span>
-                                </button>
-                                <a href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                                    <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
-                                </a>
-                            </div>
-                            
                         </div>
                     </div>
 

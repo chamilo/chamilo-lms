@@ -23,6 +23,7 @@ class ScriptHandler
 
     /**
      * Delete old symfony folder before update (generates conflicts with composer)
+     * This method also applies to 1.10 folders removed for 1.11.
      */
     public static function deleteOldFilesFrom19x()
     {
@@ -60,11 +61,15 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/pclzip/',
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',
             __DIR__.'/../../../../main/announcements/resources',
-            __DIR__.'/../../../../main/plugin/ticket',
+            //Remove from 1.10
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelGroup.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelUser.php',
-            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/Groups.php'
+            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/Groups.php',
+            __DIR__.'/../../../../plugin/ticket',
+            __DIR__.'/../../../../plugin/skype',
+            __DIR__.'/../../../../main/newscorm',
+            __DIR__.'/../../../../main/exercice',
         ];
 
         $files = [

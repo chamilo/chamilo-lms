@@ -63,7 +63,8 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
             get_lang('UploadMyAssignment'),
             null,
             ICON_SIZE_MEDIUM
-        ) . get_lang('UploadMyAssignment'), $url,
+        ) . get_lang('UploadMyAssignment'),
+        $url,
         array('class'=>'btn-toolbar')
     );
 }

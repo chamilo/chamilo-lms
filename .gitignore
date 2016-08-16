@@ -44,7 +44,7 @@ plugin/bbb/config.vm.php
 main/cron/incoming/*
 
 # Stuff updated through composer - Remove just before release
-composer.lock
-vendor
-web/assets/*
+#composer.lock
+#vendor
+#web/assets/*
 

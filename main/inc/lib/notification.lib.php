@@ -329,7 +329,7 @@ class Notification extends Model
                 $this->save($params);
             }
 
-            MessagesWebService::sendPushNotification($user_list, $title, $content);
+            self::sendPushNotification($user_list, $title, $content);
         }
     }
 
@@ -442,5 +442,73 @@ class Notification extends Model
         }
 
         return $content;
+    }
+
+    /**
+     * Send the push notifications to Chamilo Mobile app
+     * @param array $userIds The IDs of users who will be notified
+     * @param string $title The notification title
+     * @param string $content The notification content
+     * @return int The number of success notifications. Otherwise returns false
+     */
+    public static function sendPushNotification(array $userIds, $title, $content)
+    {
+        if (api_get_setting('messaging_allow_send_push_notification') !== 'true') {
+            return false;
+        }
+
+        $gdcApiKey = api_get_setting('messaging_gdc_api_key');
+
+        if ($gdcApiKey === false) {
+            return false;
+        }
+
+        $content = str_replace(['<br>', '<br/>', '<br />'], "\n", $content);
+        $content = strip_tags($content);
+        $content = html_entity_decode($content, ENT_QUOTES);
+
+        $gcmRegistrationIds = [];
+
+        foreach ($userIds as $userId) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $valueInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $userId,
+                Rest::EXTRA_FIELD_GCM_REGISTRATION
+            );
+
+            if (empty($valueInfo)) {
+                continue;
+            }
+
+            $gcmRegistrationIds[] = $valueInfo['value'];
+        }
+
+        $headers = [
+            'Authorization: key=' . $gdcApiKey,
+            'Content-Type: application/json'
+        ];
+
+        $fields = json_encode([
+            'registration_ids' => $gcmRegistrationIds,
+            'data' => [
+                'title' => $title,
+                'message' => $content
+            ]
+        ]);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://gcm-http.googleapis.com/gcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        /** @var array $decodedResult */
+        $decodedResult = json_decode($result, true);
+
+        return intval($decodedResult['success']);
     }
 }

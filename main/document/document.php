@@ -31,6 +31,8 @@ use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 
+$allowDownloadDocumentsByApiKey = api_get_setting('allow_download_documents_by_api_key') === 'true';
+
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 $to_user_id = null;
@@ -38,8 +40,33 @@ $parent_id = null;
 
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
-api_protect_course_script(true);
-api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
+
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+
+$allowUseTool = false;
+
+if ($allowDownloadDocumentsByApiKey) {
+    try {
+        if ($action != 'download') {
+            throw new Exception(get_lang('SelectAnAction'));
+        }
+
+        $username = isset($_GET['username']) ? Security::remove_XSS($_GET['username']) : null;
+        $apiKey = isset($_GET['api_key']) ? Security::remove_XSS($_GET['api_key']) : null;
+
+        $restApi = Rest::validate($username, $apiKey);
+
+        $allowUseTool = $restApi ? true : false;
+    } catch (Exception $e) {
+        $allowUseTool = false;
+    }
+}
+
+if (!$allowUseTool) {
+    api_protect_course_script(true);
+    api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
+}
+
 DocumentManager::removeGeneratedAudioTempFile();
 
 if (
@@ -173,7 +200,6 @@ if (!empty($groupId)) {
 // Actions.
 
 $document_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 

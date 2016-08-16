@@ -267,4 +267,13 @@ class CAnnouncement
     {
         return $this->cId;
     }
+
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
 }

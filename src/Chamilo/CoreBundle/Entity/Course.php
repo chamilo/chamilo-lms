@@ -1184,4 +1184,31 @@ class Course
         }
         return $this;
     }
+
+    /**
+     * Check if the course has a picture
+     * @return bool
+     */
+    public function hasPicture()
+    {
+        return file_exists(api_get_path(SYS_COURSE_PATH) . $this->directory . '/course-pic85x85.png');
+    }
+
+    /**
+     * Get the course picture path
+     * @param bool $fullSize
+     * @return null|string
+     */
+    public function getPicturePath($fullSize = false)
+    {
+        if (!$this->hasPicture()) {
+            return null;
+        }
+
+        if ($fullSize) {
+            return api_get_path(WEB_COURSE_PATH) . $this->directory . '/course-pic.png';
+        }
+
+        return api_get_path(WEB_COURSE_PATH) . $this->directory . '/course-pic85x85.png';
+    }
 }

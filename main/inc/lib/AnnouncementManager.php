@@ -177,6 +177,68 @@ class AnnouncementManager
         }
     }
 
+    public static function getAnnouncementInfoById($announcementId, $courseId, $userId)
+    {
+        if (api_is_allowed_to_edit(false, true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+            $dql = "SELECT CA, IP
+                    FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
+                    WHERE
+                        CA.id = IP.ref AND
+                        CA.iid = :announcement AND
+                        IP.tool = 'announcement' AND
+                        CA.cId = IP.course AND
+                        CA.cId = :course AND
+                    ORDER BY CA.displayOrder DESC";
+        } else {
+            $group_list = GroupManager::get_group_ids($courseId, api_get_user_id());
+
+            if (empty($group_list)) {
+                $group_list[] = 0;
+            }
+
+            if (api_get_user_id() != 0) {
+                $dql = "SELECT CA, IP
+                    FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
+                    WHERE
+                        CA.id = IP.ref AND
+                        CA.iid = :announcement AND
+                        IP.tool='announcement' AND
+                        (
+                            IP.toUser = $userId OR
+                            IP.group IN ('0', '" . implode("', '", $group_list) . "') OR
+                            IP.group IS NULL
+                        ) AND
+                        IP.visibility = '1' AND
+                        CA.cId = IP.course AND
+                        IP.course = :course
+                    ORDER BY CA.displayOrder DESC";
+            } else {
+                $dql = "SELECT CA, IP
+                    FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
+                    WHERE
+                            CA.id = IP.ref AND
+                            CA.iid = :announcement AND
+                            IP.tool = 'announcement' AND
+                            (IP.group = '0' OR IP.group IS NULL) AND
+                            IP.visibility = '1' AND
+                            CA.cId = IP.course AND
+                            IP.course = :course";
+            }
+        }
+
+        $result = Database::getManager()
+            ->createQuery($dql)
+            ->execute([
+                'announcement' => $announcementId,
+                'course' => $courseId
+            ]);
+
+        return [
+            'announcement' => $result[0],
+            'item_property' => $result[1]
+        ];
+    }
+
     /**
      * Displays one specific announcement
      * @param int $announcement_id, the id of the announcement you want to display
@@ -188,135 +250,80 @@ class AnnouncementManager
         }
 
         global $charset;
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        $course_id = api_get_course_int_id();
+        $html = '';
+        $result = self::getAnnouncementInfoById($announcement_id, api_get_course_int_id(), api_get_user_id());
+        $title = $result['announcement']->getTitle();
+        $content = $result['announcement']->getContent();
+        $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
+        $html .= "<tr><td><h2>" . $title . "</h2></td></tr>";
 
-        if (api_is_allowed_to_edit(false, true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-            $sql = "SELECT announcement.*, toolitemproperties.*
-                    FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-                    WHERE
-                        announcement.id = toolitemproperties.ref AND
-                        announcement.id = '$announcement_id' AND
-                        toolitemproperties.tool='announcement' AND
-                        announcement.c_id = $course_id AND
-                        toolitemproperties.c_id = $course_id
-                    ORDER BY display_order DESC";
-        } else {
-            $group_list = GroupManager::get_group_ids($course_id, api_get_user_id());
-            if (empty($group_list)) {
-                $group_list[] = 0;
-            }
-            if (api_get_user_id() != 0) {
-                $sql = "SELECT announcement.*, toolitemproperties.*
-                        FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-                        WHERE
-                            announcement.id = toolitemproperties.ref AND
-                            announcement.id = '$announcement_id' AND
-                            toolitemproperties.tool='announcement' AND
-                            (
-                                toolitemproperties.to_user_id='" . api_get_user_id() . "' OR
-                                toolitemproperties.to_group_id IN ('0', '" . implode("', '", $group_list) . "') OR
-                                toolitemproperties.to_group_id IS NULL
-                            ) AND
-                            toolitemproperties.visibility='1' AND
-                            announcement.c_id = $course_id AND
-                            toolitemproperties.c_id = $course_id
-                        ORDER BY display_order DESC";
+        if (api_is_allowed_to_edit(false, true) ||
+            (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+        ) {
+            $modify_icons = "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=modify&id=" . $announcement_id . "\">" .
+                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . "</a>";
+            if ($result['item_property']->getVisibility() == 1) {
+                $image_visibility = "visible";
+                $alt_visibility = get_lang('Hide');
             } else {
-                $sql = "SELECT announcement.*, toolitemproperties.*
-                        FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-                        WHERE
-                            announcement.id = toolitemproperties.ref AND
-                            announcement.id = '$announcement_id' AND
-                            toolitemproperties.tool='announcement' AND
-                            (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id IS NULL) AND
-                            toolitemproperties.visibility='1' AND
-                            announcement.c_id = $course_id AND
-                            toolitemproperties.c_id = $course_id
-                        ";
+                $image_visibility = "invisible";
+                $alt_visibility = get_lang('Visible');
             }
+            global $stok;
+
+            $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&origin=" . (!empty($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '') . "&action=showhide&id=" . $announcement_id . "&sec_token=" . $stok . "\">" .
+                Display::return_icon($image_visibility . '.png', $alt_visibility, '', ICON_SIZE_SMALL) . "</a>";
+
+            if (api_is_allowed_to_edit(false, true)) {
+                $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete&id=" . $announcement_id . "&sec_token=" . $stok . "\" onclick=\"javascript:if(!confirm('" . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)) . "')) return false;\">" .
+                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) .
+                    "</a>";
+            }
+            $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
         }
 
-        $sql_result = Database::query($sql);
-        $html = null;
-        if (Database::num_rows($sql_result) > 0) {
-            $result = Database::fetch_array($sql_result, 'ASSOC');
-            $title = $result['title'];
-            $content = $result['content'];
-            $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
-            $html .= "<tr><td><h2>" . $title . "</h2></td></tr>";
+        $content = self::parse_content($result['item_property']->getToUser()->getId(), $content, api_get_course_id(), api_get_session_id());
 
-            if (api_is_allowed_to_edit(false, true) ||
-                (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
-            ) {
-                $modify_icons = "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=modify&id=" . $announcement_id . "\">" .
-                    Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . "</a>";
-                if ($result['visibility'] == 1) {
-                    $image_visibility = "visible";
-                    $alt_visibility = get_lang('Hide');
-                } else {
-                    $image_visibility = "invisible";
-                    $alt_visibility = get_lang('Visible');
-                }
-                global $stok;
+        $html .= "<tr><td>$content</td></tr>";
+        $html .= "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " . api_convert_and_format_date(
+            $result['item_property']->getInsertDate(), DATE_TIME_FORMAT_LONG
+        ) . "</td></tr>";
 
-                $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&origin=" . (!empty($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '') . "&action=showhide&id=" . $announcement_id . "&sec_token=" . $stok . "\">" .
-                    Display::return_icon($image_visibility . '.png', $alt_visibility, '', ICON_SIZE_SMALL) . "</a>";
+        if ($result['item_property']->getGroup() !== null) {
+            $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
+        }
+        if (api_is_allowed_to_edit(false, true)) {
+            $sent_to = self::sent_to('announcement', $announcement_id);
+            $sent_to_form = self::sent_to_form($sent_to);
+            $html .= Display::tag(
+                'td',
+                get_lang('SentTo') . ' : ' . $sent_to_form,
+                array('class' => 'announcements_datum')
+            );
+        }
+        $attachment_list = self::get_attachment($announcement_id);
 
-                if (api_is_allowed_to_edit(false, true)) {
-                    $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete&id=" . $announcement_id . "&sec_token=" . $stok . "\" onclick=\"javascript:if(!confirm('" . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)) . "')) return false;\">" .
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) .
-                        "</a>";
-                }
-                $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
-            }
-
-            $content = self::parse_content($result['to_user_id'], $content, api_get_course_id(), api_get_session_id());
-
-            $html .= "<tr><td>$content</td></tr>";
-            $html .= "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " . api_convert_and_format_date($result['insert_date'], DATE_TIME_FORMAT_LONG) . "</td></tr>";
-
-            // User or group icon
-            $sent_to_icon = '';
-            if ($result['to_group_id'] !== '0' and $result['to_group_id'] !== 'NULL') {
-                $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
-            }
+        if (count($attachment_list) > 0) {
+            $html .= "<tr><td>";
+            $realname = $attachment_list['path'];
+            $user_filename = $attachment_list['filename'];
+            $full_file_name = 'download.php?'.api_get_cidreq().'&file=' . $realname;
+            $html .= '<br/>';
+            $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
+            $html .= '<a href="' . $full_file_name . ' "> ' . $user_filename . ' </a>';
+            $html .= ' - <span class="forum_attach_comment" >' . $attachment_list['comment'] . '</span>';
             if (api_is_allowed_to_edit(false, true)) {
-                $sent_to = self::sent_to('announcement', $announcement_id);
-                $sent_to_form = self::sent_to_form($sent_to);
-                $html .= Display::tag(
-                    'td',
-                    get_lang('SentTo') . ' : ' . $sent_to_form,
-                    array('class' => 'announcements_datum')
+                $html .= Display::url(
+                    Display::return_icon('delete.png', get_lang('Delete'), '', 16),
+                    api_get_self() . "?" . api_get_cidreq() . "&action=delete_attachment&id_attach=" . $attachment_list['id'] . "&sec_token=" . $stok
                 );
             }
-            $attachment_list = self::get_attachment($announcement_id);
-
-            if (count($attachment_list) > 0) {
-                $html .= "<tr><td>";
-                $realname = $attachment_list['path'];
-                $user_filename = $attachment_list['filename'];
-                $full_file_name = 'download.php?'.api_get_cidreq().'&file=' . $realname;
-                $html .= '<br/>';
-                $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
-                $html .= '<a href="' . $full_file_name . ' "> ' . $user_filename . ' </a>';
-                $html .= ' - <span class="forum_attach_comment" >' . $attachment_list['comment'] . '</span>';
-                if (api_is_allowed_to_edit(false, true)) {
-                    $html .= Display::url(
-                        Display::return_icon('delete.png', get_lang('Delete'), '', 16),
-                        api_get_self() . "?" . api_get_cidreq() . "&action=delete_attachment&id_attach=" . $attachment_list['id'] . "&sec_token=" . $stok
-                    );
-                }
-                $html .= '</td></tr>';
-            }
-            $html .= "</table>";
-
-            return $html;
+            $html .= '</td></tr>';
         }
+        $html .= "</table>";
 
-        return null;
+        return $html;
     }
 
     /**
@@ -1395,7 +1402,9 @@ class AnnouncementManager
      * @param string $sord
      * @param string $titleToSearch
      * @param int $userIdToSearch
-     *
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
      * @return array
      */
     public static function getAnnouncements(
@@ -1407,16 +1416,19 @@ class AnnouncementManager
         $sidx = '',
         $sord = '',
         $titleToSearch = '',
-        $userIdToSearch = 0
+        $userIdToSearch = 0,
+        $userId = 0,
+        $courseId = 0,
+        $sessionId = 0
     ) {
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        $user_id = api_get_user_id();
+        $user_id = $userId ?: api_get_user_id();
         $group_id = api_get_group_id();
-        $session_id = api_get_session_id();
+        $session_id = $sessionId ?: api_get_session_id();
         $condition_session = api_get_session_condition($session_id, true, true, 'announcement.session_id');
-        $course_id = api_get_course_int_id();
+        $course_id = $courseId ?: api_get_course_int_id();
         $_course = api_get_course_info();
 
         $group_memberships = GroupManager::get_group_ids($course_id, api_get_user_id());

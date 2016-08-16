@@ -36,6 +36,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/jmontoyaa/essence"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ywarnier/iCalcreator"
         }
     ],
     "require": {
@@ -102,7 +106,7 @@
         "jimmiw/php-time-ago": "^0.4.11",
         "phpoffice/phpword": "^0.12.1",
         "facebook/php-sdk-v4" : "~5.0",
-        "kigkonsult/icalcreator" : "dev-master",
+        "kigkonsult/icalcreator" : "0.1.0",
         "essence/essence": "dev-jmontoyaa-patch-1",
         "pclzip/pclzip": "2.8.2"
     },

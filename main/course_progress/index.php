@@ -64,14 +64,10 @@ if ($action == 'thematic_details' || $action == 'thematic_list') {
 }
 
 // get thematic id
-if (isset($_GET['thematic_id'])) {
-    $thematic_id = intval($_GET['thematic_id']);
-}
+$thematic_id = isset($_GET['thematic_id']) ? (int) $_GET['thematic_id'] : 0;
 
 // get thematic plan description type
-if (isset($_GET['description_type'])) {
-    $description_type = intval($_GET['description_type']);
-}
+$description_type = isset($_GET['description_type']) ? (int) $_GET['description_type'] : 0;
 
 // instance thematic object for using like library here
 $thematic = new Thematic();

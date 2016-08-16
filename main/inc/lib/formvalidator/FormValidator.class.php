@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * Class FormValidator
  * create/manipulate/validate user input.
@@ -951,8 +949,15 @@ EOT;
         // Add div-element which is to hold the progress bar
         $id = $this->getAttribute('id');
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
+            $icon = Display::return_icon('progress_bar.gif');
+
             // @todo improve UI
-            $returnValue .= '<br /><div id="loading_div_'.$id.'" class="loading_div"><i class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom"></i></div>';
+            $returnValue .= '<br />
+
+            <div id="loading_div_'.$id.'" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
+                '.$icon.'
+            </div>
+            ';
         }
 
         return $returnValue;

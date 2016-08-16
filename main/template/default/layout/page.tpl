@@ -33,7 +33,10 @@
     </div>
     {% endif %}
 
+    {% if show_header == true %}
     {% include template ~ "/layout/page_header.tpl" %}
+    {% endif %}
+
 	<section id="content-section">
         <div class="container">
             {% block breadcrumb %}
@@ -45,7 +48,10 @@
             {% endblock %}
         </div>
 	</section>
+
+    {% if show_footer == true %}
 	{% include template ~ "/layout/page_footer.tpl" %}
+    {% endif %}
     </div>
   </body>
 </html>

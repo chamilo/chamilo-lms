@@ -275,7 +275,7 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
             searchDialogAll.addClass("table");
             var searchDialog = $("#searchmodfbox_"+grid[0].id);
             searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
-            searchDialog.css({position:"relative", "z-index":"auto", "float":"left"})
+            searchDialog.css({position:"adsolute", "z-index":"100", "float":"left", "top":"30%", "left" : "30%", "padding" : "5px", "border": "1px solid #CCC"})
             var gbox = $("#gbox_"+grid[0].id);
             gbox.before(searchDialog);
             gbox.css({clear:"left"});

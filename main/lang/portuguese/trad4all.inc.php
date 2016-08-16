@@ -30,7 +30,7 @@ $CotangentCot = "Co-tangente:\t\t\tcot(x)";
 $HyperbolicCotangentCoth = "Co-tangente hiperbólico:\t\tcoth(x)";
 $ArccotangentArccot = "Arcoco-tangente:\t\t\tarccot(x)";
 $HyperbolicArccotangentArccoth = "Arco-cotangente hiperbólico:\t\tarccoth(x)";
-$HelpCookieUsageValidation = "Para o bom funcionamento do site e medir a sua utilização, esta plataforma usa cookies.<br /><br />\nSe que julgar necessário, a seção de ajuda do seu navegador vai falar sobre as prcedimientos para definir cookies.<br /><br />\nPara obter mais informações sobre cookies, você pode visitar o site <a href=\\"http://www.aboutcookies.org/\\">About Cookies</a> (em inglês) ou qualquer equivalente em 
+$HelpCookieUsageValidation = "Para o bom funcionamento do site e medir a sua utilização, esta plataforma usa cookies.<br /><br />\nSe que julgar necessário, a seção de ajuda do seu navegador vai falar sobre as prcedimientos para definir cookies.<br /><br />\nPara obter mais informações sobre cookies, você pode visitar o site <a href='http://www.aboutcookies.org/'>About Cookies</a> (em inglês) ou qualquer equivalente em 
 português.";
 $YouAcceptCookies = "Ao continuar a utilizar este site, você declara aceitar o uso de cookies.";
 $TemplateCertificateComment = "Certificado de exemplo";
@@ -45,7 +45,7 @@ $Formula = "Fórmula";
 $MultipleConnectionsAreNotAllow = "Este usuário já está conectado";
 $Listen = "Ouvir";
 $AudioFileForItemX = "Áudio para o item %s";
-$ThereIsANewWorkFeedbackInWorkXHere = "Há um novo comentário na tarefa %s. Para ver <a href=\\"%s\\">clique aqui </a>";
+$ThereIsANewWorkFeedbackInWorkXHere = "Há um novo comentário na tarefa %s. Para ver <a href='%s'>clique aqui </a>";
 $ThereIsANewWorkFeedback = "Há um novo comentário na tarefa %s";
 $LastUpload = "Último carregamento";
 $EditUserListCSV = "Editar usuários por CSV";
@@ -5948,7 +5948,7 @@ $ContactInformationHasBeenSent = "Informação de contato enviada";
 $EditExtraFieldOptions = "Editar opções os campos extras";
 $ExerciseDescriptionLabel = "Descrição";
 $UserInactivedSinceX = "Usuário inativo a partir de %s";
-$ContactInformationDescription = "Caro usuário,\n\nestá prestes a instalar um dos a melhor plataforma open source de e-learning no mercado. Como muitos outros projetos de código aberto, Chamilo é apoiado por uma grande comunidade de professores, estudantes, desenvolvedores e criadores de conteúdo.\n\nSe você sabe mais quem vai gerir este sistema e-learning, pode divulgar outros que o nosso software que você usa e você pode dizer sobre eventos que possam ser de interesse.\n\nCumplimentar essa forma consiste na aceitação do associação Chamilo ou seus membros possam enviar informações por e-mail sobre eventos ou atualizações importantes o software Chamilo. Isso irá ajudar a comunidade a crescer como uma entidade organizada, onde o fluxo de informações, é feito o respeito permanente para o seu tempo e sua privacidade.\n\nNo entanto, note que não tem nenhuma obrigação de preencher este formulário. Se você deseja manter o anonimato, vamos perder a oportunidade de oferecer todos os privilégios de ser um portal administrador registrado, mas vai respeitar sua decisão. Basta deixar este formulário em branco e clique em \\"Avançar\\" para continuar a instalação Chamilo.";
+$ContactInformationDescription = "Caro usuário,\n\nestá prestes a instalar um dos a melhor plataforma open source de e-learning no mercado. Como muitos outros projetos de código aberto, Chamilo é apoiado por uma grande comunidade de professores, estudantes, desenvolvedores e criadores de conteúdo.\n\nSe você sabe mais quem vai gerir este sistema e-learning, pode divulgar outros que o nosso software que você usa e você pode dizer sobre eventos que possam ser de interesse.\n\nCumplimentar essa forma consiste na aceitação do associação Chamilo ou seus membros possam enviar informações por e-mail sobre eventos ou atualizações importantes o software Chamilo. Isso irá ajudar a comunidade a crescer como uma entidade organizada, onde o fluxo de informações, é feito o respeito permanente para o seu tempo e sua privacidade.\n\nNo entanto, note que não tem nenhuma obrigação de preencher este formulário. Se você deseja manter o anonimato, vamos perder a oportunidade de oferecer todos os privilégios de ser um portal administrador registrado, mas vai respeitar sua decisão. Basta deixar este formulário em branco e clique em 'Avançar' para continuar a instalação Chamilo.";
 $CompanyActivity = "Actividade da empresa";
 $PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Por favor, permita-nos um pouco de tempo para inscrevê-lo num de nossos cursos. Se acha que nos esquecemos de si, contacte os administradores do portal. Normalmente pode encontrar os detalhes de contato no rodapé desta página.";
 $ManageSessionFields = "Administrar campos de sessão";
@@ -6082,8 +6082,8 @@ $CourseRequestAcceptedEmailText = "Seu petição do curso %s foi aprovado. Um no
 $CourseRequestRejectedEmailSubject = "%s A petição do curso %s foi rejeitada";
 $CourseRequestRejectedEmailText = "Lamentamos que o pedido do curso% s foi rejeitada porque não está em conformidade com os nossos termos e condições.";
 $CourseValidationTermsAndConditionsLink = "Petição do cursos - link para termos e condições";
-$CourseValidationTermsAndConditionsLinkComment = "A URL que liga o documento \\"Termos e Condições\\" que regem a aplicação de um curso. Se este endereço
-é definido, o usuário terá que ler e aceitar os termos e condições antes de submeter o seu pedido claro. Se você ativar o módulo \\"Termos e Condições\\" Chamilo e quiser usá-lo, em vez de termos e condições próprias, deixe este campo em branco.";
+$CourseValidationTermsAndConditionsLinkComment = "A URL que liga o documento 'Termos e Condições' que regem a aplicação de um curso. Se este endereço
+é definido, o usuário terá que ler e aceitar os termos e condições antes de submeter o seu pedido claro. Se você ativar o módulo 'Termos e Condições' Chamilo e quiser usá-lo, em vez de termos e condições próprias, deixe este campo em branco.";
 $CourseCreationFailed = "O curso não tiver sido criado devido a um erro interno.";
 $CourseRequestCreationFailed = "A petição do curso não tiver sido criada devido a um erro interno.";
 $CourseRequestEdit = "Editar uma petição do curso";
@@ -6103,7 +6103,7 @@ $SSOServerUnAuthURIComment = "Endereço da página do servidor que um usuário d
 $SSOServerProtocolTitle = "Protocolo do servidor Single Sign On";
 $SSOServerProtocolComment = "Prefixo que indica o domínio do servidor protocolo de Single Sign On (se o servidor permitir, recomendamos https:// para protocolos seguros não são um perigo para um sistema de autenticação)";
 $EnabledWirisTitle = "Editor matemática WIRIS";
-$EnabledWirisComment = "Ativar WIRIS editor matemática. Ao instalar este plugin você começa WIRIS editor e WIRIS CAS. Activation <br/> não é completamente feito se você ainda não tiver baixado o <a href=\\"http://www.wiris.com/es/plugins3/ckeditor/download\\" target=\\"_ blank\\">PHP plugin para CKeditor do WIRIS</a> e conteúdo diretório descompactado no Chamilo main/inc/lib/javascript/ckeditor/plugins/ <br/>Esta vontade é necessário porque WIRIS é software proprietário e serviços do WIRIS são <a href=\\"http://www.wiris.com/store/who-pays\\" target=\\"_blank\\">comercial</a>. Para fazer ajustes para o plugin editar o arquivo configuration.ini ou substituir seu conteúdo com o de configuration.ini.default que acompanha Chamilo.";
+$EnabledWirisComment = "Ativar WIRIS editor matemática. Ao instalar este plugin você começa WIRIS editor e WIRIS CAS. Activation <br/> não é completamente feito se você ainda não tiver baixado o <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_ blank'>PHP plugin para CKeditor do WIRIS</a> e conteúdo diretório descompactado no Chamilo main/inc/lib/javascript/ckeditor/plugins/ <br/>Esta vontade é necessário porque WIRIS é software proprietário e serviços do WIRIS são <a href='http://www.wiris.com/store/who-pays' target='_blank'>comercial</a>. Para fazer ajustes para o plugin editar o arquivo configuration.ini ou substituir seu conteúdo com o de configuration.ini.default que acompanha Chamilo.";
 $FileSavedAs = "Ficheiro guardado como";
 $FileExportAs = "Ficheiro exportado como";
 $AllowSpellCheckTitle = "Corretor ortografico";
@@ -6127,8 +6127,7 @@ $AverageScore = "Média de resultados";
 $LastConnexionDate = "Data da última entrada";
 $ToolVideoconference = "Videoconferência";
 $BigBlueButtonEnableTitle = "Ferramenta do videoconferência BigBlueButton";
-$BigBlueButtonEnableComment = "Selecione se deseja ativar a ferramenta de videoconferência BigBlueButton. Uma vez ativado, ele aparecerá como uma ferramenta na página principal de todos os cursos. Os professores podem iniciar uma videoconferência, a qualquer momento, mas os estudantes só podem aderir a um já lançado. Se você não tiver um servidor BigBlueButton, tente <a href=\\"http://bigbluebutton.org/\\" target=\\"_blank\\">configurar um</a> ou pedir a ajuda do <a href=\\"http://www.chamilo.org/en/providers\\"
-target=\\"_blank\\">provedores oficiais do Chamilo</a>. BigBlueButton é livre, mas a instalação requer certas habilidades técnicas que nem todo mundo possui. Você pode instalá-lo em seu próprio país ou procurar ajuda profissional com o consequente custo. Na lógica do software livre, oferecemos-lhe as ferramentas para fazer seu trabalho mais fácil e nós recomendamos profissionais (os fornecedores oficiais Chamilo), que será capaz de ajudar.";
+$BigBlueButtonEnableComment = "Selecione se deseja ativar a ferramenta de videoconferência BigBlueButton. Uma vez ativado, ele aparecerá como uma ferramenta na página principal de todos os cursos. Os professores podem iniciar uma videoconferência, a qualquer momento, mas os estudantes só podem aderir a um já lançado. Se você não tiver um servidor BigBlueButton, tente <a href='http://bigbluebutton.org/' target='_blank'>configurar um</a> ou pedir a ajuda do <a href='http://www.chamilo.org/en/providers' target='_blank'>provedores oficiais do Chamilo</a>. BigBlueButton é livre, mas a instalação requer certas habilidades técnicas que nem todo mundo possui. Você pode instalá-lo em seu próprio país ou procurar ajuda profissional com o consequente custo. Na lógica do software livre, oferecemos-lhe as ferramentas para fazer seu trabalho mais fácil e nós recomendamos profissionais (os fornecedores oficiais Chamilo), que será capaz de ajudar.";
 $BigBlueButtonHostTitle = "Servidor host BigBlueButton";
 $BigBlueButtonHostComment = "Este é o nome do servidor em que o servidor BigBlueButton está em execução. Ele pode ser localhost, um endereço IP (por exemplo, 192.168.14.54) ou um nome de domínio (por exemplo, my.video.com).";
 $BigBlueButtonSecuritySaltTitle = "Chave de segurança do servidor BigBlueButton";
@@ -6373,7 +6372,7 @@ $EvaluationHasBeenLocked = "Avaliação foi bloqueada";
 $AllDone = "Dias comprovados";
 $AllNotDone = "Dias não verificados";
 $IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Se os seus caminhos de aprendizagem tem arquivos de áudio incluído, você deve selecioná-los a partir dos documentos";
-$IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Se você planeja fazer um upgrade de uma versão mais antiga do Chamilo, você pode querer <a href=\\"http://translate.chamilo.org/documentation/changelog.html\\" target=\\"_blank\\">ter um olhar para o changelog</a> para saber o que há de novo eo que foi alterado";
+$IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Se você planeja fazer um upgrade de uma versão mais antiga do Chamilo, você pode querer <a href='http://translate.chamilo.org/documentation/changelog.html' target='_blank'>ter um olhar para o changelog</a> para saber o que há de novo eo que foi alterado";
 $UplUploadFailedSizeIsZero = "Ocorreu um problema ao carregar o documento: o arquivo recebido tinha um tamanho de 0 bytes no servidor. Por favor, reveja o arquivo local e caso constate qualquer tipo de corrupção ou danos, tente novamente.";
 $CourseBelongURL = "Curso registrado para o URL";
 $CoursesInPlatform = "Cursos em a plataforma";
@@ -6533,7 +6532,7 @@ $AddCategoryDone = "Categoria adicionada";
 $NbCategory = "Categorias Nb";
 $DeleteCategoryAreYouSure = "Tem a certeza de que quer eliminar esta categoria?";
 $DeleteCategoryDone = "Categoria eliminada";
-$MofidfyCategoryDone = "Categoria atualizada";
+$ModifyCategoryDone = "Categoria atualizada";
 $NotInAGroup = "Não está num grupo";
 $DoFilter = "Filtrar";
 $ByCategory = "Por categoria";

@@ -2295,6 +2295,9 @@ class TicketManager
         return $form;
     }
 
+    /**
+     * @return string
+     */
     public static function getSettingsMenu()
     {
         $items = [

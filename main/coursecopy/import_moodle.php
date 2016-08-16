@@ -43,7 +43,9 @@ if ($form->validate()) {
     $file = $_FILES['moodle_file'];
     $moodleImport = new MoodleImport();
     $responseImport = $moodleImport->readMoodleFile($file);
-    Session::erase('flash_messages');
+
+    Display::cleanFlashMessages();
+
     if ($responseImport) {
         Display::addFlash(Display::return_message(get_lang('MoodleFileImportedSuccessfully'), 'success'));
     } else {

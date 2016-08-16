@@ -564,7 +564,6 @@ class MoodleImport
             case 'match':
                 return FILL_IN_BLANKS;
                 break;
-            case 'match':
             case 'essay':
                 return FREE_ANSWER;
                 break;

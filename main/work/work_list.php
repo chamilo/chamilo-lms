@@ -6,12 +6,10 @@ $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
-// Including necessary files
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
-$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -34,32 +32,41 @@ if (!empty($group_id)) {
     $group_properties  = GroupManager :: get_group_properties($group_id);
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
-        'name' => get_lang('Groups'),
+        'name' => get_lang('Groups')
     );
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+        'name' => get_lang('GroupSpace').' '.$group_properties['name']
     );
 }
 
 $interbreadcrumb[] = array(
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('StudentPublications')
 );
 $interbreadcrumb[] = array(
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId,
-    'name' => $my_folder_data['title'],
+    'name' => $my_folder_data['title']
 );
 
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
-$actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'">'.
+$actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
 
 $actionsRight = '';
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee()) {
-    $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin;
-    $actionsRight = Display::url(Display::return_icon('upload_package.png', get_lang('UploadMyAssignment'), null, ICON_SIZE_MEDIUM) . get_lang('UploadMyAssignment'), $url, array('class'=>'btn-toolbar'));
+    $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId;
+    $actionsRight = Display::url(
+        Display::return_icon(
+            'upload_package.png',
+            get_lang('UploadMyAssignment'),
+            null,
+            ICON_SIZE_MEDIUM
+        ) . get_lang('UploadMyAssignment'),
+        $url,
+        array('class'=>'btn-toolbar')
+    );
 }
 
 $tpl = new Template('');

@@ -1,4 +1,4 @@
-<footer id="footer-section" class="sticky-footer">
+*<footer id="footer-section" class="sticky-footer">
     <div class="container">
         <div class="pre-footer">
             {% if plugin_pre_footer is not null %}

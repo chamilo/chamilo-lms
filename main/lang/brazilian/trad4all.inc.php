@@ -6715,7 +6715,7 @@ $AddCategoryDone = "Categoria adicionada";
 $NbCategory = "Categorias Nb";
 $DeleteCategoryAreYouSure = "Está certo de querer eliminar esta categoria?";
 $DeleteCategoryDone = "Categoria eliminada";
-$MofidfyCategoryDone = "Categoria atualizada";
+$ModifyCategoryDone = "Categoria atualizada";
 $NotInAGroup = "Não está num grupo";
 $DoFilter = "Filtrar";
 $ByCategory = "Por categoria";
@@ -7750,4 +7750,6 @@ $TicketWarnAdminNoUserInCategoryComment = "Advirta via ticket administrador Sem 
 $TicketAllowCategoryEditionTitle = "Permitir ticket de edição da Categoria de Título";
 $TicketAllowCategoryEditionComment = "Permitir ticket de Categoria Edição de Comentário";
 $TicketSystem = "Sistema de ticket";
+$MoodleFileImportedSuccessfully = "O arquivo do curso Moodle foi importado com êxito.";
+$ExtensionInstalledButNotEnabled = "Extensão instalada, mas não habilitada";
 ?>

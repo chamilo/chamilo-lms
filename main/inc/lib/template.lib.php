@@ -68,7 +68,7 @@ class Template
 
         if (empty($this->show_learnpath)) {
             $origin = api_get_origin();
-            if ($origin == 'learnpath') {
+            if ($origin === 'learnpath') {
                 $this->show_learnpath = true;
                 $show_footer = false;
                 $show_header = false;

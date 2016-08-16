@@ -5766,7 +5766,7 @@ ul#toolnavbox {
     z-index:9999;
 }
 ul#toolnavbox li {
-    width: 200px;
+    width: 100%;
 }
 ul#toolnavbox li a {
     display: block;

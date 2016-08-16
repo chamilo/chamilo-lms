@@ -42,7 +42,7 @@
             {% block breadcrumb %}
                 {{ breadcrumb }}
             {% endblock %}
-            {% include template ~ "/layout/course_navigation.tpl" %}
+            
             {% block body %}
                 {{ content }}
             {% endblock %}

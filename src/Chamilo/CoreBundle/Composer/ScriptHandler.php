@@ -62,14 +62,10 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',
             __DIR__.'/../../../../main/announcements/resources',
             //Remove from 1.10
-            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelGroup.php',
-            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
-            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelUser.php',
-            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/Groups.php',
             __DIR__.'/../../../../plugin/ticket',
             __DIR__.'/../../../../plugin/skype',
             __DIR__.'/../../../../main/newscorm',
-            __DIR__.'/../../../../main/exercice',
+            __DIR__.'/../../../../main/exercice'
         ];
 
         $files = [
@@ -152,7 +148,11 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/style_button.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/style_reset_button.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/style_submit_button.php',
-            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/tbl_change.js.php'
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/tbl_change.js.php',
+            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelGroup.php',
+            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
+            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelUser.php',
+            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/Groups.php'
         ];
 
         foreach ($paths as $path) {

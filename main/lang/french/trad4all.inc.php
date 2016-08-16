@@ -7798,6 +7798,15 @@ $Palettes = "Palettes";
 $DesignWithBadgeStudioComment = "Utilisez le designer de badges intégré pour créer votre propre badge.";
 $YouAlreadySentThisFile = "Vous avez déjà envoyé ce fichier ou un autre fichier du même nom. Veuillez vous assurer de n'envoyer qu'une seule fois chaque fichier.";
 $DocumentsDefaultVisibility = "Visibilité par défaut des nouveaux documents";
+$TicketAllowStudentAddTitle = "Autoriser les utilisateurs à ajouter des tickets";
+$TicketAllowStudentAddComment = "Autoriser les utilisateurs à enregistrer de nouveaux tickets (sinon seuls les administrateurs peuvent le faire).";
+$TicketSendWarningToAllAdminsTitle = "Envoyer alertes de tickets aux admins";
+$TicketSendWarningToAllAdminsComment = "Envoyer un message si un ticket a été créé sans catégorie, ou si aucun administrateur n'a été assigné à la catégorie de ticket sélectionnée.";
+$TicketWarnAdminNoUserInCategoryTitle = "Alerter les admins si pas d'utilisateur pour une catégorie de tickets";
+$TicketWarnAdminNoUserInCategoryComment = "Envoyer un message d'avertissement (e-mail et message interne de Chamilo) à tous les administrateurs s'il existe une catégorie de tickets qui n'est assignée à aucun utilisateur (ce qui pourrait causer des oublis de tickets).";
+$TicketAllowCategoryEditionTitle = "Édition des catégories de tickets";
+$TicketAllowCategoryEditionComment = "Permettre l'édition de catégories de tickets par les administrateurs.";
+$TicketSystem = "Tickets";
 $MoodleFileImportedSuccessfully = "Le fichier de cours Moodle a été importé avec succès.";
 $ExtensionInstalledButNotEnabled = "Extension installée mais pas activée";
 ?>

@@ -7851,6 +7851,15 @@ $Palettes = "Palettes";
 $DesignWithBadgeStudioComment = "Usa Badge Studio para crear tu propia insignia dentro de tu plataforma";
 $YouAlreadySentThisFile = "You have already sent this file or another file with the same name. Please make sure you only upload each file once.";
 $DocumentsDefaultVisibility = "Default visibility of new documents";
+$TicketAllowStudentAddTitle = "Allow users to add tickets";
+$TicketAllowStudentAddComment = "Allows all users to add tickets not only the administrators.";
+$TicketSendWarningToAllAdminsTitle = "Send ticket warning messages to administrators";
+$TicketSendWarningToAllAdminsComment = "Send a message if a ticket was created without a category or if a category doesn't have any administrator assigned.";
+$TicketWarnAdminNoUserInCategoryTitle = "Send alert to administrators if tickets category has no one in charge";
+$TicketWarnAdminNoUserInCategoryComment = "Send a warning message (email and chamilo message) to all administrators if there's not a user assigned to a category.";
+$TicketAllowCategoryEditionTitle = "Allow tickets categories edition";
+$TicketAllowCategoryEditionComment = "Allow category edition by administrators.";
+$TicketSystem = "Tickets";
 $MoodleFileImportedSuccessfully = "The Moodle course file has been imported successfully.";
 $ExtensionInstalledButNotEnabled = "Extension installed but not enabled";
 ?>

@@ -36,22 +36,22 @@ switch ($action) {
             echo '';
             break;
         }
-        $track_online_table      = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-        $tbl_my_user		     = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_my_user_friend      = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $tbl_user 			     = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $search				     = Database::escape_string($_REQUEST['q']);
+        $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $tbl_my_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_my_user_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_access_url_rel_user = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $search = Database::escape_string($_REQUEST['q']);
 
-        $access_url_id           = api_get_multiple_access_url() == 'true' ? api_get_current_access_url_id() : 1;
-        $user_id                 = api_get_user_id();
-        $is_western_name_order   = api_is_western_name_order();
+        $access_url_id = api_get_multiple_access_url() == 'true' ? api_get_current_access_url_id() : 1;
+        $user_id = api_get_user_id();
+        $is_western_name_order = api_is_western_name_order();
 
         $likeCondition = " AND (firstname LIKE '%$search%' OR lastname LIKE '%$search%' OR email LIKE '%$search%') ";
 
-        if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool') == 'true') {
+        if (api_get_setting('allow_social_tool') === 'true' && api_get_setting('allow_message_tool') === 'true') {
             // All users
-            if (api_get_setting('allow_send_message_to_all_platform_users') == 'true' || api_is_platform_admin() ) {
+            if (api_get_setting('allow_send_message_to_all_platform_users') === 'true' || api_is_platform_admin() ) {
                 if ($access_url_id != 0) {
                     $sql = "SELECT DISTINCT u.user_id as id, u.firstname, u.lastname, u.email
                             FROM $tbl_user u LEFT JOIN $tbl_access_url_rel_user r ON u.user_id = r.user_id
@@ -97,8 +97,11 @@ switch ($action) {
                                 $likeCondition";
                 }
             }
-        } elseif (api_get_setting('allow_social_tool')=='false' && api_get_setting('allow_message_tool')=='true') {
-            if (api_get_setting('allow_send_message_to_all_platform_users') == 'true') {
+        } elseif (
+            api_get_setting('allow_social_tool') === 'false' &&
+            api_get_setting('allow_message_tool') === 'true'
+        ) {
+            if (api_get_setting('allow_send_message_to_all_platform_users') === 'true') {
                 $sql = "SELECT DISTINCT u.user_id as id, u.firstname, u.lastname, u.email
                         FROM $tbl_user u LEFT JOIN $tbl_access_url_rel_user r ON u.user_id = r.user_id
                         WHERE
@@ -109,7 +112,7 @@ switch ($action) {
             } else {
                 $time_limit = api_get_setting('time_limit_whosonline');
                 $online_time = time() - $time_limit*60;
-                $limit_date	 = api_get_utc_datetime($online_time);
+                $limit_date	= api_get_utc_datetime($online_time);
                 $sql = "SELECT SELECT DISTINCT u.user_id as id, u.firstname, u.lastname, u.email
                         FROM $tbl_my_user u INNER JOIN $track_online_table t
                         ON u.user_id=t.login_user_id

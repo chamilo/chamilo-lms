@@ -297,40 +297,50 @@ exit;
  * Classes to create a special data structure to manipulate LP Items
  * used only in this file
  * @todo move in a file
+ * @todo use PSR
  */
-class LP_item_order_list {
+
+class LP_item_order_list
+{
     public $list = array();
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->list = array();
     }
 
-    public function add($in_LP_item_order_item) {
+    public function add($in_LP_item_order_item)
+    {
         $this->list[] = $in_LP_item_order_item;
     }
 
-    public function get_item_with_same_parent($in_parent_id) {
+    public function get_item_with_same_parent($in_parent_id)
+    {
         $out_res = new LP_item_order_list();
-        for ($i=0; $i < count($this->list); $i++) {
+        for ($i = 0; $i < count($this->list); $i++) {
             if ($this->list[$i]->parent_item_id == $in_parent_id) {
                 $out_res->add($this->list[$i]);
             }
         }
+
         return $out_res;
     }
 
-    public function get_list_of_parents() {
+    public function get_list_of_parents()
+    {
         $tab_out_res = array();
         foreach ($this->list as $LP_item) {
             if (!in_array($LP_item->parent_item_id, $tab_out_res)) {
                 $tab_out_res[] = $LP_item->parent_item_id;
             }
         }
+
         return $tab_out_res;
     }
 
-    public function set_parameters_for_id($in_id, $in_value, $in_parameters) {
-        for ($i=0; $i < count($this->list); $i++) {
+    public function set_parameters_for_id($in_id, $in_value, $in_parameters)
+    {
+        for ($i = 0; $i < count($this->list); $i++) {
             if ($this->list[$i]->id == $in_id) {
                 $this->list[$i]->$in_parameters = $in_value;
                 break;
@@ -340,14 +350,16 @@ class LP_item_order_list {
 
 }
 
-class LP_item_order_item {
+class LP_item_order_item
+{
     public $id = 0;
     public $parent_item_id = 0;
     public $previous_item_id = 0;
     public $next_item_id = 0;
     public $display_order = 0;
 
-    public function __construct($in_id=0, $in_parent_id=0) {
+    public function __construct($in_id = 0, $in_parent_id = 0)
+    {
         $this->id = $in_id;
         $this->parent_item_id = $in_parent_id;
     }

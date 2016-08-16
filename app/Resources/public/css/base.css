@@ -5885,6 +5885,23 @@ ul#toolnavbox-two li a.btn{
 .block-invitation .title-profile{
     font-weight: bold;
 }
+#session-table .ui-jqdialog .ui-jqdialog-title{
+    margin: 0;
+    padding-left: 10px;
+}
+#session-table .ui-jqdialog .ui-jqdialog-titlebar{
+    padding: 0;
+}
+#session-table .fm-button{
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+#session-table input{
+    line-height: 20px;
+}
+#session-table .table{
+    margin-bottom: 5px;
+}
 .select2-container--default .select2-selection--multiple{
     background-color: #FFF !important;
     border: 1px solid #CCC !important;

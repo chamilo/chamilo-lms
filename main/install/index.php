@@ -368,7 +368,7 @@ if ($encryptPassForm == '1') {
 
         function send_contact_information() {
             if (!document.getElementById('accept_licence').checked) {
-                alert('Debe aceptar la licencia para poder usar este software')
+                alert('<?php echo get_lang('YouMustAcceptLicence'); ?>')
                 ;return false;
             } else {
                 var data_post = "";

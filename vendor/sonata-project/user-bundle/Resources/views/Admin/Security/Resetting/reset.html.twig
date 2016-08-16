@@ -1,0 +1,46 @@
+{% extends base_template %}
+
+{% block sonata_nav %}
+{% endblock sonata_nav %}
+
+{% block logo %}
+{% endblock logo %}
+
+{% block sonata_left_side %}
+{% endblock sonata_left_side %}
+
+{% block body_attributes %}class="sonata-bc login-page"{% endblock %}
+
+{% block sonata_wrapper %}
+
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="{{ path('sonata_admin_dashboard') }}">
+                {% if 'single_text' == admin_pool.getOption('title_mode') or 'both' == admin_pool.getOption('title_mode') %}
+                    <span>{{ admin_pool.title }}</span>
+                {% endif %}
+            </a>
+        </div>
+        <div class="login-box-body">
+            {% block sonata_user_reset_form %}
+                <p class="login-box-msg">{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}</p>
+                <form action="{{ path('sonata_user_admin_resetting_reset', {'token': token}) }}" method="post" role="form">
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="fos_user_resetting_form_new_first"  name="fos_user_resetting_form[new][first]" required="required" placeholder="{{ 'form.new_password'|trans({}, 'FOSUserBundle')|replace({':': ''}) }}"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="fos_user_resetting_form_new_second"  name="fos_user_resetting_form[new][second]" required="required" placeholder="{{ 'form.new_password_confirmation'|trans({}, 'FOSUserBundle')|replace({':': ''}) }}"/>
+                    </div>
+                    {{ form_widget(form._token) }}
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-primary btn-block btn-flat">{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}</button>
+                        </div>
+                    </div>
+                </form>
+            {% endblock %}
+        </div>
+    </div>
+
+{% endblock sonata_wrapper %}

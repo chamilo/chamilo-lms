@@ -1,0 +1,96 @@
+# Group
+group:
+    edit:
+        submit: Gruppe aktualisieren
+    show:
+        name: Gruppenname
+    new:
+        submit: Gruppe erstellen
+    flash:
+        updated: Die Gruppe wurde aktualisiert
+        created: Die Gruppe wurde erstellt
+        deleted: Die Gruppe wurde gelöscht
+
+# Security
+"Bad credentials": Benutzername oder Passwort ungültig
+
+security:
+    login:
+        username: "Benutzername:"
+        password: "Passwort:"
+        remember_me: An mich erinnern
+        submit: Anmelden
+
+# Profile
+profile:
+    show:
+        username: Benutzername
+        email: E-Mail
+    edit:
+        submit: Benutzer aktualisieren
+    flash:
+        updated: Das Benutzerprofil wurde aktualisiert
+
+# Password change
+change_password:
+    submit: Passwort ändern
+    flash:
+        success: Das Passwort wurde geändert
+
+# Registration
+registration:
+    check_email: Eine E-Mail wurde an %email% gesendet. Sie enthält einen Link, den Du anklicken musst, um Dein Benutzerkonto zu bestätigen.
+    confirmed: Glückwunsch %username%, Dein Benutzerkonto ist jetzt bestätigt.
+    back: Zurück zur ursprünglichen Seite.
+    submit: Registrieren
+    flash:
+        user_created: Der Benutzer wurde erfolgreich erstellt
+    email:
+        subject: Willkommen %username%!
+        message: |
+            Hallo %username%!
+
+            Besuche bitte folgende Seite, um Dein Benutzerkonto zu bestätigen: %confirmationUrl%
+
+            Mit besten Grüßen,
+            das Team.
+
+# Password resetting
+resetting:
+    password_already_requested: Für diesen Benutzer wurde in den vergangenen 24 Stunden bereits ein neues Passwort beantragt.
+    check_email: Eine E-Mail wurde an %email% gesendet. Sie enthält einen Link, den Du anklicken musst, um Dein Passwort zurückzusetzen.
+    request:
+        invalid_username: Der Benutzername oder die E-Mail-Adresse "%username%" existiert nicht.
+        username: "Benutzername oder E-Mail-Adresse:"
+        submit: Passwort zurücksetzen
+    reset:
+        submit: Passwort ändern
+    flash:
+        success: Das Passwort wurde erfolgreich zurückgesetzt
+    email:
+        subject: Passwort zurücksetzen
+        message: |
+            Hallo %username%!
+
+            Besuche bitte folgende Seite, um Dein Passwort zurückzusetzen: %confirmationUrl%
+
+            Mit besten Grüßen,
+            das Team.
+
+# Global strings
+layout:
+    logout: Abmelden
+    login: Anmelden
+    register: Registrieren
+    logged_in_as: Angemeldet als %username%
+
+# Form field labels
+form:
+    group_name: "Gruppenname:"
+    username: "Benutzername:"
+    email: "E-Mail-Adresse:"
+    current_password: "Derzeitiges Passwort:"
+    password: "Passwort:"
+    password_confirmation: "Bestätigung:"
+    new_password: "Neues Passwort:"
+    new_password_confirmation: "Bestätigung:"

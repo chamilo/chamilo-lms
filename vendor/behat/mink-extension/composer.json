@@ -1,0 +1,40 @@
+{
+    "name": "behat/mink-extension",
+    "type": "behat-extension",
+    "description": "Mink extension for Behat",
+    "keywords": ["web", "test", "browser", "gui"],
+    "homepage": "http://extensions.behat.org/mink",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Konstantin Kudryashov",
+            "email": "ever.zet@gmail.com"
+        },
+        {
+            "name": "Christophe Coevoet",
+            "email": "stof@notk.org"
+        }
+    ],
+
+    "require": {
+        "php":          ">=5.3.2",
+        "behat/behat":  "~3.0,>=3.0.5",
+        "behat/mink":   "~1.5",
+        "symfony/config": "~2.2|~3.0"
+    },
+
+    "require-dev": {
+        "phpspec/phpspec":          "~2.0",
+        "behat/mink-goutte-driver": "~1.1"
+    },
+
+    "autoload": {
+        "psr-0": { "Behat\\MinkExtension": "src/" }
+    },
+
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.1.x-dev"
+        }
+    }
+}

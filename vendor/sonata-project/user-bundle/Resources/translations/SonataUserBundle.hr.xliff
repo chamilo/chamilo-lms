@@ -1,0 +1,551 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="" >
+        <body>
+            <trans-unit id="title_user_registration">
+                <source>title_user_registration</source>
+                <target>Registracija</target>
+            </trans-unit>
+            <trans-unit id="title_user_account">
+                <source>title_user_account</source>
+                <target>Korisnički račun</target>
+            </trans-unit>
+            <trans-unit id="title_user_edit_profile">
+                <source>title_user_edit_profile</source>
+                <target>Uredi</target>
+            </trans-unit>
+            <trans-unit id="title_user_authentication">
+                <source>title_user_authentication</source>
+                <target>Prijava</target>
+            </trans-unit>
+            <trans-unit id="sonata_user_submit">
+                <source>sonata_user_submit</source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_user_list">
+                <source>breadcrumb.link_user_list</source>
+                <target>Korisnici</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_user_create">
+                <source>breadcrumb.link_user_create</source>
+                <target>Dodaj korisnika</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_user_edit">
+                <source>breadcrumb.link_user_edit</source>
+                <target>Uredi</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_user_delete">
+                <source>breadcrumb.link_user_delete</source>
+                <target>Obriši</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_group_list">
+                <source>breadcrumb.link_group_list</source>
+                <target>Grupe</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_group_create">
+                <source>breadcrumb.link_group_create</source>
+                <target>Dodaj grupu</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_group_edit">
+                <source>breadcrumb.link_group_edit</source>
+                <target>Uredi</target>
+            </trans-unit>
+            <trans-unit id="users">
+                <source>users</source>
+                <target>Korisnici</target>
+            </trans-unit>
+            <trans-unit id="groups">
+                <source>groups</source>
+                <target>Grupe</target>
+            </trans-unit>
+            <trans-unit id="switch_user_exit">
+                <source>switch_user_exit</source>
+                <target>Exit impersonating mode</target>
+            </trans-unit>
+            <trans-unit id="switch_user">
+                <source>switch_user</source>
+                <target>Impersonate User</target>
+            </trans-unit>
+            <trans-unit id="user_block_logout">
+                <source>user_block_logout</source>
+                <target>Odjava</target>
+            </trans-unit>
+            <trans-unit id="user_block_profile">
+                <source>user_block_profile</source>
+                <target>user_block_profile</target>
+            </trans-unit>
+            <trans-unit id="user_form.label_username">
+                <source>form.label_username</source>
+                <target>Korisničko ime</target>
+            </trans-unit>
+            <trans-unit id="form.label_email">
+                <source>form.label_email</source>
+                <target>E-Mail-Addresa</target>
+            </trans-unit>
+            <trans-unit id="form.label_plain_password">
+                <source>form.label_plain_password</source>
+                <target>Lozinka</target>
+            </trans-unit>
+            <trans-unit id="form.label_groups">
+                <source>form.label_groups</source>
+                <target>Grupe</target>
+            </trans-unit>
+            <trans-unit id="form.label_roles">
+                <source>form.label_roles</source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="form.label_locked">
+                <source>form.label_locked</source>
+                <target>Zaključan</target>
+            </trans-unit>
+            <trans-unit id="form.label_expired">
+                <source>form.label_expired</source>
+                <target>Istekao</target>
+            </trans-unit>
+            <trans-unit id="form.label_enabled">
+                <source>form.label_enabled</source>
+                <target>Omogućen</target>
+            </trans-unit>
+            <trans-unit id="form.label_credentials_expired">
+                <source>form.label_credentials_expired</source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="form.label_created_at">
+                <source>form.label_created_at</source>
+                <target>Kreiran</target>
+            </trans-unit>
+            <trans-unit id="form.label_last_login">
+                <source>form.label_last_login</source>
+                <target>Zadnja prijava</target>
+            </trans-unit>
+            <trans-unit id="user_form.label_name">
+                <source>form.label_name</source>
+                <target>Ime</target>
+            </trans-unit>
+            <trans-unit id="filter.label_username">
+                <source>filter.label_username</source>
+                <target>Prezime</target>
+            </trans-unit>
+            <trans-unit id="filter.label_name">
+                <source>filter.label_name</source>
+                <target>Ime</target>
+            </trans-unit>
+            <trans-unit id="filter.label_email">
+                <source>filter.label_email</source>
+                <target>E-Mail-Addresa</target>
+            </trans-unit>
+            <trans-unit id="filter.label_locked">
+                <source>filter.label_locked</source>
+                <target>Zaključan</target>
+            </trans-unit>
+            <trans-unit id="filter.label_id">
+                <source>filter.label_id</source>
+                <target>ID</target>
+            </trans-unit>
+            <trans-unit id="filter.label_groups">
+                <source>filter.label_groups</source>
+                <target>Grupe</target>
+            </trans-unit>
+            <trans-unit id="filter.label_created_at">
+                <source>filter.label_created_at</source>
+                <target>Kreiran</target>
+            </trans-unit>
+            <trans-unit id="filter.label_last_login">
+                <source>filter.label_last_login</source>
+                <target>Zadnja prijava</target>
+            </trans-unit>
+            <trans-unit id="filter.label_firstname">
+                <source>filter.label_firstname</source>
+                <target>Ime</target>
+            </trans-unit>
+            <trans-unit id="filter.label_lastname">
+                <source>filter.label_lastname</source>
+                <target>Prezime</target>
+            </trans-unit>
+            <trans-unit id="list.label_username">
+                <source>list.label_username</source>
+                <target>Korisničko ime</target>
+            </trans-unit>
+            <trans-unit id="list.label_name">
+                <source>list.label_name</source>
+                <target>Ime</target>
+            </trans-unit>
+            <trans-unit id="list.label_email">
+                <source>list.label_email</source>
+                <target>E-Mail-Addresa</target>
+            </trans-unit>
+            <trans-unit id="list.label_groups">
+                <source>list.label_groups</source>
+                <target>Grupe</target>
+            </trans-unit>
+            <trans-unit id="list.label_locked">
+                <source>list.label_locked</source>
+                <target>Zaključan</target>
+            </trans-unit>
+            <trans-unit id="list.label_enabled">
+                <source>list.label_enabled</source>
+                <target>Omogućen</target>
+            </trans-unit>
+            <trans-unit id="list.label_created_at">
+                <source>list.label_created_at</source>
+                <target>Kreiran</target>
+            </trans-unit>
+            <trans-unit id="list.label_last_login">
+                <source>list.label_last_login</source>
+                <target>Zadnja prijava</target>
+            </trans-unit>
+            <trans-unit id="list.label_impersonating">
+                <source>list.label_impersonating</source>
+                <target>Impersonate User</target>
+            </trans-unit>
+            <trans-unit id="list.label_roles">
+                <source>list.label_roles</source>
+                <target>Roles</target>
+            </trans-unit>
+            <trans-unit id="list.label_firstname">
+                <source>list.label_firstname</source>
+                <target>Ime</target>
+            </trans-unit>
+            <trans-unit id="list.label_lastname">
+                <source>list.label_lastname</source>
+                <target>Prezime</target>
+            </trans-unit>
+            <trans-unit id="label_two_step_code">
+                <source>label_two_step_code</source>
+                <target>Two-step verification</target>
+            </trans-unit>
+            <trans-unit id="message_two_step_code_help">
+                <source>message_two_step_code_help</source>
+                <target>Unesite kod za verifikaciju generiran u vašoj mobilnoj aplikaciji.</target>
+            </trans-unit>
+            <trans-unit id="label_two_step_code_error">
+                <source>label_two_step_code_error</source>
+                <target>Kod za verifikaciju nije važeći</target>
+            </trans-unit>
+            <trans-unit id="sonata_user">
+                <source>sonata_user</source>
+                <target>Korisnici</target>
+            </trans-unit>
+            <trans-unit id="form_general">
+                <source>General</source>
+                <target>Općenito</target>
+            </trans-unit>
+            <trans-unit id="form_groups">
+                <source>Groups</source>
+                <target>Grupe</target>
+            </trans-unit>
+            <trans-unit id="form_management">
+                <source>Management</source>
+                <target>Upravljanje</target>
+            </trans-unit>
+            <trans-unit id="field.label_roles_editable">
+                <source>field.label_roles_editable</source>
+                <target>Roles</target>
+            </trans-unit>
+            <trans-unit id="form.label_date_of_birth">
+                <source>form.label_date_of_birth</source>
+                <target>Datum rođenja</target>
+            </trans-unit>
+            <trans-unit id="form.label_firstname">
+                <source>form.label_firstname</source>
+                <target>Ime</target>
+            </trans-unit>
+            <trans-unit id="form.label_lastname">
+                <source>form.label_lastname</source>
+                <target>Prezime</target>
+            </trans-unit>
+            <trans-unit id="form.label_website">
+                <source>form.label_website</source>
+                <target>Website</target>
+            </trans-unit>
+            <trans-unit id="form.label_biography">
+                <source>form.label_biography</source>
+                <target>Biografija</target>
+            </trans-unit>
+            <trans-unit id="form.label_gender">
+                <source>form.label_gender</source>
+                <target>Spol</target>
+            </trans-unit>
+            <trans-unit id="form.label_locale">
+                <source>form.label_locale</source>
+                <target>Locale</target>
+            </trans-unit>
+            <trans-unit id="form.label_timezone">
+                <source>form.label_timezone</source>
+                <target>Vremenska zona</target>
+            </trans-unit>
+            <trans-unit id="form.label_phone">
+                <source>form.label_phone</source>
+                <target>Telefon</target>
+            </trans-unit>
+            <trans-unit id="form.label_facebook_uid">
+                <source>form.label_facebook_uid</source>
+                <target>Facebook Uid</target>
+            </trans-unit>
+            <trans-unit id="form.label_facebook_name">
+                <source>form.label_facebook_name</source>
+                <target>Facebook Name</target>
+            </trans-unit>
+            <trans-unit id="form.label_twitter_uid">
+                <source>form.label_twitter_uid</source>
+                <target>Twitter Uid</target>
+            </trans-unit>
+            <trans-unit id="form.label_twitter_name">
+                <source>form.label_twitter_name</source>
+                <target>Twitter Name</target>
+            </trans-unit>
+            <trans-unit id="form.label_gplus_uid">
+                <source>form.label_gplus_uid</source>
+                <target>Google+ Uid</target>
+            </trans-unit>
+            <trans-unit id="form.label_gplus_name">
+                <source>form.label_gplus_name</source>
+                <target>Google+ Name</target>
+            </trans-unit>
+            <trans-unit id="form.label_token">
+                <source>form.label_token</source>
+                <target>Token</target>
+            </trans-unit>
+            <trans-unit id="form.label_two_step_verification_code">
+                <source>form.label_two_step_verification_code</source>
+                <target>Two Step Verification Code</target>
+            </trans-unit>
+            <trans-unit id="show.label_username">
+                <source>show.label_username</source>
+                <target>Korisničko ime</target>
+            </trans-unit>
+            <trans-unit id="show.label_email">
+                <source>show.label_email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="show.label_groups">
+                <source>show.label_groups</source>
+                <target>Grupe</target>
+            </trans-unit>
+            <trans-unit id="show.label_date_of_birth">
+                <source>show.label_date_of_birth</source>
+                <target>Datum rođenja</target>
+            </trans-unit>
+            <trans-unit id="show.label_firstname">
+                <source>show.label_firstname</source>
+                <target>Ime</target>
+            </trans-unit>
+            <trans-unit id="show.label_lastname">
+                <source>show.label_lastname</source>
+                <target>Prezime</target>
+            </trans-unit>
+            <trans-unit id="show.label_website">
+                <source>show.label_website</source>
+                <target>Website</target>
+            </trans-unit>
+            <trans-unit id="show.label_biography">
+                <source>show.label_biography</source>
+                <target>Biografija</target>
+            </trans-unit>
+            <trans-unit id="show.label_gender">
+                <source>show.label_gender</source>
+                <target>Spol</target>
+            </trans-unit>
+            <trans-unit id="show.label_locale">
+                <source>show.label_locale</source>
+                <target>Locale</target>
+            </trans-unit>
+            <trans-unit id="show.label_timezone">
+                <source>show.label_timezone</source>
+                <target>Vremenska zona</target>
+            </trans-unit>
+            <trans-unit id="show.label_phone">
+                <source>show.label_phone</source>
+                <target>Telefon</target>
+            </trans-unit>
+            <trans-unit id="show.label_facebook_uid">
+                <source>show.label_facebook_uid</source>
+                <target>Facebook Uid</target>
+            </trans-unit>
+            <trans-unit id="show.label_facebook_name">
+                <source>show.label_facebook_name</source>
+                <target>Facebook Name</target>
+            </trans-unit>
+            <trans-unit id="show.label_twitter_uid">
+                <source>show.label_twitter_uid</source>
+                <target>Twitter Uid</target>
+            </trans-unit>
+            <trans-unit id="show.label_twitter_name">
+                <source>show.label_twitter_name</source>
+                <target>Twitter Name</target>
+            </trans-unit>
+            <trans-unit id="show.label_gplus_uid">
+                <source>show.label_gplus_uid</source>
+                <target>Google+ Uid</target>
+            </trans-unit>
+            <trans-unit id="show.label_gplus_name">
+                <source>show.label_gplus_name</source>
+                <target>Google+ Name</target>
+            </trans-unit>
+            <trans-unit id="show.label_token">
+                <source>show.label_token</source>
+                <target>Token</target>
+            </trans-unit>
+            <trans-unit id="show.label_two_step_verification_code">
+                <source>show.label_two_step_verification_code</source>
+                <target>Two Step Verification Code</target>
+            </trans-unit>
+            <trans-unit id="show.label_created_at">
+                <source>show.label_created_at</source>
+                <target>Kreiran</target>
+            </trans-unit>
+            <trans-unit id="show.label_last_login">
+                <source>show.label_last_login</source>
+                <target>Zadnja prijava</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_user_show">
+                <source>breadcrumb.link_user_show</source>
+                <target>Prikaži</target>
+            </trans-unit>
+            <trans-unit id="gender_unknown">
+                <source>gender_unknown</source>
+                <target>nepoznat</target>
+            </trans-unit>
+            <trans-unit id="gender_female">
+                <source>gender_female</source>
+                <target>ženski</target>
+            </trans-unit>
+            <trans-unit id="gender_male">
+                <source>gender_male</source>
+                <target>muški</target>
+            </trans-unit>
+            <trans-unit id="sonata_profile_title">
+                <source>sonata_profile_title</source>
+                <target>Upravljačka ploča</target>
+            </trans-unit>
+            <trans-unit id="link_show_profile">
+                <source>link_show_profile</source>
+                <target>Upravljačka ploča</target>
+            </trans-unit>
+            <trans-unit id="link_edit_profile">
+                <source>link_edit_profile</source>
+                <target>Profil</target>
+            </trans-unit>
+            <trans-unit id="title_user_edit_authentication">
+                <source>title_user_edit_authentication</source>
+                <target>Prijava</target>
+            </trans-unit>
+            <trans-unit id="link_edit_authentication">
+                <source>link_edit_authentication</source>
+                <target>Prijava</target>
+            </trans-unit>
+            <trans-unit id="label_profile_gender">
+                <source>label_profile_gender</source>
+                <target>Spol</target>
+            </trans-unit>
+            <trans-unit id="label_profile_firstname">
+                <source>label_profile_firstname</source>
+                <target>Ime</target>
+            </trans-unit>
+            <trans-unit id="label_profile_lastname">
+                <source>label_profile_lastname</source>
+                <target>Prezime</target>
+            </trans-unit>
+            <trans-unit id="label_profile_website">
+                <source>label_profile_website</source>
+                <target>Website</target>
+            </trans-unit>
+            <trans-unit id="label_profile_dob">
+                <source>label_profile_dob</source>
+                <target>Datum rođenja</target>
+            </trans-unit>
+            <trans-unit id="label_profile_biography">
+                <source>label_profile_biography</source>
+                <target>Biografija</target>
+            </trans-unit>
+            <trans-unit id="label_profile_locale">
+                <source>label_profile_locale</source>
+                <target>Locale</target>
+            </trans-unit>
+            <trans-unit id="label_profile_timezone">
+                <source>label_profile_timezone</source>
+                <target>Vremenska zona</target>
+            </trans-unit>
+            <trans-unit id="label_profile_phone">
+                <source>label_profile_phone</source>
+                <target>Telefon</target>
+            </trans-unit>
+            <trans-unit id="profile.flash.updated">
+                <source>profile.flash.updated</source>
+                <target>Vaš profil je supješno izmjenjen.</target>
+            </trans-unit>
+            <trans-unit id="sonata_change_password_link">
+                <source>sonata_change_password_link</source>
+                <target>Izmjenite lozinku</target>
+            </trans-unit>
+            <trans-unit id="link_register">
+                <source>link_register</source>
+                <target>Registracija</target>
+            </trans-unit>
+            <trans-unit id="link_login">
+                <source>link_login</source>
+                <target>Prijava</target>
+            </trans-unit>
+            <trans-unit id="link_logout">
+                <source>link_logout</source>
+                <target>Odjava</target>
+            </trans-unit>
+            <trans-unit id="registration.flash.user_created">
+                <source>registration.flash.user_created</source>
+                <target>Vaš korisnički račun je uspješno kreiran!</target>
+            </trans-unit>
+            <trans-unit id="forgotten_password">
+                <source>forgotten_password</source>
+                <target>Zaboravljena lozinka?</target>
+            </trans-unit>
+            <trans-unit id="sonata_user_profile_breadcrumb_index">
+                <source>sonata_user_profile_breadcrumb_index</source>
+                <target>Kontrolna ploča</target>
+            </trans-unit>
+            <trans-unit id="sonata_user_profile_breadcrumb_edit">
+                <source>sonata_user_profile_breadcrumb_edit</source>
+                <target>Uredi profil</target>
+            </trans-unit>
+            <trans-unit id="sonata_user_already_authenticated">
+                <source>sonata_user_already_authenticated</source>
+                <target>Već ste prijavljeni</target>
+            </trans-unit>
+            <trans-unit id="security.login.username">
+                <source>security.login.username</source>
+                <target>Korisničko ime</target>
+            </trans-unit>
+            <trans-unit id="security.login.password">
+                <source>security.login.password</source>
+                <target>Lozinka</target>
+            </trans-unit>
+            <trans-unit id="form.username">
+                <source>form.username</source>
+                <target>Korisničko ime</target>
+            </trans-unit>
+            <trans-unit id="form.email">
+                <source>form.email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="form.password">
+                <source>form.password</source>
+                <target>Lozinka</target>
+            </trans-unit>
+            <trans-unit id="form.password_confirmation">
+                <source>form.password_confirmation</source>
+                <target>Ponovi lozinku</target>
+            </trans-unit>
+            <trans-unit id="title_user_edit_password">
+                <source>title_user_edit_password</source>
+                <target>title_user_edit_password</target>
+            </trans-unit>
+            <trans-unit id="title_user_resetting">
+                <source>title_user_resetting</source>
+                <target>title_user_resetting</target>
+            </trans-unit>
+            <trans-unit id="title_user_resetting_reset">
+                <source>title_user_resetting_reset</source>
+                <target>title_user_resetting_reset</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

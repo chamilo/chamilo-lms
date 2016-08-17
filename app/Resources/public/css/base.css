@@ -5776,11 +5776,10 @@ ul#toolnavbox li a {
     height: 35px;
 }
 ul#toolnavbox .tool-img{
-    float: left;
-    margin-right: 5px;
+    margin-left: 5px;
 }
 ul#toolnavbox li a.btn{
-    text-align: left !important;
+    text-align: right !important;
 }
 
 ul#toolnavbox-two {

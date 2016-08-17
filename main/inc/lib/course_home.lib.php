@@ -1176,14 +1176,14 @@ class CourseHome
             $html .= self::show_navigation_tool_shortcuts($orientation = SHORTCUTS_VERTICAL);
         } else {
             $html .= '<script>$(function() {
-                $("#toolnavbox a").stop().animate({"margin-left":"-185px"},1000);
+                $("#toolnavbox a").stop().animate({"margin-left":"-160px"},1000);
                 $("#toolnavbox > li").hover(
                     function () {
                         $("a",$(this)).stop().animate({"margin-left":"-2px"},200);
                         $("span",$(this)).css("display","block");
                     },
                     function () {
-                        $("a",$(this)).stop().animate({"margin-left":"-185px"},200);
+                        $("a",$(this)).stop().animate({"margin-left":"-160px"},200);
                         $("span",$(this)).css("display","initial");
                     }
                 );
@@ -1214,11 +1214,11 @@ class CourseHome
                     }
                 }
                 $html .= ' title="'.$navigation_item['name'].'">';
+                if (api_get_setting('show_navigation_menu') != 'icons') {
+                    $html .= $navigation_item['name'];
+                }
                 if (api_get_setting('show_navigation_menu') != 'text') {
                     $html .= Display::return_icon(substr($navigation_item['image'],0,-3)."png", $navigation_item['name'], array('class'=>'tool-img'), ICON_SIZE_SMALL);
-                }
-                if (api_get_setting('show_navigation_menu') != 'icons') {
-                    $html .= '<span class="tool-text">'.$navigation_item['name'].'</span>';
                 }
                 $html .= '</a>';
                 $html .= '</li>';
@@ -1237,46 +1237,37 @@ class CourseHome
     public static function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
     {
         $navigation_items = self::get_navigation_items(false);
-        
+        $html = '';
         if (!empty($navigation_items)) {
-            /* if ($orientation == SHORTCUTS_HORIZONTAL) {
+            if ($orientation == SHORTCUTS_HORIZONTAL) {
                 $style_id = "toolshortcuts_horizontal";
             } else {
                 $style_id = "toolshortcuts_vertical";
-            } */
-            $html .= '<script>$(function() {
-                $("#toolnavbox-two a").stop().animate({"margin-left":"-35px"},1000);
-                $("#toolnavbox-two > li").hover(
-                    function () {
-                        $("a",$(this)).stop().animate({"margin-left":"-2px"},200);
-                    },
-                    function () {
-                        $("a",$(this)).stop().animate({"margin-left":"-35x"},200);
-                    }
-                );
-            });</script>';
-            $html .= '<ul id="toolnavbox-two">';
+            }
+            $html .= '<div id="'.$style_id.'">';
             foreach ($navigation_items as $key => $navigation_item) {
-                $html .= '<li>';
                 if (strpos($navigation_item['link'], 'chat') !== false &&
                     api_get_course_setting('allow_open_chat_window')
                 ) {
-                    $html .= '<a class="btn btn-default" href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$navigation_item['target'].'"';
+                    $html .= '<a class="items-icon" href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="'.$navigation_item['target'].'"';
                 } else {
-                    $html .= '<a class="btn btn-default" href="'.$navigation_item['link'].'"';
+                    $html .= '<a class="items-icon" href="'.$navigation_item['link'].'"';
                 }
                 if (strpos(api_get_self(), $navigation_item['link']) !== false) {
                     $html .= ' id="here"';
                 }
                 $html .= ' target="_top" title="'.$navigation_item['name'].'">';
-                $html .= Display::return_icon(substr($navigation_item['image'],0,-3)."png", $navigation_item['name'], null, ICON_SIZE_SMALL);
+                $html .= Display::return_icon(substr($navigation_item['image'],0,-3)."png", $navigation_item['name'], null, ICON_SIZE_MEDIUM);
                 //$html .= '<img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/>';
                 $html .= '</a> ';
-                
-                $html .= '</li>';
+                if ($orientation == SHORTCUTS_VERTICAL) {
+                    $html .= '<br />';
+                }
             }
-            $html .= '</ul>';
+            $html .= '</div>';
+
         }
+
         return $html;
     }
 

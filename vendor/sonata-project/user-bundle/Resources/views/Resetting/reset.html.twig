@@ -1,0 +1,14 @@
+{% extends "SonataUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+    {{ form_errors(form) }}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ "title_user_resetting_reset" | trans({}, 'SonataUserBundle') }}</h3>
+        </div>
+        <div class="panel-body">
+            {% include "FOSUserBundle:Resetting:reset_content.html.twig" %}
+        </div>
+    </div>
+{% endblock fos_user_content %}

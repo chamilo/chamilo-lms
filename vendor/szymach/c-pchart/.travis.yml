@@ -1,0 +1,16 @@
+language: php
+
+cache:
+  directories:
+    - vendor
+
+php:
+  - 5.4
+
+before_script:
+  - composer self-update -n
+  - composer install -n --prefer-dist -v
+
+after_failure:
+  - cat app/logs/dev.log
+  - cat app/logs/test.log

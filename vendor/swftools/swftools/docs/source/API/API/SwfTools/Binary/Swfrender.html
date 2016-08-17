@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>SwfTools\Binary\Swfrender | PHP-SwfTools API</title>
+                    <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+                            </head>
+        <body id="class">
+            <div class="header">
+        <ul>
+            <li><a href="../../classes.html">Classes</a></li>
+                            <li><a href="../../namespaces.html">Namespaces</a></li>
+                        <li><a href="../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../doc-index.html">Index</a></li>
+            
+        </ul>
+
+        <div id="title">PHP-SwfTools API</div>
+
+            <div class="type">Class</div>
+    <h1><a href="../../SwfTools/Binary.html">SwfTools\Binary</a>\Swfrender</h1>
+    </div>
+        <div class="content">
+                <p>class    <strong>Swfrender</strong>        extends <a href="../../SwfTools/Binary/Binary.html"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a></p>
+
+    
+    
+    
+            <h2>Methods</h2>
+
+            <table>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method___construct">__construct</a>($binaryPathname, <abbr title="Monolog\Logger">Logger</abbr> $logger, $timeout)
+                    <p>The path to the binary</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../SwfTools/Binary/Binary.html#method___construct"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../SwfTools/Binary/Binary.html"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_setTimeout">setTimeout</a>(integer $timeout)
+                    <p>Set the timeout for the underlying processes ; 0 means no timeout</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../SwfTools/Binary/Binary.html#method_setTimeout"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    integer
+                </td>
+                <td class="last">
+                    <a href="#method_getTimeout">getTimeout</a>()
+                    <p>Get the timeout for the underlyning processes ; 0 means no timeout</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../SwfTools/Binary/Binary.html#method_getTimeout"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    string|null
+                </td>
+                <td class="last">
+                    <a href="#method_getVersion">getVersion</a>()
+                    <p>Try to get the version of the binary.</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../SwfTools/Binary/Binary.html#method_getVersion"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    null
+                </td>
+                <td class="last">
+                    <a href="#method_render">render</a>(string $pathfile, string $outputFile, Boolean $legacy)
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    static&nbsp;<a href="../../SwfTools/Binary/Swfrender.html"><abbr title="SwfTools\Binary\Swfrender">Swfrender</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_load">load</a>(<a href="../../SwfTools/Configuration.html"><abbr title="SwfTools\Configuration">Configuration</abbr></a> $configuration, <abbr title="Monolog\Logger">Logger</abbr> $logger)
+                    <p>Factory method to build the binary</p>
+                </td>
+                <td></td>
+            </tr>
+            </table>
+
+
+        <h2>Details</h2>
+
+                        <h3 id="method___construct">
+        <div class="location">in <a href="../../SwfTools/Binary/Binary.html#method___construct"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a> at line 47</div>
+        <code>            public            
+    <strong>__construct</strong>($binaryPathname, <abbr title="Monolog\Logger">Logger</abbr> $logger, $timeout)</code>
+    </h3>
+    <div class="details">
+        <p>The path to the binary</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$binaryPathname</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td><abbr title="Monolog\Logger">Logger</abbr></td>
+                <td>$logger</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td></td>
+                <td>$timeout</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_setTimeout">
+        <div class="location">in <a href="../../SwfTools/Binary/Binary.html#method_setTimeout"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a> at line 67</div>
+        <code>            public            <a href="../../SwfTools/Binary/Binary.html"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a>
+    <strong>setTimeout</strong>(integer $timeout)</code>
+    </h3>
+    <div class="details">
+        <p>Set the timeout for the underlying processes ; 0 means no timeout</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>integer</td>
+                <td>$timeout</td>
+                <td>The timeout value</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../SwfTools/Binary/Binary.html"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td>In case the timeout value is not valid</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getTimeout">
+        <div class="location">in <a href="../../SwfTools/Binary/Binary.html#method_getTimeout"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a> at line 83</div>
+        <code>            public            integer
+    <strong>getTimeout</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Get the timeout for the underlyning processes ; 0 means no timeout</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>integer</td>
+            <td>The timeout value.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getVersion">
+        <div class="location">in <a href="../../SwfTools/Binary/Binary.html#method_getVersion"><abbr title="SwfTools\Binary\Binary">Binary</abbr></a> at line 93</div>
+        <code>            public            string|null
+    <strong>getVersion</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Try to get the version of the binary.</p>
+        <p>If the detection fails, return null</p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>string|null</td>
+            <td>The version of the binary adapter</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_render">
+        <div class="location">at line 32</div>
+        <code>            public            null
+    <strong>render</strong>(string $pathfile, string $outputFile, Boolean $legacy)</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>string</td>
+                <td>$pathfile</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$outputFile</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>Boolean</td>
+                <td>$legacy</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>null</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_load">
+        <div class="location">at line 61</div>
+        <code>        static    public            <a href="../../SwfTools/Binary/Swfrender.html"><abbr title="SwfTools\Binary\Swfrender">Swfrender</abbr></a>
+    <strong>load</strong>(<a href="../../SwfTools/Configuration.html"><abbr title="SwfTools\Configuration">Configuration</abbr></a> $configuration, <abbr title="Monolog\Logger">Logger</abbr> $logger)</code>
+    </h3>
+    <div class="details">
+        <p>Factory method to build the binary</p>
+        <p>Either pass a configuration file with the binary settings, or pass an<br />
+ empty configuration, which will trigger the autodetection</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="../../SwfTools/Configuration.html"><abbr title="SwfTools\Configuration">Configuration</abbr></a></td>
+                <td>$configuration</td>
+                <td>A Configuration</td>
+            </tr>
+                    <tr>
+                <td><abbr title="Monolog\Logger">Logger</abbr></td>
+                <td>$logger</td>
+                <td>A logger</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../SwfTools/Binary/Swfrender.html"><abbr title="SwfTools\Binary\Swfrender">Swfrender</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="BinaryNotFoundException">BinaryNotFoundException</abbr></td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+    
+            </div>
+            <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/" target="_top">Sami, the API Documentation Generator</a>.
+    </div>
+    </body>
+</html>

@@ -1,0 +1,5 @@
+suites:
+  data_import_suite:
+    namespace: Ddeboer\DataImport
+    psr4_prefix: Ddeboer\DataImport
+formatter.name: pretty

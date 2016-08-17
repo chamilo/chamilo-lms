@@ -1,0 +1,16 @@
+<form action="{{ path('sonata_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+    {% if invalid_username is defined %}
+        <div class="alert alert-danger">{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</div>
+    {% endif %}
+
+    <div class="form-group">
+        <label for="username" class="control-label required">{{ 'resetting.request.username'|trans({}, 'FOSUserBundle') }} * </label>
+        <input type="text" id="username" name="username" required="required" />
+    </div>
+
+    <div class="form-actions form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <input type="submit" value="{{ 'resetting.request.submit'|trans({}, 'FOSUserBundle') }}" class="btn btn-primary" />
+        </div>
+    </div>
+</form>

@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="fos_rest.serializer.exclusion_strategy.version" />
+        <parameter key="fos_rest.serializer.exclusion_strategy.groups" type="collection" />
+        <parameter key="fos_rest.view_handler.jsonp.callback_param"/>
+        <parameter key="fos_rest.view.exception_wrapper_handler">FOS\RestBundle\View\ExceptionWrapperHandler</parameter>
+        <parameter key="fos_rest.view_handler.default.class">FOS\RestBundle\View\ViewHandler</parameter>
+        <parameter key="fos_rest.view_handler.jsonp.class">FOS\RestBundle\View\JsonpHandler</parameter>
+        <parameter key="fos_rest.serializer.exception_wrapper_serialize_handler.class">FOS\RestBundle\Serializer\ExceptionWrapperSerializeHandler</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="fos_rest.view_handler.default" class="%fos_rest.view_handler.default.class%" public="false">
+            <argument>%fos_rest.formats%</argument>
+            <argument>%fos_rest.failed_validation%</argument>
+            <argument>%fos_rest.empty_content%</argument>
+            <argument>%fos_rest.serialize_null%</argument>
+            <argument>%fos_rest.force_redirects%</argument>
+            <argument>%fos_rest.default_engine%</argument>
+            <call method="setExclusionStrategyGroups">
+                <argument>%fos_rest.serializer.exclusion_strategy.groups%</argument>
+            </call>
+            <call method="setExclusionStrategyVersion">
+                <argument>%fos_rest.serializer.exclusion_strategy.version%</argument>
+            </call>
+            <call method="setSerializeNullStrategy">
+                <argument>%fos_rest.serializer.serialize_null%</argument>
+            </call>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+
+        <service id="fos_rest.view_handler.jsonp" class="%fos_rest.view_handler.jsonp.class%" public="false">
+            <argument>%fos_rest.view_handler.jsonp.callback_param%</argument>
+        </service>
+
+        <service id="fos_rest.view.exception_wrapper_handler" class="%fos_rest.view.exception_wrapper_handler%"/>
+
+        <service id="fos_rest.serializer.exception_wrapper_serialize_handler" class="%fos_rest.serializer.exception_wrapper_serialize_handler.class%">
+            <tag name="jms_serializer.subscribing_handler" />
+        </service>
+
+        <service id="fos_rest.serializer.exception_wrapper_normalizer" class="FOS\RestBundle\Serializer\ExceptionWrapperNormalizer">
+            <argument type="service" id="translator" />
+            <tag name="serializer.normalizer" />
+        </service>
+
+    </services>
+</container>

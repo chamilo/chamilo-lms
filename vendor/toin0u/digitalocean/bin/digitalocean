@@ -1,0 +1,114 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * This file is part of the DigitalOcean library.
+ *
+ * (c) Antoine Corcy <contact@sbin.dk>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+function includeIfExists($file)
+{
+    if (file_exists($file)) {
+        return include $file;
+    }
+}
+
+if (!extension_loaded('curl') || !function_exists('curl_init')) {
+    die(<<<EOT
+cURL has to be enabled!
+EOT
+    );
+}
+
+if ((!$loader = includeIfExists(__DIR__ . '/../vendor/autoload.php')) &&
+    (!$loader = includeIfExists(__DIR__ . '/../../../autoload.php'))) {
+        die(<<<EOT
+You must set up the project dependencies, run the following commands:
+$ wget http://getcomposer.org/composer.phar
+OR
+$ curl -sS https://getcomposer.org/installer | php
+$ php composer.phar install --dev
+EOT
+    );
+}
+
+error_reporting(-1);
+
+use Symfony\Component\Console\Application as BaseApplication;
+use DigitalOcean\DigitalOcean;
+use DigitalOcean\CLI\Droplets;
+use DigitalOcean\CLI\Images;
+use DigitalOcean\CLI\Regions;
+use DigitalOcean\CLI\Sizes;
+use DigitalOcean\CLI\SSHKeys;
+use DigitalOcean\CLI\Domains;
+use DigitalOcean\CLI\Events;
+
+class Application extends BaseApplication
+{
+    private $logo = <<<LOGO
+ _____  _       _ _        _  ____
+|  __ \(_)     (_) |      | |/ __ \
+| |  | |_  __ _ _| |_ __ _| | |  | | ___ ___  __ _ _ __
+| |  | | |/ _` | | __/ _` | | |  | |/ __/ _ \/ _` | '_ \
+| |__| | | (_| | | || (_| | | |__| | (_|  __/ (_| | | | |
+|_____/|_|\__, |_|\__\__,_|_|\____/ \___\___|\__,_|_| |_|
+           __/ |
+          |___/
+
+
+LOGO;
+
+    public function getHelp()
+    {
+        return $this->logo . parent::getHelp();
+    }
+}
+
+$console = new Application();
+$console->setName('DigitalOcean :: DigitalOcean API PHP 5.3+ library');
+$console->setVersion(DigitalOcean::VERSION);
+$console->add(new Droplets\ShowAllActiveCommand());
+$console->add(new Droplets\ShowCommand());
+$console->add(new Droplets\CreateCommand());
+$console->add(new Droplets\CreateInteractiveCommand());
+$console->add(new Droplets\RebootCommand());
+$console->add(new Droplets\PowerCycleCommand());
+$console->add(new Droplets\ShutdownCommand());
+$console->add(new Droplets\PowerOnCommand());
+$console->add(new Droplets\PowerOffCommand());
+$console->add(new Droplets\ResetRootPasswordCommand());
+$console->add(new Droplets\ResizeCommand());
+$console->add(new Droplets\SnapshotCommand());
+$console->add(new Droplets\RestoreCommand());
+$console->add(new Droplets\RebuildCommand());
+$console->add(new Droplets\RenameCommand());
+$console->add(new Droplets\DestroyCommand());
+$console->add(new Images\GetAllCommand());
+$console->add(new Images\GetGlobalCommand());
+$console->add(new Images\GetMyImagesCommand());
+$console->add(new Images\ShowCommand());
+$console->add(new Images\DestroyCommand());
+$console->add(new Images\TransferCommand());
+$console->add(new Regions\GetAllCommand());
+$console->add(new Sizes\GetAllCommand());
+$console->add(new SSHKeys\GetAllCommand());
+$console->add(new SSHKeys\ShowCommand());
+$console->add(new SSHKeys\AddCommand());
+$console->add(new SSHKeys\DestroyCommand());
+$console->add(new SSHKeys\EditCommand());
+$console->add(new Domains\GetAllCommand());
+$console->add(new Domains\ShowCommand());
+$console->add(new Domains\AddCommand());
+$console->add(new Domains\DestroyCommand());
+$console->add(new Domains\GetRecordsCommand());
+$console->add(new Domains\AddRecordCommand());
+$console->add(new Domains\ShowRecordCommand());
+$console->add(new Domains\EditRecordCommand());
+$console->add(new Domains\DestroyRecordCommand());
+$console->add(new Events\ShowCommand());
+$console->run();

@@ -1,0 +1,21 @@
+checks:
+    php:
+        code_rating: true
+        duplication: true
+
+tools:
+    external_code_coverage: false
+    php_code_coverage:      false
+    php_code_sniffer:
+        config: { standard: 'PSR1' }
+    php_changetracking: true
+    php_cpd: true
+    php_cs_fixer:
+        config: { level: 'psr1' }
+    php_mess_detector: true
+    php_pdepend: true
+    php_analyzer: true
+    sensiolabs_security_checker: true
+
+filter:
+    paths: [ 'src/*' ]

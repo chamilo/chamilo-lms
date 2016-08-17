@@ -1,0 +1,36 @@
+{
+  "name": "mediaelement",
+  "homepage": "https://github.com/herby/mediaelement",
+  "description": "HTML5 <video> and <audio> made easy.",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "html5",
+    "video",
+    "audio",
+    "shim"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**",
+    "!/build/**",
+    "!/bower.json",
+    "!/README*",
+    "!/changelog*"
+  ],
+  "main": [
+    "./build/mediaelement-and-player.js",
+    "./build/mediaelementplayer.css"
+  ],
+  "version": "2.22.0",
+  "_release": "2.22.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.22.0",
+    "commit": "c8ab5f4c70f3ea1655bb36ef6af20976c940f65a"
+  },
+  "_source": "https://github.com/johndyer/mediaelement.git",
+  "_target": "2.*",
+  "_originalSource": "mediaelement"
+}

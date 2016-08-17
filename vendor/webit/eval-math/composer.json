@@ -1,0 +1,24 @@
+{
+	"name" : "webit/eval-math",
+	"description" : "EvalMath",
+	"type" : "library",
+	"keywords" : [
+		"EvalMath"
+	],
+	"require": {
+		"php": ">=5.3"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~4.2"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Webit\\Util\\EvalMath\\" : "src/"
+		}
+	},
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}

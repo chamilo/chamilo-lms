@@ -412,7 +412,7 @@ class Template
                 $show_course_navigation_menu = CourseHome::show_navigation_menu();
             }
         }
-        //$this->assign('show_course_shortcut', $show_course_shortcut);
+        $this->assign('show_course_shortcut', $show_course_shortcut);
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
 

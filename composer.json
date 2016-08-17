@@ -103,7 +103,7 @@
         "phpoffice/phpword": "^0.12.1",
         "facebook/php-sdk-v4" : "~5.0",
         "kigkonsult/icalcreator" : "0.1.0",
-        "essence/essence": "2.6.0",
+        "essence/essence": "2.6.1",
         "pclzip/pclzip": "2.8.2"
     },
     "require-dev": {

@@ -1384,7 +1384,7 @@ EOT;
                         .prepend(file.preview);
                     node
                         .append('<br>')
-                        .append($('<span class=\"text-success\"/>').text('" . get_lang('UplUploadSucceeded') . "'));
+                        .append($('<span class=\"text-success\"/>').text('" . addslashes(get_lang('UplUploadSucceeded')) . "'));
                 }
                 if (file.error) {
                     node
@@ -1419,7 +1419,7 @@ EOT;
                 });
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
-                    var failedMessage = '" . get_lang('UplUploadFailed') . "';
+                    var failedMessage = '" . addslashes(get_lang('UplUploadFailed')) . "';
                     var error = $('<span class=\"text-danger\"/>').text(failedMessage);
                     $(data.context.children()[index])
                         .append('<br>')

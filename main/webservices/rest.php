@@ -30,7 +30,7 @@ switch ($action) {
             $json = array(
                 'status' => true,
                 'apiKey' => $apiKey,
-                'gcmSenderId' => api_get_configuration_value('messaging_gdc_project_number'),
+                'gcmSenderId' => api_get_setting('messaging_gdc_project_number'),
             );
         } else {
             $json = array(

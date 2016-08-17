@@ -7862,4 +7862,6 @@ $TicketAllowCategoryEditionComment = "Allow category edition by administrators."
 $TicketSystem = "Tickets";
 $MoodleFileImportedSuccessfully = "The Moodle course file has been imported successfully.";
 $ExtensionInstalledButNotEnabled = "Extension installed but not enabled";
+$MailingTestSent = "E-mail sent. This procedure works in all aspects similarly to the normal e-mail sending of Chamilo, but allows for more flexibility in terms of destination e-mail and message body.";
+$EMailTester = "E-mail tester";
 ?>

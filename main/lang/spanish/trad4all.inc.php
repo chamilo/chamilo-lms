@@ -7881,4 +7881,6 @@ $TicketAllowCategoryEditionComment = "Permitir la edición de categorías de tic
 $TicketSystem = "Tickets";
 $MoodleFileImportedSuccessfully = "El archivo de curso de Moodle ha sido importado exitosamente.";
 $ExtensionInstalledButNotEnabled = "Extensión instalada pero no activada";
+$MailingTestSent = "El correo de prueba ha sido enviado. Se comporta en todos aspectos como los demás correos de Chamilo, pero permite hacer pruebas con correos y cuerpos distintos.";
+$EMailTester = "Probador de correo electrónico";
 ?>

@@ -2821,12 +2821,6 @@ class DocumentManager
             $upload_ok = process_uploaded_file($files[$fileKey], $show_output);
 
             if ($upload_ok) {
-                // File got on the server without problems, now process it
-                if ($title) {
-                    $titleAndExt = explode('.', $files[$fileKey]['name']);
-                    $ext = end($titleAndExt);
-                    $files[$fileKey]['name'] = $title.'.'.$ext;
-                }
                 $new_path = handle_uploaded_document(
                     $course_info,
                     $files[$fileKey],
@@ -2872,6 +2866,10 @@ class DocumentManager
                                 $params['title'] = get_document_title($files['file']['name']);
                             }
                         }*/
+
+                        if (!empty($title)) {
+                            $params['title'] = $title;
+                        }
 
                         if (!empty($comment)) {
                             $params['comment'] = trim($comment);

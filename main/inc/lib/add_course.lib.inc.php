@@ -201,14 +201,13 @@ class AddCourse
     public static function get_course_tables()
     {
         $tables = array();
-
+        $tables[] = 'item_property';
         $tables[] = 'tool';
         $tables[] = 'tool_intro';
         $tables[] = 'group_info';
         $tables[] = 'group_category';
         $tables[] = 'group_rel_user';
         $tables[] = 'group_rel_tutor';
-        $tables[] = 'item_property';
         $tables[] = 'userinfo_content';
         $tables[] = 'userinfo_def';
         $tables[] = 'course_description';

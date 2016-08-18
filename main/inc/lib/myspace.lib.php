@@ -2967,6 +2967,51 @@ class MySpace
 
         return $return;
     }
+
+    /**
+     * Gets the connections to a course as an array of login and logout time
+     *
+     * @param   int       $user_id
+     * @param   int    $courseId
+     * @author  Jorge Frisancho Jibaja
+     * @author  Julio Montoya <gugli100@gmail.com> fixing the function
+     * @version OCT-22- 2010
+     * @return  array
+     */
+    public static function get_connections_to_course_by_date($user_id, $courseId, $start_date, $end_date)
+    {
+        // Database table definitions
+        $tbl_track_course = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $course_info = api_get_course_info_by_id($courseId);
+        $user_id = intval($user_id);
+        $courseId = intval($courseId);
+        $connections = array();
+
+        if (!empty($course_info)) {
+            $end_date = add_day_to($end_date);
+            $sql = "SELECT login_course_date, logout_course_date
+                FROM $tbl_track_course
+                WHERE
+                    user_id = $user_id AND
+                    c_id = $courseId AND
+                    login_course_date BETWEEN '$start_date' AND '$end_date' AND
+                    logout_course_date BETWEEN '$start_date' AND '$end_date'
+                ORDER BY login_course_date ASC";
+            $rs = Database::query($sql);
+
+            while ($row = Database::fetch_array($rs)) {
+                $login_date = $row['login_course_date'];
+                $logout_date = $row['logout_course_date'];
+                $timestamp_login_date = strtotime($login_date);
+                $timestamp_logout_date = strtotime($logout_date);
+                $connections[] = array(
+                    'login' => $timestamp_login_date,
+                    'logout' => $timestamp_logout_date
+                );
+            }
+        }
+        return $connections;
+    }
 }
 
 /**
@@ -3019,52 +3064,6 @@ function add_day_to($end_date) {
     $foo_date = strtotime(" +1 day", $foo_date);
     $foo_date = date("Y-m-d", $foo_date);
     return $foo_date;
-}
-
-
-/**
- * Gets the connections to a course as an array of login and logout time
- *
- * @param   int       $user_id
- * @param   int    $courseId
- * @author  Jorge Frisancho Jibaja
- * @author  Julio Montoya <gugli100@gmail.com> fixing the function
- * @version OCT-22- 2010
- * @return  array
- */
-function get_connections_to_course_by_date($user_id, $courseId, $start_date, $end_date)
-{
-    // Database table definitions
-    $tbl_track_course = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $course_info = api_get_course_info_by_id($courseId);
-    $user_id = intval($user_id);
-    $courseId = intval($courseId);
-    $connections = array();
-
-    if (!empty($course_info)) {
-        $end_date = add_day_to($end_date);
-        $sql = "SELECT login_course_date, logout_course_date
-                FROM $tbl_track_course
-                WHERE
-                    user_id = $user_id AND
-                    c_id = $courseId AND
-                    login_course_date BETWEEN '$start_date' AND '$end_date' AND
-                    logout_course_date BETWEEN '$start_date' AND '$end_date'
-                ORDER BY login_course_date ASC";
-        $rs = Database::query($sql);
-
-        while ($row = Database::fetch_array($rs)) {
-            $login_date = $row['login_course_date'];
-            $logout_date = $row['logout_course_date'];
-            $timestamp_login_date = strtotime($login_date);
-            $timestamp_logout_date = strtotime($logout_date);
-            $connections[] = array(
-                'login' => $timestamp_login_date,
-                'logout' => $timestamp_logout_date
-            );
-        }
-    }
-    return $connections;
 }
 
 /**

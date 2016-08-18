@@ -1447,6 +1447,12 @@ function _api_format_user($user, $add_password = false)
         'expiration_date',
         'last_login'
     );
+    if (api_get_setting('extended_profile') === 'true') {
+        $attributes[] = 'competences';
+        $attributes[] = 'diplomas';
+        $attributes[] = 'teach';
+        $attributes[] = 'openarea';
+    }
 
     foreach ($attributes as $attribute) {
         $result[$attribute] = isset($user[$attribute]) ? $user[$attribute] : null;

@@ -59,7 +59,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
     $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId;
     $actionsRight = Display::url(
         Display::return_icon(
-            'upload_package.png',
+            'upload_file.png',
             get_lang('UploadMyAssignment'),
             null,
             ICON_SIZE_MEDIUM

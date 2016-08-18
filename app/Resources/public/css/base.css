@@ -487,23 +487,9 @@ header{
     border: 1px solid #dcdcdc;
     border-radius: 5px;
     background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
 }
 .actions img:hover{
     background: #ededed; /* Old browsers */
-    background: -moz-linear-gradient(top, #ededed 2%, #f6f6f6 49%, #ffffff 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(2%,#ededed), color-stop(49%,#f6f6f6), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 .actions .btn-toolbar {
     margin : 0px;
@@ -514,23 +500,9 @@ header{
     padding-right: 5px;
     margin-right: 5px;
     background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
 }
 .actions .btn-toolbar:hover{
     background: #ededed; /* Old browsers */
-    background: -moz-linear-gradient(top, #ededed 2%, #f6f6f6 49%, #ffffff 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(2%,#ededed), color-stop(49%,#f6f6f6), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 .actions .btn-toolbar img{
     background: none;
@@ -5840,9 +5812,15 @@ ul#toolnavbox-two li a.btn{
     font-size: 120%;
     margin-bottom: 0;
 }
-
+.
 #upload_form .fa-plus-square-o, #upload_form .fa-minus-square-o {
     cursor:pointer;
+}
+#upload, .description-upload{
+    padding-top: 30px;
+}
+#form-work{
+    padding-top: 30px;
 }
 .item-backup{
     padding-top: 5px;
@@ -5927,9 +5905,6 @@ ul#toolnavbox-two li a.btn{
     padding: 10px;
     display: inline-block;
     width: 100%;
-}
-.muted{
-    padding: 10px;
 }
 .group-title{
     margin-bottom: 20px;

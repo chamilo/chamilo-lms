@@ -856,6 +856,7 @@ $parameters['keyword'] = isset($_GET['keyword']) ? Security::remove_XSS($_GET['k
 $parameters['sec_token'] = Security::get_token();
 $parameters['cidReq'] = api_get_cidreq();
 $parameters['id_session'] = api_get_session_id();
+$parameters['type'] = $type;
 
 $table->set_additional_parameters($parameters);
 $header_nr = 0;

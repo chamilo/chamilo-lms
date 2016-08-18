@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Shows the exercise results
  *
@@ -17,13 +19,13 @@ $id = isset($_REQUEST['id']) ? intval($_GET['id']) : null; //exe id
 $show_headers = isset($_REQUEST['show_headers']) ? intval($_REQUEST['show_headers']) : null; //exe id
 
 if ($origin == 'learnpath') {
-	$show_headers = false;
+    $show_headers = false;
 }
 
 api_protect_course_script($show_headers);
 
 if (empty($id)) {
-	api_not_allowed($show_headers);
+    api_not_allowed($show_headers);
 }
 
 $is_allowedToEdit = api_is_allowed_to_edit(null,true) || $is_courseTutor;
@@ -49,7 +51,7 @@ if (!empty($exercise_id)) {
 // Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $current_user_id) {
-    	api_not_allowed($show_headers);
+        api_not_allowed($show_headers);
     }
 }
 
@@ -59,22 +61,29 @@ $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot
 if ($show_headers) {
     $interbreadcrumb[] = array(
         "url" => "exercise.php?".api_get_cidreq(),
-        "name" => get_lang('Exercises'),
+        "name" => get_lang('Exercises')
     );
     $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Result'));
-	$this_section = SECTION_COURSES;
-	Display::display_header();
+    $this_section = SECTION_COURSES;
+    Display::display_header();
 } else {
-    $htmlHeadXtra[] = "
-    <style>
-    body { background: none;}
-    </style>
-    ";
+    $htmlHeadXtra[] = '<style>
+        body { background: none;}
+    </style>';
 	Display::display_reduced_header();
 }
+
+$message = Session::read('attempt_remaining');
+if (!empty($message)) {
+    Display::display_normal_message(
+        $message,
+        false
+    );
+}
+Session::erase('attempt_remaining');
 
 ExerciseLib::display_question_list_by_attempt($objExercise, $id, false);
 
 if ($show_headers) {
-	Display::display_footer();
+    Display::display_footer();
 }

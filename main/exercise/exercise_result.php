@@ -124,6 +124,7 @@ if ($origin == 'learnpath') {
 }
 
 $i = $total_score = $max_score = 0;
+$remainingMessage = '';
 
 //We check if the user attempts before sending to the exercise_result.php
 if ($objExercise->selectAttempts() > 0) {
@@ -152,15 +153,18 @@ if ($objExercise->selectAttempts() > 0) {
             $attemptButton = Display::toolbarButton(
                 get_lang('AnotherAttempt'),
                 api_get_path(WEB_CODE_PATH) . 'exercise/overview.php?' . api_get_cidreq() . '&' . http_build_query([
-                    'exerciseId' => $objExercise->id
+                    'exerciseId' => $objExercise->id,
+                    'learnpath_id' => $learnpath_id,
+                    'learnpath_item_id' => $learnpath_item_id
                 ]),
                 'pencil-square-o',
                 'info'
             );
             $attemptMessage = sprintf(get_lang('RemainingXAttempts'), $remainingAttempts);
+            $remainingMessage = sprintf("<p>%s</p> %s", $attemptMessage, $attemptButton);
 
             Display::display_normal_message(
-                sprintf("<p>%s</p> %s", $attemptMessage, $attemptButton),
+                $remainingMessage,
                 false
             );
         }
@@ -211,6 +215,8 @@ if ($origin != 'learnpath') {
         Session::erase('objExercise');
         Session::erase('exe_id');
     }
+
+    Session::write('attempt_remaining', $remainingMessage);
 
 	// Record the results in the learning path, using the SCORM interface (API)
 	echo "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";

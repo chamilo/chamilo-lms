@@ -406,7 +406,7 @@ class Template
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 //Course toolbar
                 $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();
-            } 
+            }
             if (api_get_setting('show_navigation_menu') != 'false') {
                 //Course toolbar
                 $show_course_navigation_menu = CourseHome::show_navigation_menu();
@@ -1008,6 +1008,7 @@ class Template
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : null);
 
         $this->assign('user_notifications', $total_invitations);
+
 
         // Block Breadcrumb
         $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);

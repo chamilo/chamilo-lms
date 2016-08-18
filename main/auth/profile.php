@@ -499,8 +499,13 @@ function is_platform_authentication() {
  *
  * @return    boolean    Editability of the profile
  */
-function is_profile_editable() {
-    return (empty($GLOBALS['profileIsEditable']) ? false : $GLOBALS['profileIsEditable']);
+function is_profile_editable()
+{
+    if (isset($GLOBALS['profileIsEditable'])) {
+        return (bool) $GLOBALS['profileIsEditable'];
+    }
+
+    return true;
 }
 
 /*

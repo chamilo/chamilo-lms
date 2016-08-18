@@ -478,7 +478,7 @@ class UserManager
                     /** @var FormValidator $form */
                     $form->freeze();
                     $form->removeElement('submit');
-                    $form->removeElement('password');
+#                    $form->removeElement('password');
                     $form->removeElement('pass1');
                     $form->removeElement('pass2');
                     $form->removeElement('search');

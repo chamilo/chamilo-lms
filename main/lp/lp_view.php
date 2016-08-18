@@ -407,33 +407,31 @@ if (Database::num_rows($res_media) > 0) {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, true, false);
 
-$breadcrumb = null;
-
+global $interbreadcrumb;
 if ($is_allowed_to_edit) {
-    global $interbreadcrumb;
     $interbreadcrumb[] = array(
-        'url' => 'lp_controller.php?action=list&isStudentView=false',
+        'url' => api_get_self().'?action=list&isStudentView=false&'.api_get_cidreq(true, true, 'course'),
         'name' => get_lang('LearningPaths')
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_self() . "?action=add_item&type=step&lp_id={$_SESSION['oLP']->lp_id}&isStudentView=false&".api_get_cidreq(),
+        'url' => api_get_self() . "?action=add_item&type=step&lp_id={$_SESSION['oLP']->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
         'name' => $_SESSION['oLP']->get_name()
     );
+
     $interbreadcrumb[] = array(
         'url' => '#',
         'name' => get_lang('Preview')
     );
-    $breadcrumb = return_breadcrumb($interbreadcrumb, null, null);
 }
 
 // Return to course home.
 if ($is_allowed_to_edit) {
-    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq(true, true, 'course') . '&' . http_build_query([
         'isStudentView' => 'false',
         'action' => 'return_to_course_homepage'
     ]);
 } else {
-    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq(true, true, 'course') . '&' . http_build_query([
         'action' => 'return_to_course_homepage'
     ]);
 }
@@ -473,10 +471,7 @@ if ($_SESSION['oLP']->current == $_SESSION['oLP']->get_last()) {
     }
 }
 
-
-
-
-$template = new Template('title', false, false, true, true, false);
+$template = new Template('', false, false, true, true, false);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
 
 $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
@@ -502,7 +497,7 @@ $template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());
 $template->assign('jquery_ui_css_web_path', api_get_jquery_ui_css_web_path());
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 $template->assign('gamification_mode', $gamificationMode);
-$template->assign('breadcrumb', $breadcrumb);
+//$template->assign('breadcrumb', $breadcrumb);
 $template->assign('button_home_url', $buttonHomeUrl);
 $template->assign('button_home_text', $buttonHomeText);
 $template->assign('navigation_bar', $navigation_bar);

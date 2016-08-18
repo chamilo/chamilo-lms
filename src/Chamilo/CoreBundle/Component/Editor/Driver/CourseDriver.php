@@ -12,6 +12,8 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
 class CourseDriver extends Driver implements DriverInterface
 {
     public $name = 'CourseDriver';
+    public $visibleFiles = [];
+    private $coursePath;
 
     /**
      * Setups the folder
@@ -21,14 +23,14 @@ class CourseDriver extends Driver implements DriverInterface
         $userId = api_get_user_id();
         $userInfo = api_get_user_info();
         $sessionId = api_get_session_id();
-
         $courseInfo = $this->connector->course;
 
         if (!empty($courseInfo)) {
-
             $coursePath = api_get_path(SYS_COURSE_PATH);
             $courseDir = $courseInfo['directory'] . '/document';
             $baseDir = $coursePath . $courseDir;
+
+            $this->coursePath = $baseDir;
 
             // Creates shared folder
 
@@ -80,8 +82,9 @@ class CourseDriver extends Driver implements DriverInterface
             //$code = $this->connector->course->getCode();
             $courseCode = $this->connector->course['code'];
             $alias = $courseCode.' '.get_lang('Documents');
+            $userId = api_get_user_id();
 
-            return array(
+            $config = array(
                 'driver' => 'CourseDriver',
                 'path' => $this->getCourseDocumentSysPath(),
                 'URL' => $this->getCourseDocumentRelativeWebPath(),
@@ -95,9 +98,55 @@ class CourseDriver extends Driver implements DriverInterface
                         'write' => false,
                         'hidden' => true,
                         'locked' => false
-                    ),
+                    )
                 )
             );
+
+            $folders = \DocumentManager::get_all_document_folders($this->connector->course, null, false, true);
+            if (!empty($folders)) {
+                foreach ($folders as $folder) {
+                    //$folder = str_replace('-', "", $folder);
+                    //\/
+                    $config['attributes'][] = [
+                        'pattern' => '!'.$folder.'!',
+                        'read' => false,
+                        'write' => false,
+                        'hidden' => true,
+                        'locked' => false
+                    ];
+                }
+            }
+
+            // Blocking all groups
+
+            // hide all groups folders
+            $config['attributes'][] = [
+                'pattern' => '!_groupdocs_!',
+                'read' => false,
+                'write' => false,
+                'hidden' => true,
+                'locked' => false
+            ];
+
+
+            // Allow only the groups I have access
+            $allGroups = \GroupManager::getAllGroupPerUserSubscription($userId);
+            if (!empty($allGroups)) {
+                foreach ($allGroups as $groupInfo) {
+                    $groupId = $groupInfo['iid'];
+                    if (\GroupManager::user_has_access($userId, $groupId, \GroupManager::GROUP_TOOL_DOCUMENTS)) {
+                        $config['attributes'][] = [
+                            'pattern' => '!'.$groupInfo['secret_directory'].'!',
+                            'read' => true,
+                            'write' => false,
+                            'hidden' => false,
+                            'locked' => false
+                        ];
+                    }
+                }
+            }
+
+            return $config;
         }
 
         return array();
@@ -165,13 +214,11 @@ class CourseDriver extends Driver implements DriverInterface
     {
         $this->setConnectorFromPlugin();
 
-        if ($this->allow()) {
+        if ($this->allowToEdit()) {
 
             // upload file by elfinder.
             $result = parent::upload($fp, $dst, $name, $tmpname);
-
             $name = $result['name'];
-
             $filtered = \URLify::filter($result['name'], 80, '', true);
 
             if (strcmp($name, $filtered) != 0) {
@@ -198,7 +245,6 @@ class CourseDriver extends Driver implements DriverInterface
                     $result['name']
                 );
             }
-            //error_log(print_r($this->error(),1));
 
             return $result;
         }
@@ -215,7 +261,7 @@ class CourseDriver extends Driver implements DriverInterface
         //parent::rm($hash);
         $this->setConnectorFromPlugin();
 
-        if ($this->allow()) {
+        if ($this->allowToEdit()) {
 
             $path = $this->decode($hash);
             $stat = $this->stat($path);
@@ -244,10 +290,65 @@ class CourseDriver extends Driver implements DriverInterface
     public function allow()
     {
         //if ($this->connector->security->isGranted('ROLE_ADMIN')) {
-        return
-            isset($this->connector->course) &&
-            !empty($this->connector->course) &&
-            !api_is_anonymous()
-        ;
+
+        if (api_is_anonymous()) {
+
+            return false;
+        }
+
+        if (isset($this->connector->course) && !empty($this->connector->course)) {
+
+            return true;
+        }
+
+        return false;
     }
+
+    /**
+     * Allow to upload/delete folder or files
+     *
+     * @return bool
+     */
+    public function allowToEdit()
+    {
+        $allow = $this->allow();
+
+        return $allow && api_is_allowed_to_edit(null, true);
+    }
+
+    /**
+     * @param string $attr
+     * @param string $path
+     * @param $data
+     * @param CourseDriver $volume
+     */
+    /*public function access($attr, $path, $data, $volume)
+    {
+        if ($path == $this->coursePath) {
+
+            return true;
+        }
+
+        $allowToEdit = $this->allowToEdit();
+        if ($allowToEdit) {
+            return true;
+        }
+
+        $path = str_replace($this->coursePath, '', $path);
+        $documentId = \DocumentManager::get_document_id($this->connector->course, $path);
+
+        if ($documentId) {
+
+            $result = \DocumentManager::is_visible_by_id(
+                $documentId,
+                $this->connector->course,
+                api_get_session_id(),
+                api_get_user_id()
+            );
+            return false;
+        }
+
+        return false;
+
+    }*/
 }

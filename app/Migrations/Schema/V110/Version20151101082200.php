@@ -30,6 +30,16 @@ class Version20151101082200 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session MODIFY session_category_id INT NULL");
 
         $this->addSql("UPDATE session SET session_category_id = NULL WHERE session_category_id NOT IN (SELECT id FROM session_category)");
+
+        $table = $schema->getTable('session_rel_course_rel_user');
+        if ($table->hasForeignKey('FK_720167E91D79BD3')) {
+            $this->addSql("ALTER TABLE session_rel_course_rel_user DROP FOREIGN KEY FK_720167E91D79BD3");
+        }
+
+        $table = $schema->getTable('session_rel_course');
+        if ($table->hasForeignKey('FK_12D110D391D79BD3')) {
+            $this->addSql("ALTER TABLE session_rel_course DROP FOREIGN KEY FK_12D110D391D79BD3");
+        }
     }
 
     /**

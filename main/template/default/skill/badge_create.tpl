@@ -655,9 +655,9 @@
                                                         <h3 class="label"><label for="size-glyph">{{ "Size" | get_lang }}</label></h3>
                                                         <p class="item">
                                                             <select name="size-glyph" class="form-control" id="size-glyph">
-                                                                <option value="200">200 %</option>
-                                                                <option value="100" selected>100 %</option>
-                                                                <option value="50">50 %</option>
+                                                                <option value="big">{{ "Big" | get_lang }}</option>
+                                                                <option value="medium" selected>{{ "Medium" | get_lang }}</option>
+                                                                <option value="small">{{ "Small" | get_lang }}</option>
                                                             </select>
                                                         </p>
                                                     </div>
@@ -753,7 +753,7 @@
         });
 
         $('#size-glyph').change(function () {
-            window.size = parseInt($(this).val());
+            window.size = $(this).val();
             updateGlyph();
         });
 

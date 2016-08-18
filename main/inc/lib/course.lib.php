@@ -2143,10 +2143,10 @@ class CourseManager
             }
 
             // Cleaning groups
-            $groups = GroupManager::get_groups();
+            $groups = GroupManager::get_groups($courseId);
             if (!empty($groups)) {
                 $groupList = array_column($groups, 'id');
-                GroupManager::delete_groups($groupList);
+                GroupManager::delete_groups($groupList, $course['code']);
             }
 
             // Cleaning c_x tables

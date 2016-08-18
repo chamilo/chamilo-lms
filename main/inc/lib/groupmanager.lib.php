@@ -61,12 +61,12 @@ class GroupManager
     /**
      * @return array
      */
-    public static function get_groups()
+    public static function get_groups($courseId = null)
     {
         $table_group = Database :: get_course_table(TABLE_GROUP);
-        $course_id = api_get_course_int_id();
+        $courseId = !empty($courseId) ? (int) $courseId : api_get_course_int_id();
 
-        $sql = "SELECT * FROM $table_group WHERE c_id = $course_id ";
+        $sql = "SELECT * FROM $table_group WHERE c_id = $courseId  ";
         $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');
     }
@@ -773,7 +773,7 @@ class GroupManager
             while ($group = Database::fetch_object($res)) {
                 $groups_to_delete[] = $group->id;
             }
-            self :: delete_groups($groups_to_delete);
+            self::delete_groups($groups_to_delete, $course_code);
         }
         $sql = "DELETE FROM $table_group_cat
                 WHERE c_id = $course_id  AND id='".$cat_id."'";

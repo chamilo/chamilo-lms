@@ -56,16 +56,16 @@ if (!is_dir($saveDir)) {
 
 //avoid duplicates
 $waminame_to_save = $waminame;
-$title_to_save    = str_replace('_', ' ', $waminame);
-$waminame_noex    = basename($waminame, ".wav");
+$title_to_save = str_replace('_', ' ', $waminame);
+$waminame_noex = basename($waminame, ".wav");
 if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
     $i = 1;
     while (file_exists($saveDir.'/'.$waminame_noex.'_'.$i.'.'.$ext)) {
         $i++;
     }
     $waminame_to_save = $waminame_noex.'_'.$i.'.'.$ext;
-    $title_to_save    = $waminame_noex.'_'.$i.'.'.$ext;
-    $title_to_save    = str_replace('_', ' ', $title_to_save);
+    $title_to_save = $waminame_noex.'_'.$i.'.'.$ext;
+    $title_to_save = str_replace('_', ' ', $title_to_save);
 }
 
 $documentPath = $saveDir.'/'.$waminame_to_save;

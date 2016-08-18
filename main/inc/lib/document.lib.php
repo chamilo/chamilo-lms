@@ -745,7 +745,8 @@ class DocumentManager
     public static function get_all_document_folders(
         $_course,
         $to_group_id = 0,
-        $can_see_invisible = false
+        $can_see_invisible = false,
+        $getInvisibleList = false
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
@@ -776,7 +777,7 @@ class DocumentManager
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             $show_users_condition = "";
-            if (api_get_setting('show_users_folders') == 'false') {
+            if (api_get_setting('show_users_folders') === 'false') {
                 $show_users_condition = " AND docs.path NOT LIKE '%shared_folder%'";
             }
 
@@ -795,7 +796,7 @@ class DocumentManager
                             $groupCondition AND
                             docs.path NOT LIKE '%shared_folder%' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
-                            last.visibility 	<> 2
+                            last.visibility <> 2
                             $condition_session ";
             } else {
                 $sql = "SELECT DISTINCT docs.id, path
@@ -808,10 +809,10 @@ class DocumentManager
                             docs.c_id = {$_course['real_id']}
                         )
                         WHERE
-                            docs.filetype 		= 'folder' AND
+                            docs.filetype = 'folder' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
                             $groupCondition AND
-                            last.visibility 	<> 2
+                            last.visibility <> 2
                             $show_users_condition $condition_session ";
             }
             $result = Database::query($sql);
@@ -839,27 +840,42 @@ class DocumentManager
                 return false;
             }
         } else {
+
             // No invisible folders
             // Condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
+
+            $visibilityCondition = 'last.visibility = 1';
+            $fileType = "docs.filetype = 'folder' AND";
+            if ($getInvisibleList) {
+                $visibilityCondition = 'last.visibility = 0';
+                $fileType = '';
+            }
+
             //get visible folders
             $sql = "SELECT DISTINCT docs.id, path
                     FROM
                         $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
                     WHERE
                         docs.id = last.ref AND
-                        docs.filetype = 'folder' AND
+                        $fileType
                         last.tool = '" . TOOL_DOCUMENT . "' AND
                         $groupCondition AND
-                        last.visibility = 1
+                        $visibilityCondition
                         $condition_session AND
                         last.c_id = {$_course['real_id']}  AND
                         docs.c_id = {$_course['real_id']} ";
             $result = Database::query($sql);
+
             $visibleFolders = array();
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $visibleFolders[$row['id']] = $row['path'];
+            }
+
+            if ($getInvisibleList) {
+
+                return $visibleFolders;
             }
 
             // Condition for the session
@@ -899,6 +915,7 @@ class DocumentManager
                     $invisibleFolders[$folders_in_invisible_folder['id']] = $folders_in_invisible_folder['path'];
                 }
             }
+
 
             //if both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
             if (is_array($visibleFolders) && is_array($invisibleFolders)) {
@@ -4507,6 +4524,7 @@ class DocumentManager
             file_exists($documentData['absolute_path'])
         ) {
             $mp3FilePath = self::convertWavToMp3($documentData['absolute_path']);
+            error_log($mp3FilePath);
 
             if (!empty($mp3FilePath) && file_exists($mp3FilePath)) {
 

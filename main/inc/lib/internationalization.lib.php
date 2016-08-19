@@ -439,6 +439,7 @@ function api_get_local_time(
     if (is_null($to_timezone)) {
         $to_timezone = _api_get_timezone();
     }
+
     // If time is a timestamp, convert it to a string
     if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
@@ -456,6 +457,9 @@ function api_get_local_time(
         $time = $time->format('Y-m-d H:i:s');
         $from_timezone = 'UTC';
     }
+
+
+
     try {
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
@@ -476,7 +480,8 @@ function api_get_local_time(
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_strtotime($time, $timezone = null) {
+function api_strtotime($time, $timezone = null)
+{
     $system_timezone = date_default_timezone_get();
     if (!empty($timezone)) {
         date_default_timezone_set($timezone);
@@ -658,14 +663,19 @@ function api_format_date($time, $format = null, $language = null)
 
 function date_to_str_ago($date, $timeZone = 'UTC')
 {
-    if ($date === '0000-00-00 00:00:00')  {
+    if ($date === '0000-00-00 00:00:00') {
 
         return '';
     }
 
-    $timeAgo = new TimeAgo($timeZone, api_get_language_isocode());
+    $getOldTimezone = _api_get_timezone();
 
-    return $timeAgo->inWords($date);
+    $timeAgo = new TimeAgo($timeZone, api_get_language_isocode());
+    $value = $timeAgo->inWords($date);
+
+    date_default_timezone_set($getOldTimezone);
+
+    return $value;
 }
 
 /**

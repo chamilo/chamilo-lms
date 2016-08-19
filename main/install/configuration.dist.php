@@ -242,4 +242,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['packager'] = 'chamilo';
 // If true exercises added in LP can be modified.
 //$_configuration['force_edit_exercise_in_lp'] = false;
-
+// List of driver to plugin in ckeditor
+//$_configuration['editor_driver_list'] = ['PersonalDriver', 'CourseDriver'];

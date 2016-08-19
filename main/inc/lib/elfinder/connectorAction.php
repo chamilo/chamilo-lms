@@ -9,12 +9,18 @@ use Chamilo\CoreBundle\Component\Editor\Finder;
 error_reporting(-1);
 /** @var Connector $connector */
 $connector = new Connector();
-$driverList = array(
-    'PersonalDriver',
-    'CourseDriver',
-    //'CourseUserDriver',
-    //'HomeDriver'
-);
+
+// Check driver list in configuration
+$driverList = api_get_configuration_value('editor_driver_list');
+if (empty($driverList)) {
+    $driverList = array(
+        'PersonalDriver',
+        'CourseDriver',
+        //'CourseUserDriver',
+        //'HomeDriver'
+    );
+}
+
 $connector->setDriverList($driverList);
 
 $operations = $connector->getOperations();

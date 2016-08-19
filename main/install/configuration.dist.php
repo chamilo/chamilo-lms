@@ -247,3 +247,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // to reflect their packaging method. The default value is 'chamilo'. This will
 // be reflected on the https://version.chamilo.org/stats page in the future.
 //$_configuration['packager'] = 'chamilo';
+// List of driver to plugin in ckeditor
+//$_configuration['editor_driver_list'] = ['PersonalDriver', 'CourseDriver'];

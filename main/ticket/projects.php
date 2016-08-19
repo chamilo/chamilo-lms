@@ -10,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
 
-$toolName = get_lang('Project');
+//$toolName = get_lang('Project');
 
 $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
@@ -43,6 +43,11 @@ $interbreadcrumb[] = array(
     'name' => get_lang('Settings')
 );
 
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
+    'name' => get_lang('Projects')
+);
+
 switch ($action) {
     case 'delete':
         TicketManager::deleteProject($id);
@@ -51,10 +56,7 @@ switch ($action) {
         break;
     case 'add':
         $toolName = get_lang('Add');
-        $interbreadcrumb[] = array(
-            'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
-            'name' => get_lang('Categories')
-        );
+
         $url = api_get_self().'?action=add';
         $form = TicketManager::getProjectForm($url);
         $formToString = $form->returnForm();
@@ -74,15 +76,14 @@ switch ($action) {
         }
         break;
     case 'edit':
+        $item = TicketManager::getProject($_GET['id']);
+        if (empty($item)) {
+            api_not_allowed(true);
+        }
         $toolName = get_lang('Edit');
-        $interbreadcrumb[] = array(
-            'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
-            'name' => get_lang('Categories')
-        );
         $url = api_get_self().'?action=edit&id='.$id;
         $form = TicketManager::getProjectForm($url);
 
-        $item = TicketManager::getProject($_GET['id']);
         $form->setDefaults([
             'name' => $item->getName(),
             'description' => $item->getDescription()]
@@ -120,6 +121,18 @@ $isAdmin = api_is_platform_admin();
 function modify_filter($id, $params, $row)
 {
     $result = Display::url(
+        get_lang('Tickets'),
+        "tickets.php?project_id={$row['id']}",
+        ['class' => 'btn btn-small btn-default']
+    );
+
+    $result .= Display::url(
+        get_lang('Categories'),
+        "categories.php?project_id={$row['id']}",
+        ['class' => 'btn btn-default']
+    );
+
+    $result .= Display::url(
         Display::return_icon('edit.png', get_lang('Edit')),
         "projects.php?action=edit&id={$row['id']}"
     );
@@ -129,7 +142,7 @@ function modify_filter($id, $params, $row)
         "projects.php?action=delete&id={$row['id']}"
     );
 
-	return $result;
+    return $result;
 }
 
 $table->set_header(0, '', false);
@@ -138,7 +151,7 @@ $table->set_header(2, get_lang('Description'), true, array("style" => "width:200
 $table->set_header(3, get_lang('Actions'), true);
 $table->set_column_filter('3', 'modify_filter');
 
-Display::display_header($toolName);
+Display::display_header('');
 
 $items = [
     [

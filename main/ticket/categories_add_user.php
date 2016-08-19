@@ -19,7 +19,12 @@ if (empty($categoryInfo)) {
     api_not_allowed(true);
 }
 
-$form = new FormValidator('edit', 'post', api_get_self().'?id='.$categoryId);
+$project = TicketManager::getProject($projectId);
+if (empty($project)) {
+    api_not_allowed(true);
+}
+
+$form = new FormValidator('edit', 'post', api_get_self().'?id='.$categoryId.'&project_id='.$projectId);
 $form->addHeader($categoryInfo['name']);
 $users = UserManager::get_user_list([], ['firstname']);
 $users = array_column($users, 'complete_name', 'user_id');
@@ -54,9 +59,27 @@ $interbreadcrumb[] = array(
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId,
     'name' => get_lang('MyTickets')
 );
+
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/settings.php',
+    'name' => get_lang('Settings')
+);
+
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
+    'name' => get_lang('Projects')
+);
+
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
+    'name' => $project->getName()
+);
+
 $interbreadcrumb[] = array(
     'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php?project_id='.$projectId,
     'name' => get_lang('Categories')
 );
+
+
 Display::display_header(get_lang('Users'));
 $form->display();

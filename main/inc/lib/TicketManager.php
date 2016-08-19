@@ -1941,10 +1941,7 @@ class TicketManager
             $list[] = [
                 'id' => $row->getId(),
                 '0' => $row->getId(),
-                '1' => Display::url(
-                    $row->getName(),
-                    api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$row->getId()
-                ),
+                '1' => $row->getName(),
                 '2' => $row->getDescription(),
                 '3' => $row->getId()
             ];
@@ -2304,10 +2301,6 @@ class TicketManager
             [
                 'url' => 'projects.php',
                 'content' => get_lang('Projects')
-            ],
-            [
-                'url' => 'categories.php',
-                'content' => get_lang('Categories')
             ],
             [
                 'url' => 'status.php',

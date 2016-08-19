@@ -33,7 +33,6 @@ function load_course_list (div_course, my_user_id, user_email) {
 function changeType() {
     var selected = document.getElementById("category_id").selectedIndex;
     var id = $("#category_id").val();
-    //$("#project_id").val(projects[id]);
     $("#other_area").val(other_area[id]);
     $("#email").val(email[id]);
     if (parseInt(course_required[id]) == 0){
@@ -62,15 +61,15 @@ function validate() {
     var selected = document.getElementById("category_id").selectedIndex;
     var id = document.getElementById("category_id").options[selected].value;
     if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0) {
-        alert("' . get_lang("ValidCourse") . '");
+        alert("' . addslashes(get_lang("ValidCourse")) . '");
         return false;
     } else if(id != "CUR" && parseInt(course_required[id]) != 1  && !re.test(document.getElementById("personal_email").value)) {
         if (document.getElementById("personal_email").value != "") {
-            alert("' . get_lang("PleaseEnterValidEmail") . '");
+            alert("' . addslashes(get_lang("PleaseEnterValidEmail")) . '");
             return false;
         }
     } else if(fckEditor1val == "") {
-        alert("' . get_lang("ValidMessage") . '");
+        alert("' . addslashes(get_lang("Filled")) . '");
         return false;
     }
 }
@@ -299,7 +298,7 @@ function show_form_send_ticket()
         )
     );
 
-    //if (api_is_platform_admin()) {
+    if (api_is_platform_admin()) {
         $form->addElement(
             'SelectAjax',
             'user_id',
@@ -307,7 +306,7 @@ function show_form_send_ticket()
             null,
             ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like']
         );
-    //}
+    }
 
     $form->addElement(
         'text',

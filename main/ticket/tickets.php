@@ -67,7 +67,7 @@ if ($table->per_page == 0) {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 switch ($action) {
     case 'assign':
@@ -139,7 +139,7 @@ $isAdmin = api_is_platform_admin();
 
 Display::display_header(get_lang('MyTickets'));
 if (!empty($projectId))
-if ($isAdmin ) {
+if ($isAdmin) {
     $getParameters = [
         'keyword',
         'keyword_status',
@@ -183,7 +183,7 @@ if ($isAdmin ) {
         $selectTypes[$type['category_id']] = $type['name'];
     }
 
-    $admins = UserManager::get_user_list_like(array("status" => "1"), array("username"), true);
+    $admins = UserManager::get_user_list_like(array('status' => '1'), array('username'), true);
     $selectAdmins = [
         0 => get_lang('Unassigned')
     ];
@@ -213,11 +213,15 @@ if ($isAdmin ) {
     $form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
     $form->addText('keyword', get_lang('Keyword'), 'size="25"');
     $form->addButtonSearch(get_lang('Search'), 'submit_simple');
-    $form->addElement('static', 'search_advanced_link', null,
-            '<a href="javascript://" class = "advanced-parameters" onclick="display_advanced_search_form();">'
-            . '<span id="img_plus_and_minus">&nbsp;'
-            . Display::return_icon('div_show.gif', get_lang('Show')) . ' '
-            . get_lang('AdvancedSearch') . '</span></a>');
+    $form->addElement(
+        'static',
+        'search_advanced_link',
+        null,
+        '<a href="javascript://" class = "advanced-parameters" onclick="display_advanced_search_form();">'
+        . '<span id="img_plus_and_minus">&nbsp;'
+        . Display::return_icon('div_show.gif', get_lang('Show')) . ' '
+        . get_lang('AdvancedSearch') . '</span></a>'
+    );
 
     echo '<div class="actions" >';
     if (api_is_platform_admin()) {
@@ -231,18 +235,6 @@ if ($isAdmin ) {
             Display::return_icon('settings.png', get_lang('Categories')),
             api_get_path(WEB_CODE_PATH) . 'ticket/settings.php'
         );
-
-        /*if (api_get_setting('ticket_allow_category_edition')) {
-            echo Display::url(
-                Display::return_icon('folder_document.gif', get_lang('Categories')),
-                api_get_path(WEB_CODE_PATH) . 'ticket/categories.php?project_id='.$projectId
-            );
-
-            echo Display::url(
-                Display::return_icon('folder_document.gif', get_lang('Projects')),
-                api_get_path(WEB_CODE_PATH) . 'ticket/projects.php'
-            );
-        }*/
         echo '</span>';
     }
     $form->display();
@@ -256,25 +248,48 @@ if ($isAdmin ) {
         ['style' => 'display:"none"', 'id' => 'advanced_search_form']
     );
     $advancedSearchForm->addHeader(get_lang('AdvancedSearch'));
-    $advancedSearchForm->addSelect('keyword_category', get_lang('Category'), $selectTypes, ['placeholder' => get_lang('Select')]);
+    $advancedSearchForm->addSelect(
+        'keyword_category',
+        get_lang('Category'),
+        $selectTypes,
+        ['placeholder' => get_lang('Select')]
+    );
     //$advancedSearchForm->addText('keyword_request_user', get_lang('User'), false);
     $advancedSearchForm->addDateTimePicker('keyword_start_date_start', get_lang('Created'));
     $advancedSearchForm->addDateTimePicker('keyword_start_date_end', get_lang('Until'));
-    $advancedSearchForm->addSelect('keyword_admin', get_lang('AssignedTo') , $selectAdmins, ['placeholder' => get_lang('All')]);
-    $advancedSearchForm->addSelect('keyword_status', get_lang('Status'), $selectStatus, ['placeholder' => get_lang('Select')]);
-    $advancedSearchForm->addSelect('keyword_priority', get_lang('Priority'), $selectPriority, ['placeholder' => get_lang('All')]);
-    $advancedSearchForm->addSelect('keyword_unread', get_lang('Status'), $selectStatusUnread, ['placeholder' => get_lang('All')]);
+    $advancedSearchForm->addSelect(
+        'keyword_admin',
+        get_lang('AssignedTo'),
+        $selectAdmins,
+        ['placeholder' => get_lang('All')]
+    );
+    $advancedSearchForm->addSelect(
+        'keyword_status',
+        get_lang('Status'),
+        $selectStatus,
+        ['placeholder' => get_lang('Select')]
+    );
+    $advancedSearchForm->addSelect(
+        'keyword_priority',
+        get_lang('Priority'),
+        $selectPriority,
+        ['placeholder' => get_lang('All')]
+    );
+    $advancedSearchForm->addSelect(
+        'keyword_unread',
+        get_lang('Status'),
+        $selectStatusUnread,
+        ['placeholder' => get_lang('All')]
+    );
     $advancedSearchForm->addText('keyword_course', get_lang('Course'), false);
     $advancedSearchForm->addButtonSearch(get_lang('AdvancedSearch'), 'submit_advanced');
     $advancedSearchForm->display();
 } else {
-    if (api_get_setting('ticket_allow_student_add') == 'true') {
+    if (api_get_setting('ticket_allow_student_add') === 'true') {
         echo '<div class="actions" >';
-        echo '<span style="float:right;">' .
-                '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id='.$projectId.'">' .
-                    Display::return_icon('add.png', get_lang('Add'), '', '32') .
-                '</a>' .
-              '</span>';
+        echo '<a href="' . api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id='.$projectId.'">' .
+                Display::return_icon('add.png', get_lang('Add'), '', '32') .
+             '</a>';
         echo '</div>';
     }
 }
@@ -306,7 +321,7 @@ if ($isAdmin) {
     $table->set_header(7, get_lang('Message'), true);
 } else {
     echo '<center><h1>' . get_lang('MyTickets') . '</h1></center>';
-    echo '<center><p>' . get_lang('MsgWelcome') . '</p></center>';
+    echo '<center><p>' . get_lang('TicketMsgWelcome') . '</p></center>';
     $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Date'), true);
     $table->set_header(2, get_lang('LastUpdate'), true);

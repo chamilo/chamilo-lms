@@ -251,7 +251,9 @@ if (!isset($_POST['compose'])) {
 
     $img_assing = '';
     if (empty($ticket['ticket']['assigned_last_user'])) {
-        $img_assing = '<a href="#" id="assign" class="btn btn-success">'.get_lang('Assign').'</a>';
+        if ($isAdmin) {
+            $img_assing = '<a href="#" id="assign" class="btn btn-success">'.get_lang('Assign').'</a>';
+        }
     } else {
         if ($isAdmin) {
             $img_assing = '<a class="btn btn-warning" href="#" id="assign">
@@ -399,7 +401,8 @@ if (!isset($_POST['compose'])) {
         echo '<a id="note-'.$counter.'"> </a><h4>' . sprintf(get_lang('UpdatedByX'), $message['user_created']).' '.$date.
             ' <span class="pull-right">'.$counterLink.'</span></h4>';
         echo Display::div(
-            $entireMessage, ['class' => 'well']
+            $entireMessage,
+            ['class' => 'well']
         );
         $counter++;
     }

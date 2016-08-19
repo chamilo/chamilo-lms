@@ -854,13 +854,14 @@ class TicketManager
                 $table_support_category cat,
                 $table_support_priority priority,
                 $table_support_status status
-            WHERE
+            WHERE 
                 cat.id = ticket.category_id AND
                 ticket.priority_id = priority.id AND
                 ticket.status_id = status.id                
         ";
+
         if (!$isAdmin) {
-            $sql .= " AND (ticket.assigned_last_user = $user_id)";
+            $sql .= " AND (ticket.assigned_last_user = $user_id OR ticket.sys_insert_user_id = $user_id )";
         }
 
         $keyword_unread = '';
@@ -949,34 +950,6 @@ class TicketManager
             }
         }
 
-        /*
-        if ($keyword_unread == 'yes') {
-            $sql .= " AND ticket.ticket_id IN (SELECT ticket.ticket_id
-                FROM $table_support_tickets ticket,
-                    $table_support_messages message,
-                    $table_main_user user
-                WHERE ticket.ticket_id = message.ticket_id
-                    AND message.status = 'NOL'
-                    AND message.sys_insert_user_id = user.user_id
-                    AND user.user_id NOT IN (SELECT user_id FROM $table_main_admin)
-                    AND ticket.status_id != '".self::STATUS_FORWARDED."'
-                GROUP BY ticket.ticket_id)";
-        } else {
-            if ($keyword_unread == 'no') {
-                $sql .= " AND ticket.ticket_id NOT IN (SELECT ticket.ticket_id
-                    FROM $table_support_tickets ticket,
-                        $table_support_messages message,
-                        $table_main_user user
-                    WHERE ticket.ticket_id = message.ticket_id
-                        AND message.status = 'NOL'
-                        AND message.sys_insert_user_id = user.user_id
-                        AND user.user_id NOT IN (
-                            SELECT user_id FROM $table_main_admin
-                            )
-                        AND ticket.status_id != '".self::STATUS_FORWARDED."'
-                    GROUP BY ticket.ticket_id)";
-            }
-        }*/
         $sql .= " ORDER BY col$column $direction";
         $sql .= " LIMIT $from, $number_of_items";
 

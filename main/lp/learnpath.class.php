@@ -9298,7 +9298,9 @@ class learnpath
         // Always call the learnpathItem->scorm_export() method to change it to the SCORM format.
         $link_updates = array();
         $links_to_create = array();
-        foreach ($this->items as $index => $item) {
+        //foreach ($this->items as $index => $item) {
+        foreach ($this->ordered_items as $index => $itemId) {
+            $item = $this->items[$itemId];
             if (!in_array($item->type, array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION))) {
                 // Get included documents from this item.
                 if ($item->type === 'sco') {
@@ -9385,6 +9387,7 @@ class learnpath
 
                 // Dependency to other files - not yet supported.
                 $i = 1;
+                if ($inc_docs)
                 foreach ($inc_docs as $doc_info) {
                     if (count($doc_info) < 1 || empty($doc_info[0])) {
                         continue;
@@ -9396,7 +9399,6 @@ class learnpath
                     $my_dep->setAttribute('adlcp:scormtype', 'asset');
                     $my_dep_file = $xmldoc->createElement('file');
                     // Check type of URL.
-                    //error_log(__LINE__.'Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2], 0);
                     if ($doc_info[1] == 'remote') {
                         // Remote file. Save url as is.
                         $my_dep_file->setAttribute('href', $doc_info[0]);
@@ -9663,14 +9665,27 @@ class learnpath
                         $my_item->appendChild($my_masteryscore);
 
                         // Attach this item to the organization element or hits parent if there is one.
+
                         if (!empty($item->parent) && $item->parent != 0) {
                             $children = $organization->childNodes;
-                            for ($i = 0; $i < $children->length; $i++) {
+                            /*for ($i = 0; $i < $children->length; $i++) {
                                 $item_temp = $children->item($i);
-                                if ($item_temp -> nodeName == 'item') {
+                                if ($exe_id == 81) {
+                                error_log($item_temp->nodeName );
+                                    error_log($item_temp->getAttribute('identifier'));
+                                }
+                                if ($item_temp->nodeName == 'item') {
                                     if ($item_temp->getAttribute('identifier') == 'ITEM_'.$item->parent) {
-                                        $item_temp -> appendChild($my_item);
+                                        $item_temp->appendChild($my_item);
                                     }
+                                }
+                            }*/
+
+
+                            $possible_parent = $this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
+                            if ($possible_parent) {
+                                if ($possible_parent->getAttribute('identifier') == 'ITEM_'.$item->parent) {
+                                    $possible_parent->appendChild($my_item);
                                 }
                             }
                         } else {
@@ -9682,25 +9697,24 @@ class learnpath
                         $my_file_path = 'quiz_'.$item->get_id().'.html';
                         // Write the contents of the exported exercise into a (big) html file
                         // to later pack it into the exported SCORM. The file will be removed afterwards.
-                        $contents = ScormSection::export_exercise_to_scorm($exe_id, true);
+                        $contents = ScormSection::export_exercise_to_scorm($exe, true);
+
                         $tmp_file_path = $archive_path.$temp_dir_short.'/'.$my_file_path;
                         $res = file_put_contents($tmp_file_path, $contents);
                         if ($res === false) {
                             error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0);
                         }
                         $files_cleanup[] = $tmp_file_path;
-                        //error_log($tmp_path); die();
-                        //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_QUOTES, 'UTF-8');
                         $my_xml_file_path = $my_file_path;
                         $my_sub_dir = dirname($my_file_path);
                         $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
-                        //$my_xml_sub_dir = api_htmlentities(api_utf8_encode($my_sub_dir), ENT_QUOTES, 'UTF-8');
                         $my_xml_sub_dir = $my_sub_dir;
                         // Give a <resource> child to the <resources> element.
                         $my_resource = $xmldoc->createElement('resource');
                         $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
                         $my_resource->setAttribute('type', 'webcontent');
                         $my_resource->setAttribute('href', $my_xml_file_path);
+
                         // adlcp:scormtype can be either 'sco' or 'asset'.
                         $my_resource->setAttribute('adlcp:scormtype', 'sco');
                         // xml:base is the base directory to find the files declared in this resource.
@@ -9742,8 +9756,6 @@ class learnpath
                                             // The calculated real path is really inside the chamilo root path.
                                             // Reduce file path to what's under the DocumentRoot.
                                             $file_path = substr($file_path, strlen($root_path));
-                                            //echo $file_path;echo '<br /><br />';
-                                            //error_log('Reduced path: '.$file_path, 0);
                                             $zip_files_abs[] = $file_path;
                                             $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => 'document/'.$file_path);
                                             $my_dep_file->setAttribute('href', 'document/'.$file_path);
@@ -9871,15 +9883,16 @@ class learnpath
                         $my_file->setAttribute('href', 'document/'.$my_xml_file_path);
                         $my_resource->appendChild($my_file);
                         $resources->appendChild($my_resource);
+
                         break;
                 }
             }
         }
-
         $organizations->appendChild($organization);
         $root->appendChild($organizations);
         $root->appendChild($resources);
         $xmldoc->appendChild($root);
+
 
         // TODO: Add a readme file here, with a short description and a link to the Reload player
         // then add the file to the zip, then destroy the file (this is done automatically).
@@ -10018,9 +10031,7 @@ EOD;
         $fs = new \Symfony\Component\Filesystem\Filesystem;
         $fs->mirror($main_code_path, $archive_path.$temp_dir_short);
 
-
         // Finalize the imsmanifest structure, add to the zip, then return the zip.
-
         $manifest = @$xmldoc->saveXML();
         $manifest = api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
         file_put_contents($archive_path.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);

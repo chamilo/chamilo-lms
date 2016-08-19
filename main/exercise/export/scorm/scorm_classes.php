@@ -929,16 +929,12 @@ class ScormSection
 	/**
 	 * Send a complete exercise in SCORM format, from its ID
 	 *
-	 * @param int $exerciseId The exercise to exporte
+	 * @param Exercise $exercise The exercise to export
 	 * @param boolean $standalone Wether it should include XML tag and DTD line.
 	 * @return string XML as a string, or an empty string if there's no exercise with given ID.
 	 */
-	public static function export_exercise_to_scorm($exerciseId, $standalone = true)
+	public static function export_exercise_to_scorm(Exercise $exercise, $standalone = true)
 	{
-		$exercise = new Exercise();
-		if (!$exercise->read($exerciseId)) {
-			return '';
-		}
 		$ims = new ScormSection($exercise);
 		$xml = $ims->export($standalone);
 

@@ -326,6 +326,16 @@ class Diagnoser
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
             ),
+            'Zend OPcache' => array(
+                'link' => 'http://www.php.net/opcache',
+                'expected' => 2,
+                'comment' => get_lang('ExtensionShouldBeLoaded'),
+            ),
+            'apcu' => array(
+                'link' => 'http://www.php.net/apcu',
+                'expected' => 2,
+                'comment' => get_lang('ExtensionShouldBeLoaded'),
+            ),
         );
 
         foreach ($extensions as $extension => $data) {

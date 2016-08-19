@@ -11,7 +11,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestcategory;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
@@ -911,8 +911,9 @@ class CourseBuilder
             $courseId
         );
         foreach ($tab_test_categories_id as $test_category_id) {
-            $test_category = new TestCategory($test_category_id);
-            $copy_course_test_category = new CourseCopyTestcategory(
+            $test_category = new TestCategory();
+            $test_category = $test_category->getCategory($test_category_id);
+            $copy_course_test_category = new CourseCopyTestCategory(
                 $test_category_id,
                 $test_category->name,
                 $test_category->description

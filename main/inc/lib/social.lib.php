@@ -56,6 +56,7 @@ class SocialManager extends UserManager
         $list_type_friend = self::show_list_type_friends();
         foreach ($list_type_friend as $value_type_friend) {
             if (strtolower($value_type_friend['title']) == $relation_type_name) {
+
                 return $value_type_friend['id'];
             }
         }
@@ -194,7 +195,7 @@ class SocialManager extends UserManager
                 WHERE
                     user_sender_id='.$user_id.' AND
                     user_receiver_id='.$friend_id.' AND
-                    msg_status IN(5,6,7);
+                    msg_status IN('.MESSAGE_STATUS_INVITATION_PENDING.', '.MESSAGE_STATUS_INVITATION_ACCEPTED.', '.MESSAGE_STATUS_INVITATION_DENIED.');
                 ';
         $res_exist = Database::query($sql);
         $row_exist = Database::fetch_array($res_exist, 'ASSOC');
@@ -362,61 +363,6 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Sends invitations to friends
-     * @author Isaac Flores Paz <isaac.flores.paz@gmail.com>
-     * @author Julio Montoya <gugli100@gmail.com> Cleaning code
-     * @param void
-     * @return string message invitation
-     */
-    public static function send_invitation_friend_user($userfriend_id, $subject_message = '', $content_message = '')
-    {
-        global $charset;
-
-        $user_info = api_get_user_info($userfriend_id);
-        $succes = get_lang('MessageSentTo');
-        $succes.= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
-
-        if (isset($subject_message) && isset($content_message) && isset($userfriend_id)) {
-            $send_message = MessageManager::send_message($userfriend_id, $subject_message, $content_message);
-
-            if ($send_message) {
-                Display::addFlash(
-                    Display::display_confirmation_message($succes, true, true)
-                );
-            } else {
-                Display::addFlash(
-                    Display::display_error_message(get_lang('ErrorSendingMessage'), true, true)
-                );
-            }
-            return false;
-        } elseif (isset($userfriend_id) && !isset($subject_message)) {
-            $count_is_true = false;
-            if (isset($userfriend_id) && $userfriend_id > 0) {
-                $message_title = get_lang('Invitation');
-                $count_is_true = self::send_invitation_friend(api_get_user_id(), $userfriend_id, $message_title, $content_message);
-
-                if ($count_is_true) {
-                    Display::addFlash(
-                        Display::display_confirmation_message(
-                            api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES, $charset),
-                            false,
-                            true
-                        )
-                    );
-                } else {
-                    Display::addFlash(
-                        Display::display_warning_message(
-                            api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES, $charset),
-                            false,
-                            true
-                        )
-                    );
-                }
-            }
-        }
-    }
-
-    /**
      * Get user's feeds
      * @param   int User ID
      * @param   int Limit of posts per feed
@@ -471,6 +417,65 @@ class SocialManager extends UserManager
         }
 
         return $res;
+    }
+
+    /**
+     * Sends invitations to friends
+     *
+     * @param int  $userId
+     * @param string $subject
+     * @param string $content
+     *
+     * @return string message invitation
+     */
+    public static function sendInvitationToUser($userId, $subject = '', $content = '')
+    {
+        $user_info = api_get_user_info($userId);
+        $success = get_lang('MessageSentTo');
+        $success.= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
+
+        if (isset($subject) && isset($content) && isset($userId)) {
+            $result = MessageManager::send_message($userId, $subject, $content);
+
+            if ($result) {
+                Display::addFlash(
+                    Display::return_message($success, 'normal', false)
+                );
+            } else {
+                Display::addFlash(
+                    Display::return_message(get_lang('ErrorSendingMessage'), 'error', false)
+                );
+            }
+            return false;
+        } elseif (isset($userId) && !isset($subject)) {
+            if (isset($userId) && $userId > 0) {
+
+                $count = self::send_invitation_friend(
+                    api_get_user_id(),
+                    $userId,
+                    get_lang('Invitation'),
+                    $content
+                );
+
+                if ($count) {
+                    Display::addFlash(
+                        Display::return_message(
+                            api_htmlentities(get_lang('InvitationHasBeenSent')),
+                            'normal',
+                            false
+                        )
+                    );
+                } else {
+                    Display::addFlash(
+                        Display::return_message(
+                            api_htmlentities(get_lang('YouAlreadySentAnInvitation')),
+                            'warning',
+                            false
+                        )
+                    );
+                }
+            }
+        }
     }
 
     /**

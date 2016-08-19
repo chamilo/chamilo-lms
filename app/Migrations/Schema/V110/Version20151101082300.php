@@ -27,25 +27,33 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $accessUrlRelCourse->addForeignKeyConstraint('access_url', ['access_url_id'], ['id']);
         $accessUrlRelCourse->addForeignKeyConstraint('course', ['c_id'], ['id']);
 
-        $schema->renameTable('class', 'class_item');
+        if ($schema->hasTable('class')) {
+            $schema->renameTable('class', 'class_item');
+        }
 
-        $classUser = $schema->getTable('class_user');
-        $classUser->getColumn('class_id')->setUnsigned(false);
-        $classUser->getColumn('user_id')->setUnsigned(false);
+        if ($schema->hasTable('class_user')) {
+            $classUser = $schema->getTable('class_user');
+            $classUser->getColumn('class_id')->setUnsigned(false);
+            $classUser->getColumn('user_id')->setUnsigned(false);
+        }
 
         $course = $schema->getTable('course');
         $course->getColumn('course_type_id')->setUnsigned(false);
         $course->addForeignKeyConstraint('room', ['room_id'], ['id']);
 
-        $courseRelClass = $schema->getTable('course_rel_class');
-        $courseRelClass->getColumn('class_id')->setUnsigned(false)->setType(Type::getType(Type::INTEGER));
+        if ($schema->hasTable('course_rel_class')) {
+            $courseRelClass = $schema->getTable('course_rel_class');
+            $courseRelClass->getColumn('class_id')->setUnsigned(false)->setType(Type::getType(Type::INTEGER));
+        }
 
         $courseRelUser = $schema->getTable('course_rel_user');
         $courseRelUser->addForeignKeyConstraint('course', ['c_id'], ['id']);
         $courseRelUser->addForeignKeyConstraint('user', ['user_id'], ['id']);
 
-        $courseType = $schema->getTable('course_type');
-        $courseType->getColumn('id')->setUnsigned(false);
+        if ($schema->hasTable('course_type')) {
+            $courseType = $schema->getTable('course_type');
+            $courseType->getColumn('id')->setUnsigned(false);
+        }
 
         $schema->getTable('c_announcement')->addIndex(['c_id']);
         $schema->getTable('c_announcement_attachment')->addIndex(['c_id']);

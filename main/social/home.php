@@ -33,7 +33,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
     //	PICTURE
     $form->addElement('file', 'picture', get_lang('AddImage'));
-    $form->add_progress_bar();
+    $form->addProgress();
     if (!empty($user_data['picture_uri'])) {
         $form->addElement(
             'checkbox',

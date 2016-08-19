@@ -94,6 +94,8 @@ class Priority
     public function __construct()
     {
         $this->insertDateTime = new \DateTime();
+        $this->color = '';
+        $this->urgency = '';
     }
 
     /**

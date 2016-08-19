@@ -2029,9 +2029,9 @@ function get_work_user_list(
                         $action .=  '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
-                    $loadingText = get_lang('Loading');
-                    $uploadedText = get_lang('Uploaded');
-                    $failsUploadText = get_lang('UplNoFileUploaded');
+                    $loadingText = addslashes(get_lang('Loading'));
+                    $uploadedText = addslashes(get_lang('Uploaded'));
+                    $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
                     $failsUploadIcon = Display::return_icon('closed-circle.png', '', [], ICON_SIZE_TINY);
                     $correction = '
                         <form
@@ -2040,7 +2040,7 @@ function get_work_user_list(
                         action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
                         >
                         <div id="progress_'.$item_id.'" class="text-center button-load">
-                            '.get_lang('ClickOrDropOneFileHere').'
+                            '.addslashes(get_lang('ClickOrDropOneFileHere')).'
                             '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
                         </div>
 
@@ -3298,7 +3298,7 @@ function setWorkUploadForm($form, $uploadFormType = 0)
         case 0:
             // File and text.
             $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
-            $form->add_real_progress_bar('uploadWork', 'file');
+            $form->addProgress();
             $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
             break;
         case 1:
@@ -3309,7 +3309,7 @@ function setWorkUploadForm($form, $uploadFormType = 0)
         case 2:
             // Only file.
             $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
-            $form->add_real_progress_bar('uploadWork', 'file');
+            $form->addProgress();
             $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
             break;
     }

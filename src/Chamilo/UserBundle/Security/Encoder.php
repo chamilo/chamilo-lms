@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
 class Encoder implements PasswordEncoderInterface
 {
     protected $method;
+    protected $defaultEncoder;
 
     /**
      * @param $method
@@ -23,16 +24,6 @@ class Encoder implements PasswordEncoderInterface
     public function __construct($method)
     {
         $this->method = $method;
-    }
-
-    /**
-     * @param string $raw
-     * @param string $salt
-     * @return string
-     */
-    public function encodePassword($raw, $salt)
-    {
-
         switch ($this->method) {
             case 'none':
                 $defaultEncoder = new PlaintextPasswordEncoder();
@@ -45,8 +36,22 @@ class Encoder implements PasswordEncoderInterface
                 $defaultEncoder = new MessageDigestPasswordEncoder($this->method, false, 1);
                 break;
         }
+        $this->defaultEncoder = $defaultEncoder;
+    }
 
-        return $defaultEncoder->encodePassword($raw, $salt);
+    /**
+     * @param string $raw
+     * @param string $salt
+     *
+     * @return string
+     */
+    public function encodePassword($raw, $salt)
+    {
+        if ($this->method === 'bcrypt') {
+            $salt = null;
+        }
+
+        return $this->defaultEncoder->encodePassword($raw, $salt);
     }
 
     /**
@@ -57,6 +62,10 @@ class Encoder implements PasswordEncoderInterface
      */
     public function isPasswordValid($encoded, $raw, $salt)
     {
-        return $encoded === $this->encodePassword($raw, $salt);
+        if ($this->method === 'bcrypt') {
+            $salt = null;
+        }
+
+        return $this->defaultEncoder->isPasswordValid($encoded, $raw, $salt);
     }
 }

@@ -68,7 +68,7 @@ class Template
 
         if (empty($this->show_learnpath)) {
             $origin = api_get_origin();
-            if ($origin == 'learnpath') {
+            if ($origin === 'learnpath') {
                 $this->show_learnpath = true;
                 $show_footer = false;
                 $show_header = false;
@@ -910,7 +910,7 @@ class Template
         $iconBug = Display::return_icon('bug.png', get_lang('ReportABug'), null, ICON_SIZE_LARGE);
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
             $rightFloatMenu = '<div class="report">
-		<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
+		<a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
                     '. $iconBug . '
                 </a>
 		</div>';
@@ -1024,6 +1024,7 @@ class Template
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : null);
 
         $this->assign('user_notifications', $total_invitations);
+
 
         // Block Breadcrumb
         $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);

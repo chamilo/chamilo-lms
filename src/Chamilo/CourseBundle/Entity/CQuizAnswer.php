@@ -122,6 +122,7 @@ class CQuizAnswer
     public function __construct()
     {
         $this->id = null;
+        $this->idAuto = 0;
         $this->correct = null;
         $this->comment = null;
         $this->ponderation = 0;

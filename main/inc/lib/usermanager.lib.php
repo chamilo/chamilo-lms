@@ -102,21 +102,8 @@ class UserManager
     private static function getEncoderFactory()
     {
         $encryption = self::getPasswordEncryption();
-        switch ($encryption) {
-            case 'none':
-                $defaultEncoder = new PlaintextPasswordEncoder();
-                break;
-            case 'sha1':
-            case 'md5':
-                $defaultEncoder = new MessageDigestPasswordEncoder($encryption, false, 1);
-                break;
-            case 'bcrypt':
-                $defaultEncoder = new BCryptPasswordEncoder(4);
-                break;
-        }
-
         $encoders = array(
-            'Chamilo\\UserBundle\\Entity\\User' => $defaultEncoder
+            'Chamilo\\UserBundle\\Entity\\User' => new \Chamilo\UserBundle\Security\Encoder($encryption)
         );
 
         $encoderFactory = new EncoderFactory($encoders);

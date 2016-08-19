@@ -173,7 +173,7 @@ function form_special_export() {
     $form->addElement('radio', 'backup_option', '',  get_lang('SpecialLetMeSelectItems'), 'select_items');
     $form->addElement('html','<br />');
     $form->addButtonExport(get_lang('CreateBackup'));
-    $form->add_progress_bar();
+    $form->addProgress();
     $values['backup_option'] = 'full_backup';
     $form->setDefaults($values);
     $form->display();

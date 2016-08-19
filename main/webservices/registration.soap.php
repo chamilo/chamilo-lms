@@ -4190,8 +4190,6 @@ function WSEditSession($params)
             continue;
         }
 
-        if (empty($nolimit) && $duration) $nolimit = 1;
-
         if (empty($nolimit)) {
             $date_start = "$year_start-".(($month_start < 10) ? "0$month_start" : $month_start)."-".(($day_start < 10) ? "0$day_start" : $day_start).' 00:00:00';
             $date_end = "$year_end-".(($month_end < 10) ? "0$month_end" : $month_end)."-".(($day_end < 10) ? "0$day_end" : $day_end).' 23:59:59';

@@ -127,7 +127,7 @@ function lp_upload_quiz_main()
 
     $form->addRule('user_upload_quiz', get_lang('ThisFieldIsRequired'), 'required');
 
-    $form->add_progress_bar();
+    $form->addProgress();
     $form->addButtonUpload(get_lang('Upload'), 'submit_upload_quiz');
 
     // Display the upload field
@@ -353,7 +353,8 @@ function lp_upload_quiz_action_handling()
                     $categoryName = $categoryList[$i];
                     $categoryId = TestCategory::get_category_id_for_title($categoryName, $courseId);
                     if (empty($categoryId)) {
-                        $category = new TestCategory(null, $categoryName, '');
+                        $category = new TestCategory();
+                        $category->name = $categoryName;
                         $categoryId = $category->addCategoryInBDD();
                     }
                 }

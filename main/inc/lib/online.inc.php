@@ -117,7 +117,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     		LIMIT 0,1";
     $q_last_connection = Database::query($sql);
     if (Database::num_rows($q_last_connection)>0) {
-        $i_id_last_connection = Database::result($q_last_connection,0,"login_id");
+        $i_id_last_connection = Database::result($q_last_connection, 0, "login_id");
     }
 
     if (!isset($_SESSION['login_as'])) {

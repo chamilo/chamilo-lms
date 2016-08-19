@@ -51,3 +51,4 @@
     {% include template ~ "/layout/menu.tpl" %}
 {% endblock %}
 </header>
+{% include template ~ "/layout/course_navigation.tpl" %}

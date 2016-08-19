@@ -126,7 +126,7 @@ class TestSocial extends UnitTestCase{
 		$userfriend_id = 1;
 		$subject_message = 'test';
 		$content_message = 'this message is a test';
-		$res = SocialManager::send_invitation_friend_user ($userfriend_id,$subject_message,$content_message);
+		$res = SocialManager::sendInvitationToUser ($userfriend_id,$subject_message,$content_message);
 		ob_end_clean();
 		if(is_string($res)){
 			$this->assertTrue($res);

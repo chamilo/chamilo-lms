@@ -546,7 +546,22 @@ class AppPlugin
                     );
                 }
 
-                $form->addElement('html', '<div><h3>'.$icon.' '.Security::remove_XSS($pluginTitle).'</h3><div>');
+                $form->addHtml('<div class="panel panel-default">');
+                $form->addHtml('
+                    <div class="panel-heading" role="tab" id="heading-' . $plugin_name . '-settings">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-' . $plugin_name . '-settings" aria-expanded="false" aria-controls="collapse-' . $plugin_name . '-settings">
+                ');
+                $form->addHtml($icon . ' ' . $pluginTitle);
+                $form->addHtml('
+                            </a>
+                        </h4>
+                    </div>
+                ');
+                $form->addHtml('
+                    <div id="collapse-' . $plugin_name . '-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-' . $plugin_name . '-settings">
+                        <div class="panel-body">
+                ');
 
                 $groups = array();
                 foreach ($obj->course_settings as $setting) {
@@ -576,7 +591,11 @@ class AppPlugin
                     $form->addGroup($groups[$k], $k, array($obj->get_lang($k)));
                 }
                 $form->addButtonSave(get_lang('SaveSettings'));
-                $form->addElement('html', '</div></div>');
+                $form->addHtml('
+                        </div>
+                    </div>
+                ');
+                $form->addHtml('</div>');
             }
         }
     }

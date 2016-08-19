@@ -20,7 +20,7 @@ switch ($action) {
         if ($range == 1) {
             $start_date = Security::remove_XSS($_REQUEST['sd']);
             $end_date = Security::remove_XSS($_REQUEST['ed']);
-            $sql_result = get_connections_to_course_by_date(
+            $sql_result = MySpace::get_connections_to_course_by_date(
                 $user_id,
                 $courseId,
                 $start_date,
@@ -47,7 +47,7 @@ switch ($action) {
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
 
-        $sql_result = get_connections_to_course_by_date(
+        $sql_result = MySpace::get_connections_to_course_by_date(
             $user_id,
             $courseId,
             $start_date,

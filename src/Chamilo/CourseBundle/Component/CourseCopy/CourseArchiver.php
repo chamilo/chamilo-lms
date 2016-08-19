@@ -227,7 +227,7 @@ class CourseArchiver
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance', 'Attendance');
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent', 'CalendarEvent');
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath', 'CourseCopyLearnpath');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestcategory', 'CourseCopyTestcategory');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestCategory', 'CourseCopyTestCategory');
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription', 'CourseDescription');
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession', 'CourseSession');
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Document', 'Document');

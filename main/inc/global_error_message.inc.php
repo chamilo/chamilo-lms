@@ -55,56 +55,28 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     } else {
         $theme = 'chamilo';
     }
+
+    $root_rel = '';
+    $installation_guide_url = $root_rel.'documentation/installation_guide.html';
     
     $css_path = 'app/Resources/public/css/';
     $css_web_assets = 'web/assets/';
     $css_web_path = 'web/css/';
     $themePath = $css_path.'themes/'.$theme.'/default.css';
-    $css_web_fontawesome = $css_web_assets.'fontawesome/css/font-awesome.css';
     $bootstrap_file = $css_web_assets.'bootstrap/dist/css/bootstrap.min.css';
     $css_base_file = $css_web_path.'base.css';
 
-    $css_list = array($bootstrap_file,$css_web_fontawesome, $css_base_file, $themePath);
+    $css_list = array($bootstrap_file, $css_base_file, $themePath);
 
     $web_img = 'main/img';
-    $root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
-    
-    $root_rel = htmlentities($_SERVER['PHP_SELF']);
-    if (!empty($root_rel)) {
-        // If we could obtain a relative path for the chamilo dir from the $_SERVER array
-        $pos = strrpos($root_rel, '/'); //search for last "/" in path
-        $root_rel = substr($root_rel, 0, $pos - strlen($root_rel) + 1);
-        if (strpos($root_rel, '/main/') !== false) {
-            // If the current path contains '/main/', then
-            $pos = 0;
-            while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), '/main/')) !== false) {
-                $pos = $test_pos + 1;
-            }
-            $root_rel = substr($root_rel, 0, $pos);
-        } elseif (strpos($root_rel, '/courses/') !== false && function_exists('api_get_path') && strpos($root_rel, api_get_path(REL_COURSE_PATH)) !== false) {
-            $pos = 0;
-            while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), api_get_path(REL_COURSE_PATH))) !== false) {
-                $pos = $test_pos + 1;
-            }
-            $root_rel = substr($root_rel, 0, $pos);
-        } elseif (!function_exists('api_get_path')) {
-            // Sometimes the api_get_path() function might be unavailable (system not installed, for example)
-            // In this case, we assume the root folder, although this might trigger issues with Chamilo installed in a subfolder
-            $root_rel = '/';
-        }
-    }
-
-    $installation_guide_url = $root_rel.'documentation/installation_guide.html';
+    $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../')).'/';
 
     $css_def = '';
-    foreach ($css_list as $css_item) {
-        $css_base_chamilo_file = $css_item;
-        
-        if (file_exists($css_base_chamilo_file)) {
-            $css_def .= '<link rel="stylesheet" href="'.$css_base_chamilo_file.'">'.PHP_EOL;
-            //$css_def .= @file_get_contents($css_base_chamilo_file);
+    foreach ($css_list as $cssFile) {
+        $cssFile = $root_sys.$cssFile;
+        if (file_exists($cssFile)) {
+            $css_def .= file_get_contents($cssFile);
         }
-        
     }
 
     $global_error_message = array();
@@ -142,7 +114,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                     <p class="text">Let\'s start hunting skills down with Chamilo LMS! This wizard will guide you through the Chamilo installation and configuration process.</p>
                           <p class="download-info">
                               <button class="btn btn-primary btn-lg" type="submit" value="INSTALL Chamilo" ><i class="fa fa-download" aria-hidden="true"></i> Install Chamilo</button>
-                              <a class="btn btn-success btn-lg" href="'.$installation_guide_url.'" target="_blank"> <em class="fa fa-file-text-o"></em> '.$read_installation_guide.'</a>
+                              <a class="btn btn-success btn-lg" href="'.$installation_guide_url.'" target="_blank"> '.$read_installation_guide.'</a>
                           </p>
                     </div>
                 </div>
@@ -180,19 +152,17 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     $bgMoon = base64_encode(file_get_contents("$root_sys/main/img/bg_moon_two.png"));
     $installChamiloImage = "data:image/png;base64,".base64_encode(file_get_contents("$root_sys/main/img/mr_chamilo_install.png"));
     $global_error_message['mr_chamilo'] = $installChamiloImage;
-    
+
     $global_error_message_page =
 <<<EOM
 <!DOCTYPE html>
 <html>
 		<head>
 			<title>{TITLE}</title>
-            <meta charset="{ENCODING}" />
-            
-            $css_def
-            
-
-            <style type="text/css">
+            <meta charset="{ENCODING}" />            
+                        
+            <style>
+                $css_def                
                 html, body {min-height:100%; padding:0; margin:0;}
             
                 #wrapper {padding:0; position:absolute; top:0; bottom:0; left:0; right:0;}
@@ -220,8 +190,6 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                     -ms-animation: animatedBackground 40s linear infinite;
                     -moz-animation: animatedBackground 40s linear infinite;
                     -webkit-animation: animatedBackground 40s linear infinite;
-                    
-                    
                 }
                 .installer{
                     background: url("data:image/png;base64,$bgMoon") no-repeat center 390px;
@@ -260,13 +228,21 @@ if (is_int($global_error_code) && $global_error_code > 0) {
             </header>
             <div id="content">
                 <div class="container">
-                <div class="welcome-install">
-                    <div class="avatar">
+                    <div class="welcome-install">
+                        <div class="avatar">
                             <img class="img-responsive" src="{MR_CHAMILO}"/>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="office">
+                                    <p class="text">
+                                    {DESCRIPTION}
+                                    {CODE}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {DESCRIPTION}
-                    {CODE}
-                </div>
                 </div>
             </div>
         </div>

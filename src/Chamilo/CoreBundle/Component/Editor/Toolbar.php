@@ -49,7 +49,8 @@ class Toolbar
             array_merge(
                 $this->getDefaultPlugins(),
                 $this->getPlugins(),
-                $this->getConditionalPlugins())
+                $this->getConditionalPlugins()
+            )
         );
 
         return

@@ -268,7 +268,7 @@ if (Security::check_token('post') && (
     $values['same_file_name_option'] = FILE_OVERWRITE;
     $form->setDefaults($values);
 
-    $form->add_progress_bar();
+    $form->addProgress();
     // When progress bar appears we have to hide the title "Select backup file".
     $form->updateAttributes(array(
         'onsubmit' => str_replace(

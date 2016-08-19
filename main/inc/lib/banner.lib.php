@@ -597,8 +597,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 continue;
             }
             if ($breadcrumb_step['url'] != '#') {
-                $sep = (strrchr($breadcrumb_step['url'], '?') ? '&amp;' : '?');
-                $navigation_item['url'] = $breadcrumb_step['url'].$sep.api_get_cidreq();
+                $sep = strrchr($breadcrumb_step['url'], '?') ? '&' : '?';
+                $courseParams = strpos($breadcrumb_step['url'], 'cidReq') === false ? api_get_cidreq() : '';
+                $navigation_item['url'] = $breadcrumb_step['url'].$sep.$courseParams;
             } else {
                 $navigation_item['url'] = '#';
             }
@@ -628,6 +629,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             // we cut the string depending of the MAX_LENGTH_BREADCRUMB value
             $navigation_item['title'] = cut($navigation_item['title'], MAX_LENGTH_BREADCRUMB);
             $navigation_item['title'] = Security::remove_XSS($navigation_item['title']);
+
             $navigation[] = $navigation_item;
         }
     }
@@ -650,6 +652,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
     }
 
+
     // part 3: The tool itself. If we are on the course homepage we do not want
     // to display the title of the course because this
     // is the same as the first part of the breadcrumbs (see part 1)
@@ -671,6 +674,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             $counter++;
         }
     }
+
 
     $html = '';
 
@@ -724,8 +728,8 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             $html .= $view;
             $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));
         }
-    }
 
+    }
     return $html;
 }
 

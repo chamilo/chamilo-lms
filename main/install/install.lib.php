@@ -55,15 +55,29 @@ function isAlreadyInstalledSystem()
  * @param   string  $returnSuccess Text to show when extension is available (defaults to 'Yes')
  * @param   string  $returnFailure Text to show when extension is available (defaults to 'No')
  * @param   boolean $optional Whether this extension is optional (then show unavailable text in orange rather than red)
+ * @param   string  $enabledTerm If this string is not null, then use to check if the corresponding parameter is = 1. If not, mention it's present but not enabled. For example, for opcache, this should be 'opcache.enable'
  * @return  string  HTML string reporting the status of this extension. Language-aware.
  * @author  Christophe Gesch??
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author  Yannick Warnier <yannick.warnier@dokeos.com>
  */
-function checkExtension($extensionName, $returnSuccess = 'Yes', $returnFailure = 'No', $optional = false)
+function checkExtension($extensionName, $returnSuccess = 'Yes', $returnFailure = 'No', $optional = false, $enabledTerm = '')
 {
     if (extension_loaded($extensionName)) {
-        return Display::label($returnSuccess, 'success');
+        if (!empty($enabledTerm)) {
+            $isEnabled = ini_get($enabledTerm);
+            if ($isEnabled == '1') {
+                return Display::label($returnSuccess, 'success');
+            } else {
+                if ($optional) {
+                    return Display::label(get_lang('ExtensionInstalledButNotEnabled'), 'warning');
+                } else {
+                    return Display::label(get_lang('ExtensionInstalledButNotEnabled'), 'important');
+                }
+            }
+        } else {
+            return Display::label($returnSuccess, 'success');
+        }
     } else {
         if ($optional) {
             return Display::label($returnFailure, 'warning');
@@ -460,6 +474,8 @@ function get_config_param($param, $updatePath = '')
         // try to recover config file from Chamilo 1.9.x
         if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
             $updateFromConfigFile = 'main/inc/conf/configuration.php';
+        } elseif (file_exists($updatePath . 'app/config/configuration.php')) {
+            $updateFromConfigFile = 'app/config/configuration.php';
         } else {
             // Give up recovering.
             //error_log('Chamilo Notice: Could not find previous config file at '.$updatePath.'main/inc/conf/configuration.php nor at '.$updatePath.'claroline/inc/conf/claro_main.conf.php in get_config_param(). Will start new config (in '.__FILE__.', line '.__LINE__.')', 0);
@@ -697,60 +713,68 @@ function display_requirements(
     echo '</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('support').'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('session', get_lang('Yes'), get_lang('ExtensionSessionsNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">pdo_mysql</a> '.get_lang('support').'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">pdo_mysql</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('pdo_mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.zip.php" target="_blank">Zip</a> '.get_lang('support').'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.zip.php" target="_blank">Zip</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('zip', get_lang('Yes'), get_lang('ExtensionNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('support').'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('zlib', get_lang('Yes'), get_lang('ExtensionZlibNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.get_lang('support').'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('pcre', get_lang('Yes'), get_lang('ExtensionPCRENotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.xml.php" target="_blank">XML</a> '.get_lang('support').'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.xml.php" target="_blank">XML</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('xml', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang('support').'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('intl', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
                <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang('support').'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('json', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
              <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('support').'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('gd', get_lang('Yes'), get_lang('ExtensionGDNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a>'.get_lang('support').'</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a>'.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('curl', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
 
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable'), true).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="http://php.net/opcache" target="_blank">Zend OpCache</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-value">'.checkExtension('Zend OPcache', get_lang('Yes'), get_lang('No'), true, 'opcache.enable').'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item"><a href="http://php.net/apcu" target="_blank">APCu</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-value">'.checkExtension('apcu', get_lang('Yes'), get_lang('No'), true, 'apc.enabled').'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('iconv', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('ldap', get_lang('Yes'), get_lang('ExtensionLDAPNotAvailable'), true).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('xapian', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
         </table>';
@@ -1112,14 +1136,6 @@ function display_license_agreement()
                     <?php echo get_lang('IAccept'); ?>
                 </label>
             </div>
-            <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" >
-                <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
-            </button>
-            <input type="hidden" name="is_executable" id="is_executable" value="-" />
-            <button type="submit" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
-                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
-            </button>
-
         </div>
     </div>
     <div class="row">
@@ -1141,6 +1157,15 @@ function display_license_agreement()
             <p><?php echo get_contact_registration_form() ?></p><br />
         </div>
     </div>
+
+    <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" >
+        <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
+    </button>
+    <input type="hidden" name="is_executable" id="is_executable" value="-" />
+    <button type="submit" id="license-next" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
+        <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
+    </button>
+
     <?php
 }
 
@@ -1152,7 +1177,7 @@ function get_contact_registration_form()
 {
 
     $html ='
-   <form class="form-horizontal">
+   <div class="form-horizontal">
     <div class="panel panel-default">
     <div class="panel-body">
     <div id="div_sent_information"></div>
@@ -1261,13 +1286,13 @@ function get_contact_registration_form()
     <div class="clear"></div>
     <div class="form-group">
             <div class="col-sm-3">&nbsp;</div>
-            <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" ><em class="fa fa-floppy-o"></em> '.get_lang('SendInformation').'</button></div>
+            <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" ><em class="fa fa-floppy-o"></em> '.get_lang('SendInformation').'</button> <span id="loader-button"></span></div>
     </div>
     <div class="form-group">
             <div class="col-sm-3">&nbsp;</div>
             <div class="col-sm-9"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
     </div></div></div>
-    </form>';
+    </div>';
 
     return $html;
 }

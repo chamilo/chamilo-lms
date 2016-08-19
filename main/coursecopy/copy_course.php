@@ -122,7 +122,7 @@ if (Security::check_token('post') && (
         $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameRename'), FILE_RENAME);
         $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameOverwrite'), FILE_OVERWRITE);
         $form->addGroup($group, '', get_lang('SameFilename'));
-        $form->add_progress_bar();
+        $form->addProgress();
         $form->addButtonSave(get_lang('CopyCourse'));
         $form->setDefaults(array('copy_option' =>'select_items','same_file_name_option' => FILE_OVERWRITE));
 

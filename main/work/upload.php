@@ -76,7 +76,7 @@ $interbreadcrumb[] = array(
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UploadADocument'));
 
 $form = new FormValidator(
-    'form',
+    'form-work',
     'POST',
     api_get_self()."?".api_get_cidreq()."&id=".$work_id,
     '',

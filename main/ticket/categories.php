@@ -88,6 +88,10 @@ switch ($action) {
         }
         break;
     case 'edit':
+        if (api_get_setting('ticket_allow_category_edition') !== 'true') {
+            api_not_allowed();
+        }
+
         $toolName = get_lang('Edit');
         $interbreadcrumb[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php?project_id='.$projectId,
@@ -128,20 +132,25 @@ switch ($action) {
 function modify_filter($id, $params, $row)
 {
     $projectId = Session::read('project_id');
-    $result = Display::url(
-        Display::return_icon('edit.png', get_lang('Edit')),
-        "categories.php?action=edit&id={$row['id']}&project_id=".$projectId
-    );
+
+    if (api_get_setting('ticket_allow_category_edition') === 'true') {
+        $result = Display::url(
+            Display::return_icon('edit.png', get_lang('Edit')),
+            "categories.php?action=edit&id={$row['id']}&project_id=".$projectId
+        );
+    }
 
     $result .= Display::url(
         Display::return_icon('user.png', get_lang('AssignUser')),
         "categories_add_user.php?id={$row['id']}&project_id=".$projectId
     );
 
-    $result .= Display::url(
-        Display::return_icon('delete.png', get_lang('Delete')),
-        "categories.php?action=delete&id={$row['id']}&project_id=".$projectId
-    );
+    if (api_get_setting('ticket_allow_category_edition') === 'true') {
+        $result .= Display::url(
+            Display::return_icon('delete.png', get_lang('Delete')),
+            "categories.php?action=delete&id={$row['id']}&project_id=".$projectId
+        );
+    }
 
 	return $result;
 }

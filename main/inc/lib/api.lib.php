@@ -1329,6 +1329,12 @@ function _api_format_user($user, $add_password = false)
         'last_login',
         'profile_completed'
     );
+    if (api_get_setting('extended_profile') === 'true') {
+        $attributes[] = 'competences';
+        $attributes[] = 'diplomas';
+        $attributes[] = 'teach';
+        $attributes[] = 'openarea';
+    }
 
     foreach ($attributes as $attribute) {
         $result[$attribute] = isset($user[$attribute]) ? $user[$attribute] : null;
@@ -1623,14 +1629,16 @@ function api_get_cidreq_params($courseCode, $sessionId = 0, $groupId = 0)
  *
  * @param bool $addSessionId
  * @param bool $addGroupId
+ * @param string $origin
+ *
  * @return  string  Course & session references to add to a URL
  *
  */
-function api_get_cidreq($addSessionId = true, $addGroupId = true)
+function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 {
     $courseCode = api_get_course_id();
     $url = empty($courseCode) ? '' : 'cidReq='.htmlspecialchars($courseCode);
-    $origin = api_get_origin();
+    $origin = empty($origin) ? api_get_origin() : Security::remove_XSS($origin);
 
     if ($addSessionId) {
         if (!empty($url)) {
@@ -7500,7 +7508,7 @@ function convert_double_quote_to_single($in_text) {
 function api_get_origin()
 {
     if (isset($_REQUEST['origin'])) {
-        return $_REQUEST['origin'] == 'learnpath' ? 'learnpath' : null;
+        return $_REQUEST['origin'] === 'learnpath' ? 'learnpath' : '';
     }
 
     return null;

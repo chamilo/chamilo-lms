@@ -32,12 +32,19 @@
             "main/inc/lib/hook"
         ]
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ywarnier/iCalcreator"
+        }
+    ],
     "require": {
         "php": ">=5.4",
         "ext-intl": "*",
         "ext-gd": "*",
         "ext-curl": "*",
         "ext-zlib": "*",
+        "ext-zip": "*",
         "ext-xml": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -120,7 +127,7 @@
         "aferrandini/phpqrcode": "1.0.1",
         "mpdf/mpdf": "6.1.*",
         "barryvdh/elfinder-builds": "2.1.0.3",
-        "jbroadway/urlify": "1.0.7-stable",
+        "jbroadway/urlify": "dev-master",
         "monolog/monolog": "~1.0",
 
         "ircmaxell/password-compat": "~1.0.4",
@@ -138,7 +145,6 @@
         "media-alchemyst/media-alchemyst": "~0.5",
         "php-ffmpeg/php-ffmpeg": "0.5.1",
         "imagine/imagine": "0.6.2",
-        "essence/essence": "^3.2",
         "jeroendesloovere/vcard": "^1.2",
         "a2lix/translation-form-bundle": "~2.0",
         "knplabs/doctrine-behaviors": "~1.1",
@@ -146,6 +152,9 @@
         "theodo-evolution/session-bundle": "1.0.*",
         "jimmiw/php-time-ago": "^0.4.11",
         "phpoffice/phpword": "^0.12.1",
+        "facebook/php-sdk-v4" : "~5.0",
+        "kigkonsult/icalcreator" : "0.1.0",
+        "essence/essence": "2.6.1",
         "pclzip/pclzip": "2.8.2"
     },
     "require-dev": {

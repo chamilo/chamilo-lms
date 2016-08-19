@@ -345,7 +345,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'));
 
     // Forum image
-    $form->add_progress_bar();
+    $form->addProgress();
     if (!empty($inputvalues['forum_image'])) {
         $baseImagePath = api_get_course_path() . '/upload/forum/images/' . $inputvalues['forum_image'];
         $image_path = api_get_path(WEB_COURSE_PATH) . $baseImagePath;

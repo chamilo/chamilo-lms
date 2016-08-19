@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 use ChamiloSession as Session;
 
 /**
@@ -10,7 +11,6 @@ use ChamiloSession as Session;
  */
 
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/MoodleImport.class.php';
 
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
@@ -31,7 +31,7 @@ $this_section = SECTION_COURSES;
 
 // Breadcrumbs
 $interbreadcrumb[] = array(
-    'url' => '../course_info/maintenance.php',
+    'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq(),
     'name' => get_lang('Maintenance')
 );
 
@@ -43,7 +43,9 @@ if ($form->validate()) {
     $file = $_FILES['moodle_file'];
     $moodleImport = new MoodleImport();
     $responseImport = $moodleImport->readMoodleFile($file);
-    Session::erase('flash_messages');
+
+    Display::cleanFlashMessages();
+
     if ($responseImport) {
         Display::addFlash(Display::return_message(get_lang('MoodleFileImportedSuccessfully'), 'success'));
     } else {

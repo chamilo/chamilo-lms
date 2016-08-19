@@ -33,19 +33,29 @@
     </div>
     {% endif %}
 
+    {% if show_header == true %}
     {% include template ~ "/layout/page_header.tpl" %}
+    {% endif %}
+    {% if show_course_shortcut is not null %}
+        <div class="nav-tools">
+            {{ show_course_shortcut }}
+        </div>
+    {% endif %}
 	<section id="content-section">
         <div class="container">
             {% block breadcrumb %}
                 {{ breadcrumb }}
             {% endblock %}
-            {% include template ~ "/layout/course_navigation.tpl" %}
+            
             {% block body %}
                 {{ content }}
             {% endblock %}
         </div>
 	</section>
+
+    {% if show_footer == true %}
 	{% include template ~ "/layout/page_footer.tpl" %}
+    {% endif %}
     </div>
   </body>
 </html>

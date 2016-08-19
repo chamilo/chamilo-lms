@@ -652,6 +652,14 @@
                                                                 <option value="youtube-square">Youtube (Square)</option>
                                                             </select>
                                                         </p>
+                                                        <h3 class="label"><label for="size-glyph">{{ "Size" | get_lang }}</label></h3>
+                                                        <p class="item">
+                                                            <select name="size-glyph" class="form-control" id="size-glyph">
+                                                                <option value="big">{{ "Big" | get_lang }}</option>
+                                                                <option value="medium" selected>{{ "Medium" | get_lang }}</option>
+                                                                <option value="small">{{ "Small" | get_lang }}</option>
+                                                            </select>
+                                                        </p>
                                                     </div>
                                                     <div class="col-md-12 text-center">
                                                         <a id="set-custom-badge" class="btn btn-primary"><em class="fa fa-check"></em> {{ 'UseThisBadge' | get_lang }}</a>
@@ -737,11 +745,17 @@
 {{ badge_studio.script_js }}
 <script>
     $(document).ready(function() {
-      $('#set-custom-badge').click(function () {
-          var data = $('#raster').attr('src');
-          $('#badge_studio_image').val(data);
-          $('#badge-preview').attr('src', data);
-          $('#badge-container').removeClass('hide');
-      });
+        $('#set-custom-badge').click(function () {
+            var data = $('#raster').attr('src');
+            $('#badge_studio_image').val(data);
+            $('#badge-preview').attr('src', data);
+            $('#badge-container').removeClass('hide');
+        });
+
+        $('#size-glyph').change(function () {
+            window.size = $(this).val();
+            updateGlyph();
+        });
+
     })
 </script>

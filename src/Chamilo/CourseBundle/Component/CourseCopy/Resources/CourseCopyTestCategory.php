@@ -4,11 +4,11 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Class CourseCopyTestcategory
+ * Class CourseCopyTestCategory
  * @author Hubert Borderiou <hubert.borderiou@grenet.fr>
  * @package chamilo.backup
  */
-class CourseCopyTestcategory extends Resource
+class CourseCopyTestCategory extends Resource
 {
     /**
      * The title

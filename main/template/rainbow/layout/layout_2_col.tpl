@@ -82,8 +82,18 @@
                     }
                 });
             });
+
+            $(document).ready(function() {
+                $.ajax({
+                    url: "{{ _p.web }}web/app_dev.php/cms/page/blocks/4",
+                    success: function (data) {
+                        $('#latest_blocks').html(data);
+                    }
+                });
+            });
             </script>
             <div id="latest_pages"></div>
+            <div id="latest_blocks"></div>
             <!-- END CSS -->
         </div>
     </div>

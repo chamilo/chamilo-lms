@@ -26,7 +26,13 @@ class PageController extends Controller
     {
         $site = $this->container->get('sonata.page.site.selector')->retrieve();
 
-        $criteria = ['enabled' => 1, 'site' => $site, 'decorate' => 1, 'routeName' => 'page_slug'];
+        $criteria = [
+            'enabled' => 1,
+            'site' => $site,
+            'decorate' => 1,
+            'routeName' => 'page_slug',
+            'metaKeyword' => null,
+        ];
         $order = ['createdAt' => 'desc'];
         // Get latest pages
         $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
@@ -48,6 +54,46 @@ class PageController extends Controller
 
         return $this->render(
             '@ChamiloPage/latest.html.twig',
+            [ 'pages' => $pagesToShow ]
+        );
+    }
+
+    /**
+     * @Route("/cms/page/blocks/{number}")
+     * @param int $number
+     */
+    public function getLatestBlocks($number)
+    {
+        $site = $this->container->get('sonata.page.site.selector')->retrieve();
+
+        $criteria = [
+            'enabled' => 1,
+            'site' => $site,
+            'decorate' => 1,
+            'routeName' => 'page_slug',
+            'metaKeyword' => 'block',
+        ];
+        $order = ['createdAt' => 'desc'];
+        // Get latest pages
+        $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
+        $pagesToShow = [];
+        /** @var Page $page */
+        foreach ($pages as $page) {
+            // Skip homepage
+            if ($page->getUrl() === '/') {
+                continue;
+            }
+            $criteria = ['pageId' => $page];
+            /** @var Snapshot $snapshot */
+            // Check if page has a valid snapshot
+            $snapshot = $this->container->get('sonata.page.manager.snapshot')->findEnableSnapshot($criteria);
+            if ($snapshot) {
+                $pagesToShow[] = $page;
+            }
+        }
+
+        return $this->render(
+            '@ChamiloPage/blocks.html.twig',
             [ 'pages' => $pagesToShow ]
         );
     }

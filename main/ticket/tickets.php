@@ -312,21 +312,21 @@ if (empty($projectId)) {
 
 if ($isAdmin) {
     $table->set_header(0, '#', true);
-    $table->set_header(1, get_lang('Date'), true);
-    $table->set_header(2, get_lang('LastUpdate'), true);
-    $table->set_header(3, get_lang('Category'), true);
-    $table->set_header(4, get_lang('CreatedBy'), true);
-    $table->set_header(5, get_lang('AssignedTo'), true);
-    $table->set_header(6, get_lang('Status'), true);
+    $table->set_header(1, get_lang('Status'), true);
+    $table->set_header(2, get_lang('Date'), true);
+    $table->set_header(3, get_lang('LastUpdate'), true);
+    $table->set_header(4, get_lang('Category'), true);
+    $table->set_header(5, get_lang('CreatedBy'), true);
+    $table->set_header(6, get_lang('AssignedTo'), true);
     $table->set_header(7, get_lang('Message'), true);
 } else {
     echo '<center><h1>' . get_lang('MyTickets') . '</h1></center>';
     echo '<center><p>' . get_lang('TicketMsgWelcome') . '</p></center>';
     $table->set_header(0, '#', true);
-    $table->set_header(1, get_lang('Date'), true);
-    $table->set_header(2, get_lang('LastUpdate'), true);
-    $table->set_header(3, get_lang('Category'));
-    $table->set_header(4, get_lang('Status'), false);
+    $table->set_header(1, get_lang('Status'), false);
+    $table->set_header(2, get_lang('Date'), true);
+    $table->set_header(3, get_lang('LastUpdate'), true);
+    $table->set_header(4, get_lang('Category'));
 }
 
 $table->display();

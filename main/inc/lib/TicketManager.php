@@ -1013,8 +1013,9 @@ class TicketManager
                     $img_source = 'icons/32/course_home.png';
                     break;
             }
-            $row['col1'] = api_get_local_time($row['col1']);
-            $row['col2'] = api_get_local_time($row['col2']);
+
+            $row['col1'] = Display::tip(date_to_str_ago($row['col1']), api_get_local_time($row['col1']));
+            $row['col2'] = Display::tip(date_to_str_ago($row['col2']), api_get_local_time($row['col2']));
             if ($isAdmin) {
                 if ($row['priority_id'] === self::PRIORITY_HIGH && $row['status_id'] != self::STATUS_CLOSE) {
                     $actions .= '<img src="' . $webCodePath . 'img/exclamation.png" border="0" />';
@@ -1031,12 +1032,12 @@ class TicketManager
 
                 $ticket = array(
                     $row['col0'].' '.$row['subject'],
-                    api_format_date($row['col1'], '%d/%m/%y - %I:%M:%S %p'),
-                    api_format_date($row['col2'], '%d/%m/%y - %I:%M:%S %p'),
+                    $row['col7'],
+                    $row['col1'],
+                    $row['col2'],
                     $row['col3'],
                     $name,
                     $row['assigned_last_user'],
-                    $row['col7'],
                     $row['col8']
                 );
             } else {
@@ -1058,10 +1059,10 @@ class TicketManager
                 }
                 $ticket = array(
                     $row['col0'],
-                    api_format_date($row['col1'], '%d/%m/%y - %I:%M:%S %p'),
-                    api_format_date($row['col2'], '%d/%m/%y - %I:%M:%S %p'),
-                    $row['col3'],
                     $row['col7'],
+                    $row['col1'],
+                    $row['col2'],
+                    $row['col3']
                 );
             }
             /*if ($unread > 0) {

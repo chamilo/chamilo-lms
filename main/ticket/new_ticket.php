@@ -150,7 +150,6 @@ $htmlHeadXtra[] = '<script language="javascript">
     var email = ' . js_array($types, 'email', 'email') .
 '</script>';
 
-
 /**
  * @param $s
  * @return string
@@ -190,7 +189,6 @@ function show_form_send_ticket()
     }
 
     // Status List
-    $statusList = array();
     $statusAttributes = array(
         'style' => 'display: none;',
         'id' => 'status_id',
@@ -317,7 +315,8 @@ function show_form_send_ticket()
         )
     );
 
-    $form->addLabel('',
+    $form->addLabel(
+        '',
         Display::div(
             '',
             array(
@@ -373,7 +372,6 @@ function show_form_send_ticket()
             $form->addHidden('session_id', $sessionInfo['id']);
         }
     }
-
 
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
     $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
@@ -446,9 +444,6 @@ function save_ticket()
         $status,
         $user_id
     )) {
-        Display::addFlash(
-            Display::return_message(get_lang('Saved'), 'success')
-        );
         header('Location:' . api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
         exit;
     } else {

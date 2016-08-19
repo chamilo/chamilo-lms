@@ -1771,7 +1771,6 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                 $invisibility_span_open.
                 $display_size.
                 $invisibility_span_close;
-
             // Last edit date
             $last_edit_date = api_get_local_time($document_data['lastedit_date']);
             $display_date = date_to_str_ago($document_data['lastedit_date']).

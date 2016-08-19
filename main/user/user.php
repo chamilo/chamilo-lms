@@ -816,8 +816,7 @@ function modify_filter($user_id, $row, $data)
 
                 $result .= Display::url(
                         $text,
-                        'user.php?'.api_get_cidreq(
-                        ).'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
+                        'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
                         array('class' => 'btn btn-default '.$disabled)
                     ).'&nbsp;';
             }
@@ -854,7 +853,6 @@ $tableLabel = $type === STUDENT ? 'student' : 'teacher';
 $table = new SortableTable($tableLabel.'_list', 'get_number_of_users', 'get_user_data', $default_column);
 $parameters['keyword'] = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $parameters['sec_token'] = Security::get_token();
-$parameters['cidReq'] = api_get_cidreq();
 $parameters['id_session'] = api_get_session_id();
 $parameters['type'] = $type;
 

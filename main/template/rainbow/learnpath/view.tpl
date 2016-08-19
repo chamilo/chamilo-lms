@@ -7,7 +7,7 @@
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 <div class="lp-view-zone-container">
                     <div id="scorm-info">
-                        <div id="panel-scorm" class="panel-bsody">
+                        <div id="panel-scorm" class="panel-body">
                             <div class="image-avatar">
                                     {% if lp_author == '' %}
                                        <div class="text-center">
@@ -24,15 +24,13 @@
                                         </div>
                                     {% endif %}
                                 </div>
-
+                                
                                 {% if show_audio_player %}
-                                    <div id="lp_media_file">
+                                    <div id="lp_media_file" class="audio-scorm">
                                         {{ media_player }}
                                     </div>
                                 {% endif %}
-
                                 {% if gamification_mode == 1 %}
-                                    <hr>
                                     <!--- gamification -->    
                                     <div id="scorm-gamification">
                                         <div class="row">
@@ -67,19 +65,21 @@
                                         {{ progress_bar }}
                                     </div>
                                 {% endif %}
-
+                                <div class="visible-xs-block movil-toolbar">
+                                    <ul class="btn-movil">
+                                        <li>
+                                            <a href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                                                <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <button type="button" id="lp-view-expand-button" class="icon-toolbar expand visible-xs-block">
+                                                <span class="fa fa-expand" aria-hidden="true"></span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                                 {{ teacher_toc_buttons }}
-
-                            <hr class="visible-xs-block">
-                            <div class="visible-xs-block movil-toolbar">
-                                <button type="button" id="lp-view-expand-button" class="icon-toolbar expand visible-xs-block">
-                                <span class="fa fa-expand" aria-hidden="true"></span>
-                                </button>
-                                <a href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                                    <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
-                                </a>
-                            </div>
-                            
                         </div>
                     </div>
 
@@ -132,11 +132,13 @@
 
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="lp-view-content">
+                                <div id="wrapper-iframe" style="width:100%; height:100%">
                                 {% if lp_mode == 'fullscreen' %}
-                                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                                 {% else %}
-                                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                                 {% endif %}
+                                </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="lp-view-forum">
                                 
@@ -161,7 +163,14 @@
         };
 
         $(document).on('ready', function () {
-            
+            if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
+              $('#wrapper-iframe').css({
+                'overflow' : 'auto',
+                'position' : 'relative',
+                '-webkit-overflow-scrolling': 'touch'
+              });
+            }
+
             {% if lp_mode == 'embedframe' %}
                 //$('#learning_path_main').addClass('lp-view-collapsed');
                 $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
@@ -214,7 +223,8 @@
                 $('.lp-view-tabs').fadeIn();
             });
 
-            loadForumThead({{ lp_id }}, {{ lp_current_item_id }});
+            loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
+            checkCurrentItemPosition({{ lp_current_item_id }});
 
             {% if glossary_extra_tools in glossary_tool_availables %}
                 // Loads the glossary library.

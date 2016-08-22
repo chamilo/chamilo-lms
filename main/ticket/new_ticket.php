@@ -13,23 +13,46 @@ if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') != '
 }
 
 api_block_anonymous_users();
+$courseId = api_get_course_int_id();
 
-$htmlHeadXtra[] = '
-<script>
-function load_course_list (div_course, my_user_id, user_email) {
-    $.ajax({
-        contentType: "application/x-www-form-urlencoded",
-        type: "GET",
-        url: "course_user_list.php",
-        data: "user_id="+my_user_id,
-        success: function(datos) {
-            $("#user_request").html(datos);
-            $("#user_id_request").val(my_user_id);
-            $("#personal_email").val(user_email);
-            $("#btnsubmit").attr("disabled", false);
-        }
-    });
+$htmlHeadXtra[] = '<script>
+
+function updateCourseList(sessionId) {    
+    $selectCourse = $("select#course_id");
+    $selectCourse.empty();
+        
+    $.get("'.api_get_path(WEB_AJAX_PATH).'session.ajax.php", {
+        a: "get_courses_inside_session",
+        session_id : sessionId
+    }, function (courseList) {
+        $("<option>", {
+            value: 0,
+            text: "'.get_lang('Select').'"
+        }).appendTo($selectCourse);
+        
+        if (courseList.length > 0) {            
+            $.each(courseList, function (index, course) {
+                $("<option>", {
+                    value: course.id,
+                    text: course.name
+                }).appendTo($selectCourse);
+            });
+            $("select#course_id option[value=\''.$courseId.'\']").attr("selected",true);
+            $("select#course_id").selectpicker("refresh");
+        }        
+    }, "json");    
 }
+
+$(document).on("ready", function () {    
+    $("select#session_id").on("change", function () {        
+        var sessionId = parseInt(this.value, 10);
+        updateCourseList(sessionId);
+    });    
+            
+    var sessionId = $("select#session_id").val();
+    updateCourseList(sessionId);
+});
+
 function changeType() {
     var selected = document.getElementById("category_id").selectedIndex;
     var id = $("#category_id").val();
@@ -182,6 +205,8 @@ function show_form_send_ticket()
 {
     global $types;
 
+    $userId = api_get_user_id();
+
     // Category List
     $categoryList = array();
     foreach ($types as $type) {
@@ -218,7 +243,7 @@ function show_form_send_ticket()
     // Priority List
     $priorityList = TicketManager::getPriorityList();
 
-    $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
+    $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
     $form = new FormValidator(
         'send_ticket',
         'POST',
@@ -361,17 +386,33 @@ function show_form_send_ticket()
         )
     );
 
+    $sessionList = SessionManager::get_sessions_by_user($userId);
+    $sessionListToSelect = array(get_lang('Select'));
+    //Course List
+    foreach ($sessionList as $sessionInfo) {
+        $sessionListToSelect[$sessionInfo['session_id']] = $sessionInfo['session_name'];
+    }
+
+    $form->addSelect('session_id', get_lang('Session'), $sessionListToSelect, ['id' => 'session_id']);
+
+    $form->addSelect('course_id', get_lang('Course'), [], ['id' => 'course_id']);
+
+
     $courseInfo = api_get_course_info();
+    $params = [];
+
     if (!empty($courseInfo)) {
-        $form->addLabel(get_lang('Course'), $courseInfo['title']);
-        $form->addHidden('course_id', $courseInfo['real_id']);
+        $params = [
+            'course_id' => $courseInfo['real_id']
+        ];
 
         $sessionInfo = api_get_session_info(api_get_session_id());
         if (!empty($sessionInfo)) {
-            $form->addLabel(get_lang('Session'), $sessionInfo['name']);
-            $form->addHidden('session_id', $sessionInfo['id']);
+            $params['session_id'] = $sessionInfo['id'];
         }
     }
+
+    $form->setDefaults($params);
 
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
     $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
@@ -541,17 +582,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $user_id = $user[0];
         $userPicture = UserManager::getUserPicture($user_id);
         $photo = '<img src="' . $userPicture. '" alt="' . api_get_person_name($user[2], $user[3]) . '" title="' . api_get_person_name($user[2], $user[3]) . '" />';
-        $button = '<a  href="javascript:void(0)" onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ', \'' . $user[5] . '\')">'
-                    . Display::return_icon('view_more_stats.gif', get_lang('Info')) .
-                   '</a>&nbsp;&nbsp;';
         $users[] = array(
             $photo,
             $user_id,
             $user[2],
             $user[3],
             $user[4],
-            $user[5],
-            $button,
+            $user[5]
         );
     }
 
@@ -564,19 +601,7 @@ $interbreadcrumb[] = array(
 );
 
 if (!isset($_POST['compose'])) {
-    if (api_is_platform_admin()) {
-        Display::display_header(get_lang('ComposeMessage'));
-    } else {
-        $userInfo = api_get_user_info();
-        $htmlHeadXtra[] = "
-             <script>
-                $(document).ready(function(){
-                    load_course_list('div_{$userInfo['user_id']}', '{$userInfo['user_id']}', '{$userInfo['email']}');
-                });
-             </script>
-             ";
-        Display::display_header(get_lang('ComposeMessage'));
-    }
+    Display::display_header(get_lang('ComposeMessage'));
     show_form_send_ticket();
 } else {
     save_ticket();

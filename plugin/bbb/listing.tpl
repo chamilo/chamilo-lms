@@ -10,6 +10,10 @@
         <span id="users_online" class="label label-warning">
             {{ 'XUsersOnLine'| get_lang | format(users_online) }}
         </span>
+
+        <div class="well">
+            {{  url_to_share }}
+        </div>
     </div>
   {% endif %}
 

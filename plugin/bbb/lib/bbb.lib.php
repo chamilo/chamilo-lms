@@ -355,7 +355,12 @@ class bbb
             return false;
         }
 
-        $pass = $this->getUserMeetingPassword();
+        $manager = $this->isConferenceManager();
+        if ($manager) {
+            $pass = $this->getModMeetingPassword();
+        } else {
+            $pass = $this->getUserMeetingPassword();
+        }
 
         $meetingData = Database::select(
             '*',

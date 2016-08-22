@@ -97,6 +97,9 @@ if ($conferenceManager) {
                 $vm->resizeToMinLimit();
             }
 
+            Display::addFlash($message);
+            header('Location: '.$bbb->getListingUrl());
+            exit;
             break;
         case 'publish':
             $result = $bbb->publishMeeting($_GET['id']);

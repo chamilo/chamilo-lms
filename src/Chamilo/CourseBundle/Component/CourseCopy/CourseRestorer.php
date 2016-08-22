@@ -215,8 +215,7 @@ class CourseRestorer
                                 $params['tool'] = self::DBUTF8(
                                     $property['tool']
                                 );
-                                $property['insert_user_id'] = $this->checkUserId($property['insert_user_id']);
-                                $params['insert_user_id'] = (int) $property['insert_user_id'];
+                                $params['insert_user_id'] = $this->checkUserId($property['insert_user_id']);
                                 $params['insert_date'] = self::DBUTF8(
                                     $property['insert_date']
                                 );
@@ -227,7 +226,7 @@ class CourseRestorer
                                 $params['lastedit_type'] = self::DBUTF8(
                                     $property['lastedit_type']
                                 );
-                                $params['lastedit_user_id'] = (int) $property['lastedit_user_id'];
+                                $params['lastedit_user_id'] =  $this->checkUserId($property['lastedit_user_id'], true);
 
                                 $params['visibility'] = self::DBUTF8(
                                     $property['visibility']
@@ -239,9 +238,7 @@ class CourseRestorer
                                     $property['end_visible']
                                 );
 
-                                $property['to_user_id'] = $this->checkUserId($property['to_user_id'], true);
-                                $params['to_user_id'] = (int) $property['to_user_id'];
-                                //$params['to_group_id'] = 'NULL';
+                                $params['to_user_id'] = $this->checkUserId($property['to_user_id'], true);
 
                                 $id = Database::insert($table, $params);
                                 if ($id) {

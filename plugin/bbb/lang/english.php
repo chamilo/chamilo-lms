@@ -56,3 +56,4 @@ $strings['plugin_tool_bbb'] = 'Video';
 $strings['ThereAreNotRecordingsForTheMeetings'] = 'There are not recording for the meeting sessions';
 $strings['NoRecording'] = 'No recording';
 $strings['ClickToContinue'] = 'Click to continue';
+$strings['UrlMeetingToShare'] = 'URL to share';

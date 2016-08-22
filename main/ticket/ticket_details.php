@@ -320,11 +320,6 @@ if (!isset($_POST['compose'])) {
             </tr>';
     }
     if ($ticket['ticket']['course_url'] != null) {
-        echo '<tr>
-				<td><b>' . get_lang('Course') . ':</b> ' . $ticket['ticket']['course_url'] . ' </td>
-			    <td></td>
-	            <td colspan="2"></td>
-	          </tr>';
         if (!empty($ticket['ticket']['session_id'])) {
             $sessionInfo = api_get_session_info($ticket['ticket']['session_id']);
             echo '<tr>
@@ -333,6 +328,12 @@ if (!isset($_POST['compose'])) {
 	            <td colspan="2"></td>
 	          </tr>';
         }
+
+        echo '<tr>
+				<td><b>' . get_lang('Course') . ':</b> ' . $ticket['ticket']['course_url'] . ' </td>
+			    <td></td>
+	            <td colspan="2"></td>
+	          </tr>';
     }
     echo '<tr>
             <td>

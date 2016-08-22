@@ -148,6 +148,45 @@ switch ($action) {
 
         echo json_encode($list);
         break;
+    case 'get_courses_inside_session':
+        $userId = api_get_user_id();
+        $isAdmin = api_is_platform_admin();
+        if ($isAdmin) {
+            $sessionList = SessionManager::get_sessions_list();
+            $sessionIdList = array_column($sessionList, 'id');
+        } else {
+            $sessionList = SessionManager::get_sessions_by_user($userId);
+            $sessionIdList = array_column($sessionList, 'session_id');
+        }
+
+        $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
+        $courseList = [];
+        if (empty($sessionId)) {
+            $preCourseList = CourseManager::get_courses_list_by_user_id($userId, false, true);
+            $courseList = array_column($preCourseList, 'real_id');
+        } else {
+
+            if ($isAdmin) {
+                if (in_array($sessionId, $sessionIdList)) {
+                    $courseList = SessionManager::getCoursesInSession($sessionId);
+                } else {
+                    $courseList = SessionManager::getCoursesInSession($sessionId);
+                }
+            }
+        }
+
+        $courseListToSelect = [];
+        //Course List
+        foreach ($courseList as $courseId) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $courseListToSelect[] = [
+                'id' => $courseInfo['real_id'],
+                'name' => $courseInfo['title']
+            ];
+        }
+
+        echo json_encode($courseListToSelect);
+        break;
     default:
         echo '';
 }

@@ -47,5 +47,5 @@ $strings['plugin_tool_bbb'] = 'Video';
 
 $strings['ThereAreNotRecordingsForTheMeetings'] = 'No hay grabaciones de sesiones de videoconferencia';
 $strings['NoRecording'] = 'No hay grabación';
-
 $strings['ClickToContinue'] = 'Hacer click para continuar';
+$strings['UrlMeetingToShare'] = 'URL a compartir';

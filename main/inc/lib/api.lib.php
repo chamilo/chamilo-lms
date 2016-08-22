@@ -8040,3 +8040,56 @@ function api_protect_limit_for_session_admin()
 function api_is_student_view_active() {
     return (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview");
 }
+
+/**
+ * Adds a file inside the upload/$type/id 
+ *
+ * @param string $type
+ * @param array $file
+ * @param int $itemId
+ * @param string $cropParameters
+ * @return array|bool
+ */
+function api_upload_file($type, $file, $itemId, $cropParameters = '')
+{
+    $upload = process_uploaded_file($file);
+    if ($upload) {
+        $name = api_replace_dangerous_char($file['name']);
+
+        // No "dangerous" files
+        $name = disable_dangerous_file($name);
+
+        $pathId = '/'.substr((string)$itemId, 0, 1).'/'.$itemId.'/';
+        $path = api_get_path(SYS_UPLOAD_PATH).$type.$pathId;
+
+        if (!is_dir($path)) {
+            mkdir($path, api_get_permissions_for_new_directories(), true);
+        }
+
+        $pathToSave = $path.$name;
+
+        $result = move_uploaded_file($file['tmp_name'], $pathToSave);
+        if ($result) {
+            if (!empty($cropParameters)) {
+                $image = new Image($pathToSave);
+                $image->crop($cropParameters);
+            }
+
+            return ['path_to_save' => $pathId.$name];
+        }
+        return false;
+    }
+}
+
+/**
+ * @param string $type
+ * @param string $file
+ */
+function api_remove_uploaded_file($type, $file)
+{
+    $path = api_get_path(SYS_UPLOAD_PATH).$type.'/'.$file;
+    if (file_exists($path)) {
+        unlink($path);
+    }
+}
+

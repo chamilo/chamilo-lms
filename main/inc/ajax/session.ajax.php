@@ -165,24 +165,25 @@ switch ($action) {
             $preCourseList = CourseManager::get_courses_list_by_user_id($userId, false, true);
             $courseList = array_column($preCourseList, 'real_id');
         } else {
-
             if ($isAdmin) {
+                $courseList = SessionManager::getCoursesInSession($sessionId);
+            } else {
                 if (in_array($sessionId, $sessionIdList)) {
-                    $courseList = SessionManager::getCoursesInSession($sessionId);
-                } else {
                     $courseList = SessionManager::getCoursesInSession($sessionId);
                 }
             }
         }
 
         $courseListToSelect = [];
-        //Course List
-        foreach ($courseList as $courseId) {
-            $courseInfo = api_get_course_info_by_id($courseId);
-            $courseListToSelect[] = [
-                'id' => $courseInfo['real_id'],
-                'name' => $courseInfo['title']
-            ];
+        if (!empty($courseList)) {
+            //Course List
+            foreach ($courseList as $courseId) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $courseListToSelect[] = [
+                    'id' => $courseInfo['real_id'],
+                    'name' => $courseInfo['title']
+                ];
+            }
         }
 
         echo json_encode($courseListToSelect);

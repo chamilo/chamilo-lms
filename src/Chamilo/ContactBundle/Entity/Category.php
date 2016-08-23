@@ -12,7 +12,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  * @ORM\Entity
  * @ORM\Table(name="contact_category")
  *
- * @package Chamilo\FaqBundle\Entity
+ * @package Chamilo\ContactBundle\Entity
  */
 class Category
 {

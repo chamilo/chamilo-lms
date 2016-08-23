@@ -186,6 +186,7 @@ class Database
 
         $listener = new \Gedmo\Sortable\SortableListener();
         $entityManager->getEventManager()->addEventSubscriber($listener);
+
         $connection = $entityManager->getConnection();
         $connection->executeQuery('SET sql_mode = "";');
 
@@ -684,7 +685,6 @@ class Database
             $path.'src/Chamilo/CourseBundle/Entity',
             $path.'src/Chamilo/TicketBundle/Entity',
             $path.'src/Chamilo/SkillBundle/Entity',
-            $path.'src/Chamilo/ContactBundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',

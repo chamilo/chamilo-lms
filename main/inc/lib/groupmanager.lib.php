@@ -401,12 +401,13 @@ class GroupManager
         self::unsubscribe_all_users($group_ids);
         self::unsubscribe_all_tutors($group_ids);
 
-        $sql = "SELECT id, secret_directory, session_id
+        $sql = "SELECT id, iid, secret_directory, session_id
                 FROM $group_table
                 WHERE c_id = $course_id AND id IN (".implode(' , ', $group_ids).")";
         $db_result = Database::query($sql);
 
         while ($group = Database::fetch_object($db_result)) {
+            $groupId = $group['iid'];
             // move group-documents to garbage
             $source_directory = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$group->secret_directory;
             // File to renamed
@@ -426,22 +427,22 @@ class GroupManager
                     }
                 }
             }
+
+            $sql = "DELETE FROM $forum_table
+                    WHERE c_id = $course_id AND forum_of_group = $groupId ";
+            Database::query($sql);
+
+            // Delete item properties of this group.
+            $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
+            $sql = "DELETE FROM $itemPropertyTable
+                    WHERE c_id = $course_id AND to_group_id = $groupId ";
+            Database::query($sql);
+
+            // delete the groups
+            $sql = "DELETE FROM $group_table
+                    WHERE c_id = $course_id AND iid = $groupId ";
+            Database::query($sql);
         }
-
-        $sql = "DELETE FROM ".$forum_table."
-                WHERE c_id = $course_id AND forum_of_group IN ('".implode("' , '", $group_ids)."')";
-        Database::query($sql);
-
-        // Delete item properties of this group.
-        $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $sql = "DELETE FROM ".$itemPropertyTable."
-                WHERE c_id = $course_id AND to_group_id IN ('".implode("' , '", $group_ids)."')";
-        Database::query($sql);
-
-        // delete the groups
-        $sql = "DELETE FROM ".$group_table."
-                WHERE c_id = $course_id AND id IN ('".implode("' , '", $group_ids)."')";
-        Database::query($sql);
 
         return true;
     }

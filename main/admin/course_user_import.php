@@ -43,6 +43,7 @@ function validate_data($users_courses)
             }
         }
 
+
         // 3. Check whether username exists.
         if (isset ($user_course['UserName']) && strlen($user_course['UserName']) != 0) {
             if (UserManager::is_username_available($user_course['UserName'])) {
@@ -72,12 +73,21 @@ function save_data($users_courses)
     $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $csv_data = array();
     $inserted_in_course = array();
-
+    $courseListCache = [];
+    $courseListById = [];
     foreach ($users_courses as $user_course) {
-        $csv_data[$user_course['UserName']][$user_course['CourseCode']] = $user_course['Status'];
+        if (!in_array($user_course['CourseCode'], array_keys($courseListCache))) {
+            $courseInfo = api_get_course_info($user_course['CourseCode']);
+            $courseListCache[$user_course['CourseCode']] = $courseInfo;
+        } else {
+            $courseInfo = $courseListCache[$user_course['CourseCode']];
+        }
+        $courseListById[$courseInfo['real_id']] = $courseInfo;
+        $csv_data[$user_course['UserName']][$courseInfo['real_id']] = $user_course['Status'];
     }
 
     foreach ($csv_data as $username => $csv_subscriptions) {
+
         $sql = "SELECT * FROM $user_table u
                 WHERE u.username = '".Database::escape_string($username)."'";
         $res = Database::query($sql);
@@ -96,33 +106,24 @@ function save_data($users_courses)
 
         if ($_POST['subscribe']) {
             foreach ($to_subscribe as $courseId) {
-                $courseInfo = api_get_course_info_by_id($courseId);
-                $course_code = $courseInfo['code'];
+                $courseInfo = $courseListById[$courseId];
+                $courseCode = $courseInfo['code'];
 
-                if (CourseManager :: course_exists($course_code)) {
-                    CourseManager::subscribe_user(
-                        $user_id,
-                        $course_code,
-                        $csv_subscriptions[$course_code]
-                    );
-                    $course_info = CourseManager::get_course_information($course_code);
-                    $inserted_in_course[$course_code] = $course_info['title'];
-                    $inserted_in_course[$course_info['code']] = $course_info['title'];
-                }
+                CourseManager::subscribe_user(
+                    $user_id,
+                    $courseCode,
+                    $csv_subscriptions[$courseId]
+                );
+                $inserted_in_course[$courseInfo['code']] = $courseInfo['title'];
+
             }
         }
 
         if ($_POST['unsubscribe']) {
             foreach ($to_unsubscribe as $courseId) {
-                $courseInfo = api_get_course_info_by_id($courseId);
-                $course_code = $courseInfo['code'];
-
-                if (CourseManager :: course_exists($course_code)) {
-                    CourseManager::unsubscribe_user($user_id, $course_code);
-                    $course_info = CourseManager::get_course_information($course_code);
-                    CourseManager::unsubscribe_user($user_id, $course_code);
-                    $inserted_in_course[$course_info['code']] = $course_info['title'];
-                }
+                $courseInfo = $courseListById[$courseId];
+                $courseCode = $courseInfo['code'];
+                CourseManager::unsubscribe_user($user_id, $courseCode);
             }
         }
     }
@@ -170,6 +171,7 @@ $errors = array();
 if ($form->validate()) {
     $users_courses = parse_csv_data($_FILES['import_file']['tmp_name']);
     $errors = validate_data($users_courses);
+
     if (count($errors) == 0) {
         $inserted_in_course = save_data($users_courses);
         // Build the alert message in case there were visual codes subscribed to.
@@ -189,9 +191,11 @@ if ($form->validate()) {
             $warn = get_lang('ErrorsWhenImportingFile');
         }
 
+        Display::addFlash(Display::return_message($warn));
+
         Security::clear_token();
         $tok = Security::get_token();
-        header('Location: user_list.php?action=show_message&warn='.urlencode($warn).'&sec_token='.$tok);
+        header('Location: '.api_get_self());
         exit();
     }
 }

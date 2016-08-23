@@ -7,6 +7,7 @@
  * @author Guillaume Lederer <guillaume@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Unzip the exercise in the temp folder
@@ -258,7 +259,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
 
     //parse XML question file
     //$data = str_replace(array('<p>', '</p>', '<front>', '</front>'), '', $data);
-    $data = stripGivenTags($data, array('p', 'front'));
+    $data = ChamiloApi::stripGivenTags($data, array('p', 'front'));
     $qtiVersion = array();
     $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data, $qtiVersion);
     $qtiMainVersion = 2; //by default, assume QTI version 2

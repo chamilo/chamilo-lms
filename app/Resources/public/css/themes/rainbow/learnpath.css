@@ -1,18 +1,21 @@
 #learning_path_breadcrumb_zone .breadcrumb{
-    background-color: #009EE0;
+    background-color: #ECF0F1;
+}
+#learning_path_breadcrumb_zone .breadcrumb a{
+    color: #000;
 }
 .expand .fa{
-    background-color: #E53140;
+    background-color: #96BD0D;
 }
 .icon-toolbar .fa:hover{
-    background-color: #E53140;
+    background-color: #96BD0D;
     color: #FFF;
 }
 .progress-bar-warning{
-    background-color: #E53140;
+    background-color: #96BD0D;
 }
 .scorm_item_normal.scorm_highlight a{
-    color: #E53140 !important;
+    color: #96BD0D !important;
 }
 .scorm_item_normal.scorm_highlight.scorm_completed{
     background: transparent url("images/scorm_current.png") no-repeat scroll left center !important

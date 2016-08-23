@@ -63,14 +63,17 @@
                 {% endif %}
                 <div class="row">
                     <div class="col-xs-6 col-md-4">
-                        <h2><a href="{{ _p.web }}">{{ _s.site_name }}</a></h2>
+                        <div class="logo pull-left">
+                            {{ logo }}    
+                        </div>
+                        <!-- <h2><a href="{{ _p.web }}">{{ _s.site_name }}</a></h2> -->
                     </div>
                     <div class="col-xs-6 col-md-4">
                          
                     </div>
                         <div class="col-xs-6 col-md-4">
-                            <div class="logo pull-right">
-                                {{ logo }}
+                            <div class="logo-ofaj pull-right">
+                                <a href="#"><img src="{{ _p.web_css_theme }}images/logo-ofaj.png"/></a> 
                             </div>
                         </div>
                 </div>

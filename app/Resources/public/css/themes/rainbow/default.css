@@ -5,51 +5,33 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * Based on Bootstrap v3
 */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Open Sans Light'), local('OpenSans-Light'), url(../chamilo/fonts/OpenSans-Light.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Light.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url(../chamilo/fonts/OpenSans.woff2) format('woff2'), url(../chamilo/fonts/OpenSans.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(../chamilo/fonts/OpenSans-Semibold.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Semibold.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../chamilo/fonts/OpenSans-Bold.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Bold.woff) format('woff');
-}
+
 html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 body {
   margin: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: Verdana, Helvetica, Arial, sans-serif !important;
   line-height: 1.72222;
   background: url('images/bg.png') center center repeat-x;
 }
 a {
-  color: #00829C;
+  color: #07578A;
   text-decoration: none;
 }
 a:hover,
 a:focus {
-  color: #1abc9c;
+  color: #E2007A;
   text-decoration: none;
 }
 a:focus {
   outline: none;
+}
+.logo-ofaj{
+    padding: 5px;
+    margin-bottom: 30px;
+    margin-top: 10px;
 }
 .title{
     position: static;
@@ -106,7 +88,7 @@ a:focus {
 }
 /* Menu Option */
 .item-menu{
-    width: 165px;
+    width: 180px;
     text-align: center;
 }
 .item-menu a{
@@ -170,14 +152,14 @@ a:focus {
 }
 .section-title{
     font-size: 32px;
-    color: #E53140;
+    color: #96BD0D;
     text-align: center;
 }
 .statistics .icon-color{
-    color: #E53140;
+    color: #96BD0D;
 }
 .statistics .number{
-    color: #162A83;
+    color: #E2007A;
     font-weight: 700;
 }
 .statistics .text{

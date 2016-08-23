@@ -156,7 +156,7 @@ if ($objExercise->review_answers) {
 }
 
 $template->assign('shuffle_answers', $objExercise->random_answers);
-$htmlHeadXtra[] = $template->fetch('default/exercise/submit.js.tpl');
+$htmlHeadXtra[] = $template->fetch($template->get_template('/exercise/submit.js.tpl'));
 
 $current_timestamp = time();
 $my_remind_list = array();

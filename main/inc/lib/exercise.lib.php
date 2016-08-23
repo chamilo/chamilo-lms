@@ -942,7 +942,7 @@ JAVASCRIPT;
                             <tr>
                                 <td widht="45%">
                                     <div id="window_{$windowId}" class="window window_left_question window{$questionId}_question">
-                                        <strong>$lines_count.</strong> $parsed_answer
+                                        <div class="text-options"><strong>$lines_count.</strong> $parsed_answer </div>
                                     </div>
                                 </td>
                                 <td width="10%">
@@ -1017,7 +1017,7 @@ HTML;
                             if (isset($select_items[$lines_count])) {
                                 $s .= <<<HTML
                                 <div id="window_{$windowId}_answer" class="window window_right_question">
-                                    <strong>{$select_items[$lines_count]['letter']}.</strong> {$select_items[$lines_count]['answer']}
+                                    <div class="text-options"><strong>{$select_items[$lines_count]['letter']}.</strong> {$select_items[$lines_count]['answer']}</div>
                                 </div>
 HTML;
                             } else {

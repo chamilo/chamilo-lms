@@ -155,7 +155,7 @@ var MatchingDraggable = {
                 isSource: true,
                 connectorStyle: {
                     strokeStyle: "#8a8888",
-                    lineWidth: 8
+                    lineWidth: 4
                 },
                 connector: [
                     MatchingDraggable.connectorType,

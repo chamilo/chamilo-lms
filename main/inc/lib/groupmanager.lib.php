@@ -407,7 +407,7 @@ class GroupManager
         $db_result = Database::query($sql);
 
         while ($group = Database::fetch_object($db_result)) {
-            $groupId = $group['iid'];
+            $groupId = $group->iid;
             // move group-documents to garbage
             $source_directory = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$group->secret_directory;
             // File to renamed

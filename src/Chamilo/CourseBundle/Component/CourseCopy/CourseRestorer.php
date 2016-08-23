@@ -212,33 +212,17 @@ class CourseRestorer
                                 the target course*/
 
                                 $params['c_id'] = $this->destination_course_id;
-                                $params['tool'] = self::DBUTF8(
-                                    $property['tool']
-                                );
+                                $params['tool'] = self::DBUTF8($property['tool']);
                                 $params['insert_user_id'] = $this->checkUserId($property['insert_user_id']);
-                                $params['insert_date'] = self::DBUTF8(
-                                    $property['insert_date']
-                                );
-                                $params['lastedit_date'] = self::DBUTF8(
-                                    $property['lastedit_date']
-                                );
+                                $params['insert_date'] = self::DBUTF8($property['insert_date']);
+                                $params['lastedit_date'] = self::DBUTF8($property['lastedit_date']);
                                 $params['ref'] = $resource->destination_id;
-                                $params['lastedit_type'] = self::DBUTF8(
-                                    $property['lastedit_type']
-                                );
-                                $params['lastedit_user_id'] =  $this->checkUserId($property['lastedit_user_id'], true);
-
-                                $params['visibility'] = self::DBUTF8(
-                                    $property['visibility']
-                                );
-                                $params['start_visible'] = self::DBUTF8(
-                                    $property['start_visible']
-                                );
-                                $params['end_visible'] = self::DBUTF8(
-                                    $property['end_visible']
-                                );
-
-                                $params['to_user_id'] = $this->checkUserId($property['to_user_id'], true);
+                                $params['lastedit_type'] = self::DBUTF8($property['lastedit_type']);
+                                $params['lastedit_user_id'] =  $this->checkUserId($property['lastedit_user_id']);
+                                $params['visibility'] = self::DBUTF8($property['visibility']);
+                                $params['start_visible'] = self::DBUTF8($property['start_visible']);
+                                $params['end_visible'] = self::DBUTF8($property['end_visible']);
+                                $params['to_user_id'] = $this->checkUserId($property['to_user_id']);
 
                                 $id = Database::insert($table, $params);
                                 if ($id) {
@@ -522,7 +506,7 @@ class CourseRestorer
 
                                 $file_info = pathinfo($path.$document->path);
 
-                                if (in_array($file_info['extension'], array('html', 'htm'))) {
+                                if (isset($file_info['extension']) && in_array($file_info['extension'], array('html', 'htm'))) {
                                     $content = file_get_contents($path.$document->path);
                                     if (UTF8_CONVERT) {
                                         $content = utf8_encode($content);
@@ -3312,8 +3296,8 @@ class CourseRestorer
      *
      * @return int
      */
-    private function checkUserId($userId, $returnNull = false) {
-
+    private function checkUserId($userId, $returnNull = false)
+    {
         if (!empty($userId)) {
             $userInfo = api_get_user_info($userId);
             if (empty($userInfo)) {

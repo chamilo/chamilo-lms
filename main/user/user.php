@@ -84,6 +84,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                 $courseId,
                                 $isTutor
                             );
+                            Display::addFlash(Display::return_message(get_lang('Updated')));
                         } else {
                             Display::addFlash(Display::return_message(get_lang('InviteesCantBeTutors'), 'error'));
                         }
@@ -961,17 +962,17 @@ if (api_is_allowed_to_edit(null, true)) {
             $selectedTab = 1;
             $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.STUDENT;
             $icon = Display::url(
-                    Display::return_icon('add-user.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
-                    $url
-                    );
+                Display::return_icon('add-user.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
+                $url
+            );
             break;
         case COURSEMANAGER:
             $selectedTab = 2;
             $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
             $icon = Display::url(
-                    Display::return_icon('add-teacher.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
-                    $url
-                    );
+                Display::return_icon('add-teacher.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
+                $url
+            );
             break;
     }
 
@@ -997,17 +998,26 @@ if (api_is_allowed_to_edit(null, true)) {
     echo '</div>';
     echo '<div class="col-md-6">';
     echo '<div class="pull-right">';
-        // Build search-form
-        $form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAYOUT_INLINE);
-        $form->addText('keyword', '', false);
-        $form->addButtonSearch(get_lang('SearchButton'));
-        $form->display();
+    // Build search-form
+    $form = new FormValidator(
+        'search_user',
+        'get',
+        api_get_self().'?type='.$type,
+        '',
+        null,
+        FormValidator::LAYOUT_INLINE
+    );
+    $form->addHidden('type', $type);
+    $form->addText('keyword', '', false);
+    $form->addElement('hidden', 'cidReq', api_get_course_id());
+    $form->addButtonSearch(get_lang('SearchButton'));
+    $form->display();
     echo '</div>';
     echo '</div>';
     echo '</div>';
 
     $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
-    if (api_is_allowed_to_edit() && $allowTutors == 'true') {
+    if (api_is_allowed_to_edit() && $allowTutors === 'true') {
         $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
             get_lang('Sessions').'</a>';
     }
@@ -1015,7 +1025,6 @@ if (api_is_allowed_to_edit(null, true)) {
 }
 
 echo UserManager::getUserSubscriptionTab($selectedTab);
-
 $table->display();
 
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {

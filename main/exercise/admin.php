@@ -343,7 +343,7 @@ $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 
 $template = new Template();
 
-$htmlHeadXtra[] = $template->fetch('default/exercise/submit.js.tpl');
+$htmlHeadXtra[] = $template->fetch($template->get_template('/exercise/submit.js.tpl'));
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/css/hotspot.css">';

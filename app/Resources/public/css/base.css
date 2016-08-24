@@ -4209,7 +4209,7 @@ ul.exercise-draggable-answer .touch-items:hover{
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
-
+  position: relative;
 }
 .drag_question .indent{
   text-indent: -15px;
@@ -4300,34 +4300,25 @@ ul.exercise-draggable-answer .touch-items:hover{
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   cursor: pointer;
-  min-height: 65px;
-  padding: 25px;
+  min-height: 45px;
   margin-left: 5px;
   margin-right: 5px;
-
+  font-size: 14px !important;
+}
+.drag_question .window .text-options{
+  padding-top: 2px;
 }
 .window_left_question {
   padding: 10px 25px 10px 10px;
   text-align: right;
-  background: #f2f9fe; /* Old browsers */
-  background: -moz-linear-gradient(top, #f2f9fe 0%, #d6f0fd 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f9fe), color-stop(100%,#d6f0fd)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #f2f9fe 0%,#d6f0fd 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #f2f9fe 0%,#d6f0fd 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #f2f9fe 0%,#d6f0fd 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #f2f9fe 0%,#d6f0fd 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f9fe', endColorstr='#d6f0fd',GradientType=0 ); /* IE6-9 */
+  background: #F8F8F8; /* Old browsers */
+  border: 1px solid #DDD !important;
+  
 }
 .window_right_question {
   padding: 10px 10px 10px 25px;
-  background: #ffffff; /* Old browsers */
-  background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+  background: #F8F8F8;
+  border: 1px solid #DDD !important;
 }
 .drag_question .data_table, .drag_question .data_table th, .drag_question .data_table td{
   border:none !important;

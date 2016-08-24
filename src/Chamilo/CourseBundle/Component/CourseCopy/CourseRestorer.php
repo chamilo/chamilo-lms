@@ -3310,6 +3310,11 @@ class CourseRestorer
             return null;
         }
 
+        if (empty($userId)) {
+
+            return api_get_user_id();
+        }
+
         return $userId;
     }
 }

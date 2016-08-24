@@ -331,7 +331,7 @@ class ExtraField extends Model
         $fieldId = intval($fieldId);
         $sql = "SELECT * FROM {$this->table}
                 WHERE
-                    field_id = '$fieldId' AND
+                    id = '$fieldId' AND
                     extra_field_type = $this->extraFieldType";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {

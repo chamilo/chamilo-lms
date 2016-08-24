@@ -143,8 +143,8 @@ class SortableTable extends HTML_Table
             $this->direction = $default_order_direction;
         }
 
-        if (isset($_SESSION[$this->param_prefix.'direction'])) {
-            $my_session_direction = $_SESSION[$this->param_prefix.'direction'];
+        $my_session_direction = Session::read($this->param_prefix.'direction');
+        if (!empty($my_session_direction)) {
             if (!in_array($my_session_direction, array('ASC', 'DESC'))) {
                 $this->direction = 'ASC';
             } else {

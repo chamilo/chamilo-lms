@@ -58,7 +58,7 @@ if (is_dir($file_url_sys)) {
 }
 
 //fix the screen when you try to access a protected course through the url
-$is_allowed_in_course = $_SESSION['is_allowed_in_course'];
+$is_allowed_in_course = api_is_allowed_in_course();
 
 if ($is_allowed_in_course == false) {
     api_not_allowed(true);

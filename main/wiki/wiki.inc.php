@@ -2069,15 +2069,18 @@ class Wiki
      */
     public function double_post($wpost_id)
     {
-        if (isset($_SESSION['wpost_id'])) {
-            if ($wpost_id == $_SESSION['wpost_id']) {
+        $postId = Session::read('wpost_id');
+        if (!empty($postId)) {
+            if ($wpost_id == $postId) {
                 return false;
             } else {
-                $_SESSION['wpost_id'] = $wpost_id;
+                Session::write('wpost_id', $wpost_id);
+
                 return true;
             }
         } else {
-            $_SESSION['wpost_id'] = $wpost_id;
+            Session::write('wpost_id', $wpost_id);
+
             return true;
         }
     }
@@ -2683,9 +2686,9 @@ class Wiki
 
                 // First prevent concurrent users and double version
                 if ($is_editing_block['is_editing'] == $userId) {
-                    $_SESSION['_version'] = $is_editing_block['version'];
+                    Session::write('_version', $is_editing_block['version']);
                 } else {
-                    unset($_SESSION['_version']);
+                    Session::erase('_version');
                 }
                 // Second checks if has exceeded the time that a page may be available or if a page was edited and saved by its author
                 if ($time_editing > $max_edit_time || ($is_editing_block['is_editing'] == $userId && $action!='edit')) {
@@ -5091,6 +5094,7 @@ class Wiki
 
                     // Saving a change
                     if ($form->validate()) {
+                        $versionFromSession = Session::read('_version');
                         if (empty($_POST['title'])) {
                             Display::addFlash(
                                 Display::return_message(
@@ -5100,7 +5104,7 @@ class Wiki
                             );
                         } elseif (!self::double_post($_POST['wpost_id'])) {
                             //double post
-                        } elseif ($_POST['version']!='' && $_SESSION['_version'] !=0 && $_POST['version'] != $_SESSION['_version']) {
+                        } elseif ($_POST['version'] != '' && $versionFromSession != 0 && $_POST['version'] != $versionFromSession) {
                             //prevent concurrent users and double version
                             Display::addFlash(
                                 Display::return_message(

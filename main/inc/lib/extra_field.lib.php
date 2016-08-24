@@ -1277,7 +1277,7 @@ class ExtraField extends Model
                         $tagsSelect->setAttribute('id', "extra_{$field_details['variable']}");
                         $tagsSelect->setMultiple(true);
 
-                        if ($this->type == 'user') {
+                        if ($this->type === 'user') {
                             // The magic should be here
                             $user_tags = UserManager::get_user_tags($itemId, $field_details['id']);
 

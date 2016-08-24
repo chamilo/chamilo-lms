@@ -42,7 +42,6 @@ if ($variables) {
 
 Session::write('variables_to_show', $variablesToShow);
 
-
 $htmlHeadXtra[] = '<script>
 function load_course_list (div_course,my_user_id) {
 	 $.ajax({
@@ -540,17 +539,25 @@ function modify_filter($user_id, $url_params, $row)
     $current_user_status_label = $row['7'];
 
 	if ($current_user_status_label == $statusname[ANONYMOUS]) {
-		$user_is_anonymous =true;
+		$user_is_anonymous = true;
 	}
 	$result = '';
 	if (!$user_is_anonymous) {
-		$icon = Display::return_icon('course.png', get_lang('Courses'), array('onmouseout' => 'clear_course_list (\'div_'.$user_id.'\')'));
+        $icon = Display::return_icon(
+            'course.png',
+            get_lang('Courses'),
+            array('onmouseout' => 'clear_course_list (\'div_'.$user_id.'\')')
+        );
 		$result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
 			        '.$icon.'
 					<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
 					</a>';
 
-        $icon = Display::return_icon('session.png', get_lang('Sessions'), array('onmouseout' => 'clear_session_list (\'div_s_'.$user_id.'\')'));
+        $icon = Display::return_icon(
+            'session.png',
+            get_lang('Sessions'),
+            array('onmouseout' => 'clear_session_list (\'div_s_'.$user_id.'\')')
+        );
 		$result .= '<a href="javascript:void(0)" onclick="load_session_list(\'div_s_'.$user_id.'\','.$user_id.')" >
 					'.$icon.'
 					<div class="blackboard_hide" id="div_s_'.$user_id.'">&nbsp;&nbsp;</div>
@@ -608,7 +615,11 @@ function modify_filter($user_id, $url_params, $row)
     }
 
 	if ($is_admin) {
-		$result .= Display::return_icon('admin_star.png', get_lang('IsAdministrator'),array('width'=> ICON_SIZE_SMALL, 'heigth'=> ICON_SIZE_SMALL));
+        $result .= Display::return_icon(
+            'admin_star.png',
+            get_lang('IsAdministrator'),
+            array('width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL)
+        );
 	} else {
 		$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));
 	}
@@ -662,6 +673,7 @@ function modify_filter($user_id, $url_params, $row)
             }
         }
     }
+
 	return $result;
 }
 
@@ -695,7 +707,12 @@ function active_filter($active, $params, $row)
         $result = Display::return_icon($image.'.png', get_lang('AccountExpired'), array(), 16);
     } elseif ($row['0'] <> $_user['user_id']) {
     	// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-		$result = Display::return_icon($image.'.png', get_lang(ucfirst($action)), array('onclick'=>'active_user(this);', 'id'=>'img_'.$row['0']), 16).'</a>';
+        $result = Display::return_icon(
+            $image.'.png',
+            get_lang(ucfirst($action)),
+            array('onclick' => 'active_user(this);', 'id' => 'img_'.$row['0']),
+            16
+        );
 	}
 
 	return $result;
@@ -844,8 +861,6 @@ $active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lan
 $active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('Inactive'));
 $form->addGroup($active_group, '', get_lang('ActiveAccount'), null, false);
 $form->addElement('checkbox', 'check_easy_passwords', null, get_lang('CheckEasyPasswords'));
-
-
 $data = $extraField->addElements($form, 0, [], true, false, $variablesToShow);
 
 $htmlHeadXtra[] = '
@@ -899,7 +914,7 @@ $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
 
 // Only show empty actions bar if delete users has been blocked
-if (api_is_platform_admin() && !(api_get_configuration_value('deny_delete_users'))) {
+if (api_is_platform_admin() && !api_get_configuration_value('deny_delete_users')) {
     $table->set_form_actions(array('delete' => get_lang('DeleteFromPlatform')));
 } else {
     $table->set_form_actions(array('none' => get_lang('NoActionAvailable')));
@@ -969,7 +984,7 @@ $toolbarActions = Display::toolbarAction(
 );
 
 $tpl = new Template($tool_name);
-$tpl->assign('actions', $toolbarActions);
+//$tpl->assign('actions', $toolbarActions);
 $tpl->assign('message', $message);
-$tpl->assign('content', $form.$table_result.$extra_search_options);
+$tpl->assign('content', $toolbarActions.$form.$table_result.$extra_search_options);
 $tpl->display_one_col_template();

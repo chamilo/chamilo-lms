@@ -7847,4 +7847,6 @@ $MethodeTravailExplanation = "";
 $MethodeTravail = "Ma méthode de travail";
 
 $SearchTCC = "Déjà inscrit dans TCC?";
+
+$URLOFAJ = "https://www.ofaj.org/";
 ?>

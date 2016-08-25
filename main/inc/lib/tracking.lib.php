@@ -6109,13 +6109,14 @@ class TrackingCourseLog
     			$row[5] = '';
     			//@todo Improve this code please
     			switch ($table_name['table_name']) {
-    				case 'document' :
+    				case 'document':
     					$sql = "SELECT tool.title as title FROM $table_tool tool
                                 WHERE c_id = $course_id AND id = $ref";
     					$rs_document = Database::query($sql);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[5] = $obj_document->title;
-
+                        if ($obj_document) {
+                            $row[5] = $obj_document->title;
+                        }
     					break;
     				case 'announcement':
                         $sql = "SELECT title FROM $table_tool
@@ -6164,21 +6165,27 @@ class TrackingCourseLog
     					$rs = Database::query("SELECT title FROM $table_tool WHERE c_id = $course_id AND id = $ref");
     					if (Database::num_rows($rs) > 0) {
     						$obj = Database::fetch_object($rs);
-    						$row[5] = $obj->title;
+                            if ($obj) {
+                                $row[5] = $obj->title;
+                            }
     					}
     					break;
     				case 'thematic_advance':
     					$rs = Database::query("SELECT content FROM $table_tool WHERE c_id = $course_id AND id = $ref");
     					if (Database::num_rows($rs) > 0) {
     						$obj = Database::fetch_object($rs);
-    						$row[5] = $obj->content;
+                            if ($obj) {
+                                $row[5] = $obj->content;
+                            }
     					}
     					break;
     				case 'thematic_plan':
     					$rs = Database::query("SELECT title FROM $table_tool WHERE c_id = $course_id AND id = $ref");
     					if (Database::num_rows($rs) > 0) {
     						$obj = Database::fetch_object($rs);
-    						$row[5] = $obj->title;
+                            if ($obj) {
+                                $row[5] = $obj->title;
+                            }
     					}
     					break;
     				default:
@@ -6192,7 +6199,6 @@ class TrackingCourseLog
     			$row[2] = $row2;
                 if (!empty($row['col3'])) {
                     $userInfo = api_get_user_info($row['user_id']);
-
                     $row['col3'] = Display::url(
                         $row['col3'],
                         $userInfo['profile_url']
@@ -6494,7 +6500,6 @@ class TrackingCourseLog
     	}
 
     	$column = intval($column);
-
     	$from = intval($from);
     	$number_of_items = intval($number_of_items);
 

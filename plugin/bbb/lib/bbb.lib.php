@@ -151,7 +151,30 @@ class bbb
      */
     public function isConferenceManager()
     {
-        return api_is_course_admin() || api_is_coach() || api_is_platform_admin();
+        if (api_is_coach() || api_is_platform_admin()) {
+
+            return true;
+        }
+
+        if ($this->isGlobalConferencePerUserEnabled()) {
+            $currentUserId = api_get_user_id();
+            if ($this->userId === $currentUserId) {
+
+                return true;
+            } else {
+
+                return false;
+            }
+        }
+
+        $courseInfo = api_get_course_info();
+
+        if (!empty($courseInfo)) {
+
+            return api_is_course_admin();
+        }
+
+        return false;
     }
 
     /**
@@ -355,7 +378,12 @@ class bbb
             return false;
         }
 
-        $pass = $this->getUserMeetingPassword();
+        $manager = $this->isConferenceManager();
+        if ($manager) {
+            $pass = $this->getModMeetingPassword();
+        } else {
+            $pass = $this->getUserMeetingPassword();
+        }
 
         $meetingData = Database::select(
             '*',

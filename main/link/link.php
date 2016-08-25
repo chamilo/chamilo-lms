@@ -118,7 +118,6 @@ switch ($action) {
     case 'editlink':
         $form = Link::getLinkForm($id, 'editlink');
         if ($form->validate()) {
-
             Link::editLink($id, $form->getSubmitValues());
             header('Location: '.$linkListUrl);
             exit;

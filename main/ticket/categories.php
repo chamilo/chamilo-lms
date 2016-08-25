@@ -37,7 +37,12 @@ if ($table->per_page == 0) {
 
 $formToString = '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
+
+$project = TicketManager::getProject($projectId);
+if (empty($project)) {
+    api_not_allowed(true);
+}
 
 Session::write('project_id', $projectId);
 $action = isset($_GET['action']) ? $_GET['action'] : '';
@@ -52,11 +57,22 @@ $interbreadcrumb[] = array(
     'name' => get_lang('Settings')
 );
 
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
+    'name' => get_lang('Projects')
+);
+
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
+    'name' => $project->getName()
+);
+
 switch ($action) {
     case 'delete':
         TicketManager::deleteCategory($id);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
-        header("Location: ".api_get_self());
+        header("Location: ".api_get_self().'?project_id='.$projectId);
+        exit;
         break;
     case 'add':
         $toolName = get_lang('Add');

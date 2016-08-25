@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
         HOME PAGE FOR EACH COURSE
 *
@@ -28,18 +30,9 @@
 *	@package chamilo.course_home
 */
 
-use ChamiloSession as Session;
-
 $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
-
-// Delete LP sessions - commented out after seeing that normal
-// users in their first learnpath step (1st SCO of a SCORM)
-// cannot have their data saved if they "Return to course homepage"
-// before any LMSFinish()
-//unset($_SESSION['oLP']);
-//unset($_SESSION['lpobject']);
 
 $htmlHeadXtra[] ='<script>
 /* option show/hide thematic-block */

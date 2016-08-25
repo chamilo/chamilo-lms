@@ -6,7 +6,9 @@ use ChamiloSession as Session;
 /**
  * This is a code library for Chamilo.
  * It is included by default in every Chamilo file (through including the global.inc.php)
- *
+ * This library is in process of being transferred to src/Chamilo/CoreBundle/Component/Utils/ChamiloApi.
+ * Whenever a function is transferred to the ChamiloApi class, the places where it is used should include
+ * the "use Chamilo\CoreBundle\Component\Utils\ChamiloApi;" statement.
  * @package chamilo.library
  */
 
@@ -8041,17 +8043,54 @@ function api_is_student_view_active() {
 }
 
 /**
- * Like strip_tags(), but leaves an additional space and removes only the given tags
- * @param string $string
- * @param array $tags Tags to be removed
- * @return  string The original string without the given tags
+ * Adds a file inside the upload/$type/id 
+ *
+ * @param string $type
+ * @param array $file
+ * @param int $itemId
+ * @param string $cropParameters
+ * @return array|bool
  */
-function stripGivenTags($string, $tags) {
-    foreach ($tags as $tag) {
-        $string2 = preg_replace('#</' . $tag . '[^>]*>#i', ' ', $string);
-        if ($string2 != $string) {
-            $string = preg_replace('/<' . $tag . '[^>]*>/i', ' ', $string2);
+function api_upload_file($type, $file, $itemId, $cropParameters = '')
+{
+    $upload = process_uploaded_file($file);
+    if ($upload) {
+        $name = api_replace_dangerous_char($file['name']);
+
+        // No "dangerous" files
+        $name = disable_dangerous_file($name);
+
+        $pathId = '/'.substr((string)$itemId, 0, 1).'/'.$itemId.'/';
+        $path = api_get_path(SYS_UPLOAD_PATH).$type.$pathId;
+
+        if (!is_dir($path)) {
+            mkdir($path, api_get_permissions_for_new_directories(), true);
         }
+
+        $pathToSave = $path.$name;
+
+        $result = move_uploaded_file($file['tmp_name'], $pathToSave);
+        if ($result) {
+            if (!empty($cropParameters)) {
+                $image = new Image($pathToSave);
+                $image->crop($cropParameters);
+            }
+
+            return ['path_to_save' => $pathId.$name];
+        }
+        return false;
     }
-    return $string;
 }
+
+/**
+ * @param string $type
+ * @param string $file
+ */
+function api_remove_uploaded_file($type, $file)
+{
+    $path = api_get_path(SYS_UPLOAD_PATH).$type.'/'.$file;
+    if (file_exists($path)) {
+        unlink($path);
+    }
+}
+

@@ -596,7 +596,7 @@ class TicketManager
                     'ticket_id' => $ticket_id,
                     'user_id' => $user_id,
                     'assigned_date' => $now,
-                    'sys_insert_user_id' => $insert_id,
+                    'sys_insert_user_id' => $insert_id
                 ];
                 Database::insert($table_support_assigned_log, $params);
 
@@ -631,7 +631,7 @@ class TicketManager
                         null, // sender name
                         null, // sender e-mail
                         array(
-                            'cc' => $sender['email'],
+                            'cc' => $sender['email']
                         ) // should be support e-mail (platform admin) here
                     );
                 }
@@ -854,13 +854,14 @@ class TicketManager
                 $table_support_category cat,
                 $table_support_priority priority,
                 $table_support_status status
-            WHERE
+            WHERE 
                 cat.id = ticket.category_id AND
                 ticket.priority_id = priority.id AND
                 ticket.status_id = status.id                
         ";
+
         if (!$isAdmin) {
-            $sql .= " AND (ticket.assigned_last_user = $user_id)";
+            $sql .= " AND (ticket.assigned_last_user = $user_id OR ticket.sys_insert_user_id = $user_id )";
         }
 
         $keyword_unread = '';
@@ -949,34 +950,6 @@ class TicketManager
             }
         }
 
-        /*
-        if ($keyword_unread == 'yes') {
-            $sql .= " AND ticket.ticket_id IN (SELECT ticket.ticket_id
-                FROM $table_support_tickets ticket,
-                    $table_support_messages message,
-                    $table_main_user user
-                WHERE ticket.ticket_id = message.ticket_id
-                    AND message.status = 'NOL'
-                    AND message.sys_insert_user_id = user.user_id
-                    AND user.user_id NOT IN (SELECT user_id FROM $table_main_admin)
-                    AND ticket.status_id != '".self::STATUS_FORWARDED."'
-                GROUP BY ticket.ticket_id)";
-        } else {
-            if ($keyword_unread == 'no') {
-                $sql .= " AND ticket.ticket_id NOT IN (SELECT ticket.ticket_id
-                    FROM $table_support_tickets ticket,
-                        $table_support_messages message,
-                        $table_main_user user
-                    WHERE ticket.ticket_id = message.ticket_id
-                        AND message.status = 'NOL'
-                        AND message.sys_insert_user_id = user.user_id
-                        AND user.user_id NOT IN (
-                            SELECT user_id FROM $table_main_admin
-                            )
-                        AND ticket.status_id != '".self::STATUS_FORWARDED."'
-                    GROUP BY ticket.ticket_id)";
-            }
-        }*/
         $sql .= " ORDER BY col$column $direction";
         $sql .= " LIMIT $from, $number_of_items";
 
@@ -1040,8 +1013,9 @@ class TicketManager
                     $img_source = 'icons/32/course_home.png';
                     break;
             }
-            $row['col1'] = api_get_local_time($row['col1']);
-            $row['col2'] = api_get_local_time($row['col2']);
+
+            $row['col1'] = Display::tip(date_to_str_ago($row['col1']), api_get_local_time($row['col1']));
+            $row['col2'] = Display::tip(date_to_str_ago($row['col2']), api_get_local_time($row['col2']));
             if ($isAdmin) {
                 if ($row['priority_id'] === self::PRIORITY_HIGH && $row['status_id'] != self::STATUS_CLOSE) {
                     $actions .= '<img src="' . $webCodePath . 'img/exclamation.png" border="0" />';
@@ -1058,12 +1032,12 @@ class TicketManager
 
                 $ticket = array(
                     $row['col0'].' '.$row['subject'],
-                    api_format_date($row['col1'], '%d/%m/%y - %I:%M:%S %p'),
-                    api_format_date($row['col2'], '%d/%m/%y - %I:%M:%S %p'),
+                    $row['col7'],
+                    $row['col1'],
+                    $row['col2'],
                     $row['col3'],
                     $name,
                     $row['assigned_last_user'],
-                    $row['col7'],
                     $row['col8']
                 );
             } else {
@@ -1085,10 +1059,10 @@ class TicketManager
                 }
                 $ticket = array(
                     $row['col0'],
-                    api_format_date($row['col1'], '%d/%m/%y - %I:%M:%S %p'),
-                    api_format_date($row['col2'], '%d/%m/%y - %I:%M:%S %p'),
-                    $row['col3'],
                     $row['col7'],
+                    $row['col1'],
+                    $row['col2'],
+                    $row['col3']
                 );
             }
             /*if ($unread > 0) {
@@ -1652,22 +1626,23 @@ class TicketManager
 
         $sql = "SELECT * FROM $table_support_assigned_log 
                 WHERE ticket_id = '$ticket_id'
-                ORDER BY assigned_date";
+                ORDER BY assigned_date DESC";
         $result = Database::query($sql);
-        $history = array();
+        $history = [];
         $webpath = api_get_path(WEB_PATH);
         while ($row = Database::fetch_assoc($result)) {
+
             if ($row['user_id'] != 0) {
-                $assignuser = api_get_user_info(
-                        $row['user_id']
-                );
+                $assignuser = api_get_user_info($row['user_id']);
+                $row['assignuser'] = '<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['user_id'] . '"  target="_blank">' .
+                $assignuser['username'] . '</a>';
+            } else {
+                $row['assignuser'] = get_lang('Unassign');
             }
+            $row['assigned_date'] = date_to_str_ago($row['assigned_date']);
             $insertuser = api_get_user_info($row['sys_insert_user_id']);
-            $row['assigned_date'] = api_convert_and_format_date(
-                api_get_local_time($row['assigned_date']), '%d/%m/%y-%H:%M:%S', _api_get_timezone()
-            );
-            $row['assignuser'] = $row['user_id'] != 0 ? ('<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['user_id'] . '"  target="_blank">' . $assignuser['username'] . '</a>') : get_lang('Unassign');
-            $row['insertuser'] = '<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['sys_insert_user_id'] . '"  target="_blank">' . $insertuser['username'] . '</a>';
+            $row['insertuser'] = '<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['sys_insert_user_id'] . '"  target="_blank">' .
+                $insertuser['username'] . '</a>';
             $history[] = $row;
         }
 
@@ -1941,10 +1916,7 @@ class TicketManager
             $list[] = [
                 'id' => $row->getId(),
                 '0' => $row->getId(),
-                '1' => Display::url(
-                    $row->getName(),
-                    api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$row->getId()
-                ),
+                '1' => $row->getName(),
                 '2' => $row->getDescription(),
                 '3' => $row->getId()
             ];
@@ -2304,10 +2276,6 @@ class TicketManager
             [
                 'url' => 'projects.php',
                 'content' => get_lang('Projects')
-            ],
-            [
-                'url' => 'categories.php',
-                'content' => get_lang('Categories')
             ],
             [
                 'url' => 'status.php',

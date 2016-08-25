@@ -5,9 +5,6 @@
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'fileManage.lib.php';
-require_once $libpath.'fileUpload.lib.php';
 
 // user permissions
 api_block_anonymous_users();

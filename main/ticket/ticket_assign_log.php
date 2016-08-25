@@ -7,32 +7,36 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$plugin = TicketPlugin::create();
+api_protect_admin_script();
+
+if (!isset($_POST['ticket_id'])) {
+    exit;
+}
 
 $ticket_id = intval($_POST['ticket_id']);
 $history = TicketManager::get_assign_log($ticket_id);
 ?>
-<table width="350px" border="0" cellspacing="2" cellpadding="2">
-    <?php
-    if (count($history) == 0) {
-        ?>
-        <tr>
-            <td colspan="2"><?php echo api_ucfirst(('Sin Historial')); ?></td>
-        </tr>
-        <?php
-    }
+<table width="200px" border="0" cellspacing="2" cellpadding="2">
+<?php
+if (count($history) == 0) {
     ?>
-    <?php for ($k = 0; $k < count($history); $k++) { ?>
-        <tr>
-            <td width="125px">
-                <?php echo api_convert_encoding($history[$k]['assignuser'], 'UTF-8', $charset); ?>
-            </td>
-            <td width="100px">
-                <?php echo api_convert_encoding($history[$k]['assigned_date'], 'UTF-8', $charset); ?>
-            </td>
-            <td width="125px">
-                <?php echo api_convert_encoding($history[$k]['insertuser'], 'UTF-8', $charset); ?>
-            </td>
-        </tr>
-    <?php } ?>
+    <tr>
+        <td colspan="2"><?php echo api_ucfirst(get_lang('TicketNoHistory')); ?></td>
+    </tr>
+    <?php
+}
+foreach ($history as $item) {
+?>
+    <tr>
+        <td width="50px">
+            <?php echo api_convert_encoding($item['insertuser'], 'UTF-8', $charset); ?>
+        </td>
+        <td width="80px">
+            <?php echo api_convert_encoding($item['assigned_date'], 'UTF-8', $charset); ?>
+        </td>
+        <td width="50px">
+            <?php echo api_convert_encoding($item['assignuser'], 'UTF-8', $charset); ?>
+        </td>
+    </tr>
+<?php } ?>
 </table>

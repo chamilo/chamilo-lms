@@ -21,9 +21,7 @@ $interbreadcrumb[] = array ("url" => "#", "name" => get_lang("ImportUsersToACour
 $form = new FormValidator('user_import', 'post', 'user_import.php');
 $form->addElement('header', $tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
-
 $form->addElement('checkbox', 'unsubscribe_users', null, get_lang('UnsubscribeUsersAlreadyAddedInCourse'));
-
 $form->addButtonImport(get_lang('Import'));
 
 $course_code = api_get_course_id();

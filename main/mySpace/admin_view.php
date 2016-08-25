@@ -5,8 +5,8 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 
-$exportCSV  = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$display 	 = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
+$exportCSV = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 // the section (for the tabs)
@@ -15,9 +15,9 @@ $this_section = SECTION_TRACKING;
 $csv_content = array();
 $nameTools = get_lang('MySpace');
 
-$is_platform_admin 	= api_is_platform_admin();
-$is_drh 			= api_is_drh();
-$is_session_admin 	= api_is_session_admin();
+$is_platform_admin = api_is_platform_admin();
+$is_drh = api_is_drh();
+$is_session_admin = api_is_session_admin();
 
 if ($exportCSV) {
     if ($display == 'user') {

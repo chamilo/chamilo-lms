@@ -90,11 +90,13 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     SurveyUtil::display_survey_search_form();
 }
 
+$sessionId = api_get_session_id();
+
 // Action handling: deleting a survey
-if ($action == 'delete' && isset($_GET['survey_id'])) {
+if ($action === 'delete' && isset($_GET['survey_id'])) {
     // Getting the information of the survey (used for when the survey is shared)
     $survey_data = SurveyManager::get_survey($_GET['survey_id']);
-    if (api_is_course_coach() && intval($_SESSION['id_session']) != $survey_data['session_id']) {
+    if (api_is_course_coach() && $sessionId != $survey_data['session_id']) {
         // The coach can't delete a survey not belonging to his session
         api_not_allowed();
         exit;

@@ -88,7 +88,6 @@ Display::display_header($tool_name);
 
 echo Display::page_header(get_lang('CourseUsage'));
 
-
 $table = new SortableTableFromArray(get_course_usage($courseInfo, $sessionId), 0, 20, 'usage_table');
 $table->set_additional_parameters(array('code' => $courseInfo['code']));
 $table->set_other_tables(array('user_table', 'class_table'));
@@ -159,11 +158,11 @@ $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
 $url = api_get_path(WEB_CODE_PATH);
 if (!empty($sessionList)) {
     foreach ($sessionList as &$session) {
-        $session[0] = Display::url($session[0], $url.'admin/resume_session.php?id_session='.$session['id']);
+        $session[0] = Display::url($session[0], $url.'session/resume_session.php?id_session='.$session['id']);
         unset($session[1]);
     }
     echo Display::page_header(get_lang('Sessions'));
-    $table = new SortableTableFromArray($session_list, 0, 20, 'user_table');
+    $table = new SortableTableFromArray($sessionList, 0, 20, 'user_table');
     $table->display();
 }
 

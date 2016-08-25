@@ -6,7 +6,6 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$plugin = TicketPlugin::create();
 
 $userId = intval($_GET['user_id']);
 $userInfo = api_get_user_info($userId);

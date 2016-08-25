@@ -105,7 +105,7 @@ function get_users($from, $limit, $column, $direction)
             COURSEMANAGER,
             $keyword
         );
-      }
+    }
 
     $all_datas = array();
 
@@ -123,8 +123,8 @@ function get_users($from, $limit, $column, $direction)
                 $courseId = $courseInfo['real_id'];
 
                 if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
-                    $my_average 		 = Tracking :: get_avg_student_score($student_id, $course_code);
+                    $avg_time_spent += Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
+                    $my_average = Tracking :: get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;
                     }
@@ -169,6 +169,7 @@ function get_users($from, $limit, $column, $direction)
         $row[] = $detailsLink;
         $all_datas[] = $row;
     }
+
     return $all_datas;
 }
 
@@ -257,11 +258,16 @@ if ($export_csv) {
 
 $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/users.php');
 
-$form->addElement('select', 'status', get_lang('Status'), array(
-    '' => '',
-    STUDENT => get_lang('Student'),
-    COURSEMANAGER => get_lang('Teacher'),
-    DRH => get_lang('DRH'))
+$form->addElement(
+    'select',
+    'status',
+    get_lang('Status'),
+    array(
+        '' => '',
+        STUDENT => get_lang('Student'),
+        COURSEMANAGER => get_lang('Teacher'),
+        DRH => get_lang('DRH')
+    )
 );
 $form = Tracking::setUserSearchForm($form);
 $form->setDefaults($params);

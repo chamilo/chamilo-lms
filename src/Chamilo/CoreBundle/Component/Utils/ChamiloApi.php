@@ -129,4 +129,19 @@ class ChamiloApi
 
         return \Display::url($image, api_get_path(WEB_PATH) . 'index.php');
     }
+    /**
+     * Like strip_tags(), but leaves an additional space and removes only the given tags
+     * @param string $string
+     * @param array $tags Tags to be removed
+     * @return  string The original string without the given tags
+     */
+    public static function stripGivenTags($string, $tags) {
+        foreach ($tags as $tag) {
+            $string2 = preg_replace('#</' . $tag . '[^>]*>#i', ' ', $string);
+            if ($string2 != $string) {
+                $string = preg_replace('/<' . $tag . '[^>]*>/i', ' ', $string2);
+            }
+        }
+        return $string;
+    }
 }

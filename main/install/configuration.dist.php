@@ -244,3 +244,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['force_edit_exercise_in_lp'] = false;
 // Hide exercise label BT#11316
 //$_configuration['exercise_hide_label'] = true;
+//$_configuration['packager'] = 'chamilo';
+// List of driver to plugin in ckeditor
+//$_configuration['editor_driver_list'] = ['PersonalDriver', 'CourseDriver'];

@@ -596,7 +596,7 @@ class TicketManager
                     'ticket_id' => $ticket_id,
                     'user_id' => $user_id,
                     'assigned_date' => $now,
-                    'sys_insert_user_id' => $insert_id,
+                    'sys_insert_user_id' => $insert_id
                 ];
                 Database::insert($table_support_assigned_log, $params);
 
@@ -631,7 +631,7 @@ class TicketManager
                         null, // sender name
                         null, // sender e-mail
                         array(
-                            'cc' => $sender['email'],
+                            'cc' => $sender['email']
                         ) // should be support e-mail (platform admin) here
                     );
                 }
@@ -1626,22 +1626,23 @@ class TicketManager
 
         $sql = "SELECT * FROM $table_support_assigned_log 
                 WHERE ticket_id = '$ticket_id'
-                ORDER BY assigned_date";
+                ORDER BY assigned_date DESC";
         $result = Database::query($sql);
-        $history = array();
+        $history = [];
         $webpath = api_get_path(WEB_PATH);
         while ($row = Database::fetch_assoc($result)) {
+
             if ($row['user_id'] != 0) {
-                $assignuser = api_get_user_info(
-                        $row['user_id']
-                );
+                $assignuser = api_get_user_info($row['user_id']);
+                $row['assignuser'] = '<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['user_id'] . '"  target="_blank">' .
+                $assignuser['username'] . '</a>';
+            } else {
+                $row['assignuser'] = get_lang('Unassign');
             }
+            $row['assigned_date'] = date_to_str_ago($row['assigned_date']);
             $insertuser = api_get_user_info($row['sys_insert_user_id']);
-            $row['assigned_date'] = api_convert_and_format_date(
-                api_get_local_time($row['assigned_date']), '%d/%m/%y-%H:%M:%S', _api_get_timezone()
-            );
-            $row['assignuser'] = $row['user_id'] != 0 ? ('<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['user_id'] . '"  target="_blank">' . $assignuser['username'] . '</a>') : get_lang('Unassign');
-            $row['insertuser'] = '<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['sys_insert_user_id'] . '"  target="_blank">' . $insertuser['username'] . '</a>';
+            $row['insertuser'] = '<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['sys_insert_user_id'] . '"  target="_blank">' .
+                $insertuser['username'] . '</a>';
             $history[] = $row;
         }
 

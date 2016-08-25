@@ -908,7 +908,7 @@ class Template
             if (!empty($courseInfo)) {
                 $courseParams = api_get_cidreq();
             }
-            $url = api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id=1&'.$courseParams;
+            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id=1&'.$courseParams;
             $rightFloatMenu .= '<div class="report">
 		        <a href="'.$url.'" target="_blank">
                     '. $iconTicket . '

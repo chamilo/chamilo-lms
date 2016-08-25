@@ -19,10 +19,7 @@ api_protect_course_script();
 /* Libraries */
 
 require 'learnpath_functions.inc.php';
-require 'resourcelinker.inc.php';
-// Rewrite the language file, sadly overwritten by resourcelinker.inc.php.
 /* Header and action code */
-
 $currentstyle = api_get_setting('stylesheets');
 $htmlHeadXtra[] = '<script>
 function activate_start_date() {
@@ -50,14 +47,7 @@ $isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] 
 $learnpath_id = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
 
 /* MAIN CODE */
-
-// Using the resource linker as a tool for adding resources to the learning path.
-if ($action == 'add' && $type == 'learnpathitem') {
-    $htmlHeadXtra[] = "<script> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
-}
-
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-    //error_log('New LP - User not authorized in lp_add.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }

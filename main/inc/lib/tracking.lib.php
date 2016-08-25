@@ -321,7 +321,7 @@ class Tracking
                     $title = $row['mytitle'];
 
                     if (empty($title)) {
-                        $title = rl_get_resource_name($courseInfo['code'], $lp_id, $row['myid']);
+                        $title = learnpath::rl_get_resource_name($courseInfo['code'], $lp_id, $row['myid']);
                     }
 
                     if (in_array($row['item_type'], $chapterTypes)) {
@@ -702,7 +702,7 @@ class Tracking
                     $time_for_total = $subtotal_time;
                     $time = learnpathItem::getScormTimeFromParameter('js', $subtotal_time);
                     if (empty($title)) {
-                        $title = rl_get_resource_name($courseInfo['code'], $lp_id, $row['myid']);
+                        $title = learnpath::rl_get_resource_name($courseInfo['code'], $lp_id, $row['myid']);
                     }
 
                     $action = null;
@@ -6708,7 +6708,7 @@ class TrackingUserLog
      * @param int $course_id
      * @param int $session_id
      */
-    public function display_login_tracking_info($view, $user_id, $course_id, $session_id = 0)
+    public static function display_login_tracking_info($view, $user_id, $course_id, $session_id = 0)
     {
     	$MonthsLong = $GLOBALS['MonthsLong'];
 
@@ -6791,7 +6791,7 @@ class TrackingUserLog
      * @return array
      * @todo remove globals
      */
-    public function display_exercise_tracking_info($view, $user_id, $courseCode)
+    public static function display_exercise_tracking_info($view, $user_id, $courseCode)
     {
     	global $TBL_TRACK_HOTPOTATOES, $TABLECOURSE_EXERCICES, $TABLETRACK_EXERCICES, $dateTimeFormatLong;
         $courseId = api_get_course_int_id($courseCode);
@@ -6894,7 +6894,7 @@ class TrackingUserLog
      * Displays the student publications for a specific user in a specific course.
      * @todo remove globals
      */
-    public function display_student_publications_tracking_info($view, $user_id, $course_id)
+    public static function display_student_publications_tracking_info($view, $user_id, $course_id)
     {
     	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK;
         $_course = api_get_course_info_by_id($course_id);
@@ -6962,7 +6962,7 @@ class TrackingUserLog
      * Displays the links followed for a specific user in a specific course.
      * @todo remove globals
      */
-    public function display_links_tracking_info($view, $user_id, $courseCode)
+    public static function display_links_tracking_info($view, $user_id, $courseCode)
     {
     	global $TABLETRACK_LINKS, $TABLECOURSE_LINKS;
         $courseId = api_get_course_int_id($courseCode);

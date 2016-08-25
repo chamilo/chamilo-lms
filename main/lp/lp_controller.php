@@ -1021,6 +1021,7 @@ switch ($action) {
         }
         break;
     case 'add_sub_item': // Add an item inside a dir/chapter.
+        // @todo check if this is @deprecated
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
@@ -1032,7 +1033,6 @@ switch ($action) {
             if (!empty($_REQUEST['parent_item_id'])) {
                 $_SESSION['from_learnpath'] = 'yes';
                 $_SESSION['origintoolurl'] = 'lp_controller.php?action=admin_view&lp_id='.intval($_REQUEST['lp_id']);
-                require 'resourcelinker.php';
             } else {
                 require 'lp_admin_view.php';
             }

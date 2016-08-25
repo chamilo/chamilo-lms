@@ -5496,7 +5496,7 @@ class DocumentManager
             $basename = substr(strrchr($basename, '.'), 1);
         } else {
             if ($path == '/shared_folder') {
-                $icon = 'folder_users.gif';
+                $icon = 'folder_users.png';
                 if ($is_allowed_to_edit) {
                     $basename = get_lang('HelpUsersFolder');
                 } else {
@@ -5514,7 +5514,7 @@ class DocumentManager
                 } else {
                     $basename = get_lang('UserFolders') . ' (' . api_get_session_name($current_session_id) . ')';
                 }
-                $icon = 'folder_users.gif';
+                $icon = 'folder_users.png';
             } else {
                 $icon = 'folder_document.gif';
 
@@ -5573,7 +5573,7 @@ class DocumentManager
         if ($user_image) {
             return Display::img($icon, $basename, array(), false);
         }
-        return Display::return_icon($icon, $basename, array());
+        return Display::return_icon($icon, $basename, array(), ICON_SIZE_MEDIUM);
     }
 
     /**

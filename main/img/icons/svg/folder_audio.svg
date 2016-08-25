@@ -1175,8 +1175,8 @@
      id="base"
      showgrid="false"
      inkscape:zoom="2.1820285"
-     inkscape:cx="152.19314"
-     inkscape:cy="-17.451424"
+     inkscape:cx="11.986715"
+     inkscape:cy="82.01369"
      inkscape:window-width="1873"
      inkscape:window-height="1056"
      inkscape:window-x="1413"
@@ -1453,7 +1453,10 @@ folder-1.ai</rdf:li></rdf:Alt></dc:title></rdf:Description><cc:Work
                rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata></x:xmpmeta><xpacket
        id="xpacket8">
 end='w'</xpacket></metadata><g
-     id="g6217"><rect
+     id="g6217"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90"
+     inkscape:export-filename="/var/www/chamilo11/main/img/icons/128/folder_audio.png"><rect
        y="0"
        x="0"
        height="128"

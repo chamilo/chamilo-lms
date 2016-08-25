@@ -229,6 +229,7 @@ $form = new FormValidator(
     '',
     array('enctype' => 'multipart/form-data')
 );
+
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 
@@ -252,7 +253,7 @@ $form->addElement(
     'onclick="javascript: check_unzip();" value="1"'
 );
 
-if (api_get_setting('search_enabled') == 'true') {
+if (api_get_setting('search_enabled') === 'true') {
     //TODO: include language file
     $supported_formats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
     $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>');
@@ -273,9 +274,10 @@ $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename')
 // Close the java script and avoid the footer up
 $form->addElement('html', '</div>');
 
+$form->add_real_progress_bar('DocumentUpload', 'file');
+
 // Button upload document
 $form->addButtonSend(get_lang('SendDocument'), 'submitDocument');
-$form->add_real_progress_bar('DocumentUpload', 'file');
 
 $fileExistsOption = api_get_setting('document_if_file_exists_option');
 
@@ -290,8 +292,6 @@ $defaults = array(
 );
 
 $form->setDefaults($defaults);
-
-$simple_form = $form->returnForm();
 
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath='.$path;
 

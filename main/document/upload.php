@@ -176,9 +176,6 @@ if (empty($document_data['parents'])) {
 
 $this_section = SECTION_COURSES;
 
-// Display the header
-Display::display_header($nameTools, 'Doc');
-
 /*    Here we do all the work */
 $unzip = isset($_POST['unzip']) ? $_POST['unzip'] : null;
 $index = isset($_POST['index_document']) ? $_POST['index_document'] : null;
@@ -195,9 +192,12 @@ if (!empty($_FILES)) {
         $index,
         true
     );
+    header('Location: '.api_get_self().'?'.api_get_cidreq().'#tabs-2');
+    exit;
 }
 
-// Actions
+// Display the header
+Display::display_header($nameTools, 'Doc');
 
 // Link back to the documents overview
 if ($is_certificate_mode) {

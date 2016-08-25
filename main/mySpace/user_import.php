@@ -27,7 +27,7 @@ if (isset($_GET['id_session']) && $_GET['id_session'] != '') {
 $purification_option_for_usernames = false;
 
 // Checking whether the current coach is the admin coach.
-if (api_get_setting('add_users_by_coach') == 'true') {
+if (api_get_setting('add_users_by_coach') === 'true') {
     if (!api_is_platform_admin()) {
         if (isset($_REQUEST['id_session'])) {
             $id_session = intval($_REQUEST['id_session']);
@@ -42,7 +42,7 @@ if (api_get_setting('add_users_by_coach') == 'true') {
         }
     }
 } else {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 set_time_limit(0);
@@ -77,10 +77,12 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
                 }
             } else {
                 header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoSessionId')));
+                exit;
             }
         }
     } else {
         header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoUsersRead')));
+        exit;
     }
 }
 
@@ -91,14 +93,14 @@ if ($_FILES['import_file']['size'] == 0 && $_POST) {
 }
 
 if (count($errors) != 0) {
-	$error_message = '<ul>';
-	foreach ($errors as $index => $error_user) {
-		$error_message .= '<li><strong>'.$error_user['error'].'</strong>: ';
-		$error_message .= api_get_person_name($error_user['FirstName'], $error_user['LastName']);
-		$error_message .= '</li>';
-	}
-	$error_message .= '</ul>';
-	Display :: display_error_message($error_message, false);
+    $error_message = '<ul>';
+    foreach ($errors as $index => $error_user) {
+        $error_message .= '<li><strong>'.$error_user['error'].'</strong>: ';
+        $error_message .= api_get_person_name($error_user['FirstName'], $error_user['LastName']);
+        $error_message .= '</li>';
+    }
+    $error_message .= '</ul>';
+    Display :: display_error_message($error_message, false);
 }
 
 $form = new FormValidator('user_import');

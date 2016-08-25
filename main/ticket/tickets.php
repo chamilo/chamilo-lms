@@ -110,8 +110,7 @@ switch ($action) {
                 utf8_decode(strip_tags($ticket[4])),
                 utf8_decode(strip_tags($ticket[5])),
                 utf8_decode(strip_tags($ticket[6])),
-                utf8_decode(strip_tags($ticket[7])),
-                utf8_decode(strip_tags(str_replace('&nbsp;', ' ', $ticket[9])))
+                utf8_decode(strip_tags($ticket[7]))
             );
             $data[] = $ticket_rem;
         }

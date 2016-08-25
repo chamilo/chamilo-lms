@@ -6,7 +6,6 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$plugin = TicketPlugin::create();
 
 api_block_anonymous_users();
 $user_id = api_get_user_id();

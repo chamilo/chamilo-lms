@@ -4,14 +4,11 @@
 /**
  * @package chamilo.plugin.ticket
  */
-
+exit;
 require_once __DIR__.'/../inc/global.inc.php';
-$plugin = TicketPlugin::create();
-
 require_once __DIR__.'/tutor_report.lib.php';
 
-$htmlHeadXtra[] = '
-	<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(document).ready(function (){
     $(".ajax").click(function() {
         var url     = this.href;

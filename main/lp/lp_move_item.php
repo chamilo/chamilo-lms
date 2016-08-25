@@ -16,7 +16,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script();
 
 include 'learnpath_functions.inc.php';
-//include '../resourcelinker/resourcelinker.inc.php';
 include 'resourcelinker.inc.php';
 
 /* Header and action code */

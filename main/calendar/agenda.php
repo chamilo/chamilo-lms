@@ -30,9 +30,6 @@ if (empty($action)) {
     exit;
 }
 
-/* 	Resource linker */
-$_SESSION['source_type'] = 'Agenda';
-require_once '../resourcelinker/resourcelinker.inc.php';
 $group_id = api_get_group_id();
 $eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;

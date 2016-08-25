@@ -20,8 +20,6 @@ $courseId = api_get_course_int_id();
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
 
-/* Libraries */
-require_once api_get_path(SYS_CODE_PATH) . 'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH) . 'exercise/hotpotatoes.lib.php';
 
 /* Header */

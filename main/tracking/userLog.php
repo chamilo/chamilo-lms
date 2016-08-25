@@ -8,10 +8,10 @@
  * @todo clean code - structure is unclear and difficult to modify
  */
 
-$uInfo = intval($_REQUEST['uInfo']);
-$view  = Security::remove_XSS($_REQUEST['view']);
-// Including the global initialization file
 require_once '../inc/global.inc.php';
+
+$uInfo = isset($_REQUEST['uInfo']) ? intval($_REQUEST['uInfo']) : 0;
+$view  = isset($_REQUEST['view']) ? Security::remove_XSS($_REQUEST['view']) : '';
 
 // the section (for the tabs)
 $this_section = "session_my_space";
@@ -24,13 +24,11 @@ $courseId = api_get_course_int_id();
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
 
-/* Libraries */
-require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
 
 if (isset($uInfo)) {
     $interbreadcrumb[]= array(
-        'url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), 
+        'url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo),
         "name"=> api_ucfirst(get_lang('Users'))
     );
 }

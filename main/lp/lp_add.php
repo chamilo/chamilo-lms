@@ -19,7 +19,6 @@ api_protect_course_script();
 /* Libraries */
 
 require 'learnpath_functions.inc.php';
-//include '../resourcelinker/resourcelinker.inc.php';
 require 'resourcelinker.inc.php';
 // Rewrite the language file, sadly overwritten by resourcelinker.inc.php.
 /* Header and action code */

@@ -125,15 +125,6 @@ if (!empty($groupId)) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewTopic'));
 }
 
-/* Resource Linker */
-if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Resources')) {
-    $_SESSION['formelements']	= $_POST;
-    $_SESSION['origin']			= $_SERVER['REQUEST_URI'];
-    $_SESSION['breadcrumbs']	= $interbreadcrumb;
-    header('Location: ../resourcelinker/resourcelinker.php');
-    exit;
-}
-
 $htmlHeadXtra[] = <<<JS
     <script>
     $(document).on('ready', function() {

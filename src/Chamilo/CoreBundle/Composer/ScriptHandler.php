@@ -61,6 +61,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/pclzip/',
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',
             __DIR__.'/../../../../main/announcements/resources',
+            __DIR__.'/../../../../main/resourcelinker',
             //Remove from 1.10
             __DIR__.'/../../../../plugin/ticket',
             __DIR__.'/../../../../plugin/skype',

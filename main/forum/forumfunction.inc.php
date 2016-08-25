@@ -3629,12 +3629,6 @@ function show_edit_post_form(
         }
     }
 
-    if ($current_forum['allow_attachments'] == '1' || api_is_allowed_to_edit(null, true)) {
-        if (empty($form_values) && !isset($_POST['SubmitPost'])) {
-            //edit_added_resources('forum_post', $current_post['post_id']);
-        }
-    }
-
     $form->addElement('html', '</div>');
 
     $form->addFile('user_upload[]', get_lang('Attachment'));

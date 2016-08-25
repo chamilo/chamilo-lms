@@ -25,23 +25,23 @@ if (api_is_allowed_to_edit(null, true)) {
      * Display message to confirm that a tool must be hidden from the list of available tools (visibility 0,1->2)
      */
 
-    if ($_GET['remove']) {
+    if (isset($_GET['remove']) && $_GET['remove']) {
         $msgDestroy = get_lang('DelLk').'<br />';
         $msgDestroy .= '<a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;';
         $msgDestroy .= '<a href="'.api_get_self().'?destroy=yes&amp;id='.$id.'">'.get_lang('Yes').'</a>';
         $show_message .= Display :: return_message($msgDestroy, 'confirmation', false);
-    } elseif ($_GET['destroy']) {
+    } elseif (isset($_GET['destroy']) && $_GET['destroy']) {
         /*
          * Process hiding a tools from available tools.
          * visibility=2 are only view  by Dokeos Administrator (visibility 0,1->2)
          */
         Database::query("UPDATE $tool_table SET visibility='2' WHERE c_id = $course_id AND id='".$id."'");
-    } elseif ($_GET['hide']) {
+    } elseif (isset($_GET['hide']) && $_GET['hide']) {
         /*	HIDE */
         // visibility 1 -> 0
         Database::query("UPDATE $tool_table SET visibility=0 WHERE c_id = $course_id AND id='".$id."'");
         $show_message .= Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
-    } elseif ($_GET["restore"]) {
+    } elseif (isset($_GET['restore']) && $_GET["restore"]) {
         // visibility 0,2 -> 1
         /*	REACTIVATE */
         Database::query("UPDATE $tool_table SET visibility=1  WHERE c_id = $course_id AND id='".$id."'");

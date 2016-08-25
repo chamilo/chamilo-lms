@@ -1333,14 +1333,14 @@ EOT;
             var uploadButton = $('<button/>')
                 .addClass('btn btn-primary')
                 .prop('disabled', true)
-                .text('".get_lang('Loading')."')
+                .text('".addslashes(get_lang('Loading'))."')
                 .on('click', function () {
                     var \$this = $(this),
                     data = \$this.data();
 
                     \$this
                         .off('click')
-                        .text('".get_lang('Cancel')."')
+                        .text('".addslashes(get_lang('Cancel'))."')
                         .on('click', function () {
                             \$this.remove();
                             data.abort();

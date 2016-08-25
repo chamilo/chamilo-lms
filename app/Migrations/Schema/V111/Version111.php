@@ -303,6 +303,10 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));');
         }
 
+        if ($schema->hasTable('resource')) {
+            $schema->dropTable('resource');
+        }
+
         $this->addSql('DELETE FROM settings_current WHERE variable = "service_visio"');
         $this->addSql('DELETE FROM settings_current WHERE variable = "course_create_active_tools" AND subkey = "online_conference"');
         $this->addSql('DELETE FROM settings_options WHERE variable = "visio_use_rtmpt"');

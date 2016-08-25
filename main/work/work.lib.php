@@ -866,7 +866,7 @@ function updateDirName($work_data, $newPath)
 {
     $course_id = $work_data['c_id'];
     $sessionId = intval($work_data['session_id']);
-    $work_id = intval($work_data['id']);
+    $work_id = intval($work_data['iid']);
     $oldPath = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
     $newPath = Database::escape_string($newPath);
@@ -874,6 +874,7 @@ function updateDirName($work_data, $newPath)
     $newPath = disable_dangerous_file($newPath);
 
     if ($oldPath == '/'.$newPath) {
+
         return true;
     }
 
@@ -883,8 +884,7 @@ function updateDirName($work_data, $newPath)
                     title = '".$originalNewPath."'
                 WHERE
                     c_id = $course_id AND
-                    id = $work_id AND
-                    session_id = " . ($sessionId ? $sessionId : 'NULL');
+                    iid = $work_id";
         Database::query($sql);
     }
 }
@@ -3773,7 +3773,7 @@ function agendaExistsForWork($workId, $courseInfo)
 
 /**
  * Update work description, qualification, weight, allow_text_assignment
- * @param int $workId
+ * @param int $workId (iid)
  * @param array $params
  * @param array $courseInfo
  * @param int $sessionId
@@ -3792,10 +3792,9 @@ function updateWork($workId, $params, $courseInfo, $sessionId = 0)
         $workTable,
         $filteredParams,
         array(
-            'id = ? AND c_id = ? AND session_id = ? ' => array(
+            'iid = ? AND c_id = ?' => array(
                 $workId,
-                $courseInfo['real_id'],
-                $sessionId ? $sessionId : null
+                $courseInfo['real_id']
             )
         )
     );
@@ -3819,7 +3818,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     $agendaId = 0;
 
     if (isset($params['add_to_calendar']) && $params['add_to_calendar'] == 1) {
-        require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 
         // Setting today date
         $date = $end_date = $time;
@@ -3915,7 +3913,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                 WHERE
                     publication_id = $workId AND
                     c_id = $course_id AND
-                    id = ".$data['id'];
+                    iid = ".$data['iid'];
         Database::query($sql);
     }
 

@@ -12,7 +12,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script();
 
 require_once 'learnpath_functions.inc.php';
-require_once 'resourcelinker.inc.php';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -23,12 +22,6 @@ $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-// Using the resource linker as a tool for adding resources to the learning path.
-if ($action == 'add' && $type == 'learnpathitem') {
-     $htmlHeadXtra[] = "<script>
-     window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\";
-     </script>";
-}
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_add_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);

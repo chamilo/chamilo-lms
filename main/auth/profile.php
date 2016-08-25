@@ -825,9 +825,6 @@ if ($form->validate()) {
     $userInfo = api_get_user_info();
     Session::write('_user', $userInfo);
 
-    // re-init the system to take new settings into account
-    //$_SESSION['_user']['uidReset'] = true;
-    //$_SESSION['noredirection'] = true;
     $url = api_get_self();
     header("Location: ".$url);
     exit;

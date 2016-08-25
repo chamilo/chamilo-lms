@@ -136,7 +136,6 @@ class CourseBuilder
         $courseCode = '',
         $with_base_content = false
     ) {
-        $table_link = Database:: get_course_table(TABLE_LINKED_RESOURCES);
         $table_properties = Database:: get_course_table(TABLE_ITEM_PROPERTY);
         $course = api_get_course_info($courseCode);
         $courseId = $course['real_id'];
@@ -151,25 +150,6 @@ class CourseBuilder
                 $with_base_content,
                 $specificIdList
             );
-        }
-
-        //TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
-        foreach ($this->course->resources as $type => $resources) {
-            foreach ($resources as $id => $resource) {
-                $sql = "SELECT * FROM $table_link
-                        WHERE
-                            c_id = $courseId AND
-                            source_type = '".$resource->get_type()."' AND
-                            source_id = '".$resource->get_id()."'";
-                $res = Database::query($sql);
-
-                while ($link = Database::fetch_object($res)) {
-                    $this->course->resources[$type][$id]->add_linked_resource(
-                        $link->resource_type,
-                        $link->resource_id
-                    );
-                }
-            }
         }
 
         // Once we've built the resources array a bit more, try to get items

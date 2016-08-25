@@ -105,14 +105,6 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url' => 'javascript: void (0);', 'name' => get_lang('EditPost'));
 }
 
-/* Resource Linker */
-
-if (isset($_POST['add_resources']) && $_POST['add_resources'] == get_lang('Resources')) {
-    $_SESSION['formelements'] = $_POST;
-    $_SESSION['origin'] = $_SERVER['REQUEST_URI'];
-    $_SESSION['breadcrumbs'] = $interbreadcrumb;
-    header('Location: ../resourcelinker/resourcelinker.php');
-}
 $table_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /* Header */

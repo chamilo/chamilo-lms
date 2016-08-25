@@ -19,7 +19,6 @@ api_protect_course_script();
 /* Libraries */
 
 include 'learnpath_functions.inc.php';
-include 'resourcelinker.inc.php';
 
 /* Header and action code */
 
@@ -70,13 +69,10 @@ $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 /* MAIN CODE */
 
-// Using the resource linker as a tool for adding resources to the learning path.
-if ($action == 'add' && $type == 'learnpathitem') {
-     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
-}
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_add_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    exit;
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
@@ -148,7 +144,7 @@ $(document).ready(function() {
     }, {
         selector: '#doc_form'
     });
-    
+
     $('.lp-btn-associate-forum').on('click', function (e) {
         var associate = confirm('<?php echo get_lang('ConfirmAssociateForumToLPItem') ?>');
 

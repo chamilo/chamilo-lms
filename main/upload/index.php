@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
 * Main script for the documents tool
 *
@@ -50,15 +52,18 @@ if (isset($_REQUEST['curdirpath'])) {
 } else {
     $path = '/';
 }
+
+$toolFromSession = Session::read('my_tool');
+
 // set calling tool
 if (isset($_REQUEST['tool'])) {
     $my_tool = $_REQUEST['tool'];
-    $_SESSION['my_tool'] = $_REQUEST['tool'];
-} elseif (!empty($_SESSION['my_tool'])) {
-    $my_tool = $_SESSION['my_tool'];
+    Session::write('my_tool', $_REQUEST['tool']);
+} elseif (!empty($toolFromSession)) {
+    $my_tool = $toolFromSession;
 } else {
     $my_tool = 'document';
-    $_SESSION['my_tool'] = $my_tool;
+    Session::write('my_tool', $my_tool);
 }
 
 /**

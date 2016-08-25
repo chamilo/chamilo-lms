@@ -3629,12 +3629,6 @@ function show_edit_post_form(
         }
     }
 
-    if ($current_forum['allow_attachments'] == '1' || api_is_allowed_to_edit(null, true)) {
-        if (empty($form_values) && !isset($_POST['SubmitPost'])) {
-            //edit_added_resources('forum_post', $current_post['post_id']);
-        }
-    }
-
     $form->addElement('html', '</div>');
 
     $form->addFile('user_upload[]', get_lang('Attachment'));
@@ -3771,9 +3765,6 @@ function store_edit_post($forumInfo, $values)
             $values['id_attach']
         );
     }
-
-    // Storing the attachments if any.
-    //update_added_resources('forum_post', $values['post_id']);
 
     $message = get_lang('EditPostStored').'<br />';
     $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&">'.get_lang('Forum').'</a><br />';

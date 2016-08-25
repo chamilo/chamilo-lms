@@ -12,12 +12,12 @@
 * - reply on message (when pressing reply when viewing a message)
 * - send to specific user (when pressing send message in the who is online list)
 */
-$cidReset	= true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_message_tool') !='true') {
+if (api_get_setting('allow_message_tool') !== 'true') {
     api_not_allowed();
 }
 
@@ -66,7 +66,8 @@ $nameTools = get_lang('ComposeMessage');
 /**
 * Shows the compose area + a list of users to select from.
 */
-function show_compose_to_any($user_id) {
+function show_compose_to_any($user_id)
+{
     $default['user_list'] = 0;
     $online_user_list = null;
     $html = manage_form($default, $online_user_list);
@@ -77,8 +78,9 @@ function show_compose_to_any($user_id) {
 function show_compose_reply_to_message($message_id, $receiver_id)
 {
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
-	$query = "SELECT user_sender_id FROM $table_message
-			  WHERE user_receiver_id=".intval($receiver_id)." AND id='".intval($message_id)."';";
+	$query = "SELECT user_sender_id
+              FROM $table_message
+			  WHERE user_receiver_id = ".intval($receiver_id)." AND id='".intval($message_id)."';";
 	$result = Database::query($query);
 	$row = Database::fetch_array($result,'ASSOC');
 	if (!isset($row['user_sender_id'])) {
@@ -100,6 +102,7 @@ function show_compose_to_user ($receiver_id)
 	$default['title'] = api_xml_http_response_encode(get_lang('EnterTitle'));
 	$default['users'] = array($receiver_id);
 	$html .= manage_form($default);
+
     return $html;
 }
 
@@ -173,7 +176,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
         $message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
         $default['title'] = get_lang('MailSubjectReplyShort')." ".$message_reply_info['title'];
         $form->addElement('hidden', 're_id', intval($_GET['re_id']));
-        $form->addElement('hidden','save_form', 'save_form');
+        $form->addElement('hidden', 'save_form', 'save_form');
 
         // Adding reply mail
         $user_reply_info = api_get_user_info($message_reply_info['user_sender_id']);
@@ -206,7 +209,10 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
             '
         );
 
-        $form->addLabel('', '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
+        $form->addLabel(
+            '',
+            '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')'
+        );
     }
 
     $form->addButtonSend(get_lang('SendMessage'), 'compose');
@@ -270,13 +276,13 @@ if ($socialToolIsActive) {
 	$this_section = SECTION_SOCIAL;
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_PATH).'main/social/home.php',
-        'name' => get_lang('SocialNetwork'),
+        'name' => get_lang('SocialNetwork')
     );
 } else {
 	$this_section = SECTION_MYPROFILE;
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_PATH).'main/auth/profile.php',
-        'name' => get_lang('Profile'),
+        'name' => get_lang('Profile')
     );
 }
 
@@ -385,8 +391,6 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->display($social_layout);
 } else {
     $content = $social_right_content;
-    //$tpl->assign('actions', $actions);
-    //$tpl->assign('message', $show_message);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 }

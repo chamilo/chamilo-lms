@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 require_once '../inc/global.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 
@@ -109,7 +107,7 @@ if ($form->validate()) {
 
     if ($editCheck) {
 
-        updateWork($workId, $params, $courseInfo, $sessionId);
+        updateWork($workData['iid'], $params, $courseInfo, $sessionId);
         updatePublicationAssignment($workId, $params, $courseInfo, $groupId);
         updateDirName($workData, $params['new_dir']);
 

@@ -19,7 +19,7 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
+if (api_get_setting('allow_user_course_subscription_by_course_admin') === 'false') {
     if (!api_is_platform_admin()) {
         api_not_allowed(true);
     }
@@ -43,75 +43,62 @@ if ($type == COURSEMANAGER) {
 //extra entries in breadcrumb
 $interbreadcrumb[] = array(
     "url" => "user.php?".api_get_cidreq(),
-    "name" => get_lang("ToolUser"),
+    "name" => get_lang("ToolUser")
 );
 if ($keyword) {
     $interbreadcrumb[] = array(
         "url" => "subscribe_user.php?type=".$type.'&'.api_get_cidreq(),
-        "name" => $tool_name,
+        "name" => $tool_name
     );
 	$tool_name = get_lang('SearchResults');
 }
 
-$current_session_id = api_get_session_id();
+$sessionId = api_get_session_id();
 $list_register_user='';
 $list_not_register_user='';
 
 if (isset($_REQUEST['register'])) {
-    if ($type == COURSEMANAGER) {
-        if (!empty($current_session_id)) {
+    $userInfo = api_get_user_info($_REQUEST['user_id']);
+    $message = $userInfo['complete_name'].' '.get_lang('AddedToCourse');
+
+    if ($type === COURSEMANAGER) {
+        if (!empty($sessionId)) {
             $result_simple_sub = SessionManager::set_coach_to_course_session(
                 $_REQUEST['user_id'],
-                $current_session_id,
+                $sessionId,
                 $courseInfo['real_id']
             );
+            Display::addFlash(Display::return_message($message));
         } else {
             $result_simple_sub = CourseManager:: subscribe_user(
                 $_REQUEST['user_id'],
                 $courseInfo['code'],
                 COURSEMANAGER
             );
+            Display::addFlash(Display::return_message($message));
         }
     } else {
         $result_simple_sub = CourseManager:: subscribe_user(
             $_REQUEST['user_id'],
             $courseInfo['code']
         );
+        Display::addFlash(Display::return_message($message));
     }
-
-	$user_id_temp = $_SESSION['session_user_id'];
-
-    if (is_array($user_id_temp)) {
-        $counter = count($user_id_temp);
-        for ($j=0; $j<$counter;$j++) {
-            if 	($user_id_temp[$j]==$_GET['user_id']) {
-                if ($result_simple_sub)	{
-                    Display::addFlash(Display::return_message($_SESSION['session_user_name'][$j].' '.get_lang('AddedToCourse')));
-                } else {
-                    Display::addFlash(Display::return_message($_SESSION['session_user_name'][$j].' '.get_lang('NotAddedToCourse'), 'error'));
-
-                }
-            }
-        }
-        unset($_SESSION['session_user_id']);
-        unset($_SESSION['session_user_name']);
-    }
-
     header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
     exit;
 }
 
 if (isset($_POST['action'])) {
-    switch($_POST['action']) {
+    switch ($_POST['action']) {
         case 'subscribe':
             if (is_array($_POST['user'])) {
                 foreach ($_POST['user'] as $index => $user_id) {
-                    $user_id = intval($user_id);
-                    if ($type == COURSEMANAGER) {
-                        if (!empty($current_session_id)) {
+                    $userInfo = api_get_user_info($user_id);
+                    if ($type === COURSEMANAGER) {
+                        if (!empty($sessionId)) {
                             $is_suscribe[] = SessionManager::set_coach_to_course_session(
                                 $user_id,
-                                $current_session_id,
+                                $sessionId,
                                 $courseInfo['real_id']
                             );
                         } else {
@@ -127,61 +114,15 @@ if (isset($_POST['action'])) {
                             $courseInfo['code']
                         );
                     }
-                    $is_suscribe_user_id[] = $user_id;
+                    $message = $userInfo['complete_name'].' '.get_lang('AddedToCourse');
+                    Display::addFlash(Display::return_message($message));
                 }
-            }
-
-            $user_id_temp = $_SESSION['session_user_id'];
-            $user_name_temp = $_SESSION['session_user_name'];
-
-            unset($_SESSION['session_user_id']);
-            unset($_SESSION['session_user_name']);
-            $counter = 0;
-            $is_suscribe_counter = count($is_suscribe_user_id);
-
-            $list_register_user='';
-
-            for ($i = 0; $i < $is_suscribe_counter; $i++) {
-                for ($j = 0; $j < count($user_id_temp); $j++) {
-                    if ($is_suscribe_user_id[$i] == $user_id_temp[$j]) {
-                        if ($is_suscribe[$i]) {
-                            $list_register_user .= " - ".$user_name_temp[$j].'<br/>';
-                            $temp_unique_user = $user_name_temp[$j];
-                            $counter++;
-                        } else {
-                            $list_not_register_user .= " - ".$user_name_temp[$j].'<br/>';
-                        }
-                    }
-                }
-            }
-
-            if (!empty($list_register_user)) {
-                if ($is_suscribe_counter == 1) {
-                    $register_user_message = $temp_unique_user.' '.get_lang('AddedToCourse');
-                    Display::addFlash(Display::return_message($register_user_message));
-                } else {
-                    $register_user_message = get_lang('UsersRegistered').'<br/><br />'.$list_register_user;
-                    Display::addFlash(Display::return_message($register_user_message, 'normal', false));
-                }
-            }
-
-            if (!empty($list_not_register_user)) {
-                $not_register_user_message = get_lang('UsersNotRegistered').'<br/><br /><br />'.$list_not_register_user;
-                Display::addFlash(Display::return_message($not_register_user_message, 'error', false));
             }
 
             header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
             exit;
 			break;
 	}
-}
-
-if (!empty($_SESSION['session_user_id'])) {
-	unset($_SESSION['session_user_id']);
-}
-
-if (!empty($_SESSION['session_user_name'])) {
-	unset($_SESSION['session_user_name']);
 }
 
 $is_western_name_order = api_is_western_name_order();
@@ -198,23 +139,23 @@ $parameters['keyword'] = $keyword;
 $parameters['type'] = $type;
 $table->set_additional_parameters($parameters);
 $col = 0;
-$table->set_header($col ++, '', false);
-$table->set_header($col ++, get_lang('OfficialCode'));
+$table->set_header($col++, '', false);
+$table->set_header($col++, get_lang('OfficialCode'));
 if (api_is_western_name_order()) {
-    $table->set_header($col ++, get_lang('FirstName'));
-    $table->set_header($col ++, get_lang('LastName'));
+    $table->set_header($col++, get_lang('FirstName'));
+    $table->set_header($col++, get_lang('LastName'));
 } else {
-    $table->set_header($col ++, get_lang('LastName'));
-    $table->set_header($col ++, get_lang('FirstName'));
+    $table->set_header($col++, get_lang('LastName'));
+    $table->set_header($col++, get_lang('FirstName'));
 }
 
 if (api_get_setting('show_email_addresses') == 'true') {
-    $table->set_header($col ++, get_lang('Email'));
-    $table->set_column_filter($col -1, 'email_filter');
+    $table->set_header($col++, get_lang('Email'));
+    $table->set_column_filter($col - 1, 'email_filter');
 }
 $table->set_header($col++, get_lang('Active'), false);
 $table->set_column_filter($col -1, 'active_filter');
-$table->set_header($col ++, get_lang('Actions'), false);
+$table->set_header($col++, get_lang('Actions'), false);
 $table->set_column_filter($col -1, 'reg_filter');
 $table->set_form_actions(array ('subscribe' => get_lang('reg')), 'user');
 
@@ -241,24 +182,29 @@ $actionsLeft = Display::url(
     $url
 );
 
-if (isset($keyword)) {
-    $actionsLeft .= '<a href="subscribe_user.php?type='.$type.'&">'.
-        Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
-}
-if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])) {
+if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_filter_value'])) {
     $actionsLeft .= '<a href="subscribe_user.php?type='.$type.'">'.
         Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
 }
-if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
-    display_extra_profile_fields_filter();
+$extraForm = '';
+if (api_get_setting('ProfilingFilterAddingUsers') === 'true') {
+    $extraForm = display_extra_profile_fields_filter();
 }
 
 // Build search-form
-$form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAYOUT_INLINE);
+$form = new FormValidator(
+    'search_user',
+    'get',
+    api_get_self().'?'.api_get_cidreq(),
+    '',
+    null,
+    FormValidator::LAYOUT_INLINE
+);
 $form->addText('keyword', '', false);
 $form->addElement('hidden', 'type', $type);
+$form->addElement('hidden', 'cidReq', api_get_course_id());
 $form->addButtonSearch(get_lang('Search'));
-echo Display::toolbarAction('toolbar-subscriber', [$actionsLeft, $form->returnForm()]);
+echo Display::toolbarAction('toolbar-subscriber', [$actionsLeft.$extraForm, $form->returnForm()]);
 
 $option = $type == COURSEMANAGER ? 2 : 1;
 echo UserManager::getUserSubscriptionTab($option);
@@ -291,7 +237,7 @@ function get_number_of_users()
 					ON
 						u.user_id = cu.user_id AND
 						c_id = '".api_get_course_int_id()."' AND
-						session_id ='".api_get_session_id()."'
+						session_id ='".$sessionId."'
 					WHERE
 						cu.user_id IS NULL AND
 						u.status = 1 AND
@@ -306,7 +252,7 @@ function get_number_of_users()
 							LEFT JOIN $tbl_session_rel_course_user cu
 							ON
 							    u.user_id = cu.user_id and cu.c_id = '".api_get_course_int_id()."' AND
-							    session_id ='".api_get_session_id()."'
+							    session_id ='".$sessionId."'
 							INNER JOIN  $tbl_url_rel_user as url_rel_user
 							ON (url_rel_user.user_id = u.user_id)
 							WHERE
@@ -341,14 +287,14 @@ function get_number_of_users()
 		}
 	} else {
 		// students
-		if (api_get_session_id() != 0) {
+		if ($sessionId != 0) {
 			$sql = "SELECT COUNT(u.user_id)
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu
 					ON
 						u.user_id = cu.user_id AND
 						c_id='".api_get_course_int_id()."' AND
-						session_id ='".api_get_session_id()."'
+						session_id ='".$sessionId."'
 					WHERE
 						cu.user_id IS NULL AND
 						u.status<>".DRH." AND
@@ -364,7 +310,7 @@ function get_number_of_users()
 							ON
 								u.user_id = cu.user_id AND
 								c_id='".api_get_course_int_id()."' AND
-								session_id ='".api_get_session_id()."'
+								session_id ='".$sessionId."'
 							INNER JOIN $tbl_url_rel_user as url_rel_user
 							ON (url_rel_user.user_id = u.user_id)
 							WHERE
@@ -383,7 +329,7 @@ function get_number_of_users()
 			// we change the SQL when we have a filter
 			if (isset($_GET['subscribe_user_filter_value']) &&
                 !empty($_GET['subscribe_user_filter_value']) &&
-                api_get_setting('ProfilingFilterAddingUsers') == 'true'
+                api_get_setting('ProfilingFilterAddingUsers') === 'true'
             ){
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
@@ -396,29 +342,27 @@ function get_number_of_users()
 						field_values.value = '".Database::escape_string($field_identification[1])."'
 					";
 			} else	{
-				$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+				$sql .=	"WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
 			}
 
 			if (api_is_multiple_url_enabled()) {
 				$url_access_id = api_get_current_access_url_id();
 
 				if ($url_access_id !=-1) {
-
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
 					$sql = "SELECT COUNT(u.user_id)
 							FROM $user_table u
 							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'
-							INNER JOIN  $tbl_url_rel_user as url_rel_user
+							INNER JOIN $tbl_url_rel_user as url_rel_user
 							ON (url_rel_user.user_id = u.user_id)
-							WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status<>".DRH." ";
+							WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status <> ".DRH." ";
 				}
 			}
 		}
 	}
 
 	// when there is a keyword then we are searching and we have to change the SQL statement
-	if (isset($_GET['keyword']) AND !empty($_GET['keyword'])) {
+	if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
 		$keyword = Database::escape_string(trim($_REQUEST['keyword']));
 		$sql .= " AND (
 		    firstname LIKE '%".$keyword."%' OR
@@ -429,12 +373,12 @@ function get_number_of_users()
         )";
 
 		// we also want to search for users who have something in their profile fields that matches the keyword
-		if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
+		if (api_get_setting('ProfilingFilterAddingUsers') === 'true') {
 			$additional_users = search_additional_profile_fields($keyword);
 		}
 
 		// getting all the users of the course (to make sure that we do not display users that are already in the course)
-		if (!empty($_SESSION["id_session"])) {
+		if (!empty($sessionId)) {
             $a_course_users = CourseManager:: get_user_list_from_course_code(
                 $courseCode,
                 $sessionId
@@ -467,7 +411,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
     $url_access_id = api_get_current_access_url_id();
     $course_code = api_get_course_id();
-    $session_id = api_get_session_id();
+    $sessionId = api_get_session_id();
 	$courseId = api_get_course_int_id();
 
 	// Database table definitions
@@ -480,8 +424,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     // adding teachers
 	$is_western_name_order = api_is_western_name_order();
 
-    if (api_get_setting('show_email_addresses') == 'true') {
-
+    if (api_get_setting('show_email_addresses') === 'true') {
         $select_fields = "u.user_id              AS col0,
                 u.official_code        AS col1,
                 ".($is_western_name_order
@@ -505,14 +448,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
     }
 	if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
 		// adding a teacher through a session
-		if (!empty($session_id)) {
+		if (!empty($sessionId)) {
 			$sql = "SELECT $select_fields
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu
 					ON
 						u.user_id = cu.user_id AND
 						c_id ='".$courseId."' AND
-						session_id ='".$session_id."'
+						session_id ='".$sessionId."'
                     INNER JOIN  $tbl_url_rel_user as url_rel_user
                     ON (url_rel_user.user_id = u.user_id) ";
 
@@ -593,14 +536,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		}
 	} else {
 		// adding a student
-		if (!empty($session_id)) {
+		if (!empty($sessionId)) {
 			$sql = "SELECT $select_fields
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
                     	u.user_id = cu.user_id AND
                     	c_id ='".$courseId."' AND
-                    	session_id ='".$session_id."' ";
+                    	session_id ='".$sessionId."' ";
 
             if (api_is_multiple_url_enabled()) {
                 $sql .= " INNER JOIN $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
@@ -638,7 +581,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     	c_id ='".$courseId."'";
 
 			// applying the filter of the additional user profile fields
-			if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_filter_value'])){
+			if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_filter_value'])) {
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values
@@ -688,7 +631,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	}
 
 	// adding additional WHERE statements to the SQL for the search functionality
-    $additional_users = null;
 	if (isset($_REQUEST['keyword'])) {
 		$keyword = Database::escape_string(trim($_REQUEST['keyword']));
 		$sql .= " AND (
@@ -700,7 +642,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					)
 				";
 
-		if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
+		if (api_get_setting('ProfilingFilterAddingUsers') === 'true') {
 			// we also want to search for users who have something in
 			// their profile fields that matches the keyword
 			$additional_users = search_additional_profile_fields($keyword);
@@ -708,8 +650,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 		// getting all the users of the course (to make sure that we do not
 		// display users that are already in the course)
-		if (!empty($session_id)) {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($course_code, $session_id);
+		if (!empty($sessionId)) {
+			$a_course_users = CourseManager :: get_user_list_from_course_code($course_code, $sessionId);
 		} else {
 			$a_course_users = CourseManager :: get_user_list_from_course_code($course_code, 0);
 	    }
@@ -728,33 +670,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$users = array ();
 	while ($user = Database::fetch_row($res)) {
 		$users[] = $user;
-		$_SESSION['session_user_id'][] = $user[0];
-		if ($is_western_name_order) {
-			$_SESSION['session_user_name'][] = api_get_person_name($user[2], $user[3]);
-		} else {
-			$_SESSION['session_user_name'][] = api_get_person_name($user[3], $user[2]);
-		}
 	}
-	// adding additional users based on the search on the additional profile fields
-	if (isset($_REQUEST['keyword'])){
-		if (is_array($additional_users)) {
-			foreach($additional_users as $additional_user_key=>$additional_user_value){
-				if (!in_array($additional_user_key, $_SESSION['session_user_id']) &&
-                    !in_array($additional_user_key,$users_of_course)
-                ){
-                    $users[] = array(
-                        $additional_user_value['col0'],
-                        $additional_user_value['col1'],
-                        $additional_user_value['col2'].'*',
-                        $additional_user_value['col3'].'*',
-                        $additional_user_value['col4'],
-                        $additional_user_value['col5'],
-                        $additional_user_value['col6'],
-                    );
-				}
-			}
-		}
-	}
+
 	return $users;
 }
 /**
@@ -762,7 +679,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 * @param string $email An email-address
 * @return string HTML-code with a mailto-link
 */
-function email_filter($email) {
+function email_filter($email)
+{
 	return Display :: encrypted_mailto_link($email, $email);
 }
 /**
@@ -770,13 +688,16 @@ function email_filter($email) {
  * @param int $user_id The user id
  * @return string Some HTML-code
  */
-function reg_filter($user_id) {
+function reg_filter($user_id)
+{
     if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
         $type = COURSEMANAGER;
     } else {
         $type = STUDENT;
     }
-	$result = '<a class="btn btn-small btn-primary" href="'.api_get_self().'?register=yes&type='.$type.'&user_id='.$user_id.'">'.get_lang("reg").'</a>';
+	$result = '<a class="btn btn-small btn-primary" href="'.api_get_self().'?register=yes&type='.$type.'&user_id='.$user_id.'">'.
+        get_lang("reg").'</a>';
+
 	return $result;
 }
 
@@ -790,7 +711,8 @@ function reg_filter($user_id) {
  * @return string Some HTML-code with the lock/unlock button
  */
 
-function active_filter($active, $url_params, $row) {
+function active_filter($active, $url_params, $row)
+{
 	$_user = api_get_user_info();
 	if ($active=='1') {
 		$action='AccountActive';
@@ -880,9 +802,8 @@ function search_additional_profile_fields($keyword)
 function display_extra_profile_fields_filter()
 {
 	// getting all the additional user profile fields
-	$extra = UserManager::get_extra_fields(0,50,5,'ASC');
-
-	$return='<option value="">'.get_lang('SelectFilter').'</option>';
+    $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+	$return = '<option value="">'.get_lang('SelectFilter').'</option>';
 
 	// looping through the additional user profile fields
 	foreach ($extra as $id => $field_details) {
@@ -898,8 +819,10 @@ function display_extra_profile_fields_filter()
 			case ExtraFieldModel::FIELD_TYPE_SELECT:
 			case ExtraFieldModel::FIELD_TYPE_SELECT_MULTIPLE:
 				$return .= '<optgroup label="'.$field_details[3].'">';
-				foreach($field_details[9] as $option_id => $option_details) {
-					if ($_GET['subscribe_user_filter_value'] == $field_details[0].'*'.$option_details[1]) {
+				foreach ($field_details[9] as $option_id => $option_details) {
+					if (isset($_GET['subscribe_user_filter_value']) &&
+                        $_GET['subscribe_user_filter_value'] == $field_details[0].'*'.$option_details[1]
+                    ) {
 						$selected = 'selected="selected"';
 					} else {
 						$selected = false;
@@ -911,9 +834,11 @@ function display_extra_profile_fields_filter()
 		}
 	}
 
-	echo '<form id="subscribe_user_filter" name="subscribe_user_filter" method="get" action="'.api_get_self().'?api_get_cidreq" style="float:left;">';
-	echo '	<input type="hidden" name="type" id="type" value="'.Security::remove_XSS($_REQUEST['type']).'" />';
-	echo   '<select name="subscribe_user_filter_value" id="subscribe_user_filter_value">'.$return.'</select>';
-	echo   '<button type="submit" name="submit_filter" id="submit_filter" value="" class="search">'.get_lang('Filter').'</button>';
-	echo '</form>';
+	$html = '<form class="form-inline" id="subscribe_user_filter" name="subscribe_user_filter" method="get" action="'.api_get_self().'?'.api_get_cidreq().'">';
+	$html .= '<input type="hidden" name="type" id="type" value="'.Security::remove_XSS($_REQUEST['type']).'" />';
+	$html .= '<select name="subscribe_user_filter_value" id="subscribe_user_filter_value">'.$return.'</select>';
+	$html .= '<button type="submit" name="submit_filter" id="submit_filter" value="" class="search">'.get_lang('Filter').'</button>';
+	$html .= '</form>';
+
+    return $html;
 }

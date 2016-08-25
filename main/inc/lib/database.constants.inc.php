@@ -201,10 +201,6 @@ define('TABLE_QUIZ_QUESTION_CATEGORY', 'quiz_question_category');
 define('TABLE_QUIZ_QUESTION_REL_CATEGORY', 'quiz_question_rel_category');
 define('TABLE_QUIZ_REL_CATEGORY', 'quiz_rel_category');
 
-// Linked resource table
-//@todo table exists?
-define('TABLE_LINKED_RESOURCES', 'resource');
-
 // New SCORM tables
 define('TABLE_LP_MAIN', 'lp');
 define('TABLE_LP_ITEM', 'lp_item');

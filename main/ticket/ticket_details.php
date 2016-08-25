@@ -280,7 +280,7 @@ if (!isset($_POST['compose'])) {
     echo '<table width="100%" >
             <tr>
               <td colspan="3">
-              <h1>'.$title.' '.$form_close_ticket.' '.$img_assing.' </h1>
+              <h1>'.$title.' '.$form_close_ticket.'</h1>
               <h2>'.$ticket['ticket']['subject'].'</h2>
               <p>
                 '.$senderData.' ' .
@@ -344,31 +344,6 @@ if (!isset($_POST['compose'])) {
             </td>            
          </tr>
         ';
-
-    // Select admins
-    $select_admins = '<select  class ="chzn-select" style="width: 350px; " name = "admins" id="admins" ">';
-
-    $admins = UserManager::get_user_list_like(
-        array('status' => COURSEMANAGER), array('username'),
-        true
-    );
-
-    $select_admins .= '<option value="" >'.get_lang('None').'</option>';
-
-    foreach ($admins as $admin) {
-        $select_admins.= "<option value = '" . $admin['user_id'] . "' " . (($user_id == $admin['user_id']) ? ("selected='selected'") : '') . ">" .
-           $admin['complete_name'] . "</option>";
-    }
-    $select_admins .= "</select>";
-    echo '<div id="dialog-form" title="' . get_lang('Assign') . '" >';
-    echo '<form id="frmResponsable" method="POST" action="ticket_details.php?ticket_id=' . $ticket['ticket']['id'] . '">
-			<input type="hidden" name ="action" id="action" value="assign"/>
-			<div>
-				<div class="label">' . get_lang('Responsable') . ':</div>
-				<div class="formw">' . $select_admins . '</div>
-			</div>
-		  </form>';
-    echo '</div>';
     echo '</table>';
     $messages = $ticket['messages'];
 
@@ -454,6 +429,10 @@ if (!isset($_POST['compose'])) {
             $ticket_id,
             api_get_user_id()
         );
+
+        if (isset($_POST['assigned_last_user']) && !empty($_POST['assigned_last_user'])) {
+            TicketManager::assign_ticket_user($ticket_id, $_POST['assigned_last_user']);
+        }
     }
     Display::addFlash(Display::return_message(get_lang('Saved')));
     header("Location:" . api_get_self() . "?ticket_id=" . $ticket_id);
@@ -501,10 +480,32 @@ function show_form_send_message($ticket)
             )
         );
 
+        $admins = UserManager::get_user_list_like(
+            array('status' => COURSEMANAGER), array('username'),
+            true
+        );
+
+        $adminList = ['' => get_lang('Select')];
+        foreach ($admins as $admin) {
+            $adminList[$admin['user_id']] = $admin['complete_name'];
+        }
+
+        $form->addElement(
+            'select',
+            'assigned_last_user',
+            get_lang('Assign'),
+            $adminList,
+            array(
+            'id' => 'assigned_last_user',
+            'for' => 'assigned_last_user'
+            )
+        );
+
         $form->setDefaults(
             [
                 'priority_id' =>  $ticket['priority_id'],
                 'status_id' =>  $ticket['status_id'],
+                'assigned_last_user' => $ticket['assigned_last_user']
             ]
         );
     }

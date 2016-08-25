@@ -62,11 +62,9 @@ if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
 $nameTools = get_lang('StudentDetails');
 $em = Database::getManager();
 
-$em = Database::getManager();
-
 if (isset($_GET['details'])) {
     if ($origin === 'user_course') {
-        if (empty ($cidReq)) {
+        if (empty($cidReq)) {
             $interbreadcrumb[] = array (
                 "url" => api_get_path(WEB_COURSE_PATH) . $courseInfo['directory'],
                 'name' => $courseInfo['title']
@@ -76,13 +74,13 @@ if (isset($_GET['details'])) {
             "url" => "../user/user.php?cidReq=" . $course_code,
             "name" => get_lang("Users")
         );
-    } else
+    } else {
         if ($origin === 'tracking_course') {
             $interbreadcrumb[] = array (
                 "url" => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session=' . api_get_session_id(),
                 "name" => get_lang("Tracking")
             );
-        } else
+        } else {
             if ($origin === 'resume_session') {
                 $interbreadcrumb[] = array (
                     'url' => "../session/session_list.php",
@@ -117,6 +115,8 @@ if (isset($_GET['details'])) {
                     );
                 }
             }
+        }
+    }
     $nameTools = get_lang("DetailsStudentInCourse");
 } else {
     if ($origin == 'resume_session') {
@@ -135,7 +135,7 @@ if (isset($_GET['details'])) {
             "url" => api_is_student_boss()?"#":"index.php",
             "name" => get_lang('MySpace')
         );
-        if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
             if ($sessionId) {
                 $interbreadcrumb[] = array (
                     "url" => "student.php?id_coach=" . Security :: remove_XSS($_GET['id_coach']) . "&id_session=" . $sessionId,
@@ -225,7 +225,6 @@ if (api_is_drh() || api_is_platform_admin() || api_is_student_boss()) {
 }
 
 $courses = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
-
 $courses_in_session_by_coach = array();
 $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_id());
 
@@ -362,8 +361,6 @@ if (!empty($student_id)) {
         Display::return_icon('skill-badges.png', get_lang('AssignSkill'), null, ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH) . 'badge/assign.php?' . http_build_query(['user' => $student_id])
     );
-
-
     echo '</div>';
 
     // is the user online ?
@@ -419,12 +416,12 @@ if (!empty($student_id)) {
 
     // cvs information
     $csv_content[] = array(
-        get_lang('Information', '')
+        get_lang('Information')
     );
     $csv_content[] = array (
-        get_lang('Name', ''),
-        get_lang('Email', ''),
-        get_lang('Tel', '')
+        get_lang('Name'),
+        get_lang('Email'),
+        get_lang('Tel')
     );
     $csv_content[] = array(
         $user_info['complete_name'],
@@ -436,14 +433,14 @@ if (!empty($student_id)) {
 
     // csv tracking
     $csv_content[] = array(
-        get_lang('Tracking', '')
+        get_lang('Tracking')
     );
     $csv_content[] = array(
-        get_lang('FirstLoginInPlatform', ''),
-        get_lang('LatestLoginInPlatform', ''),
-        get_lang('TimeSpentInTheCourse', ''),
-        get_lang('Progress', ''),
-        get_lang('Score', '')
+        get_lang('FirstLoginInPlatform'),
+        get_lang('LatestLoginInPlatform'),
+        get_lang('TimeSpentInTheCourse'),
+        get_lang('Progress'),
+        get_lang('Score')
     );
     $csv_content[] = array(
         strip_tags($first_connection_date),
@@ -890,7 +887,7 @@ if (!empty($student_id)) {
 
                 $i = 0;
                 foreach ($rs_lp as $learnpath) {
-                    $lp_id = intval($learnpath->getId());
+                    $lp_id = $learnpath->getId();
                     $lp_name = $learnpath->getName();
                     $any_result = false;
 
@@ -1063,11 +1060,13 @@ if (!empty($student_id)) {
         );
 
         $t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
+        $sessionCondition = api_get_session_condition($sessionId, true, true, 'quiz.session_id');
+
         $sql = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
                 WHERE
                     quiz.c_id = ".$courseInfo['real_id']." AND
-                    (quiz.session_id = $sessionId OR quiz.session_id = 0) AND
                     active IN (0, 1)
+                    $sessionCondition                    
                 ORDER BY quiz.title ASC ";
 
         $result_exercices = Database::query($sql);
@@ -1143,7 +1142,7 @@ if (!empty($student_id)) {
                             exe_exo_id = "'.$exercise_id.'" AND
                             exe_user_id ="'.$student_id.'" AND
                             c_id = '.$courseInfo['real_id'].' AND
-                            session_id ="'.$sessionId.'" AND
+                            session_id = "'.$sessionId.'" AND
                             status = ""
                         ORDER BY exe_date DESC
                         LIMIT 1';

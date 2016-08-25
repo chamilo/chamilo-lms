@@ -10,7 +10,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script();
 
 require 'learnpath_functions.inc.php';
-require 'resourcelinker.inc.php';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 

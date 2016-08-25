@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *  @package chamilo.admin
  */
@@ -51,14 +53,13 @@ if ($form->validate()) {
 
         $skills = array_filter($skills);
         $skills = array_unique($skills);
-
-        $_SESSION['skills'] = $skills;
+        Session::write('skills', $skills);
 
     } else {
-        $skills = isset($_SESSION['skills']) ? $_SESSION['skills']: array();
+        $skills = Session::read('skills', []);
     }
 } else {
-    $skills = isset($_SESSION['skills']) ? $_SESSION['skills']: array();
+    $skills = Session::read('skills', []);
 }
 
 $user_list = array();
@@ -129,7 +130,8 @@ switch ($action) {
                 $new_skill[] = $skill_id;
             }
         }
-        $skills = $_SESSION['skills'] = $new_skill;
+        $skills = $new_skill;
+        Session::write('skills', $skills);
         break;
     case 'load_profile':
         $skill_profile = new SkillRelProfile();

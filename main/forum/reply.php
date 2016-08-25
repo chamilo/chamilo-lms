@@ -142,15 +142,6 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Reply'));
 }
 
-/* Resource Linker */
-if (isset($_POST['add_resources']) && $_POST['add_resources'] == get_lang('Resources')) {
-    $_SESSION['formelements'] = $_POST;
-    $_SESSION['origin'] = $_SERVER['REQUEST_URI'];
-    $_SESSION['breadcrumbs'] = $interbreadcrumb;
-    header('Location: ../resourcelinker/resourcelinker.php');
-    exit;
-}
-
 /* Header */
 $htmlHeadXtra[] = <<<JS
     <script>

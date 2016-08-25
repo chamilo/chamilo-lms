@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
 *	Exercise result
 *	This script gets information from the script "exercise_submit.php",
@@ -14,8 +16,6 @@
 *
 *	@todo	split more code up in functions, move functions to library?
 */
-
-use \ChamiloSession as Session;
 
 $debug = false;
 require_once '../inc/global.inc.php';
@@ -37,7 +37,7 @@ if (empty($origin)) {
 /** @var Exercise $objExercise */
 if (empty($objExercise)) {
 
-    $objExercise = $_SESSION['objExercise'];
+    $objExercise = Session::read('objExercise');
 }
 if (empty($remind_list)) {
     $remind_list = isset($_REQUEST['remind_list']) ? $_REQUEST['remind_list'] : null;

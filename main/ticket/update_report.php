@@ -4,9 +4,8 @@
 /**
  * @package chamilo.plugin.ticket
  */
-
+exit;
 require_once __DIR__.'/../inc/global.inc.php';
-$plugin = TicketPlugin::create();
 
 $work_id = intval($_POST['work_id']);
 $forum_id = intval($_POST['forum_id']);

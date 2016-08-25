@@ -1948,7 +1948,7 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, v
 
 UPDATE settings_current SET selected_value = '1.11.0.6' WHERE variable = 'chamilo_database_version';
 
-INSERT INTO settings_current (variable, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('icons_mode_svg', NULL, 'radio', 'Tuning', 'false', 'IconsModeSVGTitle', 'IconsModeSVGComment', '', NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('icons_mode_svg', NULL, 'radio', 'Tuning', 'false', 'IconsModeSVGTitle', 'IconsModeSVGComment', '', NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('icons_mode_svg', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('icons_mode_svg', 'false', 'No');
 

@@ -61,7 +61,9 @@ class Version110 extends AbstractMigrationChamilo
             $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id");
         }
 
-        $this->addSql("ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id)");
+        if (!$table->hasIndex('idx_select_cs')) {
+            $this->addSql("ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id)");
+        }
 
         // Delete info of session_rel_user if session does not exists;
         $this->addSql("DELETE FROM session_rel_user WHERE id_session NOT IN (SELECT id FROM session)");
@@ -95,7 +97,10 @@ class Version110 extends AbstractMigrationChamilo
             $this->addSql("ALTER TABLE session_rel_user ADD COLUMN duration int");
         }
 
-        $this->addSql("ALTER TABLE skill ADD COLUMN criteria text");
+        $table = $schema->getTable('skill');
+        if (!$table->hasColumn('criteria')) {
+            $this->addSql("ALTER TABLE skill ADD COLUMN criteria text");
+        }
         $this->addSql("ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0");
         $this->addSql("ALTER TABLE track_e_access ADD COLUMN c_id int NOT NULL");
 
@@ -135,7 +140,10 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL");
         $this->addSql("ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL");
 
-        $this->addSql("ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0");
+        $table = $schema->getTable('course');
+        if (!$table->hasColumn('add_teachers_to_sessions_courses')) {
+            $this->addSql("ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0");
+        }
         $this->addSql("ALTER TABLE course DROP COLUMN target_course_code");
         $this->addSql("ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
@@ -482,7 +490,12 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float");
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_max_score float");
         $this->addSql("ALTER TABLE c_group_info ADD COLUMN status tinyint DEFAULT 1");
-        $this->addSql("ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0");
+
+        $table = $schema->getTable('c_student_publication');
+        if (!$table->hasColumn('document_id')) {
+            $this->addSql("ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0");
+        }
+
         $this->addSql("ALTER TABLE c_lp_item MODIFY COLUMN description VARCHAR(511) DEFAULT ''");
         $this->addSql("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE' ");
         $this->addSql("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");

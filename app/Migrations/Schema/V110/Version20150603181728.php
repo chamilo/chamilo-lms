@@ -62,6 +62,8 @@ class Version20150603181728 extends AbstractMigrationChamilo
         $this->addSql("DELETE FROM c_item_property WHERE insert_user_id IS NOT NULL AND insert_user_id <> 0 AND insert_user_id NOT IN (SELECT id FROM user)");
 
         // Remove inconsistencies about non-existing users
+        $this->addSql("DELETE FROM c_item_property WHERE c_id NOT IN (SELECT id FROM course)");
+        // Remove inconsistencies about non-existing users
         $this->addSql("DELETE FROM course_rel_user WHERE user_id NOT IN (SELECT user_id FROM user)");
 
         $this->addSql("DELETE FROM c_item_property WHERE c_id NOT IN (SELECT id FROM course)");

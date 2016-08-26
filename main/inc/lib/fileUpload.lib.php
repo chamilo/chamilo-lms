@@ -1358,6 +1358,7 @@ function get_levels($filename) {
 
 /**
  * Adds file to document table in database
+ * deprecated: use file_set_default_settings instead
  *
  * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
  * @param	path,filename
@@ -2061,24 +2062,37 @@ function add_all_documents_in_folder_to_database(
             }
 
             $completePath = $parentPath.'/'.$file;
-
             $sysFolderPath = $folderPath.'/'.$file;
 
             // Is directory?
             if (is_dir($sysFolderPath)) {
-                $newFolderData = create_unexisting_directory(
-                    $courseInfo,
-                    $userId,
-                    $sessionId,
-                    $groupId,
-                    null,
-                    $base_work_dir,
+
+                $folderExists = DocumentManager::folderExists(
                     $completePath,
-                    null,
-                    null,
-                    true
+                    $courseInfo,
+                    $sessionId,
+                    $groupId
                 );
-                $files[$file] = $newFolderData;
+
+                if ($folderExists === true) {
+                    $documentId = DocumentManager::get_document_id($courseInfo, $completePath, $sessionId);
+                    if ($documentId) {
+                        $newFolderData = DocumentManager::get_document_data_by_id($documentId, $courseInfo, false, $sessionId);
+                    }
+                } else {
+                    $newFolderData = create_unexisting_directory(
+                        $courseInfo,
+                        $userId,
+                        $sessionId,
+                        $groupId,
+                        null,
+                        $base_work_dir,
+                        $completePath,
+                        null,
+                        null,
+                        false
+                    );
+                }
 
                 // Recursive
                 add_all_documents_in_folder_to_database(
@@ -2092,7 +2106,6 @@ function add_all_documents_in_folder_to_database(
                     $newFolderData
                 );
             } else {
-
                 // Rename
                 $uploadedFile = array(
                     'name' => $file,

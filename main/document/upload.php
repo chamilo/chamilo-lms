@@ -195,6 +195,8 @@ if (!empty($_FILES)) {
         $index,
         true
     );
+    header('Location: '.api_get_self().'?'.api_get_cidreq().'#tabs-2');
+    exit;
 }
 
 // Actions
@@ -251,7 +253,7 @@ $form->addElement(
     'onclick="javascript: check_unzip();" value="1"'
 );
 
-if (api_get_setting('search_enabled') == 'true') {
+if (api_get_setting('search_enabled') === 'true') {
     //TODO: include language file
     $supported_formats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
     $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>');
@@ -289,8 +291,6 @@ $defaults = array(
 );
 
 $form->setDefaults($defaults);
-
-$simple_form = $form->returnForm();
 
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath='.$path;
 

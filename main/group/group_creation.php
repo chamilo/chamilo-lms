@@ -39,11 +39,6 @@ if (isset($_POST['action'])) {
                 if (!empty($_POST['same_places'])) {
                     $group['places'] = $_POST['group_0_places'];
                 }
-                if (api_get_setting('allow_group_categories') == 'false') {
-                    $group['category'] = 0;
-                } elseif (isset($_POST['same_category']) && $_POST['same_category']) {
-                    $group['category'] = $_POST['group_0_category'];
-                }
 
                 GroupManager::create_group(
                     $group['name'],
@@ -187,7 +182,10 @@ EOT;
                     $cat_options,
                     array('id' => 'category_'.$group_number)
                 );
-			}
+			} else {
+                $group_el[] = $form->createElement('hidden', 'group_'.$group_number.'_category', 0);
+                $defaults['group_'.$group_number.'_category'] = array_keys($cat_options)[0];
+            }
             $group_el[] = $form->createElement(
                 'text',
                 'group_'.$group_number.'_places',

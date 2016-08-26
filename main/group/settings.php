@@ -48,6 +48,8 @@ if (api_get_setting('allow_group_categories') == 'true') {
         $categoryList[$category['id']] = $category['title'];
     }
     $form->addElement('select', 'category_id', get_lang('Category'), $categoryList);
+} else {
+    $form->addHidden('category_id', 0);
 }
 
 // Members per group

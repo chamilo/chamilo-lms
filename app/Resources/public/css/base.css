@@ -4580,27 +4580,6 @@ div#chat-remote-video video {
 #page-install .checkbox{
     margin-bottom: 10px;
 }
-#page-install .footer-install p{
-    padding: 0;
-    margin: 0;
-}
-#page-install .content{
-    display: inline-block;
-}
-#page-install .footer-install{
-  color: #666666;
-  background: none;
-  border: 1px solid #DDD;
-  border-radius: 5px;
-  padding-bottom: 15px;
-  padding-top: 15px;
-}
-#page-install footer a{
-  color: #333333;
-}
-#page-install footer a:hover{
-  color: #666666;
-}
 #page-install pre{
   margin-top: 5px !important;
 }
@@ -5771,7 +5750,7 @@ ul#toolnavbox-two li a {
     margin-left: -2px;
     font-size: 12px;
     width: 50px;
-    
+
 }
 ul#toolnavbox-two .tool-img{
     float: left;
@@ -6091,7 +6070,7 @@ ul#toolnavbox-two li a.btn{
 }
 @media (min-width:320px) and (max-width: 479px){
     footer {
-        
+
         padding-top: 15px;
     }
     footer #footer_right{
@@ -6118,7 +6097,7 @@ ul#toolnavbox-two li a.btn{
         margin: -2.5px -15px;
     }
     .installer{
-        display: inline-table; 
+        display: inline-table;
     }
 }
 

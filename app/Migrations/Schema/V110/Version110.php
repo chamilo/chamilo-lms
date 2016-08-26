@@ -490,7 +490,12 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float");
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_max_score float");
         $this->addSql("ALTER TABLE c_group_info ADD COLUMN status tinyint DEFAULT 1");
-        $this->addSql("ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0");
+
+        $table = $schema->getTable('c_student_publication');
+        if (!$table->hasColumn('document_id')) {
+            $this->addSql("ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0");
+        }
+
         $this->addSql("ALTER TABLE c_lp_item MODIFY COLUMN description VARCHAR(511) DEFAULT ''");
         $this->addSql("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE' ");
         $this->addSql("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");

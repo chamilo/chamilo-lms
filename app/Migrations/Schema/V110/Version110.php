@@ -97,7 +97,10 @@ class Version110 extends AbstractMigrationChamilo
             $this->addSql("ALTER TABLE session_rel_user ADD COLUMN duration int");
         }
 
-        $this->addSql("ALTER TABLE skill ADD COLUMN criteria text");
+        $table = $schema->getTable('skill');
+        if (!$table->hasColumn('criteria')) {
+            $this->addSql("ALTER TABLE skill ADD COLUMN criteria text");
+        }
         $this->addSql("ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0");
         $this->addSql("ALTER TABLE track_e_access ADD COLUMN c_id int NOT NULL");
 

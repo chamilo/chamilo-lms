@@ -694,7 +694,7 @@ function display_requirements(
 
     $timezone = checkPhpSettingExists("date.timezone");
     if (!$timezone) {
-        echo "<div class='warning-message'>".
+        echo "<div class='alert alert-warning'>".
             Display::return_icon('warning.png', get_lang('Warning'), '', ICON_SIZE_MEDIUM).
             get_lang("DateTimezoneSettingNotSet")."</div>";
     }
@@ -918,12 +918,10 @@ function display_requirements(
     }
 
     if ($course_test_was_created && !$file_course_test_was_created) {
-        $courseTestLabel = Display::label(
-            sprintf(
-                get_lang('InstallWarningCouldNotInterpretPHP'),
-                api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/test.php'
-            ),
-            'warning'
+        $courseTestLabel = Display::label(get_lang('Warning'), 'warning');
+        $courseTestLabel .= '<br />'.sprintf(
+            get_lang('InstallWarningCouldNotInterpretPHP'),
+            api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/test.php'
         );
     }
 

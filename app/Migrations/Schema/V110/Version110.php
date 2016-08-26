@@ -61,7 +61,9 @@ class Version110 extends AbstractMigrationChamilo
             $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id");
         }
 
-        $this->addSql("ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id)");
+        if (!$table->hasIndex('idx_select_cs')) {
+            $this->addSql("ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id)");
+        }
 
         // Delete info of session_rel_user if session does not exists;
         $this->addSql("DELETE FROM session_rel_user WHERE id_session NOT IN (SELECT id FROM session)");

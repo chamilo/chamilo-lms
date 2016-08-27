@@ -1554,6 +1554,14 @@ class UserManager
         $addRandomId = true,
         $userInfo = []
     ) {
+        // Make sure userInfo is defined. Otherwise, define it!
+        if (empty($userInfo) || !is_array($userInfo) || count($userInfo) == 0) {
+            if (empty($user_id)) {
+                return '';
+            } else {
+                $userInfo = api_get_user_info($user_id);
+            }
+        }
         $imageWebPath = self::get_user_picture_path_by_id($user_id, 'web', $userInfo);
         $pictureWebFile = $imageWebPath['file'];
         $pictureWebDir = $imageWebPath['dir'];

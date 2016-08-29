@@ -21,10 +21,10 @@ body{
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 120px;
+    
 }
 #content-section{
-    margin-bottom: 150px;
+    margin-bottom: 230px;
 }
 /* End Sticky footer style */
 select {
@@ -198,7 +198,6 @@ header{
 .panelSliders .ui-slider-handle {
   border-color: #000;
 }
-
 #panelSliders {
   width: 75%;
   margin: 25px auto;
@@ -4669,14 +4668,8 @@ div#chat-remote-video video {
   height: 100px;
 }
 /* list courses classic*/
-.classic-courses .teachers{
-    margin: 0;
-    padding: 0;
-    display: inline-block;
+.classic-courses .list-teachers{
     font-size: 12px;
-}
-.classic-courses .teachers li{
-    display: inline-block;
 }
 /* list my course user*/
 .session .info-session{
@@ -4686,7 +4679,7 @@ div#chat-remote-video video {
 .session .info-session span{
     margin-right: 10px;
 }
-.session .teachers{
+.session .list-teachers{
     font-size: 12px;
 }
 .session .sessions-items .courses{

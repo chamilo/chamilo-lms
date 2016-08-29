@@ -706,7 +706,8 @@ class Template
             'mediaelement/build/mediaelement-and-player.min.js',
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
             'image-map-resizer/js/imageMapResizer.min.js',
-            'jquery.scrollbar/jquery.scrollbar.min.js'
+            'jquery.scrollbar/jquery.scrollbar.min.js',
+            'readmore-js/readmore.min.js'
         ];
         if (CHAMILO_LOAD_WYSIWYG == true) {
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';

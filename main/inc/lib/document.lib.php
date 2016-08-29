@@ -5588,12 +5588,27 @@ class DocumentManager
      */
     public static function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, $visibility)
     {
+        $sessionId = api_get_session_id();
         $web_odf_extension_list = DocumentManager::get_web_odf_extension_list();
         $document_id = $document_data['id'];
         $type = $document_data['filetype'];
         $is_read_only = $document_data['readonly'];
         $path = $document_data['path'];
-        $parent_id = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
+
+        $parent_id = DocumentManager::get_document_id(
+            api_get_course_info(),
+            dirname($path),
+            0
+        );
+
+        if (empty($parent_id) && !empty($sessionId)) {
+            $parent_id = DocumentManager::get_document_id(
+                api_get_course_info(),
+                dirname($path),
+                $sessionId
+            );
+        }
+
         $curdirpath = dirname($document_data['path']);
         $is_certificate_mode = DocumentManager::is_certificate_mode($path);
         $curdirpath = urlencode($curdirpath);

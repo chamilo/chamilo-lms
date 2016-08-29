@@ -249,3 +249,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['packager'] = 'chamilo';
 // List of driver to plugin in ckeditor
 //$_configuration['editor_driver_list'] = ['PersonalDriver', 'CourseDriver'];
+// Hide send to hrm users options in announcements
+//$_configuration['announcements_hide_send_to_hrm_users'] = true;

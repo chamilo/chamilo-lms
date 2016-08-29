@@ -51,24 +51,28 @@ $base_work_dir = $sys_course_path.$courseDir;
 $sessionId = api_get_session_id();
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 
-$document_data = DocumentManager::get_document_data_by_id(
-    $_REQUEST['id'],
-    api_get_course_id(),
-    true,
-    $sessionId
-);
+$document_data = [];
 
-if ($sessionId != 0 && !$document_data) {
+if (isset($_REQUEST['id'])) {
     $document_data = DocumentManager::get_document_data_by_id(
         $_REQUEST['id'],
         api_get_course_id(),
         true,
-        0
+        $sessionId
     );
+
+    if ($sessionId != 0 && !$document_data) {
+        $document_data = DocumentManager::get_document_data_by_id(
+            $_REQUEST['id'],
+            api_get_course_id(),
+            true,
+            0
+        );
+    }
 }
 
 if (empty($document_data)) {
-    $document_id  = $parent_id =  0;
+    $document_id = $parent_id =  0;
     $path = '/';
 } else {
     $document_id = $document_data['id'];
@@ -117,7 +121,6 @@ if (!empty($groupId)) {
     }
 } elseif ($is_allowed_to_edit ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $path, api_get_session_id())) {
-
 } else {
     // No course admin and no group member...
     api_not_allowed(true);

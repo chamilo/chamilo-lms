@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Patchwork\Utf8;
+
 /**
  * File: internationalization.lib.php
  * Internationalization library for Chamilo 1.x LMS
@@ -10,8 +12,6 @@
  * @author More authors, mentioned in the correpsonding fragments of this source.
  * @package chamilo.library
  */
-
-use Patchwork\Utf8;
 
 /**
  * Constants
@@ -238,9 +238,13 @@ function api_get_language_isocode($language = null, $default_code = 'en')
     }
     if (!isset($iso_code[$language])) {
         if (!class_exists('Database')) {
+            // This might happen, in case of calling this function early during the global initialization.
             return $default_code; // This might happen, in case of calling this function early during the global initialization.
         }
-        $sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'");
+        $sql = "SELECT isocode 
+                FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+                WHERE dokeos_folder = '$language'";
+        $sql_result = Database::query($sql);
         if (Database::num_rows($sql_result)) {
             $result = Database::fetch_array($sql_result);
             $iso_code[$language] = trim($result['isocode']);
@@ -252,6 +256,7 @@ function api_get_language_isocode($language = null, $default_code = 'en')
             $iso_code[$language] = $default_code;
         }
     }
+
     return $iso_code[$language];
 }
 
@@ -264,11 +269,12 @@ function api_get_language_isocode($language = null, $default_code = 'en')
 function api_get_platform_isocodes()
 {
     $iso_code = array();
-    $sql = "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+    $sql = "SELECT isocode 
+            FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
             ORDER BY isocode ";
     $sql_result = Database::query($sql);
     if (Database::num_rows($sql_result)) {
-        while ($row = Database::fetch_array($sql_result)) {;
+        while ($row = Database::fetch_array($sql_result)) {
             $iso_code[] = trim($row['isocode']);
         }
     }
@@ -291,7 +297,8 @@ function api_get_text_direction($language = null)
     	$language = api_get_interface_language();
     }
     if (!isset($text_direction[$language])) {
-        $text_direction[$language] = in_array(api_purify_language_id($language),
+        $text_direction[$language] = in_array(
+            api_purify_language_id($language),
             array(
                 'arabic',
                 'ar',
@@ -352,7 +359,7 @@ function _api_get_timezone()
     // If allowed by the administrator
     $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
 
-    if ($use_users_timezone == 'true') {
+    if ($use_users_timezone === 'true') {
         $userId = api_get_user_id();
         // Get the timezone based on user preference, if it exists
         $timezone_user = UserManager::get_extra_user_data_by_field($userId, 'timezone');
@@ -382,7 +389,7 @@ function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false
 {
     $from_timezone = _api_get_timezone();
     $to_timezone = 'UTC';
-    if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
+    if (is_null($time) || empty($time) || $time === '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
             return null;
         }

@@ -44,15 +44,6 @@ class TestSecurity extends UnitTestCase {
 			//var_dump($res);
 	}
 
-	function testfilter() {
-			$var ='';
-			$type='string';
-			$options=array();
-			$res=Security::filter($var, $type, $options);
-			$this->assertTrue(is_bool($res));
-			//var_dump($res);
-	}
-
 	function testfilter_filename() {
 	 		$filename = 'security/.htaccess';
 	 		$res=Security::filter_filename($filename);

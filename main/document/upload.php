@@ -166,14 +166,16 @@ if ($is_certificate_mode) {
 }
 
 // Interbreadcrumb for the current directory root path
-if (empty($document_data['parents'])) {
-    $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
-} else {
-    foreach ($document_data['parents'] as $document_sub_data) {
-        $interbreadcrumb[] = array(
-            'url' => $document_sub_data['document_url'],
-            'name' => $document_sub_data['title']
-        );
+if ($document_data) {
+    if (empty($document_data['parents'])) {
+        $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+    } else {
+        foreach ($document_data['parents'] as $document_sub_data) {
+            $interbreadcrumb[] = array(
+                'url' => $document_sub_data['document_url'],
+                'name' => $document_sub_data['title']
+            );
+        }
     }
 }
 
@@ -206,10 +208,10 @@ Display::display_header($nameTools, 'Doc');
 // Link back to the documents overview
 if ($is_certificate_mode) {
     $actions = '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
     $actions = '<a href="document.php?id='.$document_id.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 // Link to create a folder
@@ -305,10 +307,10 @@ $multipleForm = new FormValidator(
 );
 $multipleForm->addMultipleUpload($url);
 
-    $headers = array(
-        get_lang('Upload'),
-        get_lang('Upload').' ('.get_lang('Simple').')',
-    );
+$headers = array(
+    get_lang('Upload'),
+    get_lang('Upload').' ('.get_lang('Simple').')'
+);
 
 echo Display::tabs($headers, array($multipleForm->returnForm(), $form->returnForm()), 'tabs');
 

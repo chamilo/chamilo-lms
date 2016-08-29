@@ -2077,7 +2077,12 @@ function add_all_documents_in_folder_to_database(
                 if ($folderExists === true) {
                     $documentId = DocumentManager::get_document_id($courseInfo, $completePath, $sessionId);
                     if ($documentId) {
-                        $newFolderData = DocumentManager::get_document_data_by_id($documentId, $courseInfo, false, $sessionId);
+                        $newFolderData = DocumentManager::get_document_data_by_id(
+                            $documentId,
+                            $courseInfo,
+                            false,
+                            $sessionId
+                        );
                     }
                 } else {
                     $newFolderData = create_unexisting_directory(

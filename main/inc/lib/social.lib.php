@@ -504,8 +504,11 @@ class SocialManager extends UserManager
                 $image = $my_course['course_info']['course_image'];
                 $imageCourse = Display::img($image, $course_title, array('class'=>'img-course'));
             } else {
-                $imageCourse = Display::return_icon('session_default_small.png', $course_title, array('class' => 'img-course'));
-
+                $imageCourse = Display::return_icon(
+                    'session_default_small.png',
+                    $course_title,
+                    array('class' => 'img-course')
+                );
             }
         } else {
             $imageCourse = Display::return_icon('course.png', get_lang('Course'), array('class' => 'img-default'));
@@ -525,7 +528,7 @@ class SocialManager extends UserManager
         ) {
            $result .= '<span class="title">' . $course_title . '<span>';
         } else {
-            $result .= $course_title." "." ".get_lang('CourseClosed')."";
+            $result .= $course_title." ".get_lang('CourseClosed');
         }
 
         $result .= '</li>';
@@ -563,7 +566,7 @@ class SocialManager extends UserManager
             $my_course['user_course_cat'],
             $result,
             $my_course['id_session'],
-            $session,
+            $session
         );
 
         return $output;
@@ -572,7 +575,7 @@ class SocialManager extends UserManager
     /**
      * Shows the avatar block in social pages
      *
-     * @param string highlight link possible values:
+     * @param string $show highlight link possible values:
      * group_add,
      * home,
      * messages,
@@ -583,8 +586,8 @@ class SocialManager extends UserManager
      * shared_profile,
      * friends,
      * groups search
-     * @param int group id
-     * @param int user id
+     * @param int $group_id
+     * @param int $user_id
      *
      */
     public static function show_social_avatar_block($show = '', $group_id = 0, $user_id = 0)
@@ -644,13 +647,12 @@ class SocialManager extends UserManager
                     'normal' => UserManager::getUserPicture(
                         $user_id,
                         USER_IMAGE_SIZE_MEDIUM
-                    ),
+                    )
                 ]
             );
         }
 
         $skillBlock = $template->get_template('social/avatar_block.tpl');
-
 
         return $template->fetch($skillBlock);
     }
@@ -685,18 +687,8 @@ class SocialManager extends UserManager
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
+
         $usergroup = new UserGroup();
-
-        $user_info = api_get_user_info($user_id, true);
-        $current_user_id = api_get_user_id();
-        $current_user_info = api_get_user_info($current_user_id, true);
-
-        if ($current_user_id == $user_id) {
-            $user_friend_relation = null;
-        } else {
-            $user_friend_relation = SocialManager::get_relation_between_contacts($current_user_id, $user_id);
-        }
-
         $show_groups = array(
             'groups',
             'group_messages',
@@ -810,17 +802,16 @@ class SocialManager extends UserManager
                 $myFiles = '';
             }
             $links .= $myFiles;
-
             $links .='</ul>';
 
             $html .= Display::panelCollapse(
-                    get_lang('SocialNetwork'),
-                    $links,
-                    'social-network-menu',
-                    null,
-                    'sn-sidebar',
-                    'sn-sidebar-collapse'
-                    );
+                get_lang('SocialNetwork'),
+                $links,
+                'social-network-menu',
+                null,
+                'sn-sidebar',
+                'sn-sidebar-collapse'
+            );
         }
 
         if (in_array($show, $show_groups) && !empty($group_id)) {
@@ -971,7 +962,10 @@ class SocialManager extends UserManager
                         );
 
                         if (!empty($content)) {
-                            $url = Display::url(Display::return_icon('announcement.png', get_lang('Announcements')).$course_info['name'].' ('.$content['count'].')', api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code']);
+                            $url = Display::url(
+                                Display::return_icon('announcement.png', get_lang('Announcements')).$course_info['name'].' ('.$content['count'].')',
+                                api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code']
+                            );
                             $announcements[] = Display::tag('li', $url);
                         }
                     }
@@ -1027,11 +1021,8 @@ class SocialManager extends UserManager
         if (api_is_anonymous()) {
             $add_row = true;
         }
-
-        $extra_params = array();
         $course_url = '';
         if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-            $extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
             $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
         }
 
@@ -1061,7 +1052,7 @@ class SocialManager extends UserManager
             $url =  null;
             // Anonymous users can't have access to the profile
             if (!api_is_anonymous()) {
-                if (api_get_setting('allow_social_tool') == 'true') {
+                if (api_get_setting('allow_social_tool') === 'true') {
                     $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$uid.$course_url;
                 } else {
                     $url = '?id='.$uid.$course_url;
@@ -1361,22 +1352,25 @@ class SocialManager extends UserManager
         $start = Database::escape_string($start);
         $limit = intval($limit);
 
-        $sql = "
-        SELECT
-          id,
-          user_sender_id,
-          user_receiver_id,
-          send_date,
-          content,
-          parent_id,
-          (SELECT ma.path FROM $tblMessageAttachment ma
-           WHERE  ma.message_id = tm.id ) as path,
-          (SELECT ma.filename FROM $tblMessageAttachment ma
-          WHERE  ma.message_id = tm.id ) as filename
-        FROM $tblMessage tm
-        WHERE
-            user_receiver_id = $userId AND
-            send_date > '$start'
+        $sql = "SELECT
+                    id,
+                    user_sender_id,
+                    user_receiver_id,
+                    send_date,
+                    content,
+                    parent_id,
+                    (
+                        SELECT ma.path FROM $tblMessageAttachment ma
+                        WHERE  ma.message_id = tm.id 
+                    ) as path,
+                    (
+                        SELECT ma.filename FROM $tblMessageAttachment ma 
+                        WHERE ma.message_id = tm.id 
+                    ) as filename
+                    FROM $tblMessage tm
+                WHERE
+                    user_receiver_id = $userId AND 
+                    send_date > '$start'
         ";
 
         $sql .= (empty($messageStatus) || is_null($messageStatus)) ? '' : " AND msg_status = '$messageStatus' ";
@@ -1646,33 +1640,6 @@ class SocialManager extends UserManager
         }
     }
 
-
-    /**
-     * Get full image path from a path and a size
-     * @param   string  $path
-     * @return  string
-     */
-    private static function getImagePath($path, $size = '')
-    {
-        $name = '';
-        $array = preg_split('#\/#', $path);
-        if (isset($array[2]) && !empty($array[2])) {
-
-            if ($size == IMAGE_WALL_SMALL) {
-                $name = IMAGE_WALL_SMALL. '_' . $array[2];
-            }else if($size == IMAGE_WALL_MEDIUM){
-                $name = IMAGE_WALL_MEDIUM. '_' . $array[2];
-            }else if($size == IMAGE_WALL_BIG){
-                $name = IMAGE_WALL_BIG. '_' . $array[2];
-            }else {
-                $name = IMAGE_WALL_SMALL. '_' . $array[2];
-            }
-            $lessImage = str_replace($array[2], '', $path);
-            $name = $lessImage . $name;
-        }
-
-        return $name;
-    }
     /**
     * Delete messages delete logic
     * @param int $id id message to delete.
@@ -1698,8 +1665,13 @@ class SocialManager extends UserManager
      * @param int $groupId Optional. Group ID
      * @return string The HTML code with the social block
      */
-    public static function setSocialUserBlock(Template $template, $userId, $groupBlock = '', $groupId = 0, $show_full_profile = true)
-    {
+    public static function setSocialUserBlock(
+        Template $template,
+        $userId,
+        $groupBlock = '',
+        $groupId = 0,
+        $show_full_profile = true
+    ) {
         if (api_get_setting('allow_social_tool') != 'true') {
             return '';
         }
@@ -1937,7 +1909,6 @@ class SocialManager extends UserManager
         foreach ($messages as $message) {
             $post = $message['html'];
             $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $message['id']);
-
             $html .= Display::panel($post.$comment, '');
         }
 
@@ -1956,7 +1927,6 @@ class SocialManager extends UserManager
         }
 
         $skill = new Skill();
-
         $ranking = $skill->get_user_skill_ranking($userId);
         $skills = $skill->get_user_skills($userId, true);
 

@@ -510,7 +510,7 @@ class UrlManager
         $table_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $result_array = array();
 
-        if (is_array($course_list) && is_array($url_list)){
+        if (is_array($course_list) && is_array($url_list)) {
             foreach ($url_list as $url_id) {
                 foreach ($course_list as $course_code) {
                     $courseInfo = api_get_course_info($course_code);
@@ -531,7 +531,7 @@ class UrlManager
             }
         }
 
-        return 	$result_array;
+        return $result_array;
     }
 
     /**
@@ -560,7 +560,7 @@ class UrlManager
             }
         }
 
-        return 	$resultArray;
+        return $resultArray;
     }
 
     /**
@@ -589,7 +589,7 @@ class UrlManager
             }
         }
 
-        return 	$resultArray;
+        return $resultArray;
     }
 
     /**
@@ -625,6 +625,7 @@ class UrlManager
                 usergroup_id = '".intval($userGroupId)."',
                 access_url_id = ".intval($urlId);
         Database::query($sql);
+
         return Database::insert_id();
     }
 
@@ -832,7 +833,7 @@ class UrlManager
         $table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
         $sql= "DELETE FROM $table
                WHERE usergroup_id = '".intval($userGroupId)."' AND
-                     access_url_id=".intval($urlId)."  ";
+                     access_url_id = ".intval($urlId);
         $result = Database::query($sql);
 
         return $result;
@@ -884,7 +885,9 @@ class UrlManager
     public static function update_urls_rel_user($user_list, $access_url_id)
     {
         $table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql = "SELECT user_id FROM $table_url_rel_user WHERE access_url_id = ".intval($access_url_id);
+        $sql = "SELECT user_id 
+                FROM $table_url_rel_user 
+                WHERE access_url_id = ".intval($access_url_id);
         $result = Database::query($sql);
         $existing_users = array();
 
@@ -1008,7 +1011,6 @@ class UrlManager
         }
 
         // Adding
-
         foreach ($list as $id) {
             UrlManager::addCourseCategoryToUrl($id, $urlId);
             $categoryInfo = CourseCategory::getCategoryById($id);

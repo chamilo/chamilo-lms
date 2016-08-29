@@ -458,8 +458,6 @@ function api_get_local_time(
         $from_timezone = 'UTC';
     }
 
-
-
     try {
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
@@ -664,7 +662,6 @@ function api_format_date($time, $format = null, $language = null)
 function date_to_str_ago($date, $timeZone = 'UTC')
 {
     if ($date === '0000-00-00 00:00:00') {
-
         return '';
     }
 

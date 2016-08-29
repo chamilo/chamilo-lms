@@ -304,7 +304,6 @@ class Statistics
             }
 
             if (!empty($row[5])) {
-
                 //course
                 if (!empty($row[3])) {
                     $row[3] = Display::url($row[3], api_get_path(WEB_CODE_PATH).'admin/course_edit.php?id='.$row[3]);
@@ -314,7 +313,10 @@ class Statistics
 
                 // session
                 if (!empty($row[4])) {
-                    $row[4] = Display::url($row[4], api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$row[4]);
+                    $row[4] = Display::url(
+                        $row[4],
+                        api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$row[4]
+                    );
                 } else {
                     $row[4] = '-';
                 }
@@ -571,7 +573,10 @@ class Statistics
         if ($distinct) {
             $field = 'DISTINCT(login_user_id)';
         }
-        $sql = "SELECT count($field) AS number, date(login_date) as login_date FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 15 DAY) >= '$now' $where_url GROUP BY date(login_date)";
+        $sql = "SELECT count($field) AS number, date(login_date) as login_date 
+                FROM $table $table_url 
+                WHERE DATE_ADD(login_date, INTERVAL 15 DAY) >= '$now' $where_url 
+                GROUP BY date(login_date)";
 
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res,'ASSOC')){
@@ -847,16 +852,18 @@ class Statistics
                 $field = 'user_receiver_id';
                 break;
         }
+
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message 
-                FROM ".$access_url_rel_user_table." as url, ".$message_table." m 
-                LEFT JOIN ".$user_table." u ON m.$field = u.user_id 
+                FROM $access_url_rel_user_table as url, $message_table m 
+                LEFT JOIN $user_table u ON m.$field = u.user_id 
                 WHERE  url.user_id = m.$field AND  access_url_id='".$current_url_id."' 
-                GROUP BY m.$field ORDER BY count_message DESC ";
+                GROUP BY m.$field 
+                ORDER BY count_message DESC ";
         } else {
             $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message 
-                FROM ".$message_table." m 
-                LEFT JOIN ".$user_table." u ON m.$field = u.user_id 
+                FROM $message_table m 
+                LEFT JOIN $user_table u ON m.$field = u.user_id 
                 GROUP BY m.$field ORDER BY count_message DESC ";
         }
         $res = Database::query($sql);
@@ -885,17 +892,23 @@ class Statistics
         $current_url_id = api_get_current_access_url_id();
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend ".
-                "FROM ".$access_url_rel_user_table." as url, ".$user_friend_table." uf ".
-                "LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id ".
-                "WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND uf.user_id = url.user_id AND  access_url_id='".$current_url_id."' ".
-                "GROUP BY uf.user_id ORDER BY count_friend DESC ";
+            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend 
+                    FROM $access_url_rel_user_table as url, $user_friend_table uf 
+                    LEFT JOIN $user_table u 
+                    ON uf.user_id = u.user_id 
+                    WHERE 
+                        uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND 
+                        uf.user_id = url.user_id AND  
+                        access_url_id = '".$current_url_id."' 
+                    GROUP BY uf.user_id 
+                    ORDER BY count_friend DESC ";
         } else {
-            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend ".
-                "FROM ".$user_friend_table." uf ".
-                "LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id ".
-                "WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' ".
-                "GROUP BY uf.user_id ORDER BY count_friend DESC ";
+            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend 
+                    FROM $user_friend_table uf 
+                    LEFT JOIN $user_table u ON uf.user_id = u.user_id 
+                    WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' 
+                    GROUP BY uf.user_id 
+                    ORDER BY count_friend DESC ";
         }
         $res = Database::query($sql);
         $list_friends = array();
@@ -903,6 +916,7 @@ class Statistics
             $users = api_get_person_name($friends['firstname'], $friends['lastname']).'<br />('.$friends['username'].')';
             $list_friends[$users] = $friends['count_friend'];
         }
+
         return $list_friends;
     }
 
@@ -924,11 +938,11 @@ class Statistics
             $where_url='';
         }
         $now = api_get_utc_datetime();
-        $sql[get_lang('ThisDay')]    =
+        $sql[get_lang('ThisDay')] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
-        $sql[get_lang('Last7days')]  =
+        $sql[get_lang('Last7days')] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
@@ -940,7 +954,7 @@ class Statistics
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 6 MONTH) >= '$now' $where_url";
-        $sql[get_lang('NeverConnected')]      =
+        $sql[get_lang('NeverConnected')] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url WHERE 1=1 $where_url";
         foreach ($sql as $index => $query) {

@@ -6,7 +6,6 @@
  */
 class CoursesAndSessionsCatalog
 {
-
     /**
      * Check the configuration for the courses and sessions catalog
      * @global array $_configuration Configuration

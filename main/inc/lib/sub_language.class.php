@@ -17,7 +17,8 @@ class SubLanguageManager
     /**
      * Get all the languages
      * @param bool $onlyActive Whether to return only active languages (default false)
-     * @return Array All information about sub-language
+     *
+     * @return array All information about sub-language
      */
     public static function getAllLanguages($onlyActive = false)
     {
@@ -38,10 +39,10 @@ class SubLanguageManager
 
     /**
      * Get all files of lang folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)
-     * @param String The lang path folder  (/var/www/my_lms/main/lang/spanish)
+     * @param string The lang path folder  (/var/www/my_lms/main/lang/spanish)
      * @param bool true if we only want the "subname" trad4all instead of  trad4all.inc.php
      *
-     * @return Array All file of lang folder
+     * @return array All file of lang folder
      */
     public static function get_lang_folder_files_list($path, $only_main_name = false)
     {
@@ -69,7 +70,7 @@ class SubLanguageManager
      * Get all information of sub-language
      * @param Integer The parent id(Language father id)
      * @param Integer The sub language id
-     * @return Array All information about sub-language
+     * @return array All information about sub-language
      */
     public static function get_all_information_of_sub_language($parent_id, $sub_language_id)
     {
@@ -90,7 +91,7 @@ class SubLanguageManager
     /**
      * Get all information of language
      * @param Integer The parent id(Language father id)
-     * @return Array All information about language
+     * @return array All information about language
      */
     public static function get_all_information_of_language($parent_id)
     {
@@ -107,9 +108,9 @@ class SubLanguageManager
 
     /**
      * Get all information of chamilo file
-     * @param String The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
+     * @param string The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      * @patam Bool Whether we want to remove the '$' prefix in the results or not
-     * @return Array Contains all information of chamilo file
+     * @return array Contains all information of chamilo file
      */
     public static function get_all_language_variable_in_file($system_path_file, $get_as_string_index = false)
     {
@@ -136,7 +137,8 @@ class SubLanguageManager
 
     /**
      * Add file in sub-language directory and add header(tag php)
-     * @param String The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
+     * @param string The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
+     *
      * @return bool
      */
     public static function add_file_in_language_directory($system_path_file)
@@ -148,9 +150,9 @@ class SubLanguageManager
 
     /**
      * Write in file of sub-language
-     * @param String The path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
-     * @param String The new sub-language
-     * @param String The language variable
+     * @param string The path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
+     * @param string The new sub-language
+     * @param string The language variable
      * @return Boolean True on success, False on error
      */
     public static function write_data_in_file($path_file, $new_term, $new_variable)
@@ -225,7 +227,7 @@ class SubLanguageManager
 
     /**
      * Remove directory for sub-language
-     * @param String The sub-language path directory ( e.g. 'spanish_corporate'' )
+     * @param string The sub-language path directory ( e.g. 'spanish_corporate'' )
      * @return boolean  True on success, false on failure
      */
     public static function remove_language_directory($sub_language_dir)
@@ -275,8 +277,8 @@ class SubLanguageManager
 
     /**
      * Get name of language by id
-     * @param Integer The language id
-     * @return String The original name of language
+     * @param int The language id
+     * @return string The original name of language
      */
     public static function get_name_of_language_by_id($language_id)
     {
@@ -332,7 +334,7 @@ class SubLanguageManager
 
     /**
      * Verified if language is father of an sub-language
-     * @param Integer The language id
+     * @param int The language id
      * @return Boolean
      */
     public static function check_if_language_is_father($language_id)
@@ -351,7 +353,7 @@ class SubLanguageManager
 
     /**
      * Make unavailable the language
-     * @param Integer The language id
+     * @param int The language id
      * @return void()
      */
     public static function make_unavailable_language($language_id)
@@ -366,7 +368,7 @@ class SubLanguageManager
 
     /**
      * Make available the language
-     * @param Integer The language id
+     * @param int The language id
      * @return void
      */
     public static function make_available_language($language_id)
@@ -381,7 +383,7 @@ class SubLanguageManager
 
     /**
      * Set platform language
-     * @param Integer The language id
+     * @param int The language id
      * @return bool
      */
     public static function set_platform_language($language_id)

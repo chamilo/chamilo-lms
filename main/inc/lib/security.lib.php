@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\AllowIframes;
+
 /**
  * This is the security library for Chamilo.
  *
@@ -22,8 +24,6 @@
  * @package chamilo.library
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
-use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\AllowIframes;
 
 /**
  * Security class
@@ -186,7 +186,7 @@ class Security
      */
     public static function get_HTML_token()
     {
-        $token = md5(uniqid(rand(), TRUE));
+        $token = md5(uniqid(rand(), true));
         $string = '<input type="hidden" name="sec_token" value="'.$token.'" />';
         $_SESSION['sec_token'] = $token;
 
@@ -233,51 +233,6 @@ class Security
     {
         $_SESSION['sec_ua_seed'] = uniqid(rand(), true);
         $_SESSION['sec_ua'] = $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed'];
-    }
-
-    /**
-     * This function filters a variable to the type given, with the options given
-     * @param	mixed	The variable to be filtered
-     * @param	string	The type of variable we expect (bool,int,float,string)
-     * @param	array	Additional options
-     * @return	bool	True if variable was filtered and added to the current object, false otherwise
-     */
-    public static function filter($var, $type = 'string', $options = array())
-    {
-        // This function has not been finished! Do not use!
-        $result = false;
-        // Get variable name and value.
-        $args = func_get_args();
-        $names = array_keys($args);
-        $name = $names[0];
-        $value = $args[$name];
-        switch ($type) {
-            case 'bool':
-                $result = (bool) $var;
-                break;
-            case 'int':
-                $result = (int) $var;
-                break;
-            case 'float':
-                $result = (float) $var;
-                break;
-            case 'string/html':
-                $result = self::remove_XSS($var);
-                break;
-            case 'string/db':
-                $result = Database::escape_string($var);
-                break;
-            case 'array':
-                // An array variable shouldn't be given to the filter.
-                return false;
-            default:
-                return false;
-        }
-        if (!empty($option['save'])) {
-            self::$clean[$name] = $result;
-        }
-
-        return $result;
     }
 
     /**
@@ -433,7 +388,6 @@ class Security
 
 		return $text;
     }
-
 
     /**
      * This method provides specific protection (against XSS and other kinds of attacks) for static images (icons) used by the system.

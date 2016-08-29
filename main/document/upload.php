@@ -172,15 +172,12 @@ if (empty($document_data['parents'])) {
     foreach ($document_data['parents'] as $document_sub_data) {
         $interbreadcrumb[] = array(
             'url' => $document_sub_data['document_url'],
-            'name' => $document_sub_data['title'],
+            'name' => $document_sub_data['title']
         );
     }
 }
 
 $this_section = SECTION_COURSES;
-
-// Display the header
-Display::display_header($nameTools, 'Doc');
 
 /*    Here we do all the work */
 $unzip = isset($_POST['unzip']) ? $_POST['unzip'] : null;
@@ -201,6 +198,9 @@ if (!empty($_FILES)) {
     header('Location: '.api_get_self().'?'.api_get_cidreq().'#tabs-2');
     exit;
 }
+
+// Display the header
+Display::display_header($nameTools, 'Doc');
 
 // Actions
 // Link back to the documents overview

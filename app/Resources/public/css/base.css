@@ -3055,34 +3055,21 @@ a.forum_group_link {
     text-align: center;
 }
 .new_actions {
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
-    border: 1px solid #E5E5E5;
-    border-radius: 4px 4px 4px 4px;
+    background: #ffffff;
     min-height: 50px;
+    border: 1px solid #E5E5E5;
+}
+.new_actions .nav > li{
+    margin-left: 0;
 }
 .new_actions .nav > li > a {
-
-    border-radius: 0 0 0 0;
+    border-radius: 0;
     border-right: 1px solid #E5E5E5;
     margin: 0;
     padding: 10px;
 }
 .new_actions .nav li a:hover{
-    background: #f4f4f4; /* Old browsers */
-    background: -moz-linear-gradient(top, #f4f4f4 0%, #dddddd 71%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f4f4f4), color-stop(71%,#dddddd)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #f4f4f4 0%,#dddddd 71%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #f4f4f4 0%,#dddddd 71%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #f4f4f4 0%,#dddddd 71%); /* IE10+ */
-    background: linear-gradient(to bottom, #f4f4f4 0%,#dddddd 71%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f4f4', endColorstr='#dddddd',GradientType=0 ); /* IE6-9 */
+    background: #ECF0F1;
 }
 .new_actions-fixed {
     border-color: #D5D5D5;
@@ -3105,14 +3092,7 @@ a.forum_group_link {
     padding:8px;
 }
 .new_actions .nav-pills li.active a{
-    background: #dddddd; /* Old browsers */
-    background: -moz-linear-gradient(top, #dddddd 10%, #f4f4f4 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(10%,#dddddd), color-stop(100%,#f4f4f4)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #dddddd 10%,#f4f4f4 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #dddddd 10%,#f4f4f4 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #dddddd 10%,#f4f4f4 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #dddddd 10%,#f4f4f4 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dddddd', endColorstr='#f4f4f4',GradientType=0 ); /* IE6-9 */
+    background: #ECF0F1;
 }
 .subnav .nav > li > .logout {
     padding-top:8px;
@@ -3149,6 +3129,12 @@ a.forum_group_link {
 #course_thing_to_do .thumbnail {
     text-align: center;
     margin-bottom: 5px;
+}
+.section-parameters{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .handle{
     background-image: url('../../main/img/div_show.gif');

@@ -1143,7 +1143,7 @@ function display_license_agreement()
     </div>
 
     <!-- Contact information form -->
-    <div>
+    <div class="section-parameters">
         <a href="javascript://" class = "advanced_parameters" >
         <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" />&nbsp;<?php echo get_lang('ContactInformation') ?></span>
         </a>
@@ -1155,7 +1155,7 @@ function display_license_agreement()
             <p><?php echo get_contact_registration_form() ?></p><br />
         </div>
     </div>
-
+    <div class="text-center">
     <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" >
         <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
     </button>
@@ -1163,7 +1163,7 @@ function display_license_agreement()
     <button type="submit" id="license-next" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
         <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
     </button>
-
+    </div>
     <?php
 }
 

@@ -3,7 +3,7 @@
 /**
 *	This is the file display library for Dokeos.
 *	Include/require it in your code to use its functionality.
-*
+*   @todo move this file to DocumentManager
 *	@package chamilo.library
 */
 
@@ -196,41 +196,6 @@ function format_url($file_path)
     $path_component = array_map('rawurlencode', $path_component);
 
     return implode('/', $path_component);
-}
-
-/**
- * Get the most recent time the content of a folder was changed.
- *
- * @param string $dir_name (string)   - Path of the dir on the hard disk
- * @param bool $do_recursive (bool) - Traverse all folders in the folder?
- * @return string Time the content of the folder was changed
- */
-function recent_modified_file_time($dir_name, $do_recursive = true)
-{
-    $dir = dir($dir_name);
-    $last_modified = 0;
-    $return = 0;
-    if (is_dir($dir)) {
-        while(($entry = $dir->read()) !== false)
-        {
-            if ($entry != '.' && $entry != '..')
-                continue;
-
-            if (!is_dir($dir_name.'/'.$entry))
-                $current_modified = filemtime($dir_name.'/'.$entry);
-            elseif ($do_recursive)
-                $current_modified = recent_modified_file_time($dir_name.'/'.$entry, true);
-
-            if ($current_modified > $last_modified)
-                $last_modified = $current_modified;
-        }
-
-        $dir->close();
-        //prevents returning 0 (for empty directories)
-        $return = ($last_modified == 0) ? filemtime($dir_name) : $last_modified;
-    }
-
-    return $return;
 }
 
 /**

@@ -84,7 +84,7 @@ if ($form->validate()) {
     header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id().'&'.api_get_cidreq());
     exit;
 }
-$selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+$selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : '';
 $interbreadcrumb[] = array(
     'url' => Security::remove_XSS($_SESSION['gradebook_dest']) . '?selectcat=' . $selectcat . '&' . api_get_cidreq(),
     'name' => get_lang('Gradebook')

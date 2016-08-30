@@ -12,11 +12,11 @@ api_protect_course_script(true);
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
-$select_cat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+$select_cat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $is_allowedToEdit = $is_courseAdmin;
 $evaladd = new Evaluation();
 $evaladd->set_user_id($_user['user_id']);
-if (isset($_GET['selectcat']) && (!empty($_GET['selectcat']))) {
+if (!empty($select_cat)) {
     $evaladd->set_category_id($_GET['selectcat']);
     $cat = Category :: load($_GET['selectcat']);
     $evaladd->set_course_code($cat[0]->get_course_code());

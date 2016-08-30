@@ -16,14 +16,14 @@ $tbl_forum_thread 		= Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_attendance 		= Database :: get_course_table(TABLE_ATTENDANCE);
 $em = Database::getManager();
 
-$linkarray 				= LinkFactory :: load($_GET['editlink']);
+$linkarray = LinkFactory :: load($_GET['editlink']);
 /** @var AbstractLink $link */
 $link = $linkarray[0];
 if ($link->is_locked() && !api_is_platform_admin()) {
     api_not_allowed();
 }
 
-$linkcat  = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']):'';
+$linkcat  = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']):'';
 
 $session_id = api_get_session_id();

@@ -11,19 +11,30 @@ require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
-$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?','name' => get_lang('Gradebook'));
-$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Details'));
-$interbreadcrumb[] = array ('url' => 'gradebook_showlog_link.php?visiblelink='.Security::remove_XSS($_GET['visiblelink']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),	'name' => get_lang('GradebookQualifyLog'));
+$selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
+
+$interbreadcrumb[] = array(
+    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',
+    'name' => get_lang('Gradebook'),
+);
+$interbreadcrumb[] = array(
+    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectCat,
+    'name' => get_lang('Details')
+);
+$interbreadcrumb[] = array(
+    'url' => 'gradebook_showlog_link.php?visiblelink='.Security::remove_XSS($_GET['visiblelink']).'&selectcat='.$selectCat,
+    'name' => get_lang('GradebookQualifyLog')
+);
 $this_section = SECTION_COURSES;
 Display :: display_header('');
 echo '<div class="actions">';
 api_display_tool_title(get_lang('GradebookQualifyLog'));
 echo '</div>';
 
-$t_user     = Database :: get_main_table(TABLE_MAIN_USER);
-$t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
-$visible_link=Security::remove_XSS($_GET['visiblelink']);
-$evaledit   = EvalLink :: load($visible_link);
+$t_user = Database:: get_main_table(TABLE_MAIN_USER);
+$t_link_log = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
+$visible_link = Security::remove_XSS($_GET['visiblelink']);
+$evaledit = EvalLink:: load($visible_link);
 $sql = "SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.created_at,us.username
         FROM ".$t_link_log." lk inner join ".$t_user." us
         ON lk.user_id_log=us.user_id
@@ -41,7 +52,7 @@ foreach($list_info as $key => $info_log) {
 
 $parameters = array(
     'visiblelink' => Security::remove_XSS($_GET['visiblelink']),
-    'selectcat' => Security::remove_XSS($_GET['selectcat']),
+    'selectcat' => $selectCat,
 );
 
 $table = new SortableTableFromArrayConfig($list_info, 1,20,'gradebooklink');

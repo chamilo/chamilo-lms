@@ -23,7 +23,7 @@ if (!$isDrhOfCourse) {
 }
 
 if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
-    header('Location: '.api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&search='.Security::remove_XSS($_POST['keyword']));
+    header('Location: '.api_get_self().'?selectcat='.intval($_GET['selectcat']).'&search='.Security::remove_XSS($_POST['keyword']));
     exit;
 }
 
@@ -64,7 +64,7 @@ if (isset($export_flatview_form) && (!$file_type == 'pdf')) {
 }
 
 if (isset($_GET['selectcat'])) {
-    $category_id = Security::remove_XSS($_GET['selectcat']);
+    $category_id = (int) $_GET['selectcat'];
 } else {
     $category_id = '';
 }

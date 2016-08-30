@@ -311,39 +311,39 @@ Display::display_introduction_section(TOOL_BLOGS);
 
 <div class="row">
 	<div class="col-md-3">
-
-            <div class="panel panel-default">
-                <div class="panel-heading"><?php echo get_lang('Calendar') ?></div>
-                <div class="panel-body">
-                    <?php
-                        $month = isset($_GET['month']) ? (int)$_GET['month'] : (int) date('m');
-                        $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
-                        Blog::display_minimonthcalendar($month, $year, $blog_id);
-                    ?>
-                </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><?php echo get_lang('Calendar') ?></div>
+            <div class="panel-body">
+                <?php
+                    $month = isset($_GET['month']) ? (int)$_GET['month'] : (int) date('m');
+                    $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
+                    Blog::display_minimonthcalendar($month, $year, $blog_id);
+                ?>
             </div>
+        </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading"><?php echo get_lang('Search') ?></div>
-                <div class="panel-body">
-                    <form action="blog.php" method="get" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <input type="hidden" name="blog_id" value="<?php echo $blog_id ?>" />
-                            <input type="hidden" name="action" value="view_search_result" />
-                            <input type="text" class="form-control" size="20" name="q" value="<?php echo isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : ''; ?>" />
-                        </div>
-			<button class="btn btn-default btn-block" type="submit"><em class="fa fa-search"></em> <?php echo get_lang('Search'); ?></button>
-                    </form>
-                </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><?php echo get_lang('Search') ?></div>
+            <div class="panel-body">
+                <form action="blog.php" method="get" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="hidden" name="blog_id" value="<?php echo $blog_id ?>" />
+                        <input type="hidden" name="action" value="view_search_result" />
+                        <input type="text" class="form-control" size="20" name="q" value="<?php echo isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : ''; ?>" />
+                    </div>
+                    <button class="btn btn-default btn-block" type="submit">
+                        <em class="fa fa-search"></em> <?php echo get_lang('Search'); ?>
+                    </button>
+                </form>
             </div>
+        </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading"><?php echo get_lang('MyTasks') ?></div>
-                <div class="panel-body">
-                    <?php Blog::get_personal_task_list(); ?>
-                </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><?php echo get_lang('MyTasks') ?></div>
+            <div class="panel-body">
+                <?php Blog::get_personal_task_list(); ?>
             </div>
-
+        </div>
 	</div>
 	<div class="col-md-9">
 		<?php
@@ -467,32 +467,33 @@ switch ($action) {
 			echo '<br /><br />';
 			Blog :: display_assigned_task_list($blog_id);
 			echo '<br /><br />';
-		}
-		else
-			api_not_allowed();
+        } else {
+            api_not_allowed();
+        }
 
 		break;
 	case 'execute_task' :
-		if (isset ($_GET['post_id']))
-			Blog :: display_post($blog_id, intval($_GET['post_id']));
-		else
-			Blog :: display_select_task_post($blog_id, intval($_GET['task_id']));
-
+        if (isset ($_GET['post_id'])) {
+            Blog:: display_post($blog_id, intval($_GET['post_id']));
+        } else {
+            Blog:: display_select_task_post($blog_id, intval($_GET['task_id']));
+        }
 		break;
 	case 'view_search_result' :
 		Blog :: display_search_results($blog_id, Database::escape_string($_GET['q']));
 		break;
-	case '' :
-	default :
+    case '':
+    default:
 		if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
 			Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
 		} else {
 			Blog :: display_blog_posts($blog_id);
 		}
+        break;
 }
 ?>
 </div>
 </div>
 <?php
-// Display the footer
+
 Display::display_footer();

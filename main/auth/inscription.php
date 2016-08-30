@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *  This script displays a form for registering new users.
  *  @package    chamilo.auth
  */
-
-use ChamiloSession as Session;
 
 //quick hack to adapt the registration form result to the selected registration language
 if (!empty($_POST['language'])) {

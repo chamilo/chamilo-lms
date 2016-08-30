@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Show information about OpenBadge citeria
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>

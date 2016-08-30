@@ -9,9 +9,9 @@ use ChamiloSession as Session;
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
-
+$typeList = array('personal', 'course', 'admin', 'platform');
 // Calendar type
-$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin', 'platform')) ? $_REQUEST['type'] : 'personal';
+$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList) ? $_REQUEST['type'] : 'personal';
 $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
 if ($type == 'personal' || $type == 'admin') {
@@ -125,7 +125,8 @@ $tpl->assign('month_names', json_encode($months));
 $tpl->assign('month_names_short', json_encode($months_short));
 $tpl->assign('day_names', json_encode($days));
 $tpl->assign('day_names_short', json_encode($day_short));
-$tpl->assign('button_text',
+$tpl->assign(
+    'button_text',
     json_encode(array(
         'today' => get_lang('Today'),
         'month' => get_lang('Month'),

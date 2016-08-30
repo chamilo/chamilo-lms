@@ -111,7 +111,6 @@ $(function() {
 Display::display_header($tool_name);
 
 // Action handling: Add
-
 switch ($action) {
     case 'add':
         if (api_get_session_id() != 0 &&
@@ -124,14 +123,12 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            //if ($check) {
             $values = $form->exportValues();
             unset($values['id']);
             $res = $obj->save($values);
             if ($res) {
                 Display::display_confirmation_message(get_lang('ItemAdded'));
             }
-            //}
             $obj->display();
         } else {
             echo '<div class="actions">';
@@ -169,12 +166,10 @@ switch ($action) {
         break;
     case 'delete':
         // Action handling: delete
-        //if ($check) {
         $res = $obj->delete($_GET['id']);
         if ($res) {
             Display::display_confirmation_message(get_lang('ItemDeleted'));
         }
-        //}
         $obj->display();
         break;
     default:

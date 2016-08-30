@@ -21,13 +21,13 @@ $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('skills.js');
 
-$skill  = new Skill();
-$type   = 'edit'; //edit
-$tree   = $skill->get_skills_tree(null, null, true);
+$skill = new Skill();
+$type = 'edit'; //edit
+$tree = $skill->get_skills_tree(null, null, true);
 $skill_visualizer = new SkillVisualizer($tree, $type);
 
 $html = $skill_visualizer->return_html();
-$url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
+$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 
 $tpl = new Template(null, false, false);
 
@@ -36,7 +36,6 @@ $tpl->assign('html', $html);
 $tpl->assign('skill_visualizer', $skill_visualizer);
 $tpl->assign('js', $skill_visualizer->return_js());
 
-//
 $content = $tpl->fetch('default/skill/skill_tree.tpl');
 $tpl->assign('content', $content);
 $tpl->display_no_layout_template();

@@ -47,24 +47,33 @@ if ($action == 'add') {
     );
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extraField->type,'name' => $extraField->pageName);
-    $interbreadcrumb[]=array(
+    $interbreadcrumb[] = array(
+        'url' => 'extra_fields.php?type='.$extraField->type,
+        'name' => $extraField->pageName
+    );
+    $interbreadcrumb[] = array(
         'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
         'name' => $extraFieldInfo['display_text']
     );
-    $interbreadcrumb[]=array(
+    $interbreadcrumb[] = array(
         'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
         'name' => get_lang('EditExtraFieldOptions')
     );
 
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extraField->type,'name' => $extraField->pageName);
-    $interbreadcrumb[]=array(
-        'url' =>  'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
+    $interbreadcrumb[] = array(
+        'url' => 'extra_fields.php?type='.$extraField->type,
+        'name' => $extraField->pageName
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
         'name' => $extraFieldInfo['display_text']
     );
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('EditExtraFieldOptions'));
+    $interbreadcrumb[] = array(
+        'url' => '#',
+        'name' => get_lang('EditExtraFieldOptions')
+    );
 }
 
 $roleId = isset($_REQUEST['roleId']) ? $_REQUEST['roleId'] : null;
@@ -120,7 +129,7 @@ $result = Database::select(
     $obj->table,
     array(
         'where' => array("field_id = ? " => $field_id),
-        'order' => "option_order ASC",
+        'order' => "option_order ASC"
     )
 );
 

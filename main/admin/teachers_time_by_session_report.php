@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \Chamilo\CoreBundle\Entity\Session;
+use \Doctrine\Common\Collections\Criteria;
+
 /**
  * Generate a teacher time report in platform by session only
  * @package chamilo.admin
  */
-
-use \Chamilo\CoreBundle\Entity\Session;
-use \Doctrine\Common\Collections\Criteria;
 
 $cidReset = true;
 

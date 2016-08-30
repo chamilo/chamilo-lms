@@ -337,7 +337,7 @@ class Notification extends Model
      * Formats the content in order to add the welcome message,
      * the notification preference, etc
      * @param string $content
-     * @param array	 $senderInfo result of api_get_user_info() or
+     * @param array  $senderInfo result of api_get_user_info() or
      * GroupPortalManager:get_group_data()
      *
      * @return string

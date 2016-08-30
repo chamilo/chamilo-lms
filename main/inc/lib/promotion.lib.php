@@ -25,6 +25,7 @@ class Promotion extends Model
      */
     public function __construct()
     {
+        parent::__construct();
         $this->table = Database::get_main_table(TABLE_PROMOTION);
     }
 
@@ -33,8 +34,13 @@ class Promotion extends Model
      */
     public function get_count()
     {
-        $row = Database::select('count(*) as count', $this->table, array(),
-            'first');
+        $row = Database::select(
+            'count(*) as count',
+            $this->table,
+            array(),
+            'first'
+        );
+
         return $row['count'];
     }
 
@@ -91,14 +97,21 @@ class Promotion extends Model
                         $new_session_list = array();
 
                         foreach ($session_list as $item) {
-                            $sid = SessionManager::copy($item['id'], true,
-                                false, false, true);
+                            $sid = SessionManager::copy(
+                                $item['id'],
+                                true,
+                                false,
+                                false,
+                                true
+                            );
                             $new_session_list[] = $sid;
                         }
 
                         if (!empty($new_session_list)) {
-                            SessionManager::suscribe_sessions_to_promotion($pid,
-                                $new_session_list);
+                            SessionManager::suscribe_sessions_to_promotion(
+                                $pid,
+                                $new_session_list
+                            );
                         }
                     }
                 }
@@ -149,10 +162,20 @@ class Promotion extends Model
         echo '<div class="actions" style="margin-bottom:20px">';
         echo '<a href="career_dashboard.php">' . Display::return_icon('back.png',
                 get_lang('Back'), '', '32') . '</a>';
-        echo '<a href="' . api_get_self() . '?action=add">' . Display::return_icon('new_promotion.png',
-                get_lang('Add'), '', '32') . '</a>';
-        echo '<a href="' . api_get_path(WEB_CODE_PATH) . 'session/session_add.php">' . Display::return_icon('new_session.png',
-                get_lang('AddSession'), '', '32') . '</a>';
+        echo '<a href="' . api_get_self() . '?action=add">' .
+            Display::return_icon(
+                'new_promotion.png',
+                get_lang('Add'),
+                '',
+                '32'
+            ) . '</a>';
+        echo '<a href="' . api_get_path(WEB_CODE_PATH) . 'session/session_add.php">' .
+            Display::return_icon(
+                'new_session.png',
+                get_lang('AddSession'),
+                '',
+                '32'
+            ) . '</a>';
         echo '</div>';
         echo Display::grid_html('promotions');
     }
@@ -166,9 +189,9 @@ class Promotion extends Model
         $promotion_id,
         $status
     ) {
-        $session_list = SessionManager::get_all_sessions_by_promotion($promotion_id);
-        if (!empty($session_list)) {
-            foreach ($session_list as $item) {
+        $sessionList = SessionManager::get_all_sessions_by_promotion($promotion_id);
+        if (!empty($sessionList)) {
+            foreach ($sessionList as $item) {
                 SessionManager::set_session_status($item['id'], $status);
             }
         }
@@ -216,8 +239,12 @@ class Promotion extends Model
         foreach ($careers as $item) {
             $career_list[$item['id']] = $item['name'];
         }
-        $form->addElement('select', 'career_id', get_lang('Career'),
-            $career_list);
+        $form->addElement(
+            'select',
+            'career_id',
+            get_lang('Career'),
+            $career_list
+        );
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {

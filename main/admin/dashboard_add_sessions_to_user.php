@@ -22,11 +22,11 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList'));
+$interbreadcrumb[] = array('url' => 'user_list.php', 'name' => get_lang('UserList'));
 
 // Database Table Definitions
-$tbl_session 			= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 // Initializing variables
@@ -71,9 +71,11 @@ function search_sessions($needle, $type)
         }
 
         if (api_is_multiple_url_enabled()) {
-            $sql 	= " SELECT s.id, s.name FROM $tbl_session s
-                        LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
-                        WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()."";
+            $sql = " SELECT s.id, s.name FROM $tbl_session s
+                     LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+                     WHERE  
+                        s.name LIKE '$needle%' $without_assigned_sessions AND 
+                        access_url_id = ".api_get_current_access_url_id();
         } else {
             $sql = "SELECT s.id, s.name FROM $tbl_session s
                     WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
@@ -214,7 +216,6 @@ $result	= Database::query($sql);
         <div class="row">
             <div class="col-md-4">
                 <h5><?php echo get_lang('SessionsListInPlatform') ?> :</h5>
-
                 <div id="ajax_list_sessions_multiple">
                     <select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">
                         <?php
@@ -246,11 +247,7 @@ $result	= Database::query($sql);
                                 <em class="fa fa-arrow-left"></em>
                             </button>
                         </div>
-                    <?php
-                    }
-                    else
-                    {
-                        ?>
+                    <?php } else { ?>
                     <div class="separate-action">
                         <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                             <em class="fa fa-arrow-right"></em>
@@ -264,39 +261,35 @@ $result	= Database::query($sql);
 
                     <?php
                     }
-                    ?>
-
-                    <?php
                     echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
                     ?>
                 </div>
             </div>
             <div class="col-md-4">
-                <h5><?php
-                        if (UserManager::is_admin($user_id)) {
-                            echo get_lang('AssignedSessionsListToPlatformAdministrator');
-                        } else if ($user_info['status'] == SESSIONADMIN) {
-                            echo get_lang('AssignedSessionsListToSessionsAdministrator');
-                        } else {
-                            echo get_lang('AssignedSessionsListToHumanResourcesManager');
-                        }
-                        ?>
+                <h5>
+                    <?php
+                    if (UserManager::is_admin($user_id)) {
+                        echo get_lang('AssignedSessionsListToPlatformAdministrator');
+                    } else if ($user_info['status'] == SESSIONADMIN) {
+                        echo get_lang('AssignedSessionsListToSessionsAdministrator');
+                    } else {
+                        echo get_lang('AssignedSessionsListToHumanResourcesManager');
+                    }
+                    ?>
                 :</h5>
                  <select id='destination' name="SessionsList[]" multiple="multiple" size="20" style="width:320px;">
-                        <?php
-                        if (is_array($assigned_sessions_to_hrm)) {
-                            foreach($assigned_sessions_to_hrm as $enreg) {
-                                ?>
-                                <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; ?>>
-                                    <?php echo $enreg['name'] ?>
-                                </option>
-                            <?php }
-                        }?>
-                    </select>
+                    <?php
+                    if (is_array($assigned_sessions_to_hrm)) {
+                        foreach($assigned_sessions_to_hrm as $enreg) {
+                            ?>
+                            <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; ?>>
+                                <?php echo $enreg['name'] ?>
+                            </option>
+                        <?php }
+                    }?>
+                </select>
             </div>
         </div>
-
     </form>
-
 <?php
 Display::display_footer();

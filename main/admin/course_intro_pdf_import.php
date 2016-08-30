@@ -25,7 +25,6 @@ if ($_POST['formSent']) {
         Display :: display_error_message($error_message, false);
     } else {
         $allowed_file_mimetype = array('zip');
-
         $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
 
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {

@@ -91,7 +91,7 @@ function search_courses($needle, $type)
 		$rs	= Database::query($sql);
 
 		$return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" >';
-		while($course = Database :: fetch_array($rs)) {
+		while ($course = Database :: fetch_array($rs)) {
 			$return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'],ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
 		}
 		$return .= '</select>';
@@ -192,7 +192,7 @@ foreach ($assigned_courses_code as &$value) {
 
 $without_assigned_courses = '';
 if (count($assigned_courses_code) > 0) {
-	$without_assigned_courses = " AND c.code NOT IN(".implode(',',$assigned_courses_code).")";
+	$without_assigned_courses = " AND c.code NOT IN(".implode(',', $assigned_courses_code).")";
 }
 
 $needle = '%';
@@ -269,9 +269,6 @@ if(!empty($msg)) {
                 <?php echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>'; ?>
             </div>
         </div>
-
-
-
     </div>
     <div class="col-md-4">
         <h5><?php

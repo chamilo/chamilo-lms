@@ -122,7 +122,7 @@ function search_users($needle, $type)
         }
 
 		$rs	= Database::query($sql);
-		$xajax_response->addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
+        $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
 
         if ($type == 'single') {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -172,6 +172,7 @@ function search_users($needle, $type)
             $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
         }
 	}
+
 	return $xajax_response;
 }
 
@@ -312,12 +313,12 @@ Display::display_header($tool_name);
 $actionsLeft = '';
 if ($userStatus != STUDENT_BOSS) {
     $actionsLeft = Display::url(
-        Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM ),
+        Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM),
         "dashboard_add_courses_to_user.php?user=$user_id"
     );
 
     $actionsLeft .= Display::url(
-        Display::return_icon('session-add.png', get_lang('AssignSessions'), null, ICON_SIZE_MEDIUM ) ,
+        Display::return_icon('session-add.png', get_lang('AssignSessions'), null, ICON_SIZE_MEDIUM),
         "dashboard_add_sessions_to_user.php?user=$user_id"
     );
 }
@@ -424,11 +425,12 @@ if(!empty($msg)) {
             <div class="col-sm-12">
                 <div id="ajax_list_users_multiple">
                     <select id="origin" class="form-control" name="NoAssignedUsersList[]" multiple="multiple" size="15">
-                        <?php   while ($enreg = Database::fetch_array($result)) {
+                        <?php
+                            while ($enreg = Database::fetch_array($result)) {
                                 $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
-                                  <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"';?>>
-                            <?php echo $person_name.' ('.$enreg['username'].')'; ?>
-                        </option>
+                                <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"';?>>
+                                <?php echo $person_name.' ('.$enreg['username'].')'; ?>
+                                </option>
                         <?php } ?>
                     </select>
                 </div>
@@ -463,7 +465,6 @@ if(!empty($msg)) {
                 <em class="fa fa-chevron-left"></em>
                 </button>
             </div>
-
           <?php
           }
           ?>
@@ -492,13 +493,13 @@ if(!empty($msg)) {
                 <select id='destination' class="form-control" name="UsersList[]" multiple="multiple" size="15" >
                     <?php
                     if (is_array($assigned_users_to_hrm)) {
-                            foreach($assigned_users_to_hrm as $enreg) {
-                                    $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']);
+                        foreach($assigned_users_to_hrm as $enreg) {
+                            $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']);
                     ?>
                             <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"'; ?>>
-                        <?php echo $person_name.' ('.$enreg['username'].')'; ?>
-                    </option>
-                    <?php }
+                            <?php echo $person_name.' ('.$enreg['username'].')'; ?>
+                            </option>
+                        <?php }
                     }?>
                 </select>
             </div>

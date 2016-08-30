@@ -269,7 +269,6 @@ class Plugin
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
             if ($setting['variable'] == $this->get_name() . '_' . $name) {
-
                 return $setting['selected_value'];
             }
         }
@@ -441,7 +440,6 @@ class Plugin
                             WHERE c_id = $courseId AND variable = '$variable' ";
                     $result = Database::query($sql);
                     if (!Database::num_rows($result)) {
-
                         $params = [
                             'c_id' => $courseId,
                             'variable' => $variable,
@@ -503,7 +501,6 @@ class Plugin
         $courseId = intval($courseId);
 
         if (empty($courseId)) {
-
             return false;
         }
         $plugin_name = $this->get_name();
@@ -632,7 +629,6 @@ class Plugin
 
         $checkDuplicate = Database::select('*', 'settings_current', $checkCondition);
         if (!empty($checkDuplicate)) {
-
             return false;
         }
 

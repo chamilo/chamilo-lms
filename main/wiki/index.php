@@ -119,7 +119,6 @@ if (!empty($view)) {
 Display::display_introduction_section(TOOL_WIKI);
 
 $wiki->showActionBar();
-echo $wiki->getMessages();
 echo $content;
 
 Display::display_footer();

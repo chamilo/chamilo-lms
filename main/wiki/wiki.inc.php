@@ -107,12 +107,12 @@ class Wiki
                 isset($input_array[$key+1]) && $input_array[$key+1] == ']]'
             ) {
                 if (api_strpos($value, "|") !== false) {
-                    $full_link_array=explode("|", $value);
-                    $link=trim($full_link_array[0]);
-                    $title=trim($full_link_array[1]);
+                    $full_link_array = explode("|", $value);
+                    $link = trim($full_link_array[0]);
+                    $title = trim($full_link_array[1]);
                 } else {
-                    $link=trim($value);
-                    $title=trim($value);
+                    $link = trim($value);
+                    $title = trim($value);
                 }
                 unset($input_array[$key-1]);
                 unset($input_array[$key+1]);
@@ -131,9 +131,10 @@ class Wiki
      **/
     public function detect_external_link($input)
     {
-        $exlink='href=';
-        $exlinkStyle='class="wiki_link_ext" href=';
-        $output=str_replace($exlink, $exlinkStyle, $input);
+        $exlink = 'href=';
+        $exlinkStyle = 'class="wiki_link_ext" href=';
+        $output = str_replace($exlink, $exlinkStyle, $input);
+
         return $output;
     }
 
@@ -144,7 +145,7 @@ class Wiki
     public function detect_anchor_link($input)
     {
         $anchorlink = 'href="#';
-        $anchorlinkStyle='class="wiki_anchor_link" href="#';
+        $anchorlinkStyle = 'class="wiki_anchor_link" href="#';
         $output = str_replace($anchorlink, $anchorlinkStyle, $input);
 
         return $output;
@@ -250,7 +251,8 @@ class Wiki
                 unset($input_array[$key+1]);
             }
         }
-        $output = implode('',$input_array);
+        $output = implode('', $input_array);
+
         return $output;
     }
 
@@ -578,7 +580,7 @@ class Wiki
         $_clean['title']   = trim($values['title']);
         $_clean['content'] = $values['content'];
 
-        if (api_get_setting('htmlpurifier_wiki') == 'true') {
+        if (api_get_setting('htmlpurifier_wiki') === 'true') {
             $purifier = new HTMLPurifier();
             $_clean['content'] = $purifier->purify($_clean['content']);
         }
@@ -608,7 +610,8 @@ class Wiki
 
         $groupId = api_get_group_id();
 
-        $_clean['linksto'] = self::links_to($_clean['content']);	//check wikilinks
+        //check wikilinks
+        $_clean['linksto'] = self::links_to($_clean['content']);
 
         // cleaning config variables
         $_clean['task'] = isset($values['task']) ? $values['task'] : '';
@@ -638,8 +641,8 @@ class Wiki
         $course_id = api_get_course_int_id();
 
         // Filter no _uass
-        if (api_strtoupper(trim($values['title'])) == 'INDEX') {
-            self::setMessage(Display::display_warning_message(get_lang('GoAndEditMainPage'), false, true));
+        if (api_strtoupper(trim($values['title'])) === 'INDEX') {
+            Display::addFlash(Display::display_warning_message(get_lang('GoAndEditMainPage'), false, true));
         } else {
             $var = $_clean['reflink'];
             $group_id = intval($_GET['group_id']);
@@ -823,7 +826,7 @@ class Wiki
                 isset($values['enddate_assig']) &&
                 strtotime($values['startdate_assig']) > strtotime($values['enddate_assig'])
             ) {
-                self::setMessage(
+                Display::addFlash(
                     Display::display_error_message(
                         get_lang("EndDateCannotBeBeforeTheStartDate"),
                         false,
@@ -841,9 +844,9 @@ class Wiki
                 $return_message = self::save_new_wiki($values);
 
                 if ($return_message == false) {
-                    self::setMessage(Display::display_error_message(get_lang('NoWikiPageTitle'), false, true));
+                    Display::addFlash(Display::display_error_message(get_lang('NoWikiPageTitle'), false, true));
                 } else {
-                    self::setMessage(Display::display_confirmation_message($return_message, false, true));
+                    Display::addFlash(Display::display_confirmation_message($return_message, false, true));
                 }
 
                 $wikiData = self::getWikiData();
@@ -937,7 +940,7 @@ class Wiki
                     $default_table_for_content_End;
                 $title = get_lang('DefaultTitle');
             } else {
-                return self::setMessage(Display::display_normal_message(get_lang('WikiStandBy'), false, true));
+                return Display::addFlash(Display::display_normal_message(get_lang('WikiStandBy'), false, true));
             }
         } else {
             $content = Security::remove_XSS($row['content']);
@@ -2015,7 +2018,7 @@ class Wiki
     {
         if (!api_is_platform_admin()) {
             if (api_get_setting('students_export2pdf') !== 'true') {
-                self::setMessage(
+                Display::addFlash(
                     Display::display_error_message(
                         get_lang('PDFDownloadNotAllowedForStudents'),
                         false,
@@ -3332,7 +3335,7 @@ class Wiki
         }
 
         if (!$_GET['title']) {
-            self::setMessage(Display::display_error_message(get_lang("MustSelectPage"), false, true));
+            Display::addFlash(Display::display_error_message(get_lang("MustSelectPage"), false, true));
             return;
         }
 
@@ -3639,10 +3642,10 @@ class Wiki
                     echo "</table>";
                 }
             } else {
-                self::setMessage(Display::display_warning_message(get_lang('LockByTeacher'), false, true));
+                Display::addFlash(Display::display_warning_message(get_lang('LockByTeacher'), false, true));
             }
         } else {
-            self::setMessage(Display::display_normal_message(get_lang('DiscussNotAvailable'), false, true));
+            Display::addFlash(Display::display_normal_message(get_lang('DiscussNotAvailable'), false, true));
         }
     }
 
@@ -3865,7 +3868,7 @@ class Wiki
         $action = $this->action;
 
         if (!$_GET['title']) {
-            self::setMessage(Display::display_error_message(get_lang("MustSelectPage"), false, true));
+            Display::addFlash(Display::display_error_message(get_lang("MustSelectPage"), false, true));
         } else {
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
@@ -4224,7 +4227,7 @@ class Wiki
         if (($current_row['reflink'] == 'index' || $current_row['reflink'] == '' || $current_row['assignment'] == 1) &&
             (!api_is_allowed_to_edit(false,true) && $this->group_id == 0)
         ) {
-            self::setMessage(
+            Display::addFlash(
                 Display::display_normal_message(get_lang('OnlyEditPagesCourseManager'), false, true)
             );
         } else {
@@ -4239,7 +4242,7 @@ class Wiki
                 ) {
                     $PassEdit = true;
                 } else {
-                    self::setMessage(
+                    Display::addFlash(
                         Display::display_normal_message(get_lang('OnlyEditPagesGroupMembers'), false, true)
                     );
                 }
@@ -4250,13 +4253,13 @@ class Wiki
             // check if is an assignment
             //$icon_assignment = null;
             if ($current_row['assignment'] == 1) {
-                self::setMessage(Display::display_normal_message(get_lang('EditAssignmentWarning'), false, true));
+                Display::addFlash(Display::display_normal_message(get_lang('EditAssignmentWarning'), false, true));
             } elseif($current_row['assignment']==2) {
                 if (($userId == $current_row['user_id'])==false) {
                     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                         $PassEdit = true;
                     } else {
-                        self::setMessage(Display::display_warning_message(get_lang('LockByTeacher'), false, true));
+                        Display::addFlash(Display::display_warning_message(get_lang('LockByTeacher'), false, true));
                         $PassEdit = false;
                     }
                 } else {
@@ -4269,7 +4272,7 @@ class Wiki
                 if ($current_row['editlock'] == 1 &&
                     (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false)
                 ) {
-                    self::setMessage(Display::display_normal_message(get_lang('PageLockedExtra'), false, true));
+                    Display::addFlash(Display::display_normal_message(get_lang('PageLockedExtra'), false, true));
                 } else {
                     if ($last_row['is_editing']!=0 && $last_row['is_editing'] != $userId) {
                         // Checking for concurrent users
@@ -4281,9 +4284,9 @@ class Wiki
                         $is_being_edited = get_lang('ThisPageisBeginEditedBy').' <a href='.$userinfo['profile_url'].'>'.
                             Display::tag('span', $userinfo['complete_name_with_username']).
                             get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes');
-                        self::setMessage(Display::display_normal_message($is_being_edited, false, true));
+                        Display::addFlash(Display::display_normal_message($is_being_edited, false, true));
                     } else {
-                        self::setMessage(Display::display_confirmation_message(
+                        Display::addFlash(Display::display_confirmation_message(
                             self::restore_wikipage(
                                 $current_row['page_id'],
                                 $current_row['reflink'],
@@ -4363,7 +4366,7 @@ class Wiki
             </a>) <br />'.get_lang("ConvertToLastVersion").':
             <a href="index.php?cidReq='.$_course['id'].'&action=restorepage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&group_id='.$last_row['group_id'].'&session_id='.$last_row['session_id'].'&view='.api_htmlentities($_GET['view']).'">'.
                 get_lang("Restore").'</a></center>';
-            self::setMessage(Display::display_warning_message($message, false, true));
+            Display::addFlash(Display::display_warning_message($message, false, true));
         }
     }
 
@@ -4763,15 +4766,15 @@ class Wiki
         $condition_session = $this->condition_session;
 
         if (!$_GET['title']) {
-            self::setMessage(Display::display_error_message(get_lang('MustSelectPage'), false, true));
+            Display::addFlash(Display::display_error_message(get_lang('MustSelectPage'), false, true));
             return;
         }
 
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-            self::setMessage('<div id="wikititle">'.get_lang('DeletePageHistory').'</div>');
+            Display::addFlash('<div id="wikititle">'.get_lang('DeletePageHistory').'</div>');
 
             if ($page == "index") {
-                self::setMessage(Display::display_warning_message(get_lang('WarningDeleteMainPage'), false, true));
+                Display::addFlash(Display::display_warning_message(get_lang('WarningDeleteMainPage'), false, true));
             }
 
             $message = get_lang('ConfirmDeletePage')."
@@ -4780,17 +4783,17 @@ class Wiki
                 get_lang("Yes")."</a>";
 
             if (!isset($_GET['delete'])) {
-                self::setMessage(Display::display_warning_message($message, false, true));
+                Display::addFlash(Display::display_warning_message($message, false, true));
             }
 
             if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
                 $result = self::deletePage($page, $course_id, $groupfilter, $condition_session);
                 if ($result) {
-                    self::setMessage(Display::display_confirmation_message(get_lang('WikiPageDeleted'), false, true));
+                    Display::addFlash(Display::display_confirmation_message(get_lang('WikiPageDeleted'), false, true));
                 }
             }
         } else {
-            self::setMessage(Display::display_normal_message(get_lang("OnlyAdminDeletePageWiki"), false, true));
+            Display::addFlash(Display::display_normal_message(get_lang("OnlyAdminDeletePageWiki"), false, true));
         }
     }
 
@@ -4828,7 +4831,7 @@ class Wiki
         // we do not need a while loop since we are always displaying the last version
 
         if ($row['content'] == '' && $row['title'] == '' && $page == '') {
-            self::setMessage(
+            Display::addFlash(
                 Display::display_error_message(get_lang('MustSelectPage'), false, true)
             );
             return;
@@ -5145,7 +5148,7 @@ class Wiki
         $userId = api_get_user_id();
 
         if (!$_GET['title']) {
-            self::setMessage(Display::display_error_message(get_lang("MustSelectPage"), false, true));
+            Display::addFlash(Display::display_error_message(get_lang("MustSelectPage"), false, true));
             return;
         }
 
@@ -5399,7 +5402,7 @@ class Wiki
                 if (isset($_GET['wiki_id'])) {
                     $export2doc = self::export2doc($_GET['wiki_id']);
                     if ($export2doc) {
-                        self::setMessage(
+                        Display::addFlash(
                             Display::display_confirmation_message(
                                 get_lang('ThePageHasBeenExportedToDocArea'),
                                 false,
@@ -5454,16 +5457,16 @@ class Wiki
                     </p>';
 
                     if (!isset($_GET['delete'])) {
-                        self::setMessage($title.Display::display_warning_message($message, false, true));
+                        Display::addFlash($title.Display::display_warning_message($message, false, true));
                     }
                 } else {
-                    self::setMessage(Display::display_normal_message(get_lang("OnlyAdminDeleteWiki"), false, true));
+                    Display::addFlash(Display::display_normal_message(get_lang("OnlyAdminDeleteWiki"), false, true));
                 }
 
                 if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                     if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
                         $return_message = self::delete_wiki();
-                        self::setMessage(Display::display_confirmation_message($return_message, false, true));
+                        Display::addFlash(Display::display_confirmation_message($return_message, false, true));
                         $this->redirectHome();
                     }
                 }
@@ -5487,12 +5490,12 @@ class Wiki
                         GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id()) ||
                         api_is_allowed_in_course()
                     ) {
-                        self::setMessage(Display::display_normal_message(get_lang('GoAndEditMainPage'), false, true));
+                        Display::addFlash(Display::display_normal_message(get_lang('GoAndEditMainPage'), false, true));
                     } else {
-                        self::setMessage(Display::display_normal_message(get_lang('WikiStandBy'), false, true));
+                        Display::addFlash(Display::display_normal_message(get_lang('WikiStandBy'), false, true));
                     }
                 } elseif (self::check_addnewpagelock()==0 && (api_is_allowed_to_edit(false, true)==false || api_is_platform_admin()==false)) {
-                    self::setMessage(Display::display_error_message(get_lang('AddPagesLocked'), false, true));
+                    Display::addFlash(Display::display_error_message(get_lang('AddPagesLocked'), false, true));
                 } else {
                     if (api_is_allowed_to_edit(false,true) ||
                         api_is_platform_admin() ||
@@ -5501,7 +5504,7 @@ class Wiki
                     ) {
                         self::display_new_wiki_form();
                     } else {
-                        self::setMessage(Display::display_normal_message(get_lang('OnlyAddPagesGroupMembers'), false, true));
+                        Display::addFlash(Display::display_normal_message(get_lang('OnlyAddPagesGroupMembers'), false, true));
                     }
                 }
                 break;
@@ -5531,39 +5534,6 @@ class Wiki
                 exit;
                 break;
         }
-    }
-
-    /**
-     * @param string $message
-     */
-    public function setMessage($message)
-    {
-        $messagesArray = Session::read('wiki_message');
-        if (empty($messagesArray)) {
-            $messagesArray = array($message);
-        } else {
-            $messagesArray[] = $message;
-        }
-
-        Session::write('wiki_message', $messagesArray);
-    }
-
-    /**
-     *  Get messages
-     * @return string
-     */
-    public function getMessages()
-    {
-        $messagesArray = Session::read('wiki_message');
-        $messageToString = null;
-        if (!empty($messagesArray)) {
-            foreach ($messagesArray as $message) {
-                $messageToString .= $message.'<br />';
-            }
-        }
-        Session::erase('wiki_message');
-
-        return $messageToString;
     }
 
     /**

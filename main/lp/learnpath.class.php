@@ -11377,6 +11377,7 @@ EOD;
                 $link .= $main_dir_path.'work/work_list.php?'.api_get_cidreq().'&id='.$row_item['path'].'&origin=learnpath';
                 break;
         } //end switch
+
         return $link;
     }
 

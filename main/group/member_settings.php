@@ -152,7 +152,7 @@ if (!empty($complete_user_list)) {
 
             if ($orderUserListByOfficialCode === 'true') {
                 $officialCode = !empty($user['official_code']) ? $user['official_code']." - " : '? - ';
-                $name = $officialCode." ".api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+                $name = $officialCode.' '.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
             }
             $possible_users[$user['user_id']] = $name.$groupNameListToString;
         }

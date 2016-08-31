@@ -146,7 +146,8 @@ class ScoreDisplayForm extends FormValidator
 		}
 	}
 
-	function validate() {
+	public function validate()
+    {
 		return parent :: validate();
 	}
 }

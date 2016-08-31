@@ -19,13 +19,13 @@ $current_course_tool  = TOOL_GROUP;
 api_protect_course_script(true);
 
 $group_id = api_get_group_id();
-$current_group = GroupManager :: get_group_properties($group_id);
+$current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array ('url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']);
 
-$is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $group_id);
+$is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
@@ -97,9 +97,6 @@ function sort_users($user_a, $user_b)
     }
 }
 
-
-/*	MAIN CODE */
-
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {
     $("#max_member").on("focus", function() {
@@ -126,12 +123,11 @@ $userGroup = new UserGroup();
 $orderUserListByOfficialCode = api_get_setting('order_user_list_by_official_code');
 if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');
-
     foreach ($complete_user_list as $index => $user) {
         //prevent invitee users add to groups or tutors - see #8091
         if ($user['status'] != INVITEE) {
             $officialCode = !empty($user['official_code']) ? ' - '.$user['official_code'] : null;
-            
+
             $groups = $userGroup->getUserGroupListByUser($user['user_id']);
             $groupNameListToString = '';
             if (!empty($groups)) {
@@ -146,7 +142,7 @@ if (!empty($complete_user_list)) {
 
             if ($orderUserListByOfficialCode === 'true') {
                 $officialCode = !empty($user['official_code']) ? $user['official_code']." - " : '? - ';
-                $name = $officialCode." ".api_get_person_name(
+                $name = $officialCode.' '.api_get_person_name(
                         $user['firstname'],
                         $user['lastname']
                     ).' ('.$user['username'].')';

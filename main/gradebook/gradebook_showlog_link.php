@@ -45,7 +45,7 @@ while ($row=Database::fetch_row($result)) {
     $list_info[] = $row;
 }
 
-foreach($list_info as $key => $info_log) {
+foreach ($list_info as $key => $info_log) {
     $list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
     $list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
@@ -55,7 +55,7 @@ $parameters = array(
     'selectcat' => $selectCat,
 );
 
-$table = new SortableTableFromArrayConfig($list_info, 1,20,'gradebooklink');
+$table = new SortableTableFromArrayConfig($list_info, 1, 20, 'gradebooklink');
 $table->set_additional_parameters($parameters);
 $table->set_header(0, get_lang('GradebookNameLog'));
 $table->set_header(1, get_lang('GradebookDescriptionLog'));

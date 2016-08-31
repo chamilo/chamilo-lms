@@ -188,7 +188,8 @@ $form->addGroup(
     '',
     Display::return_icon('work.png', get_lang('GroupWork'), array(), ICON_SIZE_SMALL) . ' ' . get_lang('GroupWork'),
     '',
-    false);
+    false
+);
 
 // Calendar settings.
 $group = array(
@@ -275,17 +276,17 @@ $currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
 if ($form->validate()) {
     $values = $form->exportValues();
     if ($values['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
-		$max_member = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
-	} else {
-		$max_member = $values['max_member'];
-	}
+        $max_member = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
+    } else {
+        $max_member = $values['max_member'];
+    }
 
-	$self_reg_allowed = isset($values['self_reg_allowed']) ? $values['self_reg_allowed'] : 0;
-	$self_unreg_allowed = isset($values['self_unreg_allowed']) ? $values['self_unreg_allowed'] : 0;
+    $self_reg_allowed = isset($values['self_reg_allowed']) ? $values['self_reg_allowed'] : 0;
+    $self_unreg_allowed = isset($values['self_unreg_allowed']) ? $values['self_unreg_allowed'] : 0;
 
-	switch ($values['action']) {
-		case 'update_settings':
-			GroupManager::update_category(
+    switch ($values['action']) {
+        case 'update_settings':
+            GroupManager::update_category(
                 $values['id'],
                 $values['title'],
                 $values['description'],
@@ -304,8 +305,8 @@ if ($form->validate()) {
             Display::addFlash(Display::return_message(get_lang('GroupPropertiesModified')));
             header("Location: ".$currentUrl."&category=".$values['id']);
             exit;
-		case 'add_category':
-			GroupManager :: create_category(
+        case 'add_category':
+            GroupManager :: create_category(
                 $values['title'],
                 $values['description'],
                 $values['doc_state'],
@@ -323,8 +324,8 @@ if ($form->validate()) {
             Display::addFlash(Display::return_message(get_lang('CategoryCreated')));
             header("Location: ".$currentUrl);
             exit;
-			break;
-	}
+            break;
+    }
 }
 
 // Else display the form
@@ -339,10 +340,10 @@ echo '</div>';
 $defaults = $category;
 $defaults['action'] = $action;
 if ($defaults['max_student'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
-	$defaults['max_member_no_limit'] = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
+    $defaults['max_member_no_limit'] = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
 } else {
-	$defaults['max_member_no_limit'] = 1;
-	$defaults['max_member'] = $defaults['max_student'];
+    $defaults['max_member_no_limit'] = 1;
+    $defaults['max_member'] = $defaults['max_student'];
 }
 $form->setDefaults($defaults);
 $form->display();

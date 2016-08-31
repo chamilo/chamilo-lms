@@ -210,15 +210,13 @@ class GradebookDataGenerator
 
                     if (!empty($score['score'][0])) {
                         $invalidateResults = false;
-                }
+                    }
                     $rankingStudentList[$user['user_id']] = $score['score'][0];
                 }
 
                 $scoreDisplay = ScoreDisplay::instance();
                 $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
-
                 $row['ranking'] = $scoreDisplay->display_score($score, SCORE_DIV, SCORE_BOTH, true);
-
                 if ($invalidateResults) {
                     $row['ranking'] = null;
                 }
@@ -321,7 +319,7 @@ class GradebookDataGenerator
         if (!empty($score)) {
             switch ($item->get_item_type()) {
                 // category
-                case 'C' :
+                case 'C':
                     if ($score != null) {
                         if ($forceSimpleResult) {
                             return
@@ -349,8 +347,8 @@ class GradebookDataGenerator
                     }
                     break;
                 // evaluation and link
-                case 'E' :
-                case 'L' :
+                case 'E':
+                case 'L':
                     //if ($parentId == 0) {
                         $scoreWeight = [
                             ($score[1] > 0) ? $score[0] / $score[1] * $item->get_weight() : 0,
@@ -502,7 +500,7 @@ class GradebookDataGenerator
         }
 
         if ($timestamp1 == $timestamp2) {
-            return $this->sort_by_name($item1,$item2);
+            return $this->sort_by_name($item1, $item2);
         } else {
             return ($timestamp1 < $timestamp2 ? -1 : 1);
         }

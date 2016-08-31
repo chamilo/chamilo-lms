@@ -136,7 +136,6 @@ switch ($action) {
 
         $entityManager = Database::getManager();
         $usersRepo = $entityManager->getRepository('ChamiloUserBundle:User');
-
         $users = $usersRepo->searchUsersByStatus($_GET['q'], COURSEMANAGER);
 
         foreach ($users as $user) {

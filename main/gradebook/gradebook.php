@@ -21,6 +21,8 @@ if (!empty($_GET['course'])) {
     unset($_GET['course']);
 }
 
+$selectcat = isset($_GET['selectcat']) ?  (int) $_GET['selectcat'] : 0;
+
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {
 	for (i=0;i<$(".actions").length;i++) {
@@ -67,7 +69,6 @@ if (isset ($_GET['createallcategories'])) {
     exit;
 }
 //move a category
-$selectcat = isset($_GET['selectcat']) ?  (int) $_GET['selectcat'] : '';
 
 if (isset($_GET['movecat'])) {
     $move_cat = Security::remove_XSS($_GET['movecat']);

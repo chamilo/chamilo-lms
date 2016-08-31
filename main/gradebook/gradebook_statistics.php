@@ -30,14 +30,19 @@ if (api_is_allowed_to_edit()) {
 $displayscore = ScoreDisplay :: instance();
 
 Display::display_header(get_lang('EvaluationStatistics'));
-DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 0, 'statistics');
+DisplayGradebook::display_header_result(
+    $eval[0],
+    $currentcat[0]->get_id(),
+    0,
+    'statistics'
+);
 
 //Bad, Regular, Good  - User definitions
 $displays = $displayscore->get_custom_score_display_settings();
 
 if (!$displayscore->is_custom() || empty($displays)) {
     if (api_is_platform_admin() || api_is_course_admin()) {
-        Display :: display_error_message(get_lang('PleaseEnableScoringSystem'),false);
+        Display :: display_error_message(get_lang('PleaseEnableScoringSystem'), false);
     }
 } else {
     $allresults = Result::load(null,null,$eval[0]->get_id());
@@ -50,7 +55,12 @@ if (!$displayscore->is_custom() || empty($displays)) {
     foreach ($allresults as $result) {
         $score = $result->get_score();
         if (isset($score)) {
-            $display = $displayscore->display_score(array($score, $eval[0]->get_max()), SCORE_CUSTOM, SCORE_ONLY_CUSTOM, true);
+            $display = $displayscore->display_score(
+                array($score, $eval[0]->get_max()),
+                SCORE_CUSTOM,
+                SCORE_ONLY_CUSTOM,
+                true
+            );
             $nr_items[$display]++;
             $resultcount++;
         }

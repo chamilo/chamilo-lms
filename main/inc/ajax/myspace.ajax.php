@@ -6,7 +6,6 @@
 require_once '../global.inc.php';
 $action = $_GET['a'];
 
-
 switch ($action) {
     case 'access_detail':
         $user_id = intval($_REQUEST['student']);
@@ -36,7 +35,6 @@ switch ($action) {
         echo $foo_print;
 
         break;
-
     case 'access_detail_by_date':
         $db = array('is_empty' => true);
         $start_date = isset($_REQUEST['startDate']) ? $_REQUEST['startDate'] : "";

@@ -94,7 +94,6 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
  */
 
 if (api_is_allowed_to_edit(false, true)) {
-
     // Post-actions
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
@@ -165,7 +164,6 @@ Display::display_introduction_section(TOOL_GROUP);
 $actionsLeft = '';
 
 if (api_is_allowed_to_edit(false, true)) {
-
     $actionsLeft .= '<a href="group_creation.php?'.api_get_cidreq().'">'.
         Display::return_icon('add-groups.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
 

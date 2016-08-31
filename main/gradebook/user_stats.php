@@ -115,6 +115,6 @@ $actions.='</div>';
 
 Display :: display_header(get_lang('ResultsPerUser'));
 echo $actions;
-DisplayGradebook :: display_header_user($_GET['userid']);
+DisplayGradebook :: display_header_user($_GET['userid'], $category[0]->get_id());
 $user_table->display();
 Display :: display_footer();

@@ -422,7 +422,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
     $course_id = api_get_course_int_id();
 
     // Query
-    if (api_get_setting('show_email_addresses') == 'true') {
+    if (api_get_setting('show_email_addresses') === 'true') {
         $sql = "SELECT user.id 	AS col0,
 				".(api_is_western_name_order() ?
                 "user.firstname 	AS col1,
@@ -443,21 +443,20 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
     } else {
         if (api_is_allowed_to_edit()) {
             $sql = "SELECT DISTINCT
-						u.id 	AS col0,
-						".(api_is_western_name_order() ?
-                    "u.firstname 	AS col1,
-						u.lastname 	AS col2,"
-                    :
-                    "u.lastname 	AS col1,
-						u.firstname 	AS col2,"
-                )."
-						u.email		AS col3
-						FROM $table_user u 
-						INNER JOIN $table_group_user gu 
-						ON (gu.user_id = u.id) AND gu.c_id = $course_id
-						WHERE gu.group_id = '".Database::escape_string($current_group['id'])."'
-                        ORDER BY col$column $direction 
-                        LIMIT $from, $number_of_items";
+                        u.id AS col0,
+                        ".(api_is_western_name_order() ?
+                        "u.firstname 	AS col1,
+                            u.lastname 	AS col2,"
+                        :
+                        "u.lastname 	AS col1,
+                        u.firstname 	AS col2,")."
+                        u.email		AS col3
+                    FROM $table_user u 
+                    INNER JOIN $table_group_user gu 
+                    ON (gu.user_id = u.id) AND gu.c_id = $course_id
+                    WHERE gu.group_id = '".Database::escape_string($current_group['id'])."'
+                    ORDER BY col$column $direction 
+                    LIMIT $from, $number_of_items";
         } else {
             $sql = "SELECT DISTINCT
 						user.id 	AS col0,
@@ -467,14 +466,14 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     :
                     "user.lastname 	AS col1,
 						user.firstname 	AS col2 "
-                )."
-						FROM $table_user user, $table_group_user group_rel_user
-						WHERE 
-						    group_rel_user.c_id = $course_id AND  
-						    group_rel_user.user_id = user.id AND 
-						    group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'
-                        ORDER BY col$column $direction 
-                        LIMIT $from,$number_of_items";
+                    )."
+                    FROM $table_user user, $table_group_user group_rel_user
+                    WHERE 
+                        group_rel_user.c_id = $course_id AND  
+                        group_rel_user.user_id = user.id AND 
+                        group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'
+                    ORDER BY col$column $direction 
+                    LIMIT $from,$number_of_items";
         }
     }
 

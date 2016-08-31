@@ -4,7 +4,7 @@ require_once '../global.inc.php';
 
 $action = $_GET['a'];
 
-switch($action) {
+switch ($action) {
     case 'load_online_user':
         if (isset($_SESSION['who_is_online_counter'])) {
             $_SESSION['who_is_online_counter']++;

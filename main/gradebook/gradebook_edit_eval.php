@@ -36,9 +36,8 @@ if ($form->validate()) {
     $final_weight = $values['weight_mask'];
 
     $eval->set_weight($final_weight);
-
     $eval->set_max($values['max']);
-    if (empty ($values['visible'])) {
+    if (empty($values['visible'])) {
         $visible = 0;
     } else {
         $visible = 1;

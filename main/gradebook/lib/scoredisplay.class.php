@@ -62,7 +62,6 @@ class ScoreDisplay
         }
 
         // Loading portal settings + using standard functions.
-
         $value = api_get_setting('gradebook_score_display_coloring');
         $value = $value['my_display_coloring'];
 
@@ -342,23 +341,23 @@ class ScoreDisplay
     private function display_default($score, $type)
     {
         switch ($type) {
-            case SCORE_DIV :                            // X / Y
+            case SCORE_DIV:                            // X / Y
                 return $this->display_as_div($score);
-            case SCORE_PERCENT :                        // XX %
+            case SCORE_PERCENT:                        // XX %
                 return $this->display_as_percent($score);
-            case SCORE_DIV_PERCENT :                    // X / Y (XX %)
+            case SCORE_DIV_PERCENT:                    // X / Y (XX %)
                 return $this->display_as_div($score).' (' . $this->display_as_percent($score) . ')';
-            case SCORE_AVERAGE :                        // XX %
+            case SCORE_AVERAGE:                        // XX %
                 return $this->display_as_percent($score);
-            case SCORE_DECIMAL :                        // 0.50  (X/Y)
+            case SCORE_DECIMAL:                        // 0.50  (X/Y)
                 return $this->display_as_decimal($score);
-            case SCORE_DIV_PERCENT_WITH_CUSTOM :        // X / Y (XX %) - Good!
+            case SCORE_DIV_PERCENT_WITH_CUSTOM:        // X / Y (XX %) - Good!
                 $custom = $this->display_custom($score);
                 if (!empty($custom)) {
                     $custom = ' - '.$custom;
                 }
                 return $this->display_as_div($score).' (' . $this->display_as_percent($score) . ')'.$custom;
-            case SCORE_DIV_SIMPLE_WITH_CUSTOM :         // X - Good!
+            case SCORE_DIV_SIMPLE_WITH_CUSTOM:         // X - Good!
                 $custom = $this->display_custom($score);
 
                 if (!empty($custom)) {

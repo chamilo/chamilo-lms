@@ -28,7 +28,15 @@ $linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']):'
 
 $session_id = api_get_session_id();
 if ($session_id == 0) {
-    $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
+    $cats = Category:: load(
+        null,
+        null,
+        $course_code,
+        null,
+        null,
+        $session_id,
+        false
+    ); //already init
 } else {
     $cats = Category :: load_session_categories(null, $session_id);
 }
@@ -44,9 +52,7 @@ $form = new LinkAddEditForm(
 if ($form->validate()) {
     $values = $form->exportValues();
     $parent_cat = Category :: load($values['select_gradebook']);
-
     $final_weight = $values['weight_mask'];
-
     $link->set_weight($final_weight);
 
     if (!empty($values['select_gradebook'])) {
@@ -103,7 +109,7 @@ $interbreadcrumb[] = array(
     'name' => get_lang('Gradebook')
 );
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(document).ready( function() {
     $("#hide_category_id").change(function() {
        $("#hide_category_id option:selected").each(function () {

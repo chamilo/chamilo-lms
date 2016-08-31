@@ -219,7 +219,6 @@ class GradebookUtils
             $courseParams = api_get_cidreq_params($cat->get_course_code(), $cat->get_session_id());
 
             if (api_is_allowed_to_edit(null, true)) {
-
                 // Locking button
                 if (api_get_setting('gradebook_locking_enabled') == 'true') {
                     if ($cat->is_locked()) {
@@ -293,12 +292,10 @@ class GradebookUtils
      */
     public static function build_edit_icons_eval($eval, $selectcat)
     {
-        $status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
         $is_locked = $eval->is_locked();
         $eval->get_course_code();
         $cat = new Category();
         $message_eval = $cat->show_message_resource_delete($eval->get_course_code());
-
         $courseParams = api_get_cidreq_params($eval->get_course_code(), $eval->getSessionId());
 
         if ($message_eval === false && api_is_allowed_to_edit(null, true)) {
@@ -516,10 +513,10 @@ class GradebookUtils
         global $users;
         global $current_value;
         switch ($data) {
-            case 'Result' :
+            case 'Result':
                 $users[] = $user;
                 break;
-            default :
+            default:
                 $user[$data] = $current_value;
                 break;
         }
@@ -533,10 +530,10 @@ class GradebookUtils
         global $user;
         global $current_tag;
         switch ($data) {
-            case 'Result' :
+            case 'Result':
                 $user = array();
                 break;
-            default :
+            default:
                 $current_tag = $data;
         }
     }
@@ -694,8 +691,6 @@ class GradebookUtils
         $content_html = DocumentManager::replace_user_info_into_html($user_id, $course_code, $sessionId, $is_preview);
         $new_content_html = isset($content_html['content']) ? $content_html['content'] : null;
         $variables = isset($content_html['variables']) ? $content_html['variables'] : null;
-        $contentHead = null;
-
         $path_image = api_get_path(WEB_COURSE_PATH) . api_get_course_path($course_code) . '/document/images/gallery';
         $new_content_html = str_replace('../images/gallery', $path_image, $new_content_html);
 
@@ -1055,7 +1050,6 @@ class GradebookUtils
     public static function get_all_users($evals = array(), $links = array())
     {
         $coursecodes = array();
-        $users = array();
 
         // By default add all user in course
         $coursecodes[api_get_course_id()] = '1';
@@ -1163,9 +1157,7 @@ class GradebookUtils
         $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $em = Database::getManager();
-        $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $tbl_forum_thread = Database:: get_course_table(TABLE_FORUM_THREAD);
-        $tbl_work = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
         $tbl_attendance = Database:: get_course_table(TABLE_ATTENDANCE);
 
         $sql = 'UPDATE '.$table_link.' SET weight = '."'".Database::escape_string($weight)."'".'
@@ -1456,5 +1448,4 @@ class GradebookUtils
 
         return $file;
     }
-
 }

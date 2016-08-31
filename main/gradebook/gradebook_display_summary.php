@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Script
  * @package chamilo.gradebook
  */
-
-use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;

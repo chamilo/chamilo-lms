@@ -280,22 +280,22 @@ $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $original_total);
 Display::display_warning_message($warning_message, false);
 
 ?>
-    <form method="post"
-          action="gradebook_edit_all.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $my_selectcat ?>">
-        <table class="data_table">
-            <tr class="row_odd">
-                <th style="width: 35px;"><?php echo get_lang('Type'); ?></th>
-                <th><?php echo get_lang('Resource'); ?></th>
-                <th><?php echo get_lang('Weight'); ?></th>
-            </tr>
-            <?php echo $output; ?>
-        </table>
-        <input type="hidden" name="submitted" value="1"/>
-        <br/>
-        <button class="btn btn-primary" type="submit" name="name"
-                value="<?php echo get_lang('Save') ?>">
-            <?php echo get_lang('SaveScoringRules') ?>
-        </button>
-    </form>
+<form method="post"
+      action="gradebook_edit_all.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $my_selectcat ?>">
+    <table class="data_table">
+        <tr class="row_odd">
+            <th style="width: 35px;"><?php echo get_lang('Type'); ?></th>
+            <th><?php echo get_lang('Resource'); ?></th>
+            <th><?php echo get_lang('Weight'); ?></th>
+        </tr>
+        <?php echo $output; ?>
+    </table>
+    <input type="hidden" name="submitted" value="1"/>
+    <br/>
+    <button class="btn btn-primary" type="submit" name="name"
+            value="<?php echo get_lang('Save') ?>">
+        <?php echo get_lang('SaveScoringRules') ?>
+    </button>
+</form>
 <?php
 Display:: display_footer();

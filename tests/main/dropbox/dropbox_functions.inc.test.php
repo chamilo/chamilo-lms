@@ -128,21 +128,6 @@ class TestDropboxFunctions extends UnitTestCase {
 	}
 
 	/**
-	* returns username or false if user isn't registered anymore
-	* @todo check if this function is still necessary. There might be a library function for this.
-	*/
-
-	function testGetUserNameFromId() {
-		global $dropbox_cnf;
-		$id = 1;
-		$res= getUserNameFromId($id);
-		if(!is_null($res)){
-		$this->assertTrue(is_string($res));
-		}
-        //var_dump($res);
-	}
-
-	/**
 	* returns loginname or false if user isn't registered anymore
 	* @todo check if this function is still necessary. There might be a library function for this.
 	*/

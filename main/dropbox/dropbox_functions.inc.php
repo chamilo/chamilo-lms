@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
 * This file contains additional dropbox functions. Initially there were some
 * functions in the init files also but I have moved them over
 * to one file -- Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @author Julio Montoya adding c_id support
 */
-use ChamiloSession as Session;
 
 $this_section = SECTION_COURSES;
 
@@ -394,7 +395,7 @@ function store_addcategory()
         return array('type' => 'error', 'message' => get_lang('ErrorPleaseGiveCategoryName'));
     }
 
-    if (!$_POST['edit_id']) {
+    if (!isset($_POST['edit_id'])) {
         $session_id = api_get_session_id();
         // step 3a, we check if the category doesn't already exist
         $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
@@ -1003,11 +1004,6 @@ function store_add_dropbox($file = [])
 
     // set title
     $dropbox_title = $dropbox_filename;
-    // set author
-    if (!isset($_POST['authors'])) {
-        $_POST['authors'] = getUserNameFromId($_user['user_id']);
-    }
-
     // note: I think we could better migrate everything from here on to
     // separate functions: store_new_dropbox, store_new_mailing, store_just_upload
 
@@ -1025,7 +1021,6 @@ function store_add_dropbox($file = [])
                     return false;
                 }
                 if (($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload) {
-
                     Display::addFlash(Display::return_message(get_lang('MailingJustUploadSelectNoOther'), 'warning'));
                     return false;
                 }
@@ -1101,7 +1096,7 @@ function store_add_dropbox($file = [])
         $_user['user_id'],
         $dropbox_title,
         isset($_POST['description']) ? $_POST['description'] : '',
-        strip_tags($_POST['authors']),
+        api_get_user_id(),
         $dropbox_filename,
         $dropbox_filesize,
         $new_work_recipients

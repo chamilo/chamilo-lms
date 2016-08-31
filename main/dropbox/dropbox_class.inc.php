@@ -9,8 +9,7 @@
  * - Dropbox_Work:
  * 		. id
  * 		. uploader_id	=> who sent it
- * 		. uploaderName
- * 		. filename		=> name of file stored on the server
+ *		. filename		=> name of file stored on the server
  * 		. filesize
  * 		. title			=> name of file returned to user. This is the original name of the file
  * 							except when the original name contained spaces. In that case the spaces
@@ -45,7 +44,6 @@ class Dropbox_Work
 {
     public $id;
     public $uploader_id;
-    public $uploaderName;
     public $filename;
     public $filesize;
     public $title;
@@ -97,7 +95,6 @@ class Dropbox_Work
 
         // Fill in the properties
         $this->uploader_id = intval($uploader_id);
-        $this->uploaderName = getUserNameFromId($this->uploader_id);
         $this->filename = $filename;
         $this->filesize = $filesize;
         $this->title = $title;
@@ -135,7 +132,6 @@ class Dropbox_Work
                 $params,
                 ['c_id = ? AND id = ?' => [$course_id, $this->id]]
             );
-
 		} else {
 			$this->upload_date = $this->last_upload_date;
 			$params = [
@@ -197,14 +193,12 @@ class Dropbox_Work
 
         // Check if uploader is still in Chamilo system
         $uploader_id = stripslashes($res['uploader_id']);
-        $uploaderName = getUserNameFromId($uploader_id);
-        if (!$uploaderName) {
+        $userInfo = api_get_user_info($uploader_id);
+        if (!$userInfo) {
             //deleted user
             $this->uploader_id = -1;
-            $this->uploaderName = get_lang('Unknown', '');
         } else {
             $this->uploader_id = $uploader_id;
-            $this->uploaderName = $uploaderName;
         }
 
         // Fill in properties
@@ -290,13 +284,13 @@ class Dropbox_SentWork extends Dropbox_Work
 
 		// Do sanity checks on recipient_ids array & property fillin
 		// The sanity check for ex-coursemembers is already done in base constructor
-		settype($uploader_id, 'integer') or die(get_lang('GeneralError').' (code 208)'); // Set $uploader_id to correct type
+		$uploader_id = (int) $uploader_id;
 
 		$justSubmit = false;
-		if ( is_int($recipient_ids)) {
+		if (is_int($recipient_ids)) {
 			$justSubmit = true;
 			$recipient_ids = array($recipient_ids + $this->id);
-		} elseif ( count($recipient_ids) == 0) {
+		} elseif (count($recipient_ids) == 0) {
 			$justSubmit = true;
 			$recipient_ids = array($uploader_id);
 		}
@@ -306,16 +300,17 @@ class Dropbox_SentWork extends Dropbox_Work
 		}
 
 		foreach ($recipient_ids as $rec) {
-			if (empty($rec)) die(get_lang('GeneralError').' (code 210)');
-			//if (!isCourseMember($rec)) die(); //cannot sent document to someone outside of course
-				//this check is done when validating submitted data
-			$this->recipients[] = array('id' => $rec, 'name' => getUserNameFromId($rec));
+			if (empty($rec)) {
+			    continue;
+            }
+
+            //this check is done when validating submitted data
+			$this->recipients[] = array('id' => $rec);
 		}
 
         $table_post = $dropbox_cnf['tbl_post'];
         $table_person = $dropbox_cnf['tbl_person'];
         $session_id = api_get_session_id();
-        $uploader_id = $this->uploader_id;
         $user  = api_get_user_id();
         $now = api_get_utc_datetime();
 
@@ -473,103 +468,6 @@ class Dropbox_Person
 	}
 
 	/**
-	 * This private method is used by the usort function in  the
-	 * orderSentWork and orderReceivedWork methods.
-	 * It compares 2 work-objects by 1 of the properties of that object, dictated by the
-	 * private property _orderBy
-	 *
-	 * @param unknown_type $a
-	 * @param unknown_type $b
-	 * @return int -1, 0 or 1 dependent of the result of the comparison.
-	 */
-	function _cmpWork($a, $b)
-    {
-		$sort = $this->_orderBy;
-		$aval = $a->$sort;
-		$bval = $b->$sort;
-		if ($sort == 'recipients') {
-		    // The recipients property is an array so we do the comparison based
-		    // on the first item of the recipients array
-		    $aval = $aval[0]['name'];
-			$bval = $bval[0]['name'];
-		}
-		if ($sort == 'filesize') {    // Filesize is not a string, so we use other comparison technique
-			return $aval < $bval ? -1 : 1;
-		} elseif ($sort == 'title') { // Natural order for sorting titles is more "human-friendly"
-			return api_strnatcmp($aval, $bval);
-		} else {
-		    return api_strcasecmp($aval, $bval);
-		}
-	}
-
-	/**
-	 * A method that sorts the objects in the sentWork array, dependent on the $sort parameter.
-	 * $sort can be lastDate, firstDate, title, size, ...
-	 *
-	 * @param unknown_type $sort
-	 */
-	function orderSentWork($sort)
-    {
-		switch($sort) {
-			case 'lastDate':
-				$this->_orderBy = 'last_upload_date';
-				break;
-			case 'firstDate':
-				$this->_orderBy = 'upload_date';
-				break;
-			case 'title':
-				$this->_orderBy = 'title';
-				break;
-			case 'size':
-				$this->_orderBy = 'filesize';
-				break;
-			case 'author':
-				$this->_orderBy = 'author';
-				break;
-			case 'recipient':
-				$this->_orderBy = 'recipients';
-				break;
-			default:
-				$this->_orderBy = 'last_upload_date';
-		}
-
-		usort($this->sentWork, array($this, '_cmpWork'));
-	}
-
-	/**
-	 * method that sorts the objects in the receivedWork array, dependent on the $sort parameter.
-	 * $sort can be lastDate, firstDate, title, size, ...
-	 * @param unknown_type $sort
-	 */
-	function orderReceivedWork($sort)
-    {
-		switch($sort) {
-			case 'lastDate':
-				$this->_orderBy = 'last_upload_date';
-				break;
-			case 'firstDate':
-				$this->_orderBy = 'upload_date';
-				break;
-			case 'title':
-				$this->_orderBy = 'title';
-				break;
-			case 'size':
-				$this->_orderBy = 'filesize';
-				break;
-			case 'author':
-				$this->_orderBy = 'author';
-				break;
-			case 'sender':
-				$this->_orderBy = 'uploaderName';
-				break;
-			default:
-				$this->_orderBy = 'last_upload_date';
-		}
-
-		usort($this->receivedWork, array($this, '_cmpWork'));
-	}
-
-	/**
 	 * Deletes all the received work of this person
 	 */
 	public function deleteAllReceivedWork()
@@ -715,8 +613,9 @@ class Dropbox_Person
 			   break;
 			}  // foreach (... as $wi -> $w) gives error 221! (no idea why...)
 		}
+
 		if (!$found) {
-			die(get_lang('GeneralError').' (code 221)');
+			return false;
 		}
 
 		$feedback_date = api_get_utc_datetime();
@@ -744,6 +643,7 @@ class Dropbox_Person
 		if (($ownerid = $this->receivedWork[$wi]->uploader_id) > $dropbox_cnf['mailingIdBase']) {
 		    $ownerid = getUserOwningThisMailing($ownerid);
 		}
+
         api_item_property_update(
             $_course,
             TOOL_DROPBOX,
@@ -777,6 +677,7 @@ class Dropbox_Person
 					break;
 				default:
 					$new_received_work[] = $work;
+                    break;
 			}
 		}
 		$this->receivedWork = $new_received_work;

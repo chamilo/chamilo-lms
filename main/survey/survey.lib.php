@@ -1974,7 +1974,7 @@ class SurveyUtil
 
         if ($result !== false) {
             $message = get_lang('SurveyUserAnswersHaveBeenRemovedSuccessfully').'<br />
-					<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.Security::remove_XSS($survey_id).'">'.get_lang('GoBack').'</a>';
+					<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.intval($survey_id).'">'.get_lang('GoBack').'</a>';
             Display::display_confirmation_message($message, false);
         }
     }

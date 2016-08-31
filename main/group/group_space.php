@@ -96,8 +96,7 @@ $edit_url = '';
 if (api_is_allowed_to_edit(false, true) ||
     GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())
 ) {
-    $my_origin = isset($origin) ? $origin : '';
-    $edit_url =  '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'&origin='.$my_origin.'">'.
+    $edit_url =  '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'">'.
         Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
 }
 
@@ -308,7 +307,6 @@ $tutor_info = '';
 if (count($tutors) == 0) {
     $tutor_info = get_lang('GroupNoneMasc');
 } else {
-    isset($origin) ? $my_origin = $origin:$my_origin='';
     $tutor_info .= '<ul class="thumbnails">';
     foreach ($tutors as $index => $tutor) {
         $userInfo = api_get_user_info($tutor['user_id']);

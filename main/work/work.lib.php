@@ -34,19 +34,19 @@ function display_action_links($id, $cur_dir_path, $action)
     $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 
     if (!empty($id)) {
-        $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.
+        $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.
             Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 
     if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
         // Create dir
         if (empty($id)) {
-            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir&origin='.$origin.'&gradebook='.$gradebook.'">';
+            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir&gradebook='.$gradebook.'">';
             $display_output .= Display::return_icon('new_work.png', get_lang('CreateAssignment'),'',ICON_SIZE_MEDIUM).'</a>';
         }
         if (empty($id)) {
             // Options
-            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings&origin='.$origin.'&gradebook='.$gradebook.'">';
+            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings&gradebook='.$gradebook.'">';
             $display_output .= Display::return_icon('settings.png', get_lang('EditToolOptions'),'',ICON_SIZE_MEDIUM).'</a>';
         }
         $display_output .= '<a id="open-view-list" href="#">' . Display::return_icon('listwork.png', get_lang('ViewStudents'),'',ICON_SIZE_MEDIUM) . '</a>';

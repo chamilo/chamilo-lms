@@ -59,7 +59,6 @@ api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 Event::event_access_tool(TOOL_ANNOUNCEMENT);
 
 $announcement_id = isset($_GET['id']) ? intval($_GET['id']) : null;
-$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'list';
 
 $announcement_number = AnnouncementManager::getNumberAnnouncements();
@@ -604,16 +603,16 @@ if ((api_is_allowed_to_edit(false, true) ||
     (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 ) {
     if (in_array($action, array('add', 'modify', 'view'))) {
-        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
+        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
     } else {
-        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$origin."'>".
+        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>".
             Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), '', ICON_SIZE_MEDIUM)."</a>";
     }
     $show_actions = true;
 } else {
     if (in_array($action, array('view'))) {
-        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
+        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
     }
 }
@@ -638,7 +637,7 @@ if ($show_actions) {
 
 echo $content;
 
-if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
+if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
     //we are not in learnpath tool
     Display::display_footer();
 }

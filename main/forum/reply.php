@@ -185,13 +185,13 @@ if ($origin == 'learnpath') {
 if ($origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
-    echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&gradebook='.$gradebook.'&thread='.$threadId.'&origin='.$origin.'">'.
+    echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&gradebook='.$gradebook.'&thread='.$threadId.'">'.
         Display::return_icon('back.png', get_lang('BackToThread'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 }
 /*New display forum div*/
 echo '<div class="forum_title">';
-echo '<h1><a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.
+echo '<h1><a href="viewforum.php?'.api_get_cidreq().'&forum='.$current_forum['forum_id'].'" '.
     class_visible_invisible($current_forum['visibility']).'>'.
     prepare4display($current_forum['forum_title']).'</a></h1>';
 echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';

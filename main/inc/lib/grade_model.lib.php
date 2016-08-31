@@ -266,11 +266,11 @@ class GradeModel extends Model
      */
     public function fill_grade_model_select_in_form(&$form, $name = 'gradebook_model_id', $default_value = null)
     {
-        if (api_get_setting('gradebook_enable_grade_model') == 'false') {
+        if (api_get_setting('gradebook_enable_grade_model') === 'false') {
             return false;
         }
 
-        if (api_get_setting('teachers_can_change_grade_model_settings') == 'true' || api_is_platform_admin()) {
+        if (api_get_setting('teachers_can_change_grade_model_settings') === 'true' || api_is_platform_admin()) {
             $grade_models = $this->get_all();
             $grade_model_options = array('-1' => get_lang('None'));
             if (!empty($grade_models)) {

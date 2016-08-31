@@ -229,7 +229,7 @@ class GroupManager
             $unique_name = $newFolderData['path'];
 
             /* Stores the directory path into the group table */
-            $sql = "UPDATE ".$table_group." SET
+            $sql = "UPDATE $table_group SET
                         name = '".Database::escape_string($name)."',
                         secret_directory = '".$unique_name."'
                     WHERE c_id = $course_id AND id ='".$lastId."'";
@@ -287,6 +287,7 @@ class GroupManager
 
         return $lastId;
     }
+
     /**
      * Create subgroups.
      * This function creates new groups based on an existing group. It will
@@ -344,7 +345,7 @@ class GroupManager
      */
     public static function create_class_groups($category_id)
     {
-        $options['where'] = array(" usergroup.course_id = ? " =>  api_get_course_int_id());
+        $options['where'] = array(" usergroup.course_id = ? " => api_get_course_int_id());
         $obj = new UserGroup();
         $classes = $obj->getUserGroupInCourse($options);
         $group_ids = array();
@@ -356,7 +357,7 @@ class GroupManager
                 0,
                 count($users_ids)
             );
-            self::subscribe_users($users_ids,$group_id);
+            self::subscribe_users($users_ids, $group_id);
             $group_ids[] = $group_id;
         }
         return $group_ids;
@@ -382,13 +383,13 @@ class GroupManager
         $forum_table = Database:: get_course_table(TABLE_FORUM);
 
         $group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
-        $group_ids = array_map('intval',$group_ids);
+        $group_ids = array_map('intval', $group_ids);
 
         if (api_is_course_coach()) {
             //a coach can only delete courses from his session
             for ($i = 0; $i < count($group_ids); $i++) {
-                if (!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i])) {
-                    array_splice($group_ids,$i,1);
+                if (!api_is_element_in_the_session(TOOL_GROUP, $group_ids[$i])) {
+                    array_splice($group_ids, $i, 1);
                     $i--;
                 }
             }
@@ -772,7 +773,7 @@ class GroupManager
                 WHERE c_id = $course_id AND category_id='".$cat_id."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            $groups_to_delete = array ();
+            $groups_to_delete = array();
             while ($group = Database::fetch_object($res)) {
                 $groups_to_delete[] = $group->id;
             }
@@ -1152,7 +1153,7 @@ class GroupManager
         while ($row = Database::fetch_array($rs)) {
             $result[] = $row['user_id'];
         }
-        
+
         return $result;
     }
 
@@ -1295,8 +1296,9 @@ class GroupManager
         $sql = "SELECT  COUNT(*) AS number_of_students
                 FROM $table_group_user
                 WHERE c_id = $course_id AND group_id = $group_id";
-        $db_result = Database::query($sql);
-        $db_object = Database::fetch_object($db_result);
+        $result = Database::query($sql);
+        $db_object = Database::fetch_object($result);
+
         return $db_object->number_of_students;
     }
 
@@ -1343,8 +1345,8 @@ class GroupManager
                     g.c_id         = $course_id AND
                     gu.user_id     = $user_id AND
                     g.id         = gu.group_id  $cat_condition";
-        $db_result = Database::query($sql);
-        $db_object = Database::fetch_object($db_result);
+        $result = Database::query($sql);
+        $db_object = Database::fetch_object($result);
 
         return $db_object->number_of_groups;
     }
@@ -1408,7 +1410,7 @@ class GroupManager
      */
     public static function is_subscribed($user_id, $group_id)
     {
-        if (empty($user_id) or empty($group_id)) {
+        if (empty($user_id) || empty($group_id)) {
             return false;
         }
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
@@ -1674,6 +1676,7 @@ class GroupManager
             $sql = 'DELETE FROM '.$table_group_user.'
                     WHERE group_id IN ('.implode(',', $group_ids).') AND c_id = '.$course_id;
             $result = Database::query($sql);
+
             return $result;
         }
         return true;

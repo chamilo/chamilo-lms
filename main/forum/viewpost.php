@@ -65,11 +65,11 @@ if ($origin == 'learnpath') {
     );
     $interbreadcrumb[] = array(
         'url' => 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$current_forum_category['cat_id'].'&search='.Security::remove_XSS(urlencode($_GET['search'])),
-        'name' => prepare4display($current_forum_category['cat_title']),
+        'name' => prepare4display($current_forum_category['cat_title'])
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&origin='.$origin.'&search='.Security::remove_XSS(urlencode($_GET['search'])),
-        'name' => prepare4display($current_forum['forum_title']),
+        'url' => 'viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&search='.Security::remove_XSS(urlencode($_GET['search'])),
+        'name' => prepare4display($current_forum['forum_title'])
     );
 
     // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
@@ -122,9 +122,9 @@ if ($message != 'PostDeletedSpecial') {
 
     echo '<div style="float:right;">';
     $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&origin='.$origin.'&gradebook='.$gradebook.'&search='.Security::remove_XSS(urlencode($_GET['search']));
-    echo $my_url.'&view=flat&origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
-    echo $my_url.'&view=threaded&origin='.$origin.'">'.get_lang('ThreadedView').'</a> | ';
-    echo $my_url.'&view=nested&origin='.$origin.'">'.get_lang('NestedView').'</a>';
+    echo $my_url.'&view=flat">'.get_lang('FlatView').'</a> | ';
+    echo $my_url.'&view=threaded">'.get_lang('ThreadedView').'</a> | ';
+    echo $my_url.'&view=nested">'.get_lang('NestedView').'</a>';
     $my_url = null;
     echo '</div>';
     // The reply to thread link should only appear when the forum_category is

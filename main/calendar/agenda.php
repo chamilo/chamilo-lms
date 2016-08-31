@@ -16,7 +16,6 @@ if (!empty($course_info)) {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-$origin = isset($_GET['origin']) ? $_GET['origin'] : null;
 
 $this_section = SECTION_COURSES;
 $url = null;

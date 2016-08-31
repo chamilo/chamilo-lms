@@ -123,7 +123,6 @@ class GlossaryManager
             }
             return false;
         } else {
-
             $params = [
                 'glossary_id' => 0,
                 'c_id' => api_get_course_int_id(),
@@ -189,7 +188,6 @@ class GlossaryManager
 					    glossary_id = ".intval($values['glossary_id']);
             $result = Database::query($sql);
             if ($result === false) {
-
                 return false;
             }
 
@@ -321,7 +319,6 @@ class GlossaryManager
         $glossaryInfo = self::get_glossary_information($glossary_id);
 
         if (empty($glossaryInfo)) {
-
             return false;
         }
 

@@ -1685,7 +1685,7 @@ class AnnouncementManager
                         $image_visibility="invisible";
                         $alt_visibility=get_lang('Visible');
                     }
-                    $modify_icons .=  "<a href=\"".$actionUrl."&origin=".$origin."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
+                    $modify_icons .=  "<a href=\"".$actionUrl."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
                         Display::return_icon($image_visibility.'.png', $alt_visibility,'',ICON_SIZE_SMALL)."</a>";
 
                     // DISPLAY MOVE UP COMMAND only if it is not the top announcement

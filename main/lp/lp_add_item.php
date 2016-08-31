@@ -19,8 +19,6 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-require_once 'learnpath_functions.inc.php';
-
 /** @var learnpath $learnPath */
 $learnPath = Session::read('oLP');
 

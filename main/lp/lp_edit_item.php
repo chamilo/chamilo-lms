@@ -16,12 +16,7 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-/* Libraries */
-
-include 'learnpath_functions.inc.php';
-
 /* Header and action code */
-
 $htmlHeadXtra[] = '
 <script>'.$_SESSION['oLP']->get_js_dropdown_array().
 "

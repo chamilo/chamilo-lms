@@ -11,8 +11,6 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-require_once 'learnpath_functions.inc.php';
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $isStudentView = isset($_REQUEST['isStudentView']) ? (int)$_REQUEST['isStudentView'] : null;

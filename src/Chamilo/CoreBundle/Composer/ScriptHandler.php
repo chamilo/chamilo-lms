@@ -152,6 +152,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/tbl_change.js.php',
             __DIR__.'/../../../../main/lp/resourcelinker.php',
             __DIR__.'/../../../../main/lp/resourcelinker.inc.php',
+            __DIR__.'/../../../../main/lp/learnpath_functions.inc.php',
             __DIR__.'/../../../../main/tracking/toolaccess_details.php',
             __DIR__.'/../../../../main/tracking/course_access_details.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelGroup.php',

@@ -15,10 +15,8 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-include 'learnpath_functions.inc.php';
-
 /* Header and action code */
-$htmlHeadXtra[] = '<script type="text/javascript">'.
+$htmlHeadXtra[] = '<script>'.
 $_SESSION['oLP']->get_js_dropdown_array() .
 "
     function load_cbo(id) {

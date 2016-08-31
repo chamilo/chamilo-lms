@@ -16,9 +16,6 @@
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
-/* Libraries */
-
-require 'learnpath_functions.inc.php';
 /* Header and action code */
 $currentstyle = api_get_setting('stylesheets');
 $htmlHeadXtra[] = '<script>

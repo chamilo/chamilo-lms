@@ -16,8 +16,6 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-include 'learnpath_functions.inc.php';
-
 /* Constants and variables */
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -39,15 +37,15 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 
 /* The learnpath has been just created, go get the last id. */
 $is_new = false;
-
 $course_id = api_get_course_int_id();
 
 if ($learnpath_id == 0) {
     $is_new = true;
-
-    $sql        = "SELECT id FROM " . $tbl_lp . " WHERE c_id = $course_id ORDER BY id DESC LIMIT 0, 1";
-    $result     = Database::query($sql);
-    $row        = Database::fetch_array($result);
+    $sql = "SELECT id FROM $tbl_lp
+            WHERE c_id = $course_id 
+            ORDER BY id DESC LIMIT 0, 1";
+    $result = Database::query($sql);
+    $row = Database::fetch_array($result);
     $learnpath_id = $row['id'];
 }
 
@@ -82,7 +80,7 @@ Display::display_header('', 'Path');
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
 ?>
-<script type='text/javascript'>
+<script>
 /* <![CDATA[ */
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');

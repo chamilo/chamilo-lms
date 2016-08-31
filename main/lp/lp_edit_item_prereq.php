@@ -13,12 +13,7 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-/* Libraries */
-
-include 'learnpath_functions.inc.php';
-
 /* Constants and variables */
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);

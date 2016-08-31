@@ -679,10 +679,8 @@ class aicc extends learnpath
                 }
             }
         }
-        //error_log('New LP - in export_zip()', 0);
         // Zip everything that is in the corresponding scorm dir.
         // Write the zip file somewhere (might be too big to return).
-        require_once 'learnpath_functions.inc.php';
         $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         $_course = api_get_course_info(api_get_course_id());
@@ -702,7 +700,7 @@ class aicc extends learnpath
         // Get a temporary dir for creating the zip file.
 
         //error_log('New LP - cleaning dir '.$zipfoldername, 0);
-        deldir($zipfoldername); //make sure the temp dir is cleared
+        removeDir($zipfoldername); //make sure the temp dir is cleared
         mkdir($zipfoldername, api_get_permissions_for_new_directories());
         //error_log('New LP - made dir '.$zipfoldername, 0);
 

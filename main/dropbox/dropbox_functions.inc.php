@@ -46,7 +46,7 @@ function handle_multiple_actions()
         $checked_file_ids = $_POST['id'];
     } else {
         foreach ($_POST as $key => $value) {
-            if (strstr($value, $part.'_') AND $key != 'view_received_category' AND $key != 'view_sent_category') {
+            if (strstr($value, $part.'_') && $key != 'view_received_category' && $key != 'view_sent_category') {
                 $checked_files = true;
                 $checked_file_ids[] = intval(substr($value, strrpos($value, '_')));
             }
@@ -66,7 +66,7 @@ function handle_multiple_actions()
                 $dropboxfile->deleteReceivedWork($value);
                 $message = get_lang('ReceivedFileDeleted');
             }
-            if ($_GET['view'] == 'sent' OR empty($_GET['view'])) {
+            if ($_GET['view'] == 'sent' || empty($_GET['view'])) {
                 $dropboxfile->deleteSentWork($value);
                 $message = get_lang('SentFileDeleted');
             }
@@ -167,7 +167,7 @@ function delete_category($action, $id, $user_id = null)
             WHERE c_id = $course_id AND cat_id='".intval($id)."'";
     $result = Database::query($sql);
 
-    while($row = Database::fetch_array($result)) {
+    while ($row = Database::fetch_array($result)) {
         $dropboxfile = new Dropbox_Person($user_id, $is_courseAdmin, $is_courseTutor);
         if ($action == 'deletereceivedcategory') {
             $dropboxfile->deleteReceivedWork($row[$id_field]);
@@ -242,7 +242,7 @@ function store_move($id, $target, $part)
                     WHERE
                         c_id = $course_id AND
                         uploader_id = ".intval($_user['user_id'])." AND
-                        id = ".intval($id)."";
+                        id = ".intval($id);
             Database::query($sql);
             $return_message = get_lang('SentFileMoved');
         }
@@ -251,58 +251,6 @@ function store_move($id, $target, $part)
     }
 
     return $return_message;
-}
-
-/**
-* This functions displays all teh possible actions that can be
- * performed on multiple files. This is the dropdown list that
-* appears below the sortable table of the sent / or received files.
-*
-* @return html value for the dropdown list
-*
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
-function display_action_options($part, $categories, $current_category = 0)
-{
-    echo '<select name="actions">';
-    echo '<option value="download">'.get_lang('Download').'</option>';
-    echo '<option value="delete">'.get_lang('Delete').'</option>';
-    if (is_array($categories)) {
-        echo '<optgroup label="'.get_lang('MoveTo').'">';
-        if ($current_category != 0) {
-            echo '<option value="move_0">'.get_lang('Root').'</a>';
-        }
-        foreach ($categories as $value) {
-            if ($current_category != $value['cat_id']) {
-                echo '<option value="move_'.$value['cat_id'].'">'.$value['cat_name'].'</option>';
-            }
-        }
-        echo '</optgroup>';
-    }
-    echo '</select>';
-    echo '<input type="submit" name="do_actions_'.Security::remove_XSS($part).'" value="'.get_lang('Ok').'" />';
-}
-
-/**
-* this function returns the html code that displays the checkboxes next to the files so that
-* multiple actions on one file are possible.
-*
-* @param $id the unique id of the file
-* @param $part are we dealing with a sent or with a received file?
-*
-* @return string code
-*
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
-function display_file_checkbox($id, $part) {
-    if (isset($_GET['selectall'])) {
-        $checked = 'checked';
-    }
-    $return_value = '<input type="checkbox" name="'.Security::remove_XSS($part).'_'.Security::remove_XSS($id).'" value="'.Security::remove_XSS($id).'" '.$checked.' />';
-
-    return $return_value;
 }
 
 /**
@@ -430,7 +378,6 @@ function store_addcategory()
             return array('type' => 'error', 'message' => get_lang('CategoryAlreadyExistsEditIt'));
         }
     } else {
-
         $params = [
             'cat_name' => $_POST['category_name'],
             'received' => $received,
@@ -473,7 +420,7 @@ function display_addcategory_form($category_name = '', $id = '', $action)
     if (isset($id) && $id != '') {
         // retrieve the category we are editing
         $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
-                WHERE c_id = $course_id AND cat_id = ".intval($id)."";
+                WHERE c_id = $course_id AND cat_id = ".intval($id);
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
@@ -695,7 +642,6 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     );
     $form->addButtonUpload(get_lang('Upload'), 'submitWork');
 
-
     $headers = array(
         get_lang('Upload'),
         get_lang('Upload').' ('.get_lang('Simple').')',
@@ -725,50 +671,11 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     $multipleForm->addMultipleUpload($url);
     $multipleForm->addHtml('</div>');
 
-    echo Display::tabs($headers, array($multipleForm->returnForm(), $form->returnForm()), 'tabs');
-}
-
-/**
-* returns username or false if user isn't registered anymore
-* @todo check if this function is still necessary. There might be a library function for this.
-*/
-function getUserNameFromId($id)
-{
-    $dropbox_cnf = getDropboxConf();
-
-    $mailingId = $id - dropbox_cnf('mailingIdBase');
-    if ($mailingId > 0) {
-        return get_lang('MailingAsUsername', '') . $mailingId;
-    }
-    $id = intval($id);
-    $sql = "SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ', lastname)" : "CONCAT(lastname,' ', firstname)")." AS name
-            FROM " . $dropbox_cnf['tbl_user'] . "
-            WHERE user_id='$id'";
-    $result = Database::query($sql);
-    $res = Database::fetch_array($result);
-
-    if (!$res) {
-        return false;
-    }
-
-    return stripslashes($res['name']);
-}
-
-/**
-* returns loginname or false if user isn't registered anymore
-* @todo check if this function is still necessary. There might be a library function for this.
-*/
-function getLoginFromId($id)
-{
-    $id = intval($id);
-    $sql = "SELECT username
-            FROM " . dropbox_cnf('tbl_user') . "
-            WHERE user_id='$id'";
-    $result = Database::query($sql);
-    $res = Database::fetch_array($result);
-    if (!$res) return false;
-
-    return stripslashes($res['username']);
+    echo Display::tabs(
+        $headers,
+        array($multipleForm->returnForm(), $form->returnForm()),
+        'tabs'
+    );
 }
 
 /**
@@ -1030,7 +937,7 @@ function store_add_dropbox($file = [])
             }
         }
     } else {  // rename file to login_filename_uniqueId format
-        $dropbox_filename = getLoginFromId($_user['user_id']) . "_" . $dropbox_filename . "_".uniqid('');
+        $dropbox_filename = $_user['username'] . "_" . $dropbox_filename . "_".uniqid('');
     }
 
     // creating the array that contains all the users who will receive the file

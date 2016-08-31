@@ -24,53 +24,15 @@ class TestDropboxFunctions extends UnitTestCase {
 	*/
 
 	function testdisplay_move_form() {
-		ob_start();
-		$id= 1;
-		$part = 'test';
-		$res= display_move_form($part, $id, $target=array());
-		ob_end_clean();
-		if(!is_null($res)){
-		$this->assertTrue(is_string($res));
-		}
-        //var_dump($res);
+        ob_start();
+        $id = 1;
+        $part = 'test';
+        $res = display_move_form($part, $id, $target = array());
+        ob_end_clean();
+        if (!is_null($res)) {
+            $this->assertTrue(is_string($res));
+        }
 	}
-
-	/**
-	* This functions displays all teh possible actions that can be performed on multiple files. This is the dropdown list that
-	* appears below the sortable table of the sent / or received files.
-	* @return html value for the dropdown list
-	*/
-
-	function testdisplay_action_options() {
-		ob_start();
-		$categories= 1;
-		$part = 'test';
-		$res= display_action_options($part, $categories, $current_category=0);
-		ob_end_clean();
-		if(!is_null($res)){
-		$this->assertTrue(is_string($res));
-		}
-        //var_dump($res);
-	}
-
-	/**
-	* this function returns the html code that displays the checkboxes next to the files so that
-	* multiple actions on one file are possible.
-	* @param $id the unique id of the file
-	* @param $part are we dealing with a sent or with a received file?
-	* @return html code
-	*/
-
-	function testdisplay_file_checkbox() {
-		$id= 1;
-		$part = 'test';
-		$res= display_file_checkbox($id, $part);
-		if(!is_null($res)){
-		$this->assertTrue(is_string($res));
-		}
-        //var_dump($res);
-	}
-
 	/**
 	* This function displays the form to add a new category.
 	*
@@ -126,21 +88,6 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-
-	/**
-	* returns loginname or false if user isn't registered anymore
-	* @todo check if this function is still necessary. There might be a library function for this.
-	*/
-
-	function testGetLoginFromId() {
-		$id = 1;
-		$res= getLoginFromId($id);
-		if(!is_null($res)){
-		$this->assertTrue(is_string($res));
-		}
-        //var_dump($res);
-	}
-
 
 	/**
 	* @desc This function retrieves the number of feedback messages on every document. This function might become obsolete when

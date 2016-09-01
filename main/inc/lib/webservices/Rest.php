@@ -478,30 +478,36 @@ class Rest extends WebService
         $forumsFullData = get_forums('', $course->getCode(), $includeGroupsForums);
         $forums = [];
 
-        foreach ($forumsFullData as $forumId => $forum) {
+        foreach ($forumsFullData as $forumId => $forumInfo) {
+            $forum = [
+                'id' => intval($forumInfo['iid']),
+                'catId' => intval($forumInfo['forum_category']),
+                'title' => $forumInfo['forum_title'],
+                'description' => $forumInfo['forum_comment'],
+                'image' => $forumInfo['forum_image'] ? ($webCoursePath . $forumInfo['forum_image']) : '',
+                'numberOfThreads' => intval($forumInfo['number_of_threads']),
+                'lastPost' => null
+            ];
+
             $lastPostInfo = get_last_post_information($forumId, false, $course->getId());
 
-            $forums[] = [
-                'id' => $forum['iid'],
-                'catId' => $forum['forum_category'],
-                'forumId' => $forum['forum_id'],
-                'title' => $forum['forum_title'],
-                'description' => $forum['forum_comment'],
-                'image' => $forum['forum_image'] ? ($webCoursePath . $forum['forum_image']) : '',
-                'lastPost' => [
+            if ($lastPostInfo) {
+                $forum['lastPost'] = [
                     'date' => api_convert_and_format_date($lastPostInfo['last_post_date']),
                     'user' => api_get_person_name(
                         $lastPostInfo['last_poster_firstname'],
                         $lastPostInfo['last_poster_lastname']
                     )
-                ]
-            ];
+                ];
+            }
+
+            $forums[] = $forum;
         }
 
         foreach ($categoriesFullData as $category) {
             $categoryForums = array_filter(
                 $forums,
-                function ($forum) use ($category) {
+                function (array $forum) use ($category) {
                     if ($forum['catId'] != $category['cat_id']) {
                         return false;
                     }
@@ -511,9 +517,9 @@ class Rest extends WebService
             );
 
             $categories[] = [
-                'id' => $category['iid'],
+                'id' => intval($category['iid']),
                 'title' => $category['cat_title'],
-                'catId' => $category['cat_id'],
+                'catId' => intval($category['cat_id']),
                 'description' => $category['cat_comment'],
                 'forums' => $categoryForums,
                 'courseId' => $course->getId()

@@ -399,6 +399,7 @@ class AddCourse
      * @param string Course directory name (e.g. 'ABC')
      * @param string Language used for content (e.g. 'spanish')
      * @param bool Whether to fill the course with example content
+     * @param int $authorId
      * @return bool False on error, true otherwise
      * @version 1.2
      * @assert (null, '', '', null) === false
@@ -409,7 +410,8 @@ class AddCourse
         $course_id,
         $course_repository,
         $language,
-        $fill_with_exemplary_content = null
+        $fill_with_exemplary_content = null,
+        $authorId = 0
     ) {
         if (is_null($fill_with_exemplary_content)) {
             $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
@@ -421,6 +423,7 @@ class AddCourse
         }
 
         $courseInfo = api_get_course_info_by_id($course_id);
+        $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
         $tbl_course_homepage = Database::get_course_table(TABLE_TOOL_LIST);
         $TABLEGROUPCATEGORIES = Database::get_course_table(
@@ -680,7 +683,7 @@ class AddCourse
 
         $counter = 1;
         foreach ($files as $file) {
-            self::insertDocument($course_id, $counter, $file);
+            self::insertDocument($course_id, $counter, $file, $authorId);
             $counter++;
         }
 
@@ -707,7 +710,7 @@ class AddCourse
             ];
 
             foreach ($files as $file) {
-                self::insertDocument($course_id, $counter, $file);
+                self::insertDocument($course_id, $counter, $file, $authorId);
                 $counter++;
             }
 
@@ -1097,18 +1100,20 @@ class AddCourse
      * @param int $course_id
      * @param int $counter
      * @param array $file
+     * @param int $authorId
      */
-    public static function insertDocument($course_id, $counter, $file)
+    public static function insertDocument($course_id, $counter, $file, $authorId = 0)
     {
         $tableItem = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tableDocument = Database::get_course_table(TABLE_DOCUMENT);
 
         $now = api_get_utc_datetime();
-
         $sql = "INSERT INTO $tableDocument (id, c_id, path,title,filetype,size, readonly, session_id)
                 VALUES ($counter, $course_id, '".$file['path']."', '".$file['title']."', '".$file['filetype']."', '".$file['size']."', 0, 0)";
         Database::query($sql);
         $docId = Database:: insert_id();
+
+        $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
         if ($docId) {
             $sql = "UPDATE $tableDocument SET id = iid WHERE iid = $docId";
@@ -1120,17 +1125,18 @@ class AddCourse
                     'id' => $counter,
                     'c_id' => $course_id,
                     'tool' => 'document',
-                    'insert_user_id' => api_get_user_id(),
+                    'insert_user_id' => $authorId,
                     'insert_date' => $now,
                     'lastedit_date' => $now,
                     'ref' => $docId,
                     'lastedit_type' => 'DocumentAdded',
-                    'lastedit_user_id' => api_get_user_id(),
+                    'lastedit_user_id' => $authorId,
                     'to_group_id' => null,
                     'to_user_id' =>  null,
                     'visibility' => 0
                 ]
             );
+
             if ($id) {
                 $sql = "UPDATE $tableItem SET id = iid WHERE iid = $id";
                 Database::query($sql);
@@ -1199,12 +1205,8 @@ class AddCourse
             $visibility = $params['visibility'];
         }
 
-        $subscribe = isset($params['subscribe']) ? intval(
-            $params['subscribe']
-        ) : ($visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0);
-        $unsubscribe = isset($params['unsubscribe']) ? intval(
-            $params['unsubscribe']
-        ) : 0;
+        $subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : $visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0;
+        $unsubscribe = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
         $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
         $teachers = isset($params['teachers']) ? $params['teachers'] : null;
         $status = isset($params['status']) ? $params['status'] : null;

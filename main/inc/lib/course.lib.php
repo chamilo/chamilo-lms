@@ -36,7 +36,7 @@ class CourseManager
      *
      * @return  mixed  false if the course was not created, array with the course info
      */
-    public static function create_course($params, $extraFields = array())
+    public static function create_course($params, $authorId = 0)
     {
         global $_configuration;
         // Check portal limits
@@ -44,6 +44,8 @@ class CourseManager
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
         }
+
+        $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
         if (isset($_configuration[$access_url_id]) && is_array($_configuration[$access_url_id])) {
             $return = self::checkCreateCourseAccessUrlParam(
@@ -98,7 +100,7 @@ class CourseManager
                 $course_info = api_get_course_info_by_id($course_id);
 
                 if (!empty($course_info)) {
-                    self::fillCourse($course_info, $params);
+                    self::fillCourse($course_info, $params, $authorId);
 
                     return $course_info;
                 }
@@ -6156,16 +6158,20 @@ class CourseManager
      * Fill course with all necessary items
      * @param array $courseInfo Course info array
      * @param array $params Parameters from the course creation form
+     * @param int $authorId
      * @return void
      */
-    private static function fillCourse($courseInfo, $params)
+    private static function fillCourse($courseInfo, $params, $authorId = 0)
     {
+        $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
+
         AddCourse::prepare_course_repository($courseInfo['directory'], $courseInfo['code']);
         AddCourse::fill_db_course(
             $courseInfo['real_id'],
             $courseInfo['directory'],
             $courseInfo['course_language'],
-            $params['exemplary_content']
+            $params['exemplary_content'],
+            $authorId
         );
 
         if (isset($params['gradebook_model_id'])) {

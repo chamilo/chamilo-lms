@@ -1017,7 +1017,7 @@ class ImportCsv
                     $params['course_language'] = $row['language'];
                     $params['teachers'] = $row['teachers'];
 
-                    $courseInfo = CourseManager::create_course($params);
+                    $courseInfo = CourseManager::create_course($params, $this->defaultAdminId);
 
                     if (!empty($courseInfo)) {
                         CourseManager::update_course_extra_field_value(

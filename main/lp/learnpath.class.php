@@ -35,7 +35,6 @@ class learnpath
     public $license; // Which license this course has been given - not used yet on 20060522.
     public $lp_id; // DB ID for this learnpath.
     public $lp_view_id; // DB ID for lp_view
-    public $log_file; // File where to log learnpath API msg.
     public $maker; // Which maker has conceived the content (ENI, Articulate, ...).
     public $message = '';
     public $mode = 'embedded'; // Holds the video display mode (fullscreen or embedded).
@@ -614,7 +613,7 @@ class learnpath
             "prerequisite" => $prerequisites,
             "max_time_allowed" => $max_time_allowed,
             'min_score' => 0,
-            'launch_data' => '',
+            'launch_data' => ''
         );
 
         if ($prerequisites != 0) {
@@ -628,7 +627,6 @@ class learnpath
         }
 
         if ($new_item_id) {
-
             $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
             Database::query($sql);
 
@@ -2225,8 +2223,8 @@ class learnpath
         $tbl_lp_item_view 	= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Getting all the information about the item.
-        $sql = "SELECT * FROM ".$tbl_lp_item." as lp
-                INNER JOIN ".$tbl_lp_item_view." as lp_view
+        $sql = "SELECT * FROM $tbl_lp_item as lp
+                INNER JOIN $tbl_lp_item_view as lp_view
                 ON lp.id = lp_view.lp_item_id
                 WHERE
                     lp.id = '".$_SESSION['oLP']->current."' AND
@@ -2258,7 +2256,6 @@ class learnpath
             }
 
             $courseInfo = api_get_course_info();
-
             $audio = $row['audio'];
 
             $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
@@ -6877,13 +6874,17 @@ class learnpath
         }
 
         $legend = '<legend>';
-        if ($action == 'add')
+        if ($action == 'add') {
             $legend .= get_lang('CreateTheExercise');
-        elseif ($action == 'move') $legend .= get_lang('MoveTheCurrentExercise');
-        else
+        } elseif ($action == 'move') {
+            $legend .= get_lang('MoveTheCurrentExercise');
+        } else {
             $legend .= get_lang('EditCurrentExecice');
+        }
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
-            $legend .= Display :: return_warning_message(get_lang('Warning') . ' ! ' . get_lang('WarningEditingDocument'));
+            $legend .= Display:: return_warning_message(
+                get_lang('Warning').' ! '.get_lang('WarningEditingDocument')
+            );
         }
         $legend .= '</legend>';
 
@@ -6962,7 +6963,6 @@ class learnpath
                             $s_selected_position = $arrLP[$i]['id'];
                         elseif ($action == 'add') $s_selected_position = 0;
                         $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-
                     }
                 }
             }
@@ -7584,18 +7584,18 @@ class learnpath
 
             $relative_prefix = '';
 
-            $editor_config = array( 'ToolbarSet' 			=> 'LearningPathDocuments',
-                'Width' 				=> '100%',
-                'Height' 				=> '500',
-                'FullPage' 				=> true,
-                'CreateDocumentDir' 	=> $relative_prefix,
-                'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/scorm/',
-                'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().$item_path_fck
+            $editor_config = array(
+                'ToolbarSet' => 'LearningPathDocuments',
+                'Width' => '100%',
+                'Height' => '500',
+                'FullPage' => true,
+                'CreateDocumentDir' => $relative_prefix,
+                'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/scorm/',
+                'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().$item_path_fck
             );
 
             $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
-            $content_path = (api_get_path(SYS_COURSE_PATH).api_get_course_path().$item_path_fck);
-            //$defaults['content_lp'] = file_get_contents($item_path);
+            $content_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().$item_path_fck;
             $defaults['content_lp'] = file_get_contents($content_path);
         }
 
@@ -7681,8 +7681,8 @@ class learnpath
             $parent = 0;
         }
 
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
-                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM $tbl_lp_item
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
 
         $result = Database::query($sql);
         $arrLP = array ();
@@ -8380,29 +8380,29 @@ class learnpath
         $return = '<div class="actions">';
 
         switch ($item_type) {
-            case 'dir' :
+            case 'dir':
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateChapter');
                 break;
 
-            case TOOL_LP_FINAL_ITEM :
-            case TOOL_DOCUMENT :
+            case TOOL_LP_FINAL_ITEM:
+            case TOOL_DOCUMENT:
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateDocument');
                 break;
 
-            case TOOL_LINK :
+            case TOOL_LINK:
             case 'link' :
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateLink');
                 break;
 
-            case TOOL_QUIZ :
+            case TOOL_QUIZ:
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateQuiz');
                 break;
 
-            case TOOL_STUDENTPUBLICATION :
+            case TOOL_STUDENTPUBLICATION:
                 // Commented the message cause should not show it.
                 //$lang = get_lang('TitleManipulateStudentPublication');
                 break;

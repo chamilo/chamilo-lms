@@ -1006,7 +1006,6 @@ class ImportCsv
                 );
 
                 $courseInfo = api_get_course_info_by_id($courseId);
-                $courseCode = $courseInfo['code'];
 
                 if (empty($courseInfo)) {
                     // Create

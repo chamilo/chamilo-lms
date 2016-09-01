@@ -46,14 +46,14 @@ class AddCourse
         $try_new_fsc_id = $try_new_fsc_db = $try_new_fsc_dir = 0;
 
         while (!$keys_are_unique) {
-
             $keys_course_id = $prefix_for_all . $unique_prefix . $wanted_code . $final_suffix['CourseId'];
-            //$keys_course_db_name = $prefix_for_base_name . $unique_prefix . strtoupper($keys_course_id) . $final_suffix['CourseDb'];
             $keys_course_repository = $prefix_for_path . $unique_prefix . $wanted_code . $final_suffix['CourseDir'];
             $keys_are_unique = true;
 
             // Check whether they are unique.
-            $query = "SELECT 1 FROM ".$course_table." WHERE code='".$keys_course_id."' LIMIT 0,1";
+            $query = "SELECT 1 FROM $course_table 
+                      WHERE code='".$keys_course_id."' 
+                      LIMIT 0, 1";
             $result = Database::query($query);
 
             if (Database::num_rows($result)) {

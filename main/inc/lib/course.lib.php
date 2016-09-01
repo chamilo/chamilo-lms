@@ -46,11 +46,21 @@ class CourseManager
         }
 
         if (isset($_configuration[$access_url_id]) && is_array($_configuration[$access_url_id])) {
-            $return = self::checkCreateCourseAccessUrlParam($_configuration, $access_url_id, 'hosting_limit_courses', 'PortalCoursesLimitReached');
+            $return = self::checkCreateCourseAccessUrlParam(
+                $_configuration,
+                $access_url_id,
+                'hosting_limit_courses',
+                'PortalCoursesLimitReached'
+            );
             if ($return != false) {
                 return $return;
             }
-            $return = self::checkCreateCourseAccessUrlParam($_configuration, $access_url_id, 'hosting_limit_active_courses', 'PortalActiveCoursesLimitReached');
+            $return = self::checkCreateCourseAccessUrlParam(
+                $_configuration,
+                $access_url_id,
+                'hosting_limit_active_courses',
+                'PortalActiveCoursesLimitReached'
+            );
             if ($return != false) {
                 return $return;
             }
@@ -77,7 +87,6 @@ class CourseManager
         $params['exemplary_content'] = isset($params['exemplary_content']) ? $params['exemplary_content'] : false;
 
         if (count($keys)) {
-
             $params['code'] = $keys['currentCourseCode'];
             $params['visual_code'] = $keys['currentCourseId'];
             $params['directory'] = $keys['currentCourseRepository'];

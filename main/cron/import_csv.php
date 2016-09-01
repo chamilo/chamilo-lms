@@ -231,7 +231,8 @@ class ImportCsv
         CourseManager::create_course_extra_field(
             $this->extraFieldIdNameList['course'],
             1,
-            'External course id'
+            'External course id',
+            ''
         );
 
         // Create session extra field extra_external_session_id

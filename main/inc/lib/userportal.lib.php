@@ -1482,7 +1482,7 @@ class IndexManager
             $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
             $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
 
-            if (api_get_configuration_value('view_grid_courses')){
+            if (api_get_configuration_value('view_grid_courses')) {
                 $sessions_with_no_category = $this->tpl->fetch(
                     $this->tpl->get_template('/user_portal/grid_session.tpl')
                 );

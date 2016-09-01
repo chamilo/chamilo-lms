@@ -240,7 +240,8 @@ class UserManager
             $access_url_id = api_get_current_access_url_id();
         }
 
-        if (is_array($_configuration[$access_url_id]) &&
+        if (isset($_configuration[$access_url_id]) &&
+            is_array($_configuration[$access_url_id]) &&
             isset($_configuration[$access_url_id]['hosting_limit_users']) &&
             $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
             $num = self::get_number_of_users();
@@ -253,6 +254,7 @@ class UserManager
         }
 
         if ($status === 1 &&
+            isset($_configuration[$access_url_id]) &&
             is_array($_configuration[$access_url_id]) &&
             isset($_configuration[$access_url_id]['hosting_limit_teachers']) &&
             $_configuration[$access_url_id]['hosting_limit_teachers'] > 0

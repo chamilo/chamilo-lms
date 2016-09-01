@@ -1503,7 +1503,7 @@ function get_forums(
     if ($id == '') {
         // Student
         // Select all the forum information of all forums (that are visible to students).
-        $sql = "SELECT * FROM $table_forums forum
+        $sql = "SELECT item_properties.*, forum.* FROM $table_forums forum
                 INNER JOIN ".$table_item_property." item_properties
                 ON (
                     forum.forum_id = item_properties.ref AND
@@ -1538,7 +1538,7 @@ function get_forums(
         // Course Admin
         if (api_is_allowed_to_edit()) {
             // Select all the forum information of all forums (that are not deleted).
-            $sql = "SELECT * FROM ".$table_forums." forum
+            $sql = "SELECT item_properties.*, forum.* FROM ".$table_forums." forum
                     INNER JOIN ".$table_item_property." item_properties
                     ON (
                         forum.forum_id = item_properties.ref AND

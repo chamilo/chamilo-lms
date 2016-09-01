@@ -540,6 +540,10 @@ class Rest extends WebService
 
         $forumInfo = get_forums($forumId);
 
+        if (!isset($forumInfo['iid'])) {
+            throw new Exception(get_lang('NoForum'));
+        }
+
         /** @var Course $course */
         $course = Database::getManager()->find('ChamiloCoreBundle:Course', $forumInfo['c_id']);
 
@@ -550,7 +554,6 @@ class Rest extends WebService
         $webCoursePath = api_get_path(WEB_COURSE_PATH) . $course->getDirectory() . '/upload/forum/images/';
         $forum = [
             'id' => $forumInfo['iid'],
-            'forumId' => $forumInfo['forum_id'],
             'title' => $forumInfo['forum_title'],
             'description' => $forumInfo['forum_comment'],
             'image' => $forumInfo['forum_image'] ? ($webCoursePath . $forumInfo['forum_image']) : '',
@@ -561,7 +564,7 @@ class Rest extends WebService
 
         foreach ($threads as $thread) {
             $forum['threads'][] = [
-                'iid' => $thread['iid'],
+                'id' => $thread['iid'],
                 'title' => $thread['thread_title'],
                 'lastEditDate' => api_convert_and_format_date($thread['lastedit_date'], DATE_TIME_FORMAT_LONG_24H),
                 'numberOfReplies' => $thread['thread_replies'],

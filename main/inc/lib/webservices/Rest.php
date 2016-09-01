@@ -590,8 +590,6 @@ class Rest extends WebService
             'id' => intval($threadInfo['iid']),
             'cId' => intval($threadInfo['c_id']),
             'title' => $threadInfo['thread_title'],
-            'numberOfReplies' => intval($threadInfo['thread_replies']),
-            'numberOfViews' => intval($threadInfo['thread_views']),
             'forumId' => intval($threadInfo['forum_id']),
             'posts' => []
         ];

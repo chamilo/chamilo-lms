@@ -738,14 +738,19 @@ class GroupManager
         }
 
         $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];
 
+        if (empty($course_info)) {
+            return false;
+        }
+
+        $course_id = $course_info['real_id'];
         $group_id = intval($group_id);
         $sql = "SELECT gc.* FROM $table_group_cat gc, $table_group g
                 WHERE
                     gc.c_id = $course_id AND
                     g.c_id = $course_id AND
-                    gc.id = g.category_id AND g.id= $group_id
+                    gc.id = g.category_id AND 
+                    g.id= $group_id
                 LIMIT 1";
         $res = Database::query($sql);
         $cat = array();

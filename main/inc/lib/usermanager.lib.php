@@ -917,6 +917,16 @@ class UserManager
             return false;
         }
 
+        $originalUsername = $user->getUsername();
+
+        // If username is different from original then check if it exists.
+        if ($originalUsername !== $username) {
+            $available = self::is_username_available($username);
+            if ($available === false) {
+                return false;
+            }
+        }
+
         if (!empty($expiration_date)) {
             $expiration_date = api_get_utc_datetime($expiration_date);
             $expiration_date = new \DateTime(

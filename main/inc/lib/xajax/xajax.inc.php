@@ -914,25 +914,9 @@ class xajax
 		}
 
 		// Build the URL: Start with scheme, user and pass
-		$sURL = $aURL['scheme'].'://';
-		if (!empty($aURL['user'])) {
-			$sURL.= $aURL['user'];
-			if (!empty($aURL['pass'])) {
-				$sURL.= ':'.$aURL['pass'];
-			}
-			$sURL.= '@';
-		}
-
-		// Add the host
-		$sURL.= $aURL['host'];
-
-		// Add the port if needed
-		if (!empty($aURL['port']) && (($aURL['scheme'] == 'http' && $aURL['port'] != 80) || ($aURL['scheme'] == 'https' && $aURL['port'] != 443))) {
-			$sURL.= ':'.$aURL['port'];
-		}
-
+		$sURL  = api_get_self();
 		// Add the path and the query string
-		$sURL.= $aURL['path'].@$aURL['query'];
+		$sURL.= @$aURL['query'];
 
 		// Clean up
 		unset($aURL);

@@ -1333,7 +1333,9 @@ class ImportCsv
                 $enreg = explode(';', trim($enreg));
                 if ($key) {
                     foreach ($tag_names as $tag_key => $tag_name) {
-                        $sessions[$key - 1][$tag_name] = $enreg[$tag_key];
+                        if (isset($enreg[$tag_key])) {
+                            $sessions[$key - 1][$tag_name] = $enreg[$tag_key];
+                        }
                     }
                 } else {
                     foreach ($enreg as $tag_name) {

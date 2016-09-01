@@ -1621,7 +1621,7 @@ class GroupManager
             if (self::can_user_subscribe($user_id, $group_id, false)) {
                 $sql = "INSERT INTO " . $table_group_tutor . " (c_id, user_id, group_id)
                         VALUES ('$course_id', '" . $user_id . "', '" . $group_id . "')";
-                $result &= Database::query($sql);
+                $result = Database::query($sql);
             }
         }
 

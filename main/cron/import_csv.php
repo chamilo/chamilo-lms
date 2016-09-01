@@ -716,7 +716,7 @@ class ImportCsv
                 $externalSessionId = null;
                 if (isset($row['external_sessionID'])) {
                     $externalSessionId = $row['external_sessionID'];
-                    $sessionId = SessionManager::get_session_id_from_original_id(
+                    $sessionId = SessionManager::getSessionIdFromOriginalId(
                         $externalSessionId,
                         $this->extraFieldIdNameList['session']
                     );
@@ -1127,7 +1127,7 @@ class ImportCsv
 
                 $chamiloSessionId = null;
                 if (!empty($externalSessionId)) {
-                    $chamiloSessionId = SessionManager::get_session_id_from_original_id(
+                    $chamiloSessionId = SessionManager::getSessionIdFromOriginalId(
                         $externalSessionId,
                         $this->extraFieldIdNameList['session']
                     );
@@ -1205,7 +1205,7 @@ class ImportCsv
 
                 $chamiloSessionId = null;
                 if (!empty($externalSessionId)) {
-                    $chamiloSessionId = SessionManager::get_session_id_from_original_id(
+                    $chamiloSessionId = SessionManager::getSessionIdFromOriginalId(
                         $externalSessionId,
                         $this->extraFieldIdNameList['session']
                     );
@@ -1264,7 +1264,7 @@ class ImportCsv
 
                 $chamiloSessionId = null;
                 if (!empty($externalSessionId)) {
-                    $chamiloSessionId = SessionManager::get_session_id_from_original_id(
+                    $chamiloSessionId = SessionManager::getSessionIdFromOriginalId(
                         $externalSessionId,
                         $this->extraFieldIdNameList['session']
                     );
@@ -1359,7 +1359,7 @@ class ImportCsv
             // Looping the sessions.
             foreach ($sessions as $session) {
                 if (!empty($session['SessionID'])) {
-                    $sessionId = SessionManager::get_session_id_from_original_id(
+                    $sessionId = SessionManager::getSessionIdFromOriginalId(
                         $session['SessionID'],
                         $this->extraFieldIdNameList['session']
                     );

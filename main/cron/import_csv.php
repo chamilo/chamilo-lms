@@ -610,13 +610,25 @@ class ImportCsv
 
                             // Blocking password update
                             $avoidUsersWithPassword = $this->conditions['importStudents']['update']['avoid']['password'];
-                            $user = api_get_user_entity($userInfo['id']);
-                            $encoded = UserManager::encryptPassword($row['password'], $user);
 
-                            if ($userInfo['password'] != $encoded && in_array($row['password'], $avoidUsersWithPassword)) {
-                                $this->logger->addInfo("Students - User password is not updated: ".$row['username']." because the avoid conditions (password).");
-                                $password = null;
-                                $resetPassword = 0; // disallow password change
+                            if (isset($row['password'])) {
+                                $user = api_get_user_entity($userInfo['id']);
+                                $encoded = UserManager::encryptPassword(
+                                    $row['password'],
+                                    $user
+                                );
+
+                                if ($userInfo['password'] != $encoded && in_array(
+                                        $row['password'],
+                                        $avoidUsersWithPassword
+                                    )
+                                ) {
+                                    $this->logger->addInfo(
+                                        "Students - User password is not updated: ".$row['username']." because the avoid conditions (password)."
+                                    );
+                                    $password = null;
+                                    $resetPassword = 0; // disallow password change
+                                }
                             }
                         }
                     }

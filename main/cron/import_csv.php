@@ -348,7 +348,7 @@ class ImportCsv
      */
     private function importTeachers($file, $moveFile = true)
     {
-        $data = Import::csv_to_array($file);
+        $data = Import::csvToArray($file);
 
         /* Unique identifier: official-code username.
         Email address and password should never get updated. *ok
@@ -482,7 +482,7 @@ class ImportCsv
      */
     private function importStudents($file, $moveFile = true)
     {
-        $data = Import::csv_to_array($file);
+        $data = Import::csvToArray($file);
 
         /*
          * Another users import.
@@ -672,7 +672,7 @@ class ImportCsv
      */
     private function importCalendarStatic($file, $moveFile = true)
     {
-        $data = Import::csv_to_array($file);
+        $data = Import::csvToArray($file);
 
         if (!empty($data)) {
             $this->logger->addInfo(count($data) . " records found.");
@@ -958,7 +958,7 @@ class ImportCsv
      */
     private function importCourses($file, $moveFile = true, &$teacherBackup = array(), &$groupBackup = array())
     {
-        $data = Import::csv_to_array($file);
+        $data = Import::csvToArray($file);
 
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");

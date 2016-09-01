@@ -569,13 +569,12 @@ class ImportCsv
                         $this->logger->addError("Students - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }
                 } else {
-
                     if (empty($userInfo)) {
                         $this->logger->addError("Students - Can't update user :".$row['username']);
                         continue;
                     }
 
-                    if (isset($row['action']) && $row['action'] == 'delete') {
+                    if (isset($row['action']) && $row['action'] === 'delete') {
                         // Inactive one year later
                         $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + 365*24*60*60));
                     }
@@ -611,8 +610,10 @@ class ImportCsv
 
                             // Blocking password update
                             $avoidUsersWithPassword = $this->conditions['importStudents']['update']['avoid']['password'];
+                            $user = api_get_user_entity($userInfo['id']);
+                            $encoded = UserManager::encryptPassword($row['password'], $user);
 
-                            if ($userInfo['password'] != api_get_encrypted_password($row['password']) && in_array($row['password'], $avoidUsersWithPassword)) {
+                            if ($userInfo['password'] != $encoded && in_array($row['password'], $avoidUsersWithPassword)) {
                                 $this->logger->addInfo("Students - User password is not updated: ".$row['username']." because the avoid conditions (password).");
                                 $password = null;
                                 $resetPassword = 0; // disallow password change

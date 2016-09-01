@@ -5081,11 +5081,16 @@ class CourseManager
         if (empty($teachers)) {
             return false;
         }
+
         if (!is_array($teachers)) {
             $teachers = array($teachers);
         }
         $courseId = intval($courseId);
         $courseInfo = api_get_course_info_by_id($courseId);
+
+        if (empty($courseInfo)) {
+            return false;
+        }
         $course_code = $courseInfo['code'];
 
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);

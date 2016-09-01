@@ -302,7 +302,7 @@ class ImportCsv
         $row['password'] = $row['Password'];
         $row['auth_source'] = isset($row['AuthSource']) ? $row['AuthSource'] : PLATFORM_AUTH_SOURCE;
         $row['official_code'] = $row['OfficialCode'];
-        $row['phone'] = $row['PhoneNumber'];
+        $row['phone'] = isset($row['PhoneNumber']) ? $row['PhoneNumber'] : '';
 
         if (isset($row['StudentID'])) {
             $row['extra_'.$this->extraFieldIdNameList['user']] = $row['StudentID'];

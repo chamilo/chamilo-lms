@@ -573,7 +573,7 @@ class ImportCsv
                         continue;
                     }
 
-                    if ($row['action'] == 'delete') {
+                    if (isset($row['action']) && $row['action'] == 'delete') {
                         // Inactive one year later
                         $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + 365*24*60*60));
                     }

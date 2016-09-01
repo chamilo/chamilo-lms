@@ -21,12 +21,9 @@ class Version20160603113100 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $languageTable = $schema->getTable('language');
-        $languageTable
-            ->getColumn('parent_id')
-            ->setType(Type::getType(Type::INTEGER))
-            ->setNotnull(false);
-        $languageTable->addForeignKeyConstraint('language', ['parent_id'], ['id'], [], 'language_parent');
+        $this->addSql('ALTER TABLE language MODIFY id INT');
+        $this->addSql('ALTER TABLE language MODIFY parent_id INT');
+        $this->addSql('ALTER TABLE language ADD CONSTRAINT language_parent FOREIGN KEY (parent_id) REFERENCES language (id)');
     }
 
     /**

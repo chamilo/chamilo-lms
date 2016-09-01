@@ -2776,6 +2776,11 @@ class SessionManager
             $session_id = api_get_session_id();
         }
 
+        if (empty($session_id)) {
+            return false;
+        }
+
+
         if (!empty($courseId)) {
             $courseId = intval($courseId);
         } else {
@@ -2828,10 +2833,11 @@ class SessionManager
                                 c_id = $courseId AND
                                 user_id = $user_id ";
                     $result = Database::query($sql);
-                    if (Database::affected_rows($result) > 0)
+                    if (Database::affected_rows($result) > 0) {
                         return true;
-                    else
+                    } else {
                         return false;
+                    }
                 }
             } else {
                 // Assign user as a coach to course

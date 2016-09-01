@@ -1168,7 +1168,7 @@ class ImportCsv
                             $courseInfo['code']
                         );
                         break;
-                   case 'drh':
+                    case 'drh':
                         $userInfo = api_get_user_info($userId);
                         SessionManager::suscribe_sessions_to_hr_manager(
                             $userInfo,
@@ -1289,7 +1289,6 @@ class ImportCsv
                     $this->logger->addError('User does not exists: '.$chamiloUserName);
                     continue;
                 }
-                $status = null;
                 switch ($type) {
                     case 'student':
                         SessionManager::subscribe_users_to_session_course(
@@ -1624,7 +1623,7 @@ class ImportCsv
                     $this->logger->addError('User does not exists: '.$chamiloUserName);
                     continue;
                 }
-                $status = null;
+
                 switch ($type) {
                     case 'student':
                         SessionManager::subscribe_users_to_session_course(

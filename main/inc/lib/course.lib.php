@@ -5164,7 +5164,11 @@ class CourseManager
                     // Remove old and add new
                     if ($deleteSessionTeacherNotInList) {
                         foreach ($teachers as $userId) {
-                            SessionManager::set_coach_to_course_session($userId, $session['id'], $courseId);
+                            SessionManager::set_coach_to_course_session(
+                                $userId,
+                                $session['id'],
+                                $courseId
+                            );
                         }
 
                         $teachersToDelete = array();
@@ -5174,14 +5178,22 @@ class CourseManager
 
                         if (!empty($teachersToDelete)) {
                             foreach ($teachersToDelete as $userId) {
-                                SessionManager::set_coach_to_course_session($userId, $session['id'], $courseId,
-                                    true);
+                                SessionManager::set_coach_to_course_session(
+                                    $userId,
+                                    $session['id'],
+                                    $courseId,
+                                    true
+                                );
                             }
                         }
                     } else {
                         // Add new teachers only
                         foreach ($teachers as $userId) {
-                            SessionManager::set_coach_to_course_session($userId, $session['id'], $courseId);
+                            SessionManager::set_coach_to_course_session(
+                                $userId,
+                                $session['id'],
+                                $courseId
+                            );
                         }
                     }
                 }

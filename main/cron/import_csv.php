@@ -263,8 +263,8 @@ class ImportCsv
         $extraField = new ExtraField('calendar_event');
         $extraField->save(array(
             'field_type' => ExtraField::FIELD_TYPE_TEXT,
-            'field_variable' => $this->extraFieldIdNameList['calendar_event'],
-            'field_display_text' => 'External calendar event id'
+            'variable' => $this->extraFieldIdNameList['calendar_event'],
+            'display_text' => 'External calendar event id'
         ));
     }
 

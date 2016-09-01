@@ -529,7 +529,7 @@ class ImportCsv
                 $userInfo = array();
                 $userInfoByOfficialCode = null;
                 if (!empty($user_id)) {
-                    $userInfo = api_get_user_info($user_id);
+                    $userInfo = api_get_user_info($user_id, false, true);
                     $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
                 }
 

@@ -365,6 +365,7 @@ class ImportCsv
      */
     private function importTeachers($file, $moveFile = true)
     {
+        $this->fixCSVFile($file);
         $data = Import::csvToArray($file);
 
         /* Unique identifier: official-code username.
@@ -499,6 +500,7 @@ class ImportCsv
      */
     private function importStudents($file, $moveFile = true)
     {
+        $this->fixCSVFile($file);
         $data = Import::csvToArray($file);
 
         /*
@@ -689,6 +691,7 @@ class ImportCsv
      */
     private function importCalendarStatic($file, $moveFile = true)
     {
+        $this->fixCSVFile($file);
         $data = Import::csvToArray($file);
 
         if (!empty($data)) {
@@ -975,6 +978,7 @@ class ImportCsv
      */
     private function importCourses($file, $moveFile = true, &$teacherBackup = array(), &$groupBackup = array())
     {
+        $this->fixCSVFile($file);
         $data = Import::csvToArray($file);
 
         if (!empty($data)) {
@@ -1858,6 +1862,28 @@ class ImportCsv
             $sql = "TRUNCATE $table";
             Database::query($sql);
             echo $sql.PHP_EOL;
+        }
+    }
+
+    /**
+     * If csv file ends with '"' character then a '";' is added
+     * @param string $file
+     */
+    private function fixCSVFile($file)
+    {
+        $f = fopen($file, 'r+');
+        $cursor = -1;
+
+        fseek($f, $cursor, SEEK_END);
+        $char = fgetc($f);
+        while ($char === "\n" || $char === "\r") {
+            fseek($f, $cursor--, SEEK_END);
+            $char = fgetc($f);
+        }
+
+        if ($char === "\"") {
+            fseek($f, -1, SEEK_CUR);
+            fwrite($f, '";');
         }
     }
 }

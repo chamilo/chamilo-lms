@@ -56,6 +56,16 @@ Let's see the options of each section.
   This handler will also be called when the `change` or the `onpaste` events
   happen.
 
+* __onScore__:
+
+  Default: `undefined` (Function)
+
+  A callback function that will be called when the score is calculted by the
+  rules engine, allowing for a final modification before rendering the result.
+
+  The options, the word and the score will be passed as arguments, in that
+  order.
+
 * __zxcvbn__:
 
   Default: `false` (Boolean)
@@ -352,7 +362,7 @@ Let's see the options of each section.
 ```javascript
 var options = {};
 options.common = {
-    minChar: 8;
+    minChar: 8
 };
 options.rules = {
     activated: {

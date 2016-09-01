@@ -1,6 +1,6 @@
 /*!
 * jQuery Password Strength plugin for Twitter Bootstrap
-* Version: 2.0.1
+* Version: 2.0.2
 *
 * Copyright (c) 2008-2013 Tane Piper
 * Copyright (c) 2013 Alejandro Blanco
@@ -198,6 +198,10 @@ try {
             }
         });
 
+        if ($.isFunction(options.common.onScore)) {
+            totalScore = options.common.onScore(options, word, totalScore);
+        }
+
         return totalScore;
     };
 }(jQuery, rulesEngine));
@@ -223,6 +227,7 @@ defaultOptions.common.userInputs = [
 ];
 defaultOptions.common.onLoad = undefined;
 defaultOptions.common.onKeyUp = undefined;
+defaultOptions.common.onScore = undefined;
 defaultOptions.common.zxcvbn = false;
 defaultOptions.common.zxcvbnTerms = [
     // List of disrecommended words

@@ -1,4 +1,4 @@
-// WebcamJS v1.0.12
+// WebcamJS v1.0.15
 // Webcam library for capturing JPEG/PNG images in JavaScript
 // Attempts getUserMedia, falls back to Flash
 // Author: Joseph Huckaby: http://github.com/jhuckaby
@@ -34,7 +34,7 @@ FlashError.prototype = new IntermediateInheritor();
 WebcamError.prototype = new IntermediateInheritor();
 
 var Webcam = {
-	version: '1.0.12',
+	version: '1.0.15',
 	
 	// globals
 	protocol: location.protocol.match(/https/i) ? 'https' : 'http',
@@ -49,6 +49,7 @@ var Webcam = {
 		dest_height: 0,        // these default to width/height
 		image_format: 'jpeg',  // image format (may be jpeg or png)
 		jpeg_quality: 90,      // jpeg image quality from 0 (worst) to 100 (best)
+		enable_flash: true,    // enable flash fallback,
 		force_flash: false,    // force flash mode,
 		flip_horiz: false,     // flip image horiz (mirror mode)
 		fps: 30,               // camera frames per second
@@ -56,6 +57,7 @@ var Webcam = {
 		constraints: null,     // custom user media constraints,
 		swfURL: '',            // URI to webcam.swf movie (defaults to the js location)
 		flashNotDetectedText: 'ERROR: No Adobe Flash Player detected.  Webcam.js relies on Flash for browsers that do not support getUserMedia (like yours).',
+		noInterfaceFoundText: 'No supported webcam interface found.',
 		unfreeze_snap: true    // Whether to unfreeze the camera after snap (defaults to true)
 	},
 
@@ -193,7 +195,7 @@ var Webcam = {
 			.catch( function(err) {
 				// JH 2016-07-31 Instead of dispatching error, now falling back to Flash if userMedia fails (thx @john2014)
 				// JH 2016-08-07 But only if flash is actually installed -- if not, dispatch error here and now.
-				if (self.detectFlash()) {
+				if (self.params.enable_flash && self.detectFlash()) {
 					setTimeout( function() { self.params.force_flash = 1; self.attach(elem); }, 1 );
 				}
 				else {
@@ -201,12 +203,15 @@ var Webcam = {
 				}
 			});
 		}
-		else {
+		else if (this.params.enable_flash && this.detectFlash()) {
 			// flash fallback
 			window.Webcam = Webcam; // needed for flash-to-js interface
 			var div = document.createElement('div');
 			div.innerHTML = this.getSWFHTML();
 			elem.appendChild( div );
+		}
+		else {
+			this.dispatch('error', new WebcamError( this.params.noInterfaceFoundText ));
 		}
 		
 		// setup final crop for live preview

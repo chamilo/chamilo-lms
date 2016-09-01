@@ -2776,15 +2776,14 @@ class SessionManager
             $session_id = api_get_session_id();
         }
 
-        if (empty($session_id)) {
-            return false;
-        }
-
-
         if (!empty($courseId)) {
             $courseId = intval($courseId);
         } else {
             $courseId = api_get_course_id();
+        }
+
+        if (empty($session_id) || empty($courseId) || empty($user_id)) {
+            return false;
         }
 
         // Table definition

@@ -102,7 +102,7 @@
                                             <h4>{{ item.title }}</h4>
                                             <div class="list-teachers">
                                                 {% if item.teachers|length > 0 %}
-                                                    <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">
+                                                    <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">&nbsp;
                                                     {% for coach in item.teachers %}
                                                         {{ loop.index > 1 ? ' | ' }}
                                                         <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}"

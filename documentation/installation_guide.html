@@ -701,6 +701,7 @@ If you have issues with files taking a long time to download, make sure you reco
 
   location @rewrite{
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
+    rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/upload/(.*)$ /app/courses/$1/upload/$2 last;
@@ -711,7 +712,8 @@ If you have issues with files taking a long time to download, make sure you reco
   location / {
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued.php?skill=$1&user=$2 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     try_files $uri @rewrite;
   }
 
@@ -727,6 +729,7 @@ If you have issues with files taking a long time to download, make sure you reco
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/badge/([^/]+) /main/badge/issued.php?issue=$1 last;
     rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
     rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
 

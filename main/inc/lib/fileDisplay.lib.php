@@ -171,6 +171,40 @@ function choose_image($file_name)
     return 'defaut.gif';
 }
 
+/**
+ * Get the icon to display for a folder by its path
+ * @param string $folderPath
+ * @return string
+ */
+function chooseFolderIcon($folderPath)
+{
+    if ($folderPath == '/shared_folder') {
+        return 'folder_users.gif';
+    }
+
+    if (strstr($folderPath, 'shared_folder_session_')) {
+        return 'folder_users.gif';
+    }
+
+    switch ($folderPath) {
+        case '/audio';
+            return 'folder_audio.gif';
+        case '/flash':
+            return 'folder_flash.gif';
+        case '/images';
+            return 'folder_images.gif';
+        case '/video':
+            return 'folder_video.gif';
+        case '/images/gallery':
+            return 'folder_gallery.gif';
+        case '/chat_files':
+            return 'folder_chat.gif';
+        case '/learning_path':
+            return 'folder_learningpath.gif';
+    }
+
+    return 'folder_document.gif';
+}
 
 /**
  * Transform a UNIX time stamp in human readable format date.

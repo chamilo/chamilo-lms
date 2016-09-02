@@ -1339,32 +1339,35 @@ function return_visible_invisible($current_visibility_status)
         return $status;
     }
 }
+
 /**
  * Retrieve all the information off the forum categories (or one specific) for the current course.
  * The categories are sorted according to their sorting order (cat_order
  *
- * @param int $id default ''. When an id is passed we only find the information
+ * @param int|string $id default ''. When an id is passed we only find the information
  * about that specific forum category. If no id is passed we get all the forum categories.
+ * @param int $courseId Optional. The course ID
+ * @param int $sessionId Optional. The session ID
  * @return array containing all the information about all the forum categories
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_forum_categories($id = '')
+function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
 {
     $table_categories = Database :: get_course_table(TABLE_FORUM_CATEGORY);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
     // Condition for the session
-    $session_id = api_get_session_id();
-    $course_id = api_get_course_int_id();
+    $session_id = $sessionId ?: api_get_session_id();
+    $course_id = $courseId ?: api_get_course_int_id();
 
     $condition_session = api_get_session_condition($session_id, true, true, 'forum_categories.session_id');
     $condition_session .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if (empty($id)) {
         $sql = "SELECT *
-                FROM ".$table_categories." forum_categories, ".$table_item_property." item_properties
+                FROM ".$table_item_property." item_properties, ".$table_categories." forum_categories
                 WHERE
                     forum_categories.cat_id=item_properties.ref AND
                     item_properties.visibility=1 AND
@@ -1373,7 +1376,7 @@ function get_forum_categories($id = '')
                 ORDER BY forum_categories.cat_order ASC";
         if (api_is_allowed_to_edit()) {
             $sql = "SELECT *
-                    FROM ".$table_categories." forum_categories, ".$table_item_property." item_properties
+                    FROM ".$table_item_property." item_properties, ".$table_categories." forum_categories
                     WHERE
                         forum_categories.cat_id=item_properties.ref AND
                         item_properties.visibility<>2 AND
@@ -1383,7 +1386,7 @@ function get_forum_categories($id = '')
         }
     } else {
         $sql = "SELECT *
-                FROM ".$table_categories." forum_categories, ".$table_item_property." item_properties
+                FROM ".$table_item_property." item_properties, ".$table_categories." forum_categories
                 WHERE
                     forum_categories.cat_id=item_properties.ref AND
                     item_properties.tool='".TOOL_FORUM_CATEGORY."' AND
@@ -1394,7 +1397,7 @@ function get_forum_categories($id = '')
     $result = Database::query($sql);
     $forum_categories_list = array();
 
-    while ($row = Database::fetch_array($result)) {
+    while ($row = Database::fetch_assoc($result)) {
         if (empty($id)) {
             $forum_categories_list[$row['cat_id']] = $row;
         } else {
@@ -1409,18 +1412,19 @@ function get_forum_categories($id = '')
  * This function retrieves all the fora in a given forum category
  *
  * @param int $cat_id the id of the forum category
+ * @param int $courseId Optional. The course ID
  * @return array containing all the information about the forums (regardless of their category)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_forums_in_category($cat_id)
+function get_forums_in_category($cat_id, $courseId = 0)
 {
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     $forum_list = array();
-    $course_id = api_get_course_int_id();
+    $course_id = $courseId ?: api_get_course_int_id();
 
     $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
             WHERE
@@ -1475,15 +1479,10 @@ function get_forums(
 
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
     // Condition for the session
-    if (empty($sessionId)) {
-        $session_id = api_get_session_id();
-    } else {
-        $session_id = $sessionId;
-    }
+    $session_id = intval($sessionId) ?: api_get_session_id();
 
     $sessionIdLink = ($session_id === 0) ? '' : 'AND threads.session_id = item_properties.session_id';
 
@@ -1504,7 +1503,7 @@ function get_forums(
     if ($id == '') {
         // Student
         // Select all the forum information of all forums (that are visible to students).
-        $sql = "SELECT * FROM $table_forums forum
+        $sql = "SELECT item_properties.*, forum.* FROM $table_forums forum
                 INNER JOIN ".$table_item_property." item_properties
                 ON (
                     forum.forum_id = item_properties.ref AND
@@ -1539,7 +1538,7 @@ function get_forums(
         // Course Admin
         if (api_is_allowed_to_edit()) {
             // Select all the forum information of all forums (that are not deleted).
-            $sql = "SELECT * FROM ".$table_forums." forum
+            $sql = "SELECT item_properties.*, forum.* FROM ".$table_forums." forum
                     INNER JOIN ".$table_item_property." item_properties
                     ON (
                         forum.forum_id = item_properties.ref AND
@@ -1580,30 +1579,27 @@ function get_forums(
         we use this part of the function) */
 
         // Select all the forum information of the given forum (that is not deleted).
-        $sql = "SELECT * FROM $table_forums forum, ".$table_item_property." item_properties
+        $sql = "SELECT * FROM ".$table_item_property." item_properties, $table_forums forum
                 WHERE
-                    forum.forum_id=item_properties.ref AND
-                    forum_id = ".intval($id)." AND
-                    item_properties.visibility<>2 AND
-                    item_properties.tool='".TOOL_FORUM."'
-                    $condition_session AND
-                    forum.c_id = $course_id AND
-                    item_properties.c_id = $course_id
+                    forum.forum_id = item_properties.ref AND
+                    forum.iid = " . intval($id) . " AND
+                    item_properties.visibility != 2 AND
+                    item_properties.tool = '".TOOL_FORUM."' AND 
+                    forum.c_id = item_properties.c_id
                 ORDER BY forum_order ASC";
 
         // Select the number of threads of the forum.
         $sql2 = "SELECT count(*) AS number_of_threads, forum_id
                 FROM $table_threads
                 WHERE
-                    forum_id = ".intval($id)." AND
-                    c_id = $course_id
+                    forum_id = " . intval($id) . "
                 GROUP BY forum_id";
     }
 
     // Handling all the forum information.
 
     $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
+    while ($row = Database::fetch_assoc($result)) {
         if ($id == '') {
             $forum_list[$row['forum_id']] = $row;
         } else {
@@ -1783,14 +1779,8 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_threads($forum_id, $course_code = null)
+function get_threads($forum_id)
 {
-    $course_info = api_get_course_info($course_code);
-    if (empty($course_info)) {
-        return array();
-    }
-
-    $course_id = $course_info['real_id'];
     $groupId = api_get_group_id();
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -1803,18 +1793,17 @@ function get_threads($forum_id, $course_code = null)
     $groupCondition = api_get_group_id() != 0 ? " AND item_properties.to_group_id = '$groupId' " : "";
 
     $sql = "SELECT DISTINCT
-                thread.*,
                 item_properties.*,
                 users.firstname,
                 users.lastname,
                 users.user_id,
-                thread.locked as locked
+                thread.locked as locked,
+                thread.*
             FROM $table_threads thread
             INNER JOIN $table_item_property item_properties
             ON
                 thread.thread_id = item_properties.ref AND
                 item_properties.c_id = thread.c_id AND
-                item_properties.c_id = $course_id AND
                 item_properties.tool = '".TABLE_FORUM_THREAD."' $groupCondition
             LEFT JOIN $table_users users
                 ON thread.thread_poster_id=users.user_id
@@ -1825,18 +1814,17 @@ function get_threads($forum_id, $course_code = null)
 
     if (api_is_allowed_to_edit()) {
         $sql = "SELECT DISTINCT
-                    thread.*,
                     item_properties.*,
                     users.firstname,
                     users.lastname,
                     users.user_id,
-                    thread.locked as locked
+                    thread.locked as locked,
+                    thread.*
                 FROM $table_threads thread
                 INNER JOIN $table_item_property item_properties
                 ON
                     thread.thread_id = item_properties.ref AND
-                    item_properties.c_id = $course_id AND
-                    thread.c_id = $course_id AND
+                    item_properties.c_id = thread.c_id AND
                     item_properties.tool = '".TABLE_FORUM_THREAD."'
                     $groupCondition
                 LEFT JOIN $table_users users
@@ -1918,7 +1906,6 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
     $criteria = Criteria::create();
     $criteria
         ->where(Criteria::expr()->eq('threadId', $threadId))
-        ->andWhere(Criteria::expr()->eq('cId', api_get_course_int_id()))
         ->andWhere($visibleCriteria)
     ;
 
@@ -1956,6 +1943,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
         $user = $em->find('ChamiloUserBundle:User', $post->getPosterId());
 
         $list[$post->getPostId()] = [
+            'iid' => $post->getIid(),
             'c_id' => $post->getCId(),
             'post_id' => $post->getPostId(),
             'post_title' => $post->getPostTitle(),
@@ -2038,19 +2026,17 @@ function get_thread_information($thread_id)
 {
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-    $course_id = api_get_course_int_id();
     $thread_id = intval($thread_id);
 
-    $sql = "SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
+    $sql = "SELECT * FROM " . $table_item_property . " item_properties, " . $table_threads . " threads
             WHERE
                 item_properties.tool= '".TOOL_FORUM_THREAD."' AND
-                item_properties.c_id = $course_id AND
-                item_properties.ref = ".$thread_id." AND
-                threads.thread_id   = ".$thread_id." AND
-                threads.c_id = $course_id
+                item_properties.ref = threads.thread_id AND
+                threads.iid   = ".$thread_id." AND
+                threads.c_id = item_properties.c_id
             ";
     $result = Database::query($sql);
-    $row = Database::fetch_array($result);
+    $row = Database::fetch_assoc($result);
 
     return $row;
 }
@@ -5434,7 +5420,7 @@ function get_all_post_from_user($user_id, $course_code)
             continue;
         }
         if ($j <= 4) {
-            $threads = get_threads($forum['forum_id'], $course_code);
+            $threads = get_threads($forum['forum_id']);
 
             if (is_array($threads)) {
                 $i = 0;

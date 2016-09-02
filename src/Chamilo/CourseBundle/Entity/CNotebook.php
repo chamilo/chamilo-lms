@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Entity\Repository\CNotebookRepository")
  */
 class CNotebook
 {
@@ -325,5 +325,14 @@ class CNotebook
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 }

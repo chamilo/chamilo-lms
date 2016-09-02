@@ -1380,22 +1380,31 @@ class ImportCsv
                         $coachId = $coachInfo['user_id'];
                     }
 
+                    $dateStart = $dateStart[0].'-'.$dateStart[1].'-'.$dateStart[2].' 00:00:00';
+                    $dateEnd = $dateEnd[0].'-'.$dateEnd[1].'-'.$dateEnd[2].' 23:59:59';
+
+                    $date = new \DateTime($dateStart);
+                    $interval = new DateInterval('P'.$this->daysCoachAccessBeforeBeginning.'D');
+                    $date->sub($interval);
+                    $coachBefore = $date->format('Y-m-d h:i');
+
+                    $date = new \DateTime($dateStart);
+                    $interval = new DateInterval('P'.$this->daysCoachAccessAfterBeginning.'D');
+                    $date->add($interval);
+                    $coachAfter = $date->format('Y-m-d h:i');
+
                     if (empty($sessionId)) {
                         $result = SessionManager::create_session(
                             $session['SessionName'],
-                            $dateStart[0],
-                            $dateStart[1],
-                            $dateStart[2],
-                            $dateEnd[0],
-                            $dateEnd[1],
-                            $dateEnd[2],
-                            $this->daysCoachAccessBeforeBeginning,
-                            $this->daysCoachAccessAfterBeginning,
-                            null,
-                            $coachUserName,
+                            $dateStart,
+                            $dateEnd,
+                            $dateStart,
+                            $dateEnd,
+                            $coachBefore,
+                            $coachAfter,
+                            $coachId,
                             $categoryId,
-                            $visibility,
-                            1
+                            $visibility
                         );
 
                         if (is_numeric($result)) {
@@ -1405,9 +1414,10 @@ class ImportCsv
                                 $this->extraFieldIdNameList['session'],
                                 $session['SessionID']
                             );
+                        } else {
+                            $this->logger->addInfo("Failed creating session: ".$session['SessionName']);
                         }
                     } else {
-
                         $sessionInfo = api_get_session_info($sessionId);
                         $accessBefore = null;
                         $accessAfter = null;
@@ -1416,7 +1426,7 @@ class ImportCsv
                             (!empty($sessionInfo['nb_days_access_before_beginning']) &&
                                 $sessionInfo['nb_days_access_before_beginning'] < $this->daysCoachAccessBeforeBeginning)
                         ) {
-                            $accessBefore = intval($this->daysCoachAccessBeforeBeginning);
+                            $accessBefore = $coachBefore;
                         }
 
                         $accessAfter = null;
@@ -1424,7 +1434,7 @@ class ImportCsv
                             (!empty($sessionInfo['nb_days_access_after_end']) &&
                                 $sessionInfo['nb_days_access_after_end'] < $this->daysCoachAccessAfterBeginning)
                         ) {
-                            $accessAfter = intval($this->daysCoachAccessAfterBeginning);
+                            $accessAfter = $coachAfter;
                         }
 
                         $showDescription = isset($sessionInfo['show_description']) ? $sessionInfo['show_description'] : 1;
@@ -1432,28 +1442,23 @@ class ImportCsv
                         $result = SessionManager::edit_session(
                             $sessionId,
                             $session['SessionName'],
-                            $dateStart[0],
-                            $dateStart[1],
-                            $dateStart[2],
-                            $dateEnd[0],
-                            $dateEnd[1],
-                            $dateEnd[2],
+                            $dateStart,
+                            $dateEnd,
+                            $dateStart,
+                            $dateEnd,
                             $accessBefore,
                             $accessAfter,
-                            null,
                             $coachId,
                             $categoryId,
                             $visibility,
-                            true, //$start_limit =
-                            true, //$end_limit =
-                            null, //$description
-                            $showDescription // $showDescription = null,
+                            null, //$description = null,
+                            $showDescription
                         );
 
                         if (is_numeric($result)) {
                             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
                             $params = array(
-                                'description' => $session['SessionDescription'],
+                                'description' => $session['SessionDescription']
                             );
                             Database::update(
                                 $tbl_session,

@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CourseBundle\Entity\Repository\CAnnouncementRepository;
-use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 
 /**
  * Class RestApi
@@ -31,6 +30,7 @@ class Rest extends WebService
     const ACTION_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
     const ACTION_COURSE_FORUM = 'course_forum';
     const ACTION_COURSE_FORUM_THREAD = 'course_forumthread';
+    const ACTION_COURSE_LEARNPATHS = 'course_learnpaths';
 
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
@@ -198,7 +198,7 @@ class Rest extends WebService
         $results = [];
 
         /** @var CourseDescription $description */
-        foreach($descriptions as $description) {
+        foreach ($descriptions as $description) {
             $results[] = [
                 'id' => $description->get_description_type(),
                 'title' => $description->get_title(),
@@ -248,7 +248,7 @@ class Rest extends WebService
             $webPath = api_get_path(WEB_CODE_PATH) . 'document/document.php?';
 
             /** @var array $document */
-            foreach($documents as $document) {
+            foreach ($documents as $document) {
                 if ($document['visibility'] != '1') {
                     continue;
                 }
@@ -642,5 +642,120 @@ class Rest extends WebService
         }
 
         return $result;
+    }
+
+    /**
+     * @param int $courseId
+     * @return array
+     * @throws Exception
+     */
+    public function getCourseLearnPaths($courseId)
+    {
+        $em = Database::getManager();
+        /** @var Course $course */
+        $course = $em->find('ChamiloCoreBundle:Course', $courseId);
+
+        if (!$course) {
+            throw new Exception(get_lang('NoCourse'));
+        }
+
+        $categoriesTempList = learnpath::getCategories($courseId);
+
+        $categoryNone = new \Chamilo\CourseBundle\Entity\CLpCategory();
+        $categoryNone->setId(0);
+        $categoryNone->setName(get_lang('WithOutCategory'));
+        $categoryNone->setPosition(0);
+
+        $categories = array_merge([$categoryNone], $categoriesTempList);
+
+        $userId = api_get_user_id();
+
+        $categoryData = array();
+
+        /** @var CLpCategory $category */
+        foreach ($categories as $category) {
+            $learnPathList = new LearnpathList(
+                $this->user->getId(),
+                $course->getCode(),
+                null,
+                null,
+                false,
+                $category->getId()
+            );
+
+            $flatLpList = $learnPathList->get_flat_list();
+
+            if (empty($flatLpList)) {
+                continue;
+            }
+
+            $listData = array();
+
+            foreach ($flatLpList as $lpId => $lpDetails) {
+                if ($lpDetails['lp_visibility'] == 0) {
+                    continue;
+                }
+
+                if (!learnpath::is_lp_visible_for_student(
+                    $lpId,
+                    $this->user->getId(),
+                    $course->getCode()
+                )) {
+                    continue;
+                }
+
+                $timeLimits = false;
+
+                //This is an old LP (from a migration 1.8.7) so we do nothing
+                if (
+                    (empty($lpDetails['created_on']) || $lpDetails['created_on'] == '0000-00-00 00:00:00') &&
+                    (empty($lpDetails['modified_on']) || $lpDetails['modified_on'] == '0000-00-00 00:00:00')
+                ) {
+                    $timeLimits = false;
+                }
+
+                //Checking if expired_on is ON
+                if ($lpDetails['expired_on'] != '' && $lpDetails['expired_on'] != '0000-00-00 00:00:00') {
+                    $timeLimits = true;
+                }
+
+                if ($timeLimits) {
+                    if (
+                        !empty($lpDetails['publicated_on']) && $lpDetails['publicated_on'] != '0000-00-00 00:00:00' &&
+                        !empty($lpDetails['expired_on']) && $lpDetails['expired_on'] != '0000-00-00 00:00:00'
+                    ) {
+                        $startTime = api_strtotime($lpDetails['publicated_on'], 'UTC');
+                        $endTime = api_strtotime($lpDetails['expired_on'], 'UTC');
+                        $now = time();
+                        $isActivedTime = false;
+
+                        if ($now > $startTime && $endTime > $now) {
+                            $isActivedTime = true;
+                        }
+
+                        if (!$isActivedTime) {
+                            continue;
+                        }
+                    }
+                }
+
+                $lpStartUrl = api_get_cidreq() . '&action=view&lp_id=' . $lpId;
+                $progress = learnpath::getProgress($lpId, $userId, $courseId);
+
+                $listData[] = array(
+                    'urlStart' => rawurlencode($lpStartUrl),
+                    'title' => Security::remove_XSS($lpDetails['lp_name']),
+                    'progress' => intval($progress),
+                );
+            }
+
+            $categoryData[] = array(
+                'id' => $category->getId(),
+                'name' => $category->getName(),
+                'learnpaths' => $listData
+            );
+        }
+
+        return $categoryData;
     }
 }

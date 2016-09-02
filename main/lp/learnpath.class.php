@@ -5,6 +5,7 @@ use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
 /**
  * Class learnpath
@@ -10465,9 +10466,11 @@ EOD;
         );*/
 
         // Using doctrine extensions
-        $items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->getBySortableGroupsQuery(
-            array('cId' => $courseId)
-        )->getResult();
+        /** @var SortableRepository $repo */
+        $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
+        $items = $repo
+            ->getBySortableGroupsQuery(['cId' => $courseId])
+            ->getResult();
 
         return $items;
     }

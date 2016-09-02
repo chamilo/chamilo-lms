@@ -13,6 +13,8 @@ try {
     /** @var Rest $restApi */
     $restApi = $apiKey ? Rest::validate($username, $apiKey) : null;
 
+
+
     switch ($action) {
         case Rest::ACTION_AUTH:
             Rest::init();
@@ -141,6 +143,14 @@ try {
             $restResponse->setData($userInfo);
             break;
 
+        case Rest::ACTION_COURSE_LEARNPATHS:
+            $courseId = isset($_POST['c_id']) ? Security::remove_XSS($_POST['c_id']) : 0;
+
+            $data = $restApi->getCourseLearnPaths($courseId);
+
+            $restResponse->setData($data);
+            break;
+
         default:
             throw new Exception(get_lang('InvalidAction'));
     }
@@ -151,7 +161,7 @@ try {
 
 }
 
-//header('Content-Type: application/json');
+header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
 echo $restResponse->format();

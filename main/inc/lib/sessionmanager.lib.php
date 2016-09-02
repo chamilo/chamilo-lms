@@ -4079,10 +4079,7 @@ class SessionManager
 
         $error_message = null;
         $session_counter = 0;
-
-        if (empty($defaultUserId)) {
-            $defaultUserId = api_get_user_id();
-        }
+        $defaultUserId = empty($defaultUserId) ? api_get_user_id() : (int) $defaultUserId;
 
         $eol = PHP_EOL;
         if (PHP_SAPI != 'cli') {
@@ -4092,17 +4089,6 @@ class SessionManager
         $debug = false;
         if (isset($logger)) {
             $debug = true;
-        }
-
-        $extraParameters = null;
-
-        if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
-            $extraParameters .= ' , nb_days_access_before_beginning = '.intval($daysCoachAccessBeforeBeginning);
-            $extraParameters .= ' , nb_days_access_after_end = '.intval($daysCoachAccessAfterBeginning);
-        }
-
-        if (!is_null($showDescription)) {
-            $extraParameters .= ' , show_description = '.intval($showDescription);
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -4121,7 +4107,9 @@ class SessionManager
                 $enreg = explode(';', trim($enreg));
                 if ($key) {
                     foreach ($tag_names as $tag_key => $tag_name) {
-                        $sessions[$key - 1][$tag_name] = $enreg[$tag_key];
+                        if (isset($enreg[$tag_key])) {
+                            $sessions[$key - 1][$tag_name] = $enreg[$tag_key];
+                        }
                     }
                 } else {
                     foreach ($enreg as $tag_name) {
@@ -4167,19 +4155,60 @@ class SessionManager
                             break;
                     }
                 }
-
                 if (empty($session_name)) {
                     continue;
                 }
 
                 $date_start = $enreg['DateStart'];
                 $date_end = $enreg['DateEnd'];
+
+                $dateStart = explode('/', $enreg['DateStart']);
+                $dateEnd = explode('/', $enreg['DateEnd']);
+                $dateStart = $dateStart[0].'-'.$dateStart[1].'-'.$dateStart[2].' 00:00:00';
+                $dateEnd = $dateEnd[0].'-'.$dateEnd[1].'-'.$dateEnd[2].' 23:59:59';
+
                 $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
                 $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
+
+                $extraParameters = null;
+                if (!is_null($showDescription)) {
+                    $extraParameters .= ' , show_description = '.intval($showDescription);
+                }
+
+                $coachBefore = '';
+                $coachAfter = '';
+
+                if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
+                    $date = new \DateTime($dateStart);
+                    $interval = new DateInterval(
+                        'P'.$daysCoachAccessBeforeBeginning.'D'
+                    );
+                    $date->sub($interval);
+                    $coachBefore = $date->format('Y-m-d h:i');
+                    $coachBefore = api_get_utc_datetime($coachBefore);
+
+                    $extraParameters .= " , coach_access_start_date = '$coachBefore'";
+
+                    $date = new \DateTime($dateEnd);
+                    $interval = new DateInterval('P'.$daysCoachAccessAfterBeginning.'D');
+                    $date->add($interval);
+                    $coachAfter = $date->format('Y-m-d h:i');
+
+                    $coachAfter = api_get_utc_datetime($coachAfter);
+                    $extraParameters .= " , coach_access_end_date = '$coachAfter'";
+                }
+
+                $dateStart = api_get_utc_datetime($dateStart);
+                $dateEnd = api_get_utc_datetime($dateEnd);
 
                 $extraSessionParameters = null;
                 if (!empty($sessionDescription)) {
                     $extraSessionParameters = " , description = '".Database::escape_string($sessionDescription)."'";
+                }
+
+                $sessionCondition = '';
+                if (!empty($session_category_id)) {
+                    $sessionCondition = " , session_category_id = '$session_category_id' ";
                 }
 
                 // Searching a general coach.
@@ -4215,20 +4244,17 @@ class SessionManager
                         }
                     }
 
-                    $sessionCondition = '';
-                    if (!empty($session_category_id)) {
-                        $sessionCondition = "session_category_id = '$session_category_id',";
-                    }
-
                     // Creating the session.
                     $sql = "INSERT IGNORE INTO $tbl_session SET
                             name = '" . $session_name . "',
                             id_coach = '$coach_id',
-                            access_start_date = '$date_start',
-                            access_end_date = '$date_end',
-                            visibility = '$visibilityAfterExpirationPerSession',
-                            $sessionCondition
-                            session_admin_id = " . intval($defaultUserId) . $extraParameters . $extraSessionParameters;
+                            access_start_date = '$dateStart',
+                            access_end_date = '$dateEnd',
+                            display_start_date = '$dateStart',
+                            display_end_date = '$dateEnd',
+                            visibility = '$visibilityAfterExpirationPerSession',                            
+                            session_admin_id = " . $defaultUserId . " 
+                            $sessionCondition $extraParameters $extraSessionParameters";
                     Database::query($sql);
 
                     $session_id = Database::insert_id();
@@ -4259,16 +4285,22 @@ class SessionManager
                         $my_session_result = self::get_session_by_name($enreg['SessionName']);
                     }
 
+
                     if ($my_session_result === false) {
 
                         // Creating a session.
                         $sql = "INSERT IGNORE INTO $tbl_session SET
                                 name = '$session_name',
                                 id_coach = '$coach_id',
-                                access_start_date = '$date_start',
-                                access_end_date = '$date_end',
-                                visibility = '$visibilityAfterExpirationPerSession',
-                                session_category_id = '$session_category_id' " . $extraParameters . $extraSessionParameters;
+                                access_start_date = '$dateStart',
+                                access_end_date = '$dateEnd',
+                                display_start_date = '$dateStart',
+                                display_end_date = '$dateEnd',
+                                visibility = '$visibilityAfterExpirationPerSession' 
+                                $extraParameters 
+                                $extraSessionParameters
+                                $sessionCondition
+                                ";
 
                         Database::query($sql);
 
@@ -4314,10 +4346,12 @@ class SessionManager
                         // Updating the session.
                         $params = array(
                             'id_coach' => $coach_id,
-                            'access_start_date' => $date_start,
-                            'access_end_date' => $date_end,
+                            'access_start_date' => $dateStart,
+                            'access_end_date' => $dateEnd,
+                            'display_start_date' => $dateStart,
+                            'display_end_date' => $dateEnd,
                             'visibility' => $visibilityAfterExpirationPerSession,
-                            'session_category_id' => $session_category_id,
+                            'session_category_id' => $session_category_id
                         );
 
                         if (!empty($sessionDescription)) {
@@ -4355,14 +4389,14 @@ class SessionManager
                                     (!empty($sessionInfo['nb_days_access_before_beginning']) &&
                                         $sessionInfo['nb_days_access_before_beginning'] < $daysCoachAccessBeforeBeginning)
                                 ) {
-                                    $params['nb_days_access_before_beginning'] = intval($daysCoachAccessBeforeBeginning);
+                                    $params['coach_access_start_date'] = $coachBefore;
                                 }
 
                                 if (empty($sessionInfo['nb_days_access_after_end']) ||
                                     (!empty($sessionInfo['nb_days_access_after_end']) &&
                                         $sessionInfo['nb_days_access_after_end'] < $daysCoachAccessAfterBeginning)
                                 ) {
-                                    $params['nb_days_access_after_end'] = intval($daysCoachAccessAfterBeginning);
+                                    $params['coach_access_end_date'] = $coachAfter;
                                 }
                             }
 

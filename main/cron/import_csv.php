@@ -1393,6 +1393,11 @@ class ImportCsv
                     $date->add($interval);
                     $coachAfter = $date->format('Y-m-d h:i');
 
+                    $dateStart = api_get_utc_datetime($dateStart);
+                    $dateEnd = api_get_utc_datetime($dateEnd);
+                    $coachBefore = api_get_utc_datetime($coachBefore);
+                    $coachAfter = api_get_utc_datetime($coachAfter);
+
                     if (empty($sessionId)) {
                         $result = SessionManager::create_session(
                             $session['SessionName'],

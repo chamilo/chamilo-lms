@@ -36,11 +36,26 @@ class MoodleImport
             }
 
             $folder = api_get_unique_id();
-            $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
+            $destinationDir = api_get_path(SYS_ARCHIVE_PATH) . $folder;
             $coursePath = api_get_course_path();
+            $sessionId = api_get_session_id();
+            $groupId = api_get_group_id();
+            $documentPath = api_get_path(SYS_COURSE_PATH) . $coursePath . '/document';
             $courseInfo = api_get_course_info();
 
             mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
+
+            $newFolderData = create_unexisting_directory(
+                $courseInfo,
+                api_get_user_id(),
+                $sessionId,
+                $groupId,
+                null,
+                $documentPath,
+                '/moodle',
+                'Moodle Docs',
+                0
+            );
 
             $package->extract(
                 PCLZIP_OPT_PATH,
@@ -145,7 +160,7 @@ class MoodleImport
                                         $questionInstance->updateTitle($moduleValues['question_instances'][$index]['name']);
 
                                         // Replace the path from @@PLUGINFILE@@ to a correct chamilo path
-                                        $moduleValues['question_instances'][$index]['questiontext'] = str_replace('@@PLUGINFILE@@', '/courses/' . $coursePath . '/document', $moduleValues['question_instances'][$index]['questiontext']);
+                                        $moduleValues['question_instances'][$index]['questiontext'] = str_replace('@@PLUGINFILE@@', '/courses/' . $coursePath . '/document/moodle', $moduleValues['question_instances'][$index]['questiontext']);
                                         $questionInstance->updateDescription($moduleValues['question_instances'][$index]['questiontext']);
                                         $questionInstance->updateLevel(1);
                                         $questionInstance->updateCategory(0);
@@ -192,7 +207,7 @@ class MoodleImport
 
                                         DocumentManager::upload_document(
                                             $files,
-                                            '/',
+                                            '/moodle',
                                             $fileInfo['title'],
                                             '',
                                             null,
@@ -243,7 +258,7 @@ class MoodleImport
 
                             DocumentManager::upload_document(
                                 $files,
-                                '/',
+                                '/moodle',
                                 isset($fileInfo['title']) ? $fileInfo['title'] : pathinfo($fileInfo['filename'], PATHINFO_FILENAME),
                                 '',
                                 null,
@@ -605,7 +620,7 @@ class MoodleImport
 
                 $coursePath = api_get_course_path();
 
-                $placeholder = str_replace('@@PLUGINFILE@@', '/courses/' . $coursePath . '/document', $currentQuestion['questiontext']);
+                $placeholder = str_replace('@@PLUGINFILE@@', '/courses/' . $coursePath . '/document/moodle', $currentQuestion['questiontext']);
 
                 $optionsValues = [];
 
@@ -850,7 +865,7 @@ class MoodleImport
 
                     $currentAnswers = $correctAnswer.$othersAnswers;
                     $currentAnswers = '['.substr($currentAnswers, 0, -1).'] ';
-                    $answer['questiontext'] = str_replace('@@PLUGINFILE@@', '/courses/' . $coursePath . '/document', $answer['questiontext']);
+                    $answer['questiontext'] = str_replace('@@PLUGINFILE@@', '/courses/' . $coursePath . '/document/moodle', $answer['questiontext']);
 
                     $placeholder .= '<p> ' . strip_tags($answer['questiontext']).' '.$currentAnswers . ' </p>';
                 }

@@ -58,7 +58,6 @@ class Import
     {
         $csvReader = self::csv_reader($filename);
         $resultArray = [];
-
         if ($csvReader) {
             $workflow = new Workflow\StepAggregator($csvReader);
             $writer = new ArrayWriter($resultArray);

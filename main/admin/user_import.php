@@ -148,6 +148,22 @@ function complete_missing_data($user)
         $user['ExpiryDate'] = '';
     }
 
+    if (!isset($user['OfficialCode'])) {
+        $user['OfficialCode'] = '';
+    }
+
+    if (!isset($user['language'])) {
+        $user['language'] = '';
+    }
+
+    if (!isset($user['PhoneNumber'])) {
+        $user['PhoneNumber'] = '';
+    }
+
+    if (!isset($user['OfficialCode'])) {
+        $user['OfficialCode'] = '';
+    }
+
     return $user;
 }
 
@@ -190,10 +206,8 @@ function save_data($users)
                 null,
                 $send_mail
             );
-            if (!is_array($user['Courses']) && !empty($user['Courses'])) {
-                $user['Courses'] = array($user['Courses']);
-            }
-            if (is_array($user['Courses'])) {
+
+            if (isset($user['Courses']) && is_array($user['Courses'])) {
                 foreach ($user['Courses'] as $course) {
                     if (CourseManager::course_exists($course)) {
                         CourseManager::subscribe_user($user_id, $course, $user['Status']);
@@ -215,8 +229,8 @@ function save_data($users)
             // We are sure that the extra field exists.
             foreach ($extra_fields as $extras) {
                 if (isset($user[$extras[1]])) {
-                    $key 	= $extras[1];
-                    $value 	= $user[$extras[1]];
+                    $key = $extras[1];
+                    $value = $user[$extras[1]];
                     UserManager::update_extra_field_value($user_id, $key, $value);
                 }
             }
@@ -233,11 +247,25 @@ function parse_csv_data($file)
 {
     $users = Import :: csvToArray($file);
     foreach ($users as $index => $user) {
-        if (isset ($user['Courses'])) {
+        if (isset($user['Courses'])) {
             $user['Courses'] = explode('|', trim($user['Courses']));
         }
+
+        // Lastname is needed.
+        if (!isset($user['LastName']) || (isset($user['LastName']) && empty($user['LastName']))) {
+            unset($users[$index]);
+            continue;
+        }
+
+        // FirstName is needed.
+        if (!isset($user['FirstName']) || (isset($user['FirstName']) && empty($user['FirstName']))) {
+            unset($users[$index]);
+            continue;
+        }
+
         $users[$index] = $user;
     }
+
     return $users;
 }
 /**

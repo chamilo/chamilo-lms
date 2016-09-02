@@ -2356,6 +2356,7 @@ function fixIds(EntityManager $em)
     }
 
     if (!empty($oldGroups)) {
+        error_log('Moving group files');
         foreach ($oldGroups as $oldId => $newId) {
             $path = \GroupPortalManager::get_group_picture_path_by_id(
                 $oldId,
@@ -2369,6 +2370,7 @@ function fixIds(EntityManager $em)
                     $path['dir']
                 );
                 $command = "mv {$path['dir']} $newPath ";
+                error_log("Executing $command");
                 system($command);
             }
         }

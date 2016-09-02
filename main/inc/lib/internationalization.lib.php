@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Patchwork\Utf8;
+
 /**
  * File: internationalization.lib.php
  * Internationalization library for Chamilo 1.x LMS
@@ -11,12 +13,9 @@
  * @package chamilo.library
  */
 
-use Patchwork\Utf8;
-
 /**
  * Constants
  */
-
 // Special tags for marking untranslated variables.
 define('SPECIAL_OPENING_TAG', '[=');
 define('SPECIAL_CLOSING_TAG', '=]');
@@ -56,16 +55,6 @@ define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);
 // Contextual: formatting a person's name for data-exporting operations.
 // For backward compatibility this format has been set to Eastern order.
 define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
-
-// The following constants are used for tuning language detection functionality.
-// We reduce the text for language detection to the given number of characters
-// for increasing speed and to decrease memory consumption.
-define('LANGUAGE_DETECT_MAX_LENGTH', 2000);
-// Maximum allowed difference in so called delta-points for aborting certain language detection.
-// The value 80000 is good enough for speed and detection accuracy.
-// If you set the value of $max_delta too low, no language will be recognized.
-// $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
-define('LANGUAGE_DETECT_MAX_DELTA', 140000);
 
 /**
  * Returns a translated (localized) string, called by its identificator.
@@ -257,9 +246,13 @@ function api_get_language_isocode($language = null, $default_code = 'en')
     }
     if (!isset($iso_code[$language])) {
         if (!class_exists('Database')) {
-            return $default_code; // This might happen, in case of calling this function early during the global initialization.
+            // This might happen, in case of calling this function early during the global initialization.
+            return $default_code;
         }
-        $sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'");
+        $sql = "SELECT isocode 
+                FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+                WHERE dokeos_folder = '$language'";
+        $sql_result = Database::query($sql);
         if (Database::num_rows($sql_result)) {
             $result = Database::fetch_array($sql_result);
             $iso_code[$language] = trim($result['isocode']);
@@ -271,6 +264,7 @@ function api_get_language_isocode($language = null, $default_code = 'en')
             $iso_code[$language] = $default_code;
         }
     }
+
     return $iso_code[$language];
 }
 
@@ -283,10 +277,12 @@ function api_get_language_isocode($language = null, $default_code = 'en')
 function api_get_platform_isocodes()
 {
     $iso_code = array();
-    $sql = "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." ORDER BY isocode ";
+    $sql = "SELECT isocode 
+            FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+            ORDER BY isocode ";
     $sql_result = Database::query($sql);
     if (Database::num_rows($sql_result)) {
-        while ($row = Database::fetch_array($sql_result)) {;
+        while ($row = Database::fetch_array($sql_result)) {
             $iso_code[] = trim($row['isocode']);
         }
     }
@@ -309,7 +305,8 @@ function api_get_text_direction($language = null)
     	$language = api_get_interface_language();
     }
     if (!isset($text_direction[$language])) {
-        $text_direction[$language] = in_array(api_purify_language_id($language),
+        $text_direction[$language] = in_array(
+            api_purify_language_id($language),
             array(
                 'arabic',
                 'ar',
@@ -370,10 +367,10 @@ function _api_get_timezone()
     // If allowed by the administrator
     $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
 
-    if ($use_users_timezone == 'true') {
+    if ($use_users_timezone === 'true') {
         $userId = api_get_user_id();
         // Get the timezone based on user preference, if it exists
-        $timezone_user = UserManager::get_extra_user_data_by_field($userId,'timezone');
+        $timezone_user = UserManager::get_extra_user_data_by_field($userId, 'timezone');
         if (isset($timezone_user['timezone']) && $timezone_user['timezone'] != null) {
             $to_timezone = $timezone_user['timezone'];
         }
@@ -400,7 +397,7 @@ function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false
 {
     $from_timezone = _api_get_timezone();
     $to_timezone = 'UTC';
-    if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
+    if (is_null($time) || empty($time) || $time === '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
             return null;
         }
@@ -495,7 +492,8 @@ function api_get_local_time(
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_strtotime($time, $timezone = null) {
+function api_strtotime($time, $timezone = null)
+{
     $system_timezone = date_default_timezone_get();
     if (!empty($timezone)) {
         date_default_timezone_set($timezone);

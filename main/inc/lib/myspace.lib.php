@@ -402,7 +402,7 @@ class MySpace
             }
         }
         if (!empty($order[$tracking_column])) {
-            $sqlCoachs .= "ORDER BY ".$order[$tracking_column]." ".$tracking_direction;
+            $sqlCoachs .= " ORDER BY ".$order[$tracking_column]." ".$tracking_direction;
         }
 
         $result_coaches = Database::query($sqlCoachs);

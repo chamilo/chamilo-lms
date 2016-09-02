@@ -1120,7 +1120,7 @@ if ($is_allowed_to_edit ||
     if (isset($_POST['action']) && isset($_POST['ids'])) {
         $files = $_POST['ids'];
         $readonlyAlreadyChecked = false;
-        $messages = null;
+        $messages = '';
         $items = array(
             '/audio',
             '/flash',
@@ -1151,12 +1151,10 @@ if ($is_allowed_to_edit ||
                             null,
                             $sessionId
                         )) {
-                            Display::addFlash(Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation'));
+                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation');
                         } else {
-                            Display::addFlash(Display::return_message(get_lang('ViModProb'), 'error'));
+                            $messages .= Display::return_message(get_lang('ViModProb'), 'error');
                         }
-                        header('Location: '.$currentUrl);
-                        exit;
                         break;
                     case 'set_visible':
                         $visibilityCommand = 'visible';
@@ -1172,12 +1170,10 @@ if ($is_allowed_to_edit ||
                             null,
                             $sessionId
                         )) {
-                            Display::addFlash(Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation'));
+                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation');
                         } else {
-                            Display::addFlash(Display::return_message(get_lang('ViModProb'), 'error'));
+                            $messages .=  Display::return_message(get_lang('ViModProb'), 'error');
                         }
-                        header('Location: '.$currentUrl);
-                        exit;
                         break;
                     case 'delete':
                         // Check all documents scheduled for deletion
@@ -1193,8 +1189,7 @@ if ($is_allowed_to_edit ||
                                         $id,
                                         false,
                                         $sessionId
-                                    )
-                                    ) {
+                                    )) {
                                         $messages .= Display::return_message(
                                             get_lang('CantDeleteReadonlyFiles'),
                                             'error'
@@ -1224,7 +1219,10 @@ if ($is_allowed_to_edit ||
                 }
             }
         } // endforeach
+
         Display::addFlash($messages);
+        header('Location: '.$currentUrl);
+        exit;
     }
 }
 

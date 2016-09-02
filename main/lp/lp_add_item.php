@@ -91,7 +91,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
 $interbreadcrumb[] = array(
-    'url' => 'lp_controller.php?action=list?'.api_get_cidreq(),
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths'),
 );
 $interbreadcrumb[] = array(

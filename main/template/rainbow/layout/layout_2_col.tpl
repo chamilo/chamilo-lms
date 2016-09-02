@@ -76,7 +76,7 @@
             <script>
             $(document).ready(function() {
                 $.ajax({
-                    url: "{{ _p.web }}web/app_dev.php/cms/page/latest/3",
+                    url: "{{ _p.web }}web/app_dev.php/cms/page/latest/3?_locale={{ document_language }}",
                     success: function (data) {
                         $('#latest_pages').html(data);
                     }
@@ -85,7 +85,7 @@
 
             $(document).ready(function() {
                 $.ajax({
-                    url: "{{ _p.web }}web/app_dev.php/cms/page/blocks/4",
+                    url: "{{ _p.web }}web/app_dev.php/cms/page/blocks/4?_locale={{ document_language }}",
                     success: function (data) {
                         $('#latest_blocks').html(data);
                     }

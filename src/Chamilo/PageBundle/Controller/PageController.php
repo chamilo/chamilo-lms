@@ -22,9 +22,12 @@ class PageController extends Controller
      * @Route("/cms/page/latest/{number}")
      * @param int $number
      */
-    public function getLatestPages($number)
+    public function getLatestPages($number, Request $request)
     {
         $site = $this->container->get('sonata.page.site.selector')->retrieve();
+
+        $locale = $request->get('_locale');
+        $translator = $this->get('translator');
 
         $criteria = [
             'enabled' => 1,
@@ -37,6 +40,7 @@ class PageController extends Controller
         // Get latest pages
         $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
         $pagesToShow = [];
+
         /** @var Page $page */
         foreach ($pages as $page) {
             // Skip homepage
@@ -48,6 +52,7 @@ class PageController extends Controller
             // Check if page has a valid snapshot
             $snapshot = $this->container->get('sonata.page.manager.snapshot')->findEnableSnapshot($criteria);
             if ($snapshot) {
+                $page->setMetaDescription($translator->trans($page->getMetaDescription(), [], null, $locale));
                 $pagesToShow[] = $page;
             }
         }
@@ -62,9 +67,11 @@ class PageController extends Controller
      * @Route("/cms/page/blocks/{number}")
      * @param int $number
      */
-    public function getLatestBlocks($number)
+    public function getLatestBlocks($number, Request $request)
     {
         $site = $this->container->get('sonata.page.site.selector')->retrieve();
+        $locale = $request->get('_locale');
+        $translator = $this->get('translator');
 
         $criteria = [
             'enabled' => 1,
@@ -88,6 +95,7 @@ class PageController extends Controller
             // Check if page has a valid snapshot
             $snapshot = $this->container->get('sonata.page.manager.snapshot')->findEnableSnapshot($criteria);
             if ($snapshot) {
+                $page->setMetaDescription($translator->trans($page->getMetaDescription(), [], null, $locale));
                 $pagesToShow[] = $page;
             }
         }

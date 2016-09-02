@@ -305,7 +305,7 @@ class UserManager
         }
 
         $currentDate = api_get_utc_datetime();
-        $now = new DateTime($currentDate);
+        $now = new DateTime();
 
         if (empty($expirationDate) || $expirationDate == '0000-00-00 00:00:00') {
             // Default expiration date

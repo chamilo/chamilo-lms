@@ -2613,10 +2613,10 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
                     'session_name' => $row['name'],
                     'session_id' => $row['id'],
-                    'access_start_date' => api_get_local_time($row['access_start_date']),
-                    'access_end_date' => api_get_local_time($row['access_end_date']),
-                    'coach_access_start_date' => api_get_local_time($row['coach_access_start_date']),
-                    'coach_access_end_date' => api_get_local_time($row['coach_access_end_date']),
+                    'access_start_date' => $row['access_start_date'],
+                    'access_end_date' => $row['access_end_date'],
+                    'coach_access_start_date' => $row['coach_access_start_date'],
+                    'coach_access_end_date' => $row['coach_access_end_date'],
                     'courses' => $courseList
                 );
             }

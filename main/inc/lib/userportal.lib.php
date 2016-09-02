@@ -1091,8 +1091,7 @@ class IndexManager
         $gamificationModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
         $specialCourseList = '';
-        $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
-
+        $load_history = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
         $viewGridCourses = api_get_configuration_value('view_grid_courses');
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
@@ -1135,7 +1134,6 @@ class IndexManager
                 $this->load_directories_preview
             );
 
-
             if ($viewGridCourses) {
                 $coursesWithoutCategoryTemplate = '/user_portal/grid_courses_without_category.tpl';
                 $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';
@@ -1165,7 +1163,6 @@ class IndexManager
         }
 
         $sessions_with_category = '';
-
         $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
         $coursesListSessionStyle = $coursesListSessionStyle === false ? 1 : $coursesListSessionStyle;
         if (api_is_drh()) {
@@ -1210,10 +1207,8 @@ class IndexManager
                             $is_coach_course = api_is_coach($session_id, $course['real_id']);
                             $allowed_time = 0;
                             $dif_time_after = 0;
-
-                            if (!empty($date_session_start) &&
-                                $date_session_start != '0000-00-00 00:00:00'
-                            ) {
+                            $allowedEndTime = true;
+                            if (!empty($date_session_start) && $date_session_start != '0000-00-00 00:00:00') {
                                 if ($is_coach_course) {
                                     $allowed_time = api_strtotime($coachAccessStartDate);
                                 } else {
@@ -1221,22 +1216,15 @@ class IndexManager
                                 }
 
                                 if (!isset($_GET['history'])) {
-                                    if (!empty($date_session_end) &&
-                                        $date_session_end != '0000-00-00 00:00:00'
-                                    ) {
+                                    if (!empty($date_session_end) && $date_session_end != '0000-00-00 00:00:00') {
                                         $endSessionToTms = api_strtotime($date_session_end);
                                         if ($session_now > $endSessionToTms) {
-                                            $dif_time_after = $session_now - $endSessionToTms;
-                                            $dif_time_after = round($dif_time_after / 86400);
+                                            $allowedEndTime = false;
                                         }
                                     }
                                 }
                             }
-
-                            if (
-                                $session_now >= $allowed_time
-                                //($coachAccessEndDate > $dif_time_after - 1)
-                            ) {
+                            if ($session_now >= $allowed_time && $allowedEndTime) {
                                 // Read only and accessible.
                                 $atLeastOneCourseIsVisible = true;
 
@@ -1346,23 +1334,18 @@ class IndexManager
                                     $course['real_id']
                                 );
 
-                                $dif_time_after = 0;
                                 $allowed_time = 0;
+                                $allowedEndTime = true;
+
                                 if ($is_coach_course) {
-                                    // 24 hours = 86400
                                     if ($date_session_start != '0000-00-00 00:00:00') {
                                         $allowed_time = api_strtotime($coachAccessStartDate);
                                     }
                                     if (!isset($_GET['history'])) {
                                         if ($date_session_end != '0000-00-00 00:00:00') {
-                                            $endSessionToTms = api_strtotime(
-                                                $date_session_end
-                                            );
+                                            $endSessionToTms = api_strtotime($date_session_end);
                                             if ($session_now > $endSessionToTms) {
-                                                $dif_time_after = $session_now - $endSessionToTms;
-                                                $dif_time_after = round(
-                                                    $dif_time_after / 86400
-                                                );
+                                                $allowedEndTime = false;
                                             }
                                         }
                                     }
@@ -1372,11 +1355,8 @@ class IndexManager
                                     );
                                 }
 
-                                if (
-                                    $session_now >= $allowed_time //&&
-                                    //$coachAccessEndDate > $dif_time_after - 1
-                                ) {
-                                    if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                                if ($session_now >= $allowed_time && $allowedEndTime) {
+                                    if (api_get_setting('hide_courses_in_sessions') === 'false') {
                                         $c = CourseManager:: get_logged_user_course_html(
                                             $course,
                                             $session_id,

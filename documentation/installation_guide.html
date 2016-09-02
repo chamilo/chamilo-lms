@@ -741,7 +741,7 @@ If you have issues with files taking a long time to download, make sure you reco
   }
 
   # Serve static files directly
-  location ~* \.(png|jpe?g|gif|ico)$ {
+  location ~* \.(png|jpe?g|gif|ico|js)$ {
     expires 1y;
     access_log off;
     rewrite ^/courses/([^/]+)/course-pic85x85.png$ /app/courses/$1/course-pic85x85.png last;

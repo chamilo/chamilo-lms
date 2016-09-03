@@ -188,12 +188,14 @@ class IndexManager
             if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
                 $show_menu = true;
                 $show_course_link = true;
-                $show_create_link = true;
             } else {
                 if (api_get_setting('allow_students_to_browse_courses') == 'true') {
                     $show_menu = true;
                     $show_course_link = true;
                 }
+            }
+            if (api_get_setting('allow_users_to_create_courses') !== 'false' && !api_is_platform_admi()) {
+                $show_create_link = true;
             }
 
             if ($show_menu && ($show_create_link || $show_course_link )) {

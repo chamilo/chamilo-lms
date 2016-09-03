@@ -3,7 +3,7 @@
   Template to automatically create a new user with information from anywhere.
   This file is loaded by main/inc/local.inc.php
   To use it please add this line to main/inc/conf/configuration.php :
-  $extAuthSource["external_logininfo"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_logininfo/newUser.php";
+  $extAuthSource["external_logininfo"]["newUser"] = $_configuration['root_sys']."main/auth/external_logininfo/newUser.php";
 
   You also have to implements the external_get_user_info function in functions.inc.php
  */

@@ -752,13 +752,11 @@ function api_get_path($path = '', $configuration = [])
     $course_folder = isset($configuration['course_folder']) ? $configuration['course_folder'] : $course_folder;
     $root_rel = isset($configuration['url_append']) ? $configuration['url_append'] : '';
 
-    $configuration['code_append'] = 'main';
-
     // Web server base and system server base.
     if (!array_key_exists($root_web, $isInitialized)) {
         // process absolute global roots
         if (!empty($configuration)) {
-            $code_folder = $configuration['code_append'];
+            $code_folder = 'main';
         } else {
             $code_folder = $paths[$root_web][REL_CODE_PATH];
         }

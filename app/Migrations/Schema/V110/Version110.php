@@ -430,7 +430,7 @@ class Version110 extends AbstractMigrationChamilo
 
         $this->addSql("ALTER TABLE session_rel_user CHANGE id_session session_id int");
         $this->addSql("ALTER TABLE session_rel_user CHANGE id_user user_id int");
-        $this->addSql("DELETE FROM session_rel_user WHERE user_id NOT IN (SELECT user_id FROM user)");
+        $this->addSql("DELETE FROM session_rel_user WHERE user_id NOT IN (SELECT id FROM user)");
         $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
         $this->addSql("ALTER TABLE c_item_property CHANGE id_session session_id int");

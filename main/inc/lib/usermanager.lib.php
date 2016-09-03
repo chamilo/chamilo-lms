@@ -2520,9 +2520,9 @@ class UserManager
         $categories = array();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-
                 // User portal filters:
-                if ($ignoreTimeLimit == false) {
+
+                if ($ignoreTimeLimit === false) {
                     if ($is_time_over) {
                         // History
                         if (empty($row['access_end_date']) || $row['access_end_date'] == '0000-00-00 00:00:00') {
@@ -2560,43 +2560,57 @@ class UserManager
                 );
 
                 $session_id = $row['id'];
-
                 $courseList = UserManager::get_courses_list_by_session(
                     $user_id,
                     $row['id']
                 );
 
                 // Session visibility.
+                /*$visibility = api_get_session_visibility(
+                    $session_id,
+                    null,
+                    $ignore_visibility_for_admins
+                );*/
+
+
                 $visibility = api_get_session_visibility(
                     $session_id,
                     null,
                     $ignore_visibility_for_admins
                 );
 
-                // Course Coach session visibility.
-                $blockedCourseCount = 0;
-                $closedVisibilityList = array(
-                    COURSE_VISIBILITY_CLOSED,
-                    COURSE_VISIBILITY_HIDDEN
-                );
+                if ($visibility != SESSION_VISIBLE) {
 
-                foreach ($courseList as $course) {
-                    // Checking session visibility
-                    $sessionCourseVisibility = api_get_session_visibility(
-                        $session_id,
-                        $course['real_id'],
-                        $ignore_visibility_for_admins
+                    // Course Coach session visibility.
+                    $blockedCourseCount = 0;
+                    $closedVisibilityList = array(
+                        COURSE_VISIBILITY_CLOSED,
+                        COURSE_VISIBILITY_HIDDEN
                     );
 
-                    $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
-                    if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
-                        $blockedCourseCount++;
-                    }
-                }
+                    foreach ($courseList as $course) {
+                        // Checking session visibility
+                        $sessionCourseVisibility = api_get_session_visibility(
+                            $session_id,
+                            $course['real_id'],
+                            $ignore_visibility_for_admins
+                        );
 
-                // If all courses are blocked then no show in the list.
-                if ($blockedCourseCount == count($courseList)) {
-                    $visibility = SESSION_INVISIBLE;
+                        $courseIsVisible = !in_array(
+                            $course['visibility'],
+                            $closedVisibilityList
+                        );
+                        if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
+                            $blockedCourseCount++;
+                        }
+                    }
+
+                    // If all courses are blocked then no show in the list.
+                    if ($blockedCourseCount === count($courseList)) {
+                        $visibility = SESSION_INVISIBLE;
+                    } else {
+                        $visibility = SESSION_VISIBLE;
+                    }
                 }
 
                 switch ($visibility) {
@@ -2606,7 +2620,7 @@ class UserManager
                         break;
                     case SESSION_INVISIBLE:
                         if ($ignore_visibility_for_admins == false) {
-                            continue(2);
+                            continue 2;
                         }
                 }
 

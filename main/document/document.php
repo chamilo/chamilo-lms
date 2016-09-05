@@ -1533,7 +1533,7 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
 if ($groupId != 0) {
     $userAccess = GroupManager::user_has_access(
         api_get_user_id(),
-        $groupId,
+        $groupIid,
         GroupManager::GROUP_TOOL_DOCUMENTS
     );
     if ($userAccess) {
@@ -1714,7 +1714,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
     if ($groupId == 0 ||
         GroupManager::user_has_access(
             $userId,
-            $groupId,
+            $groupIid,
             GroupManager::GROUP_TOOL_DOCUMENTS
         )
     ) {

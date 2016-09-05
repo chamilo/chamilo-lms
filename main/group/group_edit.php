@@ -333,7 +333,7 @@ if ($form->validate()) {
 
     // Storing the users (we first remove all users and then add only those who were selected)
     GroupManager :: unsubscribe_all_users($current_group['iid']);
-    if (isset ($_POST['group_members']) && count($_POST['group_members']) > 0) {
+    if (isset($_POST['group_members']) && count($_POST['group_members']) > 0) {
         GroupManager :: subscribe_users($values['group_members'], $current_group['iid']);
     }
 

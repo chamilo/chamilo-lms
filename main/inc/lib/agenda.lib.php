@@ -2572,6 +2572,7 @@ class Agenda
     {
         $courseInfo = api_get_course_info();
         $groupInfo = GroupManager::get_group_properties(api_get_group_id());
+        $groupIid = isset($groupInfo['iid']) ? $groupInfo['iid'] : 0;
 
         $actionsLeft = '';
         $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
@@ -2589,8 +2590,8 @@ class Agenda
 
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) ||
-            (GroupManager::user_has_access(api_get_user_id(), api_get_group_id(), GroupManager::GROUP_TOOL_CALENDAR) &&
-            isset($groupInfo['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']))
+            (GroupManager::user_has_access(api_get_user_id(), $groupIid, GroupManager::GROUP_TOOL_CALENDAR) &&
+            GroupManager::is_tutor_of_group(api_get_user_id(), $groupIid))
         ) {
             $actionsLeft .= Display::url(
                 Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM),
@@ -2633,7 +2634,6 @@ class Agenda
             if ($this->type == 'personal') {
                 $form = null;
                 if (!isset($_GET['action'])) {
-
                     $form = new FormValidator(
                         'form-search',
                         'get',
@@ -2654,9 +2654,6 @@ class Agenda
                         $sessions,
                         ['id' => 'session_id', 'onchange' => 'submit();']
                     );
-                    //$form->addButtonFilter(get_lang('Filter'));
-                    //$renderer = $form->defaultRenderer();
-                    //$renderer->setCustomElementTemplate('<div class="col-md-6">{element}</div>');
 
                     $form->addButtonReset(get_lang('Reset'));
                     $form = $form->returnForm();

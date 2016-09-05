@@ -7964,11 +7964,12 @@ function api_protect_course_group($tool, $showHeader = true)
 {
     $userId = api_get_user_id();
     $groupId = api_get_group_id();
+    $groupInfo = GroupManager::get_group_properties($groupId);
 
-    if (!empty($groupId)) {
+    if (!empty($groupInfo)) {
         $allow = GroupManager::user_has_access(
             $userId,
-            $groupId,
+            $groupInfo['iid'],
             $tool
         );
 

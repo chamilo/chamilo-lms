@@ -2251,8 +2251,11 @@ class CourseManager
             // Cleaning groups
             $groups = GroupManager::get_groups($courseId);
             if (!empty($groups)) {
-                $groupList = array_column($groups, 'id');
-                GroupManager::delete_groups($groupList, $course['code']);
+                $groupList = array_column($groups, 'iid');
+                foreach ($groupList as $groupId) {
+                    GroupManager::delete_groups($groupId, $course['code']);
+                }
+
             }
 
             // Cleaning c_x tables

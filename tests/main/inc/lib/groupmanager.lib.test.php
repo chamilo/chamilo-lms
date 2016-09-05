@@ -305,15 +305,6 @@ class TestGroupManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testCanUserUnsubscribe(){
-		global $user_id;
-		$group_id = 6;
-		$res = GroupManager::can_user_unsubscribe($user_id, $group_id);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res === false);
-		//var_dump($res);
-	}
-
 	public function testGetSubscribedUsers(){
 		$group_id = 2;
 		$res = GroupManager::get_subscribed_users($group_id);

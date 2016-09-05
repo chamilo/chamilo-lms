@@ -642,7 +642,8 @@ class Attendance
         }
 
         if (!empty($groupId)) {
-            $students = GroupManager::getStudents($groupId);
+            $groupInfo = GroupManager::get_group_properties($groupId);
+            $students = GroupManager::getStudents($groupInfo['iid']);
             if (!empty($students)) {
                 foreach ($students as $student) {
                     $studentInGroup[$student['user_id']] = true;

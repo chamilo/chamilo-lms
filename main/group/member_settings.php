@@ -134,7 +134,6 @@ if ($subscribedTutors) {
     $subscribedTutors = array_column($subscribedTutors, 'user_id');
 }
 
-
 $orderUserListByOfficialCode = api_get_setting('order_user_list_by_official_code');
 $possible_users = array();
 $userGroup = new UserGroup();

@@ -42,7 +42,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $user_id = api_get_user_id();
 
 if (!empty($group_id)) {
-    $group_properties  = GroupManager :: get_group_properties($group_id);
+    $group_properties = GroupManager :: get_group_properties($group_id);
     $show_work = false;
 
     if (api_is_allowed_to_edit(false, true)) {
@@ -51,7 +51,7 @@ if (!empty($group_id)) {
         // you are not a teacher
         $show_work = GroupManager::user_has_access(
             $user_id,
-            $group_id,
+            $group_properties['iid'],
             GroupManager::GROUP_TOOL_WORK
         );
     }

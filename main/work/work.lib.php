@@ -4984,11 +4984,12 @@ function protectWork($courseInfo, $workId)
     }
 
     allowOnlySubscribedUser($userId, $workId, $courseInfo['real_id']);
+    $groupInfo = GroupManager::get_group_properties($groupId);
 
     if (!empty($groupId)) {
         $showWork = GroupManager::user_has_access(
             $userId,
-            $groupId,
+            $groupInfo['iid'],
             GroupManager::GROUP_TOOL_WORK
         );
         if (!$showWork) {

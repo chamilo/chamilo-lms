@@ -82,8 +82,15 @@ if (!empty($groupId)) {
     //Group info & group category info
     $group_properties = GroupManager::get_group_properties($groupId);
     //User has access in the group?
-    $user_has_access_in_group = GroupManager::user_has_access($userId, $groupId, GroupManager::GROUP_TOOL_FORUM);
-    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid']);
+    $user_has_access_in_group = GroupManager::user_has_access(
+        $userId,
+        $group_properties['iid'],
+        GroupManager::GROUP_TOOL_FORUM
+    );
+    $is_group_tutor = GroupManager::is_tutor_of_group(
+        api_get_user_id(),
+        $group_properties['iid']
+    );
 
     // Course
     if (

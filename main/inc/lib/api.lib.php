@@ -7161,7 +7161,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     $checkPass = api_get_setting('allow_strength_pass_checker');
     $useStrengthPassChecker = $checkPass === 'true';
 
-    if ($useStrengthPassChecker == false) {
+    if ($useStrengthPassChecker === false) {
         return null;
     }
 

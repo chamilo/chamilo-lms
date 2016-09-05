@@ -739,7 +739,7 @@ class DocumentManager
      * can show all folders (except for the deleted ones) or only visible ones
      *
      * @param array $_course
-     * @param int $to_group_id
+     * @param int $to_group_id iid
      * @param boolean $can_see_invisible
      *
      * @return array with paths
@@ -1113,7 +1113,7 @@ class DocumentManager
      * @param string $base_work_dir, path to the documents folder (if not defined, $documentId must be used)
      * @param int   $sessionId The ID of the session, if any
      * @param int   $documentId The document id, if available
-     * @param int $groupId
+     * @param int $groupId iid
      * @return boolean true/false
      * @todo now only files/folders in a folder get visibility 2, we should rename them too.
      * @todo We should be able to get rid of this later when using only documentId (check further usage)
@@ -1124,7 +1124,7 @@ class DocumentManager
         $base_work_dir = null,
         $sessionId = null,
         $documentId = null,
-        $groupId = null
+        $groupId = 0
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 

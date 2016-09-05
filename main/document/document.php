@@ -258,7 +258,7 @@ switch ($action) {
                         $base_work_dir,
                         $sessionId,
                         $_GET['deleteid'],
-                        $groupId
+                        $groupIid
                     );
 
                     if ($deleteDocument) {
@@ -431,7 +431,7 @@ switch ($action) {
                 if (!isset($_GET['copy'])) {
                     Display::addFlash(Display::return_message($message, 'warning', false));
                 }
-                if (Security::remove_XSS($_GET['copy']) == 'yes') {
+                if ($_GET['copy'] === 'yes') {
                     if (!copy($file, $copyfile)) {
                         Display::addFlash(Display::return_message(get_lang('CopyFailed'), 'error'));
                     } else {
@@ -578,7 +578,7 @@ if (isset($document_id) && empty($action)) {
             api_get_course_id(),
             $sessionId,
             api_get_user_id(),
-            $groupId
+            $groupIid
         );
 
         if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
@@ -903,10 +903,11 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skin/
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jplayer/jquery.jplayer.min.js"></script>';
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
 
+$groupIid = isset($group_properties['iid']) ? $group_properties['iid'] : 0;
 $documentAndFolders = DocumentManager::get_all_document_data(
     $courseInfo,
     $curdirpath,
-    $groupId,
+    $groupIid,
     null,
     $is_allowed_to_edit || $group_member_with_upload_rights,
     false
@@ -1010,7 +1011,7 @@ if ($is_allowed_to_edit ||
         if (!empty($document_to_move)) {
             $folders = DocumentManager::get_all_document_folders(
                 $courseInfo,
-                $groupId,
+                $groupIid,
                 $is_allowed_to_edit || $group_member_with_upload_rights
             );
 
@@ -1094,7 +1095,7 @@ if ($is_allowed_to_edit ||
                         $doc_id,
                         'FolderMoved',
                         api_get_user_id(),
-                        $groupId,
+                        $groupIid,
                         null,
                         null,
                         null,
@@ -1108,7 +1109,7 @@ if ($is_allowed_to_edit ||
                         $doc_id,
                         'DocumentMoved',
                         api_get_user_id(),
-                        $groupId,
+                        $groupIid,
                         null,
                         null,
                         null,
@@ -1234,7 +1235,7 @@ if ($is_allowed_to_edit ||
                             $base_work_dir,
                             $sessionId,
                             $documentId,
-                            $groupId
+                            $groupIid
                         );
                         if (!empty($deleteDocument)) {
                             $messages .= Display::return_message(
@@ -1301,7 +1302,7 @@ if ($is_allowed_to_edit ||
                 $courseInfo,
                 api_get_user_id(),
                 $sessionId,
-                $groupId,
+                $groupIid,
                 $to_user_id,
                 $base_work_dir,
                 $dir_name,
@@ -1512,7 +1513,7 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
     $documentAndFolders = DocumentManager::get_all_document_data(
         $courseInfo,
         $curdirpath,
-        $groupId,
+        $groupIid,
         null,
         $is_allowed_to_edit || $group_member_with_upload_rights,
         true
@@ -1521,7 +1522,7 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
     $documentAndFolders = DocumentManager::get_all_document_data(
         $courseInfo,
         $curdirpath,
-        $groupId,
+        $groupIid,
         null,
         $is_allowed_to_edit || $group_member_with_upload_rights,
         false
@@ -1537,14 +1538,14 @@ if ($groupId != 0) {
     if ($userAccess) {
         $folders = DocumentManager::get_all_document_folders(
             $courseInfo,
-            $groupId,
+            $groupIid,
             $is_allowed_to_edit || $group_member_with_upload_rights
         );
     }
 } else {
     $folders = DocumentManager::get_all_document_folders(
         $courseInfo,
-        $groupId,
+        $groupIid,
         $is_allowed_to_edit || $group_member_with_upload_rights
     );
 }

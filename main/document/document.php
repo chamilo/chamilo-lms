@@ -147,6 +147,7 @@ if (api_get_session_id() != 0) {
 
 // Get group info
 $group_properties = GroupManager::get_group_properties($groupId);
+$groupIid = isset($group_properties['iid']) ? $group_properties['iid'] : 0;
 
 $groupMemberWithEditRights = $is_allowed_to_edit || GroupManager::is_tutor_of_group($userId, $group_properties['iid'], $courseId);
 
@@ -903,7 +904,7 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skin/
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jplayer/jquery.jplayer.min.js"></script>';
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
 
-$groupIid = isset($group_properties['iid']) ? $group_properties['iid'] : 0;
+
 $documentAndFolders = DocumentManager::get_all_document_data(
     $courseInfo,
     $curdirpath,

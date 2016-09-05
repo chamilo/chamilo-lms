@@ -33,7 +33,7 @@ $interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get
 
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
 
-$forums_of_groups = get_forums_of_group($current_group['id']);
+$forums_of_groups = get_forums_of_group($current_group['iid']);
 
 if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_session_id())) {
     api_not_allowed(true);
@@ -117,7 +117,7 @@ if (api_is_allowed_to_edit(false, true) ||
 ) {
     $actions_array = array();
     // Link to the forum of this group
-    $forums_of_groups = get_forums_of_group($current_group['id']);
+    $forums_of_groups = get_forums_of_group($current_group['iid']);
 
     if (is_array($forums_of_groups)) {
         if ($current_group['forum_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
@@ -218,15 +218,14 @@ if (api_is_allowed_to_edit(false, true) ||
     if (!empty($actions_array)) {
         echo Display::actions($actions_array);
     }
-
 } else {
     $actions_array = array();
 
     // Link to the forum of this group
-    $forums_of_groups = get_forums_of_group($current_group['id']);
+    $forums_of_groups = get_forums_of_group($current_group['iid']);
 
     if (is_array($forums_of_groups)) {
-        if ( $current_group['forum_state'] == GroupManager::TOOL_PUBLIC) {
+        if ($current_group['forum_state'] == GroupManager::TOOL_PUBLIC) {
             foreach ($forums_of_groups as $key => $value) {
                 if ($value['forum_group_public_private'] == 'public') {
                     $actions_array[] = array(
@@ -379,8 +378,12 @@ $table->display();
  */
 function get_number_of_group_users()
 {
-    global $current_group;
+    $groupInfo = GroupManager::get_group_properties(api_get_user_id());
     $course_id = api_get_course_int_id();
+
+    if (empty($groupInfo) || empty($course_id)) {
+        return 0;
+    }
 
     // Database table definition
     $table = Database :: get_course_table(TABLE_GROUP_USER);
@@ -390,7 +393,7 @@ function get_number_of_group_users()
             FROM $table
             WHERE 
                 c_id = $course_id AND 
-                group_id='".intval($current_group['id'])."'";
+                group_id = '".intval($groupInfo['iid'])."'";
     $result = Database::query($sql);
     $return = Database::fetch_array($result, 'ASSOC');
 
@@ -411,13 +414,16 @@ function get_number_of_group_users()
  */
 function get_group_user_data($from, $number_of_items, $column, $direction)
 {
-    global $current_group;
+    $groupInfo = GroupManager::get_group_properties(api_get_user_id());
+    $course_id = api_get_course_int_id();
+
+    if (empty($groupInfo) || empty($course_id)) {
+        return 0;
+    }
 
     // Database table definition
     $table_group_user = Database:: get_course_table(TABLE_GROUP_USER);
     $table_user = Database:: get_main_table(TABLE_MAIN_USER);
-
-    $course_id = api_get_course_int_id();
 
     // Query
     if (api_get_setting('show_email_addresses') === 'true') {
@@ -435,7 +441,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 				WHERE 
 				    group_rel_user.c_id = $course_id AND 
 				    group_rel_user.user_id = user.id AND 
-				    group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'
+				    group_rel_user.group_id = '".$groupInfo['iid']."'
                 ORDER BY col$column $direction 
                 LIMIT $from, $number_of_items";
     } else {
@@ -452,7 +458,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     FROM $table_user u 
                     INNER JOIN $table_group_user gu 
                     ON (gu.user_id = u.id) AND gu.c_id = $course_id
-                    WHERE gu.group_id = '".Database::escape_string($current_group['id'])."'
+                    WHERE gu.group_id = '".$groupInfo['iid']."'
                     ORDER BY col$column $direction 
                     LIMIT $from, $number_of_items";
         } else {
@@ -469,9 +475,9 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     WHERE 
                         group_rel_user.c_id = $course_id AND  
                         group_rel_user.user_id = user.id AND 
-                        group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'
+                        group_rel_user.group_id = '".$groupInfo['iid']."'
                     ORDER BY col$column $direction 
-                    LIMIT $from,$number_of_items";
+                    LIMIT $from, $number_of_items";
         }
     }
 

@@ -4916,25 +4916,26 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
 /**
  * This function gets all the forum information of the all the forum of the group
  *
- * @param integer $group_id the id of the group we need the fora of (see forum.forum_of_group)
+ * @param integer $groupId the id of the group we need the fora of (see forum.forum_of_group)
  * @return array
  *
  * @todo this is basically the same code as the get_forums function. Consider merging the two.
  */
-function get_forums_of_group($group_id)
+function get_forums_of_group($groupId)
 {
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
+    $groupId = (int) $groupId;
 
     // Student
     // Select all the forum information of all forums (that are visible to students).
 
-    $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
+    $sql = "SELECT * FROM $table_forums forum, $table_item_property item_properties
             WHERE
-                forum.forum_of_group = '".Database::escape_string($group_id)."' AND
+                forum.forum_of_group = $groupId AND
                 forum.c_id = $course_id AND
                 item_properties.c_id = $course_id AND
                 forum.forum_id = item_properties.ref AND
@@ -4943,7 +4944,7 @@ function get_forums_of_group($group_id)
             ORDER BY forum.forum_order ASC";
     // Select the number of threads of the forums (only the threads that are visible).
     $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id
-            FROM $table_threads threads, ".$table_item_property." item_properties
+            FROM $table_threads threads, $table_item_property item_properties
             WHERE
                 threads.thread_id = item_properties.ref AND
                 threads.c_id = $course_id AND
@@ -4953,7 +4954,7 @@ function get_forums_of_group($group_id)
             GROUP BY threads.forum_id";
     // Select the number of posts of the forum (post that are visible and that are in a thread that is visible).
     $sql3 = "SELECT count(post_id) AS number_of_posts, posts.forum_id
-            FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
+            FROM $table_posts posts, $table_threads threads, $table_item_property item_properties
             WHERE posts.visible=1 AND
                 posts.c_id = $course_id AND
                 item_properties.c_id = $course_id AND
@@ -4968,9 +4969,9 @@ function get_forums_of_group($group_id)
     if (api_is_allowed_to_edit()) {
         // Select all the forum information of all forums (that are not deleted).
         $sql = "SELECT *
-                FROM ".$table_forums." forum , ".$table_item_property." item_properties
+                FROM $table_forums forum, $table_item_property item_properties
                 WHERE
-                    forum.forum_of_group = '".Database::escape_string($group_id)."' AND
+                    forum.forum_of_group = $groupId AND
                     forum.c_id = $course_id AND
                     item_properties.c_id = $course_id AND
                     forum.forum_id = item_properties.ref AND
@@ -4980,7 +4981,7 @@ function get_forums_of_group($group_id)
 
         // Select the number of threads of the forums (only the threads that are not deleted).
         $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id
-                 FROM $table_threads threads, ".$table_item_property." item_properties
+                 FROM $table_threads threads, $table_item_property item_properties
                  WHERE
                     threads.thread_id=item_properties.ref AND
                     threads.c_id = $course_id AND
@@ -4991,7 +4992,8 @@ function get_forums_of_group($group_id)
         // Select the number of posts of the forum.
         $sql3 = "SELECT count(post_id) AS number_of_posts, forum_id
                 FROM $table_posts
-                WHERE c_id = $course_id GROUP BY forum_id";
+                WHERE c_id = $course_id 
+                GROUP BY forum_id";
 
     }
 
@@ -5024,7 +5026,8 @@ function get_forums_of_group($group_id)
         }
     }
 
-    // Finding the last post information (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname).
+    // Finding the last post information
+    // (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname).
     if (!empty($forum_list)) {
         foreach ($forum_list as $key => $value) {
             $last_post_info_of_forum = get_last_post_information($key, api_is_allowed_to_edit());

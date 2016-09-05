@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CourseBundle\Entity\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use ChamiloSession as Session;
 
 /**
  * Class RestApi
@@ -31,6 +32,7 @@ class Rest extends WebService
     const ACTION_COURSE_FORUM = 'course_forum';
     const ACTION_COURSE_FORUM_THREAD = 'course_forumthread';
     const ACTION_COURSE_LEARNPATHS = 'course_learnpaths';
+    const ACTION_COURSE_LEARNPATH = 'course_learnpath';
 
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
@@ -668,8 +670,6 @@ class Rest extends WebService
 
         $categories = array_merge([$categoryNone], $categoriesTempList);
 
-        $userId = api_get_user_id();
-
         $categoryData = array();
 
         /** @var CLpCategory $category */
@@ -739,14 +739,26 @@ class Rest extends WebService
                     }
                 }
 
-                $lpStartUrl = api_get_cidreq() . '&action=view&lp_id=' . $lpId;
-                $progress = learnpath::getProgress($lpId, $userId, $courseId);
+                $progress = learnpath::getProgress($lpId, $this->user->getId(), $courseId);
 
                 $listData[] = array(
-                    'urlStart' => rawurlencode($lpStartUrl),
+                    'id' => $lpId,
                     'title' => Security::remove_XSS($lpDetails['lp_name']),
                     'progress' => intval($progress),
+                    'url' => api_get_path(WEB_CODE_PATH) . 'webservices/api/v2.php?' . http_build_query([
+                        'hash' => $this->encodeParams([
+                            'action' => 'course_learnpath',
+                            'lp_id' => $lpId,
+                            'cidReq' => $course->getCode(),
+                            'id_session' => 0,
+                            'gidReq' => 0
+                        ])
+                    ])
                 );
+            }
+
+            if (empty($listData)) {
+                continue;
             }
 
             $categoryData[] = array(
@@ -757,5 +769,64 @@ class Rest extends WebService
         }
 
         return $categoryData;
+    }
+
+    /**
+     * @param array $additionalParams Optional
+     * @return string
+     */
+    private function encodeParams(array $additionalParams = [])
+    {
+        $params = array_merge($additionalParams, [
+            'api_key' => $this->apiKey,
+            'username' => $this->user->getUsername(),
+        ]);
+
+        $strParams = serialize($params);
+
+        $b64Encoded = base64_encode($strParams);
+
+        return str_replace(['+', '/', '='], ['-', '_', '.'], $b64Encoded);
+    }
+
+    /**
+     * @param string $encoded
+     * @return array
+     */
+    public static function decodeParams($encoded){
+        $decoded = str_replace(['-', '_', '.'], ['+', '/', '='], $encoded);
+        $mod4 = strlen($decoded) % 4;
+
+        if ($mod4) {
+            $decoded .= substr('====', $mod4);
+        }
+
+        $b64Decoded = base64_decode($decoded);
+
+        return unserialize($b64Decoded);
+    }
+
+    /**
+     * Start login for a user. Then make a redirect to show the learnpath
+     * @param int $lpId
+     * @param string $courseCode
+     */
+    public function showLearningPath($lpId, $courseCode)
+    {
+        $loggedUser['user_id'] = $this->user->getId();
+        $loggedUser['status'] = $this->user->getStatus();
+        $loggedUser['uidReset'] = true;
+
+        Session::write('_user', $loggedUser);
+        Login::init_user($this->user->getId(), true);
+
+        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . http_build_query([
+            'action' => 'view',
+            'lp_id' => intval($lpId),
+            'cidReq' => $courseCode
+        ]);
+
+        header("Location: $url");
+        exit;
     }
 }

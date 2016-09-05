@@ -3,17 +3,25 @@
 
 require_once '../../inc/global.inc.php';
 
+$hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
+
+if ($hash) {
+    $hashParams = Rest::decodeParams($hash);
+
+    foreach ($hashParams as $key => $value) {
+        $_REQUEST[$key] = $value;
+    }
+}
+
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-$username = isset($_POST['username']) ? Security::remove_XSS($_POST['username']) : null;
-$apiKey = isset($_POST['api_key']) ? Security::remove_XSS($_POST['api_key']) : null;
+$username = isset($_REQUEST['username']) ? Security::remove_XSS($_REQUEST['username']) : null;
+$apiKey = isset($_REQUEST['api_key']) ? Security::remove_XSS($_REQUEST['api_key']) : null;
 
 $restResponse = new RestResponse();
 
 try {
     /** @var Rest $restApi */
     $restApi = $apiKey ? Rest::validate($username, $apiKey) : null;
-
-
 
     switch ($action) {
         case Rest::ACTION_AUTH:
@@ -149,6 +157,13 @@ try {
             $data = $restApi->getCourseLearnPaths($courseId);
 
             $restResponse->setData($data);
+            break;
+
+        case Rest::ACTION_COURSE_LEARNPATH:
+            $lpId = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : 0;
+            $cidReq = isset($_REQUEST['cidReq']) ? Security::remove_XSS($_REQUEST['cidReq']) : 0;
+
+            $restApi->showLearningPath($lpId, $cidReq);
             break;
 
         default:

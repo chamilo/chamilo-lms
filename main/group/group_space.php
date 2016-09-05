@@ -378,7 +378,7 @@ $table->display();
  */
 function get_number_of_group_users()
 {
-    $groupInfo = GroupManager::get_group_properties(api_get_user_id());
+    $groupInfo = GroupManager::get_group_properties(api_get_group_id());
     $course_id = api_get_course_int_id();
 
     if (empty($groupInfo) || empty($course_id)) {
@@ -414,7 +414,7 @@ function get_number_of_group_users()
  */
 function get_group_user_data($from, $number_of_items, $column, $direction)
 {
-    $groupInfo = GroupManager::get_group_properties(api_get_user_id());
+    $groupInfo = GroupManager::get_group_properties(api_get_group_id());
     $course_id = api_get_course_int_id();
 
     if (empty($groupInfo) || empty($course_id)) {

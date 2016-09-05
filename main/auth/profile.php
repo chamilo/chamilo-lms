@@ -22,8 +22,6 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $this_section = SECTION_MYPROFILE;
 }
 
-//$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
-
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
@@ -78,7 +76,7 @@ function show_icon_edit(element_html) {
 </script>';
 
 $jquery_ready_content = '';
-if (api_get_setting('allow_message_tool') == 'true') {
+if (api_get_setting('allow_message_tool') === 'true') {
     $jquery_ready_content = <<<EOF
     $(".message-content .message-delete").click(function(){
         $(this).parents(".message-content").animate({ opacity: "hide" }, "slow");
@@ -259,8 +257,8 @@ if (defined('CONFVAL_ASK_FOR_OFFICIAL_CODE') && CONFVAL_ASK_FOR_OFFICIAL_CODE ==
     $form->applyFilter('official_code', 'stripslashes');
     $form->applyFilter('official_code', 'trim');
     $form->applyFilter('official_code', 'html_filter');
-    if (api_get_setting('registration', 'officialcode') == 'true' && api_get_setting('profile',
-            'officialcode') == 'true'
+    if (api_get_setting('registration', 'officialcode') === 'true' &&
+        api_get_setting('profile', 'officialcode') === 'true'
     ) {
         $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
     }
@@ -560,12 +558,13 @@ $filtered_extension = false;
 if ($form->validate()) {
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
-
+    /** @var User $user */
     $user = UserManager::getRepository()->find(api_get_user_id());
 
     // set password if a new one was provided
     $validPassword = false;
     $passwordWasChecked = false;
+
     if ($user &&
         (!empty($user_data['password0']) &&
         !empty($user_data['password1'])) ||
@@ -574,8 +573,9 @@ if ($form->validate()) {
     ) {
         $passwordWasChecked = true;
         $validPassword = UserManager::isPasswordValid(
+            $user->getPassword(),
             $user_data['password0'],
-            $user
+            $user->getSalt()
         );
 
         if ($validPassword) {
@@ -610,9 +610,7 @@ if ($form->validate()) {
                 $changeemail = $user_data['email'];
             }
 
-            if (!check_user_email($user_data['email']) &&
-                empty($user_data['password0'])
-            ){
+            if (!check_user_email($user_data['email']) && empty($user_data['password0'])) {
                 Display::addFlash(
                     Display:: return_message(
                         get_lang('ToChangeYourEmailMustTypeYourPassword'),
@@ -721,7 +719,7 @@ if ($form->validate()) {
     $available_values_to_modify = array();
     foreach ($profile_list as $key => $status) {
         if ($status == 'true') {
-            switch($key) {
+            switch ($key) {
                 case 'login':
                     $available_values_to_modify[] = 'username';
                     break;
@@ -768,11 +766,6 @@ if ($form->validate()) {
         }
         if (isset($password) && in_array('password', $available_values_to_modify)) {
             $changePassword = true;
-            /*$password = api_get_encrypted_password($password);
-            $sql .= " password = '".Database::escape_string($password)."'";*/
-        } else {
-            // remove trailing , from the query we have so far
-            //$sql = rtrim($sql, ',');
         }
     } else {
         if (isset($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
@@ -783,17 +776,11 @@ if ($form->validate()) {
                     $sql .= " email = '".Database::escape_string($changeemail)."' ";
                 }
                 $changePassword = true;
-                /*$password = api_get_encrypted_password($password);
-                $sql .= " password = '".Database::escape_string($password)."'";*/
-            } else {
-                // remove trailing , from the query we have so far
-                //$sql = rtrim($sql, ',');
             }
         }
     }
 
     $sql = rtrim($sql, ',');
-
     if ($changePassword && !empty($password)) {
         UserManager::updatePassword(api_get_user_id(), $password);
     }

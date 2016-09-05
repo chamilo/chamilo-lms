@@ -3442,7 +3442,7 @@ HOTSPOT;
         $currentCatId = 0;
         for ($i = 0; $i < count($tabGroups); $i++) {
             $tabCategory = GroupManager::get_category_from_group(
-                $tabGroups[$i]["id"]
+                $tabGroups[$i]['iid']
             );
             if ($tabCategory["id"] != $currentCatId) {
                 $res .= "<option value='-1' disabled='disabled'>" . $tabCategory["title"] . "</option>";

@@ -30,6 +30,8 @@ if (empty($action)) {
 }
 
 $group_id = api_get_group_id();
+$groupInfo = GroupManager::get_group_properties($group_id);
+
 $eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
 
@@ -109,7 +111,7 @@ if (api_is_allowed_to_edit(false, true) ||
         !api_is_anonymous() &&
         api_is_allowed_to_session_edit(false, true)) ||
     GroupManager::user_has_access(api_get_user_id(), $group_id, GroupManager::GROUP_TOOL_CALENDAR) &&
-    GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
+    GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])
 ) {
     switch ($action) {
         case 'add':

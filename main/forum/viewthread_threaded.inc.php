@@ -233,11 +233,12 @@ echo api_convert_and_format_date(
 // Get attach id
 $attachment_list = get_attachment($display_post_id);
 $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
+$groupInfo = GroupManager::get_group_properties($groupId);
 
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
 if (
-    GroupManager::is_tutor_of_group(api_get_user_id(), $groupId) || (
+(isset($groupInfo['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) || (
         $current_forum['allow_edit'] == 1 &&
         $row['user_id'] == $_user['user_id']
     ) || (
@@ -277,7 +278,7 @@ if (!empty($my_post) && is_array($my_post)) {
 }
 
 if (
-    GroupManager::is_tutor_of_group(api_get_user_id(), $groupId) ||
+    (isset($groupInfo['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) ||
     api_is_allowed_to_edit(false, true) &&
     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
 ) {

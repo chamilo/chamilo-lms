@@ -2379,11 +2379,11 @@ function get_list_users_without_publication($task_id, $studentId = null)
     }
 
     $group_id = api_get_group_id();
-
     $new_group_user_list = array();
 
     if ($group_id) {
-        $group_user_list = GroupManager::get_subscribed_users($group_id);
+        $groupInfo = GroupManager::get_group_properties($group_id);
+        $group_user_list = GroupManager::get_subscribed_users($groupInfo['iid']);
         if (!empty($group_user_list)) {
             foreach($group_user_list as $group_user) {
                 $new_group_user_list[] = $group_user['user_id'];

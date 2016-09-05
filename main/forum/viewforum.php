@@ -52,8 +52,9 @@ $userId = api_get_user_id();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $courseId = api_get_course_int_id();
+$groupInfo = GroupManager::get_group_properties($groupId);
 
-$isTutor = GroupManager::is_tutor_of_group($userId, $groupId, $courseId);
+$isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo['iid'], $courseId);
 
 /* MAIN DISPLAY SECTION */
 
@@ -82,7 +83,7 @@ if (!empty($groupId)) {
     $group_properties = GroupManager::get_group_properties($groupId);
     //User has access in the group?
     $user_has_access_in_group = GroupManager::user_has_access($userId, $groupId, GroupManager::GROUP_TOOL_FORUM);
-    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupId);
+    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid']);
 
     // Course
     if (

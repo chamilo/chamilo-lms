@@ -56,10 +56,10 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $groupId = api_get_group_id();
+$group_properties = GroupManager::get_group_properties($groupId);
 $sessionId = api_get_session_id();
 
 if ($origin == 'group') {
-    $group_properties = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')
@@ -126,14 +126,14 @@ if (
     isset($_GET['content']) &&
     isset($_GET['id']) &&
     (api_is_allowed_to_edit(false, true) ||
-    GroupManager::is_tutor_of_group(api_get_user_id(), $groupId))
+        (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])))
 ) {
     $message = delete_post($_GET['id']);
 }
 if (($my_action == 'invisible' || $my_action == 'visible') &&
     isset($_GET['id']) &&
     (api_is_allowed_to_edit(false, true) ||
-    GroupManager::is_tutor_of_group(api_get_user_id(), $groupId))
+        (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])))
 ) {
     $message = approve_post($_GET['id'], $_GET['action']);
 }

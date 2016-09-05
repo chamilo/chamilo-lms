@@ -145,18 +145,19 @@ if (api_get_session_id() != 0) {
     $group_member_with_upload_rights = $group_member_with_upload_rights && api_is_allowed_to_session_edit(false, true);
 }
 
-$groupMemberWithEditRights = $is_allowed_to_edit || GroupManager::is_tutor_of_group($userId, $groupId, $courseId);
+// Get group info
+$group_properties = GroupManager::get_group_properties($groupId);
+
+$groupMemberWithEditRights = $is_allowed_to_edit || GroupManager::is_tutor_of_group($userId, $group_properties['iid'], $courseId);
 
 // Setting group variables.
 if (!empty($groupId)) {
-    // Get group info
-    $group_properties = GroupManager::get_group_properties($groupId);
     // Let's assume the user cannot upload files for the group
     $group_member_with_upload_rights = false;
 
     if ($group_properties['doc_state'] == 2) {
         // Documents are private
-        if ($is_allowed_to_edit || GroupManager::is_user_in_group($userId, $groupId)) {
+        if ($is_allowed_to_edit || GroupManager::is_user_in_group($userId, $group_properties['iid'])) {
             // Only courseadmin or group members (members + tutors) allowed
             $interbreadcrumb[] = array(
                 'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -184,8 +185,8 @@ if (!empty($groupId)) {
 
         // Allowed to upload?
         if ($is_allowed_to_edit ||
-            GroupManager::is_subscribed($userId, $groupId) ||
-            GroupManager::is_tutor_of_group($userId, $groupId, $courseId)
+            GroupManager::is_subscribed($userId, $group_properties['iid']) ||
+            GroupManager::is_tutor_of_group($userId, $group_properties['iid'], $courseId)
         ) {
             // Only course admin or group members can upload
             $group_member_with_upload_rights = true;

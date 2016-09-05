@@ -72,9 +72,9 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
+$group_properties = GroupManager::get_group_properties(api_get_group_id());
 if ($origin == 'group') {
     $_clean['toolgroup'] = api_get_group_id();
-    $group_properties = GroupManager::get_group_properties($_clean['toolgroup']);
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
@@ -173,7 +173,7 @@ $group_id = api_get_group_id();
 
 if (!api_is_allowed_to_edit(null, true) &&
     $current_forum['allow_edit'] == 0 &&
-    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
+    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])
 ) {
     $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {

@@ -50,7 +50,7 @@ Display::display_introduction_section(TOOL_GROUP);
  * User wants to register in this group
  */
 if (!empty($_GET['selfReg']) &&
-    GroupManager :: is_self_registration_allowed($user_id, $current_group['id'])
+    GroupManager :: is_self_registration_allowed($user_id, $current_group['iid'])
 ) {
     GroupManager :: subscribe_users($user_id, $current_group['id']);
     Display :: display_normal_message(get_lang('GroupNowMember'));
@@ -60,9 +60,9 @@ if (!empty($_GET['selfReg']) &&
  * User wants to unregister from this group
  */
 if (!empty($_GET['selfUnReg']) &&
-    GroupManager :: is_self_unregistration_allowed($user_id, $current_group['id'])
+    GroupManager :: is_self_unregistration_allowed($user_id, $current_group['iid'])
 ) {
-    GroupManager :: unsubscribe_users($user_id, $current_group['id']);
+    GroupManager :: unsubscribe_users($user_id, $current_group['iid']);
     Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
 
@@ -75,7 +75,7 @@ echo '<a href="group.php">'.
  * Register to group
  */
 $subscribe_group = '';
-if (GroupManager :: is_self_registration_allowed($user_id, $current_group['id'])) {
+if (GroupManager :: is_self_registration_allowed($user_id, $current_group['iid'])) {
     $subscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfReg=1&group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.
         get_lang("RegIntoGroup").'</a>';
 }
@@ -84,7 +84,7 @@ if (GroupManager :: is_self_registration_allowed($user_id, $current_group['id'])
  * Unregister from group
  */
 $unsubscribe_group = '';
-if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group['id'])) {
+if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group['iid'])) {
     $unsubscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.
         get_lang("StudentUnsubscribe").'</a>';
 }
@@ -94,7 +94,7 @@ echo '&nbsp;</div>';
 
 $edit_url = '';
 if (api_is_allowed_to_edit(false, true) ||
-    GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())
+    GroupManager::is_tutor_of_group(api_get_user_id(), $current_group['iid'])
 ) {
     $edit_url =  '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'">'.
         Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
@@ -113,7 +113,7 @@ if (!empty($current_group['description'])) {
  */
 // If the user is subscribed to the group or the user is a tutor of the group then
 if (api_is_allowed_to_edit(false, true) ||
-    GroupManager::is_user_in_group(api_get_user_id(), $current_group['id'])
+    GroupManager::is_user_in_group(api_get_user_id(), $current_group['iid'])
 ) {
     $actions_array = array();
     // Link to the forum of this group
@@ -301,7 +301,7 @@ if (api_is_allowed_to_edit(false, true) ||
 /*
  * List all the tutors of the current group
  */
-$tutors = GroupManager::get_subscribed_tutors($current_group['id']);
+$tutors = GroupManager::get_subscribed_tutors($current_group['iid']);
 
 $tutor_info = '';
 if (count($tutors) == 0) {

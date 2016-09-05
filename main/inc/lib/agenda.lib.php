@@ -2571,6 +2571,7 @@ class Agenda
     public function displayActions($view, $filter = 0)
     {
         $courseInfo = api_get_course_info();
+        $groupInfo = GroupManager::get_group_properties(api_get_group_id());
 
         $actionsLeft = '';
         $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
@@ -2588,8 +2589,8 @@ class Agenda
 
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) ||
-            GroupManager::user_has_access(api_get_user_id(), api_get_group_id(), GroupManager::GROUP_TOOL_CALENDAR) &&
-            GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())
+            (GroupManager::user_has_access(api_get_user_id(), api_get_group_id(), GroupManager::GROUP_TOOL_CALENDAR) &&
+            isset($groupInfo['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']))
         ) {
             $actionsLeft .= Display::url(
                 Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM),
@@ -2601,10 +2602,8 @@ class Agenda
                 api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=".$this->type
             );
 
-            if ($this->type == 'course') {
-
+            if ($this->type === 'course') {
                 if (!isset($_GET['action'])) {
-
                     $form = new FormValidator(
                         'form-search',
                         'post',

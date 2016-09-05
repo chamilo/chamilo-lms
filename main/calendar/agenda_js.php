@@ -54,8 +54,8 @@ $session_id = api_get_session_id();
 $group_id = api_get_group_id();
 
 if (!empty($group_id)) {
-    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
     $group_properties = GroupManager::get_group_properties($group_id);
+    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid']);
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups')

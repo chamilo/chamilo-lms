@@ -111,7 +111,7 @@ if (!empty($groupId)) {
     $group_properties = GroupManager::get_group_properties($groupId);
 
     // Only courseadmin or group members allowed
-    if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupId)) {
+    if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $group_properties['iid'])) {
         $interbreadcrumb[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
             'name' => get_lang('GroupSpace'),

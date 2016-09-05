@@ -34,7 +34,7 @@ $locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREA
 $sessionId = api_get_session_id();
 $currentThread = get_thread_information($_GET['thread']);
 $userId = api_get_user_id();
-
+$groupInfo = GroupManager::get_group_properties($group_id);
 $postCount = 1;
 
 foreach ($rows as $post) {
@@ -48,11 +48,7 @@ foreach ($rows as $post) {
         $messageclass = 'forum_message_post_text';
         $leftclass = 'forum_message_left';
     }
-    /*
-      echo '<pre>';
-      print_r($post);
-      echo '</pre>';
-     */
+
     $indent = $post['indent_cnt'];
 
     $html = '';
@@ -119,7 +115,7 @@ foreach ($rows as $post) {
     // The course admin him/herself can do this off course always
 
     if (
-        GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) ||
+    (isset($groupInfo['iid']) &&GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) ||
         ($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
         (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
     ) {
@@ -133,7 +129,7 @@ foreach ($rows as $post) {
     }
 
     if (
-        GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) ||
+        (isset($groupInfo['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) ||
         api_is_allowed_to_edit(false, true) &&
         !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
     ) {

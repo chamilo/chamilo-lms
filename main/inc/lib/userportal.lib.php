@@ -1208,7 +1208,6 @@ class IndexManager
                         foreach ($session['courses'] as $course) {
                             $is_coach_course = api_is_coach($session_id, $course['real_id']);
                             $allowed_time = 0;
-                            $dif_time_after = 0;
                             $allowedEndTime = true;
                             if (!empty($date_session_start) && $date_session_start != '0000-00-00 00:00:00') {
                                 if ($is_coach_course) {

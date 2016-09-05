@@ -925,11 +925,14 @@ class Wiki
             Database::query($sql);
         }
 
+        $groupInfo = GroupManager::get_group_properties(api_get_group_id());
+
         // if both are empty and we are displaying the index page then we display the default text.
         if ($row['content']=='' && $row['title']=='' && $page=='index') {
+
             if (api_is_allowed_to_edit(false, true) ||
                 api_is_platform_admin() ||
-                GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id()) ||
+                GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid']) ||
                 api_is_allowed_in_course()
             ) {
                 //Table structure for better export to pdf
@@ -978,7 +981,7 @@ class Wiki
                 $actionsLeft .= $editLink;
             } else {
                 if ((api_is_allowed_in_course() ||
-                    GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id()))
+                    GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid']))
                 ) {
                     $actionsLeft .= $editLink;
                 } else {
@@ -1039,7 +1042,7 @@ class Wiki
             // Only available if row['id'] is set
             if ($row['id']) {
                 if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit() ||
-                    GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
+                    GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid'])
                 ) {
                     // menu discuss page
                     $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=discuss&title='.api_htmlentities(urlencode($page)).'" '.self::is_active_navigation_tab('discuss').'>'.
@@ -2097,6 +2100,7 @@ class Wiki
         $assignment_type = $values['assignment'];
         $session_id = $this->session_id;
         $groupId = api_get_group_id();
+        $groupInfo = GroupManager::get_group_properties($groupId);
 
         if ($groupId==0) {
             //extract course members
@@ -2107,8 +2111,8 @@ class Wiki
             }
         } else {
             //extract group members
-            $subscribed_users = GroupManager :: get_subscribed_users($groupId);
-            $subscribed_tutors = GroupManager :: get_subscribed_tutors($groupId);
+            $subscribed_users = GroupManager :: get_subscribed_users($groupInfo['iid']);
+            $subscribed_tutors = GroupManager :: get_subscribed_tutors($groupInfo['iid']);
             $a_users_to_add_with_duplicates = array_merge($subscribed_users, $subscribed_tutors);
 
             //remove duplicates
@@ -2158,8 +2162,9 @@ class Wiki
                 $name = api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname'])." . ".$username;
                 $photo= '<img src="'.$userPicture.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';
 
-                $is_tutor_of_group = GroupManager::is_tutor_of_group($assig_user_id, $groupId); //student is tutor
-                $is_tutor_and_member = GroupManager::is_tutor_of_group($assig_user_id, $groupId) && GroupManager::is_subscribed($assig_user_id, $groupId);
+                $is_tutor_of_group = GroupManager::is_tutor_of_group($assig_user_id, $groupInfo['iid']); //student is tutor
+                $is_tutor_and_member = GroupManager::is_tutor_of_group($assig_user_id, $groupInfo['iid']) &&
+                    GroupManager::is_subscribed($assig_user_id, $groupInfo['iid']);
                 // student is tutor and member
 
                 if ($is_tutor_and_member) {
@@ -4234,10 +4239,11 @@ class Wiki
 
             // check if is a wiki group
             if ($current_row['group_id'] != 0) {
+                $groupInfo = GroupManager::get_group_properties($this->group_id);
                 //Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false,true) ||
                     api_is_platform_admin() ||
-                    GroupManager :: is_user_in_group($userId, $this->group_id) ||
+                    GroupManager :: is_user_in_group($userId, $groupInfo['iid']) ||
                     api_is_allowed_in_course()
                 ) {
                     $PassEdit = true;
@@ -4865,10 +4871,11 @@ class Wiki
 
             // Check if is a wiki group
             if (!empty($groupId)) {
+                $groupInfo = GroupManager::get_group_properties($groupId);
                 //Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false,true) ||
                     api_is_platform_admin() ||
-                    GroupManager :: is_user_in_group($userId, $groupId)
+                    GroupManager :: is_user_in_group($userId, $groupInfo['iid'])
                 ) {
                     $PassEdit = true;
                 } else {
@@ -5481,13 +5488,14 @@ class Wiki
                 if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
                     api_not_allowed();
                 }
+                $groupInfo = GroupManager::get_group_properties(api_get_group_id());
                 echo '<div class="actions">'.get_lang('AddNew').'</div>';
                 echo '<br/>';
                 //first, check if page index was created. chektitle=false
                 if (self::checktitle('index')) {
                     if (api_is_allowed_to_edit(false,true) ||
                         api_is_platform_admin() ||
-                        GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id()) ||
+                        GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid']) ||
                         api_is_allowed_in_course()
                     ) {
                         Display::addFlash(Display::display_normal_message(get_lang('GoAndEditMainPage'), false, true));
@@ -5497,9 +5505,10 @@ class Wiki
                 } elseif (self::check_addnewpagelock()==0 && (api_is_allowed_to_edit(false, true)==false || api_is_platform_admin()==false)) {
                     Display::addFlash(Display::display_error_message(get_lang('AddPagesLocked'), false, true));
                 } else {
+                    $groupInfo = GroupManager::get_group_properties(api_get_group_id());
                     if (api_is_allowed_to_edit(false,true) ||
                         api_is_platform_admin() ||
-                        GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id()) ||
+                        GroupManager::is_user_in_group(api_get_user_id(), $groupInfo['iid']) ||
                         $_GET['group_id'] == 0
                     ) {
                         self::display_new_wiki_form();

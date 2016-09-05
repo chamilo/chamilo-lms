@@ -852,7 +852,6 @@ function store_add_dropbox($file = [])
     // note: why can't this be valid? It is like sending a document to
     // yourself AND to a different person (I do this quite often with my e-mails)
     if ($thisIsJustUpload && (count($_POST['recipients']) != 1)) {
-
         Display::addFlash(Display::return_message(get_lang('MailingJustUploadSelectNoOther'), 'warning'));
         return false;
     }
@@ -946,7 +945,8 @@ function store_add_dropbox($file = [])
         if (strpos($rec, 'user_') === 0) {
             $new_work_recipients[] = substr($rec, strlen('user_'));
         } elseif (strpos($rec, 'group_') === 0) {
-            $userList = GroupManager::get_subscribed_users(substr($rec, strlen('group_')));
+            $groupInfo = GroupManager::get_group_properties(substr($rec, strlen('group_')));
+            $userList = GroupManager::get_subscribed_users($groupInfo['iid']);
             foreach ($userList as $usr) {
                 if (!in_array($usr['user_id'], $new_work_recipients) && $usr['user_id'] != $_user['user_id']) {
                     $new_work_recipients[] = $usr['user_id'];

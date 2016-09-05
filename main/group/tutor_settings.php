@@ -25,7 +25,7 @@ $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array ('url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']);
 
-$is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
+$is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group['iid']);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
@@ -110,20 +110,31 @@ $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidre
 $form->addElement('hidden', 'action');
 
 // Group tutors
-$group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
+$group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['iid']);
+
 $selected_tutors = array();
 foreach ($group_tutor_list as $index => $user) {
     $selected_tutors[] = $user['user_id'];
 }
 
-$complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
+$complete_user_list = GroupManager::fill_groups_list($current_group['iid']);
 $possible_users = array();
 $userGroup = new UserGroup();
+
+$subscribedUsers = GroupManager::get_subscribed_users($current_group['iid']);
+if ($subscribedUsers) {
+    $subscribedUsers = array_column($subscribedUsers, 'user_id');
+}
 
 $orderUserListByOfficialCode = api_get_setting('order_user_list_by_official_code');
 if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');
     foreach ($complete_user_list as $index => $user) {
+
+        if (in_array($user['user_id'], $subscribedUsers)) {
+            continue;
+        }
+
         //prevent invitee users add to groups or tutors - see #8091
         if ($user['status'] != INVITEE) {
             $officialCode = !empty($user['official_code']) ? ' - '.$user['official_code'] : null;
@@ -147,6 +158,7 @@ if (!empty($complete_user_list)) {
                         $user['lastname']
                     ).' ('.$user['username'].')';
             }
+
             $possible_users[$user['user_id']] = $name.$groupNameListToString;
         }
     }
@@ -167,13 +179,14 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     // Storing the tutors (we first remove all the tutors and then add only those who were selected)
-    GroupManager :: unsubscribe_all_tutors($current_group['id']);
-    if (isset ($_POST['group_tutors']) && count($_POST['group_tutors']) > 0) {
-        GroupManager :: subscribe_tutors($values['group_tutors'], $current_group['id']);
+    GroupManager :: unsubscribe_all_tutors($current_group['iid']);
+    if (isset($_POST['group_tutors']) && count($_POST['group_tutors']) > 0) {
+        GroupManager::subscribe_tutors($values['group_tutors'], $current_group['iid']);
     }
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)
-    $cat = GroupManager::get_category_from_group($current_group['id']);
+    $cat = GroupManager::get_category_from_group($current_group['iid']);
+
     if (isset($_POST['group_members']) &&
         count($_POST['group_members']) > $max_member &&
         $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT

@@ -416,7 +416,8 @@ switch ($action) {
             if (!isset($announcement_to_modify)) {
                 $announcement_to_modify = '';
             }
-            $element = CourseManager::addGroupMultiSelect($form, $group_id, array());
+
+            $element = CourseManager::addGroupMultiSelect($form, $group_properties['iid'], array());
             $form->setRequired($element);
             $form->addElement(
                 'checkbox',

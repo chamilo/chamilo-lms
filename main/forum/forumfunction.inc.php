@@ -1910,6 +1910,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
     ;
 
     $groupId = api_get_group_id();
+    $groupInfo = GroupManager::get_group_properties($groupId);
     $filterModerated = true;
 
     if (empty($groupId)) {
@@ -1917,7 +1918,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
             $filterModerated = false;
         }
     } else {
-        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupId)) {
+        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) {
             $filterModerated = false;
         }
     }

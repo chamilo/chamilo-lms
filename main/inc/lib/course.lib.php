@@ -2146,7 +2146,7 @@ class CourseManager
 
         if ($in_get_empty_group == 0) {
             // get only groups that are not empty
-            $sql = "SELECT DISTINCT g.id, g.name
+            $sql = "SELECT DISTINCT g.id, g.iid, g.name
                     FROM " . Database::get_course_table(TABLE_GROUP) . " AS g
                     INNER JOIN " . Database::get_course_table(TABLE_GROUP_USER) . " gu
                     ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
@@ -2154,7 +2154,7 @@ class CourseManager
                     ORDER BY g.name";
         } else {
             // get all groups even if they are empty
-            $sql = "SELECT g.id, g.name
+            $sql = "SELECT g.id, g.name, g.iid 
                     FROM " . Database::get_course_table(TABLE_GROUP) . " AS g
                     $session_condition
                     AND c_id = $course_id";
@@ -2162,7 +2162,7 @@ class CourseManager
         $result = Database::query($sql);
 
         while ($group_data = Database::fetch_array($result)) {
-            $group_data['userNb'] = GroupManager::number_of_students($group_data['id'], $course_id);
+            $group_data['userNb'] = GroupManager::number_of_students($group_data['iid'], $course_id);
             $group_list[$group_data['id']] = $group_data;
         }
         return $group_list;
@@ -5640,7 +5640,7 @@ class CourseManager
     /**
      * Shows the form for sending a message to a specific group or user.
      * @param FormValidator $form
-     * @param int $group_id
+     * @param int $group_id iid
      * @param array $to
      */
     public static function addGroupMultiSelect($form, $group_id, $to = array())

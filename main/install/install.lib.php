@@ -694,7 +694,7 @@ function display_requirements(
 
     $timezone = checkPhpSettingExists("date.timezone");
     if (!$timezone) {
-        echo "<div class='warning-message'>".
+        echo "<div class='alert alert-warning'>".
             Display::return_icon('warning.png', get_lang('Warning'), '', ICON_SIZE_MEDIUM).
             get_lang("DateTimezoneSettingNotSet")."</div>";
     }
@@ -918,12 +918,10 @@ function display_requirements(
     }
 
     if ($course_test_was_created && !$file_course_test_was_created) {
-        $courseTestLabel = Display::label(
-            sprintf(
-                get_lang('InstallWarningCouldNotInterpretPHP'),
-                api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/test.php'
-            ),
-            'warning'
+        $courseTestLabel = Display::label(get_lang('Warning'), 'warning');
+        $courseTestLabel .= '<br />'.sprintf(
+            get_lang('InstallWarningCouldNotInterpretPHP'),
+            api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/test.php'
         );
     }
 
@@ -1145,7 +1143,7 @@ function display_license_agreement()
     </div>
 
     <!-- Contact information form -->
-    <div>
+    <div class="section-parameters">
         <a href="javascript://" class = "advanced_parameters" >
         <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" />&nbsp;<?php echo get_lang('ContactInformation') ?></span>
         </a>
@@ -1157,7 +1155,7 @@ function display_license_agreement()
             <p><?php echo get_contact_registration_form() ?></p><br />
         </div>
     </div>
-
+    <div class="text-center">
     <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" >
         <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
     </button>
@@ -1165,7 +1163,7 @@ function display_license_agreement()
     <button type="submit" id="license-next" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
         <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
     </button>
-
+    </div>
     <?php
 }
 
@@ -2429,6 +2427,7 @@ function fixIds(EntityManager $em)
     }
 
     if (!empty($oldGroups)) {
+        error_log('Moving group files');
         foreach ($oldGroups as $oldId => $newId) {
             $path = get_group_picture_path_by_id(
                 $oldId,
@@ -2442,6 +2441,7 @@ function fixIds(EntityManager $em)
                     $path['dir']
                 );
                 $command = "mv {$path['dir']} $newPath ";
+                error_log("Executing $command");
                 system($command);
             }
         }

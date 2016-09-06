@@ -203,6 +203,7 @@ switch ($action) {
             );
         } else {
             header('Location: ' . api_get_self());
+            exit;
         }
         break;
     case 'display_random_courses':

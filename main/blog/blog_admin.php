@@ -67,11 +67,6 @@ if (api_is_allowed_to_edit()) {
         Display::display_confirmation_message(get_lang('BlogDeleted'));
     }
 
-    /*
-        DISPLAY
-    */
-    //api_display_tool_title($nameTools);
-    //api_introductionsection(TOOL_BLOG);
     if (isset($_GET['action']) && $_GET['action'] == 'add') {
         // we show the form if
         // 1. no post data

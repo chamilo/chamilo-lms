@@ -81,7 +81,7 @@ switch($action) {
         Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
         break;
     case 'delete_selected':
-        foreach($_POST['id'] as $index => $id) {
+        foreach ($_POST['id'] as $index => $id) {
             SystemAnnouncementManager :: delete_announcement($id);
         }
         Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
@@ -137,11 +137,16 @@ if ($action_todo) {
     $language_list = api_get_languages();
     $language_list_with_keys = array();
     $language_list_with_keys['all'] = get_lang('All');
-    for ($i=0; $i<count($language_list['name']) ; $i++) {
+    for ($i = 0; $i < count($language_list['name']); $i++) {
         $language_list_with_keys[$language_list['folder'][$i]] = $language_list['name'][$i];
     }
 
-    $form->addElement('select', 'lang',get_lang('Language'), $language_list_with_keys);
+    $form->addElement(
+        'select',
+        'lang',
+        get_lang('Language'),
+        $language_list_with_keys
+    );
     $form->addHtmlEditor(
         'content',
         get_lang('Content'),

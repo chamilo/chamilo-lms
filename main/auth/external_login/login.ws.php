@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 // External login module : WS (for Web Services)
 /**
  *
  * This file is included in main/inc/local.inc.php at user login if the user
  * have 'ws' in his auth_source field instead of 'platform'.
  */
-
-use ChamiloSession as Session;
 
 // Configure the web service URL here. e.g. http://174.1.1.19:8020/login.asmx?WSDL
 $wsUrl = '';
@@ -21,7 +21,7 @@ $isValid = loginWSAuthenticate($login, $password, $wsUrl);
 // if the authentication was successful, proceed
 if ($isValid === 1) {
     //error_log('WS authentication worked');
-    $chamiloUser = api_get_user_info($login);
+    $chamiloUser = api_get_user_info_from_username($login);
     $loginFailed = false;
     $_user['user_id'] = $chamiloUser['user_id'];
     $_user['status'] = (isset($chamiloUser['status']) ? $chamiloUser['status'] : 5);
@@ -45,9 +45,10 @@ if ($isValid === 1) {
  * @param string The cleartext password, as provided in form
  * @param string The WS URL, as provided at the beginning of this script
  */
-function loginWSAuthenticate($username, $password, $wsUrl) {
+function loginWSAuthenticate($username, $password, $wsUrl)
+{
     // check params
-    if (empty($username) or empty($password) or empty($wsUrl)) {
+    if (empty($username) || empty($password) || empty($wsUrl)) {
         return false;
     }
     // Create new SOAP client instance
@@ -62,7 +63,7 @@ function loginWSAuthenticate($username, $password, $wsUrl) {
     // Complete password con PKCS7-specific padding
     $blockSize = 16;
     $padding = $blockSize - (strlen($password)%$blockSize);
-    $password .= str_repeat(chr($padding),$padding);
+    $password .= str_repeat(chr($padding), $padding);
     $cipher = new Crypt_AES(CRYPT_AES_MODE_CFB);
     $cipher->setKeyLength(128);
     $cipher->setKey($key);
@@ -83,7 +84,13 @@ function loginWSAuthenticate($username, $password, $wsUrl) {
     $passCrypted = base64_encode($cipheredPass);
     // The call to the webservice will change depending on your definition
     try {
-        $response = $client->validateUser(array('user' => $username, 'pass' => $passCrypted, 'system' => 'chamilo'));
+        $response = $client->validateUser(
+            array(
+                'user' => $username,
+                'pass' => $passCrypted,
+                'system' => 'chamilo',
+            )
+        );
     } catch (SoapFault $fault) {
         error_log('Caught something');
         if ($fault->faultstring != 'Could not connect to host') {

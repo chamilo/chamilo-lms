@@ -6,9 +6,9 @@
  */
 class SystemAnnouncementManager
 {
-    CONST VISIBLE_GUEST = 1;
-    CONST VISIBLE_STUDENT = 2;
-    CONST VISIBLE_TEACHER = 3;
+    const VISIBLE_GUEST = 1;
+    const VISIBLE_STUDENT = 2;
+    const VISIBLE_TEACHER = 3;
 
 	/**
 	 * Displays all announcements
@@ -38,13 +38,13 @@ class SystemAnnouncementManager
                     (('$now' BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
 
         switch ($visible) {
-            case self::VISIBLE_GUEST :
+            case self::VISIBLE_GUEST:
                 $sql .= " AND visible_guest = 1 ";
                 break;
-            case self::VISIBLE_STUDENT :
+            case self::VISIBLE_STUDENT:
                 $sql .= " AND visible_student = 1 ";
                 break;
-            case self::VISIBLE_TEACHER :
+            case self::VISIBLE_TEACHER:
                 $sql .= " AND visible_teacher = 1 ";
                 break;
         }
@@ -160,9 +160,6 @@ class SystemAnnouncementManager
         $announcements = Database::query($sql);
         $content = '';
         if (Database::num_rows($announcements) > 0) {
-            $query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
-            $query_string = ereg_replace('&$', '', $query_string);
-            $url = api_get_self();
             $content .= '<div class="system_announcements">';
             $content .= '<h3>'.get_lang('SystemAnnouncements').'</h3>';
             $content .= '<table align="center">';
@@ -208,12 +205,12 @@ class SystemAnnouncementManager
     public static function display_arrow($user_id)
     {
         $start = (int)$_GET['start'];
-        $nb_announcement = SystemAnnouncementManager :: count_nb_announcement($start,$user_id);
+        $nb_announcement = SystemAnnouncementManager :: count_nb_announcement($start, $user_id);
         $next = ((int)$_GET['start']+19);
         $prev = ((int)$_GET['start']-19);
         $content = '';
-        if(!isset($_GET['start']) || $_GET['start'] == 0) {
-            if($nb_announcement > 20) {
+        if (!isset($_GET['start']) || $_GET['start'] == 0) {
+            if ($nb_announcement > 20) {
                 $content .= '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
             }
         } else {
@@ -265,6 +262,7 @@ class SystemAnnouncementManager
         while ($rows = Database::fetch_array($announcements)) {
             $i++;
         }
+
         return $i;
     }
 
@@ -378,7 +376,7 @@ class SystemAnnouncementManager
             'visible_student' => $visible_student,
             'visible_guest' => $visible_guest,
             'lang' => $lang,
-            'access_url_id' => $current_access_url_id,
+            'access_url_id' => $current_access_url_id
         ];
 
         $resultId = Database::insert($db_table, $params);
@@ -509,10 +507,9 @@ class SystemAnnouncementManager
         $em = Database::getManager();
 		$announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
 
-		if (!$announcement) {
-
-			return false;
-		}
+        if (!$announcement) {
+            return false;
+        }
 
         $a_dateS = explode(' ', $date_start);
         $a_arraySD = explode('-', $a_dateS[0]);
@@ -548,8 +545,8 @@ class SystemAnnouncementManager
 			return false;
 		}
 
-	    $start    = api_get_utc_datetime($date_start);
-        $end      = api_get_utc_datetime($date_end);
+        $start = api_get_utc_datetime($date_start);
+        $end = api_get_utc_datetime($date_end);
 
 		//Fixing urls that are sent by email
 		//$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
@@ -576,7 +573,7 @@ class SystemAnnouncementManager
                     $lang
                 );
             }
-        }  
+        }
 
         $dateStart = new DateTime($start, new DateTimeZone('UTC'));
         $dateEnd = new DateTime($end, new DateTimeZone('UTC'));
@@ -609,8 +606,7 @@ class SystemAnnouncementManager
 		$id = intval($id);
 		$sql = "DELETE FROM ".$db_table." WHERE id =".$id;
 		$res = Database::query($sql);
-		if ($res === false) {
-
+        if ($res === false) {
 			return false;
 		}
 		return true;
@@ -857,11 +853,11 @@ class SystemAnnouncementManager
         }
 
         $announcement = Database::select(
-            "*",
+            '*',
             $announcementTable,
             [
-                "where" => $whereConditions,
-                "order" => "date_start"
+                'where' => $whereConditions,
+                'order' => 'date_start'
             ], 'first'
         );
 

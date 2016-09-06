@@ -59,7 +59,6 @@ api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 Event::event_access_tool(TOOL_ANNOUNCEMENT);
 
 $announcement_id = isset($_GET['id']) ? intval($_GET['id']) : null;
-$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'list';
 
 $announcement_number = AnnouncementManager::getNumberAnnouncements();
@@ -163,8 +162,6 @@ switch ($action) {
             $keyword = $filterData['keyword'];
             $userIdToSearch = $filterData['user_id'];
         }
-
-        //$searchFormToString = $searchForm->returnForm();
 
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_course_announcements&'.api_get_cidreq().'&title_to_search='.$keyword.'&user_id_to_search='.$userIdToSearch;
@@ -312,7 +309,6 @@ switch ($action) {
                 if (!api_is_course_coach() ||
                     api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])
                 ) {
-
                     AnnouncementManager::change_visibility_announcement(
                         $_course,
                         $_GET['id']
@@ -320,7 +316,6 @@ switch ($action) {
                     Display::addFlash(Display::return_message(get_lang('VisibilityChanged')));
                     header('Location: '.$homeUrl);
                     exit;
-
                 }
             }
         }
@@ -364,7 +359,7 @@ switch ($action) {
                     get_lang('RemindInactiveLearnersMailSubject'),
                     api_get_setting('siteName')
                 );
-            } elseif (isset($_GET['remindallinactives']) && $_GET['remindallinactives'] == 'true') {
+            } elseif (isset($_GET['remindallinactives']) && $_GET['remindallinactives'] === 'true') {
                 // we want to remind inactive users. The $_GET['since'] parameter
                 // determines which users have to be warned (i.e the users who have been inactive for x days or more
                 $since = isset($_GET['since']) ? intval($_GET['since']) : 6;
@@ -419,11 +414,11 @@ switch ($action) {
             );
         } else {
             if (!isset($announcement_to_modify)) {
-                $announcement_to_modify = "";
+                $announcement_to_modify = '';
             }
-            $element = CourseManager::addGroupMultiSelect($form, $group_id, array());
-            $form->setRequired($element);
 
+            $element = CourseManager::addGroupMultiSelect($form, $group_properties['iid'], array());
+            $form->setRequired($element);
             $form->addElement(
                 'checkbox',
                 'email_ann',
@@ -459,9 +454,7 @@ switch ($action) {
             $htmlTags .= "<b>".$tag."</b><br />";
         }
 
-        $form->addHtml(
-            "<div class='form-group'><div class='col-sm-2'></div><div class='col-sm-8'><div class='alert alert-info'>".$htmlTags."</div></div></div>"
-        );
+        $form->addLabel('', "<div class='alert alert-info'>".$htmlTags."</div>");
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),
@@ -478,7 +471,12 @@ switch ($action) {
             $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
         }
 
-        $form->addCheckBox('send_to_hrm_users', null, get_lang('SendAnnouncementCopyToDRH'));
+        $config = api_get_configuration_value('announcements_hide_send_to_hrm_users');
+
+        if ($config === false) {
+            $form->addCheckBox('send_to_hrm_users', null, get_lang('SendAnnouncementCopyToDRH'));
+        }
+
         $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
         $form->setDefaults($defaults);
 
@@ -606,16 +604,16 @@ if ((api_is_allowed_to_edit(false, true) ||
     (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 ) {
     if (in_array($action, array('add', 'modify', 'view'))) {
-        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
+        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
     } else {
-        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$origin."'>".
+        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>".
             Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), '', ICON_SIZE_MEDIUM)."</a>";
     }
     $show_actions = true;
 } else {
     if (in_array($action, array('view'))) {
-        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
+        $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
     }
 }
@@ -640,7 +638,7 @@ if ($show_actions) {
 
 echo $content;
 
-if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
+if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
     //we are not in learnpath tool
     Display::display_footer();
 }

@@ -92,7 +92,6 @@ switch ($action) {
             header('Location: '.$listAction);
             exit;
         }
-
         break;
     case 'delete':
         $tpl->assign('actions', Display::url(get_lang('List'), $listAction));

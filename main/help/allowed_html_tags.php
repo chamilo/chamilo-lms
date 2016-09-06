@@ -7,9 +7,6 @@
  *
  *	@package chamilo.help
  */
-/**
- * Code
- */
 require '../inc/global.inc.php';
 
 header('Content-Type: text/html; charset='.api_get_system_encoding());

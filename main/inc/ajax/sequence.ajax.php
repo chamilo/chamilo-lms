@@ -1,16 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Responses to AJAX calls
- */
-
 use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
-
+/**
+ * Responses to AJAX calls
+ */
 require_once '../global.inc.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;

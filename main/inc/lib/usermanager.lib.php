@@ -240,7 +240,8 @@ class UserManager
             $access_url_id = api_get_current_access_url_id();
         }
 
-        if (is_array($_configuration[$access_url_id]) &&
+        if (isset($_configuration[$access_url_id]) &&
+            is_array($_configuration[$access_url_id]) &&
             isset($_configuration[$access_url_id]['hosting_limit_users']) &&
             $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
             $num = self::get_number_of_users();
@@ -253,6 +254,7 @@ class UserManager
         }
 
         if ($status === 1 &&
+            isset($_configuration[$access_url_id]) &&
             is_array($_configuration[$access_url_id]) &&
             isset($_configuration[$access_url_id]['hosting_limit_teachers']) &&
             $_configuration[$access_url_id]['hosting_limit_teachers'] > 0
@@ -303,7 +305,7 @@ class UserManager
         }
 
         $currentDate = api_get_utc_datetime();
-        $now = new DateTime($currentDate);
+        $now = new DateTime();
 
         if (empty($expirationDate) || $expirationDate == '0000-00-00 00:00:00') {
             // Default expiration date
@@ -934,6 +936,16 @@ class UserManager
 
         if (empty($user)) {
             return false;
+        }
+
+        $originalUsername = $user->getUsername();
+
+        // If username is different from original then check if it exists.
+        if ($originalUsername !== $username) {
+            $available = self::is_username_available($username);
+            if ($available === false) {
+                return false;
+            }
         }
 
         if (!empty($expiration_date)) {
@@ -1573,6 +1585,14 @@ class UserManager
         $addRandomId = true,
         $userInfo = []
     ) {
+        // Make sure userInfo is defined. Otherwise, define it!
+        if (empty($userInfo) || !is_array($userInfo) || count($userInfo) == 0) {
+            if (empty($user_id)) {
+                return '';
+            } else {
+                $userInfo = api_get_user_info($user_id);
+            }
+        }
         $imageWebPath = self::get_user_picture_path_by_id($user_id, 'web', $userInfo);
         $pictureWebFile = $imageWebPath['file'];
         $pictureWebDir = $imageWebPath['dir'];
@@ -2519,9 +2539,9 @@ class UserManager
         $categories = array();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-
                 // User portal filters:
-                if ($ignoreTimeLimit == false) {
+
+                if ($ignoreTimeLimit === false) {
                     if ($is_time_over) {
                         // History
                         if (empty($row['access_end_date']) || $row['access_end_date'] == '0000-00-00 00:00:00') {
@@ -2559,43 +2579,57 @@ class UserManager
                 );
 
                 $session_id = $row['id'];
-
                 $courseList = UserManager::get_courses_list_by_session(
                     $user_id,
                     $row['id']
                 );
 
                 // Session visibility.
+                /*$visibility = api_get_session_visibility(
+                    $session_id,
+                    null,
+                    $ignore_visibility_for_admins
+                );*/
+
+
                 $visibility = api_get_session_visibility(
                     $session_id,
                     null,
                     $ignore_visibility_for_admins
                 );
 
-                // Course Coach session visibility.
-                $blockedCourseCount = 0;
-                $closedVisibilityList = array(
-                    COURSE_VISIBILITY_CLOSED,
-                    COURSE_VISIBILITY_HIDDEN
-                );
+                if ($visibility != SESSION_VISIBLE) {
 
-                foreach ($courseList as $course) {
-                    // Checking session visibility
-                    $sessionCourseVisibility = api_get_session_visibility(
-                        $session_id,
-                        $course['real_id'],
-                        $ignore_visibility_for_admins
+                    // Course Coach session visibility.
+                    $blockedCourseCount = 0;
+                    $closedVisibilityList = array(
+                        COURSE_VISIBILITY_CLOSED,
+                        COURSE_VISIBILITY_HIDDEN
                     );
 
-                    $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
-                    if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
-                        $blockedCourseCount++;
-                    }
-                }
+                    foreach ($courseList as $course) {
+                        // Checking session visibility
+                        $sessionCourseVisibility = api_get_session_visibility(
+                            $session_id,
+                            $course['real_id'],
+                            $ignore_visibility_for_admins
+                        );
 
-                // If all courses are blocked then no show in the list.
-                if ($blockedCourseCount == count($courseList)) {
-                    $visibility = SESSION_INVISIBLE;
+                        $courseIsVisible = !in_array(
+                            $course['visibility'],
+                            $closedVisibilityList
+                        );
+                        if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
+                            $blockedCourseCount++;
+                        }
+                    }
+
+                    // If all courses are blocked then no show in the list.
+                    if ($blockedCourseCount === count($courseList)) {
+                        $visibility = SESSION_INVISIBLE;
+                    } else {
+                        $visibility = SESSION_VISIBLE;
+                    }
                 }
 
                 switch ($visibility) {
@@ -2605,17 +2639,17 @@ class UserManager
                         break;
                     case SESSION_INVISIBLE:
                         if ($ignore_visibility_for_admins == false) {
-                            continue(2);
+                            continue 2;
                         }
                 }
 
                 $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
                     'session_name' => $row['name'],
                     'session_id' => $row['id'],
-                    'access_start_date' => api_get_local_time($row['access_start_date']),
-                    'access_end_date' => api_get_local_time($row['access_end_date']),
-                    'coach_access_start_date' => api_get_local_time($row['coach_access_start_date']),
-                    'coach_access_end_date' => api_get_local_time($row['coach_access_end_date']),
+                    'access_start_date' => $row['access_start_date'],
+                    'access_end_date' => $row['access_end_date'],
+                    'coach_access_start_date' => $row['coach_access_start_date'],
+                    'coach_access_end_date' => $row['coach_access_end_date'],
                     'courses' => $courseList
                 );
             }

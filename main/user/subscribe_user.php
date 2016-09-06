@@ -121,8 +121,8 @@ if (isset($_POST['action'])) {
 
             header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
             exit;
-			break;
-	}
+        break;
+    }
 }
 
 $is_western_name_order = api_is_western_name_order();
@@ -300,107 +300,107 @@ function get_number_of_users()
 						u.status<>".DRH." AND
 						(u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
-			if (api_is_multiple_url_enabled()) {
-				$url_access_id = api_get_current_access_url_id();
-				if ($url_access_id !=-1) {
-					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-					$sql = "SELECT COUNT(u.user_id)
-							FROM $user_table u
-							LEFT JOIN $tbl_session_rel_course_user cu
-							ON
-								u.user_id = cu.user_id AND
-								c_id='".api_get_course_int_id()."' AND
-								session_id ='".$sessionId."'
-							INNER JOIN $tbl_url_rel_user as url_rel_user
-							ON (url_rel_user.user_id = u.user_id)
-							WHERE
-								cu.user_id IS NULL AND
-								u.status<>".DRH." AND
-								access_url_id= $url_access_id AND
-								(u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
-				}
-			}
-		} else {
-			$sql = "SELECT COUNT(u.user_id)
-					FROM $user_table u
-					LEFT JOIN $course_user_table cu
-					ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'";
+            if (api_is_multiple_url_enabled()) {
+                $url_access_id = api_get_current_access_url_id();
+                if ($url_access_id !=-1) {
+                    $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                    $sql = "SELECT COUNT(u.user_id)
+                            FROM $user_table u
+                            LEFT JOIN $tbl_session_rel_course_user cu
+                            ON
+                                u.user_id = cu.user_id AND
+                                c_id='".api_get_course_int_id()."' AND
+                                session_id ='".$sessionId."'
+                            INNER JOIN $tbl_url_rel_user as url_rel_user
+                            ON (url_rel_user.user_id = u.user_id)
+                            WHERE
+                                cu.user_id IS NULL AND
+                                u.status<>".DRH." AND
+                                access_url_id= $url_access_id AND
+                                (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+                }
+            }
+        } else {
+            $sql = "SELECT COUNT(u.user_id)
+                    FROM $user_table u
+                    LEFT JOIN $course_user_table cu
+                    ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'";
 
-			// we change the SQL when we have a filter
-			if (isset($_GET['subscribe_user_filter_value']) &&
+            // we change the SQL when we have a filter
+            if (isset($_GET['subscribe_user_filter_value']) &&
                 !empty($_GET['subscribe_user_filter_value']) &&
                 api_get_setting('ProfilingFilterAddingUsers') === 'true'
             ){
-				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
-				$sql .=	"
-					LEFT JOIN $table_user_field_values field_values
-					ON field_values.item_id = u.user_id
-					WHERE
-						cu.user_id IS NULL AND
-						u.status <> ".DRH." AND
-						field_values.field_id = '".intval($field_identification[0])."' AND
-						field_values.value = '".Database::escape_string($field_identification[1])."'
-					";
-			} else	{
-				$sql .=	"WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
-			}
+                $field_identification = explode('*',$_GET['subscribe_user_filter_value']);
+                $sql .=	"
+                    LEFT JOIN $table_user_field_values field_values
+                    ON field_values.item_id = u.user_id
+                    WHERE
+                        cu.user_id IS NULL AND
+                        u.status <> ".DRH." AND
+                        field_values.field_id = '".intval($field_identification[0])."' AND
+                        field_values.value = '".Database::escape_string($field_identification[1])."'
+                    ";
+            } else	{
+                $sql .=	"WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
+            }
 
-			if (api_is_multiple_url_enabled()) {
-				$url_access_id = api_get_current_access_url_id();
+            if (api_is_multiple_url_enabled()) {
+                $url_access_id = api_get_current_access_url_id();
 
-				if ($url_access_id !=-1) {
-					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-					$sql = "SELECT COUNT(u.user_id)
-							FROM $user_table u
-							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'
-							INNER JOIN $tbl_url_rel_user as url_rel_user
-							ON (url_rel_user.user_id = u.user_id)
-							WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status <> ".DRH." ";
-				}
-			}
+                if ($url_access_id !=-1) {
+                    $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                    $sql = "SELECT COUNT(u.user_id)
+                            FROM $user_table u
+                            LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'
+                            INNER JOIN $tbl_url_rel_user as url_rel_user
+                            ON (url_rel_user.user_id = u.user_id)
+                            WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status <> ".DRH." ";
+                }
+            }
 		}
 	}
 
-	// when there is a keyword then we are searching and we have to change the SQL statement
-	if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
-		$keyword = Database::escape_string(trim($_REQUEST['keyword']));
-		$sql .= " AND (
-		    firstname LIKE '%".$keyword."%' OR
-		    lastname LIKE '%".$keyword."%' OR
-		    email LIKE '%".$keyword."%' OR
-		    username LIKE '%".$keyword."%' OR
-		    official_code LIKE '%".$keyword."%'
+    // when there is a keyword then we are searching and we have to change the SQL statement
+    if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+        $keyword = Database::escape_string(trim($_REQUEST['keyword']));
+        $sql .= " AND (
+            firstname LIKE '%".$keyword."%' OR
+            lastname LIKE '%".$keyword."%' OR
+            email LIKE '%".$keyword."%' OR
+            username LIKE '%".$keyword."%' OR
+            official_code LIKE '%".$keyword."%'
         )";
 
-		// we also want to search for users who have something in their profile fields that matches the keyword
-		if (api_get_setting('ProfilingFilterAddingUsers') === 'true') {
-			$additional_users = search_additional_profile_fields($keyword);
-		}
+        // we also want to search for users who have something in their profile fields that matches the keyword
+        if (api_get_setting('ProfilingFilterAddingUsers') === 'true') {
+            $additional_users = search_additional_profile_fields($keyword);
+        }
 
-		// getting all the users of the course (to make sure that we do not display users that are already in the course)
-		if (!empty($sessionId)) {
+        // getting all the users of the course (to make sure that we do not display users that are already in the course)
+        if (!empty($sessionId)) {
             $a_course_users = CourseManager:: get_user_list_from_course_code(
                 $courseCode,
                 $sessionId
             );
-		} else {
+        } else {
             $a_course_users = CourseManager:: get_user_list_from_course_code(
                 $courseCode,
                 0
             );
-	    }
-		foreach ($a_course_users as $user_id=>$course_user) {
-			$users_of_course[] = $course_user['user_id'];
-	    }
-	}
+        }
+        foreach ($a_course_users as $user_id => $course_user) {
+            $users_of_course[] = $course_user['user_id'];
+        }
+    }
     $sql .=" AND u.status <> ".ANONYMOUS." ";
-	$res = Database::query($sql);
+    $res = Database::query($sql);
     $count_user = 0;
 
     if ($res) {
-	   $row = Database::fetch_row($res);
-	   $count_user = $row[0];
-	}
+       $row = Database::fetch_row($res);
+       $count_user = $row[0];
+    }
 
 	return $count_user;
 }
@@ -714,21 +714,22 @@ function reg_filter($user_id)
 function active_filter($active, $url_params, $row)
 {
 	$_user = api_get_user_info();
-	if ($active=='1') {
-		$action='AccountActive';
-		$image='accept';
-	}
+    if ($active == '1') {
+        $action = 'AccountActive';
+        $image = 'accept';
+    }
 
-	if ($active=='0') {
-		$action='AccountInactive';
-		$image='error';
+    if ($active == '0') {
+        $action = 'AccountInactive';
+        $image = 'error';
 	}
     $result = null;
-	if ($row['0']<>$_user['user_id']) {
+    if ($row['0'] <> $_user['user_id']) {
 	// you cannot lock yourself out otherwise you could disable all the accounts
 	// including your own => everybody is locked out and nobody can change it anymore.
 		$result = Display::return_icon($image.'.png',  get_lang(ucfirst($action)), array() , ICON_SIZE_TINY);
 	}
+
 	return $result;
 }
 
@@ -761,7 +762,7 @@ function search_additional_profile_fields($keyword)
 		$profiling_field_options_exact_values[] = $profiling_field_options;
 	}
     $profiling_field_options_exact_values_sql = '';
-	foreach ($profiling_field_options_exact_values as $profilingkey => $profilingvalue){
+	foreach ($profiling_field_options_exact_values as $profilingkey => $profilingvalue) {
 		$profiling_field_options_exact_values_sql .= " OR (field_id = '".$profilingvalue['field_id']."' AND value='".$profilingvalue['option_value']."') ";
 	}
 

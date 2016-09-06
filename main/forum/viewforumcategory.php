@@ -80,8 +80,7 @@ $interbreadcrumb[] = array(
 if (!empty($_GET['action']) && !empty($_GET['content'])) {
     if ($_GET['action']=='add' && $_GET['content']=='forum' ) {
         $interbreadcrumb[] = array(
-            'url' => 'viewforumcategory.php?forumcategory='
-                . $current_forum_category['cat_id'] . '&origin=' . $origin,
+            'url' => 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='. $current_forum_category['cat_id'],
             'name' => $current_forum_category['cat_title']
         );
         $interbreadcrumb[] = array(
@@ -96,7 +95,7 @@ if (!empty($_GET['action']) && !empty($_GET['content'])) {
     );
 }
 
-if ($origin=='learnpath') {
+if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
     Display::display_header(null);
@@ -387,7 +386,7 @@ if ($action_forums != 'add') {
                     $forum['forum_title'].$session_displayed,
                     array(
                         'href' => 'viewforum.php?' . api_get_cidreq()
-                            . "&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&origin=$origin&search="
+                            . "&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&search="
                             . Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
                         'class' => return_visible_invisible($forum['visibility'])
                     )

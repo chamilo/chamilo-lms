@@ -416,11 +416,11 @@ if ($encryptPassForm == '1') {
 
 <div id="page-install">
 <div id="main" class="container">
-    <div class="panel panel-default">
-    <div class="panel-body">
     <div class="row">
+        <div class="panel panel-default">
+        <div class="panel-body">
+
         <div class="col-md-8">
-            <div class="content">
         <form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
 
@@ -970,7 +970,6 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 ?>
           </form>
         </div>
-        </div>
         <div class="col-md-4">
             <div class="logo-install">
                 <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
@@ -992,14 +991,19 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                 </a>
             </div>
         </div>
+        </div>
+        </div>
 
-      </div>
-    </div>
-    </div>
-        <footer class="footer-install">
-            <div style="text-align: center;">
-                <?php echo $poweredBy; ?>
+        <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div style="text-align: center;">
+                    <?php echo $poweredBy; ?>
+                </div>
             </div>
-        </footer>
-  </body>
+        </div>
+        </div>
+    </div>
+  </div>
+</body>
 </html>

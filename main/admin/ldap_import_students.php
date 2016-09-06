@@ -5,9 +5,6 @@
  * @package chamilo.admin
  * Copyright (c) 2007 Mustapha Alouani (supervised by Michel Moreau-Belliard)
  */
-/**
- * Code
- */
 // resetting the course id
 $cidReset=true;
 require_once('../inc/global.inc.php');

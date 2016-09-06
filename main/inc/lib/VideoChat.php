@@ -10,7 +10,6 @@
  */
 class VideoChat
 {
-
     /**
      * Get the video chat info by its users
      * @param int $user1 User id
@@ -89,5 +88,4 @@ class VideoChat
 
         return false;
     }
-
 }

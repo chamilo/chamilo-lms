@@ -161,7 +161,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
                 $legal = '';
 
-                if (isset($course_info['activate_legal']) AND $course_info['activate_legal'] == 1) {
+                if (isset($course_info['activate_legal']) && $course_info['activate_legal'] == 1) {
                     $legal = ', legal_agreement';
                     $a_users[0][] = get_lang('LegalAgreementAccepted');
                 }
@@ -241,7 +241,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             true
                         );
                         if (!empty($extra_fields)) {
-                            foreach($extra_fields as $key => $extra_value) {
+                            foreach ($extra_fields as $key => $extra_value) {
                                 $user[$key] = $extra_value;
                             }
                         }
@@ -294,7 +294,7 @@ if (api_is_allowed_to_edit(null, true)) {
                     }
                     $sql .= " WHERE
                             c_id = '$courseId' AND
-                            course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                            course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                             course_user.user_id = user.user_id ";
 
                     if (api_is_multiple_url_enabled()) {
@@ -376,18 +376,18 @@ if (api_is_allowed_to_edit(null, true)) {
                 }
 
                 switch ($_GET['format']) {
-                    case 'csv' :
+                    case 'csv':
                         Export::arrayToCsv($a_users, $fileName);
                         exit;
-                    case 'xls' :
+                    case 'xls':
                         Export::arrayToXls($a_users, $fileName);
                         exit;
-                    case 'pdf' :
+                    case 'pdf':
                         $header_attributes = array(
                             array('style' => 'width:10px'),
                             array('style' => 'width:30px'),
                             array('style' => 'width:50px'),
-                            array('style' => 'width:500px'),
+                            array('style' => 'width:500px')
                         );
                         $params = array(
                             'add_signatures' => false,
@@ -475,7 +475,6 @@ function get_number_of_users()
         }
     }
 
-
     if (!empty($sessionId)) {
         $a_course_users = CourseManager::get_user_list_from_course_code(
             $courseCode,
@@ -522,6 +521,7 @@ function get_number_of_users()
             $counter++;
         }
     }
+
     return $counter;
 }
 
@@ -647,7 +647,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
             $temp = array();
             if (api_is_allowed_to_edit(null, true)) {
-
                 $userInfo = api_get_user_info($user_id);
                 $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
 
@@ -814,7 +813,6 @@ function modify_filter($user_id, $row, $data)
             }
 
             if ($data['user_status_in_course'] == STUDENT) {
-
                 $result .= Display::url(
                         $text,
                         'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,

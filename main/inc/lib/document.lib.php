@@ -739,7 +739,7 @@ class DocumentManager
      * can show all folders (except for the deleted ones) or only visible ones
      *
      * @param array $_course
-     * @param int $to_group_id
+     * @param int $to_group_id iid
      * @param boolean $can_see_invisible
      *
      * @return array with paths
@@ -1113,7 +1113,7 @@ class DocumentManager
      * @param string $base_work_dir, path to the documents folder (if not defined, $documentId must be used)
      * @param int   $sessionId The ID of the session, if any
      * @param int   $documentId The document id, if available
-     * @param int $groupId
+     * @param int $groupId iid
      * @return boolean true/false
      * @todo now only files/folders in a folder get visibility 2, we should rename them too.
      * @todo We should be able to get rid of this later when using only documentId (check further usage)
@@ -1124,7 +1124,7 @@ class DocumentManager
         $base_work_dir = null,
         $sessionId = null,
         $documentId = null,
-        $groupId = null
+        $groupId = 0
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
@@ -2841,6 +2841,9 @@ class DocumentManager
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $base_work_dir = $sys_course_path . $course_dir;
 
+        $group_properties = GroupManager::get_group_properties(api_get_group_id());
+        $groupIid = isset($group_properties['iid']) ? $group_properties['iid'] : 0;
+
         if (isset($files[$fileKey])) {
             $upload_ok = process_uploaded_file($files[$fileKey], $show_output);
 
@@ -2851,7 +2854,7 @@ class DocumentManager
                     $base_work_dir,
                     $path,
                     api_get_user_id(),
-                    api_get_group_id(),
+                    $groupIid,
                     null,
                     $unzip,
                     $if_exists,
@@ -2926,7 +2929,6 @@ class DocumentManager
                             )
                         );
                     }
-
 
                     if ($index_document) {
                         self::index_document(
@@ -5496,7 +5498,7 @@ class DocumentManager
             $basename = substr(strrchr($basename, '.'), 1);
         } else {
             if ($path == '/shared_folder') {
-                $icon = 'folder_users.gif';
+                $icon = 'folder_users.png';
                 if ($is_allowed_to_edit) {
                     $basename = get_lang('HelpUsersFolder');
                 } else {
@@ -5514,7 +5516,7 @@ class DocumentManager
                 } else {
                     $basename = get_lang('UserFolders') . ' (' . api_get_session_name($current_session_id) . ')';
                 }
-                $icon = 'folder_users.gif';
+                $icon = 'folder_users.png';
             } else {
                 $icon = 'folder_document.gif';
 
@@ -5573,7 +5575,7 @@ class DocumentManager
         if ($user_image) {
             return Display::img($icon, $basename, array(), false);
         }
-        return Display::return_icon($icon, $basename, array());
+        return Display::return_icon($icon, $basename, array(), ICON_SIZE_MEDIUM);
     }
 
     /**
@@ -5588,12 +5590,27 @@ class DocumentManager
      */
     public static function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, $visibility)
     {
+        $sessionId = api_get_session_id();
         $web_odf_extension_list = DocumentManager::get_web_odf_extension_list();
         $document_id = $document_data['id'];
         $type = $document_data['filetype'];
         $is_read_only = $document_data['readonly'];
         $path = $document_data['path'];
-        $parent_id = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
+
+        $parent_id = DocumentManager::get_document_id(
+            api_get_course_info(),
+            dirname($path),
+            0
+        );
+
+        if (empty($parent_id) && !empty($sessionId)) {
+            $parent_id = DocumentManager::get_document_id(
+                api_get_course_info(),
+                dirname($path),
+                $sessionId
+            );
+        }
+
         $curdirpath = dirname($document_data['path']);
         $is_certificate_mode = DocumentManager::is_certificate_mode($path);
         $curdirpath = urlencode($curdirpath);

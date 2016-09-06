@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -28,7 +27,6 @@ if ($form->validate()) {
     if (isset($_FILES['file']['tmp_name']) &&
         !empty($_FILES['file']['tmp_name'])
     ) {
-
         $users = Import::csv_reader($_FILES['file']['tmp_name']);
         $courseId = $values['course'];
         $courseInfo = api_get_course_info_by_id($courseId);
@@ -62,7 +60,6 @@ if ($form->validate()) {
             );
         }
     }
-
 }
 
 Display :: display_footer();

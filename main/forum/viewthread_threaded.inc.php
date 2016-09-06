@@ -100,7 +100,7 @@ foreach ($rows as $post) {
         $count_loop = ($count == 0) ? '&id=1' : '';
         $thread_structure .= "<a href=\"viewthread.php?" . api_get_cidreq() .
             "&forum=" . $forumId . "&thread=" . $threadId .
-            "&post=" . $post['post_id'] . "&origin=$origin$count_loop\"" .
+            "&post=" . $post['post_id'] . "$count_loop\"" .
             "$class>" . prepare4display($post['post_title']) . "</a></div>";
         $prev_next_array[] = $post['post_id'];
     }
@@ -233,11 +233,12 @@ echo api_convert_and_format_date(
 // Get attach id
 $attachment_list = get_attachment($display_post_id);
 $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
+$groupInfo = GroupManager::get_group_properties($groupId);
 
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
 if (
-    GroupManager::is_tutor_of_group(api_get_user_id(), $groupId) || (
+(isset($groupInfo['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) || (
         $current_forum['allow_edit'] == 1 &&
         $row['user_id'] == $_user['user_id']
     ) || (
@@ -277,7 +278,7 @@ if (!empty($my_post) && is_array($my_post)) {
 }
 
 if (
-    GroupManager::is_tutor_of_group(api_get_user_id(), $groupId) ||
+    (isset($groupInfo['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) ||
     api_is_allowed_to_edit(false, true) &&
     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
 ) {
@@ -309,7 +310,7 @@ if (
     if (!isset($_GET['id']) && $post_id > $post_minor) {
         echo "<a href=\"viewthread.php?" . api_get_cidreq() .
             "&forum=" . $forumId . "&thread=" . $threadId .
-            "&origin=" . $origin . "&action=move&post=" .
+            "&action=move&post=" .
             $rows[$display_post_id]['post_id'] . "\">" .
             Display::return_icon(
                 'move.png',
@@ -363,7 +364,7 @@ if (($current_forum_category && $current_forum_category['locked'] == 0) &&
             echo '<a href="reply.php?' . api_get_cidreq() .
                 '&forum=' . $forumId . '&thread=' . $threadId .
                 '&post=' . $rows[$display_post_id]['post_id'] .
-                '&action=replymessage&origin=' . $origin . '">' .
+                '&action=replymessage">' .
                 Display::return_icon(
                     'message_reply_forum.png',
                     get_lang('ReplyToMessage')
@@ -371,7 +372,7 @@ if (($current_forum_category && $current_forum_category['locked'] == 0) &&
             echo '<a href="reply.php?' . api_get_cidreq() .
                 '&forum=' . $forumId . '&thread=' . $threadId .
                 '&post=' . $rows[$display_post_id]['post_id'] .
-                '&action=quote&origin=' . $origin . '">' .
+                '&action=quote">' .
                 Display::return_icon(
                     'quote.gif',
                     get_lang('QuoteMessage')
@@ -437,10 +438,7 @@ if (!empty($attachment_list) && is_array($attachment_list)) {
             (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
         ) {
             echo '&nbsp;&nbsp;<a href="' . api_get_self() . '?' .
-                api_get_cidreq() . '&origin=' .
-                Security::remove_XSS($_GET['origin']) .
-                '&action=delete_attach&id_attach=' .
-                $attachment['id'] . '&forum=' . $forumId .
+                api_get_cidreq() . '&action=delete_attach&id_attach=' .$attachment['id'] . '&forum=' . $forumId .
                 '&thread=' . $threadId .
                 '" onclick="javascript:if(!confirm(\'' .
                 addslashes(api_htmlentities(

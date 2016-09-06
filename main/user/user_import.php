@@ -31,7 +31,6 @@ if (empty($course_code)) {
 }
 
 $session_id = api_get_session_id();
-
 $message = '';
 $user_to_show = array();
 $type = '';

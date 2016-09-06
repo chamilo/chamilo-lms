@@ -36,9 +36,8 @@ if ($form->validate()) {
     $final_weight = $values['weight_mask'];
 
     $eval->set_weight($final_weight);
-
     $eval->set_max($values['max']);
-    if (empty ($values['visible'])) {
+    if (empty($values['visible'])) {
         $visible = 0;
     } else {
         $visible = 1;
@@ -48,13 +47,13 @@ if ($form->validate()) {
     header('Location: '.$_SESSION['gradebook_dest'].'?editeval=&selectcat=' . $eval->get_category_id());
     exit;
 }
-$selectcat_inter=isset($_GET['selectcat'])?Security::remove_XSS($_GET['selectcat']):'';
-$interbreadcrumb[] = array (
+$selectcat_inter=isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
+$interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectcat_inter,
     'name' => get_lang('Gradebook'
-    ));
+));
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(document).ready( function() {
     $("#hid_category_id").change(function() {
        $("#hid_category_id option:selected").each(function () {

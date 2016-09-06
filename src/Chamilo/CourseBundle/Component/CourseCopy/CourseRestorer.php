@@ -3194,7 +3194,7 @@ class CourseRestorer
                                     $sessionId
                                 );
                             } else {
-                                $workId = $workData['id'];
+                                $workId = $workData['iid'];
                                 updateWork(
                                     $workId,
                                     $obj->params,

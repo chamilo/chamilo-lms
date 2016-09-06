@@ -36,7 +36,14 @@ if ($action == 'modEventType') {
     if (!empty($event_name)) {
         $eventName = $event_name;
     }
-    Event::save_event_type_message($eventName, $users, $eventMessage, $eventSubject, $eventMessageLanguage, $activated);
+    Event::save_event_type_message(
+        $eventName,
+        $users,
+        $eventMessage,
+        $eventSubject,
+        $eventMessageLanguage,
+        $activated
+    );
     header('location: event_controller.php');
     exit;
 }
@@ -47,7 +54,17 @@ $languages = api_get_languages();
 
 $ajaxPath = api_get_path(WEB_CODE_PATH) . 'inc/ajax/events.ajax.php';
 
-$action_array = array(array('url' =>'event_controller.php?action=listing' , 'content' => Display::return_icon('view_text.png', get_lang('ListView'), array(), ICON_SIZE_MEDIUM)));
+$action_array = array(
+    array(
+        'url' => 'event_controller.php?action=listing',
+        'content' => Display::return_icon(
+            'view_text.png',
+            get_lang('ListView'),
+            array(),
+            ICON_SIZE_MEDIUM
+        ),
+    )
+);
 
 $key_lang = get_lang('YouHaveSomeUnsavedChanges');
 $users = UserManager::get_user_list(array(), array('firstname'));
@@ -345,7 +362,9 @@ echo Display::actions($action_array);
     <select id="languages" name="languages" style="margin-top:20px;" onclick='confirmMessage(this.name); return false;'>
 <?php foreach ($languages["name"] as $key => $value) {
     $english_name = $languages['folder'][$key]; ?>
-            <option value="<?php echo $english_name; ?>" <?php echo ($english_name == api_get_interface_language()) ? "selected=selected" : ""; ?>><?php echo $value; ?></option>
+    <option value="<?php echo $english_name; ?>" <?php echo ($english_name == api_get_interface_language()) ? "selected=selected" : ""; ?>>
+        <?php echo $value; ?>
+    </option>
 <?php } ?>
     </select>
 
@@ -355,8 +374,6 @@ echo Display::actions($action_array);
     <input type="hidden" id="eventName" value="<?php echo $event_name ?>"/>
 
     <br />
-    <!--	<div id="descLangVar">
-        </div>-->
     <br />
 
     <label for="eventSubject">

@@ -9,9 +9,6 @@
 *	@package chamilo.blogs
 */
 
-/**
- * MAIN CODE
- */
 session_cache_limiter('public');
 
 require_once '../inc/global.inc.php';
@@ -48,14 +45,16 @@ if (is_dir($full_file_name)) {
     exit;
 }
 
-$tbl_blogs_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
+$tbl_blogs_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 $course_id = api_get_course_int_id();
 
 // launch event
 Event::event_download($doc_url);
 
 $sql = 'SELECT filename FROM '.$tbl_blogs_attachment.'
-        WHERE c_id = '.$course_id.' AND path LIKE BINARY "'.Database::escape_string($doc_url).'"';
+        WHERE 
+            c_id = '.$course_id.' AND 
+            path LIKE BINARY "'.Database::escape_string($doc_url).'"';
 $result = Database::query($sql);
 if (Database::num_rows($result) > 0) {
     $row = Database::fetch_array($result);

@@ -24,5 +24,6 @@ switch ($action) {
         break;
     default:
         echo '';
-    }
+        break;
+}
 exit;

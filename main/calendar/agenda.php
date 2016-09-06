@@ -16,7 +16,6 @@ if (!empty($course_info)) {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-$origin = isset($_GET['origin']) ? $_GET['origin'] : null;
 
 $this_section = SECTION_COURSES;
 $url = null;
@@ -30,10 +29,9 @@ if (empty($action)) {
     exit;
 }
 
-/* 	Resource linker */
-$_SESSION['source_type'] = 'Agenda';
-require_once '../resourcelinker/resourcelinker.inc.php';
 $group_id = api_get_group_id();
+$groupInfo = GroupManager::get_group_properties($group_id);
+
 $eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
 
@@ -112,8 +110,8 @@ if (api_is_allowed_to_edit(false, true) ||
     (api_get_course_setting('allow_user_edit_agenda') &&
         !api_is_anonymous() &&
         api_is_allowed_to_session_edit(false, true)) ||
-    GroupManager::user_has_access(api_get_user_id(), $group_id, GroupManager::GROUP_TOOL_CALENDAR) &&
-    GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
+    GroupManager::user_has_access(api_get_user_id(), $groupInfo['iid'], GroupManager::GROUP_TOOL_CALENDAR) &&
+    GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])
 ) {
     switch ($action) {
         case 'add':

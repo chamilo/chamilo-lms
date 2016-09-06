@@ -91,7 +91,7 @@ function search_courses($needle, $type)
 		$rs	= Database::query($sql);
 
 		$return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" >';
-		while($course = Database :: fetch_array($rs)) {
+		while ($course = Database :: fetch_array($rs)) {
 			$return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'],ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
 		}
 		$return .= '</select>';
@@ -102,8 +102,7 @@ function search_courses($needle, $type)
 
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -170,7 +169,6 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 Display::display_header($tool_name);
 
 // actions
-
 $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
     Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM).'</a>';
 $actionsLeft .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.
@@ -192,7 +190,7 @@ foreach ($assigned_courses_code as &$value) {
 
 $without_assigned_courses = '';
 if (count($assigned_courses_code) > 0) {
-	$without_assigned_courses = " AND c.code NOT IN(".implode(',',$assigned_courses_code).")";
+	$without_assigned_courses = " AND c.code NOT IN(".implode(',', $assigned_courses_code).")";
 }
 
 $needle = '%';
@@ -218,7 +216,6 @@ if (api_is_multiple_url_enabled()) {
             WHERE  c.code LIKE '$needle' $without_assigned_courses
             ORDER BY c.title";
 }
-
 
 $result	= Database::query($sql);
 
@@ -269,9 +266,6 @@ if(!empty($msg)) {
                 <?php echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>'; ?>
             </div>
         </div>
-
-
-
     </div>
     <div class="col-md-4">
         <h5><?php

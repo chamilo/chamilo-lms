@@ -11,21 +11,19 @@
  */
 $nbre=0;
 echo '<form name="form" method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'">';
-	if($statut==1)
-	{
-		echo get_lang('EmailNotifySubscription').': <input type="checkbox" name="mailling" value="1" checked="checked"><i>'.get_lang('DontUnchek').'</i>';
-	}
-	else
-	{
-		echo '<input type="hidden" name="mailling" value="1">';
-	}
-if(!empty($course))
-{
-	echo '<input type="hidden" name="course" value="'.Security::remove_XSS($course).'">';
+if ($statut == 1) {
+    echo get_lang(
+            'EmailNotifySubscription'
+        ).': <input type="checkbox" name="mailling" value="1" checked="checked"><i>'.get_lang(
+            'DontUnchek'
+        ).'</i>';
+} else {
+    echo '<input type="hidden" name="mailling" value="1">';
 }
-elseif(!empty($id_session))
-{
-	echo '<input type="hidden" name="id_session" value="'.Security::remove_XSS($id_session).'">';
+if (!empty($course)) {
+    echo '<input type="hidden" name="course" value="'.Security::remove_XSS($course).'">';
+} elseif (!empty($id_session)) {
+    echo '<input type="hidden" name="id_session" value="'.Security::remove_XSS($id_session).'">';
 }
 $is_western_name_order = api_is_western_name_order();
 echo '<input type="hidden" name="confirmed" value="yes">';
@@ -46,13 +44,10 @@ while (list ($key, $val) = each($nom_form)) {
 	echo '<tr align="center" id="header'.$ndiv.'">';
 	echo '<td><input type="checkbox" name="checkboxes[]" value="'.$key.'" checked="checked"></td>';
 	echo '<td>'.$email_form[$key].'<input type="hidden" name="email_form['.$key.']" size="40" value="'.$email_form[$key].'"></td>';
-	if ($is_western_name_order)
-	{
+	if ($is_western_name_order)	{
 		echo '<td>'.$prenom_form[$key].'<input type="hidden" name="prenom_form['.$key.']" size="20" value="'.$prenom_form[$key].'"></td>';
 		echo '<td>'.$nom_form[$key].'<input type="hidden" name="nom_form['.$key.']" size="20" value="'.$nom_form[$key].'"></td>';
-	}
-	else
-	{
+	} else {
 		echo '<td>'.$nom_form[$key].'<input type="hidden" name="nom_form['.$key.']" size="20" value="'.$nom_form[$key].'"></td>';
 		echo '<td>'.$prenom_form[$key].'<input type="hidden" name="prenom_form['.$key.']" size="20" value="'.$prenom_form[$key].'"></td>';
 	}
@@ -69,4 +64,3 @@ echo '<br />';
 echo '<br />';
 echo '<input type="submit"  name="submit" value="'.get_lang('Submit').'">';
 echo '</form>';
-?>

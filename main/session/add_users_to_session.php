@@ -492,7 +492,7 @@ if ($ajax_search) {
     }
 
     $result = Database::query($sql);
-    $users = Database::store_result($result,'ASSOC');
+    $users = Database::store_result($result, 'ASSOC');
 
     foreach ($users as $uid => $user) {
         if ($user['session_id'] != $id_session) {
@@ -503,7 +503,7 @@ if ($ajax_search) {
                 'official_code' => $user['official_code']
             ) ;
             unset($users[$uid]);
-	}
+        }
     }
     unset($users); //clean to free memory
 
@@ -533,11 +533,11 @@ if ($ajax_search) {
     }
 
     $result = Database::query($sql);
-    $users = Database::store_result($result,'ASSOC');
+    $users = Database::store_result($result, 'ASSOC');
     foreach ($users as $uid => $user) {
         if ($user['session_id'] == $id_session) {
             $sessionUsersList[$user['id']] = $user;
-            if (array_key_exists($user['id'],$nosessionUsersList)) {
+            if (array_key_exists($user['id'], $nosessionUsersList)) {
                 unset($nosessionUsersList[$user['id']]);
             }
         }

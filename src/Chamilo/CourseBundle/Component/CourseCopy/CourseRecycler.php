@@ -49,7 +49,6 @@ class CourseRecycler
         }
 
         $table_tool_intro = Database::get_course_table(TABLE_TOOL_INTRO);
-        $table_linked_resources = Database::get_course_table(TABLE_LINKED_RESOURCES);
         $table_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $this->type = $backupType;
@@ -73,14 +72,8 @@ class CourseRecycler
 
         foreach ($this->course->resources as $type => $resources) {
             foreach ($resources as $id => $resource) {
-                $sql = "DELETE FROM $table_linked_resources
-                        WHERE
-                            c_id = ".$this->course_id." AND
-                            (source_type = '".$type."' AND source_id = '".$id."') OR
-                            (resource_type = '".$type."' AND resource_id = '".$id."') ";
-                Database::query($sql);
                 if (is_numeric($id)) {
-                    $sql = "DELETE FROM ".$table_item_properties."
+                    $sql = "DELETE FROM $table_item_properties
                             WHERE c_id = ".$this->course_id." AND tool ='".$resource->get_tool()."' AND ref=".$id;
                     Database::query($sql);
                 } elseif ($type == RESOURCE_TOOL_INTRO) {

@@ -43,7 +43,7 @@ class CourseChatUtils
         $course = $em->find('ChamiloCoreBundle:Course', $this->courseId);
 
         if ($this->sessionId) {
-            $criteria = Criteria::create()->where(Criteria::expr()->eq("course", $course));
+            $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
 
             return $em
                 ->find('ChamiloCoreBundle:Session', $this->sessionId)

@@ -149,8 +149,8 @@ foreach ($userSkills as $index => $skillIssue) {
     }
 
     $formAcquiredLevel = new FormValidator(
-        'acquired_level'.$skillIssue->getId(), 
-        'post', 
+        'acquired_level'.$skillIssue->getId(),
+        'post',
         $skillIssue->getIssueUrlAll()
     );
     $formAcquiredLevel->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
@@ -202,8 +202,8 @@ foreach ($userSkills as $index => $skillIssue) {
         exit;
     }
 
-    $badgeInfoError = "";
-    $personalBadge = "";
+    $badgeInfoError = '';
+    $personalBadge = '';
 
     if ($allowDownloadExport) {
         $backpack = 'https://backpack.openbadges.org/';

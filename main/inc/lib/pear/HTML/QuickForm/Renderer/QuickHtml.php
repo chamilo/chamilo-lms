@@ -36,9 +36,8 @@
  * @version     Release: 3.2.11
  * @since       3.1.1
  */
-class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default {
-    // {{{ properties
-
+class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default
+{
     /**
      * The array of rendered elements
      * @var array
@@ -54,15 +53,12 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
      * @access public
      * @return void
      */
-    function HTML_QuickForm_Renderer_QuickHtml()
+    public function HTML_QuickForm_Renderer_QuickHtml()
     {
         $this->HTML_QuickForm_Renderer_Default();
         // The default templates aren't used for this renderer
         $this->clearAllTemplates();
-    } // end constructor
-
-    // }}}
-    // {{{ toHtml()
+    }
 
     /**
      * returns the HTML generated for the form
@@ -85,10 +81,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
         // Insert the extra data and form elements at the end of the form
         $this->_html = str_replace('</form>', $data . "\n</form>", $this->_html);
         return $this->_html;
-    } // end func toHtml
-
-    // }}}
-    // {{{ elementToHtml()
+    }
 
     /**
      * Gets the html for an element and marks it as rendered.
@@ -100,9 +93,8 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
      *
      * @access public
      * @return string The html for the QuickForm element
-     * @throws HTML_QuickForm_Error
      */
-    function elementToHtml($elementName, $elementValue = null)
+    public function elementToHtml($elementName, $elementValue = null)
     {
         $elementKey = null;
         // Find the key for the element
@@ -130,10 +122,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
                 return $this->renderedElements[$elementKey]['html'];
             }
         }
-    } // end func elementToHtml
-
-    // }}}
-    // {{{ renderElement()
+    }
 
     /**
      * Gets the html for an element and adds it to the array by calling
@@ -147,7 +136,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
      * @return mixed HTML string of element if $immediateRender is set, else we just add the
      *               html to the global _html string
      */
-    function renderElement(&$element, $required, $error)
+    public function renderElement(&$element, $required, $error)
     {
         $this->_html = '';
         parent::renderElement($element, $required, $error);
@@ -159,10 +148,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
                     'rendered' => false);
         }
         $this->_html = '';
-    } // end func renderElement
-
-    // }}}
-    // {{{ renderHidden()
+    }
 
     /**
      * Gets the html for a hidden element and adds it to the array.
@@ -171,7 +157,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
      * @access public
      * @return void
      */
-    function renderHidden(&$element)
+    public function renderHidden(&$element)
     {
         $this->renderedElements[] = array(
                 'name' => $element->getName(),
@@ -191,7 +177,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
      * @access   public
      * @return   void
      */
-    function finishGroup(&$group)
+    public function finishGroup(&$group)
     {
         $this->_html = '';
         parent::finishGroup($group);
@@ -201,8 +187,5 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
                 'html' => $this->_html,
                 'rendered' => false);
         $this->_html = '';
-    } // end func finishGroup
-
-    // }}}
-} // end class HTML_QuickForm_Renderer_QuickHtml
-?>
+    }
+}

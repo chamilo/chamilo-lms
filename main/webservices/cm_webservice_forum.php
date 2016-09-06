@@ -61,7 +61,7 @@ class WSCMForum extends WSCM
     public function get_forum_threads_id($username, $password, $course_code, $forum_id)
     {
         if($this->verifyUserPass($username, $password) == "valid") {
-            $threads_info = get_threads($forum_id, $course_code);
+            $threads_info = get_threads($forum_id);
             $threads_id = '#';
             foreach ($threads_info as $thread)
             {

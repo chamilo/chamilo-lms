@@ -148,6 +148,22 @@ function complete_missing_data($user)
         $user['ExpiryDate'] = '';
     }
 
+    if (!isset($user['OfficialCode'])) {
+        $user['OfficialCode'] = '';
+    }
+
+    if (!isset($user['language'])) {
+        $user['language'] = '';
+    }
+
+    if (!isset($user['PhoneNumber'])) {
+        $user['PhoneNumber'] = '';
+    }
+
+    if (!isset($user['OfficialCode'])) {
+        $user['OfficialCode'] = '';
+    }
+
     return $user;
 }
 
@@ -190,10 +206,8 @@ function save_data($users)
                 null,
                 $send_mail
             );
-            if (!is_array($user['Courses']) && !empty($user['Courses'])) {
-                $user['Courses'] = array($user['Courses']);
-            }
-            if (is_array($user['Courses'])) {
+
+            if (isset($user['Courses']) && is_array($user['Courses'])) {
                 foreach ($user['Courses'] as $course) {
                     if (CourseManager::course_exists($course)) {
                         CourseManager::subscribe_user($user_id, $course, $user['Status']);
@@ -215,8 +229,8 @@ function save_data($users)
             // We are sure that the extra field exists.
             foreach ($extra_fields as $extras) {
                 if (isset($user[$extras[1]])) {
-                    $key 	= $extras[1];
-                    $value 	= $user[$extras[1]];
+                    $key = $extras[1];
+                    $value = $user[$extras[1]];
                     UserManager::update_extra_field_value($user_id, $key, $value);
                 }
             }
@@ -429,8 +443,8 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
                 '<strong>'.$error_user['UserName'].'</strong> - '.
                 api_get_person_name(
                     $error_user['FirstName'],
-                    $error_user['LastName']).'
-                '.$email;
+                    $error_user['LastName']
+                ).' '.$email;
             $warning_message .= '</li>';
         }
         $warning_message .= '</ul>';
@@ -438,11 +452,16 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
 
     // if the warning message is too long then we display the warning message trough a session
     Display::addFlash(Display::return_message($warning_message, 'warning', false));
-
     Display::addFlash(Display::return_message($see_message_import, 'confirmation', false));
 
     if ($error_kind_file) {
-        Display::addFlash(Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error', false));
+        Display::addFlash(
+            Display::return_message(
+                get_lang('YouMustImportAFileAccordingToSelectedOption'),
+                'error',
+                false
+            )
+        );
     } else {
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?sec_token='.$tok);
         exit;
@@ -511,7 +530,6 @@ if ($count_fields > 0) {
         $i++;
     }
 }
-
 ?>
     <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
     <blockquote>

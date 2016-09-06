@@ -25,7 +25,7 @@ function validate_data($users_courses)
         }
 
         // 2. Check whether coursecode exists.
-        if (isset ($user_course['CourseCode']) && strlen($user_course['CourseCode']) != 0) {
+        if (isset($user_course['CourseCode']) && strlen($user_course['CourseCode']) != 0) {
             // 2.1 Check whethher code has been allready used by this CVS-file.
             if (!isset($coursecodes[$user_course['CourseCode']])) {
                 // 2.1.1 Check whether course with this code exists in the system.
@@ -43,8 +43,7 @@ function validate_data($users_courses)
         }
 
         // 3. Check whether Email exists.
-        if (isset ($user_course['Email']) && strlen($user_course['Email']) !=
-            0) {
+        if (isset($user_course['Email']) && strlen($user_course['Email']) != 0) {
             $user = api_get_user_info_from_email($user_course['Email']);
             if (empty($user)) {
                 $user_course['error'] = get_lang('UnknownUser');
@@ -53,7 +52,7 @@ function validate_data($users_courses)
         }
 
         // 4. Check whether status is valid.
-        if (isset ($user_course['Status']) && strlen($user_course['Status']) != 0) {
+        if (isset($user_course['Status']) && strlen($user_course['Status']) != 0) {
             if ($user_course['Status'] != COURSEMANAGER && $user_course['Status'] != STUDENT) {
                 $user_course['error'] = get_lang('UnknownStatus');
                 $errors[]             = $user_course;
@@ -75,13 +74,13 @@ function save_data($users_courses)
     $inserted_in_course = array();
 
     foreach ($users_courses as $user_course) {
-        $csv_data[$user_course['Email']][$user_course['CourseCode']] =
-            $user_course['Status'];
+        $csv_data[$user_course['Email']][$user_course['CourseCode']] = $user_course['Status'];
     }
 
     foreach ($csv_data as $email => $csv_subscriptions) {
         $sql = "SELECT * FROM $user_table u
-                WHERE u.email = '".Database::escape_string($email)."' LIMIT 1";
+                WHERE u.email = '".Database::escape_string($email)."' 
+                LIMIT 1";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
         $user_id = $obj->user_id;
@@ -96,7 +95,7 @@ function save_data($users_courses)
         $to_subscribe   = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
         $to_unsubscribe = array_diff(array_keys($db_subscriptions), array_keys($csv_subscriptions));
 
-        if ($_POST['subscribe']) {
+        if (isset($_POST['subscribe']) && $_POST['subscribe']) {
             foreach ($to_subscribe as $courseId) {
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $course_code = $courseInfo['code'];
@@ -114,7 +113,7 @@ function save_data($users_courses)
             }
         }
 
-        if ($_POST['unsubscribe']) {
+        if (isset($_POST['unsubscribe']) && $_POST['unsubscribe']) {
             foreach ($to_unsubscribe as $courseId) {
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $course_code = $courseInfo['code'];

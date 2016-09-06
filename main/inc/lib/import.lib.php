@@ -50,7 +50,7 @@ class Import
      *   $result [1]['FirstName'] = 'Adam';
      *   ...
      * @param string $filename	The path to the CSV-file which should be imported.
-     * @return array			Returns an array (in the system encoding) that contains all data from the CSV-file.
+     * @return array Returns an array (in the system encoding) that contains all data from the CSV-file.
      *
      *
      * @deprecated use cvs_reader instead
@@ -59,7 +59,6 @@ class Import
     {
         $csvReader = self::csv_reader($filename);
         $resultArray = [];
-
         if ($csvReader) {
             $workflow = new Workflow\StepAggregator($csvReader);
             $writer = new ArrayWriter($resultArray);

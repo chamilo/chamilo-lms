@@ -126,7 +126,7 @@ $(document).ready(function() {
                 var end_date_value = end.format('{{ js_format_date }}');
 
                 $('#start_date').html(start_date_value);
-                
+
                 if (start_date_value == end_date_value) {
                     $('#end_date').html(' - ' + end_date_value);
                 } else {
@@ -138,7 +138,7 @@ $(document).ready(function() {
 				$('#color_calendar').removeClass('group_event');
 				$('#color_calendar').addClass('label_tag');
 				$('#color_calendar').addClass('{{ type_event_class }}');
-                                
+
                 //It shows the CKEDITOR while Adding an Event
                 $('#cke_content').show();
                 //It Fixing a minor bug with textarea ckeditor.remplace
@@ -153,7 +153,7 @@ $(document).ready(function() {
 						'{{ "Add" | get_lang }}' : function() {
 							var bValid = true;
 							bValid = bValid && checkLength(title, "title", 1, 255);
-                                                        
+
                             //Update the CKEditor Instance to the remplaced textarea, ready to be serializable
                             for ( instance in CKEDITOR.instances ) {
                                 CKEDITOR.instances[instance].updateElement();
@@ -277,7 +277,7 @@ $(document).ready(function() {
                 $('#color_calendar').removeClass('personal_event');
                 $('#color_calendar').removeClass('group_event');
                 $('#color_calendar').addClass(calEvent.type+'_event');
-                
+
                 //It hides the CKEDITOR while clicking an existing Event
                 $('#cke_content').hide();
 
@@ -540,8 +540,8 @@ $(document).ready(function() {
 				}
 			});
         },
-		axisFormat: 'h(:mm)a',
-		timeFormat: 'h:mm',
+		axisFormat: 'H(:mm)', // pm-am format -> h(:mm)a
+		timeFormat: 'H:mm',   // pm-am format -> h:mm
 		loading: function(bool) {
 			if (bool) $('#loading').show();
 			else $('#loading').hide();

@@ -858,11 +858,9 @@ class scorm extends learnpath
                 }
             }
         }
-        //error_log('New LP - in export_zip()',0);
         //zip everything that is in the corresponding scorm dir
         //write the zip file somewhere (might be too big to return)
 
-        require_once 'learnpath_functions.inc.php';
         $courseId = api_get_course_int_id();
         $_course = api_get_course_info();
 
@@ -881,8 +879,8 @@ class scorm extends learnpath
         // Get a temporary dir for creating the zip file.
 
         //error_log('New LP - cleaning dir '.$zipfoldername, 0);
-        deldir($zipfoldername); // Make sure the temp dir is cleared.
-        $res = mkdir($zipfoldername, api_get_permissions_for_new_directories());
+        my_delete($zipfoldername); // Make sure the temp dir is cleared.
+        mkdir($zipfoldername, api_get_permissions_for_new_directories());
         //error_log('New LP - made dir '.$zipfoldername, 0);
 
         // Create zipfile of given directory.

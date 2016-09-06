@@ -278,9 +278,9 @@ class Thematic
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             if (!empty($thematic_id)) {
-                $data = Database::fetch_array($res,'ASSOC');
+                $data = Database::fetch_array($res, 'ASSOC');
             } else {
-                while ($row = Database::fetch_array($res,'ASSOC')) {
+                while ($row = Database::fetch_array($res, 'ASSOC')) {
                     $data[$row['id']] = $row;
                 }
             }
@@ -469,7 +469,8 @@ class Thematic
         $tbl_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT COUNT(id) AS total_number_of_items FROM $tbl_thematic_advance
+        $sql = "SELECT COUNT(id) AS total_number_of_items 
+                FROM $tbl_thematic_advance
                 WHERE c_id = $course_id AND thematic_id = $thematic_id ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
@@ -821,7 +822,7 @@ class Thematic
                 $_course,
                 'thematic_advance',
                 $thematic_advance_id,
-                "ThematicAdvanceDeleted",
+                'ThematicAdvanceDeleted',
                 $user_id
             );
         }
@@ -885,7 +886,8 @@ class Thematic
             $sql = "SELECT
                         tp.id, thematic_id, tp.title, description, description_type, t.session_id
 			        FROM $tbl_thematic_plan tp
-			        INNER JOIN $tbl_thematic t ON (t.id=tp.thematic_id)
+			        INNER JOIN $tbl_thematic t 
+			        ON (t.id=tp.thematic_id)
                     WHERE
                         t.c_id = $course_id AND
                         tp.c_id = $course_id
@@ -1071,7 +1073,7 @@ class Thematic
                 $_course,
                 'thematic_plan',
                 $thematic_plan_id,
-                "ThematicPlanDeleted",
+                'ThematicPlanDeleted',
                 $user_id
             );
         }
@@ -1097,7 +1099,7 @@ class Thematic
 		        WHERE
 		            c_id = $course_id AND
 		            thematic_id = $thematic_id AND
-		            description_type >= ".ADD_THEMATIC_PLAN." ";
+		            description_type >= ".ADD_THEMATIC_PLAN;
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
         $last_description_type = $row['max'];
@@ -1220,6 +1222,7 @@ class Thematic
                 }
             }
         }
+
         return $affected_rows;
     }
 
@@ -1292,8 +1295,8 @@ class Thematic
 
     /**
      * Get total average of thematic advances
-     * @param	string	Course code (optional)
-     * @param	int		Session id	(optional)
+     * @param	string	$course_code (optional)
+     * @param	int		$session_id	(optional)
      * @return 	float	Average of thematic advances
      */
     public function get_total_average_of_thematic_advances($course_code = null, $session_id = null)
@@ -1332,7 +1335,7 @@ class Thematic
             $score = array_sum($a_average_of_advances_by_thematic);
             $total_average = round(($score * 100) / ($count_tematics * 100));
         }
-        
+
         return $total_average;
     }
 
@@ -1362,7 +1365,6 @@ class Thematic
         }
 
         return $average;
-
     }
 
     /**

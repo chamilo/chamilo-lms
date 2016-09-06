@@ -34,7 +34,7 @@ $locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREA
 $sessionId = api_get_session_id();
 $currentThread = get_thread_information($_GET['thread']);
 $userId = api_get_user_id();
-
+$groupInfo = GroupManager::get_group_properties($group_id);
 $postCount = 1;
 
 foreach ($rows as $post) {
@@ -48,11 +48,7 @@ foreach ($rows as $post) {
         $messageclass = 'forum_message_post_text';
         $leftclass = 'forum_message_left';
     }
-    /*
-      echo '<pre>';
-      print_r($post);
-      echo '</pre>';
-     */
+
     $indent = $post['indent_cnt'];
 
     $html = '';
@@ -85,7 +81,7 @@ foreach ($rows as $post) {
         if (api_get_course_setting('allow_user_image_forum')) {
             $html .= '<div class="thumbnail">' . display_user_image($post['user_id'], $name, $origin) . '</div>';
         }
-        
+
         $html .= Display::tag(
             'p',
             $name,
@@ -119,7 +115,7 @@ foreach ($rows as $post) {
     // The course admin him/herself can do this off course always
 
     if (
-        GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) ||
+    (isset($groupInfo['iid']) &&GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) ||
         ($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
         (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
     ) {
@@ -133,7 +129,7 @@ foreach ($rows as $post) {
     }
 
     if (
-        GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) ||
+        (isset($groupInfo['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) ||
         api_is_allowed_to_edit(false, true) &&
         !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
     ) {
@@ -177,7 +173,7 @@ foreach ($rows as $post) {
 
         if ($count > 0) {
             $iconEdit .= "<a href=\"viewthread.php?" . api_get_cidreq()
-                . "&forum=$clean_forum_id&thread=$clean_thread_id&action=move&origin=$origin&post={$post['post_id']}"
+                . "&forum=$clean_forum_id&thread=$clean_thread_id&action=move&post={$post['post_id']}"
                 . "\">" . Display::return_icon('move.png', get_lang('MovePost'), array(), ICON_SIZE_SMALL) . "</a>";
         }
     }
@@ -199,7 +195,7 @@ foreach ($rows as $post) {
             if ($locked == false) {
                 $iconEdit .= "<a href=\"forumqualify.php?" . api_get_cidreq()
                     . "&forum=$clean_forum_id&thread=$clean_thread_id&action=list&post={$post['post_id']}"
-                    . "&user={$post['user_id']}&user_id={$post['user_id']}&origin=$origin"
+                    . "&user={$post['user_id']}&user_id={$post['user_id']}"
                     . "&idtextqualify=$current_qualify_thread"
                     . "\" >" . Display::return_icon('quiz.gif', get_lang('Qualify')) . "</a>";
             }
@@ -319,8 +315,7 @@ foreach ($rows as $post) {
             if (($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
                 (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
             ) {
-                $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&origin='
-                    . Security::remove_XSS($_GET['origin']) . '&action=delete_attach&id_attach='
+                $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=delete_attach&id_attach='
                     . $attachment['iid'] . '&forum=' . $clean_forum_id . '&thread=' . $clean_thread_id
                     . '" onclick="javascript:if(!confirm(\''
                     . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)) . '\')) return false;">'

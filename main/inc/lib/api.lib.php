@@ -752,13 +752,11 @@ function api_get_path($path = '', $configuration = [])
     $course_folder = isset($configuration['course_folder']) ? $configuration['course_folder'] : $course_folder;
     $root_rel = isset($configuration['url_append']) ? $configuration['url_append'] : '';
 
-    $configuration['code_append'] = 'main';
-
     // Web server base and system server base.
     if (!array_key_exists($root_web, $isInitialized)) {
         // process absolute global roots
         if (!empty($configuration)) {
-            $code_folder = $configuration['code_append'];
+            $code_folder = 'main';
         } else {
             $code_folder = $paths[$root_web][REL_CODE_PATH];
         }
@@ -1354,9 +1352,9 @@ function _api_format_user($user, $add_password = false)
     $result['user_id'] = $result['id'] = $user_id;
 
     // Getting user avatar.
-    $originalFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL, $result);
-    $smallFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL, $result);
-    $mediumFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_MEDIUM, $result);
+    $originalFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL, null, $result);
+    $smallFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL, null, $result);
+    $mediumFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_MEDIUM, null, $result);
 
     $result['avatar'] = $originalFile;
     $avatarString = explode('?', $originalFile);
@@ -2114,7 +2112,6 @@ function api_get_session_visibility(
 
             // I don't care the session visibility.
             if (empty($row['access_start_date']) && empty($row['access_end_date'])) {
-
                 // Session duration per student.
                 if (isset($row['duration']) && !empty($row['duration'])) {
                     $duration = $row['duration'] * 24 * 60 * 60;
@@ -2157,7 +2154,6 @@ function api_get_session_visibility(
 
                 return SESSION_AVAILABLE;
             } else {
-
                 // If start date was set.
                 if (!empty($row['access_start_date'])) {
                     if ($now > api_strtotime($row['access_start_date'], 'UTC')) {
@@ -2170,7 +2166,7 @@ function api_get_session_visibility(
                 // If the end date was set.
                 if (!empty($row['access_end_date'])) {
                     // Only if date_start said that it was ok
-                    if ($visibility == SESSION_AVAILABLE) {
+                    if ($visibility === SESSION_AVAILABLE) {
                         if ($now < api_strtotime($row['access_end_date'], 'UTC')) {
                             // Date still available
                             $visibility = SESSION_AVAILABLE;
@@ -2184,9 +2180,9 @@ function api_get_session_visibility(
 
             /* If I'm a coach the visibility can change in my favor depending in
              the coach dates */
-            $is_coach = api_is_coach($session_id, $courseId);
+            $isCoach = api_is_coach($session_id, $courseId);
 
-            if ($is_coach) {
+            if ($isCoach) {
                 // Test end date.
                 if (!empty($row['coach_access_end_date'])) {
                     $endDateCoach = api_strtotime($row['coach_access_end_date'], 'UTC');
@@ -2212,7 +2208,6 @@ function api_get_session_visibility(
             $visibility = SESSION_INVISIBLE;
         }
     }
-
     return $visibility;
 }
 
@@ -2501,10 +2496,11 @@ function api_get_user_platform_status($user_id = null) {
     //Group (in course)
     if ($group_id && $course_id) {
         $group_status = array();
-        $is_subscribed = GroupManager::is_subscribed($user_id, $group_id);
+        $groupInfo = GroupManager::get_group_properties($group_id);
+        $is_subscribed = GroupManager::is_subscribed($user_id, $groupInfo['iid']);
         if ($is_subscribed) {
             $group_status = array('id'=> $group_id , 'status' => 'student');
-            $is_tutor = GroupManager::is_tutor_of_group($user_id, $group_id);
+            $is_tutor = GroupManager::is_tutor_of_group($user_id, $groupInfo['iid']);
             if ($is_tutor) {
                 $group_status['status'] = 'tutor';
             } else {
@@ -5581,7 +5577,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
  */
 function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
     if (is_null($session_id)) {
-        $session_id = intval($_SESSION['id_session']);
+        $session_id = api_get_session_id();
     }
 
     // Get information to build query depending of the tool.
@@ -5607,7 +5603,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
     }
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT session_id FROM $table_tool WHERE c_id = $course_id AND $key_field =  ".intval($element_id);
+    $sql = "SELECT session_id FROM $table_tool 
+            WHERE c_id = $course_id AND $key_field =  ".intval($element_id);
     $rs = Database::query($sql);
     if ($element_session_id = Database::result($rs, 0, 0)) {
         if ($element_session_id == intval($session_id)) {
@@ -7165,7 +7162,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     $checkPass = api_get_setting('allow_strength_pass_checker');
     $useStrengthPassChecker = $checkPass === 'true';
 
-    if ($useStrengthPassChecker == false) {
+    if ($useStrengthPassChecker === false) {
         return null;
     }
 
@@ -7968,11 +7965,12 @@ function api_protect_course_group($tool, $showHeader = true)
 {
     $userId = api_get_user_id();
     $groupId = api_get_group_id();
+    $groupInfo = GroupManager::get_group_properties($groupId);
 
-    if (!empty($groupId)) {
+    if (!empty($groupInfo)) {
         $allow = GroupManager::user_has_access(
             $userId,
-            $groupId,
+            $groupInfo['iid'],
             $tool
         );
 
@@ -8043,7 +8041,7 @@ function api_is_student_view_active() {
 }
 
 /**
- * Adds a file inside the upload/$type/id 
+ * Adds a file inside the upload/$type/id
  *
  * @param string $type
  * @param array $file

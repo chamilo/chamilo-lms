@@ -76,50 +76,49 @@ if ($origin == 'learnpath') {
     if (!empty($groupId)) {
         $group_properties  = GroupManager::get_group_properties($groupId);
         $interbreadcrumb[] = array(
-            "url" => "../group/group.php",
-            "name" => get_lang('Groups'),
+            "url" => "../group/group.php?".api_get_cidreq(),
+            "name" => get_lang('Groups')
         );
         $interbreadcrumb[] = array(
             "url" => "../group/group_space.php?".api_get_cidreq(),
             "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')'
         );
         $interbreadcrumb[] = array(
-            "url" => "viewforum.php?forum=".intval($_GET['forum'])."&origin=".$origin."&search=".Security::remove_XSS(urlencode($_GET['search'])),
+            "url" => "viewforum.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&search=".Security::remove_XSS(urlencode($_GET['search'])),
             "name" => prepare4display($currentForum['forum_title'])
         );
         if ($message <> 'PostDeletedSpecial') {
             $interbreadcrumb[]= array(
-                "url" => "viewthread.php?forum=".intval($_GET['forum'])."&gradebook=".$gradebook."&thread=".intval($_GET['thread']),
+                "url" => "viewthread.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&gradebook=".$gradebook."&thread=".intval($_GET['thread']),
                 "name" => prepare4display($currentThread['thread_title'])
             );
         }
 
         $interbreadcrumb[] = array(
             "url" => "#",
-            "name" => get_lang('QualifyThread'),
+            "name" => get_lang('QualifyThread')
         );
 
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
         Display :: display_header('');
         api_display_tool_title($nameTools);
     } else {
-
         $search = isset($_GET['search']) ? Security::remove_XSS(urlencode($_GET['search'])) : '';
         $info_thread = get_thread_information($_GET['thread']);
         $interbreadcrumb[] = array(
             "url" => "index.php?".api_get_cidreq()."&search=".$search,
             "name" => $nameTools);
         $interbreadcrumb[] = array(
-            "url" => "viewforumcategory.php?forumcategory=".$currentForumCategory['cat_id']."&search=".$search,
+            "url" => "viewforumcategory.php?".api_get_cidreq()."&forumcategory=".$currentForumCategory['cat_id']."&search=".$search,
             "name" => prepare4display($currentForumCategory['cat_title'])
         );
         $interbreadcrumb[] = array(
-            "url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&origin=".$origin."&search=".$search,
+            "url" => "viewforum.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&search=".$search,
             "name" => prepare4display($currentForum['forum_title'])
         );
 
         if ($message <> 'PostDeletedSpecial') {
-            if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
+            if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
                 $info_thread=get_thread_information($_GET['thread']);
                 $interbreadcrumb[] = array(
                     "url" => "viewthread.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&thread=".intval($_GET['thread']),
@@ -133,7 +132,7 @@ if ($origin == 'learnpath') {
             }
         }
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
-        $interbreadcrumb[]=array("url" => "#","name" => get_lang('QualifyThread'));
+        $interbreadcrumb[]=array("url" => "#", "name" => get_lang('QualifyThread'));
         Display :: display_header('');
     }
 }

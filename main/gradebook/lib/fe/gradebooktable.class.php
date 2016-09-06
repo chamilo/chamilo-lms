@@ -113,7 +113,8 @@ class GradebookTable extends SortableTable
         if ($this->teacherView) {
             $this->set_header($column++, get_lang('Modify'), false, 'width="195px"');
             // Actions on multiple selected documents.
-            $this->set_form_actions(array(
+            $this->set_form_actions(
+                array(
                     'setvisible' => get_lang('SetVisible'),
                     'setinvisible' => get_lang('SetInvisible'),
                     'deleted' => get_lang('DeleteSelected')
@@ -169,21 +170,22 @@ class GradebookTable extends SortableTable
 
         switch ($this->column) {
             // Type
-            case (0 + $col_adjust) :
+            case (0 + $col_adjust):
                 $sorting = GradebookDataGenerator :: GDG_SORT_TYPE;
                 break;
-            case (1 + $col_adjust) :
+            case (1 + $col_adjust):
                 $sorting = GradebookDataGenerator :: GDG_SORT_NAME;
                 break;
-            case (2 + $col_adjust) :
+            case (2 + $col_adjust):
                 $sorting = GradebookDataGenerator :: GDG_SORT_DESCRIPTION;
                 break;
-            case (3 + $col_adjust) :
+            case (3 + $col_adjust):
                 $sorting = GradebookDataGenerator :: GDG_SORT_WEIGHT;
                 break;
-            case (4 + $col_adjust) :
+            case (4 + $col_adjust):
                 $sorting = GradebookDataGenerator :: GDG_SORT_DATE;
-            case (5 + $col_adjust) :
+                break;
+            case (5 + $col_adjust):
                 $sorting = GradebookDataGenerator :: GDG_SORT_ID;
                 break;
         }
@@ -210,13 +212,13 @@ class GradebookTable extends SortableTable
         }
 
         if (empty($this->studentList)) {
-                $studentList = CourseManager::get_user_list_from_course_code(
-                    $course_code,
-                    $session_id,
-                    null,
-                    null,
-                    $statusToFilter
-                );
+            $studentList = CourseManager::get_user_list_from_course_code(
+                $course_code,
+                $session_id,
+                null,
+                null,
+                $statusToFilter
+            );
             $this->studentList = $studentList;
         }
 
@@ -233,7 +235,6 @@ class GradebookTable extends SortableTable
         // generate the data to display
         $sortable_data = array();
         $weight_total_links = 0;
-        $main_categories = array();
         $main_cat = Category::load(
             null,
             null,
@@ -301,7 +302,7 @@ class GradebookTable extends SortableTable
             $weight = $scoredisplay->display_score(
                 array(
                     $data['3'],
-                    $this->currentcat->get_weight(),
+                    $this->currentcat->get_weight()
                 ),
                 SCORE_SIMPLE,
                 SCORE_BOTH,
@@ -433,7 +434,6 @@ class GradebookTable extends SortableTable
 
                     // Links.
                     foreach ($data_array2 as $data) {
-
                         $row = array();
                         $item = $data[0];
 
@@ -579,7 +579,6 @@ class GradebookTable extends SortableTable
         if ($this->teacherView) {
             // Total for teacher.
             if (count($main_cat) > 1) {
-
                 if (intval($total_categories_weight) == $main_weight) {
                     $total = GradebookUtils::score_badges(
                         array(
@@ -668,7 +667,7 @@ class GradebookTable extends SortableTable
                         $totalResult,
                         $totalRanking,
                         $totalBest,
-                        $totalAverage,
+                        $totalAverage
                     );
                 } else {
                     $row = array(
@@ -679,7 +678,7 @@ class GradebookTable extends SortableTable
                         $totalResult,
                         $totalRanking,
                         $totalBest,
-                        $totalAverage,
+                        $totalAverage
                     );
                 }
 
@@ -697,9 +696,7 @@ class GradebookTable extends SortableTable
             ) {
                 $id_cat = intval($_GET['selectcat']);
                 $category = Category::load($id_cat);
-
                 $weight_category = intval($this->build_weight($category[0]));
-
                 $course_code = $this->build_course_code($category[0]);
                 $weight_total_links  = round($weight_total_links);
 
@@ -755,7 +752,7 @@ class GradebookTable extends SortableTable
                     is_array($course_codes)
                 ) {
                     $warning_message = '';
-                    for ($x = 0; $x<count($weight_categories);$x++) {
+                    for ($x = 0; $x < count($weight_categories); $x++) {
                         $weight_category = intval($weight_categories[$x]);
                         $certificate_min_score = intval($certificate_min_scores[$x]);
                         $course_code = $course_codes[$x];
@@ -768,7 +765,7 @@ class GradebookTable extends SortableTable
                     }
 
                     if (!empty($warning_message)) {
-                        Display::display_warning_message($warning_message,false);
+                        Display::display_warning_message($warning_message, false);
                     }
                 }
             }
@@ -813,11 +810,8 @@ class GradebookTable extends SortableTable
 
             /* Add a border to the picture */
             $pChart->drawRectangle(0,0,$xSize-10,$ySize-10,array("R"=>0,"G"=>0,"B"=>0));
-
             $pChart->drawText(10,16,get_lang('Results'),array("FontSize"=>11,"Align"=> TEXT_ALIGN_BOTTOMMIDDLE));
-
             $pChart->setGraphArea(50, 30, $xSize-50, $ySize-50);
-
             $pChart->setFontProperties(
                 array(
                     'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
@@ -840,7 +834,15 @@ class GradebookTable extends SortableTable
 
             /* Draw the line chart */
             $pChart->drawLineChart();
-            $pChart->drawPlotChart(array("DisplayValues"=>TRUE,"PlotBorder"=>TRUE,"BorderSize"=>2,"Surrounding"=>-60,"BorderAlpha"=>80));
+            $pChart->drawPlotChart(
+                array(
+                    "DisplayValues" => true,
+                    "PlotBorder" => true,
+                    "BorderSize" => 2,
+                    "Surrounding" => -60,
+                    "BorderAlpha" => 80,
+                )
+            );
 
             /* Write the chart legend */
             $pChart->drawLegend(
@@ -910,13 +912,13 @@ class GradebookTable extends SortableTable
     {
         switch ($item->get_item_type()) {
             // category
-            case 'C' :
+            case 'C':
                 return 'CATE' . $item->get_id();
             // evaluation
-            case 'E' :
+            case 'E':
                 return 'EVAL' . $item->get_id();
             // link
-            case 'L' :
+            case 'L':
                 return 'LINK' . $item->get_id();
         }
     }
@@ -944,7 +946,7 @@ class GradebookTable extends SortableTable
 
         switch ($item->get_item_type()) {
             // category
-            case 'C' :
+            case 'C':
                 $prms_uri='?selectcat=' . $item->get_id() . '&amp;view='.$view;
 
                 if (isset($_GET['isStudentView'])) {
@@ -960,7 +962,7 @@ class GradebookTable extends SortableTable
                 . '</a>'
                 . ($item->is_course() ? ' &nbsp;[' . $item->get_course_code() . ']'.$show_message : '');
                 // evaluation
-            case 'E' :
+            case 'E':
                 $cat = new Category();
                 $course_id = CourseManager::get_course_by_category($categoryId);
                 $show_message = $cat->show_message_resource_delete($course_id);
@@ -1035,13 +1037,13 @@ class GradebookTable extends SortableTable
     {
         switch ($item->get_item_type()) {
             // category
-            case 'C' :
+            case 'C':
                 return GradebookUtils::build_edit_icons_cat($item, $this->currentcat);
             // evaluation
-            case 'E' :
+            case 'E':
                 return GradebookUtils::build_edit_icons_eval($item, $this->currentcat->get_id());
             // link
-            case 'L' :
+            case 'L':
                 return GradebookUtils::build_edit_icons_link($item, $this->currentcat->get_id());
         }
     }

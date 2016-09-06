@@ -51,24 +51,28 @@ $base_work_dir = $sys_course_path.$courseDir;
 $sessionId = api_get_session_id();
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 
-$document_data = DocumentManager::get_document_data_by_id(
-    $_REQUEST['id'],
-    api_get_course_id(),
-    true,
-    $sessionId
-);
+$document_data = [];
 
-if ($sessionId != 0 && !$document_data) {
+if (isset($_REQUEST['id'])) {
     $document_data = DocumentManager::get_document_data_by_id(
         $_REQUEST['id'],
         api_get_course_id(),
         true,
-        0
+        $sessionId
     );
+
+    if ($sessionId != 0 && !$document_data) {
+        $document_data = DocumentManager::get_document_data_by_id(
+            $_REQUEST['id'],
+            api_get_course_id(),
+            true,
+            0
+        );
+    }
 }
 
 if (empty($document_data)) {
-    $document_id  = $parent_id =  0;
+    $document_id = $parent_id =  0;
     $path = '/';
 } else {
     $document_id = $document_data['id'];
@@ -107,7 +111,7 @@ if (!empty($groupId)) {
     $group_properties = GroupManager::get_group_properties($groupId);
 
     // Only courseadmin or group members allowed
-    if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupId)) {
+    if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $group_properties['iid'])) {
         $interbreadcrumb[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
             'name' => get_lang('GroupSpace'),
@@ -117,7 +121,6 @@ if (!empty($groupId)) {
     }
 } elseif ($is_allowed_to_edit ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $path, api_get_session_id())) {
-
 } else {
     // No course admin and no group member...
     api_not_allowed(true);
@@ -163,21 +166,20 @@ if ($is_certificate_mode) {
 }
 
 // Interbreadcrumb for the current directory root path
-if (empty($document_data['parents'])) {
-    $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
-} else {
-    foreach ($document_data['parents'] as $document_sub_data) {
-        $interbreadcrumb[] = array(
-            'url' => $document_sub_data['document_url'],
-            'name' => $document_sub_data['title'],
-        );
+if ($document_data) {
+    if (empty($document_data['parents'])) {
+        $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+    } else {
+        foreach ($document_data['parents'] as $document_sub_data) {
+            $interbreadcrumb[] = array(
+                'url' => $document_sub_data['document_url'],
+                'name' => $document_sub_data['title']
+            );
+        }
     }
 }
 
 $this_section = SECTION_COURSES;
-
-// Display the header
-Display::display_header($nameTools, 'Doc');
 
 /*    Here we do all the work */
 $unzip = isset($_POST['unzip']) ? $_POST['unzip'] : null;
@@ -195,16 +197,21 @@ if (!empty($_FILES)) {
         $index,
         true
     );
+    header('Location: '.api_get_self().'?'.api_get_cidreq().'#tabs-2');
+    exit;
 }
+
+// Display the header
+Display::display_header($nameTools, 'Doc');
 
 // Actions
 // Link back to the documents overview
 if ($is_certificate_mode) {
     $actions = '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
     $actions = '<a href="document.php?id='.$document_id.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 // Link to create a folder
@@ -251,7 +258,7 @@ $form->addElement(
     'onclick="javascript: check_unzip();" value="1"'
 );
 
-if (api_get_setting('search_enabled') == 'true') {
+if (api_get_setting('search_enabled') === 'true') {
     //TODO: include language file
     $supported_formats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
     $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>');
@@ -290,8 +297,6 @@ $defaults = array(
 
 $form->setDefaults($defaults);
 
-$simple_form = $form->returnForm();
-
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath='.$path;
 
 $multipleForm = new FormValidator(
@@ -302,10 +307,10 @@ $multipleForm = new FormValidator(
 );
 $multipleForm->addMultipleUpload($url);
 
-    $headers = array(
-        get_lang('Upload'),
-        get_lang('Upload').' ('.get_lang('Simple').')',
-    );
+$headers = array(
+    get_lang('Upload'),
+    get_lang('Upload').' ('.get_lang('Simple').')'
+);
 
 echo Display::tabs($headers, array($multipleForm->returnForm(), $form->returnForm()), 'tabs');
 

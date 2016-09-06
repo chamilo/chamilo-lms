@@ -90,8 +90,6 @@ class PDF
             $tpl = $this->template;
         }
 
-        $theme = api_get_visual_theme();
-
         // Assignments
         $tpl->assign('pdf_content', $content);
 
@@ -109,8 +107,7 @@ class PDF
 
         $tpl->assign('organization', $organization);
 
-        //Showing only the current teacher/admin instead the all teacher list name see BT#4080
-
+        // Showing only the current teacher/admin instead the all teacher list name see BT#4080
         if (isset($this->params['show_real_course_teachers']) &&
             $this->params['show_real_course_teachers']
         ) {
@@ -282,11 +279,11 @@ class PDF
             if (in_array($extension, array('html', 'htm'))) {
                 $dirName = $file_info['dirname'];
                 $filename = $file_info['basename'];
-                $filename = str_replace('_',' ',$filename);
+                $filename = str_replace('_', ' ', $filename);
 
-                if ($extension == 'html') {
+                if ($extension === 'html') {
                     $filename = basename($filename,'.html');
-                } elseif($extension == 'htm'){
+                } elseif($extension === 'htm'){
                     $filename = basename($filename,'.htm');
                 }
 
@@ -298,7 +295,7 @@ class PDF
                 $document_html = str_replace('href="./css/frames.css"', $absolute_css_path, $document_html);
 
                 if (!empty($course_data['path'])) {
-                    $document_html= str_replace('../','', $document_html);
+                    $document_html= str_replace('../', '', $document_html);
                     $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
 
                     $doc = new DOMDocument();
@@ -441,9 +438,13 @@ class PDF
         $absolute_css_path = api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/frames.css';
         $document_html = str_replace('href="./css/frames.css"','href="'.$absolute_css_path.'"', $document_html);
 
-        $document_html= str_replace('../../','',$document_html);
-        $document_html= str_replace('../','',$document_html);
-        $document_html= str_replace((empty($_configuration['url_append'])?'':$_configuration['url_append'].'/').'courses/'.$course_code.'/document/','',$document_html);
+        $document_html = str_replace('../../', '', $document_html);
+        $document_html = str_replace('../', '', $document_html);
+        $document_html = str_replace(
+            (empty($_configuration['url_append']) ? '' : $_configuration['url_append'].'/').'courses/'.$course_code.'/document/',
+            '',
+            $document_html
+        );
 
         if (!empty($course_data['path'])) {
             $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
@@ -591,8 +592,6 @@ class PDF
             $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
         }
         $course_image = $store_path.'/'.api_get_current_access_url_id().'_pdf_watermark.png';
-        $extension = strtolower(substr(strrchr($filename, '.'), 1));
-        $result = false;
 
         if (file_exists($course_image)) {
             @unlink($course_image);
@@ -700,7 +699,6 @@ class PDF
 
             $teachers = '';
             if (!empty($teacher_list)) {
-
                 foreach ($teacher_list as $teacher) {
                     $teachers[]= $teacher['firstname'].' '.$teacher['lastname'];
                 }

@@ -9,9 +9,9 @@ use ChamiloSession as Session;
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
-
+$typeList = array('personal', 'course', 'admin', 'platform');
 // Calendar type
-$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin', 'platform')) ? $_REQUEST['type'] : 'personal';
+$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList) ? $_REQUEST['type'] : 'personal';
 $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
 if ($type == 'personal' || $type == 'admin') {
@@ -54,8 +54,8 @@ $session_id = api_get_session_id();
 $group_id = api_get_group_id();
 
 if (!empty($group_id)) {
-    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
     $group_properties = GroupManager::get_group_properties($group_id);
+    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid']);
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups')
@@ -125,7 +125,8 @@ $tpl->assign('month_names', json_encode($months));
 $tpl->assign('month_names_short', json_encode($months_short));
 $tpl->assign('day_names', json_encode($days));
 $tpl->assign('day_names_short', json_encode($day_short));
-$tpl->assign('button_text',
+$tpl->assign(
+    'button_text',
     json_encode(array(
         'today' => get_lang('Today'),
         'month' => get_lang('Month'),

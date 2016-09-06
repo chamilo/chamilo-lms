@@ -114,17 +114,18 @@ class Gradebook extends Model
         $clean_gradebook = array();
 
         if (!empty($skill_gradebooks_source)) {
-            foreach($skill_gradebooks_source as $source) {
+            foreach ($skill_gradebooks_source as $source) {
                 $clean_gradebook[] = $source['skill_id'];
             }
         }
 
         //Cleaning skills
-        $skill_list = array_map('intval', $skill_list);
-        $skill_list = array_filter($skill_list);
+        if (!empty($skill_list)) {
+            $skill_list = array_map('intval', $skill_list);
+            $skill_list = array_filter($skill_list);
+        }
 
         if (!empty($skill_list)) {
-
             if (!empty($clean_gradebook)) {
                 $skill_to_remove = array_diff($clean_gradebook, $skill_list);
             }
@@ -132,7 +133,7 @@ class Gradebook extends Model
             foreach ($skill_list as $skill_id) {
                 $params = array();
                 $params['gradebook_id'] = $gradebook_id;
-                $params['skill_id']     = $skill_id;
+                $params['skill_id'] = $skill_id;
                 if (!$skill_gradebook->exists_gradebook_skill($gradebook_id, $skill_id)) {
                     $skill_gradebook->save($params);
                 }

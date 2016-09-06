@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+
 /**
  * Special exports
  *
@@ -12,9 +15,6 @@
 // including the global file
 $cidReset = true;
 require_once  '../inc/global.inc.php';
-
-use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
-use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -217,12 +217,11 @@ function rename_zip($FileZip) {
 
 }
 
-function fullexportspecial(){
+function fullexportspecial()
+{
     global $tbl_session, $tbl_session_course, $export;
     $FileZip = create_zip();
     $to_group_id = 0;
-    $code_course = '';
-    $list_course = array();
     $zip_folder = new PclZip($FileZip['TEMP_FILE_ZIP']);
     $list_course = CourseManager::get_course_list();
 

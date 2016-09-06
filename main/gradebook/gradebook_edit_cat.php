@@ -36,7 +36,7 @@ if ($form->validate()) {
     $cat->set_id($values['hid_id']);
     $cat->set_name($values['name']);
 
-    if (empty ($values['course_code'])) {
+    if (empty($values['course_code'])) {
         $cat->set_course_code(null);
     } else {
         $cat->set_course_code($values['course_code']);
@@ -66,7 +66,7 @@ if ($form->validate()) {
         $cat->set_certificate_min_score($values['certif_min_score']);
     }
 
-    if (empty ($values['visible'])) {
+    if (empty($values['visible'])) {
         $visible = 0;
     } else {
         $visible = 1;
@@ -84,7 +84,7 @@ if ($form->validate()) {
     header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id().'&'.api_get_cidreq());
     exit;
 }
-$selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+$selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : '';
 $interbreadcrumb[] = array(
     'url' => Security::remove_XSS($_SESSION['gradebook_dest']) . '?selectcat=' . $selectcat . '&' . api_get_cidreq(),
     'name' => get_lang('Gradebook')

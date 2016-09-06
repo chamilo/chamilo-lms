@@ -52,8 +52,9 @@ $userId = api_get_user_id();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $courseId = api_get_course_int_id();
+$groupInfo = GroupManager::get_group_properties($groupId);
 
-$isTutor = GroupManager::is_tutor_of_group($userId, $groupId, $courseId);
+$isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo['iid'], $courseId);
 
 /* MAIN DISPLAY SECTION */
 
@@ -81,8 +82,15 @@ if (!empty($groupId)) {
     //Group info & group category info
     $group_properties = GroupManager::get_group_properties($groupId);
     //User has access in the group?
-    $user_has_access_in_group = GroupManager::user_has_access($userId, $groupId, GroupManager::GROUP_TOOL_FORUM);
-    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupId);
+    $user_has_access_in_group = GroupManager::user_has_access(
+        $userId,
+        $group_properties['iid'],
+        GroupManager::GROUP_TOOL_FORUM
+    );
+    $is_group_tutor = GroupManager::is_tutor_of_group(
+        api_get_user_id(),
+        $group_properties['iid']
+    );
 
     // Course
     if (
@@ -314,15 +322,15 @@ if (
                     $table_list .= '<td>
                         <a href="' . $forumUrl . 'forumqualify.php?' . api_get_cidreq()
                         . '&forum=' . Security::remove_XSS($my_forum) . '&thread='
-                        . Security::remove_XSS($_GET['id']) . '&user=' . $row_student_list['id']
+                        . intval($_GET['id']) . '&user=' . $row_student_list['id']
                         . '&user_id=' . $row_student_list['id'] . '&idtextqualify='
-                        . $current_qualify_thread . '&origin=' . $origin . '">'
+                        . $current_qualify_thread.'">'
                         . Display::return_icon($icon_qualify, get_lang('Qualify')) . '</a></td></tr>';
                 }
                 $counter_stdlist++;
             }
         } else {
-            if ($listType == 'qualify') {
+            if ($listType === 'qualify') {
                 $table_list .= '<tr><td colspan="2">' . get_lang('ThereIsNotQualifiedLearners') . '</td></tr>';
             } else {
                 $table_list .= '<tr><td colspan="2">' . get_lang('ThereIsNotUnqualifiedLearners') . '</td></tr>';
@@ -461,7 +469,7 @@ if (is_array($threads)) {
 
             $name = api_get_person_name($row['firstname'], $row['lastname']);
             $linkPostForum = '<a href="viewthread.php?' . api_get_cidreq() . '&forum=' . Security::remove_XSS($my_forum)
-                . "&origin=$origin&thread={$row['thread_id']}$origin_string&search="
+                . "&origin=$origin&thread={$row['thread_id']}&search="
                 . Security::remove_XSS(urlencode($my_search)) . '">'
                 . $row['thread_title'] . '</a>';
             $html = '';
@@ -624,15 +632,15 @@ if (is_array($threads)) {
             $icon_liststd = 'user.png';
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 $iconsEdit .= '<a href="' . api_get_self() . '?' . $cidreq . '&forum='
-                    . Security::remove_XSS($my_forum)
-                    . "&origin=$origin&action=notify&content=thread&id={$row['thread_id']}"
+                    . intval($my_forum)
+                    . "&action=notify&content=thread&id={$row['thread_id']}"
                     . '">' . Display::return_icon($iconnotify, get_lang('NotifyMe')) . '</a>';
             }
 
             if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
                 $iconsEdit .= '<a href="' . api_get_self() . '?' . $cidreq . '&forum='
-                    . Security::remove_XSS($my_forum)
-                    . "&origin=$origin&action=liststd&content=thread&id={$row['thread_id']}"
+                    . intval($my_forum)
+                    . "&action=liststd&content=thread&id={$row['thread_id']}"
                     . '">' . Display::return_icon($icon_liststd, get_lang('StudentList'), array(), ICON_SIZE_SMALL)
                     . '</a>';
             }

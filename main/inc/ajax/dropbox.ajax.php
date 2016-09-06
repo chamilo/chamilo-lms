@@ -43,7 +43,6 @@ switch ($action) {
                 $json = array();
 
                 if (!empty($result)) {
-
                     $json['name'] = Display::url(
                         api_htmlentities($result->title),
                         api_htmlentities(api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq()),

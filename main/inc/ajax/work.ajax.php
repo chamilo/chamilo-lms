@@ -104,7 +104,6 @@ switch ($action) {
             );
 
             if (isset($resultUpload['url']) && !empty($resultUpload['url'])) {
-
                 $title = isset($resultUpload['filename']) && !empty($resultUpload['filename']) ? $resultUpload['filename'] : get_lang('Untitled');
                 $url = Database::escape_string($resultUpload['url']);
                 $title = Database::escape_string($title);
@@ -148,7 +147,6 @@ switch ($action) {
             header('Content-Type: application/json');
             echo json_encode($json);
         }
-
         break;
     default:
         echo '';

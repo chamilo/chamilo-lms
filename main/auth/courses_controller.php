@@ -43,8 +43,7 @@ class CoursesController
         $data['user_courses'] = $this->model->get_courses_of_user($user_id);
         $data['user_course_categories'] = $this->model->get_user_course_categories();
         $data['courses_in_category'] = $this->model->get_courses_in_category();
-        $data['all_user_categories'] = $this->model->get_user_course_categories(
-        );
+        $data['all_user_categories'] = $this->model->get_user_course_categories();
         $data['action'] = $action;
         $data['message'] = $message;
 
@@ -115,7 +114,6 @@ class CoursesController
 
         $data['browse_course_categories'] = $browse_course_categories;
         $data['code'] = Security::remove_XSS($category_code);
-
 
         // getting all the courses to which the user is subscribed to
         $curr_user_id = api_get_user_id();
@@ -353,7 +351,9 @@ class CoursesController
     /**
      * Unsubscribe user from a course
      * render to listing view
-     * @param string    Course code
+     * @param string $course_code
+     * @param string $search_term
+     * @param string $category_code
      */
     public function unsubscribe_user_from_course($course_code, $search_term = null, $category_code = null)
     {
@@ -383,9 +383,7 @@ class CoursesController
     public function getCoursesCategoriesBlock($code = null, $hiddenLinks = false, $limit = null)
     {
         $categories = $this->model->browse_course_categories();
-
         $html = '';
-
         if (!empty($categories)) {
             $action = 'display_courses';
             foreach ($categories[0] as $category) {
@@ -517,8 +515,7 @@ class CoursesController
         $sessionId,
         $sessionName,
         $checkRequirements = false
-    )
-    {
+    ) {
         if ($checkRequirements) {
             $url = api_get_path(WEB_AJAX_PATH);
             $url .= 'sequence.ajax.php?';
@@ -544,9 +541,7 @@ class CoursesController
 
         $catalogSessionAutoSubscriptionAllowed = false;
 
-        if (
-            api_get_setting('catalog_allow_session_auto_subscription') === 'true'
-        ) {
+        if (api_get_setting('catalog_allow_session_auto_subscription') === 'true') {
             $catalogSessionAutoSubscriptionAllowed = true;
         }
 

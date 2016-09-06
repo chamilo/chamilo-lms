@@ -22,7 +22,7 @@ api_protect_admin_script(true);
 $nameTools = get_lang('PlatformAdmin');
 
 // setting breadcrumbs
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => $nameTools);
+$interbreadcrumb[] = array ('url' => 'index.php', 'name' => $nameTools);
 
 // setting the name of the tool
 $nameTools = get_lang('DataFiller');
@@ -30,8 +30,8 @@ $nameTools = get_lang('DataFiller');
 $output = array();
 if (!empty($_GET['fill'])) {
     switch ($_GET['fill']) {
-    	case 'users':
-        	require api_get_path(SYS_TEST_PATH).'datafiller/fill_users.php';
+        case 'users':
+            require api_get_path(SYS_TEST_PATH).'datafiller/fill_users.php';
             $output = fill_users();
             break;
         case 'courses':
@@ -63,11 +63,11 @@ if (count($output)>0) {
 ?>
 <div id="datafiller" class="panel panel-default">
     <div class="panel-body">
-    <h4><?php echo Display::return_icon('bug.png',get_lang('DataFiller'),null,ICON_SIZE_MEDIUM).' '.get_lang('DataFiller')?></h4>
+    <h4><?php echo Display::return_icon('bug.png', get_lang('DataFiller'), null, ICON_SIZE_MEDIUM).' '.get_lang('DataFiller')?></h4>
     <div class="description"><?php echo get_lang('ThisSectionIsOnlyVisibleOnSourceInstalls');?></div>
     <ul class="fillers">
-      <li><a href="filler.php?fill=users"><?php echo Display::return_icon('user.png',get_lang('FillUsers'),null,ICON_SIZE_SMALL).' '.get_lang('FillUsers');?></a></li>
-      <li><a href="filler.php?fill=courses"><?php echo Display::return_icon('new-course.png',get_lang('FillCourses'),null,ICON_SIZE_SMALL).' '.get_lang('FillCourses');?></a></li>
+      <li><a href="filler.php?fill=users"><?php echo Display::return_icon('user.png', get_lang('FillUsers'), null, ICON_SIZE_SMALL).' '.get_lang('FillUsers');?></a></li>
+      <li><a href="filler.php?fill=courses"><?php echo Display::return_icon('new-course.png', get_lang('FillCourses'), null, ICON_SIZE_SMALL).' '.get_lang('FillCourses');?></a></li>
     </ul>
     </div>
 </div>

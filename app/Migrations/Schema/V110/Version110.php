@@ -37,6 +37,8 @@ class Version110 extends AbstractMigrationChamilo
         // Use $schema->createTable
         $this->addSql('set sql_mode=""');
 
+        $connection = $this->connection;
+
         $this->addSql("CREATE TABLE IF NOT EXISTS course_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME)");
         $this->addSql("CREATE TABLE IF NOT EXISTS session_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME)");
         $this->addSql("CREATE TABLE IF NOT EXISTS hook_observer( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, path varchar(255) NOT NULL, plugin_name varchar(255) NULL, PRIMARY KEY PK_hook_management_hook_observer(id))");
@@ -61,7 +63,9 @@ class Version110 extends AbstractMigrationChamilo
             $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id");
         }
 
-        $this->addSql("ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id)");
+        if (!$table->hasIndex('idx_select_cs')) {
+            $this->addSql("ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id)");
+        }
 
         // Delete info of session_rel_user if session does not exists;
         $this->addSql("DELETE FROM session_rel_user WHERE id_session NOT IN (SELECT id FROM session)");
@@ -95,8 +99,14 @@ class Version110 extends AbstractMigrationChamilo
             $this->addSql("ALTER TABLE session_rel_user ADD COLUMN duration int");
         }
 
-        $this->addSql("ALTER TABLE skill ADD COLUMN criteria text");
-        $this->addSql("ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0");
+        $table = $schema->getTable('skill');
+        if (!$table->hasColumn('criteria')) {
+            $this->addSql("ALTER TABLE skill ADD COLUMN criteria text");
+        }
+        $table = $schema->getTable('gradebook_category');
+        if (!$table->hasColumn('generate_certificates')) {
+            $this->addSql("ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0");
+        }
         $this->addSql("ALTER TABLE track_e_access ADD COLUMN c_id int NOT NULL");
 
         $this->addSql("ALTER TABLE track_e_lastaccess ADD COLUMN c_id int NOT NULL");
@@ -135,7 +145,10 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL");
         $this->addSql("ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL");
 
-        $this->addSql("ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0");
+        $table = $schema->getTable('course');
+        if (!$table->hasColumn('add_teachers_to_sessions_courses')) {
+            $this->addSql("ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0");
+        }
         $this->addSql("ALTER TABLE course DROP COLUMN target_course_code");
         $this->addSql("ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
@@ -399,6 +412,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_tool_intro ADD COLUMN iid int NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN c_id INT NOT NULL");
+        $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id INT DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id_auto int unsigned NOT NULL");
         $this->addSql("ALTER TABLE c_quiz_answer DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id_auto int unsigned DEFAULT NULL");
@@ -417,7 +431,7 @@ class Version110 extends AbstractMigrationChamilo
 
         $this->addSql("ALTER TABLE session_rel_user CHANGE id_session session_id int");
         $this->addSql("ALTER TABLE session_rel_user CHANGE id_user user_id int");
-        $this->addSql("DELETE FROM session_rel_user WHERE user_id NOT IN (SELECT user_id FROM user)");
+        $this->addSql("DELETE FROM session_rel_user WHERE user_id NOT IN (SELECT id FROM user)");
         $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
         $this->addSql("ALTER TABLE c_item_property CHANGE id_session session_id int");
@@ -482,7 +496,12 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float");
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_max_score float");
         $this->addSql("ALTER TABLE c_group_info ADD COLUMN status tinyint DEFAULT 1");
-        $this->addSql("ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0");
+
+        $table = $schema->getTable('c_student_publication');
+        if (!$table->hasColumn('document_id')) {
+            $this->addSql("ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0");
+        }
+
         $this->addSql("ALTER TABLE c_lp_item MODIFY COLUMN description VARCHAR(511) DEFAULT ''");
         $this->addSql("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE' ");
         $this->addSql("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
@@ -535,9 +554,16 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise', 'Exercise')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'Learning path')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath')");
-        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1)");
-        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'true', 'Yes')");
-        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'false', 'No')");
+
+        $sql = "SELECT * FROM settings_current WHERE variable = 'documents_default_visibility_defined_in_course'";
+        $result = $connection->executeQuery($sql);
+        $count = $result->rowCount();
+        if (empty($count)) {
+            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1)");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'true', 'Yes')");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'false', 'No')");
+        }
+
         $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_mathjax', NULL, 'radio', 'Editor', 'false', 'EnableMathJaxTitle', 'EnableMathJaxComment', NULL, NULL, 0)");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'true', 'Yes')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'false', 'No')");

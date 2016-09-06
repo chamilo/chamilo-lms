@@ -63,12 +63,12 @@ switch ($action) {
             echo json_encode($response_data);
         }
         break;
-	case 'show_course_information' :
-		require_once '../global.inc.php';
+    case 'show_course_information' :
+        require_once '../global.inc.php';
 
-		// Get the name of the database course.
-		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-		$course_info = api_get_course_info($_GET['code']);
+        // Get the name of the database course.
+        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $course_info = api_get_course_info($_GET['code']);
 
         if (
             api_get_setting('course_catalog_hide_private') === 'true' &&
@@ -78,24 +78,24 @@ switch ($action) {
             break;
         }
 
-		$sql = "SELECT * FROM $tbl_course_description
-		        WHERE c_id = ".$course_info['real_id']." AND session_id = 0
-		        ORDER BY id";
-		$result = Database::query($sql);
-		if (Database::num_rows($result) > 0 ) {
-		    while ($description = Database::fetch_object($result)) {
-			    $descriptions[$description->id] = $description;
-		    }
+        $sql = "SELECT * FROM $tbl_course_description
+                WHERE c_id = ".$course_info['real_id']." AND session_id = 0
+                ORDER BY id";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0 ) {
+            while ($description = Database::fetch_object($result)) {
+                $descriptions[$description->id] = $description;
+            }
             // Function that displays the details of the course description in html.
-		    echo CourseManager::get_details_course_description_html(
+            echo CourseManager::get_details_course_description_html(
                 $descriptions,
                 api_get_system_encoding(),
                 false
             );
-		} else {
-		    echo get_lang('NoDescription');
-		}
-	    break;
+        } else {
+            echo get_lang('NoDescription');
+        }
+        break;
     case 'session_courses_lp_default':
         /**
          * @todo this functions need to belong to a class or a special
@@ -110,7 +110,7 @@ switch ($action) {
         $sidx  = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
         $sord  = $_REQUEST['sord'];    //asc or desc
         if (!in_array($sord, array('asc','desc'))) {
-        	$sord = 'desc';
+            $sord = 'desc';
         }
         $session_id  = intval($_REQUEST['session_id']);
         $course_id   = intval($_REQUEST['course_id']);
@@ -124,7 +124,7 @@ switch ($action) {
                     $my_session_list[] = $item['id_session'];
             }
             if (!in_array($session_id, $my_session_list)) {
-            	break;
+                break;
             }
         }
 
@@ -473,7 +473,7 @@ switch ($action) {
 
         $response = new stdClass();
         $i =0;
-        foreach ($temp as $key=>$row) {
+        foreach ($temp as $key => $row) {
             $row = $row['cell'];
             if (!empty($row)) {
                 if ($key >= $start  && $key < ($start + $limit)) {
@@ -499,7 +499,7 @@ switch ($action) {
 
         echo json_encode($response);
         break;
-	default:
-		echo '';
+    default:
+        echo '';
 }
 exit;

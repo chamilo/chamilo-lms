@@ -82,8 +82,8 @@ if ($form->validate()) {
                         $defaults = $term_preview;
                         if (!$term_preview) {
                             // there are not terms and conditions
-                            $term_preview['type']=-1;
-                            $defaults['type']=0;
+                            $term_preview['type'] = -1;
+                            $defaults['type'] = 0;
                         }
                     }
                 }

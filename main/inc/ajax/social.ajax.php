@@ -46,7 +46,7 @@ switch ($action) {
         if (isset($_GET['denied_friend_id'])) {
             SocialManager::invitation_denied($_GET['denied_friend_id'], $current_user_id);
             Display::display_confirmation_message(api_xml_http_response_encode(get_lang('InvitationDenied')));
-            
+
             header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
         }
         break;
@@ -65,7 +65,7 @@ switch ($action) {
             echo '';
             break;
         }
-        $user_id	= api_get_user_id();
+        $user_id = api_get_user_id();
         $name_search= Security::remove_XSS($_POST['search_name_q']);
         $number_friends = 0;
 
@@ -77,11 +77,10 @@ switch ($action) {
 
         $friend_html = '';
         $number_of_images = 8;
-
         $number_friends = count($friends);
         if ($number_friends != 0) {
-            $number_loop   = ($number_friends/$number_of_images);
-            $loop_friends  = ceil($number_loop);
+            $number_loop = ($number_friends/$number_of_images);
+            $loop_friends = ceil($number_loop);
             $j=0;
             for ($k=0; $k<$loop_friends; $k++) {
                 if ($j==$number_of_images) {
@@ -237,7 +236,7 @@ switch ($action) {
         echo $html;
         break;
     case 'voteMsg':
-
+        break;
     default:
         echo '';
 }

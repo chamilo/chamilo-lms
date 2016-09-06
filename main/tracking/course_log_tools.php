@@ -46,9 +46,6 @@ if (!empty($groupId)) {
     $lpReporting = false;
 }
 
-// Including additional libraries.
-require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
 // Starting the output buffering when we are exporting the information.

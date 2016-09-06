@@ -1,5 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
+
 /**
 *	Code library for showing Who is online
 *
@@ -9,8 +13,6 @@
 *	@author Roan Embrechts, cleaning and bugfixing
 *	@package chamilo.whoisonline
 */
-
-use ChamiloSession as Session;
 
 /**
  * Insert a login reference for the current user into the track_e_online stats table.
@@ -197,7 +199,6 @@ function user_is_online($user_id)
 
     $result = Database::query($query);
     if (Database::num_rows($result)) {
-
         return true;
     }
 

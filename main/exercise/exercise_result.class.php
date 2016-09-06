@@ -66,10 +66,10 @@ class ExerciseResult
             $session_id_and .= " AND exe_exo_id = $exercise_id ";
         }
 
-		if (empty($user_id)) {
+        if (empty($user_id)) {
             $user_id_and = null;
-			$sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
-			            official_code,
+            $sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
+                        official_code,
                         ce.title as extitle,
                         te.exe_result as exresult ,
                         te.exe_weighting as exweight,
@@ -91,9 +91,9 @@ class ExerciseResult
                     te.status != 'incomplete' AND
                     te.c_id = ce.c_id $user_id_and  $session_id_and AND
                     ce.active <>-1";
-		} else {
+        } else {
             $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
-			// get only this user's results
+            // get only this user's results
             $sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
                     official_code,
                     ce.title as extitle,
@@ -119,12 +119,12 @@ class ExerciseResult
                         te.c_id = ce.c_id $user_id_and $session_id_and AND
                         ce.active <>-1 AND
                     ORDER BY userpart2, te.c_id ASC, ce.title ASC, te.exe_date DESC";
-		}
+        }
 
-		$results = array();
-		$resx = Database::query($sql);
+        $results = array();
+        $resx = Database::query($sql);
         $bestAttemptPerUser = array();
-		while ($rowx = Database::fetch_array($resx,'ASSOC')) {
+        while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
             if ($this->onlyBestAttempts) {
                 if (!isset($bestAttemptPerUser[$rowx['excruid']])) {
                     $bestAttemptPerUser[$rowx['excruid']] = $rowx;
@@ -136,7 +136,7 @@ class ExerciseResult
             } else {
                 $results[] = $rowx;
             }
-		}
+        }
 
         if ($this->onlyBestAttempts) {
             $results = $bestAttemptPerUser;
@@ -147,13 +147,13 @@ class ExerciseResult
 
         if ($filter) {
             switch ($filter) {
-                case 1 :
+                case 1:
                     $filter_by_not_revised = true;
                     break;
-                case 2 :
+                case 2:
                     $filter_by_revised = true;
                     break;
-                default :
+                default:
                     null;
             }
         }
@@ -190,8 +190,8 @@ class ExerciseResult
                     continue;
                 }
 
-				$return[$i] = array();
-				if (empty($user_id)) {
+                $return[$i] = array();
+                if (empty($user_id)) {
                     $return[$i]['official_code']   = $result['official_code'];
                     if (api_is_western_name_order()) {
                         $return[$i]['first_name']   = $results[$i]['userpart1'];
@@ -200,15 +200,15 @@ class ExerciseResult
                         $return[$i]['first_name']   = $results[$i]['userpart2'];
                         $return[$i]['last_name']    = $results[$i]['userpart1'];
                     }
-					$return[$i]['user_id']      = $results[$i]['excruid'];
-					$return[$i]['email']        = $results[$i]['exemail'];
-				}
-				$return[$i]['title'] = $result['extitle'];
-				$return[$i]['start_date'] = api_get_local_time($result['exstart']);
+                    $return[$i]['user_id']      = $results[$i]['excruid'];
+                    $return[$i]['email']        = $results[$i]['exemail'];
+                }
+                $return[$i]['title'] = $result['extitle'];
+                $return[$i]['start_date'] = api_get_local_time($result['exstart']);
                 $return[$i]['end_date'] = api_get_local_time($result['exdate']);
                 $return[$i]['duration'] = $result['duration'];
-				$return[$i]['result'] = $result['exresult'];
-				$return[$i]['max'] = $result['exweight'];
+                $return[$i]['result'] = $result['exresult'];
+                $return[$i]['max'] = $result['exweight'];
                 $return[$i]['status'] = $revised ? get_lang('Validated') : get_lang('NotValidated');
                 $return[$i]['lp_id'] = $result['orig_lp_id'];
                 $return[$i]['lp_name'] = $result['lp_name'];
@@ -221,13 +221,12 @@ class ExerciseResult
 
                 $userWithResults[$result['excruid']] = 1;
                 $i++;
-			}
-		}
+            }
+        }
 
         if ($this->includeAllUsers) {
             $latestId = count($return);
             $userWithResults = array_keys($userWithResults);
-
 
             if (!empty($students)) {
                 foreach ($students as $student) {
@@ -265,10 +264,10 @@ class ExerciseResult
             }
         }
 
-		$this->results = $return;
+        $this->results = $return;
 
-		return true;
-	}
+        return true;
+    }
 
 	/**
 	 * Exports the complete report as a CSV file
@@ -285,14 +284,14 @@ class ExerciseResult
         $exercise_id = 0,
         $hotpotato_name = null
     ) {
-		global $charset;
-		$this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
+        global $charset;
+        $this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
 
-		$filename = 'exercise_results_'.date('YmdGis').'.csv';
-		if(!empty($user_id)) {
-			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.csv';
-		}
-		$data = '';
+        $filename = 'exercise_results_'.date('YmdGis').'.csv';
+        if(!empty($user_id)) {
+            $filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.csv';
+        }
+        $data = '';
         if (api_is_western_name_order()) {
             if(!empty($this->results[0]['first_name'])) {
                 $data .= get_lang('FirstName').';';
@@ -316,28 +315,28 @@ class ExerciseResult
         $data .= get_lang('Email').';';
         $data .= get_lang('Groups').';';
 
-		if ($export_user_fields) {
-			//show user fields section with a big th colspan that spans over all fields
-			$extra_user_fields = UserManager::get_extra_fields(0,1000,5,'ASC',false, 1);
-			$num = count($extra_user_fields);
-			foreach($extra_user_fields as $field) {
-				$data .= '"'.str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset)).'";';
-			}
-		}
+        if ($export_user_fields) {
+            //show user fields section with a big th colspan that spans over all fields
+            $extra_user_fields = UserManager::get_extra_fields(0,1000,5,'ASC',false, 1);
+            $num = count($extra_user_fields);
+            foreach($extra_user_fields as $field) {
+                $data .= '"'.str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset)).'";';
+            }
+        }
 
-		$data .= get_lang('Title').';';
-		$data .= get_lang('StartDate').';';
+        $data .= get_lang('Title').';';
+        $data .= get_lang('StartDate').';';
         $data .= get_lang('EndDate').';';
         $data .= get_lang('Duration'). ' ('.get_lang('MinMinutes').') ;';
-		$data .= get_lang('Score').';';
-		$data .= get_lang('Total').';';
+        $data .= get_lang('Score').';';
+        $data .= get_lang('Total').';';
         $data .= get_lang('Status').';';
         $data .= get_lang('ToolLearnpath').';';
         $data .= get_lang('UserIsCurrentlySubscribed').';';
-		$data .= "\n";
+        $data .= "\n";
 
-		//results
-		foreach ($this->results as $row) {
+        //results
+        foreach ($this->results as $row) {
 
             if (api_is_western_name_order()) {
                 $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
@@ -354,51 +353,51 @@ class ExerciseResult
             $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n",'  ',implode(", ", GroupManager :: get_user_group_name($row['user_id']))).';';
 
-			if ($export_user_fields) {
-				//show user fields data, if any, for this user
-				$user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);
-				foreach($user_fields_values as $value) {
-					$data .= '"'.str_replace('"','""',api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
-				}
-			}
+            if ($export_user_fields) {
+                //show user fields data, if any, for this user
+                $user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);
+                foreach($user_fields_values as $value) {
+                    $data .= '"'.str_replace('"','""',api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
+                }
+            }
 
-			$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
-			$data .= str_replace("\r\n",'  ',$row['start_date']).';';
+            $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
+            $data .= str_replace("\r\n",'  ',$row['start_date']).';';
             $data .= str_replace("\r\n",'  ',$row['end_date']).';';
             $data .= str_replace("\r\n",'  ',$row['duration']).';';
-			$data .= str_replace("\r\n",'  ',$row['result']).';';
-			$data .= str_replace("\r\n",'  ',$row['max']).';';
+            $data .= str_replace("\r\n",'  ',$row['result']).';';
+            $data .= str_replace("\r\n",'  ',$row['max']).';';
             $data .= str_replace("\r\n",'  ',$row['status']).';';
             $data .= str_replace("\r\n",'  ',$row['lp_name']).';';
             $data .= str_replace("\r\n",'  ',$row['is_user_subscribed']).';';
-			$data .= "\n";
-		}
+            $data .= "\n";
+        }
 
-		//output the results
-		$len = strlen($data);
-		header('Content-type: application/octet-stream');
-		header('Content-Type: application/force-download');
-		header('Content-length: '.$len);
-		if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {
-			header('Content-Disposition: filename= '.$filename);
-		} else {
-			header('Content-Disposition: attachment; filename= '.$filename);
-		}
-		if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
-			header('Pragma: ');
-			header('Cache-Control: ');
-			header('Cache-Control: public'); // IE cannot download from sessions without a cache
-		}
-		header('Content-Description: '.$filename);
-		header('Content-transfer-encoding: binary');
-		echo $data;
-		return true;
-	}
+        //output the results
+        $len = strlen($data);
+        header('Content-type: application/octet-stream');
+        header('Content-Type: application/force-download');
+        header('Content-length: '.$len);
+        if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {
+            header('Content-Disposition: filename= '.$filename);
+        } else {
+            header('Content-Disposition: attachment; filename= '.$filename);
+        }
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+            header('Pragma: ');
+            header('Cache-Control: ');
+            header('Cache-Control: public'); // IE cannot download from sessions without a cache
+        }
+        header('Content-Description: '.$filename);
+        header('Content-transfer-encoding: binary');
+        echo $data;
+        return true;
+    }
 
-	/**
-	 * Exports the complete report as an XLS file
-	 * @return	boolean		False on error
-	 */
+    /**
+     * Exports the complete report as an XLS file
+     * @return	boolean		False on error
+     */
     public function exportCompleteReportXLS(
         $document_path = '',
         $user_id = null,
@@ -407,41 +406,41 @@ class ExerciseResult
         $exercise_id = 0,
         $hotpotato_name = null
     ) {
-		global $charset;
-		$this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
-		$filename = 'exercise_results_'.api_get_local_time().'.xls';
-		if (!empty($user_id)) {
-			$filename = 'exercise_results_user_'.$user_id.'_'.api_get_local_time().'.xls';
-		}
+        global $charset;
+        $this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
+        $filename = 'exercise_results_'.api_get_local_time().'.xls';
+        if (!empty($user_id)) {
+            $filename = 'exercise_results_user_'.$user_id.'_'.api_get_local_time().'.xls';
+        }
 
         $spreadsheet = new PHPExcel();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
 
-		$line = 0;
-		$column = 0; //skip the first column (row titles)
+        $line = 0;
+        $column = 0; //skip the first column (row titles)
 
-		// check if exists column 'user'
-		$with_column_user = false;
-		foreach ($this->results as $result) {
-			if (!empty($result['last_name']) && !empty($result['first_name'])) {
-				$with_column_user = true;
-				break;
-			}
-		}
+        // check if exists column 'user'
+        $with_column_user = false;
+        foreach ($this->results as $result) {
+            if (!empty($result['last_name']) && !empty($result['first_name'])) {
+                $with_column_user = true;
+                break;
+            }
+        }
 
         $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
 
-		if ($with_column_user) {
+        if ($with_column_user) {
             if (api_is_western_name_order()) {
-    			$worksheet->SetCellValueByColumnAndRow($line, $column,get_lang('FirstName'));
-    			$column++;
-                $worksheet->SetCellValueByColumnAndRow($line, $column,get_lang('LastName'));
+                $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('FirstName'));
+                $column++;
+                $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('LastName'));
                 $column++;
             } else {
-                $worksheet->SetCellValueByColumnAndRow($line, $column,get_lang('LastName'));
+                $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('LastName'));
                 $column++;
-                $worksheet->SetCellValueByColumnAndRow($line, $column,get_lang('FirstName'));
+                $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('FirstName'));
                 $column++;
             }
 
@@ -451,43 +450,51 @@ class ExerciseResult
             }
 
             $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Email'));
-		    $column++;
-		}
+            $column++;
+        }
         $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Groups'));
-	    $column++;
+        $column++;
 
-		if ($export_user_fields) {
-			//show user fields section with a big th colspan that spans over all fields
-			$extra_user_fields = UserManager::get_extra_fields(0,1000,5,'ASC',false, 1);
+        if ($export_user_fields) {
+            //show user fields section with a big th colspan that spans over all fields
+            $extra_user_fields = UserManager::get_extra_fields(0,1000,5,'ASC',false, 1);
 
-			//show the fields names for user fields
-			foreach ($extra_user_fields as $field) {
-				$worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset));
-				$column++;
-			}
-		}
+            //show the fields names for user fields
+            foreach ($extra_user_fields as $field) {
+                $worksheet->SetCellValueByColumnAndRow(
+                    $line,
+                    $column,
+                    api_html_entity_decode(
+                        strip_tags($field[3]),
+                        ENT_QUOTES,
+                        $charset
+                    )
+                );
+                $column++;
+            }
+        }
 
-		$worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Title'));
-		$column++;
-		$worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('StartDate'));
+        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Title'));
+        $column++;
+        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('StartDate'));
         $column++;
         $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('EndDate'));
         $column++;
         $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Duration').' ('.get_lang('MinMinutes').')');
-		$column++;
-		$worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Score'));
-		$column++;
-		$worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Total'));
-		$column++;
+        $column++;
+        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Score'));
+        $column++;
+        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Total'));
+        $column++;
         $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Status'));
-		$column++;
+        $column++;
         $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('ToolLearnpath'));
         $column++;
         $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('UserIsCurrentlySubscribed'));
-		$line++;
+        $line++;
 
-		foreach ($this->results as $row) {
-			$column = 0;
+        foreach ($this->results as $row) {
+            $column = 0;
 
             if ($with_column_user) {
                 if (api_is_western_name_order()) {
@@ -509,22 +516,22 @@ class ExerciseResult
 
                 $worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset));
                 $column++;
-			}
+            }
 
             $worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags(implode(", ", GroupManager :: get_user_group_name($row['user_id']))), ENT_QUOTES, $charset));
             $column++;
 
-			if ($export_user_fields) {
-				//show user fields data, if any, for this user
-				$user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);
-				foreach($user_fields_values as $value) {
-					$worksheet->SetCellValueByColumnAndRow($line,$column, api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset));
-					$column++;
-				}
-			}
+            if ($export_user_fields) {
+                //show user fields data, if any, for this user
+                $user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);
+                foreach($user_fields_values as $value) {
+                    $worksheet->SetCellValueByColumnAndRow($line,$column, api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset));
+                    $column++;
+                }
+            }
 
-			$worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset));
-			$column++;
+            $worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset));
+            $column++;
             $worksheet->SetCellValueByColumnAndRow($line, $column, $row['start_date']);
             $column++;
             $worksheet->SetCellValueByColumnAndRow($line, $column, $row['end_date']);
@@ -540,14 +547,14 @@ class ExerciseResult
             $worksheet->SetCellValueByColumnAndRow($line, $column, $row['lp_name']);
             $column++;
             $worksheet->SetCellValueByColumnAndRow($line, $column, $row['is_user_subscribed']);
-			$line++;
-		}
+            $line++;
+        }
 
         $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
         $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
         $writer->save($file);
         DocumentManager::file_send_for_download($file, true, $filename);
 
-		return true;
-	}
+        return true;
+    }
 }

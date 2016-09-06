@@ -7,7 +7,7 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.admin
  */
-/* INIT SECTION */
+
 // Resetting the course id.
 $cidReset = true;
 
@@ -163,7 +163,6 @@ if (!empty($selectedSession)) {
     );
 
     $reportTitle = sprintf(get_lang('TimeReportForSessionX'), $session['name']);
-
     $courses = SessionManager::get_course_list_by_session_id($selectedSession);
 
     foreach ($courses as $course) {

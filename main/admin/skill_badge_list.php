@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Show information about Mozilla OpenBadges
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.admin.openbadges
  */
-use ChamiloSession as Session;
 
 $cidReset = true;
 

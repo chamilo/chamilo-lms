@@ -44,8 +44,10 @@ function get_legal_data_mask($id, $params = null, $row = null)
 {
 	return LegalManager::get_legal_data($id, $params, $row);
 }
+
 function count_mask()
 {
 	return LegalManager::count();
 }
+
 Display :: display_footer();

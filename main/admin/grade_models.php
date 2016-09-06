@@ -27,7 +27,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $check = Security::check_token('request');
 $token = Security::get_token();
 
-if ($action == 'add') {
+if ($action === 'add') {
     $interbreadcrumb[]=array('url' => 'grade_models.php','name' => get_lang('GradeModel'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
 } elseif ($action == 'edit') {
@@ -40,7 +40,7 @@ if ($action == 'add') {
 $htmlHeadXtra[]= '<script>
 
 function plusItem(item) {
-        if (item != 1) {
+    if (item != 1) {
 		document.getElementById(item).style.display = "inline";
     	document.getElementById("plus-"+item).style.display = "none";
    	 	document.getElementById("min-"+(item-1)).style.display = "none";
@@ -49,18 +49,18 @@ function plusItem(item) {
 	 	//document.getElementById("txta-"+(item)).value = "100";
 	 	//document.getElementById("txta-"+(item-1)).value = "";
 	 	$("input").removeClass("form-control");
-        }
-  }
+    }
+}
 
 function minItem(item) {
     if (item != 1) {
-     document.getElementById(item).style.display = "none";
-	 //document.getElementById("txta-"+item).value = "";
-	 //document.getElementById("txtb-"+item).value = "";
-     document.getElementById("plus-"+item).style.display = "inline";
-     document.getElementById("min-"+(item-1)).style.display = "inline";
-	 //document.getElementById("txta-"+(item-1)).value = "100";
-	 $("input").removeClass("form-control");
+        document.getElementById(item).style.display = "none";
+        //document.getElementById("txta-"+item).value = "";
+        //document.getElementById("txtb-"+item).value = "";
+        document.getElementById("plus-"+item).style.display = "inline";
+        document.getElementById("min-"+(item-1)).style.display = "inline";
+        //document.getElementById("txta-"+(item-1)).value = "100";
+        $("input").removeClass("form-control");
 	}
 	if (item = 1) {
 		document.getElementById("min-"+(item)).style.display = "none";
@@ -73,17 +73,39 @@ function minItem(item) {
 Display::display_header();
 
 //jqgrid will use this URL to do the selects
-$url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_grade_models';
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_grade_models';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = array(get_lang('Name'), get_lang('Description'), get_lang('Actions'));
+$columns = array(
+    get_lang('Name'),
+    get_lang('Description'),
+    get_lang('Actions'),
+);
 
 //Column config
-$column_model   = array(
-                        array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
-                        array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
-                       );
+$column_model = array(
+    array(
+        'name' => 'name',
+        'index' => 'name',
+        'width' => '80',
+        'align' => 'left'
+    ),
+    array(
+        'name' => 'description',
+        'index' => 'description',
+        'width' => '500',
+        'align' => 'left',
+        'sortable' => 'false'
+    ),
+    array(
+        'name' => 'actions',
+        'index' => 'actions',
+        'width' => '100',
+        'align' => 'left',
+        'formatter' => 'action_formatter',
+        'sortable' => 'false'
+    )
+);
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
@@ -100,7 +122,16 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 $(function() {
 <?php
     // grid definition see the $obj->display() function
-    echo Display::grid_js('grade_model',  $url, $columns, $column_model, $extra_params, array(), $action_links,true);
+    echo Display::grid_js(
+        'grade_model',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
 ?>
 });
 </script>

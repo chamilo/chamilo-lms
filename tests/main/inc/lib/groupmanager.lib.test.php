@@ -305,15 +305,6 @@ class TestGroupManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testCanUserUnsubscribe(){
-		global $user_id;
-		$group_id = 6;
-		$res = GroupManager::can_user_unsubscribe($user_id, $group_id);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res === false);
-		//var_dump($res);
-	}
-
 	public function testGetSubscribedUsers(){
 		$group_id = 2;
 		$res = GroupManager::get_subscribed_users($group_id);
@@ -392,31 +383,11 @@ class TestGroupManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testGetCompleteListOfUsersThatCanBeAddedToGroup(){
-		global $_course, $_user;
-		$course_code= 'chamilo_COURSETEST';
-		$group_id=2;
-		$res = GroupManager::get_complete_list_of_users_that_can_be_added_to_group($course_code, $group_id);
-		$this->assertTrue(is_array($res));
-		$this->assertTrue($res);
-		//var_dump($res);
-	}
-
 	public function testfilter_duplicates(){
 		$user_array_in = '';
 		$compare_field = '';
 		$res = GroupManager::filter_duplicates($user_array_in, $compare_field);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-
-	public function testFilterUsersAlreadyInGroup(){
-		global $_course;
-		$user_array_in = array();
-		$group_id = 2;
-		$res = GroupManager::filter_users_already_in_group($user_array_in, $group_id);
-		$this->assertTrue(is_null($res));
-		$this->assertNull($res);
 		//var_dump($res);
 	}
 

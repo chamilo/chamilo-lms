@@ -275,7 +275,7 @@ function get_course_visibility_icon($v) {
     }
 }
 
-if (isset ($_POST['action'])) {
+if (isset($_POST['action'])) {
     switch ($_POST['action']) {
         // Delete selected courses
         case 'delete_courses':
@@ -294,7 +294,7 @@ $content = '';
 $message = '';
 $actions = '';
 
-if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
+if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
     // Get all course categories
     $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
     $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
@@ -375,8 +375,9 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $actions .= '<div class="row">';
     $actions .= '<div class="col-md-2">';
     $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
-    if (api_get_setting('course_validation') == 'true') {
-        $actions .= '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'',ICON_SIZE_MEDIUM).'</a>';
+    if (api_get_setting('course_validation') === 'true') {
+        $actions .= '<a href="course_request_review.php">'.
+            Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     $actions .= '</div>';
     $actions .= '<div class="col-md-4">';
@@ -419,13 +420,13 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     if (isset ($_GET['keyword'])) {
         $parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
     } elseif (isset ($_GET['keyword_code'])) {
-        $parameters['keyword_code'] 		= Security::remove_XSS($_GET['keyword_code']);
-        $parameters['keyword_title'] 		= Security::remove_XSS($_GET['keyword_title']);
-        $parameters['keyword_category'] 	= Security::remove_XSS($_GET['keyword_category']);
-        $parameters['keyword_language'] 	= Security::remove_XSS($_GET['keyword_language']);
-        $parameters['keyword_visibility'] 	= Security::remove_XSS($_GET['keyword_visibility']);
-        $parameters['keyword_subscribe'] 	= Security::remove_XSS($_GET['keyword_subscribe']);
-        $parameters['keyword_unsubscribe'] 	= Security::remove_XSS($_GET['keyword_unsubscribe']);
+        $parameters['keyword_code'] = Security::remove_XSS($_GET['keyword_code']);
+        $parameters['keyword_title'] = Security::remove_XSS($_GET['keyword_title']);
+        $parameters['keyword_category'] = Security::remove_XSS($_GET['keyword_category']);
+        $parameters['keyword_language'] = Security::remove_XSS($_GET['keyword_language']);
+        $parameters['keyword_visibility'] = Security::remove_XSS($_GET['keyword_visibility']);
+        $parameters['keyword_subscribe'] = Security::remove_XSS($_GET['keyword_subscribe']);
+        $parameters['keyword_unsubscribe'] = Security::remove_XSS($_GET['keyword_unsubscribe']);
     }
 
     $table->set_additional_parameters($parameters);

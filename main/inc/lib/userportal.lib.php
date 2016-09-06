@@ -188,12 +188,14 @@ class IndexManager
             if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
                 $show_menu = true;
                 $show_course_link = true;
-                $show_create_link = true;
             } else {
                 if (api_get_setting('allow_students_to_browse_courses') == 'true') {
                     $show_menu = true;
                     $show_course_link = true;
                 }
+            }
+            if (api_get_setting('allow_users_to_create_courses') !== 'false' && !api_is_platform_admi()) {
+                $show_create_link = true;
             }
 
             if ($show_menu && ($show_create_link || $show_course_link )) {
@@ -367,25 +369,6 @@ class IndexManager
 
         $searchItem = null;
 
-
-
-        $myCertificate = GradebookUtils::get_certificate_by_user_id(
-            0,
-            $this->user_id
-        );
-
-        if ($myCertificate) {
-            $content .= Display::tag(
-                'li',
-                Display::url(
-                    Display::return_icon('skill-badges.png', get_lang('MyGeneralCertificate'), null, ICON_SIZE_SMALL).get_lang('MyGeneralCertificate'),
-                    api_get_path(WEB_CODE_PATH).'social/my_skills_report.php?a=generate_custom_skill'
-                )
-            );
-        }
-
-
-
         if (api_get_setting('allow_public_certificates') == 'true') {
             $searchItem = Display::tag(
                 'li',
@@ -405,14 +388,7 @@ class IndexManager
 
         if (api_get_setting('allow_skills_tool') == 'true') {
 
-            $content .= Display::tag(
-                'li',
-                Display::url(
-                    Display::return_icon('skill-badges.png', get_lang('MySkills'), null, ICON_SIZE_SMALL).get_lang('MySkills'),
-                    api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'
-                )
-            );
-
+            $content .= Display::tag('li', Display::url(Display::return_icon('skill-badges.png',get_lang('MySkills'),null,ICON_SIZE_SMALL).get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'));
             $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
             if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
                 $content .= Display::tag('li',
@@ -948,8 +924,16 @@ class IndexManager
 
         $editProfileUrl = Display::getProfileEditionLink($user_id);
 
-        $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.Display::return_icon('edit-profile.png',get_lang('EditProfile'),null,ICON_SIZE_SMALL).get_lang('EditProfile').'</a></li>';
+        $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.
+            Display::return_icon(
+                'edit-profile.png',
+                get_lang('EditProfile'),
+                null,
+                ICON_SIZE_SMALL
+            ).
+            get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';
+
         $html = self::show_right_block(
             get_lang('Profile'),
             $profile_content,
@@ -971,30 +955,6 @@ class IndexManager
                 null,
                 'videoconference',
                 'videoconferenceCollapse'
-            );
-        }
-
-
-
-        $diagnosis = '';
-
-        if (api_is_drh() || api_is_student_boss()) {
-            $diagnosis = Display::url(get_lang('DiagnosisManagement'), api_get_path(WEB_PATH).'load_search.php').'<br />';
-            $diagnosis .= Display::url(get_lang('Diagnostic'), api_get_path(WEB_PATH).'search.php');
-        } else {
-            if (api_is_student()) {
-                $diagnosis = Display::url(get_lang('Diagnostic'), api_get_path(WEB_PATH).'search.php');
-            }
-        }
-
-        if (!empty($diagnosis)) {
-            $html .= self::show_right_block(
-                get_lang('Diagnostic'),
-                $diagnosis,
-                'profile_block',
-                null,
-                'profile',
-                'profileCollapse'
             );
         }
 
@@ -1084,10 +1044,9 @@ class IndexManager
         }
 
         //Sort courses
-//Not needed in the case of Ofaj.
-//        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-//        $img_order= Display::return_icon('order-course.png',get_lang('SortMyCourses'),null,ICON_SIZE_SMALL);
-//        $my_account_content .= '<li class="order-course">'.Display::url($img_order.get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
+        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
+        $img_order= Display::return_icon('order-course.png',get_lang('SortMyCourses'),null,ICON_SIZE_SMALL);
+        $my_account_content .= '<li class="order-course">'.Display::url($img_order.get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
 
         // Session history
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {
@@ -1134,8 +1093,7 @@ class IndexManager
         $gamificationModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
         $specialCourseList = '';
-        $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
-
+        $load_history = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
         $viewGridCourses = api_get_configuration_value('view_grid_courses');
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
@@ -1178,7 +1136,6 @@ class IndexManager
                 $this->load_directories_preview
             );
 
-
             if ($viewGridCourses) {
                 $coursesWithoutCategoryTemplate = '/user_portal/grid_courses_without_category.tpl';
                 $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';
@@ -1203,14 +1160,11 @@ class IndexManager
                     $this->tpl->get_template($coursesWithoutCategoryTemplate)
                 );
             }
-            if (!empty($specialCourses['course_count']) && !empty($courses['course_count'])) {
-                $courseCount = intval($specialCourses['course_count']) + intval($courses['course_count']);
-            }
+
+            $courseCount = count($specialCourses) + count($courses['in_category']) + count($courses['not_category']);
         }
 
         $sessions_with_category = '';
-        $sessions_with_no_category = '';
-
         $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
         $coursesListSessionStyle = $coursesListSessionStyle === false ? 1 : $coursesListSessionStyle;
         if (api_is_drh()) {
@@ -1254,11 +1208,8 @@ class IndexManager
                         foreach ($session['courses'] as $course) {
                             $is_coach_course = api_is_coach($session_id, $course['real_id']);
                             $allowed_time = 0;
-                            $dif_time_after = 0;
-
-                            if (!empty($date_session_start) &&
-                                $date_session_start != '0000-00-00 00:00:00'
-                            ) {
+                            $allowedEndTime = true;
+                            if (!empty($date_session_start) && $date_session_start != '0000-00-00 00:00:00') {
                                 if ($is_coach_course) {
                                     $allowed_time = api_strtotime($coachAccessStartDate);
                                 } else {
@@ -1266,22 +1217,15 @@ class IndexManager
                                 }
 
                                 if (!isset($_GET['history'])) {
-                                    if (!empty($date_session_end) &&
-                                        $date_session_end != '0000-00-00 00:00:00'
-                                    ) {
+                                    if (!empty($date_session_end) && $date_session_end != '0000-00-00 00:00:00') {
                                         $endSessionToTms = api_strtotime($date_session_end);
                                         if ($session_now > $endSessionToTms) {
-                                            $dif_time_after = $session_now - $endSessionToTms;
-                                            $dif_time_after = round($dif_time_after / 86400);
+                                            $allowedEndTime = false;
                                         }
                                     }
                                 }
                             }
-
-                            if (
-                                $session_now >= $allowed_time
-                                //($coachAccessEndDate > $dif_time_after - 1)
-                            ) {
+                            if ($session_now >= $allowed_time && $allowedEndTime) {
                                 // Read only and accessible.
                                 $atLeastOneCourseIsVisible = true;
 
@@ -1391,23 +1335,18 @@ class IndexManager
                                     $course['real_id']
                                 );
 
-                                $dif_time_after = 0;
                                 $allowed_time = 0;
+                                $allowedEndTime = true;
+
                                 if ($is_coach_course) {
-                                    // 24 hours = 86400
                                     if ($date_session_start != '0000-00-00 00:00:00') {
                                         $allowed_time = api_strtotime($coachAccessStartDate);
                                     }
                                     if (!isset($_GET['history'])) {
                                         if ($date_session_end != '0000-00-00 00:00:00') {
-                                            $endSessionToTms = api_strtotime(
-                                                $date_session_end
-                                            );
+                                            $endSessionToTms = api_strtotime($date_session_end);
                                             if ($session_now > $endSessionToTms) {
-                                                $dif_time_after = $session_now - $endSessionToTms;
-                                                $dif_time_after = round(
-                                                    $dif_time_after / 86400
-                                                );
+                                                $allowedEndTime = false;
                                             }
                                         }
                                     }
@@ -1417,11 +1356,8 @@ class IndexManager
                                     );
                                 }
 
-                                if (
-                                    $session_now >= $allowed_time //&&
-                                    //$coachAccessEndDate > $dif_time_after - 1
-                                ) {
-                                    if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                                if ($session_now >= $allowed_time && $allowedEndTime) {
+                                    if (api_get_setting('hide_courses_in_sessions') === 'false') {
                                         $c = CourseManager:: get_logged_user_course_html(
                                             $course,
                                             $session_id,
@@ -1533,7 +1469,7 @@ class IndexManager
                 );
             } else {
                 $sessions_with_no_category = $this->tpl->fetch(
-                    $this->tpl->get_template('/user_portal/classic_session.tpl')
+                    $this->tpl->get_template('user_portal/classic_session.tpl')
                 );
             }
         }

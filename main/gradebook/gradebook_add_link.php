@@ -14,8 +14,9 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $courseCode = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : null;
-$course_info = api_get_course_info($courseCode);
+$selectCat =  isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
+$course_info = api_get_course_info($courseCode);
 $tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
@@ -34,8 +35,8 @@ if ($session_id == 0) {
 } else {
     $all_categories = Category::load_session_categories(null, $session_id);
 }
-$category = Category :: load($_GET['selectcat']);
-$url = api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();
+$category = Category :: load($selectCat);
+$url = api_get_self().'?selectcat='.$selectCat.'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();
 $typeform = new LinkForm(
     LinkForm :: TYPE_CREATE,
     $category[0],
@@ -49,7 +50,7 @@ $typeform = new LinkForm(
 // if user selected a link type
 if ($typeform->validate() && isset($_GET['newtypeselected'])) {
     // reload page, this time with a parameter indicating the selected type
-    header('Location: '.api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat'])
+    header('Location: '.api_get_self().'?selectcat='.$selectCat
         .'&typeselected='.$typeform->exportValue('select_link')
         .'&course_code='.Security::remove_XSS($_GET['course_code']).'&'.api_get_cidreq()
     );
@@ -58,7 +59,7 @@ if ($typeform->validate() && isset($_GET['newtypeselected'])) {
 
 // link type selected, show 2nd form to retrieve the link data
 if (isset($typeSelected) && $typeSelected != '0') {
-    $url = api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&typeselected='.$typeSelected.'&course_code='.$courseCode.'&'.api_get_cidreq();
+    $url = api_get_self().'?selectcat='.$selectCat.'&typeselected='.$typeSelected.'&course_code='.$courseCode.'&'.api_get_cidreq();
 
     $addform = new LinkAddEditForm(
         LinkAddEditForm :: TYPE_ADD,
@@ -127,14 +128,14 @@ if (isset($typeSelected) && $typeSelected != '0') {
             header('Location: gradebook_add_result.php?selecteval='.$link->get_ref_id().'&'.api_get_cidreq());
             exit;
         } else {
-            header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?linkadded=&selectcat='.Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq());
+            header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?linkadded=&selectcat='.$selectCat.'&'.api_get_cidreq());
             exit;
         }
     }
 }
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq(),
+    'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat.'&'.api_get_cidreq(),
     'name' => get_lang('Gradebook')
 );
 $this_section = SECTION_COURSES;

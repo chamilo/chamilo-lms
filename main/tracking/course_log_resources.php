@@ -28,9 +28,6 @@ if (!$is_allowedToTrack) {
     exit;
 }
 
-// Including additional libraries.
-require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $session_id = intval($_REQUEST['id_session']);

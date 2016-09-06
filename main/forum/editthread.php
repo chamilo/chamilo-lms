@@ -80,7 +80,7 @@ if (!api_is_allowed_to_edit(false, true) &&
     api_not_allowed();
 }
 // 4. anonymous posts are not allowed and the user is not logged in
-if (!$_user['user_id'] AND $currentForum['allow_anonymous'] <> 1) {
+if (!$_user['user_id'] && $currentForum['allow_anonymous'] <> 1) {
     api_not_allowed();
 }
 

@@ -46,19 +46,19 @@
                                     {% endif %}
                                 </h4>
                                 <div class="course-items-session">
-                                    {{ 'teacher.png' | img(16, 'Professor'|get_lang ) }}
-                                    <ul class="teachers">
-                                        {% for teacher in item.teachers %}
-                                            <li>
+                                    <div class="list-teachers">
+                                        {% if item.teachers|length > 0 %}
+                                            <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">&nbsp;
+                                            {% for teacher in item.teachers %}
                                                 {% set counter = counter + 1 %}
                                                 {% if counter > 1 %} | {% endif %}
                                                 <a href="{{ teacher.url }}" class="ajax"
                                                    data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
                                                     {{ teacher.firstname }} {{ teacher.lastname }}
                                                 </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>

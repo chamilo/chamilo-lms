@@ -20,7 +20,7 @@ if (isset($_GET['editQuestion'])) {
 
 if (is_object($objQuestion)) {
     // FORM CREATION
-    $form = new FormValidator('question_admin_form','post', $action);
+    $form = new FormValidator('question_admin_form', 'post', $action);
     if (isset($_GET['editQuestion'])) {
         $class = "btn btn-default";
         $text = get_lang('ModifyQuestion');
@@ -50,7 +50,6 @@ if (is_object($objQuestion)) {
 
     // FORM VALIDATION
     if (isset($_POST['submitQuestion']) && $form->validate()) {
-
         // question
         $objQuestion->processCreation($form, $objExercise);
 
@@ -62,10 +61,10 @@ if (is_object($objQuestion)) {
 
         // redirect
         if ($objQuestion->type != HOT_SPOT && $objQuestion->type != HOT_SPOT_DELINEATION) {
-            if(isset($_GET['editQuestion'])) {
+            if (isset($_GET['editQuestion'])) {
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
             } else {
-                //New question
+                // New question
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemAdded"</script>';
             }
         } else {

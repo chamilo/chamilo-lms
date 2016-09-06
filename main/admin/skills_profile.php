@@ -47,10 +47,8 @@ if ($form->validate()) {
 
     $skills = $values['skills'];
     if (!empty($skills)) {
-
         $hidden_skills = isset($values['hidden_skills']) ? $values['hidden_skills'] : array();
         $skills = array_merge($skills, $hidden_skills);
-
         $skills = array_filter($skills);
         $skills = array_unique($skills);
         Session::write('skills', $skills);
@@ -90,7 +88,7 @@ if (!empty($users)) {
         $user_list[$user['user_id']]['total_found_skills'] = $found_counts;
     }
     $ordered_user_list = array();
-    foreach($user_list as $user_id => $user_data) {
+    foreach ($user_list as $user_id => $user_data) {
         $ordered_user_list[$user_data['total_found_skills']][] = $user_data;
     }
     if (!empty($ordered_user_list)) {
@@ -104,23 +102,21 @@ $tpl->assign('total_search_skills', $count_skills);
 
 if (!empty($skills)) {
     $counter = 0;
-    foreach($skills as $hidden_skill_id) {
+    foreach ($skills as $hidden_skill_id) {
         $form->addElement('hidden', 'hidden_skills[]', $hidden_skill_id);
         $counter++;
     }
 }
 
 if (!empty($skills)) {
-    foreach($skills as $my_skill) {
+    foreach ($skills as $my_skill) {
         $total_skills_to_search[$my_skill] = $my_skill;
     }
 }
 
 $total_skills_to_search = $skill->get_skills_info($total_skills_to_search);
-
-
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
-$id     = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
+$id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
 
 switch ($action) {
     case 'remove_skill':

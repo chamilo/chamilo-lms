@@ -46,7 +46,7 @@ if (!empty($group_id)) {
         // you are not a teacher
         $show_work = GroupManager::user_has_access(
             $user_id,
-            $group_id,
+            $group_properties['iid'],
             GroupManager::GROUP_TOOL_WORK
         );
     }

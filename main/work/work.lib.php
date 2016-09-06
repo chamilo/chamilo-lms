@@ -34,19 +34,19 @@ function display_action_links($id, $cur_dir_path, $action)
     $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 
     if (!empty($id)) {
-        $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.
+        $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.
             Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 
     if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
         // Create dir
         if (empty($id)) {
-            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir&origin='.$origin.'&gradebook='.$gradebook.'">';
+            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir&gradebook='.$gradebook.'">';
             $display_output .= Display::return_icon('new_work.png', get_lang('CreateAssignment'),'',ICON_SIZE_MEDIUM).'</a>';
         }
         if (empty($id)) {
             // Options
-            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings&origin='.$origin.'&gradebook='.$gradebook.'">';
+            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings&gradebook='.$gradebook.'">';
             $display_output .= Display::return_icon('settings.png', get_lang('EditToolOptions'),'',ICON_SIZE_MEDIUM).'</a>';
         }
         $display_output .= '<a id="open-view-list" href="#">' . Display::return_icon('listwork.png', get_lang('ViewStudents'),'',ICON_SIZE_MEDIUM) . '</a>';
@@ -866,7 +866,7 @@ function updateDirName($work_data, $newPath)
 {
     $course_id = $work_data['c_id'];
     $sessionId = intval($work_data['session_id']);
-    $work_id = intval($work_data['id']);
+    $work_id = intval($work_data['iid']);
     $oldPath = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
     $newPath = Database::escape_string($newPath);
@@ -874,6 +874,7 @@ function updateDirName($work_data, $newPath)
     $newPath = disable_dangerous_file($newPath);
 
     if ($oldPath == '/'.$newPath) {
+
         return true;
     }
 
@@ -883,8 +884,7 @@ function updateDirName($work_data, $newPath)
                     title = '".$originalNewPath."'
                 WHERE
                     c_id = $course_id AND
-                    id = $work_id AND
-                    session_id = " . ($sessionId ? $sessionId : 'NULL');
+                    iid = $work_id";
         Database::query($sql);
     }
 }
@@ -2379,11 +2379,11 @@ function get_list_users_without_publication($task_id, $studentId = null)
     }
 
     $group_id = api_get_group_id();
-
     $new_group_user_list = array();
 
     if ($group_id) {
-        $group_user_list = GroupManager::get_subscribed_users($group_id);
+        $groupInfo = GroupManager::get_group_properties($group_id);
+        $group_user_list = GroupManager::get_subscribed_users($groupInfo['iid']);
         if (!empty($group_user_list)) {
             foreach($group_user_list as $group_user) {
                 $new_group_user_list[] = $group_user['user_id'];
@@ -3773,7 +3773,7 @@ function agendaExistsForWork($workId, $courseInfo)
 
 /**
  * Update work description, qualification, weight, allow_text_assignment
- * @param int $workId
+ * @param int $workId (iid)
  * @param array $params
  * @param array $courseInfo
  * @param int $sessionId
@@ -3792,10 +3792,9 @@ function updateWork($workId, $params, $courseInfo, $sessionId = 0)
         $workTable,
         $filteredParams,
         array(
-            'id = ? AND c_id = ? AND session_id = ? ' => array(
+            'iid = ? AND c_id = ?' => array(
                 $workId,
-                $courseInfo['real_id'],
-                $sessionId ? $sessionId : null
+                $courseInfo['real_id']
             )
         )
     );
@@ -3819,7 +3818,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     $agendaId = 0;
 
     if (isset($params['add_to_calendar']) && $params['add_to_calendar'] == 1) {
-        require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 
         // Setting today date
         $date = $end_date = $time;
@@ -3915,7 +3913,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                 WHERE
                     publication_id = $workId AND
                     c_id = $course_id AND
-                    id = ".$data['id'];
+                    iid = ".$data['iid'];
         Database::query($sql);
     }
 
@@ -4986,11 +4984,12 @@ function protectWork($courseInfo, $workId)
     }
 
     allowOnlySubscribedUser($userId, $workId, $courseInfo['real_id']);
+    $groupInfo = GroupManager::get_group_properties($groupId);
 
     if (!empty($groupId)) {
         $showWork = GroupManager::user_has_access(
             $userId,
-            $groupId,
+            $groupInfo['iid'],
             GroupManager::GROUP_TOOL_WORK
         );
         if (!$showWork) {

@@ -44,7 +44,7 @@ if (isset($current_thread['thread_id'])) {
 
     if (!empty($rows)) {
         $postCount = count($rows);
-        
+
         foreach ($rows as $row) {
             if ($row['user_id'] == '0') {
                 $name = prepare4display($row['poster_name']);
@@ -167,7 +167,8 @@ if (isset($current_thread['thread_id'])) {
             // The user who posted it can edit his thread only if the course admin allowed
             // this in the properties of the forum
             // The course admin him/herself can do this off course always
-            if (GroupManager::is_tutor_of_group($userId, $groupId) ||
+            $groupInfo = GroupManager::get_group_properties($groupId);
+            if ((isset($groupInfo['iid']) && GroupManager::is_tutor_of_group($userId, $groupInfo['iid'])) ||
                 ($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
                 (
                 api_is_allowed_to_edit(false, true) &&
@@ -185,7 +186,7 @@ if (isset($current_thread['thread_id'])) {
             }
 
             if ($origin != 'learnpath') {
-                if (GroupManager::is_tutor_of_group($userId, $groupId) ||
+                if (GroupManager::is_tutor_of_group($userId, $groupInfo['iid']) ||
                     api_is_allowed_to_edit(false, true) &&
                     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 ) {
@@ -211,7 +212,7 @@ if (isset($current_thread['thread_id'])) {
                 }
 
                 if (
-                    GroupManager::is_tutor_of_group($userId, $groupId) ||
+                    GroupManager::is_tutor_of_group($userId, $groupInfo['iid']) ||
                         (api_is_allowed_to_edit(false, true) &&
                         !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                         )
@@ -322,8 +323,7 @@ if (isset($current_thread['thread_id'])) {
                     if (($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
                         (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
                     ) {
-                        $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&origin='
-                            . Security::remove_XSS($origin) . '&action=delete_attach&id_attach='
+                        $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=delete_attach&id_attach='
                             . $attachment['iid'] . '&forum=' . $clean_forum_id . '&thread=' . $clean_thread_id
                             . '" onclick="javascript:if(!confirm(\''
                             . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))

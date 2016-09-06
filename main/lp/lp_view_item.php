@@ -60,10 +60,6 @@ $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 $isStudentView  = (empty($_REQUEST['isStudentView']) ? 0 : (int) $_REQUEST['isStudentView']);
 $learnpath_id   = (int) $_REQUEST['lp_id'];
 
-// Using the resource linker as a tool for adding resources to the learning path.
-if ($action == 'add' && $type == 'learnpathitem') {
-     $htmlHeadXtra[] = "<script> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
-}
 if ((!$is_allowed_to_edit) || $isStudentView) {
     error_log('New LP - User not authorized in lp_view_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);

@@ -1568,8 +1568,8 @@ class Display
                 }
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
                     $userDurationData = SessionManager::getUserSession(
-                            api_get_user_id(),
-                            $session_id
+                        api_get_user_id(),
+                        $session_id
                     );
                     $userDuration = 0;
                     if (isset($userDurationData['duration'])) {
@@ -1588,14 +1588,14 @@ class Display
             } else {
                 $start = $stop = false;
                 $start_buffer = $stop_buffer = '';
-                if ($session_info['access_start_date'] == '0000-00-00' || empty($session_info['access_start_date'])) {
+                if ($session_info['access_start_date'] == '0000-00-00 00:00:00' || empty($session_info['access_start_date'])) {
                     $session_info['access_start_date'] = '';
                 } else {
                     $start = true;
                     $start_buffer = $session_info['access_start_date'];
                     $session_info['access_start_date'] = $session_info['access_start_date'];
                 }
-                if ($session_info['access_end_date'] == '0000-00-00' || empty($session_info['access_end_date'])) {
+                if ($session_info['access_end_date'] == '0000-00-00 00:00:00' || empty($session_info['access_end_date'])) {
                     $session_info['access_end_date'] = '';
                 } else {
                     $stop = true;
@@ -1614,19 +1614,17 @@ class Display
                     if (!empty($session_info['access_start_date'])) {
                         $start_buffer = sprintf(
                             get_lang('FromDateX'),
-                            api_format_date($session_info['access_start_date'])
+                            api_format_date(api_get_local_time($session_info['access_start_date']))
                         );
                     }
 
                     if (!empty($session_info['access_end_date'])) {
                         $stop_buffer = sprintf(
                             get_lang('UntilDateX'),
-                            api_format_date($session_info['access_end_date'])
+                            api_format_date(api_get_local_time($session_info['access_end_date']))
                         );
                     }
-
-                    $session['dates'] = $start_buffer . " " . $stop_buffer;
-
+                    $session['dates'] = $start_buffer . ' ' . $stop_buffer;
                 }
 
                 if ( api_get_setting('show_session_coach') === 'true' ) {
@@ -1653,7 +1651,6 @@ class Display
             );
 
             $session['extra_fields'] = [];
-
             foreach ($extraFieldValues as $value) {
                 $session['extra_fields'][] = [
                     'field' => [

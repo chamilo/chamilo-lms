@@ -9,16 +9,18 @@ require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
+$selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
+
 $interbreadcrumb[] = array (
     'url' => $_SESSION['gradebook_dest'].'?',
     'name' => get_lang('Gradebook'
 ));
 $interbreadcrumb[] = array (
-    'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
+    'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
     'name' => get_lang('Details'
 ));
 $interbreadcrumb[] = array (
-    'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),
+    'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.$selectCat,
     'name' => get_lang('GradebookQualifyLog')
 );
 $this_section = SECTION_COURSES;
@@ -42,7 +44,7 @@ while ($row = Database::fetch_row($result)) {
     $list_info[] = $row;
 }
 
-foreach($list_info as $key => $info_log) {
+foreach ($list_info as $key => $info_log) {
     $list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
     $list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }

@@ -657,7 +657,6 @@ class AppPlugin
         $installedPluginsList = $this->getInstalledPluginListObject();
         foreach ($installedPluginsList as $installedPlugin) {
             if ($installedPlugin->isMailPlugin) {
-
                 return get_class($installedPlugin);
             }
         }
@@ -671,7 +670,7 @@ class AppPlugin
     public function getSMSPluginLibrary()
     {
         $className = $this->getSMSPluginName();
-        $className = str_replace("Plugin", "", $className);
+        $className = str_replace('Plugin', '', $className);
 
         if (class_exists($className)) {
             return new $className;

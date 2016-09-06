@@ -801,7 +801,8 @@ class UserGroup extends Model
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $sql = "SELECT * FROM $this->table u
-                    INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = u.id)
+                    INNER JOIN {$this->access_url_rel_usergroup} a 
+                    ON (a.usergroup_id = u.id)
                     WHERE name = '".Database::escape_string($name)."' AND access_url_id = $urlId";
         } else {
             $sql = "SELECT * FROM $this->table WHERE name = '".Database::escape_string($name)."'";
@@ -954,7 +955,6 @@ class UserGroup extends Model
 
         $groupExists = $this->usergroup_exists(trim($params['name']));
         if ($groupExists == false) {
-
             $id = parent::save($params, $show_query);
             if ($id) {
                 if ($this->useMultipleUrl) {
@@ -1318,7 +1318,6 @@ class UserGroup extends Model
         $form->applyFilter('description', 'trim');
 
         if ($this->showGroupTypeSetting) {
-
             $form->addElement(
                 'checkbox',
                 'group_type',
@@ -1356,7 +1355,7 @@ class UserGroup extends Model
         $form->addElement('checkbox', 'allow_members_leave_group', '', get_lang('AllowMemberLeaveGroup'));
 
         // Setting the form elements
-        if ($type == 'add') {
+        if ($type === 'add') {
             $form->addButtonCreate($header);
         } else {
             $form->addButtonUpdate($header);
@@ -1376,7 +1375,7 @@ class UserGroup extends Model
     {
         $picture = array();
         //$picture['style'] = $style;
-        if ($picture_file == 'unknown.jpg') {
+        if ($picture_file === 'unknown.jpg') {
             $picture['file'] = Display::returnIconPath($picture_file);
             return $picture;
         }
@@ -1485,7 +1484,7 @@ class UserGroup extends Model
      */
     public function getAllowedPictureExtensions()
     {
-        return $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+        return ['jpg', 'jpeg', 'png', 'gif'];
     }
 
     /**
@@ -1828,8 +1827,8 @@ class UserGroup extends Model
     }
 
     /** Gets the last groups created
-     * @param int  quantity of records
-     * @param bool show groups with image or not
+     * @param int  $num quantity of records
+     * @param bool $with_image show groups with image or not
      * @return array  with group content
      * @author Julio Montoya
      * */
@@ -1992,7 +1991,6 @@ class UserGroup extends Model
         $my_group_role = self::get_user_group_role($user_id, $group_id);
 
         // Loading group permission
-
         $links = '';
         switch ($my_group_role) {
             case GROUP_USER_PERMISSION_READER:
@@ -2088,16 +2086,19 @@ class UserGroup extends Model
      * @param bool $with_image
      * @return int
      */
-    public function get_groups_by_user_count($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false)
-    {
-        $table_group_rel_user	= $this->usergroup_rel_user_table;
-        $tbl_group				= $this->table;
-        $user_id 				= intval($user_id);
+    public function get_groups_by_user_count(
+        $user_id = '',
+        $relation_type = GROUP_USER_PERMISSION_READER,
+        $with_image = false
+    ) {
+        $table_group_rel_user = $this->usergroup_rel_user_table;
+        $tbl_group = $this->table;
+        $user_id = intval($user_id);
 
         if ($relation_type == 0) {
             $where_relation_condition = '';
         } else {
-            $relation_type 			= intval($relation_type);
+            $relation_type = intval($relation_type);
             $where_relation_condition = "AND gu.relation_type = $relation_type ";
         }
 
@@ -2125,38 +2126,10 @@ class UserGroup extends Model
     public function get_all_group_tags($tag, $from = 0, $number_of_items = 10, $getCount = false)
     {
         $group_table = $this->table;
-        $table_tag = Database::get_main_table(TABLE_MAIN_TAG);
-        //$table_group_tag_values	= Database::get_main_table(TABLE_USERGROUP_REL_TAG);
-
-        $field_id = 5;
         $tag = Database::escape_string($tag);
         $from = intval($from);
         $number_of_items = intval($number_of_items);
         $return = array();
-
-        // all the information of the field
-        /*$select = "SELECT g.id, g.name, g.description, g.picture";
-
-        $sql = "$select
-                FROM $table_tag t
-                INNER JOIN $table_group_tag_values tv
-                ON (tv.tag_id=t.id)
-                INNER JOIN $group_table g
-                ON (tv.usergroup_id =g.id)
-				WHERE
-				    tag LIKE '$tag%' AND
-				    field_id= $field_id
-                ORDER BY tag";
-
-        $sql .= " LIMIT $from, $number_of_items";
-
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result)> 0) {
-            while ($row = Database::fetch_array($result,'ASSOC')) {
-                $return[$row['id']] = $row;
-            }
-        }*/
 
         $keyword = $tag;
         $sql = "SELECT  g.id, g.name, g.description, g.url, g.picture
@@ -2243,9 +2216,7 @@ class UserGroup extends Model
         $includeSubgroupsUsers = true
     ) {
         $userId = intval($userId);
-
         $groups = $this->get_groups_by_user($userId, $relationType);
-
         $groupsId = array_keys($groups);
         $subgroupsId = [];
         $userIdList = [];
@@ -2304,9 +2275,7 @@ class UserGroup extends Model
         for ($i = 1; $i <= $levels; $i++) {
             $tableIndexNumber = $i;
             $tableIndexJoinNumber = $i - 1;
-
             $select .= "g$i.id as id_$i ";
-
             $select .= ($i != $levels ? ", " : null);
 
             if ($i == 1) {
@@ -2322,9 +2291,9 @@ class UserGroup extends Model
         $result = Database::query("$select $from");
 
         while ($item = Database::fetch_assoc($result)) {
-            foreach ($item as $groupId) {
-                if (!empty($groupId)) {
-                    $groups[] = $groupId;
+            foreach ($item as $myGroupId) {
+                if (!empty($myGroupId)) {
+                    $groups[] = $myGroupId;
                 }
             }
         }
@@ -2362,6 +2331,7 @@ class UserGroup extends Model
             }
         }
         $res = Database::query($sql);
+
         return $res;
     }
 
@@ -2411,6 +2381,4 @@ class UserGroup extends Model
     {
         return $groupInfo['allow_members_leave_group'] == 1 ? true : false;
     }
-
 }
-

@@ -667,7 +667,7 @@ class TestCategory
      */
     public static function getCatScoreForExeidForUserid($in_cat_id, $in_exe_id, $in_user_id)
     {
-        $tbl_track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $tbl_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $tbl_question_rel_category = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $in_cat_id = intval($in_cat_id);
         $in_exe_id = intval($in_exe_id);

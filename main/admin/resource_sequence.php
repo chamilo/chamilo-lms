@@ -76,7 +76,15 @@ $form->addHtml("</div>");
 
 $formSave = new FormValidator('');
 $formSave->addHidden('sequence_type', 'session');
-$formSave->addButton('save_resource', get_lang('SaveSettings'), 'floppy-o', 'success', null, null, ['cols-size' => [1, 10, 1]]);
+$formSave->addButton(
+    'save_resource',
+    get_lang('SaveSettings'),
+    'floppy-o',
+    'success',
+    null,
+    null,
+    ['cols-size' => [1, 10, 1]]
+);
 
 $tpl->assign('create_sequence', $formSequence->returnForm());
 $tpl->assign('select_sequence', $selectSequence->returnForm());

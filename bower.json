@@ -27,7 +27,8 @@
     "cropper": "1.0.*",
     "jquery.scrollbar": "0.2.*",
     "jquery-file-upload": "*",
-    "pwstrength-bootstrap": "*"
+    "pwstrength-bootstrap": "*",
+    "readmore-js": "2.1.0"
   },
   "resolutions": {
     "jquery": "2.1.4"

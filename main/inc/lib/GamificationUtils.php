@@ -25,7 +25,6 @@ class GamificationUtils
         );
 
         if (empty($sessions)) {
-
             return 0;
         }
 

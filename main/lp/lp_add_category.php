@@ -9,9 +9,6 @@
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
-require 'learnpath_functions.inc.php';
-require 'resourcelinker.inc.php';
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 if (!$is_allowed_to_edit) {
@@ -48,10 +45,12 @@ if ($form->validate()) {
     if (!empty($values['id'])) {
         learnpath::updateCategory($values);
         $url = api_get_self().'?action=list&'.api_get_cidreq();
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: '.$url);
         exit;
     } else {
         learnpath::createCategory($values);
+        Display::addFlash(Display::return_message(get_lang('Added')));
         $url = api_get_self().'?action=list&'.api_get_cidreq();
         header('Location: '.$url);
         exit;

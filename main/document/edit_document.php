@@ -419,12 +419,13 @@ if (!empty($sessionId)) {
 
 $owner_id = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
+$groupInfo = GroupManager::get_group_properties(api_get_group_id());
 
 if ($owner_id == api_get_user_id() ||
     api_is_platform_admin() ||
     $is_allowed_to_edit || GroupManager:: is_user_in_group(
         api_get_user_id(),
-        api_get_group_id()
+        $groupInfo['iid']
     )
 ) {
 	$action = api_get_self().'?id='.$document_data['id'].'&'.api_get_cidreq();
@@ -581,7 +582,7 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc)
 function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_certificate_mode=false)
 {
     $actionsLeft = null;
-    
+
     global $parent_id;
     $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parent_id;
 

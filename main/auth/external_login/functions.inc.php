@@ -16,7 +16,8 @@
  *       password
  *   or false if no data
  * */
-function external_get_user_info($login, $password) {
+function external_get_user_info($login, $password)
+{
     //Those are the mandatory fields for user creation.
     //See external_add_user function for all the fields you can have.
     $table = USERINFO_TABLE;
@@ -43,21 +44,21 @@ function external_get_user_info($login, $password) {
         default:
             $status = STUDENT;
     }
+
     // Language
     switch ($user_info['language']) {
-        case 'FR' :
+        case 'FR':
             $language = 'french';
             break;
-        case 'EN' :
+        case 'EN':
             $language = 'english';
             break;
-        default :
+        default:
             $language = 'english';
             break;
     }
     //Can Send Message ?
     $can_send_message = ($user_info['can_send_message'] == 1) ? 'yes' : 'no';
-
 
     $u = array(
         'firstname' => $user_info['firstname'],
@@ -93,34 +94,64 @@ function external_get_user_info($login, $password) {
   firstname, lastname, status, email, login, password
  * @return mixed   new user id - if the new user creation succeeds, false otherwise
  * */
-function external_add_user($u) {
+function external_add_user($u)
+{
     //Setting default
-    if (empty($u['password']))
+    if (empty($u['password'])) {
         $u['password'] = null;
-    if (empty($u['status']))
+    }
+    if (empty($u['status'])) {
         $u['status'] = 5;
-    if (!isset($u['official_code']))
+    }
+    if (!isset($u['official_code'])) {
         $u['official_code'] = '';
-    if (!isset($u['language']))
+    }
+    if (!isset($u['language'])) {
         $u['language'] = '';
-    if (!isset($u['phone']))
+    }
+    if (!isset($u['phone'])) {
         $u['phone'] = '';
-    if (!isset($u['picture_uri']))
+    }
+    if (!isset($u['picture_uri'])) {
         $u['picture_uri'] = '';
-    if (!isset($u['auth_source']))
+    }
+    if (!isset($u['auth_source'])) {
         $u['auth_source'] = PLATFORM_AUTH_SOURCE;
-    if (!isset($u['expiration_date']))
+    }
+    if (!isset($u['expiration_date'])) {
         $u['expiration_date'] = '';
-    if (!isset($u['active']))
+    }
+    if (!isset($u['active'])) {
         $u['active'] = 1;
-    if (!isset($u['hr_dept_id']))
-        $u['hr_dept_id'] = 0; //id of responsible HR
-    if (!isset($u['extra']))
+    }
+    if (!isset($u['hr_dept_id'])) {
+        $u['hr_dept_id'] = 0;
+    } //id of responsible HR
+    if (!isset($u['extra'])) {
         $u['extra'] = null;
-    if (!isset($u['encrypt_method']))
+    }
+    if (!isset($u['encrypt_method'])) {
         $u['encrypt_method'] = '';
+    }
 
-    $chamilo_uid = UserManager::create_user($u['firstname'], $u['lastname'], $u['status'], $u['email'], $u['username'], $u['password'], $u['official_code'], $u['language'], $u['phone'], $u['picture_uri'], $u['auth_source'], $u['expiration_date'], $u['active'], $u['hr_dept_id'], $u['extra'], $u['encrypt_method']);
+    $chamilo_uid = UserManager::create_user(
+        $u['firstname'],
+        $u['lastname'],
+        $u['status'],
+        $u['email'],
+        $u['username'],
+        $u['password'],
+        $u['official_code'],
+        $u['language'],
+        $u['phone'],
+        $u['picture_uri'],
+        $u['auth_source'],
+        $u['expiration_date'],
+        $u['active'],
+        $u['hr_dept_id'],
+        $u['extra'],
+        $u['encrypt_method']
+    );
     return $chamilo_uid;
 }
 
@@ -151,10 +182,30 @@ function external_add_user($u) {
  * @return boolean|null
  * @author ndiechburg <noel@cblue.be>
  * */
-function external_update_user($new_user) {
+function external_update_user($new_user)
+{
     $old_user = api_get_user_info($new_user['user_id']);
     $u = array_merge($old_user, $new_user);
-    $updated = UserManager::update_user($u['user_id'], $u['firstname'], $u['lastname'], $u['username'], null, $u['auth_source'], $u['email'], $u['status'], $u['official_code'], $u['phone'], $u['picture_uri'], $u['expiration_date'], $u['active'], $u['creator_id'], $u['hr_dept_id'], $u['extra'], $u['language'], '');
+    $updated = UserManager::update_user(
+        $u['user_id'],
+        $u['firstname'],
+        $u['lastname'],
+        $u['username'],
+        null,
+        $u['auth_source'],
+        $u['email'],
+        $u['status'],
+        $u['official_code'],
+        $u['phone'],
+        $u['picture_uri'],
+        $u['expiration_date'],
+        $u['active'],
+        $u['creator_id'],
+        $u['hr_dept_id'],
+        $u['extra'],
+        $u['language'],
+        ''
+    );
     if (isset($u['courses']) && !empty($u['courses'])) {
         $autoSubscribe = explode('|', $u['courses']);
         foreach ($autoSubscribe as $code) {
@@ -172,5 +223,3 @@ function external_update_user($new_user) {
       $res = Database::query("SELECT * from $table WHERE user_id = ".$u['user_id']);
       } */
 }
-
-?>

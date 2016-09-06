@@ -45,9 +45,10 @@ if ($isValid === 1) {
  * @param string The cleartext password, as provided in form
  * @param string The WS URL, as provided at the beginning of this script
  */
-function loginWSAuthenticate($username, $password, $wsUrl) {
+function loginWSAuthenticate($username, $password, $wsUrl)
+{
     // check params
-    if (empty($username) or empty($password) or empty($wsUrl)) {
+    if (empty($username) || empty($password) || empty($wsUrl)) {
         return false;
     }
     // Create new SOAP client instance
@@ -62,7 +63,7 @@ function loginWSAuthenticate($username, $password, $wsUrl) {
     // Complete password con PKCS7-specific padding
     $blockSize = 16;
     $padding = $blockSize - (strlen($password)%$blockSize);
-    $password .= str_repeat(chr($padding),$padding);
+    $password .= str_repeat(chr($padding), $padding);
     $cipher = new Crypt_AES(CRYPT_AES_MODE_CFB);
     $cipher->setKeyLength(128);
     $cipher->setKey($key);
@@ -83,7 +84,13 @@ function loginWSAuthenticate($username, $password, $wsUrl) {
     $passCrypted = base64_encode($cipheredPass);
     // The call to the webservice will change depending on your definition
     try {
-        $response = $client->validateUser(array('user' => $username, 'pass' => $passCrypted, 'system' => 'chamilo'));
+        $response = $client->validateUser(
+            array(
+                'user' => $username,
+                'pass' => $passCrypted,
+                'system' => 'chamilo',
+            )
+        );
     } catch (SoapFault $fault) {
         error_log('Caught something');
         if ($fault->faultstring != 'Could not connect to host') {

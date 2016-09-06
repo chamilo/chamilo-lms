@@ -3339,14 +3339,18 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
  * It also updates the forum_threads table (thread_replies +1 , thread_last_post, thread_date)
  * @param array $current_forum
  * @param array $values
+ * @param int $courseId Optional
+ * @param int $userId Optional
+ * @return array
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function store_reply($current_forum, $values)
+function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
 {
-    $_course = api_get_course_info();
+    $_course = api_get_course_info_by_id($courseId);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $post_date = api_get_utc_datetime();
+    $userId = $userId ?: api_get_user_id();
 
     if ($current_forum['approval_direct_post'] == '1' &&
         !api_is_allowed_to_edit(null, true)
@@ -3364,12 +3368,12 @@ function store_reply($current_forum, $values)
         $new_post_id = Database::insert(
             $table_posts,
             [
-                'c_id' => api_get_course_int_id(),
+                'c_id' => $courseId,
                 'post_title' => $values['post_title'],
                 'post_text' => isset($values['post_text']) ? ($values['post_text']) : null,
                 'thread_id' => $values['thread_id'],
                 'forum_id' => $values['forum_id'],
-                'poster_id' => api_get_user_id(),
+                'poster_id' => $userId,
                 'post_id' => 0,
                 'post_date' => $post_date,
                 'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : null,
@@ -3406,7 +3410,7 @@ function store_reply($current_forum, $values)
                 TOOL_FORUM,
                 $values['forum_id'],
                 'NewMessageInForum',
-                api_get_user_id()
+                $userId
             );
 
             // Insert post
@@ -3415,7 +3419,7 @@ function store_reply($current_forum, $values)
                 TOOL_FORUM_POST,
                 $new_post_id,
                 'NewPost',
-                api_get_user_id()
+                $userId
             );
 
             if ($current_forum['approval_direct_post'] == '1' &&

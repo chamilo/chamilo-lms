@@ -3981,10 +3981,6 @@ class CourseManager
         $objUser = $entityManager->find('ChamiloUserBundle:User', $user_id);
         $objCourse = $entityManager->find('ChamiloCoreBundle:Course', $course['real_id']);
         $objSession = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
-
-        /*$date_start = $sess[$course_info['id_session']]['access_start_date'];
-        $date_end = $sess[$course_info['id_session']]['access_end_date'];*/
-
         $now = date('Y-m-d h:i:s');
 
         // Table definitions
@@ -4009,7 +4005,6 @@ class CourseManager
         // Display course entry.
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
         $session_url = '';
-        $session_title = '';
 
         $params = array();
         $params['icon'] = Display::return_icon(
@@ -4051,8 +4046,9 @@ class CourseManager
                 }
 
             } else {
-                $session_title = $course_info['name'] . ' ' . Display::tag('span', get_lang('CourseClosed'),
-                        array('class' => 'item_closed'));
+                $session_title =
+                    $course_info['name'] . ' ' .
+                    Display::tag('span', get_lang('CourseClosed'), array('class' => 'item_closed'));
             }
         } else {
             $session_title = $course_info['name'];
@@ -4092,12 +4088,11 @@ class CourseManager
         }
         }
 
-        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+        if (api_get_setting('display_coursecode_in_courselist') === 'true') {
             $session_title .= ' (' . $course_info['visual_code'] . ') ';
         }
 
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
-
             $teacher_list = CourseManager::getTeachersFromCourseByCode(
                 $course_info['code']
             );
@@ -4106,14 +4101,6 @@ class CourseManager
                 $course_info['id_session'],
                 $course_info['real_id']
             );
-
-            /* if ($course_info['status'] == COURSEMANAGER ||
-                ($course_info['status'] == STUDENT && empty($course_info['id_session'])) ||
-                empty($course_info['status'])
-            ) {
-                $params['teachers'] = $teacher_list;
-            }
-            */
             $params['teachers'] = $teacher_list;
 
             if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) ||

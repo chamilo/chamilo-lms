@@ -19,6 +19,7 @@ switch ($action) {
         $courseInfo = api_get_course_info();
         $sessionId = api_get_session_id();
         $userId = api_get_user_id();
+        $groupId = api_get_group_id();
 
         if (!empty($_FILES)) {
             $files = $_FILES['files'];
@@ -41,7 +42,17 @@ switch ($action) {
                     'title' => $file['name'],
                     'description' => ''
                 ];
-                $result = processWorkForm($workInfo, $values, $courseInfo, $sessionId, 0, $userId, $file, true);
+
+                $result = processWorkForm(
+                    $workInfo,
+                    $values,
+                    $courseInfo,
+                    $sessionId,
+                    $groupId,
+                    $userId,
+                    $file,
+                    true
+                );
 
                 $json = array();
                 if (!empty($result) && is_array($result) && empty($result['error'])) {

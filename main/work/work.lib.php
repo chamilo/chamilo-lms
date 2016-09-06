@@ -3667,14 +3667,28 @@ function checkExistingWorkFileName($filename, $workId)
  *
  * @return null|string
  */
-function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, $userId, $file = [], $checkDuplicated = false)
-{
+function processWorkForm(
+    $workInfo,
+    $values,
+    $courseInfo,
+    $sessionId,
+    $groupId,
+    $userId,
+    $file = [],
+    $checkDuplicated = false
+) {
     $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $courseId = $courseInfo['real_id'];
     $groupId = intval($groupId);
     $sessionId = intval($sessionId);
     $userId = intval($userId);
+
+    $groupIid = null;
+    if (!empty($groupId)) {
+        $groupInfo = GroupManager::get_group_properties($groupId);
+        $groupIid = $groupInfo['iid'];
+    }
 
     $title = $values['title'];
     $description = $values['description'];
@@ -3731,14 +3745,13 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
             'document_id' => 0,
             'weight' => 0,
             'allow_text_assignment' => 0,
-            'post_group_id' => $groupId,
+            'post_group_id' => $groupIid,
             'sent_date' => api_get_utc_datetime(),
             'parent_id' => $workInfo['id'],
             'session_id' => $sessionId,
             'user_id' => $userId,
             'has_properties' => 0,
             'qualification' => 0
-
             //'filesize' => $filesize
         ];
         $workId = Database::insert($work_table, $params);
@@ -3768,7 +3781,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
                 $workId,
                 'DocumentAdded',
                 $userId,
-                $groupId
+                $groupIid
             );
             sendAlertToUsers($workId, $courseInfo, $sessionId);
             Event::event_upload($workId);

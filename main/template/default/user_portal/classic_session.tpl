@@ -46,15 +46,16 @@
                         {% endif %}
                         <div class="info-session">
                             {% if row.coach_name  != '' %}
-                                <span><i class="fa fa-user" aria-hidden="true"></i>
+                                <span>
+                                    <i class="fa fa-user" aria-hidden="true"></i>
                                     {{ row.coach_name }}
-                        </span>
+                                </span>
                             {% endif %}
-                            <span><i class="fa fa-calendar" aria-hidden="true"></i>
-                                {{ row.date }}
-                    </span>
+                        <span>
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            {{ row.date }}
+                        </span>
                         </div>
-
                         {% if row.coaches %}
                             <h5 class="teacher-name">{{ "teacher.png"|icon(16) ~ row.coaches }}</h5>
                         {% endif %}
@@ -79,44 +80,44 @@
                             {% if row.coach_name  != '' %}
                                 <span><i class="fa fa-user" aria-hidden="true"></i>
                                     {{ row.coach_name }}
-                        </span>
+                                </span>
                             {% endif %}
                             <span><i class="fa fa-calendar" aria-hidden="true"></i>
                                 {{ row.date }}
-                    </span>
+                            </span>
                         </div>
                         <div class="sessions-items">
-                            {% for item in row.courses %}
-                                <div class="courses">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            {% if item.link %}
-                                                <a href="{{ item.link }}" class="thumbnail">
-                                                    <img class="img-responsive" src="{{ item.icon }}">
-                                                </a>
-                                            {% else %}
-                                                {{ 'blackboard.png' | img(48, item.title ) }}
+                        {% for item in row.courses %}
+                            <div class="courses">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        {% if item.link %}
+                                            <a href="{{ item.link }}" class="thumbnail">
+                                                <img class="img-responsive" src="{{ item.icon }}">
+                                            </a>
+                                        {% else %}
+                                            {{ 'blackboard.png' | img(48, item.title ) }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-10">
+                                        <h4>{{ item.title }}</h4>
+                                        <div class="list-teachers">
+                                            {% if item.teachers|length > 0 %}
+                                                <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">&nbsp;
+                                                {% for coach in item.coaches %}
+                                                    {{ loop.index > 1 ? ' | ' }}
+                                                    <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}"
+                                                       data-title="{{ coach.full_name }}" class="ajax">
+                                                        {{ coach.firstname }},
+                                                        {{ coach.lastname }}
+                                                    </a>
+                                                {% endfor %}
                                             {% endif %}
-                                        </div>
-                                        <div class="col-md-10">
-                                            <h4>{{ item.title }}</h4>
-                                            <div class="list-teachers">
-                                                {% if item.teachers|length > 0 %}
-                                                    <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">&nbsp;
-                                                    {% for coach in item.teachers %}
-                                                        {{ loop.index > 1 ? ' | ' }}
-                                                        <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}"
-                                                           data-title="{{ coach.full_name }}" class="ajax">
-                                                            {{ coach.firstname }},
-                                                            {{ coach.lastname }}
-                                                        </a>
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            {% endfor %}
+                            </div>
+                        {% endfor %}
                         </div>
                     </div>
                 </div>

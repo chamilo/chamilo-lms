@@ -377,7 +377,6 @@ class HTML_QuickForm extends HTML_Common
      * @since     1.0
      * @access    public
      * @return    void
-     * @throws    HTML_QuickForm_Error
      */
     public function setDefaults($defaultValues = null, $filter = null)
     {
@@ -419,7 +418,6 @@ class HTML_QuickForm extends HTML_Common
      * @since     2.0
      * @access    public
      * @return    void
-     * @throws    HTML_QuickForm_Error
      */
     public function setConstants($constantValues = null, $filter = null)
     {
@@ -457,7 +455,7 @@ class HTML_QuickForm extends HTML_Common
      * @access    public
      * @return    void
      */
-    function setMaxFileSize($bytes = 0)
+    public function setMaxFileSize($bytes = 0)
     {
         if ($bytes > 0) {
             $this->_maxFileSize = $bytes;
@@ -480,7 +478,7 @@ class HTML_QuickForm extends HTML_Common
      * @access    public
      * @return    int   max file size in bytes
      */
-    function getMaxFileSize()
+    public function getMaxFileSize()
     {
         return $this->_maxFileSize;
     } // end func getMaxFileSize
@@ -632,17 +630,12 @@ class HTML_QuickForm extends HTML_Common
         }
 
         return $elementObject;
-    } // end func addElement
-
+    }
 
     public function getElements()
     {
         return $this->_elements;
     }
-
-
-    // }}}
-    // {{{ insertElementBefore()
 
    /**
     * Inserts a new element right before the other element
@@ -658,7 +651,6 @@ class HTML_QuickForm extends HTML_Common
     * @param    string                  Name of the element before which the new
     *                                   one is inserted
     * @return   HTML_QuickForm_element  reference to inserted element
-    * @throws   HTML_QuickForm_Error
     */
     public function &insertElementBefore(&$element, $nameAfter)
     {
@@ -1046,7 +1038,6 @@ class HTML_QuickForm extends HTML_Common
      * @param    boolean    $force         Force the rule to be applied, even if the target form element does not exist
      * @since    1.0
      * @access   public
-     * @throws   HTML_QuickForm_Error
      */
     public function addRule(
         $element,

@@ -412,6 +412,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_tool_intro ADD COLUMN iid int NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN c_id INT NOT NULL");
+        $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id INT DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id_auto int unsigned NOT NULL");
         $this->addSql("ALTER TABLE c_quiz_answer DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id_auto int unsigned DEFAULT NULL");

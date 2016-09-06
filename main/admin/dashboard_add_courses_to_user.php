@@ -102,8 +102,7 @@ function search_courses($needle, $type)
 
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -170,7 +169,6 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 Display::display_header($tool_name);
 
 // actions
-
 $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
     Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM).'</a>';
 $actionsLeft .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.
@@ -218,7 +216,6 @@ if (api_is_multiple_url_enabled()) {
             WHERE  c.code LIKE '$needle' $without_assigned_courses
             ORDER BY c.title";
 }
-
 
 $result	= Database::query($sql);
 

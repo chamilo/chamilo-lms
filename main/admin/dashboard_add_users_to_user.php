@@ -120,8 +120,7 @@ function search_users($needle, $type)
                     $order_clause
             ";
         }
-
-		$rs	= Database::query($sql);
+        $rs	= Database::query($sql);
         $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
 
         if ($type == 'single') {
@@ -171,15 +170,14 @@ function search_users($needle, $type)
             $return .= '</select>';
             $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
         }
-	}
+    }
 
 	return $xajax_response;
 }
 
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_user_to_user (code, content) {
 	document.getElementById("user_to_add").value = "";
 	document.getElementById("ajax_list_users_single").innerHTML = "";
@@ -286,7 +284,7 @@ if (!empty($filters) && !empty($filterData)) {
 
 $msg = '';
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
-	$user_list = $_POST['UsersList'];
+    $user_list = $_POST['UsersList'];
 
     switch ($userStatus) {
         case DRH:
@@ -388,7 +386,8 @@ if (!empty($conditions)) {
 
 if (api_is_multiple_url_enabled()) {
 	$sql = "SELECT user.user_id, username, lastname, firstname
-	        FROM $tbl_user user  LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
+	        FROM $tbl_user user  LEFT JOIN $tbl_access_url_rel_user au 
+	        ON (au.user_id = user.user_id)
 			WHERE
                 $without_assigned_users
                 user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND

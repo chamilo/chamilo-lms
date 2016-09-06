@@ -615,14 +615,19 @@ class Event
                 'hotspot_correct' => $correct,
                 'hotspot_coordinate' => $coords
             );
-            Database::update($tbl_track_e_hotspot, $params,
-                array('hotspot_user_id = ? AND hotspot_exe_id = ? AND hotspot_question_id = ? AND hotspot_answer_id = ? ' => array(
-                    api_get_user_id(),
-                    $exe_id,
-                    $question_id,
-                    $answer_id,
-                    $answer_id
-                )));
+            Database::update(
+                $tbl_track_e_hotspot,
+                $params,
+                array(
+                    'hotspot_user_id = ? AND hotspot_exe_id = ? AND hotspot_question_id = ? AND hotspot_answer_id = ? ' => array(
+                        api_get_user_id(),
+                        $exe_id,
+                        $question_id,
+                        $answer_id,
+                        $answer_id
+                    )
+                )
+            );
 
         } else {
             return Database::insert(
@@ -728,8 +733,7 @@ class Event
     /**
      * Get every email stored in the database
      *
-     * @param int $etId
-     * @return type
+     * @return array
      * @assert () !== false
      */
     public static function get_all_event_types()
@@ -767,6 +771,7 @@ class Event
                 ON relUser.user_id = user.user_id
                 WHERE user.status <> '.ANONYMOUS.' AND relUser.event_type_name = "'.$event_name.'"';
         $user_list = Database::store_result(Database::query($sql), 'ASSOC');
+
         return json_encode($user_list);
     }
 
@@ -915,14 +920,14 @@ class Event
         $sql = "SELECT count(*) as count
                 FROM $stat_table
                 WHERE
-                    exe_exo_id 				= $exerciseId AND
-                    exe_user_id 			= $user_id AND
-                    status 			   	   != 'incomplete' AND
-                    orig_lp_id 				= $lp_id AND
-                    orig_lp_item_id 		= $lp_item_id AND
-                    orig_lp_item_view_id 	= $lp_item_view_id AND
-                    c_id 			        = '".api_get_course_int_id()."' AND
-                    session_id 				= '".api_get_session_id()."'";
+                    exe_exo_id = $exerciseId AND
+                    exe_user_id = $user_id AND
+                    status != 'incomplete' AND
+                    orig_lp_id = $lp_id AND
+                    orig_lp_item_id = $lp_item_id AND
+                    orig_lp_item_view_id = $lp_item_view_id AND
+                    c_id = '".api_get_course_int_id()."' AND
+                    session_id = '".api_get_session_id()."'";
 
         $query = Database::query($sql);
         if (Database::num_rows($query) > 0) {
@@ -1246,9 +1251,8 @@ class Event
 
     /**
      * Gets exercise results (NO Exercises in LPs) from a given exercise id, course, session
-     * @param   int     exercise id
-     * @param   string  course code
-     * @param   int     session id
+     * @param   int     $exe_id exercise id
+     * @param string $status
      * @return  array   with the results
      *
      */
@@ -1301,8 +1305,15 @@ class Event
      * @return  array   with the results
      *
      */
-    public static function getExerciseResultsByUser($user_id, $exercise_id, $courseId, $session_id = 0, $lp_id = 0, $lp_item_id = 0, $order = null)
-    {
+    public static function getExerciseResultsByUser(
+        $user_id,
+        $exercise_id,
+        $courseId,
+        $session_id = 0,
+        $lp_id = 0,
+        $lp_item_id = 0,
+        $order = null
+    ) {
         $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_track_attempt_recording = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
@@ -1388,7 +1399,7 @@ class Event
     }
 
     /**
-     * Gets all exercise BEST results attempts (NO Exercises in LPs ) from a given exercise id, course, session per user
+     * Gets all exercise BEST results attempts (NO Exercises in LPs) from a given exercise id, course, session per user
      * @param   int     $exercise_id
      * @param   int     $courseId
      * @param   int     $session_id
@@ -1472,12 +1483,7 @@ class Event
         $res = Database::query($sql);
         $list = array();
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $list[$row['exe_id']] = $row;  /*
-              $sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
-              $res_question = Database::query($sql);
-              while($row_q = Database::fetch_array($res_question,'ASSOC')) {
-              $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
-              } */
+            $list[$row['exe_id']] = $row;
         }
         //Getting the best results of every student
         $best_score_return = array();
@@ -1529,7 +1535,7 @@ class Event
     }
 
     /**
-     * Gets all exercise BEST results attempts (NO Exercises in LPs ) from a given exercise id, course, session per user
+     * Gets all exercise BEST results attempts (NO Exercises in LPs) from a given exercise id, course, session per user
      * @param   int     exercise id
      * @param   int   course id
      * @param   int     session id
@@ -1561,9 +1567,9 @@ class Event
 
     /**
      * Gets all exercise events from a Learning Path within a Course 	nd Session
-     * @param	int		exercise id
-     * @param	int	$courseId
-     * @param 	int		session id
+     * @param	int $exercise_id
+     * @param	int $courseId
+     * @param 	int $session_id
      * @return 	array
      */
     public static function get_all_exercise_event_from_lp($exercise_id, $courseId, $session_id = 0)
@@ -1634,13 +1640,14 @@ class Event
     public static function get_comments($exe_id, $question_id)
     {
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $sql = "SELECT teacher_comment FROM ".$table_track_attempt."
+        $sql = "SELECT teacher_comment 
+                FROM $table_track_attempt
                 WHERE
                     exe_id='".Database::escape_string($exe_id)."' AND
                     question_id = '".Database::escape_string($question_id)."'
                 ORDER by question_id";
         $sqlres = Database::query($sql);
-        $comm = Database::result($sqlres, 0, "teacher_comment");
+        $comm = Database::result($sqlres, 0, 'teacher_comment');
 
         return $comm;
     }

@@ -7,7 +7,13 @@
 class EventEmailTemplate extends Model
 {
     public $table;
-    public $columns = array('id', 'message', 'subject', 'event_type_name', 'activated');
+    public $columns = array(
+        'id',
+        'message',
+        'subject',
+        'event_type_name',
+        'activated',
+    );
 
     /**
      * Constructor

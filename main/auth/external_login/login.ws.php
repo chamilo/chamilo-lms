@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 // External login module : WS (for Web Services)
 /**
  *
  * This file is included in main/inc/local.inc.php at user login if the user
  * have 'ws' in his auth_source field instead of 'platform'.
  */
-
-use ChamiloSession as Session;
 
 // Configure the web service URL here. e.g. http://174.1.1.19:8020/login.asmx?WSDL
 $wsUrl = '';
@@ -21,7 +21,7 @@ $isValid = loginWSAuthenticate($login, $password, $wsUrl);
 // if the authentication was successful, proceed
 if ($isValid === 1) {
     //error_log('WS authentication worked');
-    $chamiloUser = api_get_user_info($login);
+    $chamiloUser = api_get_user_info_from_username($login);
     $loginFailed = false;
     $_user['user_id'] = $chamiloUser['user_id'];
     $_user['status'] = (isset($chamiloUser['status']) ? $chamiloUser['status'] : 5);

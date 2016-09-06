@@ -65,13 +65,6 @@ class TrackEAttempt
     private $marks;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
-     */
-    private $courseCode;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
@@ -253,29 +246,6 @@ class TrackEAttempt
     public function getMarks()
     {
         return $this->marks;
-    }
-
-    /**
-     * Set courseCode
-     *
-     * @param string $courseCode
-     * @return TrackEAttempt
-     */
-    public function setCourseCode($courseCode)
-    {
-        $this->courseCode = $courseCode;
-
-        return $this;
-    }
-
-    /**
-     * Get courseCode
-     *
-     * @return string
-     */
-    public function getCourseCode()
-    {
-        return $this->courseCode;
     }
 
     /**

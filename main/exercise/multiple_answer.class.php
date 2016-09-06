@@ -23,8 +23,8 @@ class MultipleAnswer extends Question
     public function __construct()
     {
         parent::__construct();
-        $this -> type = MULTIPLE_ANSWER;
-        $this -> isContent = $this-> getIsContent();
+        $this->type = MULTIPLE_ANSWER;
+        $this->isContent = $this->getIsContent();
     }
 
     /**

@@ -633,11 +633,9 @@ class ExerciseLib
                          */
                         if ($origin !== null) {
                             global $exe_id;
-                            $trackAttempts = Database::get_main_table(
-                                TABLE_STATISTIC_TRACK_E_ATTEMPT
-                            );
+                            $trackAttempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
                             $sql = 'SELECT answer FROM ' . $trackAttempts . '
-                                WHERE exe_id=' . $exe_id . ' AND question_id=' . $questionId;
+                                    WHERE exe_id=' . $exe_id . ' AND question_id=' . $questionId;
                             $rsLastAttempt = Database::query($sql);
                             $rowLastAttempt = Database::fetch_array($rsLastAttempt);
                             $answer = $rowLastAttempt['answer'];

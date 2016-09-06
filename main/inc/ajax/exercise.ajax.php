@@ -229,7 +229,6 @@ switch ($action) {
 
         // Use have permissions?
         if (api_is_allowed_to_session_edit()) {
-
             // "all" or "simple" strings means that there's one or all questions exercise type
             $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
@@ -407,7 +406,7 @@ switch ($action) {
                         $session_id,
                         $my_question_id
                     );
-                    if ($objQuestionTmp->type  == HOT_SPOT) {
+                    if ($objQuestionTmp->type == HOT_SPOT) {
                         Event::delete_attempt_hotspot(
                             $exe_id,
                             api_get_user_id(),

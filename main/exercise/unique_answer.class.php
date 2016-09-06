@@ -310,7 +310,6 @@ class UniqueAnswer extends Question
             $answer = trim($form->getSubmitValue('answer[' . $i . ']'));
             $comment = trim($form->getSubmitValue('comment[' . $i . ']'));
             $weighting = trim($form->getSubmitValue('weighting[' . $i . ']'));
-
             $scenario = $form->getSubmitValue('scenario');
 
             //$list_destination = $form -> getSubmitValue('destination'.$i);
@@ -340,7 +339,7 @@ class UniqueAnswer extends Question
                 $destination_str.=$destination_id.';';
             }*/
 
-            $goodAnswer = ($correct == $i) ? true : false;
+            $goodAnswer = $correct == $i ? true : false;
 
             if ($goodAnswer) {
                 $nbrGoodAnswers++;

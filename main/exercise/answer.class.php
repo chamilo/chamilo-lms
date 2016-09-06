@@ -662,7 +662,6 @@ class Answer
                     )) {
                         $answer = new Answer($this->questionId);
                         $answer->read();
-
                         $correctAnswerId = $answer->selectAnswerIdByPosition($correct);
 
 						// Continue to avoid matching question bug if $correctAnswerId returns false
@@ -672,7 +671,6 @@ class Answer
 						}
 
                         $correctAnswerAutoId = $answer->selectAutoId($correct);
-
                         $quizAnswer->setCorrect($correctAnswerAutoId ? $correctAnswerAutoId : 0);
 
                         $em->merge($quizAnswer);

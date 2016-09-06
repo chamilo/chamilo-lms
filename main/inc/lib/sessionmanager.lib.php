@@ -2929,7 +2929,8 @@ class SessionManager
                             relation_type=" . SESSION_RELATION_TYPE_RRHH . " AND
                             access_url_id = " . api_get_current_access_url_id() . "";
             } else {
-                $sql = "SELECT session_id FROM $tbl_session_rel_user s
+                $sql = "SELECT s.session_id 
+                        FROM $tbl_session_rel_user s
                         WHERE user_id = $userId AND relation_type=" . SESSION_RELATION_TYPE_RRHH . "";
             }
             $result = Database::query($sql);

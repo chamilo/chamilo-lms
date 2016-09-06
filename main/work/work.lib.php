@@ -3592,6 +3592,12 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
         $title = get_lang('Untitled');
     }
 
+    $groupIid = null;
+    if (!empty($groupId)) {
+        $groupInfo = GroupManager::get_group_properties($groupId);
+        $groupIid = $groupInfo['iid'];
+    }
+
     if ($saveWork) {
         $active = '1';
         $params = [
@@ -3607,14 +3613,13 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
             'document_id' => 0,
             'weight' => 0,
             'allow_text_assignment' => 0,
-            'post_group_id' => $groupId,
+            'post_group_id' => $groupIid,
             'sent_date' => api_get_utc_datetime(),
             'parent_id' => $workInfo['id'],
             'session_id' => $sessionId ? $sessionId : null,
             'user_id' => $userId,
             'has_properties' => 0,
             'qualification' => 0
-
             //'filesize' => $filesize
         ];
         $workId = Database::insert($work_table, $params);
@@ -3644,7 +3649,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
                 $workId,
                 'DocumentAdded',
                 $userId,
-                $groupId
+                $groupIid
             );
             sendAlertToUsers($workId, $courseInfo, $sessionId);
             Event::event_upload($workId);

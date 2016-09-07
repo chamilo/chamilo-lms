@@ -4161,9 +4161,6 @@ class SessionManager
                     continue;
                 }
 
-                $date_start = $enreg['DateStart'];
-                $date_end = $enreg['DateEnd'];
-
                 $dateStart = explode('/', $enreg['DateStart']);
                 $dateEnd = explode('/', $enreg['DateEnd']);
                 $dateStart = $dateStart[0].'-'.$dateStart[1].'-'.$dateStart[2].' 00:00:00';
@@ -4383,7 +4380,6 @@ class SessionManager
                             }
 
                             $sessionInfo = api_get_session_info($session_id);
-
                             $params['show_description'] = isset($sessionInfo['show_description']) ? $sessionInfo['show_description'] : intval($showDescription);
 
                             if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
@@ -4402,7 +4398,7 @@ class SessionManager
                                 }
                             }
 
-                            Database::update($tbl_session, $params, array('id = ?' => $session_id));
+                            Database::update($tbl_session, $params, array('id = ?' => $session_id), true);
 
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field

@@ -450,7 +450,6 @@ class Database
     ) {
         if (!empty($tableName) && !empty($attributes)) {
             $updateSql = '';
-            //Cleaning attributes
             $count = 1;
 
             if ($showQuery) {
@@ -477,7 +476,7 @@ class Database
                 if ($showQuery) {
                     var_dump($sql);
                     var_dump($attributes);
-                    var_dump($where_conditions);
+                    var_dump($whereConditions);
                 }
 
                 if ($result) {
@@ -518,11 +517,11 @@ class Database
             }
         }
 
-        $sql    = "SELECT $clean_columns FROM $table_name $conditions";
+        $sql = "SELECT $clean_columns FROM $table_name $conditions";
         $result = self::query($sql);
         $array = array();
 
-        if ($type_result == 'all') {
+        if ($type_result === 'all') {
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {
                     $array[$row['id']] = $row;

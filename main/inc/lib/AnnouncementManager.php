@@ -192,7 +192,7 @@ class AnnouncementManager
             $dql = "SELECT CA, IP
                     FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
                     WHERE
-                        CA.id = IP.ref AND
+                        CA.iid = IP.ref AND
                         CA.iid = :announcement AND
                         IP.tool = 'announcement' AND
                         CA.cId = IP.course AND
@@ -209,7 +209,7 @@ class AnnouncementManager
                 $dql = "SELECT CA, IP
                     FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
                     WHERE
-                        CA.id = IP.ref AND
+                        CA.iid = IP.ref AND
                         CA.iid = :announcement AND
                         IP.tool='announcement' AND
                         (
@@ -225,7 +225,7 @@ class AnnouncementManager
                 $dql = "SELECT CA, IP
                         FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
                         WHERE
-                            CA.id = IP.ref AND
+                            CA.iid = IP.ref AND
                             CA.iid = :announcement AND
                             IP.tool = 'announcement' AND
                             (IP.group = '0' OR IP.group IS NULL) AND
@@ -262,6 +262,11 @@ class AnnouncementManager
 
         $html = '';
         $result = self::getAnnouncementInfoById($announcement_id, api_get_course_int_id(), api_get_user_id());
+
+        if (empty($result['announcement'])) {
+            return '';
+        }
+
         $title = $result['announcement']->getTitle();
         $content = $result['announcement']->getContent();
         $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";

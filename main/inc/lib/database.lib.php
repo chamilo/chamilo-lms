@@ -472,6 +472,7 @@ class Database
 
                 if ($show_query) {
                     var_dump($sql);
+                    var_dump($attributes);
                 }
 
                 if ($result) {
@@ -551,11 +552,10 @@ class Database
             $type_condition = strtolower($type_condition);
             switch ($type_condition) {
                 case 'where':
-
                     foreach ($condition_data as $condition => $value_array) {
                         if (is_array($value_array)) {
                             $clean_values = array();
-                            foreach($value_array as $item) {
+                            foreach ($value_array as $item) {
                                 $item = Database::escape_string($item);
                                 $clean_values[]= $item;
                             }
@@ -565,17 +565,17 @@ class Database
                         }
 
                         if (!empty($condition) && $clean_values != '') {
-                            $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
-                            $condition = str_replace("'?'","%s", $condition);
-                            $condition = str_replace("?","%s", $condition);
+                            $condition = str_replace('%', "'@percentage@'", $condition); //replace "%"
+                            $condition = str_replace("'?'", "%s", $condition);
+                            $condition = str_replace("?", "%s", $condition);
 
-                            $condition = str_replace("@%s@","@-@", $condition);
-                            $condition = str_replace("%s","'%s'", $condition);
-                            $condition = str_replace("@-@","@%s@", $condition);
+                            $condition = str_replace("@%s@", "@-@", $condition);
+                            $condition = str_replace("%s", "'%s'", $condition);
+                            $condition = str_replace("@-@", "@%s@", $condition);
 
                             // Treat conditions as string
                             $condition = vsprintf($condition, $clean_values);
-                            $condition = str_replace('@percentage@','%', $condition); //replace "%"
+                            $condition = str_replace('@percentage@', '%', $condition); //replace "%"
                             $where_return .= $condition;
                         }
                     }
@@ -593,7 +593,7 @@ class Database
                         $new_order_array = explode(',', $order_array);
                         $temp_value = array();
 
-                        foreach($new_order_array as $element) {
+                        foreach ($new_order_array as $element) {
                             $element = explode(' ', $element);
                             $element = array_filter($element);
                             $element = array_values($element);
@@ -612,8 +612,6 @@ class Database
                         }
                         if (!empty($temp_value)) {
                             $return_value .= ' ORDER BY '.implode(', ', $temp_value);
-                        } else {
-                            //$return_value .= '';
                         }
                     }
                     break;
@@ -622,7 +620,7 @@ class Database
                     if (!empty($limit_array)) {
                         if (count($limit_array) > 1) {
                             $return_value .= ' LIMIT '.intval($limit_array[0]).' , '.intval($limit_array[1]);
-                        }  else {
+                        } else {
                             $return_value .= ' LIMIT '.intval($limit_array[0]);
                         }
                     }

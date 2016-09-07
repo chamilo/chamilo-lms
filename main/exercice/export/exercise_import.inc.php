@@ -163,6 +163,10 @@ function import_exercise($file)
             //2. Create question
             $question = new Ims2Question();
             $question->type = $question_array['type'];
+            if (empty($question->type)) {
+                // If the type was not provided, assume this is a multiple choice, unique answer type (the most basic)
+                $question->type = MCUA;
+            }
             $question->setAnswer();
             if (strlen($question_array['title']) < 50) {
                 $question->updateTitle(formatText(strip_tags($question_array['title'])) . '...');

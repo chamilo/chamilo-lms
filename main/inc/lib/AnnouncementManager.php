@@ -263,12 +263,13 @@ class AnnouncementManager
         $html = '';
         $result = self::getAnnouncementInfoById($announcement_id, api_get_course_int_id(), api_get_user_id());
 
-        if (empty($result['announcement'])) {
+        if (empty($result['announcement']) || empty($result['item_property'])) {
             return '';
         }
 
         $title = $result['announcement']->getTitle();
         $content = $result['announcement']->getContent();
+
         $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
         $html .= "<tr><td><h2>" . $title . "</h2></td></tr>";
 
@@ -286,7 +287,7 @@ class AnnouncementManager
             }
             global $stok;
 
-            $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&origin=" . (!empty($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '') . "&action=showhide&id=" . $announcement_id . "&sec_token=" . $stok . "\">" .
+            $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=showhide&id=" . $announcement_id . "&sec_token=" . $stok . "\">" .
                 Display::return_icon($image_visibility . '.png', $alt_visibility, '', ICON_SIZE_SMALL) . "</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
@@ -297,7 +298,12 @@ class AnnouncementManager
             $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
         }
 
-        $content = self::parse_content($result['item_property']->getToUser()->getId(), $content, api_get_course_id(), api_get_session_id());
+        $content = self::parse_content(
+            $result['item_property']->getToUser()->getId(),
+            $content,
+            api_get_course_id(),
+            api_get_session_id()
+        );
 
         $html .= "<tr><td>$content</td></tr>";
         $html .= "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " . api_convert_and_format_date(

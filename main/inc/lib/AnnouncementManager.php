@@ -192,8 +192,8 @@ class AnnouncementManager
             $dql = "SELECT CA, IP
                     FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
                     WHERE
-                        CA.iid = IP.ref AND
-                        CA.iid = :announcement AND
+                        CA.id = IP.ref AND
+                        CA.id = :announcement AND
                         IP.tool = 'announcement' AND
                         CA.cId = IP.course AND
                         CA.cId = :course
@@ -209,8 +209,8 @@ class AnnouncementManager
                 $dql = "SELECT CA, IP
                     FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
                     WHERE
-                        CA.iid = IP.ref AND
-                        CA.iid = :announcement AND
+                        CA.id = IP.ref AND
+                        CA.id = :announcement AND
                         IP.tool='announcement' AND
                         (
                             IP.toUser = $userId OR
@@ -225,8 +225,8 @@ class AnnouncementManager
                 $dql = "SELECT CA, IP
                         FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
                         WHERE
-                            CA.iid = IP.ref AND
-                            CA.iid = :announcement AND
+                            CA.id = IP.ref AND
+                            CA.id = :announcement AND
                             IP.tool = 'announcement' AND
                             (IP.group = '0' OR IP.group IS NULL) AND
                             IP.visibility = '1' AND

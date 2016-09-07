@@ -2402,7 +2402,7 @@ class SessionManager
 
     /**
      * Get the session information by name
-     * @param string session name
+     * @param string $session_name
      * @return mixed false if the session does not exist, array if the session exist
      * */
     public static function get_session_by_name($session_name)
@@ -4284,7 +4284,6 @@ class SessionManager
                         $my_session_result = self::get_session_by_name($enreg['SessionName']);
                     }
 
-
                     if ($my_session_result === false) {
 
                         // Creating a session.
@@ -4338,10 +4337,6 @@ class SessionManager
                             }
                         }
                     } else {
-                        if ($debug) {
-                            $logger->addError("Sessions - Session to be updated: $session_name");
-                        }
-
                         // Updating the session.
                         $params = array(
                             'id_coach' => $coach_id,
@@ -4369,8 +4364,12 @@ class SessionManager
                             }
                             $session_id = $sessionId;
                         } else {
-                            $row = Database::query("SELECT id FROM $tbl_session WHERE name = '$session_name'");
-                            list($session_id) = Database::fetch_array($row);
+                            $my_session_result = SessionManager::get_session_by_name($session_name);
+                            $session_id = $my_session_result['id'];
+                        }
+
+                        if ($debug) {
+                            $logger->addError("Sessions - Session #$session_id to be updated: '$session_name'");
                         }
 
                         if ($session_id) {

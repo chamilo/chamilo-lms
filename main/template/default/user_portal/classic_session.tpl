@@ -102,7 +102,7 @@
                                     <div class="col-md-10">
                                         <h4>{{ item.title }}</h4>
                                         <div class="list-teachers">
-                                            {% if item.teachers|length > 0 %}
+                                            {% if item.coaches|length > 0 %}
                                                 <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">&nbsp;
                                                 {% for coach in item.coaches %}
                                                     {{ loop.index > 1 ? ' | ' }}

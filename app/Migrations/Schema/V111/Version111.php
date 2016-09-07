@@ -298,6 +298,7 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE extra_field_options CHANGE display_text display_text VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE extra_field CHANGE variable variable VARCHAR(255) NOT NULL');
         $this->addSql('ALTER TABLE c_course_setting MODIFY COLUMN value TEXT');
+        $this->addSql("ALTER TABLE session MODIFY COLUMN name VARCHAR(150) NOT NULL DEFAULT ''");
 
         if (!$schema->hasTable('version')) {
             $this->addSql('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));');

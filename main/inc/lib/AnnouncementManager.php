@@ -30,7 +30,7 @@ class AnnouncementManager
             '((teacher_email))',
             '((course_title))',
             '((course_link))',
-            '((official_code))',
+            '((official_code))'
         );
     }
 
@@ -46,11 +46,12 @@ class AnnouncementManager
     {
         $readerInfo = api_get_user_info($userId);
         $courseInfo = api_get_course_info($course_code);
-        $teacher_list = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
+        $teacherList = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
 
+        $teacher_email = '';
         $teacher_name = '';
-        if (!empty($teacher_list)) {
-            foreach ($teacher_list as $teacher_data) {
+        if (!empty($teacherList)) {
+            foreach ($teacherList as $teacher_data) {
                 $teacher_name = api_get_person_name($teacher_data['firstname'], $teacher_data['lastname']);
                 $teacher_email = $teacher_data['email'];
                 break;
@@ -58,16 +59,16 @@ class AnnouncementManager
         }
 
         $courseLink = api_get_course_url($course_code, $session_id);
-
-        $data['user_name'] = $readerInfo['username'];
-        $data['user_firstname'] = $readerInfo['firstname'];
-        $data['user_lastname'] = $readerInfo['lastname'];
+        if (!empty($readerInfo)) {
+            $data['user_name'] = $readerInfo['username'];
+            $data['user_firstname'] = $readerInfo['firstname'];
+            $data['user_lastname'] = $readerInfo['lastname'];
+            $data['official_code'] = $readerInfo['official_code'];
+        }
         $data['teacher_name'] = $teacher_name;
         $data['teacher_email'] = $teacher_email;
         $data['course_title'] = $courseInfo['name'];
         $data['course_link'] = Display::url($courseLink, $courseLink);
-        $data['official_code'] = $readerInfo['official_code'];
-
         $content = str_replace(self::get_tags(), $data, $content);
 
         return $content;
@@ -262,13 +263,17 @@ class AnnouncementManager
 
         $html = '';
         $result = self::getAnnouncementInfoById($announcement_id, api_get_course_int_id(), api_get_user_id());
+        /** @var \Chamilo\CourseBundle\Entity\CAnnouncement $announcement */
+        $announcement = $result['announcement'];
+        /** @var \Chamilo\CourseBundle\Entity\CItemProperty $itemProperty */
+        $itemProperty = $result['announcement'];
 
-        if (empty($result['announcement']) || empty($result['item_property'])) {
+        if (!empty($announcement) || !empty($itemProperty)) {
             return '';
         }
 
-        $title = $result['announcement']->getTitle();
-        $content = $result['announcement']->getContent();
+        $title = $announcement->getTitle();
+        $content = $announcement->getContent();
 
         $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
         $html .= "<tr><td><h2>" . $title . "</h2></td></tr>";
@@ -278,7 +283,7 @@ class AnnouncementManager
         ) {
             $modify_icons = "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=modify&id=" . $announcement_id . "\">" .
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . "</a>";
-            if ($result['item_property']->getVisibility() == 1) {
+            if ($itemProperty->getVisibility() == 1) {
                 $image_visibility = "visible";
                 $alt_visibility = get_lang('Hide');
             } else {
@@ -298,8 +303,11 @@ class AnnouncementManager
             $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
         }
 
+        $toUser = $itemProperty->getToUser();
+        $toUserId = !empty($toUser) ? $toUser : 0;
+
         $content = self::parse_content(
-            $result['item_property']->getToUser()->getId(),
+            $toUserId,
             $content,
             api_get_course_id(),
             api_get_session_id()
@@ -307,10 +315,10 @@ class AnnouncementManager
 
         $html .= "<tr><td>$content</td></tr>";
         $html .= "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " . api_convert_and_format_date(
-            $result['item_property']->getInsertDate(), DATE_TIME_FORMAT_LONG
+            $itemProperty->getInsertDate(), DATE_TIME_FORMAT_LONG
         ) . "</td></tr>";
 
-        if ($result['item_property']->getGroup() !== null) {
+        if ($itemProperty->getGroup() !== null) {
             $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
         }
         if (api_is_allowed_to_edit(false, true)) {

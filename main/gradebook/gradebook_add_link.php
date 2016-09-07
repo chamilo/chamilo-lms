@@ -114,10 +114,12 @@ if (isset($typeSelected) && $typeSelected != '0') {
             if ($row[0] == 0) {
                 $link->add();
                 $sql = 'UPDATE '.$tbl_forum_thread.' SET
-                            thread_qualify_max='.$addvalues['weight'].',
-                            thread_weight='.$addvalues['weight'].',
-                            thread_title_qualify="'.$rowtit[0].'"
-						WHERE thread_id='.$addvalues['select_link'].' AND c_id = '.$course_info['real_id'].' ';
+                            thread_qualify_max= "'.$addvalues['weight'].'",
+                            thread_weight= "'.$addvalues['weight'].'",
+                            thread_title_qualify = "'.$rowtit[0].'"
+						WHERE 
+						    thread_id='.$addvalues['select_link'].' AND 
+						    c_id = '.$course_info['real_id'].' ';
                 Database::query($sql);
             }
         }

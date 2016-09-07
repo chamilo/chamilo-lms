@@ -4399,7 +4399,7 @@ class SessionManager
                                 }
                             }
 
-                            Database::update($tbl_session, $params, array('id = ?' => $session_id), true);
+                            Database::update($tbl_session, $params, array('id = ?' => $session_id));
 
 
                             foreach ($enreg as $key => $value) {

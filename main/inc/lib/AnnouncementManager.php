@@ -177,9 +177,18 @@ class AnnouncementManager
         }
     }
 
+    /**
+     * @param int $announcementId
+     * @param int $courseId
+     * @param int $userId
+     *
+     * @return array
+     */
     public static function getAnnouncementInfoById($announcementId, $courseId, $userId)
     {
-        if (api_is_allowed_to_edit(false, true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+        if (api_is_allowed_to_edit(false, true) ||
+            (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+        ) {
             $dql = "SELECT CA, IP
                     FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
                     WHERE
@@ -187,7 +196,7 @@ class AnnouncementManager
                         CA.iid = :announcement AND
                         IP.tool = 'announcement' AND
                         CA.cId = IP.course AND
-                        CA.cId = :course AND
+                        CA.cId = :course
                     ORDER BY CA.displayOrder DESC";
         } else {
             $group_list = GroupManager::get_group_ids($courseId, api_get_user_id());
@@ -214,8 +223,8 @@ class AnnouncementManager
                     ORDER BY CA.displayOrder DESC";
             } else {
                 $dql = "SELECT CA, IP
-                    FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
-                    WHERE
+                        FROM ChamiloCourseBundle:CAnnouncement CA, ChamiloCourseBundle:CItemProperty IP
+                        WHERE
                             CA.id = IP.ref AND
                             CA.iid = :announcement AND
                             IP.tool = 'announcement' AND

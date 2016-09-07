@@ -44,6 +44,17 @@ a:focus {
 .title a:hover{
     color: #666;
 }
+.title-green{
+    position: static;
+    font-size: 25px;
+    margin-top: 32px;
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: #96BD0D;
+}
+.title-green a:hover{
+    color: #666;
+}
 .list-faq{
     border: 1px solid #e5e5e5;
     border-radius: 5px;
@@ -64,7 +75,7 @@ a:focus {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 30px;
-    color: #E72D40;
+    color: #07578A;
 }
 .page-faq{
     padding-left: 30px;

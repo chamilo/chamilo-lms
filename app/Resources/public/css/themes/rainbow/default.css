@@ -22,7 +22,7 @@ a {
 }
 a:hover,
 a:focus {
-  color: #E2007A;
+  color: #666;
   text-decoration: none;
 }
 a:focus {
@@ -39,7 +39,10 @@ a:focus {
     margin-top: 32px;
     margin-bottom: 12px;
     font-weight: bold;
-    color: #E72D40;
+    color: #07578A;
+}
+.title a:hover{
+    color: #666;
 }
 .list-faq{
     border: 1px solid #e5e5e5;
@@ -283,8 +286,8 @@ a:focus {
    background-color: transparent;
 }
 .btn-primary{
-    background-color: #009EE0;
-    border-color: #009EE0;
+    background-color: #162A83;
+    border-color: #162A83;
 }
 .btn-primary:hover{
     background-color: #000080;

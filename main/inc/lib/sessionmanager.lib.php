@@ -4359,10 +4359,13 @@ class SessionManager
                         }
 
                         if (isset($sessionId) && !empty($sessionId)) {
-                            if (!empty($enreg['SessionName'])) {
-                                $params['name'] = $enreg['SessionName'];
-                            }
                             $session_id = $sessionId;
+                            if (!empty($enreg['SessionName'])) {
+                                ///$params['name'] = $enreg['SessionName'];
+                                $sessionName = $enreg['SessionName'];
+                                $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
+                                Database::query($sql);
+                            }
                         } else {
                             $my_session_result = SessionManager::get_session_by_name($session_name);
                             $session_id = $my_session_result['id'];
@@ -4373,7 +4376,6 @@ class SessionManager
                         }
 
                         if ($session_id) {
-
                             if ($debug) {
                                 $logger->addError("Sessions - Session to be updated #$session_id");
                             }

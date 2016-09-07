@@ -175,12 +175,18 @@ class StudentPublicationLink extends AbstractLink
 		$dql = 'SELECT a FROM ChamiloCourseBundle:CStudentPublication a
     			WHERE
     				a.cId = :course AND
-    				active = 1 AND
-    				parent_id = :parent AND
-    				session_id = :session AND
-    				qualificator_id <> 0
+    				a.active = :active AND
+    				a.parentId = :parent AND
+    				a.session = :session AND
+    				a.qualificatorId <> 0
 				';
-        $params = ['course' => $this->course_id, 'parent' => $parentId, 'session' => $session];
+
+        $params = [
+            'course' => $this->course_id,
+            'parent' => $parentId,
+            'session' => $session,
+            'active' => true
+        ];
 
 		if (!empty($stud_id)) {
 		    $dql .= ' AND a.userId = :student ';
@@ -201,7 +207,7 @@ class StudentPublicationLink extends AbstractLink
 				break;
 		}
 
-        $scores = $em->createQuery($dql)->execute([$params]);
+        $scores = $em->createQuery($dql)->execute($params);
 
 		// for 1 student
 		if (!empty($stud_id)) {

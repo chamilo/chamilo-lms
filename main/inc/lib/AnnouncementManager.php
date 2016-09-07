@@ -283,7 +283,7 @@ class AnnouncementManager
         ) {
             $modify_icons = "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=modify&id=" . $announcement_id . "\">" .
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . "</a>";
-            if ($itemProperty->getVisibility() == 1) {
+            if ($itemProperty->getVisibility() === 1) {
                 $image_visibility = "visible";
                 $alt_visibility = get_lang('Hide');
             } else {
@@ -304,7 +304,7 @@ class AnnouncementManager
         }
 
         $toUser = $itemProperty->getToUser();
-        $toUserId = !empty($toUser) ? $toUser : 0;
+        $toUserId = !empty($toUser) ? $toUser->getId() : 0;
 
         $content = self::parse_content(
             $toUserId,

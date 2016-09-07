@@ -266,9 +266,9 @@ class AnnouncementManager
         /** @var \Chamilo\CourseBundle\Entity\CAnnouncement $announcement */
         $announcement = $result['announcement'];
         /** @var \Chamilo\CourseBundle\Entity\CItemProperty $itemProperty */
-        $itemProperty = $result['announcement'];
+        $itemProperty = $result['item_property'];
 
-        if (!empty($announcement) || !empty($itemProperty)) {
+        if (empty($announcement) || empty($itemProperty)) {
             return '';
         }
 

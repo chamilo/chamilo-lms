@@ -434,50 +434,53 @@ class Database
     }
 
     /**
-     * @param string $table_name use Database::get_main_table
+     * @param string $tableName use Database::get_main_table
      * @param array $attributes Values to updates
      * Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
-     * @param array $where_conditions where conditions i.e array('id = ?' =>'4')
-     * @param bool $show_query
+     * @param array $whereConditions where conditions i.e array('id = ?' =>'4')
+     * @param bool $showQuery
      *
      * @return bool|int
      */
     public static function update(
-        $table_name,
+        $tableName,
         $attributes,
-        $where_conditions = array(),
-        $show_query = false
+        $whereConditions = array(),
+        $showQuery = false
     ) {
-        if (!empty($table_name) && !empty($attributes)) {
-            $update_sql = '';
+        if (!empty($tableName) && !empty($attributes)) {
+            $updateSql = '';
             //Cleaning attributes
             $count = 1;
 
+            if ($showQuery) {
+                var_dump($attributes);
+            }
+
             foreach ($attributes as $key => $value) {
-                $update_sql .= "$key = :$key ";
+                $updateSql .= "$key = :$key ";
                 if ($count < count($attributes)) {
-                    $update_sql.=', ';
+                    $updateSql.= ', ';
                 }
                 $count++;
             }
 
-            if (!empty($update_sql)) {
+            if (!empty($updateSql)) {
                 //Parsing and cleaning the where conditions
-                $where_return = self::parse_where_conditions($where_conditions);
+                $whereReturn = self::parse_where_conditions($whereConditions);
 
-                $sql = "UPDATE $table_name SET $update_sql $where_return ";
-
+                $sql = "UPDATE $tableName SET $updateSql $whereReturn ";
                 $statement = self::getManager()->getConnection()->prepare($sql);
+
                 $result = $statement->execute($attributes);
 
-                if ($show_query) {
+                if ($showQuery) {
                     var_dump($sql);
                     var_dump($attributes);
                     var_dump($where_conditions);
                 }
 
                 if ($result) {
-
                     return $statement->rowCount();
                 }
             }

@@ -4399,6 +4399,7 @@ class SessionManager
 
                             Database::update($tbl_session, $params, array('id = ?' => $session_id), true);
 
+
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);

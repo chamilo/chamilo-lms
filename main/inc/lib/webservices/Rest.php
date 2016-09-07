@@ -33,6 +33,7 @@ class Rest extends WebService
     const ACTION_COURSE_FORUM_THREAD = 'course_forumthread';
     const ACTION_COURSE_LEARNPATHS = 'course_learnpaths';
     const ACTION_COURSE_LEARNPATH = 'course_learnpath';
+    const ACTION_SAVE_FORUM_POST = 'save_forum_post';
 
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
@@ -828,5 +829,24 @@ class Rest extends WebService
 
         header("Location: $url");
         exit;
+    }
+
+    /**
+     * @param array $postValues
+     * @param int $forumId
+     * @param int $courseId
+     * @return array
+     */
+    public function saveForumPost(array $postValues, $forumId, $courseId)
+    {
+        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+
+        $forum = get_forums($forumId);
+
+        store_reply($forum, $postValues, $courseId, $this->user->getId());
+
+        return [
+            'registered' => true
+        ];
     }
 }

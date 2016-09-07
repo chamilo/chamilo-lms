@@ -166,6 +166,30 @@ try {
             $restApi->showLearningPath($lpId, $cidReq);
             break;
 
+        case Rest::ACTION_SAVE_FORUM_POST:
+            if (
+                empty($_POST['title']) || empty($_POST['text']) || empty($_POST['thread']) || empty($_POST['forum']) ||
+                empty($_POST['notify']) || empty($_POST['parent']) || empty($_POST['course'])
+            ) {
+                throw new Exception(get_lang('NoData'));
+            }
+
+            $courseId = intval($_POST['course']);
+
+            $postValues = [
+                'post_title' => $_POST['title'],
+                'post_text' => nl2br($_POST['text']),
+                'thread_id' => $_POST['thread'],
+                'forum_id' => $_POST['forum'],
+                'post_notification' => $_POST['notify'],
+                'post_parent_id' => $_POST['parent']
+            ];
+
+            $data = $restApi->saveForumPost($postValues, $forumId, $courseId);
+
+            $restResponse->setData($data);
+            break;
+
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

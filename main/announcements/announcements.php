@@ -53,6 +53,10 @@ $_course = api_get_course_info_by_id($course_id);
 $group_id = api_get_group_id();
 $sessionId = api_get_session_id();
 
+if (!empty($group_id)) {
+    $group_properties = GroupManager:: get_group_properties($group_id);
+}
+
 api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 
 /*	Tracking	*/
@@ -573,16 +577,14 @@ switch ($action) {
 if (!empty($_GET['remind_inactive'])) {
     $to[] = 'USER:'.intval($_GET['remind_inactive']);
 }
-
 if (!empty($group_id)) {
-    $group_properties = GroupManager:: get_group_properties($group_id);
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
     );
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
+        "name" => get_lang('GroupSpace').' '.$group_properties['name']
     );
 }
 

@@ -473,6 +473,7 @@ class Database
                 if ($show_query) {
                     var_dump($sql);
                     var_dump($attributes);
+                    var_dump($where_conditions);
                 }
 
                 if ($result) {

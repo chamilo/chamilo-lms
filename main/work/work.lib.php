@@ -3592,7 +3592,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
         $title = get_lang('Untitled');
     }
 
-    $groupIid = null;
+    $groupIid = 0;
     if (!empty($groupId)) {
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
@@ -4271,7 +4271,7 @@ function makeInvisible($item_id, $course_info)
  * @param int $item_id
  * @param string $path
  * @param array $courseInfo
- * @param int $groupId
+ * @param int $groupId iid
  * @param int $sessionId
  * @return string
  */

@@ -279,7 +279,8 @@ class NavBuilder extends ContainerAware
                         'route' => 'main',
                         'routeParameters' => array(
                             'name' => 'admin/',
-                        )
+                        ),
+                        'icon' => ' fa fa-cog'
                     )
                 );
             }
@@ -291,6 +292,7 @@ class NavBuilder extends ContainerAware
                     'routeParameters' => array(
                         'name' => 'calendar/agenda_js.php',
                     ),
+                    'icon' => ' fa fa-calendar'
                 )
             );
 
@@ -307,7 +309,8 @@ class NavBuilder extends ContainerAware
                     'route' => 'main',
                     'routeParameters' => array(
                         'name' => 'social/home.php'
-                    )
+                    ),
+                    'icon' => ' fa fa-user'
                 )
             )->setAttribute('divider_append', true);
 
@@ -318,6 +321,7 @@ class NavBuilder extends ContainerAware
                     'routeParameters' => array(
                         'name' => 'messages/inbox.php',
                     ),
+                    'icon' => ' fa fa-envelope'
                 )
             )->setAttribute('divider_append', true);
 
@@ -328,11 +332,12 @@ class NavBuilder extends ContainerAware
                     'routeParameters' => array(
                         'name' => 'gradebook/my_certificates.php',
                     ),
+                    'icon' => ' fa fa-graduation-cap'
                 )
             )->setAttribute('divider_append', true);
 
             // legacy logout
-            $logoutLink = $menu->addChild(
+            $dropdown->addChild(
                 $translator->trans('Logout'),
                 array(
                     'route' => 'main',
@@ -346,16 +351,16 @@ class NavBuilder extends ContainerAware
                 )
             );
 
-            $logoutLink
+            /* $logoutLink
                 ->setLinkAttributes(array(
                     'id' => 'logout_button',
                     //'class' => 'fa fa-power-off',
                 ))
                 ->setAttributes(array(
                     /*'id' => 'signin',
-                    'class' => 'dropdown'*/
+                    'class' => 'dropdown'
                 ))
-            ;
+            ; */
         }
 
         return $menu;

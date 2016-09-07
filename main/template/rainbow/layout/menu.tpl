@@ -38,31 +38,45 @@
                {% if user_notifications is not null %}
                <li><a href="{{ message_url }}">{{ user_notifications }}</a></li>
                {% endif %}
+               
                {% if _u.status != 6 %}
-                <li class="dropdown">
+                <li class="dropdown avatar-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}" />  <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        {% if _u.is_admin == 1 %}
-                            <li class=""><a href="{{ _p.web }}main/admin">{{ "NomPageAdmin"|get_lang }}</a></li>
-                            {% endif %}
-                            <li class=""><a href="{{ _p.web }}main/calendar/agenda_js.php?type=personal">{{ "AllowPersonalAgendaTitle"|get_lang }}</a></li>
-                            <li role="separator" class="divider"></li>
-                        <li>
-                            {{ profile_link }}
-                            {{ message_link }}
-                            {{ certificate_link }}
+                        <li class="user-header">
+                            <div class="text-center">
+                            <img class="img-circle" src="{{ _u.avatar_medium }}" alt="{{ _u.complete_name }}" />
+                            <p class="name"><a href="{{ profile_url }}">{{ _u.complete_name }}</a></p>
+                            <p><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ _u.email }}</p>
+                            </div>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        
+                        <li class="user-body">
+                            <a href="{{ _p.web }}main/admin">
+                                <em class="fa fa-cog" aria-hidden="true"></em>
+                                {{ "NomPageAdmin"|get_lang }}
+                            </a>
+                            <a href="{{ _p.web }}main/calendar/agenda_js.php?type=personal">
+                                <em class="fa fa-calendar" aria-hidden="true"></em>
+                                {{ "AllowPersonalAgendaTitle"|get_lang }}
+                            </a>
+                            <a title="{{ "Inbox"|get_lang }}" href="{{ message_url }}">
+                                <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
+                            </a>
+                            <a title="{{ "MyCertificates"|get_lang }}" href="{{ certificate_url }}">
+                                <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "MyCertificates"|get_lang }}
+                            </a>
+                            <a id="logout_button" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
+                                <em class="fa fa-sign-out"></em> {{ "Logout"|get_lang }}
+                            </a>
                         </li>
                     </ul>
                 </li>
-               {% if logout_link is not null %}
-               <li>
-                   <a id="logout_button" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
-                       <em class="fa fa-sign-out"></em> {{ "Logout"|get_lang }}
-                   </a>
-               </li>
-               {% endif %}
+               
+               
                {% endif %}
             </ul>
             {% endif %}

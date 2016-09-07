@@ -142,7 +142,11 @@
                 </div>
             {% endif %}
             <div class="row">
-                <div class="col-xs-6 col-md-4"></div>
+                <div class="col-xs-6 col-md-4">
+                    <div class="logo pull-left">
+                        <img src="{{ asset('css/themes/'~ theme ~'/images/header-logo.png') }}"/>
+                    </div>
+                </div>
                 <div class="col-xs-6 col-md-4">
                     {% if plugin_header_center is not null %}
                         <div id="plugin_header_center">
@@ -152,7 +156,7 @@
                 </div>
                 <div class="col-xs-6 col-md-4">
                     <div class="logo pull-right">
-                        <img src="{{ asset('css/themes/'~ theme ~'/images/header-logo.png') }}"/>
+                        <img src="{{ asset('css/themes/'~ theme ~'/images/logo-ofaj.png') }}"/>
                     </div>
                 </div>
             </div>

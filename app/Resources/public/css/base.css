@@ -23,8 +23,8 @@ body{
     width: 100%;
     
 }
-#content-section{
-    margin-bottom: 230px;
+#content-section, #page-wrap{
+    margin-bottom: 100px;
 }
 /* End Sticky footer style */
 select {

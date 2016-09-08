@@ -686,11 +686,19 @@ function api_get_path($path = '', $configuration = [])
         }
     }
 
+    // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
+    if (isset($configuration['access_url']) && $configuration['access_url'] != 1) {
+        //we look into the DB the function api_get_access_url
+        $url_info = api_get_access_url($configuration['access_url']);
+        $root_web = $url_info['active'] == 1 ? $url_info['url'] : $configuration['root_web'];
+    }
+
+
     if (empty($paths)) {
         $paths = [];
     }
-    $paths = [];
 
+    $paths = [];
     // Initialise cache with default values.
     if (!array_key_exists($root_web, $paths)) {
         $paths[$root_web] = array(
@@ -734,21 +742,7 @@ function api_get_path($path = '', $configuration = [])
         );
     }
 
-    //static $isInitialized = [];
     $isInitialized = [];
-
-    $loadNewConfig = false;
-
-    // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
-    if ($path == WEB_PATH) {
-        if (isset($configuration['access_url']) && $configuration['access_url'] != 1) {
-            //we look into the DB the function api_get_access_url
-            $url_info = api_get_access_url($configuration['access_url']);
-            $root_web = $url_info['active'] == 1 ? $url_info['url'] : $configuration['root_web'];
-            $loadNewConfig = true;
-        }
-    }
-
     $course_folder = isset($configuration['course_folder']) ? $configuration['course_folder'] : $course_folder;
     $root_rel = isset($configuration['url_append']) ? $configuration['url_append'] : '';
 
@@ -778,8 +772,8 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][REL_PATH].'main/default_course_document/';
 
         $paths[$root_web][WEB_PATH] = $slashed_root_web;
-        $paths[$root_web][WEB_CODE_PATH] = $slashed_root_web.$code_folder;
-        $paths[$root_web][WEB_COURSE_PATH] = $slashed_root_web.$course_folder;
+        $paths[$root_web][WEB_CODE_PATH] = $paths[$root_web][WEB_PATH].$code_folder;
+        $paths[$root_web][WEB_COURSE_PATH] = $paths[$root_web][WEB_PATH].$course_folder;
         $paths[$root_web][WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][WEB_CODE_PATH].'default_course_document/';
         $paths[$root_web][WEB_APP_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_APP_PATH];
         $paths[$root_web][WEB_PLUGIN_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_PLUGIN_PATH];
@@ -829,7 +823,6 @@ function api_get_path($path = '', $configuration = [])
 
     // Retrieving a common-purpose path.
     if (isset($paths[$root_web][$path])) {
-
         return $paths[$root_web][$path];
     }
 
@@ -5190,7 +5183,7 @@ function api_add_access_url($u, $d = '', $a = 1) {
  * @param int       Access URL's ID. Optional. Uses 1 by default, which is the unique URL
  * @return array    Array of database results for the current settings of the current access URL
  */
-function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
+function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
@@ -5215,6 +5208,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
     }
     $result = Database::query($sql);
     $result = Database::store_result($result,'ASSOC');
+
     return $result;
 }
 

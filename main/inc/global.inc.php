@@ -88,7 +88,7 @@ define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../app/cache/mpdf/');
 require_once __DIR__.'/../../vendor/autoload.php';
 
 // Do not over-use this variable. It is only for this script's local use.
-$libraryPath = api_get_path(LIBRARY_PATH);
+$libraryPath = __DIR__.'/lib/';
 
 // @todo convert this libs in classes
 require_once $libraryPath.'database.constants.inc.php';
@@ -133,6 +133,7 @@ $dbParams = array(
     // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
     'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : ''
 );
+
 try {
     $database = new \Database();
     $database->connect($dbParams);

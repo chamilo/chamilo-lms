@@ -107,7 +107,7 @@ class ImportCsv
         if (!empty($files)) {
             foreach ($files as $file) {
                 $fileInfo = pathinfo($file);
-                if ($fileInfo['extension'] == 'csv') {
+                if (isset($fileInfo['extension']) && $fileInfo['extension'] === 'csv') {
                     // Checking teachers_yyyymmdd.csv, courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
                     $parts = explode('_', $fileInfo['filename']);
                     $preMethod = ucwords($parts[1]);
@@ -429,6 +429,7 @@ class ImportCsv
                         $this->logger->addInfo("Teachers - User created: ".$row['username']);
                     } else {
                         $this->logger->addError("Teachers - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
+                        $this->logger->addError(Display::getFlashToString());
                     }
                 } else {
                     if (empty($userInfo)) {
@@ -567,6 +568,7 @@ class ImportCsv
                         $this->logger->addInfo("Students - User created: ".$row['username']);
                     } else {
                         $this->logger->addError("Students - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
+                        $this->logger->addError(Display::getFlashToString());
                     }
                 } else {
                     if (empty($userInfo)) {
@@ -584,7 +586,6 @@ class ImportCsv
                     $resetPassword = 2; // allow password change
 
                     // Conditions that disables the update of password and email:
-
                     if (isset($this->conditions['importStudents'])) {
                         if (isset($this->conditions['importStudents']['update']) &&
                             isset($this->conditions['importStudents']['update']['avoid'])
@@ -618,10 +619,8 @@ class ImportCsv
                                     $user
                                 );
 
-                                if ($userInfo['password'] != $encoded && in_array(
-                                        $row['password'],
-                                        $avoidUsersWithPassword
-                                    )
+                                if ($userInfo['password'] != $encoded &&
+                                    in_array($row['password'], $avoidUsersWithPassword)
                                 ) {
                                     $this->logger->addInfo(
                                         "Students - User password is not updated: ".$row['username']." because the avoid conditions (password)."
@@ -660,7 +659,6 @@ class ImportCsv
                     );
 
                     if ($result) {
-
                         if ($row['username'] != $userInfo['username']) {
                             $this->logger->addInfo("Students - Username was changes from '".$userInfo['username']."' to '".$row['username']."' ");
                         }

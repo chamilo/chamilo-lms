@@ -429,7 +429,7 @@ class ImportCsv
                         $this->logger->addInfo("Teachers - User created: ".$row['username']);
                     } else {
                         $this->logger->addError("Teachers - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
-                        $this->logger->addError(Display::getFlashToString());
+                        $this->logger->addError(strip_tags(Display::getFlashToString()));
                     }
                 } else {
                     if (empty($userInfo)) {
@@ -568,7 +568,7 @@ class ImportCsv
                         $this->logger->addInfo("Students - User created: ".$row['username']);
                     } else {
                         $this->logger->addError("Students - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
-                        $this->logger->addError(Display::getFlashToString());
+                        $this->logger->addError(strip_tags(Display::getFlashToString()));
                     }
                 } else {
                     if (empty($userInfo)) {

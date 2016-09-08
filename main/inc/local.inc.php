@@ -358,7 +358,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                     // Check if the account is active (not locked)
                     if ($uData['active'] == '1') {
-
                         // Check if the expiration date has not been reached
                         if ($uData['expiration_date'] > date('Y-m-d H:i:s')
                             || empty($uData['expiration_date'])
@@ -366,7 +365,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             global $_configuration;
 
                             if (api_is_multiple_url_enabled()) {
-
                                 // Check if user is an admin
                                 $my_user_is_admin = UserManager::is_admin($uData['user_id']);
 
@@ -379,7 +377,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 $current_access_url_id = api_get_current_access_url_id();
 
                                 if ($my_user_is_admin === false) {
-
                                     // the user have the permissions to enter at this site
                                     if (is_array($my_url_list) &&
                                         in_array($current_access_url_id, $my_url_list)
@@ -438,7 +435,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     }
                                 }
                             } else {
-
                                 ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
                                 $_user['status'] = $uData['status'];
@@ -475,7 +471,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     Session::write('loginFailed', '1');
 
                     if ($allowCaptcha) {
-
                         if (isset($_SESSION['loginFailedCount'])) {
                             $_SESSION['loginFailedCount']++;
                         } else {

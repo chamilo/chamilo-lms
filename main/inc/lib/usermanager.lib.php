@@ -2656,7 +2656,7 @@ class UserManager
      * @param integer $user_id
      * @return array  list of statuses (session_id-course_code => status)
      */
-    public static function get_personal_session_course_list($user_id)
+    public static function get_personal_session_course_list($user_id, $sessionLimit = null)
     {
         // Database Table Definitions
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -2690,10 +2690,10 @@ class UserManager
                     course_rel_user.status course_rel_status,
                     course_rel_user.sort sort,
                     course_rel_user.user_course_cat user_course_cat
-                 FROM ".$tbl_course_user." course_rel_user
-                 LEFT JOIN ".$tbl_course." course
+                 FROM $tbl_course_user course_rel_user
+                 LEFT JOIN $tbl_course course
                  ON course.id = course_rel_user.c_id
-                 LEFT JOIN ".$tbl_user_course_category." user_course_category
+                 LEFT JOIN $tbl_user_course_category user_course_category
                  ON course_rel_user.user_course_cat = user_course_category.id
                  $join_access_url
                  WHERE
@@ -2739,16 +2739,24 @@ class UserManager
         // Get the list of sessions where the user is subscribed
         // This is divided into two different queries
         $sessions = array();
+
+        $sessionLimitRestriction = '';
+        if (!empty($sessionLimit)) {
+            $sessionLimit = (int) $sessionLimit;
+            $sessionLimitRestriction = "LIMIT $sessionLimit";
+        }
+
         $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
                 FROM $tbl_session_user su INNER JOIN $tbl_session s
                 ON (s.id = su.session_id)
                 WHERE (
-                    su.session_id = s.id AND
                     su.user_id = $user_id AND
                     su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                 )
                 $coachCourseConditions
-                ORDER BY access_start_date, access_end_date, name";
+                ORDER BY access_start_date, access_end_date, name
+                $sessionLimitRestriction
+        ";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)>0) {
@@ -2786,7 +2794,6 @@ class UserManager
 
                 // This query is horribly slow when more than a few thousand
                 // users and just a few sessions to which they are subscribed
-                $id_session = $enreg['id'];
                 $personal_course_list_sql = "SELECT DISTINCT
                         course.code code,
                         course.title i,
@@ -2806,7 +2813,7 @@ class UserManager
                         LEFT JOIN $tbl_user as user
                             ON user.id = session_course_user.user_id OR session.id_coach = user.id
                     WHERE
-                        session_course_user.session_id = $id_session AND (
+                        session_course_user.session_id = $session_id AND (
                             (session_course_user.user_id = $user_id AND session_course_user.status = 2)
                             OR session.id_coach = $user_id
                         )
@@ -2843,10 +2850,11 @@ class UserManager
                 session.name as session_name,
                 IF((session_course_user.user_id = 3 AND session_course_user.status=2),'2', '5')
             FROM $tbl_session_course_user as session_course_user
-                INNER JOIN $tbl_course AS course
-                ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
-                INNER JOIN $tbl_session as session ON session_course_user.session_id = session.id
-                LEFT JOIN $tbl_user as user ON user.id = session_course_user.user_id
+            INNER JOIN $tbl_course AS course
+            ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
+            INNER JOIN $tbl_session as session 
+            ON session_course_user.session_id = session.id
+            LEFT JOIN $tbl_user as user ON user.id = session_course_user.user_id
             WHERE session_course_user.user_id = $user_id
             ORDER BY i";
 

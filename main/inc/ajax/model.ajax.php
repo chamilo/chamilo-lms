@@ -99,7 +99,7 @@ function getWhereClause($col, $oper, $val)
 }
 
 // If there is no search request sent by jqgrid, $where should be empty
-$whereCondition = null;
+$whereCondition = '';
 $operation = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
 $exportFormat = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
 $searchField = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
@@ -404,8 +404,12 @@ switch ($action) {
         $exercise_id = $_REQUEST['exerciseId'];
 
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
-            $filter_user = intval($_GET['filter_by_user']);
-            $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
+            $filter_user = (int) $_GET['filter_by_user'];
+            if (empty($whereCondition)) {
+                $whereCondition .= " te.exe_user_id  = '$filter_user'";
+            } else {
+                $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
+            }
         }
 
         if (!empty($whereCondition)) {

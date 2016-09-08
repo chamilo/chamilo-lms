@@ -186,7 +186,7 @@ class UserManager
      * @param  string $language User language    (optional)
      * @param  string $phone Phone number    (optional)
      * @param  string $picture_uri Picture URI        (optional)
-     * @param  string $auth_source Authentication source    (optional, defaults to 'platform', dependind on constant)
+     * @param  string $authSource Authentication source    (optional, defaults to 'platform', dependind on constant)
      * @param  string $expirationDate Account expiration date (optional, defaults to null)
      * @param  int    $active Whether the account is enabled or disabled by default
      * @param  int    $hr_dept_id The department of HR in which the user is registered (optional, defaults to 0)
@@ -215,7 +215,7 @@ class UserManager
         $language = '',
         $phone = '',
         $picture_uri = '',
-        $auth_source = PLATFORM_AUTH_SOURCE,
+        $authSource = PLATFORM_AUTH_SOURCE,
         $expirationDate = null,
         $active = 1,
         $hr_dept_id = 0,
@@ -268,13 +268,24 @@ class UserManager
             }
         }
 
-        if ($auth_source == PLATFORM_AUTH_SOURCE && empty($password)) {
-            Display::addFlash(
-                Display::return_message(get_lang('ThisFieldIsRequired').': '.get_lang('Password'), 'warning')
-            );
+        if (empty($password)) {
+            if ($authSource === PLATFORM_AUTH_SOURCE) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('ThisFieldIsRequired').': '.get_lang(
+                            'Password'
+                        ),
+                        'warning'
+                    )
+                );
 
-            return false;
+                return false;
+            }
+
+            $password = '';
         }
+
+
 
         // database table definition
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -341,7 +352,7 @@ class UserManager
             ->setOfficialCode($official_code)
             ->setPictureUri($picture_uri)
             ->setCreatorId($creator_id)
-            ->setAuthSource($auth_source)
+            ->setAuthSource($authSource)
             ->setPhone($phone)
             ->setAddress($address)
             ->setLanguage($language)

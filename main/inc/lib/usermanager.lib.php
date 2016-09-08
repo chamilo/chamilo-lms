@@ -2740,11 +2740,12 @@ class UserManager
         // This is divided into two different queries
         $sessions = array();
         $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
-                FROM $tbl_session_user, $tbl_session s
+                FROM $tbl_session_user su INNER JOIN $tbl_session s
+                ON (s.id = su.session_id)
                 WHERE (
-                    session_id = s.id AND
-                    user_id = $user_id AND
-                    relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    su.session_id = s.id AND
+                    su.user_id = $user_id AND
+                    su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                 )
                 $coachCourseConditions
                 ORDER BY access_start_date, access_end_date, name";

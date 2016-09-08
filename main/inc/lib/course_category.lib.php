@@ -584,11 +584,8 @@ class CourseCategory
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);
         $searchTerm = Database::escape_string($searchTerm);
-        $categoryFilter = '';
-        $searchFilter = '';
 
         $specialCourseList = CourseManager::get_special_course_list();
-
         $without_special_courses = '';
         if (!empty($specialCourseList)) {
             $without_special_courses = ' AND course.code NOT IN ("'.implode('","', $specialCourseList).'")';
@@ -596,14 +593,16 @@ class CourseCategory
 
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course');
 
-        if ($categoryCode == 'ALL') {
+        $categoryFilter = '';
+        if ($categoryCode === 'ALL') {
             // Nothing to do
-        } elseif ($categoryCode == 'NONE') {
+        } elseif ($categoryCode === 'NONE') {
             $categoryFilter = ' AND category_code = "" ';
         } else {
             $categoryFilter = ' AND category_code = "'.$categoryCode.'" ';
         }
 
+        $searchFilter = '';
         if (!empty($searchTerm)) {
             $searchFilter = ' AND (code LIKE "%'.$searchTerm.'%"
             OR title LIKE "%'.$searchTerm.'%"
@@ -633,7 +632,7 @@ class CourseCategory
                         course.visibility != '0' AND
                         course.visibility != '4' AND
                         category_code = '$category_code'
-                        $searchTerm
+                        $searchFilter
                         $without_special_courses
                         $visibilityCondition
                     ";

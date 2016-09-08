@@ -1219,7 +1219,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
     );
 
     $url_id = api_get_current_access_url_id();
-    /* 
+    /*
     if (!empty($_configuration['multiple_access_urls']) && api_is_global_platform_admin() && $url_id == 1) {
         $group = array();
         $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
@@ -1297,11 +1297,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 if (empty($row['category'])) {
                     $row['category'] = 0;
                 }
-
-                if (is_array($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ])) {
+                if (isset($settings_by_access_list[$row['variable']]) &&
+                    is_array($settings_by_access_list[$row['variable']][$row['subkey']][$row['category']])) {
                     // We are sure that the other site have a selected value.
-                    if ($settings_by_access_list[$row['variable']] [$row['subkey']] [$row['category']]['selected_value'] != '') {
-                        $row['selected_value'] = $settings_by_access_list[$row['variable']] [$row['subkey']] [$row['category']]['selected_value'];
+                    if ($settings_by_access_list[$row['variable']][$row['subkey']][$row['category']]['selected_value'] != '') {
+                        $row['selected_value'] = $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']]['selected_value'];
                     }
                 }
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.

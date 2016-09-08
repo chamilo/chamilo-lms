@@ -268,7 +268,7 @@ class UserManager
             }
         }
 
-        if (empty($password)) {
+        if ($auth_source == PLATFORM_AUTH_SOURCE && empty($password)) {
             Display::addFlash(
                 Display::return_message(get_lang('ThisFieldIsRequired').': '.get_lang('Password'), 'warning')
             );

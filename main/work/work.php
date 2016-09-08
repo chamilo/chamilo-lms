@@ -177,7 +177,6 @@ switch ($action) {
         $form->addButtonCreate(get_lang('CreateDirectory'));
 
         if ($form->validate()) {
-
             $result = addDir(
                 $_POST,
                 $user_id,

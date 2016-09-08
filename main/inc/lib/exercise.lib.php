@@ -1546,8 +1546,7 @@ HOTSPOT;
         $exercise_id,
         $extra_where_conditions = null,
         $get_count = false
-    )
-    {
+    ) {
         //@todo replace all this globals
         global $documentPath, $filter;
 
@@ -1618,7 +1617,6 @@ HOTSPOT;
             }
 
             if (strpos($extra_where_conditions, 'group_all')) {
-
                 $extra_where_conditions = str_replace(
                     "AND (  group_id = 'group_all'  )",
                     '',
@@ -1733,7 +1731,8 @@ HOTSPOT;
                 WHERE
                     te.status != 'incomplete' AND
                     te.c_id = " . $course_id . " $session_id_and AND
-                    ce.active <>-1 AND ce.c_id = " . $course_id . "
+                    ce.active <>-1 AND 
+                    ce.c_id = " . $course_id . "
                     $exercise_where
                     $extra_where_conditions
                 ";
@@ -1763,9 +1762,7 @@ HOTSPOT;
                     AND tth.c_id = " . $course_id . "
                     $hotpotatoe_where
                     $sqlWhereOption
-                    AND user.status NOT IN(" . api_get_users_status_ignored_in_reports(
-                    'string'
-                ) . ")
+                    AND user.status NOT IN(" . api_get_users_status_ignored_in_reports('string') . ")
                 ORDER BY
                     tth.c_id ASC,
                     tth.exe_date DESC";

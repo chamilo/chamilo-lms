@@ -19,21 +19,27 @@ api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
 
-$interbreadcrumb[] = array ("url" => api_is_student_boss()?"#":"index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = array(
+    "url" => api_is_student_boss() ? "#" : "index.php",
+    "name" => get_lang('MySpace')
+);
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
-    $interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
+    $interbreadcrumb[] = array(
+        "url" => "teachers.php",
+        "name" => get_lang('Teachers')
+    );
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"] == "coach") {
-    $interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
+    $interbreadcrumb[] = array("url" => "coaches.php", "name" => get_lang('Tutors'));
 }
 
 function get_count_users()
 {
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-    $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
-    $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+    $active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
+    $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
@@ -55,7 +61,7 @@ function get_users($from, $limit, $column, $direction)
 {
     $active = isset($_GET['active']) ? $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-    $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+    $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
     $lastConnectionDate = null;
@@ -108,7 +114,6 @@ function get_users($from, $limit, $column, $direction)
     }
 
     $all_datas = array();
-
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
         if (isset($_GET['id_session'])) {
@@ -169,9 +174,9 @@ function get_users($from, $limit, $column, $direction)
         $lostPasswordLink = '';
         if (api_is_drh() || api_is_platform_admin()) {
             $lostPasswordLink = '&nbsp;'.Display::url(
-                    Display::return_icon('edit.png', get_lang('Edit')),
-                    api_get_path(WEB_CODE_PATH).'mySpace/user_edit.php?user_id='.$student_id
-                );
+                Display::return_icon('edit.png', get_lang('Edit')),
+                api_get_path(WEB_CODE_PATH).'mySpace/user_edit.php?user_id='.$student_id
+            );
         }
 
         $row[] = $lostPasswordLink.$detailsLink;
@@ -191,11 +196,26 @@ $actionsLeft = '';
 
 if (api_is_drh()) {
     $menu_items = array(
-        Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php" ),
-        Display::url(Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), '#'),
-        Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php'),
-        Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php'),
-        Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php'),
+        Display::url(
+            Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+        ),
+        Display::url(
+            Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
+            '#'
+        ),
+        Display::url(
+            Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM),
+            'teachers.php'
+        ),
+        Display::url(
+            Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM),
+            'course.php'
+        ),
+        Display::url(
+            Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM),
+            'session.php'
+        ),
         Display::url(
             Display::return_icon('skills.png', get_lang('Skills'), array(), ICON_SIZE_MEDIUM),
             'skills.php'
@@ -234,7 +254,8 @@ if (api_is_drh()) {
 
 $actionsRight = '';
 $actionsRight .= Display::url(
-    Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);',
+    Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM),
+    'javascript: void(0);',
     array('onclick'=>'javascript: window.print();')
 );
 $actionsRight .= Display::url(
@@ -289,7 +310,11 @@ if ($export_csv) {
     }
 }
 
-$form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/student.php');
+$form = new FormValidator(
+    'search_user',
+    'get',
+    api_get_path(WEB_CODE_PATH).'mySpace/student.php'
+);
 $form = Tracking::setUserSearchForm($form);
 $form->setDefaults($params);
 

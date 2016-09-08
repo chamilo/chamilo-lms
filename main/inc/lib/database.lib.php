@@ -469,6 +469,7 @@ class Database
                 $whereReturn = self::parse_where_conditions($whereConditions);
 
                 $sql = "UPDATE $tableName SET $updateSql $whereReturn ";
+
                 $statement = self::getManager()->getConnection()->prepare($sql);
 
                 $result = $statement->execute($attributes);

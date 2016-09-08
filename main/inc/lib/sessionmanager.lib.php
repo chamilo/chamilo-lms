@@ -1370,7 +1370,6 @@ class SessionManager
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false
     ) {
-        $name = trim(stripslashes($name));
         $coachId = intval($coachId);
         $sessionCategoryId = intval($sessionCategoryId);
         $visibility = intval($visibility);
@@ -1407,11 +1406,11 @@ class SessionManager
 
             return false;
         } else {
-            $sql = "SELECT id FROM $tbl_session WHERE name='" . Database::escape_string($name) . "'";
-            $rs = Database::query($sql);
+            $sessionInfo = self::get_session_by_name($name);
             $exists = false;
-            while ($row = Database::fetch_array($rs)) {
-                if ($row['id'] != $id) {
+
+            if (!empty($sessionInfo)) {
+                if ($sessionInfo['id'] != $id) {
                     $exists = true;
                 }
             }
@@ -4153,7 +4152,7 @@ class SessionManager
                     }
                 }
 
-                $session_name = Database::escape_string($enreg['SessionName']);
+                $session_name = $enreg['SessionName'];
                 // Default visibility
                 $visibilityAfterExpirationPerSession = $sessionVisibility;
 
@@ -4171,6 +4170,7 @@ class SessionManager
                             break;
                     }
                 }
+
                 if (empty($session_name)) {
                     continue;
                 }
@@ -4246,7 +4246,7 @@ class SessionManager
                             $suffix = ' - ' . $i;
                         }
                         $sql = 'SELECT 1 FROM ' . $tbl_session . '
-                                WHERE name="' . $session_name . $suffix . '"';
+                                WHERE name="' . Database::escape_string($session_name). $suffix . '"';
                         $rs = Database::query($sql);
 
                         if (Database::result($rs, 0, 0)) {
@@ -4259,7 +4259,7 @@ class SessionManager
 
                     // Creating the session.
                     $sql = "INSERT IGNORE INTO $tbl_session SET
-                            name = '" . $session_name . "',
+                            name = '" . Database::escape_string($session_name). "',
                             id_coach = '$coach_id',
                             access_start_date = '$dateStart',
                             access_end_date = '$dateEnd',
@@ -4376,7 +4376,7 @@ class SessionManager
                             $session_id = $sessionId;
                             if (!empty($enreg['SessionName'])) {
                                 ///$params['name'] = $enreg['SessionName'];
-                                $sessionName = $enreg['SessionName'];
+                                $sessionName = Database::escape_string($enreg['SessionName']);
                                 $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
                                 Database::query($sql);
                             }
@@ -4414,7 +4414,6 @@ class SessionManager
                             }
 
                             Database::update($tbl_session, $params, array('id = ?' => $session_id));
-
 
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field

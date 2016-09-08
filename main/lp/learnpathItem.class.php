@@ -2758,7 +2758,7 @@ class learnpathItem
                             'LearnpathPrereqNotCompleted'
                         );
                     }
-                    
+
                     return $returnstatus;
                 }
             }
@@ -4132,10 +4132,7 @@ class learnpathItem
                     }
                     foreach ($this->interactions as $index => $interaction) {
                         $correct_resp = '';
-                        if (is_array(
-                                $interaction[4]
-                            ) && !empty($interaction[4][0])
-                        ) {
+                        if (is_array($interaction[4] ) && !empty($interaction[4][0])) {
                             foreach ($interaction[4] as $resp) {
                                 $correct_resp .= $resp . ',';
                             }
@@ -4172,7 +4169,7 @@ class learnpathItem
                                 'weighting' => $interaction[3],
                                 'completion_time' => $interaction[2],
                                 'correct_responses' => $correct_resp,
-                                'student_response' => $interaction[5],
+                                'student_response' => isset($interaction[5]) ? $interaction[5] : '',
                                 'result' => $interaction[6],
                                 'latency' => $interaction[7]
                             );
@@ -4186,7 +4183,6 @@ class learnpathItem
                                     )
                                 )
                             );
-
                         } else {
                             // Insert new one.
                             $params = array(
@@ -4198,7 +4194,7 @@ class learnpathItem
                                 'weighting' => $interaction[3],
                                 'completion_time' => $interaction[2],
                                 'correct_responses' => $correct_resp,
-                                'student_response' => $interaction[5],
+                                'student_response' => isset($interaction[5]) ? $interaction[5] : '',
                                 'result' => $interaction[6],
                                 'latency' => $interaction[7]
                             );

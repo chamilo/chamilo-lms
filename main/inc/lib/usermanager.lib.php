@@ -282,10 +282,11 @@ class UserManager
                 return false;
             }
 
-            $password = '';
+            // We use the authSource as password.
+            // The real validation will be by processed by the auth
+            // source not Chamilo
+            $password = $authSource;
         }
-
-
 
         // database table definition
         $table_user = Database::get_main_table(TABLE_MAIN_USER);

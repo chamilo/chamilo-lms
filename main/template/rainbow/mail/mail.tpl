@@ -27,7 +27,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td cellpadding="0" cellspacing="0" style="padding: 40px 10px">
+                        <td cellpadding="0" cellspacing="0" style="padding: 40px 10px; border-top: 1px solid #96BD0D;">
                             {{ content }}
                         </td>
                     </tr>

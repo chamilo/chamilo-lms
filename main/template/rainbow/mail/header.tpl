@@ -5,8 +5,10 @@
                 <img src="{{ _p.web_css_theme ~ 'images/header-logo.png' }}" alt="{{ _s.site_name }}">
             </a>
         </td>
-        <td width="100%">
-            &nbsp;
+        <td width="100%" align="right">
+            <a href="{{ 'URLOFAJ'|get_lang }}">
+                <img src="{{ _p.web_css_theme ~ 'images/logo-ofaj.png' }}" alt="{{ _s.site_name  }}">
+            </a>
         </td>
     </tr>
 </table>

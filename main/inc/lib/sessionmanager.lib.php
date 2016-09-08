@@ -1377,23 +1377,33 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         if (empty($name)) {
-            Display::return_message(get_lang('SessionNameIsRequired'), 'warning');
+            Display::addFlash(
+                Display::return_message(get_lang('SessionNameIsRequired'), 'warning')
+            );
 
             return false;
         } elseif (empty($coachId)) {
-            Display::return_message(get_lang('CoachIsRequired'), 'warning');
+            Display::addFlash(
+                Display::return_message(get_lang('CoachIsRequired'), 'warning')
+            );
 
             return false;
         } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') && !api_is_valid_date($startDate, 'Y-m-d H:i:s')) {
-            Display::return_message(get_lang('InvalidStartDate'), 'warning');
+            Display::addFlash(
+                Display::return_message(get_lang('InvalidStartDate'), 'warning')
+            );
 
             return false;
         } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i') && !api_is_valid_date($endDate, 'Y-m-d H:i:s')) {
-            Display::return_message(get_lang('InvalidEndDate'), 'warning');
+            Display::addFlash(
+                Display::return_message(get_lang('InvalidEndDate'), 'warning')
+            );
 
             return false;
         } elseif (!empty($startDate) && !empty($endDate) && $startDate >= $endDate) {
-            Display::return_message(get_lang('StartDateShouldBeBeforeEndDate'), 'warning');
+            Display::addFlash(
+                Display::return_message(get_lang('StartDateShouldBeBeforeEndDate'), 'warning')
+            );
 
             return false;
         } else {
@@ -1407,7 +1417,9 @@ class SessionManager
             }
 
             if ($exists) {
-                Display::return_message(get_lang('SessionNameAlreadyExists'), 'warning');
+                Display::addFlash(
+                    Display::return_message(get_lang('SessionNameAlreadyExists'), 'warning')
+                );
 
                 return false;
             } else {
@@ -1454,9 +1466,11 @@ class SessionManager
                     $values['session_category_id'] = null;
                 }
 
-                Database::update($tbl_session, $values, array(
-                    'id = ?' => $id
-                ));
+                Database::update(
+                    $tbl_session,
+                    $values,
+                    array('id = ?' => $id)
+                );
 
                 if (!empty($extraFields)) {
                     $extraFields['item_id'] = $id;

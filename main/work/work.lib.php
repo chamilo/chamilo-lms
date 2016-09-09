@@ -3684,7 +3684,7 @@ function processWorkForm(
     $sessionId = intval($sessionId);
     $userId = intval($userId);
 
-    $groupIid = null;
+    $groupIid = 0;
     if (!empty($groupId)) {
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];

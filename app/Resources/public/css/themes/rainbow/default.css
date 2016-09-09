@@ -148,7 +148,12 @@ a:focus {
     padding-right: 10px;
 }
 .section-notice .items .title a{
-    color: #E53140;
+    color: #07578A;
+    font-size: 20px;
+    font-weight: 700;
+}
+.section-notice .items .title a:hover{
+    color: #666666;
     font-size: 20px;
     font-weight: 700;
 }

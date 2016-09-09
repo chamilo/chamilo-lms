@@ -147,6 +147,9 @@ a:focus {
     padding-left: 10px;
     padding-right: 10px;
 }
+.section-notice .items .description .title{
+    margin-top: 10px;
+}
 .section-notice .items .title a{
     color: #07578A;
     font-size: 20px;
@@ -156,6 +159,10 @@ a:focus {
     color: #666666;
     font-size: 20px;
     font-weight: 700;
+}
+.section-notice .items .image .sonata-media-block-media-container img{
+    width: 100%;
+    height: 100%;
 }
 .section-notice .items .date{
     color: #888;

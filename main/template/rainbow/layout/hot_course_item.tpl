@@ -1,6 +1,6 @@
 {% for item in hot_courses %}
     {% if item.title %}
-        <div class="col-md-3 col-sm-3 col-xs-6">
+        <div class="col-md-3 col-sm-3 col-xs-12">
             <div class="items">
                 <div class="image">
                     <img src="{{ item.course_image_large }}" class="img-responsive">

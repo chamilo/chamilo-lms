@@ -38,6 +38,8 @@ class ImportCsv
      */
     public $expirationDateInUserCreation = 1;
 
+    public $batchSize = 20;
+
     /**
      * When updating a user the expiration date is set to update date + this value
      * @var int number of years
@@ -382,6 +384,10 @@ class ImportCsv
             $this->logger->addInfo(count($data)." records found.");
             $expirationDateOnCreation = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
             $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
+
+            $batchSize = $this->batchSize;
+            $em = Database::getManager();
+            $counter = 1;
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
 
@@ -478,7 +484,15 @@ class ImportCsv
                         $this->logger->addError("Teachers - User not updated: ".$row['username']);
                     }
                 }
+
+                if (($counter % $batchSize) === 0) {
+                    $em->flush();
+                    $em->clear(); // Detaches all objects from Doctrine!
+                }
+                $counter++;
             }
+
+            $em->clear(); // Detaches all objects from Doctrine!
         }
 
         if ($moveFile) {
@@ -517,7 +531,7 @@ class ImportCsv
          */
         $timeStart = microtime(true);
 
-        $batchSize = 20;
+        $batchSize = $this->batchSize;
         $em = Database::getManager();
 
         if (!empty($data)) {
@@ -720,8 +734,7 @@ class ImportCsv
 
         $timeEnd = microtime(true);
         $executionTime = round(($timeEnd - $timeStart)/60, 2);
-
-        $this->logger->addInfo("Total Execution Time: $executionTime Min");
+        $this->logger->addInfo("Execution Time for process students: $executionTime Min");
 
         if ($moveFile) {
             $this->moveFile($file);
@@ -2010,7 +2023,12 @@ if (isset($_configuration['import_csv_test'])) {
     $import->test = true;
 }
 
+$timeStart = microtime(true);
 $import->run();
+
+$timeEnd = microtime(true);
+$executionTime = round(($timeEnd - $timeStart)/60, 2);
+$this->logger->addInfo("Total execution Time $executionTime Min");
 
 if (isset($_configuration['import_csv_fix_permissions']) &&
     $_configuration['import_csv_fix_permissions'] == true

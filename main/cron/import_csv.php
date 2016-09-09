@@ -515,6 +515,7 @@ class ImportCsv
         So I presume you’ll just update the expiration date.
         We want to grant access to courses up to a year after deletion.
          */
+        $timeStart = microtime(true);
 
         if (!empty($data)) {
             $language = $this->defaultLanguage;
@@ -577,8 +578,7 @@ class ImportCsv
                         Display::cleanFlashMessages();
                     }
                 } else {
-                    $userToUpdateList[]['user_info'] = $userInfo;
-                    $userToUpdateList[]['row'] = $row;
+                    $userToUpdateList[] = ['user_info' => $userInfo, 'row' => $row];
                 }
             }
 
@@ -698,6 +698,11 @@ class ImportCsv
                 }
             }
         }
+
+        $timeEnd = microtime(true);
+        $executionTime = round(($timeEnd - $timeStart)/60, 2);
+
+        $this->logger->addInfo("Total Execution Time: $executionTime Min");
 
         if ($moveFile) {
             $this->moveFile($file);

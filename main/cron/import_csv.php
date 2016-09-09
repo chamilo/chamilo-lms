@@ -561,7 +561,7 @@ class ImportCsv
 
                     if ($result) {
                         foreach ($row as $key => $value) {
-                            if (substr($key, 0, 6) == 'extra_') {
+                            if (substr($key, 0, 6) === 'extra_') {
                                 //an extra field
                                 UserManager::update_extra_field_value($result, substr($key, 6), $value);
                             }
@@ -612,9 +612,9 @@ class ImportCsv
                             }
 
                             // Blocking password update
-                            $avoidUsersWithPassword = $this->conditions['importStudents']['update']['avoid']['password'];
+                            //$avoidUsersWithPassword = $this->conditions['importStudents']['update']['avoid']['password'];
 
-                            if (isset($row['password'])) {
+                            /*if (isset($row['password'])) {
                                 $user = api_get_user_entity($userInfo['id']);
                                 $encoded = UserManager::encryptPassword(
                                     $row['password'],
@@ -630,9 +630,13 @@ class ImportCsv
                                     $password = null;
                                     $resetPassword = 0; // disallow password change
                                 }
-                            }
+                            }*/
                         }
                     }
+
+                    // Always disallow password change during update
+                    $password = null;
+                    $resetPassword = 0; // disallow password change
 
                     $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
 

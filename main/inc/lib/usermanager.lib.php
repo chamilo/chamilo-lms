@@ -2576,11 +2576,11 @@ class UserManager
         // This is divided into two different queries
         $sessions = array();
         $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
-                FROM $tbl_session_user, $tbl_session s
+                FROM $tbl_session_user su INNER JOIN $tbl_session s
+                ON (s.id = su.session_id)
                 WHERE (
-                    session_id = s.id AND
-                    user_id = $user_id AND
-                    relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    su.user_id = $user_id AND
+                    su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                 )
                 $coachCourseConditions
                 ORDER BY access_start_date, access_end_date, name";
@@ -4035,12 +4035,14 @@ class UserManager
                         FROM $tbl_user u
                         INNER JOIN $tbl_session_rel_user sru ON (sru.user_id = u.id)
                         WHERE
-                            sru.session_id IN (
-                                SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
-                                $tbl_session_rel_access_url
-                                WHERE access_url_id = ".api_get_current_access_url_id()."
-                                $sessionConditionsCoach
-                                UNION (
+                            (
+                                sru.session_id IN (
+                                    SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
+                                    $tbl_session_rel_access_url session_rel_access_rel_user
+                                    ON session_rel_access_rel_user.session_id = s.id
+                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    $sessionConditionsCoach                                  
+                                ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s
                                     INNER JOIN $tbl_session_rel_access_url url
                                     ON (url.session_id = s.id)
@@ -4049,7 +4051,7 @@ class UserManager
                                     WHERE access_url_id = ".api_get_current_access_url_id()."
                                     $sessionConditionsTeacher
                                 )
-                            )
+                            ) 
                             $userConditions
                     )
                     UNION ALL(

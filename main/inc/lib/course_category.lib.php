@@ -643,7 +643,7 @@ function countCoursesInCategory($category_code = '', $searchTerm = '')
                         course.visibility != '0' AND
                         course.visibility != '4' AND
                         category_code = '$category_code'
-                        $searchTerm
+                        $searchFilter
                         $without_special_courses
                         $visibilityCondition
                     ";

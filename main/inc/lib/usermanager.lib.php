@@ -295,7 +295,7 @@ class UserManager
         // database table definition
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
-        //Checking the user language
+        // Checking the user language
         $languages = api_get_languages();
         $language = strtolower($language);
 
@@ -1139,7 +1139,7 @@ class UserManager
 
     /**
      * Check if a username is available
-     * @param string the wanted username
+     * @param string $username the wanted username
      * @return boolean true if the wanted username is available
      * @assert ('') === false
      * @assert ('xyzxyzxyz') === true

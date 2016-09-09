@@ -691,8 +691,8 @@ class UrlManager
     /**
      * Add a user into a url
      * @author Julio Montoya
-     * @param  $user_id
-     * @param  $url_id
+     * @param  int $user_id
+     * @param  int $url_id
      *
      * @return boolean true if success
      * */

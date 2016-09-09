@@ -395,7 +395,7 @@ class ImportCsv
                     $row['extra_' . $this->extraFieldIdNameList['user']],
                     $this->extraFieldIdNameList['user']
                 );
-                $userInfo  = array();
+                $userInfo = array();
                 $userInfoByOfficialCode  = null;
 
                 if (!empty($user_id)) {
@@ -2028,7 +2028,7 @@ $import->run();
 
 $timeEnd = microtime(true);
 $executionTime = round(($timeEnd - $timeStart)/60, 2);
-$this->logger->addInfo("Total execution Time $executionTime Min");
+$logger->addInfo("Total execution Time $executionTime Min");
 
 if (isset($_configuration['import_csv_fix_permissions']) &&
     $_configuration['import_csv_fix_permissions'] == true

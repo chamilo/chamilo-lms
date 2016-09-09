@@ -2906,7 +2906,7 @@ class SessionManager
         // Deleting assigned sessions to hrm_id.
         if ($removeOldConnections) {
             if (api_is_multiple_url_enabled()) {
-                $sql = "SELECT session_id
+                $sql = "SELECT s.session_id
                         FROM $tbl_session_rel_user s
                         INNER JOIN $tbl_session_rel_access_url a ON (a.session_id = s.session_id)
                         WHERE

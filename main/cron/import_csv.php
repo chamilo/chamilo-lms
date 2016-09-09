@@ -521,9 +521,6 @@ class ImportCsv
             $language = $this->defaultLanguage;
             $this->logger->addInfo(count($data)." records found.");
 
-            //$em = Database::getManager();
-            //$em->getConnection()->beginTransaction();
-
             $expirationDateOnCreate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
             $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
 
@@ -582,6 +579,9 @@ class ImportCsv
                 }
             }
 
+            $batchSize = 20;
+            $counter = 1;
+            $em = Database::getManager();
             if (!empty($userToUpdateList)) {
                 foreach ($userToUpdateList as $userData) {
                     $row = $userData['row'];
@@ -695,7 +695,14 @@ class ImportCsv
                     } else {
                         $this->logger->addError("Students - User NOT updated: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }
+
+                    if (($counter % $batchSize) === 0) {
+                        $em->flush();
+                        $em->clear(); // Detaches all objects from Doctrine!
+                    }
+                    $counter++;
                 }
+                $em->clear(); // Detaches all objects from Doctrine!
             }
         }
 

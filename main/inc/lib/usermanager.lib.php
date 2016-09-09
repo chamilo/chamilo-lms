@@ -63,14 +63,18 @@ class UserManager
      */
     public static function getManager()
     {
-        $encoderFactory = self::getEncoderFactory();
-        $userManager = new Chamilo\UserBundle\Entity\Manager\UserManager(
-            $encoderFactory,
-            new \FOS\UserBundle\Util\Canonicalizer(),
-            new \FOS\UserBundle\Util\Canonicalizer(),
-            Database::getManager(),
-            'Chamilo\\UserBundle\\Entity\\User'
-        );
+        static $userManager;
+
+        if (!isset($userManager)) {
+            $encoderFactory = self::getEncoderFactory();
+            $userManager = new Chamilo\UserBundle\Entity\Manager\UserManager(
+                $encoderFactory,
+                new \FOS\UserBundle\Util\Canonicalizer(),
+                new \FOS\UserBundle\Util\Canonicalizer(),
+                Database::getManager(),
+                'Chamilo\\UserBundle\\Entity\\User'
+            );
+        }
 
         return $userManager;
     }
@@ -341,8 +345,6 @@ class UserManager
         /** @var User $user */
         $user = $userManager->createUser();
 
-        /** @var User $user */
-        //$user = new User();
         $user
             ->setLastname($lastName)
             ->setFirstname($firstName)
@@ -882,17 +884,27 @@ class UserManager
         if (!empty($hook)) {
             $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
         }
-        global $_configuration;
         $original_password = $password;
+
+        if ($user_id != strval(intval($user_id))) {
+            return false;
+        }
 
         if (empty($user_id)) {
             return false;
         }
-        $user_info = api_get_user_info($user_id, false, true);
+
+        $userManager = self::getManager();
+        /** @var Chamilo\UserBundle\Entity\User $user */
+        $user = self::getRepository()->find($user_id);
+
+        if (empty($user)) {
+            return false;
+        }
 
         if ($reset_password == 0) {
             $password = null;
-            $auth_source = $user_info['auth_source'];
+            $auth_source = $user->getAuthSource();
         } elseif ($reset_password == 1) {
             $original_password = $password = api_generate_password();
             $auth_source = PLATFORM_AUTH_SOURCE;
@@ -904,31 +916,16 @@ class UserManager
             $auth_source = $auth_source;
         }
 
-        if ($user_id != strval(intval($user_id))) {
-            return false;
-        }
-
-        if ($user_id === false) {
-            return false;
-        }
-
-        //Checking the user language
+        // Checking the user language
         $languages = api_get_languages();
         if (!in_array($language, $languages['folder'])) {
             $language = api_get_setting('platformLanguage');
         }
 
         $change_active = 0;
-        if ($user_info['active'] != $active) {
+        $isUserActive = $user->getActive();
+        if ($isUserActive != $active) {
             $change_active = 1;
-        }
-
-        $userManager = self::getManager();
-        /** @var Chamilo\UserBundle\Entity\User $user */
-        $user = self::getRepository()->find($user_id);
-
-        if (empty($user)) {
-            return false;
         }
 
         $originalUsername = $user->getUsername();
@@ -1019,7 +1016,7 @@ class UserManager
                     get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
                     get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".
                     get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
-                    get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$_configuration['root_web']."\n\n".
+                    get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)."\n\n".
                     get_lang('Problem')."\n\n".
                     get_lang('SignatureFormula').",\n\n".
                     api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
@@ -2576,14 +2573,6 @@ class UserManager
                     $user_id,
                     $row['id']
                 );
-
-                // Session visibility.
-                /*$visibility = api_get_session_visibility(
-                    $session_id,
-                    null,
-                    $ignore_visibility_for_admins
-                );*/
-
 
                 $visibility = api_get_session_visibility(
                     $session_id,

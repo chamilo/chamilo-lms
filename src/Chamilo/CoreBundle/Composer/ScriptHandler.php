@@ -18,7 +18,7 @@ class ScriptHandler
         $appCss = __DIR__.'/../../../../app/Resources/public';
         $newPath = __DIR__.'/../../../../web';
         $fs = new Filesystem();
-        $fs->mirror($appCss, $newPath, ['override' => true]);
+        $fs->mirror($appCss, $newPath, null, ['override' => true]);
     }
 
     /**

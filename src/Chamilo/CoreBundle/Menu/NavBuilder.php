@@ -57,6 +57,7 @@ class NavBuilder extends ContainerAware
     {
         $checker = $this->container->get('security.authorization_checker');
         $translator = $this->container->get('translator');
+        $locale = $this->container->get('request')->getLocale();
 
         $menu = $factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav navbar-nav');
@@ -122,6 +123,7 @@ class NavBuilder extends ContainerAware
                 'FAQ',
                 [
                     'route' => 'faq_index',
+                    'routeParameters' => ['_locale' => $locale]
                 ]
             )->setAttribute('class', 'item-menu menu-5');
 
@@ -141,7 +143,6 @@ class NavBuilder extends ContainerAware
         }
 
         if (!$checker->isGranted('IS_AUTHENTICATED_FULLY')) {
-
             $menu->addChild(
                 $translator->trans('Subscription'),
                 array(
@@ -165,7 +166,8 @@ class NavBuilder extends ContainerAware
             $menu->addChild(
                 $translator->trans('Contact'),
                 array(
-                    'route' => 'contact'
+                    'route' => 'contact',
+                    'routeParameters' => ['_locale' => $locale]
                 )
             )->setAttribute('class', 'item-menu menu-5');
         }

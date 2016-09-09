@@ -12,7 +12,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
-                
+
                 {% if _u.logged == 1 %}
                     {% for items in menu %}
                         {% if items.key != 'profile' and items.key != 'dashboard' and items.key != 'admin' and items.key != 'agenda' %}
@@ -21,16 +21,16 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                {% if _u.logged == 1 %}    
-                    <li class="item-menu menu-5"><a href="{{ _p.web }}web/app_dev.php/faq">{{ "FAQ"|get_lang }}</a></li>
+                {% if _u.logged == 1 %}
+                    <li class="item-menu menu-5"><a href="{{ _p.web }}web/app_dev.php/faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a></li>
                 {% endif %}
-                   
+
                 {% if _u.logged == 0 %}
                     <li class="item-menu menu-1"><a href="{{ _p.web }}">{{ "CampusHomepage"|get_lang }}</a></li>
-                    <li class="item-menu menu-2"><a href="{{ _p.web }}web/app_dev.php/faq">{{ "FAQ"|get_lang }}</a></li>
+                    <li class="item-menu menu-2"><a href="{{ _p.web }}web/app_dev.php/faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a></li>
                     <li class="item-menu menu-3"><a href="{{ _p.web }}main/auth/inscription.php">{{ "Subscription"|get_lang }}</a></li>
                     <li class="item-menu menu-4"><a href="#">{{ "Demo"|get_lang }}</a></li>
-                    <li class="item-menu menu-5"><a href="{{ _p.web }}web/app_dev.php/contact">{{ "Contact"|get_lang }}</a></li>
+                    <li class="item-menu menu-5"><a href="{{ _p.web }}web/app_dev.php/contact?_locale={{ document_language }}">{{ "Contact"|get_lang }}</a></li>
                 {% endif %}
             </ul>
            {% if _u.logged == 1 %}
@@ -38,7 +38,7 @@
                {% if user_notifications is not null %}
                <li><a href="{{ message_url }}">{{ user_notifications }}</a></li>
                {% endif %}
-               
+
                {% if _u.status != 6 %}
                 <li class="dropdown avatar-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -53,7 +53,7 @@
                             </div>
                         </li>
                         <li role="separator" class="divider"></li>
-                        
+
                         <li class="user-body">
                             <a href="{{ _p.web }}main/admin">
                                 <em class="fa fa-cog" aria-hidden="true"></em>
@@ -75,8 +75,8 @@
                         </li>
                     </ul>
                 </li>
-               
-               
+
+
                {% endif %}
             </ul>
             {% endif %}

@@ -1562,15 +1562,15 @@ class Display
                     $session_info['access_start_date'] = '';
                 } else {
                     $start = true;
-                    $start_buffer = $session_info['access_start_date'];
-                    $session_info['access_start_date'] = $session_info['access_start_date'];
+                    $start_buffer = api_get_local_time($session_info['access_start_date']);
+                    $session_info['access_start_date'] = api_get_local_time($session_info['access_start_date']);
                 }
                 if ($session_info['access_end_date'] == '0000-00-00' || empty($session_info['access_end_date'])) {
                     $session_info['access_end_date'] = '';
                 } else {
                     $stop = true;
-                    $stop_buffer = $session_info['access_end_date'];
-                    $session_info['access_end_date'] = $session_info['access_end_date'];
+                    $stop_buffer = api_get_local_time($session_info['access_end_date']);
+                    $session_info['access_end_date'] = api_get_local_time($session_info['access_end_date']);
                 }
                 if ($start && $stop) {
                     $session['dates'] = Display::tag(
@@ -1604,7 +1604,7 @@ class Display
                     );
                 }
 
-                if ( api_get_setting('show_session_coach') === 'true' ) {
+                if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = get_lang('GeneralCoach') . ': ' . api_get_person_name(
                         $session_info['firstname'],
                         $session_info['lastname']
@@ -1614,7 +1614,6 @@ class Display
             }
             $session['active'] = $active;
             $session['session_category_id'] = $session_info['session_category_id'];
-
             $session['description'] = $session_info['description'];
             $session['show_description'] = $session_info['show_description'];
 
@@ -2161,7 +2160,7 @@ class Display
         $link = Display::url($label.' ', $link_to_show, $linkAttributes);
         return  '<li class = "'.$class.'">'.$link.'</li>';
     }
-    
+
     /**
      * @param int $current
      * @param int $total

@@ -29,6 +29,10 @@ class ContactController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $locale = $request->get('_locale');
+        $translator = $this->get('translator');
+        $translator->setLocale($locale);
+
         $type = new ContactType();
         /** @var User $user */
         $user = $this->getUser();

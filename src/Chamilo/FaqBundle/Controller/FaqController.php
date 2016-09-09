@@ -8,6 +8,7 @@ use Chamilo\FaqBundle\Entity\QuestionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Chamilo\FaqBundle\Entity\Category;
 use Chamilo\FaqBundle\Entity\Question;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FaqController
@@ -26,8 +27,12 @@ class FaqController extends Controller
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction($categorySlug, $questionSlug)
+    public function indexAction($categorySlug, $questionSlug, Request $request)
     {
+        $locale = $request->get('_locale');
+        $translator = $this->get('translator');
+        $translator->setLocale($locale);
+
         if (!$categorySlug || !$questionSlug) {
             $redirect = $this->generateRedirectToDefaultSelection($categorySlug, $questionSlug);
             if ($redirect) {

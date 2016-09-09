@@ -380,6 +380,8 @@ class ImportCsv
 
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");
+            $expirationDateOnCreation = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
+            $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
 
@@ -395,8 +397,6 @@ class ImportCsv
                     $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
                 }
 
-                $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
-
                 if (empty($userInfo) && empty($userInfoByOfficialCode)) {
                     // Create user
                     $userId = UserManager::create_user(
@@ -411,7 +411,7 @@ class ImportCsv
                         $row['phone'],
                         null, //$row['picture'], //picture
                         $row['auth_source'], // ?
-                        $expirationDate, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
+                        $expirationDateOnCreation, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
                         1, //active
                         0,
                         null, // extra
@@ -438,8 +438,6 @@ class ImportCsv
                         continue;
                     }
 
-                    $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
-
                     // Update user
                     $result = UserManager::update_user(
                         $userInfo['user_id'],
@@ -453,7 +451,7 @@ class ImportCsv
                         $userInfo['official_code'],
                         $userInfo['phone'],
                         $userInfo['picture_uri'],
-                        $expirationDate,
+                        $expirationDateOnUpdate,
                         $userInfo['active'],
                         null, //$creator_id = null,
                         0, //$hr_dept_id = 0,
@@ -521,6 +519,14 @@ class ImportCsv
         if (!empty($data)) {
             $language = $this->defaultLanguage;
             $this->logger->addInfo(count($data)." records found.");
+
+            //$em = Database::getManager();
+            //$em->getConnection()->beginTransaction();
+
+            $expirationDateOnCreate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
+            $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
+
+            $userToUpdateList = [];
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
                 $user_id = UserManager::get_user_id_from_original_id(
@@ -534,8 +540,6 @@ class ImportCsv
                     $userInfo = api_get_user_info($user_id, false, true);
                     $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
                 }
-
-                $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
 
                 if (empty($userInfo) && empty($userInfoByOfficialCode)) {
                     // Create user
@@ -551,7 +555,7 @@ class ImportCsv
                         $row['phone'],
                         null, //$row['picture'], //picture
                         $row['auth_source'], // ?
-                        $expirationDate, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
+                        $expirationDateOnCreate, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
                         1, //active
                         0,
                         null, // extra
@@ -573,6 +577,16 @@ class ImportCsv
                         Display::cleanFlashMessages();
                     }
                 } else {
+                    $userToUpdateList[]['user_info'] = $userInfo;
+                    $userToUpdateList[]['row'] = $row;
+                }
+            }
+
+            if (!empty($userToUpdateList)) {
+                foreach ($userToUpdateList as $userData) {
+                    $row = $userData['row'];
+                    $userInfo = $userData['user_info'];
+
                     if (empty($userInfo)) {
                         $this->logger->addError("Students - Can't update user :".$row['username']);
                         continue;
@@ -638,8 +652,6 @@ class ImportCsv
                     $password = null;
                     $resetPassword = 0; // disallow password change
 
-                    $expirationDate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
-
                     // Update user
                     $result = UserManager::update_user(
                         $userInfo['user_id'],
@@ -653,7 +665,7 @@ class ImportCsv
                         $userInfo['official_code'],
                         $userInfo['phone'],
                         $userInfo['picture_uri'],
-                        $expirationDate,
+                        $expirationDateOnUpdate,
                         $userInfo['active'],
                         null, //$creator_id = null,
                         0, //$hr_dept_id = 0,
@@ -669,7 +681,7 @@ class ImportCsv
                             $this->logger->addInfo("Students - Username was changes from '".$userInfo['username']."' to '".$row['username']."' ");
                         }
                         foreach ($row as $key => $value) {
-                            if (substr($key, 0, 6) == 'extra_') {
+                            if (substr($key, 0, 6) === 'extra_') {
                                 //an extra field
                                 UserManager::update_extra_field_value(
                                     $userInfo['user_id'],

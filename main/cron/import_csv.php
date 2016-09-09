@@ -517,6 +517,9 @@ class ImportCsv
          */
         $timeStart = microtime(true);
 
+        $batchSize = 20;
+        $em = Database::getManager();
+
         if (!empty($data)) {
             $language = $this->defaultLanguage;
             $this->logger->addInfo(count($data)." records found.");
@@ -525,6 +528,9 @@ class ImportCsv
             $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
 
             $userToUpdateList = [];
+
+            $counter = 1;
+
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
                 $user_id = UserManager::get_user_id_from_original_id(
@@ -574,14 +580,20 @@ class ImportCsv
                         $this->logger->addError(strip_tags(Display::getFlashToString()));
                         Display::cleanFlashMessages();
                     }
+
+                    if (($counter % $batchSize) === 0) {
+                        $em->flush();
+                        $em->clear(); // Detaches all objects from Doctrine!
+                    }
+                    $counter++;
                 } else {
                     $userToUpdateList[] = ['user_info' => $userInfo, 'row' => $row];
                 }
             }
 
-            $batchSize = 20;
+            $em->clear(); // Detaches all objects from Doctrine!
+
             $counter = 1;
-            $em = Database::getManager();
             if (!empty($userToUpdateList)) {
                 foreach ($userToUpdateList as $userData) {
                     $row = $userData['row'];

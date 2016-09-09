@@ -3,6 +3,7 @@
 
 use \Chamilo\CoreBundle\Entity\Session;
 use \Doctrine\Common\Collections\Criteria;
+use \Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository;
 
 /**
  * Generate a teacher time report in platform by session only
@@ -79,9 +80,9 @@ if ($session) {
                 continue;
             }
 
-            $works = $em
-                ->getRepository('ChamiloCourseBundle:CStudentPublication')
-                ->findWorksByTeacher($user, $course, $session);
+            /** @var \Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository $studentPubRepo */
+            $studentPubRepo = $em->getRepository('ChamiloCourseBundle:CStudentPublication');
+            $works = $studentPubRepo->findWorksByTeacher($user, $course, $session);
 
             $usersInfo[$user->getId()][$course->getId() . '_number_of_students'] = $sessionCourse->getNbrUsers();
             $usersInfo[$user->getId()][$course->getId() . '_number_of_works'] = count($works);

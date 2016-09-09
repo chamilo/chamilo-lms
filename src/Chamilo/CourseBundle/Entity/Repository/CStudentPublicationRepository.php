@@ -34,7 +34,7 @@ class CStudentPublicationRepository extends EntityRepository
             ->where(
                 $qb->expr()->andX(
                     $qb->expr()->eq('w.cId', ':course'),
-                    $qb->expr()->eq('w.sessionId', ':session'),
+                    $qb->expr()->eq('w.session', ':session'),
                     $qb->expr()->in('w.active', [0, 1]),
                     $qb->expr()->eq('w.parentId', 0),
                     $qb->expr()->eq('w.postGroupId', ':group'),

@@ -59,7 +59,7 @@ foreach ($course_list as $course) {
         $session_id
     );
     if ($status !== false || api_is_platform_admin() || $userIsGeneralCoach) {
-        $user_course_list[] = $course['code'];
+        $user_course_list[] = $course['real_id'];
     }
 }
 
@@ -126,12 +126,13 @@ $new_course_list = array();
 
 if (!empty($course_list)) {
     foreach ($course_list as $course_data) {
-        if (!api_is_platform_admin()) {
-            if (in_array(
-                    $course_data['code'],
-                    $user_course_list
-                ) || api_is_anonymous()
-            ) {
+        if (api_is_platform_admin()) {
+            $course_data['title'] = Display::url(
+                $course_data['title'],
+                api_get_course_url($course_data['code'], $session_id)
+            );
+        } else {
+            if (in_array($course_data['real_id'], $user_course_list) || api_is_anonymous()) {
                 $course_data['title'] = Display::url(
                     $course_data['title'],
                     api_get_course_url($course_data['code'], $session_id)

@@ -44,17 +44,6 @@ $userId = api_get_user_id();
 $session_info = SessionManager::fetch($session_id);
 $session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
 $course_list = SessionManager::get_course_list_by_session_id($session_id);
-
-// Getting all sessions where I'm subscribed
-/*$new_session_list = array();
-if (!api_is_anonymous()) {
-    $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-}
-$user_course_list = array();
-foreach ($new_session_list as $session_item) {
-    $user_course_list[] = $session_item['code'];
-}*/
-
 $userIsGeneralCoach = SessionManager::user_is_general_coach($userId, $session_id);
 
 $user_course_list = array();
@@ -74,70 +63,13 @@ if (empty($user_course_list)) {
 }
 
 $my_session_list = array();
-$final_array     = array();
-/*
-if (!empty($new_session_list)) {
-    foreach ($new_session_list as $item) {
-        $my_session_id = isset($item['id_session']) ? $item['id_session'] : null;
-        if (isset($my_session_id) && !in_array($my_session_id, $my_session_list) && $session_id == $my_session_id) {
-            $final_array[$my_session_id]['name'] = $item['session_name'];
-
-            //Get all courses by session where I'm subscribed
-            $my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);
-
-            foreach ($my_course_list as $my_course) {
-                $course = array();
-
-                $course_info   = api_get_course_info($my_course['code']);
-
-                // Getting all visible exercises from the current course
-                $exercise_list = ExerciseLib::get_all_exercises(
-                    $course_info,
-                    $my_session_id,
-                    true,
-                    null,
-                    false,
-                    1
-                );
-
-                $course['name'] = $course_info['name'];
-                $course['id']   = $course_info['real_id'];
-                if (!empty($exercise_list)) {
-                    foreach ($exercise_list as $exercise_item) {
-                        //Loading the exercise
-                        $exercise = new Exercise($course_info['real_id']);
-                        $exercise->read($exercise_item['id']);
-                        $visible_return = $exercise->is_visible();
-                        if ($visible_return['value'] != false) {
-                            // Reading all Exercise results by user, exercise_id, code, and session.
-                            $user_results = Event::getExerciseResultsByUser(
-                                api_get_user_id(),
-                                $exercise_item['id'],
-                                $my_course['code'],
-                                $my_session_id
-                            );
-                            $course['exercises'][$exercise_item['id']]['data']['exercise_data'] =  $exercise;
-                            $course['exercises'][$exercise_item['id']]['data']['results']       =  $user_results;
-                        }
-                    }
-                    $final_array[$my_session_id]['data'][$my_course['code']] = $course;
-                }
-            }
-        }
-        $my_session_list[] =  $my_session_id;
-    }
-}*/
-
+$final_array = array();
 $new_course_list = array();
 
 if (!empty($course_list)) {
     foreach ($course_list as $course_data) {
         if (!api_is_platform_admin()) {
-            if (in_array(
-                    $course_data['code'],
-                    $user_course_list
-                ) || api_is_anonymous()
-            ) {
+            if (in_array($course_data['real_id'], $user_course_list) || api_is_anonymous()) {
                 $course_data['title'] = Display::url(
                     $course_data['title'],
                     api_get_course_url($course_data['code'], $session_id)
@@ -631,24 +563,6 @@ if (!api_is_anonymous()) {
     $headers[] = get_lang('MyQCM');
     $headers[] = get_lang('MyStatistics');
 }
-
-// Sub headers
-/*$sub_header = array(
-    get_lang('AllLearningPaths'),
-    get_lang('PerWeek'),
-    get_lang('ByCourse')
-);
-
-// Sub headers data
-$lpTab = Display::tabs(
-    $sub_header,
-    array(
-        //Display::grid_html('list_default'),
-        Display::grid_html('list_week'),
-        //Display::grid_html('list_course')
-    ),
-    'sub_tab'
-);*/
 
 $coursesTab = Display::grid_html('courses');
 $starTab = Display::grid_html('list_default');

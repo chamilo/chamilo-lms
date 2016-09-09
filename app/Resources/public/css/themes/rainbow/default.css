@@ -416,6 +416,22 @@ footer a:hover{
 .page-header{
   margin: 10px 0 10px;
 }
+#user_form .form-horizontal{
+    font-size: 13px;
+}
+.form-horizontal .holder{
+    border: none;
+}
+.form-horizontal .ul.holder li.bit-input input{
+    width: 514px;
+    border: 1px solid #cccccc !important;
+}
+legend{
+    font-size: 18px;
+}
+.legend .panel-body{
+    font-size: 13px;
+}
 @media (max-width: 480px) {
     .item-menu{
         width: 100%;
@@ -423,6 +439,6 @@ footer a:hover{
     }
 }
 
-.red_underline {
+/* .red_underline {
    color: red;
-}
+} */

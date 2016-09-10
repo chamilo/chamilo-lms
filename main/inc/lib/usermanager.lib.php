@@ -2491,54 +2491,47 @@ class UserManager
         $ignore_visibility_for_admins = false,
         $ignoreTimeLimit = false
     ) {
-        // Database Table Definitions
-        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_category = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
         if ($user_id != strval(intval($user_id))) {
             return array();
         }
 
         // Get the list of sessions per user
-        $now = api_get_utc_datetime();
+        $now = new DateTime('now', new DateTimeZone('UTC'));
 
-        $sql = "SELECT DISTINCT
-                    session.id,
-                    session.name,
-                    session.access_start_date,
-                    session.access_end_date,
-                    session_category_id,
-                    session_category.name as session_category_name,
-                    session_category.date_start session_category_date_start,
-                    session_category.date_end session_category_date_end,
-                    coach_access_start_date,
-                    coach_access_end_date
-              FROM $tbl_session as session
-                  LEFT JOIN $tbl_session_category session_category
-                  ON (session_category_id = session_category.id)
-                  LEFT JOIN $tbl_session_course_user as session_rel_course_user
-                  ON (session_rel_course_user.session_id = session.id)
-              WHERE (
-                    session_rel_course_user.user_id = $user_id OR
-                    session.id_coach = $user_id
-              )
-              ORDER BY session_category_name, name";
+        $dql = "
+            SELECT DISTINCT
+                S.id,
+                S.name,
+                S.accessStartDate AS access_start_date,
+                S.accessEndDate AS access_end_date,
+                SC.id AS session_category_id,
+                SC.name AS session_category_name,
+                SC.dateStart AS session_category_date_start,
+                SC.dateEnd AS session_category_date_end,
+                S.coachAccessStartDate AS coach_access_start_date,
+                S.coachAccessEndDate AS coach_access_end_date
+            FROM ChamiloCoreBundle:Session AS S
+            LEFT JOIN ChamiloCoreBundle:SessionCategory AS SC WITH S.category = SC
+            LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS SCU WITH SCU.session = S
+            WHERE SCU.user = :user OR S.generalCoach = :user
+            ORDER BY SC.name, S.name";
 
-        $result = Database::query($sql);
-        $categories = array();
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $sessionData = Database::getManager()
+            ->createQuery($dql)
+            ->setParameters(['user' => $user_id])
+            ->getResult();
+        $categories = [];
+        foreach ($sessionData as $row) {
                 // User portal filters:
 
                 if ($ignoreTimeLimit === false) {
                     if ($is_time_over) {
                         // History
-                        if (empty($row['access_end_date']) || $row['access_end_date'] == '0000-00-00 00:00:00') {
+                        if (empty($row['access_end_date'])) {
                             continue;
                         }
 
-                        if (isset($row['access_end_date'])) {
+                        if (!empty($row['access_end_date'])) {
                             if ($row['access_end_date'] > $now) {
                                 continue;
                             }
@@ -2550,7 +2543,6 @@ class UserManager
                             // Teachers can access the session depending in the access_coach date
                         } else {
                             if (isset($row['access_end_date']) &&
-                                ($row['access_end_date'] != '0000-00-00 00:00:00') &&
                                 !empty($row['access_end_date'])
                             ) {
                                 if ($row['access_end_date'] <= $now) {
@@ -2564,8 +2556,12 @@ class UserManager
                 $categories[$row['session_category_id']]['session_category'] = array(
                     'id' => $row['session_category_id'],
                     'name' => $row['session_category_name'],
-                    'date_start' => $row['session_category_date_start'],
+                    'date_start' => $row['session_category_date_start']
+                        ? $row['session_category_date_start']->format('Y-m-d H:i:s')
+                        : null,
                     'date_end' => $row['session_category_date_end']
+                        ? $row['session_category_date_end']->format('Y-m-d H:i:s')
+                        : null
                 );
 
                 $session_id = $row['id'];
@@ -2628,14 +2624,21 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
                     'session_name' => $row['name'],
                     'session_id' => $row['id'],
-                    'access_start_date' => $row['access_start_date'],
-                    'access_end_date' => $row['access_end_date'],
-                    'coach_access_start_date' => $row['coach_access_start_date'],
-                    'coach_access_end_date' => $row['coach_access_end_date'],
+                    'access_start_date' => $row['access_start_date']
+                        ? $row['access_start_date']->format('Y-m-d H:i:s')
+                        : null,
+                    'access_end_date' => $row['access_end_date']
+                        ? $row['access_end_date']->format('Y-m-d H:i:s')
+                        : null,
+                    'coach_access_start_date' => $row['coach_access_start_date']
+                        ? $row['coach_access_start_date']->format('Y-m-d H:i:s')
+                        : null,
+                    'coach_access_end_date' => $row['coach_access_end_date']
+                        ? $row['coach_access_end_date']->format('Y-m-d H:i:s')
+                        : null,
                     'courses' => $courseList
                 );
             }
-        }
 
         return $categories;
     }

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLp;
+
 /**
  * Class LearnpathList
  * This class is only a learning path list container with several practical methods for sorting the list and
@@ -66,9 +68,9 @@ class LearnpathList
             $session_id = api_get_session_id();
         }
 
-        $condition_session = api_get_session_condition($session_id, true, true);
+        $condition_session = api_get_session_condition($session_id, true, true, 'Lp.sessionId');
 
-        $order = "ORDER BY display_order ASC, name ASC";
+        $order = "ORDER BY Lp.displayOrder ASC, Lp.name ASC";
         if (isset($order_by)) {
             $order = Database::parse_conditions(array('order' => $order_by));
         }
@@ -78,10 +80,10 @@ class LearnpathList
 
         if ($check_publication_dates) {
             $time_conditions = " AND (
-                (publicated_on <> '' AND publicated_on < '$now' AND expired_on <> '' AND expired_on > '$now') OR
-                (publicated_on <> '' AND publicated_on < '$now' AND expired_on IS NULL) OR
-                (publicated_on IS NULL AND expired_on <> '' AND expired_on > '$now') OR
-                (publicated_on IS NULL AND expired_on IS NULL ))
+                (LP.publicatedOn IS NOT NULL AND LP.publicatedOn < '$now' AND Lp.expiredOn IS NOT NULL AND Lp.expiredOn > '$now') OR
+                (LP.publicatedOn IS NOT NULL AND LP.publicatedOn < '$now' AND Lp.expiredOn IS NULL) OR
+                (LP.publicatedOn IS NULL AND Lp.expiredOn IS NOT NULL AND Lp.expiredOn > '$now') OR
+                (LP.publicatedOn IS NULL AND Lp.expiredOn IS NULL ))
             ";
         }
 
@@ -89,28 +91,34 @@ class LearnpathList
         if ($ignoreCategoryFilter == false) {
             if (!empty($categoryId)) {
                 $categoryId = intval($categoryId);
-                $categoryFilter = " AND category_id = $categoryId";
+                $categoryFilter = " AND Lp.categoryId = $categoryId";
             } else {
-                $categoryFilter = " AND (category_id = 0 OR category_id IS NULL) ";
+                $categoryFilter = " AND (Lp.categoryId = 0 OR Lp.categoryId IS NULL) ";
             }
         }
 
-        $sql = "SELECT * FROM $lp_table
+        $dql = "SELECT Lp FROM ChamiloCourseBundle:CLp as Lp
                 WHERE
-                    c_id = $course_id
+                    Lp.cId = $course_id
                     $time_conditions
                     $condition_session
                     $categoryFilter
                 $order
                     ";
-        $res = Database::query($sql);
+
+        $learningPaths = Database::getManager()
+            ->createQuery($dql)
+            ->getResult();
+
         $names = array();
-        while ($row = Database::fetch_array($res,'ASSOC')) {
+
+        /** @var CLp $row */
+        foreach ($learningPaths as $row) {
             // Use domesticate here instead of Database::escape_string because
             // it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
             // is done using domesticate()
-            $myname = domesticate($row['name']);
-            $mylink = 'lp/lp_controller.php?action=view&lp_id='.$row['id'].'&id_session='.$session_id;
+            $myname = domesticate($row->getName());
+            $mylink = 'lp/lp_controller.php?action=view&lp_id=' . $row->getIid() . '&id_session='.$session_id;
 
             $sql2 = "SELECT * FROM $tbl_tool
                      WHERE
@@ -133,62 +141,38 @@ class LearnpathList
             $vis = api_get_item_visibility(
                 api_get_course_info($course_code),
                 'learnpath',
-                $row['id'],
+                $row->getIid(),
                 $session_id
             );
 
-            if (!empty($row['created_on'])) {
-                $row['created_on'] = $row['created_on'];
-            } else {
-                $row['created_on'] = '';
-            }
-
-            if (!empty($row['modified_on'])) {
-                $row['modified_on'] = $row['modified_on'];
-            } else {
-                $row['modified_on'] = '';
-            }
-
-            if (!empty($row['publicated_on'])) {
-                $row['publicated_on'] = $row['publicated_on'];
-            } else {
-                $row['publicated_on'] = '';
-            }
-
-            if (!empty($row['expired_on'])) {
-                $row['expired_on'] = $row['expired_on'];
-            } else {
-                $row['expired_on'] = '';
-            }
-
-            $this->list[$row['id']] = array(
-                'lp_type' => $row['lp_type'],
-                'lp_session' => $row['session_id'],
-                'lp_name' => stripslashes($row['name']),
-                'lp_desc' => stripslashes($row['description']),
-                'lp_path' => $row['path'],
-                'lp_view_mode' => $row['default_view_mod'],
-                'lp_force_commit' => $row['force_commit'],
-                'lp_maker' => stripslashes($row['content_maker']),
-                'lp_proximity' => $row['content_local'],
+            $this->list[$row->getIid()] = array(
+                'lp_type' => $row->getLpType(),
+                'lp_session' => $row->getSessionId(),
+                'lp_name' => stripslashes($row->getName()),
+                'lp_desc' => stripslashes($row->getDescription()),
+                'lp_path' => $row->getPath(),
+                'lp_view_mode' => $row->getDefaultViewMod(),
+                'lp_force_commit' => $row->getForceCommit(),
+                'lp_maker' => stripslashes($row->getContentMaker()),
+                'lp_proximity' => $row->getContentLocal(),
                 'lp_encoding' => api_get_system_encoding(),
                 'lp_visibility' => $vis,
                 'lp_published' => $pub,
-                'lp_prevent_reinit' => $row['prevent_reinit'],
-                'seriousgame_mode' => $row['seriousgame_mode'],
-                'lp_scorm_debug' => $row['debug'],
-                'lp_display_order' => $row['display_order'],
-                'lp_preview_image' => stripslashes($row['preview_image']),
-                'autolaunch' => $row['autolaunch'],
-                'session_id' => $row['session_id'],
-                'created_on' => $row['created_on'],
-                'modified_on' => $row['modified_on'],
-                'publicated_on' => $row['publicated_on'],
-                'expired_on' => $row['expired_on'],
+                'lp_prevent_reinit' => $row->getPreventReinit(),
+                'seriousgame_mode' => $row->getSeriousgameMode(),
+                'lp_scorm_debug' => $row->getDebug(),
+                'lp_display_order' => $row->getDisplayOrder(),
+                'lp_preview_image' => stripslashes($row->getPreviewImage()),
+                'autolaunch' => $row->getAutolaunch(),
+                'session_id' => $row->getSessionId(),
+                'created_on' => $row->getCreatedOn()->format('Y-m-d H:i:s'),
+                'modified_on' => $row->getModifiedOn()->format('Y-m-d H:i:s'),
+                'publicated_on' => $row->getPublicatedOn() ? $row->getPublicatedOn()->format('Y-m-d H:i:s') : null,
+                'expired_on' => $row->getExpiredOn() ? $row->getExpiredOn()->format('Y-m-d H:i:s') : null,
                 //'category_id'       => $row['category_id'],
-                'subscribe_users' => $row['subscribe_users'],
+                'subscribe_users' => $row->getSubscribeUsers(),
             );
-            $names[$row['name']] = $row['id'];
+            $names[$row->getName()] = $row->getIid();
         }
 
         $this->alpha_list = asort($names);

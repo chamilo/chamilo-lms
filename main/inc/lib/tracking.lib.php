@@ -3257,12 +3257,16 @@ class Tracking
 
         $sessions = [];
         while ($row = Database::fetch_array($rs)) {
+            if ($row['access_start_date'] == '0000-00-00 00:00:00') {
+                $row['access_start_date'] = null;
+            }
+
             $sessions[$row['id']] = $row;
         }
 
         if (!empty($sessions)) {
             foreach ($sessions as & $session) {
-                if ($session['access_start_date'] == '0000-00-00 00:00:00' || empty($session['access_start_date'])
+                if (empty($session['access_start_date'])
                 ) {
                     $session['status'] = get_lang('SessionActive');
                 }

@@ -1556,6 +1556,10 @@ class Display
 
             if (
                 (
+                    $session_info['access_end_date'] == '0000-00-00 00:00:00' &&
+                    $session_info['access_start_date'] == '0000-00-00 00:00:00'
+                ) ||
+                (
                     $session_info['access_end_date'] == '0000-00-00' &&
                     $session_info['access_start_date'] == '0000-00-00'
                 ) ||

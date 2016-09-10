@@ -8,6 +8,7 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Chamilo\CoreBundle\Entity\SessionCategory;
 
 //use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 //use Gedmo\Mapping\Annotation as Gedmo;
@@ -811,8 +812,7 @@ class Session
 
     /**
      * Get id
-     *
-     * @return integer
+     * @return User
      */
     public function getGeneralCoach()
     {
@@ -829,6 +829,7 @@ class Session
 
     /**
      * @return mixed
+     * @return SessionCategory
      */
     public function getCategory()
     {

@@ -708,23 +708,17 @@ class Rest extends WebService
                 $timeLimits = false;
 
                 //This is an old LP (from a migration 1.8.7) so we do nothing
-                if (
-                    (empty($lpDetails['created_on']) || $lpDetails['created_on'] == '0000-00-00 00:00:00') &&
-                    (empty($lpDetails['modified_on']) || $lpDetails['modified_on'] == '0000-00-00 00:00:00')
-                ) {
+                if (empty($lpDetails['created_on']) && empty($lpDetails['modified_on'])) {
                     $timeLimits = false;
                 }
 
                 //Checking if expired_on is ON
-                if ($lpDetails['expired_on'] != '' && $lpDetails['expired_on'] != '0000-00-00 00:00:00') {
+                if (!empty($lpDetails['expired_on'])) {
                     $timeLimits = true;
                 }
 
                 if ($timeLimits) {
-                    if (
-                        !empty($lpDetails['publicated_on']) && $lpDetails['publicated_on'] != '0000-00-00 00:00:00' &&
-                        !empty($lpDetails['expired_on']) && $lpDetails['expired_on'] != '0000-00-00 00:00:00'
-                    ) {
+                    if (!empty($lpDetails['publicated_on']) && !empty($lpDetails['expired_on'])) {
                         $startTime = api_strtotime($lpDetails['publicated_on'], 'UTC');
                         $endTime = api_strtotime($lpDetails['expired_on'], 'UTC');
                         $now = time();

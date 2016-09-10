@@ -1209,7 +1209,7 @@ class IndexManager
                             $is_coach_course = api_is_coach($session_id, $course['real_id']);
                             $allowed_time = 0;
                             $allowedEndTime = true;
-                            if (!empty($date_session_start) && $date_session_start != '0000-00-00 00:00:00') {
+                            if (!empty($date_session_start)) {
                                 if ($is_coach_course) {
                                     $allowed_time = api_strtotime($coachAccessStartDate);
                                 } else {
@@ -1217,7 +1217,7 @@ class IndexManager
                                 }
 
                                 if (!isset($_GET['history'])) {
-                                    if (!empty($date_session_end) && $date_session_end != '0000-00-00 00:00:00') {
+                                    if (!empty($date_session_end)) {
                                         $endSessionToTms = api_strtotime($date_session_end);
                                         if ($session_now > $endSessionToTms) {
                                             $allowedEndTime = false;
@@ -1339,11 +1339,11 @@ class IndexManager
                                 $allowedEndTime = true;
 
                                 if ($is_coach_course) {
-                                    if ($date_session_start != '0000-00-00 00:00:00') {
+                                    if (!empty($date_session_start)) {
                                         $allowed_time = api_strtotime($coachAccessStartDate);
                                     }
                                     if (!isset($_GET['history'])) {
-                                        if ($date_session_end != '0000-00-00 00:00:00') {
+                                        if (!empty($date_session_end)) {
                                             $endSessionToTms = api_strtotime($date_session_end);
                                             if ($session_now > $endSessionToTms) {
                                                 $allowedEndTime = false;
@@ -1414,9 +1414,7 @@ class IndexManager
 
                         if (
                             !empty($session_category_start_date) &&
-                            $session_category_start_date != '0000-00-00' &&
-                            !empty($session_category_end_date) &&
-                            $session_category_end_date != '0000-00-00'
+                            !empty($session_category_end_date)
                         ) {
                             $categoryParams['subtitle'] = sprintf(
                                 get_lang('FromDateXToDateY'),
@@ -1425,15 +1423,13 @@ class IndexManager
                             );
                         } else {
                             if (
-                                !empty($session_category_start_date) &&
-                                $session_category_start_date != '0000-00-00'
+                                !empty($session_category_start_date)
                             ) {
                                 $categoryParams['subtitle'] = get_lang('From') . ' ' . $session_category_start_date;
                             }
 
                             if (
-                                !empty($session_category_end_date) &&
-                                $session_category_end_date != '0000-00-00'
+                                !empty($session_category_end_date)
                             ) {
                                 $categoryParams['subtitle'] = get_lang('Until') . ' ' . $session_category_end_date;
                             }

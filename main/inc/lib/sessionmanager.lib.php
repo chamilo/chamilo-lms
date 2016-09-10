@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use \ExtraField as ExtraFieldModel;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * Class SessionManager
@@ -35,17 +36,48 @@ class SessionManager
      */
     public static function fetch($id)
     {
-        $t = Database::get_main_table(TABLE_MAIN_SESSION);
-        if ($id != strval(intval($id))) {
-            return array();
-        }
-        $s = "SELECT * FROM $t WHERE id = $id";
-        $r = Database::query($s);
-        if (Database::num_rows($r) != 1) {
-            return array();
+        $em = Database::getManager();
+        /** @var Session $session */
+        $session = $em->find('ChamiloCoreBundle:Session', $id);
+
+        if (!$session) {
+            return [];
         }
 
-        return Database::fetch_array($r, 'ASSOC');
+        return [
+            'id' => $session->getId(),
+            'id_coach' => $session->getGeneralCoach() ? $session->getGeneralCoach()->getId() : null,
+            'session_category_id' => $session->getCategory() ? $session->getCategory()->getId() : null,
+            'name' => $session->getName(),
+            'description' => $session->getDescription(),
+            'show_description' => $session->getShowDescription(),
+            'duration' => $session->getDuration(),
+            'nbr_courses' => $session->getNbrCourses(),
+            'nbr_users' => $session->getNbrUsers(),
+            'nbr_classes' => $session->getNbrClasses(),
+            'session_admin_id' => $session->getSessionAdminId(),
+            'visibility' => $session->getVisibility(),
+            'promotion_id' => $session->getPromotionId(),
+            'display_start_date' => $session->getDisplayStartDate()
+                ? $session->getDisplayStartDate()->format('Y-m-d H:i:s')
+                : null,
+            'display_end_date' => $session->getDisplayEndDate()
+                ? $session->getDisplayEndDate()->format('Y-m-d H:i:s')
+                : null,
+            'access_start_date' => $session->getAccessStartDate()
+                ? $session->getAccessStartDate()->format('Y-m-d H:i:s')
+                : null,
+            'access_end_date' => $session->getAccessEndDate()
+                ? $session->getAccessEndDate()->format('Y-m-d H:i:s')
+                : null,
+            'coach_access_start_date' => $session->getCoachAccessStartDate()
+                ? $session->getCoachAccessStartDate()->format('Y-m-d H:i:s')
+                : null,
+            'coach_access_end_date' => $session->getCoachAccessEndDate()
+                ? $session->getCoachAccessEndDate()->format('Y-m-d H:i:s')
+                : null,
+            'send_subscription_notification' => $session->getSendSubscriptionNotification()
+        ];
     }
 
     /**
@@ -3077,6 +3109,7 @@ class SessionManager
     /**
      * Get sessions followed by human resources manager
      * @param int $userId
+     * @param int $status Optional
      * @param int $start
      * @param int $limit
      * @param bool $getCount
@@ -3217,6 +3250,36 @@ class SessionManager
                     $row['image'] = $sessionImage;
                 } else {
                     $row['image'] =  $imgPath;
+                }
+
+                if ($row['display_start_date'] == '0000-00-00 00:00:00' || $row['display_start_date'] == '0000-00-00') {
+                    $row['display_start_date'] = null;
+                }
+
+                if ($row['display_end_date'] == '0000-00-00 00:00:00' || $row['display_end_date'] == '0000-00-00') {
+                    $row['display_end_date'] = null;
+                }
+
+                if ($row['access_start_date'] == '0000-00-00 00:00:00' || $row['access_start_date'] == '0000-00-00') {
+                    $row['access_start_date'] = null;
+                }
+
+                if ($row['access_end_date'] == '0000-00-00 00:00:00' || $row['access_end_date'] == '0000-00-00') {
+                    $row['access_end_date'] = null;
+                }
+
+                if (
+                    $row['coach_access_start_date'] == '0000-00-00 00:00:00' ||
+                    $row['coach_access_start_date'] == '0000-00-00'
+                ) {
+                    $row['coach_access_start_date'] = null;
+                }
+
+                if (
+                    $row['coach_access_end_date'] == '0000-00-00 00:00:00' ||
+                    $row['coach_access_end_date'] == '0000-00-00'
+                ) {
+                    $row['coach_access_end_date'] = null;
                 }
 
                 $sessions[$row['id']] = $row;
@@ -7569,7 +7632,7 @@ class SessionManager
         $res = Database::query($sql);
 
         while ($data = Database::fetch_assoc($res)) {
-            if (self::isSessionDateOkForCoach($data['session_id'])) {
+            if (api_get_session_visibility($data['session_id'])) {
                 if (!isset($listResCourseSession[$data['id']])) {
                     $listResCourseSession[$data['id']] = array();
                 }
@@ -7578,46 +7641,6 @@ class SessionManager
         }
 
         return $listResCourseSession;
-    }
-
-    /**
-     * Return true if coach is allowed to access this session
-     * @param int $sessionId
-     * @return bool
-     */
-    public static function isSessionDateOkForCoach($sessionId)
-    {
-        return api_get_session_visibility($sessionId);
-        /*
-        $listSessionInfo = api_get_session_info($sessionId);
-        $dateStart = $listSessionInfo['date_start'];
-        $dateEnd = $listSessionInfo['date_end'];
-        $nbDaysAccessBeforeBeginning = $listSessionInfo['nb_days_access_before_beginning'];
-        $nbDaysAccessAfterEnd = $listSessionInfo['nb_days_access_after_end'];
-
-        // no start date
-        if ($dateStart == '0000-00-00') {
-            return true;
-        }
-
-        $now = time();
-
-        $dateStartForCoach = api_strtotime($dateStart.' 00:00:00') - ($nbDaysAccessBeforeBeginning * 86400);
-        $dateEndForCoach = api_strtotime($dateEnd.' 00:00:00') + ($nbDaysAccessAfterEnd * 86400);
-
-        if ($dateEnd == '0000-00-00') {
-            // start date but no end date
-            if ($dateStartForCoach <= $now) {
-                return true;
-            }
-        } else {
-            // start date and end date
-            if ($dateStartForCoach <= $now && $now <= $dateEndForCoach) {
-                return true;
-            }
-        }
-
-        return false;*/
     }
 
     /**
@@ -7641,7 +7664,7 @@ class SessionManager
             $sessionId = $data['id'];
             $listCoursesInSession = self::getCoursesInSession($sessionId);
             foreach ($listCoursesInSession as $i => $courseId) {
-                if (self::isSessionDateOkForCoach($sessionId)) {
+                if (api_get_session_visibility($sessionId)) {
                     if (!isset($listResCourseSession[$courseId])) {
                         $listResCourseSession[$courseId] = array();
                     }

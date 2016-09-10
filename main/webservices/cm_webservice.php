@@ -1,5 +1,7 @@
 <?php
 
+use Chamilo\UserBundle\Entity\User;
+
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 
 $libpath = api_get_path(LIBRARY_PATH);
@@ -148,25 +150,22 @@ class WSCM
 
         //lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
-                FROM $user_table
-                WHERE username = '".trim(addslashes($login))."'";
-        $result = Database::query($sql);
+        $userRepo = UserManager::getRepository();
+        /** @var User $uData */
+        $uData = $userRepo->findOneBy([
+            'username' => trim(addslashes($login))
+        ]);
 
-        if (Database::num_rows($result) > 0) {
-            $uData = Database::fetch_array($result);
-
-            if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
+        if ($uData) {
+            if ($uData->getAuthSource() == PLATFORM_AUTH_SOURCE) {
                 $password = trim(stripslashes($password));
                 // Check the user's password
-                if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
+                if ($password == $uData->getPassword() AND (trim($login) == $uData->getUsername())) {
                     // Check if the account is active (not locked)
-                    if ($uData['active'] == '1') {
+                    if ($uData->getActive()) {
                         // Check if the expiration date has not been reached
-                        if ($uData['expiration_date'] > date(
-                                'Y-m-d H:i:s'
-                            ) OR $uData['expiration_date'] == '0000-00-00 00:00:00'
-                        ) {
+                        $now = new DateTime();
+                        if ($uData->getExpirationDate() > $now OR !$uData->getExpirationDate()) {
                             return "valid";
                         } else {
                             return get_lang('AccountExpired');

@@ -1959,8 +1959,9 @@ class Attendance
      */
     public function getAttendanceLogin($startDate, $endDate)
     {
-        if (empty($startDate) || $startDate == '0000-00-00' ||
-            empty($endDate) || $endDate == '0000-00-00'
+        if (
+            empty($startDate) || $startDate == '0000-00-00' || $startDate == '0000-00-00 00:00:00' ||
+            empty($endDate) || $endDate == '0000-00-00' || $endDate == '0000-00-00 00:00:00'
         ) {
             return false;
         }

@@ -1024,11 +1024,11 @@ switch ($action) {
 
                 $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
                 $session_date = array();
-                if (!empty($session['access_start_date']) && $session['access_start_date'] != '0000-00-00') {
+                if (!empty($session['access_start_date'])) {
                     $session_date[] = get_lang('From').' '.api_format_date($session['access_start_date'], DATE_FORMAT_SHORT);
                 }
 
-                if (!empty($session['access_end_date']) && $session['access_end_date'] != '0000-00-00') {
+                if (!empty($session['access_end_date'])) {
                     $session_date[] = get_lang('Until').' '.api_format_date($session['access_end_date'], DATE_FORMAT_SHORT);
                 }
 

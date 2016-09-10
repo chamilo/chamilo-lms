@@ -183,7 +183,7 @@ if (!empty($course_list)) {
 
         $icons = '';
         foreach ($lp_list as $item) {
-            if ($item['modified_on'] == '0000-00-00 00:00:00' || empty($item['modified_on'])) {
+            if (empty($item['modified_on'])) {
                 $lp_date_original = $item['created_on'];
                 $image = 'new.gif';
                 $label = get_lang('LearnpathAdded');
@@ -383,11 +383,11 @@ if (!empty($new_exercises)) {
 
 $start = $end = $start_only = $end_only ='';
 
-if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00') {
+if (!empty($session_info['access_start_date'])) {
     $start = api_convert_and_format_date($session_info['access_start_date'], DATE_FORMAT_SHORT);
     $start_only = get_lang('From').' '.$session_info['access_start_date'];
 }
-if (!empty($session_info['access_start_date']) && $session_info['access_end_date'] != '0000-00-00') {
+if (!empty($session_info['access_start_date'])) {
     $end = api_convert_and_format_date($session_info['access_end_date'], DATE_FORMAT_SHORT);
     $end_only = get_lang('Until').' '.$session_info['access_end_date'];
 }

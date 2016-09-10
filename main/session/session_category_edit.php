@@ -94,7 +94,7 @@ if (!empty($return)) {
                 <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('EditTimeLimit') ?></a>
             </div>
         </div>
-        <div style="display: <?php if($formSent && ($coachAccessStartDate!='0000-00-00 00:00:00' || $coachAccessEndDate!='0000-00-00 00:00:00')) echo 'block'; else echo 'none'; ?>;" id="options">
+        <div style="display: <?php echo $formSent ? 'display' : 'none'; ?>;" id="options">
             <div class="form-group">
                 <label class="col-sm-3 control-label"><?php echo get_lang('DateStart') ?></label>
                 <div class="col-sm-6">

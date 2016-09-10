@@ -4141,7 +4141,10 @@ class CourseManager
                 $session = api_get_session_info($course_info['id_session']);
                 $session_category_id = CourseManager::get_session_category_id_by_session_id($course_info['id_session']);
                 $session['category'] = $sessioncoach['name'];
-                if ($session['access_start_date'] == '0000-00-00') {
+                if (
+                    $session['access_start_date'] == '0000-00-00 00:00:00' || empty($session['access_start_date']) ||
+                    $session['access_start_date'] == '0000-00-00'
+                ) {
                     //$session['dates'] = get_lang('WithoutTimeLimits');
                     $session['dates'] = '';
                     if (api_get_setting('show_session_coach') === 'true') {

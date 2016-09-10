@@ -660,11 +660,11 @@ if (!empty($student_id)) {
             $session_info = api_get_session_info($sId);
             if ($session_info) {
                 $session_name = $session_info['name'];
-                if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00') {
+                if (!empty($session_info['access_start_date'])) {
                     $access_start_date = api_format_date($session_info['access_start_date'], DATE_FORMAT_SHORT);
                 }
 
-                if (!empty($session_info['access_end_date']) && $session_info['access_end_date'] != '0000-00-00') {
+                if (!empty($session_info['access_end_date'])) {
                     $access_end_date = api_format_date($session_info['access_end_date'], DATE_FORMAT_SHORT);
                 }
 

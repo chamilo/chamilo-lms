@@ -2048,19 +2048,7 @@ function api_get_session_name($session_id = 0) {
  */
 function api_get_session_info($session_id)
 {
-    $data = array();
-    if (!empty($session_id)) {
-        $session_id = intval($session_id);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "SELECT * FROM $tbl_session WHERE id = $session_id";
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result)>0) {
-            $data = Database::fetch_array($result, 'ASSOC');
-        }
-    }
-
-    return $data;
+    return SessionManager::fetch($session_id);
 }
 
 /**

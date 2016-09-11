@@ -80,10 +80,10 @@ class LearnpathList
 
         if ($check_publication_dates) {
             $time_conditions = " AND (
-                (LP.publicatedOn IS NOT NULL AND LP.publicatedOn < '$now' AND Lp.expiredOn IS NOT NULL AND Lp.expiredOn > '$now') OR
-                (LP.publicatedOn IS NOT NULL AND LP.publicatedOn < '$now' AND Lp.expiredOn IS NULL) OR
-                (LP.publicatedOn IS NULL AND Lp.expiredOn IS NOT NULL AND Lp.expiredOn > '$now') OR
-                (LP.publicatedOn IS NULL AND Lp.expiredOn IS NULL ))
+                (Lp.publicatedOn IS NOT NULL AND Lp.publicatedOn < '$now' AND Lp.expiredOn IS NOT NULL AND Lp.expiredOn > '$now') OR
+                (Lp.publicatedOn IS NOT NULL AND Lp.publicatedOn < '$now' AND Lp.expiredOn IS NULL) OR
+                (Lp.publicatedOn IS NULL AND Lp.expiredOn IS NOT NULL AND Lp.expiredOn > '$now') OR
+                (Lp.publicatedOn IS NULL AND Lp.expiredOn IS NULL ))
             ";
         }
 

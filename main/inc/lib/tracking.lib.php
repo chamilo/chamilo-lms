@@ -4957,7 +4957,7 @@ class Tracking
                 api_get_user_id(),
                 $course_info['code'],
                 $session_id,
-                'publicated_on ASC',
+                'Lp.publicatedOn ASC',
                 true,
                 null,
                 true

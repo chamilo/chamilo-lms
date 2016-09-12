@@ -5350,7 +5350,11 @@ class SessionManager
                 $courseInfo = api_get_course_info_by_id($courseId);
                 foreach ($coachesPerSession as $sessionId => $coachList) {
                     CourseManager::updateTeachers(
-                        $courseInfo['real_id'], $coachList, false, false, false
+                        $courseInfo,
+                        $coachList,
+                        false,
+                        false,
+                        false
                     );
                     $result[$courseInfo['code']][$sessionId] = $coachList;
                 }

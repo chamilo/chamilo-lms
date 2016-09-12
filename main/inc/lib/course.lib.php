@@ -5061,7 +5061,7 @@ class CourseManager
     }
 
     /**
-     * @param int $courseId
+     * @param array $courseInfo
      * @param array $teachers
      * @param bool $deleteTeachersNotInList
      * @param bool $editTeacherInSessions
@@ -5069,7 +5069,7 @@ class CourseManager
      * @return false|null
      */
     public static function updateTeachers(
-        $courseId,
+        $courseInfo,
         $teachers,
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
@@ -5083,12 +5083,12 @@ class CourseManager
         if (!is_array($teachers)) {
             $teachers = array($teachers);
         }
-        $courseId = intval($courseId);
-        $courseInfo = api_get_course_info_by_id($courseId);
 
-        if (empty($courseInfo)) {
+        if (empty($courseInfo) || !isset($courseInfo['real_id'])) {
             return false;
         }
+
+        $courseId = $courseInfo['real_id'];
         $course_code = $courseInfo['code'];
 
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);

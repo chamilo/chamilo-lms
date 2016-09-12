@@ -169,20 +169,22 @@ try {
         case Rest::ACTION_SAVE_FORUM_POST:
             if (
                 empty($_POST['title']) || empty($_POST['text']) || empty($_POST['thread']) || empty($_POST['forum']) ||
-                empty($_POST['notify']) || empty($_POST['parent']) || empty($_POST['course'])
+                empty($_POST['course'])
             ) {
                 throw new Exception(get_lang('NoData'));
             }
 
             $courseId = intval($_POST['course']);
+            $notify = !empty($_POST['notify']);
+            $parentId = !empty($_POST['parent']) ? intval($_POST['parent']) : null;
 
             $postValues = [
                 'post_title' => $_POST['title'],
                 'post_text' => nl2br($_POST['text']),
                 'thread_id' => $_POST['thread'],
                 'forum_id' => $_POST['forum'],
-                'post_notification' => $_POST['notify'],
-                'post_parent_id' => $_POST['parent']
+                'post_notification' => $notify,
+                'post_parent_id' => $parentId
             ];
 
             $data = $restApi->saveForumPost($postValues, $forumId, $courseId);

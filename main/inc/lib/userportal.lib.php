@@ -1370,24 +1370,25 @@ class IndexManager
                                 }
                             }
 
-                            $sessionParams = array();
+                            $sessionParams = [];
                             // Category
                             if ($count > 0) {
                                 $session_box = Display:: get_session_title_box($session_id);
-                                $sessionParams['id'] = $session_id;
+                                $sessionParams[0]['id'] = $session_id;
+                                $sessionParams[0]['date'] = $session_box['dates'];
                                 //$sessionParams['show_link_to_session'] = !api_is_drh() && $sessionTitleLink;
-                                $sessionParams['course_list_session_style'] = $coursesListSessionStyle;
-                                $sessionParams['title'] = $session_box['title'];
-                                $sessionParams['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'] . ' | ': '') . $session_box['dates'];
-                                $sessionParams['show_actions'] = api_is_platform_admin();
-                                $sessionParams['courses'] = $html_courses_session;
-                                $sessionParams['show_simple_session_info'] = false;
+                                $sessionParams[0]['course_list_session_style'] = $coursesListSessionStyle;
+                                $sessionParams[0]['title'] = $session_box['title'];
+                                $sessionParams[0]['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'] . ' | ': '') . $session_box['dates'];
+                                $sessionParams[0]['show_actions'] = api_is_platform_admin();
+                                $sessionParams[0]['courses'] = $html_courses_session;
+                                $sessionParams[0]['show_simple_session_info'] = false;
 
                                 if (
                                     isset($_configuration['show_simple_session_info']) &&
                                     $_configuration['show_simple_session_info']
                                 ) {
-                                    $sessionParams['show_simple_session_info'] = true;
+                                    $sessionParams[0]['show_simple_session_info'] = true;
                                 }
 
                                 $this->tpl->assign('session', $sessionParams);

@@ -34,6 +34,7 @@ class Rest extends WebService
     const ACTION_COURSE_LEARNPATHS = 'course_learnpaths';
     const ACTION_COURSE_LEARNPATH = 'course_learnpath';
     const ACTION_SAVE_FORUM_POST = 'save_forum_post';
+    const ACTION_USER_SESSIONS = 'user_sessions';
 
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
@@ -842,5 +843,53 @@ class Rest extends WebService
         return [
             'registered' => true
         ];
+    }
+
+    /**
+     * Get the list of sessions for current user
+     * @return array the sessions list
+     */
+    public function getUserSessions()
+    {
+        $data = [];
+        $sessionsByCategory = UserManager::get_sessions_by_category($this->user->getId(), false);
+
+        foreach ($sessionsByCategory as $category) {
+            $categorySessions = [];
+
+            foreach ($category['sessions'] as $sessions) {
+                $sessionCourses = [];
+
+                foreach ($sessions['courses'] as $course) {
+                    $courseInfo = api_get_course_info_by_id($course['real_id']);
+
+                    $sessionCourses[] = [
+                        'visibility' => $course['visibility'],
+                        'status' => $course['status'],
+                        'id' => $courseInfo['real_id'],
+                        'title' => $courseInfo['title'],
+                        'code' => $courseInfo['code'],
+                        'directory' => $courseInfo['directory'],
+                        'pictureUrl' => $courseInfo['course_image_large']
+                    ];
+                }
+
+                $categorySessions[] = [
+                    'session_name' => $sessions['session_name'],
+                    'session_id' => $sessions['session_id'],
+                    'accessStartDate' => api_format_date($sessions['access_start_date'], DATE_TIME_FORMAT_SHORT),
+                    'accessEndDate' => api_format_date($sessions['access_end_date'], DATE_TIME_FORMAT_SHORT),
+                    'courses' => $sessionCourses
+                ];
+            }
+
+            $data[] = [
+                'id' => $category['session_category']['id'],
+                'name' => $category['session_category']['name'],
+                'sessions' => $categorySessions
+            ];
+        }
+
+        return $data;
     }
 }

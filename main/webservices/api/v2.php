@@ -192,6 +192,12 @@ try {
             $restResponse->setData($data);
             break;
 
+        case Rest::ACTION_USER_SESSIONS:
+            $courses = $restApi->getUserSessions();
+
+            $restResponse->setData($courses);
+            break;
+
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

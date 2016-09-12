@@ -2923,6 +2923,29 @@ class SessionManager
     }
 
     /**
+     * @param int $sessionId
+     * @return bool
+     */
+    public static function removeAllDrhFromSession($sessionId)
+    {
+        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $sessionId = (int) $sessionId;
+
+        if (empty($sessionId)) {
+            return false;
+        }
+
+        $sql = "DELETE FROM $tbl_session_rel_user
+                WHERE
+                    session_id = $sessionId AND                            
+                    relation_type =" . SESSION_RELATION_TYPE_RRHH;
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
      * Subscribes sessions to human resource manager (Dashboard feature)
      * @param array $userInfo Human Resource Manager info
      * @param array $sessions_list Sessions id
@@ -2930,7 +2953,7 @@ class SessionManager
      * @param bool $removeOldConnections
      * @return int
      * */
-    public static function suscribe_sessions_to_hr_manager(
+    public static function subscribeSessionsToDrh(
         $userInfo,
         $sessions_list,
         $sendEmail = false,
@@ -2971,12 +2994,12 @@ class SessionManager
                         ON (a.session_id = s.session_id)
                         WHERE
                             s.user_id = $userId AND
-                            relation_type=" . SESSION_RELATION_TYPE_RRHH . " AND
-                            access_url_id = " . api_get_current_access_url_id() . "";
+                            relation_type = " . SESSION_RELATION_TYPE_RRHH . " AND
+                            access_url_id = " . api_get_current_access_url_id();
             } else {
                 $sql = "SELECT s.session_id 
                         FROM $tbl_session_rel_user s
-                        WHERE user_id = $userId AND relation_type=" . SESSION_RELATION_TYPE_RRHH . "";
+                        WHERE user_id = $userId AND relation_type=" . SESSION_RELATION_TYPE_RRHH;
             }
             $result = Database::query($sql);
 
@@ -2986,14 +3009,13 @@ class SessionManager
                             WHERE
                                 session_id = {$row['session_id']} AND
                                 user_id = $userId AND
-                                relation_type=" . SESSION_RELATION_TYPE_RRHH . " ";
+                                relation_type =" . SESSION_RELATION_TYPE_RRHH;
                     Database::query($sql);
                 }
             }
         }
         // Inserting new sessions list.
         if (!empty($sessions_list) && is_array($sessions_list)) {
-
             foreach ($sessions_list as $session_id) {
                 $session_id = intval($session_id);
                 $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type, registered_at)
@@ -3003,7 +3025,6 @@ class SessionManager
                             '" . SESSION_RELATION_TYPE_RRHH . "',
                             '" . api_get_utc_datetime() . "'
                         )";
-
                 Database::query($sql);
                 $affected_rows++;
             }
@@ -5350,7 +5371,11 @@ class SessionManager
                 $courseInfo = api_get_course_info_by_id($courseId);
                 foreach ($coachesPerSession as $sessionId => $coachList) {
                     CourseManager::updateTeachers(
-                        $courseInfo['real_id'], $coachList, false, false, false
+                        $courseInfo,
+                        $coachList,
+                        false,
+                        false,
+                        false
                     );
                     $result[$courseInfo['code']][$sessionId] = $coachList;
                 }
@@ -5671,7 +5696,7 @@ class SessionManager
                     $sessionList[] = $sessionInfo['session_id'];
                 }
                 $userInfo = $data['user_info'];
-                self::suscribe_sessions_to_hr_manager(
+                self::subscribeSessionsToDrh(
                     $userInfo,
                     $sessionList,
                     $sendEmail,

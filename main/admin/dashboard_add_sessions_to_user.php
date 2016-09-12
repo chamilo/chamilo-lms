@@ -155,7 +155,7 @@ $UserList = array();
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
     $sessions_list = $_POST['SessionsList'];
     $userInfo = api_get_user_info($user_id);
-    $affected_rows = SessionManager::suscribe_sessions_to_hr_manager(
+    $affected_rows = SessionManager::subscribeSessionsToDrh(
         $userInfo,
         $sessions_list
     );

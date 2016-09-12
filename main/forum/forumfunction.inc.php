@@ -1893,8 +1893,6 @@ function getThreadInfo($threadId, $cId)
  */
 function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = false, $postId = null, $depth = -1)
 {
-    $list = [];
-
     $em = Database::getManager();
 
     if (api_is_allowed_to_edit(false, true)) {
@@ -1906,6 +1904,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
     $criteria = Criteria::create();
     $criteria
         ->where(Criteria::expr()->eq('threadId', $threadId))
+        ->andWhere(Criteria::expr()->eq('cId', api_get_course_int_id()))
         ->andWhere($visibleCriteria)
     ;
 
@@ -1939,11 +1938,11 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
     $posts = $qb->getQuery()->getResult();
 
     $depth++;
+
+    $list = [];
     /** @var CForumPost $post */
     foreach ($posts as $post) {
-        $user = $em->find('ChamiloUserBundle:User', $post->getPosterId());
-
-        $list[$post->getPostId()] = [
+        $postInfo = [
             'iid' => $post->getIid(),
             'c_id' => $post->getCId(),
             'post_id' => $post->getPostId(),
@@ -1958,13 +1957,23 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
             'post_parent_id' => $post->getPostParentId(),
             'visible' => $post->getVisible(),
             'status' => $post->getStatus(),
-            'indent_cnt' => $depth,
-            'user_id' => $user->getUserId(),
-            'username' => $user->getUsername(),
-            'username_canonical' => $user->getUsernameCanonical(),
-            'lastname' => $user->getLastname(),
-            'firstname' => $user->getFirstname(),
+            'indent_cnt' => $depth
         ];
+
+        $posterId = $post->getPosterId();
+        if (!empty($posterId)) {
+            $user = $em->find('ChamiloUserBundle:User', $posterId);
+
+            if ($user) {
+                $postInfo['user_id'] = $user->getUserId();
+                $postInfo['username'] = $user->getUsername();
+                $postInfo['username_canonical'] = $user->getUsernameCanonical();
+                $postInfo['lastname'] = $user->getLastname();
+                $postInfo['firstname'] = $user->getFirstname();
+            }
+        }
+
+        $list[$post->getIid()] = $postInfo;
 
         if (!$recursive) {
             continue;

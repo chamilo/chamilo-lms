@@ -332,12 +332,14 @@ class ImportCsv
 
         $row['teachers'] = array();
         if (isset($row['Teacher']) && !empty($row['Teacher'])) {
+            //$this->logger->addInfo("Teacher list found: ".$row['Teacher']);
             $teachers = explode(',', $row['Teacher']);
             if (!empty($teachers)) {
                 foreach ($teachers as $teacherUserName) {
                     $teacherUserName = trim($teacherUserName);
                     $userInfo = api_get_user_info_from_username($teacherUserName);
                     if (!empty($userInfo)) {
+                        //$this->logger->addInfo("Username found: $teacherUserName");
                         $row['teachers'][] = $userInfo['user_id'];
                     }
                 }
@@ -594,25 +596,7 @@ class ImportCsv
                         $this->logger->addError(strip_tags(Display::getFlashToString()));
                         Display::cleanFlashMessages();
                     }
-
-                    if (($counter % $batchSize) === 0) {
-                        $em->flush();
-                        $em->clear(); // Detaches all objects from Doctrine!
-                    }
-                    $counter++;
                 } else {
-                    $userToUpdateList[] = ['user_info' => $userInfo, 'row' => $row];
-                }
-            }
-
-            $em->clear(); // Detaches all objects from Doctrine!
-
-            $counter = 1;
-            if (!empty($userToUpdateList)) {
-                foreach ($userToUpdateList as $userData) {
-                    $row = $userData['row'];
-                    $userInfo = $userData['user_info'];
-
                     if (empty($userInfo)) {
                         $this->logger->addError("Students - Can't update user :".$row['username']);
                         continue;
@@ -721,15 +705,16 @@ class ImportCsv
                     } else {
                         $this->logger->addError("Students - User NOT updated: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }
-
-                    if (($counter % $batchSize) === 0) {
-                        $em->flush();
-                        $em->clear(); // Detaches all objects from Doctrine!
-                    }
-                    $counter++;
                 }
-                $em->clear(); // Detaches all objects from Doctrine!
+
+                if (($counter % $batchSize) === 0) {
+                    $em->flush();
+                    $em->clear(); // Detaches all objects from Doctrine!
+                    $this->logger->addInfo("Detaches all objects");
+                }
+                $counter++;
             }
+            $em->clear(); // Detaches all objects from Doctrine!
         }
 
         $timeEnd = microtime(true);
@@ -1104,7 +1089,7 @@ class ImportCsv
 
                     if ($addTeacherToSession) {
                         CourseManager::updateTeachers(
-                            $courseInfo['id'],
+                            $courseInfo,
                             $row['teachers'],
                             false,
                             true,
@@ -1113,7 +1098,7 @@ class ImportCsv
                         );
                     } else {
                         CourseManager::updateTeachers(
-                            $courseInfo['id'],
+                            $courseInfo,
                             $row['teachers'],
                             false,
                             false,
@@ -1223,7 +1208,8 @@ class ImportCsv
                         break;
                     case 'drh':
                         $userInfo = api_get_user_info($userId);
-                        SessionManager::suscribe_sessions_to_hr_manager(
+                        SessionManager::removeAllDrhFromSession($chamiloSessionId);
+                        SessionManager::subscribeSessionsToDrh(
                             $userInfo,
                             [$chamiloSessionId],
                             false,

@@ -236,10 +236,20 @@ class UserManager
         if (!empty($hook)) {
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
         }
+
+        // First check wether the login already exists
+        if (!self::is_username_available($loginName)) {
+            Display::addFlash(
+                Display::return_message(get_lang('LoginAlreadyTaken'))
+            );
+
+            return false;
+        }
+
         global $_configuration;
         $original_password = $password;
-        $access_url_id = 1;
 
+        $access_url_id = 1;
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
         }
@@ -309,15 +319,6 @@ class UserManager
             $creator_id = $currentUserId;
         } else {
             $creator_id = 0;
-        }
-
-        // First check wether the login already exists
-        if (!self::is_username_available($loginName)) {
-            Display::addFlash(
-                Display::return_message(get_lang('LoginAlreadyTaken'))
-            );
-
-            return false;
         }
 
         $currentDate = api_get_utc_datetime();

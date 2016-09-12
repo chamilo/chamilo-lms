@@ -82,7 +82,8 @@ $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'] = 9;
 * @version  $Id: class.nusoap_base.php,v 1.56 2010/04/26 20:15:08 snichol Exp $
 * @access   public
 */
-class nusoap_base {
+class nusoap_base
+{
 	/**
 	 * Identification for HTTP headers.
 	 *
@@ -222,7 +223,8 @@ class nusoap_base {
 	*
 	* @access	public
 	*/
-	function __construct() {
+	public function __construct()
+    {
 		$this->debugLevel = $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'];
 	}
 

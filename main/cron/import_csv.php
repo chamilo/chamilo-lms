@@ -596,12 +596,6 @@ class ImportCsv
                         $this->logger->addError(strip_tags(Display::getFlashToString()));
                         Display::cleanFlashMessages();
                     }
-
-                    if (($counter % $batchSize) === 0) {
-                        $em->flush();
-                        $em->clear(); // Detaches all objects from Doctrine!
-                    }
-                    $counter++;
                 } else {
                     if (empty($userInfo)) {
                         $this->logger->addError("Students - Can't update user :".$row['username']);
@@ -712,6 +706,13 @@ class ImportCsv
                         $this->logger->addError("Students - User NOT updated: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }
                 }
+
+                if (($counter % $batchSize) === 0) {
+                    $em->flush();
+                    $em->clear(); // Detaches all objects from Doctrine!
+                    $this->logger->addInfo("Detaches all objects");
+                }
+                $counter++;
             }
             $em->clear(); // Detaches all objects from Doctrine!
         }

@@ -178,13 +178,18 @@ function import_exercise($file)
                 $question->type = MCUA;
             }
             $question->setAnswer();
+            $description = '';
             if (strlen($question_array['title']) < 50) {
                 $question->updateTitle(formatText(strip_tags($question_array['title'])) . '...');
             } else {
                 $question->updateTitle(formatText(substr(strip_tags($question_array['title']), 0, 50)));
-                $question->updateDescription($question_array['title']);
+                $description .= $question_array['title'];
             }
-            //$question->updateDescription($question_array['title']);
+            if (!empty($question_array['description'])) {
+                $description .= $question_array['description'];
+            }
+            $question->updateDescription($description);
+
             $question->save($last_exercise_id);
             $last_question_id = $question->selectId();
             //3. Create answer

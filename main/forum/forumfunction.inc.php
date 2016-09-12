@@ -1904,7 +1904,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
     $criteria = Criteria::create();
     $criteria
         ->where(Criteria::expr()->eq('threadId', $threadId))
-        ->andWhere(Criteria::expr()->eq('cId', api_get_course_int_id()))
+        ->andWhere(Criteria::expr()->eq('cId', $forumInfo['c_id']))
         ->andWhere($visibleCriteria)
     ;
 
@@ -1973,7 +1973,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
             }
         }
 
-        $list[$post->getIid()] = $postInfo;
+        $list[] = $postInfo;
 
         if (!$recursive) {
             continue;

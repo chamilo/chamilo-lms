@@ -603,18 +603,6 @@ class ImportCsv
                     }
                     $counter++;
                 } else {
-                    $userToUpdateList[] = ['user_info' => $userInfo, 'row' => $row];
-                }
-            }
-
-            $em->clear(); // Detaches all objects from Doctrine!
-
-            $counter = 1;
-            if (!empty($userToUpdateList)) {
-                foreach ($userToUpdateList as $userData) {
-                    $row = $userData['row'];
-                    $userInfo = $userData['user_info'];
-
                     if (empty($userInfo)) {
                         $this->logger->addError("Students - Can't update user :".$row['username']);
                         continue;
@@ -723,15 +711,9 @@ class ImportCsv
                     } else {
                         $this->logger->addError("Students - User NOT updated: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }
-
-                    if (($counter % $batchSize) === 0) {
-                        $em->flush();
-                        $em->clear(); // Detaches all objects from Doctrine!
-                    }
-                    $counter++;
                 }
-                $em->clear(); // Detaches all objects from Doctrine!
             }
+            $em->clear(); // Detaches all objects from Doctrine!
         }
 
         $timeEnd = microtime(true);

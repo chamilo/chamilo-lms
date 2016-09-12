@@ -754,7 +754,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
-            'moderated'=> (int) $values['moderated'],
+            'moderated'=> isset($values['moderated']) ? (int) $values['moderated'] : 0,
             'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
             'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
             'forum_order'=> isset($new_max) ? $new_max : null,

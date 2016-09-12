@@ -3679,12 +3679,18 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
  *       'allow_text_assignment' => 0/1/2,
  * @todo Rename createAssignment or createWork, or something like that
  */
-function addDir($formValues, $user_id, $courseInfo, $group_id, $session_id)
+function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
 {
     $em = Database::getManager();
 
     $user_id = intval($user_id);
-    $group_id = intval($group_id);
+    $groupId = intval($groupId);
+
+    $groupIid = 0;
+    if (!empty($groupId)) {
+        $groupInfo = GroupManager::get_group_properties($groupId);
+        $groupIid = $groupInfo['iid'];
+    }
     $session = $em->find('ChamiloCoreBundle:Session', $session_id);
 
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
@@ -3710,7 +3716,7 @@ function addDir($formValues, $user_id, $courseInfo, $group_id, $session_id)
         ->setActive(true)
         ->setAccepted(true)
         ->setFiletype('folder')
-        ->setPostGroupId($group_id)
+        ->setPostGroupId($groupIid)
         ->setSentDate($today)
         ->setQualification($formValues['qualification'] != '' ? $formValues['qualification'] : 0)
         ->setParentId(0)
@@ -3737,10 +3743,10 @@ function addDir($formValues, $user_id, $courseInfo, $group_id, $session_id)
         $workTable->getIid(),
         'DirectoryCreated',
         $user_id,
-        $group_id
+        $groupIid
     );
 
-    updatePublicationAssignment($workTable->getIid(), $formValues, $courseInfo, $group_id);
+    updatePublicationAssignment($workTable->getIid(), $formValues, $courseInfo, $groupIid);
 
     if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
         send_email_on_homework_creation(
@@ -3823,7 +3829,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     $agendaId = 0;
 
     if (isset($params['add_to_calendar']) && $params['add_to_calendar'] == 1) {
-
         // Setting today date
         $date = $end_date = $time;
 
@@ -3884,7 +3889,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     }
 
     if (empty($data)) {
-
         $sql = "INSERT INTO $table SET
                 c_id = $course_id ,
                 $expiryDateCondition
@@ -3923,7 +3927,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     }
 
     if (!empty($params['category_id'])) {
-
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             $courseInfo['code'],
             LINK_STUDENTPUBLICATION,
@@ -4044,7 +4047,7 @@ function deleteWorkItem($item_id, $courseInfo)
 
             if ($row['contains_file'] == 1) {
                 if (!empty($work)) {
-                    if (api_get_setting('permanently_remove_deleted_files') == 'true') {
+                    if (api_get_setting('permanently_remove_deleted_files') === 'true') {
                         my_delete($currentCourseRepositorySys.'/'.$work);
                         $file_deleted = true;
                     } else {

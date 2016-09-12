@@ -21,8 +21,11 @@ class Agenda
 
     /**
      * Constructor
+     * @param int $senderId Optional The user sender ID
+     * @param int $courseId Opitonal. The course ID
+     * @param int $sessionId Optional The session ID
      */
-    public function __construct()
+    public function __construct($senderId = 0, $courseId = 0, $sessionId = 0)
     {
         //Table definitions
         $this->tbl_global_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
@@ -32,12 +35,12 @@ class Agenda
 
         //Setting the course object if we are in a course
         unset($this->course);
-        $courseInfo = api_get_course_info();
+        $courseInfo = api_get_course_info_by_id($courseId);
         if (!empty($courseInfo)) {
             $this->course = $courseInfo;
         }
-        $this->setSessionId(api_get_session_id());
-        $this->setSenderId(api_get_user_id());
+        $this->setSessionId($sessionId ?: api_get_session_id());
+        $this->setSenderId($senderId ?: api_get_user_id());
         $this->setIsAllowedToEdit(api_is_allowed_to_edit(null, true));
         $this->events = array();
 
@@ -928,7 +931,6 @@ class Agenda
                 $this->getPlatformEvents($start, $end);
                 break;
             case 'course':
-                $session_id = $this->sessionId;
                 $courseInfo = api_get_course_info_by_id($course_id);
 
                 // Session coach can see all events inside a session.
@@ -940,7 +942,7 @@ class Agenda
                         $end,
                         $courseInfo,
                         $groupId,
-                        $session_id,
+                        $this->sessionId,
                         $user_id
                     );
 
@@ -948,7 +950,7 @@ class Agenda
                     $this->getSessionEvents(
                         $start,
                         $end,
-                        api_get_session_id(),
+                        $this->sessionId,
                         $user_id,
                         $this->eventOtherSessionColor
                     );
@@ -958,7 +960,7 @@ class Agenda
                         $end,
                         $courseInfo,
                         $groupId,
-                        $session_id,
+                        $this->sessionId,
                         $user_id
                     );
                 }

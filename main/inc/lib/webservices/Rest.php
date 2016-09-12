@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CourseBundle\Entity\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\CourseBundle\Entity\CLpCategory;
-use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * Class RestApi
@@ -39,6 +39,15 @@ class Rest extends WebService
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
     /**
+     * @var Session
+     */
+    private $session;
+    /**
+     * @var Course
+     */
+    private $course;
+
+    /**
      * Rest constructor.
      * @param string $username
      * @param string $apiKey
@@ -46,6 +55,45 @@ class Rest extends WebService
     public function __construct($username, $apiKey)
     {
         parent::__construct($username, $apiKey);
+    }
+
+    public function setCourse($id)
+    {
+        if (!$id) {
+            $this->course = null;
+
+            return;
+        }
+
+        $em = Database::getManager();
+        /** @var Course $course */
+        $course = $em->find('ChamiloCoreBundle:Course', $id);
+
+        if (!$course) {
+            throw new Exception(get_lang('NoCourse'));
+        }
+
+        $this->course = $course;
+    }
+
+    /** Set the current session */
+    public function setSession($id)
+    {
+        if (!$id) {
+            $this->session = null;
+
+            return;
+        }
+
+        $em = Database::getManager();
+        /** @var Session $session */
+        $session = $em->find('ChamiloCoreBundle:Session', $id);
+
+        if (!$session) {
+            throw new Exception(get_lang('NoSession'));
+        }
+
+        $this->session = $session;
     }
 
     /**
@@ -158,47 +206,31 @@ class Rest extends WebService
     }
 
     /**
-     * @param int $courseId
      * @return array
      * @throws Exception
      */
-    public function getCourseInfo($courseId)
+    public function getCourseInfo()
     {
-        /** @var Course $course */
-        $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId);
-
-        if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
-        }
-
-        $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course->getCode());
+        $teachers = CourseManager::get_teacher_list_from_course_code_to_string($this->course->getCode());
 
         return [
-            'id' => $course->getId(),
-            'title' => $course->getTitle(),
-            'code' => $course->getCode(),
-            'directory' => $course->getDirectory(),
-            'urlPicture' => $course->getPicturePath(true),
+            'id' => $this->course->getId(),
+            'title' => $this->course->getTitle(),
+            'code' => $this->course->getCode(),
+            'directory' => $this->course->getDirectory(),
+            'urlPicture' => $this->course->getPicturePath(true),
             'teachers' => $teachers
         ];
     }
 
     /**
      * Get the course descriptions
-     * @param int $courseId
      * @return array
      * @throws Exception
      */
-    public function getCourseDescriptions($courseId)
+    public function getCourseDescriptions()
     {
-        /** @var Course $course */
-        $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId);
-
-        if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
-        }
-
-        $descriptions = CourseDescription::get_descriptions($course->getId());
+        $descriptions = CourseDescription::get_descriptions($this->course->getId());
         $results = [];
 
         /** @var CourseDescription $description */
@@ -214,25 +246,24 @@ class Rest extends WebService
     }
 
     /**
-     * @param int $courseId
      * @param int $directoryId
      * @return array
      * @throws Exception
      */
-    public function getCourseDocuments($courseId, $directoryId = 0)
+    public function getCourseDocuments($directoryId = 0)
     {
-        /** @var Course $course */
-        $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId);
-
-        if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
-        }
-
         /** @var string $path */
         $path = '/';
 
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
         if ($directoryId) {
-            $directory = DocumentManager::get_document_data_by_id($directoryId, $course->getCode(), false, 0);
+            $directory = DocumentManager::get_document_data_by_id(
+                $directoryId,
+                $this->course->getCode(),
+                false,
+                $sessionId
+            );
 
             if (!$directory) {
                 throw new Exception('NoDataAvailable');
@@ -243,9 +274,9 @@ class Rest extends WebService
 
         require_once api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php';
 
-        $courseInfo = api_get_course_info_by_id($course->getId());
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
 
-        $documents = DocumentManager::get_all_document_data($courseInfo, $path);
+        $documents = DocumentManager::get_all_document_data($courseInfo, $path, 0, null, false, false, $sessionId);
         $results = [];
 
         if (is_array($documents)) {
@@ -269,8 +300,8 @@ class Rest extends WebService
                     'url' => $webPath . http_build_query([
                         'username' => $this->user->getUsername(),
                         'api_key' => $this->apiKey,
-                        'cidReq' => $course->getCode(),
-                        'id_session' => 0,
+                        'cidReq' => $this->course->getCode(),
+                        'id_session' => $sessionId,
                         'gidReq' => 0,
                         'gradebook' => 0,
                         'origin' => '',
@@ -291,14 +322,9 @@ class Rest extends WebService
      * @return array
      * @throws Exception
      */
-    public function getCourseAnnouncements($courseId)
+    public function getCourseAnnouncements()
     {
-        /** @var Course $course */
-        $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId);
-
-        if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
-        }
+        $sessionId = $this->session ? $this->session->getId() : 0;
 
         $announcements = AnnouncementManager::getAnnouncements(
             null,
@@ -311,7 +337,8 @@ class Rest extends WebService
             null,
             0,
             $this->user->getId(),
-            $courseId
+            $this->course->getId(),
+            $sessionId
         );
 
         $announcements = array_map(function ($announcement) {
@@ -328,22 +355,15 @@ class Rest extends WebService
 
     /**
      * @param int $announcementId
-     * @param int $courseId
      * @return array
      * @throws Exception
      */
-    public function getCourseAnnouncement($announcementId, $courseId)
+    public function getCourseAnnouncement($announcementId)
     {
-        /** @var Course $course */
-        $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId);
-
-        if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
-        }
-
+        $sessionId = $this->session ? $this->session->getId() : 0;
         $announcement = AnnouncementManager::getAnnouncementInfoById(
             $announcementId,
-            $course->getId(),
+            $this->course->getId(),
             $this->user->getId()
         );
 
@@ -359,26 +379,21 @@ class Rest extends WebService
             'content' => AnnouncementManager::parse_content(
                 $this->user->getId(),
                 $announcement['announcement']->getContent(),
-                $course->getCode()
+                $this->course->getCode(),
+                $sessionId
             )
         ];
     }
 
     /**
-     * @param int $courseId
      * @return array
      * @throws Exception
      */
-    public function getCourseAgenda($courseId)
+    public function getCourseAgenda()
     {
-        /** @var Course $course */
-        $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId);
+        $sessionId = $this->session ? $this->session->getId() : 0;
 
-        if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
-        }
-
-        $agenda = new Agenda();
+        $agenda = new Agenda($this->user->getId(), $this->course->getId(), $sessionId);
         $agenda->setType('course');
         $result = $agenda->parseAgendaFilter(null);
 
@@ -393,7 +408,7 @@ class Rest extends WebService
         $events = $agenda->getEvents(
             $start->getTimestamp(),
             $end->getTimestamp(),
-            $course->getId(),
+            $this->course->getId(),
             $groupId,
             $userId,
             'array'
@@ -421,23 +436,15 @@ class Rest extends WebService
     }
 
     /**
-     * @param int $courseId
      * @return array
      * @throws Exception
      */
-    public function getCourseNotebooks($courseId)
+    public function getCourseNotebooks()
     {
         $em = Database::getManager();
-        /** @var Course $course */
-        $course = $em->find('ChamiloCoreBundle:Course', $courseId);
-
-        if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
-        }
-
         /** @var CNotebookRepository $notebooksRepo */
         $notebooksRepo = $em->getRepository('ChamiloCourseBundle:CNotebook');
-        $notebooks = $notebooksRepo->findByUser($this->user, $course, null);
+        $notebooks = $notebooksRepo->findByUser($this->user, $this->course, $this->session);
 
         return array_map(
             function (\Chamilo\CourseBundle\Entity\CNotebook $notebook) {
@@ -458,28 +465,20 @@ class Rest extends WebService
     }
 
     /**
-     * @param int $courseId
      * @return array
      * @throws Exception
      */
-    public function getCourseForumCategories($courseId)
+    public function getCourseForumCategories()
     {
-        $em = Database::getManager();
-        /** @var Course $course */
-        $course = $em->find('ChamiloCoreBundle:Course', $courseId);
-
-        if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
-        }
-
-        $webCoursePath = api_get_path(WEB_COURSE_PATH) . $course->getDirectory() . '/upload/forum/images/';
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $webCoursePath = api_get_path(WEB_COURSE_PATH) . $this->course->getDirectory() . '/upload/forum/images/';
 
         require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
-        $categoriesFullData = get_forum_categories('', $course->getId());
+        $categoriesFullData = get_forum_categories('', $this->course->getId(), $sessionId);
         $categories = [];
         $includeGroupsForums = api_get_setting('display_groups_forum_in_general_tool') === 'true';
-        $forumsFullData = get_forums('', $course->getCode(), $includeGroupsForums);
+        $forumsFullData = get_forums('', $this->course->getCode(), $includeGroupsForums, $sessionId);
         $forums = [];
 
         foreach ($forumsFullData as $forumId => $forumInfo) {
@@ -493,7 +492,7 @@ class Rest extends WebService
                 'lastPost' => null
             ];
 
-            $lastPostInfo = get_last_post_information($forumId, false, $course->getId());
+            $lastPostInfo = get_last_post_information($forumId, false, $this->course->getId());
 
             if ($lastPostInfo) {
                 $forum['lastPost'] = [
@@ -526,7 +525,7 @@ class Rest extends WebService
                 'catId' => intval($category['cat_id']),
                 'description' => $category['cat_comment'],
                 'forums' => $categoryForums,
-                'courseId' => $course->getId()
+                'courseId' => $this->course->getId()
             ];
         }
 
@@ -649,21 +648,13 @@ class Rest extends WebService
     }
 
     /**
-     * @param int $courseId
      * @return array
      * @throws Exception
      */
-    public function getCourseLearnPaths($courseId)
+    public function getCourseLearnPaths()
     {
-        $em = Database::getManager();
-        /** @var Course $course */
-        $course = $em->find('ChamiloCoreBundle:Course', $courseId);
-
-        if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
-        }
-
-        $categoriesTempList = learnpath::getCategories($courseId);
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $categoriesTempList = learnpath::getCategories($this->course->getId());
 
         $categoryNone = new \Chamilo\CourseBundle\Entity\CLpCategory();
         $categoryNone->setId(0);
@@ -678,8 +669,8 @@ class Rest extends WebService
         foreach ($categories as $category) {
             $learnPathList = new LearnpathList(
                 $this->user->getId(),
-                $course->getCode(),
-                null,
+                $this->course->getCode(),
+                $sessionId,
                 null,
                 false,
                 $category->getId()
@@ -701,7 +692,8 @@ class Rest extends WebService
                 if (!learnpath::is_lp_visible_for_student(
                     $lpId,
                     $this->user->getId(),
-                    $course->getCode()
+                    $this->course->getCode(),
+                    $sessionId
                 )) {
                     continue;
                 }
@@ -735,7 +727,7 @@ class Rest extends WebService
                     }
                 }
 
-                $progress = learnpath::getProgress($lpId, $this->user->getId(), $courseId);
+                $progress = learnpath::getProgress($lpId, $this->user->getId(), $this->course->getId(), $sessionId);
 
                 $listData[] = array(
                     'id' => $lpId,
@@ -745,9 +737,8 @@ class Rest extends WebService
                         'hash' => $this->encodeParams([
                             'action' => 'course_learnpath',
                             'lp_id' => $lpId,
-                            'cidReq' => $course->getCode(),
-                            'id_session' => 0,
-                            'gidReq' => 0
+                            'course' => $this->course->getId(),
+                            'session' => $sessionId
                         ])
                     ])
                 );
@@ -805,21 +796,27 @@ class Rest extends WebService
     /**
      * Start login for a user. Then make a redirect to show the learnpath
      * @param int $lpId
-     * @param string $courseCode
      */
-    public function showLearningPath($lpId, $courseCode)
+    public function showLearningPath($lpId)
     {
         $loggedUser['user_id'] = $this->user->getId();
         $loggedUser['status'] = $this->user->getStatus();
         $loggedUser['uidReset'] = true;
 
-        Session::write('_user', $loggedUser);
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        ChamiloSession::write('_user', $loggedUser);
         Login::init_user($this->user->getId(), true);
 
         $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . http_build_query([
+            'cidReq' => $this->course->getCode(),
+            'id_session' => $sessionId,
+            'gidReq' => 0,
+            'gradebook' => 0,
+            'origin' => '',
             'action' => 'view',
             'lp_id' => intval($lpId),
-            'cidReq' => $courseCode
+            'isStudentView' => 'true'
         ]);
 
         header("Location: $url");
@@ -829,16 +826,15 @@ class Rest extends WebService
     /**
      * @param array $postValues
      * @param int $forumId
-     * @param int $courseId
      * @return array
      */
-    public function saveForumPost(array $postValues, $forumId, $courseId)
+    public function saveForumPost(array $postValues, $forumId)
     {
         require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
         $forum = get_forums($forumId);
 
-        store_reply($forum, $postValues, $courseId, $this->user->getId());
+        store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
 
         return [
             'registered' => true

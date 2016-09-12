@@ -16,12 +16,19 @@ if ($hash) {
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $username = isset($_REQUEST['username']) ? Security::remove_XSS($_REQUEST['username']) : null;
 $apiKey = isset($_REQUEST['api_key']) ? Security::remove_XSS($_REQUEST['api_key']) : null;
+$course = !empty($_REQUEST['course']) ? intval($_REQUEST['course']) : null;
+$session = !empty($_REQUEST['session']) ? intval($_REQUEST['session']) : null;
 
 $restResponse = new RestResponse();
 
 try {
     /** @var Rest $restApi */
     $restApi = $apiKey ? Rest::validate($username, $apiKey) : null;
+
+    if ($restApi) {
+        $restApi->setCourse($course);
+        $restApi->setSession($session);
+    }
 
     switch ($action) {
         case Rest::ACTION_AUTH:
@@ -65,22 +72,18 @@ try {
             break;
 
         case Rest::ACTION_COURSE_INFO:
-            $courseId = isset($_POST['c_id']) ? Security::remove_XSS($_POST['c_id']) : 0;
-            $courseInfo = $restApi->getCourseInfo($courseId);
+            $courseInfo = $restApi->getCourseInfo();
 
             $restResponse->setData($courseInfo);
             break;
 
         case Rest::ACTION_COURSE_DESCRIPTIONS:
-            $courseId = isset($_POST['c_id']) ? Security::remove_XSS($_POST['c_id']) : 0;
-
-            $descriptions = $restApi->getCourseDescriptions($courseId);
+            $descriptions = $restApi->getCourseDescriptions();
 
             $restResponse->setData($descriptions);
             break;
 
         case Rest::ACTION_COURSE_DOCUMENTS:
-            $courseId = isset($_POST['c_id']) ? Security::remove_XSS($_POST['c_id']) : 0;
             $directoryId = isset($_POST['dir_id']) ? Security::remove_XSS($_POST['dir_id']) : null;
 
             $documents = $restApi->getCourseDocuments($courseId, $directoryId);
@@ -89,42 +92,33 @@ try {
             break;
 
         case Rest::ACTION_COURSE_ANNOUNCEMENTS:
-            $courseId = isset($_POST['c_id']) ? Security::remove_XSS($_POST['c_id']) : 0;
-
-            $announcements = $restApi->getCourseAnnouncements($courseId);
+            $announcements = $restApi->getCourseAnnouncements();
 
             $restResponse->setData($announcements);
             break;
 
         case Rest::ACTION_COURSE_ANNOUNCEMENT:
-            $courseId = isset($_POST['c_id']) ? Security::remove_XSS($_POST['c_id']) : 0;
-            $announcementId = isset($_POST['a_id']) ? Security::remove_XSS($_POST['a_id']) : 0;
+            $announcementId = isset($_POST['announcement']) ? Security::remove_XSS($_POST['announcement']) : 0;
 
-            $announcement = $restApi->getCourseAnnouncement($announcementId, $courseId);
+            $announcement = $restApi->getCourseAnnouncement($announcementId);
 
             $restResponse->setData($announcement);
             break;
 
         case Rest::ACTION_COURSE_AGENDA:
-            $courseId = isset($_POST['c_id']) ? Security::remove_XSS($_POST['c_id']) : 0;
-
-            $agenda = $restApi->getCourseAgenda($courseId);
+            $agenda = $restApi->getCourseAgenda();
 
             $restResponse->setData($agenda);
             break;
 
         case Rest::ACTION_COURSE_NOTEBOOKS:
-            $courseId = isset($_POST['c_id']) ? Security::remove_XSS($_POST['c_id']) : 0;
-
-            $notebooks = $restApi->getCourseNotebooks($courseId);
+            $notebooks = $restApi->getCourseNotebooks();
 
             $restResponse->setData($notebooks);
             break;
 
         case Rest::ACTION_COURSE_FORUM_CATEGORIES:
-            $courseId = isset($_POST['c_id']) ? Security::remove_XSS($_POST['c_id']) : 0;
-
-            $forums = $restApi->getCourseForumCategories($courseId);
+            $forums = $restApi->getCourseForumCategories();
 
             $restResponse->setData($forums);
             break;
@@ -152,29 +146,24 @@ try {
             break;
 
         case Rest::ACTION_COURSE_LEARNPATHS:
-            $courseId = isset($_POST['c_id']) ? Security::remove_XSS($_POST['c_id']) : 0;
-
-            $data = $restApi->getCourseLearnPaths($courseId);
+            $data = $restApi->getCourseLearnPaths();
 
             $restResponse->setData($data);
             break;
 
         case Rest::ACTION_COURSE_LEARNPATH:
             $lpId = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : 0;
-            $cidReq = isset($_REQUEST['cidReq']) ? Security::remove_XSS($_REQUEST['cidReq']) : 0;
 
-            $restApi->showLearningPath($lpId, $cidReq);
+            $restApi->showLearningPath($lpId);
             break;
 
         case Rest::ACTION_SAVE_FORUM_POST:
             if (
-                empty($_POST['title']) || empty($_POST['text']) || empty($_POST['thread']) || empty($_POST['forum']) ||
-                empty($_POST['course'])
+                empty($_POST['title']) || empty($_POST['text']) || empty($_POST['thread']) || empty($_POST['forum'])
             ) {
                 throw new Exception(get_lang('NoData'));
             }
 
-            $courseId = intval($_POST['course']);
             $notify = !empty($_POST['notify']);
             $parentId = !empty($_POST['parent']) ? intval($_POST['parent']) : null;
 
@@ -187,7 +176,7 @@ try {
                 'post_parent_id' => $parentId
             ];
 
-            $data = $restApi->saveForumPost($postValues, $forumId, $courseId);
+            $data = $restApi->saveForumPost($postValues, $forumId);
 
             $restResponse->setData($data);
             break;

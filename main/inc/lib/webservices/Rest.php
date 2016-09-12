@@ -35,6 +35,7 @@ class Rest extends WebService
     const ACTION_COURSE_LEARNPATH = 'course_learnpath';
     const ACTION_SAVE_FORUM_POST = 'save_forum_post';
     const ACTION_USER_SESSIONS = 'user_sessions';
+    const SAVE_USER_MESSAGE = 'save_user_message';
 
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
@@ -887,5 +888,16 @@ class Rest extends WebService
         }
 
         return $data;
+    }
+
+    public function saveUserMessage($subject, $text, array $receivers)
+    {
+        foreach ($receivers as $userId) {
+            MessageManager::send_message($userId, $subject, $text);
+        }
+
+        return [
+            'sent' => true
+        ];
     }
 }

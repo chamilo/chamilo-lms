@@ -187,6 +187,16 @@ try {
             $restResponse->setData($courses);
             break;
 
+        case Rest::SAVE_USER_MESSAGE:
+            $receivers = isset($_POST['receivers']) ? $_POST['receivers'] : [];
+            $subject = !empty($_POST['subject']) ? $_POST['subject'] : null;
+            $text = !empty($_POST['text']) ? $_POST['text'] : null;
+
+            $data = $restApi->saveUserMessage($subject, $text, $receivers);
+
+            $restResponse->setData($data);
+            break;
+
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

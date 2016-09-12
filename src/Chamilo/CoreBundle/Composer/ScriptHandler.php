@@ -22,10 +22,32 @@ class ScriptHandler
     }
 
     /**
-     * Delete old symfony folder before update (generates conflicts with composer)
+     * Delete old Symfony folder before update (generates conflicts with composer)
      * This method also applies to 1.10 folders removed for 1.11.
      */
     public static function deleteOldFilesFrom19x()
+    {
+        $paths = self::getFoldersToDelete();
+
+        foreach ($paths as $path) {
+            if (is_dir($path) && is_writable($path)) {
+                self::rmdirr($path);
+            }
+        }
+
+        $files = self::getFilesToDelete();
+
+        foreach ($files as $file) {
+            if (is_file($file) && is_writable($file)) {
+                unlink($file);
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getFoldersToDelete()
     {
         $paths = [
             __DIR__.'/../../../../archive/',
@@ -69,6 +91,14 @@ class ScriptHandler
             __DIR__.'/../../../../main/exercice'
         ];
 
+        return $paths;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getFilesToDelete()
+    {
         $files = [
             __DIR__.'/../../../../main/admin/statistics/statistics.lib.php',
             __DIR__.'/../../../../main/admin/add_users_to_group.php',
@@ -161,17 +191,7 @@ class ScriptHandler
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/Groups.php'
         ];
 
-        foreach ($paths as $path) {
-            if (is_dir($path) && is_writable($path)) {
-                self::rmdirr($path);
-            }
-        }
-
-        foreach ($files as $file) {
-            if (is_file($file) && is_writable($file)) {
-                unlink($file);
-            }
-        }
+        return $files;
     }
 
     /**

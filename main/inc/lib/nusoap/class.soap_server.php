@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 /**
 *
 * nusoap_server allows the user to create a SOAP server
@@ -13,7 +10,8 @@
 * @version  $Id: class.soap_server.php,v 1.63 2010/04/26 20:15:08 snichol Exp $
 * @access   public
 */
-class nusoap_server extends nusoap_base {
+class nusoap_server extends nusoap_base
+{
 	/**
 	 * HTTP headers of request
 	 * @var array
@@ -170,8 +168,9 @@ class nusoap_server extends nusoap_base {
     * @param mixed $wsdl file path or URL (string), or wsdl instance (object)
 	* @access   public
 	*/
-	function nusoap_server($wsdl=false){
-		parent::nusoap_base();
+	function __construct($wsdl=false)
+    {
+		parent::__construct();
 		// turn on debugging?
 		global $debug;
 		global $HTTP_SERVER_VARS;

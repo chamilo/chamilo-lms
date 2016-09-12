@@ -86,7 +86,7 @@ try {
         case Rest::ACTION_COURSE_DOCUMENTS:
             $directoryId = isset($_POST['dir_id']) ? Security::remove_XSS($_POST['dir_id']) : null;
 
-            $documents = $restApi->getCourseDocuments($courseId, $directoryId);
+            $documents = $restApi->getCourseDocuments($directoryId);
 
             $restResponse->setData($documents);
             break;

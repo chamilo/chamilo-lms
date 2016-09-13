@@ -739,7 +739,6 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
         }
-
         $params = [
             'c_id' => $course_id,
             'forum_title'=> $values['forum_title'],
@@ -754,7 +753,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
             'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
-            'moderated'=> isset($values['moderated']) ? (int) $values['moderated'] : 0,
+            'moderated'=> isset($values['moderated']['moderated']) ? (int) $values['moderated']['moderated'] : 0,
             'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
             'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
@@ -766,7 +765,6 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
 
         $last_id = Database::insert($table_forums, $params);
         if ($last_id > 0) {
-
             $sql = "UPDATE $table_forums SET forum_id = iid WHERE iid = $last_id";
             Database::query($sql);
 
@@ -1782,15 +1780,25 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
 function get_threads($forum_id)
 {
     $groupId = api_get_group_id();
+    $sessionId = api_get_session_id();
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
+
+    $groupInfo = GroupManager::get_group_properties($groupId);
+    $groupCondition = '';
+    if (!empty($groupInfo)) {
+        $groupIid = $groupInfo['iid'];
+        $groupCondition =  " AND item_properties.to_group_id = '$groupIid' ";
+    }
+
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'item_properties.session_id');
 
     // important note:  it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
     // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
     // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
     // This is why it is added to the end of the field selection
-    $groupCondition = api_get_group_id() != 0 ? " AND item_properties.to_group_id = '$groupId' " : "";
+
 
     $sql = "SELECT DISTINCT
                 item_properties.*,
@@ -1804,9 +1812,11 @@ function get_threads($forum_id)
             ON
                 thread.thread_id = item_properties.ref AND
                 item_properties.c_id = thread.c_id AND
-                item_properties.tool = '".TABLE_FORUM_THREAD."' $groupCondition
+                item_properties.tool = '".TABLE_FORUM_THREAD."' 
+                $groupCondition
+                $sessionCondition
             LEFT JOIN $table_users users
-                ON thread.thread_poster_id=users.user_id
+                ON thread.thread_poster_id = users.user_id
             WHERE
                 item_properties.visibility='1' AND
                 thread.forum_id = ".intval($forum_id)."
@@ -1904,7 +1914,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
     $criteria = Criteria::create();
     $criteria
         ->where(Criteria::expr()->eq('threadId', $threadId))
-        ->andWhere(Criteria::expr()->eq('cId', $forumInfo['c_id']))
+        //->andWhere(Criteria::expr()->eq('cId', $forumInfo['c_id']))
         ->andWhere($visibleCriteria)
     ;
 
@@ -1917,7 +1927,7 @@ function getPosts($forumInfo, $threadId, $orderDirection = 'ASC', $recursive = f
             $filterModerated = false;
         }
     } else {
-        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid'])) {
+        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']) || api_is_allowed_to_edit()) {
             $filterModerated = false;
         }
     }
@@ -2419,6 +2429,12 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     $_user = api_get_user_info();
     $course_id = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
+    $groupId = api_get_group_id();
+    $groupInfo = GroupManager::get_group_properties($groupId);
+    $groupIid = null;
+    if (!empty($groupInfo)) {
+        $groupIid = $groupInfo['iid'];
+    }
 
     $em = Database::getManager();
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -2472,7 +2488,8 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         ->setSessionId(api_get_session_id())
         ->setLpItemId(isset($values['lp_item_id']) ? (int) $values['lp_item_id'] : 0)
         ->setThreadId(0)
-        ->setLocked(0);
+        ->setLocked(0)
+    ;
 
     $em->persist($lastThread);
     $em->flush();
@@ -2515,7 +2532,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             $lastThread->getIid(),
             'ForumThreadAdded',
             api_get_user_id(),
-            api_get_group_id(),
+            $groupIid,
             null,
             null,
             null,
@@ -2533,7 +2550,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         api_set_default_visibility(
             $lastThread->getIid(),
             TOOL_FORUM_THREAD,
-            api_get_group_id(),
+            $groupIid,
             $courseInfo
         );
 
@@ -2544,7 +2561,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 $lastThread->getIid(),
                 'invisible',
                 api_get_user_id(),
-                api_get_group_id()
+                $groupIid
 
             );
             $visible = 1;
@@ -2609,7 +2626,6 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     $message = get_lang('NewThreadStored');
     // Storing the attachments if any.
     if ($has_attachment) {
-
         // Try to add an extension to the file if it hasn't one.
         $new_file_name = add_ext_on_mime(
             stripslashes($_FILES['user_upload']['name']),
@@ -2874,7 +2890,6 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     }
 
     if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($myThread)) {
-
         $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
@@ -3356,6 +3371,7 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
  */
 function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
 {
+    $courseId = !empty($courseId) ? $courseId : api_get_course_int_id();
     $_course = api_get_course_info_by_id($courseId);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $post_date = api_get_utc_datetime();

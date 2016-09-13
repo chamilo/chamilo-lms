@@ -4834,6 +4834,8 @@ class Tracking
                             $url,
                             array('target' => SESSION_LINK_TARGET)
                         );
+                    } elseif ($exercices['active'] == -1) {
+                        $exercices['title'] = sprintf(get_lang('XParenthesisDeleted'), $exercices['title']);
                     }
 
                     $html .= Display::tag('td', $exercices['title']);

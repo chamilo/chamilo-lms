@@ -535,6 +535,7 @@ class DocumentManager
      * @param int $to_user_id
      * @param boolean $can_see_invisible
      * @param boolean $search
+     * @param int $sessionId
      * @return array with all document data
      */
     public static function get_all_document_data(
@@ -543,7 +544,8 @@ class DocumentManager
         $to_group_id = 0,
         $to_user_id = null,
         $can_see_invisible = false,
-        $search = false
+        $search = false,
+        $sessionId = 0
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
@@ -574,7 +576,7 @@ class DocumentManager
         $added_slash = $path == '/' ? '' : '/';
 
         // Condition for the session
-        $sessionId = api_get_session_id();
+        $sessionId = $sessionId ?: api_get_session_id();
         $condition_session = " AND (last.session_id = '$sessionId' OR (last.session_id = '0' OR last.session_id IS NULL) )";
         $condition_session .= self::getSessionFolderFilters($originalPath, $sessionId);
 

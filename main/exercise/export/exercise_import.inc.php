@@ -161,6 +161,9 @@ function import_exercise($file)
     // 1. Create exercise.
     $exercise = new Exercise();
     $exercise->exercise = $exercise_info['name'];
+    if (!empty($exercise_info['description'])) {
+        $exercise->updateDescription($exercise_info['description']);
+    }
 
     $exercise->save();
     $last_exercise_id = $exercise->selectId();
@@ -175,13 +178,18 @@ function import_exercise($file)
                 $question->type = MCUA;
             }
             $question->setAnswer();
+            $description = '';
             if (strlen($question_array['title']) < 50) {
                 $question->updateTitle(formatText(strip_tags($question_array['title'])) . '...');
             } else {
                 $question->updateTitle(formatText(substr(strip_tags($question_array['title']), 0, 50)));
-                $question->updateDescription($question_array['title']);
+                $description .= $question_array['title'];
             }
-            //$question->updateDescription($question_array['title']);
+            if (!empty($question_array['description'])) {
+                $description .= $question_array['description'];
+            }
+            $question->updateDescription($description);
+
             $question->save($last_exercise_id);
             $last_question_id = $question->selectId();
             //3. Create answer
@@ -363,11 +371,6 @@ function startElementQti2($parser, $name, $attributes)
     } else {
         $parent_element = "";
     }
-    if (sizeof($element_pile) >= 3) {
-        $grant_parent_element = $element_pile[sizeof($element_pile) - 3];
-    } else {
-        $grant_parent_element = "";
-    }
 
     if ($record_item_body) {
 
@@ -498,7 +501,23 @@ function endElementQti2($parser, $name)
     global $non_HTML_tag_to_avoid;
     global $cardinality;
 
+    array_push($element_pile, $name);
     $current_element = end($element_pile);
+    if (sizeof($element_pile) >= 2) {
+        $parent_element = $element_pile[sizeof($element_pile) - 2];
+    } else {
+        $parent_element = "";
+    }
+    if (sizeof($element_pile) >= 3) {
+        $grand_parent_element = $element_pile[sizeof($element_pile) - 3];
+    } else {
+        $grand_parent_element = "";
+    }
+    if (sizeof($element_pile) >= 4) {
+        $great_grand_parent_element = $element_pile[sizeof($element_pile) - 4];
+    } else {
+        $great_grand_parent_element = "";
+    }
 
     //treat the record of the full content of itembody tag :
 
@@ -545,9 +564,14 @@ function elementDataQti2($parser, $data)
         $parent_element = "";
     }
     if (sizeof($element_pile) >= 3) {
-        $grant_parent_element = $element_pile[sizeof($element_pile) - 3];
+        $grand_parent_element = $element_pile[sizeof($element_pile) - 3];
     } else {
-        $grant_parent_element = "";
+        $grand_parent_element = "";
+    }
+    if (sizeof($element_pile) >= 4) {
+        $great_grand_parent_element = $element_pile[sizeof($element_pile) - 4];
+    } else {
+        $great_grand_parent_element = "";
     }
 
     //treat the record of the full content of itembody tag (needed for question statment and/or FIB text:
@@ -609,6 +633,13 @@ function elementDataQti2($parser, $data)
                 $exercise_info['question'][$current_question_ident]['wrong_answers'][] = $data;
             }
             break;
+        case 'MATTEXT':
+            if ($grand_parent_element == 'FLOW_MAT' && ($great_grand_parent_element == 'PRESENTATION_MATERIAL' || $great_grand_parent_element == 'SECTION')) {
+                if (!empty(trim($data))) {
+                    $exercise_info['description'] = $data;
+                }
+            }
+
     }
 }
 

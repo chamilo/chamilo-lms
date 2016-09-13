@@ -7811,4 +7811,8 @@ $MoodleFileImportedSuccessfully = "Le fichier de cours Moodle a été importé a
 $ExtensionInstalledButNotEnabled = "Extension installée mais pas activée";
 $MailingTestSent = "Le courriel a été envoyé. Cette page se comporte en tous points comme l'envoi normal de courriels depuis Chamilo, ce qui permet de faire des tests un peu plus poussés en alternant les destinataires et corps du courriel.";
 $EMailTester = "Testeur de courriel";
+$TicketMsgWelcome = "Bienvenu(e) dans votre section de tickets personnels. Suivez ici-même l'état de tous les tickets que vous avez créé.";
+$TicketNoHistory = "Aucun historique";
+$RecalculateResults = "Recalculer les résultats";
+$XParenthesisDeleted = "%s (supprimé)";
 ?>

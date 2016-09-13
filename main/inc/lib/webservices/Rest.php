@@ -38,6 +38,7 @@ class Rest extends WebService
     const GET_USER_SESSIONS = 'user_sessions';
     const SAVE_USER_MESSAGE = 'save_user_message';
     const GET_MESSAGE_USERS = 'message_users';
+    const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
 
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
@@ -947,5 +948,27 @@ class Rest extends WebService
         }
 
         return $data;
+    }
+
+    /**
+     * @param string $title
+     * @param string $text
+     * @return bool
+     */
+    public function saveCourseNotebook($title, $text)
+    {
+        $values = ['note_title' => $title, 'note_comment' => $text];
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $noteBookId = NotebookManager::save_note(
+            $values,
+            $this->user->getId(),
+            $this->course->getId(),
+            $sessionId
+        );
+
+        return [
+            'registered' => $noteBookId
+        ];
     }
 }

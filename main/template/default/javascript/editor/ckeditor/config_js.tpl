@@ -20,37 +20,37 @@ CKEDITOR.editorConfig = function (config) {
     ];
     //Style for default CKEditor Chamilo LMS
     config.stylesSet = [
-        { 
+        {
             name : 'Title 1',
             element : 'h1',
             attributes : { 'class': 'ck ck-title' }
         },
-        { 
+        {
             name : 'Title 2',
             element : 'h2',
             attributes : { 'class': 'ck ck-title2' }
         },
-        { 
+        {
             name : 'Alert Success',
             element : 'p',
             attributes : { 'class': 'alert alert-success' }
         },
-        { 
+        {
             name : 'Alert Info',
             element : 'p',
             attributes : { 'class': 'alert alert-info' }
         },
-        { 
+        {
             name : 'Alert Warning',
             element : 'p',
             attributes : { 'class': 'alert alert-warning' }
         },
-        { 
+        {
             name : 'Alert Danger',
             element : 'p',
             attributes : { 'class': 'alert alert-danger' }
         },
-        { 
+        {
             name : 'Section Article' ,
             element : 'h3' ,
             attributes : { 'class': 'ck ck-article' }
@@ -95,8 +95,8 @@ CKEDITOR.editorConfig = function (config) {
             attributes: { 'class':'ck-style3'}
         }
     ];
-    
-    
+
+
     {% if moreButtonsInMaximizedMode %}
         config.toolbar = 'minToolbar';
         config.smallToolbar = 'minToolbar';
@@ -104,7 +104,7 @@ CKEDITOR.editorConfig = function (config) {
     {% endif %}
 
     // File manager (elFinder)
-    config.filebrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php' }}';
+    config.filebrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
 
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;

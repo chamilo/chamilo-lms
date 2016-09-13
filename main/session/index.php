@@ -219,16 +219,12 @@ if (!empty($course_list)) {
     }
 }
 
-// If the requested session does not exist in my list we stop the script
-/*if (!api_is_platform_admin()) {
-    if (!api_is_anonymous() && !in_array($session_id, $my_session_list)) {
+//If session is not active we stop de script
+if (api_is_coach_of_course_in_session($session_id) == false) {
+    //If session is not active we stop de script
+    if (!api_is_allowed_to_session_edit()) {
         api_not_allowed(true);
     }
-}*/
-
-//If session is not active we stop de script
-if (!api_is_allowed_to_session_edit()) {
-	api_not_allowed();
 }
 
 $entityManager = Database::getManager();

@@ -889,7 +889,7 @@ class wsdl extends nusoap_base {
 	*/
 	function serialize($debug = 0)
 	{
-		$xml = '<?xml version="1.0" encoding="ISO-8859-1"?>';
+		$xml = '<?xml version="1.0" encoding="'.$this->soap_defencoding.'"?>';
 		$xml .= "\n<definitions";
 		foreach($this->namespaces as $k => $v) {
 			$xml .= " xmlns:$k=\"$v\"";

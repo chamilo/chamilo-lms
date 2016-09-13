@@ -160,9 +160,11 @@ if (!empty($course_list)) {
     }
 }
 
-//If session is not active we stop de script
-if (!api_is_allowed_to_session_edit() || api_is_coach_of_course_in_session($session_id)) {
-    api_not_allowed(true);
+if (api_is_coach_of_course_in_session($session_id) == false) {
+    //If session is not active we stop de script
+    if (!api_is_allowed_to_session_edit()) {
+        api_not_allowed(true);
+    }
 }
 
 $entityManager = Database::getManager();

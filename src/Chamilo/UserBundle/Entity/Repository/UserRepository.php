@@ -230,4 +230,68 @@ class UserRepository extends EntityRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * Find potencial users to send a message
+     * @param int $currentUserId The current user ID
+     * @param string $search The search text to filter the user list
+     * @param int $limit Optional. Sets the maximum number of results to retrieve
+     * @return mixed
+     */
+    public function findUsersToSendMessage($currentUserId, $search, $limit = 10)
+    {
+        $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 1;
+
+        if (api_get_setting('allow_social_tool') === 'true' && api_get_setting('allow_message_tool') === 'true') {
+            // All users
+            if (api_get_setting('allow_send_message_to_all_platform_users') === 'true' || api_is_platform_admin()) {
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloUserBundle:User U
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R WITH U = R.user
+                        WHERE
+                            U.status != 6  AND
+                            U.id != $currentUserId AND
+                            R.portal = $accessUrlId";
+            } else {
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
+                        INNER JOIN ChamiloUserBundle:User AS U WITH UF.friendUserId = U
+                        WHERE
+                            U.status != 6 AND
+                            UF.relationType NOT IN(" . USER_RELATION_TYPE_DELETED . ", " . USER_RELATION_TYPE_RRHH . ") AND
+                            UF.userId = $currentUserId AND
+                            UF.friendUserId != $currentUserId AND
+                            U = R.user AND
+                            R.portal = $accessUrlId";
+            }
+        } elseif (
+            api_get_setting('allow_social_tool') === 'false' && api_get_setting('allow_message_tool') === 'true'
+        ) {
+            if (api_get_setting('allow_send_message_to_all_platform_users') === 'true') {
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloUserBundle:User U
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R WITH U = R.user
+                        WHERE
+                            U.status != 6  AND
+                            U.id != $currentUserId AND
+                            R.portal = $accessUrlId";
+            } else {
+                $time_limit = api_get_setting('time_limit_whosonline');
+                $online_time = time() - $time_limit * 60;
+                $limit_date = api_get_utc_datetime($online_time);
+                $dql = "SELECT DISTINCT U
+                        FROM ChamiloUserBundle:User U
+                        INNER JOIN ChamiloCoreBundle:TrackEOnline T WITH U.id = T.loginUserId
+                        WHERE T.loginDate >= '" . $limit_date . "'";
+            }
+        }
+
+        $dql .= ' AND (U.firstname LIKE :search OR U.lastname LIKE :search OR U.email LIKE :search)';
+
+        return $this->getEntityManager()
+            ->createQuery($dql)
+            ->setMaxResults($limit)
+            ->setParameters(['search' => "%$search%"])
+            ->getResult();
+    }
 }

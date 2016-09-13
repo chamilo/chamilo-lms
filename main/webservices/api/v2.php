@@ -197,6 +197,18 @@ try {
             $restResponse->setData($data);
             break;
 
+        case Rest::GET_MESSAGE_USERS:
+            $search = !empty($_REQUEST['q']) ? $_REQUEST['q'] : null;
+
+            if (!$search || strlen($search) < 2) {
+                throw new Exception(get_lang('TooShort'));
+            }
+
+            $data = $restApi->getMessageUsers($search);
+
+            $restResponse->setData($data);
+            break;
+
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

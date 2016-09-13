@@ -7,6 +7,7 @@ use Chamilo\CourseBundle\Entity\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class RestApi
@@ -36,6 +37,7 @@ class Rest extends WebService
     const ACTION_SAVE_FORUM_POST = 'save_forum_post';
     const ACTION_USER_SESSIONS = 'user_sessions';
     const SAVE_USER_MESSAGE = 'save_user_message';
+    const GET_MESSAGE_USERS = 'message_users';
 
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
@@ -890,6 +892,12 @@ class Rest extends WebService
         return $data;
     }
 
+    /**
+     * @param string $subject
+     * @param string $text
+     * @param array $receivers
+     * @return array
+     */
     public function saveUserMessage($subject, $text, array $receivers)
     {
         foreach ($receivers as $userId) {
@@ -899,5 +907,37 @@ class Rest extends WebService
         return [
             'sent' => true
         ];
+    }
+
+    /**
+     * @param string $search
+     * @return array
+     */
+    public function getMessageUsers($search)
+    {
+        /** @var UserRepository $repo */
+        $repo = Database::getManager()
+            ->getRepository('ChamiloUserBundle:User');
+
+        $users = $repo->findUsersToSendMessage($this->user->getId(), $search);
+
+        $showEmail = api_get_setting('show_email_addresses') === 'true';
+        $data = [];
+
+        /** @var User $user */
+        foreach ($users as $user) {
+            $userName = $user->getCompleteName();
+
+            if ($showEmail) {
+                $userName .= " ({$user->getEmail()})";
+            }
+
+            $data[] = [
+                'id' => $user->getId(),
+                'name' => $userName,
+            ];
+        }
+
+        return $data;
     }
 }

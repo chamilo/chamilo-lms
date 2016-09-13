@@ -543,8 +543,6 @@ class ImportCsv
             $expirationDateOnCreate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
             $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
 
-            $userToUpdateList = [];
-
             $counter = 1;
 
             foreach ($data as $row) {

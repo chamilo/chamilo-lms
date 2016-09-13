@@ -4261,8 +4261,8 @@ class SessionManager
 
                 $dateStart = explode('/', $enreg['DateStart']);
                 $dateEnd = explode('/', $enreg['DateEnd']);
-                $dateStart = api_get_local_time($dateStart[0].'-'.$dateStart[1].'-'.$dateStart[2].' 00:00:00');
-                $dateEnd = api_get_local_time($dateEnd[0].'-'.$dateEnd[1].'-'.$dateEnd[2].' 23:59:59');
+                $dateStart = $dateStart[0].'-'.$dateStart[1].'-'.$dateStart[2].' 00:00:00';
+                $dateEnd = $dateEnd[0].'-'.$dateEnd[1].'-'.$dateEnd[2].' 23:59:59';
 
                 $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
                 $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;

@@ -253,7 +253,7 @@ if ($user_already_registered_show_terms === false) {
 
     if (CHECK_PASS_EASY_TO_FIND) {
         $form->addRule(
-            'password1',
+            'pass1',
             get_lang('PassTooEasy') . ': ' . api_generate_password(),
             'callback',
             'api_check_password'

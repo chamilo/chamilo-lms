@@ -39,6 +39,7 @@ class Rest extends WebService
     const SAVE_USER_MESSAGE = 'save_user_message';
     const GET_MESSAGE_USERS = 'message_users';
     const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
+    const SAVE_FORUM_THREAD = 'save_forum_thread';
 
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
@@ -844,7 +845,7 @@ class Rest extends WebService
     {
         require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
-        $forum = get_forums($forumId);
+        $forum = get_forums($forumId, $this->course->getCode());
 
         store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
 
@@ -969,6 +970,26 @@ class Rest extends WebService
 
         return [
             'registered' => $noteBookId
+        ];
+    }
+
+    /**
+     * @param array $values
+     * @param int $forumId
+     * @return array
+     */
+    public function saveForumThread(array $values, $forumId)
+    {
+        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+
+        $forum = get_forums($forumId, $this->course->getCode());
+        $courseInfo = api_get_course_info($this->course->getCode());
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $id = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
+
+        return [
+            'registered' => $id
         ];
     }
 }

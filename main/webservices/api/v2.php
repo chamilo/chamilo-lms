@@ -164,6 +164,7 @@ try {
                 throw new Exception(get_lang('NoData'));
             }
 
+            $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
             $notify = !empty($_POST['notify']);
             $parentId = !empty($_POST['parent']) ? intval($_POST['parent']) : null;
 
@@ -214,6 +215,28 @@ try {
             $text = !empty($_POST['text'])? $_POST['text'] : null;
 
             $data = $restApi->saveCourseNotebook($title, $text);
+
+            $restResponse->setData($data);
+            break;
+
+        case Rest::SAVE_FORUM_THREAD:
+            if (
+                empty($_POST['title']) || empty($_POST['text']) || empty($_POST['forum'])
+            ) {
+                throw new Exception(get_lang('NoData'));
+            }
+
+            $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
+            $notify = !empty($_POST['notify']);
+
+            $threadInfo = [
+                'post_title' => $_POST['title'],
+                'forum_id' => $_POST['forum'],
+                'post_text' => nl2br($_POST['text']),
+                'post_notification' => $notify
+            ];
+
+            $data = $restApi->saveForumThread($threadInfo, $forumId);
 
             $restResponse->setData($data);
             break;

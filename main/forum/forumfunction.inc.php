@@ -2418,15 +2418,16 @@ function updateThread($values)
  * @param array $values
  * @param array $courseInfo
  * @param bool $showMessage
+ * @param int $userId Optional. The user ID
+ * @param int $sessionId
  * @return int
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function store_thread($current_forum, $values, $courseInfo = array(), $showMessage = true)
+function store_thread($current_forum, $values, $courseInfo = array(), $showMessage = true, $userId = 0, $sessionId = 0)
 {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
-    $_user = api_get_user_info();
+    $userId = $userId ?: api_get_user_id();
     $course_id = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
     $groupId = api_get_group_id();
@@ -2435,6 +2436,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     if (!empty($groupInfo)) {
         $groupIid = $groupInfo['iid'];
     }
+    $sessionId = $sessionId ?: api_get_session_id();
 
     $em = Database::getManager();
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -2475,7 +2477,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         ->setCId($course_id)
         ->setThreadTitle($clean_post_title)
         ->setForumId($values['forum_id'])
-        ->setThreadPosterId($_user['user_id'])
+        ->setThreadPosterId($userId)
         ->setThreadPosterName(isset($values['poster_name']) ? $values['poster_name'] : null)
         ->setThreadDate($post_date)
         ->setThreadSticky(isset($values['thread_sticky']) ? $values['thread_sticky'] : 0)
@@ -2485,7 +2487,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         ->setThreadQualifyMax(isset($values['numeric_calification']) ? (int) $values['numeric_calification'] : 0)
         ->setThreadWeight(isset($values['weight_calification']) ? (int) $values['weight_calification'] : 0)
         ->setThreadPeerQualify(isset($values['thread_peer_qualify']) ? (int) $values['thread_peer_qualify'] : 0)
-        ->setSessionId(api_get_session_id())
+        ->setSessionId($sessionId)
         ->setLpItemId(isset($values['lp_item_id']) ? (int) $values['lp_item_id'] : 0)
         ->setThreadId(0)
         ->setLocked(0)
@@ -2516,7 +2518,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             $maxqualify,
             $resourcedescription,
             0,
-            api_get_session_id()
+            $sessionId
         );
     }
 
@@ -2531,12 +2533,12 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             TOOL_FORUM_THREAD,
             $lastThread->getIid(),
             'ForumThreadAdded',
-            api_get_user_id(),
+            $userId,
             $groupIid,
             null,
             null,
             null,
-            api_get_session_id()
+            $sessionId
         );
 
         // If the forum properties tell that the posts have to be approved
@@ -2551,7 +2553,9 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             $lastThread->getIid(),
             TOOL_FORUM_THREAD,
             $groupIid,
-            $courseInfo
+            $courseInfo,
+            $sessionId,
+            $userId
         );
 
         if ($visible == 0) {
@@ -2560,7 +2564,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 TOOL_FORUM_THREAD,
                 $lastThread->getIid(),
                 'invisible',
-                api_get_user_id(),
+                $userId,
                 $groupIid
 
             );
@@ -2576,7 +2580,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         ->setPostText($values['post_text'])
         ->setThreadId($lastThread->getIid())
         ->setForumId($values['forum_id'])
-        ->setPosterId($_user['user_id'])
+        ->setPosterId($userId)
         ->setPosterName(isset($values['poster_name']) ? $values['poster_name'] : null)
         ->setPostDate($post_date)
         ->setPostNotification(isset($values['post_notification']) ? (int) $values['post_notification'] : null)
@@ -2667,7 +2671,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         set_notification('thread', $lastThread->getIid(), true);
     }
 
-    send_notification_mails($lastThread->getIid(), $reply_info);
+    send_notification_mails($lastThread->getIid(), $reply_info, $courseInfo['code']);
 
     Session::erase('formelements');
     Session::erase('origin');
@@ -4024,7 +4028,7 @@ function send_notification_mails($thread_id, $reply_info)
     // 3. the thread is visible
     // 4. the reply is visible (=when there is)
     $current_thread = get_thread_information($thread_id);
-    $current_forum = get_forum_information($current_thread['forum_id']);
+    $current_forum = get_forum_information($current_thread['forum_id'], $current_thread['c_id']);
 
     $current_forum_category = null;
     if (isset($current_forum['forum_category'])) {

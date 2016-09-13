@@ -2932,6 +2932,77 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 }
 
 /**
+ * Returns true if user is a course coach of at least one course in session
+ * @param int $sessionId
+ * @return bool
+ */
+function api_is_coach_of_course_in_session($sessionId)
+{
+    if (api_is_platform_admin()) {
+        return true;
+    }
+
+    $userId = api_get_user_id();
+    $courseList = UserManager::get_courses_list_by_session(
+        $userId,
+        $sessionId
+    );
+
+    // Session visibility.
+    $visibility = api_get_session_visibility(
+        $sessionId,
+        null,
+        false
+    );
+
+    if ($visibility != SESSION_VISIBLE && !empty($courseList)) {
+        // Course Coach session visibility.
+        $blockedCourseCount = 0;
+        $closedVisibilityList = array(
+            COURSE_VISIBILITY_CLOSED,
+            COURSE_VISIBILITY_HIDDEN
+        );
+
+        foreach ($courseList as $course) {
+            // Checking session visibility
+            $sessionCourseVisibility = api_get_session_visibility(
+                $sessionId,
+                $course['real_id'],
+                $ignore_visibility_for_admins
+            );
+
+            $courseIsVisible = !in_array(
+                $course['visibility'],
+                $closedVisibilityList
+            );
+            if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
+                $blockedCourseCount++;
+            }
+        }
+
+        // If all courses are blocked then no show in the list.
+        if ($blockedCourseCount === count($courseList)) {
+            $visibility = SESSION_INVISIBLE;
+        } else {
+            $visibility = SESSION_VISIBLE;
+        }
+    }
+
+    switch ($visibility) {
+        case SESSION_VISIBLE_READ_ONLY:
+        case SESSION_VISIBLE:
+        case SESSION_AVAILABLE:
+            return true;
+            break;
+        case SESSION_INVISIBLE:
+            return false;
+    }
+
+    return false;
+}
+
+
+/**
 * Checks if a student can edit contents in a session depending
 * on the session visibility
 * @param bool $tutor  Whether to check if the user has the tutor role

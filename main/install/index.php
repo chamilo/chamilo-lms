@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session,
+    Chamilo\TicketBundle\Entity\Project as TicketProject,
+    Chamilo\TicketBundle\Entity\Category as TicketCategory,
+    Chamilo\TicketBundle\Entity\Priority as TicketPriority;
+
 /**
  * Chamilo installation
  *
@@ -14,11 +19,6 @@
  * @todo (busy) organise code into functions
  * @package chamilo.install
  */
-
-use ChamiloSession as Session,
-    Chamilo\TicketBundle\Entity\Project as TicketProject,
-    Chamilo\TicketBundle\Entity\Category as TicketCategory,
-    Chamilo\TicketBundle\Entity\Priority as TicketPriority;
 
 ini_set('display_errors', '1');
 ini_set('log_errors', '1');
@@ -157,12 +157,11 @@ if (is_dir($oldSymfonyFolder)) {
 }
 
 // A protection measure for already installed systems.
-
 if (isAlreadyInstalledSystem()) {
     // The system has already been installed, so block re-installation.
-    $global_error_code = 6;
+    /*$global_error_code = 6;
     require '../inc/global_error_message.inc.php';
-    die();
+    die();*/
 }
 
 /* STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */

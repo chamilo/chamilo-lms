@@ -17,7 +17,6 @@ if (empty($_GET['session_id'])) {
 }
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
-
 $sessionField = new ExtraFieldValue('session');
 $valueAllowVisitors = $sessionField->get_values_by_handler_and_field_variable($session_id, 'allow_visitors');
 
@@ -161,16 +160,9 @@ if (!empty($course_list)) {
     }
 }
 
-// If the requested session does not exist in my list we stop the script
-/*if (!api_is_platform_admin()) {
-    if (!api_is_anonymous() && !in_array($session_id, $my_session_list)) {
-        api_not_allowed(true);
-    }
-}*/
-
 //If session is not active we stop de script
-if (!api_is_allowed_to_session_edit()) {
-	api_not_allowed();
+if (!api_is_allowed_to_session_edit() || api_is_coach_of_course_in_session($session_id)) {
+    api_not_allowed(true);
 }
 
 $entityManager = Database::getManager();

@@ -4283,7 +4283,7 @@ class SessionManager
                     );
                     $date->sub($interval);
                     $coachBefore = $date->format('Y-m-d h:i');
-                    //$coachBefore = api_get_utc_datetime($coachBefore);
+                    $coachBefore = api_get_utc_datetime($coachBefore);
 
                     $extraParameters .= " , coach_access_start_date = '$coachBefore'";
 
@@ -4292,12 +4292,12 @@ class SessionManager
                     $date->add($interval);
                     $coachAfter = $date->format('Y-m-d h:i');
 
-                    //$coachAfter = api_get_utc_datetime($coachAfter);
+                    $coachAfter = api_get_utc_datetime($coachAfter);
                     $extraParameters .= " , coach_access_end_date = '$coachAfter'";
                 }
 
-                //$dateStart = api_get_utc_datetime($dateStart);
-                //$dateEnd = api_get_utc_datetime($dateEnd);
+                $dateStart = api_get_utc_datetime($dateStart);
+                $dateEnd = api_get_utc_datetime($dateEnd);
 
                 $extraSessionParameters = null;
                 if (!empty($sessionDescription)) {

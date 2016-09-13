@@ -20,7 +20,7 @@
     $().ready(function() {
         var funcNum = getUrlParam('CKEditorFuncNum');
         var elf = $('#elfinder').elfinder({
-            url : '{{ _p.web_lib ~ 'elfinder/connectorAction.php' }}',  // connector URL (REQUIRED)
+            url : '{{ _p.web_lib ~ 'elfinder/connectorAction.php?' }}{{ course_condition }}',  // connector URL (REQUIRED)
             getFileCallback : function(file) {
                 window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
                 window.close();

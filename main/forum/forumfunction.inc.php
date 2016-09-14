@@ -1850,6 +1850,7 @@ function get_threads($forum_id)
                     item_properties.c_id = thread.c_id AND
                     item_properties.tool = '".TABLE_FORUM_THREAD."'
                     $groupCondition
+                    $sessionCondition
                 LEFT JOIN $table_users users
                     ON thread.thread_poster_id=users.user_id
                 WHERE

@@ -743,6 +743,7 @@ class DocumentManager
      * @param array $_course
      * @param int $to_group_id iid
      * @param boolean $can_see_invisible
+     * @param boolean $getInvisibleList
      *
      * @return array with paths
      */
@@ -762,8 +763,6 @@ class DocumentManager
             api_get_session_id()
         );
 
-        $sharedCondition = null;
-
         if (!empty($students)) {
             $conditionList = array();
             foreach ($students as $studentId => $studentInfo) {
@@ -780,7 +779,7 @@ class DocumentManager
             // condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
-            $show_users_condition = "";
+            $show_users_condition = '';
             if (api_get_setting('show_users_folders') === 'false') {
                 $show_users_condition = " AND docs.path NOT LIKE '%shared_folder%'";
             }
@@ -844,7 +843,6 @@ class DocumentManager
                 return false;
             }
         } else {
-
             // No invisible folders
             // Condition for the session
             $session_id = api_get_session_id();
@@ -878,7 +876,6 @@ class DocumentManager
             }
 
             if ($getInvisibleList) {
-
                 return $visibleFolders;
             }
 

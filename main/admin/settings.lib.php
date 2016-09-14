@@ -402,16 +402,14 @@ function handleStylesheets()
             . '</script>';
         }
     } elseif (isset($_POST['logo_upload'])) {
-
         $logoForm->addRule('new_logo', get_lang('InvalidExtension').' ('.implode(',', $allowedFileTypes).')', 'filetype', $allowedFileTypes);
         $logoForm->addRule('new_logo', get_lang('ThisFieldIsRequired'), 'required');
 
         if ($logoForm->validate()) {
-
             $imageInfo = getimagesize($_FILES['new_logo']['tmp_name']);
             $width = $imageInfo[0];
             $height = $imageInfo[1];
-            if ($width <= 250 && $height <= 70 ) {
+            if ($width <= 250 && $height <= 70) {
                 if (is_file($dir.$newLogoFileName)) {
                     unlink($dir.$newLogoFileName);
                 }
@@ -1523,7 +1521,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 if (empty($timezone)) {
                     $timezone = _api_get_timezone();
                 }
-                $form->addElement('html', sprintf(get_lang('LocalTimeUsingPortalTimezoneXIsY'), $timezone, api_get_local_time()));
+                $form->addLabel('', sprintf(get_lang('LocalTimeUsingPortalTimezoneXIsY'), $timezone, api_get_local_time()));
                 break;
         }
     } // end for

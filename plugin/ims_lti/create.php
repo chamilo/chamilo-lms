@@ -23,7 +23,7 @@ if ($form->validate()) {
     $externalTool
         ->setName($formValues['name'])
         ->setDescription($formValues['description'])
-        ->setLaunchUrl($formValues['url'])
+        ->setLaunchUrl($formValues['base_url'])
         ->setConsumerKey($formValues['consumer_key'])
         ->setSharedSecret($formValues['shared_secret'])
         ->setCustomParams($formValues['custom_params'])

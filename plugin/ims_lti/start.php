@@ -2,13 +2,19 @@
 /* For license terms, see /license.txt */
 require '../../main/inc/global.inc.php';
 
-api_protect_course_script();
-
 $toolId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if (empty($toolId)) {
-    api_not_allowed();
+    if (api_is_platform_admin()) {
+        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'ims_lti/list.php');
+        exit;
+    }
+
+    api_not_allowed(true);
+    exit;
 }
+
+api_protect_course_script();
 
 $imsLtiPlugin = ImsLtiPlugin::create();
 

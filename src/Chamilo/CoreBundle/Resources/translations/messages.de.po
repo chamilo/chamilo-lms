@@ -36,3 +36,6 @@ msgstr "Registrierung"
 
 msgid "My certificates"
 msgstr "Meine Zertifikate"
+
+msgid "Latest blocks"
+msgstr "Neueste Blöcke"

@@ -3287,7 +3287,22 @@ class SessionManager
         $getCount = false,
         $keyword = null
     ) {
+        $platformCourses = null;
+
         if (empty($sessionId)) {
+            $platformCourses = CourseManager::getCoursesFollowedByUser(
+                $userId,
+                DRH,
+                null,
+                null,
+                null,
+                null,
+                $getCount,
+                null,
+                null,
+                true
+            );
+
             $sessionsSQL = SessionManager::get_sessions_followed_by_drh(
                 $userId,
                 null,
@@ -3327,7 +3342,7 @@ class SessionManager
         if ($getCount) {
             $result = Database::query($sql);
             $row = Database::fetch_array($result,'ASSOC');
-            return $row['count'];
+            return $row['count'] + (int) $platformCourses;
         }
 
         if (isset($from) && isset($limit)) {
@@ -3343,6 +3358,12 @@ class SessionManager
         if ($num_rows > 0) {
             while ($row = Database::fetch_array($result,'ASSOC'))	{
                 $courses[$row['id']] = $row;
+            }
+        }
+
+        if (!empty($platformCourses)) {
+              foreach ($platformCourses as $course) {
+                $courses[$course['real_id']] = $course;
             }
         }
 

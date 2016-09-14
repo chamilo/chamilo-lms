@@ -1200,9 +1200,11 @@ class Tracking
             foreach ($platformCourses as $course) {
                 $courses[$course['code']] = $course['code'];
             }
+
+
+
             $sessions = SessionManager::get_sessions_followed_by_drh($userId);
         } else {
-
             $studentList = UserManager::getUsersFollowedByUser(
                 $userId,
                 STUDENT,

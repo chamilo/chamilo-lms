@@ -1366,18 +1366,26 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
 
     if (empty($id)) {
         $sql = "SELECT *
-                FROM ".$table_item_property." item_properties, ".$table_categories." forum_categories
-                WHERE
-                    forum_categories.cat_id=item_properties.ref AND
-                    item_properties.visibility=1 AND
+                FROM $table_item_property item_properties 
+                INNER JOIN $table_categories forum_categories
+                ON (
+                    forum_categories.cat_id = item_properties.ref AND 
+                    item_properties.c_id = forum_categories.c_id
+                )
+                WHERE                    
+                    item_properties.visibility = 1 AND
                     item_properties.tool = '".TOOL_FORUM_CATEGORY."'
                     $condition_session
                 ORDER BY forum_categories.cat_order ASC";
         if (api_is_allowed_to_edit()) {
             $sql = "SELECT *
-                    FROM ".$table_item_property." item_properties, ".$table_categories." forum_categories
-                    WHERE
-                        forum_categories.cat_id=item_properties.ref AND
+                    FROM $table_item_property item_properties  
+                    INNER JOIN $table_categories forum_categories
+                    ON (
+                        forum_categories.cat_id = item_properties.ref AND 
+                        item_properties.c_id = forum_categories.c_id
+                    )
+                    WHERE                        
                         item_properties.visibility<>2 AND
                         item_properties.tool='".TOOL_FORUM_CATEGORY."'
                         $condition_session
@@ -1385,9 +1393,13 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
         }
     } else {
         $sql = "SELECT *
-                FROM ".$table_item_property." item_properties, ".$table_categories." forum_categories
-                WHERE
-                    forum_categories.cat_id=item_properties.ref AND
+                FROM $table_item_property item_properties 
+                INNER JOIN $table_categories forum_categories
+                ON (
+                    forum_categories.cat_id = item_properties.ref AND 
+                    item_properties.c_id = forum_categories.c_id
+                )
+                WHERE                    
                     item_properties.tool='".TOOL_FORUM_CATEGORY."' AND
                     forum_categories.cat_id = ".intval($id)."
                     $condition_session
@@ -1395,7 +1407,6 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
     }
     $result = Database::query($sql);
     $forum_categories_list = array();
-
     while ($row = Database::fetch_assoc($result)) {
         if (empty($id)) {
             $forum_categories_list[$row['cat_id']] = $row;

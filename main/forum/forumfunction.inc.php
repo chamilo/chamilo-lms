@@ -1508,7 +1508,7 @@ function get_forums(
                     forum.c_id = item_properties.c_id
                 )
                 WHERE
-                    item_properties.visibility=1 AND
+                    item_properties.visibility = 1 AND
                     item_properties.tool = '".TOOL_FORUM."'
                     $condition_session AND
                     forum.c_id = $course_id AND
@@ -1519,7 +1519,7 @@ function get_forums(
         // Select the number of threads of the forums (only the threads that are visible).
         $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id
                 FROM $table_threads threads
-                INNER JOIN ".$table_item_property." item_properties
+                INNER JOIN $table_item_property item_properties
                 ON (
                     threads.thread_id = item_properties.ref AND
                     threads.c_id = item_properties.c_id
@@ -1545,7 +1545,7 @@ function get_forums(
                     )
                     WHERE
                         item_properties.visibility <> 2 AND
-                        item_properties.tool='".TOOL_FORUM."'
+                        item_properties.tool = '".TOOL_FORUM."'
                         $condition_session AND
                         forum.c_id = $course_id AND
                         item_properties.c_id = $course_id
@@ -1557,7 +1557,7 @@ function get_forums(
                     FROM $table_threads threads
                     INNER JOIN $table_item_property item_properties
                     ON (
-                        threads.thread_id=item_properties.ref AND
+                        threads.thread_id = item_properties.ref AND
                         threads.c_id = item_properties.c_id
                         $sessionIdLink
                     )
@@ -1583,6 +1583,7 @@ function get_forums(
                 ON (forum.forum_id = item_properties.ref AND forum.c_id = item_properties.c_id)
                 WHERE
                     forum.forum_id = " . intval($id) . " AND
+                    forum.c_id = $course_id AND
                     item_properties.visibility != 2 AND
                     item_properties.tool = '".TOOL_FORUM."'
                 ORDER BY forum_order ASC";

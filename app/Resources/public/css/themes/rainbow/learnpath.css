@@ -4,6 +4,12 @@
 #learning_path_breadcrumb_zone .breadcrumb a{
     color: #000;
 }
+.scorm_item_level_1{
+ padding: 0 2.5em 0 1.5em;   
+}
+.scorm_item_level_0{
+ padding: 0 2.5em 0 0; 
+}
 .expand .fa{
     background-color: #96BD0D;
 }

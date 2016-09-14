@@ -388,7 +388,8 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         if (isset($_GET['forumcategory'])) {
             $defaults['forum_category'] = Security::remove_XSS($_GET['forumcategory']);
         }
-    } else {   // the default values when editing = the data in the table
+    } else {
+        // the default values when editing = the data in the table
         $defaults['forum_id'] = isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
         $defaults['forum_title'] = prepare4display(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : null);
         $defaults['forum_comment'] = prepare4display(isset($inputvalues['forum_comment']) ? $inputvalues['forum_comment'] : null);
@@ -1481,8 +1482,7 @@ function get_forums(
 
     // Condition for the session
     $session_id = intval($sessionId) ?: api_get_session_id();
-
-    $sessionIdLink = ($session_id === 0) ? '' : 'AND threads.session_id = item_properties.session_id';
+    $sessionIdLink = $session_id === 0 ? '' : ' AND threads.session_id = item_properties.session_id';
 
     $condition_session = api_get_session_condition(
         $session_id,
@@ -1493,7 +1493,7 @@ function get_forums(
     $course_id = $course_info['real_id'];
 
     $forum_list = array();
-    $includeGroupsForumSelect = "";
+    $includeGroupsForumSelect = '';
     if (!$includeGroupsForum) {
         $includeGroupsForumSelect = " AND forum_of_group = 0 ";
     }
@@ -1521,7 +1521,7 @@ function get_forums(
                 FROM $table_threads threads
                 INNER JOIN ".$table_item_property." item_properties
                 ON (
-                    threads.thread_id=item_properties.ref AND
+                    threads.thread_id = item_properties.ref AND
                     threads.c_id = item_properties.c_id
                     $sessionIdLink
                 )
@@ -1536,8 +1536,9 @@ function get_forums(
         // Course Admin
         if (api_is_allowed_to_edit()) {
             // Select all the forum information of all forums (that are not deleted).
-            $sql = "SELECT item_properties.*, forum.* FROM ".$table_forums." forum
-                    INNER JOIN ".$table_item_property." item_properties
+            $sql = "SELECT item_properties.*, forum.* 
+                    FROM $table_forums forum
+                    INNER JOIN $table_item_property item_properties
                     ON (
                         forum.forum_id = item_properties.ref AND
                         forum.c_id = item_properties.c_id
@@ -1554,7 +1555,7 @@ function get_forums(
             // Select the number of threads of the forums (only the threads that are not deleted).
             $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id
                     FROM $table_threads threads
-                    INNER JOIN ".$table_item_property." item_properties
+                    INNER JOIN $table_item_property item_properties
                     ON (
                         threads.thread_id=item_properties.ref AND
                         threads.c_id = item_properties.c_id
@@ -1577,13 +1578,13 @@ function get_forums(
         we use this part of the function) */
 
         // Select all the forum information of the given forum (that is not deleted).
-        $sql = "SELECT * FROM ".$table_item_property." item_properties, $table_forums forum
+        $sql = "SELECT * FROM $table_item_property item_properties 
+                INNER JOIN $table_forums forum
+                ON (forum.forum_id = item_properties.ref AND forum.c_id = item_properties.c_id)
                 WHERE
-                    forum.forum_id = item_properties.ref AND
-                    forum.iid = " . intval($id) . " AND
+                    forum.forum_id = " . intval($id) . " AND
                     item_properties.visibility != 2 AND
-                    item_properties.tool = '".TOOL_FORUM."' AND 
-                    forum.c_id = item_properties.c_id
+                    item_properties.tool = '".TOOL_FORUM."'
                 ORDER BY forum_order ASC";
 
         // Select the number of threads of the forum.

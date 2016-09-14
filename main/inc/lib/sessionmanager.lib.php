@@ -4980,6 +4980,13 @@ class SessionManager
             $userConditions .= " AND active = $active";
         }
 
+        $courseList = CourseManager::get_courses_followed_by_drh($userId, DRH);
+        $courseConditions = ' AND 1 <> 1';
+        if (!empty($courseList)) {
+            $courseIdList = array_column($courseList, 'id');
+            $courseConditions = ' AND c.id IN ("'.implode('","', $courseIdList).'")';
+        }
+
         switch ($status) {
             case 'drh':
                 // Classic DRH

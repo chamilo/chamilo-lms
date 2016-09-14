@@ -165,12 +165,12 @@ class LearnpathList
                 'lp_preview_image' => stripslashes($row->getPreviewImage()),
                 'autolaunch' => $row->getAutolaunch(),
                 'session_id' => $row->getSessionId(),
-                'created_on' => $row->getCreatedOn()->format('Y-m-d H:i:s'),
-                'modified_on' => $row->getModifiedOn()->format('Y-m-d H:i:s'),
+                'created_on' => $row->getCreatedOn() ? $row->getCreatedOn()->format('Y-m-d H:i:s') : null,
+                'modified_on' => $row->getModifiedOn() ? $row->getModifiedOn()->format('Y-m-d H:i:s') : null,
                 'publicated_on' => $row->getPublicatedOn() ? $row->getPublicatedOn()->format('Y-m-d H:i:s') : null,
                 'expired_on' => $row->getExpiredOn() ? $row->getExpiredOn()->format('Y-m-d H:i:s') : null,
                 //'category_id'       => $row['category_id'],
-                'subscribe_users' => $row->getSubscribeUsers(),
+                'subscribe_users' => $row->getSubscribeUsers()
             );
             $names[$row->getName()] = $row->getIid();
         }

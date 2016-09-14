@@ -145,7 +145,7 @@ function delete_category($action, $id, $user_id = null)
     // an additional check that might not be necessary
     if ($action == 'deletereceivedcategory') {
         $sentreceived = 'received';
-        $entries_table = $dropbox_cnf['tbl_post'];
+        $entries_table = Database::get_course_table(TABLE_DROPBOX_POST);
         $id_field = 'file_id';
         $return_message = get_lang('ReceivedCatgoryDeleted');
     } elseif ($action == 'deletesentcategory') {
@@ -229,7 +229,7 @@ function store_move($id, $target, $part)
     ) {
 
         if ($part == 'received') {
-            $sql = "UPDATE ".$dropbox_cnf["tbl_post"]."
+            $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_POST)."
                     SET cat_id = ".intval($target)."
                     WHERE c_id = $course_id AND dest_user_id = ".intval($_user['user_id'])."
                     AND file_id = ".intval($id)."";
@@ -711,7 +711,7 @@ function removeUnusedFiles()
     $result = Database::query($sql);
     while ($res = Database::fetch_array($result)) {
         //delete the selected files from the post and file tables
-        $sql = "DELETE FROM " . dropbox_cnf('tbl_post') . "
+        $sql = "DELETE FROM " . Database::get_course_table(TABLE_DROPBOX_POST) . "
                 WHERE c_id = $course_id AND file_id = '" . $res['id'] . "'";
         Database::query($sql);
         $sql = "DELETE FROM " . dropbox_cnf('tbl_file') . "
@@ -742,7 +742,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     $mailingPseudoId = intval($mailingPseudoId);
     $sql = "SELECT f.uploader_id
             FROM " . $dropbox_cnf['tbl_file'] . " f
-            LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p
+            LEFT JOIN " . Database::get_course_table(TABLE_DROPBOX_POST) . " p
             ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
             WHERE
                 p.dest_user_id = '" . $mailingPseudoId . "' AND
@@ -772,7 +772,7 @@ function removeMoreIfMailing($file_id)
     //    for all content files, replace mailingPseudoId by owner as uploader
     $file_id = intval($file_id);
     $sql = "SELECT p.dest_user_id
-            FROM " . $dropbox_cnf['tbl_post'] . " p
+            FROM " . Database::get_course_table(TABLE_DROPBOX_POST) . " p
             WHERE c_id = $course_id AND p.file_id = '" . $file_id . "'";
     $result = Database::query($sql);
 
@@ -1085,7 +1085,7 @@ function user_can_download_file($id, $user_id)
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id FROM ".$dropbox_cnf["tbl_post"]."
+    $sql = "SELECT file_id FROM ". Database::get_course_table(TABLE_DROPBOX_POST) ."
             WHERE c_id = $course_id AND dest_user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
     $count = Database::num_rows($result);
@@ -1105,7 +1105,7 @@ function check_if_file_exist($id)
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id FROM ".$dropbox_cnf["tbl_post"]."
+    $sql = "SELECT file_id FROM ". Database::get_course_table(TABLE_DROPBOX_POST) ."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
     $count = Database::num_rows($result);
@@ -1169,7 +1169,7 @@ function zip_download($fileList)
             FROM ".$dropbox_cnf['tbl_file']." file
             INNER JOIN ".$dropbox_cnf['tbl_person']." person
             ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
-            INNER JOIN ".$dropbox_cnf['tbl_post']." post
+            INNER JOIN ". Database::get_course_table(TABLE_DROPBOX_POST) ." post
             ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
             WHERE
                 file.id IN (".implode(', ', $fileList).") AND

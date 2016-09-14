@@ -46,7 +46,7 @@ if (isset($_GET['cat_id']) &&
                 FROM ".$dropbox_cnf['tbl_file']." file
                 INNER JOIN ".$dropbox_cnf['tbl_person']." person
                 ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
-                INNER JOIN ".$dropbox_cnf['tbl_post']." post
+                INNER JOIN ".Database::get_course_table(TABLE_DROPBOX_POST)." post
                 ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
                 WHERE
                     post.cat_id = ".intval($_GET['cat_id'])." AND

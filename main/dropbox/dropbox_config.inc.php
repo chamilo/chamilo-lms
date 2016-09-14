@@ -4,9 +4,6 @@
 /**
  *  DATABASE TABLE VARIABLES
  */
-$dropbox_cnf['tbl_user'] = Database::get_main_table(TABLE_MAIN_USER);
-$dropbox_cnf['tbl_course_user'] = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$dropbox_cnf['tbl_post'] = Database::get_course_table(TABLE_DROPBOX_POST);
 $dropbox_cnf['tbl_file'] = Database::get_course_table(TABLE_DROPBOX_FILE);
 $dropbox_cnf['tbl_person'] = Database::get_course_table(TABLE_DROPBOX_PERSON);
 $dropbox_cnf['tbl_intro'] = Database::get_course_table(TABLE_TOOL_INTRO);

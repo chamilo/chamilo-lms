@@ -308,7 +308,7 @@ class Dropbox_SentWork extends Dropbox_Work
 			$this->recipients[] = array('id' => $rec);
 		}
 
-        $table_post = $dropbox_cnf['tbl_post'];
+        $table_post = Database::get_course_table(TABLE_DROPBOX_POST);
         $table_person = $dropbox_cnf['tbl_person'];
         $session_id = api_get_session_id();
         $user  = api_get_user_id();
@@ -374,7 +374,7 @@ class Dropbox_SentWork extends Dropbox_Work
 		// Fill in recipients array
 		$this->recipients = array();
 		$sql = "SELECT dest_user_id, feedback_date, feedback
-				FROM ".$dropbox_cnf['tbl_post']."
+				FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
 				WHERE c_id = $course_id AND file_id = ".intval($id)."";
         $result = Database::query($sql);
 		while ($res = Database::fetch_array($result, 'ASSOC')) {
@@ -500,7 +500,7 @@ class Dropbox_Person
 		$sql = "DELETE FROM ".$dropbox_cnf['tbl_category']."
 		        WHERE c_id = $course_id AND cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
-		$sql = "DELETE FROM ".$dropbox_cnf['tbl_post']."
+		$sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
 		        WHERE c_id = $course_id AND cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
 		return true;
@@ -627,7 +627,7 @@ class Dropbox_Person
             'feedback' => $text,
         ];
         Database::update(
-            $dropbox_cnf['tbl_post'],
+            Database::get_course_table(TABLE_DROPBOX_POST),
             $params,
             [
                 'c_id = ? AND dest_user_id = ? AND file_id = ?' => [

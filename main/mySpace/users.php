@@ -66,7 +66,7 @@ function get_users($from, $limit, $column, $direction)
 
     $is_western_name_order = api_is_western_name_order();
     $coach_id = api_get_user_id();
-    $column = 'u.user_id';
+    $column = 'u.id';
     $drhLoaded = false;
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
@@ -76,7 +76,7 @@ function get_users($from, $limit, $column, $direction)
                 false,
                 $from,
                 $limit,
-                $column,
+                '',
                 $direction,
                 $keyword,
                 $active,
@@ -98,7 +98,7 @@ function get_users($from, $limit, $column, $direction)
             false,
             $from,
             $limit,
-            $column,
+            '',
             $direction,
             $active,
             $lastConnectionDate,

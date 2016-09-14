@@ -4953,6 +4953,7 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -4987,25 +4988,28 @@ class SessionManager
             $courseConditions = ' AND c.id IN ("'.implode('","', $courseIdList).'")';
         }
 
+        $userConditionsFromDrh = '';
+
+        // Classic DRH
+        if (empty($studentIdList)) {
+            $studentListSql = UserManager::get_users_followed_by_drh(
+                $userId,
+                $filterByStatus,
+                true,
+                false
+            );
+            $studentIdList = array_keys($studentListSql);
+            $studentListSql = "'".implode("','", $studentIdList)."'";
+        } else {
+            $studentIdList = array_map('intval', $studentIdList);
+            $studentListSql = "'".implode("','", $studentIdList)."'";
+        }
+        if (!empty($studentListSql)) {
+            $userConditionsFromDrh = " AND u.user_id IN (".$studentListSql.") ";
+        }
+
         switch ($status) {
             case 'drh':
-                // Classic DRH
-                if (empty($studentIdList)) {
-                    $studentListSql = UserManager::get_users_followed_by_drh(
-                        $userId,
-                        $filterByStatus,
-                        true,
-                        false
-                    );
-                    $studentIdList = array_keys($studentListSql);
-                    $studentListSql = "'".implode("','", $studentIdList)."'";
-                } else {
-                    $studentIdList = array_map('intval', $studentIdList);
-                    $studentListSql = "'".implode("','", $studentIdList)."'";
-                }
-                if (!empty($studentListSql)) {
-                    $userConditions = " AND u.user_id IN (".$studentListSql.") ";
-                }
                 break;
             case 'drh_all':
                 // Show all by DRH
@@ -5077,8 +5081,7 @@ class SessionManager
                     INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
                     $where
                     $sessionConditions
-                )
-                UNION (
+                ) UNION (
                     $select
                     FROM $tbl_course c
                     INNER JOIN $tbl_course_user cu ON (cu.c_id = c.id)
@@ -5086,6 +5089,12 @@ class SessionManager
                     INNER JOIN $tbl_course_rel_access_url url ON (url.c_id = c.id)
                     $where
                     $courseConditions
+                ) UNION (
+                    $select                    
+                    FROM $tbl_user u
+                    INNER JOIN $tbl_user_rel_access_url url ON (url.user_id = u.id)
+                    $where
+                    $userConditionsFromDrh
                 )
                 ) as t1
                 ";

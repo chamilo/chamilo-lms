@@ -27,3 +27,12 @@ msgstr "Administration"
 
 msgid "Contact"
 msgstr "Kontakt"
+
+msgid "Latest publications"
+msgstr "Aktuelle Veröffentlichungen"
+
+msgid "Subscription"
+msgstr "Registrierung"
+
+msgid "My certificates"
+msgstr "Meine Zertifikate"

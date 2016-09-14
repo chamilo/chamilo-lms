@@ -70,6 +70,8 @@ class Version111 extends AbstractMigrationChamilo
 
         // Needed to update 0000-00-00 00:00:00 values
         $this->addSql('SET sql_mode = ""');
+        // In case this one didn't work, also try this
+        $this->addSql('SET SESSION sql_mode = ""');
 
         $this->addSql('ALTER TABLE c_lp CHANGE publicated_on publicated_on DATETIME');
         $this->addSql('ALTER TABLE c_lp CHANGE expired_on expired_on DATETIME');

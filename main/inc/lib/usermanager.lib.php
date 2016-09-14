@@ -389,15 +389,7 @@ class UserManager
                     PERSON_NAME_EMAIL_ADDRESS
                 );
                 $email_admin = api_get_setting('emailAdministrator');
-
-                if (api_is_multiple_url_enabled()) {
-                    $access_url_id = api_get_current_access_url_id();
-                    if ($access_url_id != -1) {
-                        $url = api_get_access_url($access_url_id);
-                    }
-                } else {
-                    $url = api_get_path(WEB_PATH);
-                }
+                $url = api_get_path(WEB_PATH);
                 $tplContent = new Template(null, false, false, false, false, false);
                 // variables for the default template
                 $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));

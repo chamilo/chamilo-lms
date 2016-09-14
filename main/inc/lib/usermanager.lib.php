@@ -4277,16 +4277,18 @@ class UserManager
         }
 
         $orderBy = null;
-        if (api_is_western_name_order()) {
-            $orderBy .= " ORDER BY firstname, lastname ";
-        } else {
-            $orderBy .= " ORDER BY lastname, firstname ";
-        }
+        if ($getOnlyUserId == false) {
+            if (api_is_western_name_order()) {
+                $orderBy .= " ORDER BY firstname, lastname ";
+            } else {
+                $orderBy .= " ORDER BY lastname, firstname ";
+            }
 
-        if (!empty($column) && !empty($direction)) {
-            // Fixing order due the UNIONs
-            $column = str_replace('u.', '', $column);
-            $orderBy = " ORDER BY $column $direction ";
+            if (!empty($column) && !empty($direction)) {
+                // Fixing order due the UNIONs
+                $column = str_replace('u.', '', $column);
+                $orderBy = " ORDER BY $column $direction ";
+            }
         }
 
         $sql .= $orderBy;

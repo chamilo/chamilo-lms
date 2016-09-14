@@ -5099,6 +5099,7 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -5116,6 +5117,7 @@ class SessionManager
         }
 
         $urlId = api_get_current_access_url_id();
+
         $sessionConditions = null;
         $courseConditions = null;
         $userConditions = null;
@@ -5132,25 +5134,28 @@ class SessionManager
             $courseConditions = ' AND c.id IN ("'.implode('","', $courseIdList).'")';
         }
 
+        $userConditionsFromDrh = '';
+
+        // Classic DRH
+        if (empty($studentIdList)) {
+            $studentListSql = UserManager::get_users_followed_by_drh(
+                $userId,
+                $filterByStatus,
+                true,
+                false
+            );
+            $studentIdList = array_keys($studentListSql);
+            $studentListSql = "'".implode("','", $studentIdList)."'";
+        } else {
+            $studentIdList = array_map('intval', $studentIdList);
+            $studentListSql = "'".implode("','", $studentIdList)."'";
+        }
+        if (!empty($studentListSql)) {
+            $userConditionsFromDrh = " AND u.user_id IN (".$studentListSql.") ";
+        }
+
         switch ($status) {
             case 'drh':
-                // Classic DRH
-                if (empty($studentIdList)) {
-                    $studentListSql = UserManager::get_users_followed_by_drh(
-                        $userId,
-                        $filterByStatus,
-                        true,
-                        false
-                    );
-                    $studentIdList = array_keys($studentListSql);
-                    $studentListSql = "'".implode("','", $studentIdList)."'";
-                } else {
-                    $studentIdList = array_map('intval', $studentIdList);
-                    $studentListSql = "'".implode("','", $studentIdList)."'";
-                }
-                if (!empty($studentListSql)) {
-                    $userConditions = " AND u.user_id IN (".$studentListSql.") ";
-                }
                 break;
             case 'drh_all':
                 // Show all by DRH
@@ -5171,13 +5176,15 @@ class SessionManager
                     $sessionConditions = " AND s.id IN (".$sessionsListSql.") ";
                 }
                 break;
-            case 'session_admin';
+            case 'session_admin':
                 $sessionConditions = " AND s.id_coach = $userId ";
+                $userConditionsFromDrh = '';
                 break;
             case 'admin':
                 break;
             case 'teacher':
                 $sessionConditions = " AND s.id_coach = $userId ";
+                $userConditionsFromDrh = '';
                 break;
         }
 
@@ -5214,6 +5221,18 @@ class SessionManager
                    $userConditions
         ";
 
+        $userUnion = '';
+        if (!empty($userConditionsFromDrh)) {
+            $userUnion = "
+            UNION (
+                $select                    
+                FROM $tbl_user u
+                INNER JOIN $tbl_user_rel_access_url url ON (url.user_id = u.id)
+                $where
+                $userConditionsFromDrh
+            )";
+        }
+
         $sql = "$masterSelect (
                 ($select
                 FROM $tbl_session s
@@ -5230,7 +5249,7 @@ class SessionManager
                     INNER JOIN $tbl_course_rel_access_url url ON (url.c_id = c.id)
                     $where
                     $courseConditions
-                )
+                ) $userUnion
                 ) as t1
                 ";
 
@@ -5250,7 +5269,6 @@ class SessionManager
         }
 
         $sql .= $limitCondition;
-
         $result = Database::query($sql);
         $result = Database::store_result($result);
 

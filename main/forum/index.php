@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * These files are a complete rework of the forum. The database structure is
  * based on phpBB but all the code is rewritten. A lot of new functionalities
@@ -22,9 +24,6 @@
  * @package chamilo.forum
  */
 
-use ChamiloSession as Session;
-
-// Including the global initialization file.
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_FORUM;
 $htmlHeadXtra[] = '<script>
@@ -75,7 +74,7 @@ $search_forum = isset($_GET['search']) ? Security::remove_XSS($_GET['search']) :
 
 $actions = isset($_GET['action']) ? $_GET['action'] : '';
 
-if ($actions == 'add') {
+if ($actions === 'add') {
     switch ($_GET['content']) {
         case 'forum':
             $interbreadcrumb[] = array(
@@ -115,7 +114,6 @@ Display::display_introduction_section(TOOL_FORUM);
 $form_count = 0;
 
 if (api_is_allowed_to_edit(false, true)) {
-
     //if is called from a learning path lp_id
     $lp_id = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : null;
     handle_forum_and_forumcategories($lp_id);
@@ -175,9 +173,7 @@ if (!api_is_anonymous()) {
 }
 
 /* ACTION LINKS */
-
 echo '<div class="actions">';
-
 //if is called from learning path
 if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
     echo "<a href=\"../lp/lp_controller.php?"
@@ -407,7 +403,6 @@ if (is_array($forumCategories)) {
                         $imgForum = '';
                         // Showing the image
                         if (!empty($forum['forum_image'])) {
-
                             $image_path = api_get_path(WEB_COURSE_PATH). api_get_course_path(). '/upload/forum/images/'. $forum['forum_image'];
                             $image_size = api_getimagesize($image_path);
                             $img_attributes = '';

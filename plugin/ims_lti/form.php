@@ -1,5 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
+
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+
 require '../../main/inc/global.inc.php';
 require './OAuthSimple.php';
 
@@ -8,11 +12,20 @@ api_protect_course_script();
 $toolId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $em = Database::getManager();
+/** @var ImsLtiPlugin $imsLtiPlugin */
 $imsLtiPlugin = ImsLtiPlugin::create();
 
+/** @var ImsLtiTool $tool */
 $tool = ImsLtiTool::fetch($toolId);
+/** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+/** @var User $user */
 $user = $em->find('ChamiloUserBundle:User', api_get_user_id());
+
+$siteName = api_get_setting('siteName');
+$institution = api_get_setting('Institution');
+$toolUserId = "$siteName - $institution - {$user->getId()}";
+$toolUserId = api_replace_dangerous_char($toolUserId);
 
 $params = [
     'lti_message_type' => 'basic-lti-launch-request',
@@ -21,7 +34,7 @@ $params = [
     'resource_link_id' => $tool->getId(),
     'resource_link_title' => $tool->getName(),
 
-    'user_id' => 'chamilo110x-' . $user->getId(),
+    'user_id' => $toolUserId,
     'roles' => api_is_teacher() ? 'Instructor' : 'Student',
 
     'lis_person_name_given' => $user->getFirstname(),
@@ -36,11 +49,11 @@ $params = [
     'launch_presentation_locale' => api_get_language_isocode(),
     'launch_presentation_document_target' => 'embed',
 
-    'tool_consumer_info_product_family_code' => 'canvas',
-    'tool_consumer_info_version' => '1.10.2',
-    'tool_consumer_instance_guid' => 'campus.chamilo.org',
-    'tool_consumer_instance_name' => api_get_setting('siteName'),
-    'tool_consumer_instance_url' => api_get_setting('InstitutionUrl'),
+    'tool_consumer_info_product_family_code' => 'Chamilo LMS',
+    'tool_consumer_info_version' => api_get_version(),
+    'tool_consumer_instance_guid' => api_get_setting('InstitutionUrl'),
+    'tool_consumer_instance_name' => $siteName,
+    'tool_consumer_instance_url' => api_get_path(WEB_PATH),
     'tool_consumer_instance_contact_email' => api_get_setting('emailAdministrator'),
 
     'resource_link_description' => 'A quick revision PowerPoint about the Water cycle. Make sure you\'re clear about it!',

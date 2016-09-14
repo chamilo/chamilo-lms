@@ -194,7 +194,7 @@ class IndexManager
                     $show_course_link = true;
                 }
             }
-            if (api_get_setting('allow_users_to_create_courses') !== 'false' && !api_is_platform_admi()) {
+            if (api_get_setting('allow_users_to_create_courses') !== 'false' && !api_is_platform_admin()) {
                 $show_create_link = true;
             }
 

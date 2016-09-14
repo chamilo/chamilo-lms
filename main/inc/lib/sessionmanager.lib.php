@@ -5030,13 +5030,15 @@ class SessionManager
                     $sessionConditions = " AND s.id IN (".$sessionsListSql.") ";
                 }
                 break;
-            case 'session_admin';
+            case 'session_admin':
                 $sessionConditions = " AND s.id_coach = $userId ";
+                $userConditionsFromDrh = '';
                 break;
             case 'admin':
                 break;
             case 'teacher':
                 $sessionConditions = " AND s.id_coach = $userId ";
+                $userConditionsFromDrh = '';
                 break;
         }
 
@@ -5073,6 +5075,18 @@ class SessionManager
                    $userConditions
         ";
 
+        $userUnion = '';
+        if (!empty($userConditionsFromDrh)) {
+            $userUnion = "
+            UNION (
+                $select                    
+                FROM $tbl_user u
+                INNER JOIN $tbl_user_rel_access_url url ON (url.user_id = u.id)
+                $where
+                $userConditionsFromDrh
+            )";
+        }
+
         $sql = "$masterSelect (
                 ($select
                 FROM $tbl_session s
@@ -5089,13 +5103,7 @@ class SessionManager
                     INNER JOIN $tbl_course_rel_access_url url ON (url.c_id = c.id)
                     $where
                     $courseConditions
-                ) UNION (
-                    $select                    
-                    FROM $tbl_user u
-                    INNER JOIN $tbl_user_rel_access_url url ON (url.user_id = u.id)
-                    $where
-                    $userConditionsFromDrh
-                )
+                ) $userUnion
                 ) as t1
                 ";
 

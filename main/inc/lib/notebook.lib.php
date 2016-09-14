@@ -41,28 +41,32 @@ class NotebookManager
      * This functions stores the note in the database
      *
      * @param array $values
+     * @param int $userId Optional. The user ID
+     * @param int $courseId Optional. The course ID
+     * @param int $sessionId Optional. The session ID
      * @return bool
      * @author Christian Fasanando <christian.fasanando@dokeos.com>
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
-     *
      */
-    static function save_note($values)
+    static function save_note($values, $userId = 0, $courseId = 0, $sessionId = 0)
     {
         if (!is_array($values) or empty($values['note_title'])) {
             return false;
         }
         // Database table definition
         $table = Database :: get_course_table(TABLE_NOTEBOOK);
-        $course_id = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-
+        $userId = $userId ?: api_get_user_id();
+        $courseId = $courseId ?: api_get_course_int_id();
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $courseCode = $courseInfo['code'];
+        $sessionId = $sessionId ?: api_get_session_id();
         $now = api_get_utc_datetime();
         $params = [
             'notebook_id' => 0,
-            'c_id' => $course_id,
-            'user_id' => api_get_user_id(),
-            'course' => api_get_course_id(),
+            'c_id' => $courseId,
+            'user_id' => $userId,
+            'course' => $courseCode,
             'session_id' => $sessionId,
             'title' => $values['note_title'],
             'description' => $values['note_comment'],
@@ -77,13 +81,8 @@ class NotebookManager
             Database::query($sql);
 
             //insert into item_property
-            api_item_property_update(
-                api_get_course_info(),
-                TOOL_NOTEBOOK,
-                $id,
-                'NotebookAdded',
-                api_get_user_id()
-            );
+            api_item_property_update($courseInfo, TOOL_NOTEBOOK, $id, 'NotebookAdded', $userId);
+
             return $id;
         }
     }

@@ -17,27 +17,29 @@ class Rest extends WebService
     const SERVIVE_NAME = 'MsgREST';
     const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
 
-    const ACTION_AUTH = 'authenticate';
-    const ACTION_USER_MESSAGES = 'user_messages';
-    const ACTION_GCM_ID = 'gcm_id';
-    const ACTION_USER_COURSES = 'user_courses';
-    const ACTION_PROFILE = 'user_profile';
-    const ACTION_COURSE_INFO = 'course_info';
-    const ACTION_COURSE_DESCRIPTIONS = 'course_descriptions';
-    const ACTION_COURSE_DOCUMENTS = 'course_documents';
-    const ACTION_COURSE_ANNOUNCEMENTS = 'course_announcements';
-    const ACTION_COURSE_ANNOUNCEMENT = 'course_announcement';
-    const ACTION_COURSE_AGENDA = 'course_agenda';
-    const ACTION_COURSE_NOTEBOOKS = 'course_notebooks';
-    const ACTION_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
-    const ACTION_COURSE_FORUM = 'course_forum';
-    const ACTION_COURSE_FORUM_THREAD = 'course_forumthread';
-    const ACTION_COURSE_LEARNPATHS = 'course_learnpaths';
-    const ACTION_COURSE_LEARNPATH = 'course_learnpath';
-    const ACTION_SAVE_FORUM_POST = 'save_forum_post';
-    const ACTION_USER_SESSIONS = 'user_sessions';
+    const GET_AUTH = 'authenticate';
+    const GET_USER_MESSAGES = 'user_messages';
+    const SAVE_GCM_ID = 'gcm_id';
+    const GET_USER_COURSES = 'user_courses';
+    const GET_PROFILE = 'user_profile';
+    const GET_COURSE_INFO = 'course_info';
+    const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
+    const GET_COURSE_DOCUMENTS = 'course_documents';
+    const GET_COURSE_ANNOUNCEMENTS = 'course_announcements';
+    const GET_COURSE_ANNOUNCEMENT = 'course_announcement';
+    const GET_COURSE_AGENDA = 'course_agenda';
+    const GET_COURSE_NOTEBOOKS = 'course_notebooks';
+    const GET_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
+    const GET_COURSE_FORUM = 'course_forum';
+    const GET_COURSE_FORUM_THREAD = 'course_forumthread';
+    const GET_COURSE_LEARNPATHS = 'course_learnpaths';
+    const GET_COURSE_LEARNPATH = 'course_learnpath';
+    const SAVE_FORUM_POST = 'save_forum_post';
+    const GET_USER_SESSIONS = 'user_sessions';
     const SAVE_USER_MESSAGE = 'save_user_message';
     const GET_MESSAGE_USERS = 'message_users';
+    const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
+    const SAVE_FORUM_THREAD = 'save_forum_thread';
 
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
@@ -60,6 +62,11 @@ class Rest extends WebService
         parent::__construct($username, $apiKey);
     }
 
+    /**
+     * Set the current course
+     * @param int $id
+     * @throws Exception
+     */
     public function setCourse($id)
     {
         if (!$id) {
@@ -79,7 +86,10 @@ class Rest extends WebService
         $this->course = $course;
     }
 
-    /** Set the current session */
+    /** Set the current session
+     * @param int $id
+     * @throws Exception
+     */
     public function setSession($id)
     {
         if (!$id) {
@@ -835,7 +845,7 @@ class Rest extends WebService
     {
         require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
-        $forum = get_forums($forumId);
+        $forum = get_forums($forumId, $this->course->getCode());
 
         store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
 
@@ -939,5 +949,47 @@ class Rest extends WebService
         }
 
         return $data;
+    }
+
+    /**
+     * @param string $title
+     * @param string $text
+     * @return bool
+     */
+    public function saveCourseNotebook($title, $text)
+    {
+        $values = ['note_title' => $title, 'note_comment' => $text];
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $noteBookId = NotebookManager::save_note(
+            $values,
+            $this->user->getId(),
+            $this->course->getId(),
+            $sessionId
+        );
+
+        return [
+            'registered' => $noteBookId
+        ];
+    }
+
+    /**
+     * @param array $values
+     * @param int $forumId
+     * @return array
+     */
+    public function saveForumThread(array $values, $forumId)
+    {
+        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+
+        $forum = get_forums($forumId, $this->course->getCode());
+        $courseInfo = api_get_course_info($this->course->getCode());
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $id = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
+
+        return [
+            'registered' => $id
+        ];
     }
 }

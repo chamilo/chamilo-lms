@@ -1718,11 +1718,30 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
     } else {
         $course_id = intval($course_id);
     }
+    $sessionId = api_get_session_id();
 
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
 
+    $forum_id = intval($forum_id);
+    $return_array = array();
+
+    // First get the threads to make sure there is no inconsistency in the
+    // database between forum and thread
+    $sql = "SELECT thread_id FROM $table_threads WHERE forum_id = $forum_id AND c_id = $course_id AND session_id = $sessionId";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) == 0) {
+        // If there are no threads in this forum, then there are no posts
+        return $return_array;
+    }
+    $threads = array();
+    while ($row = Database::fetch_row($result)) {
+        $threads[] = $row[0];
+    }
+    $threadsList = implode(',', $threads);
+    // Now get the posts that are linked to these threads
     $sql = "SELECT
                 post.post_id,
                 post.forum_id,
@@ -1740,7 +1759,8 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
                 $table_item_property thread_properties,
                 $table_item_property forum_properties
             WHERE
-                post.forum_id = ".intval($forum_id)."
+                post.forum_id = $forum_id
+                AND post.thread_id IN ($threadsList)
                 AND post.poster_id=users.user_id
                 AND post.thread_id=thread_properties.ref
                 AND thread_properties.tool='".TOOL_FORUM_THREAD."'

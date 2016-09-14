@@ -1435,21 +1435,24 @@ function get_forums_in_category($cat_id, $courseId = 0)
 
     $forum_list = array();
     $course_id = $courseId ?: api_get_course_int_id();
+    $cat_id = (int) $cat_id;
 
-    $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
+    $sql = "SELECT * FROM $table_forums forum 
+            INNER JOIN $table_item_property item_properties
+            ON (forum.forum_id = item_properties.ref AND item_properties.c_id = forum.c_id)
             WHERE
-                forum.forum_category='".Database::escape_string($cat_id)."' AND
-                forum.forum_id=item_properties.ref AND
+                forum.forum_category = '".$cat_id."' AND                
                 item_properties.visibility = 1 AND
+                forum.c_id = $course_id AND
                 item_properties.c_id = $course_id AND
-                item_properties.tool='".TOOL_FORUM."' AND
-                forum.c_id = $course_id
+                item_properties.tool = '".TOOL_FORUM."'                 
             ORDER BY forum.forum_order ASC";
     if (api_is_allowed_to_edit()) {
-        $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
+        $sql = "SELECT * FROM $table_forums forum  
+                INNER JOIN $table_item_property item_properties
+                ON (forum.forum_id = item_properties.ref AND item_properties.c_id = forum.c_id)
                 WHERE
-                    forum.forum_category = '".Database::escape_string($cat_id)."' AND
-                    forum.forum_id = item_properties.ref AND
+                    forum.forum_category = '".$cat_id."' AND                    
                     item_properties.visibility <> 2 AND
                     item_properties.tool = '".TOOL_FORUM."' AND
                     item_properties.c_id = $course_id AND
@@ -1501,6 +1504,7 @@ function get_forums(
         false,
         'item_properties.session_id'
     );
+
     $course_id = $course_info['real_id'];
 
     $forum_list = array();
@@ -1512,8 +1516,9 @@ function get_forums(
     if ($id == '') {
         // Student
         // Select all the forum information of all forums (that are visible to students).
-        $sql = "SELECT item_properties.*, forum.* FROM $table_forums forum
-                INNER JOIN ".$table_item_property." item_properties
+        $sql = "SELECT item_properties.*, forum.* 
+                FROM $table_forums forum
+                INNER JOIN $table_item_property item_properties
                 ON (
                     forum.forum_id = item_properties.ref AND
                     forum.c_id = item_properties.c_id
@@ -1608,7 +1613,6 @@ function get_forums(
     }
 
     // Handling all the forum information.
-
     $result = Database::query($sql);
     while ($row = Database::fetch_assoc($result)) {
         if ($id == '') {

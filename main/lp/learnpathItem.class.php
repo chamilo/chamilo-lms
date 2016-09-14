@@ -3614,7 +3614,7 @@ class learnpathItem
                          WHERE c_id = ' . $course_id . '
                             AND lp_item_id="' . $this->db_id . '"
                             AND lp_view_id="' . $this->view_id . '"
-                            AND view_count="' . $this->attempt_id . '" ;';
+                            AND view_count="' . $this->get_attempt_id() . '"';
         $result = Database::query($get_view_sql);
         $row = Database::fetch_array($result);
 
@@ -3663,7 +3663,7 @@ class learnpathItem
                     WHERE c_id = $course_id
                       AND lp_item_id = {$this->db_id}
                       AND lp_view_id = {$this->view_id}
-                      AND view_count = {$this->attempt_id}";
+                      AND view_count = {$this->get_attempt_id()}";
             if (self::debug > 0) {
                 error_log($sql);
             }

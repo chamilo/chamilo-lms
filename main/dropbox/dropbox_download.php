@@ -32,8 +32,8 @@ if (isset($_GET['cat_id']) &&
     if ($_GET['sent_received'] == 'sent') {
         // here we also incorporate the person table to make sure that deleted sent documents are not included.
         $sql = "SELECT DISTINCT file.id, file.filename, file.title
-                FROM ".$dropbox_cnf['tbl_file']." file
-                INNER JOIN ".$dropbox_cnf['tbl_person']." person
+                FROM ". Database::get_course_table(TABLE_DROPBOX_FILE) ." file
+                INNER JOIN ". Database::get_course_table(TABLE_DROPBOX_PERSON) ." person
                 ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
                 WHERE
                     file.uploader_id = $user_id AND
@@ -43,8 +43,8 @@ if (isset($_GET['cat_id']) &&
 
     if ($_GET['sent_received'] == 'received') {
         $sql = "SELECT DISTINCT file.id, file.filename, file.title
-                FROM ".$dropbox_cnf['tbl_file']." file
-                INNER JOIN ".$dropbox_cnf['tbl_person']." person
+                FROM ". Database::get_course_table(TABLE_DROPBOX_FILE) ." file
+                INNER JOIN ". Database::get_course_table(TABLE_DROPBOX_PERSON) ." person
                 ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
                 INNER JOIN ".Database::get_course_table(TABLE_DROPBOX_POST)." post
                 ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
@@ -96,9 +96,10 @@ if (!$allowed_to_download) {
     $_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][] = intval($_GET['id']);
 
     $work = new Dropbox_Work($_GET['id']);
-    $path = dropbox_cnf('sysPath') . '/' . $work -> filename; //path to file as stored on server
 
-    if (!Security::check_abs_path($path, dropbox_cnf('sysPath').'/')) {
+    $path = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox/' . $work -> filename; //path to file as stored on server
+
+    if (!Security::check_abs_path($path, api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox/')) {
         exit;
     }
     $file = $work->title;

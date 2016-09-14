@@ -2,15 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  DATABASE TABLE VARIABLES
- */
-$dropbox_cnf['tbl_file'] = Database::get_course_table(TABLE_DROPBOX_FILE);
-$dropbox_cnf['tbl_person'] = Database::get_course_table(TABLE_DROPBOX_PERSON);
-$dropbox_cnf['tbl_intro'] = Database::get_course_table(TABLE_TOOL_INTRO);
-$dropbox_cnf['tbl_category'] = Database::get_course_table(TABLE_DROPBOX_CATEGORY);
-$dropbox_cnf['tbl_feedback'] = Database::get_course_table(TABLE_DROPBOX_FEEDBACK);
-
-/**
  *  INITIALISE OTHER VARIABLES & CONSTANTS
  */
 $dropbox_cnf['courseId'] = $_cid;

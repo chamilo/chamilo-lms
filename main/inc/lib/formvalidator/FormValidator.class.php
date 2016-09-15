@@ -1316,12 +1316,12 @@ EOT;
      */
     private function addMultipleUploadJavascript($url, $inputName)
     {
+        $icon = Display::return_icon('file_txt.gif');
         $this->addHtml("
         <script>
         $(function () {
             'use strict';
-
-            $('#".$this->getAttribute('id')."').submit(function(){
+            $('#".$this->getAttribute('id')."').submit(function() {
                 return false;
             });
 
@@ -1363,33 +1363,25 @@ EOT;
                 previewCrop: true,
                 dropzone: $('#dropzone')
              }).on('fileuploadadd', function (e, data) {
-                data.context = $('<div/>').appendTo('#files');
+                data.context = $('<div class=\"row\" style=\"margin-bottom:35px\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {
-                    var node = $('<p/>').append($('<span/>').text(file.name));
-                    /*if (!index) {
-                        node
-                            .append('<br>')
-                            .append(uploadButton.clone(true).data(data));
-                    }*/
+                    var node = $('<div class=\"col-sm-5\">').text(file.name);                    
                     node.appendTo(data.context);
                 }
             );
+            
             }).on('fileuploadprocessalways', function (e, data) {
                 var index = data.index,
                     file = data.files[index],
                     node = $(data.context.children()[index]);
                 if (file.preview) {
-                    node
-                        .prepend('<br>')
-                        .prepend(file.preview);
-                    node
-                        .append('<br>')
-                        .append($('<span class=\"text-success\"/>').text('" . addslashes(get_lang('UplUploadSucceeded')) . "'));
-                }
-                if (file.error) {
-                    node
-                        .append('<br>')
-                        .append($('<span class=\"text-danger\"/>').text(file.error));
+                    data.context
+                        .prepend($('<div class=\"col-sm-2\">').html(file.preview))
+                    ;
+                } else {
+                    data.context
+                        .prepend($('<div class=\"col-sm-2\">').html('".$icon."'))
+                    ;
                 }
                 if (index + 1 === data.files.length) {
                     data.context.find('button')
@@ -1408,22 +1400,20 @@ EOT;
                         var link = $('<a>')
                             .attr('target', '_blank')
                             .prop('href', file.url);
-
-                        $(data.context.children()[index]).wrap(link);
+                        $(data.context.children()[index]).parent().wrap(link);
+                        
+                        var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-success\"/>').text('" . addslashes(get_lang('UplUploadSucceeded')) . "'));
+                        $(data.context.children()[index]).parent().append(successMessage);
                     } else if (file.error) {
-                        var error = $('<span class=\"text-danger\"/>').text(file.error);
-                        $(data.context.children()[index])
-                            .append('<br>')
-                            .append(error);
+                        var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(file.error));
+                        $(data.context.children()[index]).parent().append(error);
                     }
                 });
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
                     var failedMessage = '" . addslashes(get_lang('UplUploadFailed')) . "';
-                    var error = $('<span class=\"text-danger\"/>').text(failedMessage);
-                    $(data.context.children()[index])
-                        .append('<br>')
-                        .append(error);
+                    var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(failedMessage));
+                    $(data.context.children()[index]).parent().append(error);
                 });
             }).prop('disabled', !$.support.fileInput)
                 .parent().addClass($.support.fileInput ? undefined : 'disabled');
@@ -1431,8 +1421,7 @@ EOT;
             $('.fileinput-button').hide();
 
         });
-        </script>"
-        );
+        </script>");
     }
 }
 

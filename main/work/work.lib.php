@@ -3333,7 +3333,12 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     }
 
     if (empty($file['size'])) {
-        return array('error' => Display :: return_message(get_lang('UplUploadFailedSizeIsZero'), 'error'));
+        return array(
+            'error' => Display:: return_message(
+                get_lang('UplUploadFailedSizeIsZero'),
+                'error'
+            ),
+        );
     }
     $updir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/work/'; //directory path to upload
 
@@ -3535,11 +3540,21 @@ function checkExistingWorkFileName($filename, $workId)
  * @param int $userId
  * @param array $file
  * @param bool  $checkDuplicated
+ * @param bool  $showFlashMessage
  *
  * @return null|string
  */
-function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, $userId, $file = [], $checkDuplicated = false)
-{
+function processWorkForm(
+    $workInfo,
+    $values,
+    $courseInfo,
+    $sessionId,
+    $groupId,
+    $userId,
+    $file = [],
+    $checkDuplicated = false,
+    $showFlashMessage = true
+) {
     $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $courseId = $courseInfo['real_id'];
@@ -3570,8 +3585,10 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
         }
 
         if (isset($result['error'])) {
-            $message = $result['error'];
-            Display::addFlash($message);
+            if ($showFlashMessage) {
+                $message = $result['error'];
+                Display::addFlash($message);
+            }
 
             $saveWork = false;
         }
@@ -3654,10 +3671,19 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
             sendAlertToUsers($workId, $courseInfo, $sessionId);
             Event::event_upload($workId);
             $workData = get_work_data_by_id($workId);
-            Display::addFlash(Display::return_message(get_lang('DocAdd')));
+            if ($showFlashMessage) {
+                Display::addFlash(Display::return_message(get_lang('DocAdd')));
+            }
         }
     } else {
-        Display::addFlash(Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error'));
+        if ($showFlashMessage) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('IsNotPosibleSaveTheDocument'),
+                    'error'
+                )
+            );
+        }
     }
 
     return $workData;

@@ -51,7 +51,8 @@ switch ($action) {
                     $groupId,
                     $userId,
                     $file,
-                    true
+                    false,
+                    false
                 );
 
                 $json = array();

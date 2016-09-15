@@ -121,10 +121,6 @@ $is_courseAdmin = api_is_course_admin();
 
 $current_course_tool  = TOOL_DROPBOX;
 
-// the dropbox configuration parameters
-$dropbox_cnf = require_once 'dropbox_config.inc.php';
-Session::write('dropbox_conf', $dropbox_cnf);
-
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';
 
@@ -209,7 +205,8 @@ function checkForm (frm)
 }
 ";
 
-if (dropbox_cnf('allowOverwrite')) {
+$allowOverwrite = api_get_setting('dropbox_allow_overwrite');
+if ($allowOverwrite == 'true') {
     //sentArray keeps list of all files still available in the sent files list
     //of the user.
     //This is used to show or hide the overwrite file-radio button of the upload form

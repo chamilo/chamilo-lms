@@ -127,7 +127,6 @@ function delete_category($action, $id, $user_id = null)
     $course_id = api_get_course_int_id();
     $is_courseAdmin = api_is_course_admin();
     $is_courseTutor = api_is_course_tutor();
-    $dropbox_cnf = getDropboxConf();
 
     if (empty($user_id)) {
         $user_id = api_get_user_id();
@@ -145,12 +144,12 @@ function delete_category($action, $id, $user_id = null)
     // an additional check that might not be necessary
     if ($action == 'deletereceivedcategory') {
         $sentreceived = 'received';
-        $entries_table = $dropbox_cnf['tbl_post'];
+        $entries_table = Database::get_course_table(TABLE_DROPBOX_POST);
         $id_field = 'file_id';
         $return_message = get_lang('ReceivedCatgoryDeleted');
     } elseif ($action == 'deletesentcategory') {
         $sentreceived = 'sent';
-        $entries_table = $dropbox_cnf['tbl_file'];
+        $entries_table = Database::get_course_table(TABLE_DROPBOX_FILE);
         $id_field = 'id';
         $return_message = get_lang('SentCatgoryDeleted');
     } else {
@@ -158,7 +157,7 @@ function delete_category($action, $id, $user_id = null)
     }
 
     // step 1: delete the category
-    $sql = "DELETE FROM ".$dropbox_cnf['tbl_category']."
+    $sql = "DELETE FROM ". Database::get_course_table(TABLE_DROPBOX_CATEGORY) ."
             WHERE c_id = $course_id AND cat_id='".intval($id)."' AND $sentreceived='1'";
     Database::query($sql);
 
@@ -220,7 +219,6 @@ function display_move_form($part, $id, $target = array(), $extra_params = array(
 function store_move($id, $target, $part)
 {
     $_user = api_get_user_info();
-    $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
 
     if ((isset($id) && $id != '') &&
@@ -229,7 +227,7 @@ function store_move($id, $target, $part)
     ) {
 
         if ($part == 'received') {
-            $sql = "UPDATE ".$dropbox_cnf["tbl_post"]."
+            $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_POST)."
                     SET cat_id = ".intval($target)."
                     WHERE c_id = $course_id AND dest_user_id = ".intval($_user['user_id'])."
                     AND file_id = ".intval($id)."";
@@ -237,7 +235,7 @@ function store_move($id, $target, $part)
             $return_message = get_lang('ReceivedFileMoved');
         }
         if ($part == 'sent') {
-            $sql = "UPDATE ".$dropbox_cnf["tbl_file"]."
+            $sql = "UPDATE ". Database::get_course_table(TABLE_DROPBOX_FILE) ."
                     SET cat_id = ".intval($target)."
                     WHERE
                         c_id = $course_id AND
@@ -267,13 +265,12 @@ function get_dropbox_categories($filter = '')
 {
     $course_id = api_get_course_int_id();
     $_user = api_get_user_info();
-    $dropbox_cnf = getDropboxConf();
     $return_array = array();
 
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
 
-    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
+    $sql = "SELECT * FROM ". Database::get_course_table(TABLE_DROPBOX_CATEGORY) ."
             WHERE c_id = $course_id AND user_id='".$_user['user_id']."' $condition_session";
 
     $result = Database::query($sql);
@@ -293,10 +290,9 @@ function get_dropbox_categories($filter = '')
  */
 function get_dropbox_category($id)
 {
-    $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
     if (empty($id) or $id != intval($id)) { return array(); }
-    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
+    $sql = "SELECT * FROM ". Database::get_course_table(TABLE_DROPBOX_CATEGORY) ."
             WHERE c_id = $course_id AND cat_id='".$id."'";
     $res = Database::query($sql);
     if ($res === false) {
@@ -325,7 +321,6 @@ function store_addcategory()
 {
     $course_id = api_get_course_int_id();
     $_user = api_get_user_info();
-    $dropbox_cnf = getDropboxConf();
 
     // check if the target is valid
     if ($_POST['target'] == 'sent') {
@@ -346,7 +341,7 @@ function store_addcategory()
     if (!isset($_POST['edit_id'])) {
         $session_id = api_get_session_id();
         // step 3a, we check if the category doesn't already exist
-        $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
+        $sql = "SELECT * FROM ". Database::get_course_table(TABLE_DROPBOX_CATEGORY) ."
                 WHERE
                     c_id = $course_id AND
                     user_id='".$_user['user_id']."' AND
@@ -367,9 +362,9 @@ function store_addcategory()
                 'user_id' => $_user['user_id'],
                 'session_id' => $session_id,
             ];
-            $id = Database::insert($dropbox_cnf['tbl_category'], $params);
+            $id = Database::insert(Database::get_course_table(TABLE_DROPBOX_CATEGORY), $params);
             if ($id) {
-                $sql = "UPDATE ".$dropbox_cnf['tbl_category']." SET cat_id = iid WHERE iid = $id";
+                $sql = "UPDATE ". Database::get_course_table(TABLE_DROPBOX_CATEGORY) ." SET cat_id = iid WHERE iid = $id";
                 Database::query($sql);
             }
 
@@ -385,7 +380,7 @@ function store_addcategory()
         ];
 
         Database::update(
-            $dropbox_cnf['tbl_category'],
+            Database::get_course_table(TABLE_DROPBOX_CATEGORY),
             $params,
             [
                 'c_id = ? AND user_id = ? AND cat_id = ?' => [
@@ -413,13 +408,12 @@ function store_addcategory()
 */
 function display_addcategory_form($category_name = '', $id = '', $action)
 {
-    $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
     $title = get_lang('AddNewCategory');
 
     if (isset($id) && $id != '') {
         // retrieve the category we are editing
-        $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
+        $sql = "SELECT * FROM ". Database::get_course_table(TABLE_DROPBOX_CATEGORY) ."
                 WHERE c_id = $course_id AND cat_id = ".intval($id);
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -501,13 +495,15 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     );
 
     $form->addElement('header', get_lang('UploadNewFile'));
-    $form->addElement('hidden', 'MAX_FILE_SIZE', dropbox_cnf('maxFilesize'));
+    $maxFileSize = api_get_setting('dropbox_max_filesize');
+    $form->addElement('hidden', 'MAX_FILE_SIZE', $maxFileSize);
     $form->addElement('hidden', 'dropbox_unid', $dropbox_unid);
     $form->addElement('hidden', 'sec_token', $token);
     $form->addElement('hidden', 'origin', $origin);
     $form->addElement('file', 'file', get_lang('UploadFile'), array('onChange' => 'javascript: checkfile(this.value);'));
 
-    if (dropbox_cnf('allowOverwrite')) {
+    $allowOverwrite = api_get_setting('dropbox_allow_overwrite');
+    if ($allowOverwrite == 'true') {
         $form->addElement('checkbox', 'cb_overwrite', null, get_lang('OverwriteFile'), array('id' => 'cb_overwrite'));
     }
 
@@ -581,12 +577,13 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     */
 
     $current_user_id = '';
+    $allowStudentToStudent = api_get_setting('dropbox_allow_student_to_student');
     $options = array();
     $userGroup = new UserGroup();
     foreach ($complete_user_list_for_dropbox as $current_user) {
         if (($dropbox_person -> isCourseTutor
                 || $dropbox_person -> isCourseAdmin
-                || dropbox_cnf('allowStudentToStudent')
+                || $allowStudentToStudent == 'true'
                 || $current_user['status'] != 5                         // Always allow teachers.
                 || $current_user['is_tutor'] == 1                       // Always allow tutors.
                 ) && $current_user['user_id'] != $_user['user_id']) {   // Don't include yourself.
@@ -613,10 +610,11 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     /*
     * Show groups
     */
+    $allowGroups = api_get_setting('dropbox_allow_group');
     if (($dropbox_person->isCourseTutor || $dropbox_person->isCourseAdmin)
-        && dropbox_cnf('allowGroup') || dropbox_cnf('allowStudentToStudent')
+        && $allowGroups == 'true' || $allowStudentToStudent == 'true'
     ) {
-        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, dropbox_cnf('courseId'));
+        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course_info['code']);
 
         if (count($complete_group_list_for_dropbox) > 0) {
             foreach ($complete_group_list_for_dropbox as $current_group) {
@@ -627,7 +625,8 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
         }
     }
 
-    if (dropbox_cnf('allowJustUpload')) {
+    $allowUpload = api_get_setting('dropbox_allow_just_upload');
+    if ($allowUpload == 'true') {
         $options['user_'.$_user['user_id']] = get_lang('JustUploadInSelect');
     }
 
@@ -698,12 +697,13 @@ function isCourseMember($user_id)
 */
 function removeUnusedFiles()
 {
-    $course_id = api_get_course_int_id();
+    $_course = api_get_course_info();
+    $course_id = $_course['real_id'];
 
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
-            FROM " . dropbox_cnf('tbl_file') . " f
-            LEFT JOIN " . dropbox_cnf('tbl_person') . " p
+            FROM " . Database::get_course_table(TABLE_DROPBOX_FILE) . " f
+            LEFT JOIN " . Database::get_course_table(TABLE_DROPBOX_PERSON) . " p
             ON (f.id = p.file_id)
             WHERE p.user_id IS NULL AND
                   f.c_id = $course_id
@@ -711,14 +711,14 @@ function removeUnusedFiles()
     $result = Database::query($sql);
     while ($res = Database::fetch_array($result)) {
         //delete the selected files from the post and file tables
-        $sql = "DELETE FROM " . dropbox_cnf('tbl_post') . "
+        $sql = "DELETE FROM " . Database::get_course_table(TABLE_DROPBOX_POST) . "
                 WHERE c_id = $course_id AND file_id = '" . $res['id'] . "'";
         Database::query($sql);
-        $sql = "DELETE FROM " . dropbox_cnf('tbl_file') . "
+        $sql = "DELETE FROM " . Database::get_course_table(TABLE_DROPBOX_FILE) . "
                 WHERE c_id = $course_id AND id ='" . $res['id'] . "'";
         Database::query($sql);
         //delete file from server
-        @unlink( dropbox_cnf('sysPath') . '/' . $res['filename']);
+        @unlink( api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox/' . $res['filename']);
     }
 }
 
@@ -737,12 +737,11 @@ function removeUnusedFiles()
 function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
 {
     $course_id = api_get_course_int_id();
-    $dropbox_cnf = getDropboxConf();
 
     $mailingPseudoId = intval($mailingPseudoId);
     $sql = "SELECT f.uploader_id
-            FROM " . $dropbox_cnf['tbl_file'] . " f
-            LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p
+            FROM " . Database::get_course_table(TABLE_DROPBOX_FILE) . " f
+            LEFT JOIN " . Database::get_course_table(TABLE_DROPBOX_POST) . " p
             ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
             WHERE
                 p.dest_user_id = '" . $mailingPseudoId . "' AND
@@ -764,7 +763,6 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
 function removeMoreIfMailing($file_id)
 {
     $course_id = api_get_course_int_id();
-    $dropbox_cnf = getDropboxConf();
     // when deleting a mailing zip-file (posted to mailingPseudoId):
     // 1. the detail window is no longer reachable, so
     //    for all content files, delete mailingPseudoId from person-table
@@ -772,34 +770,24 @@ function removeMoreIfMailing($file_id)
     //    for all content files, replace mailingPseudoId by owner as uploader
     $file_id = intval($file_id);
     $sql = "SELECT p.dest_user_id
-            FROM " . $dropbox_cnf['tbl_post'] . " p
+            FROM " . Database::get_course_table(TABLE_DROPBOX_POST) . " p
             WHERE c_id = $course_id AND p.file_id = '" . $file_id . "'";
     $result = Database::query($sql);
 
     if ($res = Database::fetch_array($result)) {
         $mailingPseudoId = $res['dest_user_id'];
-        if ($mailingPseudoId > dropbox_cnf('mailingIdBase')) {
-            $sql = "DELETE FROM " . dropbox_cnf('tbl_person') . "
+        $mailId = get_mail_id_base();
+        if ($mailingPseudoId > $mailId) {
+            $sql = "DELETE FROM " . Database::get_course_table(TABLE_DROPBOX_PERSON) . "
                     WHERE c_id = $course_id AND user_id='" . $mailingPseudoId . "'";
             Database::query($sql);
 
-            $sql = "UPDATE " . dropbox_cnf('tbl_file') ."
+            $sql = "UPDATE " . Database::get_course_table(TABLE_DROPBOX_FILE) ."
                     SET uploader_id='" . api_get_user_id() . "'
                     WHERE c_id = $course_id AND uploader_id='" . $mailingPseudoId . "'";
             Database::query($sql);
         }
     }
-}
-
-/**
-* Function that finds a given config setting
-*
-* @author René Haentjens, Ghent University
-*/
-function dropbox_cnf($variable)
-{
-    $dropbox_cnf = getDropboxConf();
-    return $dropbox_cnf[$variable];
 }
 
 /**
@@ -876,7 +864,8 @@ function store_add_dropbox($file = [])
     $dropbox_filetmpname = $file['tmp_name'];
 
     // check if the filesize does not exceed the allowed size.
-    if ($dropbox_filesize <= 0 || $dropbox_filesize > $dropbox_cnf['maxFilesize']) {
+    $maxFileSize = api_get_setting('dropbox_max_filesize');
+    if ($dropbox_filesize <= 0 || $dropbox_filesize > $maxFileSize) {
         Display::addFlash(Display::return_message(get_lang('DropboxFileTooBig'), 'warning'));
 
         return false;
@@ -919,10 +908,10 @@ function store_add_dropbox($file = [])
             api_is_course_admin(),
             api_is_course_tutor()
         );
-
+        $mailId = get_mail_id_base();
         foreach ($dropbox_person->sentWork as $w) {
             if ($w->title == $dropbox_filename) {
-                if (($w->recipients[0]['id'] > dropbox_cnf('mailingIdBase')) xor $thisIsAMailing) {
+                if (($w->recipients[0]['id'] > $mailId) xor $thisIsAMailing) {
                     Display::addFlash(Display::return_message(get_lang('MailingNonMailingError'), 'warning'));
                     return false;
                 }
@@ -955,7 +944,7 @@ function store_add_dropbox($file = [])
         }
     }
 
-    @move_uploaded_file($dropbox_filetmpname, dropbox_cnf('sysPath') . '/' . $dropbox_filename);
+    @move_uploaded_file($dropbox_filetmpname, api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox/' . $dropbox_filename);
 
     $b_send_mail = api_get_course_setting('email_alert_on_new_doc_dropbox');
 
@@ -1075,17 +1064,16 @@ function feedback_form()
 
 function user_can_download_file($id, $user_id)
 {
-    $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
     $id = intval($id);
     $user_id = intval($user_id);
 
-    $sql = "SELECT file_id FROM ".$dropbox_cnf['tbl_person']."
+    $sql = "SELECT file_id FROM ". Database::get_course_table(TABLE_DROPBOX_PERSON) ."
             WHERE c_id = $course_id AND user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id FROM ".$dropbox_cnf["tbl_post"]."
+    $sql = "SELECT file_id FROM ". Database::get_course_table(TABLE_DROPBOX_POST) ."
             WHERE c_id = $course_id AND dest_user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
     $count = Database::num_rows($result);
@@ -1097,15 +1085,14 @@ function user_can_download_file($id, $user_id)
 // add feedback since the other users will never get to see the feedback.
 function check_if_file_exist($id)
 {
-    $dropbox_cnf = getDropboxConf();
     $id = intval($id);
     $course_id = api_get_course_int_id();
-    $sql = "SELECT file_id FROM ".$dropbox_cnf['tbl_person']."
+    $sql = "SELECT file_id FROM ". Database::get_course_table(TABLE_DROPBOX_PERSON) ."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id FROM ".$dropbox_cnf["tbl_post"]."
+    $sql = "SELECT file_id FROM ". Database::get_course_table(TABLE_DROPBOX_POST) ."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
     $count = Database::num_rows($result);
@@ -1120,7 +1107,6 @@ function check_if_file_exist($id)
 */
 function store_feedback()
 {
-    $dropbox_cnf = getDropboxConf();
     if (!is_numeric($_GET['id'])) {
         return get_lang('FeedbackError');
     }
@@ -1136,9 +1122,9 @@ function store_feedback()
             'feedback_date' => api_get_utc_datetime(),
         ];
 
-        $id = Database::insert($dropbox_cnf['tbl_feedback'], $params);
+        $id = Database::insert(Database::get_course_table(TABLE_DROPBOX_FEEDBACK), $params);
         if ($id) {
-            $sql = "UPDATE ".$dropbox_cnf['tbl_feedback']." SET feedback_id = iid WHERE iid = $id";
+            $sql = "UPDATE ". Database::get_course_table(TABLE_DROPBOX_FEEDBACK) ." SET feedback_id = iid WHERE iid = $id";
             Database::query($sql);
         }
 
@@ -1160,16 +1146,15 @@ function store_feedback()
 function zip_download($fileList)
 {
     $_course = api_get_course_info();
-    $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
     $fileList = array_map('intval', $fileList);
 
     // note: we also have to add the check if the user has received or sent this file.
     $sql = "SELECT DISTINCT file.filename, file.title, file.author, file.description
-            FROM ".$dropbox_cnf['tbl_file']." file
-            INNER JOIN ".$dropbox_cnf['tbl_person']." person
+            FROM ". Database::get_course_table(TABLE_DROPBOX_FILE) ." file
+            INNER JOIN ". Database::get_course_table(TABLE_DROPBOX_PERSON) ." person
             ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
-            INNER JOIN ".$dropbox_cnf['tbl_post']." post
+            INNER JOIN ". Database::get_course_table(TABLE_DROPBOX_POST) ." post
             ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
             WHERE
                 file.id IN (".implode(', ', $fileList).") AND
@@ -1289,10 +1274,9 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 */
 function get_total_number_feedback($file_id = '')
 {
-    $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
     $sql = "SELECT COUNT(feedback_id) AS total, file_id
-            FROM ".$dropbox_cnf['tbl_feedback']."
+            FROM ". Database::get_course_table(TABLE_DROPBOX_FEEDBACK) ."
             WHERE c_id = $course_id GROUP BY file_id";
     $result = Database::query($sql);
     $return = array();
@@ -1356,4 +1340,16 @@ function get_last_tool_access($tool, $courseId = null, $user_id = null)
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     return $row['access_date'];
+}
+/**
+ * Previously $dropbox_cnf['mailingIdBase'], returns a mailing ID to generate a mail ID
+ * @return int
+ */
+function get_mail_id_base()
+{
+    // false = no mailing functionality
+    //$dropbox_cnf['mailingIdBase'] = 10000000;  // bigger than any user_id,
+    // allowing enough space for pseudo_ids as uploader_id, dest_user_id, user_id:
+    // mailing pseudo_id = dropbox_cnf('mailingIdBase') + mailing id
+    return 10000000;
 }

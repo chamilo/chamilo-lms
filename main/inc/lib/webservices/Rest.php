@@ -202,7 +202,6 @@ class Rest extends WebService
         foreach ($courses as $courseId) {
             /** @var Course $course */
             $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId['real_id']);
-
             $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course->getCode());
 
             $data[] = [
@@ -596,11 +595,11 @@ class Rest extends WebService
      * @param int $threadId
      * @return array
      */
-    public function getCourseForumThread($threadId)
+    public function getCourseForumThread($forumId, $threadId)
     {
         require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 
-        $threadInfo = get_thread_information($threadId);
+        $threadInfo = get_thread_information($forumId, $threadId);
 
         $thread = [
             'id' => intval($threadInfo['iid']),

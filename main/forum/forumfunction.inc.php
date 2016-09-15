@@ -2091,19 +2091,24 @@ function get_post_information($post_id)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_thread_information($thread_id)
+function get_thread_information($forumId, $thread_id)
 {
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $thread_id = intval($thread_id);
     $sessionId = api_get_session_id();
     $sessionCondition = api_get_session_condition($sessionId, true, false, 'threads.session_id');
-
+    $forumCondition = '';
+    if (!empty($forumId)) {
+        $forumId = (int) $forumId;
+        $forumCondition = " threads.forum_id = $forumId AND ";
+    }
     $sql = "SELECT * FROM $table_item_property item_properties
             INNER JOIN
             $table_threads threads
             ON (item_properties.ref = threads.thread_id AND threads.c_id = item_properties.c_id)
             WHERE
+                $forumCondition
                 item_properties.tool= '".TOOL_FORUM_THREAD."' AND                
                 threads.thread_id = $thread_id 
                 $sessionCondition
@@ -2725,7 +2730,12 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         set_notification('thread', $lastThread->getIid(), true);
     }
 
-    send_notification_mails($lastThread->getIid(), $reply_info, $courseInfo['code']);
+    send_notification_mails(
+        $current_forum['forum_id'],
+        $lastThread->getIid(),
+        $reply_info,
+        $courseInfo['code']
+    );
 
     Session::erase('formelements');
     Session::erase('origin');
@@ -2941,7 +2951,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     $iframe = null;
     $myThread = Security::remove_XSS($myThread);
     if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
-        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($forumId)."&thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
+        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".intval($forumId)."&thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
     }
     if (!empty($iframe)) {
         $form->addElement('label', get_lang('Thread'), $iframe);
@@ -3523,7 +3533,11 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
                 set_notification('thread', $values['thread_id'], true);
             }
 
-            send_notification_mails($values['thread_id'], $values);
+            send_notification_mails(
+                $values['forum_id'],
+                $values['thread_id'],
+                $values
+            );
             add_forum_attachment_file('', $new_post_id);
         }
 
@@ -4072,7 +4086,7 @@ function get_unaproved_messages($forum_id)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function send_notification_mails($thread_id, $reply_info)
+function send_notification_mails($forumId, $thread_id, $reply_info)
 {
     $table = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
 
@@ -4081,7 +4095,7 @@ function send_notification_mails($thread_id, $reply_info)
     // 2. the forum is visible
     // 3. the thread is visible
     // 4. the reply is visible (=when there is)
-    $current_thread = get_thread_information($thread_id);
+    $current_thread = get_thread_information($forumId, $thread_id);
     $current_forum = get_forum_information($current_thread['forum_id'], $current_thread['c_id']);
 
     $current_forum_category = null;
@@ -4103,8 +4117,8 @@ function send_notification_mails($thread_id, $reply_info)
 
     // The forum category, the forum, the thread and the reply are visible to the user
     if ($send_mails) {
-        if (isset($current_thread['forum_id'])) {
-            send_notifications($current_thread['forum_id'], $thread_id);
+        if (!empty($forumId)) {
+            send_notifications($forumId, $thread_id);
         }
     } else {
         $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
@@ -4173,11 +4187,11 @@ function handle_mail_cue($content, $id)
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            send_mail($row, get_thread_information($post_info['thread_id']));
+            send_mail($row, get_thread_information($post_info['forum_id'], $post_info['thread_id']));
         }
     } elseif ($content == 'thread') {
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
-        $sql = "SELECT users.firstname, users.lastname, users.user_id, users.email
+        $sql = "SELECT users.firstname, users.lastname, users.user_id, users.email, posts.forum_id
                 FROM $table_mailcue mailcue, $table_posts posts, $table_users users
                 WHERE
                     posts.c_id = $course_id AND
@@ -4190,7 +4204,7 @@ function handle_mail_cue($content, $id)
                 GROUP BY users.email";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            send_mail($row, get_thread_information($id));
+            send_mail($row, get_thread_information($row['forum_id'], $id));
         }
 
         // Deleting the relevant entries from the mailcue.
@@ -5250,6 +5264,7 @@ function get_notifications($content, $id)
 function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 {
     $_course = api_get_course_info();
+    $forum_id = (int) $forum_id;
 
     // The content of the mail
     $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum_id.'&thread='.$thread_id;
@@ -5261,7 +5276,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
         return false;
     }
 
-    $current_thread = get_thread_information($thread_id);
+    $current_thread = get_thread_information($forum_id, $thread_id);
     $current_forum = get_forum_information($current_thread['forum_id']);
     $subject = get_lang('NewForumPost').' - '.$_course['official_code'].' - '.$current_forum['forum_title'].' - '.$current_thread['thread_title'];
 

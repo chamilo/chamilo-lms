@@ -22,11 +22,12 @@ if (isset($_GET['origin'])) {
 
 $currentUserId = api_get_user_id();
 $userIdToQualify = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
+$forumId = isset($_GET['forum']) ? intval($_GET['forum']) : 0;
 api_block_course_item_locked_by_gradebook($_GET['thread'], LINK_FORUM_THREAD);
 $nameTools = get_lang('ToolForum');
 
 $allowed_to_edit = api_is_allowed_to_edit(null, true);
-$currentThread = get_thread_information($_GET['thread']);
+$currentThread = get_thread_information($forumId, $_GET['thread']);
 $currentForum = get_forum_information($currentThread['forum_id']);
 
 $allowToQualify = false;
@@ -104,7 +105,7 @@ if ($origin == 'learnpath') {
         api_display_tool_title($nameTools);
     } else {
         $search = isset($_GET['search']) ? Security::remove_XSS(urlencode($_GET['search'])) : '';
-        $info_thread = get_thread_information($_GET['thread']);
+        $info_thread = get_thread_information($currentForum['forum_id'], $_GET['thread']);
         $interbreadcrumb[] = array(
             "url" => "index.php?".api_get_cidreq()."&search=".$search,
             "name" => $nameTools);
@@ -119,7 +120,7 @@ if ($origin == 'learnpath') {
 
         if ($message <> 'PostDeletedSpecial') {
             if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-                $info_thread=get_thread_information($_GET['thread']);
+                $info_thread = get_thread_information($currentForum['forum_id'], $_GET['thread']);
                 $interbreadcrumb[] = array(
                     "url" => "viewthread.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&thread=".intval($_GET['thread']),
                     "name" => prepare4display($currentThread['thread_title'])
@@ -165,7 +166,7 @@ if (!empty($message)) {
 }
 
 if ($allowToQualify) {
-    $currentThread = get_thread_information($_GET['thread']);
+    $currentThread = get_thread_information($currentForum['forum_id'], $_GET['thread']);
     $threadId = $currentThread['thread_id'];
     // Show max qualify in my form
     $maxQualify = showQualify('2', $userIdToQualify, $threadId);

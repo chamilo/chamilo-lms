@@ -26,7 +26,7 @@ $_user = api_get_user_info();
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
 $rows = getPosts($current_forum, $_GET['thread'], $sortDirection, true);
 $sessionId = api_get_session_id();
-$currentThread = get_thread_information($_GET['thread']);
+$currentThread = get_thread_information($current_forum['forum_id'], $_GET['thread']);
 $post_id = isset($_GET['post']) ? (int) $_GET['post'] : 0;
 $userId = api_get_user_id();
 

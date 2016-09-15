@@ -49,13 +49,16 @@ class ForumThreadLink extends AbstractLink
 		}
 
 		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-
-		$sql = 'SELECT thread_id,thread_title,thread_title_qualify FROM '.$this->get_forum_thread_table()
-			.' forum_thread WHERE thread_id NOT IN'
-			.' (SELECT ref_id FROM '.$tbl_grade_links
-			.' WHERE type = '.LINK_FORUM_THREAD
-			." AND c_id = ".intval($this->course_id)
-			.') AND forum_thread.session_id='.api_get_session_id().'';
+		$sql = 'SELECT thread_id,thread_title,thread_title_qualify 
+		        FROM '.$this->get_forum_thread_table().'
+			    forum_thread WHERE thread_id NOT IN
+			    (
+			        SELECT ref_id FROM '.$tbl_grade_links.' 
+                    WHERE 
+                        type = '.LINK_FORUM_THREAD.' AND
+                        c_id = '.intval($this->course_id).'
+                ) 
+                AND forum_thread.session_id='.api_get_session_id();
 
 		$result = Database::query($sql);
 
@@ -96,22 +99,21 @@ class ForumThreadLink extends AbstractLink
 
 		$sql = 'SELECT tl.thread_id, tl.thread_title, tl.thread_title_qualify
 				FROM '.$tbl_grade_links.' tl INNER JOIN '.$tbl_item_property.' ip
-				ON (tl.thread_id = ip.ref AND tl.c_id = ip.c_id )
+				ON (tl.thread_id = ip.ref AND tl.c_id = ip.c_id)
 				WHERE
 				    tl.c_id = '.$this->course_id.' AND
                     ip.c_id = '.$this->course_id.' AND
                     ip.tool = "forum_thread" AND
-                    ip.visibility<>2 AND
+                    ip.visibility <> 2 AND
                     '.$session_condition.'
                 ';
 
 		$result = Database::query($sql);
-
 		while ($data = Database::fetch_array($result)) {
-			if ( isset($data['thread_title_qualify']) and $data['thread_title_qualify']!=""){
-				$cats[] = array ($data['thread_id'], $data['thread_title_qualify']);
+			if ( isset($data['thread_title_qualify']) && $data['thread_title_qualify'] != "") {
+				$cats[] = array($data['thread_id'], $data['thread_title_qualify']);
 			} else {
-				$cats[] = array ($data['thread_id'], $data['thread_title']);
+				$cats[] = array($data['thread_id'], $data['thread_title']);
 			}
 		}
 		$my_cats = isset($cats) ? $cats : null;
@@ -126,10 +128,12 @@ class ForumThreadLink extends AbstractLink
     public function has_results()
     {
         $table = Database :: get_course_table(TABLE_FORUM_POST);
-        $sql = 'SELECT count(*) AS number FROM '.$table."
+
+        $sql = "SELECT count(*) AS number FROM $table
                 WHERE
                     c_id = ".$this->course_id." AND
-                    thread_id = '".$this->get_ref_id()."'";
+                    thread_id = '".$this->get_ref_id()."'                    
+                ";
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -145,25 +149,35 @@ class ForumThreadLink extends AbstractLink
 	public function calc_score($stud_id = null, $type = null)
 	{
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-        $threadInfo = get_thread_information($this->get_ref_id());
+        $threadInfo = get_thread_information('', $this->get_ref_id());
 
-		$thread_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+		$thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+
+        $sessionId = $this->get_session_id();
+        $sessionCondition = api_get_session_condition($sessionId, true, false, 'session_id');
 
 		$sql = 'SELECT thread_qualify_max
 		        FROM '.Database :: get_course_table(TABLE_FORUM_THREAD)."
-  				WHERE c_id = ".$this->course_id." AND thread_id = '".$this->get_ref_id()."'";
+  				WHERE 
+  				    c_id = ".$this->course_id." AND 
+  				    thread_id = '".$this->get_ref_id()."'
+  				    $sessionCondition
+                ";
 		$query = Database::query($sql);
 		$assignment = Database::fetch_array($query);
 
 		$sql = "SELECT * FROM $thread_qualify
-				WHERE c_id = ".$this->course_id." AND thread_id = ".$this->get_ref_id();
+				WHERE 
+				    c_id = ".$this->course_id." AND 
+				    thread_id = ".$this->get_ref_id()."
+				    $sessionCondition
+                ";
 		if (isset($stud_id)) {
 			$sql .= ' AND user_id = '.intval($stud_id);
 		}
 
 		// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY qualify_time DESC';
-
 		$scores = Database::query($sql);
 
 		// for 1 student

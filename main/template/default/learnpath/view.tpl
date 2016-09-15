@@ -214,13 +214,13 @@
             LPViewUtils.setHeightLPToc();
 
             $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
-                $('.lp-view-tabs').fadeOut();
+                $('.lp-view-tabs').animate({opacity: 0}, 500);
             });
 
             $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
                 $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
 
-                $('.lp-view-tabs').fadeIn();
+                $('.lp-view-tabs').animate({opacity: 1}, 500);
             });
 
             loadForumThread({{ lp_id }}, {{ lp_current_item_id }});

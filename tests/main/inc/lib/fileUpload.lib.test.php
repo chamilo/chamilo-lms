@@ -343,50 +343,6 @@ class TestFileUpload extends UnitTestCase
         //var_dump($res);
     }
 
-    function testApiReplaceLinksInHtml()
-    {
-        $base_work_dir = api_get_path(SYS_COURSE_PATH);
-        $upload_path = $base_work_dir.'upload/blog';
-        $full_file_name = 'doc.php';
-        $res = api_replace_links_in_html($upload_path, $full_file_name);
-        $this->assertTrue(is_null($res));
-        //var_dump($res);
-    }
-
-    function testApiReplaceLinksInString()
-    {
-        $base_work_dir = api_get_path(SYS_COURSE_PATH);
-        $upload_path = $base_work_dir.'upload/blog';
-        $buffer = ob_get_contents();
-        $res = api_replace_links_in_string($upload_path, $buffer);
-        $this->assertTrue(is_string($res));
-        //var_dump($res);
-    }
-
-    function testApiReplaceParameter()
-    {
-        $count = 0;
-        $matches = array();
-        $href_list = array();
-        $file_path_list[] = $matches[1];
-        $base_work_dir = api_get_path(SYS_COURSE_PATH);
-        $upload_path = $base_work_dir.'upload/blog';
-        $replaceWhat[$count] = $href_list[$count];
-        /** To can test this function you need to comment "die ('can not create file')"
-         *  $res return void
-         */
-        $replaceBy[$count] = " $param_name=\"".$file_path_list[$count]."\" target =\"_top\"";
-        $replaceBy[$count] = $replaceWhat[$count];
-        $buffer = str_replace($replaceWhat, $replaceBy, $buffer);
-        $param_name = "src";
-        $res = api_replace_parameter($upload_path, $buffer, $param_name = "src");
-        $this->assertTrue(is_string($res));
-        //var_dump($res);
-    }
-
-    //clenaning
-
-
     function testCleanUpFilesInZip()
     {
         $p_event = '';

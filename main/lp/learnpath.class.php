@@ -11293,8 +11293,7 @@ EOD;
                 $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
                 $myrow = Database::fetch_array($result);
                 $path = $myrow['path'];
-                $link .= $main_dir_path . 'exercise/showinframes.php?file='.$path.'' .
-                        '&origin='.$origin.'&cid='.$course_code.'&uid='.api_get_user_id().'' .
+                $link .= $main_dir_path . 'exercise/showinframes.php?file='.$path.'&origin='.$origin.'&cid='.$course_code.'&uid='.api_get_user_id().'' .
                         '&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&lp_view_id='.$lpViewId;
                 break;
             case TOOL_FORUM:

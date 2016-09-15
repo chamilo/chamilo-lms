@@ -2097,12 +2097,13 @@ function get_thread_information($thread_id)
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $thread_id = intval($thread_id);
 
-    $sql = "SELECT * FROM " . $table_item_property . " item_properties, " . $table_threads . " threads
+    $sql = "SELECT * FROM $table_item_property item_properties
+            INNER JOIN
+            $table_threads threads
+            ON (item_properties.ref = threads.thread_id AND threads.c_id = item_properties.c_id)
             WHERE
-                item_properties.tool= '".TOOL_FORUM_THREAD."' AND
-                item_properties.ref = threads.thread_id AND
-                threads.iid   = ".$thread_id." AND
-                threads.c_id = item_properties.c_id
+                item_properties.tool= '".TOOL_FORUM_THREAD."' AND                
+                threads.id = ".$thread_id."
             ";
     $result = Database::query($sql);
     $row = Database::fetch_assoc($result);
@@ -4913,7 +4914,8 @@ function get_attachment($post_id)
     $course_id = api_get_course_int_id();
     $row = array();
     $post_id = intval($post_id);
-    $sql = "SELECT iid, path, filename,comment FROM $forum_table_attachment
+    $sql = "SELECT iid, path, filename, comment 
+            FROM $forum_table_attachment
             WHERE c_id = $course_id AND post_id = $post_id";
     $result = Database::query($sql);
     if (Database::num_rows($result) != 0) {

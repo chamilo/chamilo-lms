@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+use Chamilo\CourseBundle\Entity\CLpCategory;
+
 /**
  * This file was originally the copy of document.php, but many modifications happened since then ;
  * the direct file view is not any more needed, if the user uploads a SCORM zip file, a directory
@@ -9,8 +12,6 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-use ChamiloSession as Session;
-use Chamilo\CourseBundle\Entity\CLpCategory;
 
 $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
@@ -169,7 +170,7 @@ foreach ($categories as $item) {
         $autolaunch_exists = false;
 
         foreach ($flat_list as $id => $details) {
-
+            $id = $details['lp_old_id'];
             // Validation when belongs to a session.
             $session_img = api_get_session_image(
                 $details['lp_session'],
@@ -182,11 +183,7 @@ foreach ($categories as $item) {
             }
 
             // Check if the learnpath is visible for student.
-            if (!$is_allowed_to_edit && !learnpath::is_lp_visible_for_student(
-                    $id,
-                    $userId
-                )
-            ) {
+            if (!$is_allowed_to_edit && !learnpath::is_lp_visible_for_student($id, $userId)) {
                 continue;
             }
 
@@ -258,10 +255,7 @@ foreach ($categories as $item) {
 
             if ($is_allowed_to_edit) {
                 $url_start_lp .= '&isStudentView=true';
-                $studentVisibility = learnpath::is_lp_visible_for_student(
-                    $id,
-                    $userId
-                );
+                $studentVisibility = learnpath::is_lp_visible_for_student($id, $userId);
                 $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.($studentVisibility ? '' : ' - ('.get_lang('LPNotVisibleToStudent').')');
                 $extra = '<div class ="lp_content_type_label">'.$dsp_desc.'</div>';
             }
@@ -330,7 +324,6 @@ foreach ($categories as $item) {
             $actionSeriousGame = null;
 
             if ($is_allowed_to_edit) {
-
                 // EDIT LP
                 if ($current_session == $details['lp_session']) {
                     $dsp_edit_lp = Display::url(

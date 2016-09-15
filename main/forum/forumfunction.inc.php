@@ -1818,6 +1818,7 @@ function get_threads($forum_id)
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
 
+    $courseId = api_get_course_int_id();
     $groupInfo = GroupManager::get_group_properties($groupId);
     $groupCondition = '';
     if (!empty($groupInfo)) {
@@ -1852,7 +1853,8 @@ function get_threads($forum_id)
                 ON thread.thread_poster_id = users.user_id
             WHERE
                 item_properties.visibility='1' AND
-                thread.forum_id = ".intval($forum_id)."
+                thread.forum_id = ".intval($forum_id)." AND
+                thread.c_id = $courseId 
             ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
 
     if (api_is_allowed_to_edit()) {
@@ -1875,7 +1877,8 @@ function get_threads($forum_id)
                     ON thread.thread_poster_id=users.user_id
                 WHERE
                     item_properties.visibility<>2 AND
-                    thread.forum_id = ".intval($forum_id)."
+                    thread.forum_id = ".intval($forum_id)." AND
+                    thread.c_id = $courseId 
                 ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
     }
     $result = Database::query($sql);

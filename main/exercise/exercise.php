@@ -1072,7 +1072,10 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
 
         // prof only
         if ($is_allowedToEdit) {
-            $item = Display::tag('td', Display::return_icon('hotpotatoes_s.png', "HotPotatoes").'<a href="showinframes.php?file='.$path.'&cid='.api_get_course_id().'&uid='.$userId.'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a> ');
+            $item = Display::tag(
+                'td',
+                Display::return_icon('hotpotatoes_s.png', "HotPotatoes").
+                '<a href="showinframes.php?file='.$path.'&'.api_get_cidreq().'&uid='.$userId.'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a> ');
             $item .= Display::tag('td', '-');
 
             $actions = Display::url(

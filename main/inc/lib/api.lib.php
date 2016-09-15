@@ -7980,6 +7980,7 @@ function api_mail_html(
 
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
     $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
+
     // Send the mail message.
     if (!$mail->Send()) {
         error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');

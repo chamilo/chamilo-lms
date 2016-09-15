@@ -546,21 +546,23 @@ if (is_array($forumCategories)) {
                         $html .= '<div class="col-md-6">';
 
                         // The last post in the forum.
-                        if ($forum['last_poster_name'] != '') {
+                        if (isset($forum['last_poster_name']) && $forum['last_poster_name'] != '') {
                             $name = $forum['last_poster_name'];
                             $poster_id = 0;
                             $username = "";
                         } else {
-                            $name = api_get_person_name(
-                                $forum['last_poster_firstname'],
-                                $forum['last_poster_lastname']
-                            );
-                            $poster_id = $forum['last_poster_id'];
-                            $userinfo = api_get_user_info($poster_id);
-                            $username = sprintf(
-                                get_lang('LoginX'),
-                                $userinfo['username']
-                            );
+                            if (isset($forum['last_poster_firstname'])) {
+                                $name = api_get_person_name(
+                                    $forum['last_poster_firstname'],
+                                    $forum['last_poster_lastname']
+                                );
+                                $poster_id = $forum['last_poster_id'];
+                                $userinfo = api_get_user_info($poster_id);
+                                $username = sprintf(
+                                    get_lang('LoginX'),
+                                    $userinfo['username']
+                                );
+                            }
                         }
 
                         if (!empty($forum['last_post_id'])) {

@@ -1642,12 +1642,14 @@ function get_forums(
                     api_is_allowed_to_edit(),
                     $course_id
                 );
-                $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
-                $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
-                $forum_list[$key]['last_post_date'] = $last_post_info_of_forum['last_post_date'];
-                $forum_list[$key]['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
-                $forum_list[$key]['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
-                $forum_list[$key]['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+                if ($last_post_info_of_forum) {
+                    $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
+                    $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
+                    $forum_list[$key]['last_post_date'] = $last_post_info_of_forum['last_post_date'];
+                    $forum_list[$key]['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
+                    $forum_list[$key]['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
+                    $forum_list[$key]['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+                }
             }
         } else {
             $forum_list = array();
@@ -1658,12 +1660,14 @@ function get_forums(
             api_is_allowed_to_edit(),
             $course_id
         );
-        $forum_list['last_post_id'] = $last_post_info_of_forum['last_post_id'];
-        $forum_list['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
-        $forum_list['last_post_date'] = $last_post_info_of_forum['last_post_date'];
-        $forum_list['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
-        $forum_list['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
-        $forum_list['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+        if ($last_post_info_of_forum) {
+            $forum_list['last_post_id'] = $last_post_info_of_forum['last_post_id'];
+            $forum_list['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
+            $forum_list['last_post_date'] = $last_post_info_of_forum['last_post_date'];
+            $forum_list['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
+            $forum_list['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
+            $forum_list['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+        }
     }
 
     return $forum_list;
@@ -1734,11 +1738,15 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
 
     // First get the threads to make sure there is no inconsistency in the
     // database between forum and thread
-    $sql = "SELECT thread_id FROM $table_threads WHERE forum_id = $forum_id AND c_id = $course_id AND session_id = $sessionId";
+    $sql = "SELECT thread_id FROM $table_threads 
+            WHERE 
+                forum_id = $forum_id AND 
+                c_id = $course_id AND 
+                session_id = $sessionId";
     $result = Database::query($sql);
     if (Database::num_rows($result) == 0) {
         // If there are no threads in this forum, then there are no posts
-        return $return_array;
+        return [];
     }
     $threads = array();
     while ($row = Database::fetch_row($result)) {
@@ -1765,8 +1773,8 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
             WHERE
                 post.forum_id = $forum_id
                 AND post.thread_id IN ($threadsList)
-                AND post.poster_id=users.user_id
-                AND post.thread_id=thread_properties.ref
+                AND post.poster_id = users.user_id
+                AND post.thread_id = thread_properties.ref
                 AND thread_properties.tool='".TOOL_FORUM_THREAD."'
                 AND post.forum_id=forum_properties.ref
                 AND forum_properties.tool='".TOOL_FORUM."'

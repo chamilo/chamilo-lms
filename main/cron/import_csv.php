@@ -1155,6 +1155,7 @@ class ImportCsv
         $data = Import::csv_reader($file);
         if (!empty($data)) {
             $this->logger->addInfo(count($data) . " records found.");
+            $userIdList = [];
             foreach ($data as $row) {
                 $chamiloUserName = $row['UserName'];
                 $chamiloCourseCode = $row['CourseCode'];
@@ -1205,14 +1206,21 @@ class ImportCsv
                         );
                         break;
                     case 'drh':
+                        $removeAllSessionsFromUser = true;
+
+                        if (in_array($userId, $userIdList)) {
+                            $removeAllSessionsFromUser = false;
+                        } else {
+                            $userIdList[] = $userId;
+                        }
+
                         $userInfo = api_get_user_info($userId);
                         SessionManager::subscribeSessionsToDrh(
                             $userInfo,
                             [$chamiloSessionId],
                             false,
-                            true
+                            $removeAllSessionsFromUser
                         );
-
                         break;
                 }
 

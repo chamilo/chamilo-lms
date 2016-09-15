@@ -1206,12 +1206,11 @@ class ImportCsv
                         break;
                     case 'drh':
                         $userInfo = api_get_user_info($userId);
-                        SessionManager::removeAllDrhFromSession($chamiloSessionId);
                         SessionManager::subscribeSessionsToDrh(
                             $userInfo,
                             [$chamiloSessionId],
                             false,
-                            false
+                            true
                         );
 
                         break;

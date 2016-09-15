@@ -2950,14 +2950,14 @@ class SessionManager
      * @param array $userInfo Human Resource Manager info
      * @param array $sessions_list Sessions id
      * @param bool $sendEmail
-     * @param bool $removeOldConnections
+     * @param bool $removeSessionsFromUser
      * @return int
      * */
     public static function subscribeSessionsToDrh(
         $userInfo,
         $sessions_list,
         $sendEmail = false,
-        $removeOldConnections = true
+        $removeSessionsFromUser = true
     ) {
         // Database Table Definitions
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -2984,9 +2984,8 @@ class SessionManager
         }
 
         $affected_rows = 0;
-
         // Deleting assigned sessions to hrm_id.
-        if ($removeOldConnections) {
+        if ($removeSessionsFromUser) {
             if (api_is_multiple_url_enabled()) {
                 $sql = "SELECT s.session_id
                         FROM $tbl_session_rel_user s
@@ -3014,6 +3013,7 @@ class SessionManager
                 }
             }
         }
+
         // Inserting new sessions list.
         if (!empty($sessions_list) && is_array($sessions_list)) {
             foreach ($sessions_list as $session_id) {

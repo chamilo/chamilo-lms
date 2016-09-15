@@ -2103,8 +2103,7 @@ function get_thread_information($thread_id)
             ON (item_properties.ref = threads.thread_id AND threads.c_id = item_properties.c_id)
             WHERE
                 item_properties.tool= '".TOOL_FORUM_THREAD."' AND                
-                threads.id = ".$thread_id."
-            ";
+                threads.iid = $thread_id";
     $result = Database::query($sql);
     $row = Database::fetch_assoc($result);
 
